@@ -115,7 +115,7 @@ class QuickActions: NSObject {
                 handleOpenURL(withBrowserViewController: browserViewController, urlToOpen: urlToOpen)
             }
         case .qrCode:
-            handleQRCode(withBrowserViewController: browserViewController)
+            handleQRCode(with: browserViewController)
         }
     }
 
@@ -133,7 +133,10 @@ class QuickActions: NSObject {
         bvc.switchToTabForURLOrOpen(urlToOpen, isPrivileged: true)
     }
     
-    fileprivate func handleQRCode(withBrowserViewController bvc: BrowserViewController) {
-        bvc.openQRReader()
+    fileprivate func handleQRCode(with vc: QRCodeViewControllerDelegate & UIViewController) {
+        let qrCodeViewController = QRCodeViewController()
+        qrCodeViewController.qrCodeDelegate = vc
+        let controller = UINavigationController(rootViewController: qrCodeViewController)
+        vc.present(controller, animated: true, completion: nil)
     }
 }

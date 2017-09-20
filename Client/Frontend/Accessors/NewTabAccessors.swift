@@ -23,10 +23,6 @@ struct NewTabAccessors {
         }
         return option
     }
-
-    static func getNewTabPage(_ state: AppState) -> NewTabPage {
-        return getNewTabPage(Accessors.getPrefs(state))
-    }
 }
 
 /// Enum to encode what should happen when the user opens a new tab without a URL.

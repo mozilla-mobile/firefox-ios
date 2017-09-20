@@ -102,6 +102,16 @@ class SyncNowSetting: WithAccountSetting {
     }()
 
     fileprivate var syncNowTitle: NSAttributedString {
+        if !DeviceInfo.hasConnectivity() {
+            return NSAttributedString(
+                string: Strings.FxANoInternetConnection,
+                attributes: [
+                    NSForegroundColorAttributeName: UIColor.red,
+                    NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultMediumFont
+                ]
+            )
+        }
+        
         return NSAttributedString(
             string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
             attributes: [
@@ -177,6 +187,10 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     override var enabled: Bool {
+        if !DeviceInfo.hasConnectivity() {
+            return false
+        }
+
         return profile.hasSyncableAccount()
     }
 
@@ -243,7 +257,7 @@ class SyncNowSetting: WithAccountSetting {
             cell.accessoryView = nil
         }
         cell.accessoryType = accessoryType
-        cell.isUserInteractionEnabled = !profile.syncManager.isSyncing
+        cell.isUserInteractionEnabled = !profile.syncManager.isSyncing && DeviceInfo.hasConnectivity()
         
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             // Animation that loops continously until stopped
@@ -278,6 +292,10 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        if !DeviceInfo.hasConnectivity() {
+            return
+        }
+        
         NotificationCenter.default.post(name: Notification.Name(rawValue: SyncNowSetting.NotificationUserInitiatedSyncManually), object: nil)
         profile.syncManager.syncEverything(why: .syncNow)
     }

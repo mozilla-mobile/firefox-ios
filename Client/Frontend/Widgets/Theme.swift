@@ -13,12 +13,10 @@ struct Theme {
     var buttonTintColor: UIColor?
     var activeBorderColor: UIColor?
     var borderColor: UIColor?
-    var borderWidth: CGFloat?
-    var font: UIFont?
-    var insets: UIEdgeInsets?
     var highlightButtonColor: UIColor?
     var highlightBorderColor: UIColor?
     var highlightTextColor: UIColor?
+    var disabledButtonColor: UIColor?
 
     static let PrivateMode = "Private"
     static let NormalMode = "Normal"

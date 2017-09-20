@@ -123,7 +123,7 @@ class CustomSearchViewController: SettingsTableViewController {
             return URL(string: string)
         }
 
-        let titleField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineTitlePlaceholder, labelText: Strings.SettingsAddCustomEngineTitleLabel, settingIsValid: { text in
+        let titleField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineTitlePlaceholder, settingIsValid: { text in
             return text != nil && text != ""
         }, settingDidChange: {fieldText in
             guard let title = fieldText else {
@@ -133,7 +133,7 @@ class CustomSearchViewController: SettingsTableViewController {
         })
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
 
-        let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, labelText: Strings.SettingsAddCustomEngineURLLabel, height: 133, settingIsValid: { text in
+        let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, height: 133, settingIsValid: { text in
             //Can check url text text validity here.
             return true
         }, settingDidChange: {fieldText in
@@ -143,10 +143,9 @@ class CustomSearchViewController: SettingsTableViewController {
         urlField.textField.autocapitalizationType = .none
         urlField.textField.accessibilityIdentifier = "customEngineUrl"
 
-        let basicSettings: [Setting] = [titleField, urlField]
-
         let settings: [SettingSection] = [
-            SettingSection(footerTitle: NSAttributedString(string: "http://youtube.com/search?q=%s"), children: basicSettings)
+            SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineTitleLabel), children: [titleField]),
+            SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineURLLabel), footerTitle: NSAttributedString(string: "http://youtube.com/search?q=%s"), children: [urlField])
         ]
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine(_:)))
@@ -167,26 +166,23 @@ class CustomSearchViewController: SettingsTableViewController {
 class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
     fileprivate let Padding: CGFloat = 8
-    fileprivate let TextFieldOffset: CGFloat = 80
     fileprivate let TextLabelHeight: CGFloat = 44
     fileprivate var TextFieldHeight: CGFloat = 44
 
     fileprivate let defaultValue: String?
     fileprivate let placeholder: String
-    fileprivate let labelText: String
     fileprivate let settingDidChange: ((String?) -> Void)?
     fileprivate let settingIsValid: ((String?) -> Bool)?
 
     let textField = UITextView()
     let placeholderLabel = UILabel()
 
-    init(defaultValue: String? = nil, placeholder: String, labelText: String, height: CGFloat = 44, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
+    init(defaultValue: String? = nil, placeholder: String, height: CGFloat = 44, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
         self.defaultValue = defaultValue
         self.TextFieldHeight = height
         self.settingDidChange = settingDidChange
         self.settingIsValid = isValueValid
         self.placeholder = placeholder
-        self.labelText = labelText
         textField.addSubview(placeholderLabel)
         super.init(cellHeight: TextFieldHeight)
     }
@@ -197,6 +193,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
             textField.accessibilityIdentifier = id + "TextField"
         }
 
+        placeholderLabel.adjustsFontSizeToFitWidth = true
         placeholderLabel.textColor = UIColor(red: 0.0, green: 0.0, blue: 0.0980392, alpha: 0.22)
         placeholderLabel.text = placeholder
         placeholderLabel.frame = CGRect(x: 0, y: 0, width: textField.frame.width, height: TextLabelHeight)
@@ -209,18 +206,11 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         cell.isUserInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraitNone
         cell.contentView.addSubview(textField)
-        cell.textLabel?.text = labelText
         cell.selectionStyle = .none
 
         textField.snp.makeConstraints { make in
             make.height.equalTo(TextFieldHeight)
-            make.trailing.equalTo(cell.contentView).offset(-Padding)
-            make.leading.equalTo(cell.contentView).offset(TextFieldOffset)
-        }
-        cell.textLabel?.snp.remakeConstraints { make in
-            make.trailing.equalTo(textField.snp.leading).offset(-Padding)
-            make.leading.equalTo(cell.contentView).offset(Padding)
-            make.height.equalTo(TextLabelHeight)
+            make.left.right.equalTo(cell.contentView).inset(Padding)
         }
     }
 

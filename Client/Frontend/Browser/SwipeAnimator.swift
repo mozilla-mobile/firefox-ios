@@ -28,7 +28,6 @@ protocol SwipeAnimatorDelegate: class {
 
 class SwipeAnimator: NSObject {
     weak var delegate: SwipeAnimatorDelegate?
-    weak var container: UIView!
     weak var animatingView: UIView!
     
     fileprivate var prevOffset: CGPoint!
@@ -37,18 +36,17 @@ class SwipeAnimator: NSObject {
     fileprivate var panGestureRecogniser: UIPanGestureRecognizer!
 
     var containerCenter: CGPoint {
-        return CGPoint(x: container.frame.width / 2, y: container.frame.height / 2)
+        return CGPoint(x: animatingView.frame.width / 2, y: animatingView.frame.height / 2)
     }
 
-    init(animatingView: UIView, container: UIView, params: SwipeAnimationParameters = DefaultParameters) {
+    init(animatingView: UIView, params: SwipeAnimationParameters = DefaultParameters) {
         self.animatingView = animatingView
-        self.container = container
         self.params = params
 
         super.init()
 
-        self.panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(SwipeAnimator.SELdidPan(_:)))
-        container.addGestureRecognizer(self.panGestureRecogniser)
+        self.panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(SwipeAnimator.didPan(_:)))
+        animatingView.addGestureRecognizer(self.panGestureRecogniser)
         self.panGestureRecogniser.delegate = self
     }
 
@@ -69,7 +67,7 @@ extension SwipeAnimator {
 
     fileprivate func animateAwayWithVelocity(_ velocity: CGPoint, speed: CGFloat) {
         // Calculate the edge to calculate distance from
-        let translation = velocity.x >= 0 ? container.frame.width : -container.frame.width
+        let translation = velocity.x >= 0 ? animatingView.frame.width : -animatingView.frame.width
         let timeStep = TimeInterval(abs(translation) / speed)
         self.delegate?.swipeAnimator(self, viewWillExitContainerBounds: self.animatingView)
         UIView.animate(withDuration: timeStep, animations: {
@@ -83,7 +81,7 @@ extension SwipeAnimator {
     }
 
     fileprivate func transformForTranslation(_ translation: CGFloat) -> CGAffineTransform {
-        let swipeWidth = container.frame.size.width
+        let swipeWidth = animatingView.frame.size.width
         let totalRotationInRadians = CGFloat(params.totalRotationInDegrees / 180.0 * Double.pi)
 
         // Determine rotation / scaling amounts by the distance to the edge
@@ -97,15 +95,15 @@ extension SwipeAnimator {
     }
 
     fileprivate func alphaForDistanceFromCenter(_ distance: CGFloat) -> CGFloat {
-        let swipeWidth = container.frame.size.width
+        let swipeWidth = animatingView.frame.size.width
         return 1 - (distance / swipeWidth) * (1 - params.totalAlpha)
     }
 }
 
 //MARK: Selectors
 extension SwipeAnimator {
-    @objc func SELdidPan(_ recognizer: UIPanGestureRecognizer!) {
-        let translation = recognizer.translation(in: container)
+    @objc func didPan(_ recognizer: UIPanGestureRecognizer!) {
+        let translation = recognizer.translation(in: animatingView)
 
         switch recognizer.state {
         case .began:
@@ -117,7 +115,7 @@ extension SwipeAnimator {
         case .cancelled:
             animateBackToCenter()
         case .ended:
-            let velocity = recognizer.velocity(in: container)
+            let velocity = recognizer.velocity(in: animatingView)
             // Bounce back if the velocity is too low or if we have not reached the threshold yet
             let speed = max(abs(velocity.x), params.minExitVelocity)
             if speed < params.minExitVelocity || abs(prevOffset.x) < params.deleteThreshold {
@@ -135,7 +133,7 @@ extension SwipeAnimator {
         animateAwayWithVelocity(CGPoint(x: -direction * params.minExitVelocity, y: 0), speed: direction * params.minExitVelocity)
     }
 
-    @discardableResult @objc func SELcloseWithoutGesture() -> Bool {
+    @discardableResult @objc func closeWithoutGesture() -> Bool {
         close(right: false)
         return true
     }

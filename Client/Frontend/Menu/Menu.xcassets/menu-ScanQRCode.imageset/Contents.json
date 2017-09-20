@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "menu-ScanQRCode.png",
+      "filename" : "qrscan.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "menu-ScanQRCode@2x.png",
+      "filename" : "qrscan@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "menu-ScanQRCode@3x.png",
+      "filename" : "qrscan@3x.png",
       "scale" : "3x"
     }
   ],

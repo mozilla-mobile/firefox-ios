@@ -39,6 +39,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         label.text = Strings.ScanQRCodeInstructionsLabel
         label.textColor = UIColor.white
         label.textAlignment = NSTextAlignment.center
+        label.numberOfLines = 0
         return label
     }()
     private var maskView: UIView = UIView()
@@ -128,9 +129,8 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         }
 
         instructionsLabel.snp.makeConstraints { (make) in
-            make.left.right.equalTo(0)
+            make.left.right.equalTo(self.view.layoutMarginsGuide)
             make.top.equalTo(scanBorder.snp.bottom).offset(30)
-            make.height.equalTo(50)
         }
     }
 

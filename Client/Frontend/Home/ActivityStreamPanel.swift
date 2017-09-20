@@ -16,7 +16,7 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
 // MARK: -  Lifecycle
 struct ASPanelUX {
-    static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+    static let backgroundColor = UIConstants.AppBackgroundColor
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 14)
@@ -720,13 +720,13 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             return nil
         }
 
-        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "") { action in
+        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
             LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Activity Stream Long Press Context Menu" as AnyObject])
         }
 
-        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "") { action in
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
         
@@ -767,7 +767,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         })
 
         let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
-            let helper = ShareExtensionHelper(url: siteURL, tab: nil, activities: [])
+            let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController { completed, activityType in
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }

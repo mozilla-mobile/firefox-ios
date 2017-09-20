@@ -88,30 +88,8 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
-
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
-
-            // Starting with iOS 10.3, phone number URLs will automatically prompt the user for
-            // confirmation when calling `openURL()`.
-            if #available(iOS 10.3, *) {
-                UIApplication.shared.openURL(url)
-            }
-
-            // Otherwise, we need to construct our own prompt to prevent automatic calling if the
-            // user is running a version of iOS older than 10.3.
-            else {
-                if let components = NSURLComponents(url: url, resolvingAgainstBaseURL: false), let phoneNumber = components.path, !phoneNumber.isEmpty {
-                    let formatter = PhoneNumberFormatter()
-                    let formattedPhoneNumber = formatter.formatPhoneNumber(phoneNumber)
-                    let alert = UIAlertController(title: formattedPhoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.alert)
-                    alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: UIAlertActionStyle.cancel, handler: nil))
-                    alert.addAction(UIAlertAction(title: NSLocalizedString("Call", comment:"Alert Call Button"), style: UIAlertActionStyle.default, handler: { (action: UIAlertAction!) in
-                        UIApplication.shared.openURL(url)
-                    }))
-                    present(alert, animated: true, completion: nil)
-                }
-            }
-
+            UIApplication.shared.openURL(url)
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
         }
@@ -223,7 +201,6 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab)
-            appDidUpdateState(getCurrentAppState())
         }
     }
 

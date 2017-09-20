@@ -326,8 +326,12 @@ func testTopSitesShareNewTopSite () {
         XCUIDevice.shared().orientation = .landscapeLeft
         let app = XCUIApplication()
 
-        loadWebPage("http://example.com")
-        app.buttons["URLBarView.backButton"].tap()
+        navigator.openURL(urlString: "http://example.com")
+        if app.buttons["URLBarView.backButton"].isEnabled {
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            app.textFields["url"].tap()
+        }
         app.collectionViews.cells["TopSitesCell"].cells["example"].press(forDuration: 1)
 
         let contextMenuHeight = app.tables["Context Menu"].frame.size.height

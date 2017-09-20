@@ -92,19 +92,6 @@ public struct AppConstants {
         #endif
     }()
 
-    /// Toggles the ability to reorder tabs in the tab tray
-    public static let MOZ_REORDER_TAB_TRAY: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return false
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
     /// Enables support for International Domain Names (IDN)
     /// Disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1312294
     public static let MOZ_PUNYCODE: Bool = {

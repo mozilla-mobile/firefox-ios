@@ -42,10 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var openInFirefoxParams: LaunchParams?
 
-    var appStateStore: AppStateStore!
-
-    var systemBrightness: CGFloat = UIScreen.main.brightness
-    
     var receivedURLs: [URL]?
 
     @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -74,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Configuring window…")
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window!.backgroundColor = UIConstants.AppBackgroundColor
+        self.window!.backgroundColor = UIColor.white
 
         // Short circuit the app if we want to email logs from the debug menu
         if DebugSettingsBundleOptions.launchIntoEmailComposer {
@@ -117,7 +113,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         log.debug("Getting profile…")
         let profile = getProfile(application)
-        appStateStore = AppStateStore(prefs: profile.prefs)
 
         log.debug("Initializing telemetry…")
         Telemetry.initWithPrefs(profile.prefs)
@@ -138,6 +133,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
 
+        // Temporary fix for Bug 1390871 - NSInvalidArgumentException: -[WKContentView menuHelperFindInPage]: unrecognized selector
+        if #available(iOS 11, *) {
+            if let clazz = NSClassFromString("WKCont" + "ent" + "View"), let swizzledMethod = class_getInstanceMethod(TabWebViewMenuHelper.self, #selector(TabWebViewMenuHelper.swizzledMenuHelperFindInPage)) {
+                class_addMethod(clazz, MenuHelper.SelectorFindInPage, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
+            }
+        }
+
         log.debug("Configuring tabManager…")
         self.tabManager = TabManager(prefs: profile.prefs, imageStore: imageStore)
         self.tabManager.stateDelegate = self
@@ -147,12 +149,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Initing BVC…")
 
         browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
+        browserViewController.edgesForExtendedLayout = []
+
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
         navigationController.isNavigationBarHidden = true
+        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController

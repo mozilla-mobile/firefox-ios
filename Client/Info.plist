@@ -19,7 +19,7 @@
 	<key>PocketEnvironmentAPIKey</key>
 	<string>$(POCKET_API_KEY)</string>
 	<key>MozWhatsNewTopic</key>
-	<string></string>
+	<string>whats-new-ios-9</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
