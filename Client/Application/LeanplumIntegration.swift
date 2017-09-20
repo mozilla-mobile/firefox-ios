@@ -38,6 +38,7 @@ enum LeanplumEventName: String {
     case userSharedWebpage = "E_User_Tapped_Share_Button"
     case signsInFxa = "E_User_Signed_In_To_FxA"
     case useReaderView = "E_User_Used_Reader_View"
+    case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
 }
 
 enum UserAttributeKeyName: String {
@@ -51,7 +52,7 @@ enum UserAttributeKeyName: String {
 
 private enum SupportedLocales: String {
     case US = "en_US"
-    case DE = "de"
+    case DE = "de_DE"
     case UK = "en_GB"
     case CA_EN = "en_CA"
     case AU = "en_AU"
@@ -74,7 +75,7 @@ class LeanplumIntegration {
     fileprivate weak var profile: Profile?
     private var enabled: Bool = false
     
-    func shouldSendToLP() -> Bool {
+    fileprivate func shouldSendToLP() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
         assert(Thread.isMainThread)
         return enabled && Leanplum.hasStarted() && !UIApplication.isInPrivateMode
@@ -85,6 +86,11 @@ class LeanplumIntegration {
     }
 
     fileprivate func start() {
+        guard AppConstants.MOZ_ENABLE_LEANPLUM else {
+            enabled = false
+            return
+        }
+
         self.enabled = self.profile?.prefs.boolForKey("settings.sendUsageData") ?? true
         if !self.enabled {
             return
@@ -130,25 +136,35 @@ class LeanplumIntegration {
         userAttributesDict[UserAttributeKeyName.pocketInstalled.rawValue] = !canInstallPocket()
         userAttributesDict[UserAttributeKeyName.signedInSync.rawValue] = profile?.hasAccount()
 
-        Leanplum.start(userAttributes: userAttributesDict)
+        Leanplum.start(withUserId: nil, userAttributes: userAttributesDict, responseHandler: { _ in
+            self.track(eventName: LeanplumEventName.openedApp)
 
-        track(eventName: LeanplumEventName.openedApp)
-
-        // Only drops Leanplum event when a user has installed Focus (from a fresh state or a re-install)
-        if profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == canInstallFocus() {
-            profile?.prefs.setBool(!canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
-            if !canInstallFocus() {
-                track(eventName: LeanplumEventName.downloadedFocus)
+            // We need to check if the app is a clean install to use for
+            // preventing the What's New URL from appearing.
+            if self.profile?.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
+                self.profile?.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+                self.track(eventName: .firstRun)
+            } else if self.profile?.prefs.boolForKey("SecondRun") == nil {
+                self.profile?.prefs.setBool(true, forKey: "SecondRun")
+                self.track(eventName: .secondRun)
             }
-        }
 
-        // Only drops Leanplum event when a user has installed Pocket (from a fresh state or a re-install)
-        if profile?.prefs.boolForKey(PrefsKeys.HasPocketInstalled) == canInstallPocket() {
-            profile?.prefs.setBool(!canInstallPocket(), forKey: PrefsKeys.HasPocketInstalled)
-            if !canInstallPocket() {
-                track(eventName: LeanplumEventName.downloadedPocket)
+            // Only drops Leanplum event when a user has installed Focus (from a fresh state or a re-install)
+            if self.profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == self.canInstallFocus() {
+                self.profile?.prefs.setBool(!self.canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
+                if !self.canInstallFocus() {
+                    self.track(eventName: LeanplumEventName.downloadedFocus)
+                }
             }
-        }
+
+            // Only drops Leanplum event when a user has installed Pocket (from a fresh state or a re-install)
+            if self.profile?.prefs.boolForKey(PrefsKeys.HasPocketInstalled) == self.canInstallPocket() {
+                self.profile?.prefs.setBool(!self.canInstallPocket(), forKey: PrefsKeys.HasPocketInstalled)
+                if !self.canInstallPocket() {
+                    self.track(eventName: LeanplumEventName.downloadedPocket)
+                }
+            }
+        })
     }
 
     // Events
@@ -172,8 +188,12 @@ class LeanplumIntegration {
     // Utils
     
     func setEnabled(_ enabled: Bool) {
+        guard AppConstants.MOZ_ENABLE_LEANPLUM else {
+            return
+        }
         // Setting up Test Mode stops sending things to server.
         if enabled { start() }
+        self.enabled = enabled
         Leanplum.setTestModeEnabled(!enabled)
     }
 
@@ -199,7 +219,10 @@ class LeanplumIntegration {
     }
 
     func mailtoIsDefault() -> Bool {
-        return self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption) == "mailto:"
+        if let option = self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption), option != "mailto:" {
+            return false
+        }
+        return true
     }
 
     func setUserAttributes(attributes: [AnyHashable : Any]) {

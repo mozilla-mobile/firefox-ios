@@ -8,6 +8,8 @@ import SnapKit
 struct IntroViewControllerUX {
     static let Width = 375
     static let Height = 667
+    static let SyncButtonTopPadding = 5
+    static let MinimumFontScale: CGFloat = 0.5
 
     static let CardSlides = ["tour-Welcome", "tour-Search", "tour-Private", "tour-Mail", "tour-Sync"]
     static let NumberOfCards = CardSlides.count
@@ -24,10 +26,12 @@ struct IntroViewControllerUX {
 
     static let CardTextLineHeight = UIScreen.main.bounds.width <= 320 ? CGFloat(2) : CGFloat(6)
     static let CardTextWidth = UIScreen.main.bounds.width <= 320 ? 240 : 280
+    static let CardTitleHeight = 50
+
     
     static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Thanks for choosing Firefox!", comment: "Title for the first panel 'Welcome' in the First Run tour.")
     static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
-    static let CardTitlePrivate = NSLocalizedString("Intro.Slides.Private.Title", tableName: "Intro", value: "Browse like no one's watching", comment: "Title for the third panel 'Private Browsing' in the First Run tour.")
+    static let CardTitlePrivate = NSLocalizedString("Intro.Slides.Private.Title", tableName: "Intro", value: "Browse like no one’s watching", comment: "Title for the third panel 'Private Browsing' in the First Run tour.")
     static let CardTitleMail = NSLocalizedString("Intro.Slides.Mail.Title", tableName: "Intro", value: "You've got mail… options", comment: "Title for the fourth panel 'Mail' in the First Run tour.")
     static let CardTitleSync = NSLocalizedString("Intro.Slides.Sync.Title", tableName: "Intro", value: "Pick up where you left off", comment: "Title for the fifth panel 'Sync' in the First Run tour.")
     
@@ -43,8 +47,7 @@ struct IntroViewControllerUX {
 let IntroViewControllerSeenProfileKey = "IntroViewControllerSeen"
 
 protocol IntroViewControllerDelegate: class {
-    func introViewControllerDidFinish(_ introViewController: IntroViewController)
-    func introViewControllerDidRequestToLogin(_ introViewController: IntroViewController)
+    func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool)
 }
 
 class IntroViewController: UIViewController, UIScrollViewDelegate {
@@ -139,7 +142,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             self.introViews.append(introView)
             
             let titleLabel = UILabel()
-            titleLabel.numberOfLines = 0
+            titleLabel.numberOfLines = 2
+            titleLabel.adjustsFontSizeToFitWidth = true
+            titleLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
             titleLabel.textAlignment = NSTextAlignment.center
             titleLabel.text = title
             titleLabels.append(titleLabel)
@@ -147,12 +152,16 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             titleLabel.snp.makeConstraints { (make ) -> Void in
                 make.top.equalTo(introView).offset(20)
                 make.centerX.equalTo(introView)
+                make.height.equalTo(IntroViewControllerUX.CardTitleHeight)
                 make.width.equalTo(IntroViewControllerUX.CardTextWidth)
             }
             
             let textLabel = UILabel()
-            textLabel.numberOfLines = 0
+            textLabel.numberOfLines = 5
             textLabel.attributedText = attributedStringForLabel(text)
+            textLabel.adjustsFontSizeToFitWidth = true
+            textLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
+            textLabel.lineBreakMode = .byTruncatingTail
             textLabels.append(textLabel)
             introView.addSubview(textLabel)
             textLabel.snp.makeConstraints({ (make) -> Void in
@@ -189,6 +198,13 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             make.bottom.equalTo(syncCardView)
         }
 
+        // We need a reference to the sync pages textlabel so we can adjust the constraints
+        if let index = introViews.index(of: syncCardView), index < textLabels.count {
+            let syncTextLabel = textLabels[index]
+            syncTextLabel.snp.makeConstraints { make in
+                make.bottom.equalTo(signInButton.snp.top).offset(-IntroViewControllerUX.SyncButtonTopPadding)
+            }
+        }
         // Add all the cards to the view, make them invisible with zero alpha
         for introView in introViews {
             introView.alpha = 0
@@ -259,7 +275,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
     func SELstartBrowsing() {
         LeanplumIntegration.sharedInstance.track(eventName: .dismissedOnboarding)
-        delegate?.introViewControllerDidFinish(self)
+        delegate?.introViewControllerDidFinish(self, requestToLogin: false)
     }
 
     func SELback() {
@@ -287,7 +303,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func SELlogin() {
-		delegate?.introViewControllerDidRequestToLogin(self)
+        delegate?.introViewControllerDidFinish(self, requestToLogin: true)
     }
 
     fileprivate var accessibilityScrollStatus: String {
@@ -378,7 +394,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
     
     fileprivate func setupDynamicFonts() {
-        startBrowsingButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroSmallFontSize)
+        startBrowsingButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroStandardFontSize)
         signInButton.titleLabel?.font = UIFont(name: "FiraSans-Regular", size: DynamicFontHelper.defaultHelper.IntroBigFontSize)
 
         for titleLabel in titleLabels {

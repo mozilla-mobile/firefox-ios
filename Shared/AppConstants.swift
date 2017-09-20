@@ -15,6 +15,8 @@ public struct AppConstants {
 
     public static let SkipIntro = ProcessInfo.processInfo.arguments.contains(LaunchArguments.SkipIntro)
     public static let ClearProfile = ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile)
+    
+    public static let FxAiOSClientId = "1b1a3e44c54fbb58"
 
     /// Build Channel.
     public static let BuildChannel: AppBuildChannel = {
@@ -55,6 +57,19 @@ public struct AppConstants {
         #endif
     }()
 
+    /// Should we send a repair request to other clients when the bookmarks buffer validation fails.
+    public static let MOZ_BOOKMARKS_REPAIR_REQUEST: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return true
+        #endif
+    }()
+
     /// Flag indiciating if we are running in Debug mode or not.
     public static let isDebug: Bool = {
         #if MOZ_CHANNEL_FENNEC
@@ -66,19 +81,6 @@ public struct AppConstants {
     
     /// Enables/disables the availability of No Image Mode.
     public static let MOZ_NO_IMAGE_MODE: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return false
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    /// Toggles the ability to reorder tabs in the tab tray
-    public static let MOZ_REORDER_TAB_TRAY: Bool = {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
@@ -158,6 +160,32 @@ public struct AppConstants {
 
     ///  Toggle the feature that shows the blue 'Open copied link' banner
     public static let MOZ_CLIPBOARD_BAR: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return true
+        #endif
+    }()
+
+    /// Toggle the use of Leanplum.
+    public static let MOZ_ENABLE_LEANPLUM: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return false
+        #elseif MOZ_CHANNEL_FENNEC
+            return false
+        #else
+            return false
+        #endif
+    }()
+    
+    ///  Toggle the feature that shows updated FxA preferences cell
+    public static let MOZ_SHOW_FXA_AVATAR: Bool = {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA

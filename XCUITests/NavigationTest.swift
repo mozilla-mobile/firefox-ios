@@ -92,14 +92,14 @@ class NavigationTest: BaseTestCase {
         checkFirefoxSyncScreenShown()
 
         // Go back to NewTabScreen
-        app.navigationBars["Client.FxAContentView"].buttons["Cancel"].tap()
+        app.navigationBars["Client.FxAContentView"].buttons["Done"].tap()
         navigator.nowAt(NewTabScreen)
     }
 
     func testTapSigninShowsFxAFromSettings() {
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox scren
-        let signInToFirefoxStaticText = app.tables["AppSettingsTableViewController.tableView"].staticTexts["Sign In to Firefox"]
+        let signInToFirefoxStaticText = app.tables["AppSettingsTableViewController.tableView"].staticTexts["Sign in to Sync"]
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShown()
 
@@ -116,7 +116,7 @@ class NavigationTest: BaseTestCase {
         app.tables["History List"].staticTexts["Synced Devices"].tap()
         app.tables.buttons["Sign in"].tap()
         checkFirefoxSyncScreenShown()
-        app.navigationBars["Client.FxAContentView"].buttons["Cancel"].tap()
+        app.navigationBars["Client.FxAContentView"].buttons["Done"].tap()
         navigator.nowAt(HomePanel_History)
     }
 

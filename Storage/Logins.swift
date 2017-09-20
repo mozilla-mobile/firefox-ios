@@ -138,7 +138,7 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
     open var hasMalformedHostname: Bool = false
 
     open var username: String? { return credentials.user }
-    open var password: String { return credentials.password! }
+    open var password: String { return credentials.password ?? "" }
     open var usernameField: String?
     open var passwordField: String?
 
@@ -154,13 +154,13 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
             return self._formSubmitURL
         }
         set(value) {
-            if value == nil || value!.isEmpty {
+            guard let value = value, !value.isEmpty else {
                 self._formSubmitURL = nil
                 return
             }
 
             let url2 = URL(string: self.hostname)
-            let url1 = URL(string: value!)
+            let url1 = URL(string: value)
 
             if url1?.host != url2?.host {
                 log.warning("Form submit URL domain doesn't match login's domain.")
@@ -289,7 +289,11 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
                 return nil
         }
 
-        let login = Login(hostname: getPasswordOrigin(url.absoluteString)!, username: username, password: password)
+        guard let origin = getPasswordOrigin(url.absoluteString) else {
+            return nil
+        }
+
+        let login = Login(hostname: origin, username: username, password: password)
 
         if let formSubmit = script["formSubmitURL"] as? String {
             login.formSubmitURL = formSubmit
@@ -309,12 +313,13 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
     fileprivate class func getPasswordOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
         var realm: String? = nil
         if let uri = URL(string: uriString),
-            let scheme = uri.scheme, !scheme.isEmpty {
+            let scheme = uri.scheme, !scheme.isEmpty,
+            let host = uri.host {
             if allowJS && scheme == "javascript" {
                 return "javascript:"
             }
 
-            realm = "\(scheme)://\(uri.host!)"
+            realm = "\(scheme)://\(host)"
 
             // If the URI explicitly specified a port, only include it when
             // it's not the default. (We never want "http://foo.com:80")
@@ -522,7 +527,7 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
             }
         }
 
-        let out = Login(guid: guid, hostname: hostname, username: username!, password: password)
+        let out = Login(guid: guid, hostname: hostname, username: username ?? "", password: password)
         out.timesUsed = timesUsed
         out.httpRealm = httpRealm
         out.formSubmitURL = formSubmitURL

@@ -30,15 +30,18 @@ extension Site {
     }
 }
 
-class BaseHistoricalBrowserTable {
-    func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
-        assert(false, "Should never be called.")
+class BaseHistoricalBrowserSchema: Schema {
+    var name: String { return "BROWSER" }
+    var version: Int { return -1 }
+    
+    func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
+        fatalError("Should never be called.")
     }
 
-    func exists(_ db: SQLiteDBConnection) -> Bool {
+    func create(_ db: SQLiteDBConnection) -> Bool {
         return false
     }
-
+    
     func drop(_ db: SQLiteDBConnection) -> Bool {
         return false
     }
@@ -87,7 +90,7 @@ class BaseHistoricalBrowserTable {
     }
 }
 
-// Versions of BrowserTable that we care about:
+// Versions of BrowserSchema that we care about:
 // v6, prior to 001c73ea1903c238be1340950770879b40c41732, July 2015.
 // This is when we first started caring about database versions.
 //
@@ -99,9 +102,8 @@ class BaseHistoricalBrowserTable {
 //
 // These tests snapshot the table creation code at each of these points.
 
-class BrowserTableV6: BaseHistoricalBrowserTable {
-    var name: String { return "BROWSER" }
-    var version: Int { return 6 }
+class BrowserSchemaV6: BaseHistoricalBrowserSchema {
+    override var version: Int { return 6 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.folder.rawValue
@@ -160,10 +162,8 @@ class BrowserTableV6: BaseHistoricalBrowserTable {
             "title TEXT" +
         ") "
     }
-}
 
-extension BrowserTableV6: Table {
-    func create(_ db: SQLiteDBConnection) -> Bool {
+    override func create(_ db: SQLiteDBConnection) -> Bool {
         let visits =
         "CREATE TABLE IF NOT EXISTS \(TableVisits) (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -252,9 +252,8 @@ extension BrowserTableV6: Table {
     }
 }
 
-class BrowserTableV7: BaseHistoricalBrowserTable {
-    var name: String { return "BROWSER" }
-    var version: Int { return 7 }
+class BrowserSchemaV7: BaseHistoricalBrowserSchema {
+    override var version: Int { return 7 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.folder.rawValue
@@ -313,10 +312,8 @@ class BrowserTableV7: BaseHistoricalBrowserTable {
             "title TEXT" +
         ") "
     }
-}
 
-extension BrowserTableV7: SectionCreator, TableInfo {
-    func create(_ db: SQLiteDBConnection) -> Bool {
+    override func create(_ db: SQLiteDBConnection) -> Bool {
         // Right now we don't need to track per-visit deletions: Sync can't
         // represent them! See Bug 1157553 Comment 6.
         // We flip the should_upload flag on the history item when we add a visit.
@@ -410,9 +407,8 @@ extension BrowserTableV7: SectionCreator, TableInfo {
     }
 }
 
-class BrowserTableV8: BaseHistoricalBrowserTable {
-    var name: String { return "BROWSER" }
-    var version: Int { return 8 }
+class BrowserSchemaV8: BaseHistoricalBrowserSchema {
+    override var version: Int { return 8 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.folder.rawValue
@@ -471,10 +467,8 @@ class BrowserTableV8: BaseHistoricalBrowserTable {
             "title TEXT" +
         ") "
     }
-}
 
-extension BrowserTableV8: SectionCreator, TableInfo {
-    func create(_ db: SQLiteDBConnection) -> Bool {
+    override func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS favicons (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -582,9 +576,8 @@ extension BrowserTableV8: SectionCreator, TableInfo {
     }
 }
 
-class BrowserTableV10: BaseHistoricalBrowserTable {
-    var name: String { return "BROWSER" }
-    var version: Int { return 10 }
+class BrowserSchemaV10: BaseHistoricalBrowserSchema {
+    override var version: Int { return 10 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.folder.rawValue
@@ -614,7 +607,7 @@ class BrowserTableV10: BaseHistoricalBrowserTable {
         return self.run(db, sql: sql, args: args)
     }
 
-    func getHistoryTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String {
+    func getHistoryTableCreationString(forVersion version: Int = BrowserSchema.DefaultVersion) -> String {
         return "CREATE TABLE IF NOT EXISTS history (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
@@ -688,10 +681,8 @@ class BrowserTableV10: BaseHistoricalBrowserTable {
             ", idx INTEGER NOT NULL" +     // Should advance from 0.
         ")"
     }
-}
 
-extension BrowserTableV10: SectionCreator, TableInfo {
-    func create(_ db: SQLiteDBConnection) -> Bool {
+    override func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS favicons (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -837,7 +828,7 @@ class TestSQLiteHistory: XCTestCase {
 
     // Test that our visit partitioning for frecency is correct.
     func testHistoryLocalAndRemoteVisits() {
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -906,33 +897,32 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testUpgrades() {
-        let sources: [(Int, SectionCreator)] = [
-            (6, BrowserTableV6()),
-            (7, BrowserTableV7()),
-            (8, BrowserTableV8()),
-            (10, BrowserTableV10()),
+        let sources: [(Int, Schema)] = [
+            (6, BrowserSchemaV6()),
+            (7, BrowserSchemaV7()),
+            (8, BrowserSchemaV8()),
+            (10, BrowserSchemaV10()),
         ]
 
-        let destination = BrowserTable()
+        let destination = BrowserSchema()
 
-        for (version, table) in sources {
-            let db = BrowserDB(filename: "browser-v\(version).db", files: files)
-            XCTAssertTrue(
-                db.runWithConnection { (conn, err) in
-                    XCTAssertTrue(table.create(conn), "Creating browser table version \(version)")
+        for (version, schema) in sources {
+            var db = BrowserDB(filename: "browser-v\(version).db", schema: schema, files: files)
+            XCTAssertTrue(db.runWithConnection({ connection, _ -> Int in
+                connection.version
+            }).value.successValue == schema.version, "Creating BrowserSchema at version \(version)")
+            db.forceClose()
 
-                    // And we can upgrade to the current version.
-                    XCTAssertTrue(destination.updateTable(conn, from: table.version), "Upgrading browser table from version \(version)")
-                }.value.isSuccess
-            )
+            db = BrowserDB(filename: "browser-v\(version).db", schema: destination, files: files)
+            XCTAssertTrue(db.runWithConnection({ connection, _ -> Int in
+                connection.version
+            }).value.successValue == destination.version, "Upgrading BrowserSchema from version \(version) to version \(schema.version)")
             db.forceClose()
         }
     }
 
     func testUpgradesWithData() {
-        let db = BrowserDB(filename: "browser-v6-data.db", files: files)
-
-        XCTAssertTrue(db.createOrUpdate(BrowserTableV6()) == .success, "Creating browser table version 6")
+        var db = BrowserDB(filename: "browser-v6-data.db", schema: BrowserSchemaV6(), files: files)
 
         // Insert some data.
         let queries = [
@@ -947,7 +937,7 @@ class TestSQLiteHistory: XCTestCase {
         XCTAssertTrue(db.run(queries).value.isSuccess)
 
         // And we can upgrade to the current version.
-        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success, "Upgrading browser table from version 6")
+        db = BrowserDB(filename: "browser-v6-data.db", schema: BrowserSchema(), files: files)
 
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
@@ -959,7 +949,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testDomainUpgrade() {
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -988,7 +978,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testDomains() {
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1025,7 +1015,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testHistoryIsSynced() {
-        let db = BrowserDB(filename: "historysynced.db", files: files)
+        let db = BrowserDB(filename: "historysynced.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1042,7 +1032,7 @@ class TestSQLiteHistory: XCTestCase {
     // This is a very basic test. Adds an entry, retrieves it, updates it,
     // and then clears the database.
     func testHistoryTable() {
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
@@ -1164,11 +1154,11 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testFaviconTable() {
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
-
+        
         let expectation = self.expectation(description: "First.")
         func done() -> Success {
             expectation.fulfill()
@@ -1227,13 +1217,13 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testTopSitesFrecencyOrder() {
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
         history.setTopSitesCacheSize(20)
-        history.clearTopSitesCache().value
-        history.clearHistory().value
+        history.clearTopSitesCache().succeeded()
+        history.clearHistory().succeeded()
 
         // Lets create some history. This will create 100 sites that will have 21 local and 21 remote visits
         populateHistoryForFrecencyCalculations(history, siteCount: 100)
@@ -1241,7 +1231,7 @@ class TestSQLiteHistory: XCTestCase {
         // Create a new site thats for an existing domain but a different URL.
         let site = Site(url: "http://s\(5)ite\(5).com/foo-different-url", title: "A \(5) different url")
         site.guid = "abc\(5)defhi"
-        history.insertOrUpdatePlace(site.asPlace(), modified: baseInstantInMillis - 20000).value
+        history.insertOrUpdatePlace(site.asPlace(), modified: baseInstantInMillis - 20000).succeeded()
         // Don't give it any remote visits. But give it 100 local visits. This should be the new Topsite!
         for i in 0...100 {
             addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
@@ -1275,20 +1265,20 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testTopSitesFiltersGoogle() {
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
         history.setTopSitesCacheSize(20)
-        history.clearTopSitesCache().value
-        history.clearHistory().value
+        history.clearTopSitesCache().succeeded()
+        history.clearHistory().succeeded()
         // Lets create some history. This will create 100 sites that will have 21 local and 21 remote visits
         populateHistoryForFrecencyCalculations(history, siteCount: 100)
 
         func createTopSite(url: String, guid: String) {
             let site = Site(url: url, title: "Hi")
             site.guid = guid
-            history.insertOrUpdatePlace(site.asPlace(), modified: baseInstantInMillis - 20000).value
+            history.insertOrUpdatePlace(site.asPlace(), modified: baseInstantInMillis - 20000).succeeded()
             // Don't give it any remote visits. But give it 100 local visits. This should be the new Topsite!
             for i in 0...100 {
                 addVisitForSite(site, intoHistory: history, from: .local, atTime: advanceTimestamp(baseInstantInMicros, by: 1000000 * i))
@@ -1333,7 +1323,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testTopSitesCache() {
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1418,7 +1408,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testPinnedTopSites() {
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1509,7 +1499,7 @@ class TestSQLiteHistory: XCTestCase {
 class TestSQLiteHistoryTransactionUpdate: XCTestCase {
     func testUpdateInTransaction() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1528,7 +1518,7 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
 class TestSQLiteHistoryFilterSplitting: XCTestCase {
     let history: SQLiteHistory = {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         return SQLiteHistory(db: db, prefs: prefs)
     }()

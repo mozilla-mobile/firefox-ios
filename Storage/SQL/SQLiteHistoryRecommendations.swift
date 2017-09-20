@@ -144,7 +144,7 @@ extension SQLiteHistory: HistoryRecommendations {
         if shouldInvalidateHighlights {
             queries.append(contentsOf: self.repopulateHighlightsQuery())
         }
-        return self.db.run(queries)
+        return self.db.runAsync(queries)
     }
 
     public func getRecentBookmarks(_ limit: Int = 3) -> Deferred<Maybe<Cursor<Site>>> {

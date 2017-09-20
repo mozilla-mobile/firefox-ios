@@ -125,13 +125,8 @@ class MockUploader {
 
 // Thieved mercilessly from TestSQLiteBookmarks.
 private func getBrowserDBForFile(filename: String, files: FileAccessor) -> BrowserDB? {
-    let db = BrowserDB(filename: filename, files: files)
-
-    // BrowserTable exists only to perform create/update etc. operations -- it's not
-    // a queryable thing that needs to stick around.
-    if db.createOrUpdate(BrowserTable()) != .success {
-        return nil
-    }
+    let db = BrowserDB(filename: filename, schema: BrowserSchema(), files: files)
+    db.touch().succeeded() // Ensure the schema is created/updated in advance
     return db
 }
 

@@ -720,8 +720,8 @@ fileprivate class SuggestionCell: UITableViewCell {
         }
 
         frame.size.height = height + 2 * SearchViewControllerUX.SuggestionCellVerticalPadding
-        contentView.frame = frame
-        container.frame = frame
+        contentView.frame = bounds
+        container.frame = bounds
 
         let imageX = (48 - imageSize) / 2
         let imageY = (frame.size.height - imageSize) / 2

@@ -99,31 +99,30 @@ class ActivityStreamTest: BaseTestCase {
             app.buttons["TabToolbar.backButton"].tap()
         }
         app.textFields["url"].tap()
-        
-        waitforExistence(app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!])
+    waitforExistence(app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!])
         let numberOfTopSitesAfter = topSites.cells.matching(identifier: "TopSite").count
         XCTAssertEqual(numberOfTopSitesAfter, 1, "A new top site should appear")
     }
 
     func testTopSitesShiftAfterRemovingOne() {
         navigator.goto(NewTabScreen)
-
+        
         // Check top site in first and second cell
         let topSiteFirstCell = app.collectionViews.cells.collectionViews.cells.element(boundBy: 0).label
         let topSiteSecondCell = app.collectionViews.cells.collectionViews.cells.element(boundBy: 1).label
-
+        
         XCTAssertTrue(topSiteFirstCell == allDefaultTopSites[0])
         XCTAssertTrue(topSiteSecondCell == allDefaultTopSites[1])
-
+        
         // Remove it
         app.collectionViews.cells["TopSitesCell"].cells[allDefaultTopSites[0]].press(forDuration: 1)
         selectOptionFromContextMenu (option: "Remove")
-
+        
         // Check top site in first cell now
         let topSiteFirstCellAfter = app.collectionViews.cells.collectionViews.cells.element(boundBy: 0).label
         XCTAssertTrue(topSiteFirstCellAfter == allDefaultTopSites[1])
     }
-
+    
     func testTopSitesOpenInNewTab() {
         let app = XCUIApplication()
 
@@ -145,30 +144,30 @@ class ActivityStreamTest: BaseTestCase {
         } else {
             app.buttons["URLBarView.tabsButton"].tap()
         }
-        
+
         app.cells.element(boundBy: 0).tap() //"Example Domain"
         XCTAssertFalse(app.tables["Top sites"].exists)
-        
+
         let staticTextsQuery = self.app.staticTexts.matching(identifier: "Example Domain")
         if staticTextsQuery.count > 0 {
             let firstText = staticTextsQuery.element(boundBy: 0)
             XCTAssert(firstText.exists)
         }
     }
-
+    
     func testTopSitesOpenInNewTabDefaultTopSite() {
         navigator.goto(NewTabScreen)
         app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu (option: "Open in New Tab")
-
+        
         // Check that two tabs are open and one of them is the default top site one
         navigator.goto(TabTray)
         waitforExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
         let numTabsOpen = app.collectionViews.cells.count
         XCTAssertEqual(numTabsOpen, 2, "New tab not open")
     }
-
-     func testTopSitesOpenInNewPrivateTab() {
+    
+    func testTopSitesOpenInNewPrivateTab() {
         let app = XCUIApplication()
 
         loadWebPage("http://example.com")
@@ -178,13 +177,13 @@ class ActivityStreamTest: BaseTestCase {
             app.buttons["TabToolbar.backButton"].tap()
         }
         app.textFields["url"].tap()
-        
+
         app.collectionViews.cells["TopSitesCell"].cells["example"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
 
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
         XCTAssertFalse(app.staticTexts["example"].exists)
-        
+
         app.buttons["Cancel"].tap()
         if iPad() {
             app.buttons["TopTabsViewController.tabsButton"].tap()
@@ -197,41 +196,41 @@ class ActivityStreamTest: BaseTestCase {
 
         XCTAssertFalse(app.collectionViews.cells["TopSitesCell"].exists)
         XCTAssert(app.staticTexts["Example Domain"].exists)
-     }
-
+    }
+    
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         navigator.goto(NewTabScreen)
         app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu (option: "Open in New Private Tab")
-
+        
         // Check that two tabs are open and one of them is the default top site one
         navigator.goto(PrivateTabTray)
         waitforExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
         let numTabsOpen = app.collectionViews.cells.count
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
-
+    
     func testTopSitesBookmarkDefaultTopSite() {
         // Bookmark a default TopSite
         navigator.goto(NewTabScreen)
         app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu (option: "Bookmark")
-
+        
         // Check that it appears under Bookmarks menu
         navigator.goto(HomePanel_Bookmarks)
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
-
+        
         // Check that longtapping on the TopSite gives the option to remove it
         navigator.goto(HomePanel_TopSites)
         app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
         XCTAssertTrue(app.tables["Context Menu"].cells["Remove Bookmark"].exists)
-
+        
         // Unbookmark it
         selectOptionFromContextMenu (option: "Remove Bookmark")
         navigator.goto(HomePanel_Bookmarks)
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
     }
-
+    
     func testTopSitesBookmarkNewTopSite () {
         // Bookmark a new TopSite
         navigator.openURL(urlString: newTopSite["url"]!)
@@ -241,7 +240,7 @@ class ActivityStreamTest: BaseTestCase {
             app.buttons["TabToolbar.backButton"].tap()
         }
         app.textFields["url"].tap()
-        
+
         waitforExistence(app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!])
         app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu (option: "Bookmark")
@@ -260,19 +259,19 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(HomePanel_Bookmarks)
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
     }
-
+    
     func testTopSitesShareDefaultTopSite () {
         navigator.goto(NewTabScreen)
         app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
-
+        
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it
         selectOptionFromContextMenu (option: "Share")
         if !iPad() {
             app.buttons["Cancel"].tap()
         }
     }
-
-    func testTopSitesShareNewTopSite () {
+    
+func testTopSitesShareNewTopSite () {
         navigator.openURL(urlString: newTopSite["url"]!)
         navigator.goto(NewTabScreen)
         waitforExistence(app.collectionViews.cells["TopSitesCell"]
@@ -291,7 +290,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(app.tables["Context Menu"].cells[option].exists)
         app.tables["Context Menu"].cells[option].tap()
     }
-
+    
     func testActivityStreamPages() {
         let app = XCUIApplication()
         let topSitesTable = app.cells["TopSitesCell"]
@@ -302,7 +301,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.openURL(urlString: "http://mozilla.org")
         navigator.openURL(urlString: "http://apple.com")
         navigator.openURL(urlString: "http://yahoo.com")
-        
+
         if iPad() {
             navigator.openURL(urlString: "http://cvs.com")
             navigator.openURL(urlString: "http://walmart.com")
@@ -322,13 +321,17 @@ class ActivityStreamTest: BaseTestCase {
         waitforNoExistence(pagecontrolButton)
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button should disappear after an item is deleted.")
     }
-
+    
     func testContextMenuInLandscape() {
         XCUIDevice.shared().orientation = .landscapeLeft
         let app = XCUIApplication()
 
-        loadWebPage("http://example.com")
-        app.buttons["URLBarView.backButton"].tap()
+        navigator.openURL(urlString: "http://example.com")
+        if app.buttons["URLBarView.backButton"].isEnabled {
+            app.buttons["URLBarView.backButton"].tap()
+        } else {
+            app.textFields["url"].tap()
+        }
         app.collectionViews.cells["TopSitesCell"].cells["example"].press(forDuration: 1)
 
         let contextMenuHeight = app.tables["Context Menu"].frame.size.height

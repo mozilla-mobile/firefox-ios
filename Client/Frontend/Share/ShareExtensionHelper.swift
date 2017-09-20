@@ -13,14 +13,12 @@ class ShareExtensionHelper: NSObject {
 
     fileprivate let selectedURL: URL
     fileprivate var onePasswordExtensionItem: NSExtensionItem!
-    fileprivate let activities: [UIActivity]
     // Wechat share extension doesn't like our default data ID which is a modified to support password managers.
     fileprivate let customDataTypeIdentifers = ["com.tencent.xin.sharetimeline"]
 
-    init(url: URL, tab: Tab?, activities: [UIActivity]) {
+    init(url: URL, tab: Tab?) {
         self.selectedURL = url
         self.selectedTab = tab
-        self.activities = activities
     }
 
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: String?) -> Void) -> UIActivityViewController {
@@ -42,7 +40,7 @@ class ShareExtensionHelper: NSObject {
         }
         activityItems.append(self)
 
-        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: activities)
+        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
 
         // Hide 'Add to Reading List' which currently uses Safari.
         // We would also hide View Later, if possible, but the exclusion list doesn't currently support
@@ -62,6 +60,11 @@ class ShareExtensionHelper: NSObject {
             if !completed {
                 completionHandler(completed, activityType.map { $0.rawValue })
                 return
+            }
+            // Bug 1392418 - When copying a url using the share extension there are 2 urls in the pasteboard.
+            // Make sure the pasteboard only has one url.
+            if let url = UIPasteboard.general.urls?.first {
+                UIPasteboard.general.urls = [url]
             }
 
             if self.isPasswordManagerActivityType(activityType.map { $0.rawValue }) {
@@ -102,12 +105,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivityType?) -> String {
-        //for these customDataID's load the default public.url because they don't seem to work properly with the 1Password UTI.
-        if let type = activityType, customDataTypeIdentifers.contains(type.rawValue) {
-            return "public.url"
-        }
-        // Because of our UTI declaration, this UTI now satisfies both the 1Password Extension and the usual NSURL for Share extensions.
-        return "org.appextension.fill-browser-action"
+        return "public.url"
     }
 }
 

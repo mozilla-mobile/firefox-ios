@@ -13,286 +13,41 @@ private let log = Logger.syncLogger
 
 public typealias Args = [Any?]
 
-protocol Changeable {
-    func run(_ sql: String, withArgs args: Args?) -> Success
-    func run(_ commands: [String]) -> Success
-    func run(_ commands: [(sql: String, args: Args?)]) -> Success
-}
-
-protocol Queryable {
-    func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>>
-}
-
-public enum DatabaseOpResult {
-    case success
-    case failure
-    case closed
-}
-
-// Version 1 - Basic history table.
-// Version 2 - Added a visits table, refactored the history table to be a GenericTable.
-// Version 3 - Added a favicons table.
-// Version 4 - Added a readinglist table.
-// Version 5 - Added the clients and the tabs tables.
-// Version 6 - Visit timestamps are now microseconds.
-// Version 7 - Eliminate most tables. See BrowserTable instead.
 open class BrowserDB {
     fileprivate let db: SwiftData
-    // XXX: Increasing this should blow away old history, since we currently don't support any upgrades.
-    fileprivate let Version: Int = 7
-    fileprivate let files: FileAccessor
-    fileprivate let filename: String
-    fileprivate let secretKey: String?
-    fileprivate let schemaTable: SchemaTable
-
-    fileprivate var initialized = [String]()
 
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
     // appear in a query string.
     open static let MaxVariableNumber = 999
 
-    public init(filename: String, secretKey: String? = nil, files: FileAccessor, leaveClosed: Bool = false) {
+    public init(filename: String, secretKey: String? = nil, schema: Schema, files: FileAccessor) {
         log.debug("Initializing BrowserDB: \(filename).")
-        self.files = files
-        self.filename = filename
-        self.schemaTable = SchemaTable()
-        self.secretKey = secretKey
 
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
-        self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
         if AppConstants.BuildChannel == .developer && secretKey != nil {
-            log.debug("Creating db: \(file) with secret = \(secretKey!)")
+            log.debug("Will attempt to use encrypted DB: \(file) with secret = \(secretKey ?? "nil")")
         }
 
-        if !leaveClosed {
-            self.prepareSchema()
-        }
+        self.db = SwiftData(filename: file, key: secretKey, prevKey: nil, schema: schema, files: files)
     }
 
-    // Do the same work that we normally do at the end of init.
-    public func prepareSchema() {
-        // Create or update will also delete and create the database if our key was incorrect.
-        switch self.createOrUpdate(self.schemaTable) {
-        case .failure:
-            log.error("Failed to create/update the schema table. Aborting.")
-            fatalError()
-        case .closed:
-            log.info("Database not created as the SQLiteConnection is closed.")
-            SentryIntegration.shared.sendWithStacktrace(message: "Database not created as the SQLiteConnection is closed.", tag: "BrowserDB", severity: .info)
-        case .success:
-            log.debug("db: \(self.filename) has been created")
-        }
-    }
-
-    // Creates a table and writes its table info into the table-table database.
-    fileprivate func createTable(_ conn: SQLiteDBConnection, table: SectionCreator) -> TableResult {
-        log.debug("Try create \(table.name) version \(table.version)")
-        if !table.create(conn) {
-            // If creating failed, we'll bail without storing the table info
-            log.debug("Creation failed.")
-            return .failed
-        }
-
+    // For testing purposes or other cases where we want to ensure that this `BrowserDB`
+    // instance has been initialized (schema is created/updated).
+    public func touch() -> Success {
+        let deferred = Success()
         var err: NSError? = nil
-        guard let result = schemaTable.insert(conn, item: table, err: &err) else {
-            return .failed
-        }
-        
-        return result > -1 ? .created : .failed
-    }
-
-    // Updates a table and writes its table into the table-table database.
-    // Exposed internally for testing.
-    func updateTable(_ conn: SQLiteDBConnection, table: SectionUpdater) -> TableResult {
-        log.debug("Trying update \(table.name) version \(table.version)")
-        var from = 0
-        // Try to find the stored version of the table
-        let cursor = schemaTable.query(conn, options: QueryOptions(filter: table.name))
-        if cursor.count > 0 {
-            if let info = cursor[0] as? TableInfoWrapper {
-                from = info.version
-            }
-        }
-
-        // If the versions match, no need to update
-        if from == table.version {
-            return .exists
-        }
-
-        if !table.updateTable(conn, from: from) {
-            // If the update failed, we'll bail without writing the change to the table-table.
-            log.debug("Updating failed.")
-            return .failed
-        }
-
-        var err: NSError? = nil
-
-        // Yes, we UPDATE OR INSERT… because we might be transferring ownership of a database table
-        // to a different Table. It'll trigger exists, and thus take the update path, but we won't
-        // necessarily have an existing schema entry -- i.e., we'll be updating from 0.
-        let insertResult = schemaTable.insert(conn, item: table, err: &err) ?? 0
-        let updateResult = schemaTable.update(conn, item: table, err: &err)
-        if  updateResult > 0 || insertResult > 0 {
-            return .updated
-        }
-        return .failed
-    }
-
-    // Utility for table classes. They should call this when they're initialized to force
-    // creation of the table in the database.
-    func createOrUpdate(_ tables: Table...) -> DatabaseOpResult {
-        guard !db.closed else {
-            log.info("Database is closed - skipping schema create/updates")
-            return .closed
-        }
-
-        var success = true
-
-        let doCreate = { (table: Table, connection: SQLiteDBConnection) -> Void in
-            switch self.createTable(connection, table: table) {
-            case .created:
-                success = true
+        withConnection(&err) { connection, error -> Void in
+            guard let _ = connection as? ConcreteSQLiteDBConnection else {
+                deferred.fill(Maybe(failure: DatabaseError(description: "Could not establish a database connection")))
                 return
-            case .exists:
-                log.debug("Table already exists.")
-                success = true
-                return
-            default:
-                success = false
             }
+
+            deferred.fill(Maybe(success: ()))
         }
 
-        if let error = self.db.transaction({ connection -> Bool in
-            let thread = Thread.current.description
-            // If the table doesn't exist, we'll create it.
-            for table in tables {
-                log.debug("Create or update \(table.name) version \(table.version) on \(thread).")
-                if !table.exists(connection) {
-                    log.debug("Doesn't exist. Creating table \(table.name).")
-                    doCreate(table, connection)
-                } else {
-                    // Otherwise, we'll update it
-                    switch self.updateTable(connection, table: table) {
-                    case .updated:
-                        log.debug("Updated table \(table.name).")
-                        success = true
-                        break
-                    case .exists:
-                        log.debug("Table \(table.name) already exists.")
-                        success = true
-                        break
-                    default:
-                        log.error("Update failed for \(table.name). Dropping and recreating.")
-
-                        let _ = table.drop(connection)
-                        var err: NSError? = nil
-                        let _ = self.schemaTable.delete(connection, item: table, err: &err)
-
-                        doCreate(table, connection)
-                    }
-                }
-
-                if !success {
-                    log.warning("Failed to configure multiple tables. Aborting.")
-                    return false
-                }
-            }
-            return success
-        }) {
-            // Error getting a transaction
-            log.error("Unable to get a transaction: \(error.localizedDescription)")
-            SentryIntegration.shared.sendWithStacktrace(message: "Unable to get a transaction: \(error.localizedDescription)", tag: "BrowserDB", severity: .error)
-            success = false
-        }
-
-        // If we failed, move the file and try again. This will probably break things that are already
-        // attached and expecting a working DB, but at least we should be able to restart.
-        if !success {
-            // Make sure that we don't still have open the files that we want to move!
-            // Note that we use sqlite3_close_v2, which might actually _not_ close the
-            // database file yet. For this reason we move the -shm and -wal files, too.
-            db.forceClose()
-
-            // Attempt to make a backup as long as the DB file still exists
-            if self.files.exists(self.filename) {
-                log.warning("Couldn't create or update \(tables.map { $0.name }). Attempting to move \(self.filename) to another location.")
-                SentryIntegration.shared.sendWithStacktrace(message: "Couldn't create or update \(tables.map { $0.name }). Attempting to move \(self.filename) to another location.", tag: "BrowserDB", severity: .warning)
-
-                // Note that a backup file might already exist! We append a counter to avoid this.
-                var bakCounter = 0
-                var bak: String
-                repeat {
-                    bakCounter += 1
-                    bak = "\(self.filename).bak.\(bakCounter)"
-                } while self.files.exists(bak)
-
-                do {
-                    try self.files.move(self.filename, toRelativePath: bak)
-
-                    let shm = self.filename + "-shm"
-                    let wal = self.filename + "-wal"
-                    log.debug("Moving \(shm) and \(wal)…")
-                    if self.files.exists(shm) {
-                        log.debug("\(shm) exists.")
-                        try self.files.move(shm, toRelativePath: bak + "-shm")
-                    }
-                    if self.files.exists(wal) {
-                        log.debug("\(wal) exists.")
-                        try self.files.move(wal, toRelativePath: bak + "-wal")
-                    }
-                    
-                    log.debug("Finished moving \(self.filename) successfully.")
-                } catch let error as NSError {
-                    log.error("Unable to move \(self.filename) to another location. \(error)")
-                    SentryIntegration.shared.sendWithStacktrace(message: "Unable to move \(self.filename) to another location. \(error)", tag: "BrowserDB", severity: .error)
-                }
-            } else {
-                // No backup was attempted since the DB file did not exist
-                log.error("The DB \(self.filename) has been deleted while previously in use.")
-                SentryIntegration.shared.sendWithStacktrace(message: "The DB \(self.filename) has been deleted while previously in use.", tag: "BrowserDB", severity: .info)
-            }
-
-            // Do this after the relevant tables have been created.
-            defer {
-                // Notify the world that we moved the database. This allows us to
-                // reset sync and start over in the case of corruption.
-                let notify = Notification(name: NotificationDatabaseWasRecreated, object: self.filename)
-                NotificationCenter.default.post(notify)
-            }
-
-            self.reopenIfClosed()
-            
-            // Attempt to re-create the DB.
-            success = true
-            
-            // Re-create all previously-created tables.
-            if let _ = db.transaction({ connection -> Bool in
-                doCreate(self.schemaTable, connection)
-                for table in tables {
-                    if table as? SchemaTable === self.schemaTable {
-                        // Don't do it twice! Sometimes we hit this failure when creating the
-                        // initial schema table, in which case `schemaTable` will actually be
-                        // in this table list.
-                        continue
-                    }
-
-                    doCreate(table, connection)
-                    if !success {
-                        log.error("Unable to re-create table '\(table.name)'.")
-                        return false
-                    }
-                }
-                return success
-            }) {
-                success = false
-            }
-        }
-
-        return success ? .success : .failure
+        return deferred
     }
-
-    typealias IntCallback = (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Int
 
     func withConnection<T>(flags: SwiftData.Flags, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
         var res: T!
@@ -325,9 +80,7 @@ open class BrowserDB {
             return callback(connection, &err)
         }
     }
-}
 
-extension BrowserDB {
     func vacuum() {
         log.debug("Vacuuming a BrowserDB.")
         _ = db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
@@ -342,9 +95,7 @@ extension BrowserDB {
             return true
         }
     }
-}
 
-extension BrowserDB {
     public class func varlist(_ count: Int) -> String {
         return "(" + Array(repeating: "?", count: count).joined(separator: ", ") + ")"
     }
@@ -435,13 +186,9 @@ extension BrowserDB {
     }
 
     public func reopenIfClosed() {
-        let wasClosed = db.closed
-
         db.reopenIfClosed()
     }
-}
 
-extension BrowserDB: Changeable {
     func run(_ sql: String, withArgs args: Args? = nil) -> Success {
         return run([(sql, args)])
     }
@@ -478,9 +225,30 @@ extension BrowserDB: Changeable {
 
         return succeed()
     }
-}
 
-extension BrowserDB: Queryable {
+    func runAsync(_ commands: [(sql: String, args: Args?)]) -> Success {
+        if commands.isEmpty {
+            return succeed()
+        }
+
+        let deferred = Success()
+
+        var error: NSError?
+        error = self.transaction(synchronous: false, err: &error) { (conn, err) -> Bool in
+            for (sql, args) in commands {
+                err = conn.executeChange(sql, withArgs: args)
+                if let err = err {
+                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                    return false
+                }
+            }
+
+            deferred.fill(Maybe(success: ()))
+            return true
+        }
+
+        return deferred
+    }
 
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
         return runWithConnection { (connection, _) -> Cursor<T> in
@@ -496,17 +264,5 @@ extension BrowserDB: Queryable {
     func queryReturnsNoResults(_ sql: String, args: Args? = nil) -> Deferred<Maybe<Bool>> {
         return self.runQuery(sql, args: nil, factory: { _ in false })
           >>== { deferMaybe($0[0] ?? true) }
-    }
-}
-
-extension SQLiteDBConnection {
-    func tablesExist(_ names: [String]) -> Bool {
-        let count = names.count
-        let inClause = BrowserDB.varlist(names.count)
-        let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN \(inClause)"
-
-        let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names)
-        log.debug("\(res.count) tables exist. Expected \(count)")
-        return res.count > 0
     }
 }

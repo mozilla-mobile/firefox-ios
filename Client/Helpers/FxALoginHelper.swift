@@ -31,6 +31,23 @@ struct FxALoginFlags {
     let verified: Bool
 }
 
+enum PushNotificationError: MaybeErrorType {
+    case registrationFailed
+    case userDisallowed
+    case wrongOSVersion
+
+    var description: String {
+        switch self {
+        case .registrationFailed:
+            return "The OS was unable to complete APNS registration"
+        case .userDisallowed:
+            return "User refused permission for notifications"
+        case .wrongOSVersion:
+            return "The version of iOS is not recent enough"
+        }
+    }
+}
+
 /// This class manages the from successful login for FxAccounts to 
 /// asking the user for notification permissions, registering for 
 /// remote push notifications (APNS), then creating an account and 
@@ -60,6 +77,8 @@ class FxALoginHelper {
         return PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
     }
 
+    fileprivate var apnsTokenDeferred: Deferred<Maybe<String>>!
+
     // This should be called when the application has started.
     // This configures the helper for logging into Firefox Accounts, and
     // if already logged in, checking if anything needs to be done in response
@@ -67,6 +86,8 @@ class FxALoginHelper {
     func application(_ application: UIApplication, didLoadProfile profile: Profile) {
         self.profile = profile
         self.account = profile.getAccount()
+
+        self.apnsTokenDeferred = Deferred()
 
         guard let account = self.account else {
             // There's no account, no further action.
@@ -129,10 +150,27 @@ class FxALoginHelper {
         }
         accountVerified = data["verified"].bool ?? false
         self.account = account
+        
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            account.updateProfile()
+        }
+        
         requestUserNotifications(application)
     }
 
+    func getDeviceToken(_ application: UIApplication) -> Deferred<Maybe<String>> {
+        self.requestUserNotifications(application)
+        return self.apnsTokenDeferred
+    }
+
     fileprivate func requestUserNotifications(_ application: UIApplication) {
+        if let deferred = self.apnsTokenDeferred, deferred.isFilled,
+            let token = deferred.value.successValue {
+            // If we have an account, then it'll go through ahead and register 
+            // with autopush here.
+            // If not we'll just bail. The Deferred will do the rest.
+            return self.apnsRegisterDidSucceed(token)
+        }
         DispatchQueue.main.async {
             self.requestUserNotificationsMainThreadOnly(application)
         }
@@ -140,49 +178,13 @@ class FxALoginHelper {
 
     fileprivate func requestUserNotificationsMainThreadOnly(_ application: UIApplication) {
         assert(Thread.isMainThread, "requestAuthorization should be run on the main thread")
-        if #available(iOS 10, *) {
-            let center = UNUserNotificationCenter.current()
-            return center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                guard error == nil else {
-                    return self.application(application, canDisplayUserNotifications: false)
-                }
-                self.application(application, canDisplayUserNotifications: granted)
+        let center = UNUserNotificationCenter.current()
+        return center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            guard error == nil else {
+                return self.application(application, canDisplayUserNotifications: false)
             }
+            self.application(application, canDisplayUserNotifications: granted)
         }
-
-        // This is for iOS 9 and below.
-        // We'll still be using local notifications, i.e. the old behavior,
-        // so we need to keep doing it like this.
-        let viewAction = UIMutableUserNotificationAction()
-        viewAction.identifier = SentTabAction.view.rawValue
-        viewAction.title = Strings.SentTabViewActionTitle
-        viewAction.activationMode = .foreground
-        viewAction.isDestructive = false
-        viewAction.isAuthenticationRequired = false
-
-        let bookmarkAction = UIMutableUserNotificationAction()
-        bookmarkAction.identifier = SentTabAction.bookmark.rawValue
-        bookmarkAction.title = Strings.SentTabBookmarkActionTitle
-        bookmarkAction.activationMode = .foreground
-        bookmarkAction.isDestructive = false
-        bookmarkAction.isAuthenticationRequired = false
-
-        let readingListAction = UIMutableUserNotificationAction()
-        readingListAction.identifier = SentTabAction.readingList.rawValue
-        readingListAction.title = Strings.SentTabAddToReadingListActionTitle
-        readingListAction.activationMode = .foreground
-        readingListAction.isDestructive = false
-        readingListAction.isAuthenticationRequired = false
-
-        let sentTabsCategory = UIMutableUserNotificationCategory()
-        sentTabsCategory.identifier = TabSendCategory
-        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], for: .default)
-
-        sentTabsCategory.setActions([bookmarkAction, viewAction], for: .minimal)
-
-        let settings = UIUserNotificationSettings(types: .alert, categories: [sentTabsCategory])
-
-        application.registerUserNotificationSettings(settings)
     }
 
     // This is necessarily called from the AppDelegate.
@@ -196,15 +198,12 @@ class FxALoginHelper {
 
     func application(_ application: UIApplication, canDisplayUserNotifications allowed: Bool) {
         guard allowed else {
+            apnsTokenDeferred?.fillIfUnfilled(Maybe.failure(PushNotificationError.userDisallowed))
             return readyForSyncing()
         }
 
         // Record that we have asked the user, and they have given an answer.
         profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
-
-        guard #available(iOS 10, *) else {
-            return readyForSyncing()
-        }
 
         if AppConstants.MOZ_FXA_PUSH {
             DispatchQueue.main.async {
@@ -214,7 +213,7 @@ class FxALoginHelper {
             readyForSyncing()
         }
     }
-
+        
     func getPushConfiguration() -> PushConfiguration? {
         let label = PushConfigurationLabel(rawValue: AppConstants.scheme)
         return label?.toConfiguration()
@@ -222,9 +221,27 @@ class FxALoginHelper {
 
     func apnsRegisterDidSucceed(_ deviceToken: Data) {
         let apnsToken = deviceToken.hexEncodedString
+        self.apnsTokenDeferred?.fillIfUnfilled(Maybe(success: apnsToken))
+        self.apnsRegisterDidSucceed(apnsToken)
+    }
+
+    fileprivate func apnsRegisterDidSucceed(_ apnsToken: String) {
+        guard self.account != nil else {
+            // If we aren't logged in to FxA at this point
+            // we should bail.
+            return loginDidFail()
+        }
 
         guard let pushClient = self.pushClient else {
             return pushRegistrationDidFail()
+        }
+
+        if let pushRegistration = account.pushRegistration {
+            // Currently, we don't support routine changing of push subscriptions
+            // then we can assume that if we've already registered with the
+            // push server, then we don't need to do it again.
+            _ = pushClient.updateUAID(apnsToken, withRegistration: pushRegistration)
+            return
         }
 
         pushClient.register(apnsToken).upon { res in
@@ -236,6 +253,7 @@ class FxALoginHelper {
     }
 
     func apnsRegisterDidFail() {
+        self.apnsTokenDeferred?.fillIfUnfilled(Maybe(failure: PushNotificationError.registrationFailed))
         readyForSyncing()
     }
 
@@ -250,7 +268,7 @@ class FxALoginHelper {
 
     fileprivate func readyForSyncing() {
         guard let profile = self.profile, let account = self.account else {
-            return loginDidSucceed()
+            return loginDidFail()
         }
 
         profile.setAccount(account)
@@ -344,5 +362,7 @@ extension FxALoginHelper {
         // Cleanup the FxALoginHelper.
         self.account = nil
         self.accountVerified = nil
+
+        self.profile?.prefs.removeObjectForKey(PendingAccountDisconnectedKey)
     }
 }

@@ -42,11 +42,21 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         app.buttons["TabToolbar.menuButton"].tap()
         app.otherElements["MenuViewController.menuView"].swipeLeft()
         app.cells["SettingsMenuItem"].tap()
+        snapshot("04SettingsTopLevel")
 
         // TODO Scroll through the settings and make a screenshot of every page
 
         // Screenshot all the settings that have a separate page
-        for cellName in ["Search", "NewTab", "Homepage", "Logins", "TouchIDPasscode", "ClearPrivateData"] {
+        for cellName in ["Search", "NewTab", "Homepage", "Logins"] {
+            app.tables["AppSettingsTableViewController.tableView"].cells[cellName].tap()
+            snapshot("04Settings-\(cellName)")
+            app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+        }
+
+        // Unclear why this is needed - without it the test framework finds two TouchIDPasscode cells
+        app.tables["AppSettingsTableViewController.tableView"].swipeUp()
+
+        for cellName in ["TouchIDPasscode", "ClearPrivateData", "TrackingProtection"] {
             app.tables["AppSettingsTableViewController.tableView"].cells[cellName].tap()
             snapshot("04Settings-\(cellName)")
             app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
@@ -181,5 +191,78 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/password.html", waitForOtherElementWithAriaLabel: "body")
         app.webViews.element(boundBy: 0).buttons["submit"].tap()
         snapshot("17PasswordSnackbar-02")
+    }
+
+    func test18TopSitesMenu() {
+        let app = XCUIApplication()
+        let topSites = app.cells["TopSitesCell"]
+        topSites.cells.matching(identifier: "TopSite").element(boundBy: 0).press(forDuration: 2.0)
+        snapshot("18TopSitesMenu-01")
+    }
+
+    func test19HistoryTableContextMenu() {
+        let app = XCUIApplication()
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.toolbars.buttons["HistoryMenuToolbarItem"].tap()
+        app.tables["History List"].cells.element(boundBy: 2).press(forDuration: 2.0)
+        snapshot("19HistoryTableContextMenu-01")
+    }
+
+    func test20BookmarksTableContextMenu() {
+        let app = XCUIApplication()
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.cells["AddBookmarkMenuItem"].tap()
+        waitforNoExistence(app.otherElements["MenuViewController.menuView"])
+        app.textFields["url"].tap()
+        app.buttons["HomePanels.Bookmarks"].tap()
+        app.tables["Bookmarks List"].cells.element(boundBy: 0).press(forDuration: 2.0)
+        snapshot("20BookmarksTableContextMenu-01")
+    }
+
+    func test21ReaderModeSettingsMenu() {
+        let app = XCUIApplication()
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabLocationView.readerModeButton"].tap()
+        app.buttons["ReaderModeBarView.settingsButton"].tap()
+        snapshot("21ReaderModeSettingsMenu-01")
+    }
+
+    func test22ReadingListTableContextMenu() {
+        let app = XCUIApplication()
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabLocationView.readerModeButton"].tap()
+        app.buttons["ReaderModeBarView.listStatusButton"].tap()
+        app.textFields["url"].tap()
+        app.buttons["HomePanels.ReadingList"].tap()
+        app.tables["ReadingTable"].cells.element(boundBy: 0).press(forDuration: 2.0)
+        snapshot("22ReadingListTableContextMenu-01")
+    }
+
+    func test23ReadingListTableRowMenu() {
+        let app = XCUIApplication()
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabLocationView.readerModeButton"].tap()
+        app.buttons["ReaderModeBarView.listStatusButton"].tap()
+        app.textFields["url"].tap()
+        app.buttons["HomePanels.ReadingList"].tap()
+        app.tables["ReadingTable"].cells.element(boundBy: 0).swipeLeft()
+        snapshot("23ReadingListTableRowMenu-01")
+        app.tables["ReadingTable"].cells.element(boundBy: 0).buttons.element(boundBy: 1).tap()
+        app.tables["ReadingTable"].cells.element(boundBy: 0).swipeLeft()
+        snapshot("23ReadingListTableRowMenu-02")
+    }
+
+    func test24BookmarksListTableRowMenu() {
+        let app = XCUIApplication()
+        loadWebPage(url: "http://wopr.norad.org/~sarentz/fxios/testpages/index.html", waitForOtherElementWithAriaLabel: "body")
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.cells["AddBookmarkMenuItem"].tap()
+        waitforNoExistence(app.otherElements["MenuViewController.menuView"])
+        app.textFields["url"].tap()
+        app.buttons["HomePanels.Bookmarks"].tap()
+        app.tables["Bookmarks List"].cells.element(boundBy: 0).swipeLeft()
+        snapshot("24BookmarksListTableRowMenu-01")
     }
 }

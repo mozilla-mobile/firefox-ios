@@ -17,7 +17,7 @@ struct TodayStrings {
 }
 
 struct TodayUX {
-    static let privateBrowsingColor = UIColor(colorString: "CE6EFC")
+    static let privateBrowsingColor = UIColor(rgb: 0xCE6EFC)
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
     static let linkTextSize: CGFloat = 10.0
     static let labelTextSize: CGFloat = 14.0
@@ -79,13 +79,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
-        if #available(iOS 10, *) {
-            // no custom margin needed
-        } else {
-            button.imageView?.snp.updateConstraints { make in
-                make.left.equalTo(button.snp.left).offset(TodayUX.iOS9LeftMargin)
-            }
-        }
         return button
     }()
 
@@ -123,22 +116,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // on iOS10 widgetView will be a UIVisualEffectView and on ios9 it will just be the main self.view
         let widgetView: UIView!
-        if #available(iOSApplicationExtension 10.0, *) {
-            self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
-            let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
-            self.view.addSubview(effectView)
-            effectView.snp.makeConstraints { make in
-                make.edges.equalTo(self.view)
-            }
-            widgetView = effectView.contentView
-        } else {
-            widgetView = self.view
-            self.view.tintColor = UIColor.white
-            openCopiedLinkButton.label.textColor = UIColor.white
+        self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
+        let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
+        self.view.addSubview(effectView)
+        effectView.snp.makeConstraints { make in
+            make.edges.equalTo(self.view)
         }
-
+        widgetView = effectView.contentView
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
 

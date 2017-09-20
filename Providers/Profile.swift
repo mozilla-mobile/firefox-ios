@@ -235,21 +235,12 @@ open class BrowserProfile: Profile {
         let isNewProfile = !files.exists("")
 
         // Set up our database handles.
-
-        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, files: files, leaveClosed: true)
-        self.db = BrowserDB(filename: "browser.db", files: files, leaveClosed: true)
+        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, schema: LoginsSchema(), files: files)
+        self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
 
         // This has to happen prior to the databases being opened, because opening them can trigger
         // events to which the SyncManager listens.
         self.syncManager = BrowserSyncManager(profile: self)
-
-        self.db.prepareSchema()
-
-        if syncDelegate != nil {
-            // We almost certainly don't want to be accessing the logins.db when in an extension, so let's avoid
-            // corrupting it by not opening it at all.
-            self.loginsDB.prepareSchema()
-        }
 
         let notificationCenter = NotificationCenter.default
 
@@ -482,11 +473,14 @@ open class BrowserProfile: Profile {
     }()
 
     var accountConfiguration: FirefoxAccountConfiguration {
-        if prefs.boolForKey("useStageSyncService") ?? false {
-            return StageFirefoxAccountConfiguration()
+        if prefs.boolForKey("useCustomSyncService") ?? false {
+            return CustomFirefoxAccountConfiguration(prefs: self.prefs)
         }
         if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
+        }
+        if prefs.boolForKey("useStageSyncService") ?? false {
+            return StageFirefoxAccountConfiguration()
         }
         return ProductionFirefoxAccountConfiguration()
     }
@@ -495,7 +489,15 @@ open class BrowserProfile: Profile {
         let key = self.name + ".account"
         self.keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
         if let dictionary = self.keychain.object(forKey: key) as? [String: AnyObject] {
-            return FirefoxAccount.fromDictionary(dictionary)
+            let account =  FirefoxAccount.fromDictionary(dictionary)
+            
+            // Check to see if the account configuration set is a custom service
+            // and update it to use the custom servers.
+            if let configuration = account?.configuration as? CustomFirefoxAccountConfiguration {
+                account?.configuration = CustomFirefoxAccountConfiguration(prefs: self.prefs)
+            }
+            
+            return account
         }
         return nil
     }()
@@ -540,8 +542,13 @@ open class BrowserProfile: Profile {
         flushAccount()
         
         // tell any observers that our account has changed
-        let userInfo = [NotificationUserInfoKeyHasSyncableAccount: hasSyncableAccount()]
-        NotificationCenter.default.post(name: NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
+        DispatchQueue.main.async {
+            // Many of the observers for this notifications are on the main thread,
+            // so we should post the notification there, just in case we're not already
+            // on the main thread.
+            let userInfo = [NotificationUserInfoKeyHasSyncableAccount: self.hasSyncableAccount()]
+            NotificationCenter.default.post(name: NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
+        }
 
         self.syncManager.onAddedAccount()
     }
@@ -553,7 +560,7 @@ open class BrowserProfile: Profile {
     }
 
     // Extends NSObject so we can use timers.
-    public class BrowserSyncManager: NSObject, SyncManager {
+    public class BrowserSyncManager: NSObject, SyncManager, CollectionChangedNotifier {
         // We shouldn't live beyond our containing BrowserProfile, either in the main app or in
         // an extension.
         // But it's possible that we'll finish a side-effect sync after we've ditched the profile
@@ -755,7 +762,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        func doInBackgroundAfter(_ millis: Int64, _ block: @escaping (Void) -> Void) {
+        func doInBackgroundAfter(_ millis: Int64, _ block: @escaping () -> Void) {
             let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
             //Pretty ambiguous here. I'm thinking .now was DispatchTime.now() and not Date.now()
             queue.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(millis)), execute: block)
@@ -949,8 +956,9 @@ open class BrowserProfile: Profile {
 
         fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing clients to storage.")
+
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info) >>== { result in
+            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info, notifier: self) >>== { result in
                 guard case .completed = result else {
                     return deferMaybe(result)
                 }
@@ -1217,6 +1225,24 @@ open class BrowserProfile: Profile {
                 Date.now() < stopBy &&
                 self.profile.hasSyncableAccount()
             }
+        }
+
+        class NoAccountError: MaybeErrorType {
+            var description = "No account."
+        }
+
+        public func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Success {
+            guard let account = self.profile.account else {
+                return deferMaybe(NoAccountError())
+            }
+            return account.notify(deviceIDs: deviceIDs, collectionsChanged: collections)
+        }
+
+        public func notifyAll(collectionsChanged collections: [String]) -> Success {
+            guard let account = self.profile.account else {
+                return deferMaybe(NoAccountError())
+            }
+            return account.notifyAll(collectionsChanged: collections)
         }
     }
 }

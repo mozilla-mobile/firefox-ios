@@ -101,38 +101,39 @@ class AuthenticationTest: BaseTestCase {
     }
     
     func testPromptPassCodeUponReentry() {
-        let springboard = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.springboard")!
-      
         enablePasscode("1337")
         navigator.goto(LoginsSettings)
-        waitforExistence(app.staticTexts["Enter Passcode"])
+        waitforExistence(app.navigationBars["Enter Passcode"])
         typePasscode("1337")
         waitforExistence(app.tables["Login List"])
         
         //send app to background, and re-enter
         XCUIDevice.shared().press(.home)
-        waitforExistence(springboard.scrollViews.otherElements.icons["Fennec"])
-        springboard.scrollViews.otherElements.icons["Fennec"].doubleTap()
-        
+        app.activate()
+            let contentView = app.navigationBars["Client.FxAContentView"]
+            if contentView.exists {
+                app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
+        }
         navigator.nowAt("SettingsScreen")
         navigator.goto(LoginsSettings)
-        waitforExistence(app.staticTexts["Enter Passcode"])
+        waitforExistence(app.navigationBars["Enter Passcode"])
     }
     
     func testPromptPassCodeUponReentryWithDelay() {
-        let springboard = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.springboard")!
-        
         enablePasscode("1337", interval: "After 5 minutes")
         navigator.goto(LoginsSettings)
-        waitforExistence(app.staticTexts["Enter Passcode"])
+        waitforExistence(app.navigationBars["Enter Passcode"])
         typePasscode("1337")
         waitforExistence(app.tables["Login List"])
         
         //send app to background, and re-enter
         XCUIDevice.shared().press(.home)
-        waitforExistence(springboard.scrollViews.otherElements.icons["Fennec"])
-        springboard.scrollViews.otherElements.icons["Fennec"].doubleTap()
-        
+        app.activate()
+        let contentView = app.navigationBars["Client.FxAContentView"]
+        if contentView.exists {
+                app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
+        }
+
         navigator.nowAt("SettingsScreen")
         navigator.goto(LoginsSettings)
         waitforExistence(app.tables["Login List"])
@@ -174,7 +175,7 @@ class AuthenticationTest: BaseTestCase {
         
         let authenticationmanagerSettingstableviewTable = app.tables["AuthenticationManager.settingsTableView"]
         navigator.goto(PasscodeIntervalSettings)
-        waitforExistence(app.staticTexts["Enter Passcode"])
+        waitforExistence(app.navigationBars["Enter Passcode"])
         typePasscode("1337")
         waitforExistence(app.staticTexts["Immediately"])
         XCTAssertTrue(app.staticTexts["After 1 minute"].exists)
@@ -191,7 +192,7 @@ class AuthenticationTest: BaseTestCase {
         // only when timing isn't changed. (could be due to timer reset?)  
         // For clarification, raised Bug 1325439
         navigator.goto(PasscodeIntervalSettings)
-        waitforExistence(app.staticTexts["Enter Passcode"])
+        waitforExistence(app.navigationBars["Enter Passcode"])
         typePasscode("1337")
 
         navigator.goto(PasscodeSettings)
@@ -205,14 +206,14 @@ class AuthenticationTest: BaseTestCase {
 
         // Enter login
         navigator.goto(LoginsSettings)
-        waitforExistence(app.staticTexts["Enter Passcode"])
+        waitforExistence(app.navigationBars["Enter Passcode"])
         typePasscode("1337")
         waitforExistence(app.tables["Login List"])
         navigator.goto(SettingsScreen)
 
         // Trying again should display passcode screen since we've set the interval to be immediately.
         navigator.goto(LoginsSettings)
-        waitforExistence(app.staticTexts["Enter Passcode"])
+        waitforExistence(app.navigationBars["Enter Passcode"])
         typePasscode("1337")
         waitforExistence(app.tables["Login List"])
 
@@ -251,8 +252,7 @@ class AuthenticationTest: BaseTestCase {
     func testWrongPasscodeDisplaysAttemptsAndMaxError() {
         enablePasscode("1337")
         app.tables["AuthenticationManager.settingsTableView"].staticTexts["Require Passcode"].tap()
-        
-        waitforExistence(app.staticTexts["Enter Passcode"])
+        waitforExistence(app.navigationBars["Enter Passcode"])
         typePasscode("1337")
         waitforExistence(app.staticTexts["After 5 minutes"])
         app.staticTexts["After 5 minutes"].tap()
@@ -337,8 +337,7 @@ class AuthenticationTest: BaseTestCase {
         waitforExistence(app.tables["Login List"])
         
         navigator.goto(PasscodeIntervalSettings)
-        waitforExistence(app.staticTexts["Enter Passcode"])
-
+        waitforExistence(app.navigationBars["Enter Passcode"])
         typePasscode("1337")
         waitforExistence(app.staticTexts["Immediately"])
         app.staticTexts["After 15 minutes"].tap()
@@ -349,7 +348,6 @@ class AuthenticationTest: BaseTestCase {
         // Enter login, since the interval is reset, it will ask for password again
         navigator.goto(LoginsSettings)
         waitforExistence(app.navigationBars["Enter Passcode"])
-
         disablePasscode("1337")
     }
 }

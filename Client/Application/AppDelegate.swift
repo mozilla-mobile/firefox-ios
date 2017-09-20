@@ -42,10 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var openInFirefoxParams: LaunchParams?
 
-    var appStateStore: AppStateStore!
-
-    var systemBrightness: CGFloat = UIScreen.main.brightness
-    
     var receivedURLs: [URL]?
 
     @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -74,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Configuring window…")
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window!.backgroundColor = UIConstants.AppBackgroundColor
+        self.window!.backgroundColor = UIColor.white
 
         // Short circuit the app if we want to email logs from the debug menu
         if DebugSettingsBundleOptions.launchIntoEmailComposer {
@@ -117,7 +113,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         log.debug("Getting profile…")
         let profile = getProfile(application)
-        appStateStore = AppStateStore(prefs: profile.prefs)
 
         log.debug("Initializing telemetry…")
         Telemetry.initWithPrefs(profile.prefs)
@@ -138,6 +133,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
 
+        // Temporary fix for Bug 1390871 - NSInvalidArgumentException: -[WKContentView menuHelperFindInPage]: unrecognized selector
+        if #available(iOS 11, *) {
+            if let clazz = NSClassFromString("WKCont" + "ent" + "View"), let swizzledMethod = class_getInstanceMethod(TabWebViewMenuHelper.self, #selector(TabWebViewMenuHelper.swizzledMenuHelperFindInPage)) {
+                class_addMethod(clazz, MenuHelper.SelectorFindInPage, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
+            }
+        }
+
         log.debug("Configuring tabManager…")
         self.tabManager = TabManager(prefs: profile.prefs, imageStore: imageStore)
         self.tabManager.stateDelegate = self
@@ -147,12 +149,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Initing BVC…")
 
         browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
+        browserViewController.edgesForExtendedLayout = []
+
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
         navigationController.isNavigationBarHidden = true
+        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
         rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController
@@ -179,17 +184,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let leanplum = LeanplumIntegration.sharedInstance
         leanplum.setup(profile: profile)
         leanplum.setEnabled(true)
-
-        // We need to check if the app is a clean install to use for
-        // preventing the What's New URL from appearing.
-        let prefs = getProfile(application).prefs
-        if prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
-            prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-            leanplum.track(eventName: .firstRun)
-        } else if prefs.boolForKey("SecondRun") == nil {
-            prefs.setBool(true, forKey: "SecondRun")
-            leanplum.track(eventName: .secondRun)
-        }
 
         log.debug("Updating authentication keychain state to reflect system state")
         self.updateAuthenticationInfo()
@@ -456,10 +450,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
         defaults.synchronize()
 
-        profile?.reopen()
+        if let profile = self.profile {
+            profile.reopen()
 
-        NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: true)
-        self.profile?.syncManager.applicationDidBecomeActive()
+            if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
+                FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+            }
+
+            NightModeHelper.restoreNightModeBrightness(profile.prefs, toForeground: true)
+            profile.syncManager.applicationDidBecomeActive()
+        }
 
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
@@ -851,14 +851,27 @@ extension AppDelegate {
             }
         }
 
-        // So we've got here, and there are no sent tabs.
-        // There are a number of possibilities here: 
-        // a) we started syncing in the NotificationService, but aborted once we reached the end.
-        // b) we did some non-displayURI commands which finished properly.
+        // By now, we've dealt with any sent tab notifications.
+        //
+        // The only thing left to do now is to perform actions that can only be performed
+        // while the app is foregrounded.
         // 
-        // For now, we should just re-process the message handling.
+        // Use the push message handler to re-parse the message,
+        // this time with a BrowserProfile and processing the return
+        // differently than in NotificationService.
         let handler = FxAPushMessageHandler(with: profile)
         handler.handle(userInfo: userInfo).upon { res in
+            if let message = res.successValue {
+                switch message {
+                case .accountVerified:
+                    _ = handler.postVerification()
+                case .thisDeviceDisconnected:
+                    FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+                default:
+                    break
+                }
+            }
+
             completionHandler(res.isSuccess ? .newData : .failed)
         }
     }

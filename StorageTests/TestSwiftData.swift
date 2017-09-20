@@ -8,7 +8,7 @@ import Shared
 
 import XCTest
 
-// TODO: rewrite this test to not use BrowserTable. It used to use HistoryTable…
+// TODO: rewrite this test to not use BrowserSchema. It used to use HistoryTable…
 class TestSwiftData: XCTestCase {
     var swiftData: SwiftData?
     var urlCounter = 1
@@ -18,29 +18,15 @@ class TestSwiftData: XCTestCase {
         let files = MockFiles()
         do {
             try files.remove("testSwiftData.db")
-            try files.remove("testSwiftData_metadata.db")
         } catch _ {
         }
         testDB = (try! (files.getAndEnsureDirectory() as NSString)).appendingPathComponent("testSwiftData.db")
-        swiftData = SwiftData(filename: testDB)
-        let table = BrowserTable()
+        swiftData = SwiftData(filename: testDB, schema: BrowserSchema(), files: files)
+        let table = BrowserSchema()
 
         // Ensure static flags match expected values.
         XCTAssert(SwiftData.ReuseConnections, "Reusing database connections")
         XCTAssert(SwiftData.EnableWAL, "WAL enabled")
-
-        let _ = swiftData!.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { db in
-            let testMetadataDB = try! (files.getAndEnsureDirectory() as NSString).appendingPathComponent("testSwiftData_metadata.db")
-            let command = "ATTACH DATABASE '\(testMetadataDB)' AS 'metadataDB'"
-            return db.executeChange(command, withArgs: [])
-        }
-        
-        let _ = swiftData!.withConnection(SwiftData.Flags.readWriteCreate) { db in
-            let f = FaviconsTable<Favicon>()
-            let _ = f.create(db)    // Because BrowserTable needs it.
-            let _ = table.create(db)
-            return nil
-        }
 
         XCTAssertNil(addSite(table, url: "http://url0", title: "title0"), "Added url0.")
     }
@@ -123,10 +109,10 @@ class TestSwiftData: XCTestCase {
         }
 
         defer { urlCounter += 1 }
-        return addSite(BrowserTable(), url: "http://url/\(urlCounter)", title: "title\(urlCounter)")
+        return addSite(BrowserSchema(), url: "http://url/\(urlCounter)", title: "title\(urlCounter)")
     }
 
-    fileprivate func addSite(_ table: BrowserTable, url: String, title: String) -> NSError? {
+    fileprivate func addSite(_ table: BrowserSchema, url: String, title: String) -> NSError? {
         return swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> NSError? in
             let args: Args = [Bytes.generateGUID(), url, title]
             return connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
@@ -148,19 +134,19 @@ class TestSwiftData: XCTestCase {
             }
         }
 
-        XCTAssertNotNil(SwiftData(filename: path!), "Connected to unencrypted database")
+        XCTAssertNotNil(SwiftData(filename: path!, schema: BrowserSchema(), files: files), "Connected to unencrypted database")
 
         // Encrypt the database.
-        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret")), "Encrypted database")
+        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret", schema: BrowserSchema(), files: files)), "Encrypted database")
 
         // Now change the encryption key.
-        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret2", prevKey: "Secret")), "Re-encrypted database")
+        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret2", prevKey: "Secret", schema: BrowserSchema(), files: files)), "Re-encrypted database")
 
         // Changing the encryption without the prevKey should fail.
-        XCTAssertNotNil(verifyData(SwiftData(filename: path!)), "Failed decrypting database")
+        XCTAssertNotNil(verifyData(SwiftData(filename: path!, schema: BrowserSchema(), files: files)), "Failed decrypting database")
 
         // Now remove the encryption key.
-        XCTAssertNil(verifyData(SwiftData(filename: path!, prevKey: "Secret2")), "Decrypted database")
+        XCTAssertNil(verifyData(SwiftData(filename: path!, prevKey: "Secret2", schema: BrowserSchema(), files: files)), "Decrypted database")
     }
 
     func testArrayCursor() {

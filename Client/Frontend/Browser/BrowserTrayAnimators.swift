@@ -34,6 +34,7 @@ private extension TrayToBrowserAnimator {
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.homePanelController?.view.isHidden = true
         bvc.webViewContainerBackdrop.isHidden = true
+        bvc.statusBarOverlay.isHidden = false
         if let url = selectedTab.url, !url.isReaderModeURL {
             bvc.hideReaderModeBar(animated: false)
         }
@@ -60,7 +61,7 @@ private extension TrayToBrowserAnimator {
         bvc.urlBar.isTransitioning = true
 
         // Re-calculate the starting transforms for header/footer views in case we switch orientation
-        resetTransformsForViews([bvc.header, bvc.headerBackdrop, bvc.readerModeBar, bvc.footer, bvc.footerBackdrop])
+        resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
         transformHeaderFooterForBVC(bvc, toFrame: startingFrame, container: container)
 
         UIView.animate(withDuration: self.transitionDuration(using: transitionContext),
@@ -74,6 +75,8 @@ private extension TrayToBrowserAnimator {
             cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.height)
 
             bvc.tabTrayDidDismiss(tabTray)
+            UIApplication.shared.windows.first?.backgroundColor = UIConstants.AppBackgroundColor
+            tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
             tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.ToolbarHeight)
             tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             tabCollectionViewSnapshot.alpha = 0
@@ -129,7 +132,6 @@ private extension BrowserToTrayAnimator {
         let expandedFrame = calculateExpandedCellFrameFromBVC(bvc)
         let cell = createTransitionCellFromTab(bvc.tabManager.selectedTab, withFrame: expandedFrame)
         cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
-        cell.innerStroke.isHidden = true
 
         // Take a snapshot of the collection view to perform the scaling/alpha effect
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotView(afterScreenUpdates: true)!
@@ -148,6 +150,7 @@ private extension BrowserToTrayAnimator {
 
         // Hide views we don't want to show during the animation in the BVC
         bvc.homePanelController?.view.isHidden = true
+        bvc.statusBarOverlay.isHidden = true
         bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.urlBar.isTransitioning = true
@@ -155,6 +158,7 @@ private extension BrowserToTrayAnimator {
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
         // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens. 
         // To work around this, we dispatch the setting of collection view to hidden after the screen update is completed.
+
         DispatchQueue.main.async {
             tabTray.collectionView.isHidden = true
             let finalFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView,
@@ -169,7 +173,10 @@ private extension BrowserToTrayAnimator {
                 cell.frame = finalFrame
                 cell.title.transform = CGAffineTransform.identity
                 cell.layoutIfNeeded()
-
+                
+                UIApplication.shared.windows.first?.backgroundColor = TabTrayControllerUX.BackgroundColor
+                tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
+                
                 transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
 
                 bvc.urlBar.updateAlphaForSubviews(0)
@@ -200,10 +207,8 @@ private func transformHeaderFooterForBVC(_ bvc: BrowserViewController, toFrame f
     let headerForTransform = headerTransform(bvc.header.frame, toFrame: finalFrame, container: container)
 
     bvc.footer.transform = footerForTransform
-    bvc.footerBackdrop.transform = footerForTransform
     bvc.header.transform = headerForTransform
     bvc.readerModeBar?.transform = headerForTransform
-    bvc.headerBackdrop.transform = headerForTransform
 }
 
 private func footerTransform( _ frame: CGRect, toFrame finalFrame: CGRect, container: UIView) -> CGAffineTransform {
@@ -295,7 +300,7 @@ private func transformToolbarsToFrame(_ toolbars: [UIView?], toRect endRect: CGR
 
 private func createTransitionCellFromTab(_ tab: Tab?, withFrame frame: CGRect) -> TabCell {
     let cell = TabCell(frame: frame)
-    cell.background.image = tab?.screenshot
+    cell.screenshotView.image = tab?.screenshot
     cell.titleText.text = tab?.displayTitle
 
     if let tab = tab, tab.isPrivate {

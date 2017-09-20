@@ -16,8 +16,10 @@
 	<string>$(LEANPLUM_KEY)</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
+	<key>PocketEnvironmentAPIKey</key>
+	<string>$(POCKET_API_KEY)</string>
 	<key>MozWhatsNewTopic</key>
-	<string></string>
+	<string>whats-new-ios-9</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -84,6 +86,8 @@
 	<string>This lets you take and upload photos.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This lets you take and upload videos.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This lets you save photos.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.mozilla.ios.firefox.browsing</string>

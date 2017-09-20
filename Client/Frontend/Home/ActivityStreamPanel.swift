@@ -16,7 +16,7 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
 // MARK: -  Lifecycle
 struct ASPanelUX {
-    static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+    static let backgroundColor = UIConstants.AppBackgroundColor
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 14)
@@ -65,7 +65,6 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
 
     fileprivate let topSitesManager = ASHorizontalScrollCellManager()
-    fileprivate var pendingCacheUpdate = false
     fileprivate var showHighlightIntro = false
     fileprivate var sessionStart: Timestamp?
 
@@ -482,8 +481,11 @@ extension ActivityStreamPanel: DataObserverDelegate {
         }
         accumulate([self.getHighlights, self.getTopSites]).uponQueue(.main) { _ in
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
-            self.showHighlightIntro = self.highlights.isEmpty && !self.pendingCacheUpdate
+            self.showHighlightIntro = self.highlights.isEmpty
             self.collectionView?.reloadData()
+
+            // Refresh the AS data in the background so we'll have fresh data next time we show.
+            self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: false)
         }
     }
 
@@ -510,7 +512,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
     func getTopSites() -> Success {
         return self.profile.history.getTopSitesWithLimit(16).both(self.profile.history.getPinnedTopSites()).bindQueue(.main) { (topsites, pinnedSites) in
-            guard let mySites = topsites.successValue?.asArray(), let pinned = pinnedSites.successValue?.asArray(), !self.pendingCacheUpdate else {
+            guard let mySites = topsites.successValue?.asArray(), let pinned = pinnedSites.successValue?.asArray() else {
                 return succeed()
             }
 
@@ -558,14 +560,15 @@ extension ActivityStreamPanel: DataObserverDelegate {
             return succeed()
         }
     }
-    func willInvalidateDataSources() {
-        self.pendingCacheUpdate = true
-    }
 
     // Invoked by the ActivityStreamDataObserver when highlights/top sites invalidation is complete.
-    func didInvalidateDataSources() {
-        self.pendingCacheUpdate = false
-        reloadAll()
+    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {
+        // Do not reload panel unless we're currently showing the highlight intro or if we
+        // force-reloaded the highlights or top sites. This should prevent reloading the
+        // panel after we've invalidated in the background on the first load.
+        if showHighlightIntro || highlights || topSites {
+            reloadAll()
+        }
     }
 
     func hideURLFromTopSites(_ site: Site) {
@@ -717,13 +720,13 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             return nil
         }
 
-        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "") { action in
+        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
             LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Activity Stream Long Press Context Menu" as AnyObject])
         }
 
-        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "") { action in
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
         
@@ -741,7 +744,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         } else {
             bookmarkAction = PhotonActionSheetItem(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
                 let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
-                self.profile.bookmarks.shareItem(shareItem)
+                _ = self.profile.bookmarks.shareItem(shareItem)
                 var userData = [QuickActions.TabURLKey: shareItem.url]
                 if let title = shareItem.title {
                     userData[QuickActions.TabTitleKey] = title
@@ -751,6 +754,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                                                                                     toApplication: UIApplication.shared)
                 site.setBookmarked(true)
                 self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
+                LeanplumIntegration.sharedInstance.track(eventName: .savedBookmark)
             })
         }
 
@@ -763,7 +767,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         })
 
         let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
-            let helper = ShareExtensionHelper(url: siteURL, tab: nil, activities: [])
+            let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController { completed, activityType in
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }

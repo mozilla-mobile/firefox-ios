@@ -13,9 +13,6 @@ open class SQLiteQueue: TabQueue {
     let db: BrowserDB
 
     public init(db: BrowserDB) {
-        // BrowserTable exists only to perform create/update etc. operations -- it's not
-        // a queryable thing that needs to stick around.
-        _ = db.createOrUpdate(BrowserTable())
         self.db = db
     }
 

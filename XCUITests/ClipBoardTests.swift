@@ -55,19 +55,10 @@ class ClipBoardTests: BaseTestCase {
         checkCopiedUrl()
         restart(app)
         dismissFirstRunUI()
-        
-        if iPad() {
-            app.textFields["url"].tap()
-            app.textFields["address"].press(forDuration: 1.7)
-            app.menuItems["Paste"].tap()
-            app.typeText("\r")
-        } else { // When Bug 1385054 is resolved, remove above branch
-            //Wait until recently copied pop up appears
-            waitforExistence(app.buttons["Go"])
-            
-            //Click on the pop up Go button to load the recently copied url
-            app.buttons["Go"].tap()
-        }
+        app.textFields["url"].tap()
+        app.textFields["address"].press(forDuration: 1.7)
+        app.menuItems["Paste"].tap()
+        app.typeText("\r")
     }
 }
 

@@ -9,14 +9,7 @@ import Shared
 import XCTest
 
 private func getBrowserDB(_ filename: String, files: FileAccessor) -> BrowserDB? {
-    let db = BrowserDB(filename: filename, files: files)
-
-    // BrowserTable exists only to perform create/update etc. operations -- it's not
-    // a queryable thing that needs to stick around.
-    if db.createOrUpdate(BrowserTable()) != .success {
-        return nil
-    }
-    return db
+    return BrowserDB(filename: filename, schema: BrowserSchema(), files: files)
 }
 
 extension SQLiteBookmarks {

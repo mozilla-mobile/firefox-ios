@@ -33,9 +33,9 @@ class TopTabsTest: BaseTestCase {
         navigator.openURL(urlString: url)
         waitForValueContains(app.textFields["url"], value: urlValue)
         waitforExistence(app.buttons["Show Tabs"])
-        let numTab = app.buttons["Show Tabs"].value
+        let numTab = app.buttons["Show Tabs"].value as? String
 
-        XCTAssertEqual("2", numTab as? String)
+        XCTAssertEqual("2", numTab)
     }
 
     func testAddTabFromTabTray() {
