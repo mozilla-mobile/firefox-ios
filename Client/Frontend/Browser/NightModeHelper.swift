@@ -11,6 +11,12 @@ struct NightModePrefsKey {
     static let NightModeStatus = PrefsKeys.KeyNightModeStatus
 }
 
+private let brightnessQueue: OperationQueue = {
+    let queue = OperationQueue()
+    queue.maxConcurrentOperationCount = 1
+    return queue
+}()
+
 class NightModeHelper: TabHelper {
 
     fileprivate weak var tab: Tab?
@@ -37,17 +43,39 @@ class NightModeHelper: TabHelper {
         // Do nothing.
     }
 
-    static func setNightModeBrightness(_ prefs: Prefs, enabled: Bool) {
-        let nightModeBrightness: CGFloat
-        if enabled {
-            systemBrightness = CGFloat(UIScreen.main.brightness)
-            nightModeBrightness = min(0.1, CGFloat(UIScreen.main.brightness))
+    static func setBrightness(_ value: CGFloat, animated: Bool) {
+        let screen = UIScreen.main
+        brightnessQueue.cancelAllOperations()
+        if animated {
+            let step: CGFloat = 0.01 * ((value > screen.brightness) ? 1 : -1)
+            let operations: [Operation] = stride(from: screen.brightness, through: value, by: step).map { value in
+                let blockOperation = BlockOperation()
+                unowned let unownedOperation = blockOperation
+                blockOperation.addExecutionBlock({
+                    if !unownedOperation.isCancelled {
+                        Thread.sleep(forTimeInterval: 1 / 60.0)
+                        screen.brightness = value
+                    }
+                })
+                return blockOperation
+            }
+            brightnessQueue.addOperations(operations, waitUntilFinished: false)
         } else {
-            nightModeBrightness = systemBrightness
+            screen.brightness = value
         }
-        UIView.animate(withDuration: 1.0, animations: {
-            UIScreen.main.brightness = nightModeBrightness
-        })
+    }
+
+    static func setNightModeBrightness(_ prefs: Prefs, enabled: Bool) {
+        let brightness: CGFloat
+        if enabled {
+            if brightnessQueue.operationCount == 0 {
+                systemBrightness = CGFloat(UIScreen.main.brightness)
+            }
+            brightness = min(0.1, CGFloat(UIScreen.main.brightness))
+        } else {
+            brightness = systemBrightness
+        }
+        setBrightness(brightness, animated: true)
     }
 
     static func restoreNightModeBrightness(_ prefs: Prefs, toForeground: Bool) {
