@@ -14,8 +14,6 @@
 		0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */; };
 		0B3E7D951B27A7CE00E2E84D /* AboutHomeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */; };
 		0B54BD191B698B7C004C822C /* SuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B54BD181B698B7C004C822C /* SuggestedSites.swift */; };
-		0B5A93041B1E60B4004F47A2 /* DeferredDBOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A93031B1E60B4004F47A2 /* DeferredDBOperation.swift */; };
-		0B5A93081B1E64F3004F47A2 /* TestDeferredSqlite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A93071B1E64F3004F47A2 /* TestDeferredSqlite.swift */; };
 		0B5A93221B1EB4C8004F47A2 /* ReadingListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A93211B1EB4C8004F47A2 /* ReadingListTest.swift */; };
 		0B5A93421B1EB572004F47A2 /* readablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B5A93411B1EB572004F47A2 /* readablePage.html */; };
 		0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B62EFD11AD63CD100ACB9CD /* Clearables.swift */; };
@@ -1294,8 +1292,6 @@
 		0B3E7D931B27A7CE00E2E84D /* AboutHomeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHomeHandler.swift; sourceTree = "<group>"; };
 		0B3E7DB91B27AB4C00E2E84D /* MockLogins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MockLogins.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0B54BD181B698B7C004C822C /* SuggestedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestedSites.swift; sourceTree = "<group>"; };
-		0B5A93031B1E60B4004F47A2 /* DeferredDBOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeferredDBOperation.swift; sourceTree = "<group>"; };
-		0B5A93071B1E64F3004F47A2 /* TestDeferredSqlite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDeferredSqlite.swift; sourceTree = "<group>"; };
 		0B5A93211B1EB4C8004F47A2 /* ReadingListTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListTest.swift; sourceTree = "<group>"; };
 		0B5A93411B1EB572004F47A2 /* readablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readablePage.html; sourceTree = "<group>"; };
 		0B62EFD11AD63CD100ACB9CD /* Clearables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clearables.swift; sourceTree = "<group>"; };
@@ -2592,7 +2588,6 @@
 				289A4C121C4EB90600A460E3 /* StorageTestUtils.swift */,
 				7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */,
 				281B02991C037C1F005202C3 /* TestBrowserDB.swift */,
-				0B5A93071B1E64F3004F47A2 /* TestDeferredSqlite.swift */,
 				0BDA56AE1B26B1D5008C9B96 /* TestLogins.swift */,
 				28D158AC1AFD90E500F9C065 /* TestSQLiteBookmarks.swift */,
 				2FCAE27D1ABB533A00877008 /* TestSQLiteHistory.swift */,
@@ -2618,7 +2613,6 @@
 			children = (
 				2FCAE24B1ABB531100877008 /* BrowserDB.swift */,
 				282915E51AF1A7920006EEB5 /* BrowserSchema.swift */,
-				0B5A93031B1E60B4004F47A2 /* DeferredDBOperation.swift */,
 				D0B29EDF1F460BDF00C7CEFC /* LoginsSchema.swift */,
 				D018F93D1F44A7190098F8CA /* Schema.swift */,
 				28126F761C2F9833006466CC /* SQLiteBookmarksBase.swift */,
@@ -5186,7 +5180,6 @@
 				2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */,
 				2FCAE2601ABB531100877008 /* Favicons.swift in Sources */,
 				28126F771C2F9833006466CC /* SQLiteBookmarksBase.swift in Sources */,
-				0B5A93041B1E60B4004F47A2 /* DeferredDBOperation.swift in Sources */,
 				2FCAE2771ABB531100877008 /* SwiftData.swift in Sources */,
 				2FCAE25F1ABB531100877008 /* Cursor.swift in Sources */,
 				28302E401AF0747800521E2E /* DatabaseError.swift in Sources */,
@@ -5201,7 +5194,6 @@
 				C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */,
 				E63F71881DB7FBE200A995C9 /* TestSQLiteMetadata.swift in Sources */,
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
-				0B5A93081B1E64F3004F47A2 /* TestDeferredSqlite.swift in Sources */,
 				E6F6D6A31E9E6B2A0012072B /* DeferredTestUtils.swift in Sources */,
 				E6BE53CD1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift in Sources */,
 				289A4C131C4EB90600A460E3 /* StorageTestUtils.swift in Sources */,
