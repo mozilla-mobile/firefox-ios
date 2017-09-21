@@ -473,8 +473,9 @@ open class Scratchpad {
                 if let id = json["id"].string {
                     return id
                 }
+                prefs.removeObjectForKey(PrefDeviceRegistration)
             }
-            // This is run first time we sync with a new account.
+            // This is run the first time we sync with a new account.
             // It will be replaced by a real fxaDeviceId, from account.deviceRegistration?.id.
             log.warning("No value found in prefs for fxaDeviceId! Will overwrite on first sync")
             return "unknown_fxaDeviceId"
