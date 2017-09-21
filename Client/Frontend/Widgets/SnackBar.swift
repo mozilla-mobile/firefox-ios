@@ -252,7 +252,7 @@ class SnackBar: UIView {
 
     fileprivate func addButton(_ snackButton: SnackButton) {
         snackButton.bar = self
-        buttonsView.addButtons(snackButton)
+        buttonsView.addButtons([snackButton])
         buttonsView.setNeedsUpdateConstraints()
     }
 }

@@ -39,7 +39,7 @@ extension UIButton {
 extension TabsButton {
     static func tabTrayButton() -> TabsButton {
         let tabsButton = TabsButton()
-        tabsButton.titleLabel.text = "0"
+        tabsButton.countLabel.text = "0"
         tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the tab toolbar")
         return tabsButton
     }
