@@ -113,6 +113,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
             let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
+            let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+            subtitle.append(space)
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle
             cell.detailTextLabel?.numberOfLines = 0
