@@ -187,6 +187,8 @@ class TabCell: UICollectionViewCell {
 
         let top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
         titleText.frame.origin = CGPoint(x: titleText.frame.origin.x, y: max(0, top))
+        let shadowPath = CGRect(x: 0, y: 0, width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
+        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
 
     override func prepareForReuse() {
@@ -245,7 +247,7 @@ class TabTrayController: UIViewController {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.didClickAddTab), for: .touchUpInside)
         toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.didTogglePrivateMode), for: .touchUpInside)
-        toolbar.menuButton.addTarget(self, action: #selector(TabTrayController.didTapMenu), for: .touchUpInside)
+        toolbar.deleteButton.addTarget(self, action: #selector(TabTrayController.didTapDelete(_:)), for: .touchUpInside)
         return toolbar
     }()
 
@@ -690,11 +692,13 @@ extension TabTrayController: SettingsDelegate {
 }
 
 extension TabTrayController: PhotonActionSheetProtocol {
-    func didTapMenu() {
-        let closeAllTabs = PhotonActionSheetItem(title: "Close All Tabs", iconString: "action_remove") { _ in
-            self.closeTabsForCurrentTray()
-        }
-        self.presentSheetWith(actions: [[closeAllTabs]], on: self, from: self.view)
+    func didTapDelete(_ sender: UIButton) {
+        let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.closeTabsForCurrentTray() }))
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: .cancel, handler: nil))
+        controller.popoverPresentationController?.sourceView = sender
+        controller.popoverPresentationController?.sourceRect = sender.bounds
+        present(controller, animated: true, completion: nil)
     }
 }
 
@@ -1015,11 +1019,11 @@ class TrayToolbar: UIView {
         return button
     }()
 
-    lazy var menuButton: UIButton = {
+    lazy var deleteButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
-        button.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
-        button.accessibilityIdentifier = "TabTrayController.menuButton"
+        button.setImage(UIImage.templateImageNamed("action_delete"), for: .normal)
+        button.accessibilityLabel = Strings.TabTrayDeleteMenuButtonAccessibilityLabel
+        button.accessibilityIdentifier = "TabTrayController.remoteTabsButton"
         return button
     }()
 
@@ -1032,8 +1036,8 @@ class TrayToolbar: UIView {
         addSubview(addTabButton)
 
         var buttonToCenter: UIButton?
-        addSubview(menuButton)
-        buttonToCenter = menuButton
+        addSubview(deleteButton)
+        buttonToCenter = deleteButton
         
         maskButton.accessibilityIdentifier = "TabTrayController.maskButton"
 
@@ -1044,14 +1048,14 @@ class TrayToolbar: UIView {
 
         addTabButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
-            make.left.equalTo(self).offset(sideOffset)
+            make.right.equalTo(self).offset(-sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
 
         addSubview(maskButton)
         maskButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
-            make.right.equalTo(self).offset(-sideOffset)
+            make.left.equalTo(self).offset(sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
 
@@ -1064,7 +1068,7 @@ class TrayToolbar: UIView {
 
     fileprivate func styleToolbar(_ isPrivate: Bool) {
         addTabButton.tintColor = isPrivate ? .white : .darkGray
-        menuButton.tintColor = isPrivate ? .white : .darkGray
+        deleteButton.tintColor = isPrivate ? .white : .darkGray
         backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : .white
         maskButton.styleForMode(privateMode: isPrivate)
     }
