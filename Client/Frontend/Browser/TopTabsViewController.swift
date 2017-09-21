@@ -8,20 +8,20 @@ import WebKit
 
 struct TopTabsUX {
     static let TopTabsViewHeight: CGFloat = 44
-    static let TopTabsBackgroundNormalColor = UIColor(rgb: 0x272727)
-    static let TopTabsBackgroundPrivateColor = UIColor(rgb: 0x272727)
-    static let TopTabsBackgroundNormalColorInactive = UIColor(rgb: 0x272727)
-    static let TopTabsBackgroundPrivateColorInactive = UIColor(rgb: 0x272727)
-    static let PrivateModeToolbarTintColor = UIColor(rgb: 0x272727)
+    static let TopTabsBackgroundColor = UIColor(rgb: 0x272727)
     static let TopTabsBackgroundPadding: CGFloat = 35
     static let TopTabsBackgroundShadowWidth: CGFloat = 12
     static let TabWidth: CGFloat = 190
     static let CollectionViewPadding: CGFloat = 15
     static let FaderPading: CGFloat = 8
     static let SeparatorWidth: CGFloat = 1
+    static let HighlightLineWidth: CGFloat = 3
+    static let TabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
     static let TabTitleWidth: CGFloat = 110
     static let TabTitlePadding: CGFloat = 10
     static let AnimationSpeed: TimeInterval = 0.1
+    static let SeparatorYOffset: CGFloat = 7
+    static let SeparatorHeight: CGFloat = 32
 }
 
 protocol TopTabsDelegate: class {
@@ -97,6 +97,9 @@ class TopTabsViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
+        [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
+            collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(TopTabsViewController.reloadFavicons(_:)), name: faviconNotification, object: nil)
     }
     
@@ -252,7 +255,6 @@ class TopTabsViewController: UIViewController {
 extension TopTabsViewController: Themeable {
     func applyTheme(_ themeName: String) {
         tabsButton.applyTheme(themeName)
-        // The tabsbutton inside tabsbutton needs to be themed correctly to fit top tabs
         tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor(rgb: 0x272727)
         tabsButton.textColor = UIColor(rgb: 0xb1b1b3)
         isPrivate = (themeName == Theme.PrivateMode)
@@ -319,6 +321,13 @@ extension TopTabsViewController: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabStore.count
     }
+
+    @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderFooter", for: indexPath) as! TopTabsHeaderFooter
+        view.arrangeLine(kind)
+        return view
+    }
+
 }
 
 extension TopTabsViewController: TabSelectionDelegate {

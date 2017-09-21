@@ -9,10 +9,45 @@ struct TopTabsSeparatorUX {
     static let Color = UIColor(rgb: 0x3c3c3d)
     static let Width: CGFloat = 1
 }
+
 class TopTabsSeparator: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = TopTabsSeparatorUX.Color
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class TopTabsHeaderFooter: UICollectionReusableView {
+    let line = UIView()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(line)
+        line.backgroundColor = TopTabsSeparatorUX.Color
+    }
+
+    func arrangeLine(_ kind: String) {
+        line.snp.removeConstraints()
+        switch kind {
+            case UICollectionElementKindSectionHeader:
+                line.snp.makeConstraints { make in
+                    make.trailing.equalTo(self)
+                }
+            case UICollectionElementKindSectionFooter:
+                line.snp.makeConstraints { make in
+                    make.leading.equalTo(self)
+                }
+            default:
+                break
+        }
+        line.snp.makeConstraints { make in
+            make.height.equalTo(TopTabsUX.SeparatorHeight)
+            make.width.equalTo(TopTabsUX.SeparatorWidth)
+            make.top.equalTo(self).offset(TopTabsUX.SeparatorYOffset)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -27,6 +62,7 @@ class TopTabCell: UICollectionViewCell {
     }
     
     static let Identifier = "TopTabCellIdentifier"
+    static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator
     
     var style: Style = .light {
         didSet {
@@ -42,16 +78,17 @@ class TopTabCell: UICollectionViewCell {
             titleText.textColor = selectedTab ? UIColor(rgb:0x0c0c0d) : UIColor(rgb: 0xb1b1b3)
             highlightLine.isHidden = !selectedTab
             closeButton.tintColor = selectedTab ? UIColor(rgb: 0x272727) : UIColor(rgb: 0xb1b1b3)
-            closeButton.backgroundColor = backgroundColor
-            closeButton.layer.shadowColor = backgroundColor?.cgColor
+            // restyle if we are in PBM
             if style == .dark && selectedTab {
                 backgroundColor =  UIColor(rgb: 0x4A4A4F)
                 titleText.textColor = UIColor(rgb: 0xf9f9fa)
                 closeButton.tintColor = UIColor(rgb: 0xf9f9fa)
-                closeButton.backgroundColor = backgroundColor
-                closeButton.layer.shadowColor = backgroundColor?.cgColor
             }
-
+            closeButton.backgroundColor = backgroundColor
+            closeButton.layer.shadowColor = backgroundColor?.cgColor
+            if selectedTab {
+                drawShadow()
+            }
         }
     }
     
@@ -76,11 +113,10 @@ class TopTabCell: UICollectionViewCell {
         let closeButton = UIButton()
         closeButton.setImage(UIImage.templateImageNamed("menu-CloseTabs"), for: UIControlState())
         closeButton.tintColor = UIColor(rgb: 0xb1b1b3)
-        closeButton.imageEdgeInsets = UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 10)
+        closeButton.imageEdgeInsets = UIEdgeInsets(top: 15, left: TopTabsUX.TabTitlePadding, bottom: 15, right: TopTabsUX.TabTitlePadding)
         closeButton.layer.shadowOpacity = 0.8
         closeButton.layer.masksToBounds = false
-        closeButton.layer.shadowOffset = CGSize(width: -10, height: 0)
-
+        closeButton.layer.shadowOffset = CGSize(width: -TopTabsUX.TabTitlePadding, height: 0)
         return closeButton
     }()
 
@@ -90,10 +126,6 @@ class TopTabCell: UICollectionViewCell {
         line.isHidden = true
         return line
     }()
-
-//    let titleFadeView: UIView = {
-//        let view
-//    }
 
     weak var delegate: TopTabCellDelegate?
     
@@ -108,25 +140,27 @@ class TopTabCell: UICollectionViewCell {
         contentView.addSubview(highlightLine)
 
         favicon.snp.makeConstraints { make in
-            make.centerY.equalTo(self).offset(1)
+            make.centerY.equalTo(self).offset(TopTabsUX.TabNudge)
             make.size.equalTo(TabTrayControllerUX.FaviconSize)
             make.leading.equalTo(self).offset(TopTabsUX.TabTitlePadding)
         }
         titleText.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.height.equalTo(self)
-            make.trailing.equalTo(closeButton.snp.leading).offset(10)
+            make.trailing.equalTo(closeButton.snp.leading).offset(TopTabsUX.TabTitlePadding)
             make.leading.equalTo(favicon.snp.trailing).offset(TopTabsUX.TabTitlePadding)
         }
         closeButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self).offset(1)
+            make.centerY.equalTo(self).offset(TopTabsUX.TabNudge)
             make.height.equalTo(self)
-            make.width.equalTo(self.snp.height).offset(-10)
+            make.width.equalTo(self.snp.height).offset(-TopTabsUX.TabTitlePadding)
             make.trailing.equalTo(self.snp.trailing)
         }
         highlightLine.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(self)
-            make.height.equalTo(3)
+            make.top.equalTo(self)
+            make.leading.equalTo(self).offset(-TopTabCell.ShadowOffsetSize)
+            make.trailing.equalTo(self).offset(TopTabCell.ShadowOffsetSize)
+            make.height.equalTo(TopTabsUX.HighlightLineWidth)
         }
         
         self.clipsToBounds = false
@@ -153,17 +187,29 @@ class TopTabCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        self.layer.shadowOpacity = 0
     }
     
     func closeTab() {
         delegate?.tabCellDidClose(self)
     }
+
+    // When a tab is selected the shadow prevents the tab separators from showing.
+    func drawShadow() {
+        self.layer.masksToBounds = false
+        self.layer.shadowColor = backgroundColor?.cgColor
+        self.layer.shadowOpacity  = 1
+        self.layer.shadowRadius = 0
+
+        self.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: self.frame.size.width + (TopTabCell.ShadowOffsetSize * 2), height: self.frame.size.height), cornerRadius: 0).cgPath
+        self.layer.shadowOffset = CGSize(width: -TopTabCell.ShadowOffsetSize, height: 0)
+    }
 }
 
 class TopTabFader: UIView {
     lazy var hMaskLayer: CAGradientLayer = {
-        let innerColor: CGColor = UIColor(white: 1, alpha: 1).cgColor
-        let outerColor: CGColor = UIColor(white: 1, alpha: 0).cgColor
+        let innerColor: CGColor = UIColor(white: 1, alpha: 1.0).cgColor
+        let outerColor: CGColor = UIColor(white: 1, alpha: 0.0).cgColor
         let hMaskLayer = CAGradientLayer()
         hMaskLayer.colors = [outerColor, innerColor, innerColor, outerColor]
         hMaskLayer.locations = [0.00, 0.005, 0.995, 1.0]
@@ -181,8 +227,8 @@ class TopTabFader: UIView {
     internal override func layoutSubviews() {
         super.layoutSubviews()
 
-        let widthA = NSNumber(value: Float(CGFloat(15.0) / frame.width))
-        let widthB = NSNumber(value: Float(1 - CGFloat(15) / frame.width))
+        let widthA = NSNumber(value: Float(CGFloat(8) / frame.width))
+        let widthB = NSNumber(value: Float(1 - CGFloat(8) / frame.width))
 
         hMaskLayer.locations = [0.00, widthA, widthB, 1.0]
         hMaskLayer.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
@@ -193,53 +239,10 @@ class TopTabFader: UIView {
     }
 }
 
-class TopTabsBackgroundDecorationView: UICollectionReusableView {
-    static let Identifier = "TopTabsBackgroundDecorationViewIdentifier"
-
-    fileprivate var themeColor: UIColor = UIColor(rgb: 0x272727) {
-        didSet {
-            centerBackground.backgroundColor = UIColor(rgb: 0x272727)
-        }
-    }
-    
-    lazy var centerBackground: UIView = {
-        let centerBackground = UIView()
-        return centerBackground
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        self.contentMode = .redraw
-        self.backgroundColor = UIColor(rgb: 0x272727)
-        self.addSubview(centerBackground)
-
-        centerBackground.snp.makeConstraints { make in
-            make.top.equalTo(self)
-            make.bottom.equalTo(self)
-        }
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-        if let decorationAttributes = layoutAttributes as? TopTabsViewLayoutAttributes, let themeColor = decorationAttributes.themeColor {
-            self.themeColor = themeColor
-        }
-    }
-}
-
 class TopTabsViewLayoutAttributes: UICollectionViewLayoutAttributes {
-    var themeColor: UIColor?
-    
+
     override func isEqual(_ object: Any?) -> Bool {
         guard let object = object as? TopTabsViewLayoutAttributes else {
-            return false
-        }
-        if object.themeColor != self.themeColor {
             return false
         }
         return super.isEqual(object)
