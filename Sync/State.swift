@@ -22,7 +22,7 @@ public struct Fetched<T: Equatable>: Equatable {
     let timestamp: Timestamp
 }
 
-public func ==<T: Equatable>(lhs: Fetched<T>, rhs: Fetched<T>) -> Bool {
+public func ==<T>(lhs: Fetched<T>, rhs: Fetched<T>) -> Bool {
     return lhs.timestamp == rhs.timestamp &&
            lhs.value == rhs.value
 }
