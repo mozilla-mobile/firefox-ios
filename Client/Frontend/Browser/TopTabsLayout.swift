@@ -35,7 +35,6 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
         return CGSize(width: HeaderFooterWidth, height: 0)
     }
 
-
 }
 
 class TopTabsViewLayout: UICollectionViewFlowLayout {
