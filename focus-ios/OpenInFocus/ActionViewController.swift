@@ -16,48 +16,72 @@ extension NSObject {
     }
 }
 
+extension NSURL {
+    var encodedUrl: String? { return absoluteString?.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.alphanumerics) }
+}
+
+extension NSItemProvider {
+    var isText: Bool { return hasItemConformingToTypeIdentifier(String(kUTTypeText)) }
+    var isUrl: Bool { return hasItemConformingToTypeIdentifier(String(kUTTypeURL)) }
+
+    func processText(completion: CompletionHandler?) {
+        loadItem(forTypeIdentifier: String(kUTTypeText), options: nil, completionHandler: completion)
+    }
+
+    func processUrl(completion: CompletionHandler?) {
+        loadItem(forTypeIdentifier: String(kUTTypeURL), options: nil, completionHandler: completion)
+    }
+}
+
 class ActionViewController: SLComposeServiceViewController {
     private var isKlar: Bool { return (Bundle.main.infoDictionary!["CFBundleIdentifier"] as! String).contains("Klar") }
     private var urlScheme: String { return isKlar ? "firefox-klar" : "firefox-focus" }
 
-    override func isContentValid() -> Bool {
-        return true
-    }
+    override func isContentValid() -> Bool { return true }
+    override func didSelectPost() { return }
 
-    override func didSelectPost() {
-        return
+    func focusUrl(url: String) -> NSURL? {
+        return NSURL(string: "\(self.urlScheme)://open-url?url=\(url)")
     }
 
     override func configurationItems() -> [Any]! {
-        let item: NSExtensionItem = extensionContext!.inputItems[0] as! NSExtensionItem
-        let itemProvider: NSItemProvider = item.attachments![0] as! NSItemProvider
-        let type = kUTTypeURL as String
+        guard let item = extensionContext?.inputItems.first.flatMap({ $0 as? NSExtensionItem }) else { fatalError() }
+        guard let itemProvider = item.attachments?.first.flatMap({ $0 as? NSItemProvider }) else { fatalError() }
 
-        if itemProvider.hasItemConformingToTypeIdentifier(type) {
-            itemProvider.loadItem(forTypeIdentifier: type, options: nil, completionHandler: {
-                (urlItem, error) in
-
-                guard let url = (urlItem as! NSURL).absoluteString?.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.alphanumerics),
-                    let focusUrl = NSURL(string: "\(self.urlScheme)://open-url?url=\(url)") else { return }
-
-                // From http://stackoverflow.com/questions/24297273/openurl-not-work-in-action-extension
-                var responder = self as UIResponder?
-                let selectorOpenURL = sel_registerName("openURL:")
-                while (responder != nil) {
-                    if responder!.responds(to: selectorOpenURL) {
-                        responder!.callSelector(selector: selectorOpenURL, object: focusUrl, delay: 0)
-                    }
-
-                    responder = responder!.next
-                }
-
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.init(uptimeNanoseconds: UInt64(0.1 * Double(NSEC_PER_SEC)))) {
-                    self.cancel()
-                }
-            })
+        if itemProvider.isText {
+            itemProvider.processText { (textItem, error) in
+                let text = textItem as? String
+                let url = text.flatMap(NSURL.init(string:))
+                guard let focusUrl = url.flatMap({ $0.encodedUrl }).flatMap(self.focusUrl) else { self.cancel(); return }
+                self.handleUrl(focusUrl)
+            }
+        } else if itemProvider.isUrl {
+            itemProvider.processUrl { (urlItem, error) in
+                guard let focusUrl = (urlItem as? NSURL)?.encodedUrl.flatMap(self.focusUrl) else { self.cancel(); return }
+                self.handleUrl(focusUrl)
+            }
+        } else {
+            self.cancel()
         }
 
         return []
+    }
+
+    private func handleUrl(_ url: NSURL) {
+        // From http://stackoverflow.com/questions/24297273/openurl-not-work-in-action-extension
+        var responder = self as UIResponder?
+        let selectorOpenURL = sel_registerName("openURL:")
+        while (responder != nil) {
+            if responder!.responds(to: selectorOpenURL) {
+                responder!.callSelector(selector: selectorOpenURL, object: url, delay: 0)
+            }
+
+            responder = responder!.next
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.init(uptimeNanoseconds: UInt64(0.1 * Double(NSEC_PER_SEC)))) {
+            self.cancel()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
