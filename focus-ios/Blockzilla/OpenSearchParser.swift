@@ -121,7 +121,7 @@ class OpenSearchParser {
            let imageData = try? Data(contentsOf: imageURL),
            let uiImage = UIImage(data: imageData)
         {
-            image = uiImage.createScaled(size: CGSize(width: 32, height: 32))
+            image = uiImage
         } else {
             print("Warning: Invalid search image data")
             image = nil

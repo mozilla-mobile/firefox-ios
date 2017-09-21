@@ -41,7 +41,7 @@ class SearchSettingsViewController: UITableViewController {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         cell.textLabel?.text = engine.name
         cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
-        cell.imageView?.image = engine.image
+        cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 32, height: 32))
         cell.backgroundColor = UIConstants.colors.background
 
         if engine === searchEngineManager.activeEngine {
