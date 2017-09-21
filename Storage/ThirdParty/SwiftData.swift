@@ -34,6 +34,7 @@
 
 import Foundation
 import UIKit
+import Deferred
 import Shared
 import XCGLogger
 
@@ -126,60 +127,101 @@ open class SwiftData {
      * The real meat of all the execute methods. This is used internally to open and
      * close a database connection and run a block of code inside it.
      */
-    func withConnection(_ flags: SwiftData.Flags, synchronous: Bool=true, cb: @escaping (_ db: SQLiteDBConnection) -> NSError?) -> NSError? {
-        /**
-         * We use a weak reference here instead of strongly retaining the connection because we don't want
-         * any control over when the connection deallocs. If the only owner of the connection (SwiftData)
-         * decides to dealloc it, we should respect that since the deinit method of the connection is tied
-         * to the app lifecycle. This is to prevent background disk access causing springboard crashes.
-         */
+    func withConnection<T>(_ flags: SwiftData.Flags, synchronous: Bool = true, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
+        let deferred = Deferred<Maybe<T>>()
+
+        // We use a weak reference here instead of strongly retaining the connection because we don't want
+        // any control over when the connection deallocs. If the only owner of the connection (SwiftData)
+        // decides to dealloc it, we should respect that since the deinit method of the connection is tied
+        // to the app lifecycle. This is to prevent background disk access causing springboard crashes.
         weak var conn = getSharedConnection()
         let queue = self.sharedConnectionQueue
-        if synchronous {
-            var error: NSError? = nil
-            queue.sync {
-                /**
-                 * By the time this dispatch block runs, it is possible the user has backgrounded the app
-                 * and the connection has been dealloc'ed since we last grabbed the reference
-                 */
-
-                guard let connection = SwiftData.ReuseConnections ? conn :
-                    ConcreteSQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
-                    error = cb(FailedSQLiteDBConnection()) ?? NSError(domain: "mozilla",
-                                                                          code: 0,
-                                                                          userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
-                    return
-                }
-
-                error = cb(connection)
-            }
-            return error
-        }
-
-        queue.async {
+        
+        func doWork() {
+            // By the time this dispatch block runs, it is possible the user has backgrounded the
+            // app and the connection has been dealloc'ed since we last grabbed the reference
             guard let connection = SwiftData.ReuseConnections ? conn :
-                ConcreteSQLiteDBConnection(filename: self.filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
-                let _ = cb(FailedSQLiteDBConnection())
-                return
+                ConcreteSQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
+                    do {
+                        _ = try callback(FailedSQLiteDBConnection())
+                        
+                        deferred.fill(Maybe(failure: NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])))
+                    } catch let err as NSError {
+                        deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                    }
+                    return
             }
-                
-            let _ = cb(connection)
+            
+            do {
+                let result = try callback(connection)
+                deferred.fill(Maybe(success: result))
+            } catch let err as NSError {
+                deferred.fill(Maybe(failure: DatabaseError(err: err)))
+            }
         }
-
-        return nil
+        
+        if synchronous {
+            queue.sync {
+                doWork()
+            }
+        } else {
+            queue.async {
+                doWork()
+            }
+        }
+        
+        return deferred
     }
-    
-    func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
-        return self.transaction(synchronous: true, transactionClosure: transactionClosure)
-    }
+//    func withConnection(_ flags: SwiftData.Flags, synchronous: Bool = true, cb: @escaping (_ db: SQLiteDBConnection) -> NSError?) -> NSError? {
+//        /**
+//         * We use a weak reference here instead of strongly retaining the connection because we don't want
+//         * any control over when the connection deallocs. If the only owner of the connection (SwiftData)
+//         * decides to dealloc it, we should respect that since the deinit method of the connection is tied
+//         * to the app lifecycle. This is to prevent background disk access causing springboard crashes.
+//         */
+//        weak var conn = getSharedConnection()
+//        let queue = self.sharedConnectionQueue
+//        if synchronous {
+//            var error: NSError? = nil
+//            queue.sync {
+//                /**
+//                 * By the time this dispatch block runs, it is possible the user has backgrounded the app
+//                 * and the connection has been dealloc'ed since we last grabbed the reference
+//                 */
+//
+//                guard let connection = SwiftData.ReuseConnections ? conn :
+//                    ConcreteSQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
+//                    error = cb(FailedSQLiteDBConnection()) ?? NSError(domain: "mozilla",
+//                                                                          code: 0,
+//                                                                          userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
+//                    return
+//                }
+//
+//                error = cb(connection)
+//            }
+//            return error
+//        }
+//
+//        queue.async {
+//            guard let connection = SwiftData.ReuseConnections ? conn :
+//                ConcreteSQLiteDBConnection(filename: self.filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
+//                let _ = cb(FailedSQLiteDBConnection())
+//                return
+//            }
+//
+//            let _ = cb(connection)
+//        }
+//
+//        return nil
+//    }
 
     /**
      * Helper for opening a connection, starting a transaction, and then running a block of code inside it.
      * The code block can return true if the transaction should be committed. False if we should roll back.
      */
-    func transaction(synchronous: Bool=true, transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
+    func transaction<T>(synchronous: Bool = true, _ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
         return withConnection(SwiftData.Flags.readWriteCreate, synchronous: synchronous) { connection in
-            connection.transaction(transactionClosure)
+            try connection.transaction(transactionClosure)
         }
     }
 
@@ -311,7 +353,7 @@ public protocol SQLiteDBConnection {
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
     func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
 
-    func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError?
+    func transaction<T>(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) throws -> T
 
     func interrupt()
     func checkpoint()
@@ -347,8 +389,8 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
         return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
     }
 
-    func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
-        return self.fail("Non-open connection; can't start transaction.")
+    func transaction<T>(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) throws -> T {
+        throw self.fail("Non-open connection; can't start transaction.")
     }
 
     func interrupt() {}
@@ -714,60 +756,62 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         log.debug("Schema \(self.schema.name) needs created or updated from version \(currentVersion) to \(self.schema.version).")
 
         var success = true
+        
+        do {
+            success = try transaction { connection -> Bool in
+                log.debug("Create or update \(self.schema.name) version \(self.schema.version) on \(Thread.current.description).")
+                
+                // If `PRAGMA user_version` is zero, check if we can safely create the
+                // database schema from scratch.
+                if connection.version == 0 {
+                    // Query for the existence of the `tableList` table to determine if we are
+                    // migrating from an older DB version.
+                    let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+                    
+                    let tableListTableExists = sqliteMasterCursor[0] == 1
+                    sqliteMasterCursor.close()
+                    
+                    // If the `tableList` table doesn't exist, we can simply invoke
+                    // `createSchema()` to create a brand new DB from scratch.
+                    if !tableListTableExists {
+                        log.debug("Schema \(self.schema.name) doesn't exist. Creating.")
+                        success = self.createSchema()
+                        return success
+                    }
+                }
+                
+                log.info("Attempting to update schema from version \(currentVersion) to \(self.schema.version).")
+                SentryIntegration.shared.send(message: "Attempting to update schema from version \(currentVersion) to \(self.schema.version).", tag: "SwiftData", severity: .info)
 
-        if let error = transaction({ connection -> Bool in
-            log.debug("Create or update \(self.schema.name) version \(self.schema.version) on \(Thread.current.description).")
-            
-            // If `PRAGMA user_version` is zero, check if we can safely create the
-            // database schema from scratch.
-            if connection.version == 0 {
-                // Query for the existence of the `tableList` table to determine if we are
-                // migrating from an older DB version.
-                let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
-                
-                let tableListTableExists = sqliteMasterCursor[0] == 1
-                sqliteMasterCursor.close()
-                
-                // If the `tableList` table doesn't exist, we can simply invoke
-                // `createSchema()` to create a brand new DB from scratch.
-                if !tableListTableExists {
-                    log.debug("Schema \(self.schema.name) doesn't exist. Creating.")
-                    success = self.createSchema()
+                // If we can't create a brand new schema from scratch, we must
+                // call `updateSchema()` to go through the update process.
+                if self.updateSchema() {
+                    log.debug("Updated schema \(self.schema.name).")
+                    success = true
                     return success
                 }
-            }
-            
-            log.info("Attempting to update schema from version \(currentVersion) to \(self.schema.version).")
-            SentryIntegration.shared.send(message: "Attempting to update schema from version \(currentVersion) to \(self.schema.version).", tag: "SwiftData", severity: .info)
 
-            // If we can't create a brand new schema from scratch, we must
-            // call `updateSchema()` to go through the update process.
-            if self.updateSchema() {
-                log.debug("Updated schema \(self.schema.name).")
-                success = true
+                // If we failed to update the schema, we'll drop everything from the DB
+                // and create everything again from scratch. Assuming our schema upgrade
+                // code is correct, this *shouldn't* happen. If it does, log it to Sentry.
+                log.error("Update failed for schema \(self.schema.name) from version \(currentVersion) to \(self.schema.version). Dropping and re-creating.")
+                SentryIntegration.shared.sendWithStacktrace(message: "Update failed for schema \(self.schema.name) from version \(currentVersion) to \(self.schema.version). Dropping and re-creating.", tag: "SwiftData", severity: .error)
+
+                // If we can't even drop the schema here, something has gone really wrong, so
+                // return `false` which should force us into recovery.
+                if !self.dropSchema() {
+                    log.error("Unable to drop schema \(self.schema.name) from version \(currentVersion).")
+                    SentryIntegration.shared.sendWithStacktrace(message: "Unable to drop schema \(self.schema.name) from version \(currentVersion).", tag: "SwiftData", severity: .error)
+                    success = false
+                    return success
+                }
+
+                // Try to re-create the schema. If this fails, we are out of options and we'll
+                // return `false` which should force us into recovery.
+                success = self.createSchema()
                 return success
             }
-
-            // If we failed to update the schema, we'll drop everything from the DB
-            // and create everything again from scratch. Assuming our schema upgrade
-            // code is correct, this *shouldn't* happen. If it does, log it to Sentry.
-            log.error("Update failed for schema \(self.schema.name) from version \(currentVersion) to \(self.schema.version). Dropping and re-creating.")
-            SentryIntegration.shared.sendWithStacktrace(message: "Update failed for schema \(self.schema.name) from version \(currentVersion) to \(self.schema.version). Dropping and re-creating.", tag: "SwiftData", severity: .error)
-
-            // If we can't even drop the schema here, something has gone really wrong, so
-            // return `false` which should force us into recovery.
-            if !self.dropSchema() {
-                log.error("Unable to drop schema \(self.schema.name) from version \(currentVersion).")
-                SentryIntegration.shared.sendWithStacktrace(message: "Unable to drop schema \(self.schema.name) from version \(currentVersion).", tag: "SwiftData", severity: .error)
-                success = false
-                return success
-            }
-
-            // Try to re-create the schema. If this fails, we are out of options and we'll
-            // return `false` which should force us into recovery.
-            success = self.createSchema()
-            return success
-        }) {
+        } catch let error as NSError {
             // If we got an error trying to get a transaction, then we either bail out early and return
             // `.failure` if we think we can retry later or return `.needsRecovery` if the error is not
             // recoverable.
@@ -1073,17 +1117,17 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return LiveSQLiteCursor(statement: statement!, factory: factory)
     }
 
-    public func transaction(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> Bool) -> NSError? {
+    public func transaction<T>(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) throws -> T {
         if let err = executeChange("BEGIN EXCLUSIVE") {
             log.error("BEGIN EXCLUSIVE failed. Error code: \(err.code), \(err)")
             SentryIntegration.shared.sendWithStacktrace(message: "BEGIN EXCLUSIVE failed. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
-            return err
+            throw err
         }
 
-        var succeeded = false
+        var result: T
 
         do {
-            succeeded = try transactionClosure(self)
+            result = try transactionClosure(self)
         } catch let err as NSError {
             log.error("Op in transaction threw an error. Rolling back.")
             SentryIntegration.shared.sendWithStacktrace(message: "Op in transaction threw an error. Rolling back.", tag: "SwiftData", severity: .error)
@@ -1093,35 +1137,24 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 SentryIntegration.shared.sendWithStacktrace(message: "ROLLBACK after errored op in transaction failed. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
             }
 
-            return err
+            throw err
         }
 
-        if succeeded {
-            log.verbose("Op in transaction succeeded. Committing.")
+        log.verbose("Op in transaction succeeded. Committing.")
 
-            if let err = executeChange("COMMIT") {
-                log.error("COMMIT failed. Rolling back. Error code: \(err.code), \(err)")
-                SentryIntegration.shared.sendWithStacktrace(message: "COMMIT failed. Rolling back. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
+        if let err = executeChange("COMMIT") {
+            log.error("COMMIT failed. Rolling back. Error code: \(err.code), \(err)")
+            SentryIntegration.shared.sendWithStacktrace(message: "COMMIT failed. Rolling back. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
 
-                if let rollbackErr = executeChange("ROLLBACK") {
-                    log.error("ROLLBACK after failed COMMIT failed. Error code: \(rollbackErr.code), \(rollbackErr)")
-                    SentryIntegration.shared.sendWithStacktrace(message: "ROLLBACK after failed COMMIT failed. Error code: \(rollbackErr.code), \(rollbackErr)", tag: "SwiftData", severity: .error)
-                }
-
-                return err
+            if let rollbackErr = executeChange("ROLLBACK") {
+                log.error("ROLLBACK after failed COMMIT failed. Error code: \(rollbackErr.code), \(rollbackErr)")
+                SentryIntegration.shared.sendWithStacktrace(message: "ROLLBACK after failed COMMIT failed. Error code: \(rollbackErr.code), \(rollbackErr)", tag: "SwiftData", severity: .error)
             }
-        } else {
-            log.error("Op in transaction failed. Rolling back.")
-            SentryIntegration.shared.sendWithStacktrace(message: "Op in transaction failed. Rolling back.", tag: "SwiftData", severity: .error)
 
-            if let err = executeChange("ROLLBACK") {
-                log.error("ROLLBACK after failed op in transaction failed. Error code: \(err.code), \(err)")
-                SentryIntegration.shared.sendWithStacktrace(message: "ROLLBACK after failed op in transaction failed. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
-                return err
-            }
+            throw err
         }
 
-        return nil
+        return result
     }
 }
 

@@ -80,30 +80,30 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
         }
 
         var result: T? = nil
-        let err = db.withConnection(SwiftData.Flags.readWriteCreate) { (db) -> NSError? in
-            self.connection = db
+        let deferred = db.withConnection(SwiftData.Flags.readWriteCreate) { conn -> Void in
+            self.connection = conn
             if self.cancelled {
-                return NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])
+                throw NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])
             }
-
+            
             do {
-                result = try self.block(db)
+                result = try self.block(conn)
             } catch let err as NSError {
                 self.connection = nil
-                return err
+                throw err
             }
-
-            log.verbose("Modified rows: \(db.numberOfRowsModified).")
-
+            
+            log.verbose("Modified rows: \(conn.numberOfRowsModified).")
+            
             self.connection = nil
-            return nil
+            return ()
         }
-
+        
         if let result = result {
             fill(Maybe(success: result))
             return
         }
-        fill(Maybe(failure: DatabaseError(err: err)))
+        fill(Maybe(failure: DatabaseError(err: deferred.value.failureValue as NSError?)))
     }
 
     func cancel() {

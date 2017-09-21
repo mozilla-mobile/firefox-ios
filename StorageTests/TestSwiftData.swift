@@ -82,19 +82,20 @@ class TestSwiftData: XCTestCase {
         XCTAssertNil(writeDuringRead(true), "Insertion succeeded")
     }
 
-    fileprivate func writeDuringRead(_ safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> NSError? {
+    fileprivate func writeDuringRead(_ safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> MaybeErrorType? {
 
         // Query the database and hold the cursor.
         var c: Cursor<SDRow>!
-        let error = swiftData!.withConnection(SwiftData.Flags.readOnly) { db in
+        let result = swiftData!.withConnection(SwiftData.Flags.readOnly) { db -> Void in
             if safeQuery {
                 c = db.executeQuery("SELECT * FROM history", factory: { $0 })
             } else {
                 c = db.executeQueryUnsafe("SELECT * FROM history", factory: { $0 }, withArgs: nil)
             }
-            return nil
+            return ()
         }
-        XCTAssertNil(error, "Queried database")
+
+        XCTAssertNil(result.value.failureValue, "Queried database")
 
         // If we have a live cursor, this will step to the first result.
         // Stepping through a prepared statement without resetting it will lock the connection.
@@ -112,11 +113,17 @@ class TestSwiftData: XCTestCase {
         return addSite(BrowserSchema(), url: "http://url/\(urlCounter)", title: "title\(urlCounter)")
     }
 
-    fileprivate func addSite(_ table: BrowserSchema, url: String, title: String) -> NSError? {
-        return swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> NSError? in
+    fileprivate func addSite(_ table: BrowserSchema, url: String, title: String) -> MaybeErrorType? {
+        let result = swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> Void in
             let args: Args = [Bytes.generateGUID(), url, title]
-            return connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
+            if let err = connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args) {
+                throw err
+            }
+            
+            return ()
         }
+        
+        return result.value.failureValue
     }
 
     func testEncrypt() {
@@ -128,10 +135,11 @@ class TestSwiftData: XCTestCase {
         } catch _ {
         }
         let path = testDB
-        func verifyData(_ swiftData: SwiftData) -> NSError? {
-            return swiftData.withConnection(SwiftData.Flags.readOnly) { db in
-                return nil
+        func verifyData(_ swiftData: SwiftData) -> MaybeErrorType? {
+            let resultDeferred = swiftData.withConnection(SwiftData.Flags.readOnly) { db -> Void in
+                return ()
             }
+            return resultDeferred.value.failureValue
         }
 
         XCTAssertNotNil(SwiftData(filename: path!, schema: BrowserSchema(), files: files), "Connected to unencrypted database")

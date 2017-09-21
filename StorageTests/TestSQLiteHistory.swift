@@ -908,13 +908,13 @@ class TestSQLiteHistory: XCTestCase {
 
         for (version, schema) in sources {
             var db = BrowserDB(filename: "browser-v\(version).db", schema: schema, files: files)
-            XCTAssertTrue(db.runWithConnection({ connection -> Int in
+            XCTAssertTrue(db.withConnection({ connection -> Int in
                 connection.version
             }).value.successValue == schema.version, "Creating BrowserSchema at version \(version)")
             db.forceClose()
 
             db = BrowserDB(filename: "browser-v\(version).db", schema: destination, files: files)
-            XCTAssertTrue(db.runWithConnection({ connection -> Int in
+            XCTAssertTrue(db.withConnection({ connection -> Int in
                 connection.version
             }).value.successValue == destination.version, "Upgrading BrowserSchema from version \(version) to version \(schema.version)")
             db.forceClose()
@@ -973,11 +973,14 @@ class TestSQLiteHistory: XCTestCase {
         history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link)).succeeded()
 
         // DomainID isn't normally exposed, so we manually query to get it
-        let results = try! db.withConnection { connection -> Cursor<Int> in
+        let resultsDeferred = db.withConnection { connection -> Cursor<Int> in
             let sql = "SELECT domain_id FROM \(TableHistory) WHERE url = ?"
             let args: Args = [site.url]
             return connection.executeQuery(sql, factory: IntFactory, withArgs: args)
         }
+        
+        let results = resultsDeferred.value.successValue!
+        
         XCTAssertNotEqual(results[0]!, -1, "Domain id was updated")
     }
 

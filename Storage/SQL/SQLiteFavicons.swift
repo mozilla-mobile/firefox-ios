@@ -51,11 +51,11 @@ open class SQLiteFavicons {
     }
     
     public func insertOrUpdateFavicon(_ favicon: Favicon) -> Deferred<Maybe<Int>> {
-        return self.db.runWithConnection { conn -> Int in
-            return self.insertOrUpdateFaviconInTransaction(favicon, conn: conn) ?? 0
+        return db.withConnection { conn -> Int in
+            self.insertOrUpdateFaviconInTransaction(favicon, conn: conn) ?? 0
         }
     }
-    
+
     func insertOrUpdateFaviconInTransaction(_ favicon: Favicon, conn: SQLiteDBConnection) -> Int? {
         let query = self.getFaviconIDQuery(url: favicon.url)
         let cursor = conn.executeQuery(query.sql, factory: IntFactory, withArgs: query.args)
