@@ -172,48 +172,6 @@ open class SwiftData {
         
         return deferred
     }
-//    func withConnection(_ flags: SwiftData.Flags, synchronous: Bool = true, cb: @escaping (_ db: SQLiteDBConnection) -> NSError?) -> NSError? {
-//        /**
-//         * We use a weak reference here instead of strongly retaining the connection because we don't want
-//         * any control over when the connection deallocs. If the only owner of the connection (SwiftData)
-//         * decides to dealloc it, we should respect that since the deinit method of the connection is tied
-//         * to the app lifecycle. This is to prevent background disk access causing springboard crashes.
-//         */
-//        weak var conn = getSharedConnection()
-//        let queue = self.sharedConnectionQueue
-//        if synchronous {
-//            var error: NSError? = nil
-//            queue.sync {
-//                /**
-//                 * By the time this dispatch block runs, it is possible the user has backgrounded the app
-//                 * and the connection has been dealloc'ed since we last grabbed the reference
-//                 */
-//
-//                guard let connection = SwiftData.ReuseConnections ? conn :
-//                    ConcreteSQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
-//                    error = cb(FailedSQLiteDBConnection()) ?? NSError(domain: "mozilla",
-//                                                                          code: 0,
-//                                                                          userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
-//                    return
-//                }
-//
-//                error = cb(connection)
-//            }
-//            return error
-//        }
-//
-//        queue.async {
-//            guard let connection = SwiftData.ReuseConnections ? conn :
-//                ConcreteSQLiteDBConnection(filename: self.filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
-//                let _ = cb(FailedSQLiteDBConnection())
-//                return
-//            }
-//
-//            let _ = cb(connection)
-//        }
-//
-//        return nil
-//    }
 
     /**
      * Helper for opening a connection, starting a transaction, and then running a block of code inside it.
