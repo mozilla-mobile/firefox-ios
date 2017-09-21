@@ -134,17 +134,21 @@ open class SyncStateMachine {
             }
             var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs)
 
-            // Take the scratchpad and add the hashedUID from the token
+            // Take the scratchpad and add the fxaDeviceId from the state, and hashedUID from the token
             let b = Scratchpad.Builder(p: scratchpad)
-            if let deviceRegistration = authState.deviceRegistration {
-                b.fxaDeviceId = deviceRegistration.id
+            if let deviceID = authState.deviceID {
+                b.fxaDeviceId = deviceID
+            } else {
+                // Either deviceRegistration hasn't occurred yet (our bug) or
+                // FxA has given us an UnknownDevice error.
+                log.warning("Device registration has not taken place before sync.")
             }
             b.hashedUID = token.hashedFxAUID
 
-            // Detect if the we've changed anything in our client record from the last time we synced,
+            // Detect if we've changed anything in our client record from the last time we synced…
             let ourClientUnchanged = (b.fxaDeviceId == scratchpad.fxaDeviceId)
 
-            // and if so, trigger a reset of clients.
+            // …and if so, trigger a reset of clients.
             if !ourClientUnchanged {
                 b.localCommands.insert(LocalCommand.resetEngine(engine: "clients"))
             }

@@ -138,7 +138,7 @@ private let PrefClientName = "clientName"
 private let PrefClientGUID = "clientGUID"
 private let PrefHashedUID = "hashedUID"
 private let PrefEngineConfiguration = "engineConfiguration"
-private let PrefFxADeviceId = "PrefFxADeviceId"
+private let PrefDeviceID = "deviceID"
 
 class PrefsBackoffStorage: BackoffStorage {
     let prefs: Prefs
@@ -463,7 +463,19 @@ open class Scratchpad {
 
         b.hashedUID = prefs.stringForKey(PrefHashedUID)
 
-        b.fxaDeviceId = prefs.stringForKey(PrefFxADeviceId) ?? {
+        b.fxaDeviceId = prefs.stringForKey(PrefDeviceID) ?? {
+            // Migrate from previous way of storing device id.
+            // This code will only be run once – the id will be stored
+            // in PrefDeviceID.
+            let PrefDeviceRegistration = "deviceRegistration"
+            if let string = prefs.stringForKey(PrefDeviceRegistration) {
+                let json = JSON(parseJSON: string)
+                if let id = json["id"].string {
+                    return id
+                }
+            }
+            // This is run first time we sync with a new account.
+            // It will be replaced by a real fxaDeviceId, from account.deviceRegistration?.id.
             log.warning("No value found in prefs for fxaDeviceId! Will overwrite on first sync")
             return "unknown_fxaDeviceId"
         }()
@@ -550,7 +562,7 @@ open class Scratchpad {
             prefs.setString(uid, forKey: PrefHashedUID)
         }
 
-        prefs.setString(fxaDeviceId, forKey: PrefFxADeviceId)
+        prefs.setString(fxaDeviceId, forKey: PrefDeviceID)
 
         let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().stringValue()!})
         prefs.setObject(localCommands, forKey: PrefLocalCommands)
