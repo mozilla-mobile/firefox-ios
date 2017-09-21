@@ -19,8 +19,8 @@ class PrivateModeButton: ToggleButton {
     
     func styleForMode(privateMode isPrivate: Bool) {
         let maskImage = UIImage(named: "smallPrivateMask")?.withRenderingMode(.alwaysTemplate)
-        self.tintColor = isPrivate ? .white : .darkGray
-        self.imageView?.tintColor = isPrivate ? .white : self.light ? TopTabsUX.PrivateModeToolbarTintColor : UIConstants.PrivateModeToolbarTintColor
+        self.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0xb1b1b3)
+        self.imageView?.tintColor = self.tintColor
         self.setImage(maskImage, for: UIControlState())
         self.isSelected = isPrivate
         self.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
@@ -30,7 +30,7 @@ class PrivateModeButton: ToggleButton {
 extension UIButton {
     static func newTabButton() -> UIButton {
         let newTab = UIButton()
-        newTab.setImage(UIImage.templateImageNamed("menu-NewTab-pbm"), for: .normal)
+        newTab.setImage(UIImage.templateImageNamed("quick_action_new_tab"), for: .normal)
         newTab.accessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility label for the New Tab button in the tab toolbar.")
         return newTab
     }

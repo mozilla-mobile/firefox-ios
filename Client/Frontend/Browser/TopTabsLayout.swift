@@ -64,7 +64,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
             // Compute the separator if it does not exist in the cache
             let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: indexPath)
             let x = TopTabsUX.TopTabsBackgroundShadowWidth + ((CGFloat(indexPath.row) * (TopTabsUX.TabWidth + TopTabsUX.SeparatorWidth)) - TopTabsUX.SeparatorWidth)
-            separatorAttr.frame = CGRect(x: x, y: collectionView!.frame.height / 4, width: TopTabsUX.SeparatorWidth, height: collectionView!.frame.height / 2)
+            separatorAttr.frame = CGRect(x: x, y: 7, width: TopTabsUX.SeparatorWidth, height: 32)
             separatorAttr.zIndex = -1
             return separatorAttr
         }
@@ -79,7 +79,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         let offset = TopTabsUX.TopTabsBackgroundPadding-TopTabsUX.TopTabsBackgroundShadowWidth * 2
         decorationAttributes.frame = CGRect(x: -(offset)/2, y: 0, width: size.width + offset, height: size.height)
         decorationAttributes.zIndex = -2
-        decorationAttributes.themeColor = self.themeColor
+        decorationAttributes.themeColor = UIColor(rgb: 0x272727)
 
         // Create attributes for the Tab Separator.
         for i in attributes {

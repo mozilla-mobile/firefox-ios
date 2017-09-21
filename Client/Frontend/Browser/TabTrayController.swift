@@ -14,7 +14,7 @@ struct TabTrayControllerUX {
     static let BackgroundColor = UIConstants.TabTrayBG
     static let CellBackgroundColor = UIConstants.TabTrayBG
     static let TextBoxHeight = CGFloat(32.0)
-    static let FaviconSize = CGFloat(18.0)
+    static let FaviconSize = CGFloat(20)
     static let Margin = CGFloat(15)
     static let ToolbarBarTintColor = UIColor.black
     static let ToolbarButtonOffset = CGFloat(10.0)

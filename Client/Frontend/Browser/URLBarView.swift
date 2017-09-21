@@ -310,7 +310,12 @@ class URLBarView: UIView {
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
                     make.leading.equalTo(self.stopReloadButton.snp.trailing)
-                    make.trailing.equalTo(self.tabsButton.snp.leading)
+                    if self.topTabsIsShowing {
+                        make.trailing.equalTo(self.menuButton.snp.leading)
+                    } else {
+                        make.trailing.equalTo(self.tabsButton.snp.leading)
+                    }
+
                 } else {
                     // Otherwise, left align the location view
                     make.leading.trailing.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
@@ -447,7 +452,7 @@ class URLBarView: UIView {
         self.menuButton.isHidden = !self.toolbarIsShowing
         self.forwardButton.isHidden = !self.toolbarIsShowing
         self.backButton.isHidden = !self.toolbarIsShowing
-        self.tabsButton.isHidden = !self.toolbarIsShowing
+        self.tabsButton.isHidden = !self.toolbarIsShowing || topTabsIsShowing
         self.stopReloadButton.isHidden = !self.toolbarIsShowing
     }
 
@@ -489,7 +494,7 @@ class URLBarView: UIView {
         self.menuButton.isHidden = !self.toolbarIsShowing || inOverlayMode
         self.forwardButton.isHidden = !self.toolbarIsShowing || inOverlayMode
         self.backButton.isHidden = !self.toolbarIsShowing || inOverlayMode
-        self.tabsButton.isHidden = !self.toolbarIsShowing || inOverlayMode
+        self.tabsButton.isHidden = !self.toolbarIsShowing || inOverlayMode || topTabsIsShowing
         self.stopReloadButton.isHidden = !self.toolbarIsShowing || inOverlayMode
     }
 

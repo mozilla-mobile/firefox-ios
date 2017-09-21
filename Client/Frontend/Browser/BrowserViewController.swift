@@ -168,7 +168,8 @@ class BrowserViewController: UIViewController {
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        return isPrivate ? UIStatusBarStyle.lightContent : UIStatusBarStyle.default
+        let isIpad = shouldShowTopTabsForTraitCollection(traitCollection)
+        return (isPrivate || isIpad) ? UIStatusBarStyle.lightContent : UIStatusBarStyle.default
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -2862,7 +2863,7 @@ extension BrowserViewController: Themeable {
     func applyTheme(_ themeName: String) {
         let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
         ui.forEach { $0?.applyTheme(themeName) }
-        statusBarOverlay.backgroundColor = urlBar.backgroundColor
+        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(self.traitCollection) ? UIColor(rgb: 0x272727) : urlBar.backgroundColor
         self.setNeedsStatusBarAppearanceUpdate()
     }
 }
