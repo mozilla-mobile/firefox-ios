@@ -1568,8 +1568,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             self.openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: true)
         }
         
-        actions.append(getOtherPanelActions())
-        actions.append(getHomePanelActions(openURL: urlAction, vcDelegate: self))
+        actions.append(getHomePanelActions(openURL: urlAction))
+        actions.append(getOtherPanelActions(vcDelegate: self))
         presentSheetWith(actions: actions, on: self, from: button)
     }
 
