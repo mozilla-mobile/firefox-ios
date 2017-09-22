@@ -102,6 +102,11 @@ function handleClick(event) {
 }
 
 window.addEventListener("touchstart", function(event) {
+  var target = event.target;
+  element = target.closest("a,img");
+  if (!element) {
+    return;
+  }
   setTimeout(function() {
     // Don't show the context menu if another event listener has already
     // prevented the default behavior or if more than one touch is present.
@@ -114,18 +119,17 @@ window.addEventListener("touchstart", function(event) {
 
     // Don't show the context menu if this element is has the
     // -webkit-touch-callout: none CSS property applied.
-    var style = getComputedStyle(event.target);
+    var style = getComputedStyle(target);
     if (style.webkitTouchCallout === "none") {
       cancel();
       return;
     }
 
-    if (event.target.tagName === "img") {
-      data.image = event.target.src;
+    if (target.tagName === "img") {
+      data.image = target.src;
     }
 
-    element = event.target.closest("a");
-    if (element) {
+    if (element.tagName === "a") {
       data.link = element.href;
 
       // The web view still shows the tap highlight after clicking an element,
