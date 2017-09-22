@@ -8,6 +8,7 @@ import Storage
 import Shared
 import SwiftyJSON
 import XCGLogger
+import MobileCoreServices
 
 private let log = Logger.browserLogger
 
@@ -174,6 +175,13 @@ class Tab: NSObject {
             self.webView = webView
             self.webView?.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
             tabDelegate?.tab?(self, didCreateWebView: webView)
+
+            if #available(iOS 11.0, *) {
+                if let first = webView.scrollView.subviews.first {
+                    first.addInteraction(UIDropInteraction(delegate: webView))
+                    webView.isUserInteractionEnabled = true
+                }
+            }
         }
     }
 
@@ -532,6 +540,23 @@ private class TabWebView: WKWebView, MenuHelperInterface {
         becomeFirstResponder()
 
         return super.hitTest(point, with: event)
+    }
+}
+
+@available(iOS 11.0, *)
+extension TabWebView: UIDropInteractionDelegate {
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeURL as String]) && session.items.count == 1
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        let _ = session.loadObjects(ofClass: URL.self) { urls in
+            self.load(URLRequest(url: urls[0]))
+        }
     }
 }
 
