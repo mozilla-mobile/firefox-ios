@@ -14,7 +14,7 @@ struct TabTrayControllerUX {
     static let BackgroundColor = UIConstants.TabTrayBG
     static let CellBackgroundColor = UIConstants.TabTrayBG
     static let TextBoxHeight = CGFloat(32.0)
-    static let FaviconSize = CGFloat(18.0)
+    static let FaviconSize = CGFloat(20)
     static let Margin = CGFloat(15)
     static let ToolbarBarTintColor = UIColor.black
     static let ToolbarButtonOffset = CGFloat(10.0)
@@ -755,7 +755,6 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         } else {
             var defaultFavicon = UIImage(named: "defaultFavicon")
             if tab.isPrivate {
-                defaultFavicon = defaultFavicon?.withRenderingMode(.alwaysTemplate)
                 tabCell.favicon.image = defaultFavicon
                 tabCell.favicon.tintColor = UIColor.white
             } else {
@@ -1059,9 +1058,9 @@ class TrayToolbar: UIView {
     }
 
     fileprivate func styleToolbar(_ isPrivate: Bool) {
-        addTabButton.tintColor = isPrivate ? .white : .darkGray
-        deleteButton.tintColor = isPrivate ? .white : .darkGray
-        backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : .white
+        addTabButton.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0x272727)
+        deleteButton.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0x272727)
+        backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : UIColor(rgb: 0xf9f9fa)
         maskButton.styleForMode(privateMode: isPrivate)
     }
 }
