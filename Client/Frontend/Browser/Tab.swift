@@ -583,6 +583,11 @@ extension TabWebView: UIDropInteractionDelegate {
             self.load(URLRequest(url: urls[0]))
         }
     }
+
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: UIDropSession) {
+        print("sessionDidExit")
+        // TODO Remove the associated object frmo the session, just in case
+    }
 }
 
 ///
