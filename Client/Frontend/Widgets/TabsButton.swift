@@ -43,18 +43,31 @@ struct TabsButtonUX {
 }
 
 class TabsButton: UIButton {
-    fileprivate var theme: Theme = TabsButtonUX.Themes[Theme.NormalMode]!
-    
+
+    var textColor = UIColor.white {
+        didSet {
+            countLabel.textColor = textColor
+            borderView.color = textColor
+        }
+    }
+    var titleBackgroundColor  = UIColor.white {
+        didSet {
+            labelBackground.backgroundColor = titleBackgroundColor
+        }
+    }
+    var highlightTextColor: UIColor?
+    var highlightBackgroundColor: UIColor?
+
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
-                borderColor = theme.highlightBorderColor!
-                titleBackgroundColor = theme.highlightButtonColor
-                textColor = theme.highlightTextColor
+                countLabel.textColor = textColor
+                borderView.color = titleBackgroundColor
+                labelBackground.backgroundColor = titleBackgroundColor
             } else {
-                borderColor = theme.borderColor!
-                titleBackgroundColor = theme.backgroundColor
-                textColor = theme.textColor
+                countLabel.textColor = textColor
+                borderView.color = textColor
+                labelBackground.backgroundColor = titleBackgroundColor
             }
         }
     }
@@ -135,8 +148,6 @@ class TabsButton: UIButton {
 
         button.accessibilityLabel = accessibilityLabel
         button.countLabel.text = countLabel.text
-
-        button.theme = theme
 
         // Copy all of the styable properties over to the new TabsButton
         button.countLabel.font = countLabel.font
@@ -231,28 +242,13 @@ extension TabsButton: Themeable {
         guard let theme = TabsButtonUX.Themes[themeName] else {
             fatalError("Theme not found")
         }
-        borderColor = theme.borderColor!
-        titleBackgroundColor = theme.backgroundColor
-        textColor = theme.textColor
-        self.theme = theme
+        titleBackgroundColor = theme.backgroundColor!
+        textColor = theme.textColor!
+
+        countLabel.textColor = textColor
+        borderView.color = textColor
+        labelBackground.backgroundColor = titleBackgroundColor
+
     }
 }
 
-// MARK: UIAppearance
-extension TabsButton {
-    dynamic var borderColor: UIColor {
-        get { return borderView.color }
-        set { borderView.color = newValue }
-    }
-
-    dynamic var textColor: UIColor? {
-        get { return countLabel.textColor }
-        set { countLabel.textColor = newValue }
-    }
-
-    dynamic var titleBackgroundColor: UIColor? {
-        get { return labelBackground.backgroundColor }
-        set { labelBackground.backgroundColor = newValue }
-    }
-
-}

@@ -16,6 +16,7 @@ struct URLBarViewUX {
     static let LocationLeftPadding: CGFloat = 8
     static let Padding: CGFloat = 10
     static let LocationHeight: CGFloat = 40
+    static let ButtonHeight: CGFloat = 44
     static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 8
     static let TextFieldBorderWidth: CGFloat = 1
@@ -26,7 +27,7 @@ struct URLBarViewUX {
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
-    static let ToolbarButtonInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    static let ToolbarButtonInsets = UIEdgeInsets(top: Padding, left: Padding, bottom: Padding, right: Padding)
 
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
@@ -154,8 +155,6 @@ class URLBarView: UIView {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.addTarget(self, action: #selector(URLBarView.SELdidClickCancel), for: .touchUpInside)
-        cancelButton.setContentHuggingPriority(1000, for: UILayoutConstraintAxis.horizontal)
-        cancelButton.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.horizontal)
         cancelButton.alpha = 0
         return cancelButton
     }()
@@ -247,36 +246,38 @@ class URLBarView: UIView {
 
         cancelButton.snp.makeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
-            make.leading.equalTo(self).offset(URLBarViewUX.Padding)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
+            make.leading.equalTo(self)
         }
 
         backButton.snp.makeConstraints { make in
-            make.left.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.TopToolbarHeight)
+            make.centerY.equalTo(self)
+            make.leading.equalTo(self).offset(URLBarViewUX.Padding)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
         forwardButton.snp.makeConstraints { make in
             make.left.equalTo(self.backButton.snp.right)
             make.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.TopToolbarHeight)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
         stopReloadButton.snp.makeConstraints { make in
             make.left.equalTo(self.forwardButton.snp.right)
             make.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.TopToolbarHeight)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
         menuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.snp.trailing)
+            make.trailing.equalTo(self.snp.trailing).offset(-URLBarViewUX.Padding)
             make.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.TopToolbarHeight)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
         
         tabsButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.menuButton.snp.leading)
             make.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.TopToolbarHeight)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
         
         showQRScannerButton.snp.makeConstraints { make in
@@ -296,7 +297,7 @@ class URLBarView: UIView {
                 // the offset is equal to the padding but minus the borderwidth
                 let padding = URLBarViewUX.Padding - URLBarViewUX.TextFieldBorderWidthSelected
                 make.trailing.equalTo(self.showQRScannerButton.snp.leading).offset(-padding)
-                make.leading.equalTo(self.cancelButton.snp.trailing).offset(padding)
+                make.leading.equalTo(self.cancelButton.snp.trailing)
                 make.centerY.equalTo(self)
             }
             self.locationView.snp.remakeConstraints { make in
@@ -309,8 +310,13 @@ class URLBarView: UIView {
             self.locationContainer.snp.remakeConstraints { make in
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
-                    make.leading.equalTo(self.stopReloadButton.snp.trailing)
-                    make.trailing.equalTo(self.tabsButton.snp.leading)
+                    make.leading.equalTo(self.stopReloadButton.snp.trailing).offset(URLBarViewUX.Padding)
+                    if self.topTabsIsShowing {
+                        make.trailing.equalTo(self.menuButton.snp.leading).offset(-URLBarViewUX.Padding)
+                    } else {
+                        make.trailing.equalTo(self.tabsButton.snp.leading).offset(-URLBarViewUX.Padding)
+                    }
+
                 } else {
                     // Otherwise, left align the location view
                     make.leading.trailing.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
@@ -447,7 +453,7 @@ class URLBarView: UIView {
         self.menuButton.isHidden = !self.toolbarIsShowing
         self.forwardButton.isHidden = !self.toolbarIsShowing
         self.backButton.isHidden = !self.toolbarIsShowing
-        self.tabsButton.isHidden = !self.toolbarIsShowing
+        self.tabsButton.isHidden = !self.toolbarIsShowing || topTabsIsShowing
         self.stopReloadButton.isHidden = !self.toolbarIsShowing
     }
 
@@ -466,15 +472,11 @@ class URLBarView: UIView {
 
         if inOverlayMode {
             self.line.isHidden = inOverlayMode
-            self.cancelButton.transform = CGAffineTransform.identity
-
             // Make the editable text field span the entire URL bar, covering the lock and reader icons.
             self.locationTextField?.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationView)
             }
         } else {
-            self.cancelButton.transform = CGAffineTransform(translationX: self.cancelButton.frame.width, y: 0)
-
             // Shrink the editable text field back to the size of the location view before hiding it.
             self.locationTextField?.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationView.urlTextField)
@@ -489,7 +491,7 @@ class URLBarView: UIView {
         self.menuButton.isHidden = !self.toolbarIsShowing || inOverlayMode
         self.forwardButton.isHidden = !self.toolbarIsShowing || inOverlayMode
         self.backButton.isHidden = !self.toolbarIsShowing || inOverlayMode
-        self.tabsButton.isHidden = !self.toolbarIsShowing || inOverlayMode
+        self.tabsButton.isHidden = !self.toolbarIsShowing || inOverlayMode || topTabsIsShowing
         self.stopReloadButton.isHidden = !self.toolbarIsShowing || inOverlayMode
     }
 
