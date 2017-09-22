@@ -54,20 +54,13 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
     
     fileprivate func doWipe(_ f: @escaping (_ conn: SQLiteDBConnection) -> NSError?) -> Deferred<Maybe<()>> {
-        let deferred = Deferred<Maybe<()>>(defaultQueue: DispatchQueue.main)
-
-        _ = db.transaction { conn -> Bool in
+        return db.transaction { conn -> Void in
             if let err = f(conn) {
-                let databaseError = DatabaseError(err: err)
-                log.debug("Wipe failed: \(databaseError)")
-                deferred.fill(Maybe(failure: databaseError))
-            } else {
-                deferred.fill(Maybe(success: ()))
+                log.error("Wipe failed: \(err.localizedDescription)")
+                throw err
             }
-            return true
+            return ()
         }
-
-        return deferred
     }
 
     open func wipeClients() -> Deferred<Maybe<()>> {
@@ -93,17 +86,14 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func insertOrUpdateTabsForClientGUID(_ clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        let deferred = Deferred<Maybe<Int>>(defaultQueue: DispatchQueue.main)
-
         let deleteQuery = "DELETE FROM \(TableTabs) WHERE client_guid IS ?"
         let deleteArgs: Args = [clientGUID]
 
-        _ = db.transaction { connection -> Bool in
+        return db.transaction { connection -> Int in
             // Delete any existing tabs.
             if let err = connection.executeChange(deleteQuery, withArgs: deleteArgs) {
-                log.warning("Deleting existing tabs failed.")
-                deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                return false
+                log.error("Deleting existing tabs failed.")
+                throw err
             }
 
             // Insert replacement tabs.
@@ -122,8 +112,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
                 if let err = connection.executeChange("INSERT INTO \(TableTabs) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", withArgs: args) {
-                    log.warning("INSERT INTO \(TableTabs) failed: \(err)")
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                    log.error("INSERT INTO \(TableTabs) failed: \(err)")
                     throw err
                 }
                 
@@ -134,19 +123,14 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 }
             }
 
-            deferred.fill(Maybe(success: inserted))
-            return true
+            return inserted
         }
-
-        return deferred
     }
 
     open func insertOrUpdateClients(_ clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
-        let deferred = Deferred<Maybe<Int>>(defaultQueue: DispatchQueue.main)
-
         // TODO: insert multiple clients in a single query.
         // ORM systems are foolish.
-        _ = db.transaction { connection -> Bool in
+        return db.transaction { connection -> Int in
             var succeeded = 0
 
             // Update or insert client records.
@@ -163,8 +147,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 ]
                 
                 if let err = connection.executeChange("UPDATE \(TableClients) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, version = ?, fxaDeviceId = ? WHERE guid = ?", withArgs: args) {
-                    log.warning("UPDATE \(TableClients) failed: \(err)")
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                    log.error("UPDATE \(TableClients) failed: \(err)")
                     throw err
                 }
                 
@@ -183,8 +166,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     let lastInsertedRowID = connection.lastInsertedRowID
                     
                     if let err = connection.executeChange("INSERT INTO \(TableClients) (guid, name, modified, type, formfactor, os, version, fxaDeviceId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", withArgs: args) {
-                        log.warning("INSERT INTO \(TableClients) failed: \(err)")
-                        deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                        log.error("INSERT INTO \(TableClients) failed: \(err)")
                         throw err
                     }
                     
@@ -196,11 +178,8 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 succeeded += 1
             }
 
-            deferred.fill(Maybe(success: succeeded))
-            return true
+            return succeeded
         }
-
-        return deferred
     }
 
     open func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<Int>> {
@@ -208,13 +187,11 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func deleteClient(guid: GUID) -> Success {
-        let deferred = Success(defaultQueue: DispatchQueue.main)
-
         let deleteTabsQuery = "DELETE FROM \(TableTabs) WHERE client_guid = ?"
         let deleteClientQuery = "DELETE FROM \(TableClients) WHERE guid = ?"
         let deleteArgs: Args = [guid]
 
-        _ = db.transaction { connection -> Bool in
+        return db.transaction { connection -> Void in
             var err: NSError? = nil
             if let error = connection.executeChange(deleteClientQuery, withArgs: deleteArgs) {
                 log.warning("Deleting client failed.")
@@ -227,16 +204,12 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 err = error
             }
 
-            guard err == nil else {
-                deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                return false
+            if let err = err {
+                throw err
             }
-            
-            deferred.fill(Maybe(success: ()))
-            return true
+
+            return ()
         }
-        
-        return deferred
     }
 
     open func getClient(guid: GUID) -> Deferred<Maybe<RemoteClient?>> {

@@ -422,15 +422,13 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
     }
 
     open func applyRecords(_ records: [BookmarkMirrorItem], withMaxVars maxVars: Int) -> Success {
-        let deferred = Deferred<Maybe<()>>(defaultQueue: DispatchQueue.main)
-
         let guids = records.map { $0.guid }
         let deleted = records.filter { $0.isDeleted }.map { $0.guid }
         let values = records.map { $0.getUpdateOrInsertArgs() }
         let children = records.filter { !$0.isDeleted }.flatMap { $0.getChildrenArgs() }
         let folders = records.filter { $0.type == BookmarkNodeType.folder }.map { $0.guid }
 
-        _ = self.db.transaction { conn -> Bool in
+        return db.transaction { conn -> Void in
             // These have the same values in the same order.
             let update =
             "UPDATE \(TableBookmarksBuffer) SET " +
@@ -454,7 +452,6 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
             for args in values {
                 if let err = conn.executeChange(update, withArgs: args) {
                     log.error("Updating mirror in buffer: \(err.localizedDescription).")
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
                     throw err
                 }
 
@@ -464,7 +461,6 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
 
                 if let err = conn.executeChange(insert, withArgs: args) {
                     log.error("Inserting mirror into buffer: \(err.localizedDescription).")
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
                     throw err
                 }
             }
@@ -478,16 +474,14 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
 
             log.debug("\(folders.count) folders and \(deleted.count) deleted maybe-folders to drop from buffer structure table.")
 
-            if let error = self.deleteChildrenInTransactionWithGUIDs(folders + deleted, connection: conn) {
-                deferred.fill(Maybe(failure: DatabaseError(err: error)))
-                return false
+            if let err = self.deleteChildrenInTransactionWithGUIDs(folders + deleted, connection: conn) {
+                throw err
             }
 
             // (Re-)insert children in chunks.
             log.debug("Inserting \(children.count) children.")
             if let err = insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: children, maxVars: maxVars) {
                 log.error("Updating buffer structure: \(err.localizedDescription).")
-                deferred.fill(Maybe(failure: DatabaseError(err: err)))
                 throw err
             }
 
@@ -502,16 +496,12 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
                 let args: Args = chunk.flatMap { $0 }
                 if let err = conn.executeChange(delPendingDeletions, withArgs: args) {
                     log.error("Deleting pending deletions: \(err.localizedDescription).")
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
                     throw err
                 }
             }
 
-            deferred.fillIfUnfilled(Maybe(success: ()))
-            return true
+            return ()
         }
-
-        return deferred
     }
 
     open func doneApplyingRecordsAfterDownload() -> Success {
