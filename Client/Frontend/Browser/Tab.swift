@@ -562,12 +562,12 @@ extension TabWebView: UIDropInteractionDelegate {
         if let originalDelegate = getOriginalDelegate() {
             let proposal = originalDelegate.dropInteraction!(interaction, sessionDidUpdate: session)
             if proposal.operation != .cancel {
-                print("The webview can handle this")
+                print("MOO The webview can handle this")
                 objc_setAssociatedObject(session, &fooKey, true, .OBJC_ASSOCIATION_RETAIN)
                 return proposal
             }
         }
-        print("The webview can not handle this")
+        print("MOO The webview can not handle this")
         return UIDropProposal(operation: .copy)
     }
 
@@ -585,8 +585,12 @@ extension TabWebView: UIDropInteractionDelegate {
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: UIDropSession) {
-        print("sessionDidExit")
+        print("MOO sessionDidExit")
         // TODO Remove the associated object frmo the session, just in case
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnd session: UIDropSession) {
+        print("MOO sessionDidEnd")
     }
 }
 
