@@ -543,17 +543,40 @@ private class TabWebView: WKWebView, MenuHelperInterface {
     }
 }
 
+var fooKey = ""
+
 @available(iOS 11.0, *)
 extension TabWebView: UIDropInteractionDelegate {
+
+    func getOriginalDelegate() -> UIDropInteractionDelegate? {
+        return (self.scrollView.subviews.first?.interactions[1] as? UIDropInteraction)?.delegate
+    }
+
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeURL as String]) && session.items.count == 1
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        if let originalDelegate = getOriginalDelegate() {
+            let proposal = originalDelegate.dropInteraction!(interaction, sessionDidUpdate: session)
+            if proposal.operation != .cancel {
+                print("The webview can handle this")
+                objc_setAssociatedObject(session, &fooKey, true, .OBJC_ASSOCIATION_RETAIN)
+                return proposal
+            }
+        }
+        print("The webview can not handle this")
         return UIDropProposal(operation: .copy)
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        // If this is supposed to be handled by WKWebView, then forward it
+        if objc_getAssociatedObject(session, &fooKey) != nil {
+            getOriginalDelegate()?.dropInteraction!(interaction, performDrop: session)
+            return
+        }
+
+        // Otherwise we handle it
         let _ = session.loadObjects(ofClass: URL.self) { urls in
             self.load(URLRequest(url: urls[0]))
         }
