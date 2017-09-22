@@ -509,7 +509,7 @@ extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
 
     public func clear() -> Success {
         return self.doWipe { (conn, err: inout NSError?) -> Void in
-            if let error = conn.executeChange("DELETE FROM \(TableTabs)") {
+            if let error = conn.executeChange("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL") {
                 err = error
             }
             if let error = conn.executeChange("DELETE FROM \(TableClients)") {
