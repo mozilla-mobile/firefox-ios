@@ -543,6 +543,8 @@ private class TabWebView: WKWebView, MenuHelperInterface {
     }
 }
 
+// TODO Add some detail on how this works and why we need to do this.
+
 var fooKey = ""
 
 @available(iOS 11.0, *)
