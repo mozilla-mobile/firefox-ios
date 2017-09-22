@@ -251,32 +251,33 @@ class URLBarView: UIView {
         }
 
         backButton.snp.makeConstraints { make in
-            make.left.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.TopToolbarHeight)
+            make.centerY.equalTo(self)
+            make.leading.equalTo(self).offset(10)
+            make.size.equalTo(44)
         }
 
         forwardButton.snp.makeConstraints { make in
             make.left.equalTo(self.backButton.snp.right)
             make.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.TopToolbarHeight)
+            make.size.equalTo(44)
         }
 
         stopReloadButton.snp.makeConstraints { make in
             make.left.equalTo(self.forwardButton.snp.right)
             make.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.TopToolbarHeight)
+            make.size.equalTo(44)
         }
 
         menuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.snp.trailing)
+            make.trailing.equalTo(self.snp.trailing).offset(-URLBarViewUX.Padding)
             make.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.TopToolbarHeight)
+            make.size.equalTo(44)
         }
         
         tabsButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.menuButton.snp.leading)
             make.centerY.equalTo(self)
-            make.size.equalTo(UIConstants.TopToolbarHeight)
+            make.size.equalTo(44)
         }
         
         showQRScannerButton.snp.makeConstraints { make in
@@ -309,11 +310,11 @@ class URLBarView: UIView {
             self.locationContainer.snp.remakeConstraints { make in
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
-                    make.leading.equalTo(self.stopReloadButton.snp.trailing)
+                    make.leading.equalTo(self.stopReloadButton.snp.trailing).offset(URLBarViewUX.Padding)
                     if self.topTabsIsShowing {
-                        make.trailing.equalTo(self.menuButton.snp.leading)
+                        make.trailing.equalTo(self.menuButton.snp.leading).offset(-URLBarViewUX.Padding)
                     } else {
-                        make.trailing.equalTo(self.tabsButton.snp.leading)
+                        make.trailing.equalTo(self.tabsButton.snp.leading).offset(-URLBarViewUX.Padding)
                     }
 
                 } else {

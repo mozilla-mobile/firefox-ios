@@ -755,7 +755,6 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         } else {
             var defaultFavicon = UIImage(named: "defaultFavicon")
             if tab.isPrivate {
-                defaultFavicon = defaultFavicon?.withRenderingMode(.alwaysTemplate)
                 tabCell.favicon.image = defaultFavicon
                 tabCell.favicon.tintColor = UIColor.white
             } else {
