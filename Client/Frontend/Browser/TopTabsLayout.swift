@@ -85,10 +85,15 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
 
         // Create attributes for the Tab Separator.
         for i in attributes {
+            guard i.representedElementKind != UICollectionElementKindSectionHeader && i.representedElementKind != UICollectionElementKindSectionFooter else {
+                i.zIndex = -2 //Prevent the header/footer from appearing above the Tabs
+                continue
+            }
             let sep = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: i.indexPath)
             sep.frame = CGRect(x: i.frame.origin.x - TopTabsUX.SeparatorWidth, y: separatorYOffset, width: TopTabsUX.SeparatorWidth, height: separatorSize)
             sep.zIndex = -2
             i.zIndex = 10
+
             // Only add the seperator if it will be shown.
             if i.indexPath.row != 0 && i.indexPath.row < self.collectionView!.numberOfItems(inSection: 0) {
                 attributes.append(sep)

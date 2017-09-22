@@ -1058,9 +1058,9 @@ class TrayToolbar: UIView {
     }
 
     fileprivate func styleToolbar(_ isPrivate: Bool) {
-        addTabButton.tintColor = isPrivate ? .white : .darkGray
-        deleteButton.tintColor = isPrivate ? .white : .darkGray
-        backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : .white
+        addTabButton.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0x272727)
+        deleteButton.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0x272727)
+        backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : UIColor(rgb: 0xf9f9fa)
         maskButton.styleForMode(privateMode: isPrivate)
     }
 }

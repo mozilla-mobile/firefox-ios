@@ -259,6 +259,8 @@ extension TopTabsViewController: Themeable {
         tabsButton.textColor = UIColor(rgb: 0xb1b1b3)
         isPrivate = (themeName == Theme.PrivateMode)
         privateModeButton.styleForMode(privateMode: isPrivate)
+        privateModeButton.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0xb1b1b3)
+        privateModeButton.imageView?.tintColor = privateModeButton.tintColor
         newTab.tintColor = UIColor(rgb: 0xb1b1b3)
         collectionView.backgroundColor = view.backgroundColor
     }
