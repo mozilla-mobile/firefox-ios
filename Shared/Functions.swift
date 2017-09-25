@@ -159,7 +159,7 @@ public extension Sequence {
     }
 }
 
-public func optDictionaryEqual<K: Equatable, V: Equatable>(_ lhs: [K: V]?, rhs: [K: V]?) -> Bool {
+public func optDictionaryEqual<K, V: Equatable>(_ lhs: [K: V]?, rhs: [K: V]?) -> Bool {
     switch (lhs, rhs) {
     case (.none, .none):
         return true

@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import SnapKit
 import Storage
-import WebImage
+import SDWebImage
 import Deferred
 
 private let log = Logger.browserLogger
