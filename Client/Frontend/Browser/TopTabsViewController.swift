@@ -7,21 +7,21 @@ import Shared
 import WebKit
 
 struct TopTabsUX {
-    static let TopTabsViewHeight: CGFloat = 40
-    static let TopTabsBackgroundNormalColor = UIColor(red: 235/255, green: 235/255, blue: 235/255, alpha: 1)
-    static let TopTabsBackgroundPrivateColor = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1)
-    static let TopTabsBackgroundNormalColorInactive = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1)
-    static let TopTabsBackgroundPrivateColorInactive = UIColor(red: 53/255, green: 53/255, blue: 53/255, alpha: 1)
-    static let PrivateModeToolbarTintColor = UIColor(red: 124 / 255, green: 124 / 255, blue: 124 / 255, alpha: 1)
+    static let TopTabsViewHeight: CGFloat = 44
+    static let TopTabsBackgroundColor = UIColor(rgb: 0x272727)
     static let TopTabsBackgroundPadding: CGFloat = 35
-    static let TopTabsBackgroundShadowWidth: CGFloat = 35
-    static let TabWidth: CGFloat = 180
+    static let TopTabsBackgroundShadowWidth: CGFloat = 12
+    static let TabWidth: CGFloat = 190
     static let CollectionViewPadding: CGFloat = 15
-    static let FaderPading: CGFloat = 10
+    static let FaderPading: CGFloat = 8
     static let SeparatorWidth: CGFloat = 1
+    static let HighlightLineWidth: CGFloat = 3
+    static let TabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
     static let TabTitleWidth: CGFloat = 110
     static let TabTitlePadding: CGFloat = 10
     static let AnimationSpeed: TimeInterval = 0.1
+    static let SeparatorYOffset: CGFloat = 7
+    static let SeparatorHeight: CGFloat = 32
 }
 
 protocol TopTabsDelegate: class {
@@ -97,6 +97,9 @@ class TopTabsViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         collectionView.dataSource = self
         collectionView.delegate = tabLayoutDelegate
+        [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
+            collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(TopTabsViewController.reloadFavicons(_:)), name: faviconNotification, object: nil)
     }
     
@@ -123,40 +126,38 @@ class TopTabsViewController: UIViewController {
         self.tabStore = self.tabsToDisplay
 
         let topTabFader = TopTabFader()
-        
+
+        view.addSubview(topTabFader)
+        topTabFader.addSubview(collectionView)
         view.addSubview(tabsButton)
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
-        view.addSubview(topTabFader)
-        topTabFader.addSubview(collectionView)
         
         newTab.snp.makeConstraints { make in
             make.centerY.equalTo(view)
-            make.trailing.equalTo(view)
-            make.size.equalTo(UIConstants.ToolbarHeight)
+            make.trailing.equalTo(tabsButton.snp.leading).offset(-10)
+            make.size.equalTo(view.snp.height)
         }
         tabsButton.snp.makeConstraints { make in
             make.centerY.equalTo(view)
-            make.trailing.equalTo(newTab.snp.leading)
-            make.size.equalTo(UIConstants.ToolbarHeight)
+            make.trailing.equalTo(view).offset(-10)
+            make.size.equalTo(view.snp.height)
         }
         privateModeButton.snp.makeConstraints { make in
             make.centerY.equalTo(view)
-            make.leading.equalTo(view)
-            make.size.equalTo(UIConstants.ToolbarHeight)
+            make.leading.equalTo(view).offset(10)
+            make.size.equalTo(view.snp.height)
         }
         topTabFader.snp.makeConstraints { make in
             make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateModeButton.snp.trailing).offset(-TopTabsUX.FaderPading)
-            make.trailing.equalTo(tabsButton.snp.leading).offset(TopTabsUX.FaderPading)
+            make.leading.equalTo(privateModeButton.snp.trailing)
+            make.trailing.equalTo(newTab.snp.leading)
         }
         collectionView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateModeButton.snp.trailing).offset(-TopTabsUX.CollectionViewPadding)
-            make.trailing.equalTo(tabsButton.snp.leading).offset(TopTabsUX.CollectionViewPadding)
+            make.edges.equalTo(topTabFader)
         }
-        
-        view.backgroundColor = UIColor.black
+
+        view.backgroundColor = UIColor(rgb: 0x272727)
         tabsButton.applyTheme(Theme.NormalMode)
         if let currentTab = tabManager.selectedTab {
             applyTheme(currentTab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
@@ -254,16 +255,14 @@ class TopTabsViewController: UIViewController {
 extension TopTabsViewController: Themeable {
     func applyTheme(_ themeName: String) {
         tabsButton.applyTheme(themeName)
+        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor(rgb: 0x272727)
+        tabsButton.textColor = UIColor(rgb: 0xb1b1b3)
         isPrivate = (themeName == Theme.PrivateMode)
         privateModeButton.styleForMode(privateMode: isPrivate)
-        newTab.tintColor = isPrivate ? UIConstants.PrivateModePurple : UIColor.white
-        if let layout = collectionView.collectionViewLayout as? TopTabsViewLayout {
-            if isPrivate {
-                layout.themeColor = TopTabsUX.TopTabsBackgroundPrivateColorInactive
-            } else {
-                layout.themeColor = TopTabsUX.TopTabsBackgroundNormalColorInactive
-            }
-        }
+        privateModeButton.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0xb1b1b3)
+        privateModeButton.imageView?.tintColor = privateModeButton.tintColor
+        newTab.tintColor = UIColor(rgb: 0xb1b1b3)
+        collectionView.backgroundColor = view.backgroundColor
     }
 }
 
@@ -304,19 +303,18 @@ extension TopTabsViewController: UICollectionViewDataSource {
         }
 
         tabCell.selectedTab = (tab == tabManager.selectedTab)
-
-        if let favIcon = tab.displayFavicon,
-           let url = URL(string: favIcon.url) {
-            tabCell.favicon.sd_setImage(with: url)
+        if let siteURL = tab.url?.displayURL {
+            tabCell.favicon.setIcon(tab.displayFavicon, forURL: siteURL, completed: { (color, url) in
+                if siteURL == url {
+                    tabCell.favicon.image = tabCell.favicon.image?.createScaled(CGSize(width: 15, height: 15))
+                    tabCell.favicon.backgroundColor = color == .clear ? .white : color
+                    tabCell.favicon.contentMode = .center
+                }
+            })
         } else {
-            var defaultFavicon = UIImage(named: "defaultFavicon")
-            if tab.isPrivate {
-                defaultFavicon = defaultFavicon?.withRenderingMode(.alwaysTemplate)
-                tabCell.favicon.image = defaultFavicon
-                tabCell.favicon.tintColor = UIColor.white
-            } else {
-                tabCell.favicon.image = defaultFavicon
-            }
+            tabCell.favicon.image = UIImage(named: "defaultFavicon")
+            tabCell.favicon.contentMode = .scaleAspectFit
+            tabCell.favicon.backgroundColor = .clear
         }
         
         return tabCell
@@ -325,6 +323,13 @@ extension TopTabsViewController: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabStore.count
     }
+
+    @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderFooter", for: indexPath) as! TopTabsHeaderFooter
+        view.arrangeLine(kind)
+        return view
+    }
+
 }
 
 extension TopTabsViewController: TabSelectionDelegate {

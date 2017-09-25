@@ -44,13 +44,13 @@ public class FxADevice: RemoteDevice {
     static func fromJSON(_ json: JSON) -> FxADevice? {
         guard json.error == nil,
             let id = json["id"].string,
-            let name = json["name"].string,
-            let type = json["type"].string else {
+            let name = json["name"].string else {
                 return nil
         }
 
         let isCurrentDevice = json["isCurrentDevice"].bool ?? false
         let lastAccessTime = json["lastAccessTime"].uInt64
+        let type = json["type"].string
 
         let push: FxADevicePushParams?
         if let pushCallback = json["pushCallback"].stringValue(),

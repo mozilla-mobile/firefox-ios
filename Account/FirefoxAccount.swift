@@ -8,7 +8,7 @@ import XCGLogger
 import Deferred
 import SwiftyJSON
 import FxA
-import WebImage
+import SDWebImage
 
 private let log = Logger.syncLogger
 
@@ -219,7 +219,7 @@ open class FirefoxAccount {
         open class Avatar {
             open var image: UIImage?
             open let url: URL?
-            var currentImageState: ImageDownloadState = ImageDownloadState.notStarted
+            var currentImageState: ImageDownloadState = .notStarted
             
             init(url: URL?) {
                 self.image = UIImage(named: "placeholder-avatar")
@@ -230,7 +230,7 @@ open class FirefoxAccount {
             func updateAvatarImageState() {
                 switch currentImageState {
                 case .notStarted:
-                    self.currentImageState = ImageDownloadState.started
+                    self.currentImageState = .started
                     self.downloadAvatar()
                     break
                 case .failedCanRetry:
@@ -242,26 +242,26 @@ open class FirefoxAccount {
             }
             
             func downloadAvatar() {
-                SDWebImageManager.shared().downloadImage(with: url, options: [SDWebImageOptions.continueInBackground, SDWebImageOptions.lowPriority], progress: nil) { (image, error, cacheType, success, url) in
+                SDWebImageManager.shared().loadImage(with: url, options: [.continueInBackground, .lowPriority], progress: nil) { (image, _, error, _, success, _) in
                     if let error = error {
-                        if (error as NSError).code == 404 || self.currentImageState == ImageDownloadState.failedCanRetry {
+                        if (error as NSError).code == 404 || self.currentImageState == .failedCanRetry {
                             // Image is not found or failed to download a second time
-                            self.currentImageState = ImageDownloadState.failedCanNotRetry
+                            self.currentImageState = .failedCanNotRetry
                         } else {
                             // This could have been a transient error, attempt to download the image only once more
-                            self.currentImageState = ImageDownloadState.failedCanRetry
+                            self.currentImageState = .failedCanRetry
                             self.updateAvatarImageState()
                         }
                         return
                     }
                     
                     if success == true && image == nil {
-                        self.currentImageState = ImageDownloadState.succeededMalformed
+                        self.currentImageState = .succeededMalformed
                         return
                     }
                     
                     self.image = image
-                    self.currentImageState = ImageDownloadState.succeeded
+                    self.currentImageState = .succeeded
                     NotificationCenter.default.post(name: NotificationFirefoxAccountProfileChanged, object: self)
                 }
             }

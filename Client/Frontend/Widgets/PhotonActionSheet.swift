@@ -69,11 +69,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     lazy var cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Close", for: .normal)
+        button.setTitle(Strings.CancelButtonTitle, for: .normal)
         button.backgroundColor = UIConstants.AppBackgroundColor
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
         button.addTarget(self, action: #selector(PhotonActionSheet.dismiss(_:)), for:.touchUpInside)
         return button
     }()
@@ -153,7 +153,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
                 make.height.equalTo(PhotonActionSheetUX.CancelButtonHeight)
                 make.bottom.equalTo(self.view.snp.bottom).offset(-PhotonActionSheetUX.Padding)
             }
-            tableView.setContentOffset(CGPoint(x: 0, y: CGFloat.greatestFiniteMagnitude), animated: false)
         }
         
         if style == .bottom && UIDevice.current.userInterfaceIdiom == .pad {

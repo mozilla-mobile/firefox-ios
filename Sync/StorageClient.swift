@@ -626,7 +626,7 @@ open class Sync15StorageClient {
 
     // It would be convenient to have the storage client manage Keys, but of course we need to use a different set of
     // keys to fetch crypto/keys itself.  See uploadCryptoKeys.
-    func clientForCollection<T: CleartextPayloadJSON>(_ collection: String, encrypter: RecordEncrypter<T>) -> Sync15CollectionClient<T> {
+    func clientForCollection<T>(_ collection: String, encrypter: RecordEncrypter<T>) -> Sync15CollectionClient<T> {
         let storage = self.serverURI.appendingPathComponent("storage", isDirectory: true)
         return Sync15CollectionClient(client: self, serverURI: storage, collection: collection, encrypter: encrypter)
     }

@@ -20,6 +20,10 @@ class MockSyncAuthState: SyncAuthState {
     let serverRoot: String
     let kB: Data
 
+    var deviceID: String? {
+        return "mock_device_id"
+    }
+
     init(serverRoot: String, kB: Data) {
         self.serverRoot = serverRoot
         self.kB = kB

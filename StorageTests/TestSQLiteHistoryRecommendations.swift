@@ -6,7 +6,7 @@ import Foundation
 import Shared
 @testable import Storage
 import Deferred
-import WebImage
+import SDWebImage
 
 import XCTest
 
@@ -40,8 +40,8 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         db.run("DELETE FROM \(TableHighlights)").succeeded()
         db.run("DELETE FROM \(TableActivityStreamBlocklist)").succeeded()
 
-        SDWebImageManager.shared().imageCache.clearDisk()
-        SDWebImageManager.shared().imageCache.clearMemory()
+        SDWebImageManager.shared().imageCache?.clearDisk()
+        SDWebImageManager.shared().imageCache?.clearMemory()
 
         super.tearDown()
     }
