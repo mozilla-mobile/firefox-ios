@@ -105,27 +105,30 @@ open class GradientProgressBar: UIProgressView {
     }
     
     func hideProgressBar() {
+        guard progress == 1 else {
+            return
+        }
+
         CATransaction.begin()
         let moveAnimation = CABasicAnimation(keyPath: "position")
-        moveAnimation.duration = 0.5
+        moveAnimation.duration = DefaultValues.animationDuration * 3
         moveAnimation.fromValue = gradientLayer.position
         moveAnimation.toValue = CGPoint(x: gradientLayer.frame.width, y: gradientLayer.position.y)
         moveAnimation.fillMode = kCAFillModeForwards
         moveAnimation.isRemovedOnCompletion = false
-        
-        
+
         CATransaction.setCompletionBlock {
             self.resetProgressBar()
         }
         
         gradientLayer.add(moveAnimation, forKey: "position")
-        
+
         CATransaction.commit()
     }
     
     func resetProgressBar() {
-        setProgress(0, animated: false)
-        gradientLayer.removeAllAnimations()
+        super.setProgress(0, animated: false)
+        self.isHidden = true // The URLBar will unhide the view before starting the next animation.
     }
     
     override open func layoutSubviews() {
@@ -135,7 +138,7 @@ open class GradientProgressBar: UIProgressView {
     
     func animateGradient() {
         let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
-        gradientChangeAnimation.duration = 0.4
+        gradientChangeAnimation.duration = DefaultValues.animationDuration * 4
         gradientChangeAnimation.toValue = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.0]
         gradientChangeAnimation.fromValue = [0.0, 0.0, 0.0, 0.2, 0.4, 0.6, 0.8]
         gradientChangeAnimation.fillMode = kCAFillModeForwards
@@ -150,14 +153,30 @@ open class GradientProgressBar: UIProgressView {
         CATransaction.begin()
         // Workaround for non animated progress change
         // Source: https://stackoverflow.com/a/16381287/3532505
-        CATransaction.setAnimationDuration(animated ? animationDuration : 0.0)
+        CATransaction.setAnimationDuration(animated ? DefaultValues.animationDuration : 0.0)
         alphaMaskLayer.frame = bounds.updateWidth(byPercentage: CGFloat(progress))
+        if progress == 1 {
+            // Delay calling hide until the last animation has completed
+            CATransaction.setCompletionBlock({
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DefaultValues.animationDuration, execute: {
+                    self.hideProgressBar()
+                })
+            })
+        }
         CATransaction.commit()
     }
+
     
     override open func setProgress(_ progress: Float, animated: Bool) {
+        if progress < self.progress && self.progress != 1 {
+            return
+        }
+        // Setup animations
+        gradientLayer.removeAnimation(forKey: "position")
+        if gradientLayer.animation(forKey: "colorChange") == nil {
+            animateGradient()
+        }
         super.setProgress(progress, animated: animated)
-        
         updateAlphaMaskLayerWidth(animated: animated)
     }
 }
@@ -167,5 +186,3 @@ extension CGRect {
         return CGRect(x: origin.x, y: origin.y, width: size.width * percentage, height: size.height)
     }
 }
-
-
