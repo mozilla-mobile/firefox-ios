@@ -59,7 +59,6 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 log.error("Wipe failed: \(err.localizedDescription)")
                 throw err
             }
-            return ()
         }
     }
 
@@ -207,8 +206,6 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             if let err = err {
                 throw err
             }
-
-            return ()
         }
     }
 
@@ -287,6 +284,10 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             return deferMaybe(DatabaseError(err: deferredTabsCursor.value.failureValue as NSError?))
         }
         
+        defer {
+            tabCursor.close()
+        }
+        
         // Aggregate clientGUID -> RemoteTab.
         for tab in tabCursor {
             if let tab = tab, let guid = tab.clientGUID {
@@ -299,8 +300,6 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 log.error("Couldn't cast tab (\(tab ??? "nil")) to RemoteTab.")
             }
         }
-        
-        tabCursor.close()
 
         let deferred = Deferred<Maybe<[ClientAndTabs]>>(defaultQueue: DispatchQueue.main)
 

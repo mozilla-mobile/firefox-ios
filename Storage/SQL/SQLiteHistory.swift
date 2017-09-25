@@ -185,12 +185,12 @@ extension SQLiteHistory: BrowserHistory {
             let now = Date.now()
             
             if self.updateSite(site, atTime: now, withConnection: conn) > 0 {
-                return ()
+                return
             }
             
             // Insert instead.
             if self.insertSite(site, atTime: now, withConnection: conn) > 0 {
-                return ()
+                return
             }
             
             let err = DatabaseError(description: "Unable to update or insert site; Invalid key returned")
@@ -263,8 +263,6 @@ extension SQLiteHistory: BrowserHistory {
                 //log.warning("Visit insertion failed with \(err.localizedDescription)")
                 throw err
             }
-
-            return ()
         }
     }
 

@@ -130,10 +130,12 @@ open class SwiftData {
     func withConnection<T>(_ flags: SwiftData.Flags, synchronous: Bool = true, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 
-        // We use a weak reference here instead of strongly retaining the connection because we don't want
-        // any control over when the connection deallocs. If the only owner of the connection (SwiftData)
-        // decides to dealloc it, we should respect that since the deinit method of the connection is tied
-        // to the app lifecycle. This is to prevent background disk access causing springboard crashes.
+        /**
+         * We use a weak reference here instead of strongly retaining the connection because we don't want
+         * any control over when the connection deallocs. If the only owner of the connection (SwiftData)
+         * decides to dealloc it, we should respect that since the deinit method of the connection is tied
+         * to the app lifecycle. This is to prevent background disk access causing springboard crashes.
+         */
         weak var conn = getSharedConnection()
         let queue = self.sharedConnectionQueue
         

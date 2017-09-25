@@ -499,8 +499,6 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
                     throw err
                 }
             }
-
-            return ()
         }
     }
 
@@ -1030,69 +1028,66 @@ extension MergedSQLiteBookmarks {
             
             log.debug("Deleting \(op.mirrorItemsToDelete.count) mirror items.")
 
-            try op.mirrorItemsToDelete
-                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                    let args: Args = guids.map { $0 }
-                    let varlist = BrowserDB.varlist(guids.count)
-                    
-                    let sqlMirrorStructure = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN \(varlist)"
-                    if let err = conn.executeChange(sqlMirrorStructure, withArgs: args) {
-                        log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
-                    
-                    let sqlMirror = "DELETE FROM \(TableBookmarksMirror) WHERE guid IN \(varlist)"
-                    if let err = conn.executeChange(sqlMirror, withArgs: args) {
-                        log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
+            try op.mirrorItemsToDelete.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = guids.map { $0 }
+                let varlist = BrowserDB.varlist(guids.count)
+                
+                let sqlMirrorStructure = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN \(varlist)"
+                if let err = conn.executeChange(sqlMirrorStructure, withArgs: args) {
+                    log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
+                
+                let sqlMirror = "DELETE FROM \(TableBookmarksMirror) WHERE guid IN \(varlist)"
+                if let err = conn.executeChange(sqlMirror, withArgs: args) {
+                    log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
             }
             
             // Copy from other tables for simplicity.
             // Do this *before* we throw away local and buffer changes!
             // This is one reason why the local override step needs to be processed before the buffer is cleared.
-            try op.mirrorValuesToCopyFromBuffer
-                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                    let args: Args = guids.map { $0 }
-                    let varlist = BrowserDB.varlist(guids.count)
-                    let copySQL = [
-                        "INSERT OR REPLACE INTO \(TableBookmarksMirror)",
-                        "(guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
-                        "bmkUri, tags, keyword, folderName, queryId, server_modified)",
-                        "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
-                        "bmkUri, tags, keyword, folderName, queryId, server_modified",
-                        "FROM \(TableBookmarksBuffer)",
-                        "WHERE guid IN",
-                        varlist
-                        ].joined(separator: " ")
-                    
-                    if let err = conn.executeChange(copySQL, withArgs: args) {
-                        log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
+            try op.mirrorValuesToCopyFromBuffer.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = guids.map { $0 }
+                let varlist = BrowserDB.varlist(guids.count)
+                let copySQL = [
+                    "INSERT OR REPLACE INTO \(TableBookmarksMirror)",
+                    "(guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                    "bmkUri, tags, keyword, folderName, queryId, server_modified)",
+                    "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                    "bmkUri, tags, keyword, folderName, queryId, server_modified",
+                    "FROM \(TableBookmarksBuffer)",
+                    "WHERE guid IN",
+                    varlist
+                    ].joined(separator: " ")
+                
+                if let err = conn.executeChange(copySQL, withArgs: args) {
+                    log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
             }
             
-            try op.mirrorValuesToCopyFromLocal
-                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                    let args: Args = guids.map { $0 }
-                    let varlist = BrowserDB.varlist(guids.count)
-                    let copySQL = [
-                        "INSERT OR REPLACE INTO \(TableBookmarksMirror)",
-                        "(guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
-                        "bmkUri, tags, keyword, folderName, queryId, faviconID, server_modified)",
-                        "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
-                        "bmkUri, tags, keyword, folderName, queryId, faviconID,",
-                        
-                        // This will be fixed up in batches after the initial copy.
-                        "0 AS server_modified",
-                        "FROM \(TableBookmarksLocal) WHERE guid IN",
-                        varlist
-                        ].joined(separator: " ")
+            try op.mirrorValuesToCopyFromLocal.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = guids.map { $0 }
+                let varlist = BrowserDB.varlist(guids.count)
+                let copySQL = [
+                    "INSERT OR REPLACE INTO \(TableBookmarksMirror)",
+                    "(guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                    "bmkUri, tags, keyword, folderName, queryId, faviconID, server_modified)",
+                    "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                    "bmkUri, tags, keyword, folderName, queryId, faviconID,",
                     
-                    if let err = conn.executeChange(copySQL, withArgs: args) {
-                        log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
+                    // This will be fixed up in batches after the initial copy.
+                    "0 AS server_modified",
+                    "FROM \(TableBookmarksLocal) WHERE guid IN",
+                    varlist
+                    ].joined(separator: " ")
+                
+                if let err = conn.executeChange(copySQL, withArgs: args) {
+                    log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
             }
             
             try op.modifiedTimes.forEach { (time, guids) in
@@ -1115,29 +1110,28 @@ extension MergedSQLiteBookmarks {
             }
             
             log.debug("Marking \(op.processedLocalChanges.count) local changes as processed.")
-            try op.processedLocalChanges
-                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                    let args: Args = guids.map { $0 }
-                    let varlist = BrowserDB.varlist(guids.count)
-                    
-                    let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(varlist)"
-                    if let err = conn.executeChange(sqlLocalStructure, withArgs: args) {
-                        log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
-                    
-                    let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
-                    if let err = conn.executeChange(sqlLocal, withArgs: args) {
-                        log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
-                    
-                    // If the values change, we'll handle those elsewhere, but at least we need to mark these as non-overridden.
-                    let sqlMirrorOverride = "UPDATE \(TableBookmarksMirror) SET is_overridden = 0 WHERE guid IN \(varlist)"
-                    if let err = conn.executeChange(sqlMirrorOverride, withArgs: args) {
-                        log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
+            try op.processedLocalChanges.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = guids.map { $0 }
+                let varlist = BrowserDB.varlist(guids.count)
+                
+                let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(varlist)"
+                if let err = conn.executeChange(sqlLocalStructure, withArgs: args) {
+                    log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
+                
+                let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
+                if let err = conn.executeChange(sqlLocal, withArgs: args) {
+                    log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
+                
+                // If the values change, we'll handle those elsewhere, but at least we need to mark these as non-overridden.
+                let sqlMirrorOverride = "UPDATE \(TableBookmarksMirror) SET is_overridden = 0 WHERE guid IN \(varlist)"
+                if let err = conn.executeChange(sqlMirrorOverride, withArgs: args) {
+                    log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
             }
             
             if !op.mirrorItemsToUpdate.isEmpty {
@@ -1218,24 +1212,23 @@ extension MergedSQLiteBookmarks {
                 throw err
             }
             
-            try op.deletedValues
-                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                    let args: Args = guids.map { $0 }
-                    let varlist = BrowserDB.varlist(guids.count)
-                    
-                    // This will leave the idx column sparse for the buffer children.
-                    let sqlBufferStructure = "DELETE FROM \(TableBookmarksBufferStructure) WHERE child IN \(varlist)"
-                    if let err = conn.executeChange(sqlBufferStructure, withArgs: args) {
-                        log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
-                    
-                    // This will also delete items from the pending deletions table on cascade.
-                    let sqlBuffer = "DELETE FROM \(TableBookmarksBuffer) WHERE guid IN \(varlist)"
-                    if let err = conn.executeChange(sqlBuffer, withArgs: args) {
-                        log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
+            try op.deletedValues.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = guids.map { $0 }
+                let varlist = BrowserDB.varlist(guids.count)
+                
+                // This will leave the idx column sparse for the buffer children.
+                let sqlBufferStructure = "DELETE FROM \(TableBookmarksBufferStructure) WHERE child IN \(varlist)"
+                if let err = conn.executeChange(sqlBufferStructure, withArgs: args) {
+                    log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
+                
+                // This will also delete items from the pending deletions table on cascade.
+                let sqlBuffer = "DELETE FROM \(TableBookmarksBuffer) WHERE guid IN \(varlist)"
+                if let err = conn.executeChange(sqlBuffer, withArgs: args) {
+                    log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
             }
             
             let insertSQL = [
@@ -1267,44 +1260,42 @@ extension MergedSQLiteBookmarks {
                 throw err
             }
             
-            try op.bufferValuesToMoveFromLocal
-                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                    let args: Args = guids.map { $0 }
-                    let varlist = BrowserDB.varlist(guids.count)
-                    
-                    let copySQL = [
-                        "INSERT OR REPLACE INTO \(TableBookmarksBuffer)",
-                        "(guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
-                        "bmkUri, tags, keyword, folderName, queryId, server_modified)",
-                        "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
-                        "bmkUri, tags, keyword, folderName, queryId,",
-                        "\(op.modifiedTime) AS server_modified",
-                        "FROM \(TableBookmarksLocal) WHERE guid IN",
-                        varlist
-                        ].joined(separator: " ")
-                    if let err = conn.executeChange(copySQL, withArgs: args) {
-                        log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
+            try op.bufferValuesToMoveFromLocal.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = guids.map { $0 }
+                let varlist = BrowserDB.varlist(guids.count)
+                
+                let copySQL = [
+                    "INSERT OR REPLACE INTO \(TableBookmarksBuffer)",
+                    "(guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                    "bmkUri, tags, keyword, folderName, queryId, server_modified)",
+                    "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                    "bmkUri, tags, keyword, folderName, queryId,",
+                    "\(op.modifiedTime) AS server_modified",
+                    "FROM \(TableBookmarksLocal) WHERE guid IN",
+                    varlist
+                    ].joined(separator: " ")
+                if let err = conn.executeChange(copySQL, withArgs: args) {
+                    log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
             }
             
-            try op.bufferValuesToMoveFromLocal
-                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                    let args: Args = guids.map { $0 }
-                    let varlist = BrowserDB.varlist(guids.count)
-                    
-                    // This will leave the idx column sparse for the local children.
-                    let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE child IN \(varlist)"
-                    if let err = conn.executeChange(sqlLocalStructure, withArgs: args) {
-                        log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
-                    
-                    let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
-                    if let err = conn.executeChange(sqlLocal, withArgs: args) {
-                        log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
-                        throw err
-                    }
+            try op.bufferValuesToMoveFromLocal.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = guids.map { $0 }
+                let varlist = BrowserDB.varlist(guids.count)
+                
+                // This will leave the idx column sparse for the local children.
+                let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE child IN \(varlist)"
+                if let err = conn.executeChange(sqlLocalStructure, withArgs: args) {
+                    log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
+                
+                let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
+                if let err = conn.executeChange(sqlLocal, withArgs: args) {
+                    log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
+                    throw err
+                }
             }
             
             if op.bufferValuesToMoveFromLocal.count > 0 {
