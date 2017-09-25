@@ -677,7 +677,7 @@ class BrowserViewController: UIViewController {
 
         footer.snp.remakeConstraints { make in
             scrollController.footerBottomConstraint = make.bottom.equalTo(self.view.snp.bottom).constraint
-            make.top.equalTo(self.snackBars.snp.top)
+            make.bottom.equalTo(self.view.snp.bottom)
             make.leading.trailing.equalTo(self.view)
         }
 
@@ -1712,10 +1712,10 @@ extension BrowserViewController: TabDelegate {
             }
 
             if traitCollection.horizontalSizeClass != .regular {
-                make.leading.trailing.equalTo(self.footer)
+                make.leading.trailing.equalTo(self.view)
                 self.snackBars.layer.borderWidth = 0
             } else {
-                make.centerX.equalTo(self.footer)
+                make.centerX.equalTo(self.view)
                 make.width.equalTo(SnackBarUX.MaxWidth)
                 self.snackBars.layer.borderColor = UIConstants.BorderColor.cgColor
                 self.snackBars.layer.borderWidth = 1
