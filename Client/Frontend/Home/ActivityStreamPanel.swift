@@ -8,7 +8,7 @@ import Deferred
 import Storage
 import SDWebImage
 import XCGLogger
-import Telemetry
+import SyncTelemetry
 import SnapKit
 
 private let log = Logger.browserLogger

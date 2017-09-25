@@ -7,7 +7,7 @@ import Shared
 import Storage
 import Deferred
 import SwiftyJSON
-import Telemetry
+import SyncTelemetry
 
 private let log = Logger.syncLogger
 

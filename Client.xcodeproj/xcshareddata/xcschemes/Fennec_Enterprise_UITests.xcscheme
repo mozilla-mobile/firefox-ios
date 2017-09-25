@@ -141,8 +141,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E69DB07C1E97DEA9008A67E6"
-               BuildableName = "TelemetryTests.xctest"
-               BlueprintName = "TelemetryTests"
+               BuildableName = "SyncTelemetryTests.xctest"
+               BlueprintName = "SyncTelemetryTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

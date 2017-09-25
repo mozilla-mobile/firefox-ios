@@ -13,7 +13,7 @@ import XCGLogger
 import SwiftKeychainWrapper
 import Deferred
 import SwiftyJSON
-import Telemetry
+import SyncTelemetry
 
 private let log = Logger.syncLogger
 
@@ -654,7 +654,7 @@ open class BrowserProfile: Profile {
         }
 
         func canSendUsageData() -> Bool {
-            return profile.prefs.boolForKey("settings.sendUsageData") ?? true
+            return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
         }
 
         private func sendSyncPing(account: FirefoxAccount, result: SyncOperationResult) {
@@ -662,7 +662,7 @@ open class BrowserProfile: Profile {
                           account: account,
                           remoteClientsAndTabs: self.profile.remoteClientsAndTabs,
                           prefs: self.prefs,
-                          why: .schedule) >>== { Telemetry.send(ping: $0, docType: .sync) }
+                          why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
         }
 
         private func notifySyncing(notification: Notification.Name) {
@@ -689,7 +689,7 @@ open class BrowserProfile: Profile {
                 return
             }
 
-            guard profile.prefs.boolForKey("settings.sendUsageData") ?? true else {
+            guard profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true else {
                 log.debug("Profile isn't sending usage data. Not sending bookmark event.")
                 return
             }

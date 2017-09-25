@@ -7,7 +7,7 @@ import Foundation
 import Shared
 @testable import Storage
 @testable import Sync
-@testable import Telemetry
+@testable import SyncTelemetry
 import SwiftyJSON
 
 import XCTest
