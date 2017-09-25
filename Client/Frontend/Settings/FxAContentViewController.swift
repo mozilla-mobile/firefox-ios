@@ -61,8 +61,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         super.viewDidLoad()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             profile.getAccount()?.updateProfile()

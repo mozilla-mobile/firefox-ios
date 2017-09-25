@@ -315,7 +315,7 @@ class AccountStatusSetting: WithAccountSetting {
     
     func updateAccount(notification: Notification) {
         DispatchQueue.main.async {
-            self.settings.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
+            self.settings.tableView.reloadData()
         }
     }
     
