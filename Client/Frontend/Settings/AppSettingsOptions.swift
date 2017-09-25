@@ -100,7 +100,6 @@ class SyncNowSetting: WithAccountSetting {
     
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(SyncNowSetting.stopRotateSyncIcon), name: NotificationProfileDidFinishSyncing, object: nil)
     }
     
@@ -330,7 +329,6 @@ class SyncNowSetting: WithAccountSetting {
 class AccountStatusSetting: WithAccountSetting {
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(AccountStatusSetting.updateAccount(notification:)), name: NotificationFirefoxAccountProfileChanged, object: nil)
     }
     
