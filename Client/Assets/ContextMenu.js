@@ -125,11 +125,11 @@ window.addEventListener("touchstart", function(event) {
       return;
     }
 
-    if (target.tagName === "img") {
+    if (target.tagName === "IMG") {
       data.image = target.src;
     }
 
-    if (element.tagName === "a") {
+    if (element.tagName === "A") {
       data.link = element.href;
 
       // The web view still shows the tap highlight after clicking an element,
