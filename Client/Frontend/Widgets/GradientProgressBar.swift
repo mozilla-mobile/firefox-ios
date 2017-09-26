@@ -127,8 +127,9 @@ open class GradientProgressBar: UIProgressView {
     }
     
     func resetProgressBar() {
+        // Call on super instead so no animation layers are created
         super.setProgress(0, animated: false)
-        self.isHidden = true // The URLBar will unhide the view before starting the next animation.
+        isHidden = true // The URLBar will unhide the view before starting the next animation.
     }
     
     override open func layoutSubviews() {
