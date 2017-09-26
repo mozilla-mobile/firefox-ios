@@ -11,6 +11,8 @@ private let log = Logger.browserLogger
 
 private let CategorySentTab = "org.mozilla.ios.SentTab.placeholder"
 
+private let sentryTag = "NotificationService"
+
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay!
     lazy var profile: ExtensionProfile = {
@@ -31,6 +33,7 @@ class NotificationService: UNNotificationServiceExtension {
         }
 
         guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
+            SentryIntegration.shared.sendWithStacktrace(message: "No notification content", tag: sentryTag)
             return
         }
 
@@ -77,13 +80,17 @@ class SyncDataDisplay {
 
     func displayNotification(_ message: PushMessage? = nil, with error: PushMessageError? = nil) {
         guard let message = message, error == nil else {
+            if let error = error {
+                SentryIntegration.shared.send(message: "PushMessageError: \(error.description)", tag: sentryTag)
+            } else {
+                SentryIntegration.shared.send(message: "PushMessage: nil message", tag: sentryTag)
+            }
             return displayUnknownMessageNotification()
         }
 
         switch message {
         case .accountVerified:
             displayAccountVerifiedNotification()
-            break
         case .deviceConnected(let deviceName):
             displayDeviceConnectedNotification(deviceName)
         case .deviceDisconnected(let deviceName):
@@ -139,6 +146,7 @@ extension SyncDataDisplay {
         } else {
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
         }
+        SentryIntegration.shared.sendWithStacktrace(message: "Unknown notification message", tag: sentryTag)
     }
 }
 
@@ -172,6 +180,8 @@ extension SyncDataDisplay {
 
         let center = UNUserNotificationCenter.current()
         center.getDeliveredNotifications { notifications in
+
+            SentryIntegration.shared.send(message: "deliveredNotification count = \(notifications.count)", tag: sentryTag)
 
             // Let's deal with sent-tab-notifications
             let sentTabNotifications = notifications.filter {
