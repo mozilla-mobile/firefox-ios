@@ -4,3 +4,4 @@ github "adjust/ios_sdk" ~> 4.10.2
 github "cezheng/Fuzi" "master"
 github "mozilla-mobile/AutocompleteTextField" "master"
 github "mozilla-mobile/telemetry-ios" "master"
+github "getsentry/sentry-cocoa" "3.2.1"

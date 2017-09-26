@@ -12,3 +12,5 @@ if [ -f "$BUDDYBUILD_WORKSPACE/Blockzilla/Adjust-Klar.plist" ]; then
     /usr/libexec/PlistBuddy -c "Set AppToken $ADJUST_TOKEN_KLAR" "$BUDDYBUILD_WORKSPACE/Blockzilla/Adjust-Klar.plist"
 fi
 
+# Add Sentry DSN to Info.plist
+/usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_BETA" "Blockzilla/Info.plist"

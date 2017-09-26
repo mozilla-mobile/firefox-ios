@@ -19,6 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if BUDDYBUILD
             BuddyBuildSDK.setup()
         #endif
+
+        // Only set up to be in Beta build until we get approval to put Sentry in release
+        if AppInfo.isBetaBuild {
+            // Set up Sentry
+            let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
+            SentryIntegration.shared.setup(sendUsageData: sendUsageData)
+        }
         
         // Set up Telemetry
         let telemetryConfig = Telemetry.default.configuration
