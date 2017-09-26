@@ -42,7 +42,7 @@ class ClipboardBarDisplayHandler {
     
     @objc private func SELAppWillResignActive() {
         sessionStarted = true
-        UIPasteboard.general.asyncString().upon { res in
+        UIPasteboard.general.asyncString().uponQueue(.main) { res in
             if let value = res.successValue {
                 self.lastDisplayedURL = value
             }
@@ -79,7 +79,7 @@ class ClipboardBarDisplayHandler {
             // user has asked for it in settings.
             return
         }
-        UIPasteboard.general.asyncURL().upon { res in
+        UIPasteboard.general.asyncURL().uponQueue(.main) { res in
             guard let copiedURL: URL? = res.successValue,
                 let url = copiedURL else {
                 return
