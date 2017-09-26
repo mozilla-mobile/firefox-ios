@@ -503,10 +503,9 @@ class TabTrayController: UIViewController {
         self.collectionView.performBatchUpdates({ _ in
             let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
         }, completion: { finished in
+            // The addTab delegate method will pop to the BVC no need to do anything here.
             self.toolbar.isUserInteractionEnabled = true
             if finished {
-                _ = self.navigationController?.popViewController(animated: true)
-
                 if request == nil && NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
                     if let bvc = self.navigationController?.topViewController as? BrowserViewController {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
