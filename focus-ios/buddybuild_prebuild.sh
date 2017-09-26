@@ -14,3 +14,6 @@ fi
 
 # Add Sentry DSN to Info.plist
 /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_BETA" "Blockzilla/Info.plist"
+
+# Set the build number to match the Buddybuild number
+agvtool new-version -all "$BUDDYBUILD_BUILD_NUMBER"
