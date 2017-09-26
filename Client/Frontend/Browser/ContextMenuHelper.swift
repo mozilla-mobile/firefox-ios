@@ -89,7 +89,9 @@ class ContextMenuHelper: NSObject, TabHelper, UIGestureRecognizerDelegate {
     // Hack to detect the built-in context menu gesture recognizer.
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         // On iOS 11 the gestureRecognizer has been renamed. Check for both names.
-        let gestureNames = ["_UIKeyboardBasedNonEditableTextSelectionGestureCluster", "_UIKeyboardBasedNonEditableTextSelectionGestureController"]
+        let gestureNames = ["_UIKeyboardBasedTextSelectionGestureCluster",
+                            "_UIKeyboardBasedNonEditableTextSelectionGestureCluster",
+                            "_UIKeyboardBasedNonEditableTextSelectionGestureController"]
         if let otherDelegate = otherGestureRecognizer.delegate, gestureNames.reduce(false, { $0 || String(describing: otherDelegate).contains($1) }) {
             selectionGestureRecognizer = otherGestureRecognizer
         }

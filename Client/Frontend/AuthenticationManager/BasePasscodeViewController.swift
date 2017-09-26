@@ -58,7 +58,7 @@ extension BasePasscodeViewController {
 
     func failMismatchPasscode() {
         let mismatchPasscodeError
-            = NSLocalizedString("Passcodes didn't match. Try again.",
+            = NSLocalizedString("Passcodes didn’t match. Try again.",
                 tableName: "AuthenticationManager",
                 comment: "Error message displayed to user when their confirming passcode doesn't match the first code.")
         displayError(mismatchPasscodeError)

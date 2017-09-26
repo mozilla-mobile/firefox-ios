@@ -97,10 +97,6 @@ class FxALoginHelper {
         // accountVerified is needed by delegates.
         accountVerified = account.actionNeeded != .needsVerification
 
-        // We should check if deviceRegistration has been performed, and 
-        // update the sync scratch pad (a proxy for our client record) accordingly.
-        // We do this here because this is effectively the upgrade path between 7 and 8.
-        updateSyncScratchpad()
 
         guard AppConstants.MOZ_FXA_PUSH else {
             return loginDidSucceed()
@@ -290,10 +286,6 @@ class FxALoginHelper {
         // The only way we can tell if the account has been verified is to 
         // start a sync. If it works, then yay,
         account.advance().upon { state in
-            if attemptsLeft == verificationMaxRetries {
-                self.updateSyncScratchpad()
-            }
-
             guard state.actionNeeded == .needsVerification else {
                 // Verification has occurred remotely, and we can proceed.
                 // The state machine will have told any listening UIs that 
@@ -321,16 +313,6 @@ class FxALoginHelper {
 
     fileprivate func loginDidFail() {
         delegate?.accountLoginDidFail()
-    }
-
-    fileprivate func updateSyncScratchpad() {
-        // We need to associate the fxaDeviceId with sync;
-        // We can do this anything after the first time we account.advance()
-        // but before the first time we sync.
-        if let deviceRegistration = account?.deviceRegistration,
-            let scratchpadPrefs = profile?.prefs.branch("sync.scratchpad") {
-            scratchpadPrefs.setString(deviceRegistration.toJSON().stringValue()!, forKey: PrefDeviceRegistration)
-        }
     }
 
     func performVerifiedSync(_ profile: Profile, account: FirefoxAccount) {

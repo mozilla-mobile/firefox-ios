@@ -272,7 +272,7 @@ open class Keys: Equatable {
         return defaultBundle
     }
 
-    open func encrypter<T: CleartextPayloadJSON>(_ collection: String, encoder: RecordEncoder<T>) -> RecordEncrypter<T> {
+    open func encrypter<T>(_ collection: String, encoder: RecordEncoder<T>) -> RecordEncrypter<T> {
         return RecordEncrypter(bundle: forCollection(collection), encoder: encoder)
     }
 

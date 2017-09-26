@@ -14,7 +14,7 @@ import Alamofire
 import Account
 import ReadingList
 import MobileCoreServices
-import WebImage
+import SDWebImage
 import SwiftyJSON
 import Telemetry
 import Sentry
@@ -168,7 +168,8 @@ class BrowserViewController: UIViewController {
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        return isPrivate ? UIStatusBarStyle.lightContent : UIStatusBarStyle.default
+        let isIpad = shouldShowTopTabsForTraitCollection(traitCollection)
+        return (isPrivate || isIpad) ? UIStatusBarStyle.lightContent : UIStatusBarStyle.default
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -203,6 +204,7 @@ class BrowserViewController: UIViewController {
             toolbar?.tabToolbarDelegate = self
             let theme = (tabManager.selectedTab?.isPrivate ?? false) ? Theme.PrivateMode : Theme.NormalMode
             toolbar?.applyTheme(theme)
+            updateTabCountUsingTabManager(self.tabManager)
         }
         
         if showTopTabs {
@@ -390,7 +392,7 @@ class BrowserViewController: UIViewController {
         self.view.addSubview(findInPageContainer)
 
         if AppConstants.MOZ_CLIPBOARD_BAR {
-            clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs)
+            clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
             clipboardBarDisplayHandler?.delegate = self
         }
         
@@ -675,7 +677,7 @@ class BrowserViewController: UIViewController {
 
         footer.snp.remakeConstraints { make in
             scrollController.footerBottomConstraint = make.bottom.equalTo(self.view.snp.bottom).constraint
-            make.top.equalTo(self.snackBars.snp.top)
+            make.bottom.equalTo(self.view.snp.bottom)
             make.leading.trailing.equalTo(self.view)
         }
 
@@ -852,21 +854,6 @@ class BrowserViewController: UIViewController {
         if let tab = tabManager.getTabForURL(url) {
             tab.isBookmarked = true
         }
-    }
-
-    fileprivate func animateBookmarkStar() {
-        let offset: CGFloat
-        let button: UIButton!
-
-        if let toolbar: TabToolbar = self.toolbar {
-            offset = BrowserViewControllerUX.BookmarkStarAnimationOffset * -1
-            button = toolbar.bookmarkButton
-        } else {
-            offset = BrowserViewControllerUX.BookmarkStarAnimationOffset
-            button = self.urlBar.bookmarkButton
-        }
-
-        JumpAndSpinAnimator.animateFromView(button.imageView ?? button, offset: offset, completion: nil)
     }
 
     func SELBookmarkStatusDidChange(_ notification: Notification) {
@@ -1326,6 +1313,24 @@ extension BrowserViewController: URLBarDelegate {
         let controller = UINavigationController(rootViewController: qrCodeViewController)
         self.present(controller, animated: true, completion: nil)
     }
+
+    func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
+        
+        let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
+            self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.frame, arrowDirection: .up)
+        }
+        
+        let findInPageAction = {
+            self.updateFindInPageVisibility(visible: true)
+        }
+        
+        guard let tab = tabManager.selectedTab, tab.url != nil else { return }
+        
+        // The logic of which actions appear when isnt final.
+        let pageActions = getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
+                                        findInPage: findInPageAction, presentableVC: self)
+        presentSheetWith(actions: pageActions, on: self, from: button)
+    }
     
     func urlBarDidPressStop(_ urlBar: URLBarView) {
         tabManager.selectedTab?.stop()
@@ -1366,7 +1371,7 @@ extension BrowserViewController: URLBarDelegate {
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action."))
             // TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1158503 provide some form of 'this has been added' visual feedback?
         case .failure(let error):
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it's already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it’s already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
             log.error("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
         }
         return true
@@ -1564,38 +1569,18 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             self.openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: true)
         }
         
-        actions.append(getOtherPanelActions())
-        actions.append(getHomePanelActions(openURL: urlAction, vcDelegate: self))
-        actions.append(getTabMenuActions(openURL: urlAction, showTabs: showTabTray))
+        actions.append(getHomePanelActions(openURL: urlAction))
+        actions.append(getOtherPanelActions(vcDelegate: self))
         presentSheetWith(actions: actions, on: self, from: button)
     }
 
-    func tabToolbarDidPressShare(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, direction) in
-            self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.frame, arrowDirection: .up)
-        }
-        
-        let findInPageAction = {
-            self.updateFindInPageVisibility(visible: true)
-        }
-        
-        // The logic of which actions appear when isnt final.
-        guard let tab = self.tabManager.selectedTab, tab.url != nil else {
-            return
-        }
-        
-        // The logic of which actions appear when isnt final.
-        let pageActions = self.getTabActions(tab: tab,
-                                             buttonView: button,
-                                             presentShareMenu: actionMenuPresenter,
-                                             findInPage: findInPageAction,
-                                             presentableVC: self)
-        self.presentSheetWith(actions: pageActions, on: self, from: button)
+    func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        showTabTray()
     }
 
     func showBackForwardList() {
         if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
-            let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList)
             backForwardViewController.tabManager = tabManager
             backForwardViewController.bvc = self
             backForwardViewController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
@@ -1727,10 +1712,10 @@ extension BrowserViewController: TabDelegate {
             }
 
             if traitCollection.horizontalSizeClass != .regular {
-                make.leading.trailing.equalTo(self.footer)
+                make.leading.trailing.equalTo(self.view)
                 self.snackBars.layer.borderWidth = 0
             } else {
-                make.centerX.equalTo(self.footer)
+                make.centerX.equalTo(self.view)
                 make.width.equalTo(SnackBarUX.MaxWidth)
                 self.snackBars.layer.borderColor = UIConstants.BorderColor.cgColor
                 self.snackBars.layer.borderWidth = 1
@@ -2039,8 +2024,9 @@ extension BrowserViewController: TabManagerDelegate {
     fileprivate func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            urlBar.updateTabCount(max(count, 1), animated: !urlBar.inOverlayMode)
-            topTabsViewController?.updateTabCount(max(count, 1), animated: animated)
+            toolbar?.updateTabCount(count, animated: animated)
+            urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
+            topTabsViewController?.updateTabCount(count, animated: animated)
         }
     }
 }
@@ -2177,7 +2163,7 @@ extension BrowserViewController: WKUIDelegate {
         }
         
         if openInHelper.openInView == nil {
-            openInHelper.openInView = navigationToolbar.shareButton
+             openInHelper.openInView = navigationToolbar.menuButton
         }
 
         openInHelper.open()
@@ -2777,14 +2763,14 @@ extension BrowserViewController {
         let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
             self.customSearchEngineButton.tintColor = UIColor.gray
             self.customSearchEngineButton.isUserInteractionEnabled = false
-            SDWebImageManager.shared().downloadImage(with: iconURL, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, error, cacheType, success, url) in
-                guard image != nil else {
+            SDWebImageManager.shared().loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+                guard let image = image else {
                     let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                     self.present(alert, animated: true, completion: nil)
                     return
                 }
 
-                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: image!, searchTemplate: searchQuery, suggestTemplate: nil, isCustomEngine: true))
+                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: image, searchTemplate: searchQuery, suggestTemplate: nil, isCustomEngine: true))
                 let Toast = SimpleToast()
                 Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
             }
@@ -2877,7 +2863,7 @@ extension BrowserViewController: Themeable {
     func applyTheme(_ themeName: String) {
         let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
         ui.forEach { $0?.applyTheme(themeName) }
-        statusBarOverlay.backgroundColor = urlBar.backgroundColor
+        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(self.traitCollection) ? UIColor(rgb: 0x272727) : urlBar.backgroundColor
         self.setNeedsStatusBarAppearanceUpdate()
     }
 }

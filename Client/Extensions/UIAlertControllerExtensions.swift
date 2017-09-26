@@ -43,7 +43,7 @@ extension UIAlertController {
         )
 
         let dontSend = UIAlertAction(
-            title: NSLocalizedString("Don't Send", comment: "Used as a button label for crash dialog prompt"),
+            title: NSLocalizedString("Don’t Send", comment: "Used as a button label for crash dialog prompt"),
             style: UIAlertActionStyle.default,
             handler: dontSendCallback
         )
