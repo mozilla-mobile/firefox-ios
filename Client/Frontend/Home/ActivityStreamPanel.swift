@@ -6,7 +6,7 @@ import Shared
 import UIKit
 import Deferred
 import Storage
-import WebImage
+import SDWebImage
 import XCGLogger
 import Telemetry
 import SnapKit
@@ -16,7 +16,7 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
 // MARK: -  Lifecycle
 struct ASPanelUX {
-    static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+    static let backgroundColor = UIConstants.AppBackgroundColor
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 14)
@@ -767,7 +767,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         })
 
         let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
-            let helper = ShareExtensionHelper(url: siteURL, tab: nil, activities: [])
+            let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController { completed, activityType in
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }

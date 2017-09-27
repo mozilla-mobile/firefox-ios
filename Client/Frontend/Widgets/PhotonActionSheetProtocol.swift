@@ -23,34 +23,25 @@ extension PhotonActionSheetProtocol {
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
         
         if let popoverVC = sheet.popoverPresentationController {
-            popoverVC.backgroundColor = UIColor.clear
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
             popoverVC.sourceRect = CGRect(x: view.frame.width/2, y: view.frame.size.height * 0.75, width: 1, height: 1)
             popoverVC.permittedArrowDirections = UIPopoverArrowDirection.up
+            // Style the popoverVC instead of the tableView. This makes sure that the popover arrow is style as well
+            sheet.tableView.backgroundView = nil
+            sheet.tableView.backgroundColor = .clear
+            popoverVC.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
     
     //Returns a list of actions which is used to build a menu
     //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
-    func getHomePanelActions(openURL: @escaping URLOpenAction, vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
-        let openSettings = PhotonActionSheetItem(title: Strings.AppMenuSettingsTitleString, iconString: "menu-Settings") { action in
-            let settingsTableViewController = AppSettingsTableViewController()
-            settingsTableViewController.profile = self.profile
-            settingsTableViewController.tabManager = self.tabManager
-            settingsTableViewController.settingsDelegate = vcDelegate
-            
-            let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
-            controller.popoverDelegate = vcDelegate
-            controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
-            vcDelegate.present(controller, animated: true, completion: nil)
-        }
-        
+    func getHomePanelActions(openURL: @escaping URLOpenAction) -> [PhotonActionSheetItem] {
         let openTopSites = PhotonActionSheetItem(title: Strings.AppMenuTopSitesTitleString, iconString: "menu-panel-TopSites") { action in
             openURL(HomePanelType.topSites.localhostURL, false)
         }
-        
+
         let openBookmarks = PhotonActionSheetItem(title: Strings.AppMenuBookmarksTitleString, iconString: "menu-panel-Bookmarks") { action in
             openURL(HomePanelType.bookmarks.localhostURL, false)
         }
@@ -63,7 +54,17 @@ extension PhotonActionSheetProtocol {
             openURL(HomePanelType.readingList.localhostURL, false)
         }
         
-        return [openSettings, openTopSites, openBookmarks, openHistory, openReadingList]
+        let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
+            guard let tab = self.tabManager.selectedTab else { return }
+            HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
+        }
+        
+        var actions = [openTopSites, openBookmarks, openReadingList, openHistory]
+        if HomePageHelper(prefs: self.profile.prefs).isHomePageAvailable {
+            actions.insert(openHomePage, at: 0)
+        }
+
+        return actions
     }
     
     /*
@@ -74,21 +75,33 @@ extension PhotonActionSheetProtocol {
     
     typealias PageOptionsVC = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
     
-    func getOtherPanelActions() -> [PhotonActionSheetItem] {
+    func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         
         let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-        let noImageText = noImageEnabled ? Strings.AppMenuNoImageModeIsOnLabel : Strings.AppMenuNoImageModeIsOffLabel
+        let noImageText = noImageEnabled ? Strings.AppMenuNoImageModeDisable : Strings.AppMenuNoImageModeEnable
         let noImageMode = PhotonActionSheetItem(title: noImageText, iconString: "menu-NoImageMode", isEnabled: noImageEnabled) { action in
             NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
         }
         
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
-        let nightModeText = nightModeEnabled ? Strings.AppMenuNightModeIsOnLabel :  Strings.AppMenuNightModeIsOffLabel
+        let nightModeText = nightModeEnabled ? Strings.AppMenuNightModeDisable : Strings.AppMenuNightModeEnable
         let nightMode = PhotonActionSheetItem(title: nightModeText, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { action in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
         }
-        
-        return [noImageMode, nightMode]
+
+        let openSettings = PhotonActionSheetItem(title: Strings.AppMenuSettingsTitleString, iconString: "menu-Settings") { action in
+            let settingsTableViewController = AppSettingsTableViewController()
+            settingsTableViewController.profile = self.profile
+            settingsTableViewController.tabManager = self.tabManager
+            settingsTableViewController.settingsDelegate = vcDelegate
+
+            let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
+            controller.popoverDelegate = vcDelegate
+            controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
+            vcDelegate.present(controller, animated: true, completion: nil)
+        }
+
+        return [noImageMode, nightMode, openSettings]
     }
     
     func getTabActions(tab: Tab, buttonView: UIView,
@@ -107,17 +120,18 @@ extension PhotonActionSheetProtocol {
         
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
             guard let tab = self.tabManager.selectedTab else { return }
-            guard let url = tab.url else { return }
+            guard let url = tab.url?.displayURL else { return }
+
             self.profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
         }
-        
+
         let findInPageAction = PhotonActionSheetItem(title: Strings.AppMenuFindInPageTitleString, iconString: "menu-FindInPage") { action in
             findInPage()
         }
-        
+
         let bookmarkPage = PhotonActionSheetItem(title: Strings.AppMenuAddBookmarkTitleString, iconString: "menu-Bookmark") { action in
             //TODO: can all this logic go somewhere else?
-            guard let url = tab.url else { return }
+            guard let url = tab.url?.displayURL else { return }
             let absoluteString = url.absoluteString
             let shareItem = ShareItem(url: absoluteString, title: tab.title, favicon: tab.displayFavicon)
             _ = self.profile.bookmarks.shareItem(shareItem)
@@ -133,7 +147,7 @@ extension PhotonActionSheetProtocol {
         
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { action in
             //TODO: can all this logic go somewhere else?
-            guard let url = tab.url else { return }
+            guard let url = tab.url?.displayURL else { return }
             let absoluteString = url.absoluteString
             self.profile.bookmarks.modelFactory >>== {
                 $0.removeByURL(absoluteString).uponQueue(.main) { res in
@@ -145,50 +159,21 @@ extension PhotonActionSheetProtocol {
         }
         
         let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
-            guard let url = self.tabManager.selectedTab?.url else { return }
             guard let tab = self.tabManager.selectedTab else { return }
+            guard let url = self.tabManager.selectedTab?.url?.displayURL else { return }
             presentShareMenu(url, tab, buttonView, .up)
         }
+
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
-            UIPasteboard.general.string = self.tabManager.selectedTab?.url?.absoluteString ?? ""
+            UIPasteboard.general.string = self.tabManager.selectedTab?.url?.displayURL?.absoluteString ?? ""
         }
         
         let bookmarkAction = tab.isBookmarked ? removeBookmark : bookmarkPage
         var topActions = [bookmarkAction]
-        if let tab = self.tabManager.selectedTab, tab.readerModeAvailable {
+        if let tab = self.tabManager.selectedTab, tab.readerModeAvailableOrActive {
             topActions.append(addReadingList)
         }
-        return [topActions, [findInPageAction, toggleDesktopSite, setHomePage], [share, copyURL]]
-    }
-    
-    func getTabMenuActions(openURL: @escaping URLOpenAction, showTabs showTabsTrayAction: @escaping MenuAction) -> [PhotonActionSheetItem] {
-        
-        let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
-            guard let tab = self.tabManager.selectedTab else { return }
-            HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
-        }
-        
-        let openTab = PhotonActionSheetItem(title: Strings.AppMenuNewTabTitleString, iconString: "menu-NewTab") { action in
-            openURL(nil, false)
-        }
-        
-        let openPrivateTab = PhotonActionSheetItem(title: Strings.AppMenuNewPrivateTabTitleString, iconString: "smallPrivateMask") { action in
-            openURL(nil, true)
-        }
-        
-        let openTabTray = PhotonActionSheetItem(title: Strings.AppMenuShowTabsTitleString, iconString: "menu-Show-Tabs") { action in
-            showTabsTrayAction()
-        }
-        
-        var actions = [openTab, openPrivateTab]
-        // On the iPad there is already a tabs button near the menu button. Dont need an extra openTab
-        if UIDevice.current.userInterfaceIdiom != .pad {
-            actions.append(openTabTray)
-        }
-        if HomePageHelper(prefs: self.profile.prefs).isHomePageAvailable {
-            actions.insert(openHomePage, at: 0)
-        }
-        return actions
+        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, setHomePage], [share]]
     }
     
 }

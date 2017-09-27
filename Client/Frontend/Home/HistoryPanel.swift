@@ -89,8 +89,14 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         } else if refreshControl?.isRefreshing == false {
             removeRefreshControl()
         }
-        updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
-            self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
+
+        if profile.hasSyncableAccount() {
+            syncDetailText = " "
+            updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
+                self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
+            }
+        } else {
+            syncDetailText = ""
         }
     }
 

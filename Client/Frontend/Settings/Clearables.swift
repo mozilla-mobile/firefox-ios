@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import WebKit
 import Deferred
-import WebImage
+import SDWebImage
 import CoreSpotlight
 
 private let log = Logger.browserLogger

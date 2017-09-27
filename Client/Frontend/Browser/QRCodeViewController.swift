@@ -74,7 +74,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         if getAuthorizationStatus != AVAuthorizationStatus.denied {
             setupCamera()
         } else {
-            let alert = UIAlertController(title: "", message: NSLocalizedString("Please allow Firefox to access your device's camera in 'Settings' -> 'Privacy' -> 'Camera'.", comment: "Text of the prompt user to setup the camera authorization."), preferredStyle: .alert)
+            let alert = UIAlertController(title: "", message: NSLocalizedString("Please allow Firefox to access your device’s camera in ‘Settings’ -> ‘Privacy’ -> ‘Camera’.", comment: "Text of the prompt user to setup the camera authorization."), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK button"), style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }

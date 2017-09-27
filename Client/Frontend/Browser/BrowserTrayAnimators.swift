@@ -132,7 +132,6 @@ private extension BrowserToTrayAnimator {
         let expandedFrame = calculateExpandedCellFrameFromBVC(bvc)
         let cell = createTransitionCellFromTab(bvc.tabManager.selectedTab, withFrame: expandedFrame)
         cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
-        cell.innerStroke.isHidden = true
 
         // Take a snapshot of the collection view to perform the scaling/alpha effect
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotView(afterScreenUpdates: true)!
@@ -301,7 +300,7 @@ private func transformToolbarsToFrame(_ toolbars: [UIView?], toRect endRect: CGR
 
 private func createTransitionCellFromTab(_ tab: Tab?, withFrame frame: CGRect) -> TabCell {
     let cell = TabCell(frame: frame)
-    cell.background.image = tab?.screenshot
+    cell.screenshotView.image = tab?.screenshot
     cell.titleText.text = tab?.displayTitle
 
     if let tab = tab, tab.isPrivate {

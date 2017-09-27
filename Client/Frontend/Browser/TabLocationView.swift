@@ -14,6 +14,8 @@ protocol TabLocationViewDelegate {
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
+    func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton)
+    
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
@@ -63,6 +65,7 @@ class TabLocationView: UIView {
                 UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
             }
             updateTextWithURL()
+            pageOptionsButton.isHidden = (url == nil)
             setNeedsUpdateConstraints()
         }
     }
@@ -76,6 +79,7 @@ class TabLocationView: UIView {
                 let wasHidden = readerModeButton.isHidden
                 self.readerModeButton.readerModeState = newReaderModeState
                 readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
+                separatorLine.isHidden = readerModeButton.isHidden
                 if wasHidden != readerModeButton.isHidden {
                     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
                     if !readerModeButton.isHidden {
@@ -143,6 +147,26 @@ class TabLocationView: UIView {
         readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(TabLocationView.SELreaderModeCustomAction))]
         return readerModeButton
     }()
+    
+    lazy var pageOptionsButton: ToolbarButton = {
+        let pageOptionsButton = ToolbarButton(frame: CGRect.zero)
+        pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
+        pageOptionsButton.isHidden = true
+        pageOptionsButton.addTarget(self, action: #selector(TabLocationView.SELDidPressPageOptionsButton), for: .touchUpInside)
+        pageOptionsButton.isAccessibilityElement = true
+        pageOptionsButton.imageView?.contentMode = .center
+        pageOptionsButton.accessibilityLabel = NSLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
+        pageOptionsButton.accessibilityIdentifier = "TabLocationView.pageOptionsButton"
+        return pageOptionsButton
+    }()
+    
+    lazy var separatorLine: UIView = {
+        let line = UIView()
+        line.layer.cornerRadius = 2
+        line.backgroundColor = UIColor(rgb: 0xE5E5E5)
+        line.isHidden = true
+        return line
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -153,6 +177,8 @@ class TabLocationView: UIView {
         addSubview(urlTextField)
         addSubview(lockImageView)
         addSubview(readerModeButton)
+        addSubview(pageOptionsButton)
+        addSubview(separatorLine)
 
         lockImageView.snp.makeConstraints { make in
             make.size.equalTo(24)
@@ -160,9 +186,23 @@ class TabLocationView: UIView {
             make.leading.equalTo(self).offset(9)
         }
 
+        pageOptionsButton.snp.makeConstraints { make in
+            make.centerY.equalTo(self)
+            make.trailing.equalTo(self)
+            make.width.equalTo(44)
+            make.height.equalTo(self)
+        }
+        
+        separatorLine.snp.makeConstraints { make in
+            make.width.equalTo(1)
+            make.height.equalTo(26)
+            make.trailing.equalTo(pageOptionsButton.snp.leading)
+            make.centerY.equalTo(self)
+        }
+        
         readerModeButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
-            make.trailing.equalTo(self).offset(-9)
+            make.trailing.equalTo(separatorLine.snp.leading).offset(-9)
             make.size.equalTo(24)
         }
     }
@@ -191,9 +231,9 @@ class TabLocationView: UIView {
             }
 
             if readerModeButton.isHidden {
-                make.trailing.equalTo(self).inset(TabLocationViewUX.LocationContentInset)
+                make.trailing.equalTo(self.pageOptionsButton.snp.leading).offset(-TabLocationViewUX.URLBarPadding)
             } else {
-                make.trailing.equalTo(self.readerModeButton.snp.leading).inset(TabLocationViewUX.URLBarPadding)
+                make.trailing.equalTo(self.readerModeButton.snp.leading).offset(-TabLocationViewUX.URLBarPadding)
             }
         }
 
@@ -208,6 +248,10 @@ class TabLocationView: UIView {
         if recognizer.state == UIGestureRecognizerState.began {
             delegate?.tabLocationViewDidLongPressReaderMode(self)
         }
+    }
+    
+    func SELDidPressPageOptionsButton(_ button: UIButton) {
+        delegate?.tabLocationViewDidTapPageOptions(self, from: button)
     }
 
     func SELlongPressLocation(_ recognizer: UITapGestureRecognizer) {
@@ -267,10 +311,13 @@ extension TabLocationView: Themeable {
         self.urlTextField.textColor = theme.textColor
         self.readerModeButton.selectedTintColor = theme.highlightButtonColor
         self.readerModeButton.unselectedTintColor = theme.buttonTintColor
+        self.pageOptionsButton.selectedTintColor = theme.highlightButtonColor
+        self.pageOptionsButton.unselectedTintColor = theme.buttonTintColor
+        self.pageOptionsButton.tintColor = theme.buttonTintColor
     }
 }
 
-private class ReaderModeButton: UIButton {
+class ReaderModeButton: UIButton {
     var selectedTintColor: UIColor?
     var unselectedTintColor: UIColor?
     override init(frame: CGRect) {
