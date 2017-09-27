@@ -54,7 +54,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     private lazy var showCancelButton: Bool = {
         return self.style == .bottom && self.modalPresentationStyle != .popover
     }()
-    private var tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    var tableView = UITableView(frame: CGRect.zero, style: .grouped)
     private var tintColor = UIColor(rgb: 0x272727)
     private var outerScrollView = UIScrollView()
     
@@ -130,13 +130,10 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.tableFooterView = footer
         tableView.tableHeaderView = footer.clone()
         tableView.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
-        // TODO: Remove once we remove support for 9.0 (which is before this ships)
-        if #available(iOS 10.0, *) {
-            let blurEffect = UIBlurEffect(style: .light)
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            tableView.backgroundView = blurEffectView
-        }
-        
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        tableView.backgroundView = blurEffectView
+
         var width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
         width = UIDevice.current.userInterfaceIdiom == .pad ? width : (self.view.frame.width - (PhotonActionSheetUX.Padding * 2))
         let height = actionSheetHeight()
@@ -442,9 +439,6 @@ private class PhotonActionSheetCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        //        layer.shouldRasterize = true
-        //        layer.rasterizationScale = UIScreen.main.scale
         
         isAccessibilityElement = true
         
