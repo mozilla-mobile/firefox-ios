@@ -58,4 +58,17 @@ class StringExtensionsTests: XCTestCase {
         XCTAssertEqual("aa\n bbbbbb", "aa bbbbbb".stringSplitWithNewline())
     }
 
+    func testPercentEscaping() {
+        func roundtripTest(_ input: String, _ expected: String, file: StaticString = #file, line: UInt = #line) {
+            let observed = input.escape()!
+            XCTAssertEqual(observed, expected, "input is \(input)", file: file, line: line)
+            let roundtrip = observed.unescape()
+            XCTAssertEqual(roundtrip, input, "encoded is \(observed)", file: file, line: line)
+        }
+
+        roundtripTest("https://mozilla.com", "https://mozilla.com")
+        roundtripTest("http://www.cnn.com/2017/09/25/politics/north-korea-fm-us-bombers/index.html", "http://www.cnn.com/2017/09/25/politics/north-korea-fm-us-bombers/index.html")
+        roundtripTest("http://mozilla.com/?a=foo&b=bar", "http://mozilla.com/%3Fa%3Dfoo%26b%3Dbar")
+    }
+
 }
