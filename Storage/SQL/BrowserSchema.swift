@@ -1187,7 +1187,9 @@ open class BrowserSchema: Schema {
 
         // Lastly, write the *previous* schema version (prior to v31) to the database
         // using `PRAGMA user_version = ?`.
-        if let err = db.setVersion(previousVersion) {
+        do {
+            try db.setVersion(previousVersion)
+        } catch let err as NSError {
             log.error("Error setting database version: \(err.localizedDescription)")
             SentryIntegration.shared.sendWithStacktrace(message: "Error setting database version: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
             return false

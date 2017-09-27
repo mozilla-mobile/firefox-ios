@@ -317,26 +317,20 @@ private extension BookmarkMirrorItem {
     }
 }
 
-private func deleteStructureForGUIDs(_ guids: [GUID], fromTable table: String, connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) -> NSError? {
+private func deleteStructureForGUIDs(_ guids: [GUID], fromTable table: String, connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) throws -> Void {
     log.debug("Deleting \(guids.count) parents from \(table).")
     let chunks = chunk(guids, by: maxVars)
     for chunk in chunks {
         let delStructure = "DELETE FROM \(table) WHERE parent IN \(BrowserDB.varlist(chunk.count))"
 
         let args: Args = chunk.flatMap { $0 }
-        do {
-            try connection.executeChange(delStructure, withArgs: args)
-        } catch let error as NSError {
-            log.error("Updating structure: \(error.localizedDescription).")
-            return error
-        }
+        try connection.executeChange(delStructure, withArgs: args)
     }
-    return nil
 }
 
-private func insertStructureIntoTable(_ table: String, connection: SQLiteDBConnection, children: [Args], maxVars: Int) -> NSError? {
+private func insertStructureIntoTable(_ table: String, connection: SQLiteDBConnection, children: [Args], maxVars: Int) throws -> Void {
     if children.isEmpty {
-        return nil
+        return
     }
 
     // Insert the new structure rows. This uses three vars per row.
@@ -348,14 +342,8 @@ private func insertStructureIntoTable(_ table: String, connection: SQLiteDBConne
         let ins = "INSERT INTO \(table) (parent, child, idx) VALUES " +
             Array<String>(repeating: "(?, ?, ?)", count: chunk.count).joined(separator: ", ")
         log.debug("Inserting \(chunk.count) records (out of \(children.count)).")
-        do {
-            try connection.executeChange(ins, withArgs: childArgs)
-        } catch let error as NSError {
-            return error
-        }
+        try connection.executeChange(ins, withArgs: childArgs)
     }
-
-    return nil
 }
 
 /**
@@ -388,8 +376,8 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
     /**
      * Remove child records for any folders that've been deleted or are empty.
      */
-    fileprivate func deleteChildrenInTransactionWithGUIDs(_ guids: [GUID], connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) -> NSError? {
-        return deleteStructureForGUIDs(guids, fromTable: TableBookmarksBufferStructure, connection: connection, withMaxVars: maxVars)
+    fileprivate func deleteChildrenInTransactionWithGUIDs(_ guids: [GUID], connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) throws -> Void {
+        try deleteStructureForGUIDs(guids, fromTable: TableBookmarksBufferStructure, connection: connection, withMaxVars: maxVars)
     }
 
     open func isEmpty() -> Deferred<Maybe<Bool>> {
@@ -454,16 +442,11 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
 
             log.debug("\(folders.count) folders and \(deleted.count) deleted maybe-folders to drop from buffer structure table.")
 
-            if let err = self.deleteChildrenInTransactionWithGUIDs(folders + deleted, connection: conn) {
-                throw err
-            }
+            try self.deleteChildrenInTransactionWithGUIDs(folders + deleted, connection: conn)
 
             // (Re-)insert children in chunks.
             log.debug("Inserting \(children.count) children.")
-            if let err = insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: children, maxVars: maxVars) {
-                log.error("Updating buffer structure: \(err.localizedDescription).")
-                throw err
-            }
+            try insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: children, maxVars: maxVars)
 
             // Drop pending deletions of items we just received.
             // In practice that means we have made the choice that we will always
@@ -995,7 +978,7 @@ extension MergedSQLiteBookmarks {
 
         // This is a little tortured because we want it all to happen in a single transaction.
         // We walk through the accrued work items, applying them in the right order (e.g., structure
-        // then value).If at any point we fail, we abort, roll back the transaction by throwing.
+        // then value). If at any point we fail, we abort, roll back the transaction by throwing.
         return local.db.transaction { conn -> Void in
             // So we can trample the DB in any order.
             try conn.executeChange("PRAGMA defer_foreign_keys = ON")
@@ -1129,15 +1112,8 @@ extension MergedSQLiteBookmarks {
                 }
                 
                 let parents = op.mirrorStructures.map { $0.0 }
-                if let err = deleteStructureForGUIDs(parents, fromTable: TableBookmarksMirrorStructure, connection: conn) {
-                    log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
-                    throw err
-                }
-                
-                if let err = insertStructureIntoTable(TableBookmarksMirrorStructure, connection: conn, children: structureRows, maxVars: BrowserDB.MaxVariableNumber) {
-                    log.error("applyLocalOverrideCompletionOp(_:, itemSources:) encountered error: \(err.localizedDescription)")
-                    throw err
-                }
+                try deleteStructureForGUIDs(parents, fromTable: TableBookmarksMirrorStructure, connection: conn)
+                try insertStructureIntoTable(TableBookmarksMirrorStructure, connection: conn, children: structureRows, maxVars: BrowserDB.MaxVariableNumber)
             }
         }
     }
@@ -1231,11 +1207,7 @@ extension MergedSQLiteBookmarks {
                 let nextIdx = conn.executeQuery(sqlNextIdx, factory: IntFactory, withArgs: nextIdxArgs).asArray()[0]
                 
                 let toInsertArgs = Array(op.mobileRoot.getChildrenArgs(offset: offset, nextIdx: nextIdx))
-                
-                if let err = insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: toInsertArgs, maxVars: BrowserDB.MaxVariableNumber) {
-                    log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
-                    throw err
-                }
+                try insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: toInsertArgs, maxVars: BrowserDB.MaxVariableNumber)
             }
         }
     }

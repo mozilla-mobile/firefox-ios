@@ -52,29 +52,17 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let data = try! JSONSerialization.data(withJSONObject: historyAsStrings, options: [])
         return String(data: data, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
     }
-    
-    fileprivate func doWipe(_ f: @escaping (_ conn: SQLiteDBConnection) throws -> Void) -> Deferred<Maybe<()>> {
-        return db.transaction { conn -> Void in
-            try f(conn)
-        }
+
+    open func wipeClients() -> Success {
+        return db.run("DELETE FROM \(TableClients)")
     }
 
-    open func wipeClients() -> Deferred<Maybe<()>> {
-        return doWipe { conn -> Void in
-            try conn.executeChange("DELETE FROM \(TableClients)")
-        }
+    open func wipeRemoteTabs() -> Success {
+        return db.run("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL")
     }
 
-    open func wipeRemoteTabs() -> Deferred<Maybe<()>> {
-        return doWipe { conn -> Void in
-            try conn.executeChange("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL", withArgs: nil as Args?)
-        }
-    }
-
-    open func wipeTabs() -> Deferred<Maybe<()>> {
-        return doWipe { conn -> Void in
-            try conn.executeChange("DELETE FROM \(TableTabs)")
-        }
+    open func wipeTabs() -> Success {
+        return db.run("DELETE FROM \(TableTabs)")
     }
 
     open func insertOrUpdateTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
@@ -181,16 +169,10 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             do {
                 try connection.executeChange(deleteClientQuery, withArgs: deleteArgs)
             } catch let error as NSError {
-                log.warning("Deleting client failed.")
                 err = error
             }
 
-            do {
-                try connection.executeChange(deleteTabsQuery, withArgs: deleteArgs)
-            } catch let error as NSError {
-                log.warning("Deleting client tabs failed.")
-                err = error
-            }
+            try connection.executeChange(deleteTabsQuery, withArgs: deleteArgs)
 
             if let err = err {
                 throw err
@@ -215,9 +197,11 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
         return db.withConnection { connection -> [RemoteClient] in
             let cursor = connection.executeQuery("SELECT * FROM \(TableClients) WHERE EXISTS (SELECT 1 FROM \(TableRemoteDevices) rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
-            let clients = cursor.asArray()
-            cursor.close()
-            return clients
+            defer {
+                cursor.close()
+            }
+
+            return cursor.asArray()
         }
     }
 
@@ -249,77 +233,51 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        // Now find the clients.
-        let deferredClients = db.withConnection { connection -> [RemoteClient] in
-            let cursor = connection.executeQuery("SELECT * FROM \(TableClients) WHERE EXISTS (SELECT 1 FROM \(TableRemoteDevices) rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
-            let clients = cursor.asArray()
-            cursor.close()
-            
-            return clients
-        }
-        
-        guard let clients = deferredClients.value.successValue else {
-            return deferMaybe(DatabaseError(err: deferredClients.value.failureValue as NSError?))
-        }
+        return db.withConnection { conn -> [ClientAndTabs] in
+            let clientsCursor = conn.executeQuery("SELECT * FROM \(TableClients) WHERE EXISTS (SELECT 1 FROM \(TableRemoteDevices) rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
+            let tabsCursor = conn.executeQuery("SELECT * FROM \(TableTabs) WHERE client_guid IS NOT NULL ORDER BY client_guid DESC, last_used DESC", factory: SQLiteRemoteClientsAndTabs.remoteTabFactory)
 
-        log.debug("Found \(clients.count) clients in the DB.")
+            defer {
+                clientsCursor.close()
+                tabsCursor.close()
+            }
 
-        var acc = [String: [RemoteTab]]()
-        let deferredTabsCursor = db.withConnection { connection -> Cursor<RemoteTab> in
-            connection.executeQuery("SELECT * FROM \(TableTabs) WHERE client_guid IS NOT NULL ORDER BY client_guid DESC, last_used DESC", factory: SQLiteRemoteClientsAndTabs.remoteTabFactory)
-        }
-        
-        guard let tabCursor = deferredTabsCursor.value.successValue else {
-            return deferMaybe(DatabaseError(err: deferredTabsCursor.value.failureValue as NSError?))
-        }
-        
-        defer {
-            tabCursor.close()
-        }
-        
-        // Aggregate clientGUID -> RemoteTab.
-        for tab in tabCursor {
-            if let tab = tab, let guid = tab.clientGUID {
-                if acc[guid] == nil {
-                    acc[guid] = [tab]
+            var acc = [String: [RemoteTab]]()
+            for tab in tabsCursor {
+                if let tab = tab, let guid = tab.clientGUID {
+                    if acc[guid] == nil {
+                        acc[guid] = [tab]
+                    } else {
+                        acc[guid]!.append(tab)
+                    }
                 } else {
-                    acc[guid]!.append(tab)
+                    log.error("Couldn't cast tab (\(tab ??? "nil")) to RemoteTab.")
                 }
-            } else {
-                log.error("Couldn't cast tab (\(tab ??? "nil")) to RemoteTab.")
             }
-        }
 
-        let deferred = Deferred<Maybe<[ClientAndTabs]>>(defaultQueue: DispatchQueue.main)
-
-        // Most recent first.
-        let fillTabs: (RemoteClient) -> ClientAndTabs = { client in
-            var tabs: [RemoteTab]? = nil
-            if let guid: String = client.guid {
-                tabs = acc[guid]
+            // Most recent first.
+            let fillTabs: (RemoteClient) -> ClientAndTabs = { client in
+                var tabs: [RemoteTab]? = nil
+                if let guid: String = client.guid {
+                    tabs = acc[guid]
+                }
+                return ClientAndTabs(client: client, tabs: tabs ?? [])
             }
-            return ClientAndTabs(client: client, tabs: tabs ?? [])
-        }
 
-        let removeLocalClient: (RemoteClient) -> Bool = { client in
-            return client.guid != nil
-        }
+            let removeLocalClient: (RemoteClient) -> Bool = { client in
+                return client.guid != nil
+            }
 
-        // Why is this whole function synchronous?
-        deferred.fill(Maybe(success: clients.filter(removeLocalClient).map(fillTabs)))
-        return deferred
+            return clientsCursor.asArray().filter(removeLocalClient).map(fillTabs)
+        }
     }
 
     open func deleteCommands() -> Success {
-        return db.transaction { connection -> Void in
-            try connection.executeChange("DELETE FROM \(TableSyncCommands)", withArgs: [] as Args)
-        }
+        return db.run("DELETE FROM \(TableSyncCommands)")
     }
 
     open func deleteCommands(_ clientGUID: GUID) -> Success {
-        return db.transaction { connection -> Void in
-            try connection.executeChange("DELETE FROM \(TableSyncCommands) WHERE client_guid = ?", withArgs: [clientGUID] as Args)
-        }
+        return db.run("DELETE FROM \(TableSyncCommands) WHERE client_guid = ?", withArgs: [clientGUID] as Args)
     }
 
     open func insertCommand(_ command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
@@ -352,28 +310,19 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>> {
-        let allCommandsDeferred = db.withConnection { connection -> [SyncCommand] in
+        return db.withConnection { connection -> [GUID: [SyncCommand]] in
             let cursor = connection.executeQuery("SELECT * FROM \(TableSyncCommands)", factory: { row -> SyncCommand in
                 SyncCommand(
                     id: row["command_id"] as? Int,
                     value: row["value"] as! String,
                     clientGUID: row["client_guid"] as? GUID)
             })
-            let allCommands = cursor.asArray()
-            cursor.close()
-            return allCommands
+            defer {
+                cursor.close()
+            }
+
+            return self.clientsFromCommands(cursor.asArray())
         }
-
-        guard let allCommands = allCommandsDeferred.value.successValue else {
-            let err = allCommandsDeferred.value.failureValue as NSError?
-            log.error("getCommands() failed: \(err?.localizedDescription ?? "nil")")
-            return deferMaybe(DatabaseError(err: err))
-        }
-
-        let clientSyncCommands = clientsFromCommands(allCommands)
-
-        log.debug("Found \(clientSyncCommands.count) client sync commands in the DB.")
-        return deferMaybe(clientSyncCommands)
     }
 
     func clientsFromCommands(_ commands: [SyncCommand]) -> [GUID: [SyncCommand]] {
@@ -428,7 +377,7 @@ extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
     }
 
     public func clear() -> Success {
-        return doWipe { conn -> Void in
+        return db.transaction { conn -> Void in
             var err: NSError? = nil
 
             do {
@@ -437,11 +386,7 @@ extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
                 err = error
             }
 
-            do {
-                try conn.executeChange("DELETE FROM \(TableClients)")
-            } catch let error as NSError {
-                err = error
-            }
+            try conn.executeChange("DELETE FROM \(TableClients)")
 
             if let err = err {
                 throw err

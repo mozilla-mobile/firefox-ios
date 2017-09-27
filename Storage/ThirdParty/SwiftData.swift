@@ -318,8 +318,8 @@ public protocol SQLiteDBConnection {
     func interrupt()
     func checkpoint()
     func checkpoint(_ mode: Int32)
-    func vacuum() -> NSError?
-    func setVersion(_ version: Int) -> NSError?
+    func vacuum() throws -> Void
+    func setVersion(_ version: Int) throws -> Void
 }
 
 // Represents a failure to open.
@@ -333,34 +333,34 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
     }
 
     func executeChange(_ sqlStr: String, withArgs args: Args?) throws -> Void {
-        throw self.fail("Non-open connection; can't execute change.")
+        throw fail("Non-open connection; can't execute change.")
     }
     func executeChange(_ sqlStr: String) throws -> Void {
-        throw self.fail("Non-open connection; can't execute change.")
+        throw fail("Non-open connection; can't execute change.")
     }
 
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
-        return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
+        return Cursor<T>(err: fail("Non-open connection; can't execute query."))
     }
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
-        return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
+        return Cursor<T>(err: fail("Non-open connection; can't execute query."))
     }
     func executeQueryUnsafe<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
-        return Cursor<T>(err: self.fail("Non-open connection; can't execute query."))
+        return Cursor<T>(err: fail("Non-open connection; can't execute query."))
     }
 
     func transaction<T>(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) throws -> T {
-        throw self.fail("Non-open connection; can't start transaction.")
+        throw fail("Non-open connection; can't start transaction.")
     }
 
     func interrupt() {}
     func checkpoint() {}
     func checkpoint(_ mode: Int32) {}
-    func vacuum() -> NSError? {
-        return self.fail("Non-open connection; can't vacuum.")
+    func vacuum() throws -> Void {
+        throw fail("Non-open connection; can't vacuum.")
     }
-    func setVersion(_ version: Int) -> NSError? {
-        return self.fail("Non-open connection; can't set user_version.")
+    func setVersion(_ version: Int) throws -> Void {
+        throw fail("Non-open connection; can't set user_version.")
     }
 }
 
@@ -509,14 +509,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return nil
     }
 
-    public func setVersion(_ version: Int) -> NSError? {
-        do {
-            try executeChange("PRAGMA user_version = \(version)")
-        } catch let err as NSError {
-            return err
-        }
-
-        return nil
+    public func setVersion(_ version: Int) throws -> Void {
+        try executeChange("PRAGMA user_version = \(version)")
     }
     
     public func interrupt() {
@@ -599,10 +593,12 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                        factory: IntFactory, message: "Page size set")
 
             log.info("Vacuuming to alter database page size from \(currentPageSize ?? 0) to \(desiredPageSize).")
-            if let err = self.vacuum() {
-                log.error("Vacuuming failed: \(err).")
-            } else {
+
+            do {
+                try vacuum()
                 log.debug("Vacuuming succeeded.")
+            } catch let err as NSError {
+                log.error("Vacuuming failed: \(err.localizedDescription).")
             }
         }
 
@@ -650,8 +646,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             return false
         }
         
-        if let error = setVersion(schema.version) {
-            log.error("Unable to update the schema version; \(error.localizedDescription)")
+        do {
+            try setVersion(schema.version)
+        } catch let error as NSError {
+            log.error("Unable to set the schema version; \(error.localizedDescription)")
         }
         
         return true
@@ -666,8 +664,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             return false
         }
         
-        if let error = setVersion(schema.version) {
-            log.error("Unable to update the schema version; \(error.localizedDescription)")
+        do {
+            try setVersion(schema.version)
+        } catch let error as NSError {
+            log.error("Unable to set the schema version; \(error.localizedDescription)")
         }
         
         return true
@@ -682,7 +682,9 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             return false
         }
 
-        if let error = setVersion(0) {
+        do {
+            try setVersion(0)
+        } catch let error as NSError {
             log.error("Unable to reset the schema version; \(error.localizedDescription)")
         }
 
@@ -866,14 +868,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         log.debug("WAL checkpoint done on \(self.filename).")
     }
 
-    public func vacuum() -> NSError? {
-        do {
-            try executeChange("VACUUM")
-        } catch let err as NSError {
-            return err
-        }
-
-        return nil
+    public func vacuum() throws -> Void {
+        try executeChange("VACUUM")
     }
 
     /// Creates an error from a sqlite status. Will print to the console if debug_enabled is set.

@@ -59,9 +59,7 @@ open class BrowserDB {
         log.debug("Vacuuming a BrowserDB.")
 
         return withConnection({ connection -> Void in
-            if let err = connection.vacuum() {
-                throw err
-            }
+            try connection.vacuum()
         })
     }
 
@@ -165,7 +163,7 @@ open class BrowserDB {
     }
 
     func run(_ commands: [String]) -> Success {
-        return self.run(commands.map { (sql: $0, args: nil) })
+        return run(commands.map { (sql: $0, args: nil) })
     }
 
     /**

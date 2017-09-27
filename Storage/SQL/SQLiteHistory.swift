@@ -215,11 +215,11 @@ extension SQLiteHistory: BrowserHistory {
             }
             do {
                 try conn.executeChange(update, withArgs: updateArgs)
+                return conn.numberOfRowsModified
             } catch let error as NSError {
                 log.warning("Update failed with error: \(error.localizedDescription)")
                 return 0
             }
-            return conn.numberOfRowsModified
         }
         return 0
     }
@@ -633,7 +633,7 @@ extension SQLiteHistory: Favicons {
     }
 
     public func clearAllFavicons() -> Success {
-        return self.db.withConnection { conn -> Void in
+        return db.transaction { conn -> Void in
             try conn.executeChange("DELETE FROM \(TableFaviconSites)")
             try conn.executeChange("DELETE FROM \(TableFavicons)")
         }
