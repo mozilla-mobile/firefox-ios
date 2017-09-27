@@ -1563,12 +1563,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         // ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
         var actions: [[PhotonActionSheetItem]] = []
-        
-        let urlAction = { (url, isPrivate) in
-            self.openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: true)
-        }
-        
-        actions.append(getHomePanelActions(openURL: urlAction))
+
+        actions.append(getHomePanelActions())
         actions.append(getOtherPanelActions(vcDelegate: self))
         presentSheetWith(actions: actions, on: self, from: button)
     }
