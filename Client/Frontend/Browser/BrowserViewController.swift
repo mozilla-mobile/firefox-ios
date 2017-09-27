@@ -784,7 +784,7 @@ class BrowserViewController: UIViewController {
             }
             if url.isAboutHomeURL {
                 showHomePanelController(inline: true)
-            } else if !url.isLocal {
+            } else if !url.isLocal || url.isReaderModeURL {
                 hideHomePanelController()
             }
         }
