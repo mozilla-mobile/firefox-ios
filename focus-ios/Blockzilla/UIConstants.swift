@@ -42,7 +42,7 @@ struct UIConstants {
         static let settingsSeparator = UIColor(rgb: 0x414146)
         static let settingsLink = UIColor(rgb: 0x0A84FF)
         static let tableSectionHeader = UIColor(rgb: 0xFFFFFF)
-        static let toastBackground = UIColor(white: 1, alpha: 0.2)
+        static let toastBackground = UIColor(rgb: 0x414146)
         static let toastText = UIColor.white
         static let toggleOn = UIColor(rgb: 0x0080FF)
         static let toggleOff = UIColor(rgb: 0x585E64)
