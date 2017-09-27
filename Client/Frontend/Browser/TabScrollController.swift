@@ -40,7 +40,7 @@ class TabScrollingController: NSObject {
     var footerBottomConstraint: Constraint?
     var headerTopConstraint: Constraint?
     var toolbarsShowing: Bool { return headerTopOffset == 0 }
-    fileprivate var suppressToolbarHiding: Bool = false
+
     fileprivate var isZoomedOut: Bool = false
     fileprivate var lastZoomedScale: CGFloat = 0
     fileprivate var isUserZoom: Bool = false
@@ -157,6 +157,11 @@ private extension TabScrollingController {
         return tab?.loading ?? true
     }
 
+    func isBouncingAtBottom() -> Bool {
+        guard let scrollView = scrollView else { return false }
+        return scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) && scrollView.contentSize.height > scrollView.frame.size.height
+    }
+
     @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
         if tabIsLoading() {
             return
@@ -270,27 +275,18 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension TabScrollingController: UIScrollViewDelegate {
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if targetContentOffset.pointee.y + scrollView.frame.size.height >= scrollView.contentSize.height {
-            suppressToolbarHiding = true
-            showToolbars(animated: true)
-        }
-    }
-
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if tabIsLoading() {
+        if tabIsLoading() || isBouncingAtBottom() {
             return
         }
 
         if (decelerate || (toolbarState == .animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .up {
                 showToolbars(animated: true)
-            } else if scrollDirection == .down && !suppressToolbarHiding {
+            } else if scrollDirection == .down {
                 hideToolbars(animated: true)
             }
         }
-
-        suppressToolbarHiding = false
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
