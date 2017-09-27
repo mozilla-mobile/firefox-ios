@@ -116,11 +116,7 @@ class TestSwiftData: XCTestCase {
     fileprivate func addSite(_ table: BrowserSchema, url: String, title: String) -> MaybeErrorType? {
         let result = swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> Void in
             let args: Args = [Bytes.generateGUID(), url, title]
-            if let err = connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args) {
-                throw err
-            }
-            
-            return ()
+            try connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
         }
         
         return result.value.failureValue

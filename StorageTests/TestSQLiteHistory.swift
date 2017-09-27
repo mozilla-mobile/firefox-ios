@@ -63,9 +63,13 @@ class BaseHistoricalBrowserSchema: Schema {
 
     func run(_ db: SQLiteDBConnection, sql: String?, args: Args? = nil) -> Bool {
         if let sql = sql {
-            let err = db.executeChange(sql, withArgs: args)
-            return err == nil
+            do {
+                try db.executeChange(sql, withArgs: args)
+            } catch {
+                return false
+            }
         }
+
         return true
     }
 
@@ -956,18 +960,14 @@ class TestSQLiteHistory: XCTestCase {
         let site = Site(url: "http://www.example.com/test1.1", title: "title one")
 
         // Insert something with an invalid domain ID. We have to manually do this since domains are usually hidden.
-        let _ = try! db.withConnection { connection -> Int in
-            if let err = connection.executeChange("PRAGMA foreign_keys = OFF") {
-                XCTFail(err.localizedDescription)
-            }
-            
-            let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
+        let insertDeferred = db.withConnection { connection -> Void in
+            try connection.executeChange("PRAGMA foreign_keys = OFF")
+                         let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
             let args: Args = [Bytes.generateGUID(), site.url, site.title, Date.now(), 0, 0, -1]
-            if let err = connection.executeChange(insert, withArgs: args) {
-                XCTFail(err.localizedDescription)
-            }
-            return 0
+            try connection.executeChange(insert, withArgs: args)
         }
+        
+        XCTAssertTrue(insertDeferred.value.isSuccess)
 
         // Now insert it again. This should update the domain
         history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link)).succeeded()

@@ -62,7 +62,9 @@ open class SQLiteFavicons {
         
         if let id = cursor[0] {
             let updateQuery = self.getUpdateFaviconQuery(favicon: favicon)
-            if let _ = conn.executeChange(updateQuery.sql, withArgs: updateQuery.args) {
+            do {
+                try conn.executeChange(updateQuery.sql, withArgs: updateQuery.args)
+            } catch {
                 return nil
             }
             
@@ -70,7 +72,9 @@ open class SQLiteFavicons {
         }
         
         let insertQuery = self.getInsertFaviconQuery(favicon: favicon)
-        if let _ = conn.executeChange(insertQuery.sql, withArgs: insertQuery.args) {
+        do {
+            try conn.executeChange(insertQuery.sql, withArgs: insertQuery.args)
+        } catch {
             return nil
         }
         

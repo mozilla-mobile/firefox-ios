@@ -306,8 +306,8 @@ public protocol SQLiteDBConnection {
     var numberOfRowsModified: Int { get }
     var version: Int { get }
 
-    func executeChange(_ sqlStr: String) -> NSError?
-    func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError?
+    func executeChange(_ sqlStr: String) throws -> Void
+    func executeChange(_ sqlStr: String, withArgs args: Args?) throws -> Void
 
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T>
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T>
@@ -332,11 +332,11 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
         return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: str])
     }
 
-    func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError? {
-        return self.fail("Non-open connection; can't execute change.")
+    func executeChange(_ sqlStr: String, withArgs args: Args?) throws -> Void {
+        throw self.fail("Non-open connection; can't execute change.")
     }
-    func executeChange(_ sqlStr: String) -> NSError? {
-        return self.fail("Non-open connection; can't execute change.")
+    func executeChange(_ sqlStr: String) throws -> Void {
+        throw self.fail("Non-open connection; can't execute change.")
     }
 
     func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
@@ -510,7 +510,13 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     public func setVersion(_ version: Int) -> NSError? {
-        return executeChange("PRAGMA user_version = \(version)")
+        do {
+            try executeChange("PRAGMA user_version = \(version)")
+        } catch let err as NSError {
+            return err
+        }
+
+        return nil
     }
     
     public func interrupt() {
@@ -861,7 +867,13 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     public func vacuum() -> NSError? {
-        return self.executeChange("VACUUM")
+        do {
+            try executeChange("VACUUM")
+        } catch let err as NSError {
+            return err
+        }
+
+        return nil
     }
 
     /// Creates an error from a sqlite status. Will print to the console if debug_enabled is set.
@@ -933,12 +945,12 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return nil
     }
 
-    open func executeChange(_ sqlStr: String) -> NSError? {
-        return self.executeChange(sqlStr, withArgs: nil)
+    open func executeChange(_ sqlStr: String) throws -> Void {
+        try executeChange(sqlStr, withArgs: nil)
     }
 
     /// Executes a change on the database.
-    open func executeChange(_ sqlStr: String, withArgs args: Args?) -> NSError? {
+    open func executeChange(_ sqlStr: String, withArgs args: Args?) throws -> Void {
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -963,16 +975,14 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             log.error(message)
             SentryIntegration.shared.sendWithStacktrace(message: message, tag: "SwiftData", severity: .error)
 
-            return error
+            throw error
         }
 
         let status = sqlite3_step(statement!.pointer)
 
         if status != SQLITE_DONE && status != SQLITE_OK {
-            error = createErr("During: SQL Step \(sqlStr)", status: Int(status))
+            throw createErr("During: SQL Step \(sqlStr)", status: Int(status))
         }
-
-        return error
     }
 
     public func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
@@ -1078,7 +1088,9 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     public func transaction<T>(_ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) throws -> T {
-        if let err = executeChange("BEGIN EXCLUSIVE") {
+        do {
+            try executeChange("BEGIN EXCLUSIVE")
+        } catch let err as NSError {
             log.error("BEGIN EXCLUSIVE failed. Error code: \(err.code), \(err)")
             SentryIntegration.shared.sendWithStacktrace(message: "BEGIN EXCLUSIVE failed. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
             throw err
@@ -1092,9 +1104,12 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             log.error("Op in transaction threw an error. Rolling back.")
             SentryIntegration.shared.sendWithStacktrace(message: "Op in transaction threw an error. Rolling back.", tag: "SwiftData", severity: .error)
 
-            if let err = executeChange("ROLLBACK") {
+            do {
+                try executeChange("ROLLBACK")
+            } catch let err as NSError {
                 log.error("ROLLBACK after errored op in transaction failed. Error code: \(err.code), \(err)")
                 SentryIntegration.shared.sendWithStacktrace(message: "ROLLBACK after errored op in transaction failed. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
+                throw err
             }
 
             throw err
@@ -1102,13 +1117,18 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
         log.verbose("Op in transaction succeeded. Committing.")
 
-        if let err = executeChange("COMMIT") {
+        do {
+            try executeChange("COMMIT")
+        } catch let err as NSError {
             log.error("COMMIT failed. Rolling back. Error code: \(err.code), \(err)")
             SentryIntegration.shared.sendWithStacktrace(message: "COMMIT failed. Rolling back. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
 
-            if let rollbackErr = executeChange("ROLLBACK") {
-                log.error("ROLLBACK after failed COMMIT failed. Error code: \(rollbackErr.code), \(rollbackErr)")
-                SentryIntegration.shared.sendWithStacktrace(message: "ROLLBACK after failed COMMIT failed. Error code: \(rollbackErr.code), \(rollbackErr)", tag: "SwiftData", severity: .error)
+            do {
+                try executeChange("ROLLBACK")
+            } catch let err as NSError {
+                log.error("ROLLBACK after failed COMMIT failed. Error code: \(err.code), \(err)")
+                SentryIntegration.shared.sendWithStacktrace(message: "ROLLBACK after failed COMMIT failed. Error code: \(err.code), \(err)", tag: "SwiftData", severity: .error)
+                throw err
             }
 
             throw err

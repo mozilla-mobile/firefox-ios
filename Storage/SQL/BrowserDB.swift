@@ -144,9 +144,7 @@ open class BrowserDB {
 
     func write(_ sql: String, withArgs args: Args? = nil) -> Deferred<Maybe<Int>> {
         return withConnection { connection -> Int in
-            if let err = connection.executeChange(sql, withArgs: args) {
-                throw err
-            }
+            try connection.executeChange(sql, withArgs: args)
             
             let modified = connection.numberOfRowsModified
             log.debug("Modified rows: \(modified).")
@@ -182,10 +180,7 @@ open class BrowserDB {
 
         return transaction { connection -> Void in
             for (sql, args) in commands {
-                if let err = connection.executeChange(sql, withArgs: args) {
-                    log.warning("SQL operation failed: \(err.localizedDescription)")
-                    throw DatabaseError(err: err)
-                }
+                try connection.executeChange(sql, withArgs: args)
             }
         }
     }
@@ -197,10 +192,7 @@ open class BrowserDB {
 
         return transaction(synchronous: false) { connection -> Void in
             for (sql, args) in commands {
-                if let err = connection.executeChange(sql, withArgs: args) {
-                    log.warning("SQL operation failed: \(err.localizedDescription)")
-                    throw DatabaseError(err: err)
-                }
+                try connection.executeChange(sql, withArgs: args)
             }
         }
     }

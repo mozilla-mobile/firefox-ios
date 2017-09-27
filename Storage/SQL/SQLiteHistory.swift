@@ -213,9 +213,10 @@ extension SQLiteHistory: BrowserHistory {
             if Logger.logPII {
                 log.debug("Setting title to \(site.title) for URL \(site.url)")
             }
-            let error = conn.executeChange(update, withArgs: updateArgs)
-            if error != nil {
-                log.warning("Update failed with error: \(error?.localizedDescription ?? "nil")")
+            do {
+                try conn.executeChange(update, withArgs: updateArgs)
+            } catch let error as NSError {
+                log.warning("Update failed with error: \(error.localizedDescription)")
                 return 0
             }
             return conn.numberOfRowsModified
@@ -224,9 +225,10 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     fileprivate func insertSite(_ site: Site, atTime time: Timestamp, withConnection conn: SQLiteDBConnection) -> Int {
-
         if let host = (site.url as String).asURL?.normalizedHost {
-            if let error = conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host]) {
+            do {
+                try conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host])
+            } catch let error as NSError {
                 log.warning("Domain insertion failed with \(error.localizedDescription)")
                 return 0
             }
@@ -235,7 +237,9 @@ extension SQLiteHistory: BrowserHistory {
                          "(guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
                          "SELECT ?, ?, ?, ?, 0, 1, id FROM \(TableDomains) WHERE domain = ?"
             let insertArgs: Args? = [site.guid ?? Bytes.generateGUID(), site.url, site.title, time, host]
-            if let error = conn.executeChange(insert, withArgs: insertArgs) {
+            do {
+                try conn.executeChange(insert, withArgs: insertArgs)
+            } catch let error as NSError {
                 log.warning("Site insertion failed with \(error.localizedDescription)")
                 return 0
             }
@@ -259,10 +263,7 @@ extension SQLiteHistory: BrowserHistory {
             let realDate = visit.date
             let insertArgs: Args? = [visit.site.url, realDate, visit.type.rawValue]
 
-            if let err = conn.executeChange(insert, withArgs: insertArgs) {
-                //log.warning("Visit insertion failed with \(err.localizedDescription)")
-                throw err
-            }
+            try conn.executeChange(insert, withArgs: insertArgs)
         }
     }
 
@@ -633,12 +634,8 @@ extension SQLiteHistory: Favicons {
 
     public func clearAllFavicons() -> Success {
         return self.db.withConnection { conn -> Void in
-            if let err = conn.executeChange("DELETE FROM \(TableFaviconSites)") {
-                throw err
-            }
-            if let err = conn.executeChange("DELETE FROM \(TableFavicons)") {
-                throw err
-            }
+            try conn.executeChange("DELETE FROM \(TableFaviconSites)")
+            try conn.executeChange("DELETE FROM \(TableFavicons)")
         }
     }
 
@@ -660,10 +657,7 @@ extension SQLiteHistory: Favicons {
                 let id = self.favicons.insertOrUpdateFaviconInTransaction(icon, conn: conn)
 
                 // Now set up the mapping.
-                if let err = conn.executeChange(query, withArgs: args) {
-                    log.error("addFavicon(_:, forSite:) encountered an error: \(err.localizedDescription).")
-                    throw err
-                }
+                try conn.executeChange(query, withArgs: args)
 
                 // Try to update the favicon ID column in each bookmarks table. There can be
                 // multiple bookmarks with a particular URI, and a mirror bookmark can be
@@ -671,9 +665,9 @@ extension SQLiteHistory: Favicons {
                 if let id = id {
                     icon.id = id
 
-                    _ = conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-                    _ = conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-                    
+                    try? conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    try? conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+
                     return id
                 }
 

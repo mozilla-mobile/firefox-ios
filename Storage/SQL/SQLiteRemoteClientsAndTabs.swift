@@ -53,30 +53,27 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return String(data: data, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
     }
     
-    fileprivate func doWipe(_ f: @escaping (_ conn: SQLiteDBConnection) -> NSError?) -> Deferred<Maybe<()>> {
+    fileprivate func doWipe(_ f: @escaping (_ conn: SQLiteDBConnection) throws -> Void) -> Deferred<Maybe<()>> {
         return db.transaction { conn -> Void in
-            if let err = f(conn) {
-                log.error("Wipe failed: \(err.localizedDescription)")
-                throw err
-            }
+            try f(conn)
         }
     }
 
     open func wipeClients() -> Deferred<Maybe<()>> {
-        return doWipe { conn -> NSError? in
-            conn.executeChange("DELETE FROM \(TableClients)")
+        return doWipe { conn -> Void in
+            try conn.executeChange("DELETE FROM \(TableClients)")
         }
     }
 
     open func wipeRemoteTabs() -> Deferred<Maybe<()>> {
-        return doWipe { conn -> NSError? in
-            conn.executeChange("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL", withArgs: nil as Args?)
+        return doWipe { conn -> Void in
+            try conn.executeChange("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL", withArgs: nil as Args?)
         }
     }
 
     open func wipeTabs() -> Deferred<Maybe<()>> {
-        return doWipe { conn -> NSError? in
-            conn.executeChange("DELETE FROM \(TableTabs)")
+        return doWipe { conn -> Void in
+            try conn.executeChange("DELETE FROM \(TableTabs)")
         }
     }
 
@@ -90,10 +87,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         return db.transaction { connection -> Int in
             // Delete any existing tabs.
-            if let err = connection.executeChange(deleteQuery, withArgs: deleteArgs) {
-                log.error("Deleting existing tabs failed.")
-                throw err
-            }
+            try connection.executeChange(deleteQuery, withArgs: deleteArgs)
 
             // Insert replacement tabs.
             var inserted = 0
@@ -110,10 +104,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
-                if let err = connection.executeChange("INSERT INTO \(TableTabs) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", withArgs: args) {
-                    log.error("INSERT INTO \(TableTabs) failed: \(err)")
-                    throw err
-                }
+                try connection.executeChange("INSERT INTO \(TableTabs) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", withArgs: args)
                 
                 if connection.lastInsertedRowID == lastInsertedRowID {
                     log.debug("Unable to INSERT RemoteTab!")
@@ -145,10 +136,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     client.guid
                 ]
                 
-                if let err = connection.executeChange("UPDATE \(TableClients) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, version = ?, fxaDeviceId = ? WHERE guid = ?", withArgs: args) {
-                    log.error("UPDATE \(TableClients) failed: \(err)")
-                    throw err
-                }
+                try connection.executeChange("UPDATE \(TableClients) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, version = ?, fxaDeviceId = ? WHERE guid = ?", withArgs: args)
                 
                 if connection.numberOfRowsModified == 0 {
                     let args: Args = [
@@ -164,10 +152,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     
                     let lastInsertedRowID = connection.lastInsertedRowID
                     
-                    if let err = connection.executeChange("INSERT INTO \(TableClients) (guid, name, modified, type, formfactor, os, version, fxaDeviceId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", withArgs: args) {
-                        log.error("INSERT INTO \(TableClients) failed: \(err)")
-                        throw err
-                    }
+                    try connection.executeChange("INSERT INTO \(TableClients) (guid, name, modified, type, formfactor, os, version, fxaDeviceId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", withArgs: args)
                     
                     if connection.lastInsertedRowID == lastInsertedRowID {
                         log.debug("INSERT did not change last inserted row ID.")
@@ -192,13 +177,17 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         return db.transaction { connection -> Void in
             var err: NSError? = nil
-            if let error = connection.executeChange(deleteClientQuery, withArgs: deleteArgs) {
+
+            do {
+                try connection.executeChange(deleteClientQuery, withArgs: deleteArgs)
+            } catch let error as NSError {
                 log.warning("Deleting client failed.")
                 err = error
             }
 
-            // Delete any existing tabs.
-            if let error = connection.executeChange(deleteTabsQuery, withArgs: deleteArgs) {
+            do {
+                try connection.executeChange(deleteTabsQuery, withArgs: deleteArgs)
+            } catch let error as NSError {
                 log.warning("Deleting client tabs failed.")
                 err = error
             }
@@ -323,19 +312,13 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func deleteCommands() -> Success {
         return db.transaction { connection -> Void in
-            if let err = connection.executeChange("DELETE FROM \(TableSyncCommands)", withArgs: [] as Args) {
-                log.error("deleteCommands() failed: \(err.localizedDescription)")
-                throw err
-            }
+            try connection.executeChange("DELETE FROM \(TableSyncCommands)", withArgs: [] as Args)
         }
     }
 
     open func deleteCommands(_ clientGUID: GUID) -> Success {
         return db.transaction { connection -> Void in
-            if let err = connection.executeChange("DELETE FROM \(TableSyncCommands) WHERE client_guid = ?", withArgs: [clientGUID] as Args) {
-                log.error("deleteCommands(_:) failed: \(err.localizedDescription)")
-                throw err
-            }
+            try connection.executeChange("DELETE FROM \(TableSyncCommands) WHERE client_guid = ?", withArgs: [clientGUID] as Args)
         }
     }
 
@@ -405,9 +388,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     
     func insert(_ db: SQLiteDBConnection, sql: String, args: Args?) throws -> Int? {
         let lastID = db.lastInsertedRowID
-        if let err = db.executeChange(sql, withArgs: args) {
-            throw err
-        }
+        try db.executeChange(sql, withArgs: args)
         
         let id = db.lastInsertedRowID
         if id == lastID {
@@ -425,10 +406,7 @@ extension SQLiteRemoteClientsAndTabs: RemoteDevices {
         let remoteDevices = remoteDevices.filter { $0.id != nil && $0.type != nil && !$0.isCurrentDevice }
 
         return db.transaction { conn -> Void in
-            if let err = conn.executeChange("DELETE FROM \(TableRemoteDevices)") {
-                log.error("replaceRemoteDevices(_:) encountered error: \(err.localizedDescription)")
-                throw err
-            }
+            try conn.executeChange("DELETE FROM \(TableRemoteDevices)")
 
             let now = Date.now()
 
@@ -437,10 +415,7 @@ extension SQLiteRemoteClientsAndTabs: RemoteDevices {
                     "INSERT INTO \(TableRemoteDevices) (guid, name, type, is_current_device, date_created, date_modified, last_access_time) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)"
                 let args: Args = [device.id, device.name, device.type, device.isCurrentDevice, now, now, device.lastAccessTime]
-                if let err = conn.executeChange(sql, withArgs: args) {
-                    log.error("replaceRemoteDevices(_:) encountered error: \(err.localizedDescription)")
-                    throw err
-                }
+                try conn.executeChange(sql, withArgs: args)
             }
         }
     }
@@ -453,11 +428,24 @@ extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
     }
 
     public func clear() -> Success {
-        return doWipe { conn -> NSError? in
+        return doWipe { conn -> Void in
             var err: NSError? = nil
-            err = conn.executeChange("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL")
-            err = conn.executeChange("DELETE FROM \(TableClients)")
-            return err
+
+            do {
+                try conn.executeChange("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL")
+            } catch let error as NSError {
+                err = error
+            }
+
+            do {
+                try conn.executeChange("DELETE FROM \(TableClients)")
+            } catch let error as NSError {
+                err = error
+            }
+
+            if let err = err {
+                throw err
+            }
         }
     }
 }
