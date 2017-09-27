@@ -34,7 +34,10 @@ class NoImageModeHelper: TabHelper {
     }
 
     static func isNoImageModeAvailable() -> Bool {
-        return AppConstants.MOZ_NO_IMAGE_MODE
+        if #available(iOS 11, *) {
+            return AppConstants.MOZ_NO_IMAGE_MODE
+        }
+        return false
     }
 
     static func isActivated(_ prefs: Prefs) -> Bool {
@@ -42,10 +45,10 @@ class NoImageModeHelper: TabHelper {
     }
 
     static func toggle(profile: Profile, tabManager: TabManager) {
-        let enabled = isActivated(profile.prefs)
-
-        profile.prefs.setBool(!enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
-        tabManager.tabs.forEach { $0.setNoImageMode(!enabled, force: true) }
-        tabManager.selectedTab?.reload()
+        if #available(iOS 11, *) {
+            let enabled = !isActivated(profile.prefs)
+            profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+            tabManager.tabs.forEach { $0.noImageMode = enabled }
+        }
     }
 }
