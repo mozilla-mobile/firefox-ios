@@ -388,15 +388,9 @@ class URLBarView: UIView {
     }
 
     func updateProgressBar(_ progress: Float) {
-        if progress == 0 {
-            progressBar.animateGradient()
-        }
-        if progress == 1.0 {
-            progressBar.setProgress(progress, animated: !isTransitioning)
-            progressBar.hideProgressBar()
-        } else {
-            progressBar.setProgress(progress, animated: (progress > progressBar.progress) && !isTransitioning)
-        }
+        progressBar.alpha = 1
+        progressBar.isHidden = false
+        progressBar.setProgress(progress, animated: !isTransitioning)
     }
 
     func updateReaderModeState(_ state: ReaderModeState) {
