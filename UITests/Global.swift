@@ -476,9 +476,8 @@ class SimplePageServer {
 
             return response
         }
-        
-        // Add tracking protection check page
-        webServer.addHandler(forMethod: "GET", path: "/tracking-protection-test.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+
+        func htmlForImageBlockingTest(imageURL: String) -> String{
             let html =
             """
             <html><head><script>
@@ -498,13 +497,24 @@ class SimplePageServer {
                     }
 
                     window.onload = function(e) {
-                        testImage('http://ymail.com/favicon.ico');
+                        testImage('\(imageURL)');
                     }
                 </script></head>
             <body>TEST IMAGE BLOCKING</body></html>
             """
-            return GCDWebServerDataResponse(html: html)
+            return html
         }
+
+        // Add tracking protection check page
+        webServer.addHandler(forMethod: "GET", path: "/tracking-protection-test.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+            return GCDWebServerDataResponse(html: htmlForImageBlockingTest(imageURL: "http://ymail.com/favicon.ico"))
+        }
+
+        // Add image blocking test page
+        webServer.addHandler(forMethod: "GET", path: "/hide-images-test.html", request: GCDWebServerRequest.self) { (request: GCDWebServerRequest?) in
+            return GCDWebServerDataResponse(html: htmlForImageBlockingTest(imageURL: "https://www.mozilla.com/favicon.ico"))
+        }
+
 
         if !webServer.start(withPort: 0, bonjourName: nil) {
             XCTFail("Can't start the GCDWebServer")

@@ -63,6 +63,23 @@ class Tab: NSObject {
     var pendingScreenshot = false
     var url: URL?
 
+    fileprivate var _noImageMode = false
+
+    // Use computed property so @available can be used to guard `noImageMode`.
+    @available(iOS 11, *)
+    var noImageMode: Bool {
+        get { return _noImageMode }
+        set {
+            if newValue == _noImageMode {
+                return
+            }
+            _noImageMode = newValue
+            // Forced unwrap ok, a side effect of contentBlocker being iOS11+ var.
+            let helper = (contentBlocker as! ContentBlockerHelper)
+            helper.noImageMode(enabled: _noImageMode)
+        }
+    }
+
     // There is no 'available macro' on props, we currently just need to store ownership.
     var contentBlocker: AnyObject?
 
@@ -427,12 +444,6 @@ class Tab: NSObject {
             tab = tab?.parent
         }
         return false
-    }
-
-    func setNoImageMode(_ enabled: Bool = false, force: Bool) {
-        if enabled || force {
-            webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))", completionHandler: nil)
-        }
     }
 
     func setNightMode(_ enabled: Bool) {

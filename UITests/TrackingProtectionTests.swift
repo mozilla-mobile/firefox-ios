@@ -21,9 +21,14 @@ class TrackingProtectionTests: KIFTestCase {
         BrowserUtils.clearPrivateData(tester: tester())
         super.tearDown()
     }
-    
-    func visitTrackingSite(shouldBlockImage: Bool) {
-        let url = "\(webRoot!)/tracking-protection-test.html"
+
+    private func checkTrackingProtection(isBlocking: Bool) {
+        let url = "\(webRoot)/tracking-protection-test.html"
+        TrackingProtectionTests.checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
+        BrowserUtils.resetToAboutHome(tester())
+    }
+
+    public static func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
@@ -51,8 +56,6 @@ class TrackingProtectionTests: KIFTestCase {
             .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .assert(grey_enabled())
             .perform((grey_tap()))
-        
-        BrowserUtils.resetToAboutHome(tester())
     }
     
     func openTPSetting() {
@@ -94,15 +97,16 @@ class TrackingProtectionTests: KIFTestCase {
         
         // Initially, Tracking Protection is enabled on Private tabs only. open site with a tracker on a regular tab.
         // Image should be open since the tracking protection is turned off
-        visitTrackingSite(shouldBlockImage: false)
-        
+        checkTrackingProtection(isBlocking: false)
+
         openTPSetting()
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Always On")).perform(grey_tap())
         closeTPSetting()
-        
+
         // Now with the TP enabled, the image should be blocked
-        visitTrackingSite(shouldBlockImage: true)
-        
+        checkTrackingProtection(isBlocking: true)
+
+
         openTPSetting()
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
         closeTPSetting()
@@ -113,7 +117,7 @@ class TrackingProtectionTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("New Private Tab"))
             .inRoot(grey_kindOfClass(NSClassFromString("Client.MenuItemCollectionViewCell")!))
             .perform(grey_tap())
-        
-        visitTrackingSite(shouldBlockImage: true)
+
+        checkTrackingProtection(isBlocking: true)
     }
 }
