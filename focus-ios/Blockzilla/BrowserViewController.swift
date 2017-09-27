@@ -328,6 +328,31 @@ class BrowserViewController: UIViewController {
         alertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
         present(alertController, animated: true, completion: nil)
     }
+    
+    @objc private func selectLocationBar() {
+        urlBar.becomeFirstResponder()
+    }
+    
+    @objc private func reload() {
+        browser.reload()
+    }
+    
+    @objc private func goBack() {
+        browser.goBack()
+    }
+    
+    @objc private func goForward() {
+        browser.goForward()
+    }
+    
+    override var keyCommands: [UIKeyCommand]? {
+        return [
+            UIKeyCommand(input: "l", modifierFlags: .command, action: #selector(BrowserViewController.selectLocationBar), discoverabilityTitle: UIConstants.strings.selectLocationBarTitle),
+            UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(BrowserViewController.reload), discoverabilityTitle: UIConstants.strings.browserReload),
+            UIKeyCommand(input: "[", modifierFlags: .command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: UIConstants.strings.browserBack),
+            UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
+        ]
+    }
 }
 
 extension BrowserViewController: URLBarDelegate {

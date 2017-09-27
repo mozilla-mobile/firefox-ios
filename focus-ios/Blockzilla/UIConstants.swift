@@ -200,5 +200,6 @@ struct UIConstants {
         static let analyticTrackerLabel = NSLocalizedString("trackingProtection.analyticTrackerLabel", value: "Analytic trackers", comment: "label for analytic trackers.")
         static let socialTrackerLabel = NSLocalizedString("trackingProtection.socialTrackerLabel", value: "Social trackers", comment: "label for social trackers.")
         static let contentTrackerLabel = NSLocalizedString("trackingProtection.contentTrackerLabel", value: "Content trackers", comment: "label for content trackers.")
+        static let selectLocationBarTitle = NSLocalizedString("browserShortcutDescription.selectLocationBar", value: "Select Location Bar", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     }
 }
