@@ -1317,7 +1317,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
         
         let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
-            self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.frame, arrowDirection: .up)
+            self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
         }
         
         let findInPageAction = {
@@ -1528,7 +1528,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // TODO: Should this be a PhotonActionSheet?
         guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
             return
         }

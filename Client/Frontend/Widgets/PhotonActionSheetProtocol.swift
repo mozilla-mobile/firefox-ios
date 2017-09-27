@@ -23,11 +23,14 @@ extension PhotonActionSheetProtocol {
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
         
         if let popoverVC = sheet.popoverPresentationController {
-            popoverVC.backgroundColor = UIColor.clear
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
             popoverVC.sourceRect = CGRect(x: view.frame.width/2, y: view.frame.size.height * 0.75, width: 1, height: 1)
             popoverVC.permittedArrowDirections = UIPopoverArrowDirection.up
+            // Style the popoverVC instead of the tableView. This makes sure that the popover arrow is style as well
+            sheet.tableView.backgroundView = nil
+            sheet.tableView.backgroundColor = .clear
+            popoverVC.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
