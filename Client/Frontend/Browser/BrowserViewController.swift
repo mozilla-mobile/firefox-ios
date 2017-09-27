@@ -891,8 +891,9 @@ class BrowserViewController: UIViewController {
         case KVOEstimatedProgress:
             guard webView == tabManager.selectedTab?.webView,
                 let progress = change?[NSKeyValueChangeKey.newKey] as? Float else { break }
-            
-            urlBar.updateProgressBar(progress)
+            if !(webView.url?.isLocal ?? false) {
+                urlBar.updateProgressBar(progress)
+            }
         case KVOLoading:
             guard let loading = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
 
@@ -1946,7 +1947,9 @@ extension BrowserViewController: TabManagerDelegate {
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
-        self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
+        if !(selected?.webView?.url?.isLocal ?? false) {
+            self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
+        }
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
             urlBar.updateReaderModeState(readerMode.state)
