@@ -214,7 +214,6 @@ private extension TabScrollingController {
         var updatedOffset = headerTopOffset - delta
         headerTopOffset = clamp(updatedOffset, min: -topScrollHeight, max: 0)
         if isHeaderDisplayedForGivenOffset(updatedOffset) {
-            print("isHeaderDisplayedForGivenOffset true")
             scrollView?.contentOffset = CGPoint(x: contentOffset.x, y: contentOffset.y - delta)
         }
 
