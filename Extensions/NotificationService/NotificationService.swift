@@ -54,7 +54,12 @@ class NotificationService: UNNotificationServiceExtension {
         // however, we can't use weak references, because TabQueue isn't a class.
         // Rather than changing tabQueue, we manually nil it out here.
         display.tabQueue = nil
+        display.messageDelivered = false
         display.displayNotification(what, with: error)
+        if !display.messageDelivered {
+            let string = "Empty notification: message=\(what?.messageType.rawValue ?? "nil"), error=\(error?.description ?? "nil")"
+            SentryIntegration.shared.send(message: string, tag: sentryTag)
+        }
     }
 
     override func serviceExtensionTimeWillExpire() {
@@ -70,6 +75,7 @@ class SyncDataDisplay {
     var sentTabs: [SentTab]
 
     var tabQueue: TabQueue?
+    var messageDelivered: Bool = false
 
     init(content: UNMutableNotificationContent, contentHandler: @escaping (UNNotificationContent) -> Void, tabQueue: TabQueue) {
         self.contentHandler = contentHandler
@@ -251,7 +257,11 @@ extension SyncDataDisplay {
         notificationContent.title = stringWithOptionalArg(title, titleArg)
         notificationContent.body = stringWithOptionalArg(body, bodyArg)
 
+        // This is the only place we call the contentHandler.
         contentHandler(notificationContent)
+        // This is the only place we change messageDelivered. We can check if contentHandler hasn't be called because of
+        // our logic (rather than something funny with our environment, or iOS killing us).
+        messageDelivered = true
     }
 }
 
