@@ -29,18 +29,17 @@ public extension String {
         return false
     }
 
-    func escape() -> String {
-        let raw: NSString = self as NSString
-        let allowedEscapes = CharacterSet(charactersIn: ":/?&=;+!@#$()',*")
-        let str = raw.addingPercentEncoding(withAllowedCharacters: allowedEscapes)
-        return str as String!
+    func escape() -> String? {
+        // We can't guaruntee that strings have a valid string encoding, as this is an entry point for tainted data,
+        // we should be very careful about forcefully dereferencing optional types.
+        // https://stackoverflow.com/questions/33558933/why-is-the-return-value-of-string-addingpercentencoding-optional#33558934
+        let queryItemDividers = CharacterSet(charactersIn: "?=&")
+        let allowedEscapes = CharacterSet.urlQueryAllowed.symmetricDifference(queryItemDividers)
+        return self.addingPercentEncoding(withAllowedCharacters: allowedEscapes)
     }
 
-    func unescape() -> String {
-        return CFURLCreateStringByReplacingPercentEscapes(
-            kCFAllocatorDefault,
-            self as CFString,
-            "[]." as CFString) as String
+    func unescape() -> String? {
+        return self.removingPercentEncoding
     }
 
     /**

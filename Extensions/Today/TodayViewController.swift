@@ -178,9 +178,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     @objc func onPressOpenClibpoard(_ view: UIView) {
         if let urlString = UIPasteboard.general.string,
-            let _ = URL(string: urlString) {
-            let encodedString =
-                urlString.escape()
+            let _ = URL(string: urlString),
+            let encodedString = urlString.escape() {
             openContainingApp("?url=\(encodedString)")
         }
     }
