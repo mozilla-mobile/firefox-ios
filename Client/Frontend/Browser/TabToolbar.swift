@@ -177,13 +177,17 @@ class ToolbarButton: UIButton {
     override open var isHighlighted: Bool {
         didSet {
             self.tintColor = isHighlighted ? selectedTintColor : unselectedTintColor
-            self.imageView?.tintColor = self.tintColor
         }
     }
     
     override open var isEnabled: Bool {
         didSet {
             self.tintColor = isEnabled ? unselectedTintColor : disabledTintColor
+        }
+    }
+
+    override var tintColor: UIColor! {
+        didSet {
             self.imageView?.tintColor = self.tintColor
         }
     }
