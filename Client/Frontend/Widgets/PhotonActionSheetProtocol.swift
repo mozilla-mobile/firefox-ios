@@ -37,25 +37,26 @@ extension PhotonActionSheetProtocol {
     
     //Returns a list of actions which is used to build a menu
     //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
-    func getHomePanelActions(openURL: @escaping URLOpenAction) -> [PhotonActionSheetItem] {
+    func getHomePanelActions() -> [PhotonActionSheetItem] {
+        guard let tab = self.tabManager.selectedTab else { return [] }
+
         let openTopSites = PhotonActionSheetItem(title: Strings.AppMenuTopSitesTitleString, iconString: "menu-panel-TopSites") { action in
-            openURL(HomePanelType.topSites.localhostURL, false)
+            tab.loadRequest(PrivilegedRequest(url: HomePanelType.topSites.localhostURL) as URLRequest)
         }
 
         let openBookmarks = PhotonActionSheetItem(title: Strings.AppMenuBookmarksTitleString, iconString: "menu-panel-Bookmarks") { action in
-            openURL(HomePanelType.bookmarks.localhostURL, false)
+            tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
         }
         
         let openHistory = PhotonActionSheetItem(title: Strings.AppMenuHistoryTitleString, iconString: "menu-panel-History") { action in
-            openURL(HomePanelType.history.localhostURL, false)
+            tab.loadRequest(PrivilegedRequest(url: HomePanelType.history.localhostURL) as URLRequest)
         }
         
         let openReadingList = PhotonActionSheetItem(title: Strings.AppMenuReadingListTitleString, iconString: "menu-panel-ReadingList") { action in
-            openURL(HomePanelType.readingList.localhostURL, false)
+            tab.loadRequest(PrivilegedRequest(url: HomePanelType.readingList.localhostURL) as URLRequest)
         }
         
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
-            guard let tab = self.tabManager.selectedTab else { return }
             HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
         }
         
