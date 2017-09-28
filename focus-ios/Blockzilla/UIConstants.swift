@@ -194,12 +194,13 @@ struct UIConstants {
         static let handoffSyncing = NSLocalizedString("Focus.handoffSyncing", value: "Apple Handoff is syncing", comment: "Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681")
         static let linkYouCopied = NSLocalizedString("contextMenu.clipboardLink", value: "Link you copied: %@", comment: "Text for the context menu when a user has a link on their clipboard.")
         static let trackingProtectionToggleLabel = NSLocalizedString("trackingProtection.toggleLabel", value: "Tracking Protection", comment: "Text for the toggle that temporarily disables tracking protection.")
-        static let trackingProtectionToggleDescription = NSLocalizedString("trackingProtection.toggleDescription", value: "Disable just for this browsing session if the page isn’t behaving as expected.", comment: "Description for the tracking protection toggle.")
+        static let trackingProtectionToggleDescription = NSLocalizedString("trackingProtection.toggleDescription1", value: "Disable until you close %@ or tap ERASE.", comment: "Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar")
         static let trackingProtectionDisabledLabel = NSLocalizedString("trackingProtection.disabledLabel", value: "Tracking Protection off", comment: "text showing the tracking protection is disabled.")
         static let adTrackerLabel = NSLocalizedString("trackingProtection.adTrackersLabel", value: "Ad trackers", comment: "Label for ad trackers.")
         static let analyticTrackerLabel = NSLocalizedString("trackingProtection.analyticTrackerLabel", value: "Analytic trackers", comment: "label for analytic trackers.")
         static let socialTrackerLabel = NSLocalizedString("trackingProtection.socialTrackerLabel", value: "Social trackers", comment: "label for social trackers.")
         static let contentTrackerLabel = NSLocalizedString("trackingProtection.contentTrackerLabel", value: "Content trackers", comment: "label for content trackers.")
         static let selectLocationBarTitle = NSLocalizedString("browserShortcutDescription.selectLocationBar", value: "Select Location Bar", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
+        static let trackersDescriptionLabel = NSLocalizedString("trackingProtection.trackerDescriptionLabel", value: "Choose whether %@ blocks ad, analytic, social, and other trackers.", comment: "General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar")
     }
 }
