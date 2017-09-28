@@ -677,7 +677,6 @@ class BrowserViewController: UIViewController {
 
         footer.snp.remakeConstraints { make in
             scrollController.footerBottomConstraint = make.bottom.equalTo(self.view.snp.bottom).constraint
-            make.bottom.equalTo(self.view.snp.bottom)
             make.leading.trailing.equalTo(self.view)
         }
 
