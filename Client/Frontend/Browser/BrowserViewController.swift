@@ -1859,8 +1859,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let settingsNavigationController = SearchSettingsTableViewController()
         settingsNavigationController.model = self.profile.searchEngines
         settingsNavigationController.profile = self.profile
-
-        let navController = UINavigationController(rootViewController: settingsNavigationController)
+        let navController = ModalSettingsNavigationController(rootViewController: settingsNavigationController)
 
         self.present(navController, animated: true, completion: nil)
     }
