@@ -777,9 +777,13 @@ class BrowserViewController: UIViewController {
 
     fileprivate func updateInContentHomePanel(_ url: URL?) {
         if !urlBar.inOverlayMode {
-            if let url = url, url.isAboutHomeURL {
+            guard let url = url else {
+                hideHomePanelController()
+                return
+            }
+            if url.isAboutHomeURL {
                 showHomePanelController(inline: true)
-            } else {
+            } else if !url.isLocal || url.isReaderModeURL {
                 hideHomePanelController()
             }
         }
