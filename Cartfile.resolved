@@ -1,4 +1,4 @@
-github "getsentry/sentry-cocoa" "3.2.1"
+github "getsentry/sentry-cocoa" "3.8.1"
 github "Alamofire/Alamofire" "4.3.0"
 github "sleroux/Deferred" "35b8927c1b94ce074e10793c57e1f80d0e2227fa"
 github "cezheng/Fuzi" "1.0.1"
