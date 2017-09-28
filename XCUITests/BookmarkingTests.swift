@@ -19,26 +19,29 @@ class BookmarkingTests: BaseTestCase {
     }
     
     private func bookmark() {
-        navigator.goto(BrowserTabMenu)
-        app.collectionViews.cells["AddBookmarkMenuItem"].tap()
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
+//        app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .other).element.children(matching: .button).element.tap()
+        waitforExistence(app.tables.cells["Bookmark This Page"])
+        app.tables.cells["Bookmark This Page"].tap()
         navigator.nowAt(BrowserTab)
     }
     
     private func unbookmark() {
-        navigator.goto(BrowserTabMenu)
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        waitforExistence(app.tables.cells["Remove Bookmark"])
         app.cells["Remove Bookmark"].tap()
         navigator.nowAt(BrowserTab)
     }
     
     private func checkBookmarked() {
-        navigator.goto(BrowserTabMenu)
-        waitforExistence(app.collectionViews.cells["RemoveBookmarkMenuItem"])
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        waitforExistence(app.tables.cells["Remove Bookmark"])
         navigator.goto(BrowserTab)
     }
     
     private func checkUnbookmarked() {
-        navigator.goto(BrowserTabMenu)
-        waitforExistence(app.collectionViews.cells["AddBookmarkMenuItem"])
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        waitforExistence(app.tables.cells["Bookmark This Page"])
         navigator.goto(BrowserTab)
     }
     

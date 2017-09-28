@@ -38,7 +38,7 @@ class CopiedLinksTests: BaseTestCase {
         app.navigationBars["Settings"]/*@START_MENU_TOKEN@*/.buttons["Done"]/*[[".buttons[\"Done\"]",".buttons[\"AppSettingsTableViewController.navigationItem.leftBarButtonItem\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
 
         app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.menuButton"]/*[[".buttons[\"Menu\"]",".buttons[\"TabToolbar.menuButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        let settingsmenuitemCell = app/*@START_MENU_TOKEN@*/.collectionViews.cells["SettingsMenuItem"]/*[[".otherElements[\"MenuViewController.menuView\"].collectionViews",".cells[\"Settings\"]",".cells[\"SettingsMenuItem\"]",".collectionViews"],[[[-1,3,1],[-1,0,1]],[[-1,2],[-1,1]]],[0,0]]@END_MENU_TOKEN@*/
+        let settingsmenuitemCell = app.tables.cells["Settings"]
         settingsmenuitemCell.tap()
 
         //Check Offer to open copied links, when opening firefox is on

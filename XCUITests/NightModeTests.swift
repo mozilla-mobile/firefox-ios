@@ -22,29 +22,23 @@ class NightModeTests: BaseTestCase {
     
     private func nightModeOff() {
         app.buttons["TabToolbar.menuButton"].tap()
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery.cells["ShowNightModeItem"].tap()
+        app.tables.cells["Disable Night Mode"].tap()
     }
     
     private func nightModeOn() {
         app.buttons["TabToolbar.menuButton"].tap()
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery.cells["HideNightModeItem"].tap()
+        app.tables.cells["Enable Night Mode"].tap()
     }
     
     private func checkNightModeOn() {
         navigator.goto(BrowserTabMenu)
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        waitforExistence(app.collectionViews.cells["ShowNightModeItem"])
+        waitforExistence(app.tables.cells["Disable Night Mode"])
         navigator.goto(BrowserTab)
     }
     
     private func checkNightModeOff() {
         navigator.goto(BrowserTabMenu)
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        waitforExistence(app.collectionViews.cells["HideNightModeItem"])
+        waitforExistence(app.tables.cells["Enable Night Mode"])
         navigator.goto(BrowserTab)
     }
     
