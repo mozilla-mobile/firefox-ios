@@ -19,27 +19,31 @@ class BookmarkingTests: BaseTestCase {
     }
     
     private func bookmark() {
-        navigator.goto(BrowserTabMenu)
-        app.collectionViews.cells["AddBookmarkMenuItem"].tap()
+        navigator.goto(ShareMenu)
+        waitforExistence(app.tables.cells["Add Bookmark"])
+        app.tables.cells["Add Bookmark"].tap()
         navigator.nowAt(BrowserTab)
     }
     
     private func unbookmark() {
-        navigator.goto(BrowserTabMenu)
-        app.cells["Remove Bookmark"].tap()
+        navigator.goto(ShareMenu)
+        waitforExistence(app.tables.cells["Remove Bookmark"])
+        app.tables.cells["Remove Bookmark"].tap()
         navigator.nowAt(BrowserTab)
     }
     
     private func checkBookmarked() {
-        navigator.goto(BrowserTabMenu)
-        waitforExistence(app.collectionViews.cells["RemoveBookmarkMenuItem"])
-        navigator.goto(BrowserTab)
+        navigator.goto(ShareMenu)
+        waitforExistence(app.tables.cells["Remove Bookmark"])
+        app.buttons["Close"].tap()
+        navigator.nowAt(BrowserTab)
     }
     
     private func checkUnbookmarked() {
-        navigator.goto(BrowserTabMenu)
-        waitforExistence(app.collectionViews.cells["AddBookmarkMenuItem"])
-        navigator.goto(BrowserTab)
+        navigator.goto(ShareMenu)
+        waitforExistence(app.tables.cells["Add Bookmark"])
+        app.buttons["Close"].tap()
+        navigator.nowAt(BrowserTab)
     }
     
     func testBookmarkingUI() {
@@ -52,7 +56,7 @@ class BookmarkingTests: BaseTestCase {
         checkBookmarked()
         
         // Load a different page on a new tab, check it's not bookmarked
-        //navigator.goto(NewTabScreen)
+        navigator.createNewTab()
         navigator.openNewURL(urlString: url2)
         checkUnbookmarked()
         

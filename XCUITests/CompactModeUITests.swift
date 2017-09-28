@@ -23,24 +23,22 @@ class CompactModeUITests: BaseTestCase {
     
     //Set the compact mode to OFF in settings screen
     private func compactModeOff() {
+        waitforExistence(app.buttons["TabToolbar.menuButton"])
         navigator.goto(SettingsScreen)
-        app.tables["AppSettingsTableViewController.tableView"].switches["Use Compact Tabs"].tap()
-        navigator.goto(TabTray)
-        
-        let exists = NSPredicate(format: "countForHittables == 4")
-        expectation(for: exists, evaluatedWith: app.collectionViews.cells, handler: nil)
-        waitForExpectations(timeout: 10, handler: nil)
+
+        let compactSwitch = app.tables["AppSettingsTableViewController.tableView"].switches["Use Compact Tabs"]
+        compactSwitch.tap()
+        XCTAssertEqual(compactSwitch.value as? String, "0")
     }
     
     //Set the compact mode to ON in settings screen
     private func compactModeOn() {
+        waitforExistence(app.buttons["TabToolbar.menuButton"])
         navigator.goto(SettingsScreen)
-        app.tables["AppSettingsTableViewController.tableView"].switches["Use Compact Tabs"].tap()
-        navigator.goto(TabTray)
         
-        let exists = NSPredicate(format: "countForHittables == 6")
-        expectation(for: exists, evaluatedWith: app.collectionViews.cells, handler: nil)
-        waitForExpectations(timeout: 10, handler: nil)
+        let compactSwitch = app.tables["AppSettingsTableViewController.tableView"].switches["Use Compact Tabs"]
+        compactSwitch.tap()
+        XCTAssertEqual(compactSwitch.value as? String, "1")
     }
     
     func testCompactModeUI() {
@@ -55,34 +53,45 @@ class CompactModeUITests: BaseTestCase {
                 "www.youtube.com",
                 "www.amazon.com",
                 "www.twitter.com",
-                "www.yahoo.com"
+               "www.yahoo.com"
             ]
             
             //Open the array of urls in 6 different tabs
             loadWebPage(urls[0])
             for i in 1..<urls.count {
-                //openNewTab()
                 navigator.createNewTab()
                 loadWebPage(urls[i])
             }
             
             //Navigate to tabs tray
-            navigator.goto(TabTray)
-            
-            //Wait until the cells show up
             //CollectionView visible cells count should be 6
-            let exists = NSPredicate(format: "countForHittables == 6")
+            navigator.goto(TabTray)
+            var exists = NSPredicate(format: "countForHittables == 6")
             expectation(for: exists, evaluatedWith: app.collectionViews.cells, handler: nil)
             waitForExpectations(timeout: 10, handler: nil)
             XCTAssertTrue(app.collectionViews.cells.countForHittables == 6)
             
+            // Go to one of the tabs to access menu
+            app.collectionViews.cells["Google"].tap()
+            navigator.nowAt(BrowserTab)
+            
             //CollectionView visible cells count should be less than or equal to 4
             compactModeOff()
-            XCTAssertTrue(app.collectionViews.cells.countForHittables <= 4)
+            navigator.goto(TabTray)
+            exists = NSPredicate(format: "countForHittables == 4")
+            expectation(for: exists, evaluatedWith: app.collectionViews.cells, handler: nil)
+            waitForExpectations(timeout: 10, handler: nil)
+            
+            // Go to one of the tabs to access menu
+            app.collectionViews.cells["Google"].tap()
+            navigator.nowAt(BrowserTab)
             
             //CollectionView visible cells count should be 6
             compactModeOn()
-            XCTAssertTrue(app.collectionViews.cells.countForHittables == 6)
+            navigator.goto(TabTray)
+            exists = NSPredicate(format: "countForHittables == 6")
+            expectation(for: exists, evaluatedWith: app.collectionViews.cells, handler: nil)
+            waitForExpectations(timeout: 10, handler: nil)
         }
     }
 }

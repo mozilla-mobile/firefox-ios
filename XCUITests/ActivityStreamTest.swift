@@ -137,8 +137,8 @@ class ActivityStreamTest: BaseTestCase {
         app.tables["Context Menu"].cells["Open in New Tab"].tap()
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
         XCTAssertFalse(app.staticTexts["example"].exists)
+        app.buttons["goBack"].tap()
 
-        app.buttons["Cancel"].tap()
         if iPad() {
             app.buttons["TopTabsViewController.tabsButton"].tap()
         } else {
@@ -183,8 +183,8 @@ class ActivityStreamTest: BaseTestCase {
 
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
         XCTAssertFalse(app.staticTexts["example"].exists)
+        app.buttons["goBack"].tap()
 
-        app.buttons["Cancel"].tap()
         if iPad() {
             app.buttons["TopTabsViewController.tabsButton"].tap()
         } else {
@@ -200,7 +200,8 @@ class ActivityStreamTest: BaseTestCase {
     
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         navigator.goto(NewTabScreen)
-        app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
+        app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!]
+            .press(forDuration: 1)
         selectOptionFromContextMenu (option: "Open in New Private Tab")
         
         // Check that two tabs are open and one of them is the default top site one
@@ -218,16 +219,19 @@ class ActivityStreamTest: BaseTestCase {
         
         // Check that it appears under Bookmarks menu
         navigator.goto(HomePanel_Bookmarks)
+        waitforExistence(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
         
         // Check that longtapping on the TopSite gives the option to remove it
         navigator.goto(HomePanel_TopSites)
+        waitforExistence(app.collectionViews.cells["TopSitesCell"])
         app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
         XCTAssertTrue(app.tables["Context Menu"].cells["Remove Bookmark"].exists)
         
         // Unbookmark it
         selectOptionFromContextMenu (option: "Remove Bookmark")
         navigator.goto(HomePanel_Bookmarks)
+        waitforExistence(app.tables["Bookmarks List"])
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
     }
     
@@ -248,10 +252,12 @@ class ActivityStreamTest: BaseTestCase {
         // Check that it appears under Bookmarks menu
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomePanel_Bookmarks)
+        waitforExistence(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
         // Check that longtapping on the TopSite gives the option to remove it
         navigator.goto(HomePanel_TopSites)
+        waitforExistence(app.collectionViews.cells["TopSitesCell"])
         app.collectionViews.cells["TopSitesCell"].cells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
 
         // Unbookmark it

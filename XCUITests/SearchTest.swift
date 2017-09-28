@@ -67,7 +67,7 @@ class SearchTests: BaseTestCase {
         waitforNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
         
         // Verify that it is possible to enable suggestions after selecting No
-        navigator.goto(NewTabMenu)
+        navigator.goto(TabMenu)
         suggestionsOnOff()
         typeOnSearchBar(text: "foobar")
         
@@ -140,7 +140,7 @@ class SearchTests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
         
         // Go here so that next time it is possible to access settings
-        navigator.goto(BrowserTabMenu2)
+        navigator.goto(TabTrayMenu)
         }
     
     func testSearchEngine() {

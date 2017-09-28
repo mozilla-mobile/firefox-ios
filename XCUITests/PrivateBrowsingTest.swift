@@ -27,7 +27,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
     func testPrivateTabDoesNotTrackHistory() {
         navigator.openURL(urlString: url1)
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(TabMenu)
         // Go to History screen
         waitforExistence(app.toolbars.buttons["HistoryMenuToolbarItem"])
         app.toolbars.buttons["HistoryMenuToolbarItem"].tap()
@@ -46,7 +46,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(urlString: url2)
         navigator.nowAt(PrivateBrowserTab)
         waitForValueContains(app.textFields["url"], value: "facebook")
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(TabMenu)
         waitforExistence(app.toolbars.buttons["HistoryMenuToolbarItem"])
         app.toolbars.buttons["HistoryMenuToolbarItem"].tap()
         waitforExistence(app.tables["History List"])

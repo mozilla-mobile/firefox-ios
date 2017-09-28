@@ -9,8 +9,8 @@ let SettingsScreen = "SettingsScreen"
 let TabTray = "TabTray"
 let TabTrayMenu = "TabTrayMenu"
 let BrowserTab = "BrowserTab"
-let BrowserTabMenu = "BrowserTabMenu"
-let BrowserTabMenu2 = "BrowserTabMenu2"
+let TabMenu = "TabMenu"
+let ShareMenu = "ShareMenu"
 let FirstRun = "OptionalFirstRun"
 let HomePageSettings = "HomePageSettings"
 let PasscodeSettings = "PasscodeSettings"
@@ -21,8 +21,8 @@ let ClearPrivateDataSettings = "ClearPrivateDataSettings"
 let LoginsSettings = "LoginsSettings"
 let OpenWithSettings = "OpenWithSettings"
 let NewTabScreen = "NewTabScreen"
-let NewTabMenu = "NewTabMenu"
 let URLBarOpen = "URLBarOpen"
+let PrivateURLBarOpen = "PrivateURLBarOpen"
 let NewPrivateTabScreen = "NewPrivateTabScreen"
 let PrivateTabTray = "PrivateTabTray"
 let PrivateBrowserTab = "PrivateBrowserTab"
@@ -113,7 +113,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
 
     map.createScene(NewTabScreen) { scene in
         scene.tap(app.textFields["url"], to: URLBarOpen)
-        scene.tap(app.buttons["TabToolbar.menuButton"], to: NewTabMenu)
+        scene.tap(app.buttons["TabToolbar.menuButton"], to: TabMenu)
         if map.isiPad() {
             scene.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
         } else {
@@ -124,8 +124,8 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     map.createScene(NewPrivateTabScreen) { scene in
-        scene.tap(app.textFields["url"], to: URLBarOpen)
-        scene.tap(app.buttons["TabToolbar.menuButton"], to: NewTabMenu)
+        scene.tap(app.textFields["url"], to: PrivateURLBarOpen)
+        scene.tap(app.buttons["TabToolbar.menuButton"], to: TabMenu)
         if map.isiPad() {
             scene.tap(app.buttons["TopTabsViewController.tabsButton"], to: PrivateTabTray)
         } else {
@@ -135,13 +135,16 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.noop(to: HomePanelsScreen)
     }
 
+    map.createScene(PrivateURLBarOpen) { scene in
+        // This is used for opening BrowserTab with default mozilla URL
+        // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
+        scene.typeText(url + "\r", into: app.textFields["address"], to: PrivateBrowserTab)
+    }
+    
     map.createScene(URLBarOpen) { scene in
         // This is used for opening BrowserTab with default mozilla URL
         // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
         scene.typeText(url + "\r", into: app.textFields["address"], to: BrowserTab)
-        scene.backAction = {
-            app.buttons["Cancel"].tap()
-        }
     }
 
     let noopAction = {}
@@ -164,10 +167,10 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
     }
 
-    map.createScene(NewTabMenu) { scene in
+    map.createScene(TabMenu) { scene in
         scene.gesture(to: SettingsScreen) {
             // XXX The element is fails the existence test, so we tap it through the gesture() escape hatch.
-            app.collectionViews.cells["SettingsMenuItem"].tap()
+            app.tables.cells["Settings"].tap()
         }
         scene.backAction = closeMenuAction
         scene.dismissOnUse = true
@@ -189,7 +192,9 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         scene.tap(table.cells["ShowTour"], to: Intro_Welcome)
 
-        scene.backAction = navigationControllerBackAction
+        // Within the menu, only way out is to press 'Done'
+        // There is no backAction, because it can't go back to menu list
+        scene.tap(app.buttons["Done"], to: NewTabScreen)
     }
 
     map.createScene(SearchSettings) { scene in
@@ -258,7 +263,8 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     map.createScene(TabTrayMenu) { scene in
         scene.gesture(to: SettingsScreen) {
             // XXX The element is fails the existence test, so we tap it through the gesture() escape hatch.
-            app.collectionViews.cells["SettingsMenuItem"].tap()
+            // app.collectionViews.cells["SettingsMenuItem"].tap()
+            app.tables.cells["Settings"].tap()
         }
 
         scene.backAction = closeMenuAction
@@ -267,7 +273,8 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
 
     map.createScene(BrowserTab) { scene in
         scene.tap(app.textFields["url"], to: URLBarOpen)
-        scene.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        scene.tap(app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.shareButton"]/*[[".otherElements[\"Navigation Toolbar\"]",".buttons[\"Share\"]",".buttons[\"TabToolbar.shareButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/, to: ShareMenu)
+        scene.tap(app.buttons["TabToolbar.menuButton"], to: TabMenu)
         if map.isiPad() {
             scene.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
         } else {
@@ -276,8 +283,9 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     map.createScene(PrivateBrowserTab) { scene in
-        scene.tap(app.textFields["url"], to: URLBarOpen)
-        scene.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        scene.tap(app.textFields["url"], to: PrivateURLBarOpen)
+        scene.tap(app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.shareButton"]/*[[".otherElements[\"Navigation Toolbar\"]",".buttons[\"Share\"]",".buttons[\"TabToolbar.shareButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/, to: ShareMenu)
+        scene.tap(app.buttons["TabToolbar.menuButton"], to: TabMenu)
         if map.isiPad() {
             scene.tap(app.buttons["TopTabsViewController.tabsButton"], to: PrivateTabTray)
         } else {
@@ -285,25 +293,10 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         }
     }
 
-    map.createScene(BrowserTabMenu) { scene in
-        scene.backAction = closeMenuAction
+    map.createScene(ShareMenu) { scene in
         // XXX Testing for the element causes an error, so we use the more
         // generic `gesture` method which does not test for the existence
         // before swiping.
-        scene.gesture(to: BrowserTabMenu2) {
-            app.otherElements["MenuViewController.menuView"].swipeLeft()
-        }
-        scene.dismissOnUse = true
-    }
-
-    map.createScene(BrowserTabMenu2) { scene in
-        // XXX Testing for the element causes an error, so we use the more
-        // generic `gesture` method which does not test for the existence
-        // before swiping.
-        scene.gesture(to: BrowserTabMenu) {
-            app.otherElements["MenuViewController.menuView"].swipeRight()
-        }
-        scene.tap(app.collectionViews.cells["SettingsMenuItem"], to: SettingsScreen)
         scene.backAction = closeMenuAction
         scene.dismissOnUse = true
     }
@@ -353,11 +346,15 @@ extension Navigator {
     }
 
     // Add a new Tab from the New Tab option in Browser Tab Menu
-    func createNewTab() {
-        self.goto(NewTabMenu)
+    func createNewTab(isPrivate: Bool = false) {
+        self.goto(TabMenu)
         let app = XCUIApplication()
-        app.collectionViews.cells["NewTabMenuItem"].tap()
-        self.nowAt(NewTabScreen)
+        app.tables.cells["Open New Tab"].tap()
+        if (isPrivate) {
+            self.nowAt(NewPrivateTabScreen)
+        } else {
+            self.nowAt(NewTabScreen)
+        }
     }
 
     // Add Tab(s) from the Tab Tray
@@ -369,37 +366,41 @@ extension Navigator {
     }
 
     func browserPerformAction(_ view: BrowserPerformAction) {
-        let page1Options = [.requestDesktop, .requestMobile, .findInPageOption, .requestSetHomePage, .addBookmarkOption, .removeBookmarkOption, .openNewTabOption, BrowserPerformAction.openNewPrivateTabOption]
-        let page2Options = [.requestNightMode, .requestDayMode, .requestHideImages, .requestShowImages, BrowserPerformAction.openSettingsOption]
+        
+        let shareMenuOptions = [.toggleDesktopOption, .findInPageOption, .requestSetHomePageOption, .toggleBookmarkOption, .shareOption, BrowserPerformAction.copyURLOption ]
+        let TabMenuOptions = [.toggleHideImages, .toggleNightMode, .openSettingsOption, .openTopSitesOption, .openBookMarksOption, .openHistoryOption, .openReadingListOption, .openNewTabOption, .openNewPrivateTabOption, BrowserPerformAction.showTabsOption]
 
         let app = XCUIApplication()
 
-        if page1Options.contains(view) {
-            self.goto(BrowserTabMenu)
+        if shareMenuOptions.contains(view) {
+            self.goto(ShareMenu)
             app.collectionViews.cells[view.rawValue].tap()
-        } else if page2Options.contains(view) {
-            self.goto(BrowserTabMenu2)
+        } else if TabMenuOptions.contains(view) {
+            self.goto(TabTrayMenu)
             app.collectionViews.cells[view.rawValue].tap()
         }
     }
 }
 enum BrowserPerformAction: String {
-    // BrowserTabMenu Page 1
-    case requestDesktop = "RequestDesktopMenuItem"
-    case requestMobile = "RequestMobileMenuItem"
-    case findInPageOption = "FindInPageMenuItem"
-    case requestSetHomePage = "SetHomePageMenuItem"
-    case addBookmarkOption  = "AddBookmarkMenuItem"
-    case removeBookmarkOption = "RemoveBookmarkMenuItem"
-    // These two cases below added for completeness and to check a particular use case, like that the button works and takes to the correct place, but do NOT use them in a complex test case, use the other way (navigator.goto(....)) to open a new tab/new private tab
-    case openNewTabOption = "NewTabMenuItem"
-    case openNewPrivateTabOption = "NewPrivateTabMenuItem"
-
-    // BrowserTabMenu Page 2
-    case requestNightMode = "HideNightModeItem"
-    case requestDayMode = "ShowNightModeItem"
-    case requestHideImages = "HideImageModeMenuItem"
-    case requestShowImages = "ShowImageModeMenuItem"
-    // Same comment as above, this case added for completeness
-    case openSettingsOption = "SettingsMenuItem"
+    // Share Menu
+    case toggleBookmarkOption  = "menu-Bookmark"
+    case findInPageOption = "menu-FindInPage"
+    case toggleDesktopOption = "menu-RequestDesktopSite"
+    case requestSetHomePageOption = "menu-Home"
+    case shareOption = "action_share"
+    case copyURLOption = "menu-Copy-Link"
+    
+    // Tab Menu
+    case toggleHideImages = "menu-NoImageMode"
+    case toggleNightMode = "menu-NightMode"
+    
+    case openSettingsOption = "menu-Settings"
+    case openTopSitesOption = "menu-panel-TopSites"
+    case openBookMarksOption = "menu-panel-Bookmarks"
+    case openHistoryOption = "menu-panel-History"
+    case openReadingListOption = "menu-panel-ReadingList"
+    
+    case openNewTabOption = "menu-NewTab"
+    case openNewPrivateTabOption = "smallPrivateMask"
+    case showTabsOption = "menu-Show-Tabs"
 }

@@ -19,7 +19,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     private func openFindInPageFromMenu() {
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(TabMenu)
         let collectionViewsQuery = app.collectionViews
         waitforExistence(collectionViewsQuery.cells["Find In Page"])
 
