@@ -1447,6 +1447,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func addPinnedSites() -> Success {
             return history.addPinnedTopSite(site1) >>== {
+                sleep(1) // Sleep to prevent intermittent issue with sorting on the timestamp
                 return history.addPinnedTopSite(site2)
             }
         }

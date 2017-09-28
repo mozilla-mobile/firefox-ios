@@ -164,19 +164,8 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let deleteArgs: Args = [guid]
 
         return db.transaction { connection -> Void in
-            var err: NSError? = nil
-
-            do {
-                try connection.executeChange(deleteClientQuery, withArgs: deleteArgs)
-            } catch let error as NSError {
-                err = error
-            }
-
+            try connection.executeChange(deleteClientQuery, withArgs: deleteArgs)
             try connection.executeChange(deleteTabsQuery, withArgs: deleteArgs)
-
-            if let err = err {
-                throw err
-            }
         }
     }
 
@@ -233,7 +222,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return db.withConnection { conn -> [ClientAndTabs] in
+        return db.withConnection { conn -> ([RemoteClient], [RemoteTab]) in
             let clientsCursor = conn.executeQuery("SELECT * FROM \(TableClients) WHERE EXISTS (SELECT 1 FROM \(TableRemoteDevices) rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
             let tabsCursor = conn.executeQuery("SELECT * FROM \(TableTabs) WHERE client_guid IS NOT NULL ORDER BY client_guid DESC, last_used DESC", factory: SQLiteRemoteClientsAndTabs.remoteTabFactory)
 
@@ -242,16 +231,18 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 tabsCursor.close()
             }
 
+            return (clientsCursor.asArray(), tabsCursor.asArray())
+        } >>== { clients, tabs in
             var acc = [String: [RemoteTab]]()
-            for tab in tabsCursor {
-                if let tab = tab, let guid = tab.clientGUID {
+            for tab in tabs {
+                if let guid = tab.clientGUID {
                     if acc[guid] == nil {
                         acc[guid] = [tab]
                     } else {
                         acc[guid]!.append(tab)
                     }
                 } else {
-                    log.error("Couldn't cast tab (\(tab ??? "nil")) to RemoteTab.")
+                    log.error("RemoteTab (\(tab)) has a nil clientGUID")
                 }
             }
 
@@ -264,11 +255,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 return ClientAndTabs(client: client, tabs: tabs ?? [])
             }
 
-            let removeLocalClient: (RemoteClient) -> Bool = { client in
-                return client.guid != nil
-            }
-
-            return clientsCursor.asArray().filter(removeLocalClient).map(fillTabs)
+            return deferMaybe(clients.map(fillTabs))
         }
     }
 
@@ -378,19 +365,8 @@ extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
 
     public func clear() -> Success {
         return db.transaction { conn -> Void in
-            var err: NSError? = nil
-
-            do {
-                try conn.executeChange("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL")
-            } catch let error as NSError {
-                err = error
-            }
-
+            try conn.executeChange("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL")
             try conn.executeChange("DELETE FROM \(TableClients)")
-
-            if let err = err {
-                throw err
-            }
         }
     }
 }

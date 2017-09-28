@@ -207,21 +207,22 @@ extension SQLiteHistory: BrowserHistory {
         //
         // Note that we will never match against a deleted item, because deleted items have no URL,
         // so we don't need to unset is_deleted here.
-        if let host = (site.url as String).asURL?.normalizedHost {
-            let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
-            let updateArgs: Args? = [site.title, time, host, site.url]
-            if Logger.logPII {
-                log.debug("Setting title to \(site.title) for URL \(site.url)")
-            }
-            do {
-                try conn.executeChange(update, withArgs: updateArgs)
-                return conn.numberOfRowsModified
-            } catch let error as NSError {
-                log.warning("Update failed with error: \(error.localizedDescription)")
-                return 0
-            }
+        guard let host = (site.url as String).asURL?.normalizedHost else {
+            return 0
         }
-        return 0
+
+        let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
+        let updateArgs: Args? = [site.title, time, host, site.url]
+        if Logger.logPII {
+            log.debug("Setting title to \(site.title) for URL \(site.url)")
+        }
+        do {
+            try conn.executeChange(update, withArgs: updateArgs)
+            return conn.numberOfRowsModified
+        } catch let error as NSError {
+            log.warning("Update failed with error: \(error.localizedDescription)")
+            return 0
+        }
     }
 
     fileprivate func insertSite(_ site: Site, atTime time: Timestamp, withConnection conn: SQLiteDBConnection) -> Int {

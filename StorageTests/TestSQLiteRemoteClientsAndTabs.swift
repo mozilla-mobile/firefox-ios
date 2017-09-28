@@ -149,7 +149,9 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
     func testInsertGetClear() {
         // Insert some test data.
         var remoteDevicesToInsert: [RemoteDevice] = []
-        for c in clients {
+        // Filter the local client from mock test data.
+        let remoteClients = clients.filter(removeLocalClient)
+        for c in remoteClients {
             let e = self.expectation(description: "Insert.")
             clientsAndTabs.insertOrUpdateClient(c.client).upon {
                 XCTAssertTrue($0.isSuccess)
@@ -164,7 +166,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         let f = self.expectation(description: "Get after insert.")
         clientsAndTabs.getClientsAndTabs().upon {
             if let got = $0.successValue {
-                let expected = self.clients.sorted(by: byGUID).filter(removeLocalClient)
+                let expected = remoteClients.sorted(by: byGUID)
                 let actual = got.sorted(by: byGUID)
 
                 // This comparison will fail if the order of the tabs changes. We sort the result
