@@ -67,6 +67,10 @@ public struct FxAProfileResponse {
     let displayName: String?
 }
 
+public struct FxADeviceDestroyResponse {
+    let success: Bool
+}
+
 // fxa-auth-server produces error details like:
 //        {
 //            "code": 400, // matches the HTTP status code
@@ -259,6 +263,10 @@ open class FxAClient10 {
         return FxANotifyResponse(success: json.error == nil)
     }
     
+    fileprivate class func deviceDestroyResponse(fromJSON json: JSON) -> FxADeviceDestroyResponse {
+        return FxADeviceDestroyResponse(success: json.error == nil)
+    }
+
     fileprivate class func oauthResponse(fromJSON json: JSON) -> FxAOAuthResponse? {
         guard json.error == nil,
             let accessToken = json["access_token"].string else {
@@ -377,6 +385,22 @@ open class FxAClient10 {
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.notifyResponse)
+    }
+
+    open func destroyDevice(ownDeviceId: GUID, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxADeviceDestroyResponse>> {
+        let URL = self.authURL.appendingPathComponent("/account/device/destroy")
+        var mutableURLRequest = URLRequest(url: URL)
+        let httpBody: JSON = JSON(["id": ownDeviceId])
+        mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        mutableURLRequest.httpBody = httpBody.stringValue()?.utf8EncodedData
+
+        let salt: Data = Data()
+        let contextInfo: Data = FxAClient10.KW("sessionToken")
+        let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
+        mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
+
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.deviceDestroyResponse)
     }
 
     open func registerOrUpdate(device: FxADevice, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxADevice>> {
