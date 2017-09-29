@@ -211,8 +211,6 @@ class TestSQLiteBookmarks: XCTestCase {
         db.run([
             (sql: bufferQuery, args: bufferArgs),
             (sql: bufferStructureQuery, args: bufferStructureArgs),
-            (sql: bufferQuery, args: bufferArgs),
-            (sql: bufferStructureQuery, args: bufferStructureArgs),
             (sql: pendingDeletionsQuery, args: pendingDeletionsArgs),
         ]).succeeded()
 

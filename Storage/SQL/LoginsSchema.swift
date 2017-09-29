@@ -27,12 +27,15 @@ open class LoginsSchema: Schema {
     public init() {}
 
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
-        let err = db.executeChange(sql, withArgs: args)
-        if err != nil {
-            log.error("Error running SQL in LoginsSchema: \(err?.localizedDescription ?? "nil")")
+        do {
+            try db.executeChange(sql, withArgs: args)
+        } catch let err as NSError {
+            log.error("Error running SQL in LoginsSchema: \(err.localizedDescription)")
             log.error("SQL was \(sql)")
+            return false
         }
-        return err == nil
+
+        return true
     }
     
     // TODO: transaction.
@@ -109,7 +112,12 @@ open class LoginsSchema: Schema {
     
     public func drop(_ db: SQLiteDBConnection) -> Bool {
         log.debug("Dropping logins table.")
-        let err = db.executeChange("DROP TABLE IF EXISTS \(name)")
-        return err == nil
+        do {
+            try db.executeChange("DROP TABLE IF EXISTS \(name)")
+        } catch {
+            return false
+        }
+
+        return true
     }
 }
