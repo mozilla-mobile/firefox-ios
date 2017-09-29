@@ -5,7 +5,7 @@
 import XCTest
 
 class NoImageTests: BaseTestCase {
-    
+
     var navigator: Navigator!
     var app: XCUIApplication!
 
@@ -14,57 +14,49 @@ class NoImageTests: BaseTestCase {
         app = XCUIApplication()
         navigator = createScreenGraph(app).navigator(self)
     }
-    
+
     override func tearDown() {
         navigator = nil
         app = nil
         super.tearDown()
     }
-    
+
     private func showImages() {
-        app.buttons["TabToolbar.menuButton"].tap()
+        navigator.goto(BrowserTabMenu)
         app.tables.cells["Show Images"].tap()
+        navigator.nowAt(BrowserTab)
     }
-    
+
     private func hideImages() {
-        app.buttons["TabToolbar.menuButton"].tap()
+        navigator.goto(BrowserTabMenu)
         app.tables.cells["Hide Images"].tap()
+        navigator.nowAt(BrowserTab)
     }
-    
+
     private func checkShowImages() {
         navigator.goto(BrowserTabMenu)
         waitforExistence(app.tables.cells["Show Images"])
         navigator.goto(BrowserTab)
     }
-    
+
     private func checkHideImages() {
         navigator.goto(BrowserTabMenu)
         waitforExistence(app.tables.cells["Hide Images"])
         navigator.goto(BrowserTab)
     }
-    
+
+    // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
     func testImageOnOff() {
-        let url1 = "www.google.com"
-        
         // Go to a webpage, and select no images or hide images, check it's hidden or not
-        navigator.openNewURL(urlString: url1)
-        XCTAssertTrue(app.images.count > 1)
+        navigator.openNewURL(urlString: "www.google.com")
+        waitUntilPageLoad()
+
+        // Select hide images, and check the UI is updated
         hideImages()
-        
-        //After image is hidden, only image detected is the lock icon in the UI
-        if iPad() {
-            XCTAssertTrue(app.images.count == 2)
-        } else {
-            XCTAssertTrue(app.images.count == 1)
-        }
         checkShowImages()
-        
-        // Load a same page on a new tab, check images are hidden
-        navigator.openURL(urlString: url1)
-        
-        // Open it, then select show images it, and check it's showing the images
+
+        // Select show images, and check the UI is updated
         showImages()
-        XCTAssertTrue(app.images.count > 1)
         checkHideImages()
     }
 }
