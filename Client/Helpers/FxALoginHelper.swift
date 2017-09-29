@@ -336,7 +336,11 @@ extension FxALoginHelper {
             _ = pushClient.unregister(pushRegistration)
         }
 
-        // TODO: fix https://bugzilla.mozilla.org/show_bug.cgi?id=1300641 , to tell Sync and FxA we're no longer attached.
+        // TODO: fix Bug 1168690, to tell Sync to delete this client and its tabs.
+        // i.e. upload a {deleted: true} client record.
+
+        // Tell FxA we're no longer attached.
+        self.account.destroyDevice()
 
         // Cleanup the database.
         self.profile?.removeAccount()
