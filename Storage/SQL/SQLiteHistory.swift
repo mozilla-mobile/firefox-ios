@@ -20,19 +20,6 @@ class NoSuchRecordError: MaybeErrorType {
     }
 }
 
-func failOrSucceed<T>(_ err: NSError?, op: String, val: T) -> Deferred<Maybe<T>> {
-    if let err = err {
-        log.debug("\(op) failed: \(err.localizedDescription)")
-        return deferMaybe(DatabaseError(err: err))
-    }
-
-    return deferMaybe(val)
-}
-
-func failOrSucceed(_ err: NSError?, op: String) -> Success {
-    return failOrSucceed(err, op: op, val: ())
-}
-
 private var ignoredSchemes = ["about"]
 
 public func isIgnoredURL(_ url: URL) -> Bool {
@@ -189,26 +176,27 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     func recordVisitedSite(_ site: Site) -> Success {
-        var error: NSError? = nil
-
         // Don't store visits to sites with about: protocols
         if isIgnoredURL(site.url as String) {
             return deferMaybe(IgnoredSiteError())
         }
 
-        _ = db.withConnection(&error) { (conn, _) -> Int in
+        return db.withConnection { conn -> Void in
             let now = Date.now()
-
-            let i = self.updateSite(site, atTime: now, withConnection: conn)
-            if i > 0 {
-                return i
+            
+            if self.updateSite(site, atTime: now, withConnection: conn) > 0 {
+                return
             }
-
+            
             // Insert instead.
-            return self.insertSite(site, atTime: now, withConnection: conn)
+            if self.insertSite(site, atTime: now, withConnection: conn) > 0 {
+                return
+            }
+            
+            let err = DatabaseError(description: "Unable to update or insert site; Invalid key returned")
+            log.error("recordVisitedSite(_:) encountered an error: \(err.localizedDescription)")
+            throw err
         }
-
-        return failOrSucceed(error, op: "Record site")
     }
 
     func updateSite(_ site: Site, atTime time: Timestamp, withConnection conn: SQLiteDBConnection) -> Int {
@@ -219,26 +207,29 @@ extension SQLiteHistory: BrowserHistory {
         //
         // Note that we will never match against a deleted item, because deleted items have no URL,
         // so we don't need to unset is_deleted here.
-        if let host = (site.url as String).asURL?.normalizedHost {
-            let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
-            let updateArgs: Args? = [site.title, time, host, site.url]
-            if Logger.logPII {
-                log.debug("Setting title to \(site.title) for URL \(site.url)")
-            }
-            let error = conn.executeChange(update, withArgs: updateArgs)
-            if error != nil {
-                log.warning("Update failed with error: \(error?.localizedDescription ?? "nil")")
-                return 0
-            }
-            return conn.numberOfRowsModified
+        guard let host = (site.url as String).asURL?.normalizedHost else {
+            return 0
         }
-        return 0
+
+        let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
+        let updateArgs: Args? = [site.title, time, host, site.url]
+        if Logger.logPII {
+            log.debug("Setting title to \(site.title) for URL \(site.url)")
+        }
+        do {
+            try conn.executeChange(update, withArgs: updateArgs)
+            return conn.numberOfRowsModified
+        } catch let error as NSError {
+            log.warning("Update failed with error: \(error.localizedDescription)")
+            return 0
+        }
     }
 
     fileprivate func insertSite(_ site: Site, atTime time: Timestamp, withConnection conn: SQLiteDBConnection) -> Int {
-
         if let host = (site.url as String).asURL?.normalizedHost {
-            if let error = conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host]) {
+            do {
+                try conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host])
+            } catch let error as NSError {
                 log.warning("Domain insertion failed with \(error.localizedDescription)")
                 return 0
             }
@@ -247,7 +238,9 @@ extension SQLiteHistory: BrowserHistory {
                          "(guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
                          "SELECT ?, ?, ?, ?, 0, 1, id FROM \(TableDomains) WHERE domain = ?"
             let insertArgs: Args? = [site.guid ?? Bytes.generateGUID(), site.url, site.title, time, host]
-            if let error = conn.executeChange(insert, withArgs: insertArgs) {
+            do {
+                try conn.executeChange(insert, withArgs: insertArgs)
+            } catch let error as NSError {
                 log.warning("Site insertion failed with \(error.localizedDescription)")
                 return 0
             }
@@ -263,23 +256,16 @@ extension SQLiteHistory: BrowserHistory {
 
     // TODO: thread siteID into this to avoid the need to do the lookup.
     func addLocalVisitForExistingSite(_ visit: SiteVisit) -> Success {
-        var error: NSError? = nil
-        _ = db.withConnection(&error) { (conn, _) -> Int in
+        return db.withConnection { conn -> Void in
             // INSERT OR IGNORE because we *might* have a clock error that causes a timestamp
             // collision with an existing visit, and it would really suck to error out for that reason.
             let insert = "INSERT OR IGNORE INTO \(TableVisits) (siteID, date, type, is_local) VALUES (" +
                          "(SELECT id FROM \(TableHistory) WHERE url = ?), ?, ?, 1)"
             let realDate = visit.date
             let insertArgs: Args? = [visit.site.url, realDate, visit.type.rawValue]
-            error = conn.executeChange(insert, withArgs: insertArgs)
-            if error != nil {
-                //log.warning("Visit insertion failed with \(err?.localizedDescription)")
-                return 0
-            }
-            return 1
-        }
 
-        return failOrSucceed(error, op: "Record visit")
+            try conn.executeChange(insert, withArgs: insertArgs)
+        }
     }
 
     public func addLocalVisit(_ visit: SiteVisit) -> Success {
@@ -648,17 +634,10 @@ extension SQLiteHistory: Favicons {
     }
 
     public func clearAllFavicons() -> Success {
-        var err: NSError? = nil
-
-        _ = db.withConnection(&err) { (conn, err: inout NSError?) -> Int in
-            err = conn.executeChange("DELETE FROM \(TableFaviconSites)")
-            if err == nil {
-                err = conn.executeChange("DELETE FROM \(TableFavicons)")
-            }
-            return 1
+        return db.transaction { conn -> Void in
+            try conn.executeChange("DELETE FROM \(TableFaviconSites)")
+            try conn.executeChange("DELETE FROM \(TableFavicons)")
         }
-
-        return failOrSucceed(err, op: "Clear favicons")
     }
 
     public func addFavicon(_ icon: Favicon) -> Deferred<Maybe<Int>> {
@@ -674,17 +653,12 @@ extension SQLiteHistory: Favicons {
             log.verbose("Adding favicon \(icon.url) for site \(site.url).")
         }
         func doChange(_ query: String, args: Args?) -> Deferred<Maybe<Int>> {
-            var err: NSError?
-            let res = db.withConnection(&err) { (conn, err: inout NSError?) -> Int in
+            return db.withConnection { conn -> Int in
                 // Blind! We don't see failure here.
                 let id = self.favicons.insertOrUpdateFaviconInTransaction(icon, conn: conn)
 
                 // Now set up the mapping.
-                err = conn.executeChange(query, withArgs: args)
-                if let err = err {
-                    log.error("Got error adding icon: \(err).")
-                    return 0
-                }
+                try conn.executeChange(query, withArgs: args)
 
                 // Try to update the favicon ID column in each bookmarks table. There can be
                 // multiple bookmarks with a particular URI, and a mirror bookmark can be
@@ -692,17 +666,16 @@ extension SQLiteHistory: Favicons {
                 if let id = id {
                     icon.id = id
 
-                    _ = conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-                    _ = conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    try? conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    try? conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+
+                    return id
                 }
 
-                return id ?? 0
+                let err = DatabaseError(description: "Error adding favicon. ID = 0")
+                log.error("addFavicon(_:, forSite:) encountered an error: \(err.localizedDescription)")
+                throw err
             }
-
-            if res == 0 {
-                return deferMaybe(DatabaseError(err: err))
-            }
-            return deferMaybe(icon.id ?? 0)
         }
 
         let siteSubselect = "(SELECT id FROM \(TableHistory) WHERE url = ?)"

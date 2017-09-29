@@ -117,19 +117,13 @@ extension SQLiteBookmarks {
      *
      * Sorry about the long line. If we break it, the indenting below gets crazy.
      */
-    fileprivate func insertBookmarkInTransaction(_ deferred: Success, url: URL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String, conn: SQLiteDBConnection, err: inout NSError?) -> Bool {
+    fileprivate func insertBookmarkInTransaction(url: URL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String, conn: SQLiteDBConnection) throws -> Void {
 
         log.debug("Inserting bookmark in transaction on thread \(Thread.current)")
 
-        // Keep going if this returns true.
-        func change(_ sql: String, args: Args?, desc: String) -> Bool {
-            err = conn.executeChange(sql, withArgs: args)
-            if let err = err {
-                log.error(desc)
-                deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: err)))
-                return false
-            }
-            return true
+        // Keep going if this does not throw.
+        func change(_ sql: String, args: Args?, desc: String) throws {
+            try conn.executeChange(sql, withArgs: args)
         }
 
         let urlString = url.absoluteString
@@ -174,26 +168,21 @@ extension SQLiteBookmarks {
         let insertSQL = "INSERT INTO \(TableBookmarksLocal) " +
                         "(guid, type, bmkUri, title, parentid, parentName, local_modified, sync_status, faviconID) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, \(iconValue))"
-        if !change(insertSQL, args: args, desc: "Error inserting \(newGUID).") {
-            return false
-        }
+        try change(insertSQL, args: args, desc: "Error inserting \(newGUID).")
 
-        let bumpParentStatus = { (status: Int) -> Bool in
+        func bumpParentStatus(_ status: Int) throws {
             let bumpSQL = "UPDATE \(TableBookmarksLocal) SET sync_status = \(status), local_modified = \(now) WHERE guid = ?"
-            return change(bumpSQL, args: parentArgs, desc: "Error bumping \(parent)'s modified time.")
+            try change(bumpSQL, args: parentArgs, desc: "Error bumping \(parent)'s modified time.")
         }
 
-        func overrideParentMirror() -> Bool {
+        func overrideParentMirror() throws {
             // We do this slightly tortured work so that we can reuse these queries
             // in a different context.
             let (sql, args) = getSQLToOverrideFolder(parent, atModifiedTime: now)
             var generator = sql.makeIterator()
             while let query = generator.next() {
-                if !change(query, args: args, desc: "Error running overriding query.") {
-                    return false
-                }
+                try change(query, args: args, desc: "Error running overriding query.")
             }
-            return true
         }
 
         //// Make sure our parent is overridden and appropriately bumped.
@@ -222,20 +211,17 @@ extension SQLiteBookmarks {
         //   if we weren't.
         if !parentExistsLocally {
             if !parentExistsInMirror {
-                deferred.fillIfUnfilled(Maybe(failure: DatabaseError(description: "Folder \(parent) doesn't exist in either mirror or local.")))
-                return false
+                throw DatabaseError(description: "Folder \(parent) doesn't exist in either mirror or local.")
             }
             // * Mark the parent folder as overridden if necessary.
             //   Overriding the parent involves copying the parent's structure, so that
             //   we can amend it, but also the parent's row itself so that we know it's
             //   changed.
-            _ = overrideParentMirror()
+            try overrideParentMirror()
         } else {
             let (status, deleted) = localStatus!
             if deleted {
-                log.error("Trying to insert into deleted local folder.")
-                deferred.fillIfUnfilled(Maybe(failure: DatabaseError(description: "Local folder \(parent) is deleted.")))
-                return false
+                throw DatabaseError(description: "Local folder \(parent) is deleted.")
             }
 
             // * Bump the overridden parent's modified time. We already copied its
@@ -246,22 +232,16 @@ extension SQLiteBookmarks {
                 switch syncStatus {
                 case .synced:
                     log.debug("We don't expect folders to ever be marked as Synced.")
-                    if !bumpParentStatus(SyncStatus.changed.rawValue) {
-                        return false
-                    }
+                    try bumpParentStatus(SyncStatus.changed.rawValue)
                 case .new:
                     fallthrough
                 case .changed:
                     // Leave it marked as new or changed, but bump the timestamp.
-                    if !bumpParentStatus(syncStatus.rawValue) {
-                        return false
-                    }
+                    try bumpParentStatus(syncStatus.rawValue)
                 }
             } else {
                 log.warning("Local folder marked with unknown state \(status). This should never occur.")
-                if !bumpParentStatus(SyncStatus.changed.rawValue) {
-                    return false
-                }
+                try bumpParentStatus(SyncStatus.changed.rawValue)
             }
         }
 
@@ -272,15 +252,7 @@ extension SQLiteBookmarks {
                            "VALUES (?, ?, \(newIndex))"
         let structureArgs: Args = [parent, newGUID, parent]
 
-        if !change(structureSQL, args: structureArgs, desc: "Error adding new item \(newGUID) to local structure.") {
-            return false
-        }
-
-        log.debug("Returning true to commit transaction on thread \(Thread.current)")
-
-        /// Fill the deferred and commit the transaction.
-        deferred.fill(Maybe(success: ()))
-        return true
+        try change(structureSQL, args: structureArgs, desc: "Error adding new item \(newGUID) to local structure.")
     }
 
     /**
@@ -288,15 +260,9 @@ extension SQLiteBookmarks {
      */
     func insertBookmark(_ url: URL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String) -> Success {
         log.debug("Inserting bookmark task on thread \(Thread.current)")
-        let deferred = Success()
-
-        var error: NSError?
-        error = self.db.transaction(synchronous: false, err: &error) { (conn, err) -> Bool in
-            self.insertBookmarkInTransaction(deferred, url: url, title: title, favicon: favicon, intoFolder: parent, withTitle: parentTitle, conn: conn, err: &err)
+        return db.transaction(synchronous: false) { conn -> Void in
+            try self.insertBookmarkInTransaction(url: url, title: title, favicon: favicon, intoFolder: parent, withTitle: parentTitle, conn: conn)
         }
-
-        log.debug("Returning deferred on thread \(Thread.current)")
-        return deferred
     }
 }
 
@@ -351,24 +317,20 @@ private extension BookmarkMirrorItem {
     }
 }
 
-private func deleteStructureForGUIDs(_ guids: [GUID], fromTable table: String, connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) -> NSError? {
+private func deleteStructureForGUIDs(_ guids: [GUID], fromTable table: String, connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) throws -> Void {
     log.debug("Deleting \(guids.count) parents from \(table).")
     let chunks = chunk(guids, by: maxVars)
     for chunk in chunks {
         let delStructure = "DELETE FROM \(table) WHERE parent IN \(BrowserDB.varlist(chunk.count))"
 
         let args: Args = chunk.flatMap { $0 }
-        if let error = connection.executeChange(delStructure, withArgs: args) {
-            log.error("Updating structure: \(error.description).")
-            return error
-        }
+        try connection.executeChange(delStructure, withArgs: args)
     }
-    return nil
 }
 
-private func insertStructureIntoTable(_ table: String, connection: SQLiteDBConnection, children: [Args], maxVars: Int) -> NSError? {
+private func insertStructureIntoTable(_ table: String, connection: SQLiteDBConnection, children: [Args], maxVars: Int) throws -> Void {
     if children.isEmpty {
-        return nil
+        return
     }
 
     // Insert the new structure rows. This uses three vars per row.
@@ -380,12 +342,8 @@ private func insertStructureIntoTable(_ table: String, connection: SQLiteDBConne
         let ins = "INSERT INTO \(table) (parent, child, idx) VALUES " +
             Array<String>(repeating: "(?, ?, ?)", count: chunk.count).joined(separator: ", ")
         log.debug("Inserting \(chunk.count) records (out of \(children.count)).")
-        if let error = connection.executeChange(ins, withArgs: childArgs) {
-            return error
-        }
+        try connection.executeChange(ins, withArgs: childArgs)
     }
-
-    return nil
 }
 
 /**
@@ -418,8 +376,8 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
     /**
      * Remove child records for any folders that've been deleted or are empty.
      */
-    fileprivate func deleteChildrenInTransactionWithGUIDs(_ guids: [GUID], connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) -> NSError? {
-        return deleteStructureForGUIDs(guids, fromTable: TableBookmarksBufferStructure, connection: connection, withMaxVars: maxVars)
+    fileprivate func deleteChildrenInTransactionWithGUIDs(_ guids: [GUID], connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) throws -> Void {
+        try deleteStructureForGUIDs(guids, fromTable: TableBookmarksBufferStructure, connection: connection, withMaxVars: maxVars)
     }
 
     open func isEmpty() -> Deferred<Maybe<Bool>> {
@@ -438,16 +396,13 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
     }
 
     open func applyRecords(_ records: [BookmarkMirrorItem], withMaxVars maxVars: Int) -> Success {
-        let deferred = Deferred<Maybe<()>>(defaultQueue: DispatchQueue.main)
-
         let guids = records.map { $0.guid }
         let deleted = records.filter { $0.isDeleted }.map { $0.guid }
         let values = records.map { $0.getUpdateOrInsertArgs() }
         let children = records.filter { !$0.isDeleted }.flatMap { $0.getChildrenArgs() }
         let folders = records.filter { $0.type == BookmarkNodeType.folder }.map { $0.guid }
 
-        var err: NSError?
-        _ = self.db.transaction(&err) { (conn, err) -> Bool in
+        return db.transaction { conn -> Void in
             // These have the same values in the same order.
             let update =
             "UPDATE \(TableBookmarksBuffer) SET " +
@@ -469,23 +424,13 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
             "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
             for args in values {
-                if let error = conn.executeChange(update, withArgs: args) {
-                    log.error("Updating mirror in buffer: \(error.description).")
-                    err = error
-                    deferred.fill(Maybe(failure: DatabaseError(err: error)))
-                    return false
-                }
+                try conn.executeChange(update, withArgs: args)
 
                 if conn.numberOfRowsModified > 0 {
                     continue
                 }
 
-                if let error = conn.executeChange(insert, withArgs: args) {
-                    log.error("Inserting mirror into buffer: \(error.description).")
-                    err = error
-                    deferred.fill(Maybe(failure: DatabaseError(err: error)))
-                    return false
-                }
+                try conn.executeChange(insert, withArgs: args)
             }
 
             // Delete existing structure for any folders we've seen. We always trust the folders,
@@ -497,19 +442,11 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
 
             log.debug("\(folders.count) folders and \(deleted.count) deleted maybe-folders to drop from buffer structure table.")
 
-            if let error = self.deleteChildrenInTransactionWithGUIDs(folders + deleted, connection: conn) {
-                deferred.fill(Maybe(failure: DatabaseError(err: error)))
-                return false
-            }
+            try self.deleteChildrenInTransactionWithGUIDs(folders + deleted, connection: conn)
 
             // (Re-)insert children in chunks.
             log.debug("Inserting \(children.count) children.")
-            if let error = insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: children, maxVars: maxVars) {
-                log.error("Updating buffer structure: \(error.description).")
-                err = error
-                deferred.fill(Maybe(failure: DatabaseError(err: error)))
-                return false
-            }
+            try insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: children, maxVars: maxVars)
 
             // Drop pending deletions of items we just received.
             // In practice that means we have made the choice that we will always
@@ -520,24 +457,9 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
                 let delPendingDeletions = "DELETE FROM \(TablePendingBookmarksDeletions) WHERE id IN \(BrowserDB.varlist(chunk.count))"
 
                 let args: Args = chunk.flatMap { $0 }
-                if let error = conn.executeChange(delPendingDeletions, withArgs: args) {
-                    log.error("Deleting pending deletions: \(error.description).")
-                    err = error
-                    deferred.fill(Maybe(failure: DatabaseError(err: error)))
-                    return false
-                }
+                try conn.executeChange(delPendingDeletions, withArgs: args)
             }
-
-            if err == nil {
-                deferred.fillIfUnfilled(Maybe(success: ()))
-                return true
-            }
-
-            deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: err)))
-            return false
         }
-
-        return deferred
     }
 
     open func doneApplyingRecordsAfterDownload() -> Success {
@@ -1054,55 +976,30 @@ extension MergedSQLiteBookmarks {
             return succeed()
         }
 
-        let deferred = Success()
-
-        var err: NSError?
-        let resultError = self.local.db.transaction(&err) { (conn, err: inout NSError?) in
-            // This is a little tortured because we want it all to happen in a single transaction.
-            // We walk through the accrued work items, applying them in the right order (e.g., structure
-            // then value), doing so with the ugly NSError-based transaction API.
-            // If at any point we fail, we abort, roll back the transaction (return false),
-            // and reject the deferred.
-
-            func change(_ sql: String, args: Args?=nil) -> Bool {
-                if let e = conn.executeChange(sql, withArgs: args) {
-                    err = e
-                    deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: e)))
-                    return false
-                }
-                return true
-            }
-
+        // This is a little tortured because we want it all to happen in a single transaction.
+        // We walk through the accrued work items, applying them in the right order (e.g., structure
+        // then value). If at any point we fail, we abort, roll back the transaction by throwing.
+        return local.db.transaction { conn -> Void in
             // So we can trample the DB in any order.
-            if !change("PRAGMA defer_foreign_keys = ON") {
-                return false
-            }
-
+            try conn.executeChange("PRAGMA defer_foreign_keys = ON")
+            
             log.debug("Deleting \(op.mirrorItemsToDelete.count) mirror items.")
-            op.mirrorItemsToDelete
-              .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                guard err == nil else { return }
+
+            try op.mirrorItemsToDelete.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
                 let args: Args = guids.map { $0 }
                 let varlist = BrowserDB.varlist(guids.count)
-
+                
                 let sqlMirrorStructure = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN \(varlist)"
-                if !change(sqlMirrorStructure, args: args) {
-                    return
-                }
-
+                try conn.executeChange(sqlMirrorStructure, withArgs: args)
+                
                 let sqlMirror = "DELETE FROM \(TableBookmarksMirror) WHERE guid IN \(varlist)"
-                _ = change(sqlMirror, args: args)
+                try conn.executeChange(sqlMirror, withArgs: args)
             }
-
-            if err != nil {
-                return false
-            }
-
+            
             // Copy from other tables for simplicity.
             // Do this *before* we throw away local and buffer changes!
             // This is one reason why the local override step needs to be processed before the buffer is cleared.
-            op.mirrorValuesToCopyFromBuffer
-              .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+            try op.mirrorValuesToCopyFromBuffer.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
                 let args: Args = guids.map { $0 }
                 let varlist = BrowserDB.varlist(guids.count)
                 let copySQL = [
@@ -1115,15 +1012,11 @@ extension MergedSQLiteBookmarks {
                     "WHERE guid IN",
                     varlist
                     ].joined(separator: " ")
-                _ = change(copySQL, args: args)
+                
+                try conn.executeChange(copySQL, withArgs: args)
             }
-
-            if err != nil {
-                return false
-            }
-
-            op.mirrorValuesToCopyFromLocal
-              .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+            
+            try op.mirrorValuesToCopyFromLocal.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
                 let args: Args = guids.map { $0 }
                 let varlist = BrowserDB.varlist(guids.count)
                 let copySQL = [
@@ -1132,22 +1025,21 @@ extension MergedSQLiteBookmarks {
                     "bmkUri, tags, keyword, folderName, queryId, faviconID, server_modified)",
                     "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
                     "bmkUri, tags, keyword, folderName, queryId, faviconID,",
-
+                    
                     // This will be fixed up in batches after the initial copy.
                     "0 AS server_modified",
                     "FROM \(TableBookmarksLocal) WHERE guid IN",
                     varlist
                     ].joined(separator: " ")
-               _ = change(copySQL, args: args)
+                
+                try conn.executeChange(copySQL, withArgs: args)
             }
-
-            op.modifiedTimes.forEach { (time, guids) in
-                if err != nil { return }
-
+            
+            try op.modifiedTimes.forEach { (time, guids) in
                 // This will never be too big: we upload in chunks
                 // smaller than 999!
                 precondition(guids.count < BrowserDB.MaxVariableNumber)
-
+                
                 log.debug("Swizzling server modified time to \(time) for \(guids.count) GUIDs.")
                 let args: Args = guids.map { $0 }
                 let varlist = BrowserDB.varlist(guids.count)
@@ -1155,40 +1047,26 @@ extension MergedSQLiteBookmarks {
                     "UPDATE \(TableBookmarksMirror) SET server_modified = \(time)",
                     "WHERE guid IN",
                     varlist,
-                ].joined(separator: " ")
-                _ = change(updateSQL, args: args)
+                    ].joined(separator: " ")
+                try conn.executeChange(updateSQL, withArgs: args)
             }
-
-            if err != nil {
-                return false
-            }
-
+            
             log.debug("Marking \(op.processedLocalChanges.count) local changes as processed.")
-            op.processedLocalChanges
-              .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                guard err == nil else { return }
+            try op.processedLocalChanges.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
                 let args: Args = guids.map { $0 }
                 let varlist = BrowserDB.varlist(guids.count)
-
+                
                 let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(varlist)"
-                if !change(sqlLocalStructure, args: args) {
-                    return
-                }
-
+                try conn.executeChange(sqlLocalStructure, withArgs: args)
+                
                 let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
-                if !change(sqlLocal, args: args) {
-                    return
-                }
-
+                try conn.executeChange(sqlLocal, withArgs: args)
+                
                 // If the values change, we'll handle those elsewhere, but at least we need to mark these as non-overridden.
                 let sqlMirrorOverride = "UPDATE \(TableBookmarksMirror) SET is_overridden = 0 WHERE guid IN \(varlist)"
-                _ = change(sqlMirrorOverride, args: args)
+                try conn.executeChange(sqlMirrorOverride, withArgs: args)
             }
-
-            if err != nil {
-                return false
-            }
-
+            
             if !op.mirrorItemsToUpdate.isEmpty {
                 let updateSQL = [
                     "UPDATE \(TableBookmarksMirror) SET",
@@ -1199,20 +1077,13 @@ extension MergedSQLiteBookmarks {
                     "folderName = ?, queryId = ?, is_overridden = 0",
                     "WHERE guid = ?",
                     ].joined(separator: " ")
-
-                op.mirrorItemsToUpdate.forEach { (_, mirrorItem) in
-                    // Break out of the loop if we failed.
-                    guard err == nil else { return }
-
+                
+                try op.mirrorItemsToUpdate.forEach { (_, mirrorItem) in
                     let args = mirrorItem.getUpdateOrInsertArgs()
-                    _ = change(updateSQL, args: args)
-                }
-
-                if err != nil {
-                    return false
+                    try conn.executeChange(updateSQL, withArgs: args)
                 }
             }
-
+            
             if !op.mirrorItemsToInsert.isEmpty {
                 let insertSQL = [
                     "INSERT OR IGNORE INTO \(TableBookmarksMirror) (",
@@ -1224,55 +1095,27 @@ extension MergedSQLiteBookmarks {
                     "VALUES",
                     "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     ].joined(separator: " ")
-
-                op.mirrorItemsToInsert.forEach { (_, mirrorItem) in
-                    // Break out of the loop if we failed.
-                    guard err == nil else { return }
-
+                
+                try op.mirrorItemsToInsert.forEach { (_, mirrorItem) in
                     let args = mirrorItem.getUpdateOrInsertArgs()
-                    _ = change(insertSQL, args: args)
-                }
-
-                if err != nil {
-                    return false
+                    try conn.executeChange(insertSQL, withArgs: args)
                 }
             }
-
+            
             if !op.mirrorStructures.isEmpty {
                 let structureRows =
-                op.mirrorStructures.flatMap { (parent, children) in
-                    return children.enumerated().map { (idx, child) -> Args in
-                        let vals: Args = [parent, child, idx]
-                        return vals
-                    }
+                    op.mirrorStructures.flatMap { (parent, children) in
+                        return children.enumerated().map { (idx, child) -> Args in
+                            let vals: Args = [parent, child, idx]
+                            return vals
+                        }
                 }
-
+                
                 let parents = op.mirrorStructures.map { $0.0 }
-                if let e = deleteStructureForGUIDs(parents, fromTable: TableBookmarksMirrorStructure, connection: conn) {
-                    err = e
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                    return false
-                }
-
-                if let e = insertStructureIntoTable(TableBookmarksMirrorStructure, connection: conn, children: structureRows, maxVars: BrowserDB.MaxVariableNumber) {
-                    err = e
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                    return false
-                }
+                try deleteStructureForGUIDs(parents, fromTable: TableBookmarksMirrorStructure, connection: conn)
+                try insertStructureIntoTable(TableBookmarksMirrorStructure, connection: conn, children: structureRows, maxVars: BrowserDB.MaxVariableNumber)
             }
-
-            // Commit the result.
-            return true
         }
-
-        if let err = resultError {
-            log.warning("Got error “\(err.localizedDescription)”")
-            deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: err)))
-        } else {
-            deferred.fillIfUnfilled(Maybe(success: ()))
-        }
-
-        return deferred
     }
 
     public func applyBufferUpdatedCompletionOp(_ op: BufferUpdatedCompletionOp) -> Success {
@@ -1282,47 +1125,23 @@ extension MergedSQLiteBookmarks {
             return succeed()
         }
 
-        let deferred = Success()
-
-        var err: NSError?
-        let resultError = self.local.db.transaction(&err) { (conn, err: inout NSError?) in
-            func change(_ sql: String, args: Args?=nil) -> Bool {
-                if let e = conn.executeChange(sql, withArgs: args) {
-                    err = e
-                    deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: e)))
-                    return false
-                }
-                return true
-            }
-
+        return local.db.transaction { conn -> Void in
             // So we can trample the DB in any order.
-            if !change("PRAGMA defer_foreign_keys = ON") {
-                return false
+            try conn.executeChange("PRAGMA defer_foreign_keys = ON")
+            
+            try op.deletedValues.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = guids.map { $0 }
+                let varlist = BrowserDB.varlist(guids.count)
+                
+                // This will leave the idx column sparse for the buffer children.
+                let sqlBufferStructure = "DELETE FROM \(TableBookmarksBufferStructure) WHERE child IN \(varlist)"
+                try conn.executeChange(sqlBufferStructure, withArgs: args)
+                
+                // This will also delete items from the pending deletions table on cascade.
+                let sqlBuffer = "DELETE FROM \(TableBookmarksBuffer) WHERE guid IN \(varlist)"
+                try conn.executeChange(sqlBuffer, withArgs: args)
             }
-
-            op.deletedValues
-                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                    guard err == nil else { return }
-                    let args: Args = guids.map { $0 }
-                    let varlist = BrowserDB.varlist(guids.count)
-
-                    // This will leave the idx column sparse for the buffer children.
-                    let sqlBufferStructure = "DELETE FROM \(TableBookmarksBufferStructure) WHERE child IN \(varlist)"
-                    if !change(sqlBufferStructure, args: args) {
-                        return
-                    }
-
-                    // This will also delete items from the pending deletions table on cascade.
-                    let sqlBuffer = "DELETE FROM \(TableBookmarksBuffer) WHERE guid IN \(varlist)"
-                    if !change(sqlBuffer, args: args) {
-                        return
-                    }
-            }
-
-            if err != nil {
-                return false
-            }
-
+            
             let insertSQL = [
                 "INSERT OR IGNORE INTO \(TableBookmarksBuffer) (",
                 "type, server_modified, is_deleted,",
@@ -1333,14 +1152,10 @@ extension MergedSQLiteBookmarks {
                 "VALUES",
                 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 ].joined(separator: " ")
-
+            
             let args = op.mobileRoot.getUpdateOrInsertArgs()
-            _ = change(insertSQL, args: args)
-
-            if err != nil {
-                return false
-            }
-
+            try conn.executeChange(insertSQL, withArgs: args)
+            
             // We update server_modified in another operation because the first statement is an INSERT OR IGNORE
             // and we can't turn that into a INSERT OR REPLACE because this will cascade delete children
             // in the buffer structure table.
@@ -1348,93 +1163,52 @@ extension MergedSQLiteBookmarks {
                 "UPDATE \(TableBookmarksBuffer) SET server_modified = \(op.modifiedTime)",
                 "WHERE guid = ?",
                 ].joined(separator: " ")
-            _ = change(updateMobileRootTimeSQL, args: [op.mobileRoot.guid])
-
-            if err != nil {
-                return false
+            try conn.executeChange(updateMobileRootTimeSQL, withArgs: [op.mobileRoot.guid])
+            
+            try op.bufferValuesToMoveFromLocal.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = guids.map { $0 }
+                let varlist = BrowserDB.varlist(guids.count)
+                
+                let copySQL = [
+                    "INSERT OR REPLACE INTO \(TableBookmarksBuffer)",
+                    "(guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                    "bmkUri, tags, keyword, folderName, queryId, server_modified)",
+                    "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
+                    "bmkUri, tags, keyword, folderName, queryId,",
+                    "\(op.modifiedTime) AS server_modified",
+                    "FROM \(TableBookmarksLocal) WHERE guid IN",
+                    varlist
+                    ].joined(separator: " ")
+                try conn.executeChange(copySQL, withArgs: args)
             }
-
-            op.bufferValuesToMoveFromLocal
-                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                    let args: Args = guids.map { $0 }
-                    let varlist = BrowserDB.varlist(guids.count)
-
-                    let copySQL = [
-                        "INSERT OR REPLACE INTO \(TableBookmarksBuffer)",
-                        "(guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
-                        "bmkUri, tags, keyword, folderName, queryId, server_modified)",
-                        "SELECT guid, type, parentid, parentName, feedUri, siteUri, pos, title, description,",
-                        "bmkUri, tags, keyword, folderName, queryId,",
-                        "\(op.modifiedTime) AS server_modified",
-                        "FROM \(TableBookmarksLocal) WHERE guid IN",
-                        varlist
-                        ].joined(separator: " ")
-                    if !change(copySQL, args: args) {
-                        return
-                    }
+            
+            try op.bufferValuesToMoveFromLocal.withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
+                let args: Args = guids.map { $0 }
+                let varlist = BrowserDB.varlist(guids.count)
+                
+                // This will leave the idx column sparse for the local children.
+                let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE child IN \(varlist)"
+                try conn.executeChange(sqlLocalStructure, withArgs: args)
+                
+                let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
+                try conn.executeChange(sqlLocal, withArgs: args)
             }
-
-            if err != nil {
-                return false
-            }
-
-            op.bufferValuesToMoveFromLocal
-                .withSubsetsOfSize(BrowserDB.MaxVariableNumber) { guids in
-                    guard err == nil else { return }
-                    let args: Args = guids.map { $0 }
-                    let varlist = BrowserDB.varlist(guids.count)
-
-                    // This will leave the idx column sparse for the local children.
-                    let sqlLocalStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE child IN \(varlist)"
-                    if !change(sqlLocalStructure, args: args) {
-                        return
-                    }
-
-                    let sqlLocal = "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(varlist)"
-                    if !change(sqlLocal, args: args) {
-                        return
-                    }
-            }
-
-            if err != nil {
-                return false
-            }
-
+            
             if op.bufferValuesToMoveFromLocal.count > 0 {
                 guard let allChildren = op.mobileRoot.children else {
-                    log.error("Absent mobileRoot children. Aborting.")
-                    return false
+                    let err = DatabaseError(description: "Absent mobileRoot children. Aborting.")
+                    log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
+                    throw err
                 }
                 let offset = allChildren.count - op.bufferValuesToMoveFromLocal.count
-
+                
                 let sqlNextIdx = "SELECT (COALESCE(MAX(idx), -1) + 1) AS newIndex FROM \(TableBookmarksBufferStructure) WHERE parent = ?"
                 let nextIdxArgs: Args = [BookmarkRoots.MobileFolderGUID]
                 let nextIdx = conn.executeQuery(sqlNextIdx, factory: IntFactory, withArgs: nextIdxArgs).asArray()[0]
-
+                
                 let toInsertArgs = Array(op.mobileRoot.getChildrenArgs(offset: offset, nextIdx: nextIdx))
-
-                if let e = insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: toInsertArgs, maxVars: BrowserDB.MaxVariableNumber) {
-                    err = e
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                    return false
-                }
+                try insertStructureIntoTable(TableBookmarksBufferStructure, connection: conn, children: toInsertArgs, maxVars: BrowserDB.MaxVariableNumber)
             }
-
-            if err != nil {
-                return false
-            }
-
-            // Commit the result.
-            return true
         }
-
-        if let err = resultError {
-            log.warning("Got error “\(err.localizedDescription)”")
-            deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: err)))
-        } else {
-            deferred.fillIfUnfilled(Maybe(success: ()))
-        }
-
-        return deferred
     }
 }

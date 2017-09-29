@@ -145,12 +145,15 @@ open class BrowserSchema: Schema {
     }
 
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
-        let err = db.executeChange(sql, withArgs: args)
-        if err != nil {
-            log.error("Error running SQL in BrowserSchema: \(err?.localizedDescription ?? "nil")")
+        do {
+            try db.executeChange(sql, withArgs: args)
+        } catch let err as NSError {
+            log.error("Error running SQL in BrowserSchema: \(err.localizedDescription)")
             log.error("SQL was \(sql)")
+            return false
         }
-        return err == nil
+
+        return true
     }
 
     // TODO: transaction.
@@ -1174,7 +1177,9 @@ open class BrowserSchema: Schema {
         log.info("Schema table migrations complete; Dropping 'tableList' table.")
 
         let sql = "DROP TABLE IF EXISTS tableList"
-        if let err = db.executeChange(sql) {
+        do {
+            try db.executeChange(sql)
+        } catch let err as NSError {
             log.error("Error dropping tableList table: \(err.localizedDescription)")
             SentryIntegration.shared.sendWithStacktrace(message: "Error dropping tableList table: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
             return false
@@ -1182,7 +1187,9 @@ open class BrowserSchema: Schema {
 
         // Lastly, write the *previous* schema version (prior to v31) to the database
         // using `PRAGMA user_version = ?`.
-        if let err = db.setVersion(previousVersion) {
+        do {
+            try db.setVersion(previousVersion)
+        } catch let err as NSError {
             log.error("Error setting database version: \(err.localizedDescription)")
             SentryIntegration.shared.sendWithStacktrace(message: "Error setting database version: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
             return false
@@ -1224,7 +1231,9 @@ open class BrowserSchema: Schema {
         
         if previousClientsTableVersion < 2 {
             let sql = "ALTER TABLE \(TableClients) ADD COLUMN version TEXT"
-            if let err = db.executeChange(sql) {
+            do {
+                try db.executeChange(sql)
+            } catch let err as NSError {
                 log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
                 SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)", tag: "BrowserDB", severity: .error)
                 return .failure
@@ -1233,7 +1242,9 @@ open class BrowserSchema: Schema {
         
         if previousClientsTableVersion < 3 {
             let sql = "ALTER TABLE \(TableClients) ADD COLUMN fxaDeviceId TEXT"
-            if let err = db.executeChange(sql) {
+            do {
+                try db.executeChange(sql)
+            } catch let err as NSError {
                 log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
                 SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)", tag: "BrowserDB", severity: .error)
                 return .failure
