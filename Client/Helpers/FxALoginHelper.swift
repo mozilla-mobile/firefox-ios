@@ -293,12 +293,6 @@ class FxALoginHelper {
                 return self.performVerifiedSync(profile, account: account)
             }
 
-            if account.pushRegistration != nil {
-                // Verification hasn't occurred yet, but we've registered for push 
-                // so we can wait for a push notification in FxAPushMessageHandler.
-                return
-            }
-
             let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
             queue.asyncAfter(deadline: DispatchTime.now() + verificationPollingInterval) {
                 self.awaitVerification(attemptsLeft - 1)
