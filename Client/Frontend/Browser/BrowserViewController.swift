@@ -1666,7 +1666,7 @@ extension BrowserViewController: TabDelegate {
         tab.addHelper(historyStateHelper, name: HistoryStateHelper.name())
         
         if #available(iOS 11, *) {
-            tab.contentBlocker = ContentBlockerHelper(tab: tab, profile: profile)
+            (tab.contentBlocker as? ContentBlockerHelper)?.setupForWebView()
         }
 
         let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
