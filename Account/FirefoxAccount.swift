@@ -327,6 +327,18 @@ open class FirefoxAccount {
         }
     }
 
+    @discardableResult open func destroyDevice() -> Success {
+        guard let session = stateCache.value as? TokenState else {
+            return deferMaybe(NotATokenStateError(state: stateCache.value))
+        }
+        guard let ownDeviceId = self.deviceRegistration?.id else {
+            return deferMaybe(FxAClientError.local(NSError()))
+        }
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+
+        return client.destroyDevice(ownDeviceId: ownDeviceId, withSessionToken: session.sessionToken as NSData) >>> succeed
+    }
+
     @discardableResult open func advance() -> Deferred<FxAState> {
         OSSpinLockLock(&advanceLock)
         if let deferred = advanceDeferred {
