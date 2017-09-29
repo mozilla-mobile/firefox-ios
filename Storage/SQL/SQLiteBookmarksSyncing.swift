@@ -260,7 +260,7 @@ extension SQLiteBookmarks {
      */
     func insertBookmark(_ url: URL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String) -> Success {
         log.debug("Inserting bookmark task on thread \(Thread.current)")
-        return db.transaction(synchronous: false) { conn -> Void in
+        return db.transaction { conn -> Void in
             try self.insertBookmarkInTransaction(url: url, title: title, favicon: favicon, intoFolder: parent, withTitle: parentTitle, conn: conn)
         }
     }

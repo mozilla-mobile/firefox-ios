@@ -47,11 +47,11 @@ open class BrowserDB {
      * The supported mechanism for a read-only query against a WAL-using SQLite database is to use PRAGMA query_only,
      * but this isn't all that useful for us, because we have a mixed read/write workload.
      */
-    @discardableResult func withConnection<T>(flags: SwiftData.Flags = .readWriteCreate, synchronous: Bool = true, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
+    @discardableResult func withConnection<T>(flags: SwiftData.Flags = .readWriteCreate, synchronous: Bool = false, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
         return db.withConnection(flags, synchronous: synchronous, callback)
     }
 
-    func transaction<T>(synchronous: Bool = true, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
+    func transaction<T>(synchronous: Bool = false, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
         return db.transaction(synchronous: synchronous, callback)
     }
 
@@ -177,18 +177,6 @@ open class BrowserDB {
         }
 
         return transaction { connection -> Void in
-            for (sql, args) in commands {
-                try connection.executeChange(sql, withArgs: args)
-            }
-        }
-    }
-
-    func runAsync(_ commands: [(sql: String, args: Args?)]) -> Success {
-        if commands.isEmpty {
-            return succeed()
-        }
-
-        return transaction(synchronous: false) { connection -> Void in
             for (sql, args) in commands {
                 try connection.executeChange(sql, withArgs: args)
             }
