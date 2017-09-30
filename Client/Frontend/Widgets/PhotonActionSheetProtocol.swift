@@ -108,7 +108,8 @@ extension PhotonActionSheetProtocol {
     func getTabActions(tab: Tab, buttonView: UIView,
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
                        findInPage:  @escaping () -> Void,
-                       presentableVC: PresentableVC) -> Array<[PhotonActionSheetItem]> {
+                       presentableVC: PresentableVC,
+                       pinnedSites: [Site]) -> Array<[PhotonActionSheetItem]> {
         
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
@@ -159,6 +160,22 @@ extension PhotonActionSheetProtocol {
             }
         }
         
+        let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { action in
+            guard let site = self.getSiteForTab(tab: tab) else { return }
+            
+            self.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
+                guard result.isSuccess else { return }
+            }
+        }
+        
+        let unpinToTopSites = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin") { action in
+            guard let site = self.getSiteForTab(tab: tab) else { return }
+            
+            self.profile.history.removeFromPinnedTopSites(site).uponQueue(.main) { result in
+                guard result.isSuccess else { return }
+            }
+        }
+        
         let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let tab = self.tabManager.selectedTab else { return }
             guard let url = self.tabManager.selectedTab?.url?.displayURL else { return }
@@ -174,8 +191,21 @@ extension PhotonActionSheetProtocol {
         if let tab = self.tabManager.selectedTab, tab.readerModeAvailableOrActive {
             topActions.append(addReadingList)
         }
-        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, setHomePage], [share]]
+        
+        let pinAction = (pinnedSites.find { (site:Site) -> Bool in
+            return site.url == tab.url?.absoluteString
+            } != nil) ? unpinToTopSites : pinToTopSites
+        
+        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, setHomePage, pinAction], [share]]
     }
-    
+ 
+    private func getSiteForTab(tab: Tab) -> Site? {
+        guard let url = tab.url?.displayURL else { return nil }
+        let absoluteString = url.absoluteString
+        
+        guard let title = tab.title else { return nil }
+        
+        return Site(url: absoluteString, title: title, bookmarked: tab.isBookmarked, guid: Bytes.generateGUID())
+    }
 }
 

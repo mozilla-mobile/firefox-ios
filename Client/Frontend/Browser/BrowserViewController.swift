@@ -1329,10 +1329,14 @@ extension BrowserViewController: URLBarDelegate {
         
         guard let tab = tabManager.selectedTab, tab.url != nil else { return }
         
-        // The logic of which actions appear when isnt final.
-        let pageActions = getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
-                                        findInPage: findInPageAction, presentableVC: self)
-        presentSheetWith(actions: pageActions, on: self, from: button)
+        profile.history.getPinnedTopSites() >>== { pinnedSites in
+            DispatchQueue.main.async {
+                // The logic of which actions appear when isnt final.
+                let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
+                                                findInPage: findInPageAction, presentableVC: self, pinnedSites:pinnedSites.asArray())
+                self.presentSheetWith(actions: pageActions, on: self, from: button)
+            }
+        }
     }
     
     func urlBarDidPressStop(_ urlBar: URLBarView) {
