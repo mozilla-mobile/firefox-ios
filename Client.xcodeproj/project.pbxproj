@@ -463,8 +463,12 @@
 		D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA777A1A43B2990010CD32 /* SearchTests.swift */; };
 		D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */; };
 		D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */; };
+		D879C9901F4E0CFF00EB75A6 /* LivemarkPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879C98F1F4E0CFF00EB75A6 /* LivemarkPanel.swift */; };
+		D879C9A01F4E359800EB75A6 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FDA9E1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift */; };
 		D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FDAAE1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift */; };
+		D8A196F11F70D209000C3DEA /* FeedKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D879C9A11F4E370E00EB75A6 /* FeedKit.framework */; };
+		D8A196F21F70D209000C3DEA /* FeedKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D879C9A11F4E370E00EB75A6 /* FeedKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		E402000A1E6493C800B45AFF /* LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075861E37F7AB006961AC /* LaunchArguments.swift */; };
 		E40AFC541DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AFC531DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift */; };
@@ -1244,6 +1248,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				E4F2DAC11F62C73900A556CD /* Leanplum.framework in Copy Frameworks */,
+				D8A196F21F70D209000C3DEA /* FeedKit.framework in Copy Frameworks */,
 				E62CFB3D1C89EFF700C01324 /* FxA.framework in Copy Frameworks */,
 				E601386A1C89EB9800DF9756 /* SQLite.framework in Copy Frameworks */,
 				E69DB08B1E97DEAA008A67E6 /* Telemetry.framework in Copy Frameworks */,
@@ -1700,6 +1705,8 @@
 		D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSearch.swift; sourceTree = "<group>"; };
 		D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
+		D879C98F1F4E0CFF00EB75A6 /* LivemarkPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LivemarkPanel.swift; sourceTree = "<group>"; };
+		D879C9A11F4E370E00EB75A6 /* FeedKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FeedKit.framework; path = Carthage/Build/iOS/FeedKit.framework; sourceTree = "<group>"; };
 		D88FDA9E1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetProtocol.swift; sourceTree = "<group>"; };
 		D88FDAAE1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetAnimator.swift; sourceTree = "<group>"; };
 		DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabPrintPageRenderer.swift; sourceTree = "<group>"; };
@@ -2020,6 +2027,8 @@
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				E69DB08A1E97DEAA008A67E6 /* Telemetry.framework in Frameworks */,
 				7B604F861C494983006EEEC3 /* Alamofire.framework in Frameworks */,
+				7B604F9B1C4950F2006EEEC3 /* WebImage.framework in Frameworks */,
+				D8A196F11F70D209000C3DEA /* FeedKit.framework in Frameworks */,
 				7B604F9B1C4950F2006EEEC3 /* SDWebImage.framework in Frameworks */,
 				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
 				7B604FA21C495268006EEEC3 /* SnapKit.framework in Frameworks */,
@@ -2027,6 +2036,7 @@
 				7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */,
 				7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */,
 				7B6050011C49653B006EEEC3 /* AdjustSdk.framework in Frameworks */,
+				D879C9A01F4E359800EB75A6 /* (null) in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				E4B334881BBF23F3004E2BFF /* iAd.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
@@ -2799,6 +2809,7 @@
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D879C9A11F4E370E00EB75A6 /* FeedKit.framework */,
 				E4F2DABF1F620C0200A556CD /* Leanplum.framework */,
 				E46175F21EBB73A10021AE8A /* Sentry.framework */,
 				3B4988CD1E42B01800A12FDA /* SwiftyJSON.framework */,
@@ -3657,6 +3668,7 @@
 		F84B22211A09122500AAB793 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				D879C98F1F4E0CFF00EB75A6 /* LivemarkPanel.swift */,
 				F84B22261A09127C00AAB793 /* Home.xcassets */,
 				3BB50E1F1D627539004B33DF /* ActivityStreamPanel.swift */,
 				3BB50E101D6274CD004B33DF /* ActivityStreamTopSitesCell.swift */,
@@ -5545,6 +5557,7 @@
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */,
+				D879C9901F4E0CFF00EB75A6 /* LivemarkPanel.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,

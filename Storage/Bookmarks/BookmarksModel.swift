@@ -49,6 +49,15 @@ open class BookmarkItem: BookmarkNode {
     }
 }
 
+open class LivemarkItem: BookmarkItem {
+    open let feedUri: String!
+    
+    public init(guid: String, title: String, url: String, feedUri: String, isEditable: Bool=false) {
+        self.feedUri = feedUri
+        super.init(guid: guid, title: title, url: url, isEditable: isEditable)
+    }
+}
+
 /**
  * A folder is an immutable abstraction over a named
  * thing that can return its child nodes by index.
