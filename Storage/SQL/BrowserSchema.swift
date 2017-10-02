@@ -128,7 +128,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 32    // Bug 1335201.
+    static let DefaultVersion = 33    // Bug 1335201.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -1149,13 +1149,22 @@ open class BrowserSchema: Schema {
             }
             queries.append(contentsOf: [
                 "UPDATE \(TableBookmarksLocal) SET date_added = local_modified",
-                "UPDATE \(TableBookmarksMirror) SET date_added = server_modified",
-                "DROP VIEW IF EXISTS \(ViewBookmarksBufferOnMirror)",
-                "DROP VIEW IF EXISTS \(ViewBookmarksBufferWithDeletionsOnMirror)",
-                self.bufferBookmarksView,
-                self.bufferBookmarksWithDeletionsView
+                "UPDATE \(TableBookmarksMirror) SET date_added = server_modified"
             ])
             if !self.run(db, queries: queries) {
+                return false
+            }
+        }
+
+        if from < 33 && to >= 33 {
+            if !self.run(db, queries: [
+                "DROP VIEW IF EXISTS \(ViewBookmarksBufferOnMirror)",
+                "DROP VIEW IF EXISTS \(ViewBookmarksBufferWithDeletionsOnMirror)",
+                "DROP VIEW IF EXISTS \(ViewBookmarksLocalOnMirror)",
+                self.bufferBookmarksView,
+                self.bufferBookmarksWithDeletionsView,
+                self.localBookmarksView
+                ]) {
                 return false
             }
         }
