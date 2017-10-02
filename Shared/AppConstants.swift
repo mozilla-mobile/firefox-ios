@@ -41,6 +41,8 @@ public struct AppConstants {
         return scheme
     }()
 
+    public static let PrefSendUsageData = "settings.sendUsageData"
+
     /// Whether we just mirror (false) or actively do a full bookmark merge and upload (true).
     public static var shouldMergeBookmarks = false
 

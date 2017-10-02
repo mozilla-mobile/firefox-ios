@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import JSONSchema
-import Telemetry
+import SyncTelemetry
 
 // MARK: Activity Stream
 extension PingCentreTopic {

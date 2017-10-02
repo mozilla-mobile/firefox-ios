@@ -5,7 +5,7 @@
 import Foundation
 import XCTest
 import Shared
-@testable import Telemetry
+@testable import SyncTelemetry
 
 class EventTests: XCTestCase {
     func testPickling() {

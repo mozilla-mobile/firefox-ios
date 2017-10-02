@@ -18,11 +18,11 @@ public enum TelemetryDocType: String {
     case sync = "sync"
 }
 
-public protocol TelemetryEvent {
+public protocol SyncTelemetryEvent {
     func record(_ prefs: Prefs)
 }
 
-open class Telemetry {
+open class SyncTelemetry {
     private static var prefs: Prefs?
     private static var telemetryVersion: Int = 4
 
@@ -31,7 +31,7 @@ open class Telemetry {
         self.prefs = prefs
     }
 
-    open class func recordEvent(_ event: TelemetryEvent) {
+    open class func recordEvent(_ event: SyncTelemetryEvent) {
         guard let prefs = prefs else {
             assertionFailure("Prefs not initialized")
             return
@@ -40,7 +40,7 @@ open class Telemetry {
         event.record(prefs)
     }
 
-    open class func send(ping: TelemetryPing, docType: TelemetryDocType) {
+    open class func send(ping: SyncTelemetryPing, docType: TelemetryDocType) {
         let docID = UUID().uuidString
         let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         let buildID = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
@@ -100,7 +100,7 @@ open class Telemetry {
             "type": type.rawValue,
             "id": UUID().uuidString,
             "creationDate": date,
-            "version": Telemetry.telemetryVersion,
+            "version": SyncTelemetry.telemetryVersion,
             "application": [
                 "architecture": "arm",
                 "buildId": AppInfo.buildNumber,
@@ -114,6 +114,6 @@ open class Telemetry {
     }
 }
 
-public protocol TelemetryPing {
+public protocol SyncTelemetryPing {
     var payload: JSON { get }
 }

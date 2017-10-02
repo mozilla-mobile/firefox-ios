@@ -10,7 +10,7 @@ import MessageUI
 import SDWebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
-import Telemetry
+import SyncTelemetry
 import SwiftRouter
 import Sync
 import CoreSpotlight
@@ -32,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     weak var profile: Profile?
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
-    var foregroundStartTime = 0
     var applicationCleanlyBackgrounded = true
 
     weak var application: UIApplication?
@@ -43,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var openInFirefoxParams: LaunchParams?
 
     var receivedURLs: [URL]?
+    var unifiedTelemetry: UnifiedTelemetry?
 
     @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         //
@@ -86,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Initializing Sentry…")
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey("settings.sendUsageData") ?? true
+        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
         SentryIntegration.shared.setup(sendUsageData: sendUsageData)
         
         log.debug("Setting UA…")
@@ -115,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let profile = getProfile(application)
 
         log.debug("Initializing telemetry…")
-        Telemetry.initWithPrefs(profile.prefs)
+        unifiedTelemetry = UnifiedTelemetry(profile: profile)
 
         if !DebugSettingsBundleOptions.disableLocalWebServer {
             log.debug("Starting web server…")
@@ -188,16 +188,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         log.debug("Updating authentication keychain state to reflect system state")
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
-
-        resetForegroundStartTime()
-        if !(profile.prefs.boolForKey(InitialPingSentKey) ?? false) {
-            // Try to send an initial core ping when the user first opens the app so that they're
-            // "on the map". This lets us know they exist if they try the app once, crash, then uninstall.
-            // sendCorePing() only sends the ping if the user is offline, so if the first ping doesn't
-            // go through *and* the user crashes then uninstalls on the first run, then we're outta luck.
-            profile.prefs.setBool(true, forKey: InitialPingSentKey)
-            sendCorePing()
-        }
 
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
@@ -498,10 +488,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         defaults.synchronize()
 
         syncOnDidEnterBackground(application: application)
-
-        let elapsed = Int(Date().timeIntervalSince1970) - foregroundStartTime
-        Telemetry.recordEvent(UsageTelemetry.makeEvent(elapsed))
-        sendCorePing()
     }
 
     fileprivate func syncOnDidEnterBackground(application: UIApplication) {
@@ -547,36 +533,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // is that this method is only invoked whenever the application is entering the foreground where as 
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
-
-        resetForegroundStartTime()
-
-    }
-
-    fileprivate func resetForegroundStartTime() {
-        foregroundStartTime = Int(Date().timeIntervalSince1970)
-    }
-
-    /// Send a telemetry ping if the user hasn't disabled reporting.
-    /// We still create and log the ping for non-release channels, but we don't submit it.
-    fileprivate func sendCorePing() {
-        guard let profile = profile, (profile.prefs.boolForKey("settings.sendUsageData") ?? true) else {
-            log.debug("Usage sending is disabled. Not creating core telemetry ping.")
-            return
-        }
-
-        DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
-            // The core ping resets data counts when the ping is built, meaning we'll lose
-            // the data if the ping doesn't go through. To minimize loss, we only send the
-            // core ping if we have an active connection. Until we implement a fault-handling
-            // telemetry layer that can resend pings, this is the best we can do.
-            guard DeviceInfo.hasConnectivity() else {
-                log.debug("No connectivity. Not creating core telemetry ping.")
-                return
-            }
-
-            let ping = CorePing(profile: profile)
-            Telemetry.send(ping: ping, docType: .core)
-        }
     }
 
     fileprivate func updateAuthenticationInfo() {

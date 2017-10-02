@@ -107,7 +107,7 @@ class AdjustIntegration: NSObject {
     /// data yet.
     
     fileprivate func shouldEnable() throws -> Bool {
-        if profile.prefs.boolForKey("settings.sendUsageData") ?? true {
+        if profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true {
             return true
         }
         return try hasAttribution() == false
@@ -117,7 +117,7 @@ class AdjustIntegration: NSObject {
     /// setting.
     
     fileprivate func shouldTrackRetention() -> Bool {
-        return profile.prefs.boolForKey("settings.sendUsageData") ?? true
+        return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
     }
 }
 
