@@ -41,6 +41,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
     var decorationAttributeArr: [Int : UICollectionViewLayoutAttributes?] = [:]
     let separatorYOffset = TopTabsUX.SeparatorYOffset
     let separatorSize = TopTabsUX.SeparatorHeight
+    let SeparatorZIndex = -2 ///Prevent the header/footer from appearing above the Tabs
     
     override var collectionViewContentSize: CGSize {
         let tabsWidth = ((CGFloat(collectionView!.numberOfItems(inSection: 0))) * (TopTabsUX.TabWidth + TopTabsUX.SeparatorWidth)) - TopTabsUX.SeparatorWidth
@@ -64,7 +65,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         guard indexPath.row < self.collectionView!.numberOfItems(inSection: 0) else {
             let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: indexPath)
             separatorAttr.frame = CGRect.zero
-            separatorAttr.zIndex = -2 //Prevent the header/footer from appearing above the Tabs
+            separatorAttr.zIndex = SeparatorZIndex
             return separatorAttr
         }
 
@@ -75,14 +76,14 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
             let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: indexPath)
             let x = TopTabsUX.TopTabsBackgroundShadowWidth + ((CGFloat(indexPath.row) * (TopTabsUX.TabWidth + TopTabsUX.SeparatorWidth)) - TopTabsUX.SeparatorWidth)
             separatorAttr.frame = CGRect(x: x, y: separatorYOffset, width: TopTabsUX.SeparatorWidth, height: separatorSize)
-            separatorAttr.zIndex = -2 //Prevent the header/footer from appearing above the Tabs
+            separatorAttr.zIndex = SeparatorZIndex
             return separatorAttr
         }
     }
 
     override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         let attributes = super.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)
-        attributes?.zIndex = -2
+        attributes?.zIndex = SeparatorZIndex
         return attributes
     }
 
@@ -92,12 +93,12 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         // Create attributes for the Tab Separator.
         for i in attributes {
             guard i.representedElementKind != UICollectionElementKindSectionHeader && i.representedElementKind != UICollectionElementKindSectionFooter else {
-                i.zIndex = -2 //Prevent the header/footer from appearing above the Tabs
+                i.zIndex = SeparatorZIndex
                 continue
             }
             let sep = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: i.indexPath)
             sep.frame = CGRect(x: i.frame.origin.x - TopTabsUX.SeparatorWidth, y: separatorYOffset, width: TopTabsUX.SeparatorWidth, height: separatorSize)
-            sep.zIndex = -2
+            sep.zIndex = SeparatorZIndex
             i.zIndex = 10
 
             // Only add the seperator if it will be shown.
