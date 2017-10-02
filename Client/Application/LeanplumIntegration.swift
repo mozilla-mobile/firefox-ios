@@ -91,7 +91,7 @@ class LeanplumIntegration {
             return
         }
 
-        self.enabled = self.profile?.prefs.boolForKey("settings.sendUsageData") ?? true
+        self.enabled = self.profile?.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
         if !self.enabled {
             return
         }

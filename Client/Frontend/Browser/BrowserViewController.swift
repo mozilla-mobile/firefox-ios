@@ -1489,7 +1489,7 @@ extension BrowserViewController: URLBarDelegate {
 
         if let searchURL = engine.searchURLForQuery(text) {
             // We couldn't find a matching search keyword, so do a search query.
-            Telemetry.recordEvent(SearchTelemetry.makeEvent(engine, source: .URLBar))
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
