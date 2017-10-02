@@ -304,6 +304,23 @@ class NSURLExtensionsTests: XCTestCase {
         badurls.forEach { XCTAssertFalse(URL(string:$0)!.schemeIsValid, $0) }
     }
 
+    func testIsLocalUtility() {
+        let goodurls = [
+            "http://localhost:6571/reader-mode/page",
+            "http://LOCALhost:6571/about/sessionrestore.html",
+            "http://127.0.0.1:6571/errors/error.html"
+        ]
+        let badurls = [
+            "http://google.com",
+            "tel:6044044004",
+            "hax://localhost:6571/testhomepage",
+            "http://127.0.0.1:6571/test/atesthomepage.html"
+        ]
+
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isLocalUtility, $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isLocalUtility, $0) }
+    }
+
     func testisLocal() {
         let goodurls = [
             "http://localhost:6571/reader-mode/page",
