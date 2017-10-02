@@ -70,8 +70,8 @@ class TestBookmarkModel: FailFastTestCase {
         // Add a buffer into the buffer
         let mirrorDate = Date.now() - 100000
         bookmarks.applyRecords([
-            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["BBB"]),
-            BookmarkMirrorItem.bookmark("BBB", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "BBB", description: nil, URI: "http://BBB.com", tags: "", keyword: nil)
+            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["BBB"]),
+            BookmarkMirrorItem.bookmark("BBB", dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "BBB", description: nil, URI: "http://BBB.com", tags: "", keyword: nil)
         ]).succeeded()
 
         XCTAssertFalse(bookmarks.buffer.isEmpty().value.successValue!)
@@ -92,9 +92,9 @@ class TestBookmarkModel: FailFastTestCase {
         // Add a bookmark to the menu folder in our mirror
         let mirrorDate = Date.now() - 100000
         bookmarks.populateMirrorViaBuffer(items: [
-            BookmarkMirrorItem.folder(BookmarkRoots.RootGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "", description: "", children: BookmarkRoots.RootChildren),
-            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["CCC"]),
-            BookmarkMirrorItem.bookmark("CCC", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "CCC", description: nil, URI: "http://CCC.com", tags: "", keyword: nil)
+            BookmarkMirrorItem.folder(BookmarkRoots.RootGUID, dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "", description: "", children: BookmarkRoots.RootChildren),
+            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["CCC"]),
+            BookmarkMirrorItem.bookmark("CCC", dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "CCC", description: nil, URI: "http://CCC.com", tags: "", keyword: nil)
         ], atDate: mirrorDate)
 
         // Set a local bookmark
@@ -120,17 +120,17 @@ class TestBookmarkModel: FailFastTestCase {
         // Add a bookmark to the menu folder in our mirror
         let mirrorDate = Date.now() - 100000
         bookmarks.populateMirrorViaBuffer(items: [
-            BookmarkMirrorItem.folder(BookmarkRoots.RootGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "", description: "", children: BookmarkRoots.RootChildren),
-            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE"]),
-            BookmarkMirrorItem.bookmark("EEE", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "EEE", description: nil, URI: "http://EEE.com", tags: "", keyword: nil)
+            BookmarkMirrorItem.folder(BookmarkRoots.RootGUID, dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "", description: "", children: BookmarkRoots.RootChildren),
+            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE"]),
+            BookmarkMirrorItem.bookmark("EEE", dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "EEE", description: nil, URI: "http://EEE.com", tags: "", keyword: nil)
         ], atDate: mirrorDate)
 
         bookmarks.local.insertBookmark("http://AAA.com".asURL!, title: "AAA", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Bookmarks Menu").succeeded()
 
         // Add some unmerged bookmarks into the menu folder in the buffer.
         bookmarks.applyRecords([
-            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE", "FFF"]),
-            BookmarkMirrorItem.bookmark("FFF", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "FFF", description: nil, URI: "http://FFF.com", tags: "", keyword: nil)
+            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE", "FFF"]),
+            BookmarkMirrorItem.bookmark("FFF", dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "FFF", description: nil, URI: "http://FFF.com", tags: "", keyword: nil)
         ]).succeeded()
 
         XCTAssertFalse(bookmarks.buffer.isEmpty().value.successValue!)
@@ -154,8 +154,8 @@ class TestBookmarkModel: FailFastTestCase {
         // Add some unmerged bookmarks into the menu folder in the buffer.
         let mirrorDate = Date.now() - 100000
         bookmarks.applyRecords([
-            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE", "FFF"]),
-            BookmarkMirrorItem.bookmark("FFF", modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "FFF", description: nil, URI: "http://FFF.com", tags: "", keyword: nil)
+            BookmarkMirrorItem.folder(BookmarkRoots.MenuFolderGUID, dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: "", title: "Bookmarks Menu", description: "", children: ["EEE", "FFF"]),
+            BookmarkMirrorItem.bookmark("FFF", dateAdded: mirrorDate, modified: mirrorDate, hasDupe: false, parentID: BookmarkRoots.MenuFolderGUID, parentName: "Bookmarks Menu", title: "FFF", description: nil, URI: "http://FFF.com", tags: "", keyword: nil)
         ]).succeeded()
 
         // Local bookmark should be editable
