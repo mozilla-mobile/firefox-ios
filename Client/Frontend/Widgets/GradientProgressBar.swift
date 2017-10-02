@@ -111,7 +111,7 @@ open class GradientProgressBar: UIProgressView {
 
         CATransaction.begin()
         let moveAnimation = CABasicAnimation(keyPath: "position")
-        moveAnimation.duration = DefaultValues.animationDuration * 3
+        moveAnimation.duration = DefaultValues.animationDuration
         moveAnimation.fromValue = gradientLayer.position
         moveAnimation.toValue = CGPoint(x: gradientLayer.frame.width, y: gradientLayer.position.y)
         moveAnimation.fillMode = kCAFillModeForwards

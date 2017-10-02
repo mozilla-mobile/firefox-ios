@@ -393,6 +393,11 @@ class URLBarView: UIView {
         progressBar.setProgress(progress, animated: !isTransitioning)
     }
 
+    func hideProgressBar() {
+        progressBar.isHidden = true
+        progressBar.setProgress(0, animated: false)
+    }
+
     func updateReaderModeState(_ state: ReaderModeState) {
         locationView.readerModeState = state
     }
