@@ -783,7 +783,7 @@ class BrowserViewController: UIViewController {
             }
             if url.isAboutHomeURL {
                 showHomePanelController(inline: true)
-            } else if !url.isLocal || url.isReaderModeURL {
+            } else if !url.isLocalUtility || url.isReaderModeURL {
                 hideHomePanelController()
             }
         }
@@ -891,8 +891,10 @@ class BrowserViewController: UIViewController {
         case KVOEstimatedProgress:
             guard webView == tabManager.selectedTab?.webView,
                 let progress = change?[NSKeyValueChangeKey.newKey] as? Float else { break }
-            if !(webView.url?.isLocal ?? false) {
+            if !(webView.url?.isLocalUtility ?? false) {
                 urlBar.updateProgressBar(progress)
+            } else {
+                urlBar.hideProgressBar()
             }
         case KVOLoading:
             guard let loading = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
@@ -1947,7 +1949,7 @@ extension BrowserViewController: TabManagerDelegate {
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
-        if !(selected?.webView?.url?.isLocal ?? false) {
+        if !(selected?.webView?.url?.isLocalUtility ?? false) {
             self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
         }
 

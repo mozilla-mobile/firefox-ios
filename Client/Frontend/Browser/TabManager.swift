@@ -754,7 +754,6 @@ extension TabManager {
             }
 
             tab.sessionData = savedTab.sessionData
-            tab.url = tab.sessionData?.urls.last
             tab.lastTitle = savedTab.title
         }
 
