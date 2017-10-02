@@ -43,6 +43,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var source: BookmarksModel?
     var parentFolders = [BookmarkFolder]()
     var bookmarkFolder: BookmarkFolder?
+    var refreshControl: UIRefreshControl?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(BookmarksPanel.longPress(_:)))
@@ -75,11 +76,25 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         tableView.addGestureRecognizer(longPressRecognizer)
 
         self.tableView.accessibilityIdentifier = "Bookmarks List"
+        
+        self.refreshControl = UIRefreshControl()
+        self.tableView.addSubview(refreshControl!)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        refreshControl?.addTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
 
+        loadData()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        refreshControl?.removeTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
+    }
+    
+    func loadData() {
         // If we've not already set a source for this panel, fetch a new model from
         // the root; otherwise, just use the existing source to select a folder.
         guard let source = self.source else {
@@ -91,7 +106,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             }
             return
         }
-
+        
         if let bookmarkFolder = bookmarkFolder {
             source.selectFolder(bookmarkFolder).upon(onModelFetched)
         } else {
@@ -108,6 +123,15 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             // no need to do anything at all
             log.warning("Received unexpected notification \(notification.name)")
             break
+        }
+    }
+    
+    @objc fileprivate func refreshBookmarks() {
+        profile.syncManager.mirrorBookmarks().upon { (_) in
+            DispatchQueue.main.async {
+                self.loadData()
+                self.refreshControl?.endRefreshing()
+            }
         }
     }
 

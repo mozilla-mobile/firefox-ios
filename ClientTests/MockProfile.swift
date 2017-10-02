@@ -29,6 +29,7 @@ open class MockSyncManager: SyncManager {
     open func syncClientsThenTabs() -> SyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
     open func syncHistory() -> SyncResult { return completedWithStats(collection: "mock_history") }
     open func syncLogins() -> SyncResult { return completedWithStats(collection: "mock_logins") }
+    open func mirrorBookmarks() -> SyncResult { return completedWithStats(collection: "mock_bookmarks") }
     open func syncEverything(why: SyncReason) -> Success {
         return succeed()
     }
