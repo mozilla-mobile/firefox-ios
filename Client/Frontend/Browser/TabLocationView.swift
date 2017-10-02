@@ -33,7 +33,7 @@ struct TabLocationViewUX {
         theme.URLFontColor = UIColor.lightGray
         theme.textColor = UIColor(rgb: 0xf9f9fa)
         theme.highlightButtonColor = UIConstants.PrivateModePurple
-        theme.buttonTintColor = UIColor(rgb: 0xf9f9fa)
+        theme.buttonTintColor = UIColor(rgb: 0xADADb0)
         theme.backgroundColor = UIColor(rgb: 0x636369)
         themes[Theme.PrivateMode] = theme
 
@@ -322,7 +322,8 @@ class ReaderModeButton: UIButton {
     var unselectedTintColor: UIColor?
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setImage(UIImage.templateImageNamed("reader"), for: UIControlState())
+        adjustsImageWhenHighlighted = false
+        setImage(UIImage.templateImageNamed("reader"), for: .normal)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -331,7 +332,19 @@ class ReaderModeButton: UIButton {
     
     override var isSelected: Bool {
         didSet {
-            self.tintColor = isSelected ? selectedTintColor : unselectedTintColor
+            self.tintColor = (isHighlighted || isSelected) ? selectedTintColor : unselectedTintColor
+        }
+    }
+
+    override open var isHighlighted: Bool {
+        didSet {
+            self.tintColor = (isHighlighted || isSelected) ? selectedTintColor : unselectedTintColor
+        }
+    }
+
+    override var tintColor: UIColor! {
+        didSet {
+            self.imageView?.tintColor = self.tintColor
         }
     }
     

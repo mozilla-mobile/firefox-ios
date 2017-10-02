@@ -32,12 +32,12 @@ struct URLBarViewUX {
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
         var theme = Theme()
-        theme.borderColor = UIColor(rgb: 0x39393e)
-        theme.backgroundColor = UIColor(rgb: 0x4A4A4F)
-        theme.activeBorderColor = UIColor(rgb: 0x440071)
+        theme.borderColor = UIColor(rgb: 0x2D2D31)
+        theme.backgroundColor = UIColor(rgb: 0x38383D)
+        theme.activeBorderColor = UIColor(rgb: 0x4a4a4f)
         theme.tintColor = UIColor(rgb: 0xf9f9fa)
         theme.textColor = UIColor(rgb: 0xf9f9fa)
-        theme.buttonTintColor = UIConstants.PrivateModeActionButtonTintColor
+        theme.buttonTintColor = UIColor(rgb: 0xD2d2d4)
         theme.disabledButtonColor = UIColor.gray
         theme.highlightButtonColor = UIColor(rgb: 0xAC39FF)
         themes[Theme.PrivateMode] = theme
@@ -663,8 +663,8 @@ extension URLBarView: Themeable {
         currentTheme = themeName
         locationBorderColor = theme.borderColor!
         locationActiveBorderColor = theme.activeBorderColor!
-        cancelTintColor = theme.textColor
-        showQRButtonTintColor = theme.textColor
+        cancelTintColor = theme.buttonTintColor
+        showQRButtonTintColor = theme.buttonTintColor
         backgroundColor = theme.backgroundColor
         self.actionButtons.forEach { $0.applyTheme(themeName) }
         tabsButton.applyTheme(themeName)

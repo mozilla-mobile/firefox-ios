@@ -80,6 +80,12 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         }
     }
 
+    override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let attributes = super.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)
+        attributes?.zIndex = -2
+        return attributes
+    }
+
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var attributes = super.layoutAttributesForElements(in: rect)!
 
