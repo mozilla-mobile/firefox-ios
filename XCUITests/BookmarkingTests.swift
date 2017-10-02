@@ -36,12 +36,14 @@ class BookmarkingTests: BaseTestCase {
     private func checkBookmarked() {
         app.buttons["TabLocationView.pageOptionsButton"].tap()
         waitforExistence(app.tables.cells["Remove Bookmark"])
+        app.buttons["Cancel"].tap()
         navigator.goto(BrowserTab)
     }
     
     private func checkUnbookmarked() {
         app.buttons["TabLocationView.pageOptionsButton"].tap()
         waitforExistence(app.tables.cells["Bookmark This Page"])
+        app.buttons["Cancel"].tap()
         navigator.goto(BrowserTab)
     }
     
