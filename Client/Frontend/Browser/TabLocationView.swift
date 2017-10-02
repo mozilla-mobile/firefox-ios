@@ -307,13 +307,16 @@ extension TabLocationView: Themeable {
             log.error("Unable to apply unknown theme \(themeName)")
             return
         }
+        let isPrivate = themeName == Theme.PrivateMode
         self.backgroundColor = theme.backgroundColor
         self.urlTextField.textColor = theme.textColor
         self.readerModeButton.selectedTintColor = theme.highlightButtonColor
         self.readerModeButton.unselectedTintColor = theme.buttonTintColor
         self.pageOptionsButton.selectedTintColor = theme.highlightButtonColor
-        self.pageOptionsButton.unselectedTintColor = theme.buttonTintColor
-        self.pageOptionsButton.tintColor = theme.buttonTintColor
+
+        self.pageOptionsButton.unselectedTintColor = isPrivate ? UIColor(rgb: 0xD2d2d4) : UIColor(rgb: 0x272727)
+        self.pageOptionsButton.tintColor = self.pageOptionsButton.unselectedTintColor
+        separatorLine.backgroundColor = isPrivate ? UIColor(rgb: 0x3f3f43) : UIColor(rgb: 0xE5E5E5)
     }
 }
 

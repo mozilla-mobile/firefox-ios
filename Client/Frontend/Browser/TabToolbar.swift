@@ -144,7 +144,7 @@ class ToolbarButton: UIButton {
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
         var theme = Theme()
-        theme.buttonTintColor = UIColor(rgb: 0xf9f9fa)
+        theme.buttonTintColor = UIColor(rgb: 0xd2d2d4)
         theme.highlightButtonColor = UIColor(rgb: 0xAC39FF)
         theme.disabledButtonColor = UIColor.gray
         themes[Theme.PrivateMode] = theme
