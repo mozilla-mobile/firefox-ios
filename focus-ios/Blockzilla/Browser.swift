@@ -270,6 +270,10 @@ extension Browser: UIWebViewDelegate {
             canGoForward = webView.canGoForward
         }
     }
+    
+    func getPrintFormatter() -> UIViewPrintFormatter? {
+        return self.webView?.viewPrintFormatter()
+    }
 }
 
 extension Browser: LocalContentBlockerDelegate {
@@ -298,3 +302,4 @@ extension Browser: UIScrollViewDelegate {
         return delegate?.browserShouldScrollToTop(self) ?? true
     }
 }
+

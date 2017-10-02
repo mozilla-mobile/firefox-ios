@@ -56,8 +56,9 @@ class OpenUtils {
         app.openURL(url)
     }
 
-    static func buildShareViewController(url: URL, anchor: UIView) -> UIActivityViewController {
+    static func buildShareViewController(url: URL, browser: Browser, anchor: UIView) -> UIActivityViewController {
         var activities = [UIActivity]()
+        var activityItems: [Any] = [url]
 
         if canOpenInFirefox {
             activities.append(OpenInFirefoxActivity(url: url))
@@ -68,8 +69,19 @@ class OpenUtils {
         }
 
         activities.append(OpenInSafariActivity(url: url))
+        
+        if let printFormatter = browser.getPrintFormatter() {
+            let printInfo = UIPrintInfo(dictionary: nil)
+            printInfo.jobName = url.absoluteString
+            printInfo.outputType = .general
+            activityItems.append(printInfo)
+            
+            let renderer = UIPrintPageRenderer()
+            renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
+            activityItems.append(renderer)
+        }
 
-        let shareController = UIActivityViewController(activityItems: [url], applicationActivities: activities)
+        let shareController = UIActivityViewController(activityItems: activityItems, applicationActivities: activities)
 
         shareController.popoverPresentationController?.sourceView = anchor
         shareController.popoverPresentationController?.sourceRect = anchor.bounds
