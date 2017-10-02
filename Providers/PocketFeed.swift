@@ -11,6 +11,7 @@ import Storage
 private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
 private let PocketGlobalFeed = "https://getpocket.com/v3/firefox/global-recs"
 private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in milliseconds
+private let SupportedLocales = ["en_US", "en_GB", "en_CA", "de_DE", "de_AT", "de_CH"]
 
 /*s
  The Pocket class is used to fetch stories from the Pocked API.
@@ -48,11 +49,11 @@ private class PocketError: MaybeErrorType {
 }
 
 class Pocket {
-
     private let pocketGlobalFeed: String
+    
     // Allow endPoint to be overriden for testing
-    init(endPoint: String? = nil) {
-        pocketGlobalFeed = endPoint ?? PocketGlobalFeed
+    init(endPoint: String = PocketGlobalFeed) {
+        self.pocketGlobalFeed = endPoint
     }
 
     lazy fileprivate var alamofire: SessionManager = {
@@ -118,19 +119,21 @@ class Pocket {
             return nil
         }
 
-        guard let feedURL = URL(string: pocketGlobalFeed)?.withQueryParam("count", value: "\(items)") else {
+        let localeIdentifier = Locale.current.identifier
+        if !SupportedLocales.contains(localeIdentifier) {
             return nil
         }
-        let apiURL = addAPIKey(url: feedURL)
-        return URLRequest(url: apiURL, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 5)
-    }
+        let localeLanguage = localeIdentifier.replacingOccurrences(of: "_", with: "-")
 
-    private func addAPIKey(url: URL) -> URL {
-        let bundle = Bundle.main
-        guard let api_key = bundle.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String else {
-            return url
+        var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: localeLanguage)]
+        if let consumerKey = Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String {
+            params.append(URLQueryItem(name: "consumer_key", value: consumerKey))
         }
-        return url.withQueryParam("consumer_key", value: api_key)
-    }
 
+        guard let feedURL = URL(string: pocketGlobalFeed)?.withQueryParams(params) else {
+            return nil
+        }
+        
+        return URLRequest(url: feedURL, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 5)
+    }
 }
