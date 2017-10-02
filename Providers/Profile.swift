@@ -34,6 +34,7 @@ public protocol SyncManager {
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
     func syncLogins() -> SyncResult
+    func mirrorBookmarks() -> SyncResult
     @discardableResult func syncEverything(why: SyncReason) -> Success
     func syncNamedCollections(why: SyncReason, names: [String]) -> Success
 
@@ -1207,7 +1208,7 @@ open class BrowserProfile: Profile {
             return self.sync("history", function: syncHistoryWithDelegate)
         }
 
-        func mirrorBookmarks() -> SyncResult {
+        public func mirrorBookmarks() -> SyncResult {
             return self.sync("bookmarks", function: mirrorBookmarksWithDelegate)
         }
 
