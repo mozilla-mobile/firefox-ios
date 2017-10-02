@@ -87,4 +87,10 @@ class TestAppDelegate: AppDelegate {
         }
     }
 
+    override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // Speed up the animations to 100 times as fast.
+        defer { application.keyWindow?.layer.speed = 100.0 }
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    }
+
 }
