@@ -477,7 +477,9 @@ extension ActivityStreamPanel: DataObserverDelegate {
     // See ActivityStreamDataObserver for invalidation logic.
     func reloadAll() {
         self.getPocketSites().uponQueue(.main) { _ in
-            self.collectionView?.reloadData()
+            if !self.pocketStories.isEmpty {
+                self.collectionView?.reloadData()
+            }
         }
         accumulate([self.getHighlights, self.getTopSites]).uponQueue(.main) { _ in
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
@@ -502,7 +504,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
             return succeed()
         }
     }
-    
+
     func getPocketSites() -> Success {
         return pocketAPI.globalFeed(items: 4).bindQueue(.main) { pStory in
             self.pocketStories = pStory
