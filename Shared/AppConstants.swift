@@ -12,9 +12,6 @@ public enum AppBuildChannel: String {
 
 public struct AppConstants {
     public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.arguments.contains(LaunchArguments.Test)
-
-    public static let SkipIntro = ProcessInfo.processInfo.arguments.contains(LaunchArguments.SkipIntro)
-    public static let ClearProfile = ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile)
     
     public static let FxAiOSClientId = "1b1a3e44c54fbb58"
 
