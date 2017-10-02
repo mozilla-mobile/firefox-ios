@@ -74,9 +74,8 @@ class Tab: NSObject {
                 return
             }
             _noImageMode = newValue
-            // Forced unwrap ok, a side effect of contentBlocker being iOS11+ var.
-            let helper = (contentBlocker as! ContentBlockerHelper)
-            helper.noImageMode(enabled: _noImageMode)
+            let helper = (contentBlocker as? ContentBlockerHelper)
+            helper?.noImageMode(enabled: _noImageMode)
         }
     }
 
@@ -111,14 +110,16 @@ class Tab: NSObject {
     /// tab instance, queue it for later until we become foregrounded.
     fileprivate var alertQueue = [JSAlertInfo]()
 
-    init(configuration: WKWebViewConfiguration) {
-        self.configuration = configuration
-    }
-
-    init(configuration: WKWebViewConfiguration, isPrivate: Bool) {
+    init(configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         self.configuration = configuration
         super.init()
         self.isPrivate = isPrivate
+
+        if #available(iOS 11, *) {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
+                contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
+            }
+        }
     }
 
     class func toTab(_ tab: Tab) -> RemoteTab? {
