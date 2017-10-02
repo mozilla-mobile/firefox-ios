@@ -572,10 +572,12 @@ extension URLBar: AutocompleteTextFieldDelegate {
         if !isEditing && inBrowsingMode {
             present()
             delegate?.urlBarDidActivate(self)
-        } else {
+        }
+        
+        // When text.characters.count == 0, it is the HomeView
+        if let text = autocompleteTextField.text, !isEditing, text.characters.count == 0 {
             shouldPresent = true
         }
-
 
         return true
     }
