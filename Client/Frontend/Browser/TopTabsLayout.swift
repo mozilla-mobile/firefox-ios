@@ -64,7 +64,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
         guard indexPath.row < self.collectionView!.numberOfItems(inSection: 0) else {
             let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: indexPath)
             separatorAttr.frame = CGRect.zero
-            separatorAttr.zIndex = -2
+            separatorAttr.zIndex = -2 //Prevent the header/footer from appearing above the Tabs
             return separatorAttr
         }
 
@@ -75,7 +75,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
             let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: indexPath)
             let x = TopTabsUX.TopTabsBackgroundShadowWidth + ((CGFloat(indexPath.row) * (TopTabsUX.TabWidth + TopTabsUX.SeparatorWidth)) - TopTabsUX.SeparatorWidth)
             separatorAttr.frame = CGRect(x: x, y: separatorYOffset, width: TopTabsUX.SeparatorWidth, height: separatorSize)
-            separatorAttr.zIndex = -2
+            separatorAttr.zIndex = -2 //Prevent the header/footer from appearing above the Tabs
             return separatorAttr
         }
     }
