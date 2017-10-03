@@ -65,6 +65,7 @@ class ActivityStreamDataObserver: DataObserver {
         }
 
         // Highlights are cached for 15 mins
+        let userEnabledHighlights = profile.prefs.boolForKey(PrefsKeys.ASRecentHighlightsVisible) ?? true
         let shouldInvalidateHighlights = highlights || (Timestamp.uptimeInMilliseconds() - lastInvalidation > invalidationTime)
 
         // KeyTopSitesCacheIsValid is false when we want to invalidate. Thats why this logic is so backwards
