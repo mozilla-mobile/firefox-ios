@@ -10,6 +10,10 @@ import Telemetry
 //
 class UnifiedTelemetry {
     init(profile: Profile) {
+        if AppConstants.BuildChannel == .beta {
+          NotificationCenter.default.addObserver(self, selector: #selector(uploadError(notification:)), name: Telemetry.notificationUploadError, object: nil)
+        }
+
         let telemetryConfig = Telemetry.default.configuration
         telemetryConfig.appName = AppInfo.displayName
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
@@ -27,6 +31,11 @@ class UnifiedTelemetry {
         #endif
 
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
+    }
+
+    @objc func uploadError(notification: NSNotification) {
+        guard let error = notification.userInfo?["error"] as? NSError else { return }
+        SentryIntegration.shared.send(message: error.localizedDescription, tag: "UnifiedTelemetry", severity: .info)
     }
 }
 
