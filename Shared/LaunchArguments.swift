@@ -7,5 +7,6 @@ import Foundation
 public struct LaunchArguments {
     public static let Test = "FIREFOX_TEST"
     public static let SkipIntro = "FIREFOX_SKIP_INTRO"
+    public static let SkipWhatsNew = "FIREFOX_SKIP_WHATS_NEW"
     public static let ClearProfile = "FIREFOX_CLEAR_PROFILE"
 }
