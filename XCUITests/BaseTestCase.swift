@@ -10,7 +10,8 @@ class BaseTestCase: XCTestCase {
         super.setUp()
         continueAfterFailure = false
         let app = XCUIApplication()
-        restart(app)
+        app.terminate()
+        restart(app, args: [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew])
     }
 
     override func tearDown() {
@@ -18,12 +19,14 @@ class BaseTestCase: XCTestCase {
         super.tearDown()
     }
 
-    func restart(_ app: XCUIApplication) {
-        app.terminate()
-        app.launchArguments.append(LaunchArguments.Test)
-        app.launchArguments.append(LaunchArguments.ClearProfile)
-        app.launch()
-        sleep(1)
+    func restart(_ app: XCUIApplication, args: [String] = []) {
+        XCUIDevice.shared().press(.home)
+        var launchArguments = [LaunchArguments.Test]
+        args.forEach { arg in
+            launchArguments.append(arg)
+        }
+        app.launchArguments = launchArguments
+        app.activate()
     }
     
     //If it is a first run, first run window should be gone
