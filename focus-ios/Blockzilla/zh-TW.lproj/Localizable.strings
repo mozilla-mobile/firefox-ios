@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "封鎖廣告型追蹤器";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "就算您沒點擊廣告，廣告也可能會記錄您造訪了哪些網站";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "封鎖分析型追蹤器";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "用來收集、統計並測量在頁面中的點擊、捲動等行為";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "封鎖網路字型";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "封鎖其他內容追蹤器";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "開啟後可能會造成某些頁面行為不正常";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "封鎖社交型追蹤器";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "嵌入於網站，用來追蹤您的造訪紀錄並顯示分享按鈕等功能";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "可能會影響網頁與影片載入";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "使用 %@ 開啟";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "選擇網址列";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "您複製的鏈結: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "「%@」想存取您的照片";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "廣告追蹤器";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "統計追蹤器";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "內容追蹤器";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "關閉追蹤保護";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "社交追蹤器";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "直到關閉 %@ 或點擊「清除」前都停用。";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "追蹤保護";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "選擇是否要讓 %@ 封鎖廣告、統計、社交或其他追蹤器。";
 

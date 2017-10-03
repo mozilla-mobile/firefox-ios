@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Sewḥel inedfaṛen";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Kra n udellel iṭṭafaṛ tirza inek γer izmal web, Γas ur tsit ara γef udellel";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Sewḥel inedfaṛen usliḍen";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Ittwaseqdec i welqqaḍ , Aslaḍ d uktili n wamud am usekcem n isekillen akked usenned";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Sewḥel tisefsiyin Web";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Sewḥel ineḍfaṛen nniḍen n ugbur";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Armad n uγwwaṛèagi izmer ad yeglu s kra n wuguren di kra n isebtar";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Sewḥel inedfaṛen n tmetti";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Ittwarna deg kra n ismal akken ad isfuγel tirziwin inek , akken daγen ad d-yesken timahaltin am tqefalt n beṭṭu";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Yezmer ad isewḥel kra n tvidyutin akked kra n isebtar Web ad d-banen akken iwata";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Ldi di %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Fren afeggag n tansa";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Aseγwen i tneγleḍ: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” yebɣa ad yekcem ɣer tewlafin-inek";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Ineḍfaṛen n udellel";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Ineḍfaṛen n tiddadanin";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Ineḍfaṛen n ugbur";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Ammesten mgal asfuɣel yensa";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Ineḍfaṛen n iẓeḍwa imettanen";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Sens armi yemdel neɣ mdel %@ neɣ ERASE.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Ammesten mgal asfuɣel";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Fren asewḥel n uzegrir %@, n waddad, imettiyen d ineḍfaṛen nniḍen.";
 

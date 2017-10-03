@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blokovat sledující reklamy";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Některé reklamy sledují návštěvy stránek i v případě, že na reklamy nekliknete";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Blokovat analytické prvky";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Slouží k shromážďování, analýze a měření aktivit jako je klepnutí nebo posouvání";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokovat webové fonty";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Blokovat ostatní sledující prvky";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Zapnutí může způsobit, že se některé stránky budou chovat neočekávaně";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Blokovat sledující prvky sociálních sítí";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Vloženo do stránek pro sledování vašich návštěv a zobrazování funkcí jako tlačítka pro sdílení";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Může rozbít některá videa a webové stránky";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Otevřít v aplikaci %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Zvolit adresní řádek";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Zkopírovaný odkaz: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "„%@“ žádá o přístup k vašim fotkám";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Sledující reklamy";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Sledující analytické nástroje";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Sledující obsah";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Ochrana proti sledování je vypnuta";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Sledující soc. sítě";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Zakázat, dokud nezavřete aplikaci %@ nebo nekliknete na VYMAZAT.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Ochrana proti sledování";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Zvolte, zda má %@ blokovat reklamy, analytické prvky, sociální sítě a jiné sledující prvky.";
 

@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blokir pelacak iklan";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Beberapa iklan melacak kunjungan situs, meski Anda tidak mengklik iklan";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Blokir pelacak analitis";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Digunakan untuk mengumpulkan, menganalisa, dan mengukur kegiatan seperti mengetuk dan menggulir";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokir font Web";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Blokir pelacak konten lainnya";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Mengaktifkan fitur ini mungkin menyebabkan beberapa laman bertindak tidak terduga";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Blokir pelacak sosial";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Tertanam dalam situs untuk melacak kunjungan Anda dan menampilkan fungsi seperti tombol berbagi";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Mungkin menghentikan beberapa video dan laman Web";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Buka di %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Pilih Bilah Lokasi";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Tautan Anda salin: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” Meminta Akses ke Foto Anda";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Pelacak iklan";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Pelacak analitik";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Pelacak konten";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Perlindungan Pelacakan nonaktif";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Pelacak sosial";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Nonaktifkan sampai Anda menutup %@ atau mengetuk ERASE.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Perlindungan Pelacakan";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Pilih apakah %@ memblokir iklan, pelacak analitik, sosial, dan lainnya.";
 

@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Wabjeńske pśeslědowaki blokěrowaś";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Někotare wabjeńske anonse woglědy sedłow slěduju, samo gaby wy na anonse njekliknuł";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Analyzowe pśeslědowaki blokěrowaś";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Z tym se aktiwity ako pótuskowanje a kulanje pśez boki gromaźe, analyzěruju a měrje";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Webpisma blokěrowaś";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Druge wopśimjeśowe pśeslědowaki blokěrowaś";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "To móžo wjasć k tomu, až se někotare boki njewšednje zaźarže";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Socialne pśeslědowaki blokěrowaś";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Na sedłach zasajźone, aby wóne waše woglědy slědowali a funkcije ako tłocaški za źělenje zwobraznili";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Kazy snaź někotare wideo a webboki";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "W %@ wócyniś";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Adresowe pólo wubraś";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Wótkaz, kótaryž sćo kopěrował: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "„%@“ pšosy wó pśistup na waše fota";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Wabjeńske pśeslědowaki";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Analyzowe pśeslědowaki";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Wopśimjeśowe pśeslědowaki";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Šćit pśed slědowanim wušaltowany";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Socialne pśeslědowaki";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Znjemóžniś, daniž %@ njezacynjaśo abo pótusniśo ERASE.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Šćit pśed slědowanim";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Rozsuźćo, lěc %@ wabjenje, analytiske, socialne a druge pśeslědowaki blokěrujo.";
 

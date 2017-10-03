@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "مسدود کردن ردیاب‌های تبلیغاتی";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "تعدادی تبلیغ پایگاه های اینترنتی بازدید شده را دنبال می‌کنند،‌حتی اگر شما بر روی دنبال نکردن کلیک کنید";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "مسدود کردن ردیاب‌های پایشگر ترافیک";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "استفاده شده برای ذخیره سازی،‌تجزیه و تحلیل و اندازه گیری فعالیت هایی مثل کلیک کردن و یا حرکت به سمت بالاوپایین در صفحه";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "مسدود کردن قلم‌های وب";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "مسدود کردن سایر ردیاب‌های محتوا";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "فعال سازی ممکن است منجر به رفتارهای غیرمنتظره در صفحه شود";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "مسدود کردن ردیاب‌های شبکه‌های اجتماعی";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "در صفه جاسازی شده است تا بازدید های شما را دنبال کنند و قابلیت هایی نظیر دکمه همرسانی را به شما نمایش دهد";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "ممکن است باعث خرابی برخی فیلم‌ها و صفحات وب شود";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "در %@ باز شد";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "انتخاب نوار موقعیت";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "پیوندی که رونوشت کردید: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” تمایل دارد به تصاویر شما دسترسی داشته باشد";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "دنبال کننده تبلیغ";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "دنبال کنندگان تجزیه تحلیلی کننده";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "دنبال کنندگان محتوا";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "محافظت در مقابل دنبال شدن خاموش شد";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "دنبال کنندگان اجتماعی";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "غیرفعال باشد تا زمان که شما %@ را ببنیدید یا بر روی ERASE کلیک کنید.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "محاظفت در مقابل دنبال شدن";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "انتخاب مسدود کردن دنبال‌ کنندگان تبلیغ،شبکه‌های اجتما‌عی، تجزیه‌ و‌تحلیل کنندگان توسط %@.";
 

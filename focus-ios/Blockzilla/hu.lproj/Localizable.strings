@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Reklámkövetők blokkolása";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Néhány hirdetés követi az oldallátogatásokat, még akkor is, ha nem kattint a hirdetésekre";
+
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Elemző követők blokkolása";
+"Settings.toggleBlockAnalytics" = "Analitikai követők blokkolása";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Arra használatosak, hogy begyűjtsék, elemezzék és mérjék az olyan tevékenységeket, mint az érintés vagy a görgetés";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Webes betűkészletek blokkolása";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Más tartalomkövetők blokkolása";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Az engedélyezés néhány oldalon váratlan működést okozhat";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Közösségi oldalak követőinek blokkolása";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Az oldalakba vannak ágyazva, hogy kövessék a látogatásait, és megosztás gombokat jelenítsenek meg";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Néhány videó és weblap eltörhet";
@@ -218,10 +230,13 @@
 "URL.searchLabel" = "Keresés erre: %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Blokkolt nyomkövetők";
+"URL.trackersBlockedLabel" = "Blokkolt követők";
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Megnyitás ezzel: %@";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Címsáv kiválasztása";
 
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "A másolt hivatkozás: %@";
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "A „%@” szeretne hozzáférni a fényképeihez";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Hirdetéskövetők";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Analitikai követők";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Tartalomkövetők";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Követés elleni védelem kikapcsolva";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Közösségi követők";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Letiltás a %@ bezárásáig, vagy megérinti a TÖRLÉS gombot.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Követés elleni védelem";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Válassza ki, hogy a %@ blokkolja-e a reklám, analitikai, közösségi vagy más követőket.";
 

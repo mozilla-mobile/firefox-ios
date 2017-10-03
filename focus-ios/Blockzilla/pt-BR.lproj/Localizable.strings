@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Bloquear rastreadores de anúncios";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Alguns anúncios rastreiam visitas ao site, mesmo que você não clique nos anúncios";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Bloquear rastreadores analíticos";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Usado para coletar, analisar e medir atividades como tocar e deslizar";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Bloquear fontes web";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Bloquear outros rastreadores";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Habilitar pode causar comportamento inesperado em algumas páginas";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Bloquear rastreadores sociais";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Inserido em sites para rastrear suas visitas e exibir funcionalidades como botões de compartilhamento";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Pode quebrar alguns vídeos e páginas web";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Abrir com %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Selecionar barra de localização";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Link copiado: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” gostaria de acessar suas fotos";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Rastreadores de anúncios";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Rastreadores analíticos";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Rastreadores de conteúdo";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Proteção contra rastreamento desligada";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Rastreadores sociais";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Desabilitar até você fechar o %@ ou tocar em ERASE.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Proteção contra rastreamento";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Escolha se o %@ bloqueará rastreadores sociais, analíticos, de propaganda ou outros.";
 

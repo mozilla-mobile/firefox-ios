@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Zavračaj sledilce oglasov";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Nekateri oglasi beležijo obiske strani, tudi če ne klikate nanje";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Zavračaj sledilce analitike";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "V uporabi za zbiranje, analiziranje in merjenje dejanj, kot je pritiskanje in drsenje po strani";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Zavračaj spletne pisave";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Zavračaj ostale vsebinske sledilce";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Nastavitev lahko povzroči nepravilno delovanje nekaterih strani";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Zavračaj sledilce družbenih omrežij";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Vgrajeni na straneh za sledenje vašim obiskom in za prikaz možnosti, kot so gumbi za deljenje";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Lahko pokvari nekatere videoposnetke in strani";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Odpri v %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Izberi naslovno vrstico";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Povezava, ki ste jo kopirali: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” želi dostop do vaših slik";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Oglaševalski sledilci";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Analitični sledilci";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Sledilci vsebine";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Zaščita pred sledenjem je izključena";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Družbeni sledilci";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Onemogoči, dokler ne zaprete %@a ali tapnete IZBRIŠI.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Zaščita pred sledenjem";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Izberite, ali naj %@ zavrača sledilce oglasov, analitike, družbenih omrežij in druge.";
 

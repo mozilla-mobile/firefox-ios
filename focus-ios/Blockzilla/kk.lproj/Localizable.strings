@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Жарнама трекерлерін блоктау";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Кейбір жарналамалар сайт шолуды бақылайды, жарнамаларға шертпесеңіз де";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Аналитикалық трекерлерді блоктау";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Шерту және айналдыру әрекеттерін жинау, зерттеу және өлшеуге пайдаланылады";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Веб қаріптерін блоктау";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Басқа құрама трекерлерін блоктау";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Бұны іске қосу кейбір сайттардың мінез-құлығын күтпегендей өзгертеді";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Әлеуметтік желілер трекерлерін блоктау";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Шолуыңызды бақылау және бөлісу батырмалары сияқты мүмкіндіктерді көрсету мақсатымен сайттарға ендірілген";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Кейбір видео және веб парақтарының жұмысына кері әсерін тигізуі мүмкін";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ көмегімен ашу";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Орналасу жолағын таңдау";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Сіз көшіріп алған сілтеме: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "\"%@\" суреттеріңізге қатынағысы келеді";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Жарнамалық трекерлер";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Аналитикалық трекерлер";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Мазмұндық трекерлер";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Бақылаудан қорғаныс сөндірілген";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Әлеуметтік трекерлер";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "%@ жабу немесе ӨШІРУ шертуге дейін сөндіру.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Бақылаудан қорғаныс";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "%@ жарнама, аналитика, әлеуметтік және т.б. трекерлерді блоктау керектігін таңдаңыз.";
 

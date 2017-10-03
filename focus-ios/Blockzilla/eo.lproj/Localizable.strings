@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Bloki reklamajn spurilojn";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Kelkaj reklamoj spuras viajn vizitojn, eĉ se vi ne alklakas ilin";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Bloki retanalizajn spurilojn";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Uzataj por kolekti, analizi kaj mezuri agojn kiel tuŝetojn kaj ŝovon";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Bloki teksaĵajn tiparojn";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Bloki aliajn enhavajn spurilojn";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Se vi ŝaltas tion ĉi, kelkaj paĝoj povus neatendite konduti";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Bloki spurilojn de interkonaj retejoj";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Inkluzivitaj en retejoj por spuri viajn vizitojn kaj montri funkciojn, kiel dividajn butonojn";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Tio ĉi povas paneigi kelkajn filmetojn kaj retpaĝojn";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Malfermi per %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Elekti adresan strion";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Ligilo kopiita de vi: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ŝatus aliri viajn fotojn";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Reklamaj spuriloj";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Analizaj spuriloj";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Enhavaj spuriloj";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Protekto kontraŭ spurado malŝaltita";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Sociaj spuriloj";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Malŝalti ĝis kiam vi fermos %@ aŭ vi tajpos FORIGI.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Protekto kontraŭ spurado";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Elektu ĉu %@ blokos reklamajn, analizajn, sociajn kaj aliajn spurilojn.";
 

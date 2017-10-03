@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Bloquer les traqueurs publicitaires";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Certaines publicités pistent vos visites sur les sites, même sans cliquer sur les publicités";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Bloquer les traqueurs de statistiques";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Servent à collecter, analyser et mesurer les actions telles qu’appuyer sur l’écran ou faire défiler la page";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Bloquer les polices web";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Bloquer les autres traqueurs de contenu";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Activer cette option peut provoquer des problèmes sur certaines pages";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Bloquer les traqueurs de réseaux sociaux";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Inséré sur certains sites pour pister vos visites et afficher des fonctionnalités comme des boutons de partage";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Peut empêcher certaines vidéos et pages web de s’afficher correctement.";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Ouvrir dans %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Sélectionner la barre d’adresse";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Lien que vous avez copié : %@";
 
@@ -245,8 +260,32 @@
 "photosPermission.description" = "Ceci vous permet d’enregistrer l’image dans Pellicule.";
 
 /* Title for button that takes the user to system settings */
-"photosPermission.openSettings" = "Ouvrir les paramètres";
+"photosPermission.openSettings" = "Ouvrir Réglages";
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "« %@ » souhaite accéder à vos photos";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Traqueurs publicitaires";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Traqueurs de statistiques";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Traqueurs de contenu";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Protection contre le pistage désactivée";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Traqueurs de réseaux sociaux";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Désactiver jusqu’à ce que vous fermiez %@ ou appuyiez sur EFFACER.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Protection contre le pistage";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Décidez si %@ doit bloquer les traqueurs publicitaires, de statistiques, de réseaux sociaux ou d’autres traqueurs.";
 

@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Loka á auglýsinga rekjara";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Sumar auglýsingar geyma upplýsingar um vefsvæði sem hafa verið heimsótt, þótt sé smellt ekki á auglýsingarnar";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Loka á greininga rekjara";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Notað til að safna, greina og fylgjast með virkni, eins og að snerta og skruna";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Loka á vef leturgerðir";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Loka á aðra efnisrekjara";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Virkjun gæti valdið því að sum vefsvæði hagi sér á óvæntan hátt";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Loka á félagsrekjara";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Innifalið í vefsvæðum til að fylgjast með heimsóknum þínum og sýna virkni eins og miðlunartökkum";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Gæti haft áhrif á sum myndbönd og vefsíður";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Opna með %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Velja staðsetningarslá";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Hlekkur sem þú afritaðir: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "\"%@\" vill aðgang að myndunum þínum";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Auglýsinga rekjarar";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Greininga rekjarar";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Efnilegir rekjarar";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Vörn gegn rekjurum ekki virk";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Samfélagslegir rekjarar";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Slökkva á þar til þú lokar %@ eða snertir ERASE.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Vörn gegn gagnasöfnun";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Velja hvort %@ lokar á auglýsinga-, greininga-, samfélagslega- og aðra gagnasafnara.";
 
