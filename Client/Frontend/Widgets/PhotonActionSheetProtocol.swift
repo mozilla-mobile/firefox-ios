@@ -77,13 +77,15 @@ extension PhotonActionSheetProtocol {
     typealias PageOptionsVC = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
     
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
-        
-        let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-        let noImageText = noImageEnabled ? Strings.AppMenuNoImageModeDisable : Strings.AppMenuNoImageModeEnable
-        let noImageMode = PhotonActionSheetItem(title: noImageText, iconString: "menu-NoImageMode", isEnabled: noImageEnabled) { action in
-            NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
+        var noImageMode: PhotonActionSheetItem? = nil
+        if #available(iOS 11, *) {
+            let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
+            let noImageText = noImageEnabled ? Strings.AppMenuNoImageModeDisable : Strings.AppMenuNoImageModeEnable
+            noImageMode = PhotonActionSheetItem(title: noImageText, iconString: "menu-NoImageMode", isEnabled: noImageEnabled) { action in
+                NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
+            }
         }
-        
+
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
         let nightModeText = nightModeEnabled ? Strings.AppMenuNightModeDisable : Strings.AppMenuNightModeEnable
         let nightMode = PhotonActionSheetItem(title: nightModeText, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { action in
@@ -102,7 +104,10 @@ extension PhotonActionSheetProtocol {
             vcDelegate.present(controller, animated: true, completion: nil)
         }
 
-        return [noImageMode, nightMode, openSettings]
+        if let noImageMode = noImageMode {
+            return [noImageMode, nightMode, openSettings]
+        }
+        return [nightMode, openSettings]
     }
     
     func getTabActions(tab: Tab, buttonView: UIView,
