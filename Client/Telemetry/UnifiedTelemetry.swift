@@ -10,7 +10,9 @@ import Telemetry
 //
 class UnifiedTelemetry {
     init(profile: Profile) {
-        NotificationCenter.default.addObserver(self, selector: #selector(uploadError(notification:)), name: Telemetry.notificationUploadError, object: nil)
+        if AppConstants.BuildChannel == .beta {
+          NotificationCenter.default.addObserver(self, selector: #selector(uploadError(notification:)), name: Telemetry.notificationUploadError, object: nil)
+        }
 
         let telemetryConfig = Telemetry.default.configuration
         telemetryConfig.appName = AppInfo.displayName
