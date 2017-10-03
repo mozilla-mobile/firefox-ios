@@ -24,6 +24,10 @@ open class UserAgent {
         return clientUserAgent(prefix: "Firefox-iOS-FxA")
     }
 
+    open static var defaultClientUserAgent: String {
+        return clientUserAgent(prefix: "Firefox-iOS")
+    }
+
     /**
      * Use this if you know that a value must have been computed before your
      * code runs, or you don't mind failure.
