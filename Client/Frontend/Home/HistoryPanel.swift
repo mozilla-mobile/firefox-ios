@@ -9,8 +9,6 @@ import Storage
 import XCGLogger
 import Deferred
 
-private let log = Logger.browserLogger
-
 private typealias SectionNumber = Int
 private typealias CategoryNumber = Int
 private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
@@ -143,7 +141,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             break
         default:
             // no need to do anything at all
-            log.warning("Received unexpected notification \(notification.name)")
+            print("Error: Received unexpected notification \(notification.name)")
             break
         }
     }
@@ -271,13 +269,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 section += 1
             }
             if count > 0 {
-                log.debug("Category \(i) has \(count) rows, and thus is section \(section).")
                 self.categories.append((section: section, rows: count, offset: offset))
                 sectionLookup[section] = i
                 offset += count
                 section += 1
             } else {
-                log.debug("Category \(i) has 0 rows, and thus has no section.")
                 self.categories.append((section: nil, rows: 0, offset: offset))
             }
         }
@@ -395,7 +391,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             }
             return
         }
-        log.warning("No site or no URL when selecting row.")
+        print("Error: No site or no URL when selecting row.")
     }
 
     func pinTopSite(_ site: Site) {
@@ -491,13 +487,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
                                 // 1. add a new section if the section didn't previously exist
                                 if oldCategory.section == nil && category.section != oldCategory.section {
-                                    log.debug("adding section \(category.section ?? 0)")
                                     sectionsToAdd.add(category.section!)
                                 }
 
                                 // 2. add a new row if there are more rows now than there were before
                                 if oldCategory.rows < category.rows {
-                                    log.debug("adding row to \(category.section ?? 0) at \(category.rows-1)")
                                     rowsToAdd.append(IndexPath(row: category.rows-1, section: category.section!))
                                 }
 
@@ -507,14 +501,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                                 // 3. delete the selected row and add a new one on the bottom of the section if the number of rows has stayed the same
                                 if oldCategory.section == indexPath.section {
                                     if category.section == nil {
-                                        log.debug("deleting section \(indexPath.section)")
                                         sectionsToDelete.add(indexPath.section)
                                     } else if oldCategory.section == category.section {
                                         if oldCategory.rows > category.rows {
-                                            log.debug("deleting row from \(category.section ?? 0) at \(indexPath.row)")
                                             rowsToDelete.append(indexPath)
                                         } else if category.rows == oldCategory.rows {
-                                            log.debug("in section \(category.section ?? 0), removing row at \(indexPath.row) and inserting row at \(category.rows-1)")
                                             rowsToDelete.append(indexPath)
                                             rowsToAdd.append(IndexPath(row: category.rows-1, section: indexPath.section))
                                         }
