@@ -19,8 +19,6 @@ import SwiftyJSON
 import Telemetry
 import Sentry
 
-private let log = Logger.browserLogger
-
 private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 private let KVOURL = "URL"
@@ -157,7 +155,6 @@ class BrowserViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        log.debug("BVC received memory warning")
     }
 
     fileprivate func didInit() {
@@ -317,16 +314,13 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        log.debug("BVC viewDidLoad…")
         super.viewDidLoad()
-        log.debug("BVC super viewDidLoad called.")
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELBookmarkStatusDidChange(_:)), name: NSNotification.Name(rawValue: BookmarkStatusChangedNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappWillResignActiveNotification), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappDidBecomeActiveNotification), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappDidEnterBackgroundNotification), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        log.debug("BVC setting up webViewContainer…")
         webViewContainerBackdrop = UIView()
         webViewContainerBackdrop.backgroundColor = UIColor.gray
         webViewContainerBackdrop.alpha = 0
@@ -336,18 +330,15 @@ class BrowserViewController: UIViewController {
         webViewContainer.addSubview(webViewContainerToolbar)
         view.addSubview(webViewContainer)
 
-        log.debug("BVC setting up status bar…")
         // Temporary work around for covering the non-clipped web view content
         statusBarOverlay = UIView()
         view.addSubview(statusBarOverlay)
 
-        log.debug("BVC setting up top touch area…")
         topTouchArea = UIButton()
         topTouchArea.isAccessibilityElement = false
         topTouchArea.addTarget(self, action: #selector(BrowserViewController.SELtappedTopArea), for: UIControlEvents.touchUpInside)
         view.addSubview(topTouchArea)
 
-        log.debug("BVC setting up URL bar…")
         // Setup the URL bar, wrapped in a view to get transparency effect
         urlBar = URLBarView()
         urlBar.translatesAutoresizingMaskIntoConstraints = false
@@ -382,7 +373,6 @@ class BrowserViewController: UIViewController {
             return true
         })
 
-        log.debug("BVC setting up search loader…")
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
 
         footer = UIView()
@@ -402,12 +392,9 @@ class BrowserViewController: UIViewController {
         scrollController.snackBars = snackBars
         scrollController.webViewContainerToolbar = webViewContainerToolbar
 
-        log.debug("BVC updating toolbar state…")
         self.updateToolbarStateForTraitCollection(self.traitCollection)
 
-        log.debug("BVC setting up constraints…")
         setupConstraints()
-        log.debug("BVC done.")
     }
 
     fileprivate func setupConstraints() {
@@ -438,13 +425,11 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidLayoutSubviews() {
-        log.debug("BVC viewDidLayoutSubviews…")
         super.viewDidLayoutSubviews()
         statusBarOverlay.snp.remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.topLayoutGuide.length)
         }
-        log.debug("BVC done.")
     }
 
     override var canBecomeFirstResponder: Bool {
@@ -457,8 +442,6 @@ class BrowserViewController: UIViewController {
     }
 
     func loadQueuedTabs(receivedURLs: [URL]? = nil) {
-        log.debug("Loading queued tabs in the background.")
-
         // Chain off of a trivial deferred in order to run on the background queue.
         succeed().upon() { res in
             self.dequeueQueuedTabs(receivedURLs: receivedURLs ?? [])
@@ -471,7 +454,6 @@ class BrowserViewController: UIViewController {
 
             // This assumes that the DB returns rows in some kind of sane order.
             // It does in practice, so WFM.
-            log.debug("Queue. Count: \(cursor.count).")
             if cursor.count > 0 {
 
                 // Filter out any tabs received by a push notification to prevent dupes.
@@ -508,9 +490,7 @@ class BrowserViewController: UIViewController {
     var displayedRestoreTabsAlert = false
 
     override func viewWillAppear(_ animated: Bool) {
-        log.debug("BVC viewWillAppear.")
         super.viewWillAppear(animated)
-        log.debug("BVC super.viewWillAppear done.")
 
         // On iPhone, if we are about to show the On-Boarding, blank out the tab so that it does
         // not flash before we present. This change of alpha also participates in the animation when
@@ -524,15 +504,11 @@ class BrowserViewController: UIViewController {
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
-            log.debug("Restoring tabs.")
             tabManager.restoreTabs()
-            log.debug("Done restoring tabs.")
         }
 
-        log.debug("Updating tab count.")
         updateTabCountUsingTabManager(tabManager, animated: false)
         clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
-        log.debug("BVC done.")
     }
 
     fileprivate func crashedLastLaunch() -> Bool {
@@ -572,19 +548,13 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        log.debug("BVC viewDidAppear.")
         presentIntroViewController()
-        log.debug("BVC intro presented.")
         self.webViewContainerToolbar.isHidden = false
 
         screenshotHelper.viewIsVisible = true
-        log.debug("BVC taking pending screenshots….")
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
-        log.debug("BVC done taking screenshots.")
 
-        log.debug("BVC calling super.viewDidAppear.")
         super.viewDidAppear(animated)
-        log.debug("BVC done.")
 
         if shouldShowWhatsNewTab() {
             // Only display if the SUMO topic has been configured in the Info.plist (present and not empty)
@@ -709,7 +679,6 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showHomePanelController(inline: Bool) {
-        log.debug("BVC showHomePanelController.")
         homePanelIsInline = inline
 
         if homePanelController == nil {
@@ -752,7 +721,6 @@ class BrowserViewController: UIViewController {
             }
         })
         view.setNeedsUpdateConstraints()
-        log.debug("BVC done with showHomePanelController.")
     }
 
     fileprivate func hideHomePanelController() {
@@ -989,7 +957,7 @@ class BrowserViewController: UIViewController {
         profile.bookmarks.modelFactory >>== {
             $0.isBookmarked(url).uponQueue(DispatchQueue.main) { [weak tab] result in
                 guard let bookmarked = result.successValue else {
-                    log.error("Error getting bookmark status: \(result.failureValue ??? "nil").")
+                    print("Error getting bookmark status: \(result.failureValue ??? "nil").")
                     return
                 }
                 tab?.isBookmarked = bookmarked
@@ -1164,17 +1132,13 @@ class BrowserViewController: UIViewController {
         tabManager.expireSnackbars()
 
         guard let webView = tab.webView else {
-            log.warning("Cannot navigate in tab without a webView")
+            print("Cannot navigate in tab without a webView")
             return
         }
 
         if let url = webView.url, !url.isErrorPageURL && !url.isAboutHomeURL {
             tab.lastExecutedTime = Date.now()
-            
-            if navigation == nil {
-                log.warning("Implicitly unwrapped optional navigation was nil.")
-            }
-            
+
             postLocationChangeNotificationForTab(tab, navigation: navigation)
             
             // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
@@ -1378,7 +1342,7 @@ extension BrowserViewController: URLBarDelegate {
             // TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1158503 provide some form of 'this has been added' visual feedback?
         case .failure(let error):
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it’s already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
-            log.error("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
+            print("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
         }
         return true
     }
@@ -1496,7 +1460,7 @@ extension BrowserViewController: URLBarDelegate {
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
-            log.error("Error handling URL entry: \"\(text)\".")
+            print("Error handling URL entry: \"\(text)\".")
             assertionFailure("Couldn't generate search URL: \(text)")
         }
     }
@@ -1918,7 +1882,7 @@ extension BrowserViewController: TabManagerDelegate {
                         $0.isBookmarked(absoluteString)
                             .uponQueue(DispatchQueue.main) {
                             guard let isBookmarked = $0.successValue else {
-                                log.error("Error getting bookmark status: \($0.failureValue ??? "nil").")
+                                print("Error getting bookmark status: \($0.failureValue ??? "nil").")
                                 return
                             }
 
@@ -2041,7 +2005,7 @@ extension BrowserViewController: WKUIDelegate {
         guard let parentTab = tabManager[webView] else { return nil }
 
         if !navigationAction.isAllowed {
-            log.warning("Denying unprivileged request: \(navigationAction.request)")
+            print("Denying unprivileged request: \(navigationAction.request)")
             return nil
         }
 
@@ -2140,7 +2104,7 @@ extension BrowserViewController: WKUIDelegate {
 
     fileprivate func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
         if error.code == WKError.webContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
-            log.debug("WebContent process has crashed. Trying to reloadFromOrigin to restart it.")
+            print("WebContent process has crashed. Trying to reloadFromOrigin to restart it.")
             webView.reloadFromOrigin()
             return true
         }
@@ -2506,7 +2470,6 @@ extension BrowserViewController: FxAContentViewControllerDelegate {
     }
 
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController) {
-        log.info("Did cancel out of FxA signin")
         self.dismiss(animated: true, completion: nil)
     }
 }
