@@ -129,10 +129,17 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let footer = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: tableView.frame.width, height: PhotonActionSheetUX.TablePadding)))
         tableView.tableFooterView = footer
         tableView.tableHeaderView = footer.clone()
-        tableView.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
-        let blurEffect = UIBlurEffect(style: .light)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        tableView.backgroundView = blurEffectView
+
+        // In a popover the popover provides the blur background
+        // Not using a background color allows the view to style correctly with the popover arrow
+        if self.popoverPresentationController == nil {
+            tableView.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
+            let blurEffect = UIBlurEffect(style: .light)
+            let blurEffectView = UIVisualEffectView(effect: blurEffect)
+            tableView.backgroundView = blurEffectView
+        } else {
+            tableView.backgroundColor = .clear
+        }
 
         var width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
         width = UIDevice.current.userInterfaceIdiom == .pad ? width : (self.view.frame.width - (PhotonActionSheetUX.Padding * 2))

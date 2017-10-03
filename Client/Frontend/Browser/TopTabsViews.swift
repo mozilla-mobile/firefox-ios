@@ -80,7 +80,7 @@ class TopTabCell: UICollectionViewCell {
             closeButton.tintColor = selectedTab ? UIColor(rgb: 0x272727) : UIColor(rgb: 0xb1b1b3)
             // restyle if we are in PBM
             if style == .dark && selectedTab {
-                backgroundColor =  UIColor(rgb: 0x4A4A4F)
+                backgroundColor =  UIColor(rgb: 0x38383D)
                 titleText.textColor = UIColor(rgb: 0xf9f9fa)
                 closeButton.tintColor = UIColor(rgb: 0xf9f9fa)
             }
@@ -176,7 +176,7 @@ class TopTabCell: UICollectionViewCell {
             highlightLine.backgroundColor = UIColor(rgb:0x0066DC)
         case Style.dark:
             titleText.textColor = UIColor.lightText
-            backgroundColor = UIColor(rgb: 0x4A4A4F)
+            backgroundColor = UIColor(rgb: 0x38383D)
             highlightLine.backgroundColor = UIColor(rgb: 0x9400ff)
         }
     }

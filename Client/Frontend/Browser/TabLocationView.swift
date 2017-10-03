@@ -33,7 +33,7 @@ struct TabLocationViewUX {
         theme.URLFontColor = UIColor.lightGray
         theme.textColor = UIColor(rgb: 0xf9f9fa)
         theme.highlightButtonColor = UIConstants.PrivateModePurple
-        theme.buttonTintColor = UIColor(rgb: 0xf9f9fa)
+        theme.buttonTintColor = UIColor(rgb: 0xADADb0)
         theme.backgroundColor = UIColor(rgb: 0x636369)
         themes[Theme.PrivateMode] = theme
 
@@ -307,13 +307,16 @@ extension TabLocationView: Themeable {
             log.error("Unable to apply unknown theme \(themeName)")
             return
         }
-        self.backgroundColor = theme.backgroundColor
-        self.urlTextField.textColor = theme.textColor
-        self.readerModeButton.selectedTintColor = theme.highlightButtonColor
-        self.readerModeButton.unselectedTintColor = theme.buttonTintColor
-        self.pageOptionsButton.selectedTintColor = theme.highlightButtonColor
-        self.pageOptionsButton.unselectedTintColor = theme.buttonTintColor
-        self.pageOptionsButton.tintColor = theme.buttonTintColor
+        let isPrivate = themeName == Theme.PrivateMode
+        backgroundColor = theme.backgroundColor
+        urlTextField.textColor = theme.textColor
+        readerModeButton.selectedTintColor = theme.highlightButtonColor
+        readerModeButton.unselectedTintColor = theme.buttonTintColor
+        pageOptionsButton.selectedTintColor = theme.highlightButtonColor
+
+        pageOptionsButton.unselectedTintColor = isPrivate ? UIColor(rgb: 0xD2d2d4) : UIColor(rgb: 0x272727)
+        pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
+        separatorLine.backgroundColor = isPrivate ? UIColor(rgb: 0x3f3f43) : UIColor(rgb: 0xE5E5E5)
     }
 }
 
@@ -322,7 +325,8 @@ class ReaderModeButton: UIButton {
     var unselectedTintColor: UIColor?
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setImage(UIImage.templateImageNamed("reader"), for: UIControlState())
+        adjustsImageWhenHighlighted = false
+        setImage(UIImage.templateImageNamed("reader"), for: .normal)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -331,7 +335,19 @@ class ReaderModeButton: UIButton {
     
     override var isSelected: Bool {
         didSet {
-            self.tintColor = isSelected ? selectedTintColor : unselectedTintColor
+            self.tintColor = (isHighlighted || isSelected) ? selectedTintColor : unselectedTintColor
+        }
+    }
+
+    override open var isHighlighted: Bool {
+        didSet {
+            self.tintColor = (isHighlighted || isSelected) ? selectedTintColor : unselectedTintColor
+        }
+    }
+
+    override var tintColor: UIColor! {
+        didSet {
+            self.imageView?.tintColor = self.tintColor
         }
     }
     
