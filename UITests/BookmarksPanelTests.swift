@@ -23,7 +23,7 @@ class BookmarksPanelTests: KIFTestCase {
 
     private func getAppBookmarkStorage() -> BookmarkBufferStorage? {
         let application = UIApplication.shared
-        
+
         guard let delegate = application.delegate as? TestAppDelegate else {
             XCTFail("Couldn't get app delegate.")
             return nil
@@ -76,7 +76,7 @@ class BookmarksPanelTests: KIFTestCase {
     }
 
     private func navigateBackInTableView() {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).inRoot(grey_kindOfClass(UITableView.self)).perform(grey_tap())
     }
     
     private func navigateFolder(withTitle title: String) {
@@ -92,10 +92,18 @@ class BookmarksPanelTests: KIFTestCase {
     }
     
     private func assertRowExists(withTitle title: String) {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(title)).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).assert(grey_notNil())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(title)).inRoot(grey_kindOfClass(UITableView.self)).assert(grey_notNil())
     }
-    
-    func testRootHasLocalAndBuffer() {
+
+    func testMobileBookmarks() {
+        verifyRootHasLocalAndBufferBookmarks()
+
+        // Rather than an elaborate setup() step, just continue from the previous test
+        // as the view state is now setup for testing deletion.
+        verifyMobileBookmarkDelete()
+    }
+
+    func verifyRootHasLocalAndBufferBookmarks() {
         // Add buffer data, then later in the test verify that the buffer mobile folder is not shown in there anymore.
         createSomeBufferBookmarks()
         
@@ -144,7 +152,39 @@ class BookmarksPanelTests: KIFTestCase {
         navigateFolder(withTitle: "remote-subfolder")
         assertRowExists(withTitle: "item-in-remote-subfolder")
     }
-    
+
+    // This is a continuation of the above test
+    func verifyMobileBookmarkDelete() {
+        // Assert precondition that this test continues from previous state
+        assertRowExists(withTitle: "item-in-remote-subfolder")
+
+        let deleteAction = GREYMatchers.matcher(forText: "Remove Bookmark")
+
+        // Test deletion not available
+
+        var row = EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("item-in-remote-subfolder"))
+        row.perform(grey_longPress())
+        // verify the context menu does not have deletion option
+        EarlGrey.select(elementWithMatcher: deleteAction).assert(grey_nil())
+        // close the context menu
+        EarlGrey.select(elementWithMatcher: GREYMatchers.matcher(forText: "Pin to Top Sites")).perform(grey_tap())
+
+        navigateBackInTableView()
+
+        // Test successful deletion
+
+        assertRowExists(withTitle: "xyz")
+
+        let tv = tester().waitForView(withAccessibilityIdentifier: "Bookmarks List") as! UITableView
+        let rowCount = tv.numberOfRows(inSection: 0)
+
+        row = EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("xyz"))
+        row.perform(grey_longPress())
+        EarlGrey.select(elementWithMatcher: deleteAction).perform(grey_tap())
+
+        XCTAssert(tv.numberOfRows(inSection: 0) == rowCount - 1)
+    }
+  
     func testRefreshBookmarks() {
         createSomeBufferBookmarks()
         guard let bookmarks = getAppBookmarkStorage() else {
