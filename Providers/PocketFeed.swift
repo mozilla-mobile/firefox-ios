@@ -121,7 +121,7 @@ class Pocket {
 
     // Create the URL request to query the Pocket API. The max items that the query can return is 20
     // param: forceLocale is used to force the locale to be en-US for users who enable Pocket stories in prefs
-    private func createGlobalFeedRequest(items: Int = 2, locale: String,  forceLocale: Bool = false) -> URLRequest? {
+    private func createGlobalFeedRequest(items: Int = 2, locale: String, forceLocale: Bool = false) -> URLRequest? {
         guard items > 0 && items <= 20 else {
             return nil
         }
