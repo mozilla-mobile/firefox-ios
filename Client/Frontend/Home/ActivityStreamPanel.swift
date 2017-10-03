@@ -351,7 +351,9 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
             return highlights.isEmpty ? CGSize.zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
         case .highlightIntro:
             return !highlights.isEmpty ? CGSize.zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
-        case .topSites, .pocket:
+        case .pocket:
+            return pocketStories.isEmpty ? CGSize.zero : Section(section).headerHeight
+        case .topSites:
             return Section(section).headerHeight
         }
     }
@@ -405,9 +407,9 @@ extension ActivityStreamPanel {
         case .highlights:
             return self.highlights.count
         case .pocket:
-            return pocketStories.isEmpty ? 0: Int(numItems)
+            return pocketStories.isEmpty ? 0 : Int(numItems)
         case .highlightIntro:
-            return self.highlights.isEmpty && showHighlightIntro ? 1 : 0
+            return self.highlights.isEmpty && showHighlightIntro && isHighlightsEnabled() ? 1 : 0
         }
     }
 
@@ -481,11 +483,15 @@ extension ActivityStreamPanel: DataObserverDelegate {
     // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
     // See ActivityStreamDataObserver for invalidation logic.
     func reloadAll() {
+        // If the pocket stories are not availible for the Locale the PocketAPI will return nil
+        // So it is okay if the default here is true
         self.getPocketSites().uponQueue(.main) { _ in
             if !self.pocketStories.isEmpty {
                 self.collectionView?.reloadData()
             }
         }
+
+
         accumulate([self.getHighlights, self.getTopSites]).uponQueue(.main) { _ in
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
             self.showHighlightIntro = self.highlights.isEmpty
@@ -496,13 +502,40 @@ extension ActivityStreamPanel: DataObserverDelegate {
         }
     }
 
-    func getHighlights() -> Success {
+    func getBookmarksForHighlights() -> Deferred<Maybe<Cursor<Site>>> {
         let count = ASPanelUX.BookmarkHighlights // Fetch 2 bookmarks
-        return self.profile.recommendations.getHighlights().both(self.profile.recommendations.getRecentBookmarks(count)).bindQueue(.main) { (highlights, bookmarks) in
-            guard let highlights = highlights.successValue?.asArray(), let bookmarks = bookmarks.successValue?.asArray() else {
+        return self.profile.recommendations.getRecentBookmarks(count)
+    }
+
+    // Used to check if the entire section is turned off
+    // when it is we shouldnt show the emtpy state
+    func isHighlightsEnabled() -> Bool {
+        let bookmarks = profile.prefs.boolForKey(PrefsKeys.ASBookmarkHighlightsVisible) ?? false
+        let history = profile.prefs.boolForKey(PrefsKeys.ASRecentHighlightsVisible) ?? false
+        return history && bookmarks
+    }
+
+    func getHighlights() -> Success {
+        var queries: [() -> Deferred<Maybe<Cursor<Site>>>] = []
+        if profile.prefs.boolForKey(PrefsKeys.ASBookmarkHighlightsVisible) ?? true {
+            queries.append(getBookmarksForHighlights)
+        }
+
+        if profile.prefs.boolForKey(PrefsKeys.ASRecentHighlightsVisible) ?? true {
+            queries.append(self.profile.recommendations.getHighlights)
+        }
+
+        guard !queries.isEmpty else {
+            self.highlights = []
+            return succeed()
+        }
+
+        return accumulate(queries).bindQueue(.main) { result in
+            guard let resultArr = result.successValue else {
                 return succeed()
             }
-            let sites = bookmarks + highlights
+            let sites = resultArr.reduce([]) { $0 + $1.asArray() }
+
             // Scan through the fetched highlights and report on anything that might be missing.
             self.reportMissingData(sites: sites, source: .Highlights)
             self.highlights = sites
@@ -511,7 +544,15 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func getPocketSites() -> Success {
-        return pocketAPI.globalFeed(items: 4).bindQueue(.main) { pStory in
+        let showPocket = profile.prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible)
+        // Only cancel if the user has created the pref in their profile and it is false
+        // This allows someone who is in an unsupported locale to use Pocket stories
+        if let usersPocketPref = showPocket, !usersPocketPref {
+            self.pocketStories = [] //If a user just turned off Pocket we'll need to empty the array.
+            return succeed()
+        }
+
+        return pocketAPI.globalFeed(items: 4,locale: Locale.current.identifier, force: showPocket ?? false).bindQueue(.main) { pStory in
             self.pocketStories = pStory
             return succeed()
         }
