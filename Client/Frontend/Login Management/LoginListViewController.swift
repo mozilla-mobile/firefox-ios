@@ -191,7 +191,9 @@ class LoginListViewController: SensitiveViewController {
 // MARK: - Selectors
 private extension LoginListViewController {
     @objc func remoteLoginsDidChange() {
-        loadLogins()
+        DispatchQueue.main.async {
+            self.loadLogins()
+        }
     }
 
     @objc func dismissAlertController() {
