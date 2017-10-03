@@ -1013,7 +1013,7 @@ class TrayToolbar: UIView {
         let button = UIButton()
         button.setImage(UIImage.templateImageNamed("action_delete"), for: .normal)
         button.accessibilityLabel = Strings.TabTrayDeleteMenuButtonAccessibilityLabel
-        button.accessibilityIdentifier = "TabTrayController.remoteTabsButton"
+        button.accessibilityIdentifier = "TabTrayController.removeTabsButton"
         return button
     }()
 

@@ -62,14 +62,14 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
         var theme = Theme()
-        theme.backgroundColor = UIColor(rgb: 0x4A4A4F)
+        theme.backgroundColor = UIConstants.AppBackgroundColor
         theme.buttonTintColor = UIColor(rgb: 0x7e7e7f)
-        theme.highlightButtonColor = UIColor(rgb: 0x9400ff)
+        theme.highlightButtonColor = UIConstants.HighlightBlue
         themes[Theme.PrivateMode] = theme
 
         theme = Theme()
         theme.backgroundColor = UIConstants.AppBackgroundColor
-        theme.buttonTintColor = HomePanelViewControllerUX.ToolbarButtonDeselectedColorNormalMode
+        theme.buttonTintColor = UIColor(rgb: 0x7e7e7f)
         theme.highlightButtonColor = UIConstants.HighlightBlue
         themes[Theme.NormalMode] = theme
         

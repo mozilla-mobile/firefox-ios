@@ -22,7 +22,7 @@ struct TabsButtonUX {
         var themes = [String: Theme]()
         var theme = Theme()
         theme.borderColor = UIConstants.AppBackgroundColor
-        theme.backgroundColor = UIColor(rgb: 0x4A4A4F)
+        theme.backgroundColor = UIColor(rgb: 0x38383D)
         theme.textColor = UIConstants.AppBackgroundColor
         theme.highlightButtonColor = UIConstants.PrivateModePurple
         theme.highlightTextColor = TabsButtonUX.TitleColor

@@ -204,6 +204,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         label.font = self.font
         label.accessibilityIdentifier = "autocomplete"
         label.backgroundColor = self.backgroundColor
+        label.textColor = self.textColor
 
         let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
         frame.origin.x = (enteredTextSize?.width.rounded() ?? 0)
