@@ -23,3 +23,9 @@ class SettingsNavigationController: UINavigationController {
 protocol PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool)
 }
+
+class ModalSettingsNavigationController: UINavigationController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.default
+    }
+}

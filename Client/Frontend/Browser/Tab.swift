@@ -63,6 +63,22 @@ class Tab: NSObject {
     var pendingScreenshot = false
     var url: URL?
 
+    fileprivate var _noImageMode = false
+
+    // Use computed property so @available can be used to guard `noImageMode`.
+    @available(iOS 11, *)
+    var noImageMode: Bool {
+        get { return _noImageMode }
+        set {
+            if newValue == _noImageMode {
+                return
+            }
+            _noImageMode = newValue
+            let helper = (contentBlocker as? ContentBlockerHelper)
+            helper?.noImageMode(enabled: _noImageMode)
+        }
+    }
+
     // There is no 'available macro' on props, we currently just need to store ownership.
     var contentBlocker: AnyObject?
 
@@ -74,9 +90,9 @@ class Tab: NSObject {
     var desktopSite: Bool = false
     var isBookmarked: Bool = false
     
-    var readerModeAvailable: Bool {
+    var readerModeAvailableOrActive: Bool {
         if let readerMode = self.getHelper(name: "ReaderMode") as? ReaderMode {
-            return readerMode.state == .available
+            return readerMode.state != .unavailable
         }
         return false
     }
@@ -94,14 +110,16 @@ class Tab: NSObject {
     /// tab instance, queue it for later until we become foregrounded.
     fileprivate var alertQueue = [JSAlertInfo]()
 
-    init(configuration: WKWebViewConfiguration) {
-        self.configuration = configuration
-    }
-
-    init(configuration: WKWebViewConfiguration, isPrivate: Bool) {
+    init(configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         self.configuration = configuration
         super.init()
         self.isPrivate = isPrivate
+
+        if #available(iOS 11, *) {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
+                contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
+            }
+        }
     }
 
     class func toTab(_ tab: Tab) -> RemoteTab? {
@@ -427,12 +445,6 @@ class Tab: NSObject {
             tab = tab?.parent
         }
         return false
-    }
-
-    func setNoImageMode(_ enabled: Bool = false, force: Bool) {
-        if enabled || force {
-            webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))", completionHandler: nil)
-        }
     }
 
     func setNightMode(_ enabled: Bool) {

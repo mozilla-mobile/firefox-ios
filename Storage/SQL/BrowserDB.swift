@@ -35,64 +35,39 @@ open class BrowserDB {
     // For testing purposes or other cases where we want to ensure that this `BrowserDB`
     // instance has been initialized (schema is created/updated).
     public func touch() -> Success {
-        let deferred = Success()
-        var err: NSError? = nil
-        withConnection(&err) { connection, error -> Void in
+        return withConnection { connection -> Void in
             guard let _ = connection as? ConcreteSQLiteDBConnection else {
-                deferred.fill(Maybe(failure: DatabaseError(description: "Could not establish a database connection")))
-                return
+                throw DatabaseError(description: "Could not establish a database connection")
             }
-
-            deferred.fill(Maybe(success: ()))
-        }
-
-        return deferred
-    }
-
-    func withConnection<T>(flags: SwiftData.Flags, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
-        var res: T!
-        err = db.withConnection(flags) { connection in
-            // An error may occur if the internet connection is dropped.
-            var err: NSError? = nil
-            res = callback(connection, &err)
-            return err
-        }
-        return res
-    }
-
-    func withConnection<T>(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> T {
-        /*
-         * Opening a WAL-using database with a hot journal cannot complete in read-only mode.
-         * The supported mechanism for a read-only query against a WAL-using SQLite database is to use PRAGMA query_only,
-         * but this isn't all that useful for us, because we have a mixed read/write workload.
-         */
-        
-        return withConnection(flags: SwiftData.Flags.readWriteCreate, err: &err, callback: callback)
-    }
-
-    func transaction(_ err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Bool) -> NSError? {
-        return self.transaction(synchronous: true, err: &err, callback: callback)
-    }
-
-    func transaction(synchronous: Bool=true, err: inout NSError?, callback: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> Bool) -> NSError? {
-        return db.transaction(synchronous: synchronous) { connection in
-            var err: NSError? = nil
-            return callback(connection, &err)
         }
     }
 
-    func vacuum() {
+    /*
+     * Opening a WAL-using database with a hot journal cannot complete in read-only mode.
+     * The supported mechanism for a read-only query against a WAL-using SQLite database is to use PRAGMA query_only,
+     * but this isn't all that useful for us, because we have a mixed read/write workload.
+     */
+    @discardableResult func withConnection<T>(flags: SwiftData.Flags = .readWriteCreate, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
+        return db.withConnection(flags, callback)
+    }
+
+    func transaction<T>(_ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
+        return db.transaction(callback)
+    }
+
+    @discardableResult func vacuum() -> Success {
         log.debug("Vacuuming a BrowserDB.")
-        _ = db.withConnection(SwiftData.Flags.readWriteCreate, synchronous: true) { connection in
-            return connection.vacuum()
-        }
+
+        return withConnection({ connection -> Void in
+            try connection.vacuum()
+        })
     }
 
-    func checkpoint() {
+    @discardableResult func checkpoint() -> Success {
         log.debug("Checkpointing a BrowserDB.")
-        _ = db.transaction(synchronous: true) { connection in
+        
+        return transaction { connection in
             connection.checkpoint()
-            return true
         }
     }
 
@@ -165,19 +140,13 @@ open class BrowserDB {
         return walk(chunks, f: { insertChunk(Array($0)) })
     }
 
-    func runWithConnection<T>(_ block: @escaping (_ connection: SQLiteDBConnection, _ err: inout NSError?) -> T) -> Deferred<Maybe<T>> {
-        return DeferredDBOperation(db: self.db, block: block).start()
-    }
-
     func write(_ sql: String, withArgs args: Args? = nil) -> Deferred<Maybe<Int>> {
-        return self.runWithConnection() { (connection, err) -> Int in
-            err = connection.executeChange(sql, withArgs: args)
-            if err == nil {
-                let modified = connection.numberOfRowsModified
-                log.debug("Modified rows: \(modified).")
-                return modified
-            }
-            return 0
+        return withConnection { connection -> Int in
+            try connection.executeChange(sql, withArgs: args)
+            
+            let modified = connection.numberOfRowsModified
+            log.debug("Modified rows: \(modified).")
+            return modified
         }
     }
 
@@ -194,7 +163,7 @@ open class BrowserDB {
     }
 
     func run(_ commands: [String]) -> Success {
-        return self.run(commands.map { (sql: $0, args: nil) })
+        return run(commands.map { (sql: $0, args: nil) })
     }
 
     /**
@@ -207,62 +176,26 @@ open class BrowserDB {
             return succeed()
         }
 
-        var err: NSError? = nil
-        let errorResult = self.transaction(&err) { (conn, err) -> Bool in
+        return transaction { connection -> Void in
             for (sql, args) in commands {
-                err = conn.executeChange(sql, withArgs: args)
-                if let err = err {
-                    log.warning("SQL operation failed: \(err.localizedDescription)")
-                    return false
-                }
+                try connection.executeChange(sql, withArgs: args)
             }
-            return true
         }
-
-        if let err = err ?? errorResult {
-            return deferMaybe(DatabaseError(err: err))
-        }
-
-        return succeed()
-    }
-
-    func runAsync(_ commands: [(sql: String, args: Args?)]) -> Success {
-        if commands.isEmpty {
-            return succeed()
-        }
-
-        let deferred = Success()
-
-        var error: NSError?
-        error = self.transaction(synchronous: false, err: &error) { (conn, err) -> Bool in
-            for (sql, args) in commands {
-                err = conn.executeChange(sql, withArgs: args)
-                if let err = err {
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                    return false
-                }
-            }
-
-            deferred.fill(Maybe(success: ()))
-            return true
-        }
-
-        return deferred
     }
 
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
-        return runWithConnection { (connection, _) -> Cursor<T> in
-            return connection.executeQuery(sql, factory: factory, withArgs: args)
+        return withConnection { connection -> Cursor<T> in
+            connection.executeQuery(sql, factory: factory, withArgs: args)
         }
     }
 
     func queryReturnsResults(_ sql: String, args: Args? = nil) -> Deferred<Maybe<Bool>> {
-        return self.runQuery(sql, args: args, factory: { _ in true })
+        return runQuery(sql, args: args, factory: { _ in true })
          >>== { deferMaybe($0[0] ?? false) }
     }
 
     func queryReturnsNoResults(_ sql: String, args: Args? = nil) -> Deferred<Maybe<Bool>> {
-        return self.runQuery(sql, args: nil, factory: { _ in false })
+        return runQuery(sql, args: nil, factory: { _ in false })
           >>== { deferMaybe($0[0] ?? true) }
     }
 }

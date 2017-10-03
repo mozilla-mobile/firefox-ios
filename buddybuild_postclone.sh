@@ -9,12 +9,6 @@ function setup_virtualenv {
 }
 
 #
-# Update dependencies that we always need
-#
-
-brew upgrade swiftlint
-
-#
 # Add a badge for FirefoxBeta
 #
 

@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import WebImage
+import SDWebImage
 import Shared
 
 protocol SearchEnginePickerDelegate: class {

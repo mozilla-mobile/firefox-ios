@@ -826,11 +826,14 @@ extension TabManager : WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
         let tab = self[webView]
-        tab?.setNoImageMode(isNoImageMode, force: false)
         let isNightMode = NightModeAccessors.isNightMode(self.prefs)
         tab?.setNightMode(isNightMode)
+
+        if #available(iOS 11, *) {
+            let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
+            tab?.noImageMode = isNoImageMode
+        }
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

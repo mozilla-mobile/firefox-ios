@@ -63,9 +63,13 @@ class BaseHistoricalBrowserSchema: Schema {
 
     func run(_ db: SQLiteDBConnection, sql: String?, args: Args? = nil) -> Bool {
         if let sql = sql {
-            let err = db.executeChange(sql, withArgs: args)
-            return err == nil
+            do {
+                try db.executeChange(sql, withArgs: args)
+            } catch {
+                return false
+            }
         }
+
         return true
     }
 
@@ -908,13 +912,13 @@ class TestSQLiteHistory: XCTestCase {
 
         for (version, schema) in sources {
             var db = BrowserDB(filename: "browser-v\(version).db", schema: schema, files: files)
-            XCTAssertTrue(db.runWithConnection({ connection, _ -> Int in
+            XCTAssertTrue(db.withConnection({ connection -> Int in
                 connection.version
             }).value.successValue == schema.version, "Creating BrowserSchema at version \(version)")
             db.forceClose()
 
             db = BrowserDB(filename: "browser-v\(version).db", schema: destination, files: files)
-            XCTAssertTrue(db.runWithConnection({ connection, _ -> Int in
+            XCTAssertTrue(db.withConnection({ connection -> Int in
                 connection.version
             }).value.successValue == destination.version, "Upgrading BrowserSchema from version \(version) to version \(schema.version)")
             db.forceClose()
@@ -954,26 +958,29 @@ class TestSQLiteHistory: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)
 
         let site = Site(url: "http://www.example.com/test1.1", title: "title one")
-        var err: NSError? = nil
 
         // Insert something with an invalid domain ID. We have to manually do this since domains are usually hidden.
-        let _ = db.withConnection(&err, callback: { (connection, err) -> Int in
-            let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
-                         "?, ?, ?, ?, ?, ?, ?"
+        let insertDeferred = db.withConnection { connection -> Void in
+            try connection.executeChange("PRAGMA foreign_keys = OFF")
+                         let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
             let args: Args = [Bytes.generateGUID(), site.url, site.title, Date.now(), 0, 0, -1]
-            err = connection.executeChange(insert, withArgs: args)
-            return 0
-        })
+            try connection.executeChange(insert, withArgs: args)
+        }
+        
+        XCTAssertTrue(insertDeferred.value.isSuccess)
 
         // Now insert it again. This should update the domain
         history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link)).succeeded()
 
         // DomainID isn't normally exposed, so we manually query to get it
-        let results = db.withConnection(&err, callback: { (connection, err) -> Cursor<Int> in
+        let resultsDeferred = db.withConnection { connection -> Cursor<Int> in
             let sql = "SELECT domain_id FROM \(TableHistory) WHERE url = ?"
             let args: Args = [site.url]
             return connection.executeQuery(sql, factory: IntFactory, withArgs: args)
-        })
+        }
+        
+        let results = resultsDeferred.value.successValue!
+        
         XCTAssertNotEqual(results[0]!, -1, "Domain id was updated")
     }
 
@@ -1440,6 +1447,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func addPinnedSites() -> Success {
             return history.addPinnedTopSite(site1) >>== {
+                sleep(1) // Sleep to prevent intermittent issue with sorting on the timestamp
                 return history.addPinnedTopSite(site2)
             }
         }

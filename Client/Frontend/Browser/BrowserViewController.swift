@@ -14,7 +14,7 @@ import Alamofire
 import Account
 import ReadingList
 import MobileCoreServices
-import WebImage
+import SDWebImage
 import SwiftyJSON
 import Telemetry
 import Sentry
@@ -168,7 +168,8 @@ class BrowserViewController: UIViewController {
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        return isPrivate ? UIStatusBarStyle.lightContent : UIStatusBarStyle.default
+        let isIpad = shouldShowTopTabsForTraitCollection(traitCollection)
+        return (isPrivate || isIpad) ? UIStatusBarStyle.lightContent : UIStatusBarStyle.default
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -201,11 +202,9 @@ class BrowserViewController: UIViewController {
             toolbar = TabToolbar()
             footer.addSubview(toolbar!)
             toolbar?.tabToolbarDelegate = self
-
-            // Need to reset the proper blur style
-            if let selectedTab = tabManager.selectedTab, selectedTab.isPrivate {
-                toolbar?.applyTheme(Theme.PrivateMode)
-            }
+            let theme = (tabManager.selectedTab?.isPrivate ?? false) ? Theme.PrivateMode : Theme.NormalMode
+            toolbar?.applyTheme(theme)
+            updateTabCountUsingTabManager(self.tabManager)
         }
         
         if showTopTabs {
@@ -393,7 +392,7 @@ class BrowserViewController: UIViewController {
         self.view.addSubview(findInPageContainer)
 
         if AppConstants.MOZ_CLIPBOARD_BAR {
-            clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs)
+            clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
             clipboardBarDisplayHandler?.delegate = self
         }
         
@@ -678,7 +677,6 @@ class BrowserViewController: UIViewController {
 
         footer.snp.remakeConstraints { make in
             scrollController.footerBottomConstraint = make.bottom.equalTo(self.view.snp.bottom).constraint
-            make.top.equalTo(self.snackBars.snp.top)
             make.leading.trailing.equalTo(self.view)
         }
 
@@ -730,7 +728,8 @@ class BrowserViewController: UIViewController {
             assertionFailure("homePanelController is still nil after assignment.")
             return
         }
-
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        homePanelController.applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
         let panelNumber = tabManager.selectedTab?.url?.fragment
 
         // splitting this out to see if we can get better crash reports when this has a problem
@@ -778,9 +777,13 @@ class BrowserViewController: UIViewController {
 
     fileprivate func updateInContentHomePanel(_ url: URL?) {
         if !urlBar.inOverlayMode {
-            if let url = url, url.isAboutHomeURL {
+            guard let url = url else {
+                hideHomePanelController()
+                return
+            }
+            if url.isAboutHomeURL {
                 showHomePanelController(inline: true)
-            } else {
+            } else if !url.isLocalUtility || url.isReaderModeURL {
                 hideHomePanelController()
             }
         }
@@ -856,21 +859,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func animateBookmarkStar() {
-        let offset: CGFloat
-        let button: UIButton!
-
-        if let toolbar: TabToolbar = self.toolbar {
-            offset = BrowserViewControllerUX.BookmarkStarAnimationOffset * -1
-            button = toolbar.bookmarkButton
-        } else {
-            offset = BrowserViewControllerUX.BookmarkStarAnimationOffset
-            button = self.urlBar.bookmarkButton
-        }
-
-        JumpAndSpinAnimator.animateFromView(button.imageView ?? button, offset: offset, completion: nil)
-    }
-
     func SELBookmarkStatusDidChange(_ notification: Notification) {
         if let bookmark = notification.object as? BookmarkItem {
             if bookmark.url == urlBar.currentURL?.absoluteString {
@@ -903,8 +891,11 @@ class BrowserViewController: UIViewController {
         case KVOEstimatedProgress:
             guard webView == tabManager.selectedTab?.webView,
                 let progress = change?[NSKeyValueChangeKey.newKey] as? Float else { break }
-            
-            urlBar.updateProgressBar(progress)
+            if !(webView.url?.isLocalUtility ?? false) {
+                urlBar.updateProgressBar(progress)
+            } else {
+                urlBar.hideProgressBar()
+            }
         case KVOLoading:
             guard let loading = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
 
@@ -1084,21 +1075,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
-        var activities = [UIActivity]()
-
-        let findInPageActivity = FindInPageActivity() { [unowned self] in
-            self.updateFindInPageVisibility(visible: true)
-        }
-        activities.append(findInPageActivity)
-
-        if let tab = tab, (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .active {
-            let requestDesktopSiteActivity = RequestDesktopSiteActivity(requestMobileSite: tab.desktopSite) { [unowned tab] in
-                tab.toggleDesktopSite()
-            }
-            activities.append(requestDesktopSiteActivity)
-        }
-
-        let helper = ShareExtensionHelper(url: url, tab: tab, activities: activities)
+        let helper = ShareExtensionHelper(url: url, tab: tab)
 
         let controller = helper.createActivityViewController({ [unowned self] completed, _ in
             // After dismissing, check to see if there were any prompts we queued up
@@ -1109,15 +1086,6 @@ class BrowserViewController: UIViewController {
             // invoked on iOS 10. See Bug 1297768 for additional details.
             self.displayedPopoverController = nil
             self.updateDisplayedPopoverProperties = nil
-
-            if completed {
-                // We don't know what share action the user has chosen so we simply always
-                // update the toolbar and reader mode bar to reflect the latest status.
-                if let tab = tab {
-                    self.updateURLBarDisplayURL(tab)
-                }
-                self.updateReaderModeBar()
-            }
         })
 
         if let popoverPresentationController = controller.popoverPresentationController {
@@ -1351,6 +1319,24 @@ extension BrowserViewController: URLBarDelegate {
         let controller = UINavigationController(rootViewController: qrCodeViewController)
         self.present(controller, animated: true, completion: nil)
     }
+
+    func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
+        
+        let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
+            self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
+        }
+        
+        let findInPageAction = {
+            self.updateFindInPageVisibility(visible: true)
+        }
+        
+        guard let tab = tabManager.selectedTab, tab.url != nil else { return }
+        
+        // The logic of which actions appear when isnt final.
+        let pageActions = getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
+                                        findInPage: findInPageAction, presentableVC: self)
+        presentSheetWith(actions: pageActions, on: self, from: button)
+    }
     
     func urlBarDidPressStop(_ urlBar: URLBarView) {
         tabManager.selectedTab?.stop()
@@ -1391,7 +1377,7 @@ extension BrowserViewController: URLBarDelegate {
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action."))
             // TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1158503 provide some form of 'this has been added' visual feedback?
         case .failure(let error):
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it's already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it’s already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
             log.error("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
         }
         return true
@@ -1506,7 +1492,7 @@ extension BrowserViewController: URLBarDelegate {
 
         if let searchURL = engine.searchURLForQuery(text) {
             // We couldn't find a matching search keyword, so do a search query.
-            Telemetry.recordEvent(SearchTelemetry.makeEvent(engine, source: .URLBar))
+            Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
@@ -1548,7 +1534,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // TODO: Should this be a PhotonActionSheet?
         guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
             return
         }
@@ -1584,43 +1569,19 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         // ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
         var actions: [[PhotonActionSheetItem]] = []
-        
-        let urlAction = { (url, isPrivate) in
-            self.openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: true)
-        }
-        
-        actions.append(getOtherPanelActions())
-        actions.append(getHomePanelActions(openURL: urlAction, vcDelegate: self))
-        actions.append(getTabMenuActions(openURL: urlAction, showTabs: showTabTray))
+
+        actions.append(getHomePanelActions())
+        actions.append(getOtherPanelActions(vcDelegate: self))
         presentSheetWith(actions: actions, on: self, from: button)
     }
 
-    func tabToolbarDidPressShare(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, direction) in
-            self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.frame, arrowDirection: .up)
-        }
-        
-        let findInPageAction = {
-            self.updateFindInPageVisibility(visible: true)
-        }
-        
-        // The logic of which actions appear when isnt final.
-        guard let tab = self.tabManager.selectedTab, tab.url != nil else {
-            return
-        }
-        
-        // The logic of which actions appear when isnt final.
-        let pageActions = self.getTabActions(tab: tab,
-                                             buttonView: button,
-                                             presentShareMenu: actionMenuPresenter,
-                                             findInPage: findInPageAction,
-                                             presentableVC: self)
-        self.presentSheetWith(actions: pageActions, on: self, from: button)
+    func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        showTabTray()
     }
 
     func showBackForwardList() {
         if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
-            let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+            let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList)
             backForwardViewController.tabManager = tabManager
             backForwardViewController.bvc = self
             backForwardViewController.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
@@ -1708,7 +1669,7 @@ extension BrowserViewController: TabDelegate {
         tab.addHelper(historyStateHelper, name: HistoryStateHelper.name())
         
         if #available(iOS 11, *) {
-            tab.contentBlocker = ContentBlockerHelper(tab: tab, profile: profile)
+            (tab.contentBlocker as? ContentBlockerHelper)?.setupForWebView()
         }
 
         let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
@@ -1752,10 +1713,10 @@ extension BrowserViewController: TabDelegate {
             }
 
             if traitCollection.horizontalSizeClass != .regular {
-                make.leading.trailing.equalTo(self.footer)
+                make.leading.trailing.equalTo(self.view)
                 self.snackBars.layer.borderWidth = 0
             } else {
-                make.centerX.equalTo(self.footer)
+                make.centerX.equalTo(self.view)
                 make.width.equalTo(SnackBarUX.MaxWidth)
                 self.snackBars.layer.borderColor = UIConstants.BorderColor.cgColor
                 self.snackBars.layer.borderWidth = 1
@@ -1901,8 +1862,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let settingsNavigationController = SearchSettingsTableViewController()
         settingsNavigationController.model = self.profile.searchEngines
         settingsNavigationController.profile = self.profile
-
-        let navController = UINavigationController(rootViewController: settingsNavigationController)
+        let navController = ModalSettingsNavigationController(rootViewController: settingsNavigationController)
 
         self.present(navController, animated: true, completion: nil)
     }
@@ -1989,7 +1949,9 @@ extension BrowserViewController: TabManagerDelegate {
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
-        self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
+        if !(selected?.webView?.url?.isLocalUtility ?? false) {
+            self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
+        }
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
             urlBar.updateReaderModeState(readerMode.state)
@@ -2064,8 +2026,9 @@ extension BrowserViewController: TabManagerDelegate {
     fileprivate func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            urlBar.updateTabCount(max(count, 1), animated: !urlBar.inOverlayMode)
-            topTabsViewController?.updateTabCount(max(count, 1), animated: animated)
+            toolbar?.updateTabCount(count, animated: animated)
+            urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
+            topTabsViewController?.updateTabCount(count, animated: animated)
         }
     }
 }
@@ -2202,7 +2165,7 @@ extension BrowserViewController: WKUIDelegate {
         }
         
         if openInHelper.openInView == nil {
-            openInHelper.openInView = navigationToolbar.shareButton
+             openInHelper.openInView = navigationToolbar.menuButton
         }
 
         openInHelper.open()
@@ -2802,14 +2765,14 @@ extension BrowserViewController {
         let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
             self.customSearchEngineButton.tintColor = UIColor.gray
             self.customSearchEngineButton.isUserInteractionEnabled = false
-            SDWebImageManager.shared().downloadImage(with: iconURL, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, error, cacheType, success, url) in
-                guard image != nil else {
+            SDWebImageManager.shared().loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+                guard let image = image else {
                     let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                     self.present(alert, animated: true, completion: nil)
                     return
                 }
 
-                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: image!, searchTemplate: searchQuery, suggestTemplate: nil, isCustomEngine: true))
+                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: image, searchTemplate: searchQuery, suggestTemplate: nil, isCustomEngine: true))
                 let Toast = SimpleToast()
                 Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
             }
@@ -2902,7 +2865,7 @@ extension BrowserViewController: Themeable {
     func applyTheme(_ themeName: String) {
         let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
         ui.forEach { $0?.applyTheme(themeName) }
-        statusBarOverlay.backgroundColor = urlBar.backgroundColor
+        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(self.traitCollection) ? UIColor(rgb: 0x272727) : urlBar.backgroundColor
         self.setNeedsStatusBarAppearanceUpdate()
     }
 }

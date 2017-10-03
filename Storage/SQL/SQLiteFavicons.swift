@@ -51,18 +51,20 @@ open class SQLiteFavicons {
     }
     
     public func insertOrUpdateFavicon(_ favicon: Favicon) -> Deferred<Maybe<Int>> {
-        return self.db.runWithConnection { (conn, _) -> Int in
-            return self.insertOrUpdateFaviconInTransaction(favicon, conn: conn) ?? 0
+        return db.withConnection { conn -> Int in
+            self.insertOrUpdateFaviconInTransaction(favicon, conn: conn) ?? 0
         }
     }
-    
+
     func insertOrUpdateFaviconInTransaction(_ favicon: Favicon, conn: SQLiteDBConnection) -> Int? {
         let query = self.getFaviconIDQuery(url: favicon.url)
         let cursor = conn.executeQuery(query.sql, factory: IntFactory, withArgs: query.args)
         
         if let id = cursor[0] {
             let updateQuery = self.getUpdateFaviconQuery(favicon: favicon)
-            if let _ = conn.executeChange(updateQuery.sql, withArgs: updateQuery.args) {
+            do {
+                try conn.executeChange(updateQuery.sql, withArgs: updateQuery.args)
+            } catch {
                 return nil
             }
             
@@ -70,7 +72,9 @@ open class SQLiteFavicons {
         }
         
         let insertQuery = self.getInsertFaviconQuery(favicon: favicon)
-        if let _ = conn.executeChange(insertQuery.sql, withArgs: insertQuery.args) {
+        do {
+            try conn.executeChange(insertQuery.sql, withArgs: insertQuery.args)
+        } catch {
             return nil
         }
         

@@ -107,7 +107,13 @@ extension FxAPushMessageHandler {
     // doesn't tap on the notification), but that's okay because:
     // We'll naturally be syncing shortly after startup.
     func postVerification() -> Success {
-        return profile.syncManager?.syncEverything(why: .didLogin) ?? succeed()
+        if let account = profile.getAccount(),
+            let syncManager = profile.syncManager {
+            return account.advance().bind { _ in
+                return syncManager.syncEverything(why: .didLogin)
+            } >>> succeed
+        }
+        return succeed()
     }
 }
 

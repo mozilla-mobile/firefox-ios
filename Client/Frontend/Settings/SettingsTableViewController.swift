@@ -404,14 +404,19 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
     override var accessoryType: UITableViewCellAccessoryType { return .none }
 
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags flags: FxALoginFlags) {
-        // Reload the data to reflect the new Account immediately.
-        settings.tableView.reloadData()
-        // And start advancing the Account state in the background as well.
-        settings.SELrefresh()
-
-        // Dismiss the FxA content view if the account is verified.
+        // This method will get called twice: once when the user signs in, and once
+        // when the account is verified by email – on this device or another.
+        // If the user hasn't dismissed the fxa content view controller,
+        // then we should only do that (thus finishing the sign in/verification process)
+        // once the account is verified.
+        // By the time we get to here, we should be syncing or just about to sync in the
+        // background, most likely from FxALoginHelper.
         if flags.verified {
             _ = settings.navigationController?.popToRootViewController(animated: true)
+            // Reload the data to reflect the new Account immediately.
+            settings.tableView.reloadData()
+            // And start advancing the Account state in the background as well.
+            settings.SELrefresh()
         }
     }
 

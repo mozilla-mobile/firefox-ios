@@ -326,7 +326,7 @@ func testTopSitesShareNewTopSite () {
         XCUIDevice.shared().orientation = .landscapeLeft
         let app = XCUIApplication()
 
-        loadWebPage("http://example.com")
+        navigator.openURL(urlString: "http://example.com")
         if app.buttons["URLBarView.backButton"].isEnabled {
             app.buttons["URLBarView.backButton"].tap()
         } else {

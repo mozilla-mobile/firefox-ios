@@ -308,7 +308,7 @@ class ClientPickerNoClientsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupHelpView(contentView,
-            introText: NSLocalizedString("You don't have any other devices connected to this Firefox Account available to sync.", tableName: "SendTo", comment: "Error message shown in the remote tabs panel"),
+            introText: NSLocalizedString("You don’t have any other devices connected to this Firefox Account available to sync.", tableName: "SendTo", comment: "Error message shown in the remote tabs panel"),
             showMeText: "") // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
         // Move the separator off screen
         separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)

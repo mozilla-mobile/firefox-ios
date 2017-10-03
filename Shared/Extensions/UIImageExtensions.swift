@@ -4,7 +4,7 @@
 
 import Foundation
 import UIKit
-import WebImage
+import SDWebImage
 
 private let imageLock = NSLock()
 
@@ -60,5 +60,24 @@ extension UIImage {
 
     public static func templateImageNamed(_ name: String) -> UIImage? {
         return UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
+    }
+
+    // TESTING ONLY: not for use in release/production code.
+    // PNG comparison can return false negatives, be very careful using for non-equal comparison.
+    // PNG comparison requires UIImages to be constructed the same way in order for the metadata block to match,
+    // this function ensures that.
+    //
+    // This can be verified with this code:
+    //    let image = UIImage(named: "fxLogo")!
+    //    let data = UIImagePNGRepresentation(image)!
+    //    assert(data != UIImagePNGRepresentation(UIImage(data: data)!))
+    @available(*, deprecated, message: "use only in testing code")
+    public func isStrictlyEqual(to other: UIImage) -> Bool {
+        // Must use same constructor for PNG metadata block to be the same.
+        let imageA = UIImage(data: UIImagePNGRepresentation(self)!)!
+        let imageB = UIImage(data: UIImagePNGRepresentation(other)!)!
+        let dataA = UIImagePNGRepresentation(imageA)!
+        let dataB = UIImagePNGRepresentation(imageB)!
+        return dataA == dataB
     }
 }

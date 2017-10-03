@@ -9,9 +9,8 @@ import Storage
 import SnapKit
 
 struct BackForwardViewUX {
-    static let RowHeight = 50
-    static let BackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.4)
-    static let BackgroundColorPrivate = UIColor(colorLiteralRed: 0.5, green: 0.5, blue: 0.5, alpha: 0.4)
+    static let RowHeight: CGFloat = 50
+    static let BackgroundColor = UIColor(rgb: 0xf9f9fa).withAlphaComponent(0.4)
 }
 
 class BackForwardListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
@@ -19,7 +18,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     fileprivate let BackForwardListCellIdentifier = "BackForwardListViewController"
     fileprivate var profile: Profile
     fileprivate lazy var sites = [String: Site]()
-    fileprivate var isPrivate: Bool
     fileprivate var dismissing = false
     fileprivate var currentRow = 0
     fileprivate var verticalConstraints: [Constraint] = []
@@ -32,7 +30,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         tableView.alwaysBounceVertical = false
         tableView.register(BackForwardTableViewCell.self, forCellReuseIdentifier: self.BackForwardListCellIdentifier)
         tableView.backgroundColor = BackForwardViewUX.BackgroundColor
-        let blurEffect = UIBlurEffect(style: self.isPrivate ? .dark : .extraLight)
+        let blurEffect = UIBlurEffect(style: .extraLight)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         tableView.backgroundView = blurEffectView
         
@@ -41,7 +39,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     lazy var shadow: UIView = {
         let shadow = UIView()
-        shadow.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.2)
+        shadow.backgroundColor = UIColor(white: 0, alpha: 0.2)
         return shadow
     }()
     
@@ -53,7 +51,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     var tableHeight: CGFloat {
         get {
             assert(Thread.isMainThread, "tableHeight interacts with UIKit components - cannot call from background thread.")
-            return min(CGFloat(BackForwardViewUX.RowHeight*listData.count), self.view.frame.height/2)
+            return min(BackForwardViewUX.RowHeight * CGFloat(listData.count), self.view.frame.height/2)
         }
     }
     
@@ -65,9 +63,8 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     var snappedToBottom: Bool = true
     
-    init(profile: Profile, backForwardList: WKBackForwardList, isPrivate: Bool) {
+    init(profile: Profile, backForwardList: WKBackForwardList) {
         self.profile = profile
-        self.isPrivate = false
         super.init(nibName: nil, bundle: nil)
         
         loadSites(backForwardList)
@@ -78,7 +75,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         super.viewDidLoad()
         view.addSubview(shadow)
         view.addSubview(tableView)
-        self.snappedToBottom = self.bvc?.toolbar != nil
+        snappedToBottom = bvc?.toolbar != nil
         tableView.snp.makeConstraints { make in
             make.height.equalTo(0)
             make.left.right.equalTo(self.view)
@@ -94,9 +91,9 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     func loadSitesFromProfile() {
         let sql = profile.favicons as! SQLiteHistory
-        let urls = self.listData.flatMap {$0.url.isLocal ? $0.url.getQuery()["url"]?.unescape() : $0.url.absoluteString}
+        let urls = listData.flatMap {$0.url.isLocal ? $0.url.getQuery()["url"]?.unescape() : $0.url.absoluteString}
 
-        sql.getSitesForURLs(urls).uponQueue(DispatchQueue.main) { result in
+        sql.getSitesForURLs(urls).uponQueue(.main) { result in
             guard let results = result.successValue else {
                 return
             }
@@ -118,7 +115,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func loadSites(_ bfList: WKBackForwardList) {
-        self.currentItem = bfList.currentItem
+        currentItem = bfList.currentItem
         
         homeAndNormalPagesOnly(bfList)
     }
@@ -128,8 +125,8 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             return
         }
         let moveToIndexPath = IndexPath(row: index-2, section: 0)
-        self.tableView.reloadRows(at: [moveToIndexPath], with: .none)
-        self.tableView.scrollToRow(at: moveToIndexPath, at: UITableViewScrollPosition.middle, animated: false)
+        tableView.reloadRows(at: [moveToIndexPath], with: .none)
+        tableView.scrollToRow(at: moveToIndexPath, at: UITableViewScrollPosition.middle, animated: false)
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -154,7 +151,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         super.viewWillTransition(to: size, with: coordinator)
         let correctHeight = {
             self.tableView.snp.updateConstraints { make in
-                make.height.equalTo(min(CGFloat(BackForwardViewUX.RowHeight * self.listData.count), size.height / 2))
+                make.height.equalTo(min(BackForwardViewUX.RowHeight * CGFloat(self.listData.count), size.height / 2))
             }
         }
         coordinator.animate(alongsideTransition: nil) { _ in
@@ -229,24 +226,13 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         cell.isCurrentTab = listData[indexPath.item] == self.currentItem
         cell.connectingBackwards = indexPath.item != listData.count-1
         cell.connectingForwards = indexPath.item != 0
-        cell.isPrivate = isPrivate
-        
-        guard let url = urlString else {
+
+        guard let url = urlString, !item.url.isAboutHomeURL else {
             cell.site = Site(url: item.url.absoluteString, title: Strings.FirefoxHomePage)
             return cell
         }
-        
-        if item.url.isAboutHomeURL {
-            cell.site = Site(url: item.url.absoluteString, title: Strings.FirefoxHomePage)
-            return cell
-        }
-        
-        if let site = sites[url] {
-            cell.site = site
-        } else {
-            cell.site = Site(url: url, title: item.title ?? "")
-        }
-        
+
+        cell.site = sites[url] ?? Site(url: url, title: item.title ?? "")
         cell.setNeedsDisplay()
         
         return cell
@@ -258,6 +244,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt  indexPath: IndexPath) -> CGFloat {
-        return CGFloat(BackForwardViewUX.RowHeight)
+        return BackForwardViewUX.RowHeight
     }
 }

@@ -162,6 +162,11 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
     }
 
     open func synchronizeBookmarksToStorage(_ storage: SyncableBookmarks & LocalItemSource & MirrorItemSource, usingBuffer buffer: BookmarkBufferStorage & BufferItemSource, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: @escaping () -> Bool, remoteClientsAndTabs: RemoteClientsAndTabs) -> SyncResult {
+        if self.prefs.boolForKey("dateAddedMigrationDone") != true {
+            self.lastFetched = 0;
+            self.prefs.setBool(true, forKey: "dateAddedMigrationDone")
+        }
+
         if let reason = self.reasonToNotSync(storageClient) {
             return deferMaybe(.notStarted(reason))
         }

@@ -33,13 +33,13 @@ extension Strings {
 extension Strings {
     public static let TopSitesEmptyStateDescription = NSLocalizedString("TopSites.EmptyState.Description", value: "Your most visited sites will show up here.", comment: "Description label for the empty Top Sites state.")
     public static let TopSitesEmptyStateTitle = NSLocalizedString("TopSites.EmptyState.Title", value: "Welcome to Top Sites", comment: "The title for the empty Top Sites state")
-    public static let TopSitesRemoveButtonAccessibilityLabel = NSLocalizedString("TopSites.RemovePage.Button", value: "Remove page - %@", comment: "Button shown in editing mode to remove this site from the top sites panel.")
+    public static let TopSitesRemoveButtonAccessibilityLabel = NSLocalizedString("TopSites.RemovePage.Button", value: "Remove page — %@", comment: "Button shown in editing mode to remove this site from the top sites panel.")
 }
 
 // Activity Stream.
 extension Strings {
     public static let HighlightIntroTitle = NSLocalizedString("ActivityStream.HighlightIntro.Title", value: "Be on the Lookout", comment: "The title that appears for the introduction to highlights in AS.")
-    public static let HighlightIntroDescription = NSLocalizedString("ActivityStream.HighlightIntro.Description", value: "Firefox will place things here that you've discovered on the web so you can find your way back to the great articles, videos, bookmarks and other pages", comment: "The detailed text that explains what highlights are in AS.")
+    public static let HighlightIntroDescription = NSLocalizedString("ActivityStream.HighlightIntro.Description", value: "Firefox will place things here that you’ve discovered on the web so you can find your way back to the great articles, videos, bookmarks and other pages", comment: "The detailed text that explains what highlights are in AS.")
     public static let ASPageControlButton = NSLocalizedString("ActivityStream.PageControl.Button", value: "Next Page", comment: "The page control button that lets you switch between pages in top sites")
     public static let ASHighlightsTitle =  NSLocalizedString("ActivityStream.Highlights.SectionTitle", value: "Visit Again", comment: "Section title label for Visit again section")
     public static let ASPocketTitle = NSLocalizedString("ActivityStream.Pocket.SectionTitle", value: "Recommended by Pocket", comment: "Section title label for Recommended by Pocket section")
@@ -83,7 +83,7 @@ extension Strings {
 // Error pages.
 extension Strings {
     public static let ErrorPagesAdvancedButton = NSLocalizedString("ErrorPages.Advanced.Button", value: "Advanced", comment: "Label for button to perform advanced actions on the error page")
-    public static let ErrorPagesAdvancedWarning1 = NSLocalizedString("ErrorPages.AdvancedWarning1.Text", value: "Warning: we can't confirm your connection to this website is secure.", comment: "Warning text when clicking the Advanced button on error pages")
+    public static let ErrorPagesAdvancedWarning1 = NSLocalizedString("ErrorPages.AdvancedWarning1.Text", value: "Warning: we can’t confirm your connection to this website is secure.", comment: "Warning text when clicking the Advanced button on error pages")
     public static let ErrorPagesAdvancedWarning2 = NSLocalizedString("ErrorPages.AdvancedWarning2.Text", value: "It may be a misconfiguration or tampering by an attacker. Proceed if you accept the potential risk.", comment: "Additional warning text when clicking the Advanced button on error pages")
     public static let ErrorPagesCertWarningDescription = NSLocalizedString("ErrorPages.CertWarning.Description", value: "The owner of %@ has configured their website improperly. To protect your information from being stolen, Firefox has not connected to this website.", comment: "Warning text on the certificate error page")
     public static let ErrorPagesCertWarningTitle = NSLocalizedString("ErrorPages.CertWarning.Title", value: "This Connection is Untrusted", comment: "Title on the certificate error page")
@@ -106,7 +106,7 @@ extension Strings {
     public static let EmptySyncedTabsPanelStateDescription = NSLocalizedString("HistoryPanel.EmptySyncedTabsState.Description", value: "Sign in to view open tabs on your other devices.", comment: "Description for the empty synced tabs state in the History Panel")
     public static let EmptySyncedTabsPanelNullStateDescription = NSLocalizedString("HistoryPanel.EmptySyncedTabsNullState.Description", value: "Your tabs from other devices show up here.", comment: "Description for the empty synced tabs null state in the History Panel")
     public static let SyncedTabsTableViewCellDescription = NSLocalizedString("HistoryPanel.SyncedTabsCell.Description.Pluralized", value: "%d device(s) connected", comment: "Description that corresponds with a number of devices connected for the Synced Tabs Cell in the History Panel")
-    public static let HistoryPanelEmptyStateTitle = NSLocalizedString("HistoryPanel.EmptyState.Title", value: "Websites you've visited recently will show up here.", comment: "Title for the History Panel empty state.")
+    public static let HistoryPanelEmptyStateTitle = NSLocalizedString("HistoryPanel.EmptyState.Title", value: "Websites you’ve visited recently will show up here.", comment: "Title for the History Panel empty state.")
     public static let RecentlyClosedTabsButtonTitle = NSLocalizedString("HistoryPanel.RecentlyClosedTabsButton.Title", value: "Recently Closed", comment: "Title for the Recently Closed button in the History Panel")
     public static let RecentlyClosedTabsPanelTitle = NSLocalizedString("RecentlyClosedTabsPanel.Title", value: "Recently Closed", comment: "Title for the Recently Closed Tabs Panel")
     public static let FirefoxHomePage = NSLocalizedString("Firefox.HomePage.Title", value: "Firefox Home Page", comment: "Title for firefox about:home page in tab history list")
@@ -268,7 +268,7 @@ extension Strings {
 
 // errors
 extension Strings {
-    public static let UnableToDownloadError = NSLocalizedString("Downloads.Error.Message", value: "Downloads aren't supported in Firefox yet.", comment: "The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle.")
+    public static let UnableToDownloadError = NSLocalizedString("Downloads.Error.Message", value: "Downloads aren’t supported in Firefox yet.", comment: "The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle.")
     public static let UnableToAddPassErrorTitle = NSLocalizedString("AddPass.Error.Title", value: "Failed to Add Pass", comment: "Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet.")
     public static let UnableToAddPassErrorMessage = NSLocalizedString("AddPass.Error.Message", value: "An error occured while adding the pass to Wallet. Please try again later.", comment: "Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet.")
     public static let UnableToAddPassErrorDismiss = NSLocalizedString("AddPass.Error.Dismiss", value: "OK", comment: "Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet.")
@@ -346,29 +346,30 @@ extension Strings {
 extension Strings {
     public static let AppMenuAddToReadingListTitleString = NSLocalizedString("Menu.AddToReadingList.Title", tableName: "Menu", value: "Add to Reading List", comment: "Label for the button, displayed in the menu, used to add a page to the reading list.")
     public static let AppMenuShowTabsTitleString = NSLocalizedString("Menu.ShowTabs.Title", tableName: "Menu", value: "Show Tabs", comment: "Label for the button, displayed in the menu, used to open the tabs tray")
-    public static let AppMenuSharePageTitleString = NSLocalizedString("Menu.SendPageAction.Title", tableName: "Menu", value: "Share", comment: "Label for the button, displayed in the menu, used to open the share dialog.")
+    public static let AppMenuSharePageTitleString = NSLocalizedString("Menu.SharePageAction.Title", tableName: "Menu", value: "Share Page With...", comment: "Label for the button, displayed in the menu, used to open the share dialog.")
     public static let AppMenuCopyURLTitleString = NSLocalizedString("Menu.CopyURL.Title", tableName: "Menu", value: "Copy URL", comment: "Label for the button, displayed in the menu, used to copy the page url to the clipboard.")
     public static let AppMenuNewTabTitleString = NSLocalizedString("Menu.NewTabAction.Title", tableName: "Menu", value: "Open New Tab", comment: "Label for the button, displayed in the menu, used to open a new tab")
     public static let AppMenuNewPrivateTabTitleString = NSLocalizedString("Menu.NewPrivateTabAction.Title", tableName: "Menu", value: "Open New Private Tab", comment: "Label for the button, displayed in the menu, used to open a new private tab.")
-    public static let AppMenuAddBookmarkTitleString = NSLocalizedString("Menu.AddBookmarkAction.Title", tableName: "Menu", value: "Add Bookmark", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.")
+    public static let AppMenuAddBookmarkTitleString = NSLocalizedString("Menu.AddBookmarkAction.Title", tableName: "Menu", value: "Bookmark This Page", comment: "Label for the button, displayed in the menu, used to create a bookmark for the current website.")
     public static let AppMenuRemoveBookmarkTitleString = NSLocalizedString("Menu.RemoveBookmarkAction.Title", tableName: "Menu", value: "Remove Bookmark", comment: "Label for the button, displayed in the menu, used to delete an existing bookmark for the current website.")
-    public static let AppMenuFindInPageTitleString = NSLocalizedString("Menu.FindInPageAction.Title", tableName: "Menu", value: "Find In Page", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.")
+    public static let AppMenuFindInPageTitleString = NSLocalizedString("Menu.FindInPageAction.Title", tableName: "Menu", value: "Find in Page", comment: "Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page.")
     public static let AppMenuViewDesktopSiteTitleString = NSLocalizedString("Menu.ViewDekstopSiteAction.Title", tableName: "Menu", value: "Request Desktop Site", comment: "Label for the button, displayed in the menu, used to request the desktop version of the current website.")
     public static let AppMenuViewMobileSiteTitleString = NSLocalizedString("Menu.ViewMobileSiteAction.Title", tableName: "Menu", value: "Request Mobile Site", comment: "Label for the button, displayed in the menu, used to request the mobile version of the current website.")
     public static let AppMenuScanQRCodeTitleString = NSLocalizedString("Menu.ScanQRCodeAction.Title", tableName: "Menu", value: "Scan QR Code", comment: "Label for the button, displayed in the menu, used to open the QR code scanner.")
     public static let AppMenuSettingsTitleString = NSLocalizedString("Menu.OpenSettingsAction.Title", tableName: "Menu", value: "Settings", comment: "Label for the button, displayed in the menu, used to open the Settings menu.")
     public static let AppMenuCloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", tableName: "Menu", value: "Close All Tabs", comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
     public static let AppMenuOpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", tableName: "Menu", value: "Open Homepage", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
-    public static let AppMenuSetHomePageTitleString = NSLocalizedString("Menu.SetHomePageAction.Title", tableName: "Menu", value: "Set Homepage", comment: "Label for the button, displayed in the menu, used to set the homepage if none is currently set.")
+    public static let AppMenuSetHomePageTitleString = NSLocalizedString("Menu.SetHomePageAction.Title", tableName: "Menu", value: "Set as Homepage", comment: "Label for the button, displayed in the menu, used to set the homepage if none is currently set.")
     public static let AppMenuTopSitesTitleString = NSLocalizedString("Menu.OpenTopSitesAction.AccessibilityLabel", tableName: "Menu", value: "Top Sites", comment: "Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel.")
     public static let AppMenuBookmarksTitleString = NSLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel", tableName: "Menu", value: "Bookmarks", comment: "Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel.")
     public static let AppMenuHistoryTitleString = NSLocalizedString("Menu.OpenHistoryAction.AccessibilityLabel", tableName: "Menu", value: "History", comment: "Accessibility label for the button, displayed in the menu, used to open the History home panel.")
     public static let AppMenuReadingListTitleString = NSLocalizedString("Menu.OpenReadingListAction.AccessibilityLabel", tableName: "Menu", value: "Reading List", comment: "Accessibility label for the button, displayed in the menu, used to open the Reading list home panel.")
     public static let AppMenuButtonAccessibilityLabel = NSLocalizedString("Toolbar.Menu.AccessibilityLabel", value: "Menu", comment: "Accessibility label for the Menu button.")
-    public static let AppMenuNightModeIsOnLabel = NSLocalizedString("Menu.NightModeIsOnAction.Label", value: "Night Mode: On", comment: "Label for the button, displayed in the menu, shows the current state of night mode which is currently ON")
-    public static let AppMenuNightModeIsOffLabel = NSLocalizedString("Menu.NightModeIsOffAction.Label", value: "Night Mode: Off", comment: "Label for the button, displayed in the menu, shows the current state of night mode which is currently OFF")
-    public static let AppMenuNoImageModeIsOnLabel = NSLocalizedString("Menu.NoImageModeIsOnAction.Label", value: "Hide Images: On", comment: "Label for the button, displayed in the menu, shows the current state of Hide Images mode which is currently ON")
-    public static let AppMenuNoImageModeIsOffLabel = NSLocalizedString("Menu.NoImageModeIsOffAction.Label", value: "Hide Images: Off", comment: "Label for the button, displayed in the menu, shows the current state of Hide Images which is currently OFF")
+    public static let TabTrayDeleteMenuButtonAccessibilityLabel = NSLocalizedString("Toolbar.Menu.CloseAllTabs", value: "Close All Tabs", comment: "Accessibility label for the Close All Tabs menu button.")
+    public static let AppMenuNightModeEnable = NSLocalizedString("Menu.NightModeTurnOn.Label", value: "Enable Night Mode", comment: "Label for the button, displayed in the menu, turns on night mode.")
+    public static let AppMenuNightModeDisable = NSLocalizedString("Menu.NightModeTurnOff.Label", value: "Disable Night Mode", comment: "Label for the button, displayed in the menu, turns off night mode")
+    public static let AppMenuNoImageModeEnable = NSLocalizedString("Menu.NoImageModeHideImages.Label", value: "Hide Images", comment: "Label for the button, displayed in the menu, hides images on the webpage when pressed.")
+    public static let AppMenuNoImageModeDisable = NSLocalizedString("Menu.NoImageModeShowImages.Label", value: "Show Images", comment: "Label for the button, displayed in the menu, shows images on the webpage when pressed")
 }
 
 // Snackbar shown when tapping app store link

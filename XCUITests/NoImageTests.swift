@@ -23,29 +23,23 @@ class NoImageTests: BaseTestCase {
     
     private func showImages() {
         app.buttons["TabToolbar.menuButton"].tap()
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery.cells["ShowImageModeMenuItem"].tap()
+        app.tables.cells["Show Images"].tap()
     }
     
     private func hideImages() {
         app.buttons["TabToolbar.menuButton"].tap()
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        let collectionViewsQuery = app.collectionViews
-        collectionViewsQuery.cells["HideImageModeMenuItem"].tap()
+        app.tables.cells["Hide Images"].tap()
     }
     
     private func checkShowImages() {
         navigator.goto(BrowserTabMenu)
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        waitforExistence(app.collectionViews.cells["ShowImageModeMenuItem"])
+        waitforExistence(app.tables.cells["Show Images"])
         navigator.goto(BrowserTab)
     }
     
     private func checkHideImages() {
         navigator.goto(BrowserTabMenu)
-        app.collectionViews.containing(.cell, identifier:"FindInPageMenuItem").element.swipeLeft()
-        waitforExistence(app.collectionViews.cells["HideImageModeMenuItem"])
+        waitforExistence(app.tables.cells["Hide Images"])
         navigator.goto(BrowserTab)
     }
     

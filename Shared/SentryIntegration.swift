@@ -73,10 +73,10 @@ public class SentryIntegration {
     public func crash() {
         Client.shared?.crash()
     }
-    
+
     public func send(message: String, tag: String = "general", severity: SentrySeverity = .info, completion: SentryRequestFinished? = nil) {
         // Do not send messages from SwiftData or BrowserDB unless this is the Beta channel
-        if !enabled || (AppConstants.BuildChannel != .beta && (tag == "SwiftData" || tag == "BrowserDB")) {
+        if !enabled || (AppConstants.BuildChannel != .beta && (tag == "SwiftData" || tag == "BrowserDB" || tag == "NotificationService")) {
             if let completion = completion {
                 completion(nil)
             }
@@ -92,7 +92,7 @@ public class SentryIntegration {
 
     public func sendWithStacktrace(message: String, tag: String = "general", severity: SentrySeverity = .info, completion: SentryRequestFinished? = nil) {
         // Do not send messages from SwiftData or BrowserDB unless this is the Beta channel
-        if !enabled || (AppConstants.BuildChannel != .beta && (tag == "SwiftData" || tag == "BrowserDB")) {
+        if !enabled || (AppConstants.BuildChannel != .beta && (tag == "SwiftData" || tag == "BrowserDB" || tag == "NotificationService")) {
             if let completion = completion {
                 completion(nil)
             }

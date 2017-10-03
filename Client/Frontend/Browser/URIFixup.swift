@@ -44,7 +44,10 @@ class URIFixup {
 
     static func punycodedURL(_ string: String) -> URL? {
         var components = URLComponents(string: string)
-        components?.host = AppConstants.MOZ_PUNYCODE ? components?.host?.utf8HostToAscii() : components?.host
+        if AppConstants.MOZ_PUNYCODE {
+            let host = components?.host?.utf8HostToAscii()
+            components?.host = host
+        }
         return components?.url
     }
 }

@@ -91,9 +91,21 @@ class DisconnectSetting: WithAccountSetting {
 class SyncNowSetting: WithAccountSetting {
     static let NotificationUserInitiatedSyncManually = "NotificationUserInitiatedSyncManually"
     let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+    let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
+    let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
+    let syncIcon = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
     
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
     let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+    
+    override init(settings: SettingsTableViewController) {
+        super.init(settings: settings)
+        NotificationCenter.default.addObserver(self, selector: #selector(SyncNowSetting.stopRotateSyncIcon), name: NotificationProfileDidFinishSyncing, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+    }
     
     fileprivate lazy var timestampFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -102,6 +114,16 @@ class SyncNowSetting: WithAccountSetting {
     }()
 
     fileprivate var syncNowTitle: NSAttributedString {
+        if !DeviceInfo.hasConnectivity() {
+            return NSAttributedString(
+                string: Strings.FxANoInternetConnection,
+                attributes: [
+                    NSForegroundColorAttributeName: UIColor.red,
+                    NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultMediumFont
+                ]
+            )
+        }
+        
         return NSAttributedString(
             string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
             attributes: [
@@ -112,13 +134,17 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     fileprivate let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowSyncTextColor, NSFontAttributeName: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFontWeightRegular)])
-    
+
     func startRotateSyncIcon() {
-        imageView.layer.add(continuousRotateAnimation, forKey: nil)
+        DispatchQueue.main.async {
+            self.imageView.layer.add(self.continuousRotateAnimation, forKey: "rotateKey")
+        }
     }
     
     func stopRotateSyncIcon() {
-        self.imageView.layer.removeAllAnimations()
+        DispatchQueue.main.async {
+            self.imageView.layer.removeAllAnimations()
+        }
     }
 
     override var accessoryType: UITableViewCellAccessoryType { return .none }
@@ -130,18 +156,15 @@ class SyncNowSetting: WithAccountSetting {
             return nil
         }
         
-        let image = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
         guard let syncStatus = profile.syncManager.syncDisplayState else {
-            return image
+            return syncIcon
         }
         
         switch syncStatus {
         case .inProgress:
-            self.startRotateSyncIcon()
-            return UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
+            return syncBlueIcon
         default:
-            self.stopRotateSyncIcon()
-            return image
+            return syncIcon
         }
     }
 
@@ -177,6 +200,10 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     override var enabled: Bool {
+        if !DeviceInfo.hasConnectivity() {
+            return false
+        }
+
         return profile.hasSyncableAccount()
     }
 
@@ -243,7 +270,7 @@ class SyncNowSetting: WithAccountSetting {
             cell.accessoryView = nil
         }
         cell.accessoryType = accessoryType
-        cell.isUserInteractionEnabled = !profile.syncManager.isSyncing
+        cell.isUserInteractionEnabled = !profile.syncManager.isSyncing && DeviceInfo.hasConnectivity()
         
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             // Animation that loops continously until stopped
@@ -257,8 +284,19 @@ class SyncNowSetting: WithAccountSetting {
             // dimensions and color, then the scaled sync icon is added as a subview.
             imageView.contentMode = .center
             imageView.image = image
-            cell.imageView?.image = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
+            
+            cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
+            cell.imageView?.image = syncIconWrapper
             cell.imageView?.addSubview(imageView)
+            
+            if let syncStatus = profile.syncManager.syncDisplayState {
+                switch syncStatus {
+                case .inProgress:
+                    self.startRotateSyncIcon()
+                default:
+                    self.stopRotateSyncIcon()
+                }
+            }
         }
     }
 
@@ -278,6 +316,10 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        if !DeviceInfo.hasConnectivity() {
+            return
+        }
+        
         NotificationCenter.default.post(name: Notification.Name(rawValue: SyncNowSetting.NotificationUserInitiatedSyncManually), object: nil)
         profile.syncManager.syncEverything(why: .syncNow)
     }
@@ -287,7 +329,6 @@ class SyncNowSetting: WithAccountSetting {
 class AccountStatusSetting: WithAccountSetting {
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(AccountStatusSetting.updateAccount(notification:)), name: NotificationFirefoxAccountProfileChanged, object: nil)
     }
     
@@ -297,7 +338,7 @@ class AccountStatusSetting: WithAccountSetting {
     
     func updateAccount(notification: Notification) {
         DispatchQueue.main.async {
-            self.settings.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
+            self.settings.tableView.reloadData()
         }
     }
     
@@ -408,6 +449,7 @@ class AccountStatusSetting: WithAccountSetting {
         super.onConfigureCell(cell)
         
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
             cell.imageView?.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.height)! / 2
             cell.imageView?.layer.masksToBounds = true
@@ -672,7 +714,7 @@ class SendFeedbackSetting: Setting {
 class SendAnonymousUsageDataSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
         super.init(
-            prefs: prefs, prefKey: "settings.sendUsageData", defaultValue: true,
+            prefs: prefs, prefKey: AppConstants.PrefSendUsageData, defaultValue: true,
             attributedTitleText: NSAttributedString(string: NSLocalizedString("Send Anonymous Usage Data", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")),
             attributedStatusText: NSAttributedString(string: NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]),
             settingDidChange: {

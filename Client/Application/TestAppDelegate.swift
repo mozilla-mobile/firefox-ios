@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import WebImage
+import SDWebImage
 import XCGLogger
 
 private let log = Logger.browserLogger
@@ -16,20 +16,23 @@ class TestAppDelegate: AppDelegate {
         }
 
         var profile: BrowserProfile
-        if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {
+        let launchArguments = ProcessInfo.processInfo.arguments
+        if launchArguments.contains(LaunchArguments.ClearProfile) {
             // Use a clean profile for each test session.
             log.debug("Deleting all files in 'Documents' directory to clear the profile")
             profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate, clear: true)
-
-            // Don't show the What's New page.
-            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-
-            // Skip the intro when requested by for example tests or automation
-            if AppConstants.SkipIntro {
-                profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
-            }
         } else {
             profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate)
+        }
+
+        // Don't show the What's New page.
+        if launchArguments.contains(LaunchArguments.SkipWhatsNew) {
+            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+        }
+
+        // Skip the intro when requested by for example tests or automation
+        if launchArguments.contains(LaunchArguments.SkipIntro) {
+            profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
         }
 
         self.profile = profile
@@ -82,6 +85,12 @@ class TestAppDelegate: AppDelegate {
                 log.debug("Couldn't delete some document contents.")
             }
         }
+    }
+
+    override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // Speed up the animations to 100 times as fast.
+        defer { application.keyWindow?.layer.speed = 100.0 }
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
 }

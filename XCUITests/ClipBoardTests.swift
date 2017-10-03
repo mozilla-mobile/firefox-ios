@@ -38,8 +38,8 @@ class ClipBoardTests: BaseTestCase {
     //Check copied url is same as in browser
     func checkCopiedUrl() {
         if let myString = UIPasteboard.general.string {
-            var value = app.textFields["url"].value as! String
-            if myString.hasSuffix("/") {
+            var value = app.textFields["address"].value as! String
+            if myString.hasSuffix("/") == false {
                 value = "\(value)/"
             }
             XCTAssertNotNil(myString)

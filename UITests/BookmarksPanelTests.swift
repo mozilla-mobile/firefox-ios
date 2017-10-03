@@ -184,4 +184,28 @@ class BookmarksPanelTests: KIFTestCase {
 
         XCTAssert(tv.numberOfRows(inSection: 0) == rowCount - 1)
     }
+  
+    func testRefreshBookmarks() {
+        createSomeBufferBookmarks()
+        guard let bookmarks = getAppBookmarkStorage() else {
+            return
+        }
+        let applyResult = bookmarks.applyRecords([
+            makeBookmark(guid: "bm-guid0", parentID: BookmarkRoots.MobileFolderGUID, title: "xyz"),
+            makeFolder(guid: BookmarkRoots.MobileFolderGUID, parentID: BookmarkRoots.RootGUID, title: "", childrenGuids: ["bm-guid0"])
+            ])
+        XCTAssert(applyResult.value.isSuccess)
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        
+        // Add a bookmark
+        let isAdded = (bookmarks as! MergedSQLiteBookmarks).local.addToMobileBookmarks(URL(string: "http://new-bookmark")!, title: "NewBookmark", favicon: nil)
+        XCTAssert(isAdded.value.isSuccess)
+        
+        // Pull to refresh
+        assertRowExists(withTitle: "xyz")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("xyz")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.down, 0.7, 0.7))
+        
+        // Verify new bookmark exists
+        assertRowExists(withTitle: "NewBookmark")
+    }
 }

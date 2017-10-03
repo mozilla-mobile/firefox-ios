@@ -30,7 +30,7 @@ public extension SetIterator {
 }
 
 public extension Set {
-    func withSubsetsOfSize(_ n: Int, f: (Set<Iterator.Element>) -> Void) {
+    func withSubsetsOfSize(_ n: Int, f: (Set<Iterator.Element>) throws -> Void) rethrows {
         precondition(n > 0)
 
         if self.isEmpty {
@@ -38,19 +38,19 @@ public extension Set {
         }
 
         if n > self.count {
-            f(self)
+            try f(self)
             return
         }
 
         if n == 1 {
-            self.forEach { f(Set([$0])) }
+            try self.forEach { try f(Set([$0])) }
             return
         }
 
         var generator = self.makeIterator()
         while let next = generator.take(n) {
             if !next.isEmpty {
-                f(Set(next))
+                try f(Set(next))
             }
         }
     }

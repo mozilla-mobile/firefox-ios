@@ -147,6 +147,7 @@ open class LivemarkPayload: BookmarkBasePayload {
 
         return BookmarkMirrorItem.livemark(
             self.id,
+            dateAdded: self["dateAdded"].uInt64,
             modified: modified,
             hasDupe: self.hasDupe,
             // TODO: these might need to be weakened if real-world data is dirty.
@@ -199,6 +200,7 @@ open class SeparatorPayload: BookmarkBasePayload {
 
         return BookmarkMirrorItem.separator(
             self.id,
+            dateAdded: self["dateAdded"].uInt64,
             modified: modified,
             hasDupe: self.hasDupe,
             // TODO: these might need to be weakened if real-world data is dirty.
@@ -276,6 +278,7 @@ open class FolderPayload: BookmarkBasePayload {
 
         return BookmarkMirrorItem.folder(
             self.id,
+            dateAdded: self["dateAdded"].uInt64,
             modified: modified,
             hasDupe: self.hasDupe,
             // TODO: these might need to be weakened if real-world data is dirty.
@@ -365,6 +368,7 @@ open class BookmarkPayload: BookmarkBasePayload {
 
         return BookmarkMirrorItem.bookmark(
             self.id,
+            dateAdded: self["dateAdded"].uInt64,
             modified: modified,
             hasDupe: self.hasDupe,
             // TODO: these might need to be weakened if real-world data is dirty.
@@ -424,6 +428,7 @@ open class BookmarkQueryPayload: BookmarkPayload {
 
         return BookmarkMirrorItem.query(
             self.id,
+            dateAdded: self["dateAdded"].uInt64,
             modified: modified,
             hasDupe: self.hasDupe,
             parentID: self["parentid"].string!,

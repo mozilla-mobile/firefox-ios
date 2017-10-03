@@ -48,6 +48,7 @@ private struct SearchViewControllerUX {
     static let PromptButtonColor = UIColor(rgb: 0x007aff)
 
     static let IconSize: CGFloat = 23
+    static let FaviconSize: CGFloat = 29
     static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
     static let IconBorderWidth: CGFloat = 0.5
 }
@@ -340,12 +341,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         searchEngineScrollViewContent.addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
-            make.width.equalTo(SearchViewControllerUX.SearchImageWidth)
-            make.height.equalTo(SearchViewControllerUX.SearchImageHeight)
+            make.size.equalTo(SearchViewControllerUX.FaviconSize)
             //offset the left edge to align with search results
-            make.left.equalTo(leftEdge).offset(SearchViewControllerUX.PromptInsets.left)
-            make.top.equalTo(self.searchEngineScrollViewContent)
-            make.bottom.equalTo(self.searchEngineScrollViewContent)
+            make.left.equalTo(leftEdge).offset(SearchViewControllerUX.SuggestionMargin * 2)
+            make.top.equalTo(self.searchEngineScrollViewContent).offset(SearchViewControllerUX.SuggestionMargin)
+            make.bottom.equalTo(self.searchEngineScrollViewContent).offset(-SearchViewControllerUX.SuggestionMargin)
         }
 
         //search engines
@@ -359,7 +359,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
 
             engineButton.imageView?.snp.makeConstraints { make in
-                make.width.height.equalTo(OpenSearchEngine.PreferredIconSize)
+                make.width.height.equalTo(SearchViewControllerUX.FaviconSize)
                 return
             }
 
@@ -393,7 +393,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return
         }
 
-        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine, source: .QuickSearch))
+        Telemetry.default.recordSearch(location: .quickSearch, searchEngine: engine.engineID ?? "other")
+
         searchDelegate?.searchViewController(self, didSelectURL: url)
     }
 
@@ -573,7 +574,7 @@ extension SearchViewController: SuggestionCellDelegate {
             url = engine.searchURLForQuery(suggestion)
         }
 
-        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine, source: .Suggestion))
+        Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
 
         if let url = url {
             searchDelegate?.searchViewController(self, didSelectURL: url)
@@ -666,12 +667,12 @@ fileprivate class SuggestionCell: UITableViewCell {
         super.layoutSubviews()
 
         // The left bounds of the suggestions, aligned with where text would be displayed.
-        let textLeft: CGFloat = 48
+        let textLeft: CGFloat = 61
 
         // The maximum width of the container, after which suggestions will wrap to the next line.
         let maxWidth = contentView.frame.width
 
-        let imageSize = CGFloat(OpenSearchEngine.PreferredIconSize)
+        let imageSize = CGFloat(SearchViewControllerUX.FaviconSize)
 
         // The height of the suggestions container (minus margins), used to determine the frame.
         // We set it to imageSize.height as a minimum since we don't want the cell to be shorter than the icon
@@ -723,7 +724,7 @@ fileprivate class SuggestionCell: UITableViewCell {
         contentView.frame = bounds
         container.frame = bounds
 
-        let imageX = (48 - imageSize) / 2
+        let imageX = (textLeft - imageSize) / 2
         let imageY = (frame.size.height - imageSize) / 2
         imageView!.frame = CGRect(x: imageX, y: imageY, width: imageSize, height: imageSize)
     }

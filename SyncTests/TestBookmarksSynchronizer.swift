@@ -169,11 +169,11 @@ class TestBookmarksSynchronizer: XCTestCase {
 
         let buffer = MockBuffer()
         let storage = MockStorage()
-        storage.local[BookmarkRoots.MobileFolderGUID] = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Mobile Bookmarks", description: nil, children: ["bk1"])
-        storage.local["bk1"] = BookmarkMirrorItem.bookmark("bk1", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 1", description: nil, URI: "https://example.com/1", tags: "", keyword: nil)
-        storage.local["bk1"] = BookmarkMirrorItem.bookmark("bk1", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 1", description: nil, URI: "https://example.com/1", tags: "", keyword: nil)
-        let bk2 = BookmarkMirrorItem.bookmark("bk2", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 2", description: nil, URI: "https://example.com/2", tags: "", keyword: nil)
-        let bk3 = BookmarkMirrorItem.bookmark("bk3", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 3", description: nil, URI: "https://example.com/3", tags: "", keyword: nil)
+        storage.local[BookmarkRoots.MobileFolderGUID] = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Mobile Bookmarks", description: nil, children: ["bk1"])
+        storage.local["bk1"] = BookmarkMirrorItem.bookmark("bk1", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 1", description: nil, URI: "https://example.com/1", tags: "", keyword: nil)
+        storage.local["bk1"] = BookmarkMirrorItem.bookmark("bk1", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 1", description: nil, URI: "https://example.com/1", tags: "", keyword: nil)
+        let bk2 = BookmarkMirrorItem.bookmark("bk2", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 2", description: nil, URI: "https://example.com/2", tags: "", keyword: nil)
+        let bk3 = BookmarkMirrorItem.bookmark("bk3", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 3", description: nil, URI: "https://example.com/3", tags: "", keyword: nil)
         storage.local["bk2"] = bk2
         storage.local["bk3"] = bk3
 
@@ -195,15 +195,15 @@ class TestBookmarksSynchronizer: XCTestCase {
         let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
 
         let buffer = MockBuffer()
-        buffer.buffer[BookmarkRoots.MobileFolderGUID] = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Mobile Bookmarks", description: nil, children: ["bk1", "bkmdeleteme"])
+        buffer.buffer[BookmarkRoots.MobileFolderGUID] = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Mobile Bookmarks", description: nil, children: ["bk1", "bkmdeleteme"])
         buffer.children[BookmarkRoots.MobileFolderGUID] = ["bk1", "bkmdeleteme"]
-        buffer.buffer["bk1"] = BookmarkMirrorItem.bookmark("bk1", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 1", description: nil, URI: "https://example.com/1", tags: "", keyword: nil)
-        buffer.buffer["bkmdeleteme"] = BookmarkMirrorItem.bookmark("bkmdeleteme", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark to delete", description: nil, URI: "https://example.com/todelete", tags: "", keyword: nil)
+        buffer.buffer["bk1"] = BookmarkMirrorItem.bookmark("bk1", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 1", description: nil, URI: "https://example.com/1", tags: "", keyword: nil)
+        buffer.buffer["bkmdeleteme"] = BookmarkMirrorItem.bookmark("bkmdeleteme", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark to delete", description: nil, URI: "https://example.com/todelete", tags: "", keyword: nil)
 
         let storage = MockStorage()
-        storage.local["bk1"] = BookmarkMirrorItem.bookmark("bk1", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 1", description: nil, URI: "https://example.com/1", tags: "", keyword: nil)
-        let bk2 = BookmarkMirrorItem.bookmark("bk2", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 2", description: nil, URI: "https://example.com/2", tags: "", keyword: nil)
-        let bk3 = BookmarkMirrorItem.bookmark("bk3", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 3", description: nil, URI: "https://example.com/3", tags: "", keyword: nil)
+        storage.local["bk1"] = BookmarkMirrorItem.bookmark("bk1", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 1", description: nil, URI: "https://example.com/1", tags: "", keyword: nil)
+        let bk2 = BookmarkMirrorItem.bookmark("bk2", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 2", description: nil, URI: "https://example.com/2", tags: "", keyword: nil)
+        let bk3 = BookmarkMirrorItem.bookmark("bk3", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "Bookmark 3", description: nil, URI: "https://example.com/3", tags: "", keyword: nil)
         storage.local["bk2"] = bk2
         storage.local["bk3"] = bk3
 
@@ -422,11 +422,11 @@ class TestBookmarksSynchronizer: XCTestCase {
     func createMobileRootAndChildrenRecords(numChildren: Int) -> (mobileRootRecord: Record<BookmarkBasePayload>, childrenRecords: [Record<BookmarkBasePayload>]) {
         var childrenRecords: [Record<BookmarkBasePayload>] = []
         for i in 0...numChildren {
-            let item = BookmarkMirrorItem.bookmark("bk1\(i)", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "bk1\(i)", description: nil, URI: "https://example.com/\(i)", tags: "", keyword: nil)
+            let item = BookmarkMirrorItem.bookmark("bk1\(i)", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID, parentName: nil, title: "bk1\(i)", description: nil, URI: "https://example.com/\(i)", tags: "", keyword: nil)
             let record = Record<BookmarkBasePayload>(id: item.guid, payload: item.asPayload())
             childrenRecords.append(record)
         }
-        let mobileRoot = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Mobile Bookmarks", description: nil, children: [])
+        let mobileRoot = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Mobile Bookmarks", description: nil, children: [])
         let mobileRootRecord = Record<BookmarkBasePayload>(id: BookmarkRoots.translateOutgoingRootGUID(BookmarkRoots.MobileFolderGUID), payload: mobileRoot.asPayloadWithChildren(childrenRecords.map { $0.id }))
 
         return (mobileRootRecord: mobileRootRecord, childrenRecords: childrenRecords)

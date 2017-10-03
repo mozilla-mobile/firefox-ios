@@ -31,6 +31,8 @@ struct TodayUX {
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding {
 
+    var copiedURL: URL?
+
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
@@ -151,12 +153,17 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func updateCopiedLink() {
-        if let url = UIPasteboard.general.copiedURL {
-            self.openCopiedLinkButton.isHidden = false
-            self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
-            self.openCopiedLinkButton.subtitleLabel.text = url.absoluteString
-        } else {
-            self.openCopiedLinkButton.isHidden = true
+        UIPasteboard.general.asyncURL().uponQueue(.main) { res in
+            if let copiedURL: URL? = res.successValue,
+                let url = copiedURL {
+                self.openCopiedLinkButton.isHidden = false
+                self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
+                self.openCopiedLinkButton.subtitleLabel.text = url.absoluteDisplayString
+                self.copiedURL = url
+            } else {
+                self.openCopiedLinkButton.isHidden = true
+                self.copiedURL = nil
+            }
         }
     }
 
@@ -177,10 +184,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     @objc func onPressOpenClibpoard(_ view: UIView) {
-        if let urlString = UIPasteboard.general.string,
-            let _ = URL(string: urlString) {
-            let encodedString =
-                urlString.escape()
+        if let url = copiedURL,
+            let encodedString = url.absoluteString.escape() {
             openContainingApp("?url=\(encodedString)")
         }
     }

@@ -54,15 +54,19 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountVerified, object: nil)
-        
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            profile.getAccount()?.updateProfile()
-        }
+        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountVerified, object: nil)        
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            profile.getAccount()?.updateProfile()
+        }
     }
 
     override func makeWebView() -> WKWebView {

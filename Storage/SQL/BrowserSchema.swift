@@ -128,7 +128,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 31    // Bug 1388147.
+    static let DefaultVersion = 33    // Bug 1335201.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -145,12 +145,15 @@ open class BrowserSchema: Schema {
     }
 
     func run(_ db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
-        let err = db.executeChange(sql, withArgs: args)
-        if err != nil {
-            log.error("Error running SQL in BrowserSchema: \(err?.localizedDescription ?? "nil")")
+        do {
+            try db.executeChange(sql, withArgs: args)
+        } catch let err as NSError {
+            log.error("Error running SQL in BrowserSchema: \(err.localizedDescription)")
             log.error("SQL was \(sql)")
+            return false
         }
-        return err == nil
+
+        return true
     }
 
     // TODO: transaction.
@@ -193,11 +196,11 @@ open class BrowserSchema: Schema {
         let status = SyncStatus.new.rawValue
 
         let localArgs: Args = [
-            BookmarkRoots.RootID, BookmarkRoots.RootGUID, type, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, BookmarkRoots.RootGUID, status, now,
+            BookmarkRoots.RootID, BookmarkRoots.RootGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
         ]
 
         // Compute these args using the sequence in RootChildren, rather than hard-coding.
@@ -218,8 +221,8 @@ open class BrowserSchema: Schema {
 
         let local =
         "INSERT INTO \(TableBookmarksLocal) " +
-        "(id, guid, type, parentid, title, parentName, sync_status, local_modified) VALUES " +
-        Array(repeating: "(?, ?, ?, ?, '', '', ?, ?)", count: BookmarkRoots.RootChildren.count + 1).joined(separator: ", ")
+        "(id, guid, type, date_added, parentid, title, parentName, sync_status, local_modified) VALUES " +
+        Array(repeating: "(?, ?, ?, ?, ?, '', '', ?, ?)", count: BookmarkRoots.RootChildren.count + 1).joined(separator: ", ")
 
         let structure =
         "INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) VALUES " +
@@ -358,6 +361,7 @@ open class BrowserSchema: Schema {
         "( id INTEGER PRIMARY KEY AUTOINCREMENT" +
         ", guid TEXT NOT NULL UNIQUE" +
         ", type TINYINT NOT NULL" +                    // Type enum.
+        ", date_added INTEGER" +
 
         // Record/envelope metadata that'll allow us to do merges.
         ", is_deleted TINYINT NOT NULL DEFAULT 0" +    // Boolean
@@ -401,6 +405,7 @@ open class BrowserSchema: Schema {
     "  -1 AS id" +
     ", mirror.guid AS guid" +
     ", mirror.type AS type" +
+    ", mirror.date_added AS date_added" +
     ", mirror.is_deleted AS is_deleted" +
     ", mirror.parentid AS parentid" +
     ", mirror.parentName AS parentName" +
@@ -425,6 +430,7 @@ open class BrowserSchema: Schema {
     "  -1 AS id" +
     ", guid" +
     ", type" +
+    ", date_added" +
     ", is_deleted" +
     ", parentid" +
     ", parentName" +
@@ -446,6 +452,7 @@ open class BrowserSchema: Schema {
     "  -1 AS id" +
     ", mirror.guid AS guid" +
     ", mirror.type AS type" +
+    ", mirror.date_added AS date_added" +
     ", mirror.is_deleted AS is_deleted" +
     ", mirror.parentid AS parentid" +
     ", mirror.parentName AS parentName" +
@@ -470,6 +477,7 @@ open class BrowserSchema: Schema {
     "  -1 AS id" +
     ", guid" +
     ", type" +
+    ", date_added" +
     ", is_deleted" +
     ", parentid" +
     ", parentName" +
@@ -500,11 +508,11 @@ open class BrowserSchema: Schema {
 
     fileprivate let localBookmarksView =
     "CREATE VIEW \(ViewBookmarksLocalOnMirror) AS " +
-    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri," +
+    "SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri," +
     "   siteUri, pos, title, description, bmkUri, folderName, faviconID, NULL AS local_modified, server_modified, 0 AS is_overridden " +
     "FROM \(TableBookmarksMirror) WHERE is_overridden IS NOT 1 " +
     "UNION ALL " +
-    "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID," +
+    "SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID," +
     "   local_modified, NULL AS server_modified, 1 AS is_overridden " +
     "FROM \(TableBookmarksLocal) WHERE is_deleted IS NOT 1"
 
@@ -1129,6 +1137,38 @@ open class BrowserSchema: Schema {
             }
         }
 
+        if from < 32 && to >= 32 {
+            var queries: [String] = []
+            // If upgrading from < 12 these tables are created with that column already present.
+            if from > 12 {
+                queries.append(contentsOf: [
+                    "ALTER TABLE \(TableBookmarksLocal) ADD date_added INTEGER",
+                    "ALTER TABLE \(TableBookmarksMirror) ADD date_added INTEGER",
+                    "ALTER TABLE \(TableBookmarksBuffer) ADD date_added INTEGER"
+                ])
+            }
+            queries.append(contentsOf: [
+                "UPDATE \(TableBookmarksLocal) SET date_added = local_modified",
+                "UPDATE \(TableBookmarksMirror) SET date_added = server_modified"
+            ])
+            if !self.run(db, queries: queries) {
+                return false
+            }
+        }
+
+        if from < 33 && to >= 33 {
+            if !self.run(db, queries: [
+                "DROP VIEW IF EXISTS \(ViewBookmarksBufferOnMirror)",
+                "DROP VIEW IF EXISTS \(ViewBookmarksBufferWithDeletionsOnMirror)",
+                "DROP VIEW IF EXISTS \(ViewBookmarksLocalOnMirror)",
+                self.bufferBookmarksView,
+                self.bufferBookmarksWithDeletionsView,
+                self.localBookmarksView
+                ]) {
+                return false
+            }
+        }
+
         return true
     }
     
@@ -1174,7 +1214,9 @@ open class BrowserSchema: Schema {
         log.info("Schema table migrations complete; Dropping 'tableList' table.")
 
         let sql = "DROP TABLE IF EXISTS tableList"
-        if let err = db.executeChange(sql) {
+        do {
+            try db.executeChange(sql)
+        } catch let err as NSError {
             log.error("Error dropping tableList table: \(err.localizedDescription)")
             SentryIntegration.shared.sendWithStacktrace(message: "Error dropping tableList table: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
             return false
@@ -1182,7 +1224,9 @@ open class BrowserSchema: Schema {
 
         // Lastly, write the *previous* schema version (prior to v31) to the database
         // using `PRAGMA user_version = ?`.
-        if let err = db.setVersion(previousVersion) {
+        do {
+            try db.setVersion(previousVersion)
+        } catch let err as NSError {
             log.error("Error setting database version: \(err.localizedDescription)")
             SentryIntegration.shared.sendWithStacktrace(message: "Error setting database version: \(err.localizedDescription)", tag: "BrowserDB", severity: .error)
             return false
@@ -1224,7 +1268,9 @@ open class BrowserSchema: Schema {
         
         if previousClientsTableVersion < 2 {
             let sql = "ALTER TABLE \(TableClients) ADD COLUMN version TEXT"
-            if let err = db.executeChange(sql) {
+            do {
+                try db.executeChange(sql)
+            } catch let err as NSError {
                 log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
                 SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)", tag: "BrowserDB", severity: .error)
                 return .failure
@@ -1233,7 +1279,9 @@ open class BrowserSchema: Schema {
         
         if previousClientsTableVersion < 3 {
             let sql = "ALTER TABLE \(TableClients) ADD COLUMN fxaDeviceId TEXT"
-            if let err = db.executeChange(sql) {
+            do {
+                try db.executeChange(sql)
+            } catch let err as NSError {
                 log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
                 SentryIntegration.shared.sendWithStacktrace(message: "Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)", tag: "BrowserDB", severity: .error)
                 return .failure

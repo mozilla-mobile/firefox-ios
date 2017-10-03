@@ -127,7 +127,7 @@ enum RemoteTabsError {
         case .noClients:
             return Strings.EmptySyncedTabsPanelNullStateDescription
         case .noTabs:
-            return NSLocalizedString("You don't have any tabs open in Firefox on your other devices.", comment: "Error message in the remote tabs panel")
+            return NSLocalizedString("You don’t have any tabs open in Firefox on your other devices.", comment: "Error message in the remote tabs panel")
         case .failedToSync:
             return NSLocalizedString("There was a problem accessing tabs from your other devices. Try again in a few moments.", comment: "Error message in the remote tabs panel")
         }

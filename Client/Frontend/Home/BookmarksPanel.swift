@@ -13,7 +13,7 @@ let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
 
 // MARK: - Placeholder strings for Bug 1232810.
 
-let deleteWarningTitle = NSLocalizedString("This folder isn't empty.", tableName: "BookmarkPanelDeleteConfirm", comment: "Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders.")
+let deleteWarningTitle = NSLocalizedString("This folder isn’t empty.", tableName: "BookmarkPanelDeleteConfirm", comment: "Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders.")
 let deleteWarningDescription = NSLocalizedString("Are you sure you want to delete it and its contents?", tableName: "BookmarkPanelDeleteConfirm", comment: "Main body of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders.")
 let deleteCancelButtonLabel = NSLocalizedString("Cancel", tableName: "BookmarkPanelDeleteConfirm", comment: "Button label to cancel deletion when the user tried to delete a non-empty folder.")
 let deleteDeleteButtonLabel = NSLocalizedString("Delete", tableName: "BookmarkPanelDeleteConfirm", comment: "Button label for the button that deletes a folder and all of its children.")
@@ -43,6 +43,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var source: BookmarksModel?
     var parentFolders = [BookmarkFolder]()
     var bookmarkFolder: BookmarkFolder?
+    var refreshControl: UIRefreshControl?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(BookmarksPanel.longPress(_:)))
@@ -75,11 +76,25 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         tableView.addGestureRecognizer(longPressRecognizer)
 
         self.tableView.accessibilityIdentifier = "Bookmarks List"
+        
+        self.refreshControl = UIRefreshControl()
+        self.tableView.addSubview(refreshControl!)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        refreshControl?.addTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
 
+        loadData()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        refreshControl?.removeTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
+    }
+    
+    func loadData() {
         // If we've not already set a source for this panel, fetch a new model from
         // the root; otherwise, just use the existing source to select a folder.
         guard let source = self.source else {
@@ -91,7 +106,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             }
             return
         }
-
+        
         if let bookmarkFolder = bookmarkFolder {
             source.selectFolder(bookmarkFolder).upon(onModelFetched)
         } else {
@@ -108,6 +123,15 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             // no need to do anything at all
             log.warning("Received unexpected notification \(notification.name)")
             break
+        }
+    }
+    
+    @objc fileprivate func refreshBookmarks() {
+        profile.syncManager.mirrorBookmarks().upon { (_) in
+            DispatchQueue.main.async {
+                self.loadData()
+                self.refreshControl?.endRefreshing()
+            }
         }
     }
 

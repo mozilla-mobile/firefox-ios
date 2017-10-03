@@ -6,9 +6,9 @@ import Shared
 import UIKit
 import Deferred
 import Storage
-import WebImage
+import SDWebImage
 import XCGLogger
-import Telemetry
+import SyncTelemetry
 import SnapKit
 
 private let log = Logger.browserLogger
@@ -16,7 +16,7 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
 // MARK: -  Lifecycle
 struct ASPanelUX {
-    static let backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+    static let backgroundColor = UIConstants.AppBackgroundColor
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 14)
@@ -477,7 +477,9 @@ extension ActivityStreamPanel: DataObserverDelegate {
     // See ActivityStreamDataObserver for invalidation logic.
     func reloadAll() {
         self.getPocketSites().uponQueue(.main) { _ in
-            self.collectionView?.reloadData()
+            if !self.pocketStories.isEmpty {
+                self.collectionView?.reloadData()
+            }
         }
         accumulate([self.getHighlights, self.getTopSites]).uponQueue(.main) { _ in
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
@@ -502,7 +504,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
             return succeed()
         }
     }
-    
+
     func getPocketSites() -> Success {
         return pocketAPI.globalFeed(items: 4).bindQueue(.main) { pStory in
             self.pocketStories = pStory
@@ -767,7 +769,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         })
 
         let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
-            let helper = ShareExtensionHelper(url: siteURL, tab: nil, activities: [])
+            let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController { completed, activityType in
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }
