@@ -36,9 +36,7 @@
 		746D78FB1F4E0095002EB522 /* ShareSheetActivities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D78FA1F4E0095002EB522 /* ShareSheetActivities.swift */; };
 		A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C4943B406FCA9B74B4E186 /* CoreText.framework */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
-		B36DB6E21F4CE75600E8604C /* ContextMenu.js in Resources */ = {isa = PBXBuildFile; fileRef = B36DB6E11F4CE75600E8604C /* ContextMenu.js */; };
-		B37F83041F3B90CE00F242EB /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37F83021F3B90CE00F242EB /* CacheManager.swift */; };
-		B37F83051F3B90CE00F242EB /* PhotoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37F83031F3B90CE00F242EB /* PhotoManager.swift */; };
+		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
 		D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D00A44101EB8F80A00DB0218 /* Telemetry.framework */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
@@ -104,7 +102,6 @@
 		D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */; };
 		D3E2C96D1DA3077400DEBE3D /* CharacterSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */; };
 		D3E2C96F1DA3093D00DEBE3D /* BrowserToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */; };
-		D3E2C98A1DA47D5300DEBE3D /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C9891DA47D5300DEBE3D /* Browser.swift */; };
 		D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E3CA7C1DA827AD0079C94B /* HomeView.swift */; };
 		D3E54FCD1DEFA92F003E1AFF /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E54FCC1DEFA92F003E1AFF /* Fuzi.framework */; };
 		D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E54FCE1DEFAE80003E1AFF /* OpenSearchParser.swift */; };
@@ -285,9 +282,7 @@
 		A89766D61F57DCA9008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A89766D71F57DCA9008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		AAB8E622E994545108473554 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		B36DB6E11F4CE75600E8604C /* ContextMenu.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ContextMenu.js; path = Assets/ContextMenu.js; sourceTree = "<group>"; };
-		B37F83021F3B90CE00F242EB /* CacheManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
-		B37F83031F3B90CE00F242EB /* PhotoManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoManager.swift; sourceTree = "<group>"; };
+		B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		BC16C41C8D4A74C79A493D42 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C652A61E213D254A86DF5736 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		D00A440E1EB8F40A00DB0218 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
@@ -355,7 +350,6 @@
 		D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
 		D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterSetExtensions.swift; sourceTree = "<group>"; };
 		D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
-		D3E2C9891DA47D5300DEBE3D /* Browser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		D3E3CA7C1DA827AD0079C94B /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D3E3CA801DA83FAF0079C94B /* Focus.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Focus.entitlements; sourceTree = "<group>"; };
 		D3E3CA811DA83FAF0079C94B /* FocusEnterprise.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FocusEnterprise.entitlements; sourceTree = "<group>"; };
@@ -710,12 +704,36 @@
 			path = OpenInFocus;
 			sourceTree = "<group>";
 		};
-		B36DB6E01F4CE74500E8604C /* Assets */ = {
+		B31DAAC71F7D87E800A11A74 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
-				B36DB6E11F4CE75600E8604C /* ContextMenu.js */,
+				B31DAAC81F7D87EF00A11A74 /* RequestHandler */,
 			);
-			name = Assets;
+			path = Lib;
+			sourceTree = "<group>";
+		};
+		B31DAAC81F7D87EF00A11A74 /* RequestHandler */ = {
+			isa = PBXGroup;
+			children = (
+				D33E9B231E1D93DD00A39A44 /* RequestHandler.swift */,
+			);
+			path = RequestHandler;
+			sourceTree = "<group>";
+		};
+		B3AFC2B91F7C0B66001AEF38 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				B3AFC2BA1F7C0B92001AEF38 /* WebView */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		B3AFC2BA1F7C0B92001AEF38 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */,
+			);
+			path = WebView;
 			sourceTree = "<group>";
 		};
 		D30179C41BCD78BF009AD388 /* SCSiriWaveformView */ = {
@@ -848,7 +866,8 @@
 		E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */ = {
 			isa = PBXGroup;
 			children = (
-				B36DB6E01F4CE74500E8604C /* Assets */,
+				B3AFC2B91F7C0B66001AEF38 /* Modules */,
+				B31DAAC71F7D87E800A11A74 /* Lib */,
 				D3E54FD41DEFB25B003E1AFF /* SearchPlugins */,
 				D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */,
 				D3DA778B1DC2C60E009C114E /* errorPage.html */,
@@ -865,11 +884,9 @@
 				7460BD661F58B1B10096B745 /* GradientProgressBar.swift */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
 				D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */,
-				D3E2C9891DA47D5300DEBE3D /* Browser.swift */,
 				D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */,
 				D364DC251DC4163700562991 /* BrowserToolset.swift */,
 				D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */,
-				B37F83021F3B90CE00F242EB /* CacheManager.swift */,
 				D3E2C96C1DA3077400DEBE3D /* CharacterSetExtensions.swift */,
 				D35A0E011E26C94F00297884 /* ClosedRangeExtensions.swift */,
 				D3426AEC1DB846310016DA5A /* DomainCompletion.swift */,
@@ -885,8 +902,6 @@
 				D3E54FCE1DEFAE80003E1AFF /* OpenSearchParser.swift */,
 				D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */,
 				D3426AEA1DB7F8AA0016DA5A /* OverlayView.swift */,
-				B37F83031F3B90CE00F242EB /* PhotoManager.swift */,
-				D33E9B231E1D93DD00A39A44 /* RequestHandler.swift */,
 				D3E251E81DAD714C005918DC /* SafariInstructionsViewController.swift */,
 				D3426AF51DB84E7A0016DA5A /* SearchEngine.swift */,
 				D3E54FD01DEFB063003E1AFF /* SearchEngineManager.swift */,
@@ -1130,7 +1145,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3B3232E1BD16A0F00B0EEE4 /* licenses.html in Resources */,
-				B36DB6E21F4CE75600E8604C /* ContextMenu.js in Resources */,
 				E4BF2DDE1BACE8CA00DA9D68 /* Assets.xcassets in Resources */,
 				6616A36F1BD17EFA00C7E493 /* style.css in Resources */,
 				D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */,
@@ -1272,8 +1286,8 @@
 				D30179C81BCD78E2009AD388 /* SCSiriWaveformView.m in Sources */,
 				D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */,
 				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
-				B37F83051F3B90CE00F242EB /* PhotoManager.swift in Sources */,
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
+				B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
 				746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */,
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,
@@ -1283,7 +1297,6 @@
 				D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */,
 				D3426AF61DB84E7A0016DA5A /* SearchEngine.swift in Sources */,
 				746BD9261F75C43C00BE8DB9 /* DataExtensions.swift in Sources */,
-				D3E2C98A1DA47D5300DEBE3D /* Browser.swift in Sources */,
 				D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */,
 				D37DE55D1BCDBD6100906364 /* WaveView.swift in Sources */,
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
@@ -1304,7 +1317,6 @@
 				D3E2C8FA1D9F170200DEBE3D /* LocalContentBlocker.swift in Sources */,
 				D35C11471E04AADA005FFFEF /* AppConfig.swift in Sources */,
 				D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */,
-				B37F83041F3B90CE00F242EB /* CacheManager.swift in Sources */,
 				746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */,
 				E40AFB141DC939FF00DA5651 /* SupportUtils.swift in Sources */,
 				D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */,
@@ -2370,6 +2382,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = Blockzilla/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -2470,6 +2483,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = Blockzilla/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -2626,6 +2640,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = Blockzilla/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -2728,6 +2743,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = Blockzilla/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DFOCUS";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus;
@@ -3184,6 +3200,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = Blockzilla/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -3218,6 +3235,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2";
 				INFOPLIST_FILE = Blockzilla/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DKLAR";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;

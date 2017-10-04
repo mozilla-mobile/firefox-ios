@@ -17,7 +17,6 @@ class AsianLocaleTest: BaseTestCase {
 	}
  
 	func testSearchinLocale() {
-		
         // Set search engine to Google
 		app.buttons["Settings"].tap()
 		app.tables.cells["SettingsViewController.searchCell"].tap()

@@ -308,7 +308,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
             Settings.set(sender.isOn, forToggle: toggle.setting)
             Utils.reloadSafariContentBlocker()
-            LocalContentBlocker.reload()
         }
 
         // First check if the user changed the anonymous usage data setting and follow that choice right

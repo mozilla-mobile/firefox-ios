@@ -86,9 +86,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Re-register the blocking lists at startup in case they've changed.
         Utils.reloadSafariContentBlocker()
 
-        // Increase the URLCache limit to (memory: 16mb, disk: 32mb) so we don't have to re-download an image to save it.
-        URLCacheManeger().setCacheCapacity(memoryCapacity: 16, diskCapacity: 32)
-
         LocalWebServer.sharedInstance.start()
 
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -98,8 +95,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
 
         WebCacheUtils.reset()
-
-        URLProtocol.registerClass(LocalContentBlocker.self)
 
         displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
