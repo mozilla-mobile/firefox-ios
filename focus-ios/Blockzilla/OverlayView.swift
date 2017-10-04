@@ -90,9 +90,24 @@ class OverlayView: UIView {
             button.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding * 2, bottom: padding, right: padding)
         }
     }
-    func setAttributedButtonTitle(phrase: String, button: InsetButton) {
+    
+    /**
+     
+     Localize and style 'phrase' text for use as a button title.
+     
+     - Parameter phrase: The phrase text for a button title
+     - Parameter localizedStringFormat: The localization format string to apply
+     
+     - Returns: An NSAttributedString with `phrase` localized and styled appropriately.
+     
+     */
+    func getAttributedButtonTitle(phrase: String,
+                                  localizedStringFormat: String) -> NSAttributedString {
+        
+        let localizedString = String(format: localizedStringFormat, "[\(phrase)]")
+        
         // Use [ and ] to help find the position of the query, then delete them.
-        let copyTitle = NSMutableString(string: String(format: UIConstants.strings.searchButton, "[\(phrase)]"))
+        let copyTitle = NSMutableString(string: localizedString)
         let startIndex = copyTitle.range(of: "[")
         let endIndex = copyTitle.range(of: "]")
         copyTitle.deleteCharacters(in: endIndex)
@@ -104,8 +119,17 @@ class OverlayView: UIView {
         attributedString.addAttributes([NSAttributedStringKey.font: UIConstants.fonts.copyButtonQuery], range: queryRange)
         attributedString.addAttributes([NSAttributedStringKey.foregroundColor: UIColor.white], range: fullRange)
         
+        return attributedString
+    }
+    
+    func setAttributedButtonTitle(phrase: String, button: InsetButton) {
+        
+        let attributedString = getAttributedButtonTitle(phrase: phrase,
+                                                        localizedStringFormat: UIConstants.strings.searchButton)
+        
         button.setAttributedTitle(attributedString, for: .normal)
     }
+    
     func setSearchQuery(query: String, animated: Bool) {
         searchQuery = query
         let query = query.trimmingCharacters(in: .whitespaces)
@@ -206,6 +230,22 @@ extension OverlayView: KeyboardHelperDelegate {
 }
 
 extension UIPasteboard {
+    
+    //
+    // As of iOS 11: macOS/iOS's Universal Clipboard feature causes UIPasteboard to block.
+    //
+    // (Known) Apple Radars that have been filed:
+    //
+    //  http://www.openradar.me/28787338
+    //  http://www.openradar.me/28774309
+    //
+    // Discussion on Twitter:
+    //
+    //  https://twitter.com/steipete/status/787985965432369152
+    //
+    //  To workaround this, urlAsync(callback:) makes a call of UIPasteboard.general on
+    //  an async dispatch queue, calling the completion block when done.
+    //
     func urlAsync(callback: @escaping (URL?) -> Void) {
         DispatchQueue.global().async {
             let url = URL(string: UIPasteboard.general.string ?? "")
