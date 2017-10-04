@@ -10,9 +10,6 @@ import XCGLogger
 /// These are pure functions, so it's quite ok to have them
 /// as static.
 class HomePageAccessors {
-    static func isButtonInMenu(_ prefs: Prefs) -> Bool {
-        return prefs.boolForKey(HomePageConstants.HomePageButtonIsInMenuPrefKey) ?? true
-    }
 
     static func getHomePage(_ prefs: Prefs) -> URL? {
         let string = prefs.stringForKey(HomePageConstants.HomePageURLPrefKey) ?? getDefaultHomePageString(prefs)
