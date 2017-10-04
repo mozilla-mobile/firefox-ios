@@ -222,8 +222,8 @@ extension Strings {
 
 // Open With Settings
 extension Strings {
-    public static let SettingsOpenWithSectionName = NSLocalizedString("Settings.OpenWith.SectionName", value: "Open With", comment: "Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behaviour.")
-    public static let SettingsOpenWithPageTitle = NSLocalizedString("Settings.OpenWith.PageTitle", value: "Open mail links in", comment: "Title for Open With Settings")
+    public static let SettingsOpenWithSectionName = NSLocalizedString("Settings.OpenWith.SectionName", value: "Mail App", comment: "Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behaviour.")
+    public static let SettingsOpenWithPageTitle = NSLocalizedString("Settings.OpenWith.PageTitle", value: "Open mail links with", comment: "Title for Open With Settings")
 }
 
 // Third Party Search Engines
