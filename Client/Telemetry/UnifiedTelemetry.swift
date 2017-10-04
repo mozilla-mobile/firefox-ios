@@ -15,20 +15,13 @@ class UnifiedTelemetry {
         }
 
         let telemetryConfig = Telemetry.default.configuration
-        telemetryConfig.appName = AppInfo.displayName
+        telemetryConfig.appName = "Fennec"
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
         telemetryConfig.dataDirectory = .documentDirectory
-
-        #if DEBUG
-            telemetryConfig.updateChannel = "debug"
-            telemetryConfig.isCollectionEnabled = false
-            telemetryConfig.isUploadEnabled = false
-        #else
-            telemetryConfig.updateChannel = "release"
-            let sendUsageData = profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
-            telemetryConfig.isCollectionEnabled = sendUsageData
-            telemetryConfig.isUploadEnabled = sendUsageData
-        #endif
+        telemetryConfig.updateChannel = AppConstants.BuildChannel.rawValue
+        let sendUsageData = profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
+        telemetryConfig.isCollectionEnabled = sendUsageData
+        telemetryConfig.isUploadEnabled = sendUsageData
 
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
     }
