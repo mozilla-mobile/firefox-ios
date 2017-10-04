@@ -262,10 +262,6 @@ open class BrowserProfile: Profile {
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
         if isChinaEdition {
-            // On first run, set the Home button to be in the toolbar.
-            if prefs.boolForKey(PrefsKeys.KeyHomePageButtonIsInMenu) == nil {
-                prefs.setBool(false, forKey: PrefsKeys.KeyHomePageButtonIsInMenu)
-            }
             // Set the default homepage.
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
 
