@@ -162,7 +162,7 @@ class TopTabsViewController: UIViewController {
         if let currentTab = tabManager.selectedTab {
             applyTheme(currentTab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
         }
-        updateTabCount(tabStore.count)
+        updateTabCount(tabStore.count, animated: false)
     }
     
     func switchForegroundStatus(isInForeground reveal: Bool) {
