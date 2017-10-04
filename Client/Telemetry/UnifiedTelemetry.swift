@@ -18,7 +18,7 @@ class UnifiedTelemetry {
         telemetryConfig.appName = "Fennec"
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
         telemetryConfig.dataDirectory = .documentDirectory
-        telemetryConfig.updateChannel = AppConstants.BuildChannel
+        telemetryConfig.updateChannel = AppConstants.BuildChannel.rawValue
         let sendUsageData = profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
         telemetryConfig.isCollectionEnabled = sendUsageData
         telemetryConfig.isUploadEnabled = sendUsageData
