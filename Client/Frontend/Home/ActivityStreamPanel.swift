@@ -297,8 +297,13 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
                 let title = Section(indexPath.section).title
                 switch Section(indexPath.section) {
-                case .highlights, .highlightIntro, .pocket:
+                case .highlights, .highlightIntro:
                     view.title = title
+                    return view
+                case .pocket:
+                    view.title = title
+                    view.moreButton.isHidden = false
+                    view.moreButton.addTarget(self, action:#selector(ActivityStreamPanel.showMorePocketStories), for: .touchUpInside)
                     return view
                 case .topSites:
                     return UICollectionReusableView()
@@ -510,6 +515,10 @@ extension ActivityStreamPanel: DataObserverDelegate {
             self.pocketStories = pStory
             return succeed()
         }
+    }
+
+    @objc func showMorePocketStories() {
+        showSiteWithURLHandler(PocketMoreStoriesURL)
     }
 
     func getTopSites() -> Success {
@@ -814,7 +823,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
 
         switch Section(indexPath.section) {
             case .highlights: actions.append(contentsOf: [dismissHighlightAction, deleteFromHistoryAction])
-            case .pocket: actions.append(dismissHighlightAction)
+            case .pocket: break
             case .topSites: actions.append(contentsOf: topSiteActions)
             case .highlightIntro: break
         }
@@ -943,7 +952,20 @@ class ASHeaderView: UICollectionReusableView {
         titleLabel.text = self.title
         titleLabel.textColor = UIColor.gray
         titleLabel.font = ASHeaderViewUX.TextFont
+        titleLabel.minimumScaleFactor = 0.6
+        titleLabel.numberOfLines = 1
+        titleLabel.adjustsFontSizeToFitWidth = true
         return titleLabel
+    }()
+
+    lazy var moreButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("More", for: .normal)
+        button.titleLabel?.font = ASHeaderViewUX.TextFont
+        button.contentHorizontalAlignment = .right
+        button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
+        button.setTitleColor(.gray, for: UIControlState.highlighted)
+        return button
     }()
 
     var title: String? {
@@ -959,12 +981,24 @@ class ASHeaderView: UICollectionReusableView {
         }
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        moreButton.isHidden = true
+        moreButton.removeTarget(nil, action: nil, for: .allEvents)
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
+        addSubview(moreButton)
+        moreButton.snp.makeConstraints { make in
+            make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
+            make.bottom.equalTo(self)
+            make.trailing.equalTo(self).inset(ASHeaderViewUX.Insets)
+        }
+        moreButton.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: UILayoutConstraintAxis.horizontal)
         titleLabel.snp.makeConstraints { make in
             self.constraint = make.leading.equalTo(self).inset(titleInsets).constraint
-            make.trailing.equalTo(self).inset(-ASHeaderViewUX.Insets)
+            make.trailing.equalTo(moreButton.snp.leading).inset(-ASHeaderViewUX.Insets)
             make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
             make.bottom.equalTo(self)
         }

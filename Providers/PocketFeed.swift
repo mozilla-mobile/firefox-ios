@@ -10,6 +10,7 @@ import Storage
 
 private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
 private let PocketGlobalFeed = "https://getpocket.com/v3/firefox/global-recs"
+let PocketMoreStoriesURL = URL(string: "https://getpocket.cdn.mozilla.net/explore/trending?src=ff_ios")!
 private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in milliseconds
 private let SupportedLocales = ["en_US", "en_GB", "en_CA", "de_DE", "de_AT", "de_CH"]
 
