@@ -62,14 +62,14 @@ class DisconnectSetting: WithAccountSetting {
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.SettingsDisconnectButton, attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
+        return NSAttributedString(string: Strings.SettingsDisconnectSyncButton, attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
     }
 
     override var accessibilityIdentifier: String? { return "SignOut" }
 
     override func onClick(_ navigationController: UINavigationController?) {
         let alertController = UIAlertController(
-            title: Strings.SettingsDisconnectAlertTitle,
+            title: Strings.SettingsDisconnectSyncAlertTitle,
             message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'sign out firefox account' alert"),
             preferredStyle: UIAlertControllerStyle.alert)
         alertController.addAction(
