@@ -268,6 +268,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         
         cell.tintColor = action.isEnabled ? UIConstants.SystemBlueColor : self.tintColor
         cell.configureCell(action.title, imageString: action.iconString)
+        cell.accessibilityIdentifier = action.title
         return cell
     }
     

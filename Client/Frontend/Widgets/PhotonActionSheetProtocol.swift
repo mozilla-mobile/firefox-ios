@@ -162,23 +162,20 @@ extension PhotonActionSheetProtocol {
         }
         
         let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { action in
-            guard let url = tab.url?.displayURL else { return }
+            guard let url = tab.url?.displayURL,
+                  let sql = self.profile.history as? SQLiteHistory else { return }
             let absoluteString = url.absoluteString
             
-            let sql = self.profile.favicons as! SQLiteHistory
-            sql.getSitesForURLs([absoluteString]).uponQueue(.main) { result in
-                guard let results = result.successValue else {
+            sql.getSitesForURLs([absoluteString]) >>== { result in
+                guard let site = result.first(where: { $0 != nil }) else {
                     log.warning("Could not get site for \(absoluteString)")
                     return
                 }
                 
-                if case let site?? = results[0] {
-                    self.profile.history.addPinnedTopSite(site).uponQueue(.main) { addResult in
-                        guard addResult.isSuccess else {
-                            log.warning("Could not add site to pinned top sites")
-                            return
-                        }
-                    }
+                if let site = site ?? nil {
+                    _ = self.profile.history.addPinnedTopSite(site).value
+                } else {
+                    log.warning("Could not add site to top sites")
                 }
             }
         }
@@ -199,7 +196,7 @@ extension PhotonActionSheetProtocol {
             topActions.append(addReadingList)
         }
         
-        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, setHomePage, pinToTopSites], [share]]
+        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, setHomePage], [share]]
     }
 }
 
