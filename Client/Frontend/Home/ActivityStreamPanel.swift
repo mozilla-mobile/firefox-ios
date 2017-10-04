@@ -667,13 +667,14 @@ extension ActivityStreamPanel: DataObserverDelegate {
         switch section {
         case .highlights:
             site = self.highlights[index]
+            telemetry.reportEvent(.Click, source: .Highlights, position: index)
         case .pocket:
             site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
+            telemetry.reportEvent(.Click, source: .Pocket, position: index)
         case .topSites, .highlightIntro:
             return
         }
         if let site = site {
-            telemetry.reportEvent(.Click, source: .Highlights, position: index)
             showSiteWithURLHandler(URL(string:site.url)!)
         }
     }
@@ -974,7 +975,9 @@ class ASHeaderView: UICollectionReusableView {
         }
     }
 
-    var constraint: Constraint?
+    var leftConstraint: Constraint?
+    var rightConstraint: Constraint?
+
     var titleInsets: CGFloat {
         get {
             return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? ASHeaderViewUX.Insets : ASPanelUX.MinimumInsets
@@ -993,11 +996,11 @@ class ASHeaderView: UICollectionReusableView {
         moreButton.snp.makeConstraints { make in
             make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
             make.bottom.equalTo(self)
-            make.trailing.equalTo(self).inset(ASHeaderViewUX.Insets)
+            self.rightConstraint = make.trailing.equalTo(self).inset(-titleInsets).constraint
         }
         moreButton.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: UILayoutConstraintAxis.horizontal)
         titleLabel.snp.makeConstraints { make in
-            self.constraint = make.leading.equalTo(self).inset(titleInsets).constraint
+            self.leftConstraint = make.leading.equalTo(self).inset(titleInsets).constraint
             make.trailing.equalTo(moreButton.snp.leading).inset(-ASHeaderViewUX.Insets)
             make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
             make.bottom.equalTo(self)
@@ -1006,7 +1009,8 @@ class ASHeaderView: UICollectionReusableView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        constraint?.update(offset: titleInsets)
+        leftConstraint?.update(offset: titleInsets)
+        rightConstraint?.update(offset: -titleInsets)
     }
     
     required init?(coder aDecoder: NSCoder) {
