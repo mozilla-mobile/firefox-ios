@@ -34,7 +34,8 @@ class MetadataParserHelper: TabHelper {
         // Get the metadata out of the page-metadata-parser, and into a type safe struct as soon
         // as possible.
         guard let dict = message.body as? [String: Any],
-            let pageURL = self.tab?.url?.displayURL,
+            let tab = self.tab,
+            let pageURL = tab.url?.displayURL,
             let pageMetadata = PageMetadata.fromDictionary(dict) else {
                 log.debug("Page contains no metadata!")
                 return
@@ -45,7 +46,9 @@ class MetadataParserHelper: TabHelper {
             "pageMetadata": pageMetadata,
             "tabURL": pageURL
         ]
-        
+
+        tab.pageMetadata = pageMetadata
+
         NotificationCenter.default.post(name: NotificationOnPageMetadataFetched, object: nil, userInfo: userInfo)
     }
 }
