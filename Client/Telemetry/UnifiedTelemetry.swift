@@ -23,6 +23,18 @@ class UnifiedTelemetry {
         telemetryConfig.isCollectionEnabled = sendUsageData
         telemetryConfig.isUploadEnabled = sendUsageData
 
+        let prefs = profile.prefs
+        Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
+            var outputDict = inputDict // make a mutable copy
+            if let newTabChoice = prefs.stringForKey(NewTabAccessors.PrefKey) {
+                outputDict["defaultNewTabExperience"] = newTabChoice as AnyObject?
+            }
+            if let chosenEmailClient = prefs.stringForKey(PrefsKeys.KeyMailToOption) {
+                outputDict["defaultMailClient"] = chosenEmailClient as AnyObject?
+            }
+            return outputDict
+        }
+
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
     }
 
