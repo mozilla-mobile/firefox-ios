@@ -20,20 +20,19 @@ if [ "$BUDDYBUILD_SCHEME" = "FirefoxBeta" ]; then
 fi
 
 #
-# Import the final locales on our Beta and Release builds
+# Import only the shipping locales (from shipping_locales.txt) on our Beta and
+# Release builds. Import all locales on Fennec_Enterprise, except for pull requests.
 #
+
+git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
 
 if [ "$BUDDYBUILD_SCHEME" = "Firefox" ] || [ "$BUDDYBUILD_SCHEME" = "FirefoxBeta" ]; then
   setup_virtualenv
-  ./scripts/import-locales.sh --release
+  ./ios-l10n-scripts/import-locales-firefox.sh --release
 fi
-
-#
-# Import all the locales on our Fennec_Enterprise builds except for pull requests.
-#
 
 if [ "$BUDDYBUILD_SCHEME" = "Fennec_Enterprise" ] && [ "$BUDDYBUILD_PULL_REQUEST" = "" ]; then
   setup_virtualenv
-  ./scripts/import-locales.sh
+  ./ios-l10n-scripts/import-locales-firefox.sh
 fi
 
