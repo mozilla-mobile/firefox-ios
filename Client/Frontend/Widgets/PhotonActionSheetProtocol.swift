@@ -135,7 +135,7 @@ extension PhotonActionSheetProtocol {
 
         let bookmarkPage = PhotonActionSheetItem(title: Strings.AppMenuAddBookmarkTitleString, iconString: "menu-Bookmark") { action in
             //TODO: can all this logic go somewhere else?
-            guard let url = tab.url?.displayURL else { return }
+            guard let url = tab.canonicalURL?.displayURL else { return }
             let absoluteString = url.absoluteString
             let shareItem = ShareItem(url: absoluteString, title: tab.title, favicon: tab.displayFavicon)
             _ = self.profile.bookmarks.shareItem(shareItem)
@@ -166,12 +166,12 @@ extension PhotonActionSheetProtocol {
         
         let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let tab = self.tabManager.selectedTab else { return }
-            guard let url = self.tabManager.selectedTab?.url?.displayURL else { return }
+            guard let url = tab.canonicalURL?.displayURL else { return }
             presentShareMenu(url, tab, buttonView, .up)
         }
 
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
-            UIPasteboard.general.string = self.tabManager.selectedTab?.url?.displayURL?.absoluteString ?? ""
+            UIPasteboard.general.url = self.tabManager.selectedTab?.canonicalURL?.displayURL
             self.showToast(text: Strings.AppMenuCopyURLConfirmMessage)
         }
         
