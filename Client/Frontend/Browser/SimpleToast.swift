@@ -17,10 +17,9 @@ struct SimpleToastUX {
 struct SimpleToast {
 
      func showAlertWithText(_ text: String) {
-        guard let window = UIApplication.shared.windows.first,
-              let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(window) else {
-            return
-        }
+        guard let window = UIApplication.shared.windows.first else { return }
+        
+        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(window) ?? 0
 
         let toast = self.createView()
         toast.text = text

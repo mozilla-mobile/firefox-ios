@@ -64,6 +64,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                     guard let url = self.tab?.url, url.absoluteString.characters.count > 0 else { return }
                     let pasteBoard = UIPasteboard.general
                     pasteBoard.url = url as URL
+                    SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage)
                 })
             }
         }

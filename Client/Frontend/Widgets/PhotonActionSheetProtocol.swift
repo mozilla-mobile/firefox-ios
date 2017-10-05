@@ -146,6 +146,7 @@ extension PhotonActionSheetProtocol {
                                                                                 withUserData: userData,
                                                                                 toApplication: UIApplication.shared)
             tab.isBookmarked = true
+            self.showToast(text: Strings.AppMenuAddBookmarkConfirmMessage)
         }
         
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { action in
@@ -156,6 +157,7 @@ extension PhotonActionSheetProtocol {
                 $0.removeByURL(absoluteString).uponQueue(.main) { res in
                     if res.isSuccess {
                         tab.isBookmarked = false
+                        self.showToast(text: Strings.AppMenuRemoveBookmarkConfirmMessage)
                     }
                 }
             }
@@ -169,6 +171,7 @@ extension PhotonActionSheetProtocol {
 
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
             UIPasteboard.general.string = self.tabManager.selectedTab?.url?.displayURL?.absoluteString ?? ""
+            self.showToast(text: Strings.AppMenuCopyURLConfirmMessage)
         }
         
         let bookmarkAction = tab.isBookmarked ? removeBookmark : bookmarkPage
@@ -179,5 +182,8 @@ extension PhotonActionSheetProtocol {
         return [topActions, [copyURL, findInPageAction, toggleDesktopSite, setHomePage], [share]]
     }
     
+    private func showToast(text:String) {
+        SimpleToast().showAlertWithText(text)
+    }
 }
 
