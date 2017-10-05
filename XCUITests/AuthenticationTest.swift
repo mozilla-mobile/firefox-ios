@@ -158,7 +158,7 @@ class AuthenticationTest: BaseTestCase {
         typePasscode("2337")
         waitforExistence(app.staticTexts["Re-enter passcode"])
         typePasscode("3337")
-        waitforExistence(app.staticTexts["Passcodes didn't match. Try again."])
+        waitforExistence(app.staticTexts["Passcodes didn’t match. Try again."])
         
         // Put proper password
         XCTAssertTrue(app.staticTexts["Enter a new passcode"].exists)
@@ -310,7 +310,7 @@ class AuthenticationTest: BaseTestCase {
         typePasscode("1337")
         waitforExistence(app.staticTexts["Re-enter passcode"])
         typePasscode("2337")
-        waitforExistence(app.staticTexts["Passcodes didn't match. Try again."])
+        waitforExistence(app.staticTexts["Passcodes didn’t match. Try again."])
         waitforExistence(app.staticTexts["Enter a passcode"])
         app.buttons["Cancel"].tap()
     }

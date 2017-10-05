@@ -29,7 +29,6 @@ class ThirdPartySearchTest: BaseTestCase {
         
         // Visit MDN to add a custom search engine
         loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
-        
         if iPad() {
             let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
             searchTheDocsSearchField.tap()
@@ -49,9 +48,11 @@ class ThirdPartySearchTest: BaseTestCase {
         app.textFields["url"].tap()
         app.typeText("window")
         app.scrollViews.otherElements.buttons["developer.mozilla.org search"].tap()
-        
-        // Ensure that the search is done on MDN
-        let url = app.textFields["url"].value as! String
+
+        var url = app.textFields["url"].value as! String
+        if url.hasPrefix("https://") == false {
+            url = "https://\(url)"
+        }
         XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US/search"), "The URL should indicate that the search was performed on MDN and not the default")
     }
     
@@ -75,9 +76,10 @@ class ThirdPartySearchTest: BaseTestCase {
         dismissKeyboardAssistant(forApp: app)
         
         // Go to settings and set MDN as the default
-        tabTrayButton(forApp: app).tap()
-        app.buttons["TabTrayController.menuButton"].tap()
-        app.collectionViews.cells["Settings"].tap()
+//        tabTrayButton(forApp: app).tap()
+//        app.buttons["TabTrayController.menuButton"].tap()
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.tables.cells["Settings"].tap()
         let tablesQuery = app.tables
         tablesQuery.cells["Search"].tap()
         tablesQuery.cells.element(boundBy: 0).tap()
@@ -86,12 +88,16 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
         
         // Perform a search to check
+        tabTrayButton(forApp: app).tap()
         app.buttons["TabTrayController.addTabButton"].tap()
         app.textFields["url"].tap()
         app.typeText("window\r")
         
         // Ensure that the default search is MDN
-        let url = app.textFields["url"].value as! String
+        var url = app.textFields["url"].value as! String
+        if url.hasPrefix("https://") == false {
+            url = "https://\(url)"
+        }
         XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US/search"), "The URL should indicate that the search was performed on MDN and not the default")
     }
     
@@ -127,9 +133,9 @@ class ThirdPartySearchTest: BaseTestCase {
         app.typeText("\r")
         
         // Go to settings and set MDN as the default
-        tabTrayButton.tap(force: true)
-        app.buttons["TabTrayController.menuButton"].tap()
-        app.collectionViews.cells["Settings"].tap()
+//        app.buttons["TabTrayController.menuButton"].tap()
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.tables.cells["Settings"].tap()
         let tablesQuery = app.tables
         tablesQuery.cells["Search"].tap()
         
@@ -141,6 +147,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
         
         // Perform a search to check
+        tabTrayButton.tap(force: true)
         XCUIApplication().buttons["TabTrayController.addTabButton"].tap()
         
         app.textFields["url"].tap()
@@ -187,8 +194,8 @@ class ThirdPartySearchTest: BaseTestCase {
     func testCustomEngineFromIncorrectTemplate() {
         let app = XCUIApplication()
         
-        app.buttons["Menu"].tap()
-        app.collectionViews.cells["Settings"].tap()
+        app.buttons["TabToolbar.menuButton"].tap()
+        app.tables.cells["Settings"].tap()
         let tablesQuery = app.tables
         tablesQuery.cells["Search"].tap()
         app.tables.cells["customEngineViewButton"].tap()

@@ -138,11 +138,14 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
         XCTAssertFalse(app.staticTexts["example"].exists)
 
-        app.buttons["Cancel"].tap()
+        //URLBarview goBack button
+        let goBackButton = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .other).element.children(matching: .button).element(boundBy: 0)
+        goBackButton.tap()
+
         if iPad() {
             app.buttons["TopTabsViewController.tabsButton"].tap()
         } else {
-            app.buttons["URLBarView.tabsButton"].tap()
+            app.buttons["TabToolbar.tabsButton"].tap()
         }
 
         app.cells.element(boundBy: 0).tap() //"Example Domain"
@@ -159,7 +162,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(NewTabScreen)
         app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu (option: "Open in New Tab")
-        
+        sleep(3)
         // Check that two tabs are open and one of them is the default top site one
         navigator.goto(TabTray)
         waitforExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
@@ -184,11 +187,13 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssert(app.collectionViews.cells["TopSitesCell"].exists)
         XCTAssertFalse(app.staticTexts["example"].exists)
 
-        app.buttons["Cancel"].tap()
+        //URLBarview goBack button
+        let goBackButton = app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 1).children(matching: .other).element.children(matching: .button).element(boundBy: 0)
+        goBackButton.tap()
         if iPad() {
             app.buttons["TopTabsViewController.tabsButton"].tap()
         } else {
-            app.buttons["URLBarView.tabsButton"].tap()
+            app.buttons["TabToolbar.tabsButton"].tap()
         }
 
         app.buttons["TabTrayController.maskButton"].tap()
@@ -202,7 +207,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(NewTabScreen)
         app.collectionViews.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu (option: "Open in New Private Tab")
-        
+        sleep(3)
         // Check that two tabs are open and one of them is the default top site one
         navigator.goto(PrivateTabTray)
         waitforExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])

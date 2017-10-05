@@ -29,8 +29,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(urlString: url1)
         navigator.goto(BrowserTabMenu)
         // Go to History screen
-        waitforExistence(app.toolbars.buttons["HistoryMenuToolbarItem"])
-        app.toolbars.buttons["HistoryMenuToolbarItem"].tap()
+        app.tables.cells["History"].tap()
         navigator.nowAt(NewTabScreen)
         waitforExistence(app.tables["History List"])
 
@@ -47,8 +46,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(PrivateBrowserTab)
         waitForValueContains(app.textFields["url"], value: "facebook")
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.toolbars.buttons["HistoryMenuToolbarItem"])
-        app.toolbars.buttons["HistoryMenuToolbarItem"].tap()
+        app.tables.cells["History"].tap()
         waitforExistence(app.tables["History List"])
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
         XCTAssertFalse(app.tables["History List"].staticTexts[url2Label].exists)
@@ -117,10 +115,16 @@ class PrivateBrowsingTest: BaseTestCase {
         let numPrivTabs = app.collectionViews.cells.count
         XCTAssertEqual(numPrivTabs, 1, "The number of tabs is not correct, the private tab should not have been closed")
 
+        app.collectionViews.cells[url1Label].tap()
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
-        navigator.goto(SettingsScreen)
+//        navigator.goto(SettingsScreen)
+        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.menuButton"]/*[[".buttons[\"Menu\"]",".buttons[\"TabToolbar.menuButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        let settingsmenuitemCell = app.tables.cells["Settings"]
+        settingsmenuitemCell.tap()
         closePrivateTabsSwitch.tap()
 
+        app.buttons["Done"].tap()
+        navigator.nowAt(PrivateBrowserTab)
         // Go back to regular browsing and check that the private tab has been closed and that the initial Private Browsing message appears when going back to Private Browsing
         navigator.goto(PrivateTabTray)
         navigator.goto(TabTray)
