@@ -169,16 +169,12 @@ extension PhotonActionSheetProtocol {
             let absoluteString = url.absoluteString
             
             sql.getSitesForURLs([absoluteString]) >>== { result in
-                guard let site = result.first(where: { $0 != nil }) else {
+                guard let siteOp = result.asArray().first, let site = siteOp else {
                     log.warning("Could not get site for \(absoluteString)")
                     return
                 }
                 
-                if let site = site ?? nil {
-                    _ = self.profile.history.addPinnedTopSite(site).value
-                } else {
-                    log.warning("Could not add site to top sites")
-                }
+                _ = self.profile.history.addPinnedTopSite(site).value
             }
         }
         
