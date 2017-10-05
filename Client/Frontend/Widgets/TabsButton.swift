@@ -214,12 +214,12 @@ class TabsButton: UIButton {
                 self.insideButton.layer.opacity = 0
             }
             
-            let completion: (Bool) -> Void = { _ in
-                // Remove the clone and setup the actual tab button
-                newTabsButton.removeFromSuperview()
-                
-                self.insideButton.layer.opacity = 1
-                self.insideButton.layer.transform = CATransform3DIdentity
+            let completion: (Bool) -> Void = { completed in
+                if completed {
+                    newTabsButton.removeFromSuperview()
+                    self.insideButton.layer.opacity = 1
+                    self.insideButton.layer.transform = CATransform3DIdentity
+                }
                 self.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
                 self.countLabel.text = countToBe
                 self.accessibilityValue = countToBe
