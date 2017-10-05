@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Storage
 import XCGLogger
 import WebKit
 
@@ -30,14 +31,24 @@ class MetadataParserHelper: TabHelper {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let dict = message.body as? [String: Any] else {
-            return
+        // Get the metadata out of the page-metadata-parser, and into a type safe struct as soon
+        // as possible.
+        guard let dict = message.body as? [String: Any],
+            let tab = self.tab,
+            let pageURL = tab.url?.displayURL,
+            let pageMetadata = PageMetadata.fromDictionary(dict) else {
+                log.debug("Page contains no metadata!")
+                return
         }
-        
-        var userInfo = [String: Any]()
-        userInfo["isPrivate"] = self.tab?.isPrivate ?? true
-        userInfo["metadata"] = dict
-        userInfo["tabURL"] = self.tab?.url?.displayURL?.absoluteString
+
+        let userInfo: [String: Any] = [
+            "isPrivate": self.tab?.isPrivate ?? true,
+            "pageMetadata": pageMetadata,
+            "tabURL": pageURL
+        ]
+
+        tab.pageMetadata = pageMetadata
+
         NotificationCenter.default.post(name: NotificationOnPageMetadataFetched, object: nil, userInfo: userInfo)
     }
 }

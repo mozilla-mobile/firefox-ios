@@ -50,6 +50,18 @@ class Tab: NSObject {
         return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url, title: displayTitle, favicon: displayFavicon)
     }
 
+    // PageMetadata is derived from the page content itself, and as such lags behind the
+    // rest of the tab.
+    var pageMetadata: PageMetadata?
+
+    var canonicalURL: URL? {
+        if let string = pageMetadata?.siteURL,
+            let siteURL = URL(string: string) {
+            return siteURL
+        }
+        return self.url
+    }
+
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
     var bars = [SnackBar]()

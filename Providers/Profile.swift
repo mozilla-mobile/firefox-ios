@@ -318,9 +318,8 @@ open class BrowserProfile: Profile {
             log.debug("Private mode - Ignoring page metadata.")
             return
         }
-        guard let metadataDict = notification.userInfo?["metadata"] as? [String: Any],
-              let pageURL = (notification.userInfo?["tabURL"] as? String)?.asURL,
-              let pageMetadata = PageMetadata.fromDictionary(metadataDict) else {
+        guard let pageURL = notification.userInfo?["tabURL"] as? URL,
+              let pageMetadata = notification.userInfo?["pageMetadata"] as? PageMetadata else {
             log.debug("Metadata notification doesn't contain any metadata!")
             return
         }
