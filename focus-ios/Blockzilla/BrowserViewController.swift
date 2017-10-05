@@ -523,6 +523,7 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.isLoading = false
         browserToolbar.isLoading = false
         urlBarContainer.isBright = true
+        urlBar.progressBar.hideProgressBar()
     }
 
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool) {
