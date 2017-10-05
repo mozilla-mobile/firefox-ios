@@ -8,7 +8,7 @@ import WebKit
 
 struct TopTabsUX {
     static let TopTabsViewHeight: CGFloat = 44
-    static let TopTabsBackgroundColor = UIColor(rgb: 0x272727)
+    static let TopTabsBackgroundColor = UIColor(rgb: 0x2a2a2e)
     static let TopTabsBackgroundPadding: CGFloat = 35
     static let TopTabsBackgroundShadowWidth: CGFloat = 12
     static let TabWidth: CGFloat = 190

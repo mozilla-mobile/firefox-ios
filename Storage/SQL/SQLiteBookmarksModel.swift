@@ -277,11 +277,12 @@ extension SQLiteBookmarks {
         let args: Args = guids
         let varlist = BrowserDB.varlist(args.count)
         let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableExpression(direction))) AS isEditable " +
+        "SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableExpression(direction))) AS isEditable " +
         "FROM \(direction.valueView) WHERE guid IN \(varlist) AND NOT is_deleted"
 
         let withIcon = [
             "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type,",
+            "       bookmarks.date_added AS date_added,",
             "       bookmarks.is_deleted AS is_deleted,",
             "       bookmarks.parentid AS parentid, bookmarks.parentName AS parentName,",
             "       bookmarks.feedUri AS feedUri, bookmarks.pos AS pos, title AS title,",
@@ -316,7 +317,7 @@ extension SQLiteBookmarks {
         "WHERE parent = ?"
 
         let values =
-        "SELECT -1 AS id, guid, type, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableExpression(direction))) AS isEditable " +
+        "SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableExpression(direction))) AS isEditable " +
         "FROM \(valueView)"
 
         // We exclude queries and dynamic containers, because we can't
@@ -336,7 +337,7 @@ extension SQLiteBookmarks {
         }
 
         let fleshed =
-        "SELECT vals.id AS id, vals.guid AS guid, vals.type AS type, vals.is_deleted AS is_deleted, " +
+        "SELECT vals.id AS id, vals.guid AS guid, vals.type AS type, vals.date_added AS date_added, vals.is_deleted AS is_deleted, " +
         "       vals.parentid AS parentid, vals.parentName AS parentName, vals.feedUri AS feedUri, " +
         "       vals.siteUri AS siteUri," +
         "       vals.pos AS pos, vals.title AS title, vals.bmkUri AS bmkUri, vals.folderName AS folderName, " +
@@ -350,6 +351,7 @@ extension SQLiteBookmarks {
 
         let withIcon =
         "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type, " +
+        "       bookmarks.date_added AS date_added, " +
         "       bookmarks.is_deleted AS is_deleted, " +
         "       bookmarks.parentid AS parentid, bookmarks.parentName AS parentName, " +
         "       bookmarks.feedUri AS feedUri, bookmarks.siteUri AS siteUri, " +
@@ -495,7 +497,8 @@ extension SQLiteBookmarks {
     fileprivate func getMarkDeletedSQLWithWhereFragment(_ whereFragment: String) -> String {
         let sql =
         "UPDATE \(TableBookmarksLocal) SET" +
-        "  is_deleted = 1" +
+        "  date_added = NULL" +
+        ", is_deleted = 1" +
         ", local_modified = \(Date.now())" +
         ", bmkUri = NULL" +
         ", feedUri = NULL" +
@@ -707,6 +710,7 @@ class BookmarkFactory {
         let keyword = row["keyword"] as? String
         let folderName = row["folderName"] as? String
         let queryId = row["queryId"] as? String
+        let date_added = row.getTimestamp("date_added")
 
         // Local and mirror only.
         let faviconID = row["faviconID"] as? Int
@@ -732,7 +736,7 @@ class BookmarkFactory {
         } else {
             syncStatus = nil
         }
-        let item = BookmarkMirrorItem(guid: guid, type: type, serverModified: server_modified ?? 0,
+        let item = BookmarkMirrorItem(guid: guid, type: type, dateAdded: date_added, serverModified: server_modified ?? 0,
                                       isDeleted: is_deleted, hasDupe: hasDupe, parentID: parentid, parentName: parentName,
                                       feedURI: feedUri, siteURI: siteUri,
                                       pos: pos,
@@ -749,16 +753,16 @@ class BookmarkFactory {
 extension SQLiteBookmarks: SearchableBookmarks {
     public func bookmarksByURL(_ url: URL) -> Deferred<Maybe<Cursor<BookmarkItem>>> {
         let inner =
-        "SELECT id, type, guid, bmkUri, title, faviconID FROM \(TableBookmarksLocal) " +
+        "SELECT id, type, date_added, guid, bmkUri, title, faviconID FROM \(TableBookmarksLocal) " +
         "WHERE " +
         "type = \(BookmarkNodeType.bookmark.rawValue) AND is_deleted IS NOT 1 AND bmkUri = ? " +
         "UNION ALL " +
-        "SELECT id, type, guid, bmkUri, title, faviconID FROM \(TableBookmarksMirror) " +
+        "SELECT id, type, date_added, guid, bmkUri, title, faviconID FROM \(TableBookmarksMirror) " +
         "WHERE " +
         "type = \(BookmarkNodeType.bookmark.rawValue) AND is_overridden IS NOT 1 AND is_deleted IS NOT 1 AND bmkUri = ? "
 
         let sql =
-        "SELECT bookmarks.id AS id, bookmarks.type AS type, guid, bookmarks.bmkUri AS bmkUri, title, " +
+        "SELECT bookmarks.id AS id, bookmarks.type AS type, bookmarks.date_added AS date_added, guid, bookmarks.bmkUri AS bmkUri, title, " +
         "favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
         "FROM (\(inner)) AS bookmarks " +
         "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"

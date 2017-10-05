@@ -14,7 +14,7 @@ if (!window.__firefox__) {
   });
 }
 
-function MetadataWrapper() {
+function MetadataWrapper(metadataparser) {
   var dataURIRegex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
 
   function isDataURI(s) {
@@ -51,7 +51,7 @@ function MetadataWrapper() {
     }
  
     var metadata = metadataparser.getMetadata(window.document, window.location.href, metadataparser.metadataRules);
-    var imageURL = metadata["image_url"];
+    var imageURL = metadata["image"];
     if (imageURL) {
       if (isDataURI(imageURL)) {
         metadata["image_data_uri"] = imageURL;
@@ -74,7 +74,8 @@ Object.defineProperty(window.__firefox__, 'metadata', {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: Object.freeze(new MetadataWrapper())
+  value: Object.freeze(new MetadataWrapper(metadataparser))
 });
+metadataparser = undefined;
 
 })();

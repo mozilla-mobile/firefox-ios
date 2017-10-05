@@ -11,6 +11,8 @@ private let log = Logger.browserLogger
 
 private let CategorySentTab = "org.mozilla.ios.SentTab.placeholder"
 
+private let sentryTag = "NotificationService"
+
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay!
     lazy var profile: ExtensionProfile = {
@@ -31,6 +33,7 @@ class NotificationService: UNNotificationServiceExtension {
         }
 
         guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
+            SentryIntegration.shared.sendWithStacktrace(message: "No notification content", tag: sentryTag)
             return
         }
 
@@ -51,7 +54,12 @@ class NotificationService: UNNotificationServiceExtension {
         // however, we can't use weak references, because TabQueue isn't a class.
         // Rather than changing tabQueue, we manually nil it out here.
         display.tabQueue = nil
+        display.messageDelivered = false
         display.displayNotification(what, with: error)
+        if !display.messageDelivered {
+            let string = "Empty notification: message=\(what?.messageType.rawValue ?? "nil"), error=\(error?.description ?? "nil")"
+            SentryIntegration.shared.send(message: string, tag: sentryTag)
+        }
     }
 
     override func serviceExtensionTimeWillExpire() {
@@ -67,6 +75,7 @@ class SyncDataDisplay {
     var sentTabs: [SentTab]
 
     var tabQueue: TabQueue?
+    var messageDelivered: Bool = false
 
     init(content: UNMutableNotificationContent, contentHandler: @escaping (UNNotificationContent) -> Void, tabQueue: TabQueue) {
         self.contentHandler = contentHandler
@@ -77,13 +86,17 @@ class SyncDataDisplay {
 
     func displayNotification(_ message: PushMessage? = nil, with error: PushMessageError? = nil) {
         guard let message = message, error == nil else {
+            if let error = error {
+                SentryIntegration.shared.send(message: "PushMessageError: \(error.description)", tag: sentryTag)
+            } else {
+                SentryIntegration.shared.send(message: "PushMessage: nil message", tag: sentryTag)
+            }
             return displayUnknownMessageNotification()
         }
 
         switch message {
         case .accountVerified:
             displayAccountVerifiedNotification()
-            break
         case .deviceConnected(let deviceName):
             displayDeviceConnectedNotification(deviceName)
         case .deviceDisconnected(let deviceName):
@@ -139,6 +152,7 @@ extension SyncDataDisplay {
         } else {
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
         }
+        SentryIntegration.shared.sendWithStacktrace(message: "Unknown notification message", tag: sentryTag)
     }
 }
 
@@ -172,6 +186,8 @@ extension SyncDataDisplay {
 
         let center = UNUserNotificationCenter.current()
         center.getDeliveredNotifications { notifications in
+
+            SentryIntegration.shared.send(message: "deliveredNotification count = \(notifications.count)", tag: sentryTag)
 
             // Let's deal with sent-tab-notifications
             let sentTabNotifications = notifications.filter {
@@ -241,7 +257,11 @@ extension SyncDataDisplay {
         notificationContent.title = stringWithOptionalArg(title, titleArg)
         notificationContent.body = stringWithOptionalArg(body, bodyArg)
 
+        // This is the only place we call the contentHandler.
         contentHandler(notificationContent)
+        // This is the only place we change messageDelivered. We can check if contentHandler hasn't be called because of
+        // our logic (rather than something funny with our environment, or iOS killing us).
+        messageDelivered = true
     }
 }
 

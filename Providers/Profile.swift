@@ -13,7 +13,7 @@ import XCGLogger
 import SwiftKeychainWrapper
 import Deferred
 import SwiftyJSON
-import Telemetry
+import SyncTelemetry
 
 private let log = Logger.syncLogger
 
@@ -34,6 +34,7 @@ public protocol SyncManager {
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
     func syncLogins() -> SyncResult
+    func mirrorBookmarks() -> SyncResult
     @discardableResult func syncEverything(why: SyncReason) -> Success
     func syncNamedCollections(why: SyncReason, names: [String]) -> Success
 
@@ -261,10 +262,6 @@ open class BrowserProfile: Profile {
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
         if isChinaEdition {
-            // On first run, set the Home button to be in the toolbar.
-            if prefs.boolForKey(PrefsKeys.KeyHomePageButtonIsInMenu) == nil {
-                prefs.setBool(false, forKey: PrefsKeys.KeyHomePageButtonIsInMenu)
-            }
             // Set the default homepage.
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
 
@@ -321,9 +318,8 @@ open class BrowserProfile: Profile {
             log.debug("Private mode - Ignoring page metadata.")
             return
         }
-        guard let metadataDict = notification.userInfo?["metadata"] as? [String: Any],
-              let pageURL = (notification.userInfo?["tabURL"] as? String)?.asURL,
-              let pageMetadata = PageMetadata.fromDictionary(metadataDict) else {
+        guard let pageURL = notification.userInfo?["tabURL"] as? URL,
+              let pageMetadata = notification.userInfo?["pageMetadata"] as? PageMetadata else {
             log.debug("Metadata notification doesn't contain any metadata!")
             return
         }
@@ -654,7 +650,7 @@ open class BrowserProfile: Profile {
         }
 
         func canSendUsageData() -> Bool {
-            return profile.prefs.boolForKey("settings.sendUsageData") ?? true
+            return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
         }
 
         private func sendSyncPing(account: FirefoxAccount, result: SyncOperationResult) {
@@ -662,7 +658,7 @@ open class BrowserProfile: Profile {
                           account: account,
                           remoteClientsAndTabs: self.profile.remoteClientsAndTabs,
                           prefs: self.prefs,
-                          why: .schedule) >>== { Telemetry.send(ping: $0, docType: .sync) }
+                          why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
         }
 
         private func notifySyncing(notification: Notification.Name) {
@@ -689,7 +685,7 @@ open class BrowserProfile: Profile {
                 return
             }
 
-            guard profile.prefs.boolForKey("settings.sendUsageData") ?? true else {
+            guard profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true else {
                 log.debug("Profile isn't sending usage data. Not sending bookmark event.")
                 return
             }
@@ -1207,7 +1203,7 @@ open class BrowserProfile: Profile {
             return self.sync("history", function: syncHistoryWithDelegate)
         }
 
-        func mirrorBookmarks() -> SyncResult {
+        public func mirrorBookmarks() -> SyncResult {
             return self.sync("bookmarks", function: mirrorBookmarksWithDelegate)
         }
 

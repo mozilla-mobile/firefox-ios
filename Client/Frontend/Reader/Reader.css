@@ -62,7 +62,7 @@ html {
 }
 
 body {
-  padding: 24px;
+  padding: 2vw;
   transition-property: background-color, color;
   transition-duration: 0.4s;
   margin-left: auto;
@@ -344,7 +344,7 @@ body {
 }
 
 .content * {
-  max-width: 98% !important;
+  max-width: 100% !important;
   height: auto !important;
 }
 

@@ -196,7 +196,7 @@ private class TwoLineCellHelper {
 
     func setupDynamicFonts() {
         textLabel.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
-        detailTextLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallHistoryPanel
+        detailTextLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
     }
 
     func layoutSubviews() {

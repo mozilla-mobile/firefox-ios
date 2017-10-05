@@ -81,9 +81,6 @@ class ContentBlockerHelper {
         self.tab = tab
         self.profile = profile
 
-        NotificationCenter.default.addObserver(self, selector: #selector(ContentBlockerHelper.reloadTab), name: NSNotification.Name(rawValue: NotificationContentBlockerReloadNeeded), object: nil)
-        addActiveRulesToTab()
-
         if ContentBlockerHelper.heavyInitHasRunOnce {
             return
         }
@@ -101,6 +98,11 @@ class ContentBlockerHelper {
             assert(rule != nil && error == nil)
             ContentBlockerHelper.blockImagesRule = rule
         }
+    }
+
+    func setupForWebView() {
+        NotificationCenter.default.addObserver(self, selector: #selector(ContentBlockerHelper.reloadTab), name: NSNotification.Name(rawValue: NotificationContentBlockerReloadNeeded), object: nil)
+        addActiveRulesToTab()
     }
 
     deinit {

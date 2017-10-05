@@ -17,7 +17,7 @@ class ShareExtensionHelper: NSObject {
     fileprivate let customDataTypeIdentifers = ["com.tencent.xin.sharetimeline"]
 
     init(url: URL, tab: Tab?) {
-        self.selectedURL = url
+        self.selectedURL = tab?.canonicalURL?.displayURL ?? url
         self.selectedTab = tab
     }
 
@@ -81,9 +81,6 @@ class ShareExtensionHelper: NSObject {
 
 extension ShareExtensionHelper: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        if let displayURL = selectedTab?.url?.displayURL {
-            return displayURL
-        }
         return selectedURL
     }
 
@@ -97,10 +94,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
         } else {
             // Return the URL for the selected tab. If we are in reader view then decode
             // it so that we copy the original and not the internal localhost one.
-            if let url = selectedTab?.url?.displayURL, url.isReaderModeURL {
-                return url.decodeReaderModeURL
-            }
-            return selectedTab?.url?.displayURL ?? selectedURL
+            return selectedURL.isReaderModeURL ? selectedURL.decodeReaderModeURL : selectedURL
         }
     }
 
@@ -131,10 +125,6 @@ private extension ShareExtensionHelper {
 
     func findLoginExtensionItem() {
         guard let selectedWebView = selectedTab?.webView else {
-            return
-        }
-
-        if selectedWebView.url?.absoluteString == nil {
             return
         }
 

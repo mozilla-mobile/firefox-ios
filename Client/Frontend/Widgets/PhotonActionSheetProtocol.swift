@@ -29,9 +29,6 @@ extension PhotonActionSheetProtocol {
             popoverVC.sourceView = view
             popoverVC.sourceRect = CGRect(x: view.frame.width/2, y: view.frame.size.height * 0.75, width: 1, height: 1)
             popoverVC.permittedArrowDirections = UIPopoverArrowDirection.up
-            // Style the popoverVC instead of the tableView. This makes sure that the popover arrow is style as well
-            sheet.tableView.backgroundView = nil
-            sheet.tableView.backgroundColor = .clear
             popoverVC.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
         }
         viewController.present(sheet, animated: true, completion: nil)
@@ -79,13 +76,15 @@ extension PhotonActionSheetProtocol {
     typealias PageOptionsVC = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
     
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
-        
-        let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-        let noImageText = noImageEnabled ? Strings.AppMenuNoImageModeDisable : Strings.AppMenuNoImageModeEnable
-        let noImageMode = PhotonActionSheetItem(title: noImageText, iconString: "menu-NoImageMode", isEnabled: noImageEnabled) { action in
-            NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
+        var noImageMode: PhotonActionSheetItem? = nil
+        if #available(iOS 11, *) {
+            let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
+            let noImageText = noImageEnabled ? Strings.AppMenuNoImageModeDisable : Strings.AppMenuNoImageModeEnable
+            noImageMode = PhotonActionSheetItem(title: noImageText, iconString: "menu-NoImageMode", isEnabled: noImageEnabled) { action in
+                NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
+            }
         }
-        
+
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
         let nightModeText = nightModeEnabled ? Strings.AppMenuNightModeDisable : Strings.AppMenuNightModeEnable
         let nightMode = PhotonActionSheetItem(title: nightModeText, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { action in
@@ -104,7 +103,10 @@ extension PhotonActionSheetProtocol {
             vcDelegate.present(controller, animated: true, completion: nil)
         }
 
-        return [noImageMode, nightMode, openSettings]
+        if let noImageMode = noImageMode {
+            return [noImageMode, nightMode, openSettings]
+        }
+        return [nightMode, openSettings]
     }
     
     func getTabActions(tab: Tab, buttonView: UIView,
@@ -134,7 +136,7 @@ extension PhotonActionSheetProtocol {
 
         let bookmarkPage = PhotonActionSheetItem(title: Strings.AppMenuAddBookmarkTitleString, iconString: "menu-Bookmark") { action in
             //TODO: can all this logic go somewhere else?
-            guard let url = tab.url?.displayURL else { return }
+            guard let url = tab.canonicalURL?.displayURL else { return }
             let absoluteString = url.absoluteString
             let shareItem = ShareItem(url: absoluteString, title: tab.title, favicon: tab.displayFavicon)
             _ = self.profile.bookmarks.shareItem(shareItem)
@@ -182,12 +184,12 @@ extension PhotonActionSheetProtocol {
         
         let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let tab = self.tabManager.selectedTab else { return }
-            guard let url = self.tabManager.selectedTab?.url?.displayURL else { return }
+            guard let url = tab.canonicalURL?.displayURL else { return }
             presentShareMenu(url, tab, buttonView, .up)
         }
 
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
-            UIPasteboard.general.string = self.tabManager.selectedTab?.url?.displayURL?.absoluteString ?? ""
+            UIPasteboard.general.url = self.tabManager.selectedTab?.canonicalURL?.displayURL
         }
         
         let bookmarkAction = tab.isBookmarked ? removeBookmark : bookmarkPage

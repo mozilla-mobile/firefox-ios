@@ -127,7 +127,7 @@ open class SwiftData {
      * The real meat of all the execute methods. This is used internally to open and
      * close a database connection and run a block of code inside it.
      */
-    func withConnection<T>(_ flags: SwiftData.Flags, synchronous: Bool = true, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
+    func withConnection<T>(_ flags: SwiftData.Flags, synchronous: Bool = false, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
 
         /**
@@ -179,7 +179,7 @@ open class SwiftData {
      * Helper for opening a connection, starting a transaction, and then running a block of code inside it.
      * The code block can return true if the transaction should be committed. False if we should roll back.
      */
-    func transaction<T>(synchronous: Bool = true, _ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
+    func transaction<T>(synchronous: Bool = false, _ transactionClosure: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
         return withConnection(SwiftData.Flags.readWriteCreate, synchronous: synchronous) { connection in
             try connection.transaction(transactionClosure)
         }
@@ -902,7 +902,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     /// Closes a connection. This is called via deinit. Do not call this yourself.
-    @discardableResult fileprivate func closeCustomConnection(immediately: Bool=false) -> NSError? {
+    @discardableResult fileprivate func closeCustomConnection(immediately: Bool = false) -> NSError? {
         log.debug("Closing custom connection for \(self.filename) on \(Thread.current).")
         // TODO: add a lock here?
         let db = self.sqliteDB

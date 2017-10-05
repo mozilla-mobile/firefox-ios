@@ -55,6 +55,7 @@ private struct SearchViewControllerUX {
 
 protocol SearchViewControllerDelegate: class {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
+    func searchViewController(_ searchViewController: SearchViewController, didLongPressSuggestion suggestion: String)
     func presentSearchSettingsController()
 }
 
@@ -393,7 +394,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             return
         }
 
-        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine, source: .QuickSearch))
+        Telemetry.default.recordSearch(location: .quickSearch, searchEngine: engine.engineID ?? "other")
+
         searchDelegate?.searchViewController(self, didSelectURL: url)
     }
 
@@ -573,11 +575,15 @@ extension SearchViewController: SuggestionCellDelegate {
             url = engine.searchURLForQuery(suggestion)
         }
 
-        Telemetry.recordEvent(SearchTelemetry.makeEvent(engine, source: .Suggestion))
+        Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
 
         if let url = url {
             searchDelegate?.searchViewController(self, didSelectURL: url)
         }
+    }
+
+    fileprivate func suggestionCell(_ suggestionCell: SuggestionCell, didLongPressSuggestion suggestion: String) {
+        searchDelegate?.searchViewController(self, didLongPressSuggestion: suggestion)
     }
 }
 
@@ -604,6 +610,7 @@ fileprivate class ButtonScrollView: UIScrollView {
 
 fileprivate protocol SuggestionCellDelegate: class {
     func suggestionCell(_ suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String)
+    func suggestionCell(_ suggestionCell: SuggestionCell, didLongPressSuggestion suggestion: String)
 }
 
 /**
@@ -642,6 +649,7 @@ fileprivate class SuggestionCell: UITableViewCell {
                 let button = SuggestionButton()
                 button.setTitle(suggestion, for: UIControlState())
                 button.addTarget(self, action: #selector(SuggestionCell.SELdidSelectSuggestion(_:)), for: UIControlEvents.touchUpInside)
+                button.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(SuggestionCell.SELdidLongPressSuggestion(_:))))
 
                 // If this is the first image, add the search icon.
                 if container.subviews.isEmpty {
@@ -660,6 +668,15 @@ fileprivate class SuggestionCell: UITableViewCell {
     @objc
     func SELdidSelectSuggestion(_ sender: UIButton) {
         delegate?.suggestionCell(self, didSelectSuggestion: sender.titleLabel!.text!)
+    }
+
+    @objc
+    func SELdidLongPressSuggestion(_ recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.began {
+            if let button = recognizer.view as! UIButton? {
+                delegate?.suggestionCell(self, didLongPressSuggestion: button.titleLabel!.text!)
+            }
+        }
     }
 
     fileprivate override func layoutSubviews() {

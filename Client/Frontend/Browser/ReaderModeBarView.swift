@@ -49,13 +49,13 @@ struct ReaderModeBarViewUX {
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
         var theme = Theme()
-        theme.backgroundColor = UIConstants.PrivateModeAssistantToolbarBackgroundColor
-        theme.buttonTintColor = UIColor.white
+        theme.backgroundColor = UIColor(rgb: 0x38383D)
+        theme.buttonTintColor = UIColor(rgb: 0xf9f9fA)
         themes[Theme.PrivateMode] = theme
 
         theme = Theme()
-        theme.backgroundColor = UIColor.white
-        theme.buttonTintColor = UIColor.darkGray
+        theme.backgroundColor = UIColor(rgb: 0xf9f9fA)
+        theme.buttonTintColor = UIColor(rgb: 0x272727)
         themes[Theme.NormalMode] = theme
 
         return themes

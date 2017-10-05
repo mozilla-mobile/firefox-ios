@@ -7,7 +7,7 @@ import Shared
 import Account
 import Storage
 import SwiftyJSON
-import Telemetry
+import SyncTelemetry
 import Deferred
 
 fileprivate let log = Logger.syncLogger
@@ -239,7 +239,7 @@ public protocol SyncPingFailureFormattable {
     var failureReasonName: SyncPingFailureReasonName { get }
 }
 
-public struct SyncPing: TelemetryPing {
+public struct SyncPing: SyncTelemetryPing {
     public private(set) var payload: JSON
 
     public static func from(result: SyncOperationResult,

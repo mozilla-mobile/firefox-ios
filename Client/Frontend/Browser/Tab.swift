@@ -9,8 +9,6 @@ import Shared
 import SwiftyJSON
 import XCGLogger
 
-private let log = Logger.browserLogger
-
 protocol TabHelper {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
@@ -52,6 +50,18 @@ class Tab: NSObject {
         return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url, title: displayTitle, favicon: displayFavicon)
     }
 
+    // PageMetadata is derived from the page content itself, and as such lags behind the
+    // rest of the tab.
+    var pageMetadata: PageMetadata?
+
+    var canonicalURL: URL? {
+        if let string = pageMetadata?.siteURL,
+            let siteURL = URL(string: string) {
+            return siteURL
+        }
+        return self.url
+    }
+
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
     var bars = [SnackBar]()
@@ -74,9 +84,8 @@ class Tab: NSObject {
                 return
             }
             _noImageMode = newValue
-            // Forced unwrap ok, a side effect of contentBlocker being iOS11+ var.
-            let helper = (contentBlocker as! ContentBlockerHelper)
-            helper.noImageMode(enabled: _noImageMode)
+            let helper = (contentBlocker as? ContentBlockerHelper)
+            helper?.noImageMode(enabled: _noImageMode)
         }
     }
 
@@ -111,14 +120,16 @@ class Tab: NSObject {
     /// tab instance, queue it for later until we become foregrounded.
     fileprivate var alertQueue = [JSAlertInfo]()
 
-    init(configuration: WKWebViewConfiguration) {
-        self.configuration = configuration
-    }
-
-    init(configuration: WKWebViewConfiguration, isPrivate: Bool) {
+    init(configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         self.configuration = configuration
         super.init()
         self.isPrivate = isPrivate
+
+        if #available(iOS 11, *) {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
+                contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
+            }
+        }
     }
 
     class func toTab(_ tab: Tab) -> RemoteTab? {
@@ -210,7 +221,7 @@ class Tab: NSObject {
         } else if let request = lastRequest {
             webView.load(request)
         } else {
-            log.error("creating webview with no lastRequest and no session data: \(self.url?.description ?? "nil")")
+            print("creating webview with no lastRequest and no session data: \(self.url?.description ?? "nil")")
         }
     }
 
@@ -329,12 +340,12 @@ class Tab: NSObject {
         }
 
         if let _ = webView?.reloadFromOrigin() {
-            log.info("reloaded zombified tab from origin")
+            print("reloaded zombified tab from origin")
             return
         }
 
         if let webView = self.webView {
-            log.info("restoring webView from scratch")
+            print("restoring webView from scratch")
             restore(webView)
         }
     }

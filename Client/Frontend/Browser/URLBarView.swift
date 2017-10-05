@@ -32,12 +32,12 @@ struct URLBarViewUX {
     static let Themes: [String: Theme] = {
         var themes = [String: Theme]()
         var theme = Theme()
-        theme.borderColor = UIColor(rgb: 0x39393e)
-        theme.backgroundColor = UIColor(rgb: 0x4A4A4F)
-        theme.activeBorderColor = UIColor(rgb: 0x440071)
+        theme.borderColor = UIColor(rgb: 0x2D2D31)
+        theme.backgroundColor = UIColor(rgb: 0x38383D)
+        theme.activeBorderColor = UIColor(rgb: 0x4a4a4f)
         theme.tintColor = UIColor(rgb: 0xf9f9fa)
         theme.textColor = UIColor(rgb: 0xf9f9fa)
-        theme.buttonTintColor = UIConstants.PrivateModeActionButtonTintColor
+        theme.buttonTintColor = UIColor(rgb: 0xD2d2d4)
         theme.disabledButtonColor = UIColor.gray
         theme.highlightButtonColor = UIColor(rgb: 0xAC39FF)
         themes[Theme.PrivateMode] = theme
@@ -73,7 +73,8 @@ protocol URLBarDelegate: class {
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView)
     func urlBar(_ urlBar: URLBarView, didEnterText text: String)
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String)
-    func urlBarDisplayTextForURL(_ url: URL?) -> String?
+    // Returns either (search query, true) or (url, false).
+    func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
 }
 
 class URLBarView: UIView {
@@ -393,6 +394,11 @@ class URLBarView: UIView {
         progressBar.setProgress(progress, animated: !isTransitioning)
     }
 
+    func hideProgressBar() {
+        progressBar.isHidden = true
+        progressBar.setProgress(0, animated: false)
+    }
+
     func updateReaderModeState(_ state: ReaderModeState) {
         locationView.readerModeState = state
     }
@@ -401,7 +407,15 @@ class URLBarView: UIView {
         locationTextField?.setAutocompleteSuggestion(suggestion)
     }
 
-    func enterOverlayMode(_ locationText: String?, pasted: Bool) {
+    func setLocation(_ location: String?, search: Bool) {
+        locationTextField?.text = location
+        if search, let location = location, !location.isEmpty {
+            // Not notifying when empty agrees with AutocompleteTextField.textDidChange.
+            delegate?.urlBar(self, didEnterText: location)
+        }
+    }
+
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
         createLocationTextField()
 
         // Show the overlay mode UI, which includes hiding the locationView and replacing it
@@ -421,11 +435,11 @@ class URLBarView: UIView {
             self.locationTextField?.text = ""
             DispatchQueue.main.async {
                 self.locationTextField?.becomeFirstResponder()
-                self.locationTextField?.text = locationText
+                self.setLocation(locationText, search: search)
             }
         } else {
             // Copy the current URL to the editable text field, then activate it.
-            self.locationTextField?.text = locationText
+            self.setLocation(locationText, search: search)
             DispatchQueue.main.async {
                 self.locationTextField?.becomeFirstResponder()
             }
@@ -573,13 +587,13 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView) {
-        var locationText = delegate?.urlBarDisplayTextForURL(locationView.url as URL?)
+        guard var (locationText, isSearchQuery) = delegate?.urlBarDisplayTextForURL(locationView.url as URL?) else { return }
 
         // Make sure to use the result from urlBarDisplayTextForURL as it is responsible for extracting out search terms when on a search page
         if let text = locationText, let url = URL(string: text), let host = url.host, AppConstants.MOZ_PUNYCODE {
             locationText = url.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         }
-        enterOverlayMode(locationText, pasted: false)
+        enterOverlayMode(locationText, pasted: false, search: isSearchQuery)
     }
 
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView) {
@@ -663,8 +677,8 @@ extension URLBarView: Themeable {
         currentTheme = themeName
         locationBorderColor = theme.borderColor!
         locationActiveBorderColor = theme.activeBorderColor!
-        cancelTintColor = theme.textColor
-        showQRButtonTintColor = theme.textColor
+        cancelTintColor = theme.buttonTintColor
+        showQRButtonTintColor = theme.buttonTintColor
         backgroundColor = theme.backgroundColor
         self.actionButtons.forEach { $0.applyTheme(themeName) }
         tabsButton.applyTheme(themeName)

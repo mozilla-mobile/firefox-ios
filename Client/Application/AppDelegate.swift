@@ -10,7 +10,7 @@ import MessageUI
 import SDWebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
-import Telemetry
+import SyncTelemetry
 import SwiftRouter
 import Sync
 import CoreSpotlight
@@ -32,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     weak var profile: Profile?
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
-    var foregroundStartTime = 0
     var applicationCleanlyBackgrounded = true
 
     weak var application: UIApplication?
@@ -43,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var openInFirefoxParams: LaunchParams?
 
     var receivedURLs: [URL]?
+    var unifiedTelemetry: UnifiedTelemetry?
 
     @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         //
@@ -67,8 +67,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.application = application
         self.launchOptions = launchOptions
 
-        log.debug("Configuring window…")
-
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.backgroundColor = UIColor.white
 
@@ -83,52 +81,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     @discardableResult fileprivate func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
-        log.debug("Initializing Sentry…")
+        log.info("startApplication begin")
+
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey("settings.sendUsageData") ?? true
+        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
         SentryIntegration.shared.setup(sendUsageData: sendUsageData)
         
-        log.debug("Setting UA…")
         // Set the Firefox UA for browsing.
         setUserAgent()
 
-        log.debug("Starting keyboard helper…")
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
 
-        log.debug("Starting dynamic font helper…")
         DynamicFontHelper.defaultHelper.startObserving()
 
-        log.debug("Setting custom menu items…")
         MenuHelper.defaultHelper.setItems()
 
-        log.debug("Creating Sync log file…")
         let logDate = Date()
         // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
         Logger.syncLogger.newLogWithDate(logDate)
 
-        log.debug("Creating Browser log file…")
         Logger.browserLogger.newLogWithDate(logDate)
 
-        log.debug("Getting profile…")
         let profile = getProfile(application)
 
-        log.debug("Initializing telemetry…")
-        Telemetry.initWithPrefs(profile.prefs)
+        unifiedTelemetry = UnifiedTelemetry(profile: profile)
 
         if !DebugSettingsBundleOptions.disableLocalWebServer {
-            log.debug("Starting web server…")
             // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
             setUpWebServer(profile)
         }
 
-        log.debug("Setting AVAudioSession category…")
         do {
             // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
         } catch _ {
-            log.error("Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
+            print("Error: Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
         }
 
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
@@ -140,13 +129,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
         }
 
-        log.debug("Configuring tabManager…")
         self.tabManager = TabManager(prefs: profile.prefs, imageStore: imageStore)
         self.tabManager.stateDelegate = self
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
-        log.debug("Initing BVC…")
 
         browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
         browserViewController.edgesForExtendedLayout = []
@@ -162,7 +149,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.window!.rootViewController = rootViewController
 
-        log.debug("Adding observers…")
         NotificationCenter.default.addObserver(forName: NSNotification.Name.FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
@@ -185,26 +171,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         leanplum.setup(profile: profile)
         leanplum.setEnabled(true)
 
-        log.debug("Updating authentication keychain state to reflect system state")
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
-
-        resetForegroundStartTime()
-        if !(profile.prefs.boolForKey(InitialPingSentKey) ?? false) {
-            // Try to send an initial core ping when the user first opens the app so that they're
-            // "on the map". This lets us know they exist if they try the app once, crash, then uninstall.
-            // sendCorePing() only sends the ping if the user is offline, so if the first ping doesn't
-            // go through *and* the user crashes then uninstalls on the first run, then we're outta luck.
-            profile.prefs.setBool(true, forKey: InitialPingSentKey)
-            sendCorePing()
-        }
 
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
         setUpDeepLinks(application: application)
 
-        log.debug("Done with setting up the application.")
+        log.info("startApplication end")
         return true
     }
 
@@ -285,8 +260,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        log.debug("Application will terminate.")
-
         // We have only five seconds here, so let's hope this doesn't take too long.
         self.profile?.shutdown()
 
@@ -320,21 +293,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
-        log.debug("Did finish launching.")
-
-        log.debug("Setting up Adjust")
-        self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
+        adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
         #if BUDDYBUILD
-            log.debug("Setting up BuddyBuild SDK")
+            print("Setting up BuddyBuild SDK")
             BuddyBuildSDK.setup()
         #endif
         
-        log.debug("Making window key and visible…")
-        self.window!.makeKeyAndVisible()
+        window!.makeKeyAndVisible()
 
         // Now roll logs.
-        log.debug("Triggering log roll.")
         DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
             Logger.syncLogger.deleteOldLogsDownToSizeLimit()
             Logger.browserLogger.deleteOldLogsDownToSizeLimit()
@@ -347,8 +315,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             // This will block "performActionForShortcutItem:completionHandler" from being called.
             shouldPerformAdditionalDelegateHandling = false
         }
-
-        log.debug("Done with applicationDidFinishLaunching.")
 
         return shouldPerformAdditionalDelegateHandling
     }
@@ -498,10 +464,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         defaults.synchronize()
 
         syncOnDidEnterBackground(application: application)
-
-        let elapsed = Int(Date().timeIntervalSince1970) - foregroundStartTime
-        Telemetry.recordEvent(UsageTelemetry.makeEvent(elapsed))
-        sendCorePing()
     }
 
     fileprivate func syncOnDidEnterBackground(application: UIApplication) {
@@ -513,7 +475,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         var taskId: UIBackgroundTaskIdentifier = 0
         taskId = application.beginBackgroundTask (expirationHandler: { _ in
-            log.warning("Running out of background time, but we have a profile shutdown pending.")
+            print("Running out of background time, but we have a profile shutdown pending.")
             self.shutdownProfileWhenNotActive(application)
             application.endBackgroundTask(taskId)
         })
@@ -547,36 +509,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // is that this method is only invoked whenever the application is entering the foreground where as 
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
-
-        resetForegroundStartTime()
-
-    }
-
-    fileprivate func resetForegroundStartTime() {
-        foregroundStartTime = Int(Date().timeIntervalSince1970)
-    }
-
-    /// Send a telemetry ping if the user hasn't disabled reporting.
-    /// We still create and log the ping for non-release channels, but we don't submit it.
-    fileprivate func sendCorePing() {
-        guard let profile = profile, (profile.prefs.boolForKey("settings.sendUsageData") ?? true) else {
-            log.debug("Usage sending is disabled. Not creating core telemetry ping.")
-            return
-        }
-
-        DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
-            // The core ping resets data counts when the ping is built, meaning we'll lose
-            // the data if the ping doesn't go through. To minimize loss, we only send the
-            // core ping if we have an active connection. Until we implement a fault-handling
-            // telemetry layer that can resend pings, this is the best we can do.
-            guard DeviceInfo.hasConnectivity() else {
-                log.debug("No connectivity. Not creating core telemetry ping.")
-                return
-            }
-
-            let ping = CorePing(profile: profile)
-            Telemetry.send(ping: ping, docType: .core)
-        }
     }
 
     fileprivate func updateAuthenticationInfo() {
@@ -603,7 +535,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         do {
             try server.start()
         } catch let err as NSError {
-            log.error("Unable to start WebServer \(err)")
+            print("Error: Unable to start WebServer \(err)")
         }
     }
 

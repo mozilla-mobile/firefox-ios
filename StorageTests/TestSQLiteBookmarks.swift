@@ -214,7 +214,7 @@ class TestSQLiteBookmarks: XCTestCase {
             (sql: pendingDeletionsQuery, args: pendingDeletionsArgs),
         ]).succeeded()
 
-        let modified: [BookmarkMirrorItem] = [BookmarkMirrorItem.bookmark("bkm2", modified: Date.now(), hasDupe: false, parentID: "bkm2", parentName: nil, title: "BKM 2", description: nil, URI: "https://test.com", tags: "", keyword: nil)]
+        let modified: [BookmarkMirrorItem] = [BookmarkMirrorItem.bookmark("bkm2", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: "bkm2", parentName: nil, title: "BKM 2", description: nil, URI: "https://test.com", tags: "", keyword: nil)]
         bookmarks.applyRecords(modified).succeeded()
 
         XCTAssertTrue(db.queryReturnsNoResults("SELECT * FROM \(TablePendingBookmarksDeletions)").value.successValue!)
@@ -285,7 +285,7 @@ class TestSQLiteBookmarks: XCTestCase {
             (sql: pendingDeletionsQuery, args: pendingDeletionsArgs),
             ]).succeeded()
 
-        let mobileRoot = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID,
+        let mobileRoot = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID,
                                                    parentName: nil, title: "Mobile Bookmarks", description: nil, children: ["bkmbuf"] + childrenGUIDsUploaded)
         let op = BufferUpdatedCompletionOp(bufferValuesToMoveFromLocal: Set(childrenGUIDsUploaded), deletedValues: Set(["bkmtodelete"]), mobileRoot: mobileRoot, modifiedTime: 123456)
 
@@ -454,10 +454,10 @@ class TestSQLiteBookmarks: XCTestCase {
         ]
         let now = Date.now()
         let bufferSQL =
-        "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
-        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
-        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
-        "(\(now), ?, ?, ?, ?, ?, ?, NULL)"
+        "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, date_added, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
+        "(\(now), ?, ?, \(now), ?, ?, ?, ?, ?), " +
+        "(\(now), ?, ?, \(now), ?, ?, ?, ?, ?), " +
+        "(\(now), ?, ?, \(now), ?, ?, ?, ?, NULL)"
 
         let bufferStructureSQL = "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES ('somefolder02', 'rooted000002', 0)"
         db.run(bufferSQL, withArgs: args).succeeded()
@@ -605,12 +605,12 @@ class TestSQLiteBookmarks: XCTestCase {
         ]
 
         let now = Date.now()
-        let bufferSQL = "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
-        "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
-        "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
-        "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
-        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
-        "(\(now), ?, ?, 1, NULL, NULL, NULL, NULL) "
+        let bufferSQL = "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, date_added, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
+        "(\(now), ?, ?, \(now), ?, ?, ?, ?, NULL), " +
+        "(\(now), ?, ?, \(now), ?, ?, ?, ?, NULL), " +
+        "(\(now), ?, ?, \(now), ?, ?, ?, ?, NULL), " +
+        "(\(now), ?, ?, \(now), ?, ?, ?, ?, ?), " +
+        "(\(now), ?, ?, \(now), 1, NULL, NULL, NULL, NULL) "
 
         let bufferStructureSQL = "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES (?, ?, ?)"
         let bufferStructureArgs: Args = ["ihavenoparent", "ihavenochildren", 0]
@@ -928,9 +928,9 @@ class TestSQLiteBookmarks: XCTestCase {
         }
         let bookmarks = SQLiteBookmarkBufferStorage(db: db)
 
-        let record1 = BookmarkMirrorItem.bookmark("aaaaaaaaaaaa", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "AAA", description: "AAA desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
-        let record2 = BookmarkMirrorItem.bookmark("bbbbbbbbbbbb", modified: Date.now() + 10, hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "BBB", description: "BBB desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
-        let toolbar = BookmarkMirrorItem.folder("toolbar", modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "Bookmarks Toolbar", description: "Add bookmarks to this folder to see them displayed on the Bookmarks Toolbar", children: ["aaaaaaaaaaaa", "bbbbbbbbbbbb"])
+        let record1 = BookmarkMirrorItem.bookmark("aaaaaaaaaaaa", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "AAA", description: "AAA desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
+        let record2 = BookmarkMirrorItem.bookmark("bbbbbbbbbbbb", dateAdded: Date.now(), modified: Date.now() + 10, hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "BBB", description: "BBB desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
+        let toolbar = BookmarkMirrorItem.folder("toolbar", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "Bookmarks Toolbar", description: "Add bookmarks to this folder to see them displayed on the Bookmarks Toolbar", children: ["aaaaaaaaaaaa", "bbbbbbbbbbbb"])
         let recordsA: [BookmarkMirrorItem] = [record1, toolbar, record2]
         bookmarks.applyRecords(recordsA, withMaxVars: 3).succeeded()
 
@@ -940,9 +940,9 @@ class TestSQLiteBookmarks: XCTestCase {
         let children = ["M87np9Vfh_2s", "-JxRyqNte-ue", "6lIQzUtbjE8O", "eOg3jPSslzXl", "1WJIi9EjQErp", "z5uRo45Rvfbd", "EK3lcNd0sUFN", "gFD3GTljgu12", "eRZGsbN1ew9-", "widfEdgGn9de", "l7eTOR4Uf6xq", "vPbxG-gpN4Rb", "4dwJ8CototFe", "zK-kw9Ii6ScW", "eDmDU-gtEFW6", "lKjqWQaL_syt", "ETVDvWgGT31Q", "3Z_bMIHPSZQ8", "Fqu4_bJOk7fT", "Uo_5K1QrA67j", "gDTXNg4m1AJZ", "zpds8P-9xews", "87zjNtVGPtEp", "ZJru8Sn3qhW7", "txVnzBBBOgLP", "JTnRqFaj_oNa", "soaMlfmM4kjR", "g8AcVBjo6IRf", "uPUDaiG4q637", "rfq2bUud_w4d", "XBGxsiuUG2UD", "-VQRnJlyAvMs", "6wu7TScKdTU7", "ZeFji2hLVpLj", "HpCn_TVizMWX", "IPR5HZwRdlwi", "00JFOGuWnhWB", "P1jb3qKt32Vg", "D6MQJ43V1Ir5", "qWSoXFteRfsq", "o2avfYqEdomL", "xRS0U0YnjK9G", "VgOgzE_xfP4w", "SwP3rMJGvoO3", "Hf2jEgI_-PWa", "AyhmBi7Cv598", "-PaMuzTJXxVk", "JMhYrg8SlY5K", "SQeySEjzyplL", "GTAwd2UkEQEe", "x3RsZj5Ilebr", "sRZWZqPi74FP", "amHR50TpygA6", "XSk782ceVNN6", "ipiMyYQzeypI", "ph2k3Nqfhau4", "m5JKC3hAEQ0H", "yTVerkmQbNxk", "7taA6FbbbUbH", "PZvpbSRuJLPs", "C8atoa25U94F", "KOfNJk_ISLc6", "Bt74lBG9tJq6", "BuHoY2rUhuKA", "XTmoWKnwfIPl", "ZATwa3oTD1m0", "e8TczN5It6Am", "6kCUYs8hQtKg", "jDD8s5aiKoex", "QmpmcrYwLU29", "nCRcekynuJ08", "resttaI4J9tu", "EKSX3HV55VU3", "2-yCz0EIsVls", "sSeeGw3VbBY-", "qfpCrU34w9y0", "RKDgzPWecD6m", "5SgXEKu_dICW", "R143WAeB5E5r", "8Ns4-NiKG62r", "4AHuZDvop5XX", "YCP1OsO1goFF", "CYYaU1mQ_N6t", "UGkzEOMK8cuU", "1RzZOarkzQBa", "qSW2Z3cZSI9c", "ooPlKEAfQsnn", "jIUScoKLiXQt", "bjNTKugzRRL1", "hR24ZVnHUZcs", "3j2IDAZgUyYi", "xnWcy-sQDJRu", "UCcgJqGk3bTV", "WSSRWeptH9tq", "4ugv47OGD2E2", "XboCZgUx-x3x", "HrmWqiqsuLrm", "OjdxvRJ3Jb6j"]
         // swiftlint:enable line_length
 
-        let mA = BookmarkMirrorItem.bookmark("jIUScoKLiXQt", modified: Date.now(), hasDupe: false, parentID: "mobile", parentName: "mobile", title: "Join the Engineering Leisure Class — Medium", description: nil, URI: "https://medium.com/@chrisloer/join-the-engineering-leisure-class-b3083c09a78e", tags: "[]", keyword: nil)
+        let mA = BookmarkMirrorItem.bookmark("jIUScoKLiXQt", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: "mobile", parentName: "mobile", title: "Join the Engineering Leisure Class — Medium", description: nil, URI: "https://medium.com/@chrisloer/join-the-engineering-leisure-class-b3083c09a78e", tags: "[]", keyword: nil)
 
-        let mB = BookmarkMirrorItem.folder("UjAHxFOGEqU8", modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: children)
+        let mB = BookmarkMirrorItem.folder("UjAHxFOGEqU8", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: children)
         bookmarks.applyRecords([mA, mB]).succeeded()
 
         func childCount(_ parent: GUID) -> Int? {
@@ -955,7 +955,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(children.count, childCount("UjAHxFOGEqU8"))
 
         // Insert an empty mobile bookmarks folder, so we can verify that the structure table is wiped.
-        let mBEmpty = BookmarkMirrorItem.folder("UjAHxFOGEqU8", modified: Date.now() + 1, hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: [])
+        let mBEmpty = BookmarkMirrorItem.folder("UjAHxFOGEqU8", dateAdded: Date.now(), modified: Date.now() + 1, hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: [])
         bookmarks.applyRecords([mBEmpty]).succeeded()
 
         // We no longer have children.

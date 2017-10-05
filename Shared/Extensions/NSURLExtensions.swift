@@ -277,6 +277,16 @@ extension URL {
         return false
     }
 
+    // This helps find local urls that we do not want to show loading bars on.
+    // These utility pages should be invisible to the user
+    public var isLocalUtility: Bool {
+        guard self.isLocal else {
+            return false
+        }
+        let utilityURLs = ["/errors", "/about/sessionrestore", "/about/home", "/reader-mode"]
+        return utilityURLs.contains { self.path.startsWith($0) }
+    }
+
     public var isLocal: Bool {
         guard isWebPage(includeDataURIs: false) else {
             return false
