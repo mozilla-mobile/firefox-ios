@@ -518,7 +518,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     @objc func showMorePocketStories() {
-        showSiteWithURLHandler(PocketMoreStoriesURL)
+        showSiteWithURLHandler(Pocket.MoreStoriesURL)
     }
 
     func getTopSites() -> Success {
