@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let prefIntroVersion = 2
     private let browserViewController = BrowserViewController()
     private var queuedUrl: URL?
+    private var queuedString: String?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         #if BUDDYBUILD
@@ -133,17 +134,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let query = getQuery(url: url)
 
-        guard host == "open-url" else { return false }
 
-        let urlString = unescape(string: query["url"]) ?? ""
-        guard let url = URL(string: urlString) else { return false }
+        if host == "open-url" {
+            let urlString = unescape(string: query["url"]) ?? ""
+            guard let url = URL(string: urlString) else { return false }
 
-        if application.applicationState == .active {
-            // If we are active then we can ask the BVC to open the new tab right away.
-            // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-            browserViewController.submit(url: url)
-        } else {
-            queuedUrl = url
+            if application.applicationState == .active {
+                // If we are active then we can ask the BVC to open the new tab right away.
+                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
+                browserViewController.submit(url: url)
+            } else {
+                queuedUrl = url
+            }
+        } else if host == "open-text" {
+            let text = unescape(string: query["text"]) ?? ""
+
+            if application.applicationState == .active {
+                // If we are active then we can ask the BVC to open the new tab right away.
+                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
+                browserViewController.openOverylay(text: text)
+            } else {
+                queuedString = text
+            }
         }
 
         return true
@@ -213,13 +225,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         splashView?.animateHidden(true, duration: 0.25)
         if let url = queuedUrl {
-
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
 
             browserViewController.ensureBrowsingMode()
             browserViewController.submit(url: url)
             queuedUrl = nil
+        } else if let text = queuedString {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
+
+            browserViewController.openOverylay(text: text)
+            queuedString = nil
         }
+
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {

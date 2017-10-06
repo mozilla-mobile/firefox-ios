@@ -44,23 +44,52 @@ class ActionViewController: SLComposeServiceViewController {
         return NSURL(string: "\(self.urlScheme)://open-url?url=\(url)")
     }
 
-    override func configurationItems() -> [Any]! {
-        guard let item = extensionContext?.inputItems.first.flatMap({ $0 as? NSExtensionItem }) else { fatalError() }
-        guard let itemProvider = item.attachments?.first.flatMap({ $0 as? NSItemProvider }) else { fatalError() }
+    func textUrl(text: String) -> NSURL? {
+        guard let query = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return nil }
+        return NSURL(string: "\(self.urlScheme)://open-text?text=\(query)")
+    }
 
-        if itemProvider.isText {
-            itemProvider.processText { (textItem, error) in
-                let text = textItem as? String
-                let url = text.flatMap(NSURL.init(string:))
-                guard let focusUrl = url.flatMap({ $0.encodedUrl }).flatMap(self.focusUrl) else { self.cancel(); return }
-                self.handleUrl(focusUrl)
+    override func configurationItems() -> [Any]! {
+        let inputItems: [NSExtensionItem] = (extensionContext?.inputItems as? [NSExtensionItem]) ?? []
+        var urlProvider: NSItemProvider?
+        var textProvider: NSItemProvider?
+
+        // Look for the first URL the host application is sharing.
+        // If there isn't a URL grab the first text item
+        for item: NSExtensionItem in inputItems {
+            let attachments: [NSItemProvider] = (item.attachments as? [NSItemProvider]) ?? []
+            for attachment in attachments {
+                if urlProvider == nil && attachment.isUrl {
+                    urlProvider = attachment
+                } else if textProvider == nil && attachment.isText {
+                    textProvider = attachment
+                }
             }
-        } else if itemProvider.isUrl {
-            itemProvider.processUrl { (urlItem, error) in
+        }
+
+        // If a URL is found, process it. Otherwise we will try to convert
+        // the text item to a URL falling back to sending just the text.
+        if let urlProvider = urlProvider {
+            urlProvider.processUrl { (urlItem, error) in
                 guard let focusUrl = (urlItem as? NSURL)?.encodedUrl.flatMap(self.focusUrl) else { self.cancel(); return }
                 self.handleUrl(focusUrl)
             }
+        } else if let textProvider = textProvider {
+            textProvider.processText { (textItem, error) in
+                guard let text = textItem as? String else { self.cancel(); return }
+
+                if let url = NSURL.init(string: text) {
+                    guard let focusUrl = url.encodedUrl.flatMap(self.focusUrl) else { self.cancel(); return }
+                    self.handleUrl(focusUrl)
+                } else {
+                    guard let focusUrl = self.textUrl(text: text) else { self.cancel(); return }
+                    self.handleUrl(focusUrl)
+                }
+            }
         } else {
+            // If no item was processed. Cancel the share action to prevent the
+            // extension from locking the host application due to the hidden
+            // ViewController
             self.cancel()
         }
 

@@ -378,6 +378,10 @@ class URLBar: UIView {
         preActivationConstraints.forEach { $0.deactivate() }
     }
 
+    func fillUrlBar(text: String) {
+        urlText.text = text
+    }
+
     private func updateLockIcon() {
         let visible = !isEditing && (url?.scheme == "https")
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2

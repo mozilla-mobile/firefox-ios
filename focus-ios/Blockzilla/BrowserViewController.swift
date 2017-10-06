@@ -294,6 +294,11 @@ class BrowserViewController: UIViewController {
         webViewController.load(URLRequest(url: url))
     }
 
+    func openOverylay(text: String) {
+        urlBar.becomeFirstResponder()
+        urlBar.fillUrlBar(text: text)
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
