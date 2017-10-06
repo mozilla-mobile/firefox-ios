@@ -103,22 +103,15 @@ class OverlayView: UIView {
      */
     func getAttributedButtonTitle(phrase: String,
                                   localizedStringFormat: String) -> NSAttributedString {
-        
-        let localizedString = String(format: localizedStringFormat, "[\(phrase)]")
-        
-        // Use [ and ] to help find the position of the query, then delete them.
-        let copyTitle = NSMutableString(string: localizedString)
-        let startIndex = copyTitle.range(of: "[")
-        let endIndex = copyTitle.range(of: "]", options: .backwards)
-        copyTitle.deleteCharacters(in: endIndex)
-        copyTitle.deleteCharacters(in: startIndex)
-        
-        let attributedString = NSMutableAttributedString(string: copyTitle as String)
-        let queryRange = NSMakeRange(startIndex.location, (phrase as NSString).length)
-        let fullRange = NSMakeRange(0, copyTitle.length)
-        attributedString.addAttributes([NSAttributedStringKey.font: UIConstants.fonts.copyButtonQuery], range: queryRange)
-        attributedString.addAttributes([NSAttributedStringKey.foregroundColor: UIColor.white], range: fullRange)
-        
+        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [NSAttributedStringKey.foregroundColor: UIColor.white])
+        let phraseString = NSAttributedString(string: phrase, attributes: [NSAttributedStringKey.font: UIConstants.fonts.copyButtonQuery,
+                                                                           NSAttributedStringKey.foregroundColor: UIColor.white])
+
+        guard let range = attributedString.string.range(of: "%@") else { return phraseString }
+
+        let replaceRange = NSRange(range, in: attributedString.string)
+        attributedString.replaceCharacters(in: replaceRange, with: phraseString)
+
         return attributedString
     }
     
