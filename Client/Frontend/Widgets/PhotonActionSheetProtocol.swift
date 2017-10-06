@@ -11,6 +11,8 @@ protocol PhotonActionSheetProtocol {
     var profile: Profile { get }
 }
 
+private let log = Logger.browserLogger
+
 extension PhotonActionSheetProtocol {
     typealias PresentableVC = UIViewController & UIPopoverPresentationControllerDelegate
     typealias MenuAction = () -> Void
@@ -164,6 +166,21 @@ extension PhotonActionSheetProtocol {
             }
         }
         
+        let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { action in
+            guard let url = tab.url?.displayURL,
+                  let sql = self.profile.history as? SQLiteHistory else { return }
+            let absoluteString = url.absoluteString
+            
+            sql.getSitesForURLs([absoluteString]) >>== { result in
+                guard let siteOp = result.asArray().first, let site = siteOp else {
+                    log.warning("Could not get site for \(absoluteString)")
+                    return
+                }
+                
+                _ = self.profile.history.addPinnedTopSite(site).value
+            }
+        }
+        
         let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let tab = self.tabManager.selectedTab else { return }
             guard let url = tab.canonicalURL?.displayURL else { return }
@@ -180,7 +197,8 @@ extension PhotonActionSheetProtocol {
         if let tab = self.tabManager.selectedTab, tab.readerModeAvailableOrActive {
             topActions.append(addReadingList)
         }
-        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, setHomePage], [share]]
+        
+        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, setHomePage], [share]]
     }
     
     private func showToast(text:String) {

@@ -5,14 +5,6 @@
 import Account
 import Shared
 import UIKit
-import XCGLogger
-import SwiftyJSON
-
-// The following are only here because we use master for L10N and otherwise these strings would disappear from the v1.0 release
-private let Bug1204635_S1 = NSLocalizedString("Clear Everything", tableName: "ClearPrivateData", comment: "Title of the Clear private data dialog.")
-private let Bug1204635_S2 = NSLocalizedString("Are you sure you want to clear all of your data? This will also close all open tabs.", tableName: "ClearPrivateData", comment: "Message shown in the dialog prompting users if they want to clear everything")
-private let Bug1204635_S3 = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
-private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting: NSObject {
@@ -179,7 +171,7 @@ class BoolSetting: Setting {
         super.onConfigureCell(cell)
 
         let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
+        control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
         displayBool(control)
         if let title = title {
@@ -467,12 +459,9 @@ class SettingsTableViewController: UITableViewController {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
-        let tableFooter = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
-        tableFooter.showTopBorder = false
-        tableView.tableFooterView = tableFooter
-        
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
     }
@@ -560,9 +549,8 @@ class SettingsTableViewController: UITableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
-            headerView.titleLabel.text = sectionTitle
+            headerView.titleLabel.text = sectionTitle.uppercased()
         }
-
         // Hide the top border for the top section to avoid having a double line at the top
         if section == 0 || !hasSectionSeparatorLine {
             headerView.showTopBorder = false
@@ -638,44 +626,6 @@ class SettingsTableViewController: UITableViewController {
         let boundingRect = NSString(string: text).boundingRect(with: size,
             options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
-    }
-}
-
-class SettingsTableFooterView: UIView {
-    var logo: UIImageView = {
-        var image =  UIImageView(image: UIImage(named: "settingsFlatfox"))
-        image.contentMode = UIViewContentMode.center
-        image.accessibilityIdentifier = "SettingsTableFooterView.logo"
-        return image
-    }()
-
-    fileprivate lazy var topBorder: CALayer = {
-        let topBorder = CALayer()
-        topBorder.backgroundColor = UIConstants.SeparatorColor.cgColor
-        return topBorder
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        layer.addSublayer(topBorder)
-        addSubview(logo)
-    }
-    
-    var showTopBorder: Bool = true {
-        didSet {
-            topBorder.isHidden = !showTopBorder
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        topBorder.frame = CGRect(x: 0.0, y: 0.0, width: frame.size.width, height: 0.5)
-        logo.center = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
     }
 }
 

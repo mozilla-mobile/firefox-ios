@@ -50,7 +50,8 @@ private class PocketError: MaybeErrorType {
 
 class Pocket {
     private let pocketGlobalFeed: String
-    
+    static let MoreStoriesURL = URL(string: "https://getpocket.cdn.mozilla.net/explore/trending?src=ff_ios")!
+
     // Allow endPoint to be overriden for testing
     init(endPoint: String = PocketGlobalFeed) {
         self.pocketGlobalFeed = endPoint
