@@ -17,12 +17,12 @@ extension PhotonActionSheetProtocol {
     typealias IsPrivateTab = Bool
     typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
     
-    func presentSheetWith(actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView) {
+    func presentSheetWith(actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, supressPopover: Bool = false) {
         let sheet = PhotonActionSheet(actions: actions)
-        sheet.modalPresentationStyle =  UIDevice.current.userInterfaceIdiom == .pad ? .popover : .overCurrentContext
+        sheet.modalPresentationStyle =  (UIDevice.current.userInterfaceIdiom == .pad && !supressPopover) ? .popover : .overCurrentContext
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
         
-        if let popoverVC = sheet.popoverPresentationController {
+        if let popoverVC = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
             popoverVC.sourceRect = CGRect(x: view.frame.width/2, y: view.frame.size.height * 0.75, width: 1, height: 1)

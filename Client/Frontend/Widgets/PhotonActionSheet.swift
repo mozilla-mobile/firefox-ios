@@ -142,7 +142,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
 
         var width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
-        width = UIDevice.current.userInterfaceIdiom == .pad ? width : (self.view.frame.width - (PhotonActionSheetUX.Padding * 2))
+        width = self.modalPresentationStyle == .popover ? width : (self.view.frame.width - (PhotonActionSheetUX.Padding * 2))
         let height = actionSheetHeight()
         
         if self.modalPresentationStyle == .popover {
@@ -159,7 +159,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             }
         }
         
-        if style == .bottom && UIDevice.current.userInterfaceIdiom == .pad {
+        if style == .bottom && self.modalPresentationStyle == .popover {
             // We are showing the menu in a popOver
             self.actions = actions.map({ $0.reversed() }).reversed()
             tableView.frame = CGRect(origin: CGPoint.zero, size: self.preferredContentSize)
