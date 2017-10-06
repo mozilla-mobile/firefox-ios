@@ -41,13 +41,13 @@ class PocketStoriesTests: XCTestCase {
         let expect = expectation(description: "Pocket")
         let PocketFeed = Pocket(endPoint: pocketAPI)
 
-        PocketFeed.globalFeed(items: 4, locale: Locale.current.identifier, force: false).upon { result in
+        PocketFeed.globalFeed(items: 4).upon { result in
             let items = result
             XCTAssertEqual(items.count, 2, "We are fetching a static feed. There are only 2 items in it")
             self.webServer.stop() // Stop the webserver so we can check caching
 
             // Try again now that the webserver is down
-            PocketFeed.globalFeed(items: 4, locale: Locale.current.identifier, force: false).upon { result in
+            PocketFeed.globalFeed(items: 4).upon { result in
                 let items = result
                 XCTAssertEqual(items.count, 2, "We are fetching a static feed. There are only 2 items in it")
                 let item = items.first
