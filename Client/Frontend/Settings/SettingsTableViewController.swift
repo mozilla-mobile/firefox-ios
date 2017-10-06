@@ -171,7 +171,7 @@ class BoolSetting: Setting {
         super.onConfigureCell(cell)
 
         let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
+        control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
         displayBool(control)
         if let title = title {
@@ -549,9 +549,8 @@ class SettingsTableViewController: UITableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
-            headerView.titleLabel.text = sectionTitle
+            headerView.titleLabel.text = sectionTitle.uppercased()
         }
-
         // Hide the top border for the top section to avoid having a double line at the top
         if section == 0 || !hasSectionSeparatorLine {
             headerView.showTopBorder = false
