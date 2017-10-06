@@ -39,26 +39,26 @@ class BaseTestCase: XCTestCase {
         }
     }
     
-    func waitforExistence(_ element: XCUIElement) {
-        let exists = NSPredicate(format: "exists == true")
-        
-        expectation(for: exists, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 20, handler: nil)
+    func waitforExistence(_ element: XCUIElement, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "exists == true", file: file, line: line)
     }
     
-    func waitforNoExistence(_ element: XCUIElement) {
-        let exists = NSPredicate(format: "exists != true")
-        
-        expectation(for: exists, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 20, handler: nil)
+    func waitforNoExistence(_ element: XCUIElement, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "exists != true", file: file, line: line)
     }
     
-    func waitForValueContains(_ element: XCUIElement, value: String) {
-        let predicateText = "value CONTAINS " + "'" + value + "'"
-        let valueCheck = NSPredicate(format: predicateText)
-        
-        expectation(for: valueCheck, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 20, handler: nil)
+    func waitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
+    }
+
+    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
+        let predicate = NSPredicate(format: predicateString)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        if result != .completed {
+            let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
+            self.recordFailure(withDescription: message, inFile: file, atLine: line, expected: false)
+        }
     }
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
