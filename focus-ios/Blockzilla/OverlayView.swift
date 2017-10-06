@@ -109,7 +109,7 @@ class OverlayView: UIView {
         // Use [ and ] to help find the position of the query, then delete them.
         let copyTitle = NSMutableString(string: localizedString)
         let startIndex = copyTitle.range(of: "[")
-        let endIndex = copyTitle.range(of: "]")
+        let endIndex = copyTitle.range(of: "]", options: .backwards)
         copyTitle.deleteCharacters(in: endIndex)
         copyTitle.deleteCharacters(in: startIndex)
         
