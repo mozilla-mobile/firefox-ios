@@ -77,9 +77,10 @@ class AppSettingsTableViewController: SettingsTableViewController {
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
         }
-        
+
+        let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
         settings += [
-            SettingSection(title: accountSectionTitle, children: [
+            SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
                 ConnectSetting(settings: self),
                 AdvanceAccountSetting(settings: self),
@@ -87,10 +88,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
             ] + accountChinaSyncSetting + accountDebugSettings)]
-
-        if !profile.hasAccount() {
-            settings += [SettingSection(title: NSAttributedString(string: Strings.FxASyncUsageDetails), children: [])]
-        }
 
         settings += [ SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]
 
@@ -135,38 +132,24 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ])]
     
             if profile.hasAccount() {
-                settings += [SettingSection(title: nil, children: [DisconnectSetting(settings: self)])]
+                settings += [SettingSection(title: nil, footerTitle: NSAttributedString(string: ""), children: [DisconnectSetting(settings: self)])]
             }
 
         return settings
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! SettingsTableSectionHeaderFooterView
+        // Prevent the top border from showing for the General section.
         if !profile.hasAccount() {
-            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
-            let sectionSetting = settings[section]
-            headerView.titleLabel.text = sectionSetting.title?.string
-
             switch section {
-                // Hide the bottom border for the Sign In to Firefox value prop
                 case 1:
-                    headerView.titleAlignment = .top
-                    headerView.titleLabel.numberOfLines = 0
-                    headerView.showBottomBorder = false
-                    headerView.titleLabel.snp.updateConstraints { make in
-                        make.right.equalTo(headerView).offset(-50)
-                    }
-
-                // Hide the top border for the General section header when the user is not signed in.
-                case 2:
                     headerView.showTopBorder = false
-                default:
-                    return super.tableView(tableView, viewForHeaderInSection: section)
+            default:
+                break
             }
-            return headerView
         }
-        
-        return super.tableView(tableView, viewForHeaderInSection: section)
+        return headerView
     }
 }
 

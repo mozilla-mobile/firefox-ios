@@ -34,7 +34,7 @@ class OpenWithSettingsViewController: UITableViewController {
 
         let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
-        headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle
+        headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle.uppercased()
         headerView.showTopBorder = false
         headerView.showBottomBorder = true
 
