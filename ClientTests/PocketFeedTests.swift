@@ -64,28 +64,4 @@ class PocketStoriesTests: XCTestCase {
         waitForExpectations(timeout: 10, handler: nil)
     }
 
-    // Unsupported locales should return empty if force is false
-    func testunsupportedPocketLocaleSupport() {
-        let PocketFeed = Pocket(endPoint: pocketAPI)
-        let expect = expectation(description: "Pocket")
-
-        PocketFeed.globalFeed(items: 4, locale: "za-fr", force: false).upon { result in
-            XCTAssertTrue(result.isEmpty, "za-fr is a unsupported locale. should not return anything.")
-            expect.fulfill()
-        }
-        waitForExpectations(timeout: 10, handler: nil)
-    }
-
-    // Unsupported locales should return items if force is true
-    func testunsupportedPocketLocaleForced() {
-        let PocketFeed = Pocket(endPoint: pocketAPI)
-        let expect = expectation(description: "Pocket")
-
-        PocketFeed.globalFeed(items: 4, locale: "za-fr", force: true).upon { result in
-            XCTAssertEqual(result.count, 2, "za-fr is a unsupported locale. Force is true. we should return something")
-            expect.fulfill()
-        }
-        waitForExpectations(timeout: 10, handler: nil)
-    }
-
 }

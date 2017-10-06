@@ -87,10 +87,10 @@ class Pocket {
     }
 
     // Fetch items from the global pocket feed
-    func globalFeed(items: Int = 2, locale: String, force: Bool = false) -> Deferred<Array<PocketStory>> {
+    func globalFeed(items: Int = 2) -> Deferred<Array<PocketStory>> {
         let deferred = Deferred<Array<PocketStory>>()
 
-        guard let request = createGlobalFeedRequest(items: items, locale: locale, forceLocale: force) else {
+        guard let request = createGlobalFeedRequest(items: items) else {
             deferred.fill([])
             return deferred
         }
@@ -120,16 +120,12 @@ class Pocket {
     }
 
     // Create the URL request to query the Pocket API. The max items that the query can return is 20
-    // param: forceLocale is used to force the locale to be en-US for users who enable Pocket stories in prefs
-    private func createGlobalFeedRequest(items: Int = 2, locale: String, forceLocale: Bool = false) -> URLRequest? {
+    private func createGlobalFeedRequest(items: Int = 2) -> URLRequest? {
         guard items > 0 && items <= 20 else {
             return nil
         }
 
-        if !Pocket.IslocaleSupported(locale) && !forceLocale {
-            return nil
-        }
-
+        let locale = Locale.current.identifier
         let pocketLocale = locale.replacingOccurrences(of: "_", with: "-")
         var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: pocketLocale)]
         if let consumerKey = Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String {

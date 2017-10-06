@@ -543,15 +543,13 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func getPocketSites() -> Success {
-        let showPocket = profile.prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible)
-        // Only cancel if the user has created the pref in their profile and it is false
-        // This allows someone who is in an unsupported locale to use Pocket stories
-        if let usersPocketPref = showPocket, !usersPocketPref {
-            self.pocketStories = [] //If a user just turned off Pocket we'll need to empty the array.
+        let showPocket = profile.prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible) ?? Pocket.IslocaleSupported(Locale.current.identifier)
+        guard showPocket else {
+            self.pocketStories = []
             return succeed()
         }
 
-        return pocketAPI.globalFeed(items: 4, locale: Locale.current.identifier, force: showPocket ?? false).bindQueue(.main) { pStory in
+        return pocketAPI.globalFeed(items: 4).bindQueue(.main) { pStory in
             self.pocketStories = pStory
             return succeed()
         }
