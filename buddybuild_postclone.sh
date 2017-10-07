@@ -9,17 +9,6 @@ function setup_virtualenv {
 }
 
 #
-# Add a badge for FirefoxBeta
-#
-
-if [ "$BUDDYBUILD_SCHEME" = "FirefoxBeta" ]; then
-  brew update && brew install imagemagick
-  echo password | sudo -S gem install badge
-  CF_BUNDLE_SHORT_VERSION_STRING=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Client/Info.plist)
-  badge --no_badge --shield_no_resize --shield "$CF_BUNDLE_SHORT_VERSION_STRING-Build%20$BUDDYBUILD_BUILD_NUMBER-blue"
-fi
-
-#
 # Import the final locales on our Beta and Release builds
 #
 
@@ -36,4 +25,3 @@ if [ "$BUDDYBUILD_SCHEME" = "Fennec_Enterprise" ] && [ "$BUDDYBUILD_PULL_REQUEST
   setup_virtualenv
   ./scripts/import-locales.sh
 fi
-
