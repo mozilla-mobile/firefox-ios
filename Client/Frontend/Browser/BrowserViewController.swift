@@ -86,7 +86,9 @@ class BrowserViewController: UIViewController {
     var footer: UIView!
     fileprivate var topTouchArea: UIButton!
     let urlBarTopTabsContainer = UIView(frame: CGRect.zero)
-
+    var topTabsVisible: Bool {
+        return topTabsViewController != nil
+    }
     // Backdrop used for displaying greyed background for private tabs
     var webViewContainerBackdrop: UIView!
 
@@ -255,6 +257,10 @@ class BrowserViewController: UIViewController {
         displayedPopoverController?.dismiss(animated: true, completion: nil)
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.showToolbars(animated: false)
+            if self.isViewLoaded {
+                self.statusBarOverlay.backgroundColor = self.shouldShowTopTabsForTraitCollection(self.traitCollection) ? UIColor(rgb: 0x272727) : self.urlBar.backgroundColor
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
             }, completion: nil)
     }
 
@@ -1540,7 +1546,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         actions.append(getHomePanelActions())
         actions.append(getOtherPanelActions(vcDelegate: self))
-        presentSheetWith(actions: actions, on: self, from: button)
+        // force a modal if the menu is being displayed in compact split screen
+        let shouldSupress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: actions, on: self, from: button, supressPopover: shouldSupress)
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1808,7 +1816,7 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
         let tab = self.tabManager.addTab(PrivilegedRequest(url: url) as URLRequest, afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
         // If we are showing toptabs a user can just use the top tab bar
         // If in overlay mode switching doesnt correctly dismiss the homepanels
-        guard self.topTabsViewController == nil, !self.urlBar.inOverlayMode else {
+        guard !topTabsVisible, !self.urlBar.inOverlayMode else {
             return
         }
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
@@ -2402,7 +2410,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             let introViewController = IntroViewController()
             introViewController.delegate = self
             // On iPad we present it modally in a controller
-            if UIDevice.current.userInterfaceIdiom == .pad {
+            if topTabsVisible {
                 introViewController.preferredContentSize = CGSize(width: IntroViewControllerUX.Width, height: IntroViewControllerUX.Height)
                 introViewController.modalPresentationStyle = UIModalPresentationStyle.formSheet
             }
@@ -2503,7 +2511,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                     let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
                     LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Long Press Context Menu" as AnyObject])
-                    guard self.topTabsViewController == nil else {
+                    guard !self.topTabsVisible else {
                         return
                     }
                     // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
@@ -2836,8 +2844,7 @@ extension BrowserViewController: Themeable {
     func applyTheme(_ themeName: String) {
         let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
         ui.forEach { $0?.applyTheme(themeName) }
-        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(self.traitCollection) ? UIColor(rgb: 0x272727) : urlBar.backgroundColor
-        self.setNeedsStatusBarAppearanceUpdate()
+        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor(rgb: 0x272727) : urlBar.backgroundColor
     }
 }
 
