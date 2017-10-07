@@ -9,7 +9,7 @@ import Deferred
 import Storage
 
 private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
-private let PocketGlobalFeed = "https://getpocket.com/v3/firefox/global-recs"
+private let PocketGlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
 private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in milliseconds
 private let SupportedLocales = ["en_US", "en_GB", "en_CA", "de_DE", "de_AT", "de_CH"]
 
@@ -58,7 +58,7 @@ class Pocket {
     }
 
     lazy fileprivate var alamofire: SessionManager = {
-        let ua = UserAgent.fxaUserAgent //TODO: use a different UA
+        let ua = UserAgent.defaultClientUserAgent
         let configuration = URLSessionConfiguration.default
         return SessionManager.managerWithUserAgent(ua, configuration: configuration)
     }()
@@ -114,19 +114,20 @@ class Pocket {
         return deferred
     }
 
+    // Returns nil if the locale is not supported
+    static func IslocaleSupported(_ locale: String) -> Bool {
+        return SupportedLocales.contains(locale)
+    }
+
     // Create the URL request to query the Pocket API. The max items that the query can return is 20
     private func createGlobalFeedRequest(items: Int = 2) -> URLRequest? {
         guard items > 0 && items <= 20 else {
             return nil
         }
 
-        let localeIdentifier = Locale.current.identifier
-        if !SupportedLocales.contains(localeIdentifier) {
-            return nil
-        }
-        let localeLanguage = localeIdentifier.replacingOccurrences(of: "_", with: "-")
-
-        var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: localeLanguage)]
+        let locale = Locale.current.identifier
+        let pocketLocale = locale.replacingOccurrences(of: "_", with: "-")
+        var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: pocketLocale)]
         if let consumerKey = Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String {
             params.append(URLQueryItem(name: "consumer_key", value: consumerKey))
         }

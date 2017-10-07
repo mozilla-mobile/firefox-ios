@@ -20,6 +20,7 @@ struct TopSiteCellUX {
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
     static let PinIconSize: CGFloat = 12
+    static let PinColor = UIColor(rgb: 0x272727)
 }
 
 /*
@@ -37,7 +38,8 @@ class TopSiteItemCell: UICollectionViewCell {
 
     lazy var pinImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "pin_small")
+        imageView.image = UIImage.templateImageNamed("pin_small")
+        imageView.tintColor = TopSiteCellUX.PinColor
         return imageView
     }()
 
