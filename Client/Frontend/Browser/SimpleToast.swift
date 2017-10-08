@@ -6,22 +6,25 @@ import Foundation
 import Shared
 
 struct SimpleToastUX {
-    static let ToastHeight = CGFloat(60)
+    static let ToastHeight = BottomToolbarHeight
     static let ToastAnimationDuration = 0.5
-    static let ToastDefaultColor = UIColor(red: 76.0 / 255, green: 158.0 / 255, blue: 255.0 / 255, alpha: 1)
+    static let ToastDefaultColor = UIColor(red: 10 / 255, green: 132 / 255, blue: 255.0 / 255, alpha: 1)
     static let ToastFont = UIFont.systemFont(ofSize: 15)
     static let ToastDismissAfter = DispatchTimeInterval.milliseconds(4500) // 4.5 seconds.
     static let ToastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds
+    static let BottomToolbarHeight = CGFloat(45)
 }
 
 struct SimpleToast {
 
      func showAlertWithText(_ text: String) {
-        guard let window = UIApplication.shared.windows.first,
-              let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(window) else {
-            return
+        guard let window = UIApplication.shared.windows.first else { return }
+        
+        var keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(window) ?? SimpleToastUX.BottomToolbarHeight
+        if keyboardHeight == 0 {
+            keyboardHeight = SimpleToastUX.BottomToolbarHeight
         }
-
+        
         let toast = self.createView()
         toast.text = text
         window.addSubview(toast)
@@ -47,6 +50,7 @@ struct SimpleToast {
             animations: {
                 var frame = toast.frame
                 frame.origin.y = frame.origin.y + SimpleToastUX.ToastHeight
+                frame.size.height = 0
                 toast.frame = frame
             },
             completion: { finished in
@@ -60,6 +64,7 @@ struct SimpleToast {
             animations: {
                 var frame = toast.frame
                 frame.origin.y = frame.origin.y - SimpleToastUX.ToastHeight
+                frame.size.height = SimpleToastUX.ToastHeight
                 toast.frame = frame
             },
             completion: { finished in
