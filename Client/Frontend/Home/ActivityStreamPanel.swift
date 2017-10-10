@@ -1000,6 +1000,7 @@ class ASHeaderView: UICollectionReusableView {
     lazy var moreButton: UIButton = {
         let button = UIButton()
         button.setTitle("More", for: .normal)
+        button.isHidden = true
         button.titleLabel?.font = ASHeaderViewUX.TextFont
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
