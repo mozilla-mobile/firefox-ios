@@ -215,7 +215,8 @@ class TabsButton: UIButton {
             }
             
             let completion: (Bool) -> Void = { completed in
-                if completed {
+                let noActiveAnimations = self.insideButton.layer.animationKeys()?.isEmpty ?? true
+                if completed || noActiveAnimations {
                     newTabsButton.removeFromSuperview()
                     self.insideButton.layer.opacity = 1
                     self.insideButton.layer.transform = CATransform3DIdentity
