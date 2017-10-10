@@ -4,172 +4,162 @@
 
 (function() {
 
-"use strict";
+const GESTURE_ALLOWABLE_MOVEMENT = 10;
+const GESTURE_MINIMUM_PRESS_DURATION = 500;
 
-var MAX_RADIUS = 9;
+const SUPPRESS_NEXT_CLICK_DURATION = 50;
 
+var target = null;
+var originalTargetTouchCalloutStyle = '';
+
+var didLongPress = false;
 var longPressTimeout = null;
-var touchDownX = 0;
-var touchDownY = 0;
-var highlightDiv = null;
-var touchHandled = false;
-var element = null;
+
+var touchstartScreenX = 0;
+var touchstartScreenY = 0;
+
+window.addEventListener('touchstart', function(evt) {
+  // Get the closest applicable target element. If the `touchstart`
+  // event did not occur on an `<a>` or `<img>` element or the target
+  // element does not contain one in its parent DOM tree, bail out to
+  // prevent further detection for the long-press gesture.
+  target = evt.target.closest('a,img');
+  if (!target) {
+    return;
+  }
+
+  // Let `ContextMenuHelper` know that we're handling a potential
+  // long-press gesture for an `<a>` or `<img>` element.
+  webkit.messageHandlers.contextMenuMessageHandler.postMessage({ handled: true });
+
+  // Remember the original `-webkit-touch-callout` style for the
+  // closest applicable target element so we can restore it later.
+  originalTargetTouchCalloutStyle = target.style.webkitTouchCallout;
+
+  // Check if the closest applicable target element has the
+  // `-webkit-touch-callout` CSS property set to `none`. If so,
+  // bail out to prevent the context menu from appearing.
+  if (originalTargetTouchCalloutStyle === 'none') {
+    return;
+  }
+
+  // Set the `-webkit-touch-callout` style for the closest applicable
+  // target element to `none` to prevent the native `WKWebView`
+  // context menu from appearing.
+  target.style.webkitTouchCallout = 'none';
+
+  // Remember the starting `screenX` and `screenY` positions for the
+  // touch event so we can cancel the gesture if the user moves the
+  // touch past the threshold.
+  touchstartScreenX = evt.touches[0].screenX;
+  touchstartScreenY = evt.touches[0].screenY;
+
+  // Reset our flag indicating if a long-press gesture has occurred
+  // so we can suppress the next `click` event only after we have
+  // completed a long-press gesture.
+  didLongPress = false;
+
+  // Wait till the next tick before continuing to check for the gesture
+  // to give page scripts a chance to `preventDefault()` to prevent the
+  // context menu from appearing.
+  setTimeout(function() {
+    if (evt.defaultPrevented) {
+      cancel();
+      return;
+    }
+
+    // Wait for the minimum long-press duration before handling the gesture.
+    longPressTimeout = setTimeout(handleLongPress, GESTURE_MINIMUM_PRESS_DURATION, evt.target);
+  });
+
+  // Add event listeners to the `window` for `touchmove`, `touchend`, and
+  // `scroll` events.
+  window.addEventListener('touchmove', ontouchmove);
+  window.addEventListener('touchend', ontouchend);
+  window.addEventListener('scroll', onscroll);
+}, true);
+
+function ontouchmove(evt) {
+  if (Math.abs(touchstartScreenX - evt.touches[0].screenX) > GESTURE_ALLOWABLE_MOVEMENT ||
+      Math.abs(touchstartScreenY - evt.touches[0].screenY) > GESTURE_ALLOWABLE_MOVEMENT) {
+    cancel();
+  }
+}
+
+function ontouchend(evt) {
+  // If a long-press gesture was detected, suppress the next `click`
+  // event on the page to prevent unintended navigation.
+  if (didLongPress) {
+    suppressNextClick();
+  }
+
+  cancel();
+}
+
+function onscroll(evt) {
+  cancel();
+}
+
+function handleLongPress(originalTarget) {
+  didLongPress = true;
+  longPressTimeout = null;
+
+  var data = {};
+
+  var targetLink = originalTarget.closest('a');
+  if (targetLink) {
+    data.link = targetLink.href;
+  }
+
+  var targetImage = originalTarget.closest('img');
+  if (targetImage) {
+    data.image = targetImage.src;
+  }
+
+  // Let `ContextMenuHelper` know which `<a>` and/or `<img>` elements
+  // the long-press gesture occurred on.
+  webkit.messageHandlers.contextMenuMessageHandler.postMessage(data);
+
+  // Suppress the next `click` event on the page to prevent unintended
+  // navigation.
+  suppressNextClick();
+  cancel();
+}
 
 function cancel() {
   if (longPressTimeout) {
     clearTimeout(longPressTimeout);
-    longPressTimeout = null;
+  }
 
-    if (highlightDiv) {
-      document.body.removeChild(highlightDiv);
-      highlightDiv = null;
-    }
+  didLongPress = false;
+
+  touchstartScreenX = 0;
+  touchstartScreenY = 0;
+
+  // Clean up the `window` event listeners.
+  window.removeEventListener('touchmove', ontouchmove);
+  window.removeEventListener('touchend', ontouchend);
+  window.removeEventListener('scroll', onscroll);
+
+  // Restore the original `-webkit-touch-callout` style for the
+  // closest applicable target element.
+  if (target) {
+    target.style.webkitTouchCallout = originalTargetTouchCalloutStyle;
   }
 }
 
-function createHighlightOverlay(element) {
-  // Create a parent element to hold each highlight rect.
-  // This allows us to set the opacity for the entire highlight
-  // without worrying about overlapping opacities for each child.
-  highlightDiv = document.createElement("div");
-  highlightDiv.style.pointerEvents = "none";
-  highlightDiv.style.top = "0px";
-  highlightDiv.style.left = "0px";
-  highlightDiv.style.position = "absolute";
-  highlightDiv.style.opacity = 0.1;
-  highlightDiv.style.zIndex = 99999;
-  document.body.appendChild(highlightDiv);
+function suppressNextClick() {
+  document.addEventListener('click', onclick);
 
-  var rects = element.getClientRects();
-  for (var i = 0; i != rects.length; i++) {
-    var rect = rects[i];
-    var rectDiv = document.createElement("div");
-    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
-    var top = rect.top + scrollTop - 2.5;
-    var left = rect.left + scrollLeft - 2.5;
+  var suppressNextClickTimeout = setTimeout(function() {
+    document.removeEventListener('click', onclick);
+  }, SUPPRESS_NEXT_CLICK_DURATION);
 
-    // These styles are as close as possible to the default highlight style used
-    // by the web view.
-    rectDiv.style.top = top + "px";
-    rectDiv.style.left = left + "px";
-    rectDiv.style.width = rect.width + "px";
-    rectDiv.style.height = rect.height + "px";
-    rectDiv.style.position = "absolute";
-    rectDiv.style.backgroundColor = "#000";
-    rectDiv.style.borderRadius = "2px";
-    rectDiv.style.padding = "2.5px";
-    rectDiv.style.pointerEvents = "none";
-
-    highlightDiv.appendChild(rectDiv);
+  function onclick(evt) {
+    evt.preventDefault();
+    document.removeEventListener('click', onclick);
+    clearTimeout(suppressNextClickTimeout);
   }
 }
-
-function handleTouchMove(event) {
-  if (longPressTimeout) {
-       var { screenX, screenY } = event.touches[0];
-        // Cancel the context menu if finger has moved beyond the maximum allowed distance.
-       if (Math.abs(touchDownX - screenX) > MAX_RADIUS || Math.abs(touchDownY - screenY) > MAX_RADIUS) {
-         cancel();
-      }
-   }
-}
-
-function handleTouchEnd(event) {
-  cancel();
-
-  window.removeEventListener("touchend", handleTouchEnd);
-  window.removeEventListener("touchmove", handleTouchMove);
-
-  setTimeout(function() {
-    if (element) {
-      element.removeEventListener("click", handleClick, true);
-    }
-  });
-
-  // If we're showing the context menu, prevent the page from handling the click event.
-  if (touchHandled) {
-    touchHandled = false;
-    event.preventDefault();
-    event.stopPropagation();
-  }
-}
-
-function handleClick(event) {
-  this.removeEventListener("click", handleClick, true);
-  event.preventDefault();
-  event.stopPropagation();
-}
-
-window.addEventListener("touchstart", function(event) {
-  var target = event.target;
-  element = target.closest("a,img");
-  if (!element) {
-    return;
-  }
-  setTimeout(function() {
-    // Don't show the context menu if another event listener has already
-    // prevented the default behavior or if more than one touch is present.
-    if (event.defaultPrevented || event.touches.length !== 1) {
-      cancel();
-      return;
-    }
-
-    var data = {};
-
-    // Don't show the context menu if this element is has the
-    // -webkit-touch-callout: none CSS property applied.
-    var style = getComputedStyle(target);
-    if (style.webkitTouchCallout === "none") {
-      cancel();
-      return;
-    }
-
-    if (target.tagName === "IMG") {
-      data.image = target.src;
-    }
-
-    if (element.tagName === "A") {
-      data.link = element.href;
-
-      // The web view still shows the tap highlight after clicking an element,
-      // so add a delay before showing the long press highlight to avoid
-      // the highlight flashing twice.
-      setTimeout(function() {
-        if (longPressTimeout) {
-          createHighlightOverlay(element);
-        }
-      }, 100);
-
-      // Listen for touchend or move events to cancel the context menu timeout.
-      window.addEventListener("touchend", handleTouchEnd);
-      window.addEventListener("touchmove", handleTouchMove);
-
-      // Clear any old click handlers in case this is the start of an ordinary click.
-      element.removeEventListener("click", handleClick, true);
-    }
-
-    if (data.image || data.link) {
-      var touch = event.touches[0];
-      touchDownX = touch.screenX;
-      touchDownY = touch.screenY;
-
-      longPressTimeout = setTimeout(function() {
-        touchHandled = true;
-        cancel();
-        if (element) {
-          element.addEventListener("click", handleClick, true);
-        }
-        webkit.messageHandlers.contextMenuMessageHandler.postMessage(data);
-      }, 500);
-
-      webkit.messageHandlers.contextMenuMessageHandler.postMessage({ handled: true });
-    }
-  });
-}, true);
-
-// If the user touches down and moves enough to make the page scroll, cancel the
-// context menu handlers.
-addEventListener("scroll", cancel);
 
 })();
