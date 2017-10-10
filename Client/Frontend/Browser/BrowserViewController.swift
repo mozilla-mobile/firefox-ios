@@ -612,6 +612,7 @@ class BrowserViewController: UIViewController {
         [header, footer, readerModeBar].forEach { view in
                 view?.transform = CGAffineTransform.identity
         }
+        self.statusBarOverlay.isHidden = false
     }
 
     override func updateViewConstraints() {
