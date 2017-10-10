@@ -170,6 +170,9 @@ class SearchSettingsTableViewController: UITableViewController {
         } else if indexPath.item + 1 == model.orderedEngines.count {
             let customSearchEngineForm = CustomSearchViewController()
             customSearchEngineForm.profile = self.profile
+            customSearchEngineForm.successCallback = {
+                SimpleToast().showAlertWithText(Strings.ThirdPartySearchEngineAdded, bottomContainer: self.view)
+            }
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
         }
         return nil

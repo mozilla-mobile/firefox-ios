@@ -17,7 +17,7 @@ struct SimpleToastUX {
 
 struct SimpleToast {
 
-     func showAlertWithText(_ text: String) {
+    func showAlertWithText(_ text: String, bottomContainer: UIView) {
         guard let window = UIApplication.shared.windows.first else { return }
         
         var keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(window) ?? SimpleToastUX.BottomToolbarHeight
@@ -31,7 +31,7 @@ struct SimpleToast {
         toast.snp.makeConstraints { (make) in
             make.width.equalTo(window.snp.width)
             make.height.equalTo(SimpleToastUX.ToastHeight)
-            make.bottom.equalTo(window.snp.bottom).offset(-keyboardHeight)
+            make.bottom.equalTo(bottomContainer)
         }
         animate(toast)
     }
