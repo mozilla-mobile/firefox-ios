@@ -2846,6 +2846,7 @@ extension BrowserViewController: Themeable {
         let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
         ui.forEach { $0?.applyTheme(themeName) }
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor(rgb: 0x272727) : urlBar.backgroundColor
+        self.setNeedsStatusBarAppearanceUpdate()
     }
 }
 

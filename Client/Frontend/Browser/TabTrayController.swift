@@ -968,10 +968,8 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         guard let tpvc = viewControllerToCommit as? TabPeekViewController else { return }
         tabManager.selectTab(tpvc.tab)
-        _ = self.navigationController?.popViewController(animated: true)
-
+        self.navigationController?.popViewController(animated: true)
         delegate?.tabTrayDidDismiss(self)
-
     }
 }
 
