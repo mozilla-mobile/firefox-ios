@@ -8,14 +8,9 @@ let website1: [String: String] = ["url": "www.mozilla.org", "label": "Internet f
 let website2 = "yahoo.com"
 
 class ToolbarTests: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
     override func setUp() {
         super.setUp()
-        app = XCUIApplication()
         XCUIDevice.shared().orientation = UIDeviceOrientation.landscapeLeft
-        navigator = createScreenGraph(app).navigator(self)
     }
 
     override func tearDown() {

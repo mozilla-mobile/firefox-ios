@@ -6,20 +6,6 @@ import XCTest
 
 class ClipBoardTests: BaseTestCase {
     let url = "www.example.com"
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        navigator = nil
-        app = nil
-        super.tearDown()
-    }
 
     //Check for test url in the browser
     func checkUrl() {

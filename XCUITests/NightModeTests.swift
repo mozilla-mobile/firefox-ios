@@ -4,22 +4,6 @@
 
 import XCTest
 class NightModeTests: BaseTestCase {
-
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        navigator = nil
-        app = nil
-        super.tearDown()
-    }
-
     private func nightModeOff() {
         navigator.goto(BrowserTabMenu)
         app.tables.cells["Disable Night Mode"].tap()

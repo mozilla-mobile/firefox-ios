@@ -5,20 +5,6 @@
 import XCTest
 
 class HomePageUITest: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testSetInternalURLAsHomepage() {
         loadWebPage("http://en.m.wikipedia.org/wiki/Main_Page")
         app.buttons["Reader View"].tap()

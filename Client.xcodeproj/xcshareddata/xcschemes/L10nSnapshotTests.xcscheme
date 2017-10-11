@@ -39,6 +39,20 @@
                BlueprintName = "L10nSnapshotTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "L10nPermissionStringsSnapshotTests">
+               </Test>
+               <Test
+                  Identifier = "L10nSnapshotTests/test04Foo()">
+               </Test>
+               <Test
+                  Identifier = "L10nSnapshotTests/test07AddSearchProvider()">
+               </Test>
+               <Test
+                  Identifier = "L10nSnapshotTests/test14SetHompage()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <AdditionalOptions>
