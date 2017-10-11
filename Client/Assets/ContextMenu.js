@@ -30,7 +30,7 @@ window.addEventListener('touchstart', function(evt) {
 
   // Let `ContextMenuHelper` know that we're handling a potential
   // long-press gesture for an `<a>` or `<img>` element.
-  webkit.messageHandlers.contextMenuMessageHandler.postMessage({ handled: true });
+  webkit.messageHandlers.contextMenuMessageHandler.postMessage({ longPressStarted: true });
 
   // Remember the original `-webkit-touch-callout` style for the
   // closest applicable target element so we can restore it later.
