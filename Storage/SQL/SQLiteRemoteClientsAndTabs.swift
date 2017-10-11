@@ -38,10 +38,10 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     class func convertStringToHistory(_ history: String?) -> [URL] {
-        if let data = history?.data(using: String.Encoding.utf8) {
-            if let urlStrings = try! JSONSerialization.jsonObject(with: data, options: [JSONSerialization.ReadingOptions.allowFragments]) as? [String] {
-                return optFilter(urlStrings.map { URL(string: $0) })
-            }
+        if let data = history?.data(using: String.Encoding.utf8),
+            let decoded = try? JSONSerialization.jsonObject(with: data, options: [JSONSerialization.ReadingOptions.allowFragments]),
+            let urlStrings = decoded as? [String] {
+                return optFilter(urlStrings.flatMap { URL(string: $0) })
         }
         return []
     }
@@ -49,7 +49,9 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     class func convertHistoryToString(_ history: [URL]) -> String? {
         let historyAsStrings = optFilter(history.map { $0.absoluteString })
         
-        let data = try! JSONSerialization.data(withJSONObject: historyAsStrings, options: [])
+        guard let data = try? JSONSerialization.data(withJSONObject: historyAsStrings, options: []) else {
+            return nil
+        }
         return String(data: data, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
     }
 
