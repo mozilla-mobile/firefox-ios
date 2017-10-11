@@ -36,7 +36,7 @@ extension FxAPushMessageHandler {
 
         guard let encoding = userInfo["con"] as? String, // content-encoding
             let payload = userInfo["body"] as? String else {
-                return deferMaybe(PushMessageError.messageIncomplete)
+                return handleVerification()
         }
         // ver == endpointURL path, chid == channel id, aps == alert text and content_available.
 
