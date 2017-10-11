@@ -179,9 +179,6 @@
                   Identifier = "BookmarkingTests">
                </Test>
                <Test
-                  Identifier = "BookmarksPanelTests/testBookmarkPanelBufferOnly()">
-               </Test>
-               <Test
                   Identifier = "BrowserTests">
                </Test>
                <Test
