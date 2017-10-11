@@ -450,7 +450,7 @@ open class BrowserProfile: Profile {
                 return
             }
             
-            account.notify(deviceIDs: deviceIDs, collectionsChanged: ["clients"])
+            account.notify(deviceIDs: deviceIDs, collectionsChanged: ["clients"], reason: "sendtab")
         }
         
         return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> {
@@ -1227,18 +1227,18 @@ open class BrowserProfile: Profile {
             var description = "No account."
         }
 
-        public func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Success {
+        public func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success {
             guard let account = self.profile.account else {
                 return deferMaybe(NoAccountError())
             }
-            return account.notify(deviceIDs: deviceIDs, collectionsChanged: collections)
+            return account.notify(deviceIDs: deviceIDs, collectionsChanged: collections, reason: reason)
         }
 
-        public func notifyAll(collectionsChanged collections: [String]) -> Success {
+        public func notifyAll(collectionsChanged collections: [String], reason: String) -> Success {
             guard let account = self.profile.account else {
                 return deferMaybe(NoAccountError())
             }
-            return account.notifyAll(collectionsChanged: collections)
+            return account.notifyAll(collectionsChanged: collections, reason: reason)
         }
     }
 }

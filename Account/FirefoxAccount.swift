@@ -298,12 +298,12 @@ open class FirefoxAccount {
         public var description = "The server could not notify the clients."
     }
 
-    @discardableResult open func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Success {
+    @discardableResult open func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success {
         guard let session = stateCache.value as? TokenState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
         let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
-        return client.notify(deviceIDs: deviceIDs, collectionsChanged: collections, withSessionToken: session.sessionToken as NSData) >>== { resp in
+        return client.notify(deviceIDs: deviceIDs, collectionsChanged: collections, reason: reason, withSessionToken: session.sessionToken as NSData) >>== { resp in
             guard resp.success else {
                 return deferMaybe(NotifyError())
             }
@@ -311,7 +311,7 @@ open class FirefoxAccount {
         }
     }
 
-    @discardableResult open func notifyAll(collectionsChanged collections: [String]) -> Success {
+    @discardableResult open func notifyAll(collectionsChanged collections: [String], reason: String) -> Success {
         guard let session = stateCache.value as? TokenState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
@@ -319,7 +319,7 @@ open class FirefoxAccount {
             return deferMaybe(FxAClientError.local(NSError()))
         }
         let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
-        return client.notifyAll(ownDeviceId: ownDeviceId, collectionsChanged: collections, withSessionToken: session.sessionToken as NSData) >>== { resp in
+        return client.notifyAll(ownDeviceId: ownDeviceId, collectionsChanged: collections, reason: reason, withSessionToken: session.sessionToken as NSData) >>== { resp in
             guard resp.success else {
                 return deferMaybe(NotifyError())
             }
