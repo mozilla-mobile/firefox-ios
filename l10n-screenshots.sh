@@ -5,7 +5,7 @@ if [ -d l10n-screenshots ]; then
   exit 1
 fi
 
-if [ ! -d firefox-ios-l10n ]; then
+if [ ! -d firefoxios-l10n ]; then
     echo "Did not find a firefox-ios-l10n checkout. Are you running this on a localized build?"
     exit 1
 fi
