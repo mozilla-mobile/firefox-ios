@@ -33,10 +33,14 @@ class ContextMenuHelper: NSObject {
 
         self.tab = tab
 
-        let path = Bundle.main.path(forResource: "ContextMenu", ofType: "js")!
-        let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
+        guard let path = Bundle.main.path(forResource: "ContextMenu", ofType: "js"),
+                let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String,
+                let webView = tab.webView else {
+            return
+        }
+
         let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
-        tab.webView!.configuration.userContentController.addUserScript(userScript)
+        webView.configuration.userContentController.addUserScript(userScript)
 
         // Disable the native long-press gesture recognizer to prevent the native WKWebView context
         // menu from appearing.
@@ -48,7 +52,7 @@ class ContextMenuHelper: NSObject {
         // This works by making wkwebview's longpress gestures pass through our gestureRecognizer first.
         // We have to allow textselection gestures to pass through while stopping long press of links.
         gestureRecognizer.delegate = self
-        tab.webView!.addGestureRecognizer(gestureRecognizer)
+        webView.addGestureRecognizer(gestureRecognizer)
     }
 
     func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UIGestureRecognizer? {
@@ -85,13 +89,15 @@ extension ContextMenuHelper: TabHelper {
         selectionGestureRecognizer = nil
 
         var linkURL: URL?
-        if let urlString = data["link"] as? String {
-            linkURL = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet())!)
+        if let urlString = data["link"] as? String,
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+            linkURL = URL(string: escapedURLString)
         }
 
         var imageURL: URL?
-        if let urlString = data["image"] as? String {
-            imageURL = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet())!)
+        if let urlString = data["image"] as? String,
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+            imageURL = URL(string: escapedURLString)
         }
 
         if linkURL != nil || imageURL != nil {
