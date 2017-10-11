@@ -752,7 +752,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         if let favIcon = tab.displayFavicon {
             tabCell.favicon.sd_setImage(with: URL(string: favIcon.url)!)
         } else {
-            var defaultFavicon = UIImage(named: "defaultFavicon")
+            let defaultFavicon = UIImage(named: "defaultFavicon")
             if tab.isPrivate {
                 tabCell.favicon.image = defaultFavicon
                 tabCell.favicon.tintColor = UIColor.white
@@ -968,10 +968,8 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         guard let tpvc = viewControllerToCommit as? TabPeekViewController else { return }
         tabManager.selectTab(tpvc.tab)
-        _ = self.navigationController?.popViewController(animated: true)
-
+        navigationController?.popViewController(animated: true)
         delegate?.tabTrayDidDismiss(self)
-
     }
 }
 
