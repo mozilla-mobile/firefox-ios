@@ -52,27 +52,7 @@ class ContextMenuHelper: NSObject {
     }
 
     func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UIGestureRecognizer? {
-        guard let tab = self.tab else {
-            return nil
-        }
-
-        guard let webView = tab.webView else {
-            return nil
-        }
-
-        for subview in webView.scrollView.subviews {
-            guard let nativeRecognizers = subview.gestureRecognizers else {
-                continue
-            }
-
-            if let matchingRecognizer = nativeRecognizers.find({ recognizer -> Bool in
-                recognizer.description.contains(descriptionFragment)
-            }) {
-                return matchingRecognizer
-            }
-        }
-
-        return nil
+        return tab?.webView?.scrollView.subviews.flatMap({ $0.gestureRecognizers }).joined().first(where: { $0.description.contains(descriptionFragment) })
     }
 }
 
