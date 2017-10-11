@@ -206,6 +206,7 @@
 		315D05561E58DD60001F349B /* UIPasteboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */; };
 		318FB6EB1DB5600D0004E40F /* SQLiteHistoryFactories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318FB6EA1DB5600D0004E40F /* SQLiteHistoryFactories.swift */; };
 		31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */; };
+		39012F281F8ED262002E3D31 /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
 		3905274C1C874D35007E0BB7 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3905274B1C874D35007E0BB7 /* NotificationCenter.framework */; };
 		3905274F1C874D35007E0BB7 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3905274E1C874D35007E0BB7 /* TodayViewController.swift */; };
 		390527561C874D35007E0BB7 /* Today.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3905274A1C874D35007E0BB7 /* Today.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -1567,6 +1568,7 @@
 		2FFC4D371ABE3C420081D675 /* FxAStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAStateTests.swift; sourceTree = "<group>"; };
 		318FB6EA1DB5600D0004E40F /* SQLiteHistoryFactories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteHistoryFactories.swift; sourceTree = "<group>"; };
 		31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipboardBarDisplayHandler.swift; sourceTree = "<group>"; };
+		39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGraphTest.swift; sourceTree = "<group>"; };
 		3905274A1C874D35007E0BB7 /* Today.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Today.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		3905274B1C874D35007E0BB7 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		3905274E1C874D35007E0BB7 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
@@ -2873,6 +2875,7 @@
 				0B9D40781E8D5AC80059E664 /* XCUITests-Bridging-Header.h */,
 				D81127D71F84023B0050841D /* PhotonActionSheetTest.swift */,
 				2C2A91281FA2410D002E36BD /* HistoryTests.swift */,
+				39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */,
 			);
 			path = XCUITests;
 			sourceTree = "<group>";
@@ -5372,6 +5375,7 @@
 				3B546EC01D95ECAE00BDBE36 /* ActivityStreamTest.swift in Sources */,
 				3D9CA9841EF456A8002434DD /* NightModeTests.swift in Sources */,
 				39EB46991E26DDB4006346E8 /* ScreenGraph.swift in Sources */,
+				39012F281F8ED262002E3D31 /* ScreenGraphTest.swift in Sources */,
 				0B305E1B1E3A98A900BE0767 /* BookmarkingTests.swift in Sources */,
 				D81127D81F84023B0050841D /* PhotonActionSheetTest.swift in Sources */,
 				3BFE4B501D34673D00DDF53F /* ThirdPartySearchTest.swift in Sources */,
