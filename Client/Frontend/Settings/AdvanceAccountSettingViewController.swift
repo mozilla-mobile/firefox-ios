@@ -34,20 +34,12 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
     }
     
     func setCustomAccountPrefs(_ data: Data, url: URL) {        
-//        guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
-//                let settings = json as? [String:Any] else {
-//            return
-//        }
-
-        guard let settings = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String:Any] else {
+        guard let settings = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String:Any],
+                let customSyncToken = settings["sync_tokenserver_base_url"] as? String,
+                let customSyncProfile = settings["profile_server_base_url"] as? String,
+                let customSyncOauth = settings["oauth_server_base_url"] as? String,
+                let customSyncAuth = settings["auth_server_base_url"] as? String else {
             return
-        }
-
-        guard let customSyncToken = settings["sync_tokenserver_base_url"] as? String,
-            let customSyncProfile = settings["profile_server_base_url"] as? String,
-            let customSyncOauth = settings["oauth_server_base_url"] as? String,
-            let customSyncAuth = settings["auth_server_base_url"] as? String else {
-                return
         }
 
         self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyUseCustomSyncService)
