@@ -34,8 +34,12 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
     }
     
     func setCustomAccountPrefs(_ data: Data, url: URL) {        
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
-                let settings = json as? [String:Any] else {
+//        guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
+//                let settings = json as? [String:Any] else {
+//            return
+//        }
+
+        guard let settings = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String:Any] else {
             return
         }
 
