@@ -783,7 +783,6 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         let bookmarkAction: PhotonActionSheetItem
         if site.bookmarked ?? false {
             bookmarkAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
-
                 self.profile.bookmarks.modelFactory >>== {
                     $0.removeByURL(siteURL.absoluteString).uponQueue(.main) {_ in
                         self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: true, forceTopSites: false)
