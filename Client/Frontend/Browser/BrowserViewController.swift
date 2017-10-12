@@ -1307,11 +1307,16 @@ extension BrowserViewController: URLBarDelegate {
             self.updateFindInPageVisibility(visible: true)
         }
         
+        let successCallback: (String) -> Void = { (successMessage) in
+            SimpleToast().showAlertWithText(successMessage, bottomContainer:self.webViewContainer)
+        }
+        
         guard let tab = tabManager.selectedTab, tab.url != nil else { return }
         
         // The logic of which actions appear when isnt final.
         let pageActions = getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
-                                        findInPage: findInPageAction, presentableVC: self)
+                                        findInPage: findInPageAction, presentableVC: self, success: successCallback)
+
         presentSheetWith(actions: pageActions, on: self, from: button)
     }
     
@@ -2760,7 +2765,7 @@ extension BrowserViewController {
 
                 self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: image, searchTemplate: searchQuery, suggestTemplate: nil, isCustomEngine: true))
                 let Toast = SimpleToast()
-                Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
+                Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded, bottomContainer:self.webViewContainer)
             }
         }
 
