@@ -441,10 +441,9 @@ extension Strings {
 
 // Settings Home
 extension Strings {
-    public static let SendUsageSettingTitle = NSLocalizedString("Send Usage Data", tableName: "SendAnonymousUsageData", comment: "The title for the setting to send usage data.")
-    public static let SendUsageSettingLink = NSLocalizedString("Learn More.", tableName: "SendAnonymousUsageData", comment: "title for a link that explains how mozilla collects telemetry")
-    public static let SendUsageSettingMessage = NSLocalizedString("Mozilla strives to only collect what we need to provide and improve Firefox for everyone.", tableName: "SendAnonymousUsageData", comment: "A short description that explains why mozilla collects usage data.")
-
+    public static let SendUsageSettingTitle = NSLocalizedString("Settings.SendUsage.Title", value: "Send Usage Data", comment: "The title for the setting to send usage data.")
+    public static let SendUsageSettingLink = NSLocalizedString("Settings.SendUsage.Link", value: "Learn More.", comment: "title for a link that explains how mozilla collects telemetry")
+    public static let SendUsageSettingMessage = NSLocalizedString("Settings.SendUsage.Message", value: "Mozilla strives to only collect what we need to provide and improve Firefox for everyone.", comment: "A short description that explains why mozilla collects usage data.")
 }
 
 // Do not track 
