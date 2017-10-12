@@ -5,9 +5,13 @@
 import XCTest
 
 class HomePageUITest: BaseTestCase {
+    var navigator: Navigator!
+    var app: XCUIApplication!
 
     override func setUp() {
         super.setUp()
+        app = XCUIApplication()
+        navigator = createScreenGraph(app).navigator(self)
         dismissFirstRunUI()
     }
 
@@ -16,13 +20,12 @@ class HomePageUITest: BaseTestCase {
     }
 
     func testSetInternalURLAsHomepage() {
-        let app = XCUIApplication()
-
         loadWebPage("http://en.m.wikipedia.org/wiki/Main_Page")
         app.buttons["Reader View"].tap()
-        app.buttons["Menu"].tap()
-        app.cells["Set Homepage"].tap()
-
+        navigator.goto(PageOptionsMenu)
+        app.cells["Set as Homepage"].tap()
+        app.buttons["Set Homepage"].tap()
+        navigator.nowAt(BrowserTab)
         XCTAssertTrue(app.alerts.count == 0)
     }
 }

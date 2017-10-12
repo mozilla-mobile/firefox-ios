@@ -28,6 +28,7 @@ class ReaderViewTest: BaseTestCase {
 
     private func addContentToReaderView() {
         navigator.goto(BrowserTab)
+        waitUntilPageLoad()
         app.buttons["Reader View"].tap()
         waitforExistence(app.buttons["Add to Reading List"])
         app.buttons["Add to Reading List"].tap()
@@ -35,8 +36,6 @@ class ReaderViewTest: BaseTestCase {
 
     func testAddToReadingList() {
         // Initially reading list is empty
-        navigator.goto(NewTabScreen)
-        waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
 
         // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
@@ -48,12 +47,10 @@ class ReaderViewTest: BaseTestCase {
         let list = app.tables["ReadingTable"].cells.count
         XCTAssertEqual(list, 0, "There should not be any entry in the reading table")
 
-        navigator.nowAt(NewTabScreen)
         // Add item to reading list and check that it appears
         addContentToReaderView()
-        navigator.goto(NewTabScreen)
-        waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
+        waitforExistence(app.buttons["HomePanels.ReadingList"])
 
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
@@ -85,7 +82,7 @@ class ReaderViewTest: BaseTestCase {
         waitforExistence(app.buttons["Add to Reading List"])
 
         // Go to reader list view to check that there is not any item there
-        navigator.goto(NewTabScreen)
+        navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
 
@@ -97,7 +94,7 @@ class ReaderViewTest: BaseTestCase {
 
     func testMarkAsReadAndUnreadFromReadingList() {
         addContentToReaderView()
-        navigator.goto(NewTabScreen)
+        navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
 
@@ -115,7 +112,7 @@ class ReaderViewTest: BaseTestCase {
 
     func testRemoveFromReadingList() {
         addContentToReaderView()
-        navigator.goto(NewTabScreen)
+        navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
 

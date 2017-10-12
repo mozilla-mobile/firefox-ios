@@ -165,7 +165,7 @@ private let hittablePredicate = NSPredicate(format: "hittable == true")
 private let noopNodeVisitor: NodeVisitor = { _ in }
 
 extension ScreenGraphNode {
-    fileprivate func waitForElement(_ element: XCUIElement, withTest xcTest: XCTestCase, notFoundHandler: () -> ()) {
+    fileprivate func waitForElement(_ element: XCUIElement, withTest xcTest: XCTestCase, notFoundHandler: () -> Void) {
         // Wait for 5 seconds for the element to exist.
         let expectation = XCTNSPredicateExpectation(predicate: existsPredicate, object: element)
         let result = XCTWaiter().wait(for: [expectation], timeout: 5)

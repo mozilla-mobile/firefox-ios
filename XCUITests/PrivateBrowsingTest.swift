@@ -29,9 +29,9 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(urlString: url1)
         navigator.goto(BrowserTabMenu)
         // Go to History screen
-        waitforExistence(app.toolbars.buttons["HistoryMenuToolbarItem"])
-        app.toolbars.buttons["HistoryMenuToolbarItem"].tap()
-        navigator.nowAt(NewTabScreen)
+        waitforExistence(app.tables.cells["History"])
+        app.tables.cells["History"].tap()
+        navigator.nowAt(BrowserTab)
         waitforExistence(app.tables["History List"])
 
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
@@ -41,14 +41,13 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(history, 1, "History entries in regular browsing do not match")
 
         // Go to Private browsing to open a website and check if it appears on History
-        navigator.goto(NewPrivateTabScreen)
         navigator.goto(PrivateTabTray)
         navigator.openURL(urlString: url2)
         navigator.nowAt(PrivateBrowserTab)
         waitForValueContains(app.textFields["url"], value: "facebook")
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.toolbars.buttons["HistoryMenuToolbarItem"])
-        app.toolbars.buttons["HistoryMenuToolbarItem"].tap()
+        waitforExistence(app.tables.cells["History"])
+        app.tables.cells["History"].tap()
         waitforExistence(app.tables["History List"])
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
         XCTAssertFalse(app.tables["History List"].staticTexts[url2Label].exists)
@@ -61,17 +60,21 @@ class PrivateBrowsingTest: BaseTestCase {
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
         // Open two tabs in normal browsing and check the number of tabs open
         navigator.openNewURL(urlString: url1)
+        waitUntilPageLoad()
         navigator.goto(TabTray)
-        navigator.goto(NewTabScreen)
+        navigator.goto(BrowserTab)
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[url1Label])
         let numTabs = app.collectionViews.cells.count
-        XCTAssertEqual(numTabs, 2, "The number of regular tabs is not correct")
+        XCTAssertEqual(numTabs, 3, "The number of regular tabs is not correct")
 
         // Open one tab in private browsing and check the total number of tabs
-        navigator.goto(NewPrivateTabScreen)
+        navigator.goto(PrivateTabTray)
+        navigator.goto(URLBarOpen)
+        waitUntilPageLoad()
         navigator.openURL(urlString: url2)
+        waitUntilPageLoad()
         navigator.nowAt(PrivateBrowserTab)
         waitForValueContains(app.textFields["url"], value: "facebook")
 
@@ -86,14 +89,14 @@ class PrivateBrowsingTest: BaseTestCase {
         waitforExistence(app.collectionViews.cells[url1Label])
         waitforNoExistence(app.collectionViews.cells[url2Label])
         let numRegularTabs = app.collectionViews.cells.count
-        XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
+        XCTAssertEqual(numRegularTabs, 3, "The number of regular tabs is not correct")
     }
 
     func testClosePrivateTabsOptionClosesPrivateTabs() {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
-        
+
         while settingsTableView.staticTexts["Close Private Tabs"].exists == false {
             settingsTableView.swipeUp()
         }
@@ -105,6 +108,8 @@ class PrivateBrowsingTest: BaseTestCase {
         //  Open a Private tab
         navigator.goto(PrivateTabTray)
         navigator.openURL(urlString: url1)
+        //Wait until the page loads
+        waitUntilPageLoad()
         navigator.nowAt(PrivateBrowserTab)
         navigator.goto(PrivateTabTray)
 
@@ -117,10 +122,12 @@ class PrivateBrowsingTest: BaseTestCase {
         let numPrivTabs = app.collectionViews.cells.count
         XCTAssertEqual(numPrivTabs, 1, "The number of tabs is not correct, the private tab should not have been closed")
 
+        app.collectionViews.cells[url1Label].tap()
+        navigator.nowAt(PrivateBrowserTab)
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
         navigator.goto(SettingsScreen)
         closePrivateTabsSwitch.tap()
-
+        navigator.goto(PrivateBrowserTab)
         // Go back to regular browsing and check that the private tab has been closed and that the initial Private Browsing message appears when going back to Private Browsing
         navigator.goto(PrivateTabTray)
         navigator.goto(TabTray)
@@ -140,14 +147,17 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(numPrivTabsFirstTime, 0, "The number of tabs is not correct, there should not be any private tab yet")
 
         // If a private tab is open Private Browsing screen is not shown anymore
-        navigator.goto(NewPrivateTabScreen)
+        navigator.goto(PrivateBrowserTab)
+        //Wait until the page loads
+        waitUntilPageLoad()
+        navigator.goto(PrivateTabTray)
 
         // Go to regular browsing
         navigator.goto(TabTray)
 
         // Go back to private brosing
         navigator.goto(PrivateTabTray)
-        
+
         waitforNoExistence(app.staticTexts["Private Browsing"])
         XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is shown")
         let numPrivTabsOpen = app.collectionViews.cells.count
