@@ -46,6 +46,8 @@ class CustomSearchViewController: SettingsTableViewController {
             make.center.equalTo(self.view.snp.center)
         }
     }
+    
+    var successCallback: (() -> Void)?
 
     fileprivate func addSearchEngine(_ searchQuery: String, title: String) {
         spinnerView.startAnimating()
@@ -67,8 +69,11 @@ class CustomSearchViewController: SettingsTableViewController {
                 return
             }
             self.profile.searchEngines.addSearchEngine(engine)
+            
+            CATransaction.begin() // Use transaction to call callback after animation has been completed
+            CATransaction.setCompletionBlock(self.successCallback)
             _ = self.navigationController?.popViewController(animated: true)
-            SimpleToast().showAlertWithText(Strings.ThirdPartySearchEngineAdded)
+            CATransaction.commit()
         }
     }
 
