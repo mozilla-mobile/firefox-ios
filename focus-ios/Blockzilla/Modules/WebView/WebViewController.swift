@@ -59,6 +59,7 @@ class WebViewController: UIViewController, WebController {
     func reset() {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
+        browserView = WKWebView()
         setupWebview()
         self.view = browserView
     }
