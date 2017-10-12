@@ -405,6 +405,14 @@ extension Strings {
     public static let TrackingProtectionOptionBlockListTypeStrictDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrictDescription", value: "Blocks known trackers. Some websites may not function properly.", comment: "Tracking protection settings option description for using the strict blocklist.")
 }
 
+// Settings Home
+extension Strings {
+    public static let SendUsageSettingTitle = NSLocalizedString("Send Usage Data", tableName: "SendAnonymousUsageData", comment: "The title for the setting to send usage data.")
+    public static let SendUsageSettingLink = NSLocalizedString("Learn More.", tableName: "SendAnonymousUsageData", comment: "title for a link that explains how mozilla collects telemetry")
+    public static let SendUsageSettingMessage = NSLocalizedString("Mozilla strives to only collect what we need to provide and improve Firefox for everyone.", tableName: "SendAnonymousUsageData", comment: "A short description that explains why mozilla collects usage data.")
+
+}
+
 // Do not track 
 extension Strings {
     public static let SettingsDoNotTrackTitle = NSLocalizedString("Settings.DNT.Title", value: "Send websites a Do Not Track signal that you don’t want to be tracked", comment: "DNT Settings title")
