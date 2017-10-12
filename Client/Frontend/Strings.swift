@@ -211,18 +211,52 @@ extension Strings {
     public static let SettingsNewTabHighlightsBookmarks = NSLocalizedString("Settings.NewTab.Option.HighlightsBookmarks", value: "Recent Bookmarks", comment: "Option in the settings to turn off recent bookmarks in the Highlights section")
 }
 
-// Custom account settings
+// Custom account settings - These strings did not make it for the v10 l10n deadline so we have turned them into regular strings. These strings will come back localized in a next version.
+
 extension Strings {
-    public static let SettingsAdvanceAccountSectionName = NSLocalizedString("Settings.AdvanceAccount.SectionName", value: "Account Settings", comment: "Label used as an item in Settings. When touched it will open a dialog to setup advance Firefox account settings.")
-    public static let SettingsAdvanceAccountTitle = NSLocalizedString("Settings.AdvanceAccount.SectionName", value: "Advance Account Settings", comment: "Title displayed in header of the setting panel.")
-    public static let SettingsAdvanceAccountUrlPlaceholder = NSLocalizedString("Settings.AdvanceAccount.UrlPlaceholder", value: "Custom Account Url", comment: "Title displayed in header of the setting panel.")
-    
-    public static let SettingsAdvanceAccountUrlUpdatedAlertMessage = NSLocalizedString("Settings.AdvanceAccount.UpdatedAlertMessage", value: "Firefox account service updated. To begin using custom server, please log out and re-login.", comment: "Messaged displayed when sync service has been successfully set.")
-    public static let SettingsAdvanceAccountUrlUpdatedAlertOk = NSLocalizedString("Settings.AdvanceAccount.UpdatedAlertOk", value: "OK", comment: "Ok button on custom sync service updated alert")
-    
-    public static let SettingsAdvanceAccountUrlErrorAlertTitle = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertTitle", value: "Error", comment: "Error alert message title.")
-    public static let SettingsAdvanceAccountUrlErrorAlertMessage = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertMessage", value: "There was an error while attempting to parse the url. Please make sure that it is a valid Firefox Account root url.", comment: "Messaged displayed when sync service has an error setting a custom sync url.")
-    public static let SettingsAdvanceAccountUrlErrorAlertOk = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertOk", value: "OK", comment: "Ok button on custom sync service error alert.")
+    // Settings.AdvanceAccount.SectionName
+    // Label used as an item in Settings. When touched it will open a dialog to setup advance Firefox account settings.
+    public static let SettingsAdvanceAccountSectionName = "Account Settings"
+
+    // Settings.AdvanceAccount.SectionFooter
+    // Details for using custom Firefox Account service.
+    public static let SettingsAdvanceAccountSectionFooter = "To use a custom Firefox Account and sync servers, specify the root Url of the Firefox Account site. This will download the configuration and setup this device to use the new service. After the new service has been set, you will need to create a new Firefox Account or login with an existing one."
+
+    // Settings.AdvanceAccount.SectionName
+    // Title displayed in header of the setting panel.
+    public static let SettingsAdvanceAccountTitle = "Advance Account Settings"
+
+    // Settings.AdvanceAccount.UrlPlaceholder
+    // Title displayed in header of the setting panel.
+    public static let SettingsAdvanceAccountUrlPlaceholder = "Custom Account Url"
+
+    // Settings.AdvanceAccount.UpdatedAlertMessage
+    // Messaged displayed when sync service has been successfully set.
+    public static let SettingsAdvanceAccountUrlUpdatedAlertMessage = "Firefox account service updated. To begin using custom server, please log out and re-login."
+
+    // Settings.AdvanceAccount.UpdatedAlertOk
+    // Ok button on custom sync service updated alert
+    public static let SettingsAdvanceAccountUrlUpdatedAlertOk = "OK"
+
+    // Settings.AdvanceAccount.ErrorAlertTitle
+    // Error alert message title.
+    public static let SettingsAdvanceAccountUrlErrorAlertTitle = "Error"
+
+    // Settings.AdvanceAccount.ErrorAlertMessage
+    // Messaged displayed when sync service has an error setting a custom sync url.
+    public static let SettingsAdvanceAccountUrlErrorAlertMessage = "There was an error while attempting to parse the url. Please make sure that it is a valid Firefox Account root url."
+
+    // Settings.AdvanceAccount.ErrorAlertOk
+    // Ok button on custom sync service error alert.
+    public static let SettingsAdvanceAccountUrlErrorAlertOk = "OK"
+
+    // Settings.AdvanceAccount.UseCustomAccountsServiceTitle
+    // Toggle switch to use custom FxA server
+    public static let SettingsAdvanceAccountUseCustomAccountsServiceTitle = "Use Custom Account Service"
+
+    // Settings.AdvanceAccount.UrlEmptyErrorAlertMessage
+    // No custom service set.
+    public static let SettingsAdvanceAccountEmptyUrlErrorAlertMessage = "Please enter a custom account url before enabling."
 }
 
 // Open With Settings
