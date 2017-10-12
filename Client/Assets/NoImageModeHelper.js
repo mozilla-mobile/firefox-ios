@@ -22,7 +22,6 @@ Object.defineProperty(window.__firefox__, 'NoImageMode', {
 });
 
 var className = "__firefox__NoImageMode";
-var observer = null;
 
 function initializeStyleSheet () {
   var noImageCSS = "*{background-image:none !important;}img,iframe{visibility:hidden !important;}";
@@ -49,32 +48,41 @@ Object.defineProperty(window.__firefox__.NoImageMode, 'setEnabled', {
     window.__firefox__.NoImageMode.enabled = enabled;
     if (enabled) {
       initializeStyleSheet();
-
-      // Remove existing images on the page
-      var images = document.body.getElementsByTagName("img");
-      while (images.length > 0) {
-        images[0].remove();
-      }
-      // Remove any images that are added to the page later
-      observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-          for (var i = 0; i < mutation.addedNodes.length; ++ i) {
-            if (mutation.addedNodes[i] instanceof HTMLImageElement) {
-              mutation.addedNodes[i].remove();
-            }
-          }
-        });
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-    } else {
-      // It would be useful to also revert the changes we've made, rather than just to prevent any more images from being loaded
-      var style = document.getElementById(className);
-      if (style) {
-        style.remove();
-      }
-      observer.disconnect();
-      observer = null;
+      return;
     }
+
+    // Disable no image mode //
+    
+    // It would be useful to also revert the changes we've made, rather than just to prevent any more images from being loaded
+    var style = document.getElementById(className);
+    if (style) {
+      style.remove();
+    }
+
+    [].slice.apply(document.getElementsByTagName('img')).forEach(function(el) {
+      var src = el.src;
+      el.src = '';
+      el.src = src;
+    });
+
+    [].slice.apply(document.querySelectorAll('[style*="background"]')).forEach(function(el) {
+      var backgroundImage = el.style.backgroundImage;
+      el.style.backgroundImage = 'none';
+      el.style.backgroundImage = backgroundImage;
+    });
+
+    [].slice.apply(document.styleSheets).forEach(function(styleSheet) {
+      [].slice.apply(styleSheet.rules || []).forEach(function(rules) {
+        var style = rules.style;
+        if (!style) {
+          return;
+        }
+
+        var backgroundImage = style.backgroundImage;
+        style.backgroundImage = 'none';
+        style.backgroundImage = backgroundImage;
+      });
+    });
   }
 });
 
@@ -83,3 +91,4 @@ window.addEventListener("DOMContentLoaded", function (event) {
 });
 
 })();
+

@@ -167,12 +167,15 @@ class ContentBlockerHelper {
     func noImageMode(enabled: Bool) {
         guard let rule = ContentBlockerHelper.blockImagesRule else { return }
 
-        tab?.webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))", completionHandler: nil)
-
         if enabled {
             addToTab(contentRuleList: rule)
         } else {
             tab?.webView?.configuration.userContentController.remove(rule)
+        }
+
+        // Async required here to ensure remove() call is processed.
+        DispatchQueue.main.async() {
+            self.tab?.webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))", completionHandler: nil)
         }
     }
 }

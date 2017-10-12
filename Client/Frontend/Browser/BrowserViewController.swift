@@ -920,6 +920,12 @@ class BrowserViewController: UIViewController {
     fileprivate func runScriptsOnWebView(_ webView: WKWebView) {
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler: nil)
         webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
+
+        if #available(iOS 11, *) {
+            if (NoImageModeHelper.isActivated(profile.prefs)) {
+                webView.evaluateJavaScript("__firefox__.NoImageMode.setEnabled(true)", completionHandler: nil)
+            }
+        }
     }
 
     func updateUIForReaderHomeStateForTab(_ tab: Tab) {
