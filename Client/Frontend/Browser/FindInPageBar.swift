@@ -67,23 +67,27 @@ class FindInPageBar: UIView {
         searchText.inputAssistantItem.trailingBarButtonGroups = []
         searchText.enablesReturnKeyAutomatically = true
         searchText.returnKeyType = .search
+        searchText.accessibilityIdentifier = "FindInPage.searchField"
         addSubview(searchText)
 
         matchCountView.textColor = FindInPageUX.MatchCountColor
         matchCountView.font = FindInPageUX.MatchCountFont
         matchCountView.isHidden = true
+        matchCountView.accessibilityIdentifier = "FindInPage.matchCount"
         addSubview(matchCountView)
 
         previousButton.setImage(UIImage(named: "find_previous"), for: UIControlState())
         previousButton.setTitleColor(FindInPageUX.ButtonColor, for: UIControlState())
         previousButton.accessibilityLabel = NSLocalizedString("Previous in-page result", tableName: "FindInPage", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
         previousButton.addTarget(self, action: #selector(FindInPageBar.SELdidFindPrevious(_:)), for: UIControlEvents.touchUpInside)
+        previousButton.accessibilityIdentifier = "FindInPage.find_previous"
         addSubview(previousButton)
 
         nextButton.setImage(UIImage(named: "find_next"), for: UIControlState())
         nextButton.setTitleColor(FindInPageUX.ButtonColor, for: UIControlState())
         nextButton.accessibilityLabel = NSLocalizedString("Next in-page result", tableName: "FindInPage", comment: "Accessibility label for next result button in Find in Page Toolbar.")
         nextButton.addTarget(self, action: #selector(FindInPageBar.SELdidFindNext(_:)), for: UIControlEvents.touchUpInside)
+        nextButton.accessibilityIdentifier = "FindInPage.find_next"
         addSubview(nextButton)
 
         let closeButton = UIButton()
@@ -91,6 +95,7 @@ class FindInPageBar: UIView {
         closeButton.setTitleColor(FindInPageUX.ButtonColor, for: UIControlState())
         closeButton.accessibilityLabel = NSLocalizedString("Done", tableName: "FindInPage", comment: "Done button in Find in Page Toolbar.")
         closeButton.addTarget(self, action: #selector(FindInPageBar.SELdidPressClose(_:)), for: UIControlEvents.touchUpInside)
+        closeButton.accessibilityIdentifier = "FindInPage.close"
         addSubview(closeButton)
 
         let topBorder = UIView()

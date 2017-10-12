@@ -7,36 +7,36 @@ import XCTest
 class PhotonActionSheetTest: BaseTestCase {
     var navigator: Navigator!
     var app: XCUIApplication!
-    
+
     override func setUp() {
         super.setUp()
         app = XCUIApplication()
         navigator = createScreenGraph(app).navigator(self)
     }
-    
+
     func testPinToTop() {
         navigator.openURL(urlString: "http://www.yahoo.com")
-        
+        waitUntilPageLoad()
         // Open Action Sheet
         app.buttons["TabLocationView.pageOptionsButton"].tap()
-        
+
         // Pin the site
         app.cells["Pin to Top Sites"].tap()
-        
+
         // Verify that the site has been pinned
-        
+
         // Open menu
         app.buttons["Menu"].tap()
-        
+
         // Navigate to top sites
         app.cells["Top Sites"].tap()
-        
+
         waitforExistence(app.cells["TopSite"].firstMatch)
-        
+
         // Verify that the site is pinned to top
         let cell = app.cells["TopSite"].firstMatch
         XCTAssertEqual(cell.label, "yahoo")
-        
+
         // Remove pin
         cell.press(forDuration: 2)
         app.cells["Remove Pinned Site"].tap()

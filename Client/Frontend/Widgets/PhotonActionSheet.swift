@@ -75,6 +75,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
         button.addTarget(self, action: #selector(PhotonActionSheet.dismiss(_:)), for:.touchUpInside)
+        button.accessibilityIdentifier = "PhotonMenu.cancel"
         return button
     }()
     
