@@ -70,8 +70,8 @@
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
       "size" : "20x20",
+      "idiom" : "ipad",
       "filename" : "icon-40.png",
       "scale" : "2x"
     },
