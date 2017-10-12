@@ -94,12 +94,12 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
         DispatchQueue.main.async {
             self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
         }
-        let alertController = UIAlertController(title: Strings.SettingsAdvanceAccountUrlErrorAlertTitle, message: NSLocalizedString("Please enter a custom account url before enabling.", comment: "No custom service set."), preferredStyle: .alert)
+        let alertController = UIAlertController(title: Strings.SettingsAdvanceAccountUrlErrorAlertTitle, message: Strings.SettingsAdvanceAccountEmptyUrlErrorAlertMessage, preferredStyle: .alert)
         let defaultAction = UIAlertAction(title: Strings.SettingsAdvanceAccountUrlUpdatedAlertOk, style: .default, handler: nil)
         alertController.addAction(defaultAction)
         self.present(alertController, animated: true)
     }
-    
+
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
         let customSyncSetting = CustomSyncWebPageSetting(prefs: prefs,
@@ -130,9 +130,9 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
         
         let settings: [SettingSection] = [
             SettingSection(title: NSAttributedString(string: ""), children: basicSettings),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("To use a custom Firefox Account and sync servers, specify the root Url of the Firefox Account site. This will download the configuration and setup this device to use the new service. After the new service has been set, you will need to create a new Firefox Account or login with an existing one.", comment: "Details for using custom Firefox Account service.")), children: [])
+            SettingSection(title: NSAttributedString(string: Strings.SettingsAdvanceAccountSectionFooter), children: [])
         ]
-        
+
         return settings
     }
     
@@ -158,7 +158,7 @@ class CustomSyncEnableSetting: BoolSetting {
     init(prefs: Prefs, settingDidChange: ((Bool?) -> Void)? = nil) {
         super.init(
             prefs: prefs, prefKey: PrefsKeys.KeyUseCustomSyncService, defaultValue: false,
-            attributedTitleText: NSAttributedString(string: NSLocalizedString("Use Custom Account Service", tableName: "UseCustomAccountService", comment: "Toggle switch to use custom FxA server")),
+            attributedTitleText: NSAttributedString(string: Strings.SettingsAdvanceAccountUseCustomAccountsServiceTitle),
             settingDidChange: settingDidChange
         )
     }
