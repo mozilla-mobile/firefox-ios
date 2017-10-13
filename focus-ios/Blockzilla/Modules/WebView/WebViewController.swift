@@ -49,6 +49,7 @@ class WebViewController: UIViewController, WebController {
     convenience init() {
         self.init(nibName: nil, bundle: nil)
         setupWebview()
+        ContentBlockerHelper.shared.handler = reloadBlockers(_:)
     }
 
 
@@ -71,7 +72,6 @@ class WebViewController: UIViewController, WebController {
     func reload() { browserView.reload() }
     func stop() { browserView.stopLoading() }
 
-
     private func setupWebview() {
         browserView.allowsBackForwardNavigationGestures = true
         browserView.allowsLinkPreview = false
@@ -81,10 +81,15 @@ class WebViewController: UIViewController, WebController {
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
 
-        ContentBlockerHelper.getBlockLists { lists in
-            DispatchQueue.main.async {
-                lists.forEach(self.browserView.configuration.userContentController.add)
-            }
+        ContentBlockerHelper.shared.getBlockLists { lists in
+            self.reloadBlockers(lists)
+        }
+    }
+
+    @objc private func reloadBlockers(_ blockLists: [WKContentRuleList]) {
+        DispatchQueue.main.async {
+            self.browserView.configuration.userContentController.removeAllContentRuleLists()
+            blockLists.forEach(self.browserView.configuration.userContentController.add)
         }
     }
 

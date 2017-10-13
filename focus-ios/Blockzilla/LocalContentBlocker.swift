@@ -6,17 +6,16 @@ import Foundation
 import WebKit
 
 class ContentBlockerHelper {
-    static func compileItem(item: String, callback: @escaping (WKContentRuleList) -> Void) {
-        let path = Bundle.main.path(forResource: item, ofType: "json")!
-        guard let jsonFileContent = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) else { fatalError("Rule list for \(item) doesn't exist!") }
-        WKContentRuleListStore.default().compileContentRuleList(forIdentifier: item, encodedContentRuleList: jsonFileContent) { (ruleList, error) in
-            guard let ruleList = ruleList else { fatalError("problem compiling \(item)") }
-            callback(ruleList)
-        }
+    static let shared = ContentBlockerHelper()
+
+    var handler: (([WKContentRuleList]) -> Void)? = nil
+
+    func reload() {
+        guard let handler = handler else { return }
+        getBlockLists(callback: handler)
     }
 
-    static func getBlockLists(callback: @escaping ([WKContentRuleList]) -> Void) {
-        // If we already have a list, return it
+    func getBlockLists(callback: @escaping ([WKContentRuleList]) -> Void) {
         let enabledList = Utils.getEnabledLists()
         var returnList = [WKContentRuleList]()
         let dispatchGroup = DispatchGroup()
@@ -40,6 +39,15 @@ class ContentBlockerHelper {
 
         dispatchGroup.notify(queue: .global()) {
             callback(returnList)
+        }
+    }
+
+    private static func compileItem(item: String, callback: @escaping (WKContentRuleList) -> Void) {
+        let path = Bundle.main.path(forResource: item, ofType: "json")!
+        guard let jsonFileContent = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) else { fatalError("Rule list for \(item) doesn't exist!") }
+        WKContentRuleListStore.default().compileContentRuleList(forIdentifier: item, encodedContentRuleList: jsonFileContent) { (ruleList, error) in
+            guard let ruleList = ruleList else { fatalError("problem compiling \(item)") }
+            callback(ruleList)
         }
     }
 }
