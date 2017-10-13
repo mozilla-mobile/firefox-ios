@@ -110,7 +110,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         let views: NSDictionary = ["dialog": shareDialogController.view]
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(16@751)-[dialog(<=380@1000)]-(16@751)-|",
-            options: NSLayoutFormatOptions(), metrics: nil, views: (views as? [String : AnyObject])!))
+            options: NSLayoutFormatOptions(), metrics: nil, views: (views as? [String: AnyObject])!))
         
         let cx = NSLayoutConstraint(item: shareDialogController.view, attribute: NSLayoutAttribute.centerX,
             relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0)

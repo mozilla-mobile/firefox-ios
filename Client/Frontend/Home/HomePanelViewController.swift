@@ -54,7 +54,7 @@ enum HomePanelType: Int {
     case readingList = 3
 
     var localhostURL: URL {
-        return URL(string:"#panel=\(self.rawValue)", relativeTo: UIConstants.AboutHomePage as URL)!
+        return URL(string: "#panel=\(self.rawValue)", relativeTo: UIConstants.AboutHomePage as URL)!
     }
 }
 

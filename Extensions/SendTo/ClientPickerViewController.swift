@@ -18,7 +18,7 @@ struct ClientPickerViewControllerUX {
     static let TableHeaderTextColor = UIColor.gray
     static let TableHeaderTextPaddingLeft = CGFloat(20)
 
-    static let DeviceRowTintColor = UIColor(red:0.427, green:0.800, blue:0.102, alpha:1.0)
+    static let DeviceRowTintColor = UIColor(red: 0.427, green: 0.800, blue: 0.102, alpha: 1.0)
     static let DeviceRowHeight = CGFloat(50)
     static let DeviceRowTextFont = UIFont.systemFont(ofSize: 16)
     static let DeviceRowTextPaddingLeft = CGFloat(72)
@@ -54,7 +54,7 @@ class ClientPickerViewController: UITableViewController {
             title: Strings.SendToCancelButton,
             style: .plain,
             target: self,
-            action:  #selector(ClientPickerViewController.cancel)
+            action: #selector(ClientPickerViewController.cancel)
         )
 
         tableView.register(ClientPickerTableViewHeaderCell.self, forCellReuseIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier)

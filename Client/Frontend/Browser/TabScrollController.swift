@@ -116,7 +116,7 @@ class TabScrollingController: NSObject {
             completion: completion)
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
             if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
                 showToolbars(animated: true, completion: nil)

@@ -34,7 +34,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
     }
     
     func setCustomAccountPrefs(_ data: Data, url: URL) {        
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:Any] else {
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: Any] else {
             return
         }
         
@@ -61,7 +61,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
         let syncConfigureString = urlString + "/.well-known/fxa-client-configuration"
         let syncConfigureURL = URL(string: syncConfigureString)!
         
-        URLSession.shared.dataTask(with:syncConfigureURL, completionHandler: {(data, response, error) in
+        URLSession.shared.dataTask(with: syncConfigureURL, completionHandler: {(data, response, error) in
             guard let data = data, error == nil else {
                 // Something went wrong while downloading or parsing the configuration.
                 self.displayErrorAlert()

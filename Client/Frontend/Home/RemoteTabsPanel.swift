@@ -22,7 +22,7 @@ private struct RemoteTabsPanelUX {
     static let EmptyStateInstructionsTextColor = UIColor.gray
     static let EmptyStateInstructionsWidth = 170
     static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
-    static let EmptyStateSignInButtonColor = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
+    static let EmptyStateSignInButtonColor = UIColor(red: 0.3, green: 0.62, blue: 1, alpha: 1)
     static let EmptyStateSignInButtonTitleColor = UIColor.white
     static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
     static let EmptyStateSignInButtonHeight = 44

@@ -71,7 +71,7 @@ public struct UIConstants {
 
     static let PanelBackgroundColor = UIColor.white
     static let SeparatorColor = UIColor(rgb: 0xcccccc)
-    static let HighlightBlue = UIColor(red:76/255, green:158/255, blue:255/255, alpha:1)
+    static let HighlightBlue = UIColor(red: 76/255, green: 158/255, blue: 255/255, alpha: 1)
     static let DestructiveRed = UIColor(red: 255/255, green: 64/255, blue: 0/255, alpha: 1.0)
     static let BorderColor = UIColor.darkGray
     static let BackgroundColor = AppBackgroundColor

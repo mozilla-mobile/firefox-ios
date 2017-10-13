@@ -85,7 +85,7 @@ class ButtonToast: UIView {
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.titleLabel?.minimumScaleFactor = 0.1
 
-        let recognizer = UITapGestureRecognizer(target: self, action:#selector(ButtonToast.buttonPressed(_:)))
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.buttonPressed(_:)))
         button.addGestureRecognizer(recognizer)
         toast.addSubview(button)
         var descriptionLabel: UILabel?

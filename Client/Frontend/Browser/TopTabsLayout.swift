@@ -38,7 +38,7 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
 }
 
 class TopTabsViewLayout: UICollectionViewFlowLayout {
-    var decorationAttributeArr: [Int : UICollectionViewLayoutAttributes?] = [:]
+    var decorationAttributeArr: [Int: UICollectionViewLayoutAttributes?] = [:]
     let separatorYOffset = TopTabsUX.SeparatorYOffset
     let separatorSize = TopTabsUX.SeparatorHeight
     let SeparatorZIndex = -2 ///Prevent the header/footer from appearing above the Tabs

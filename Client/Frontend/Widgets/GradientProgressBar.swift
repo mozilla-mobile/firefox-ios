@@ -46,7 +46,6 @@ open class GradientProgressBar: UIProgressView {
         }
     }
     
-    
     func setGradientColors(startColor: UIColor, endColor: UIColor) {
         gradientColors = [startColor, endColor, startColor, endColor, startColor, endColor, startColor].map { $0.cgColor }
         gradientLayer.colors = gradientColors
@@ -99,8 +98,8 @@ open class GradientProgressBar: UIProgressView {
         gradientLayer.frame = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width * 2, height: bounds.size.height)
         gradientLayer.colors = gradientColors
         gradientLayer.locations = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.0]
-        gradientLayer.startPoint = CGPoint(x:0, y:0)
-        gradientLayer.endPoint = CGPoint(x:1, y:0)
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
         gradientLayer.drawsAsynchronously = true
     }
     
@@ -166,7 +165,6 @@ open class GradientProgressBar: UIProgressView {
         }
         CATransaction.commit()
     }
-
     
     override open func setProgress(_ progress: Float, animated: Bool) {
         if progress < self.progress && self.progress != 1 {

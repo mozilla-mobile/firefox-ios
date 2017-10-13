@@ -106,7 +106,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         ]
 
         if #available(iOS 11, *) {
-            privacySettings.append(ContentBlockerSetting(settings:self))
+            privacySettings.append(ContentBlockerSetting(settings: self))
         }
 
         privacySettings += [
