@@ -77,6 +77,7 @@ class WebViewController: UIViewController, WebController {
         browserView.allowsLinkPreview = false
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
+        browserView.uiDelegate = self
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
@@ -146,3 +147,12 @@ extension WebViewController: BrowserState {
     var url: URL? { return browserView.url }
 }
 
+extension WebViewController: WKUIDelegate {
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        if navigationAction.targetFrame == nil {
+            browserView.load(navigationAction.request)
+        }
+
+        return nil
+    }
+}
