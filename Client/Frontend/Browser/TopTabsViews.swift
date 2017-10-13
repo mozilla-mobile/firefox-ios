@@ -74,8 +74,8 @@ class TopTabCell: UICollectionViewCell {
     
     var selectedTab = false {
         didSet {
-            backgroundColor = selectedTab ? UIColor(rgb:0xf9f9fa) : UIColor(rgb: 0x272727)
-            titleText.textColor = selectedTab ? UIColor(rgb:0x0c0c0d) : UIColor(rgb: 0xb1b1b3)
+            backgroundColor = selectedTab ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0x272727)
+            titleText.textColor = selectedTab ? UIColor(rgb: 0x0c0c0d) : UIColor(rgb: 0xb1b1b3)
             highlightLine.isHidden = !selectedTab
             closeButton.tintColor = selectedTab ? UIColor(rgb: 0x272727) : UIColor(rgb: 0xb1b1b3)
             // restyle if we are in PBM
@@ -122,7 +122,7 @@ class TopTabCell: UICollectionViewCell {
 
     let highlightLine: UIView = {
         let line = UIView()
-        line.backgroundColor = UIColor(rgb:0x0066DC)
+        line.backgroundColor = UIColor(rgb: 0x0066DC)
         line.isHidden = true
         return line
     }()
@@ -173,7 +173,7 @@ class TopTabCell: UICollectionViewCell {
         case Style.light:
             titleText.textColor = UIColor.darkText
             backgroundColor = UIConstants.AppBackgroundColor
-            highlightLine.backgroundColor = UIColor(rgb:0x0066DC)
+            highlightLine.backgroundColor = UIColor(rgb: 0x0066DC)
         case Style.dark:
             titleText.textColor = UIColor.lightText
             backgroundColor = UIColor(rgb: 0x38383D)

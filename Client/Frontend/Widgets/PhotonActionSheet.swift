@@ -74,7 +74,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
-        button.addTarget(self, action: #selector(PhotonActionSheet.dismiss(_:)), for:.touchUpInside)
+        button.addTarget(self, action: #selector(PhotonActionSheet.dismiss(_:)), for: .touchUpInside)
         button.accessibilityIdentifier = "PhotonMenu.cancel"
         return button
     }()

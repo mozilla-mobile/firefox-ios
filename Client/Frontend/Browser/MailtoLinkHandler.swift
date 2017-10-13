@@ -7,7 +7,7 @@ import UIKit
 
 open class MailtoLinkHandler {
 
-    lazy var mailSchemeProviders: [String:MailProvider] = self.fetchMailSchemeProviders()
+    lazy var mailSchemeProviders: [String: MailProvider] = self.fetchMailSchemeProviders()
 
     func launchMailClientForScheme(_ scheme: String, metadata: MailToMetadata, defaultMailtoURL: URL) {
         guard let provider = mailSchemeProviders[scheme], let mailURL = provider.newEmailURLFromMetadata(metadata) else {
@@ -22,7 +22,7 @@ open class MailtoLinkHandler {
         }
     }
 
-    func fetchMailSchemeProviders() -> [String:MailProvider] {
+    func fetchMailSchemeProviders() -> [String: MailProvider] {
         var providerDict = [String: MailProvider]()
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
             dictRoot.forEach({ dict in

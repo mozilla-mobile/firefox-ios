@@ -102,7 +102,7 @@ class QuickActions: NSObject {
         return true
     }
 
-    fileprivate func handleShortCutItemOfType(_ type: ShortcutType, userData: [String : NSSecureCoding]?, browserViewController: BrowserViewController) {
+    fileprivate func handleShortCutItemOfType(_ type: ShortcutType, userData: [String: NSSecureCoding]?, browserViewController: BrowserViewController) {
         switch type {
         case .newTab:
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: false)

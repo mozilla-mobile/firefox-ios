@@ -88,7 +88,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         // Handle messages from the content server (via our user script).
         let contentController = WKUserContentController()
         contentController.addUserScript(userScript)
-        contentController.add(LeakAvoider(delegate:self), name: "accountsCommandHandler")
+        contentController.add(LeakAvoider(delegate: self), name: "accountsCommandHandler")
 
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
@@ -111,7 +111,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let data = [
             "type": type,
             "content": content,
-        ] as [String : Any]
+        ] as [String: Any]
         let json = JSON(data).stringValue() ?? ""
         let script = "window.postMessage(\(json), '\(self.url.absoluteString)');"
         webView.evaluateJavaScript(script, completionHandler: nil)
