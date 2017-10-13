@@ -2505,7 +2505,7 @@ extension BrowserViewController: FxAContentViewControllerDelegate {
 }
 
 extension BrowserViewController: ContextMenuHelperDelegate {
-    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UILongPressGestureRecognizer) {
+    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UIGestureRecognizer) {
         // locationInView can return (0, 0) when the long press is triggered in an invalid page
         // state (e.g., long pressing a link before the document changes, then releasing after a
         // different page loads).
@@ -2647,6 +2647,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     success(image)
                 }
             }
+    }
+
+    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer) {
+        displayedPopoverController?.dismiss(animated: true) {
+            self.displayedPopoverController = nil
+        }
     }
 }
 
