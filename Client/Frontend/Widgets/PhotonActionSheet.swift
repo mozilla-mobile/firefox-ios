@@ -297,7 +297,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 private class PhotonActionSheetHeaderView: UITableViewHeaderFooterView {
     static let Padding: CGFloat = 12
     static let VerticalPadding: CGFloat = 2
-    
+
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
@@ -326,11 +326,7 @@ private class PhotonActionSheetHeaderView: UITableViewHeaderFooterView {
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        
-        //        layer.shouldRasterize = true
-        //        layer.rasterizationScale = UIScreen.main.scale
-        isAccessibilityElement = true
-        
+
         self.backgroundView = UIView()
         self.backgroundView?.backgroundColor = .clear
         contentView.addSubview(siteImageView)
@@ -479,6 +475,8 @@ private class PhotonActionSheetCell: UITableViewCell {
     func configureCell(_ label: String, imageString: String) {
         titleLabel.text = label
         titleLabel.textColor = self.tintColor
+        accessibilityIdentifier = imageString
+        accessibilityLabel = label
         if let image = UIImage(named: imageString)?.withRenderingMode(.alwaysTemplate) {
             statusIcon.image = image
             statusIcon.tintColor = self.tintColor

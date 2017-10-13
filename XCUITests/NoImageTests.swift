@@ -8,6 +8,7 @@ class NoImageTests: BaseTestCase {
 
     var navigator: Navigator!
     var app: XCUIApplication!
+    static let NoImageButtonIdentifier = "menu-NoImageMode"
 
     override func setUp() {
         super.setUp()
@@ -23,25 +24,25 @@ class NoImageTests: BaseTestCase {
 
     private func showImages() {
         navigator.goto(BrowserTabMenu)
-        app.tables.cells["Show Images"].tap()
+        app.tables.cells[NoImageButtonIdentifier].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func hideImages() {
         navigator.goto(BrowserTabMenu)
-        app.tables.cells["Hide Images"].tap()
+        app.tables.cells[NoImageButtonIdentifier].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func checkShowImages() {
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells["Show Images"])
+        waitforExistence(app.tables.cells[NoImageButtonIdentifier])
         navigator.goto(BrowserTab)
     }
 
     private func checkHideImages() {
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells["Hide Images"])
+        waitforExistence(app.tables.cells[NoImageButtonIdentifier])
         navigator.goto(BrowserTab)
     }
 
