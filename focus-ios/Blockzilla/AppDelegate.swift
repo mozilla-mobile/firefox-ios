@@ -17,64 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var queuedString: String?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        #if BUDDYBUILD
-            BuddyBuildSDK.setup()
-        #endif
-
-        // Only set up to be in Beta build until we get approval to put Sentry in release
-        if AppInfo.isBetaBuild {
-            // Set up Sentry
-            let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
-            SentryIntegration.shared.setup(sendUsageData: sendUsageData)
-        }
         
-        // Set up Telemetry
-        let telemetryConfig = Telemetry.default.configuration
-        telemetryConfig.appName = AppInfo.isKlar ? "Klar" : "Focus"
-        telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
-        telemetryConfig.appVersion = AppInfo.shortVersion
-
-        // Since Focus always clears the caches directory and Telemetry files are
-        // excluded from iCloud backup, we store pings in documents.
-        telemetryConfig.dataDirectory = .documentDirectory
-        
-        let defaultSearchEngineProvider = SearchEngineManager(prefs: UserDefaults.standard).engines.first?.name ?? "unknown"
-        telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
-        
-        telemetryConfig.measureUserDefaultsSetting(forKey: SearchEngineManager.prefKeyEngine, withDefaultValue: defaultSearchEngineProvider)
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds, withDefaultValue: Settings.getToggle(.blockAds))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics, withDefaultValue: Settings.getToggle(.blockAnalytics))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial, withDefaultValue: Settings.getToggle(.blockSocial))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockOther, withDefaultValue: Settings.getToggle(.blockOther))
-        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockFonts, withDefaultValue: Settings.getToggle(.blockFonts))
-        
-        #if DEBUG
-            telemetryConfig.updateChannel = "debug"
-            telemetryConfig.isCollectionEnabled = false
-            telemetryConfig.isUploadEnabled = false
-        #else
-            telemetryConfig.updateChannel = "release"
-            telemetryConfig.isCollectionEnabled = Settings.getToggle(.sendAnonymousUsageData)
-            telemetryConfig.isUploadEnabled = Settings.getToggle(.sendAnonymousUsageData)
-        #endif
-        
-        Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
-        Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
-        
-        // Start the telemetry session and record an event indicating that we have entered the
-        // foreground since `applicationWillEnterForeground(_:)` does not get called at launch.
-        Telemetry.default.recordSessionStart()
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
-        
-        // Only include Adjust SDK in Focus and NOT in Klar builds.
-        #if FOCUS
-            // Always initialize Adjust, otherwise the SDK is in a bad state. We disable it
-            // immediately so that no data is collected or sent.
-            AdjustIntegration.applicationDidFinishLaunching()
-            if !Settings.getToggle(.sendAnonymousUsageData) {
-                AdjustIntegration.enabled = false
-            }
-        #endif
+        setupContinuousDeploymentTooling()
+        setupErrorTracking()
+        setupTelemetry()
 
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
@@ -100,7 +46,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
 
-        if UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) < AppDelegate.prefIntroVersion {
+        let needToShowFirstRunExperience = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) < AppDelegate.prefIntroVersion
+        if  needToShowFirstRunExperience {
 
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
             DispatchQueue.main.async {
@@ -263,6 +210,76 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Telemetry.default.scheduleUpload(pingType: CorePingBuilder.PingType)
         Telemetry.default.scheduleUpload(pingType: FocusEventPingBuilder.PingType)
     }
+}
+
+// MARK: - Telemetry & Tooling setup
+extension AppDelegate {
+    
+    func setupContinuousDeploymentTooling() {
+        #if BUDDYBUILD
+            BuddyBuildSDK.setup()
+        #endif
+    }
+    
+    func setupErrorTracking() {
+        // Only set up to be in Beta build until we get approval to put Sentry in release
+        if AppInfo.isBetaBuild {
+            // Set up Sentry
+            let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
+            SentryIntegration.shared.setup(sendUsageData: sendUsageData)
+        }
+    }
+    
+    func setupTelemetry() {
+
+        let telemetryConfig = Telemetry.default.configuration
+        telemetryConfig.appName = AppInfo.isKlar ? "Klar" : "Focus"
+        telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
+        telemetryConfig.appVersion = AppInfo.shortVersion
+        
+        // Since Focus always clears the caches directory and Telemetry files are
+        // excluded from iCloud backup, we store pings in documents.
+        telemetryConfig.dataDirectory = .documentDirectory
+        
+        let defaultSearchEngineProvider = SearchEngineManager(prefs: UserDefaults.standard).engines.first?.name ?? "unknown"
+        telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
+        
+        telemetryConfig.measureUserDefaultsSetting(forKey: SearchEngineManager.prefKeyEngine, withDefaultValue: defaultSearchEngineProvider)
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds, withDefaultValue: Settings.getToggle(.blockAds))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics, withDefaultValue: Settings.getToggle(.blockAnalytics))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockSocial, withDefaultValue: Settings.getToggle(.blockSocial))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockOther, withDefaultValue: Settings.getToggle(.blockOther))
+        telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockFonts, withDefaultValue: Settings.getToggle(.blockFonts))
+        
+        #if DEBUG
+            telemetryConfig.updateChannel = "debug"
+            telemetryConfig.isCollectionEnabled = false
+            telemetryConfig.isUploadEnabled = false
+        #else
+            telemetryConfig.updateChannel = "release"
+            telemetryConfig.isCollectionEnabled = Settings.getToggle(.sendAnonymousUsageData)
+            telemetryConfig.isUploadEnabled = Settings.getToggle(.sendAnonymousUsageData)
+        #endif
+        
+        Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
+        Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
+        
+        // Start the telemetry session and record an event indicating that we have entered the
+        // foreground since `applicationWillEnterForeground(_:)` does not get called at launch.
+        Telemetry.default.recordSessionStart()
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
+        
+        // Only include Adjust SDK in Focus and NOT in Klar builds.
+        #if FOCUS
+            // Always initialize Adjust, otherwise the SDK is in a bad state. We disable it
+            // immediately so that no data is collected or sent.
+            AdjustIntegration.applicationDidFinishLaunching()
+            if !Settings.getToggle(.sendAnonymousUsageData) {
+                AdjustIntegration.enabled = false
+            }
+        #endif
+    }
+    
 }
 
 extension UINavigationController {
