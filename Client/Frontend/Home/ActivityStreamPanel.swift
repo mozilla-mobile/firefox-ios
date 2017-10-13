@@ -784,12 +784,12 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         if site.bookmarked ?? false {
             bookmarkAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
                 self.profile.bookmarks.modelFactory >>== {
-                    $0.removeByURL(siteURL.absoluteString)
+                    $0.removeByURL(siteURL.absoluteString).uponQueue(.main) {_ in
+                        self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: true, forceTopSites: false)
+                    }
                     site.setBookmarked(false)
                 }
-                self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: true)
                 self.telemetry.reportEvent(.RemoveBookmark, source: pingSource, position: index)
-
             })
         } else {
             bookmarkAction = PhotonActionSheetItem(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
@@ -803,6 +803,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                                                                                     withUserData: userData,
                                                                                     toApplication: UIApplication.shared)
                 site.setBookmarked(true)
+                self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: true, forceTopSites: true)
                 self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
                 LeanplumIntegration.sharedInstance.track(eventName: .savedBookmark)
             })
