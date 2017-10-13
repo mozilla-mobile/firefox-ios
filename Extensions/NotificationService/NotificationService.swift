@@ -34,7 +34,7 @@ class NotificationService: UNNotificationServiceExtension {
 
         guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
             SentryIntegration.shared.sendWithStacktrace(message: "No notification content", tag: sentryTag)
-            return
+            return self.didFinish(PushMessage.accountVerified)
         }
 
         let queue = self.profile.queue
@@ -59,6 +59,7 @@ class NotificationService: UNNotificationServiceExtension {
         if !display.messageDelivered {
             let string = "Empty notification: message=\(what?.messageType.rawValue ?? "nil"), error=\(error?.description ?? "nil")"
             SentryIntegration.shared.send(message: string, tag: sentryTag)
+            display.displayUnknownMessageNotification()
         }
     }
 
