@@ -216,7 +216,12 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     let backBtnBackAction = {
-        app.buttons["TabToolbar.backButton"].tap()
+        if map.isiPad() {
+            app.buttons["URLBarView.backButton"].tap()
+        }
+        else {
+            app.buttons["TabToolbar.backButton"].tap()
+        }
     }
 
     map.createScene(SettingsScreen) { scene in
