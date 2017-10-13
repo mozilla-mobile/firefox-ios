@@ -120,10 +120,6 @@ extension PhotonActionSheetProtocol {
             tab.toggleDesktopSite()
         }
         
-        let setHomePage = PhotonActionSheetItem(title: Strings.AppMenuSetHomePageTitleString, iconString: "menu-Home") { action in
-            HomePageHelper(prefs: self.profile.prefs).setHomePage(toTab: tab, presentAlertOn: presentableVC)
-        }
-        
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
             guard let tab = self.tabManager.selectedTab else { return }
             guard let url = tab.url?.displayURL else { return }
@@ -199,7 +195,7 @@ extension PhotonActionSheetProtocol {
             topActions.append(addReadingList)
         }
         
-        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, setHomePage], [share]]
+        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites], [share]]
     }
 }
 
