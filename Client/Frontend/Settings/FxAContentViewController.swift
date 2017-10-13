@@ -60,6 +60,17 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        // If the FxAContentViewController was launched from a FxA deferred link
+        // onboarding might not have been shown. Check to see if it needs to be
+        // displayed and don't animate.
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.browserViewController.presentIntroViewController(false, animated: false)
+        }
+    }
 
     override func makeWebView() -> WKWebView {
         // Inject  our setup code after the page loads.
