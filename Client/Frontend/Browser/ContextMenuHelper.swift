@@ -6,6 +6,7 @@ import WebKit
 
 protocol ContextMenuHelperDelegate: class {
     func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UIGestureRecognizer)
+    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer)
 }
 
 class ContextMenuHelper: NSObject {
@@ -45,6 +46,11 @@ class ContextMenuHelper: NSObject {
     }
 
     func longPressGestureDetected(_ sender: UIGestureRecognizer) {
+        if sender.state == .cancelled {
+            delegate?.contextMenuHelper(self, didCancelGestureRecognizer: sender)
+            return
+        }
+
         guard sender.state == .began, let elements = self.elements else {
             return
         }

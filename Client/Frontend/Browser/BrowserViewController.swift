@@ -2648,6 +2648,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 }
             }
     }
+
+    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer) {
+        displayedPopoverController?.dismiss(animated: true) {
+            self.displayedPopoverController = nil
+        }
+    }
 }
 
 extension BrowserViewController {
