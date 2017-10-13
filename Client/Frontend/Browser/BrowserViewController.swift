@@ -2417,7 +2417,12 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 }
 
 extension BrowserViewController: IntroViewControllerDelegate {
-    @discardableResult func presentIntroViewController(_ force: Bool = false) -> Bool {
+    @discardableResult func presentIntroViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
+        if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
+            self.launchFxAFromDeeplinkURL(url)
+            return true
+        }
+        
         if force || profile.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
             let introViewController = IntroViewController()
             introViewController.delegate = self
@@ -2426,7 +2431,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 introViewController.preferredContentSize = CGSize(width: IntroViewControllerUX.Width, height: IntroViewControllerUX.Height)
                 introViewController.modalPresentationStyle = UIModalPresentationStyle.formSheet
             }
-            present(introViewController, animated: true) {
+            present(introViewController, animated: animated) {
                 // On first run (and forced) open up the homepage in the background.
                 if let homePageURL = HomePageAccessors.getHomePage(self.profile.prefs), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
                     tab.loadRequest(URLRequest(url: homePageURL))
@@ -2441,7 +2446,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
     
     func launchFxAFromDeeplinkURL(_ url: URL) {
         self.profile.prefs.removeObjectForKey("AdjustDeeplinkKey")
-        let query = url.getQuery()
+        var query = url.getQuery()
+        query["entrypoint"] = "adjust_deepklink_ios"
         let fxaParams: FxALaunchParams
         fxaParams = FxALaunchParams(query: query)
         self.presentSignInViewController(fxaParams)
@@ -2454,10 +2460,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 _ = self.navigationController?.popToRootViewController(animated: true)
             }
             
-            if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
-                self.launchFxAFromDeeplinkURL(url)
-                return
-            }
             if requestToLogin {
                 self.presentSignInViewController()
             }
