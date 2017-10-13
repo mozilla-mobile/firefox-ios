@@ -43,7 +43,7 @@ class BackForwardTableViewCell: UITableViewCell {
     var isCurrentTab = false {
         didSet {
             if isCurrentTab {
-                label.font = UIFont(name:"HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
+                label.font = UIFont(name: "HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
             }
         }
     }
@@ -137,6 +137,6 @@ class BackForwardTableViewCell: UITableViewCell {
         connectingForwards = true
         connectingBackwards = true
         isCurrentTab = false
-        label.font = UIFont(name:"HelveticaNeue", size: BackForwardViewCellUX.fontSize)
+        label.font = UIFont(name: "HelveticaNeue", size: BackForwardViewCellUX.fontSize)
     }
 }

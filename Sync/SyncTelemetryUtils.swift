@@ -94,7 +94,7 @@ public struct ValidationStats: Stats, DictionaryRepresentable {
     }
 
     func asDictionary() -> [String: Any] {
-        var dict: [String : Any] = [
+        var dict: [String: Any] = [
             "problems": problems.map { $0.asDictionary() },
             "took": took
         ]
@@ -169,7 +169,7 @@ public class SyncEngineStatsSession: StatsSession {
 }
 
 extension SyncEngineStatsSession: DictionaryRepresentable {
-    func asDictionary() -> [String : Any] {
+    func asDictionary() -> [String: Any] {
         var dict: [String: Any] = [
             "took": took,
         ]
@@ -207,7 +207,7 @@ public class SyncOperationStatsSession: StatsSession {
 }
 
 extension SyncOperationStatsSession: DictionaryRepresentable {
-    func asDictionary() -> [String : Any] {
+    func asDictionary() -> [String: Any] {
         let whenValue = when ?? 0
         return [
             "when": whenValue,

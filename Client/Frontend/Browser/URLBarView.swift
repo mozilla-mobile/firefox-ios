@@ -673,7 +673,7 @@ extension URLBarView: Themeable {
         
         let isPrivate = themeName == Theme.PrivateMode
         
-        progressBar.setGradientColors(startColor: UIConstants.LoadingStartColor.color(isPBM: isPrivate), endColor:UIConstants.LoadingEndColor.color(isPBM: isPrivate))
+        progressBar.setGradientColors(startColor: UIConstants.LoadingStartColor.color(isPBM: isPrivate), endColor: UIConstants.LoadingEndColor.color(isPBM: isPrivate))
         currentTheme = themeName
         locationBorderColor = theme.borderColor!
         locationActiveBorderColor = theme.activeBorderColor!

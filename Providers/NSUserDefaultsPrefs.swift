@@ -117,8 +117,8 @@ open class NSUserDefaultsPrefs: Prefs {
         return userDefaults.array(forKey: qualifyKey(defaultName)) as [Any]?
     }
 
-    open func dictionaryForKey(_ defaultName: String) -> [String : Any]? {
-        return userDefaults.dictionary(forKey: qualifyKey(defaultName)) as [String : Any]?
+    open func dictionaryForKey(_ defaultName: String) -> [String: Any]? {
+        return userDefaults.dictionary(forKey: qualifyKey(defaultName)) as [String: Any]?
     }
 
     open func removeObjectForKey(_ defaultName: String) {

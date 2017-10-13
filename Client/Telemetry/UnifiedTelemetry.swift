@@ -24,7 +24,7 @@ class UnifiedTelemetry {
         telemetryConfig.isUploadEnabled = sendUsageData
 
         let prefs = profile.prefs
-        Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
+        Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
             var outputDict = inputDict // make a mutable copy
             if let newTabChoice = prefs.stringForKey(NewTabAccessors.PrefKey) {
                 outputDict["defaultNewTabExperience"] = newTabChoice as AnyObject?

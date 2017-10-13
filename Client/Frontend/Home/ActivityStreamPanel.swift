@@ -303,7 +303,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                 case .pocket:
                     view.title = title
                     view.moreButton.isHidden = false
-                    view.moreButton.addTarget(self, action:#selector(ActivityStreamPanel.showMorePocketStories), for: .touchUpInside)
+                    view.moreButton.addTarget(self, action: #selector(ActivityStreamPanel.showMorePocketStories), for: .touchUpInside)
                     return view
                 case .topSites:
                     return UICollectionReusableView()
@@ -573,7 +573,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
             // Fetch the default sites
             let defaultSites = self.defaultTopSites()
             // create PinnedSite objects. used by the view layer to tell topsites apart
-            let pinnedSites: [Site] = pinned.map({ PinnedSite(site:$0) })
+            let pinnedSites: [Site] = pinned.map({ PinnedSite(site: $0) })
 
             // Merge default topsites with a user's topsites.
             let mergedSites = mySites.union(defaultSites, f: unionOnURL)
@@ -713,7 +713,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
             return
         }
         if let site = site {
-            showSiteWithURLHandler(URL(string:site.url)!)
+            showSiteWithURLHandler(URL(string: site.url)!)
         }
     }
 }

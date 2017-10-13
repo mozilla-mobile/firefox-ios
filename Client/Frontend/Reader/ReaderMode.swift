@@ -107,7 +107,7 @@ struct ReaderModeStyle {
     }
 
     /// Encode the style to a dictionary that can be stored in the profile
-    func encodeAsDictionary() -> [String:Any] {
+    func encodeAsDictionary() -> [String: Any] {
         return ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
     }
 
@@ -118,7 +118,7 @@ struct ReaderModeStyle {
     }
 
     /// Initialize the style from a dictionary, taken from the profile. Returns nil if the object cannot be decoded.
-    init?(dict: [String:Any]) {
+    init?(dict: [String: Any]) {
         let themeRawValue = dict["theme"] as? String
         let fontTypeRawValue = dict["fontType"] as? String
         let fontSizeRawValue = dict["fontSize"] as? Int
@@ -194,7 +194,7 @@ struct ReadabilityResult {
     }
 
     /// Encode to a dictionary, which can then for example be json encoded
-    func encode() -> [String:Any] {
+    func encode() -> [String: Any] {
         return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits]
     }
 

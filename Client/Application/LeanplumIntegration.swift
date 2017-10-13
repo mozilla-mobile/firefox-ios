@@ -225,7 +225,7 @@ class LeanplumIntegration {
         return true
     }
 
-    func setUserAttributes(attributes: [AnyHashable : Any]) {
+    func setUserAttributes(attributes: [AnyHashable: Any]) {
         DispatchQueue.main.async(execute: {
             if self.shouldSendToLP() {
                 Leanplum.setUserAttributes(attributes)

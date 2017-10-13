@@ -54,7 +54,7 @@ private struct ShareDialogControllerUX {
     static let TableRowHeight: CGFloat = 44                                                         // System default
     static let TableRowFont = UIFont.systemFont(ofSize: 14)
     static let TableRowFontMinScale: CGFloat = 0.8
-    static let TableRowTintColor = UIColor(red:0.427, green:0.800, blue:0.102, alpha:1.0)           // Green tint for the checkmark
+    static let TableRowTintColor = UIColor(red: 0.427, green: 0.800, blue: 0.102, alpha: 1.0)           // Green tint for the checkmark
     static let TableRowTextColor = UIColor(rgb: 0x555555)
 
     static let TableHeight = 88                                                                     // Height of 2 standard 44px cells
