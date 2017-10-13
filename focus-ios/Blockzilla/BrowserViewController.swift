@@ -123,8 +123,9 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.bottom.equalTo(view)
         }
 
-        showsToolsetInURLBar = UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.orientation.isLandscape
-
+        // true if device is an iPad or is an iPhone in landscape mode
+        showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == view.frame.size.width || view.frame.size.width > view.frame.size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && view.frame.size.width > view.frame.size.height)
+        
         containWebView()
         createHomeView()
         createURLBar()
@@ -301,13 +302,16 @@ class BrowserViewController: UIViewController {
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-
-        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
-
+        
+        // Fixes the issue of a user fresh-opening Focus via Split View
+        guard isViewLoaded else { return }
+        
         // UIDevice.current.orientation isn't reliable. See https://bugzilla.mozilla.org/show_bug.cgi?id=1315370#c5
         // As a workaround, consider the phone to be in landscape if the new width is greater than the height.
-        showsToolsetInURLBar = size.width > size.height
-
+        showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
+        urlBar.updateConstraints()
+        browserToolbar.updateConstraints()
+        
         coordinator.animate(alongsideTransition: { _ in
             self.urlBar.showToolset = self.showsToolsetInURLBar
 
