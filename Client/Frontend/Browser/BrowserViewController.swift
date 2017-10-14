@@ -1597,10 +1597,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             self.present(backForwardViewController, animated: true, completion: nil)
         }
     }
-    
-    private func showActionMenu() {
-        
-    }
 }
 
 extension BrowserViewController: WindowCloseHelperDelegate {
