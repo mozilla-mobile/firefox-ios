@@ -16,11 +16,13 @@ import SwiftKeychainWrapper
 /// Presented to the to user when asking for their passcode to validate entry into a part of the app.
 class PasscodeEntryViewController: BasePasscodeViewController {
     weak var delegate: PasscodeEntryDelegate?
-    fileprivate var passcodePane: PasscodePane?
+    fileprivate var passcodePane: PasscodePane
     
     override init() {
+        let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
+        passcodePane = PasscodePane(title:nil, passcodeSize:authInfo?.passcode?.count ?? 6)
+        
         super.init()
-        passcodePane = PasscodePane(title:nil, passcodeSize:authenticationInfo?.passcode?.count ?? 6)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,18 +32,15 @@ class PasscodeEntryViewController: BasePasscodeViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = AuthenticationStrings.enterPasscodeTitle
-        if let passcodePane = passcodePane {
-            view.addSubview(passcodePane)
-            passcodePane.snp.makeConstraints { make in
-                make.bottom.left.right.equalTo(self.view)
-                make.top.equalTo(self.topLayoutGuide.snp.bottom)
-            }
+        view.addSubview(passcodePane)
+        passcodePane.snp.makeConstraints { make in
+            make.bottom.left.right.equalTo(self.view)
+            make.top.equalTo(self.topLayoutGuide.snp.bottom)
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let passcodePane = passcodePane else { return }
         passcodePane.codeInputView.delegate = self
 
         // Don't show the keyboard or allow typing if we're locked out. Also display the error.
@@ -56,7 +55,6 @@ class PasscodeEntryViewController: BasePasscodeViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        guard let passcodePane = passcodePane else { return }
         if authenticationInfo?.isLocked() ?? false {
             passcodePane.codeInputView.isUserInteractionEnabled = false
             passcodePane.codeInputView.resignFirstResponder()
@@ -83,9 +81,9 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
             KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
             delegate?.passcodeValidationDidSucceed()
         } else {
-            passcodePane?.shakePasscode()
+            passcodePane.shakePasscode()
             failIncorrectPasscode(inputView)
-            passcodePane?.codeInputView.resetCode()
+            passcodePane.codeInputView.resetCode()
 
             // Store mutations on authentication info object
             KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
