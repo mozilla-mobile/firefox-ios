@@ -80,17 +80,17 @@ class WebViewController: UIViewController, WebController {
         ContentBlockerHelper.shared.getBlockLists { lists in
             self.reloadBlockers(lists)
         }
+
+        view.addSubview(browserView)
+        browserView.snp.makeConstraints { make in
+            make.edges.equalTo(view.snp.edges)
+        }
     }
 
     @objc private func reloadBlockers(_ blockLists: [WKContentRuleList]) {
         DispatchQueue.main.async {
             self.browserView.configuration.userContentController.removeAllContentRuleLists()
             blockLists.forEach(self.browserView.configuration.userContentController.add)
-        }
-
-        view.addSubview(browserView)
-        browserView.snp.makeConstraints { make in
-            make.edges.equalTo(view.snp.edges)
         }
     }
 
