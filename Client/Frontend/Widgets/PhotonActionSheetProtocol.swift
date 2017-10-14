@@ -177,6 +177,24 @@ extension PhotonActionSheetProtocol {
                 _ = self.profile.history.addPinnedTopSite(site).value
             }
         }
+
+        let sendToDevice = PhotonActionSheetItem(title: Strings.AppMenuSendToDeviceTitleString, iconString: "menu-Send-to-Device") { action in
+            guard let bvc = presentableVC as? PresentableVC & InstructionsViewControllerDelegate & ClientPickerViewControllerDelegate else { return }
+            if !self.profile.hasAccount() {
+                let instructionsViewController = InstructionsViewController()
+                instructionsViewController.delegate = bvc
+                let navigationController = UINavigationController(rootViewController: instructionsViewController)
+                bvc.present(navigationController, animated: true, completion: nil)
+                return
+            }
+
+            let clientPickerViewController = ClientPickerViewController()
+            clientPickerViewController.clientPickerDelegate = bvc
+            clientPickerViewController.profile = self.profile
+            clientPickerViewController.profileNeedsShutdown = false
+            let navigationController = UINavigationController(rootViewController: clientPickerViewController)
+            bvc.present(navigationController, animated: true, completion: nil)
+        }
         
         let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let tab = self.tabManager.selectedTab else { return }
@@ -194,8 +212,13 @@ extension PhotonActionSheetProtocol {
         if let tab = self.tabManager.selectedTab, tab.readerModeAvailableOrActive {
             topActions.append(addReadingList)
         }
+
+        var middleActions = [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites]
+        if AppConstants.MOZ_SENDTAB_IN_PAGE_ACTIONS {
+            middleActions.append(sendToDevice)
+        }
         
-        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites], [share]]
+        return [topActions, middleActions, [share]]
     }
 }
 
