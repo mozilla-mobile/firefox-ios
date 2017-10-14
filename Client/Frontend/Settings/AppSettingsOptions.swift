@@ -715,14 +715,22 @@ class SendAnonymousUsageDataSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
         super.init(
             prefs: prefs, prefKey: AppConstants.PrefSendUsageData, defaultValue: true,
-            attributedTitleText: NSAttributedString(string: NSLocalizedString("Send Anonymous Usage Data", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1")),
-            attributedStatusText: NSAttributedString(string: NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "See http://bit.ly/1SmEXU1"), attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]),
+            attributedTitleText: NSAttributedString(string: Strings.SendUsageSettingTitle),
+            attributedStatusText: createStatusText(),
             settingDidChange: {
                 AdjustIntegration.setEnabled($0)
                 LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.telemetryOptIn.rawValue: $0])
                 LeanplumIntegration.sharedInstance.setEnabled($0)
             }
         )
+    }
+
+    private func createStatusText() -> NSAttributedString {
+        let statusText = NSMutableAttributedString()
+        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor]))
+        statusText.append(NSAttributedString(string: " "))
+        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSForegroundColorAttributeName: UIConstants.HighlightBlue]))
+        return statusText
     }
 
     override var url: URL? {
@@ -844,7 +852,11 @@ class TouchIDPasscodeSetting: Setting {
 
         let title: String
         if LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-            title = AuthenticationStrings.touchIDPasscodeSetting
+            if #available(iOS 11.0, *), LAContext().biometryType == .typeFaceID {
+                title = AuthenticationStrings.faceIDPasscodeSetting
+            } else {
+                title = AuthenticationStrings.touchIDPasscodeSetting
+            }
         } else {
             title = AuthenticationStrings.passcode
         }

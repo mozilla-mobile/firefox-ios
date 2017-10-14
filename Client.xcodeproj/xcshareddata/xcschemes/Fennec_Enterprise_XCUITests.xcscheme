@@ -176,6 +176,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "BaseTestCase">
+               </Test>
+               <Test
                   Identifier = "SiteLoadTest">
                </Test>
             </SkippedTests>

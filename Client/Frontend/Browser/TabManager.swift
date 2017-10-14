@@ -809,7 +809,7 @@ extension TabManager {
     }
 }
 
-extension TabManager : WKNavigationDelegate {
+extension TabManager: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
     }

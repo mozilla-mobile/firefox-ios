@@ -14,7 +14,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = NSLocalizedString("Settings", comment: "Settings")
+        navigationItem.title = NSLocalizedString("Settings", comment: "Title in the settings view controller title bar")
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
             style: UIBarButtonItemStyle.done,
@@ -106,7 +106,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         ]
 
         if #available(iOS 11, *) {
-            privacySettings.append(ContentBlockerSetting(settings:self))
+            privacySettings.append(ContentBlockerSetting(settings: self))
         }
 
         privacySettings += [

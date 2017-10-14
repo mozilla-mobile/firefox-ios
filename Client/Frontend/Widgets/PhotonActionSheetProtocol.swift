@@ -112,15 +112,12 @@ extension PhotonActionSheetProtocol {
     func getTabActions(tab: Tab, buttonView: UIView,
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
                        findInPage:  @escaping () -> Void,
-                       presentableVC: PresentableVC) -> Array<[PhotonActionSheetItem]> {
+                       presentableVC: PresentableVC,
+                       success: @escaping (String) -> Void) -> Array<[PhotonActionSheetItem]> {
         
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
             tab.toggleDesktopSite()
-        }
-        
-        let setHomePage = PhotonActionSheetItem(title: Strings.AppMenuSetHomePageTitleString, iconString: "menu-Home") { action in
-            HomePageHelper(prefs: self.profile.prefs).setHomePage(toTab: tab, presentAlertOn: presentableVC)
         }
         
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
@@ -128,6 +125,7 @@ extension PhotonActionSheetProtocol {
             guard let url = tab.url?.displayURL else { return }
 
             self.profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
+            success(Strings.AppMenuAddToReadingListConfirmMessage)
         }
 
         let findInPageAction = PhotonActionSheetItem(title: Strings.AppMenuFindInPageTitleString, iconString: "menu-FindInPage") { action in
@@ -148,6 +146,7 @@ extension PhotonActionSheetProtocol {
                                                                                 withUserData: userData,
                                                                                 toApplication: UIApplication.shared)
             tab.isBookmarked = true
+            success(Strings.AppMenuAddBookmarkConfirmMessage)
         }
         
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { action in
@@ -158,6 +157,7 @@ extension PhotonActionSheetProtocol {
                 $0.removeByURL(absoluteString).uponQueue(.main) { res in
                     if res.isSuccess {
                         tab.isBookmarked = false
+                        success(Strings.AppMenuRemoveBookmarkConfirmMessage)
                     }
                 }
             }
@@ -186,6 +186,7 @@ extension PhotonActionSheetProtocol {
 
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
             UIPasteboard.general.url = self.tabManager.selectedTab?.canonicalURL?.displayURL
+            success(Strings.AppMenuCopyURLConfirmMessage)
         }
         
         let bookmarkAction = tab.isBookmarked ? removeBookmark : bookmarkPage
@@ -194,7 +195,7 @@ extension PhotonActionSheetProtocol {
             topActions.append(addReadingList)
         }
         
-        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, setHomePage], [share]]
+        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites], [share]]
     }
 }
 

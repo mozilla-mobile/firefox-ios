@@ -686,7 +686,7 @@ extension TabTrayController: PhotonActionSheetProtocol {
     func didTapDelete(_ sender: UIButton) {
         let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.closeTabsForCurrentTray() }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: .cancel, handler: nil))
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
         controller.popoverPresentationController?.sourceView = sender
         controller.popoverPresentationController?.sourceRect = sender.bounds
         present(controller, animated: true, completion: nil)
@@ -752,7 +752,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         if let favIcon = tab.displayFavicon {
             tabCell.favicon.sd_setImage(with: URL(string: favIcon.url)!)
         } else {
-            var defaultFavicon = UIImage(named: "defaultFavicon")
+            let defaultFavicon = UIImage(named: "defaultFavicon")
             if tab.isPrivate {
                 tabCell.favicon.image = defaultFavicon
                 tabCell.favicon.tintColor = UIColor.white
@@ -968,10 +968,8 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         guard let tpvc = viewControllerToCommit as? TabPeekViewController else { return }
         tabManager.selectTab(tpvc.tab)
-        _ = self.navigationController?.popViewController(animated: true)
-
+        navigationController?.popViewController(animated: true)
         delegate?.tabTrayDidDismiss(self)
-
     }
 }
 

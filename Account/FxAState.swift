@@ -47,7 +47,7 @@ func state(fromJSON json: JSON) -> FxAState? {
     }
     if let version = json["version"].int {
         if version == StateSchemaVersion {
-            return stateV1(fromJSON:json)
+            return stateV1(fromJSON: json)
         }
     }
     return nil
@@ -55,7 +55,7 @@ func state(fromJSON json: JSON) -> FxAState? {
 
 func stateV1(fromJSON json: JSON) -> FxAState? {
     if let labelString = json["label"].string {
-        if let label = FxAStateLabel(rawValue:  labelString) {
+        if let label = FxAStateLabel(rawValue: labelString) {
             switch label {
             case .engagedBeforeVerified:
                 if let

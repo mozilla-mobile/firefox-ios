@@ -7,28 +7,28 @@ import XCTest
 class SettingsTest: BaseTestCase {
     var navigator: Navigator!
     var app: XCUIApplication!
-    
+
     override func setUp() {
         super.setUp()
         app = XCUIApplication()
         navigator = createScreenGraph(app).navigator(self)
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }
-    
+
     func testHelpOpensSUMOInTab() {
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
-        
+
         while settingsTableView.staticTexts["Help"].exists == false {
             settingsTableView.swipeUp()
         }
         let helpMenu = settingsTableView.cells["Help"]
         XCTAssertTrue(helpMenu.isEnabled)
         helpMenu.tap()
-        
+
         waitForValueContains(app.textFields["url"], value: "support.mozilla.org")
         waitforExistence(app.webViews.staticTexts["Firefox for iOS"])
         XCTAssertTrue(app.webViews.staticTexts["Firefox for iOS"].exists)

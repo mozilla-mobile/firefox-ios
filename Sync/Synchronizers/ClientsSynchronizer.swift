@@ -383,7 +383,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                         self.lastFetched = responseTimestamp!
                         if isFirstSync,
                            let notifier = notifier {
-                            DispatchQueue.global(qos: DispatchQoS.background.qosClass).async { _ = notifier.notifyAll(collectionsChanged: ["clients"]) }
+                            DispatchQueue.global(qos: DispatchQoS.background.qosClass).async { _ = notifier.notifyAll(collectionsChanged: ["clients"], reason: "firstsync") }
                         }
                         return succeed()
                 }

@@ -242,7 +242,13 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 
     fileprivate func updateTitleForTouchIDState() {
         if LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-            navigationItem.title = AuthenticationStrings.touchIDPasscodeSetting
+            let title: String
+            if #available(iOS 11.0, *), LAContext().biometryType == .typeFaceID {
+                title = AuthenticationStrings.faceIDPasscodeSetting
+            } else {
+                title = AuthenticationStrings.touchIDPasscodeSetting
+            }
+            navigationItem.title = title
         } else {
             navigationItem.title = AuthenticationStrings.passcode
         }
@@ -260,11 +266,15 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         var requirePasscodeSectionChildren: [Setting] = [RequirePasscodeSetting(settings: self)]
         let localAuthContext = LAContext()
         if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
+            let title: String
+            if #available(iOS 11.0, *), localAuthContext.biometryType == .typeFaceID {
+                title = Strings.UseFaceID
+            } else {
+                title = Strings.UseTouchID
+            }
             requirePasscodeSectionChildren.append(
                 TouchIDSetting(
-                    title: NSAttributedString.tableRowTitle(
-                        NSLocalizedString("Use Touch ID", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID"), enabled: true
-                    ),
+                    title: NSAttributedString.tableRowTitle(title, enabled: true),
                     navigationController: self.navigationController,
                     delegate: nil,
                     enabled: true,

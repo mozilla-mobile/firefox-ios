@@ -18,7 +18,7 @@ class TitleActivityItemProvider: UIActivityItemProvider {
         super.init(placeholderItem: title)
     }
 
-    override var item : Any {
+    override var item: Any {
         if let activityType = activityType {
             if TitleActivityItemProvider.activityTypesToIgnore.contains(activityType) {
                 return NSNull()
