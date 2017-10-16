@@ -15,6 +15,7 @@ protocol TabLocationViewDelegate {
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton)
+    func tabLocationViewDidLongPressPageOptions(_ tabLocationVIew: TabLocationView)
     
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
@@ -157,6 +158,8 @@ class TabLocationView: UIView {
         pageOptionsButton.imageView?.contentMode = .center
         pageOptionsButton.accessibilityLabel = NSLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
         pageOptionsButton.accessibilityIdentifier = "TabLocationView.pageOptionsButton"
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELDidLongPressPageOptionsButton))
+        pageOptionsButton.addGestureRecognizer(longPressGesture)
         return pageOptionsButton
     }()
     
@@ -252,6 +255,10 @@ class TabLocationView: UIView {
     
     func SELDidPressPageOptionsButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapPageOptions(self, from: button)
+    }
+    
+    func SELDidLongPressPageOptionsButton(_ recognizer: UILongPressGestureRecognizer) {
+        delegate?.tabLocationViewDidLongPressPageOptions(self)
     }
 
     func SELlongPressLocation(_ recognizer: UITapGestureRecognizer) {
