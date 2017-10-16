@@ -60,6 +60,9 @@ class ContextMenuHelper: NSObject {
 
         delegate?.contextMenuHelper(self, didLongPressElements: elements, gestureRecognizer: sender)
 
+        // To prevent the tapped link from proceeding with navigation, "cancel" the native WKWebView
+        // `_highlightLongPressRecognizer`. This preserves the original behavior as seen here:
+        // https://github.com/WebKit/webkit/blob/d591647baf54b4b300ca5501c21a68455429e182/Source/WebKit/UIProcess/ios/WKContentViewInteraction.mm#L1600-L1614
         if let nativeHighlightLongPressRecognizer = self.nativeHighlightLongPressRecognizer,
             nativeHighlightLongPressRecognizer.isEnabled {
             nativeHighlightLongPressRecognizer.isEnabled = false
