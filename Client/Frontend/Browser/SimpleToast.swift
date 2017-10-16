@@ -18,11 +18,9 @@ struct SimpleToastUX {
 struct SimpleToast {
 
     func showAlertWithText(_ text: String, bottomContainer: UIView) {
-        guard let window = UIApplication.shared.windows.first else { return }
-        
         let toast = self.createView()
         toast.text = text
-        window.addSubview(toast)
+        bottomContainer.addSubview(toast)
         toast.snp.makeConstraints { (make) in
             make.width.equalTo(bottomContainer)
             make.left.equalTo(bottomContainer)
