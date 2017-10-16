@@ -24,25 +24,27 @@ class NoImageTests: BaseTestCase {
 
     private func showImages() {
         navigator.goto(BrowserTabMenu)
-        app.tables.cells[NoImageButtonIdentifier].tap()
+        app.tables["Context Menu"].cells["menu-NoImageMode"].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func hideImages() {
         navigator.goto(BrowserTabMenu)
-        app.tables.cells[NoImageButtonIdentifier].tap()
+        app.tables["Context Menu"].cells["menu-NoImageMode"].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func checkShowImages() {
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells[NoImageButtonIdentifier])
+        waitforExistence(app.tables["Context Menu"].cells["menu-NoImageMode"])
+        XCTAssertTrue(app.tables["Context Menu"].cells["menu-NoImageMode"].staticTexts["Show Images"].exists)
         navigator.goto(BrowserTab)
     }
 
     private func checkHideImages() {
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells[NoImageButtonIdentifier])
+        waitforExistence(app.tables["Context Menu"].cells["menu-NoImageMode"])
+        XCTAssertTrue(app.tables["Context Menu"].cells["menu-NoImageMode"].staticTexts["Hide Images"].exists)
         navigator.goto(BrowserTab)
     }
 
