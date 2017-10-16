@@ -19,6 +19,7 @@ class ContextMenuHelper: NSObject {
 
     weak var delegate: ContextMenuHelperDelegate?
 
+    fileprivate var nativeHighlightLongPressRecognizer: UILongPressGestureRecognizer?
     fileprivate var elements: Elements?
 
     required init(tab: Tab) {
@@ -35,7 +36,9 @@ class ContextMenuHelper: NSObject {
         let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
         webView.configuration.userContentController.addUserScript(userScript)
 
-        if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") {
+        nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:") as? UILongPressGestureRecognizer
+
+        if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") as? UILongPressGestureRecognizer {
             nativeLongPressRecognizer.removeTarget(nil, action: nil)
             nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected(_:)))
         }
@@ -56,6 +59,12 @@ class ContextMenuHelper: NSObject {
         }
 
         delegate?.contextMenuHelper(self, didLongPressElements: elements, gestureRecognizer: sender)
+
+        if let nativeHighlightLongPressRecognizer = self.nativeHighlightLongPressRecognizer,
+            nativeHighlightLongPressRecognizer.isEnabled {
+            nativeHighlightLongPressRecognizer.isEnabled = false
+            nativeHighlightLongPressRecognizer.isEnabled = true
+        }
 
         self.elements = nil
     }
