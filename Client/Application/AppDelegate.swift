@@ -14,6 +14,7 @@ import SyncTelemetry
 import SwiftRouter
 import Sync
 import CoreSpotlight
+import UserNotifications
 
 private let log = Logger.browserLogger
 
@@ -160,11 +161,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             profile.flushAccount()
         }
 
-        // check to see if we started 'cos someone tapped on a notification.
-        if let localNotification = launchOptions?[UIApplicationLaunchOptionsKey.localNotification] as? UILocalNotification {
-            viewURLInNewTab(localNotification)
-        }
-        
         adjustIntegration = AdjustIntegration(profile: profile)
 
         let leanplum = LeanplumIntegration.sharedInstance
@@ -295,6 +291,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
+        UNUserNotificationCenter.current().delegate = self
+        self.registerNotificationCategories()
+
         #if BUDDYBUILD
             print("Setting up BuddyBuild SDK")
             BuddyBuildSDK.setup()
@@ -317,6 +316,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         return shouldPerformAdditionalDelegateHandling
+    }
+
+    func registerNotificationCategories() {
+        let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue, title: Strings.SentTabViewActionTitle, options: .foreground)
+        let bookmarkAction = UNNotificationAction(identifier: SentTabAction.bookmark.rawValue, title: Strings.SentTabBookmarkActionTitle, options: .authenticationRequired)
+        let readingListAction = UNNotificationAction(identifier: SentTabAction.readingList.rawValue, title: Strings.SentTabAddToReadingListActionTitle, options: .authenticationRequired)
+
+        // Register ourselves to handle the notification category set by NotificationService for APNS notifications
+        let sentTabCategory = UNNotificationCategory(identifier: "org.mozilla.ios.SentTab.placeholder", actions: [viewAction, bookmarkAction, readingListAction], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))
+        UNUserNotificationCenter.current().setNotificationCategories([sentTabCategory])
     }
 
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
@@ -553,32 +562,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         FaviconFetcher.userAgent = UserAgent.desktopUserAgent()
     }
 
-    func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UILocalNotification, completionHandler: @escaping () -> Void) {
-        if let actionId = identifier {
-            if let action = SentTabAction(rawValue: actionId) {
-                viewURLInNewTab(notification)
-                switch action {
-                case .bookmark:
-                    addBookmark(notification)
-                    break
-                case .readingList:
-                    addToReadingList(notification)
-                    break
-                default:
-                    break
-                }
-            } else {
-                print("ERROR: Unknown notification action received")
-            }
-        } else {
-            print("ERROR: Unknown notification received")
-        }
-    }
-
-    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
-        viewURLInNewTab(notification)
-    }
-
     fileprivate func presentEmailComposerWithLogs() {
         if let buildNumber = Bundle.main.object(forInfoDictionaryKey: String(kCFBundleVersionKey)) as? NSString {
             let mailComposeViewController = MFMailComposeViewController()
@@ -645,17 +628,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return false
     }
 
-    fileprivate func viewURLInNewTab(_ notification: UILocalNotification) {
-        if let alertURL = notification.userInfo?[TabSendURLKey] as? String {
+    fileprivate func viewURLInNewTab(_ notification: UNNotification) {
+        if let alertURL = notification.request.content.userInfo[TabSendURLKey] as? String {
             if let urlToOpen = URL(string: alertURL) {
                 browserViewController.openURLInNewTab(urlToOpen, isPrivileged: true)
             }
         }
     }
 
-    fileprivate func addBookmark(_ notification: UILocalNotification) {
-        if let alertURL = notification.userInfo?[TabSendURLKey] as? String,
-            let title = notification.userInfo?[TabSendTitleKey] as? String {
+    fileprivate func addBookmark(_ notification: UNNotification) {
+        if let alertURL = notification.request.content.userInfo[TabSendURLKey] as? String,
+            let title = notification.request.content.userInfo[TabSendTitleKey] as? String {
             let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: alertURL), title: title, favicon: nil)
                 browserViewController.addBookmark(tabState)
 
@@ -665,9 +648,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
     }
 
-    fileprivate func addToReadingList(_ notification: UILocalNotification) {
-        if let alertURL = notification.userInfo?[TabSendURLKey] as? String,
-           let title = notification.userInfo?[TabSendTitleKey] as? String {
+    fileprivate func addToReadingList(_ notification: UNNotification) {
+        if let alertURL = notification.request.content.userInfo[TabSendURLKey] as? String,
+            let title = notification.request.content.userInfo[TabSendTitleKey] as? String {
             if let urlToOpen = URL(string: alertURL) {
                 NotificationCenter.default.post(name: NSNotification.Name.FSReadingListAddReadingListItem, object: self, userInfo: ["URL": urlToOpen, "Title": title])
             }
@@ -716,9 +699,27 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     }
 }
 
-extension AppDelegate {
-    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
-        FxALoginHelper.sharedInstance.application(application, didRegisterUserNotificationSettings: notificationSettings)
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if let action = SentTabAction(rawValue: response.actionIdentifier) {
+            viewURLInNewTab(response.notification)
+            switch action {
+            case .bookmark:
+                addBookmark(response.notification)
+                break
+            case .readingList:
+                addToReadingList(response.notification)
+                break
+            default:
+                break
+            }
+        } else {
+            log.error("Unknown notification action received")
+        }
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        viewURLInNewTab(notification)
     }
 }
 
@@ -845,30 +846,36 @@ class AppSyncDelegate: SyncDelegate {
 
             // check to see what the current notification settings are and only try and send a notification if
             // the user has agreed to them
-            if let currentSettings = app.currentUserNotificationSettings {
-                if currentSettings.types.rawValue & UIUserNotificationType.alert.rawValue != 0 {
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                if settings.alertSetting == .enabled {
                     if Logger.logPII {
                         log.info("Displaying notification for URL \(url.absoluteString)")
                     }
 
-                    let notification = UILocalNotification()
-                    notification.fireDate = Date()
-                    notification.timeZone = NSTimeZone.default
+                    let notificationContent = UNMutableNotificationContent()
                     let title: String
                     if let deviceName = deviceName {
                         title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
                     } else {
                         title = Strings.SentTab_TabArrivingNotification_NoDevice_title
                     }
-                    notification.alertTitle = title
-                    notification.alertBody = url.absoluteDisplayExternalString
-                    notification.userInfo = [TabSendURLKey: url.absoluteString, TabSendTitleKey: title]
-                    notification.alertAction = nil
+                    notificationContent.title = title
+                    notificationContent.body = url.absoluteDisplayExternalString
+                    notificationContent.userInfo = [TabSendURLKey: url.absoluteString, TabSendTitleKey: title]
+                    notificationContent.categoryIdentifier = "org.mozilla.ios.SentTab.placeholder"
 
-                    // Restore this when we fix Bug 1364420.
-                    // notification.category = TabSendCategory
+                    // `timeInterval` must be greater than zero
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
 
-                    app.presentLocalNotificationNow(notification)
+                    // The identifier for each notification request must be unique in order to be created
+                    let requestIdentifier = "\(TabSendCategory).\(url.absoluteString)"
+                    let request = UNNotificationRequest(identifier: requestIdentifier, content: notificationContent, trigger: trigger)
+
+                    UNUserNotificationCenter.current().add(request) { error in
+                        if let error = error {
+                            log.error(error.localizedDescription)
+                        }
+                    }
                 }
             }
         }

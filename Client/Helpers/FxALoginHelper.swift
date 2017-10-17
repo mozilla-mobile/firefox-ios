@@ -109,22 +109,25 @@ class FxALoginHelper {
         // Now: we have an account that does not have push notifications set up.
         // however, we need to deal with cases of asking for permissions too frequently.
         let asked = profile.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? true
-        let permitted = application.currentUserNotificationSettings!.types != .none
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            if settings.authorizationStatus != UNAuthorizationStatus.authorized {
 
-        // If we've never asked(*), then we should probably ask.
-        // If we've asked already, then we should not ask again.
-        // TODO: add UI to tell the user to go flip the Setting app.
-        // (*) if we asked in a prior release, and the user was ok with it, then there is no harm asking again.
-        // If the user denied permission, or flipped permissions in the Settings app, then 
-        // we'll bug them once, but this is probably unavoidable.
-        if asked && !permitted {
-            return loginDidSucceed()
+                // If we've never asked(*), then we should probably ask.
+                // If we've asked already, then we should not ask again.
+                // TODO: add UI to tell the user to go flip the Setting app.
+                // (*) if we asked in a prior release, and the user was ok with it, then there is no harm asking again.
+                // If the user denied permission, or flipped permissions in the Settings app, then
+                // we'll bug them once, but this is probably unavoidable.
+                if asked {
+                    return self.loginDidSucceed()
+                }
+            }
+
+            // By the time we reach here, we haven't registered for APNS
+            // Either we've never asked the user, or the user declined, then re-enabled
+            // the notification in the Settings app.
+            self.requestUserNotifications(application)
         }
-
-        // By the time we reach here, we haven't registered for APNS
-        // Either we've never asked the user, or the user declined, then re-enabled
-        // the notification in the Settings app.
-        requestUserNotifications(application)
     }
 
     // This is called when the user logs into a new FxA account.
@@ -188,15 +191,6 @@ class FxALoginHelper {
             }
             self.application(application, canDisplayUserNotifications: granted)
         }
-    }
-
-    // This is necessarily called from the AppDelegate.
-    // Once we have permission from the user to display notifications, we should 
-    // try and register for APNS. If not, then start syncing.
-    func application(_ application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
-        let types = notificationSettings.types
-        let allowed = types != .none && types.rawValue != 0
-        self.application(application, canDisplayUserNotifications: allowed)
     }
 
     func application(_ application: UIApplication, canDisplayUserNotifications allowed: Bool) {
