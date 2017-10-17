@@ -11,14 +11,14 @@ open class MailtoLinkHandler {
 
     func launchMailClientForScheme(_ scheme: String, metadata: MailToMetadata, defaultMailtoURL: URL) {
         guard let provider = mailSchemeProviders[scheme], let mailURL = provider.newEmailURLFromMetadata(metadata) else {
-            UIApplication.shared.openURL(defaultMailtoURL)
+            UIApplication.shared.open(defaultMailtoURL, options: [:])
             return
         }
 
         if UIApplication.shared.canOpenURL(mailURL) {
-            UIApplication.shared.openURL(mailURL)
+            UIApplication.shared.open(mailURL, options: [:])
         } else {
-            UIApplication.shared.openURL(defaultMailtoURL)
+            UIApplication.shared.open(defaultMailtoURL, options: [:])
         }
     }
 
