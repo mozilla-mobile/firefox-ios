@@ -161,6 +161,7 @@ class Tab: NSObject {
 
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.allowsBackForwardNavigationGestures = true
+            webView.allowsLinkPreview = false
             webView.backgroundColor = UIColor.lightGray
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame
