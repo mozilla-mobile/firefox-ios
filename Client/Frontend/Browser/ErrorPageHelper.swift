@@ -272,7 +272,7 @@ extension ErrorPageHelper: TabHelper {
 
             switch type {
             case ErrorPageHelper.MessageOpenInSafari:
-                UIApplication.shared.openURL(originalURL)
+                UIApplication.shared.open(originalURL, options: [:])
             case ErrorPageHelper.MessageCertVisitOnce:
                 if let cert = certFromErrorURL(errorURL),
                    let host = originalURL.host {

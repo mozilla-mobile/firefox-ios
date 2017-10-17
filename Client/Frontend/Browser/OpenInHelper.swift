@@ -104,7 +104,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
         }
         let passLibrary = PKPassLibrary()
         if passLibrary.containsPass(pass) {
-            UIApplication.shared.openURL(pass.passURL!)
+            UIApplication.shared.open(pass.passURL!, options: [:])
         } else {
             let addController = PKAddPassesViewController(pass: pass)
             UIApplication.shared.keyWindow?.rootViewController?.present(addController, animated: true, completion: nil)
