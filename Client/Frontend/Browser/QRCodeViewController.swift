@@ -10,8 +10,8 @@ import Shared
 private struct QRCodeViewControllerUX {
     static let navigationBarBackgroundColor = UIColor.black
     static let navigationBarTitleColor = UIColor.white
-    static let maskViewBackgroungColor = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.5)
-    static let isLightingNavigationItemColor = UIColor(colorLiteralRed: 0.45, green: 0.67, blue: 0.84, alpha: 1)
+    static let maskViewBackgroungColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+    static let isLightingNavigationItemColor = UIColor(red: 0.45, green: 0.67, blue: 0.84, alpha: 1)
 }
 
 protocol QRCodeViewControllerDelegate {
