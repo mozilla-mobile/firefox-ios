@@ -72,6 +72,7 @@ class Tab: NSObject {
     var restoring: Bool = false
     var pendingScreenshot = false
     var url: URL?
+    var mimeType: String?
 
     fileprivate var _noImageMode = false
 
