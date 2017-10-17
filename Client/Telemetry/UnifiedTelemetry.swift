@@ -40,7 +40,7 @@ class UnifiedTelemetry {
 
     @objc func uploadError(notification: NSNotification) {
         guard let error = notification.userInfo?["error"] as? NSError else { return }
-       SentryIntegration.shared.send(message: "Upload Error", tag: "UnifiedTelemetry", severity: .info, extra: ["Error": error.localizedDescription])
+        SentryIntegration.shared.send(message: "Upload Error", tag: "UnifiedTelemetry", severity: .info, extra: ["Error": error.debugDescription])
     }
 }
 
