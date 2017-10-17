@@ -24,10 +24,15 @@ class ContextMenuHelper: NSObject {
 
     required init(tab: Tab) {
         super.init()
+
         self.tab = tab
 
-        let path = Bundle.main.path(forResource: "ContextMenu", ofType: "js")!
-        let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
+        guard let path = Bundle.main.path(forResource: "ContextMenu", ofType: "js"),
+                let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String,
+                let webView = tab.webView else {
+            return
+        }
+
         let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
         webView.configuration.userContentController.addUserScript(userScript)
 
@@ -78,18 +83,20 @@ extension ContextMenuHelper: TabHelper {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let data = message.body as? [String : AnyObject] else {
+        guard let data = message.body as? [String: AnyObject] else {
             return
         }
 
         var linkURL: URL?
-        if let urlString = data["link"] as? String {
-            linkURL = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet())!)
+        if let urlString = data["link"] as? String,
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+            linkURL = URL(string: escapedURLString)
         }
 
         var imageURL: URL?
-        if let urlString = data["image"] as? String {
-            imageURL = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet())!)
+        if let urlString = data["image"] as? String,
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+            imageURL = URL(string: escapedURLString)
         }
 
         if linkURL != nil || imageURL != nil {
