@@ -43,9 +43,9 @@ class BookmarksPanelTests: KIFTestCase {
         // Set up the buffer.
         let bufferDate = Date.now()
         let changedBufferRecords = [
-            BookmarkMirrorItem.folder(BookmarkRoots.ToolbarFolderGUID, modified: bufferDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Bookmarks Toolbar", description: nil, children: ["aaa", "bbb"]),
-            BookmarkMirrorItem.bookmark("aaa", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: nil, title: "AAA", description: nil, URI: "http://getfirefox.com", tags: "[]", keyword: nil),
-            BookmarkMirrorItem.livemark("bbb", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: nil, title: "Some Livemark", description: nil, feedURI: "https://www.google.ca", siteURI: "https://www.google.ca") ]
+            BookmarkMirrorItem.folder(BookmarkRoots.ToolbarFolderGUID, dateAdded: Date.now(), modified: bufferDate, hasDupe: false, parentID: BookmarkRoots.RootGUID, parentName: nil, title: "Bookmarks Toolbar", description: nil, children: ["aaa", "bbb"]),
+            BookmarkMirrorItem.bookmark("aaa", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: nil, title: "AAA", description: nil, URI: "http://getfirefox.com", tags: "[]", keyword: nil),
+            BookmarkMirrorItem.livemark("bbb", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: nil, title: "Some Livemark", description: nil, feedURI: "https://www.google.ca", siteURI: "https://www.google.ca") ]
         
         if let bookmarks = getAppBookmarkStorage() {
             XCTAssert(bookmarks.applyRecords(changedBufferRecords).value.isSuccess)
@@ -58,6 +58,7 @@ class BookmarksPanelTests: KIFTestCase {
 
         createSomeBufferBookmarks()
 
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks Toolbar")).perform(grey_tap())
@@ -72,7 +73,7 @@ class BookmarksPanelTests: KIFTestCase {
         // … so we show the truncated URL.
         // Strangely, earlgrey cannot find the label in buddybuild, but passes locally.
         // Using KIF for this check for now.
-        EarlGrey.select(elementWithMatcher: grey_accessibilityValue("https://www.google.ca")).assert(grey_sufficientlyVisible())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityValue("www.google.ca/")).assert(grey_sufficientlyVisible())
     }
 
     private func navigateBackInTableView() {
@@ -84,11 +85,11 @@ class BookmarksPanelTests: KIFTestCase {
     }
 
     private func makeBookmark(guid: GUID, parentID: GUID, title: String) -> BookmarkMirrorItem {
-        return BookmarkMirrorItem.bookmark(guid, modified: Date.now(), hasDupe: false, parentID: parentID, parentName: nil, title: title, description: nil, URI: "http://unused.com", tags: "[]", keyword: nil)
+        return BookmarkMirrorItem.bookmark(guid, dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: parentID, parentName: nil, title: title, description: nil, URI: "http://unused.com", tags: "[]", keyword: nil)
     }
     
     private func makeFolder(guid: GUID, parentID: GUID, title: String, childrenGuids: [GUID]) -> BookmarkMirrorItem {
-        return BookmarkMirrorItem.folder(guid, modified: Date.now(), hasDupe: false, parentID: parentID, parentName: nil, title: title, description: nil, children: childrenGuids)
+        return BookmarkMirrorItem.folder(guid, dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: parentID, parentName: nil, title: title, description: nil, children: childrenGuids)
     }
     
     private func assertRowExists(withTitle title: String) {
@@ -117,6 +118,7 @@ class BookmarksPanelTests: KIFTestCase {
             makeFolder(guid: BookmarkRoots.MobileFolderGUID, parentID: BookmarkRoots.RootGUID, title: "", childrenGuids: ["bm-guid0"])
             ])
         XCTAssert(applyResult.value.isSuccess)
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
         
         // is this in the root?
@@ -183,6 +185,8 @@ class BookmarksPanelTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: deleteAction).perform(grey_tap())
 
         XCTAssert(tv.numberOfRows(inSection: 0) == rowCount - 1)
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
     }
   
     func testRefreshBookmarks() {
@@ -195,6 +199,7 @@ class BookmarksPanelTests: KIFTestCase {
             makeFolder(guid: BookmarkRoots.MobileFolderGUID, parentID: BookmarkRoots.RootGUID, title: "", childrenGuids: ["bm-guid0"])
             ])
         XCTAssert(applyResult.value.isSuccess)
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
         
         // Add a bookmark
@@ -207,5 +212,7 @@ class BookmarksPanelTests: KIFTestCase {
         
         // Verify new bookmark exists
         assertRowExists(withTitle: "NewBookmark")
+
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
     }
 }
