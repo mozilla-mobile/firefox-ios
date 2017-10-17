@@ -48,6 +48,7 @@ class HomePageSettingsTest: BaseTestCase {
         }
     }
 
+    /* Disabled due to new Photon UI
     // Check whether the toolbar/menu shows homepage icon
     func testShowHomePageIcon() {
         // Check the Homepage icon is present in menu by default
@@ -70,4 +71,5 @@ class HomePageSettingsTest: BaseTestCase {
         XCTAssertEqual(value, currentURL,
                        "The webpage typed does not match with the one saved")
     }
+     */
 }
