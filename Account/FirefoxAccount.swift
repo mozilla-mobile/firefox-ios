@@ -48,7 +48,7 @@ open class FirefoxAccount {
     // deferred safely.)  If no advance() is in progress, a new shared deferred will be scheduled and returned.  To
     // prevent data races against the shared deferred, advance() locks accesses to `advanceDeferred` using
     // `advanceLock`.
-    fileprivate var advanceLock = OSSpinLock()
+    fileprivate var advanceLock = os_unfair_lock()
     fileprivate var advanceDeferred: Deferred<FxAState>?
 
     open var actionNeeded: FxAActionNeeded {
@@ -340,11 +340,11 @@ open class FirefoxAccount {
     }
 
     @discardableResult open func advance() -> Deferred<FxAState> {
-        OSSpinLockLock(&advanceLock)
+        os_unfair_lock_lock(&advanceLock)
         if let deferred = advanceDeferred {
             // We already have an advance() in progress.  This consumer can chain from it.
             log.debug("advance already in progress; returning shared deferred.")
-            OSSpinLockUnlock(&advanceLock)
+            os_unfair_lock_unlock(&advanceLock)
             return deferred
         }
 
@@ -372,11 +372,11 @@ open class FirefoxAccount {
 
         advanceDeferred = deferred
         log.debug("no advance() in progress; setting and returning new shared deferred.")
-        OSSpinLockUnlock(&advanceLock)
+        os_unfair_lock_unlock(&advanceLock)
 
         deferred.upon { _ in
             // This advance() is complete.  Clear the shared deferred.
-            OSSpinLockLock(&self.advanceLock)
+            os_unfair_lock_lock(&self.advanceLock)
             if let existingDeferred = self.advanceDeferred, existingDeferred === deferred {
                 // The guard should not be needed, but should prevent trampling racing consumers.
                 self.advanceDeferred = nil
@@ -384,7 +384,7 @@ open class FirefoxAccount {
             } else {
                 log.warning("advance() completed but shared deferred is not existing deferred; ignoring potential bug!")
             }
-            OSSpinLockUnlock(&self.advanceLock)
+            os_unfair_lock_lock(&self.advanceLock)
         }
         return deferred
     }
