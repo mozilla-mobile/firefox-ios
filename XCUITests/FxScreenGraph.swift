@@ -447,7 +447,7 @@ extension Navigator {
 
         if PageMenuOptions.contains(view) {
             self.goto(PageOptionsMenu)
-            app.collectionViews.cells[view.rawValue].tap()
+            app.tables["Context Menu"].cells[view.rawValue].tap()
         } else if BrowserMenuOptions.contains(view) {
             self.goto(BrowserTabMenu)
             app.collectionViews.cells[view.rawValue].tap()
