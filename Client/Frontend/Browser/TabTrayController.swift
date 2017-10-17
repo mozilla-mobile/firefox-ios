@@ -1030,19 +1030,20 @@ class TrayToolbar: UIView {
         maskButton.accessibilityIdentifier = "TabTrayController.maskButton"
 
         buttonToCenter?.snp.makeConstraints { make in
-            make.center.equalTo(self)
+            make.centerX.equalTo(self)
+            make.top.equalTo(self)
             make.size.equalTo(toolbarButtonSize)
         }
 
         addTabButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.top.equalTo(self)
             make.right.equalTo(self).offset(-sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
 
         addSubview(maskButton)
         maskButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.top.equalTo(self)
             make.left.equalTo(self).offset(sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
