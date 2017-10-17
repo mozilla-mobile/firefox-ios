@@ -4,6 +4,9 @@
 
 import XCTest
 
+let url_1 = "www.google.com"
+let url_2 = ["url": "www.mozilla.org", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
+
 class BookmarkingTests: BaseTestCase {
     var navigator: Navigator!
     var app: XCUIApplication!
@@ -55,18 +58,16 @@ class BookmarkingTests: BaseTestCase {
     }
 
     func testBookmarkingUI() {
-        let url1 = "www.google.com"
-        let url2 = "www.mozilla.org"
         // Go to a webpage, and add to bookmarks, check it's added
         navigator.createNewTab()
-        loadWebPage(url1)
+        loadWebPage(url_1)
         navigator.nowAt(BrowserTab)
         bookmark()
         checkBookmarked()
 
         // Load a different page on a new tab, check it's not bookmarked
         navigator.createNewTab()
-        loadWebPage(url2)
+        loadWebPage(url_2["url"]!)
         navigator.nowAt(BrowserTab)
         checkUnbookmarked()
 
@@ -79,5 +80,32 @@ class BookmarkingTests: BaseTestCase {
         // Open it, then unbookmark it, and check it's no longer on bookmarks home panel
         unbookmark()
         checkUnbookmarked()
+    }
+
+    private func checkEmptyBookmarkList() {
+        let list = app.tables["Bookmarks List"].cells.count
+        XCTAssertEqual(list, 0, "There should not be any entry in the bookmarks list")
+    }
+
+    private func checkItemInBookmarkList() {
+        let list = app.tables["Bookmarks List"].cells.count
+        XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
+        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)
+    }
+
+    func testAccessBookmarksFromContextMenu() {
+        //First time there is not any bookmark
+        navigator.browserPerformAction(.openBookMarksOption)
+        checkEmptyBookmarkList()
+
+        //Add a bookmark
+        navigator.createNewTab()
+        loadWebPage(url_2["url"]!)
+        navigator.nowAt(BrowserTab)
+        bookmark()
+
+        //There should be a bookmark
+        navigator.browserPerformAction(.openBookMarksOption)
+        checkItemInBookmarkList()
     }
 }
