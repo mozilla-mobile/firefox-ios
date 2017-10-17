@@ -4,6 +4,9 @@
 
 import XCTest
 
+let url_1 = "www.google.com"
+let url_2 = ["url": "www.mozilla.org", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
+
 class BookmarkingTests: BaseTestCase {
     var navigator: Navigator!
     var app: XCUIApplication!
@@ -55,18 +58,16 @@ class BookmarkingTests: BaseTestCase {
     }
 
     func testBookmarkingUI() {
-        let url1 = "www.google.com"
-        let url2 = "www.mozilla.org"
         // Go to a webpage, and add to bookmarks, check it's added
         navigator.createNewTab()
-        loadWebPage(url1)
+        loadWebPage(url_1)
         navigator.nowAt(BrowserTab)
         bookmark()
         checkBookmarked()
 
         // Load a different page on a new tab, check it's not bookmarked
         navigator.createNewTab()
-        loadWebPage(url2)
+        loadWebPage(url_2["url"]!)
         navigator.nowAt(BrowserTab)
         checkUnbookmarked()
 
