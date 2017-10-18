@@ -146,7 +146,7 @@ open class FxAClient10 {
         if kB.count != 32 {
             return nil
         }
-        return kB.sha256.subdata(in:  0..<16).hexEncodedString
+        return kB.sha256.subdata(in: 0..<16).hexEncodedString
     }
 
     open class func quickStretchPW(_ email: Data, password: Data) -> Data {
@@ -343,21 +343,22 @@ open class FxAClient10 {
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.devicesResponse)
     }
     
-    open func notify(deviceIDs: [GUID], collectionsChanged collections: [String], withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxANotifyResponse>> {
+    open func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxANotifyResponse>> {
         let httpBody = JSON([
             "to": deviceIDs,
             "payload": [
                 "version": 1,
                 "command": "sync:collection_changed",
                 "data": [
-                    "collections": collections
+                    "collections": collections,
+                    "reason": reason
                 ]
             ]
         ])
         return self.notify(httpBody: httpBody, withSessionToken: sessionToken)
     }
 
-    open func notifyAll(ownDeviceId: GUID, collectionsChanged collections: [String], withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxANotifyResponse>> {
+    open func notifyAll(ownDeviceId: GUID, collectionsChanged collections: [String], reason: String, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxANotifyResponse>> {
         let httpBody = JSON([
             "to": "all",
             "excluded": [ownDeviceId],
@@ -365,7 +366,8 @@ open class FxAClient10 {
                 "version": 1,
                 "command": "sync:collection_changed",
                 "data": [
-                    "collections": collections
+                    "collections": collections,
+                    "reason": reason
                 ]
             ]
         ])

@@ -75,6 +75,7 @@ class DomainAutocompleteTest: BaseTestCase {
     // Ensure that the scheme is included in the autocompletion.
     func testEnsureSchemeIncludedAutocompletion() {
         navigator.openURL(urlString: website["url"]!)
+        waitUntilPageLoad()
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("https")
         waitForValueContains(app.textFields["address"], value: "mozilla")

@@ -46,7 +46,7 @@ extension Strings {
     public static let ASTopSitesTitle =  NSLocalizedString("ActivityStream.TopSites.SectionTitle", value: "Top Sites", comment: "Section title label for Top Sites")
     public static let HighlightVistedText = NSLocalizedString("ActivityStream.Highlights.Visited", value: "Visited", comment: "The description of a highlight if it is a site the user has visited")
     public static let HighlightBookmarkText = NSLocalizedString("ActivityStream.Highlights.Bookmark", value: "Bookmarked", comment: "The description of a highlight if it is a site the user has bookmarked")
-    public static let PocketTrendingText = NSLocalizedString("ActivitySream.Pocket.Trending", value: "Trending", comment: "The description of a Pocket Story")
+    public static let PocketTrendingText = NSLocalizedString("ActivityStream.Pocket.Trending", value: "Trending", comment: "The description of a Pocket Story")
 }
 
 // Home Panel Context Menu.
@@ -211,18 +211,52 @@ extension Strings {
     public static let SettingsNewTabHighlightsBookmarks = NSLocalizedString("Settings.NewTab.Option.HighlightsBookmarks", value: "Recent Bookmarks", comment: "Option in the settings to turn off recent bookmarks in the Highlights section")
 }
 
-// Custom account settings
+// Custom account settings - These strings did not make it for the v10 l10n deadline so we have turned them into regular strings. These strings will come back localized in a next version.
+
 extension Strings {
-    public static let SettingsAdvanceAccountSectionName = NSLocalizedString("Settings.AdvanceAccount.SectionName", value: "Account Settings", comment: "Label used as an item in Settings. When touched it will open a dialog to setup advance Firefox account settings.")
-    public static let SettingsAdvanceAccountTitle = NSLocalizedString("Settings.AdvanceAccount.SectionName", value: "Advance Account Settings", comment: "Title displayed in header of the setting panel.")
-    public static let SettingsAdvanceAccountUrlPlaceholder = NSLocalizedString("Settings.AdvanceAccount.UrlPlaceholder", value: "Custom Account Url", comment: "Title displayed in header of the setting panel.")
-    
-    public static let SettingsAdvanceAccountUrlUpdatedAlertMessage = NSLocalizedString("Settings.AdvanceAccount.UpdatedAlertMessage", value: "Firefox account service updated. To begin using custom server, please log out and re-login.", comment: "Messaged displayed when sync service has been successfully set.")
-    public static let SettingsAdvanceAccountUrlUpdatedAlertOk = NSLocalizedString("Settings.AdvanceAccount.UpdatedAlertOk", value: "OK", comment: "Ok button on custom sync service updated alert")
-    
-    public static let SettingsAdvanceAccountUrlErrorAlertTitle = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertTitle", value: "Error", comment: "Error alert message title.")
-    public static let SettingsAdvanceAccountUrlErrorAlertMessage = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertMessage", value: "There was an error while attempting to parse the url. Please make sure that it is a valid Firefox Account root url.", comment: "Messaged displayed when sync service has an error setting a custom sync url.")
-    public static let SettingsAdvanceAccountUrlErrorAlertOk = NSLocalizedString("Settings.AdvanceAccount.ErrorAlertOk", value: "OK", comment: "Ok button on custom sync service error alert.")
+    // Settings.AdvanceAccount.SectionName
+    // Label used as an item in Settings. When touched it will open a dialog to setup advance Firefox account settings.
+    public static let SettingsAdvanceAccountSectionName = "Account Settings"
+
+    // Settings.AdvanceAccount.SectionFooter
+    // Details for using custom Firefox Account service.
+    public static let SettingsAdvanceAccountSectionFooter = "To use a custom Firefox Account and sync servers, specify the root Url of the Firefox Account site. This will download the configuration and setup this device to use the new service. After the new service has been set, you will need to create a new Firefox Account or login with an existing one."
+
+    // Settings.AdvanceAccount.SectionName
+    // Title displayed in header of the setting panel.
+    public static let SettingsAdvanceAccountTitle = "Advance Account Settings"
+
+    // Settings.AdvanceAccount.UrlPlaceholder
+    // Title displayed in header of the setting panel.
+    public static let SettingsAdvanceAccountUrlPlaceholder = "Custom Account Url"
+
+    // Settings.AdvanceAccount.UpdatedAlertMessage
+    // Messaged displayed when sync service has been successfully set.
+    public static let SettingsAdvanceAccountUrlUpdatedAlertMessage = "Firefox account service updated. To begin using custom server, please log out and re-login."
+
+    // Settings.AdvanceAccount.UpdatedAlertOk
+    // Ok button on custom sync service updated alert
+    public static let SettingsAdvanceAccountUrlUpdatedAlertOk = "OK"
+
+    // Settings.AdvanceAccount.ErrorAlertTitle
+    // Error alert message title.
+    public static let SettingsAdvanceAccountUrlErrorAlertTitle = "Error"
+
+    // Settings.AdvanceAccount.ErrorAlertMessage
+    // Messaged displayed when sync service has an error setting a custom sync url.
+    public static let SettingsAdvanceAccountUrlErrorAlertMessage = "There was an error while attempting to parse the url. Please make sure that it is a valid Firefox Account root url."
+
+    // Settings.AdvanceAccount.ErrorAlertOk
+    // Ok button on custom sync service error alert.
+    public static let SettingsAdvanceAccountUrlErrorAlertOk = "OK"
+
+    // Settings.AdvanceAccount.UseCustomAccountsServiceTitle
+    // Toggle switch to use custom FxA server
+    public static let SettingsAdvanceAccountUseCustomAccountsServiceTitle = "Use Custom Account Service"
+
+    // Settings.AdvanceAccount.UrlEmptyErrorAlertMessage
+    // No custom service set.
+    public static let SettingsAdvanceAccountEmptyUrlErrorAlertMessage = "Please enter a custom account url before enabling."
 }
 
 // Open With Settings
@@ -351,7 +385,7 @@ extension Strings {
 extension Strings {
     public static let AppMenuAddToReadingListTitleString = NSLocalizedString("Menu.AddToReadingList.Title", tableName: "Menu", value: "Add to Reading List", comment: "Label for the button, displayed in the menu, used to add a page to the reading list.")
     public static let AppMenuShowTabsTitleString = NSLocalizedString("Menu.ShowTabs.Title", tableName: "Menu", value: "Show Tabs", comment: "Label for the button, displayed in the menu, used to open the tabs tray")
-    public static let AppMenuSharePageTitleString = NSLocalizedString("Menu.SharePageAction.Title", tableName: "Menu", value: "Share Page With...", comment: "Label for the button, displayed in the menu, used to open the share dialog.")
+    public static let AppMenuSharePageTitleString = NSLocalizedString("Menu.SharePageAction.Title", tableName: "Menu", value: "Share Page With…", comment: "Label for the button, displayed in the menu, used to open the share dialog.")
     public static let AppMenuCopyURLTitleString = NSLocalizedString("Menu.CopyURL.Title", tableName: "Menu", value: "Copy URL", comment: "Label for the button, displayed in the menu, used to copy the page url to the clipboard.")
     public static let AppMenuNewTabTitleString = NSLocalizedString("Menu.NewTabAction.Title", tableName: "Menu", value: "Open New Tab", comment: "Label for the button, displayed in the menu, used to open a new tab")
     public static let AppMenuNewPrivateTabTitleString = NSLocalizedString("Menu.NewPrivateTabAction.Title", tableName: "Menu", value: "Open New Private Tab", comment: "Label for the button, displayed in the menu, used to open a new private tab.")
@@ -364,7 +398,6 @@ extension Strings {
     public static let AppMenuSettingsTitleString = NSLocalizedString("Menu.OpenSettingsAction.Title", tableName: "Menu", value: "Settings", comment: "Label for the button, displayed in the menu, used to open the Settings menu.")
     public static let AppMenuCloseAllTabsTitleString = NSLocalizedString("Menu.CloseAllTabsAction.Title", tableName: "Menu", value: "Close All Tabs", comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
     public static let AppMenuOpenHomePageTitleString = NSLocalizedString("Menu.OpenHomePageAction.Title", tableName: "Menu", value: "Open Homepage", comment: "Label for the button, displayed in the menu, used to navigate to the home page.")
-    public static let AppMenuSetHomePageTitleString = NSLocalizedString("Menu.SetHomePageAction.Title", tableName: "Menu", value: "Set as Homepage", comment: "Label for the button, displayed in the menu, used to set the homepage if none is currently set.")
     public static let AppMenuTopSitesTitleString = NSLocalizedString("Menu.OpenTopSitesAction.AccessibilityLabel", tableName: "Menu", value: "Top Sites", comment: "Accessibility label for the button, displayed in the menu, used to open the Top Sites home panel.")
     public static let AppMenuBookmarksTitleString = NSLocalizedString("Menu.OpenBookmarksAction.AccessibilityLabel", tableName: "Menu", value: "Bookmarks", comment: "Accessibility label for the button, displayed in the menu, used to open the Bbookmarks home panel.")
     public static let AppMenuHistoryTitleString = NSLocalizedString("Menu.OpenHistoryAction.AccessibilityLabel", tableName: "Menu", value: "History", comment: "Accessibility label for the button, displayed in the menu, used to open the History home panel.")
@@ -397,12 +430,19 @@ extension Strings {
     public static let TrackingProtectionOptionOnOffHeader = NSLocalizedString("Settings.TrackingProtectionOption.EnabledStateHeaderLabel", value: "Use Tracking Protection to Block Known Trackers", comment: "Description label shown at the top of tracking protection options screen.")
     public static let TrackingProtectionOptionOnOffFooter = NSLocalizedString("Settings.TrackingProtectionOption.EnabledStateFooterLabel", value: "Tracking is the collection of your browsing data across multiple websites. Tracking can be used to build a profile and display content based on your browsing and personal information.", comment: "Description label shown on tracking protection options screen.")
     public static let TrackingProtectionOptionBlockListsTitle = NSLocalizedString("Settings.TrackingProtection.BlockListsTitle", value: "Block Lists", comment: "Title for tracking protection options section where Basic/Strict block list can be selected")
-    public static let TrackingProtectionOptionBlockListsHeader = NSLocalizedString("Settings.TrackingProtection.BlockListsHeader", value:  "You can choose which list Firefox will use to block Web elements that may track your browsing activity.", comment: "Header description for tracking protection options section where Basic/Strict block list can be selected")
+    public static let TrackingProtectionOptionBlockListsHeader = NSLocalizedString("Settings.TrackingProtection.BlockListsHeader", value: "You can choose which list Firefox will use to block Web elements that may track your browsing activity.", comment: "Header description for tracking protection options section where Basic/Strict block list can be selected")
 
     public static let TrackingProtectionOptionBlockListTypeBasic = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasic", value: "Basic (Recommended)", comment: "Tracking protection settings option for using the basic blocklist.")
     public static let TrackingProtectionOptionBlockListTypeBasicDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasicDescription", value: "Allows some trackers so websites function properly.", comment: "Tracking protection settings option description for using the basic blocklist.")
     public static let TrackingProtectionOptionBlockListTypeStrict = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrict", value: "Strict", comment: "Tracking protection settings option for using the strict blocklist.")
     public static let TrackingProtectionOptionBlockListTypeStrictDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrictDescription", value: "Blocks known trackers. Some websites may not function properly.", comment: "Tracking protection settings option description for using the strict blocklist.")
+}
+
+// Settings Home
+extension Strings {
+    public static let SendUsageSettingTitle = NSLocalizedString("Settings.SendUsage.Title", value: "Send Usage Data", comment: "The title for the setting to send usage data.")
+    public static let SendUsageSettingLink = NSLocalizedString("Settings.SendUsage.Link", value: "Learn More.", comment: "title for a link that explains how mozilla collects telemetry")
+    public static let SendUsageSettingMessage = NSLocalizedString("Settings.SendUsage.Message", value: "Mozilla strives to only collect what we need to provide and improve Firefox for everyone.", comment: "A short description that explains why mozilla collects usage data.")
 }
 
 // Do not track 

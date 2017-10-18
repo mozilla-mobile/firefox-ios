@@ -730,7 +730,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
         }
 
         let req = client.requestGET(uriForRecord(guid))
-        _ = req.responsePartialParsedJSON(queue:collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
+        _ = req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
 
             if let json: JSON = response.result.value {
                 let envelope = EnvelopeJSON(json)

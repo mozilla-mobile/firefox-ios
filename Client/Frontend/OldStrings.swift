@@ -53,7 +53,7 @@ private func obsoleteStrings() {
     _ = NSLocalizedString("Clear Private Data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
     _ = NSLocalizedString("Clear Private Data", tableName: "ClearPrivateData", comment: "Navigation title in settings.")
     _ = NSLocalizedString("Clear Private Data", tableName: "ClearPrivateData", comment: "Button in settings that clears private data for the selected items.")
-    _ = NSLocalizedString("Opening %@", comment:"Opening an external URL")
+    _ = NSLocalizedString("Opening %@", comment: "Opening an external URL")
     _ = NSLocalizedString("This will open in another application", comment: "Opening an external app")
     _ = NSLocalizedString("Not now", comment: "Button to not save the user's password")
     _ = NSLocalizedString("Update", comment: "Button to update the user's password")

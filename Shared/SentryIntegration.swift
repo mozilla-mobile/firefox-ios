@@ -19,7 +19,7 @@ public class SentryIntegration {
 
     private var enabled = false
 
-    private var attributes: [String : Any] = [:]
+    private var attributes: [String: Any] = [:]
 
     public func setup(sendUsageData: Bool) {
         assert(!enabled, "SentryIntegration.setup() should only be called once")
@@ -114,7 +114,7 @@ public class SentryIntegration {
         }
     }
 
-    public func addAttributes(_ attributes: [String : Any]) {
+    public func addAttributes(_ attributes: [String: Any]) {
         self.attributes.merge(with: attributes)
     }
 }

@@ -28,25 +28,25 @@ class BaseTestCase: XCTestCase {
         app.launchArguments = launchArguments
         app.activate()
     }
-    
+
     //If it is a first run, first run window should be gone
     func dismissFirstRunUI() {
         let firstRunUI = XCUIApplication().scrollViews["IntroViewController.scrollView"]
-        
+
         if firstRunUI.exists {
             firstRunUI.swipeLeft()
             XCUIApplication().buttons["Start Browsing"].tap()
         }
     }
-    
+
     func waitforExistence(_ element: XCUIElement, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "exists == true", file: file, line: line)
     }
-    
-    func waitforNoExistence(_ element: XCUIElement, file: String = #file, line: UInt = #line) {
-        waitFor(element, with: "exists != true", file: file, line: line)
+
+    func waitforNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
     }
-    
+
     func waitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
     }
@@ -77,18 +77,25 @@ class BaseTestCase: XCTestCase {
                     file: file, line: line)
         }
     }
-    
+
     func iPad() -> Bool {
         if UIDevice.current.userInterfaceIdiom == .pad {
             return true
         }
         return false
     }
+
+    func waitUntilPageLoad() {
+        let app = XCUIApplication()
+        let progressIndicator = app.progressIndicators.element(boundBy: 0)
+
+        waitforNoExistence(progressIndicator, timeoutValue: 20.0)
+    }
 }
 
 extension BaseTestCase {
     func tabTrayButton(forApp app: XCUIApplication) -> XCUIElement {
-        return app.buttons["TopTabsViewController.tabsButton"].exists ? app.buttons["TopTabsViewController.tabsButton"] : app.buttons["URLBarView.tabsButton"]
+        return app.buttons["TopTabsViewController.tabsButton"].exists ? app.buttons["TopTabsViewController.tabsButton"] : app.buttons["TabToolbar.tabsButton"]
     }
 }
 

@@ -63,7 +63,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .default) { previewAction, viewController in
                     guard let url = self.tab?.canonicalURL else { return }
                     UIPasteboard.general.url = url
-                    SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage)
+                    SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
                 })
             }
         }

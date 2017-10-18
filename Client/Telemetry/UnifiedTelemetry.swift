@@ -24,7 +24,7 @@ class UnifiedTelemetry {
         telemetryConfig.isUploadEnabled = sendUsageData
 
         let prefs = profile.prefs
-        Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
+        Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
             var outputDict = inputDict // make a mutable copy
             if let newTabChoice = prefs.stringForKey(NewTabAccessors.PrefKey) {
                 outputDict["defaultNewTabExperience"] = newTabChoice as AnyObject?
@@ -40,7 +40,7 @@ class UnifiedTelemetry {
 
     @objc func uploadError(notification: NSNotification) {
         guard let error = notification.userInfo?["error"] as? NSError else { return }
-        SentryIntegration.shared.send(message: "Upload Error", tag: "UnifiedTelemetry", severity: .info, extra: ["Error": error.localizedDescription])
+        SentryIntegration.shared.send(message: "Upload Error", tag: "UnifiedTelemetry", severity: .info, extra: ["Error": error.debugDescription])
     }
 }
 

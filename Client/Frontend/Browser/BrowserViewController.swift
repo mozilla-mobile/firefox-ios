@@ -921,6 +921,12 @@ class BrowserViewController: UIViewController {
     fileprivate func runScriptsOnWebView(_ webView: WKWebView) {
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler: nil)
         webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
+
+        if #available(iOS 11, *) {
+            if NoImageModeHelper.isActivated(profile.prefs) {
+                webView.evaluateJavaScript("__firefox__.NoImageMode.setEnabled(true)", completionHandler: nil)
+            }
+        }
     }
 
     func updateUIForReaderHomeStateForTab(_ tab: Tab) {
@@ -1287,7 +1293,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = self
-        let controller = UINavigationController(rootViewController: qrCodeViewController)
+        let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
         self.present(controller, animated: true, completion: nil)
     }
 
@@ -1301,12 +1307,23 @@ extension BrowserViewController: URLBarDelegate {
             self.updateFindInPageVisibility(visible: true)
         }
         
+        let successCallback: (String) -> Void = { (successMessage) in
+            SimpleToast().showAlertWithText(successMessage, bottomContainer: self.webViewContainer)
+        }
+        
         guard let tab = tabManager.selectedTab, tab.url != nil else { return }
         
         // The logic of which actions appear when isnt final.
         let pageActions = getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
-                                        findInPage: findInPageAction, presentableVC: self)
+                                        findInPage: findInPageAction, presentableVC: self, success: successCallback)
+
         presentSheetWith(actions: pageActions, on: self, from: button)
+    }
+    
+    func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
+        guard let tab = tabManager.selectedTab else { return }
+        guard let url = tab.canonicalURL?.displayURL else { return }
+        presentActivityViewController(url, tab: tab, sourceView: button, sourceRect: button.bounds, arrowDirection: .up)
     }
     
     func urlBarDidPressStop(_ urlBar: URLBarView) {
@@ -1448,7 +1465,7 @@ extension BrowserViewController: URLBarDelegate {
 
         profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(DispatchQueue.main) { result in
             if var urlString = result.successValue,
-                let escapedQuery = possibleQuery.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed),
+                let escapedQuery = possibleQuery.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed),
                 let range = urlString.range(of: "%s") {
                 urlString.replaceSubrange(range, with: escapedQuery)
 
@@ -1522,7 +1539,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: toggleActionTitle, style: .default, handler: { _ in tab.toggleDesktopSite() }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Label for Cancel button"), style: .cancel, handler: nil))
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
         controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
         controller.popoverPresentationController?.sourceRect = button.frame
         present(controller, animated: true, completion: nil)
@@ -1542,7 +1559,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // ensure that any keyboards or spinners are dismissed before presenting the menu
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         var actions: [[PhotonActionSheetItem]] = []
 
         actions.append(getHomePanelActions())
@@ -1554,6 +1571,20 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
+    }
+    
+    func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
+            self.tabManager.addTabAndSelect(isPrivate: false)
+        }))
+        controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
+            self.tabManager.addTabAndSelect(isPrivate: true)
+        }))
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
+        controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
+        controller.popoverPresentationController?.sourceRect = button.frame
+        present(controller, animated: true, completion: nil)
     }
 
     func showBackForwardList() {
@@ -2197,7 +2228,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
     func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController, didConfigureStyle style: ReaderModeStyle) {
         // Persist the new style to the profile
-        let encodedStyle: [String:Any] = style.encodeAsDictionary()
+        let encodedStyle: [String: Any] = style.encodeAsDictionary()
         profile.prefs.setObject(encodedStyle, forKey: ReaderModeProfileKeyStyle)
         // Change the reader mode style on all tabs that have reader mode active
         for tabIndex in 0..<tabManager.count {
@@ -2321,7 +2352,7 @@ extension BrowserViewController {
 
         var readerModeStyle = DefaultReaderModeStyle
         if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
-            if let style = ReaderModeStyle(dict: dict as [String : AnyObject]) {
+            if let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
                 readerModeStyle = style
             }
         }
@@ -2337,7 +2368,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode, readerMode.state == ReaderModeState.active {
                 var readerModeStyle = DefaultReaderModeStyle
                 if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
-                    if let style = ReaderModeStyle(dict: dict as [String : AnyObject]) {
+                    if let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
                         readerModeStyle = style
                     }
                 }
@@ -2406,7 +2437,12 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 }
 
 extension BrowserViewController: IntroViewControllerDelegate {
-    @discardableResult func presentIntroViewController(_ force: Bool = false) -> Bool {
+    @discardableResult func presentIntroViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
+        if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
+            self.launchFxAFromDeeplinkURL(url)
+            return true
+        }
+        
         if force || profile.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
             let introViewController = IntroViewController()
             introViewController.delegate = self
@@ -2415,7 +2451,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 introViewController.preferredContentSize = CGSize(width: IntroViewControllerUX.Width, height: IntroViewControllerUX.Height)
                 introViewController.modalPresentationStyle = UIModalPresentationStyle.formSheet
             }
-            present(introViewController, animated: true) {
+            present(introViewController, animated: animated) {
                 // On first run (and forced) open up the homepage in the background.
                 if let homePageURL = HomePageAccessors.getHomePage(self.profile.prefs), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
                     tab.loadRequest(URLRequest(url: homePageURL))
@@ -2430,7 +2466,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
     
     func launchFxAFromDeeplinkURL(_ url: URL) {
         self.profile.prefs.removeObjectForKey("AdjustDeeplinkKey")
-        let query = url.getQuery()
+        var query = url.getQuery()
+        query["entrypoint"] = "adjust_deepklink_ios"
         let fxaParams: FxALaunchParams
         fxaParams = FxALaunchParams(query: query)
         self.presentSignInViewController(fxaParams)
@@ -2443,10 +2480,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 _ = self.navigationController?.popToRootViewController(animated: true)
             }
             
-            if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
-                self.launchFxAFromDeeplinkURL(url)
-                return
-            }
             if requestToLogin {
                 self.presentSignInViewController()
             }
@@ -2492,7 +2525,7 @@ extension BrowserViewController: FxAContentViewControllerDelegate {
 }
 
 extension BrowserViewController: ContextMenuHelperDelegate {
-    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UILongPressGestureRecognizer) {
+    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UIGestureRecognizer) {
         // locationInView can return (0, 0) when the long press is triggered in an invalid page
         // state (e.g., long pressing a link before the document changes, then releasing after a
         // different page loads).
@@ -2635,6 +2668,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 }
             }
     }
+
+    func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer) {
+        displayedPopoverController?.dismiss(animated: true) {
+            self.displayedPopoverController = nil
+        }
+    }
 }
 
 extension BrowserViewController {
@@ -2754,7 +2793,7 @@ extension BrowserViewController {
 
                 self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: image, searchTemplate: searchQuery, suggestTemplate: nil, isCustomEngine: true))
                 let Toast = SimpleToast()
-                Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded)
+                Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded, bottomContainer: self.webViewContainer)
             }
         }
 

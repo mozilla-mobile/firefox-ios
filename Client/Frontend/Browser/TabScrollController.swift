@@ -31,6 +31,11 @@ class TabScrollingController: NSObject {
         }
     }
 
+    // Constraint-based animation is causing PDF docs to flicker. This is used to bypass this animation.
+    var isTabShowingPDF: Bool {
+        return (tab?.mimeType ?? "") == MimeType.PDF.rawValue
+    }
+
     weak var header: UIView?
     weak var footer: UIView?
     weak var urlBar: URLBarView?
@@ -71,7 +76,7 @@ class TabScrollingController: NSObject {
     fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? CGSize.zero }
     fileprivate var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     fileprivate var topScrollHeight: CGFloat { return header?.frame.height ?? 0 }
-    fileprivate var bottomScrollHeight: CGFloat { return urlBar?.frame.height ?? 0 }
+    fileprivate var bottomScrollHeight: CGFloat { return footer?.frame.height ?? 0 }
     fileprivate var snackBarsFrame: CGRect { return snackBars?.frame ?? CGRect.zero }
 
     fileprivate var lastContentOffset: CGFloat = 0
@@ -116,7 +121,7 @@ class TabScrollingController: NSObject {
             completion: completion)
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
             if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
                 showToolbars(animated: true, completion: nil)
@@ -179,7 +184,9 @@ private extension TabScrollingController {
 
             lastContentOffset = translation.y
             if checkRubberbandingForDelta(delta) && checkScrollHeightIsLargeEnoughForScrolling() {
-                if (toolbarState != .collapsed || contentOffset.y <= 0) && contentOffset.y + scrollViewHeight < contentSize.height {
+                let bottomIsNotRubberbanding = contentOffset.y + scrollViewHeight < contentSize.height
+                let topIsRubberbanding = contentOffset.y <= 0
+                if isTabShowingPDF || ((toolbarState != .collapsed || topIsRubberbanding) && bottomIsNotRubberbanding) {
                     scrollWithDelta(delta)
                 }
 
@@ -282,9 +289,9 @@ extension TabScrollingController: UIScrollViewDelegate {
 
         if (decelerate || (toolbarState == .animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .up {
-                showToolbars(animated: true)
+                showToolbars(animated: !isTabShowingPDF)
             } else if scrollDirection == .down {
-                hideToolbars(animated: true)
+                hideToolbars(animated: !isTabShowingPDF)
             }
         }
     }

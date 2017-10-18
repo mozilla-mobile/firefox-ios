@@ -809,7 +809,7 @@ extension TabManager {
     }
 }
 
-extension TabManager : WKNavigationDelegate {
+extension TabManager: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
     }
@@ -951,15 +951,20 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationResponse: WKNavigationResponse,
                  decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-            var res = WKNavigationResponsePolicy.allow
-            for delegate in delegates {
-                delegate.webView?(webView, decidePolicyFor: navigationResponse, decisionHandler: { policy in
-                    if policy == .cancel {
-                        res = policy
-                    }
-                })
-            }
+        var res = WKNavigationResponsePolicy.allow
+        for delegate in delegates {
+            delegate.webView?(webView, decidePolicyFor: navigationResponse, decisionHandler: { policy in
+                if policy == .cancel {
+                    res = policy
+                }
+            })
+        }
 
-            decisionHandler(res)
+        if res == .allow, let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            let tab = appDelegate.browserViewController.tabManager[webView]
+            tab?.mimeType = navigationResponse.response.mimeType
+        }
+
+        decisionHandler(res)
     }
 }

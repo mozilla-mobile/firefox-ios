@@ -117,7 +117,7 @@ extension SQLiteBookmarks {
      *
      * Sorry about the long line. If we break it, the indenting below gets crazy.
      */
-    fileprivate func insertBookmarkInTransaction(url: URL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String, conn: SQLiteDBConnection) throws -> Void {
+    fileprivate func insertBookmarkInTransaction(url: URL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String, conn: SQLiteDBConnection) throws {
 
         log.debug("Inserting bookmark in transaction on thread \(Thread.current)")
 
@@ -319,7 +319,7 @@ private extension BookmarkMirrorItem {
     }
 }
 
-private func deleteStructureForGUIDs(_ guids: [GUID], fromTable table: String, connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) throws -> Void {
+private func deleteStructureForGUIDs(_ guids: [GUID], fromTable table: String, connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) throws {
     log.debug("Deleting \(guids.count) parents from \(table).")
     let chunks = chunk(guids, by: maxVars)
     for chunk in chunks {
@@ -330,7 +330,7 @@ private func deleteStructureForGUIDs(_ guids: [GUID], fromTable table: String, c
     }
 }
 
-private func insertStructureIntoTable(_ table: String, connection: SQLiteDBConnection, children: [Args], maxVars: Int) throws -> Void {
+private func insertStructureIntoTable(_ table: String, connection: SQLiteDBConnection, children: [Args], maxVars: Int) throws {
     if children.isEmpty {
         return
     }
@@ -378,7 +378,7 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
     /**
      * Remove child records for any folders that've been deleted or are empty.
      */
-    fileprivate func deleteChildrenInTransactionWithGUIDs(_ guids: [GUID], connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) throws -> Void {
+    fileprivate func deleteChildrenInTransactionWithGUIDs(_ guids: [GUID], connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) throws {
         try deleteStructureForGUIDs(guids, fromTable: TableBookmarksBufferStructure, connection: connection, withMaxVars: maxVars)
     }
 

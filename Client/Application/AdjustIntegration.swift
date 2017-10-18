@@ -85,10 +85,12 @@ class AdjustIntegration: NSObject {
     /// timestamp in seconds since the UNIX epoch.
 
     fileprivate func saveAttribution(_ attribution: ADJAttribution) throws {
-        let dictionary = NSMutableDictionary(dictionary: attribution.dictionary())
-        dictionary["_timestamp"] = NSNumber(value: Int64(Date().timeIntervalSince1970) as Int64)
-        let data = try JSONSerialization.data(withJSONObject: dictionary, options: [JSONSerialization.WritingOptions.prettyPrinted])
-        try data.write(to: URL(fileURLWithPath: try getAttributionPath()), options: [])
+        if let attributionDictionary = attribution.dictionary() {
+            let dictionary = NSMutableDictionary(dictionary: attributionDictionary)
+            dictionary["_timestamp"] = NSNumber(value: Int64(Date().timeIntervalSince1970) as Int64)
+            let data = try JSONSerialization.data(withJSONObject: dictionary, options: [JSONSerialization.WritingOptions.prettyPrinted])
+            try data.write(to: URL(fileURLWithPath: try getAttributionPath()), options: [])
+        }
     }
 
     /// Return the path to the `AdjustAttribution.json` file. Throws an `NSError` if we could not build the path.

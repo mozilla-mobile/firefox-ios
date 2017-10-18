@@ -5,7 +5,7 @@
 import XCTest
 
 class ClipBoardTests: BaseTestCase {
-    let url = "www.google.com"
+    let url = "www.example.com"
     var navigator: Navigator!
     var app: XCUIApplication!
 
@@ -14,51 +14,55 @@ class ClipBoardTests: BaseTestCase {
         app = XCUIApplication()
         navigator = createScreenGraph(app).navigator(self)
     }
-    
+
     override func tearDown() {
         navigator = nil
         app = nil
         super.tearDown()
     }
-    
+
     //Check for test url in the browser
     func checkUrl() {
         let urlTextField = app.textFields["url"]
-        waitForValueContains(urlTextField, value: "www.google")
+        waitForValueContains(urlTextField, value: "www.example")
     }
-    
+
     //Copy url from the browser
     func copyUrl() {
-        app.textFields["url"].tap()
-        app.textFields["address"].press(forDuration: 1.7)
+        navigator.goto(URLBarOpen)
+        app.textFields["address"].press(forDuration: 3)
+        waitforExistence(app.menuItems["Select All"])
         app.menuItems["Select All"].tap()
+        waitforExistence(app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
+        app.typeText("\r")
+        navigator.nowAt(BrowserTab)
     }
-    
+
     //Check copied url is same as in browser
     func checkCopiedUrl() {
         if let myString = UIPasteboard.general.string {
-            var value = app.textFields["address"].value as! String
-            if myString.hasSuffix("/") == false {
-                value = "\(value)/"
+            var value = app.textFields["url"].value as! String
+            if value.hasPrefix("http") == false {
+                value = "http://\(value)"
             }
             XCTAssertNotNil(myString)
             XCTAssertEqual(myString, value, "Url matches with the UIPasteboard")
         }
     }
-    
+
     // This test is disabled in release, but can still run on master
     func testClipboard() {
         navigator.openURL(urlString: url)
+        waitUntilPageLoad()
         checkUrl()
         copyUrl()
         checkCopiedUrl()
-        restart(app)
-        dismissFirstRunUI()
-        app.textFields["url"].tap()
-        app.textFields["address"].press(forDuration: 1.7)
+
+        navigator.createNewTab()
+        navigator.goto(URLBarOpen)
+        app.textFields["address"].press(forDuration: 3)
         app.menuItems["Paste"].tap()
-        app.typeText("\r")
+        waitForValueContains(app.textFields["address"], value: "www.example.com")
     }
 }
-

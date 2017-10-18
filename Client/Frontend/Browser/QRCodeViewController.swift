@@ -56,7 +56,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         // Setup the NavigationBar
         self.navigationController?.navigationBar.barTintColor = QRCodeViewControllerUX.navigationBarBackgroundColor
         let navigationTitleAttribute: NSDictionary = NSDictionary(object: QRCodeViewControllerUX.navigationBarTitleColor, forKey: NSForegroundColorAttributeName as NSCopying)
-        self.navigationController?.navigationBar.titleTextAttributes = (navigationTitleAttribute as! [String : AnyObject])
+        self.navigationController?.navigationBar.titleTextAttributes = (navigationTitleAttribute as! [String: AnyObject])
 
         // Setup the NavigationItem
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-goBack"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(goBack))
@@ -85,7 +85,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         self.view.addSubview(scanLine)
         self.view.addSubview(instructionsLabel)
 
-        scanRange = UIDevice.current.userInterfaceIdiom == .pad ? CGRect(x: 0, y: 0, width: view.frame.width / 2, height:  view.frame.width / 2) : CGRect(x: 0, y: 0, width:  view.frame.width / 3 * 2, height:  view.frame.width / 3 * 2)
+        scanRange = UIDevice.current.userInterfaceIdiom == .pad ? CGRect(x: 0, y: 0, width: view.frame.width / 2, height: view.frame.width / 2) : CGRect(x: 0, y: 0, width: view.frame.width / 3 * 2, height: view.frame.width / 3 * 2)
 
         scanRange.center = UIScreen.main.bounds.center
         scanBorderHeight = UIDevice.current.userInterfaceIdiom == .pad ? view.frame.width / 2 : view.frame.width / 3 * 2
@@ -252,7 +252,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     }
 }
 
-extension UINavigationController {
+class QRCodeNavigationController: UINavigationController {
     override open var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }

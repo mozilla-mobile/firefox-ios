@@ -41,8 +41,8 @@ public protocol ResettableSynchronizer {
  * that a collection changed.
  */
 public protocol CollectionChangedNotifier {
-    func notify(deviceIDs: [GUID], collectionsChanged collections: [String]) -> Success
-    func notifyAll(collectionsChanged collections: [String]) -> Success
+    func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success
+    func notifyAll(collectionsChanged collections: [String], reason: String) -> Success
 }
 
 // TODO: return values?
