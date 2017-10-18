@@ -214,6 +214,7 @@ class NavigationTest: BaseTestCase {
     func testNavigationPreservesDesktopSiteOnSameHost() {
         clearData()
         navigator.openURL(urlString: urlAddOns)
+        waitUntilPageLoad()
 
         // Mobile view by default, desktop view should be available
         navigator.browserPerformAction(.toggleDesktopOption)
@@ -233,7 +234,11 @@ class NavigationTest: BaseTestCase {
         navigator.browserPerformAction(.toggleDesktopOption)
 
         // After reloading a website the desktop view should be kept
-        app.buttons["TabToolbar.stopReloadButton"].tap()
+        if iPad() {
+                app.buttons["Reload"].tap()
+        } else {
+                app.buttons["TabToolbar.stopReloadButton"].tap()
+        }
         waitForValueContains(app.textFields["url"], value: urlAddOns)
         checkDesktopView()
 
@@ -241,9 +246,14 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.browserPerformAction(.toggleDesktopOption)
         waitForValueContains(app.textFields["url"], value: urlAddOns)
+        waitUntilPageLoad()
 
         // After reloading a website the mobile view should be kept
-        app.buttons["TabToolbar.stopReloadButton"].tap()
+        if iPad() {
+            app.buttons["Reload"].tap()
+        } else {
+            app.buttons["TabToolbar.stopReloadButton"].tap()
+        }
         checkMobileView()
     }
 
