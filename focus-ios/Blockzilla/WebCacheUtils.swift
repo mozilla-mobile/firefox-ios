@@ -5,13 +5,20 @@
 import Foundation
 
 class WebCacheUtils {
+    static let FolderWhiteList = ["KSCrash", "io.sentry", "Snapshots"]
+
     static func reset() {
         URLCache.shared.removeAllCachedResponses()
         HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
 
         // Delete other remnants in the cache directory, such as HSTS.plist.
         if let cachesPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first {
-            FileManager.default.removeItemAndContents(path: cachesPath)
+            let contents = (try? FileManager.default.contentsOfDirectory(atPath: cachesPath)) ?? []
+            for file in contents {
+                if !FolderWhiteList.contains(file) {
+                    FileManager.default.removeItemAndContents(path: "\(cachesPath)/\(file)")
+                }
+            }
         }
 
         // Delete other cookies, such as .binarycookies files.

@@ -222,12 +222,9 @@ extension AppDelegate {
     }
     
     func setupErrorTracking() {
-        // Only set up to be in Beta build until we get approval to put Sentry in release
-        if AppInfo.isBetaBuild {
-            // Set up Sentry
-            let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
-            SentryIntegration.shared.setup(sendUsageData: sendUsageData)
-        }
+        // Set up Sentry
+        let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
+        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
     }
     
     func setupTelemetry() {
