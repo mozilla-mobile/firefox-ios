@@ -34,15 +34,19 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
     }
     
     func setCustomAccountPrefs(_ data: Data, url: URL) {        
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: Any] else {
+        guard let settings = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String:Any],
+                let customSyncToken = settings["sync_tokenserver_base_url"] as? String,
+                let customSyncProfile = settings["profile_server_base_url"] as? String,
+                let customSyncOauth = settings["oauth_server_base_url"] as? String,
+                let customSyncAuth = settings["auth_server_base_url"] as? String else {
             return
         }
-        
+
         self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyUseCustomSyncService)
-        self.profile.prefs.setString(json["sync_tokenserver_base_url"] as! String, forKey: PrefsKeys.KeyCustomSyncToken)
-        self.profile.prefs.setString(json["profile_server_base_url"] as! String, forKey: PrefsKeys.KeyCustomSyncProfile)
-        self.profile.prefs.setString(json["oauth_server_base_url"] as! String, forKey: PrefsKeys.KeyCustomSyncOauth)
-        self.profile.prefs.setString(json["auth_server_base_url"] as! String, forKey: PrefsKeys.KeyCustomSyncAuth)
+        self.profile.prefs.setString(customSyncToken, forKey: PrefsKeys.KeyCustomSyncToken)
+        self.profile.prefs.setString(customSyncProfile, forKey: PrefsKeys.KeyCustomSyncProfile)
+        self.profile.prefs.setString(customSyncOauth, forKey: PrefsKeys.KeyCustomSyncOauth)
+        self.profile.prefs.setString(customSyncAuth, forKey: PrefsKeys.KeyCustomSyncAuth)
         self.profile.prefs.setString(url.absoluteString, forKey: PrefsKeys.KeyCustomSyncWeb)
         self.profile.removeAccount()
         self.displaySuccessAlert()
@@ -59,7 +63,9 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
         // FxA stores its server configuation under a well-known path. This attempts to download the configuration
         // and save it into the users preferences.
         let syncConfigureString = urlString + "/.well-known/fxa-client-configuration"
-        let syncConfigureURL = URL(string: syncConfigureString)!
+        guard let syncConfigureURL = URL(string: syncConfigureString) else {
+            return
+        }
         
         URLSession.shared.dataTask(with: syncConfigureURL, completionHandler: {(data, response, error) in
             guard let data = data, error == nil else {
