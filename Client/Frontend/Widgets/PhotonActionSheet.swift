@@ -156,7 +156,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
                 make.centerX.equalTo(self.view.snp.centerX)
                 make.width.equalTo(width)
                 make.height.equalTo(PhotonActionSheetUX.CancelButtonHeight)
-                make.bottom.equalTo(self.view.snp.bottom).offset(-PhotonActionSheetUX.Padding)
+                if #available(iOS 11, *) {
+                    make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+                } else {
+                    make.bottom.equalTo(self.view.snp.bottom).offset(-PhotonActionSheetUX.Padding)
+                }
             }
         }
         
