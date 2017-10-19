@@ -26,6 +26,7 @@ enum LeanplumEventName: String {
     case openedLogins = "Opened Login Manager"
     case openedBookmark = "E_Opened_Bookmark"
     case openedNewTab = "E_Opened_New_Tab"
+    case openedPocketStory = "E_Opened_Pocket_Story"
     case interactWithURLBar = "E_Interact_With_Search_URL_Area"
     case savedBookmark = "E_Saved_Bookmark"
     case openedTelephoneLink = "Opened Telephone Link"

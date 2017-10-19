@@ -709,6 +709,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
         case .pocket:
             site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
             telemetry.reportEvent(.Click, source: .Pocket, position: index)
+            LeanplumIntegration.sharedInstance.track(eventName: .openedPocketStory, withParameters: ["Source": "Activity Stream" as AnyObject])
         case .topSites, .highlightIntro:
             return
         }
@@ -773,7 +774,11 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
-            LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Activity Stream Long Press Context Menu" as AnyObject])
+            let source = ["Source": "Activity Stream Long Press Context Menu" as AnyObject]
+            LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: source)
+            if Section(indexPath.section) == .pocket {
+                LeanplumIntegration.sharedInstance.track(eventName: .openedPocketStory, withParameters: source)
+            }
         }
 
         let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
