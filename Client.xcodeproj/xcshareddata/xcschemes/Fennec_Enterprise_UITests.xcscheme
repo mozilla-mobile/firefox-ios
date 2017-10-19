@@ -179,9 +179,6 @@
                   Identifier = "BookmarkingTests">
                </Test>
                <Test
-                  Identifier = "BrowserTests">
-               </Test>
-               <Test
                   Identifier = "ClearPrivateDataTests/testClearsCache()">
                </Test>
                <Test
@@ -216,9 +213,6 @@
                </Test>
                <Test
                   Identifier = "SettingsTests">
-               </Test>
-               <Test
-                  Identifier = "ToolbarTests/testUserInfoRemovedFromURL()">
                </Test>
                <Test
                   Identifier = "TopTabsTests">
