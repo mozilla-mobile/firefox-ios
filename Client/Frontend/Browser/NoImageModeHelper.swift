@@ -33,13 +33,6 @@ class NoImageModeHelper: TabHelper {
         // Do nothing.
     }
 
-    static func isNoImageModeAvailable() -> Bool {
-        if #available(iOS 11, *) {
-            return AppConstants.MOZ_NO_IMAGE_MODE
-        }
-        return false
-    }
-
     static func isActivated(_ prefs: Prefs) -> Bool {
         return prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
     }
