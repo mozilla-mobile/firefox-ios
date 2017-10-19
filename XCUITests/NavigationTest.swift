@@ -245,7 +245,6 @@ class NavigationTest: BaseTestCase {
         navigator.browserPerformAction(.toggleDesktopOption)
 
         // After reloading a website the desktop view should be kept
-
         if iPad() {
                 app.buttons["Reload"].tap()
         } else {
