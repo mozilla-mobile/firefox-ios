@@ -47,11 +47,13 @@ class ToolbarTests: BaseTestCase {
 
         navigator.openURL(urlString: website2)
         waitForValueContains(app.textFields["url"], value: website2)
+        waitUntilPageLoad()
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
 
         app.buttons["URLBarView.backButton"].tap()
         waitForValueContains(app.textFields["url"], value: website1["value"]!)
+        waitUntilPageLoad()
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertTrue(app.buttons["Forward"].isEnabled)
 
@@ -62,6 +64,7 @@ class ToolbarTests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: website1["value"]!)
 
         // Test to see if all the buttons are enabled then close tab.
+        waitUntilPageLoad()
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertTrue(app.buttons["Forward"].isEnabled)
 
@@ -72,7 +75,7 @@ class ToolbarTests: BaseTestCase {
         app.collectionViews.cells[website1["label"]!].swipeRight()
 
         // Go Back to other tab to see if all buttons are disabled.
-
+        navigator.nowAt(BrowserTab)
         XCTAssertFalse(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
     }
