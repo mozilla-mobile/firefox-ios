@@ -76,9 +76,15 @@ class Toolbar: UIView {
                     make.left.equalTo(self)
                 }
                 prev = view
-
-                make.centerY.equalTo(self)
-                make.height.equalTo(UIConstants.ToolbarHeight)
+                
+                var bottomInset: CGFloat = 0.0
+                if #available(iOS 11, *) {
+                    if let window = UIApplication.shared.keyWindow {
+                        bottomInset = window.safeAreaInsets.bottom
+                    }
+                }
+                make.top.equalTo(self)
+                make.height.equalTo(UIConstants.BottomToolbarHeight - bottomInset)
                 make.width.equalTo(self).dividedBy(self.subviews.count)
             }
         }
