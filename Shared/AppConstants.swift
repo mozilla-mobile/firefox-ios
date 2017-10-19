@@ -69,7 +69,7 @@ public struct AppConstants {
         #endif
     }()
 
-    /// Flag indiciating if we are running in Debug mode or not.
+    /// Flag indicating if we are running in Debug mode or not.
     public static let isDebug: Bool = {
         #if MOZ_CHANNEL_FENNEC
             return true
