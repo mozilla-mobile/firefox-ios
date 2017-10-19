@@ -50,7 +50,9 @@ public struct UIConstants {
     static let PrivateModeInputHighlightColor = UIColor(red: 120 / 255, green: 120 / 255, blue: 165 / 255, alpha: 1)
     static let PrivateModeAssistantToolbarBackgroundColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
     static let PrivateModeToolbarTintColor = UIColor(red: 74 / 255, green: 74 / 255, blue: 74 / 255, alpha: 1)
-    static var ToolbarHeight: CGFloat {
+
+    static var ToolbarHeight: CGFloat = 46
+    static var BottomToolbarHeight: CGFloat {
         get {
             var bottomInset: CGFloat = 0.0
             if #available(iOS 11, *) {
@@ -58,7 +60,7 @@ public struct UIConstants {
                     bottomInset = window.safeAreaInsets.bottom
                 }
             }
-            return 46 + bottomInset
+            return ToolbarHeight + bottomInset
         }
     }
     static let DefaultRowHeight: CGFloat = 58

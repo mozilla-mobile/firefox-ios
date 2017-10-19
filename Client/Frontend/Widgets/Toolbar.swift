@@ -84,7 +84,7 @@ class Toolbar: UIView {
                     }
                 }
                 make.top.equalTo(self)
-                make.height.equalTo(UIConstants.ToolbarHeight - bottomInset)
+                make.height.equalTo(UIConstants.BottomToolbarHeight - bottomInset)
                 make.width.equalTo(self).dividedBy(self.subviews.count)
             }
         }

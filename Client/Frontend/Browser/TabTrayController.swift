@@ -319,7 +319,7 @@ class TabTrayController: UIViewController {
 
         collectionView.dataSource = tabDataSource
         collectionView.delegate = tabLayoutDelegate
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.ToolbarHeight, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.BottomToolbarHeight, right: 0)
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
@@ -393,7 +393,7 @@ class TabTrayController: UIViewController {
 
         toolbar.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(view)
-            make.height.equalTo(UIConstants.ToolbarHeight)
+            make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
     }
 
