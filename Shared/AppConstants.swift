@@ -77,19 +77,6 @@ public struct AppConstants {
             return false
         #endif
     }()
-    
-    /// Enables/disables the availability of No Image Mode.
-    public static let MOZ_NO_IMAGE_MODE: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return false
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
 
     /// Enables support for International Domain Names (IDN)
     /// Disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1312294
