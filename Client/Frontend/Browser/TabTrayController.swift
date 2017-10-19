@@ -319,7 +319,7 @@ class TabTrayController: UIViewController {
 
         collectionView.dataSource = tabDataSource
         collectionView.delegate = tabLayoutDelegate
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.ToolbarHeight, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.BottomToolbarHeight, right: 0)
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
@@ -393,7 +393,7 @@ class TabTrayController: UIViewController {
 
         toolbar.snp.makeConstraints { make in
             make.left.right.bottom.equalTo(view)
-            make.height.equalTo(UIConstants.ToolbarHeight)
+            make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
     }
 
@@ -1030,19 +1030,20 @@ class TrayToolbar: UIView {
         maskButton.accessibilityIdentifier = "TabTrayController.maskButton"
 
         buttonToCenter?.snp.makeConstraints { make in
-            make.center.equalTo(self)
+            make.centerX.equalTo(self)
+            make.top.equalTo(self)
             make.size.equalTo(toolbarButtonSize)
         }
 
         addTabButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.top.equalTo(self)
             make.right.equalTo(self).offset(-sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
 
         addSubview(maskButton)
         maskButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.top.equalTo(self)
             make.left.equalTo(self).offset(sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
