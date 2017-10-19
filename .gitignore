@@ -71,3 +71,7 @@ MozBuildID.xcconfig
 
 # Python.
 *.pyc
+
+# SQLite
+*.db-shm
+*.db-wal
