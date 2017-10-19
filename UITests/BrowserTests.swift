@@ -22,7 +22,8 @@ class BrowserTests: KIFTestCase {
         BrowserUtils.clearPrivateData(tester: tester())
         super.tearDown()
     }
-    
+
+    // Disabled with https://bugzilla.mozilla.org/show_bug.cgi?id=1409851
     func testDisplaySharesheetWhileJSPromptOccurs() {
         let url = "\(webRoot!)/JSPrompt.html"
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())

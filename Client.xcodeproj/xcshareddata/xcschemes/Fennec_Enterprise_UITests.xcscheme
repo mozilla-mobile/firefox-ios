@@ -179,6 +179,9 @@
                   Identifier = "BookmarkingTests">
                </Test>
                <Test
+                  Identifier = "BrowserTests">
+               </Test>
+               <Test
                   Identifier = "ClearPrivateDataTests/testClearsCache()">
                </Test>
                <Test
