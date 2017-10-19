@@ -186,9 +186,9 @@ public struct AppConstants {
     /// Toggle the feature that adds 'Send to Device' to the page actions menu
     public static let MOZ_SENDTAB_IN_PAGE_ACTIONS: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
-            return false
+            return true
         #elseif MOZ_CHANNEL_FENNEC
             return true
         #else
