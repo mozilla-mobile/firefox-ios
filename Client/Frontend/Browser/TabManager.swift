@@ -715,8 +715,13 @@ extension TabManager {
     }
 
     fileprivate func restoreTabsInternal() {
-        guard let savedTabs = TabManager.tabsToRestore() else {
+        guard var savedTabs = TabManager.tabsToRestore() else {
             return
+        }
+
+        // Make sure to wipe the private tabs if the user has the pref turned on
+        if shouldClearPrivateTabs() {
+            savedTabs = savedTabs.filter { !$0.isPrivate }
         }
 
         var tabToSelect: Tab?
