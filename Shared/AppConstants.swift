@@ -59,7 +59,7 @@ public struct AppConstants {
     /// Should we send a repair request to other clients when the bookmarks buffer validation fails.
     public static let MOZ_BOOKMARKS_REPAIR_REQUEST: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return true
+            return false
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
