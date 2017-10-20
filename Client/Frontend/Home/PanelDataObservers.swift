@@ -66,8 +66,9 @@ class ActivityStreamDataObserver: DataObserver {
 
         // Highlights are cached for 15 mins
         let userEnabledHighlights = profile.prefs.boolForKey(PrefsKeys.ASRecentHighlightsVisible) ?? true
-        let shouldInvalidateHighlights = (highlights || (Timestamp.uptimeInMilliseconds() - lastInvalidation > invalidationTime)) && userEnabledHighlights
-
+        let lastInvalidationTime = profile.prefs.unsignedLongForKey(PrefsKeys.ASLastInvalidation) ?? 0
+        let shouldInvalidateHighlights = (highlights || (Date.now() - lastInvalidationTime > invalidationTime)) && userEnabledHighlights
+        
         // KeyTopSitesCacheIsValid is false when we want to invalidate. Thats why this logic is so backwards
         let shouldInvalidateTopSites = topSites || !(profile.prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false)
         if !shouldInvalidateTopSites && !shouldInvalidateHighlights {
@@ -80,7 +81,8 @@ class ActivityStreamDataObserver: DataObserver {
             if shouldInvalidateTopSites {
                 self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
             }
-            self.lastInvalidation = shouldInvalidateHighlights ? Timestamp.uptimeInMilliseconds() : self.lastInvalidation
+            let newInvalidationTime = shouldInvalidateHighlights ? Date.now() : lastInvalidationTime
+            self.profile.prefs.setLong(newInvalidationTime, forKey: PrefsKeys.ASLastInvalidation)
             self.delegate?.didInvalidateDataSources(forceHighlights: highlights, forceTopSites: topSites)
         }
     }
