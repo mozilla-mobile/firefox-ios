@@ -1,19 +1,37 @@
 #!/usr/bin/env bash
 
-# This script inserts the private Adjust tokens into the two property lists that
-# contain the Adjust settings for both Focus and Klar. It depends on two environment
-# variables to be set in BuddyBuild: ADJUST_TOKEN_FOCUS and ADJUST_TOKEN_KLAR.
+#
+# Add our Adjust keys to the build depending on the scheme. We use the sandbox for beta so
+# that we have some insight in beta usage.
+#
 
-if [ -f "$BUDDYBUILD_WORKSPACE/Blockzilla/Adjust-Focus.plist" ]; then
-    /usr/libexec/PlistBuddy -c "Set AppToken $ADJUST_TOKEN_FOCUS" "$BUDDYBUILD_WORKSPACE/Blockzilla/Adjust-Focus.plist"
+if [ "$BUDDYBUILD_SCHEME" == FocusEnterprise ]; then
+  echo "Setting Adjust token to SANDBOX for $BUDDYBUILD_SCHEME"
+  /usr/libexec/PlistBuddy -c "Set AppToken $ADJUST_TOKEN_RELEASE" "$BUDDYBUILD_WORKSPACE/Blockzilla/Adjust-Focus.plist"
+elif [ "$BUDDYBUILD_SCHEME" == FocusRelease ]; then
+  echo "Setting Adjust token to RELEASE for $BUDDYBUILD_SCHEME"
+  /usr/libexec/PlistBuddy -c "Set AppToken $ADJUST_TOKEN_RELEASE" "$BUDDYBUILD_WORKSPACE/Blockzilla/Adjust-Focus.plist"
+elif [ "$BUDDYBUILD_SCHEME" == KlarRelease ]; then
+  echo "Setting Adjust token to RELEASE for $BUDDYBUILD_SCHEME"
+  /usr/libexec/PlistBuddy -c "Set AppToken $ADJUST_TOKEN_RELEASE" "$BUDDYBUILD_WORKSPACE/Blockzilla/Adjust-Focus.plist"
 fi
 
-if [ -f "$BUDDYBUILD_WORKSPACE/Blockzilla/Adjust-Klar.plist" ]; then
-    /usr/libexec/PlistBuddy -c "Set AppToken $ADJUST_TOKEN_KLAR" "$BUDDYBUILD_WORKSPACE/Blockzilla/Adjust-Klar.plist"
+#
+# Add our Sentry keys to the build depending on the scheme. We use the sandbox for beta so
+# that we have some insight in beta usage.
+#
+
+if [ "$BUDDYBUILD_SCHEME" == FocusEnterprise ]; then
+  echo "Setting Sentry DSN to BETA for $BUDDYBUILD_SCHEME"
+  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_BETA" "Blockzilla/Info.plist"
+elif [ "$BUDDYBUILD_SCHEME" == FocusRelease ]; then
+  echo "Setting Sentry DSN to PRODUCTION for $BUDDYBUILD_SCHEME"
+  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_RELEASE" "Blockzilla/Info.plist"
+elif [ "$BUDDYBUILD_SCHEME" == KlarRelease ]; then
+  echo "Setting Sentry DSN to PRODUCTION for $BUDDYBUILD_SCHEME"
+  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_RELEASE" "Blockzilla/Info.plist"
 fi
 
-# Add Sentry DSN to Info.plist
-/usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_BETA" "Blockzilla/Info.plist"
 
 # Set the build number to match the Buddybuild number
 agvtool new-version -all "$BUDDYBUILD_BUILD_NUMBER"
