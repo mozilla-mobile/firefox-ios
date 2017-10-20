@@ -231,7 +231,9 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                     }
                 }).bind { simpleSyncingResult in
                     if let failure = simpleSyncingResult.failureValue {
-                        SentryIntegration.shared.send(message: "Failed to simple sync bookmarks: " + failure.description, tag: "BookmarksSyncing", severity: .error)
+                        if AppConstants.BuildChannel == .beta {
+                            SentryIntegration.shared.send(message: "Failed to simple sync bookmarks: " + failure.description, tag: "BookmarksSyncing", severity: .error)
+                        }
                     }
                     return deferMaybe(result)
                 }
