@@ -69,7 +69,7 @@ public struct AppConstants {
         #endif
     }()
 
-    /// Flag indiciating if we are running in Debug mode or not.
+    /// Flag indicating if we are running in Debug mode or not.
     public static let isDebug: Bool = {
         #if MOZ_CHANNEL_FENNEC
             return true
@@ -195,4 +195,13 @@ public struct AppConstants {
             return true
         #endif
     }()
+
+    /// The maximum length of a URL stored by Firefox. Shared with Places on desktop.
+    public static let DB_URL_LENGTH_MAX = 65536
+
+    /// The maximum length of a page title stored by Firefox. Shared with Places on desktop.
+    public static let DB_TITLE_LENGTH_MAX = 4096
+
+    /// The maximum length of a bookmark description stored by Firefox. Shared with Places on desktop.
+    public static let DB_DESCRIPTION_LENGTH_MAX = 1024
 }

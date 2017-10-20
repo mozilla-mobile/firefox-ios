@@ -22,8 +22,39 @@ public func titleForSpecialGUID(_ guid: GUID) -> String? {
     }
 }
 
+class BookmarkURLTooLargeError: MaybeErrorType {
+    init() {
+    }
+    var description: String {
+        return "URL too long to bookmark."
+    }
+}
+
+extension String {
+    public func truncateToUTF8ByteCount(_ keep: Int) -> String {
+        let byteCount = self.lengthOfBytes(using: String.Encoding.utf8)
+        if byteCount <= keep {
+            return self
+        }
+        let toDrop = keep - byteCount
+
+        // If we drop this many characters from the string, we will drop at least this many bytes.
+        // That's aggressive, but that's OK for our purposes.
+        guard let endpoint = self.index(self.endIndex, offsetBy: toDrop, limitedBy: self.startIndex) else {
+            return ""
+        }
+        return self.substring(to: endpoint)
+    }
+}
+
 extension SQLiteBookmarks: ShareToDestination {
     public func addToMobileBookmarks(_ url: URL, title: String, favicon: Favicon?) -> Success {
+        if url.absoluteString.lengthOfBytes(using: String.Encoding.utf8) > AppConstants.DB_URL_LENGTH_MAX {
+            return deferMaybe(BookmarkURLTooLargeError())
+        }
+
+        let title = title.truncateToUTF8ByteCount(AppConstants.DB_TITLE_LENGTH_MAX)
+
         return isBookmarked(String(describing: url), direction: Direction.local)
             >>== { yes in
                 guard !yes else { return succeed() }

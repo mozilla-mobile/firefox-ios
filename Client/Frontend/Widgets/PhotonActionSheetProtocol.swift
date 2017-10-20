@@ -121,7 +121,6 @@ extension PhotonActionSheetProtocol {
         }
         
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
-            guard let tab = self.tabManager.selectedTab else { return }
             guard let url = tab.url?.displayURL else { return }
 
             self.profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
@@ -197,20 +196,24 @@ extension PhotonActionSheetProtocol {
         }
         
         let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
-            guard let tab = self.tabManager.selectedTab else { return }
             guard let url = tab.canonicalURL?.displayURL else { return }
             presentShareMenu(url, tab, buttonView, .up)
         }
 
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
-            UIPasteboard.general.url = self.tabManager.selectedTab?.canonicalURL?.displayURL
+            UIPasteboard.general.url = tab.canonicalURL?.displayURL
             success(Strings.AppMenuCopyURLConfirmMessage)
         }
-        
-        let bookmarkAction = tab.isBookmarked ? removeBookmark : bookmarkPage
-        var topActions = [bookmarkAction]
-        if let tab = self.tabManager.selectedTab, tab.readerModeAvailableOrActive {
-            topActions.append(addReadingList)
+
+        var topActions: [PhotonActionSheetItem] = []
+
+        // Disable bookmarking and reading list if the URL is too long.
+        if !tab.urlIsTooLong {
+            topActions.append(tab.isBookmarked ? removeBookmark : bookmarkPage)
+
+            if tab.readerModeAvailableOrActive {
+                topActions.append(addReadingList)
+            }
         }
 
         var middleActions = [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites]

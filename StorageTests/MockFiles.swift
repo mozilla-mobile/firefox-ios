@@ -13,3 +13,11 @@ class MockFiles: FileAccessor {
         super.init(rootPath: (docPath as NSString).appendingPathComponent("testing"))
     }
 }
+
+class SupportingFiles: FileAccessor {
+    init() {
+        let path = Bundle.main.bundlePath + "/PlugIns/StorageTests.xctest/"
+        NSLog("Supporting files: \(path)")
+        super.init(rootPath: path)
+    }
+}
