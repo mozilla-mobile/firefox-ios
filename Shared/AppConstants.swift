@@ -46,7 +46,7 @@ public struct AppConstants {
     /// Should we try to sync (no merging) the Mobile Folder (if shouldMergeBookmarks is false).
     public static let MOZ_SIMPLE_BOOKMARKS_SYNCING: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -121,7 +121,7 @@ public struct AppConstants {
     /// Toggles the ability to add a custom search engine
     public static let MOZ_CUSTOM_SEARCH_ENGINE: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -134,7 +134,7 @@ public struct AppConstants {
     ///  Enables/disables push notificatuibs for FxA
     public static let MOZ_FXA_PUSH: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -173,7 +173,7 @@ public struct AppConstants {
     ///  Toggle the feature that shows updated FxA preferences cell
     public static let MOZ_SHOW_FXA_AVATAR: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -186,9 +186,9 @@ public struct AppConstants {
     /// Toggle the feature that adds 'Send to Device' to the page actions menu
     public static let MOZ_SENDTAB_IN_PAGE_ACTIONS: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
-            return false
+            return true
         #elseif MOZ_CHANNEL_FENNEC
             return true
         #else
