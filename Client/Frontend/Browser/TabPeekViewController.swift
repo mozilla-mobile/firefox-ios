@@ -38,13 +38,16 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     // Preview action items.
     lazy var previewActions: [UIPreviewActionItem] = {
         var actions = [UIPreviewActionItem]()
-        if !self.ignoreURL {
+
+        let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
+        if !self.ignoreURL && !urlIsTooLongToSave {
             if !self.isInReadingList {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .default) { previewAction, viewController in
                     guard let tab = self.tab else { return }
                     _ = self.delegate?.tabPeekDidAddToReadingList(tab)
                 })
             }
+
             if !self.isBookmarked {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToBookmarks, style: .default) { previewAction, viewController in
                     guard let tab = self.tab else { return }

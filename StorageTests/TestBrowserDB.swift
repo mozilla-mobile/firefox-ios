@@ -53,6 +53,24 @@ class TestBrowserDB: XCTestCase {
         }
     }
 
+    func testUpgradeV33toV34RemovesLongURLs() {
+        let db = BrowserDB(filename: "v33.db", schema: BrowserSchema(), files: SupportingFiles())
+        let results = db.runQuery("SELECT bmkUri, title FROM bookmarksLocal WHERE type = 1", args: nil, factory: { row in
+            (row[0] as! String, row[1] as! String)
+        }).value.successValue!
+
+        // The bookmark with the long URL has been deleted.
+        XCTAssertTrue(results.count == 1)
+
+        let remaining = results[0]!
+
+        // This one's title has been truncated to 4096 chars.
+        XCTAssertEqual(remaining.1.characters.count, 4096)
+        XCTAssertEqual(remaining.1.utf8.count, 4096)
+        XCTAssertTrue(remaining.1.hasPrefix("abcdefghijkl"))
+        XCTAssertEqual(remaining.0, "http://example.com/short")
+    }
+
     func testMovesDB() {
         var db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
         db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
