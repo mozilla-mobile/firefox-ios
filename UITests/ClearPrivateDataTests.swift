@@ -96,9 +96,28 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         
         let url1 = urls[0].url
         let url2 = urls[1].url
+
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
-        tester().waitForView(withAccessibilityLabel: url1)
-        tester().waitForView(withAccessibilityLabel: url2)
+        let url1Shown = GREYCondition(name: "Wait for URL 1") {
+            var errorOrNil: NSError?
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
+                .assert(grey_notNil(), error: &errorOrNil)
+            let success = errorOrNil == nil
+            return success
+        }
+        let URL1success = url1Shown?.wait(withTimeout: 10)
+        GREYAssertTrue(URL1success!, reason: "URL 1 Not Shown")
+
+        let url2Shown = GREYCondition(name: "Wait for URL 2") {
+            var errorOrNil: NSError?
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2))
+                .assert(grey_notNil(), error: &errorOrNil)
+            let success = errorOrNil == nil
+            return success
+        }
+        let URL2success = url2Shown?.wait(withTimeout: 10)
+        GREYAssertTrue(URL2success!, reason: "URL 2 Not Shown")
+
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1)).assert(grey_notNil())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2)).assert(grey_notNil())
         
@@ -154,14 +173,14 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(cookies.sessionStorage, "foo=bar")
 
         // Verify that cookies are not cleared when Cookies is deselected.
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cookies]), swipe: true, tester: tester())
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cookies]), swipe: false, tester: tester())
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "foo=bar")
         XCTAssertEqual(cookies.localStorage, "foo=bar")
         XCTAssertEqual(cookies.sessionStorage, "foo=bar")
 
         // Verify that cookies are cleared when Cookies is selected.
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cookies], swipe: true, tester: tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cookies], swipe: false, tester: tester())
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "")
         XCTAssertEqual(cookies.localStorage, "null")
@@ -181,12 +200,12 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let requests = cachedServer.requests
 
         // Verify that clearing non-cache items will keep the page in the cache.
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cache]), swipe: true, tester: tester())
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cache]), swipe: false, tester: tester())
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests)
 
         // Verify that clearing the cache will fire a new request.
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cache], swipe: true, tester: tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cache], swipe: false, tester: tester())
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests + 1)
     }
