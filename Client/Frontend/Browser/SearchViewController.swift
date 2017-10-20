@@ -7,10 +7,6 @@ import Shared
 import Storage
 import Telemetry
 
-private let PromptMessage = NSLocalizedString("Turn on search suggestions?", tableName: "Search", comment: "Prompt shown before enabling provider search queries")
-private let PromptYes = NSLocalizedString("Yes", tableName: "Search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
-private let PromptNo = NSLocalizedString("No", tableName: "Search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
-
 private enum SearchListSection: Int {
     case searchSuggestions
     case bookmarksAndHistory
@@ -39,13 +35,6 @@ private struct SearchViewControllerUX {
     static let SuggestionMargin: CGFloat = 8
     static let SuggestionCellVerticalPadding: CGFloat = 10
     static let SuggestionCellMaxRows = 2
-
-    static let PromptColor = UIConstants.PanelBackgroundColor
-    static let PromptFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
-    static let PromptYesFont = UIFont.systemFont(ofSize: 15, weight: UIFontWeightBold)
-    static let PromptNoFont = UIFont.systemFont(ofSize: 15, weight: UIFontWeightRegular)
-    static let PromptInsets = UIEdgeInsets(top: 15, left: 12, bottom: 15, right: 12)
-    static let PromptButtonColor = UIColor(rgb: 0x007aff)
 
     static let IconSize: CGFloat = 23
     static let FaviconSize: CGFloat = 29
@@ -78,7 +67,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     // cellForRowAtIndexPath, we create the cell to find its height before it's added to the table.
     fileprivate let suggestionCell = SuggestionCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
 
-    fileprivate var suggestionPrompt: UIView?
     static var userAgent: String?
 
     init(isPrivate: Bool) {
@@ -176,8 +164,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
             // Reload the footer list of search engines.
             reloadSearchEngines()
-
-            layoutSuggestionsOptInPrompt()
         }
     }
 
@@ -193,117 +179,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         return engines!
     }
 
-    fileprivate func layoutSuggestionsOptInPrompt() {
-        if isPrivate || !(searchEngines?.shouldShowSearchSuggestionsOptIn ?? false) {
-            // Make sure any pending layouts are drawn so they don't get coupled
-            // with the "slide up" animation below.
-            view.layoutIfNeeded()
-
-            // Set the prompt to nil so layoutTable() aligns the top of the table
-            // to the top of the view. We still need a reference to the prompt so
-            // we can remove it from the controller after the animation is done.
-            let prompt = suggestionPrompt
-            suggestionPrompt = nil
-            layoutTable()
-
-            UIView.animate(withDuration: 0.2,
-                animations: {
-                    self.view.layoutIfNeeded()
-                    prompt?.alpha = 0
-                },
-                completion: { _ in
-                    prompt?.removeFromSuperview()
-                    return
-                })
-            return
-        }
-
-        let prompt = UIView()
-        prompt.backgroundColor = SearchViewControllerUX.PromptColor
-
-        let promptBottomBorder = UIView()
-        promptBottomBorder.backgroundColor = UIColor.black.withAlphaComponent(0.1)
-        prompt.addSubview(promptBottomBorder)
-
-        // Insert behind the tableView so the tableView slides on top of it
-        // when the prompt is dismissed.
-        view.insertSubview(prompt, belowSubview: tableView)
-
-        suggestionPrompt = prompt
-
-        let promptImage = UIImageView()
-        promptImage.image = UIImage(named: SearchViewControllerUX.SearchImage)
-        prompt.addSubview(promptImage)
-
-        let promptLabel = UILabel()
-        promptLabel.text = PromptMessage
-        promptLabel.font = SearchViewControllerUX.PromptFont
-        promptLabel.numberOfLines = 0
-        promptLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        prompt.addSubview(promptLabel)
-
-        let promptYesButton = InsetButton()
-        promptYesButton.setTitle(PromptYes, for: UIControlState())
-        promptYesButton.setTitleColor(SearchViewControllerUX.PromptButtonColor, for: UIControlState.normal)
-        promptYesButton.titleLabel?.font = SearchViewControllerUX.PromptYesFont
-        promptYesButton.titleEdgeInsets = SearchViewControllerUX.PromptInsets
-        // If the prompt message doesn't fit, this prevents it from pushing the buttons
-        // off the row and makes it wrap instead.
-        promptYesButton.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.horizontal)
-        promptYesButton.addTarget(self, action: #selector(SearchViewController.SELdidClickOptInYes), for: UIControlEvents.touchUpInside)
-        prompt.addSubview(promptYesButton)
-
-        let promptNoButton = InsetButton()
-        promptNoButton.setTitle(PromptNo, for: UIControlState())
-        promptNoButton.setTitleColor(SearchViewControllerUX.PromptButtonColor, for: UIControlState.normal)
-        promptNoButton.titleLabel?.font = SearchViewControllerUX.PromptNoFont
-        promptNoButton.titleEdgeInsets = SearchViewControllerUX.PromptInsets
-        // If the prompt message doesn't fit, this prevents it from pushing the buttons
-        // off the row and makes it wrap instead.
-        promptNoButton.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.horizontal)
-        promptNoButton.addTarget(self, action: #selector(SearchViewController.SELdidClickOptInNo), for: UIControlEvents.touchUpInside)
-        prompt.addSubview(promptNoButton)
-
-        // otherwise the label (i.e. question) is visited by VoiceOver *after* yes and no buttons
-        prompt.accessibilityElements = [promptImage, promptLabel, promptYesButton, promptNoButton]
-
-        promptImage.snp.makeConstraints { make in
-            make.left.equalTo(prompt).offset(SearchViewControllerUX.PromptInsets.left)
-            make.centerY.equalTo(prompt)
-        }
-
-        promptLabel.snp.makeConstraints { make in
-            make.left.equalTo(promptImage.snp.right).offset(SearchViewControllerUX.PromptInsets.left)
-            let insets = SearchViewControllerUX.PromptInsets
-            make.top.equalTo(prompt).inset(insets.top)
-            make.bottom.equalTo(prompt).inset(insets.bottom)
-            make.right.lessThanOrEqualTo(promptYesButton.snp.left)
-            return
-        }
-
-        promptNoButton.snp.makeConstraints { make in
-            make.right.equalTo(prompt).inset(SearchViewControllerUX.PromptInsets.right)
-            make.centerY.equalTo(prompt)
-        }
-
-        promptYesButton.snp.makeConstraints { make in
-            make.right.equalTo(promptNoButton.snp.left).inset(SearchViewControllerUX.PromptInsets.right)
-            make.centerY.equalTo(prompt)
-        }
-
-        promptBottomBorder.snp.makeConstraints { make in
-            make.trailing.leading.equalTo(self.view)
-            make.top.equalTo(prompt.snp.bottom).offset(-1)
-            make.height.equalTo(1)
-        }
-
-        prompt.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(self.view)
-        }
-
-        layoutTable()
-    }
-
     var searchQuery: String = "" {
         didSet {
             // Reload the tableView to show the updated text in each engine.
@@ -317,7 +192,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     fileprivate func layoutTable() {
         tableView.snp.remakeConstraints { make in
-            make.top.equalTo(self.suggestionPrompt?.snp.bottom ?? self.view.snp.top)
+            make.top.equalTo(self.view.snp.top)
             make.leading.trailing.equalTo(self.view)
             make.bottom.equalTo(self.searchEngineScrollView.snp.top)
         }
@@ -401,21 +276,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     func SELdidClickSearchButton() {
         self.searchDelegate?.presentSearchSettingsController()  
-    }
-
-    func SELdidClickOptInYes() {
-        searchEngines.shouldShowSearchSuggestions = true
-        searchEngines.shouldShowSearchSuggestionsOptIn = false
-        querySuggestClient()
-        layoutSuggestionsOptInPrompt()
-        reloadSearchEngines()
-    }
-
-    func SELdidClickOptInNo() {
-        searchEngines.shouldShowSearchSuggestions = false
-        searchEngines.shouldShowSearchSuggestionsOptIn = false
-        layoutSuggestionsOptInPrompt()
-        reloadSearchEngines()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
