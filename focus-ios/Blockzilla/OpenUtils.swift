@@ -24,7 +24,7 @@ class OpenUtils {
         }
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "firefox")
-        app.openURL(firefoxURL)
+        app.open(firefoxURL, options: [:])
     }
 
     static func openInChrome(url: URL) {
@@ -40,20 +40,20 @@ class OpenUtils {
         // Proceed only if a valid Google Chrome URI Scheme is available.
         guard let scheme = chromeScheme,
               let rangeForScheme = url.absoluteString.range(of: ":"),
-              let chromeURL = URL(string: scheme + url.absoluteString.substring(from: rangeForScheme.lowerBound)) else { return }
+              let chromeURL = URL(string: scheme + url.absoluteString[rangeForScheme.lowerBound...]) else { return }
 
         // Open the URL with Chrome.
-        app.openURL(chromeURL)
+        app.open(chromeURL, options: [:])
     }
 
     static func openFirefoxInstall() {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openAppStore, object: TelemetryEventObject.menu, value: "firefox")
-        UIApplication.shared.openURL(AppInfo.config.firefoxAppStoreURL)
+        app.open(AppInfo.config.firefoxAppStoreURL, options: [:])
     }
 
     static func openInSafari(url: URL) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
-        app.openURL(url)
+        app.open(url, options: [:])
     }
 
     static func buildShareViewController(url: URL, title: String? = nil, printFormatter: UIPrintFormatter?, anchor: UIView) -> UIActivityViewController {

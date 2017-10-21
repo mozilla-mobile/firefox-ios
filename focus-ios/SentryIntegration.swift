@@ -57,7 +57,7 @@ public class SentryIntegration {
                 attributes.merge(with: self.attributes)
                 event.extra = attributes
             }
-        } catch let error {}
+        } catch {}
     }
     
     public func crash() {

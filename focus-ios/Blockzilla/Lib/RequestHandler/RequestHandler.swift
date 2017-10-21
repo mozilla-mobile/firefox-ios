@@ -26,7 +26,7 @@ class RequestHandler {
             switch scheme {
             case "tel":
                 // Don't present our dialog as the system presents its own
-                UIApplication.shared.openURL(url)
+                UIApplication.shared.open(url, options: [:])
             case "facetime", "facetime-audio":
                 let alert = RequestHandler.makeAlert(title: title, action: "FaceTime", forURL: url)
                 alertCallback(alert)
@@ -36,7 +36,7 @@ class RequestHandler {
             default:
                 let openAction = UIAlertAction(title: UIConstants.strings.open, style: .default) { _ in
                     Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.requestHandler, value: "external link")
-                    UIApplication.shared.openURL(url)
+                    UIApplication.shared.open(url, options: [:])
                 }
 
                 let cancelAction = UIAlertAction(title: UIConstants.strings.externalLinkCancel, style: .cancel) { _ in
@@ -77,7 +77,7 @@ class RequestHandler {
 
     static private func makeAlert(title: String, action: String, forURL url: URL) -> UIAlertController {
         let openAction = UIAlertAction(title: action, style: .default) { _ in
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url, options: [:])
         }
         let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: UIConstants.strings.externalLinkCancel, style: .cancel, handler: nil))

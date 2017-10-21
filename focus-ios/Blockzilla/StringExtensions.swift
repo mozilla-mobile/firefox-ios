@@ -16,18 +16,18 @@ extension String {
 
         switch position {
         case .head:
-            let truncated = substring(from: characters.index(startIndex, offsetBy: limit - leader.characters.count))
+            let truncated = self[characters.index(startIndex, offsetBy: limit - leader.characters.count)...]
             return leader + truncated
         case .middle:
             let headCharactersCount = Int(ceil(Float(limit - leader.characters.count) / 2.0))
-            let head = substring(to: characters.index(startIndex, offsetBy: headCharactersCount))
+            let head = self[...characters.index(startIndex, offsetBy: headCharactersCount)]
 
             let tailCharactersCount = Int(floor(Float(limit - leader.characters.count) / 2.0))
-            let tail = substring(from: characters.index(endIndex, offsetBy: -tailCharactersCount))
+            let tail = self[characters.index(endIndex, offsetBy: -tailCharactersCount)...]
 
             return head + leader + tail
         case .tail:
-            let truncated = substring(to: characters.index(startIndex, offsetBy: limit -  leader.characters.count))
+            let truncated = self[...characters.index(startIndex, offsetBy: limit -  leader.characters.count)]
             return truncated + leader
         }
     }

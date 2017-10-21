@@ -100,7 +100,7 @@ class BrowserViewController: UIViewController {
         }
 
         homeViewContainer.snp.makeConstraints { make in
-            make.top.equalTo(topLayoutGuide.snp.bottom)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.trailing.equalTo(view)
             homeViewBottomConstraint = make.bottom.equalTo(view).constraint
             homeViewBottomConstraint.activate()
@@ -192,7 +192,7 @@ class BrowserViewController: UIViewController {
         view.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
         urlBar.snp.makeConstraints { make in
-            urlBarTopConstraint = make.top.equalTo(topLayoutGuide.snp.bottom).constraint
+            urlBarTopConstraint = make.top.equalTo(view.safeAreaLayoutGuide.snp.top).constraint
             topURLBarConstraints = [
                 urlBarTopConstraint,
                 make.leading.trailing.bottom.equalTo(urlBarContainer).constraint

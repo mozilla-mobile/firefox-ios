@@ -28,7 +28,10 @@ class WebCacheUtils {
         }
 
         // Remove the in-memory history that WebKit maintains.
-        if let clazz = NSClassFromString("Web" + "History") as? NSObjectProtocol {
+        // With Swift 4 we have to cast it to AnyObject first
+        // https://stackoverflow.com/questions/45957626/swift-4-objective-c-runtime-and-casting-to-nsobjectprotocol
+        if let klazz = NSClassFromString("Web" + "History"),
+            let clazz = klazz as AnyObject as? NSObjectProtocol {
             if clazz.responds(to: Selector(("optional" + "Shared" + "History"))) {
                 if let webHistory = clazz.perform(Selector(("optional" + "Shared" + "History"))) {
                     let o = webHistory.takeUnretainedValue()
