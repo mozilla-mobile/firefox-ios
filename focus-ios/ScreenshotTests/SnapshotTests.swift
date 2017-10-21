@@ -88,12 +88,25 @@ class SnapshotTests: XCTestCase {
 
     func test08PasteAndGo() {
         let app = XCUIApplication()
-        app.textFields["URLBar.urlText"].typeText("mozilla.org\n")
-        app.textFields["URLBar.urlText"].tap(withNumberOfTaps: 3, numberOfTouches: 1)
-        app.menuItems.element(boundBy: 1).tap()
-        app.buttons.element(boundBy: 1).tap()
-        app.buttons["URLBar.deleteButton"].tap()
-        app.textFields["URLBar.urlText"].tap()
+        // Inject a string into clipboard
+        let clipboardString = "Hello world"
+        UIPasteboard.general.string = clipboardString
+
+        // Enter 'mozilla' on the search field
+        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
+        searchOrEnterAddressTextField.typeText("mozilla.org\n")
+
+        // Check the correct site is reached
+        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.mozilla.org/")
+
+        // Tap URL field, check for paste & go menu
+        searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.press(forDuration: 1.5)
+        expectation(for: NSPredicate(format: "count > 0"), evaluatedWith: app.menuItems, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
+
+        app.menuItems.element(boundBy: 3).tap()
+
         snapshot("08PasteAndGo")
     }
 
