@@ -49,10 +49,6 @@ class SearchEngines {
         NotificationCenter.default.addObserver(self, selector: #selector(SearchEngines.SELdidResetPrompt(_:)), name: NSNotification.Name(rawValue: "SearchEnginesPromptReset"), object: nil)
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     var defaultEngine: OpenSearchEngine {
         get {
             return self.orderedEngines[0]

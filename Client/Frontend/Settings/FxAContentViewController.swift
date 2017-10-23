@@ -53,10 +53,6 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountVerified, object: nil)        
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
     }

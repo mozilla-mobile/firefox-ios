@@ -330,8 +330,6 @@ open class BrowserProfile: Profile {
     deinit {
         log.debug("Deiniting profile \(self.localName).")
         self.syncManager.endTimedSyncs()
-        NotificationCenter.default.removeObserver(self, name: NotificationOnLocationChange, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationOnPageMetadataFetched, object: nil)
     }
 
     func localName() -> String {
@@ -728,16 +726,6 @@ open class BrowserProfile: Profile {
                     }
                 }
             }
-        }
-
-        deinit {
-            // Remove 'em all.
-            let center = NotificationCenter.default
-            center.removeObserver(self, name: NotificationDatabaseWasRecreated, object: nil)
-            center.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
-            center.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
-            center.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-            center.removeObserver(self, name: NotificationBookmarkBufferValidated, object: nil)
         }
 
         private func handleRecreationOfDatabaseNamed(name: String?) -> Success {

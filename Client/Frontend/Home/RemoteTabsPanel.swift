@@ -89,11 +89,6 @@ class RemoteTabsPanel: UIViewController, HomePanel {
         tableViewController.didMove(toParentViewController: self)
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-    }
-
     func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing:
