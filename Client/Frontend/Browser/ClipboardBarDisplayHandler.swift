@@ -31,6 +31,7 @@ class ClipboardBarDisplayHandler: NSObject {
 
         super.init()
 
+        NotificationCenter.default.addObserver(self, selector: #selector(SELUIPasteboardChanged), name: NSNotification.Name.UIPasteboardChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELAppWillEnterForegroundNotification), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: NotificationDidRestoreSession, object: nil)
     }
@@ -44,6 +45,16 @@ class ClipboardBarDisplayHandler: NSObject {
 
         if !firstTabLoaded {
             firstTab?.webView?.removeObserver(self, forKeyPath: "URL")
+        }
+    }
+
+    @objc private func SELUIPasteboardChanged() {
+        UIPasteboard.general.asyncURL().uponQueue(.main) { res in
+            guard let copiedURL: URL? = res.successValue,
+                let url = copiedURL else {
+                    return
+            }
+            self.lastDisplayedURL = url.absoluteString
         }
     }
 
