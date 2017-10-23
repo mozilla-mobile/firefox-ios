@@ -16,9 +16,6 @@ class DomainAutocompleteTests: KIFTestCase {
     func testAutocomplete() {
         BrowserUtils.addHistoryEntry("Foo bar baz", url: URL(string: "https://foo.bar.baz.org/dingbat")!)
 
-        // Wait until what's new page appears
-        tester().waitForView(withAccessibilityIdentifier: "lock_verified")
-
         tester().tapView(withAccessibilityIdentifier: "url")
         let textField = tester().waitForView(withAccessibilityLabel: "Address and Search") as! UITextField
 

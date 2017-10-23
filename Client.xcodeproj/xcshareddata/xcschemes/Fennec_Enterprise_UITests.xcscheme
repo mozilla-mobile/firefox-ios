@@ -185,9 +185,6 @@
                   Identifier = "FindInPageTests">
                </Test>
                <Test
-                  Identifier = "HistoryTests/testDeleteHistoryItemFromListWithMoreThan100Items()">
-               </Test>
-               <Test
                   Identifier = "HomePageSettingsUITests">
                </Test>
                <Test
