@@ -80,4 +80,32 @@ class BookmarkingTests: BaseTestCase {
         unbookmark()
         checkUnbookmarked()
     }
+
+    private func checkEmptyBookmarkList() {
+        let list = app.tables["Bookmarks List"].cells.count
+        XCTAssertEqual(list, 0, "There should not be any entry in the bookmarks list")
+    }
+
+    private func checkItemInBookmarkList() {
+        let list = app.tables["Bookmarks List"].cells.count
+        XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
+        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)
+    }
+
+    func testAccessBookmarksFromContextMenu() {
+        //First time there is not any bookmark
+        navigator.browserPerformAction(.openBookMarksOption)
+        checkEmptyBookmarkList()
+        navigator.nowAt(BrowserTab)
+
+        //Add a bookmark
+        navigator.createNewTab()
+        loadWebPage(url_2["url"]!)
+        navigator.nowAt(BrowserTab)
+        bookmark()
+
+        //There should be a bookmark
+        navigator.browserPerformAction(.openBookMarksOption)
+        checkItemInBookmarkList()
+    }
 }
