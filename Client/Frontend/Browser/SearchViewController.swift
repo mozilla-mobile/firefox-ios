@@ -125,10 +125,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
-    }
-
     func SELDynamicFontChanged(_ notification: Notification) {
         guard notification.name == NotificationDynamicFontChanged else { return }
 

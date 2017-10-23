@@ -50,10 +50,6 @@ class ActivityStreamDataObserver: DataObserver {
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived(_:)), name: $0, object: nil) }
     }
 
-    deinit {
-        events.forEach { NotificationCenter.default.removeObserver(self, name: $0, object: nil) }
-    }
-
     /*
      refreshIfNeeded will refresh the underlying caches for both TopSites and Highlights.
      By default this will only refresh the highlights if the last fetch is older than 15 mins

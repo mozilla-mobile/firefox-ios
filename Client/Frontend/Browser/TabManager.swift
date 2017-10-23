@@ -109,10 +109,6 @@ class TabManager: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(TabManager.prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
         assert(Thread.isMainThread)
 

@@ -30,11 +30,6 @@ class ClipboardBarDisplayHandler {
         NotificationCenter.default.addObserver(self, selector: #selector(self.SELAppWillResignActive), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-    }
-    
     @objc private func SELAppWillEnterForegroundNotification() {
         sessionStarted = true
         checkIfShouldDisplayBar()
