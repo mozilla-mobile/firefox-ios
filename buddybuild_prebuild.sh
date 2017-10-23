@@ -34,8 +34,11 @@ echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
 /usr/libexec/PlistBuddy -c "Set LeanplumKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
 
 echo "Setting up Pocket Stories API Key"
-/usr/libexec/PlistBuddy -c "Set PocketEnvironmentAPIKey $POCKET_API_KEY" "Client/Info.plist"
-
+if [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
+  /usr/libexec/PlistBuddy -c "Set PocketEnvironmentAPIKey $POCKET_PRODUCTION_API_KEY" "Client/Info.plist"
+else
+  /usr/libexec/PlistBuddy -c "Set PocketEnvironmentAPIKey $POCKET_STAGING_API_KEY" "Client/Info.plist"
+fi
 
 #
 # Setup Sentry. We have different DSNs for Beta and Production.
