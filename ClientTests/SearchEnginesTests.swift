@@ -143,17 +143,14 @@ class SearchEnginesTests: XCTestCase {
         let profile = MockProfile()
         let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
 
-        // By default, you should see an opt-in, and suggestions are disabled.
-        XCTAssertTrue(engines.shouldShowSearchSuggestionsOptIn)
-        XCTAssertFalse(engines.shouldShowSearchSuggestions)
+        // By default, you should see search suggestions
+        XCTAssertTrue(engines.shouldShowSearchSuggestions)
 
         // Setting should be persisted.
-        engines.shouldShowSearchSuggestionsOptIn = false
-        engines.shouldShowSearchSuggestions = true
+        engines.shouldShowSearchSuggestions = false
 
         let engines2 = SearchEngines(prefs: profile.prefs, files: profile.files)
-        XCTAssertFalse(engines2.shouldShowSearchSuggestionsOptIn)
-        XCTAssertTrue(engines2.shouldShowSearchSuggestions)
+        XCTAssertFalse(engines2.shouldShowSearchSuggestions)
     }
 
     func testDirectoriesForLanguageIdentifier() {
