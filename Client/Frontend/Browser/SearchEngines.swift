@@ -39,18 +39,11 @@ class SearchEngines {
 
     init(prefs: Prefs, files: FileAccessor) {
         self.prefs = prefs
-        // By default, show search suggestions opt-in and don't show search suggestions automatically.
-        self.shouldShowSearchSuggestionsOptIn = prefs.boolForKey(ShowSearchSuggestionsOptIn) ?? true
-        self.shouldShowSearchSuggestions = prefs.boolForKey(ShowSearchSuggestions) ?? false
+        // By default, show search suggestions
+        self.shouldShowSearchSuggestions = prefs.boolForKey(ShowSearchSuggestions) ?? true
         self.fileAccessor = files
         self.disabledEngineNames = getDisabledEngineNames()
         self.orderedEngines = getOrderedEngines()
-
-        NotificationCenter.default.addObserver(self, selector: #selector(SearchEngines.SELdidResetPrompt(_:)), name: NSNotification.Name(rawValue: "SearchEnginesPromptReset"), object: nil)
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 
     var defaultEngine: OpenSearchEngine {
@@ -66,12 +59,6 @@ class SearchEngines {
             orderedEngines.insert(defaultEngine, at: 0)
             self.orderedEngines = orderedEngines
         }
-    }
-
-    @objc
-    func SELdidResetPrompt(_ notification: Notification) {
-        self.shouldShowSearchSuggestionsOptIn = true
-        self.shouldShowSearchSuggestions = false
     }
 
     func isEngineDefault(_ engine: OpenSearchEngine) -> Bool {
@@ -94,12 +81,6 @@ class SearchEngines {
     var quickSearchEngines: [OpenSearchEngine]! {
         get {
             return self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
-        }
-    }
-
-    var shouldShowSearchSuggestionsOptIn: Bool {
-        didSet {
-            self.prefs.setObject(shouldShowSearchSuggestionsOptIn, forKey: ShowSearchSuggestionsOptIn)
         }
     }
 
