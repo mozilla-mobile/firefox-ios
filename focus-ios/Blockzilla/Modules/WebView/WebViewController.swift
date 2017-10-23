@@ -70,6 +70,7 @@ class WebViewController: UIViewController, WebController {
     private func setupWebview() {
         browserView.allowsBackForwardNavigationGestures = true
         browserView.allowsLinkPreview = false
+        browserView.scrollView.clipsToBounds = false
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
