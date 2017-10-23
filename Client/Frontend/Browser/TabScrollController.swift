@@ -31,6 +31,11 @@ class TabScrollingController: NSObject {
         }
     }
 
+    // Constraint-based animation is causing PDF docs to flicker. This is used to bypass this animation.
+    var isTabShowingPDF: Bool {
+        return (tab?.mimeType ?? "") == MimeType.PDF.rawValue
+    }
+
     weak var header: UIView?
     weak var footer: UIView?
     weak var urlBar: URLBarView?
@@ -179,7 +184,9 @@ private extension TabScrollingController {
 
             lastContentOffset = translation.y
             if checkRubberbandingForDelta(delta) && checkScrollHeightIsLargeEnoughForScrolling() {
-                if (toolbarState != .collapsed || contentOffset.y <= 0) && contentOffset.y + scrollViewHeight < contentSize.height {
+                let bottomIsNotRubberbanding = contentOffset.y + scrollViewHeight < contentSize.height
+                let topIsRubberbanding = contentOffset.y <= 0
+                if isTabShowingPDF || ((toolbarState != .collapsed || topIsRubberbanding) && bottomIsNotRubberbanding) {
                     scrollWithDelta(delta)
                 }
 
@@ -282,9 +289,9 @@ extension TabScrollingController: UIScrollViewDelegate {
 
         if (decelerate || (toolbarState == .animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .up {
-                showToolbars(animated: true)
+                showToolbars(animated: !isTabShowingPDF)
             } else if scrollDirection == .down {
-                hideToolbars(animated: true)
+                hideToolbars(animated: !isTabShowingPDF)
             }
         }
     }

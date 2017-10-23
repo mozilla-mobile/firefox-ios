@@ -715,8 +715,13 @@ extension TabManager {
     }
 
     fileprivate func restoreTabsInternal() {
-        guard let savedTabs = TabManager.tabsToRestore() else {
+        guard var savedTabs = TabManager.tabsToRestore() else {
             return
+        }
+
+        // Make sure to wipe the private tabs if the user has the pref turned on
+        if shouldClearPrivateTabs() {
+            savedTabs = savedTabs.filter { !$0.isPrivate }
         }
 
         var tabToSelect: Tab?
@@ -951,15 +956,20 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationResponse: WKNavigationResponse,
                  decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-            var res = WKNavigationResponsePolicy.allow
-            for delegate in delegates {
-                delegate.webView?(webView, decidePolicyFor: navigationResponse, decisionHandler: { policy in
-                    if policy == .cancel {
-                        res = policy
-                    }
-                })
-            }
+        var res = WKNavigationResponsePolicy.allow
+        for delegate in delegates {
+            delegate.webView?(webView, decidePolicyFor: navigationResponse, decisionHandler: { policy in
+                if policy == .cancel {
+                    res = policy
+                }
+            })
+        }
 
-            decisionHandler(res)
+        if res == .allow, let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            let tab = appDelegate.browserViewController.tabManager[webView]
+            tab?.mimeType = navigationResponse.response.mimeType
+        }
+
+        decisionHandler(res)
     }
 }

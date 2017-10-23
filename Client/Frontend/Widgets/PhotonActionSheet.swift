@@ -8,7 +8,7 @@ import SnapKit
 import Shared
 
 private struct PhotonActionSheetUX {
-    static let MaxWidth: CGFloat = 375
+    static let MaxWidth: CGFloat = 414
     static let Padding: CGFloat = 10
     static let SectionVerticalPadding: CGFloat = 13
     static let HeaderHeight: CGFloat = 80
@@ -142,8 +142,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             tableView.backgroundColor = .clear
         }
 
-        var width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
-        width = self.modalPresentationStyle == .popover ? width : (self.view.frame.width - (PhotonActionSheetUX.Padding * 2))
+        let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
         let height = actionSheetHeight()
         
         if self.modalPresentationStyle == .popover {
@@ -156,7 +155,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
                 make.centerX.equalTo(self.view.snp.centerX)
                 make.width.equalTo(width)
                 make.height.equalTo(PhotonActionSheetUX.CancelButtonHeight)
-                make.bottom.equalTo(self.view.snp.bottom).offset(-PhotonActionSheetUX.Padding)
+                if #available(iOS 11, *) {
+                    make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+                } else {
+                    make.bottom.equalTo(self.view.snp.bottom).offset(-PhotonActionSheetUX.Padding)
+                }
             }
         }
         

@@ -106,7 +106,7 @@ class ButtonToast: UIView {
             label.adjustsFontSizeToFitWidth = true
             label.snp.makeConstraints { (make) in
                 make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
-                make.top.equalTo(toast).offset(ButtonToastUX.ToastButtonPadding)
+                make.top.equalTo(toast).offset(ButtonToastUX.TitleButtonPadding)
                 make.trailing.equalTo(button.snp.leading).offset(-ButtonToastUX.TitleButtonPadding)
             }
             description.snp.makeConstraints { (make) in

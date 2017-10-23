@@ -305,11 +305,17 @@ class ActivityStreamTest: BaseTestCase {
         navigator.openURL(urlString: "http://yahoo.com")
 
         if iPad() {
+            // Test timeout on BB when loading these pages
             navigator.openURL(urlString: "http://cvs.com")
+            waitUntilPageLoad()
             navigator.openURL(urlString: "http://walmart.com")
+            waitUntilPageLoad()
             navigator.openURL(urlString: "http://zara.com")
+            waitUntilPageLoad()
             navigator.openURL(urlString: "http://twitter.com")
+            waitUntilPageLoad()
             navigator.openURL(urlString: "http://instagram.com")
+            waitUntilPageLoad()
         }
         navigator.goto(URLBarOpen)
         waitforExistence(pagecontrolButton)

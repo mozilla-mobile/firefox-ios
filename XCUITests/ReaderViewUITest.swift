@@ -34,6 +34,12 @@ class ReaderViewTest: BaseTestCase {
         app.buttons["Add to Reading List"].tap()
     }
 
+    private func checkReadingListNumberOfItems(items: Int) {
+        waitforExistence(app.tables["ReadingTable"])
+        let list = app.tables["ReadingTable"].cells.count
+        XCTAssertEqual(list, UInt(items), "The number of items in the reading table is not correct")
+    }
+
     func testAddToReadingList() {
         // Initially reading list is empty
         navigator.goto(HomePanel_ReadingList)
@@ -42,10 +48,7 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertFalse(app.buttons["HomePanels.ReadingList"].isEnabled)
         XCTAssertTrue(app.buttons["HomePanels.Bookmarks"].isEnabled)
 
-        let readingtableTable = app.tables["ReadingTable"]
-        waitforExistence(readingtableTable)
-        let list = app.tables["ReadingTable"].cells.count
-        XCTAssertEqual(list, 0, "There should not be any entry in the reading table")
+        checkReadingListNumberOfItems(items: 0)
 
         // Add item to reading list and check that it appears
         addContentToReaderView()
@@ -55,9 +58,7 @@ class ReaderViewTest: BaseTestCase {
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         XCTAssertTrue(savedToReadingList.exists)
-        waitforExistence(app.tables["ReadingTable"])
-        let listAfter = app.tables["ReadingTable"].cells.count
-        XCTAssertEqual(listAfter, 1, "There should not be any entry in the reading table")
+        checkReadingListNumberOfItems(items: 1)
     }
 
     func testMarkAsReadAndUreadFromReaderView() {
@@ -85,11 +86,7 @@ class ReaderViewTest: BaseTestCase {
         navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
-
-        let readingtableTable = app.tables["ReadingTable"]
-        waitforExistence(readingtableTable)
-        let list = app.tables["ReadingTable"].cells.count
-        XCTAssertEqual(list, 0, "There should not be any entry in the reading table")
+        checkReadingListNumberOfItems(items: 0)
     }
 
     func testMarkAsReadAndUnreadFromReadingList() {
@@ -125,9 +122,22 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertFalse(savedToReadingList.exists)
 
         // Reader list view should be empty
-        let readingtableTable = app.tables["ReadingTable"]
-        waitforExistence(readingtableTable)
-        let list = app.tables["ReadingTable"].cells.count
-        XCTAssertEqual(list, 0, "There should not be any entry in the reading table")
+        checkReadingListNumberOfItems(items: 0)
+    }
+
+    func testAddToReadingListFromPageOptionsMenu() {
+        // First time Reading list is empty
+        navigator.goto(HomePanel_ReadingList)
+        checkReadingListNumberOfItems(items: 0)
+
+        // Add item to Reading List from Page Options Menu
+        navigator.goto(BrowserTab)
+        waitUntilPageLoad()
+        navigator.browserPerformAction(.addReadingListOption)
+
+        // Now there should be an item on the list
+        navigator.nowAt(BrowserTab)
+        navigator.browserPerformAction(.openReadingListOption)
+        checkReadingListNumberOfItems(items: 1)
     }
 }

@@ -75,6 +75,7 @@ protocol URLBarDelegate: class {
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String)
     // Returns either (search query, true) or (url, false).
     func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
+    func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton)
 }
 
 class URLBarView: UIView {
@@ -614,6 +615,10 @@ extension URLBarView: TabLocationViewDelegate {
     
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
         delegate?.urlBarDidPressPageOptions(self, from: tabLocationView.pageOptionsButton)
+    }
+    
+    func tabLocationViewDidLongPressPageOptions(_ tabLocationView: TabLocationView) {
+        delegate?.urlBarDidLongPressPageOptions(self, from: tabLocationView.pageOptionsButton)
     }
 
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {

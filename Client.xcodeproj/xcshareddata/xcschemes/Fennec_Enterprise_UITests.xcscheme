@@ -179,9 +179,6 @@
                   Identifier = "BookmarkingTests">
                </Test>
                <Test
-                  Identifier = "BookmarksPanelTests/testBookmarkPanelBufferOnly()">
-               </Test>
-               <Test
                   Identifier = "BrowserTests">
                </Test>
                <Test
@@ -219,9 +216,6 @@
                </Test>
                <Test
                   Identifier = "SettingsTests">
-               </Test>
-               <Test
-                  Identifier = "ToolbarTests/testUserInfoRemovedFromURL()">
                </Test>
                <Test
                   Identifier = "TopTabsTests">

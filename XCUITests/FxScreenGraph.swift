@@ -212,7 +212,12 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     let cancelBackAction = {
-        app.buttons["PhotonMenu.cancel"].tap()
+        if map.isiPad() {
+            // There is not Cancel option in iPad this way it is closed
+            app/*@START_MENU_TOKEN@*/.otherElements["PopoverDismissRegion"]/*[[".otherElements[\"dismiss popup\"]",".otherElements[\"PopoverDismissRegion\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        } else {
+            app.buttons["PhotonMenu.cancel"].tap()
+        }
     }
 
     let backBtnBackAction = {
@@ -441,10 +446,10 @@ extension Navigator {
 
         if PageMenuOptions.contains(view) {
             self.goto(PageOptionsMenu)
-            app.collectionViews.cells[view.rawValue].tap()
+            app.tables["Context Menu"].cells[view.rawValue].tap()
         } else if BrowserMenuOptions.contains(view) {
             self.goto(BrowserTabMenu)
-            app.collectionViews.cells[view.rawValue].tap()
+            app.tables["Context Menu"].cells[view.rawValue].tap()
         }
     }
 }

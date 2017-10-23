@@ -46,7 +46,7 @@ public struct AppConstants {
     /// Should we try to sync (no merging) the Mobile Folder (if shouldMergeBookmarks is false).
     public static let MOZ_SIMPLE_BOOKMARKS_SYNCING: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -69,25 +69,12 @@ public struct AppConstants {
         #endif
     }()
 
-    /// Flag indiciating if we are running in Debug mode or not.
+    /// Flag indicating if we are running in Debug mode or not.
     public static let isDebug: Bool = {
         #if MOZ_CHANNEL_FENNEC
             return true
         #else
             return false
-        #endif
-    }()
-    
-    /// Enables/disables the availability of No Image Mode.
-    public static let MOZ_NO_IMAGE_MODE: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return false
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
         #endif
     }()
 
@@ -134,7 +121,7 @@ public struct AppConstants {
     /// Toggles the ability to add a custom search engine
     public static let MOZ_CUSTOM_SEARCH_ENGINE: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -147,7 +134,7 @@ public struct AppConstants {
     ///  Enables/disables push notificatuibs for FxA
     public static let MOZ_FXA_PUSH: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -186,7 +173,7 @@ public struct AppConstants {
     ///  Toggle the feature that shows updated FxA preferences cell
     public static let MOZ_SHOW_FXA_AVATAR: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -195,4 +182,26 @@ public struct AppConstants {
             return true
         #endif
     }()
+
+    /// Toggle the feature that adds 'Send to Device' to the page actions menu
+    public static let MOZ_SENDTAB_IN_PAGE_ACTIONS: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return true
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return true
+        #endif
+    }()
+
+    /// The maximum length of a URL stored by Firefox. Shared with Places on desktop.
+    public static let DB_URL_LENGTH_MAX = 65536
+
+    /// The maximum length of a page title stored by Firefox. Shared with Places on desktop.
+    public static let DB_TITLE_LENGTH_MAX = 4096
+
+    /// The maximum length of a bookmark description stored by Firefox. Shared with Places on desktop.
+    public static let DB_DESCRIPTION_LENGTH_MAX = 1024
 }

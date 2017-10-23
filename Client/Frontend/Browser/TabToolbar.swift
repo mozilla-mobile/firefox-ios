@@ -36,6 +36,7 @@ protocol TabToolbarDelegate: class {
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
 @objc
@@ -84,6 +85,8 @@ open class TabToolbarHelper: NSObject {
         toolbar.stopReloadButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickStopReload), for: UIControlEvents.touchUpInside)
 
         toolbar.tabsButton.addTarget(self, action: #selector(TabToolbarHelper.SELdidClickTabs), for: .touchUpInside)
+        let longPressGestureTabsButton = UILongPressGestureRecognizer(target: self, action: #selector(TabToolbarHelper.SELdidLongPressTabs(_:)))
+        toolbar.tabsButton.addGestureRecognizer(longPressGestureTabsButton)
 
         toolbar.menuButton.contentMode = UIViewContentMode.center
         toolbar.menuButton.setImage(UIImage.templateImageNamed("nav-menu"), for: .normal)
@@ -105,6 +108,10 @@ open class TabToolbarHelper: NSObject {
 
     func SELdidClickTabs() {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressTabs(toolbar, button: toolbar.tabsButton)
+    }
+    
+    func SELdidLongPressTabs(_ recognizer: UILongPressGestureRecognizer) {
+        toolbar.tabToolbarDelegate?.tabToolbarDidLongPressTabs(toolbar, button: toolbar.tabsButton)
     }
 
     func SELdidClickForward() {

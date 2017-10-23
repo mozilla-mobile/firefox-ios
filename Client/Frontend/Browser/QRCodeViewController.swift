@@ -252,7 +252,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     }
 }
 
-extension UINavigationController {
+class QRCodeNavigationController: UINavigationController {
     override open var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }

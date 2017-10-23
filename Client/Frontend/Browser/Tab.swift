@@ -72,8 +72,17 @@ class Tab: NSObject {
     var restoring: Bool = false
     var pendingScreenshot = false
     var url: URL?
+    var mimeType: String?
 
     fileprivate var _noImageMode = false
+
+    /// Returns true if this tab's URL is known, and it's longer than we want to store.
+    var urlIsTooLong: Bool {
+        guard let url = self.url else {
+            return false
+        }
+        return url.absoluteString.lengthOfBytes(using: String.Encoding.utf8) > AppConstants.DB_URL_LENGTH_MAX
+    }
 
     // Use computed property so @available can be used to guard `noImageMode`.
     @available(iOS 11, *)
@@ -177,6 +186,7 @@ class Tab: NSObject {
 
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.allowsBackForwardNavigationGestures = true
+            webView.allowsLinkPreview = false
             webView.backgroundColor = UIColor.lightGray
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame

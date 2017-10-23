@@ -649,7 +649,7 @@ class BrowserViewController: UIViewController {
         // Setup the bottom toolbar
         toolbar?.snp.remakeConstraints { make in
             make.edges.equalTo(self.footer)
-            make.height.equalTo(UIConstants.ToolbarHeight)
+            make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
 
         footer.snp.remakeConstraints { make in
@@ -1293,7 +1293,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = self
-        let controller = UINavigationController(rootViewController: qrCodeViewController)
+        let controller = QRCodeNavigationController(rootViewController: qrCodeViewController)
         self.present(controller, animated: true, completion: nil)
     }
 
@@ -1318,6 +1318,12 @@ extension BrowserViewController: URLBarDelegate {
                                         findInPage: findInPageAction, presentableVC: self, success: successCallback)
 
         presentSheetWith(actions: pageActions, on: self, from: button)
+    }
+    
+    func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
+        guard let tab = tabManager.selectedTab else { return }
+        guard let url = tab.canonicalURL?.displayURL else { return }
+        presentActivityViewController(url, tab: tab, sourceView: button, sourceRect: button.bounds, arrowDirection: .up)
     }
     
     func urlBarDidPressStop(_ urlBar: URLBarView) {
@@ -1565,6 +1571,20 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
+    }
+    
+    func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
+            self.tabManager.addTabAndSelect(isPrivate: false)
+        }))
+        controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
+            self.tabManager.addTabAndSelect(isPrivate: true)
+        }))
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
+        controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
+        controller.popoverPresentationController?.sourceRect = button.frame
+        present(controller, animated: true, completion: nil)
     }
 
     func showBackForwardList() {
@@ -2935,6 +2955,31 @@ extension BrowserViewController: TopTabsDelegate {
     
     func topTabsDidChangeTab() {
         urlBar.leaveOverlayMode(didCancel: true)
+    }
+}
+
+extension BrowserViewController: ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate {
+    func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
+        self.popToBVC()
+    }
+
+    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
+        self.popToBVC()
+    }
+
+    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+        guard let tab = tabManager.selectedTab,
+            let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
+        let shareItem = ShareItem.init(url: url, title: tab.title, favicon: tab.displayFavicon)
+        guard shareItem.isShareable else {
+            let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .default) { _ in self.popToBVC()})
+            present(alert, animated: true, completion: nil)
+            return
+        }
+        profile.sendItems([shareItem], toClients: clients).uponQueue(DispatchQueue.main) { _ in
+            self.popToBVC()
+        }
     }
 }
 

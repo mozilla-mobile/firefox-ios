@@ -360,7 +360,6 @@ class BrowserUtils {
             // If we don't wait here, setOn:forSwitchWithAccessibilityLabel tries to use the UITableViewCell
             // instead of the UISwitch. KIF bug?
             tester.waitForView(withAccessibilityLabel: clearable.rawValue)
-            
             tester.setOn(clearables!.contains(clearable), forSwitchWithAccessibilityLabel: clearable.rawValue)
         }
         
@@ -417,7 +416,7 @@ class SimplePageServer {
         let webServer: GCDWebServer = GCDWebServer()
 
         webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            let img = UIImagePNGRepresentation(UIImage(named: "back")!)
+            let img = UIImagePNGRepresentation(UIImage(named: "goBack")!)
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 

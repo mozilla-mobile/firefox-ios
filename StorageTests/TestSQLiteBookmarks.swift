@@ -20,6 +20,23 @@ extension SQLiteBookmarks {
 
 // MARK: - Tests.
 
+class TestTruncation: XCTestCase {
+    func testTruncate() {
+        let a = "🤠"
+        let b = "abcdefghi"
+        let c = ""
+        XCTAssertEqual(a.truncateToUTF8ByteCount(1), "")
+        XCTAssertEqual(a.truncateToUTF8ByteCount(4), a)
+        XCTAssertEqual(a.truncateToUTF8ByteCount(16), a)
+
+        XCTAssertEqual(b.truncateToUTF8ByteCount(16), b)
+        XCTAssertEqual(b.truncateToUTF8ByteCount(5), "abcde")
+        XCTAssertEqual(b.truncateToUTF8ByteCount(0), "")
+        XCTAssertEqual(c.truncateToUTF8ByteCount(1), c)
+        XCTAssertEqual(c.truncateToUTF8ByteCount(4), c)
+    }
+}
+
 class TestSQLiteBookmarks: XCTestCase {
     let files = MockFiles()
 
