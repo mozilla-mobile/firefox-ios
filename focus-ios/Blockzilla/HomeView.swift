@@ -72,4 +72,12 @@ class HomeView: UIView {
     @objc private func didPressSettings() {
         delegate?.homeViewDidPressSettings(homeView: self)
     }
+    
+    func setHighlightWhatsNew(shouldHighlight: Bool) {
+        if shouldHighlight {
+            settingsButton.setImage(UIImage(named: "preferences_updated"), for: .normal)
+        } else {
+            settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
+        }
+    }
 }

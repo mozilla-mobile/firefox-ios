@@ -15,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let browserViewController = BrowserViewController()
     private var queuedUrl: URL?
     private var queuedString: String?
+    static let prefWhatsNewDone = "WhatsNewDone"
+    static let prefWhatsNewCounter = "WhatsNewCounter"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
@@ -46,19 +48,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         displaySplashAnimation()
         KeyboardHelper.defaultHelper.startObserving()
 
-        let needToShowFirstRunExperience = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) < AppDelegate.prefIntroVersion
+        let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
+
+        let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
         if  needToShowFirstRunExperience {
 
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
             DispatchQueue.main.async {
                 // Set the prefIntroVersion viewed number in the same context as the presentation.
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
+                UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
 
                 let firstRunViewController = FirstRunViewController()
                 rootViewController.present(firstRunViewController, animated: false, completion: nil)
             }
         }
-
+        
+        // Don't highlight whats new on a fresh install (prefIntroDone == 0 on a fresh install)
+        if prefIntroDone != 0 && UserDefaults.standard.string(forKey: AppDelegate.prefWhatsNewDone) != AppInfo.shortVersion {
+            
+            let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
+            switch counter {
+                case 4:
+                    // Shown three times, remove counter
+                    UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
+                    UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
+                default:
+                    // Show highlight
+                    UserDefaults.standard.set(counter+1, forKey: AppDelegate.prefWhatsNewCounter)
+            }
+        }
+        
         return true
     }
 

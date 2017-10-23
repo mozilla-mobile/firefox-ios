@@ -55,7 +55,7 @@ class BrowserViewController: UIViewController {
         self.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -149,7 +149,9 @@ class BrowserViewController: UIViewController {
         if userHasSeenIntro && !urlBar.inBrowsingMode {
             urlBar.becomeFirstResponder()
         }
-
+        
+        homeView?.setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
+        
         super.viewWillAppear(animated)
     }
 
@@ -259,7 +261,7 @@ class BrowserViewController: UIViewController {
 
     fileprivate func showSettings() {
         urlBar.shouldPresent = false
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager)
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: self)
         navigationController!.pushViewController(settingsViewController, animated: true)
         navigationController!.setNavigationBarHidden(false, animated: true)
 
@@ -690,3 +692,21 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) { }
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
 }
+
+protocol WhatsNewDelegate {
+    func shouldShowWhatsNew() -> Bool
+    func didShowWhatsNew() -> Void
+}
+
+extension BrowserViewController: WhatsNewDelegate {
+    func shouldShowWhatsNew() -> Bool {
+        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
+        return counter != 0
+    }
+    
+    func didShowWhatsNew() {
+        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
+        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
+    }
+}
+
