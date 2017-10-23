@@ -18,13 +18,13 @@ protocol DataObserver {
 }
 
 protocol DataObserverDelegate: class {
-    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
+    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool)
     func willInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
 }
 
 // Make these delegate methods optional by providing default implementations
 extension DataObserverDelegate {
-    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {}
+    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool) {}
     func willInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {}
 }
 
@@ -80,9 +80,13 @@ class ActivityStreamDataObserver: DataObserver {
             if shouldInvalidateTopSites {
                 self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
             }
-            let newInvalidationTime = shouldInvalidateHighlights ? Date.now() : lastInvalidationTime
-            self.profile.prefs.setLong(newInvalidationTime, forKey: PrefsKeys.ASLastInvalidation)
-            self.delegate?.didInvalidateDataSources(forceHighlights: highlights, forceTopSites: topSites)
+            
+            if shouldInvalidateHighlights {
+                let newInvalidationTime = shouldInvalidateHighlights ? Date.now() : lastInvalidationTime
+                self.profile.prefs.setLong(newInvalidationTime, forKey: PrefsKeys.ASLastInvalidation)
+            }
+            
+            self.delegate?.didInvalidateDataSources(forceHighlights: highlights, forceTopSites: topSites, highlightsRefreshed: shouldInvalidateHighlights, topSitesRefreshed: shouldInvalidateTopSites)
         }
     }
 
