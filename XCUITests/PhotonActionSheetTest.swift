@@ -41,4 +41,19 @@ class PhotonActionSheetTest: BaseTestCase {
         cell.press(forDuration: 2)
         app.cells["Remove Pinned Site"].tap()
     }
+
+    func testShareOptionIsShown() {
+        navigator.browserPerformAction(.shareOption)
+        app.buttons["TabLocationView.pageOptionsButton"].press(forDuration: 1)
+
+        // Wait to see the Share options sheet
+        waitforExistence(app.buttons["Copy"])
+    }
+
+    func testShareOptionIsShownFromShortCut() {
+        navigator.goto(BrowserTab)
+        app.buttons["TabLocationView.pageOptionsButton"].press(forDuration: 1)
+        // Wait to see the Share options sheet
+        waitforExistence(app.buttons["Copy"])
+    }
 }
