@@ -27,12 +27,12 @@ class ClipboardBarDisplayHandler {
         self.tabManager = tabManager
         NotificationCenter.default.addObserver(self, selector: #selector(self.SELAppWillEnterForegroundNotification), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.SELAppWillResignActive), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.SELAppWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
     @objc private func SELAppWillEnterForegroundNotification() {
