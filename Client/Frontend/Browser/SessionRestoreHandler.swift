@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import GCDWebServers
+import Shared
 
 /// Handles requests to /about/sessionrestore to restore session history.
 struct SessionRestoreHandler {
@@ -14,6 +15,11 @@ struct SessionRestoreHandler {
             if let sessionRestorePath = Bundle.main.path(forResource: "SessionRestore", ofType: "html") {
                 do {
                     let sessionRestoreString = try String(contentsOfFile: sessionRestorePath)
+
+                    defer {
+                        NotificationCenter.default.post(name: NotificationDidRestoreSession, object: self)
+                    }
+
                     return GCDWebServerDataResponse(html: sessionRestoreString)
                 } catch _ {}
             }
