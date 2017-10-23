@@ -147,6 +147,14 @@ The user opened a new tab.
 }
 ~~~~
 
+The user opens a Pocket trending story
+~~~~
+{
+
+  "event": "E_Opened_Pocket_Story"
+}
+~~~~
+
 The user interacts with search url area.
 ~~~~
 {
