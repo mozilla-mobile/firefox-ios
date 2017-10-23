@@ -360,9 +360,15 @@ class BrowserUtils {
             // If we don't wait here, setOn:forSwitchWithAccessibilityLabel tries to use the UITableViewCell
             // instead of the UISwitch. KIF bug?
             tester.waitForView(withAccessibilityLabel: clearable.rawValue)
-            tester.setOn(clearables!.contains(clearable), forSwitchWithAccessibilityLabel: clearable.rawValue)
+//            tester.setOn(clearables!.contains(clearable), forSwitchWithAccessibilityLabel: clearable.rawValue)
+            let switchControl = grey_allOf([grey_accessibilityLabel(clearable.rawValue),
+                                           grey_kindOfClass(UISwitch.self)])
+            EarlGrey.select(elementWithMatcher: switchControl).perform(grey_turnSwitchOn(clearables!.contains(clearable)))
         }
         
+        
+        
+        tester.waitForView(withAccessibilityLabel: "Clear Private Data")
         tester.tapView(withAccessibilityLabel: "Clear Private Data", traits: UIAccessibilityTraitButton)
         acceptClearPrivateData(tester)
         

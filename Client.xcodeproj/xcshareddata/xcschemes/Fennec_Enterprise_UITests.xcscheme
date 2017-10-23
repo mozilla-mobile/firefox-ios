@@ -182,9 +182,6 @@
                   Identifier = "BrowserTests">
                </Test>
                <Test
-                  Identifier = "ClearPrivateDataTests/testClearsCache()">
-               </Test>
-               <Test
                   Identifier = "FindInPageTests">
                </Test>
                <Test
