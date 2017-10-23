@@ -36,4 +36,26 @@ class PanelDataObserversTests: XCTestCase {
 
         waitForCondition(timeout: 5) { delegate.didInvalidateCount == 3 &&  delegate.willInvalidateCount == 3 }
     }
+    
+    func testHighlightsCacheInvalidation() {
+        let profile = MockProfile()
+        let observer = ActivityStreamDataObserver(profile: profile)
+        let delegate = MockDataObserverDelegate()
+        observer.delegate = delegate
+        
+        // Set to 20min since refresh
+        profile.prefs.setLong(OneMinuteInMilliseconds * 20, forKey: PrefsKeys.ASLastInvalidation)
+        observer.refreshIfNeeded(forceHighlights: false, forceTopSites: false)
+        waitForCondition(timeout: 5) { delegate.didInvalidateCount == 1 &&  delegate.willInvalidateCount == 1 }
+
+        // Set to no validation key
+        profile.prefs.removeObjectForKey(PrefsKeys.ASLastInvalidation)
+        observer.refreshIfNeeded(forceHighlights: false, forceTopSites: false)
+        waitForCondition(timeout: 5) { delegate.didInvalidateCount == 2 &&  delegate.willInvalidateCount == 2 }
+
+        // Set to 10min since refresh
+        profile.prefs.setLong(OneMinuteInMilliseconds * 10, forKey: PrefsKeys.ASLastInvalidation)
+        observer.refreshIfNeeded(forceHighlights: false, forceTopSites: false)
+        waitForCondition(timeout: 5) { delegate.didInvalidateCount == 2 &&  delegate.willInvalidateCount == 3 }
+    }
 }

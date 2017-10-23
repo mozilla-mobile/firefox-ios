@@ -40,7 +40,6 @@ class ActivityStreamDataObserver: DataObserver {
     let profile: Profile
     weak var delegate: DataObserverDelegate?
     private var invalidationTime = OneMinuteInMilliseconds * 15
-    private var lastInvalidation: UInt64 = 0
 
     fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory]
 
