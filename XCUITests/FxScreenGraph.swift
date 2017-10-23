@@ -374,8 +374,9 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
     }
 
     map.createScene(BrowserTabMenu) { scene in
-        scene.backAction = closeMenuAction
+        scene.backAction = cancelBackAction
         scene.tap(app.tables.cells["Settings"], to: SettingsScreen)
+
 
         scene.dismissOnUse = true
     }

@@ -97,6 +97,7 @@ class BookmarkingTests: BaseTestCase {
         //First time there is not any bookmark
         navigator.browserPerformAction(.openBookMarksOption)
         checkEmptyBookmarkList()
+        navigator.nowAt(BrowserTab)
 
         //Add a bookmark
         navigator.createNewTab()
