@@ -176,10 +176,16 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "HomePageUITest">
+               </Test>
+               <Test
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
-                   Identifier = "HomePageUITest">
+                  Identifier = "TopTabsTest/testAddPrivateTabByLongPressTabsButton()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testAddTabByLongPressTabsButton()">
                </Test>
             </SkippedTests>
          </TestableReference>

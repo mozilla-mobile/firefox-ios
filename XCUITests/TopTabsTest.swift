@@ -51,6 +51,11 @@ class TopTabsTest: BaseTestCase {
         waitforExistence(app.collectionViews.cells[urlLabel])
     }
 
+    private func checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: Int) {
+        let numTabsOpen = app.collectionViews.cells.count
+        XCTAssertEqual(numTabsOpen, UInt(expectedNumberOfTabsOpen), "The number of tabs open is not correct")
+    }
+
     func testAddTabFromContext() {
         navigator.openURL(urlString: urlExample)
         // Initially there is only one tab open
@@ -67,8 +72,34 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
         waitforExistence(app.collectionViews.cells["Example Domain"])
         waitforExistence(app.collectionViews.cells["IANA — IANA-managed Reserved Domains"])
-        let numTabsOpen = app.collectionViews.cells.count
-        XCTAssertEqual(numTabsOpen, 2, "Tab not added from link")
+
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+    }
+
+    // This test only runs for iPhone see bug 1409750
+    func testAddTabByLongPressTabsButton() {
+        navigator.goto(BrowserTab)
+        app.buttons["TabToolbar.tabsButton"].press(forDuration: 1)
+
+        waitforExistence(app.buttons["New Tab"])
+        app.buttons["New Tab"].tap()
+        navigator.goto(TabTray)
+
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+    }
+
+    // This test only runs for iPhone see bug 1409750
+    func testAddPrivateTabByLongPressTabsButton() {
+        navigator.goto(BrowserTab)
+        app.buttons["TabToolbar.tabsButton"].press(forDuration: 1)
+
+        waitforExistence(app.buttons["New Private Tab"])
+        app.buttons["New Private Tab"].tap()
+        navigator.goto(TabTray)
+
+        waitforExistence(app.buttons["TabTrayController.maskButton"])
+        XCTAssertTrue(app.buttons["TabTrayController.maskButton"].isEnabled)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
     }
 
     func testSwitchBetweenTabs() {
@@ -113,8 +144,7 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
-        let numTabsOpen = app.collectionViews.cells.count
-        XCTAssertEqual(numTabsOpen, 4, "The number of regular tabs is not correct")
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
 
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.closeAllTabs()
@@ -123,8 +153,7 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
-        let numTabsAfterUndo = app.collectionViews.cells.count
-        XCTAssertEqual(numTabsAfterUndo, 4, "The number of regular tabs is not correct")
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
     }
 
     func testCloseAllTabs() {
@@ -136,15 +165,13 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
-        let numTabsOpen = app.collectionViews.cells.count
-        XCTAssertEqual(numTabsOpen, 4, "The number of tabs is not correct after opening 4")
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
 
         // Close all tabs and check that the number of tabs is correct
         navigator.closeAllTabs()
         navigator.goto(TabTray)
 
         waitforNoExistence(app.collectionViews.cells[urlLabel])
-        let numTabsAfterClosingAll = app.collectionViews.cells.count
-        XCTAssertEqual(numTabsAfterClosingAll, 1, "The number of tabs is not correct after closing all")
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
     }
 }
