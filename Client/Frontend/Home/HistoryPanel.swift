@@ -63,10 +63,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        events.forEach { NotificationCenter.default.removeObserver(self, name: $0, object: nil) }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)

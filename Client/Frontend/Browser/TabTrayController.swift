@@ -297,9 +297,6 @@ class TabTrayController: UIViewController {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
         self.tabManager.removeDelegate(self)
     }
 

@@ -104,7 +104,6 @@ class TopTabsViewController: UIViewController {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: faviconNotification, object: nil)
         self.tabManager.removeDelegate(self)
     }
     
