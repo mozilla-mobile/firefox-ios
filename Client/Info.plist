@@ -89,7 +89,7 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This lets you save photos.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Access your Logins.</string>
+	<string>This app requires Face ID access to secure your Logins.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.mozilla.ios.firefox.browsing</string>
