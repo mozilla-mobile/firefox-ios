@@ -241,9 +241,10 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
     }
 
     fileprivate func updateTitleForTouchIDState() {
-        if LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
+        let localAuthContext = LAContext()
+        if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             let title: String
-            if #available(iOS 11.0, *), LAContext().biometryType == .typeFaceID {
+            if #available(iOS 11.0, *), localAuthContext.biometryType == .typeFaceID {
                 title = AuthenticationStrings.faceIDPasscodeSetting
             } else {
                 title = AuthenticationStrings.touchIDPasscodeSetting
