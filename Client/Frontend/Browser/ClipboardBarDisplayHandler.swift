@@ -35,6 +35,12 @@ class ClipboardBarDisplayHandler: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(SELAppWillEnterForegroundNotification), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: NotificationDidRestoreSession, object: nil)
     }
+
+    deinit {
+        if !firstTabLoaded {
+            firstTab?.webView?.removeObserver(self, forKeyPath: "URL")
+        }
+    }
     
     @objc private func SELUIPasteboardChanged() {
         UIPasteboard.general.asyncURL().uponQueue(.main) { res in
