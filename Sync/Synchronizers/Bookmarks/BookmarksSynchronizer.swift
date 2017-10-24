@@ -230,10 +230,9 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                         return self.uploadSomeLocalRecords(storage, mirrorer, bookmarksClient, mobileRootRecord: mobileRootRecord, childrenRecords: childrenRecords)
                     }
                 }).bind { simpleSyncingResult in
-                    if let failure = simpleSyncingResult.failureValue,
-                       AppConstants.BuildChannel != .release {
+                    if let failure = simpleSyncingResult.failureValue {
                         let description = failure is RecordTooLargeError ? "Record too large" : failure.description
-                        SentryIntegration.shared.send(message: "Failed to simple sync bookmarks: " + description, tag: "BookmarksSyncing", severity: .error)
+                        Sentry.shared.send(message: "Failed to simple sync bookmarks", tag: SentryTag.bookmarks, severity: .error, description: description)
                     }
                     return deferMaybe(result)
                 }
@@ -282,9 +281,9 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         let repairer = BookmarksRepairRequestor(scratchpad: self.scratchpad, basePrefs: self.basePrefs, remoteClients: remoteClientsAndTabs)
         return repairer.startRepairs(validationInfo: error.inconsistencies).bind { result in
             if let repairFailure = result.failureValue {
-                SentryIntegration.shared.send(message: "Bookmarks repair failure: " + repairFailure.description, tag: "BookmarksRepair", severity: .error)
+                Sentry.shared.send(message: "Bookmarks repair failure", tag: SentryTag.bookmarks, severity: .error, description: repairFailure.description)
             } else {
-                SentryIntegration.shared.send(message: "Bookmarks repair succeeded", tag: "BookmarksRepair", severity: .debug)
+                Sentry.shared.send(message: "Bookmarks repair succeeded", tag: SentryTag.bookmarks, severity: .debug)
             }
             return succeed()
         }

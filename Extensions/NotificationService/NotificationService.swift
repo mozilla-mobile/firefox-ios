@@ -8,10 +8,7 @@ import Sync
 import UserNotifications
 
 private let log = Logger.browserLogger
-
 private let CategorySentTab = "org.mozilla.ios.SentTab.placeholder"
-
-private let sentryTag = "NotificationService"
 
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay!
@@ -33,7 +30,7 @@ class NotificationService: UNNotificationServiceExtension {
         }
 
         guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
-            SentryIntegration.shared.sendWithStacktrace(message: "No notification content", tag: sentryTag)
+            Sentry.shared.sendWithStacktrace(message: "No notification content", tag: SentryTag.notificationService)
             return self.didFinish(PushMessage.accountVerified)
         }
 
@@ -57,8 +54,8 @@ class NotificationService: UNNotificationServiceExtension {
         display.messageDelivered = false
         display.displayNotification(what, with: error)
         if !display.messageDelivered {
-            let string = "Empty notification: message=\(what?.messageType.rawValue ?? "nil"), error=\(error?.description ?? "nil")"
-            SentryIntegration.shared.send(message: string, tag: sentryTag)
+            let string = ["message": "\(what?.messageType.rawValue ?? "nil"), error=\(error?.description ?? "nil")"]
+            Sentry.shared.send(message: "Empty notification", tag: SentryTag.notificationService, extra: string)
             display.displayUnknownMessageNotification()
         }
     }
@@ -87,11 +84,7 @@ class SyncDataDisplay {
 
     func displayNotification(_ message: PushMessage? = nil, with error: PushMessageError? = nil) {
         guard let message = message, error == nil else {
-            if let error = error {
-                SentryIntegration.shared.send(message: "PushMessageError: \(error.description)", tag: sentryTag)
-            } else {
-                SentryIntegration.shared.send(message: "PushMessage: nil message", tag: sentryTag)
-            }
+            Sentry.shared.send(message: "PushMessageError", tag: SentryTag.notificationService, description: "\(error?.description ??? "nil")")
             return displayUnknownMessageNotification()
         }
 
@@ -153,7 +146,7 @@ extension SyncDataDisplay {
         } else {
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
         }
-        SentryIntegration.shared.sendWithStacktrace(message: "Unknown notification message", tag: sentryTag)
+        Sentry.shared.sendWithStacktrace(message: "Unknown notification message", tag: SentryTag.notificationService)
     }
 }
 
@@ -187,8 +180,8 @@ extension SyncDataDisplay {
 
         let center = UNUserNotificationCenter.current()
         center.getDeliveredNotifications { notifications in
-
-            SentryIntegration.shared.send(message: "deliveredNotification count = \(notifications.count)", tag: sentryTag)
+            let extra = ["notificationCount": "\(notifications.count)"]
+            Sentry.shared.send(message: "deliveredNotification count", tag: SentryTag.notificationService, extra: extra)
 
             // Let's deal with sent-tab-notifications
             let sentTabNotifications = notifications.filter {
