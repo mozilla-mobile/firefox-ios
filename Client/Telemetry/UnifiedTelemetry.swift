@@ -10,9 +10,7 @@ import Telemetry
 //
 class UnifiedTelemetry {
     init(profile: Profile) {
-        if AppConstants.BuildChannel == .beta {
-          NotificationCenter.default.addObserver(self, selector: #selector(uploadError(notification:)), name: Telemetry.notificationUploadError, object: nil)
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(uploadError(notification:)), name: Telemetry.notificationReportError, object: nil)
 
         let telemetryConfig = Telemetry.default.configuration
         telemetryConfig.appName = "Fennec"
