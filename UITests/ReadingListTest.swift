@@ -93,12 +93,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
             .perform(grey_tap())
         
         waitForEmptyReadingList()
-        
-        EarlGrey.select(elementWithMatcher:
-            grey_allOf([grey_accessibilityLabel("Cancel"),
-                                grey_accessibilityTrait(UIAccessibilityTraitButton),
-                                grey_sufficientlyVisible()]))
-            .perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
     }
     
     func testReadingListAutoMarkAsRead() {
@@ -150,6 +145,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         
         // check the entry no longer exist
         waitForEmptyReadingList()
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
     }
     
     override func tearDown() {
