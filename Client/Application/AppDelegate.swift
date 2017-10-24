@@ -423,7 +423,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
             }
 
-            NightModeHelper.restoreNightModeBrightness(profile.prefs, toForeground: true)
             profile.syncManager.applicationDidBecomeActive()
         }
 
@@ -498,10 +497,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         profile?.shutdown()
-    }
-
-    func applicationWillResignActive(_ application: UIApplication) {
-        NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: false)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
