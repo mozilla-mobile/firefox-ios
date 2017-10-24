@@ -668,7 +668,7 @@ extension TabManager {
             let unarchiver = NSKeyedUnarchiver(forReadingWith: tabData)
             unarchiver.decodingFailurePolicy = .setErrorAndReturn
             guard let tabs = unarchiver.decodeObject(forKey: "tabs") as? [SavedTab] else {
-                SentryIntegration.shared.send(message: "Failed to restore tabs: \(unarchiver.error ??? "nil")", tag: "TabManager", severity: .error)
+                Sentry.shared.send(message: "Failed to restore tabs", tag: SentryTag.tabManager, severity: .error, description: "\(unarchiver.error ??? "nil")")
                 return nil
             }
             return tabs
@@ -712,8 +712,7 @@ extension TabManager {
         _ = Try(withTry: { () -> Void in
             self.preserveTabsInternal()
             }) { (exception) -> Void in
-            print("Failed to preserve tabs: \(exception ??? "nil")")
-            SentryIntegration.shared.send(message: "Failed to preserve tabs: \(exception ??? "nil")", tag: "TabManager", severity: .error)
+            Sentry.shared.send(message: "Failed to preserve tabs", tag: SentryTag.tabManager, severity: .error, description: "\(exception ??? "nil")")
         }
     }
 
@@ -788,8 +787,7 @@ extension TabManager {
                     self.restoreTabsInternal()
                 },
                 catch: { exception in
-                    print("Failed to restore tabs: \(exception ??? "nil")")
-                    SentryIntegration.shared.send(message: "Failed to restore tabs: \(exception ??? "nil")", tag: "TabManager", severity: .error)
+                    Sentry.shared.send(message: "Failed to restore tabs: ", tag: SentryTag.tabManager, severity: .error, description: "\(exception ??? "nil")")
                 }
             )
         }

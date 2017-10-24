@@ -603,7 +603,7 @@ class ForceCrashSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        SentryIntegration.shared.crash()
+        Sentry.shared.crash()
     }
 }
 
