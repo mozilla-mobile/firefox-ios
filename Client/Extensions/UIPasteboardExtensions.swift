@@ -9,7 +9,6 @@ import Shared
 import UIKit
 
 extension UIPasteboard {
-
     func addImageWithData(_ data: Data, forURL url: URL) {
         let isGIF = UIImage.dataIsGIF(data)
 
@@ -22,11 +21,6 @@ extension UIPasteboard {
 
     fileprivate func imageTypeKey(_ isGIF: Bool) -> String {
         return (isGIF ? kUTTypeGIF : kUTTypePNG) as String
-    }
-
-    @available(*, deprecated, message: "use asyncURL(:) instead")
-    var copiedURL: URL? {
-        return self.syncURL
     }
 
     private var syncURL: URL? {

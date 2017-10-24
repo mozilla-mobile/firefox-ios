@@ -2574,8 +2574,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let copyTitle = NSLocalizedString("Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
             let copyAction = UIAlertAction(title: copyTitle, style: UIAlertActionStyle.default) { (action: UIAlertAction) -> Void in
-                let pasteBoard = UIPasteboard.general
-                pasteBoard.url = url as URL
+                UIPasteboard.general.url = url as URL
             }
             actionSheetController.addAction(copyAction)
 

@@ -156,8 +156,15 @@ class TabManager: NSObject {
     func getTabFor(_ url: URL) -> Tab? {
         assert(Thread.isMainThread)
 
-        for tab in tabs where tab.webView?.url == url {
-            return tab
+        for tab in tabs {
+            if tab.webView?.url == url {
+                return tab
+            }
+
+            // Also look for tabs that haven't been restored yet.
+            if let sessionData = tab.sessionData, sessionData.urls[sessionData.currentPage] == url {
+                return tab
+            }
         }
 
         return nil
