@@ -37,6 +37,7 @@ class ClipboardBarDisplayHandler: NSObject {
     }
     
     deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIPasteboardChanged, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
 
         if !sessionRestored {
