@@ -22,6 +22,7 @@ public struct PrefsKeys {
     public static let ASPocketStoriesVisible = "ASPocketStoriesVisible"
     public static let ASRecentHighlightsVisible = "ASRecentHighlightsVisible"
     public static let ASBookmarkHighlightsVisible = "ASBookmarkHighlightsVisible"
+    public static let ASLastInvalidation = "ASLastInvalidation"
 
     public static let KeyUseCustomSyncService = "useCustomSyncService"
     public static let KeyCustomSyncToken = "customSyncTokenServer"

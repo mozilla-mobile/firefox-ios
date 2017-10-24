@@ -10,9 +10,18 @@ import XCTest
 private class MockDataObserverDelegate: DataObserverDelegate {
     var didInvalidateCount = 0
     var willInvalidateCount = 0
+    var highlightsRefreshCount = 0
+    var topSitesRefreshCount = 0
 
-    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {
+    func didInvalidateDataSources(refresh forced: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool) {
         didInvalidateCount += 1
+        if highlightsRefreshed {
+            highlightsRefreshCount += 1
+        }
+        
+        if topSitesRefreshed {
+            topSitesRefreshCount += 1
+        }
     }
 
     func willInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {
@@ -35,5 +44,41 @@ class PanelDataObserversTests: XCTestCase {
                                         object: nil)
 
         waitForCondition(timeout: 5) { delegate.didInvalidateCount == 3 &&  delegate.willInvalidateCount == 3 }
+    }
+    
+    func testHighlightsCacheInvalidation20Min() {
+        let profile = MockProfile()
+        let observer = ActivityStreamDataObserver(profile: profile)
+        let delegate = MockDataObserverDelegate()
+        observer.delegate = delegate
+        
+        // Set to 20min since refresh
+        profile.prefs.setLong(Date.now() - (OneMinuteInMilliseconds * 20), forKey: PrefsKeys.ASLastInvalidation)
+        observer.refreshIfNeeded(forceHighlights: false, forceTopSites: false)
+        waitForCondition(timeout: 5) { delegate.highlightsRefreshCount == 1 }
+    }
+    
+    func testHighlightEmptyCache() {
+        let profile = MockProfile()
+        let observer = ActivityStreamDataObserver(profile: profile)
+        let delegate = MockDataObserverDelegate()
+        observer.delegate = delegate
+        
+        // Set to no validation key
+        profile.prefs.removeObjectForKey(PrefsKeys.ASLastInvalidation)
+        observer.refreshIfNeeded(forceHighlights: false, forceTopSites: false)
+        waitForCondition(timeout: 5) { delegate.highlightsRefreshCount == 1 }
+    }
+    
+    func testHighlightActiveCache() {
+        let profile = MockProfile()
+        let observer = ActivityStreamDataObserver(profile: profile)
+        let delegate = MockDataObserverDelegate()
+        observer.delegate = delegate
+        
+        // Set to 10min since refresh
+        profile.prefs.setLong(Date.now() - (OneMinuteInMilliseconds * 10), forKey: PrefsKeys.ASLastInvalidation)
+        observer.refreshIfNeeded(forceHighlights: false, forceTopSites: false)
+        waitForCondition(timeout: 5) { delegate.didInvalidateCount == 1 && delegate.highlightsRefreshCount == 0 }
     }
 }
