@@ -69,9 +69,7 @@ class HistoryTests: KIFTestCase {
             .inRoot(grey_accessibilityID("History List"))
             .assert(grey_sufficientlyVisible())
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Cancel"))
-            .inRoot(grey_kindOfClass(NSClassFromString("Client.InsetButton")!))
-            .perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
     }
     
     func testDeleteHistoryItemFromListWith2Items() {
@@ -103,12 +101,11 @@ class HistoryTests: KIFTestCase {
         }).wait(withTimeout: 5)
         GREYAssertTrue(historyRemoved, reason: "Failed to remove history")
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Cancel"))
-            .inRoot(grey_kindOfClass(NSClassFromString("Client.InsetButton")!))
-            .perform(grey_tap())
+       EarlGrey.select(elementWithMatcher:grey_accessibilityID("goBack")).perform(grey_tap())
     }
     
     func testDeleteHistoryItemFromListWithMoreThan100Items() {
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
         
         for pageNo in 1...102 {
@@ -119,9 +116,7 @@ class HistoryTests: KIFTestCase {
         
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("History"))
             .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher:grey_accessibilityLabel(urlToDelete))
-          //  .perform(grey_swipeSlowInDirection(GREYDirection.left))
-        .perform(grey_swipeFastInDirectionWithStartPoint(GREYDirection.left, 40.0, 0.0))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Page 102")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.left, 0.4, 0.4))
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Delete"))
             .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
             .perform(grey_tap())
@@ -142,10 +137,12 @@ class HistoryTests: KIFTestCase {
             return success
         }).wait(withTimeout: 5)
         GREYAssertTrue(historyRemoved, reason: "Failed to remove history")
+        
+        EarlGrey.select(elementWithMatcher:grey_accessibilityID("goBack")).perform(grey_tap())
     }
     
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
+        //BrowserUtils.resetToAboutHome(tester())
         BrowserUtils.clearPrivateData(tester: tester())
         super.tearDown()
     }
