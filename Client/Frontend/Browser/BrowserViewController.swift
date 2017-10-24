@@ -506,7 +506,6 @@ class BrowserViewController: UIViewController {
         }
 
         if !displayedRestoreTabsAlert && !cleanlyBackgrounded() && crashedLastLaunch() {
-            SentryIntegration.shared.send(message: "Asking to restore tabs", tag: "BrowserViewController", severity: .info, completion: nil)
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
@@ -518,7 +517,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func crashedLastLaunch() -> Bool {
-        return SentryIntegration.crashedLastLaunch
+        return Sentry.crashedLastLaunch
     }
 
     fileprivate func cleanlyBackgrounded() -> Bool {

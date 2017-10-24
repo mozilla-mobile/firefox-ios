@@ -5,8 +5,18 @@
 import Foundation
 import Sentry
 
-public class SentryIntegration {
-    public static let shared = SentryIntegration()
+public enum SentryTag: String {
+    case swiftData
+    case browserDB
+    case notificationService
+    case unifiedTelemetry
+    case general
+    case tabManager
+    case bookmarks
+}
+
+public class Sentry {
+    public static let shared = Sentry()
 
     public static var crashedLastLaunch: Bool {
         return Client.shared?.crashedLastLaunch() ?? false
@@ -22,24 +32,24 @@ public class SentryIntegration {
     private var attributes: [String: Any] = [:]
 
     public func setup(sendUsageData: Bool) {
-        assert(!enabled, "SentryIntegration.setup() should only be called once")
+        assert(!enabled, "Sentry.setup() should only be called once")
 
         if DeviceInfo.isSimulator() {
-            Logger.browserLogger.error("Not enabling Sentry; Running in Simulator")
+            Logger.browserLogger.debug("Not enabling Sentry; Running in Simulator")
             return
         }
 
         if !sendUsageData {
-            Logger.browserLogger.error("Not enabling Sentry; Not enabled by user choice")
+            Logger.browserLogger.debug("Not enabling Sentry; Not enabled by user choice")
             return
         }
 
         guard let dsn = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
-            Logger.browserLogger.error("Not enabling Sentry; Not configured in Info.plist")
+            Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
             return
         }
 
-        Logger.browserLogger.error("Enabling Sentry crash handler")
+        Logger.browserLogger.debug("Enabling Sentry crash handler")
         
         do {
             Client.shared = try Client(dsn: dsn)
@@ -84,22 +94,33 @@ public class SentryIntegration {
         return event
     }
 
-    public func send(message: String, tag: String = "general", severity: SentrySeverity = .info, extra: [String: Any]? = nil, completion: SentryRequestFinished? = nil) {
+    public func send(message: String, tag: SentryTag = .general, severity: SentrySeverity = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
         // Do not send messages from SwiftData or BrowserDB unless this is the Beta channel
-        if !enabled || (AppConstants.BuildChannel != .beta && (tag == "SwiftData" || tag == "BrowserDB" || tag == "NotificationService")) {
+
+        if !enabled || (AppConstants.BuildChannel != .beta && (tag.rawValue == "SwiftData" || tag.rawValue == "BrowserDB" || tag.rawValue == "NotificationService")) {
             if let completion = completion {
                 completion(nil)
             }
             return
         }
 
-        let event = makeEvent(message: message, tag: tag, severity: severity, extra: extra)
+        // Build the dictionary
+        var extraEvents: [String: Any] = [:]
+        if let paramEvents = extra {
+            extraEvents.merge(with: paramEvents)
+        }
+        if let extraString = description {
+            extraEvents.merge(with: ["errorDescription": extraString])
+        }
+
+        let event = makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
         Client.shared?.send(event: event, completion: completion)
     }
 
-    public func sendWithStacktrace(message: String, tag: String = "general", severity: SentrySeverity = .info, extra: [String: Any]? = nil, completion: SentryRequestFinished? = nil) {
+
+    public func sendWithStacktrace(message: String, tag: SentryTag = .general, severity: SentrySeverity = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
         // Do not send messages from SwiftData or BrowserDB unless this is the Beta channel
-        if !enabled || (AppConstants.BuildChannel != .beta && (tag == "SwiftData" || tag == "BrowserDB" || tag == "NotificationService")) {
+        if !enabled || (AppConstants.BuildChannel != .beta && (tag.rawValue == "SwiftData" || tag.rawValue == "BrowserDB" || tag.rawValue == "NotificationService")) {
             if let completion = completion {
                 completion(nil)
             }
@@ -107,7 +128,7 @@ public class SentryIntegration {
         }
 
         Client.shared?.snapshotStacktrace {
-            let event = self.makeEvent(message: message, tag: tag, severity: severity, extra: extra)
+            let event = self.makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extra)
             Client.shared?.appendStacktrace(to: event)
             event.debugMeta = nil
             Client.shared?.send(event: event, completion: completion)
@@ -116,5 +137,13 @@ public class SentryIntegration {
 
     public func addAttributes(_ attributes: [String: Any]) {
         self.attributes.merge(with: attributes)
+    }
+
+    private func printMessage(message: String, extra: [String: Any]? = nil) {
+        let string = extra?.reduce("") { (result: String, arg1) in
+            let (key, value) = arg1
+            return "\(result), \(key): \(value)"
+        }
+        Logger.browserLogger.debug("Sentry: \(message) \(string ??? "")")
     }
 }
