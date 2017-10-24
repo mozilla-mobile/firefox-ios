@@ -32,7 +32,7 @@ private struct ShareDialogControllerUX {
     static let NavigationBarTintColor = UIColor(rgb: 0xf37c00)                                      // Tint color changes the text color in the navigation bar
     static let NavigationBarCancelButtonFont = UIFont.systemFont(ofSize: UIFont.buttonFontSize)     // System default
     static let NavigationBarAddButtonFont = UIFont.boldSystemFont(ofSize: UIFont.buttonFontSize)    // System default
-    static let NavigationBarIconSize = 38                                                           // Width and height of the icon
+    static let NavigationBarIconSize = 40                                                           // Width and height of the icon
     static let NavigationBarBottomPadding = 12
 
     static let ItemTitleFontMedium = UIFont.systemFont(ofSize: 15, weight: UIFontWeightMedium)
@@ -101,8 +101,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         navItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Add", tableName: "ShareTo", comment: "Add button in the share dialog"), style: UIBarButtonItemStyle.done, target: self, action: #selector(ShareDialogController.add))
         navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarAddButtonFont], for: UIControlState())
 
-        let logo = UIImageView(frame: CGRect(x: 0, y: 0, width: ShareDialogControllerUX.NavigationBarIconSize, height: ShareDialogControllerUX.NavigationBarIconSize))
-        logo.image = UIImage(named: "Icon-Small")
+        let logo = UIImageView(image: UIImage(named: "Icon-Small"))
         logo.contentMode = UIViewContentMode.scaleAspectFit // TODO Can go away if icon is provided in correct size
         navItem.titleView = logo
 
