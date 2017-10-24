@@ -126,8 +126,6 @@ public class Sentry {
         Client.shared?.send(event: event, completion: completion)
     }
 
-
-
     public func sendWithStacktrace(message: String, tag: SentryTag = .general, severity: SentrySeverity = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
         var extraEvents: [String: Any] = [:]
         if let paramEvents = extra {

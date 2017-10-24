@@ -2969,7 +2969,7 @@ extension BrowserViewController: ClientPickerViewControllerDelegate, Instruction
     func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
         guard let tab = tabManager.selectedTab,
             let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
-        let shareItem = ShareItem.init(url: url, title: tab.title, favicon: tab.displayFavicon)
+        let shareItem = ShareItem(url: url, title: tab.title, favicon: tab.displayFavicon)
         guard shareItem.isShareable else {
             let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .default) { _ in self.popToBVC()})

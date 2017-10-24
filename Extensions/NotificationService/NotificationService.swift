@@ -8,9 +8,7 @@ import Sync
 import UserNotifications
 
 private let log = Logger.browserLogger
-
 private let CategorySentTab = "org.mozilla.ios.SentTab.placeholder"
-
 
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay!
