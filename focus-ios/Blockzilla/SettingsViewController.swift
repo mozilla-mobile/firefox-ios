@@ -164,6 +164,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if indexPath.section == 4 && indexPath.row == 1 {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = UIConstants.strings.aboutTitle
+                cell.accessibilityIdentifier = "settingsViewController.about"
             } else {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
                 let toggle = toggleForIndexPath(indexPath)

@@ -19,8 +19,13 @@ class SettingAppearanceTest: BaseTestCase {
     func testCheckSetting() {
         app.buttons["Settings"].tap()
         
+        
+        app.tables.firstMatch.swipeUp()
+
         // Check About page
-        app.navigationBars["Settings"].buttons["About"].tap()
+        let aboutCell = app.cells["settingsViewController.about"]
+        waitforExistence(element: aboutCell)
+        aboutCell.tap()
         
         let tablesQuery = app.tables
         
