@@ -6,13 +6,13 @@ import Foundation
 import Sentry
 
 public enum SentryTag: String {
-    case swiftData
-    case browserDB
-    case notificationService
-    case unifiedTelemetry
-    case general
-    case tabManager
-    case bookmarks
+    case swiftData = "SwiftData"
+    case browserDB = "BrowserDB"
+    case notificationService = "NotificationService"
+    case unifiedTelemetry = "UnifiedTelemetry"
+    case general = "General"
+    case tabManager = "TabManager"
+    case bookmarks = "Bookmarks"
 }
 
 public class Sentry {
@@ -137,7 +137,6 @@ public class Sentry {
         printMessage(message: message, extra: extraEvents)
 
         // Do not send messages to Sentry if disabled OR if we are not on beta and the severity isnt severe
-        //true && true
         if shouldNotSendEventFor(severity) {
             completion?(nil)
             return

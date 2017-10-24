@@ -417,8 +417,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         // If we cannot even open the database file, return `nil` to force SwiftData
         // into using a `FailedSQLiteDBConnection` so we can retry opening again later.
         if !doOpen() {
-            log.error("Cannot open a database connection to \(filename).")
-            let extra = ["filename" : "\(filename)"]
+            let extra = ["filename" : filename]
             Sentry.shared.sendWithStacktrace(message: "Cannot open a database connection.", tag: SentryTag.swiftData, severity: .error, extra: extra)
             return nil
         }
@@ -445,7 +444,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             // gone really wrong. In that case, bail out and return `nil` to force SwiftData
             // into using a `FailedSQLiteDBConnection` so we can retry again later.
             if let error = self.closeCustomConnection(immediately: true) {
-                Sentry.shared.sendWithStacktrace(message: "Cannot close the database connection to begin recovery.", tag: SentryTag.swiftData, severity: .error, description: "\(error.localizedDescription)")
+                Sentry.shared.sendWithStacktrace(message: "Cannot close the database connection to begin recovery.", tag: SentryTag.swiftData, severity: .error, description: error.localizedDescription)
                 return nil
             }
 
@@ -744,7 +743,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                     }
                 }
 
-                Sentry.shared.send(message: "Attempting to update schema from version", tag: SentryTag.swiftData, severity: .info, description: "\(currentVersion) to \(self.schema.version).")
+                Sentry.shared.send(message: "Attempting to update schema", tag: SentryTag.swiftData, severity: .info, description: "\(currentVersion) to \(self.schema.version).")
 
                 // If we can't create a brand new schema from scratch, we must
                 // call `updateSchema()` to go through the update process.
@@ -804,7 +803,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
         // Attempt to make a backup as long as the database file still exists.
         if files.exists(baseFilename) {
-            Sentry.shared.sendWithStacktrace(message: "Couldn't create or update schema. Attempted to move db to another location.", tag: SentryTag.swiftData, severity: .warning, description: "\(self.schema.name). Attempting to move \(baseFilename)")
+            Sentry.shared.sendWithStacktrace(message: "Couldn't create or update schema. Attempted to move db to another location.", tag: SentryTag.swiftData, severity: .warning, description: "Attempting to move '\(baseFilename)' for schema '\(self.schema.name)'")
             
             // Note that a backup file might already exist! We append a counter to avoid this.
             var bakCounter = 0
@@ -831,11 +830,11 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 
                 log.debug("Finished moving database \(baseFilename) successfully.")
             } catch let error as NSError {
-                Sentry.shared.sendWithStacktrace(message: "Unable to move db to another location", tag: SentryTag.swiftData, severity: .error, description: "\(baseFilename) to another location. \(error)")
+                Sentry.shared.sendWithStacktrace(message: "Unable to move db to another location", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(baseFilename)'. \(error.localizedDescription)")
             }
         } else {
             // No backup was attempted since the database file did not exist.
-            Sentry.shared.sendWithStacktrace(message: "The database file has been deleted while previously in use.", tag: SentryTag.swiftData, description: "filename \(baseFilename)")
+            Sentry.shared.sendWithStacktrace(message: "The database file has been deleted while previously in use.", tag: SentryTag.swiftData, description: "DB file '\(baseFilename)'")
         }
     }
     
@@ -906,7 +905,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         var status = sqlite3_close(db)
 
         if status != SQLITE_OK {
-            Sentry.shared.sendWithStacktrace(message: "Got error status while attempting to close.", tag: SentryTag.swiftData, severity: .error, description: "error status: \(status)")
+            Sentry.shared.sendWithStacktrace(message: "Got error status while attempting to close.", tag: SentryTag.swiftData, severity: .error, description: "SQLite status: \(status)")
 
             if immediately {
                 return createErr("During: closing database with flags", status: Int(status))
@@ -919,7 +918,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             if status != SQLITE_OK {
                 
                 // Based on the above comment regarding sqlite3_close_v2, this shouldn't happen.
-                Sentry.shared.sendWithStacktrace(message: "Got error status while attempting to close_v2.", tag: SentryTag.swiftData, severity: .error, description: "error status: \(status)")
+                Sentry.shared.sendWithStacktrace(message: "Got error status while attempting to close_v2.", tag: SentryTag.swiftData, severity: .error, description: "SQLite status: \(status)")
                 return createErr("During: closing database with flags", status: Int(status))
             }
         }
@@ -950,7 +949,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
                 writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
-                Sentry.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "for DB \(filename), \(error)")
+                Sentry.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
 
             let message = "Error code: \(error.code), \(error) for SQL \(String(sqlStr.characters.prefix(500)))."
@@ -990,7 +989,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
                 writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
-                Sentry.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB \(filename), \(error)")
+                Sentry.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
             Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(String(sqlStr.characters.prefix(500))).")
 
