@@ -13,7 +13,7 @@ private class MockDataObserverDelegate: DataObserverDelegate {
     var highlightsRefreshCount = 0
     var topSitesRefreshCount = 0
 
-    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool) {
+    func didInvalidateDataSources(refresh forced: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool) {
         didInvalidateCount += 1
         if highlightsRefreshed {
             highlightsRefreshCount += 1

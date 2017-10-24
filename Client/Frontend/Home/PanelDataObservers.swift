@@ -18,13 +18,13 @@ protocol DataObserver {
 }
 
 protocol DataObserverDelegate: class {
-    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool)
+    func didInvalidateDataSources(refresh forced: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool)
     func willInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
 }
 
 // Make these delegate methods optional by providing default implementations
 extension DataObserverDelegate {
-    func didInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool) {}
+    func didInvalidateDataSources(refresh forced: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool) {}
     func willInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool) {}
 }
 
@@ -86,7 +86,7 @@ class ActivityStreamDataObserver: DataObserver {
                 self.profile.prefs.setLong(newInvalidationTime, forKey: PrefsKeys.ASLastInvalidation)
             }
             
-            self.delegate?.didInvalidateDataSources(forceHighlights: highlights, forceTopSites: topSites, highlightsRefreshed: shouldInvalidateHighlights, topSitesRefreshed: shouldInvalidateTopSites)
+            self.delegate?.didInvalidateDataSources(refresh: highlights || topSites, highlightsRefreshed: shouldInvalidateHighlights, topSitesRefreshed: shouldInvalidateTopSites)
         }
     }
 
