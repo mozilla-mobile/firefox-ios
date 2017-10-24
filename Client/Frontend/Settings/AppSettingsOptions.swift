@@ -103,10 +103,6 @@ class SyncNowSetting: WithAccountSetting {
         NotificationCenter.default.addObserver(self, selector: #selector(SyncNowSetting.stopRotateSyncIcon), name: NotificationProfileDidFinishSyncing, object: nil)
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-    }
-    
     fileprivate lazy var timestampFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -330,10 +326,6 @@ class AccountStatusSetting: WithAccountSetting {
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
         NotificationCenter.default.addObserver(self, selector: #selector(AccountStatusSetting.updateAccount(notification:)), name: NotificationFirefoxAccountProfileChanged, object: nil)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountProfileChanged, object: nil)
     }
     
     func updateAccount(notification: Notification) {

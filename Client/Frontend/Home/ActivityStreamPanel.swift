@@ -99,10 +99,6 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
-    }
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
