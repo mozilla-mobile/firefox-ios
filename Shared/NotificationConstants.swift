@@ -27,3 +27,5 @@ public let NotificationFirefoxAccountVerified = Notification.Name("FirefoxAccoun
 
 // MARK: Notification UserInfo Keys
 public let NotificationUserInfoKeyHasSyncableAccount = Notification.Name("NotificationUserInfoKeyHasSyncableAccount")
+
+public let NotificationDidRestoreSession = Notification.Name("NotificationDidRestoreSession")

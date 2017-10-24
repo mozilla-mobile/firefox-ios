@@ -300,9 +300,13 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button must not exist. Only 5 elements should be on the page")
 
         navigator.openURL(urlString: "http://example.com")
+        waitUntilPageLoad()
         navigator.openURL(urlString: "http://mozilla.org")
+        waitUntilPageLoad()
         navigator.openURL(urlString: "http://apple.com")
+        waitUntilPageLoad()
         navigator.openURL(urlString: "http://yahoo.com")
+        waitUntilPageLoad()
 
         if iPad() {
             // Test timeout on BB when loading these pages
