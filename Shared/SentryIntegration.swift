@@ -84,6 +84,17 @@ public class Sentry {
         Client.shared?.crash()
     }
 
+    /*
+         This is the behaviour we want for Sentry logging
+                   .info .error .severe
+         Debug      y      y       y
+         Beta       y      y       y
+         Relase     n      n       y
+     */
+    private func shouldNotSendEventFor(_ severity: SentrySeverity) -> Bool {
+        return !enabled || (AppConstants.BuildChannel == .release && severity != .fatal)
+    }
+
     private func makeEvent(message: String, tag: String, severity: SentrySeverity, extra: [String: Any]?) -> Event {
         let event = Event(level: severity)
         event.message = message
@@ -95,15 +106,6 @@ public class Sentry {
     }
 
     public func send(message: String, tag: SentryTag = .general, severity: SentrySeverity = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
-        // Do not send messages from SwiftData or BrowserDB unless this is the Beta channel
-
-        if !enabled || (AppConstants.BuildChannel != .beta && (tag.rawValue == "SwiftData" || tag.rawValue == "BrowserDB" || tag.rawValue == "NotificationService")) {
-            if let completion = completion {
-                completion(nil)
-            }
-            return
-        }
-
         // Build the dictionary
         var extraEvents: [String: Any] = [:]
         if let paramEvents = extra {
@@ -112,23 +114,38 @@ public class Sentry {
         if let extraString = description {
             extraEvents.merge(with: ["errorDescription": extraString])
         }
+        printMessage(message: message, extra: extraEvents)
+
+        // Only report fatal errors on release
+        if shouldNotSendEventFor(severity) {
+            completion?(nil)
+            return
+        }
 
         let event = makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
         Client.shared?.send(event: event, completion: completion)
     }
 
 
+
     public func sendWithStacktrace(message: String, tag: SentryTag = .general, severity: SentrySeverity = .info, extra: [String: Any]? = nil, description: String? = nil, completion: SentryRequestFinished? = nil) {
-        // Do not send messages from SwiftData or BrowserDB unless this is the Beta channel
-        if !enabled || (AppConstants.BuildChannel != .beta && (tag.rawValue == "SwiftData" || tag.rawValue == "BrowserDB" || tag.rawValue == "NotificationService")) {
-            if let completion = completion {
-                completion(nil)
-            }
+        var extraEvents: [String: Any] = [:]
+        if let paramEvents = extra {
+            extraEvents.merge(with: paramEvents)
+        }
+        if let extraString = description {
+            extraEvents.merge(with: ["errorDescription": extraString])
+        }
+        printMessage(message: message, extra: extraEvents)
+
+        // Do not send messages to Sentry if disabled OR if we are not on beta and the severity isnt severe
+        //true && true
+        if shouldNotSendEventFor(severity) {
+            completion?(nil)
             return
         }
-
         Client.shared?.snapshotStacktrace {
-            let event = self.makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extra)
+            let event = self.makeEvent(message: message, tag: tag.rawValue, severity: severity, extra: extraEvents)
             Client.shared?.appendStacktrace(to: event)
             event.debugMeta = nil
             Client.shared?.send(event: event, completion: completion)

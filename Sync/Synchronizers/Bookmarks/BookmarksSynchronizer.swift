@@ -230,8 +230,7 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                         return self.uploadSomeLocalRecords(storage, mirrorer, bookmarksClient, mobileRootRecord: mobileRootRecord, childrenRecords: childrenRecords)
                     }
                 }).bind { simpleSyncingResult in
-                    if let failure = simpleSyncingResult.failureValue,
-                       AppConstants.BuildChannel != .release {
+                    if let failure = simpleSyncingResult.failureValue {
                         let description = failure is RecordTooLargeError ? "Record too large" : failure.description
                         Sentry.shared.send(message: "Failed to simple sync bookmarks", tag: SentryTag.bookmarks, severity: .error, description: description)
                     }
