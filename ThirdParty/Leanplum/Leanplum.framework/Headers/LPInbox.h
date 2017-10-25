@@ -95,7 +95,7 @@
 /**
  * This block is used when you define a callback.
  */
-typedef void (^LeanplumInboxChangedBlock)();
+typedef void (^LeanplumInboxChangedBlock)(void);
 
 @interface LPInbox : NSObject
 
@@ -167,7 +167,7 @@ typedef void (^LeanplumInboxChangedBlock)();
 
 @end
 
-typedef void (^LeanplumNewsfeedChangedBlock)();
+typedef void (^LeanplumNewsfeedChangedBlock)(void);
 
 @interface LPNewsfeed : NSObject
 
