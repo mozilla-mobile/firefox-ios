@@ -1,6 +1,6 @@
 //
 //  Leanplum.h
-//  Leanplum iOS SDK Version 2.0.2
+//  Leanplum iOS SDK Version 2.0.3
 //
 //  Copyright (c) 2012 Leanplum, Inc. All rights reserved.
 //
@@ -122,16 +122,16 @@ name = [LPVar define:[@#name stringByReplacingOccurrencesOfString:@"_" withStrin
  * @{
  */
 typedef void (^LeanplumStartBlock)(BOOL success);
-typedef void (^LeanplumVariablesChangedBlock)();
-typedef void (^LeanplumInterfaceChangedBlock)();
+typedef void (^LeanplumVariablesChangedBlock)(void);
+typedef void (^LeanplumInterfaceChangedBlock)(void);
 typedef void (^LeanplumSetLocationBlock)(BOOL success);
 // Returns whether the action was handled.
 typedef BOOL (^LeanplumActionBlock)(LPActionContext* context);
-typedef void (^LeanplumHandleNotificationBlock)();
+typedef void (^LeanplumHandleNotificationBlock)(void);
 typedef void (^LeanplumShouldHandleNotificationBlock)(NSDictionary *userInfo, LeanplumHandleNotificationBlock response);
 typedef NSUInteger LeanplumUIBackgroundFetchResult; // UIBackgroundFetchResult
 typedef void (^LeanplumFetchCompletionBlock)(LeanplumUIBackgroundFetchResult result);
-typedef void (^LeanplumPushSetupBlock)();
+typedef void (^LeanplumPushSetupBlock)(void);
 /**@}*/
 
 /**
@@ -150,7 +150,7 @@ typedef enum {
 
 /**
  * Optional. Sets the API server. The API path is of the form http[s]://hostname/servletName
- * @param hostName The name of the API host, such as www.leanplum.com
+ * @param hostName The name of the API host, such as api.leanplum.com
  * @param servletName The name of the API servlet, such as api
  * @param ssl Whether to use SSL
  */
@@ -405,6 +405,7 @@ typedef enum {
  */
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
 + (void)handleActionWithIdentifier:(NSString *)identifier
               forLocalNotification:(UILocalNotification *)notification
                  completionHandler:(void (^)())completionHandler;
@@ -414,9 +415,12 @@ typedef enum {
 /**
  * Call this to handle custom actions for remote notifications.
  */
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wstrict-prototypes"
 + (void)handleActionWithIdentifier:(NSString *)identifier
              forRemoteNotification:(NSDictionary *)notification
                  completionHandler:(void (^)())completionHandler;
+#pragma clang diagnostic pop
 
 /*
  * Block to call that decides whether a notification should be displayed when it is
@@ -527,7 +531,7 @@ typedef enum {
 /**
  * Automatically tracks all of the screens in the app as states.
  * You should not use this in conjunction with advanceTo as the user can only be in
- * 1 state at a time.
+ * 1 state at a time. This method requires LeanplumUIEditor module.
  */
 + (void)trackAllAppScreens;
 
@@ -545,10 +549,17 @@ typedef NS_ENUM(NSUInteger, LPTrackScreenMode) {
 /**
  * Automatically tracks all of the screens in the app as states.
  * You should not use this in conjunction with advanceTo as the user can only be in
- * 1 state at a time.
+ * 1 state at a time. This method requires LeanplumUIEditor module.
  * @param trackScreenMode Choose mode for display. Default is the view controller type name.
  */
 + (void)trackAllAppScreensWithMode:(LPTrackScreenMode)trackScreenMode;
+
+/**
+ * Manually track purchase event with currency code in your application. It is advised to use
+ * trackInAppPurchases to automatically track IAPs.
+ */
++ (void)trackPurchase:(NSString *)event withValue:(double)value
+      andCurrencyCode:(NSString *)currencyCode andParameters:(NSDictionary *)params;
 
 /**
  * Automatically tracks InApp purchase and does server side receipt validation.
