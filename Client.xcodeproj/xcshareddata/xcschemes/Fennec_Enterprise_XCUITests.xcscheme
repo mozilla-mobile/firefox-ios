@@ -179,10 +179,13 @@
                   Identifier = "BaseTestCase">
                </Test>
                <Test
-                  Identifier = "SiteLoadTest">
+                  Identifier = "HomePageUITest">
                </Test>
                <Test
-                   Identifier = "HomePageUITest">
+                  Identifier = "SearchTests/testDismissPromptPresence()">
+               </Test>
+               <Test
+                  Identifier = "SiteLoadTest">
                </Test>
             </SkippedTests>
          </TestableReference>

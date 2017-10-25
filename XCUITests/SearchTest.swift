@@ -34,38 +34,46 @@ class SearchTests: BaseTestCase {
     }
 
     func testPromptPresence() {
-        // Suggestion is off by default, so the prompt should appear
+        // Suggestion is on by default (starting on Oct 24th 2017), so the prompt should not appear
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
-        waitforExistence(app.staticTexts[LabelPrompt])
-
-        // No suggestions should be shown
-        waitforNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
-
-        // Enable Search suggestion
-        app.buttons["Yes"].tap()
+        waitforNoExistence(app.staticTexts[LabelPrompt])
 
         // Suggestions should be shown
         waitforExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+
+        // Disable Search suggestion
+        app.buttons["goBack"].tap()
+        navigator.nowAt(HomePanelsScreen)
+        suggestionsOnOff()
+
+        // Suggestions should not be shown
+        waitforNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        navigator.nowAt(BrowserTab)
+        navigator.goto(URLBarOpen)
+        typeOnSearchBar(text: "foobar")
+        waitforNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
 
         // Verify that previous choice is remembered
         app.buttons["goBack"].tap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
-        waitforExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitforNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
         app.buttons["goBack"].tap()
         navigator.nowAt(HomePanelsScreen)
-        // Reset suggestion button, set it to off
+
+        // Reset suggestion button, set it to on
         suggestionsOnOff()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
 
-        // Suggestions prompt should not appear
+        // Suggestions prompt should appear
         typeOnSearchBar(text: "foobar")
-        waitforNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitforExistence(app.tables["SiteTable"].buttons[SuggestedSite])
     }
 
+    // Promt does not appear once Search has been enabled by default, see bug: 1411184
     func testDismissPromptPresence() {
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
@@ -88,13 +96,7 @@ class SearchTests: BaseTestCase {
         // the suggestions are shown again
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
-        waitforExistence(app.staticTexts[LabelPrompt])
-
-        // No suggestions should be shown
-        waitforNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
-
-        // Enable Search suggestion
-        app.buttons["Yes"].tap()
+        waitforNoExistence(app.staticTexts[LabelPrompt])
 
         // Suggestions should be shown
         waitforExistence(app.tables["SiteTable"].buttons[SuggestedSite])
@@ -123,7 +125,7 @@ class SearchTests: BaseTestCase {
         app.menuItems["Paste"].tap()
 
         // Verify that the Paste shows the search controller with prompt
-        waitforExistence(app.staticTexts[LabelPrompt])
+        waitforNoExistence(app.staticTexts[LabelPrompt])
         app.typeText("\r")
 
         // Check that the website is loaded
