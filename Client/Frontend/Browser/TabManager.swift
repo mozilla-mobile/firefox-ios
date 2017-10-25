@@ -353,6 +353,11 @@ class TabManager: NSObject {
     fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool, notify: Bool) {
         assert(Thread.isMainThread)
 
+        guard let removalIndex = tabs.index(where: { $0 === tab }) else {
+            Sentry.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(count)")
+            return
+        }
+
         if tab.isPrivate {
             // Wipe clean data associated with this tab when it is removed.
             let dataTypes = Set([WKWebsiteDataTypeCookies,
@@ -379,9 +384,7 @@ class TabManager: NSObject {
         }
 
         let prevCount = count
-        if let removalIndex = tabs.index(where: { $0 === tab }) {
-            tabs.remove(at: removalIndex)
-        }
+        tabs.remove(at: removalIndex)
 
         let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
 
