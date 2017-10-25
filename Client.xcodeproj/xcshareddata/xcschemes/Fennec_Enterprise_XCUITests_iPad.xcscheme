@@ -179,6 +179,9 @@
                   Identifier = "HomePageUITest">
                </Test>
                <Test
+                  Identifier = "SearchTests/testDismissPromptPresence()">
+               </Test>
+               <Test
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
