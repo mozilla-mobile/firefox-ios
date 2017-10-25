@@ -142,8 +142,8 @@ class ContentBlockerHelper {
         for name in rules {
             ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
                 guard let rule = rule else {
-                    print("Content blocker load error: " + (error?.localizedDescription ?? "empty rules"))
-                    assert(false)
+                    let msg = "lookUpContentRuleList for \(name):  \(error?.localizedDescription ?? "empty rules")"
+                    Sentry.shared.send(message: "Content blocker error", tag: .general, description: msg)
                     return
                 }
                 self.addToTab(contentRuleList: rule)
