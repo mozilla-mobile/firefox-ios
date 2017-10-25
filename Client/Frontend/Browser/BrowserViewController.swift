@@ -2495,6 +2495,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
         let settingsNavigationController = SettingsNavigationController(rootViewController: vcToPresent)
 		settingsNavigationController.modalPresentationStyle = .formSheet
+        settingsNavigationController.navigationBar.isTranslucent = false
         self.present(settingsNavigationController, animated: true, completion: nil)
     }
 
