@@ -480,6 +480,12 @@ open class Sync15StorageClient {
     }
 
     func requestPOST(_ url: URL, body: [String], ifUnmodifiedSince: Timestamp?) -> Request {
+        // Workaround for Bug 1397357 -- the Sync server rejects empty newlines POST payloads.
+        // Send them as empty JSON instead.
+        if body.isEmpty {
+            return self.requestWrite(url, method: URLRequest.Method.post.rawValue, body: "[]", contentType: "application/json", ifUnmodifiedSince: ifUnmodifiedSince)
+        }
+
         let content = body.joined(separator: "\n")
         return self.requestWrite(url, method: URLRequest.Method.post.rawValue, body: content, contentType: "application/newlines", ifUnmodifiedSince: ifUnmodifiedSince)
     }
