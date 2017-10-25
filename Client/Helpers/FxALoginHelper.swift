@@ -146,6 +146,15 @@ class FxALoginHelper {
         }
         accountVerified = data["verified"].bool ?? false
         self.account = account
+        
+        if AppConstants.MOZ_ENABLE_LEANPLUM && AppConstants.MOZ_FXA_LEANPLUM_AB_PUSH_TEST {
+            // If Leanplum A/B push notification tests are enabled, defer to them for
+            // displaying the pre-push permission dialog. If user dismisses it, we will still have
+            // another chance to prompt them. Afterwards, Leanplum calls `apnsRegisterDidSucceed` or
+            // `apnsRegisterDidFail` to finish setting up Autopush.
+            return readyForSyncing()
+        }
+        
         requestUserNotifications(application)
     }
 
@@ -154,7 +163,7 @@ class FxALoginHelper {
         return self.apnsTokenDeferred
     }
 
-    fileprivate func requestUserNotifications(_ application: UIApplication) {
+    func requestUserNotifications(_ application: UIApplication) {
         if let deferred = self.apnsTokenDeferred, deferred.isFilled,
             let token = deferred.value.successValue {
             // If we have an account, then it'll go through ahead and register 
@@ -257,7 +266,7 @@ class FxALoginHelper {
         readyForSyncing()
     }
 
-    fileprivate func readyForSyncing() {
+    func readyForSyncing() {
         guard let profile = self.profile, let account = self.account else {
             return loginDidFail()
         }

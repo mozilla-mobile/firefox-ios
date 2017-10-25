@@ -133,4 +133,17 @@ public struct AppConstants {
     public static let MOZ_ENABLE_LEANPLUM: Bool = {
         return true
     }()
+    
+    ///  Toggle FxA Leanplum A/B test for prompting push permissions
+    public static let MOZ_FXA_LEANPLUM_AB_PUSH_TEST: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return false
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return true
+        #endif
+    }()
 }
