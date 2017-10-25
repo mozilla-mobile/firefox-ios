@@ -80,6 +80,14 @@ private enum SupportedLocales: String {
     case TW = "zh_TW"
     case HK = "en_HK"
     case SG_EN = "en_SG"
+    case FR = "fr_FR"
+    case IT = "it_IT"
+    case ID = "id_ID"
+    case PT_BR = "pt_BR"
+    case PL = "pl_PL"
+    case RU = "ru_RU"
+    case ES_ES = "es_ES"
+    case ES_MX = "es_MX"
 }
 
 private struct LeanplumSettings {
