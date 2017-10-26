@@ -46,7 +46,8 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
         let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabPocket))
         let bookmarks = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASBookmarkHighlightsVisible, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabHighlightsBookmarks))
         let history = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASRecentHighlightsVisible, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabHiglightsHistory))
-        let secondSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: nil, children: [pocketSetting, bookmarks, history])
+        let options = AppConstants.MOZ_POCKET_STORIES ? [pocketSetting, bookmarks, history] : [bookmarks, history]
+        let secondSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: nil, children: options)
 
         return [firstSection, secondSection]
     }

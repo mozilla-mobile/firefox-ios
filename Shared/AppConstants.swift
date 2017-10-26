@@ -157,6 +157,19 @@ public struct AppConstants {
         #endif
     }()
 
+    ///  Toggle pocket stories feature
+    public static let MOZ_POCKET_STORIES: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return true
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return true
+        #endif
+    }()
+
     /// Toggle the use of Leanplum.
     public static let MOZ_ENABLE_LEANPLUM: Bool = {
         #if MOZ_CHANNEL_RELEASE
