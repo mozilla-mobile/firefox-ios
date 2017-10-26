@@ -170,7 +170,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(HistoryPanel.refresh), for: UIControlEvents.valueChanged)
         self.refreshControl = refresh
-        self.tableView.addSubview(refresh)
+        self.tableView.refreshControl = refresh
     }
 
     func removeRefreshControl() {
