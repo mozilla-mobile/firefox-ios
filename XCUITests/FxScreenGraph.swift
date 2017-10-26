@@ -440,7 +440,7 @@ extension Navigator {
     }
 
     func browserPerformAction(_ view: BrowserPerformAction) {
-        let PageMenuOptions = [.toggleBookmarkOption, .addReadingListOption, .copyURLOption, .findInPageOption, .toggleDesktopOption, .requestSetHomePageOption, BrowserPerformAction.shareOption]
+        let PageMenuOptions = [.toggleBookmarkOption, .addReadingListOption, .copyURLOption, .findInPageOption, .toggleDesktopOption, .pinToTopSitesOption, .sendToDeviceOption, BrowserPerformAction.shareOption]
         let BrowserMenuOptions = [.openTopSitesOption, .openBookMarksOption, .openHistoryOption, .openReadingListOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
 
         let app = XCUIApplication()
@@ -461,7 +461,8 @@ enum BrowserPerformAction: String {
     case copyURLOption = "menu-Copy-Link"
     case findInPageOption = "menu-FindInPage"
     case toggleDesktopOption = "menu-RequestDesktopSite"
-    case requestSetHomePageOption = "menu-Home"
+    case pinToTopSitesOption = "action_pin"
+    case sendToDeviceOption = "menu-Send-to-Device"
     case shareOption = "action_share"
 
     // Tab Menu
