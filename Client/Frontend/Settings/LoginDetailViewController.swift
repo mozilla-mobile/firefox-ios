@@ -153,6 +153,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.descriptionLabel.returnKeyType = .next
             loginCell.editingDescription = editingInfo
             usernameField = loginCell.descriptionLabel
+            usernameField?.accessibilityIdentifier = "usernameField"
             return loginCell
 
         case .passwordItem:
@@ -164,6 +165,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.displayDescriptionAsPassword = true
             loginCell.editingDescription = editingInfo
             passwordField = loginCell.descriptionLabel
+            passwordField?.accessibilityIdentifier = "passwordField"
             return loginCell
 
         case .websiteItem:
