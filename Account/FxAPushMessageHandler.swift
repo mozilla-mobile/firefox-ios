@@ -283,6 +283,7 @@ enum PushMessageError: MaybeErrorType {
     case unimplemented(PushMessageType)
     case timeout
     case accountError
+    case noProfile
 
     public var description: String {
         switch self {
@@ -291,6 +292,7 @@ enum PushMessageError: MaybeErrorType {
         case .unimplemented(let what): return "unimplemented=\(what)"
         case .timeout: return "timeout"
         case .accountError: return "accountError"
+        case .noProfile: return "noProfile"
         }
     }
 }
