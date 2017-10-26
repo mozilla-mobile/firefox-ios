@@ -839,9 +839,7 @@ class AppSyncDelegate: SyncDelegate {
     open func displaySentTab(for url: URL, title: String, from deviceName: String?) {
         DispatchQueue.main.sync {
             if let appDelegate = app.delegate as? AppDelegate, app.applicationState == .active {
-                DispatchQueue.main.async {
-                    appDelegate.browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
-                }
+                appDelegate.browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
                 return
             }
 

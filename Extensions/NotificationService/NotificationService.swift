@@ -56,9 +56,7 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     func didFinish(_ what: PushMessage? = nil, with error: PushMessageError? = nil) {
-        if let profile = self.profile {
-            profile.shutdown()
-        }
+        profile?.shutdown()
 
         guard let display = self.display else {
             Sentry.shared.send(message: "Could not get SyncDelegate for displaying notification.", tag: .notificationService, severity: .fatal)
