@@ -158,7 +158,9 @@ class TabManager: NSObject {
             }
 
             // Also look for tabs that haven't been restored yet.
-            if let sessionData = tab.sessionData, sessionData.urls[sessionData.currentPage] == url {
+            if let sessionData = tab.sessionData,
+                0..<sessionData.urls.count ~= sessionData.currentPage,
+                sessionData.urls[sessionData.currentPage] == url {
                 return tab
             }
         }
