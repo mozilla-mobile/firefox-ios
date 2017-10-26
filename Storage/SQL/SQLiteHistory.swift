@@ -169,6 +169,7 @@ extension SQLiteHistory: BrowserHistory {
             ("DELETE FROM \(TableVisits)", nil),
             ("DELETE FROM \(TableHistory)", nil),
             ("DELETE FROM \(TableDomains)", nil),
+            ("DELETE FROM \(TablePageMetadata)", nil),
             self.favicons.getCleanupFaviconsQuery()
             ])
             // We've probably deleted a lot of stuff. Vacuum now to recover the space.
