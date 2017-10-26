@@ -24,6 +24,7 @@
 		5AFDBB0CF3A9FBA175D2B693 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 427B752EF11959F9C38B12D6 /* AVFoundation.framework */; };
 		6616A36F1BD17EFA00C7E493 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 6616A36E1BD17EFA00C7E493 /* style.css */; };
 		742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 742C99D31F3A3AD200717D69 /* Assets.xcassets */; };
+		74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74584E341FA1077000AF2582 /* SettingsContentViewController.swift */; };
 		745DC5DD1F39221100661635 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DC5DC1F39221100661635 /* ActionViewController.swift */; };
 		745DC5E41F39221100661635 /* ShareExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 745DC5DA1F39221100661635 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7460BD661F58B1B10096B745 /* GradientProgressBar.swift */; };
@@ -79,7 +80,6 @@
 		D3B323521BD1A7EE00B0EEE4 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */; };
 		D3BBC9ED1D7F81CB00D1751B /* enabled-detector.json in Resources */ = {isa = PBXBuildFile; fileRef = D3BBC9EC1D7F81CB00D1751B /* enabled-detector.json */; };
 		D3BFCB3F1BD14F5900AD22D1 /* LocalWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB3E1BD14F5900AD22D1 /* LocalWebServer.swift */; };
-		D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */; };
 		D3BFCB5B1BD15CD000AD22D1 /* rights-klar.html in Resources */ = {isa = PBXBuildFile; fileRef = D3BFCB5A1BD15CD000AD22D1 /* rights-klar.html */; };
 		D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */; };
 		D3CD375B1DD3B51900468250 /* FirstRunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CD375A1DD3B51900468250 /* FirstRunViewController.swift */; };
@@ -262,6 +262,7 @@
 		7449B17E1F291D77001A199D /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7449B17F1F291D77001A199D /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7449B1801F291D77001A199D /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		74584E341FA1077000AF2582 /* SettingsContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsContentViewController.swift; sourceTree = "<group>"; };
 		745DC5DA1F39221100661635 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		745DC5DC1F39221100661635 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 		745DC5E11F39221100661635 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -329,7 +330,6 @@
 		D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "web-fonts.json"; path = "Lists/web-fonts.json"; sourceTree = SOURCE_ROOT; };
 		D3BBC9EC1D7F81CB00D1751B /* enabled-detector.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "enabled-detector.json"; sourceTree = "<group>"; };
 		D3BFCB3E1BD14F5900AD22D1 /* LocalWebServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalWebServer.swift; sourceTree = "<group>"; };
-		D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutContentViewController.swift; sourceTree = "<group>"; };
 		D3BFCB5A1BD15CD000AD22D1 /* rights-klar.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-klar.html"; sourceTree = "<group>"; };
 		D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = SearchEngines.plist; path = Search/SearchEngines.plist; sourceTree = SOURCE_ROOT; };
 		D3C70C671DDE795300CEE458 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -877,8 +877,8 @@
 				F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */,
 				F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */,
 				D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */,
-				D3BFCB501BD1559300AD22D1 /* AboutContentViewController.swift */,
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
+				74584E341FA1077000AF2582 /* SettingsContentViewController.swift */,
 				E47F9AED1DB9338600A93285 /* AdjustIntegration.swift */,
 				7460BD661F58B1B10096B745 /* GradientProgressBar.swift */,
 				E4BF2DD61BACE8CA00DA9D68 /* AppDelegate.swift */,
@@ -1290,6 +1290,7 @@
 				746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */,
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,
 				E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */,
+				74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */,
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */,
@@ -1321,7 +1322,6 @@
 				D3E251F91DAF064B005918DC /* Utils.swift in Sources */,
 				D32F71D31BCEF67C006D44FC /* UIViewExtensions.swift in Sources */,
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
-				D3BFCB511BD1559300AD22D1 /* AboutContentViewController.swift in Sources */,
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,
 				D3E251EA1DAD714C005918DC /* InstructionsView.swift in Sources */,

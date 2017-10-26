@@ -87,15 +87,15 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         switch (indexPath as NSIndexPath).row {
         case 1:
             let url = URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")!
-            let contentViewController = AboutContentViewController(url: url)
+            let contentViewController = SettingsContentViewController(url: url)
             navigationController?.pushViewController(contentViewController, animated: true)
         case 2:
             let url = LocalWebServer.sharedInstance.URLForPath("/\(AppInfo.config.rightsFile)")!
-            let contentViewController = AboutContentViewController(url: url)
+            let contentViewController = SettingsContentViewController(url: url)
             navigationController?.pushViewController(contentViewController, animated: true)
         case 3:
             let url = URL(string: "https://www.mozilla.org/privacy/firefox-focus")!
-            let contentViewController = AboutContentViewController(url: url)
+            let contentViewController = SettingsContentViewController(url: url)
             navigationController?.pushViewController(contentViewController, animated: true)
         default: break
         }
@@ -105,7 +105,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     fileprivate func aboutHeaderViewDidPressLearnMore(_ aboutHeaderView: AboutHeaderView) {
         let url = URL(string: "https://www.mozilla.org/\(AppInfo.languageCode)/about/manifesto/")!
-        let contentViewController = AboutContentViewController(url: url)
+        let contentViewController = SettingsContentViewController(url: url)
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 }

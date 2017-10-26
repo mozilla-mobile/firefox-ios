@@ -33,20 +33,20 @@ class SettingAppearanceTest: BaseTestCase {
         tablesQuery.staticTexts["Help"].tap()
         if app.label == "Firefox Focus" {
             waitforExistence(element: app.staticTexts["What is Firefox Focus?"])
-            app.navigationBars["Firefox_Focus.AboutContentView"].buttons["About"].tap()
+            app.navigationBars["Firefox_Focus.SettingsContentView"].buttons["About"].tap()
         } else {
             waitforExistence(element: app.staticTexts["Firefox Klar"])
-            app.navigationBars["Firefox_Klar.AboutContentView"].buttons["About"].tap()
+            app.navigationBars["Firefox_Klar.SettingsContentView"].buttons["About"].tap()
         }
         
         // Check Your Rights page, until the text is displayed
         tablesQuery.staticTexts["Your Rights"].tap()
         if app.label == "Firefox Focus" {
             waitforExistence(element: app.staticTexts["Your Rights"])
-            app.navigationBars["Firefox_Focus.AboutContentView"].buttons["About"].tap()
+            app.navigationBars["Firefox_Focus.SettingsContentView"].buttons["About"].tap()
         } else {
             waitforExistence(element: app.staticTexts["Ihre Rechte"])
-            app.navigationBars["Firefox_Klar.AboutContentView"].buttons["About"].tap()
+            app.navigationBars["Firefox_Klar.SettingsContentView"].buttons["About"].tap()
         }
         
         // Go to Settings

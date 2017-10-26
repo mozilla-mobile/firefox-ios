@@ -140,7 +140,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
         guard let url = SupportUtils.URLForTopic(topic: "usage-data") else { return }
-        let contentViewController = AboutContentViewController(url: url)
+        let contentViewController = SettingsContentViewController(url: url)
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 
@@ -320,7 +320,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         highlightsButton?.tintColor = UIColor.white
         
         guard let url = SupportUtils.URLForTopic(topic: "whats-new-focus-ios-3") else { return }
-        navigationController?.pushViewController(AboutContentViewController(url: url), animated: true)
+        navigationController?.pushViewController(SettingsContentViewController(url: url), animated: true)
         
         whatsNew.didShowWhatsNew()
     }
