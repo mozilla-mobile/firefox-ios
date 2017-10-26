@@ -1598,12 +1598,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 }
 
-extension BrowserViewController: WindowCloseHelperDelegate {
-    func windowCloseHelper(_ helper: WindowCloseHelper, didRequestToCloseTab tab: Tab) {
-        tabManager.removeTab(tab)
-    }
-}
-
 extension BrowserViewController: TabDelegate {
 
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
@@ -1640,10 +1634,6 @@ extension BrowserViewController: TabDelegate {
 
         let errorHelper = ErrorPageHelper()
         tab.addHelper(errorHelper, name: ErrorPageHelper.name())
-
-        let windowCloseHelper = WindowCloseHelper(tab: tab)
-        windowCloseHelper.delegate = self
-        tab.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
 
         let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
         sessionRestoreHelper.delegate = self
