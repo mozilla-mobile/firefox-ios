@@ -26,14 +26,12 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testDefaultSites() {
-        let topSites = app.cells["TopSitesCell"]
-        let numberOfTopSites = topSites.cells.matching(identifier: "TopSite").count
-        XCTAssertEqual(numberOfTopSites, 5, "There should be a total of 5 default Top Sites.")
+        // There should be 5 top sites by default
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
     }
 
     func testTopSitesAdd() {
-        let topSites = app.cells["TopSitesCell"]
-        let numberOfTopSites = topSites.cells.matching(identifier: "TopSite").count
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
 
         loadWebPage("http://example.com")
         if iPad() {
@@ -42,14 +40,10 @@ class ActivityStreamTest: BaseTestCase {
             app.buttons["TabToolbar.backButton"].tap()
         }
         navigator.goto(URLBarOpen)
-        let sitesAfter = topSites.cells.matching(identifier: "TopSite").count
-        XCTAssertTrue(sitesAfter == numberOfTopSites + 1, "A new site should have been added to the topSites")
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
     func testTopSitesRemove() {
-        let topSites = app.cells["TopSitesCell"]
-        let numberOfTopSites = topSites.cells.matching(identifier: "TopSite").count
-
         loadWebPage("http://example.com")
         if iPad() {
             app.buttons["URLBarView.backButton"].tap()
@@ -57,13 +51,13 @@ class ActivityStreamTest: BaseTestCase {
             app.buttons["TabToolbar.backButton"].tap()
         }
         navigator.goto(URLBarOpen)
-        let sitesAfter = topSites.cells.matching(identifier: "TopSite").count
-        XCTAssertTrue(sitesAfter == numberOfTopSites + 1, "A new site should have been added to the topSites")
+        // A new site has been added to the top sites
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
         TopSiteCellgroup.cells["example"].press(forDuration: 1) //example is the name of the domain. (example.com)
         app.tables["Context Menu"].cells["Remove"].tap()
-        let sitesAfterDelete = topSites.cells.matching(identifier: "TopSite").count
-        XCTAssertTrue(sitesAfterDelete == numberOfTopSites, "A site should have been deleted to the topSites")
+        // A top site has been removed
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
     }
 
     func testTopSitesRemoveDefaultTopSite() {
@@ -71,8 +65,7 @@ class ActivityStreamTest: BaseTestCase {
 
         // Tap on Remove and check that now there should be only 4 default top sites
         selectOptionFromContextMenu(option: "Remove")
-        let numberOfTopSites = TopSiteCellgroup.cells.matching(identifier: "TopSite").count
-        XCTAssertEqual(numberOfTopSites, 4, "A site should have been deleted to the topSites")
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
     }
 
     func testTopSitesRemoveAllDefaultTopSitesAddNewOne() {
@@ -98,8 +91,7 @@ class ActivityStreamTest: BaseTestCase {
             app.buttons["TabToolbar.backButton"].tap()
         }
         waitforExistence(TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!])
-        let numberOfTopSitesAfter = TopSiteCellgroup.cells.matching(identifier: "TopSite").count
-        XCTAssertEqual(numberOfTopSitesAfter, 1, "A new top site should appear")
+        checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 1)
     }
 
     func testTopSitesShiftAfterRemovingOne() {
@@ -293,6 +285,26 @@ class ActivityStreamTest: BaseTestCase {
     private func selectOptionFromContextMenu(option: String) {
         XCTAssertTrue(app.tables["Context Menu"].cells[option].exists)
         app.tables["Context Menu"].cells[option].tap()
+    }
+
+    private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
+        waitforExistence(app.cells["TopSitesCell"])
+        XCTAssertTrue(app.cells["TopSitesCell"].exists)
+        let numberOfTopSites = TopSiteCellgroup.cells.matching(identifier: "TopSite").count
+        XCTAssertEqual(numberOfTopSites, UInt(numberOfExpectedTopSites), "The number of Top Sites is not correct")
+    }
+
+    func testOpenTopSitesFromContextMenu () {
+         // Top Sites is shown by default
+         waitforExistence(app.cells["TopSitesCell"])
+         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
+
+         // Go to a website
+         navigator.openURL(urlString: newTopSite["url"]!)
+
+         // Go back to Top Sites from context menu
+         navigator.browserPerformAction(.openTopSitesOption)
+         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
     func testActivityStreamPages() {
