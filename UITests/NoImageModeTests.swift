@@ -22,7 +22,7 @@ class NoImageModeTests: KIFTestCase {
     }
 
     private func checkHiding(isOn: Bool) {
-        let url = "\(webRoot)/hide-images-test.html"
+        let url = "\(webRoot!)/hide-images-test.html"
         TrackingProtectionTests.checkIfImageLoaded(url: url, shouldBlockImage: isOn)
         BrowserUtils.resetToAboutHome(tester())
     }
@@ -31,7 +31,7 @@ class NoImageModeTests: KIFTestCase {
         checkHiding(isOn: false)
 
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: GREYMatchers.matcher(forText: "Hide Images: Off")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: GREYMatchers.matcher(forText:"Hide Images")).perform(grey_tap())
 
         checkHiding(isOn: true)
     }
