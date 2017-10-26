@@ -837,39 +837,39 @@ class AppSyncDelegate: SyncDelegate {
     }
 
     open func displaySentTab(for url: URL, title: String, from deviceName: String?) {
-        if let appDelegate = app.delegate as? AppDelegate, app.applicationState == .active {
-            DispatchQueue.main.async {
+        DispatchQueue.main.sync {
+            if let appDelegate = app.delegate as? AppDelegate, app.applicationState == .active {
                 appDelegate.browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
+                return
             }
-            return
-        }
 
-        // check to see what the current notification settings are and only try and send a notification if
-        // the user has agreed to them
-        if let currentSettings = app.currentUserNotificationSettings {
-            if currentSettings.types.rawValue & UIUserNotificationType.alert.rawValue != 0 {
-                if Logger.logPII {
-                    log.info("Displaying notification for URL \(url.absoluteString)")
+            // check to see what the current notification settings are and only try and send a notification if
+            // the user has agreed to them
+            if let currentSettings = app.currentUserNotificationSettings {
+                if currentSettings.types.rawValue & UIUserNotificationType.alert.rawValue != 0 {
+                    if Logger.logPII {
+                        log.info("Displaying notification for URL \(url.absoluteString)")
+                    }
+
+                    let notification = UILocalNotification()
+                    notification.fireDate = Date()
+                    notification.timeZone = NSTimeZone.default
+                    let title: String
+                    if let deviceName = deviceName {
+                        title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
+                    } else {
+                        title = Strings.SentTab_TabArrivingNotification_NoDevice_title
+                    }
+                    notification.alertTitle = title
+                    notification.alertBody = url.absoluteDisplayString
+                    notification.userInfo = [TabSendURLKey: url.absoluteString, TabSendTitleKey: title]
+                    notification.alertAction = nil
+
+                    // Restore this when we fix Bug 1364420.
+                    // notification.category = TabSendCategory
+
+                    app.presentLocalNotificationNow(notification)
                 }
-
-                let notification = UILocalNotification()
-                notification.fireDate = Date()
-                notification.timeZone = NSTimeZone.default
-                let title: String
-                if let deviceName = deviceName {
-                    title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
-                } else {
-                    title = Strings.SentTab_TabArrivingNotification_NoDevice_title
-                }
-                notification.alertTitle = title
-                notification.alertBody = url.absoluteDisplayString
-                notification.userInfo = [TabSendURLKey: url.absoluteString, TabSendTitleKey: title]
-                notification.alertAction = nil
-
-                // Restore this when we fix Bug 1364420.
-                // notification.category = TabSendCategory
-
-                app.presentLocalNotificationNow(notification)
             }
         }
     }
