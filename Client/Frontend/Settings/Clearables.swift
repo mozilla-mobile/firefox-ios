@@ -41,7 +41,7 @@ class HistoryClearable: Clearable {
     }
 
     func clear() -> Success {
-        return profile.history.clearHistory().bind { success in
+        return profile.history.clearHistory().bindQueue(.main) { success in
             SDImageCache.shared().clearDisk()
             SDImageCache.shared().clearMemory()
             self.profile.recentlyClosedTabs.clearTabs()
