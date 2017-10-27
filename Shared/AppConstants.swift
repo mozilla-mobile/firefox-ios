@@ -223,11 +223,11 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_FENNEC
-            return true
+            return false
         #else
-            return true
+            return false
         #endif
     }()
 }
