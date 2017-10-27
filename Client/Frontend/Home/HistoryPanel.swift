@@ -122,6 +122,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func notificationReceived(_ notification: Notification) {
+        reloadData()
+
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
             if self.profile.hasSyncableAccount() {
