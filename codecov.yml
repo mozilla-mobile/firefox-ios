@@ -4,13 +4,18 @@ coverage:
   status:
     project:
       default:
-       threshold: 5
+       threshold: 100
+       if_no_uploads: success
        if_not_found: success
+       if_ci_failed: success
     patch:
       default:
         enabled: no
         threshold: 30
+        if_no_uploads: success
         if_not_found: success
+        if_ci_failed: success
+    changes: no
 comment: false
 ignore:
 - "UITests/.*"
