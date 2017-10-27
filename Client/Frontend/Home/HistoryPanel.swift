@@ -174,7 +174,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func removeRefreshControl() {
-        self.refreshControl?.removeFromSuperview()
+        self.tableView.refreshControl = nil
         self.refreshControl = nil
     }
 
