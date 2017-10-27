@@ -67,12 +67,14 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
 
-        generalSettings += [
-            BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
-                        titleText: Strings.SettingsOfferClipboardBarTitle,
-                        statusText: Strings.SettingsOfferClipboardBarStatus)
-        ]
-        
+        if AppConstants.MOZ_CLIPBOARD_BAR {
+            generalSettings += [
+                BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
+                            titleText: Strings.SettingsOfferClipboardBarTitle,
+                            statusText: Strings.SettingsOfferClipboardBarStatus)
+            ]
+        }
+
         var accountSectionTitle: NSAttributedString?
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
