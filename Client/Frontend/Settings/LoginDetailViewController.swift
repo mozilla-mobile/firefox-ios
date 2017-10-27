@@ -52,6 +52,7 @@ class LoginDetailViewController: SensitiveViewController {
     // Used to temporarily store a reference to the cell the user is showing the menu controller for
     fileprivate var menuControllerCell: LoginTableViewCell?
 
+    fileprivate weak var websiteField: UITextField?
     fileprivate weak var usernameField: UITextField?
     fileprivate weak var passwordField: UITextField?
 
@@ -153,6 +154,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.descriptionLabel.returnKeyType = .next
             loginCell.editingDescription = editingInfo
             usernameField = loginCell.descriptionLabel
+            usernameField?.accessibilityIdentifier = "usernameField"
             return loginCell
 
         case .passwordItem:
@@ -164,6 +166,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.displayDescriptionAsPassword = true
             loginCell.editingDescription = editingInfo
             passwordField = loginCell.descriptionLabel
+            passwordField?.accessibilityIdentifier = "passwordField"
             return loginCell
 
         case .websiteItem:
@@ -171,6 +174,8 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.style = .noIconAndBothLabels
             loginCell.highlightedLabelTitle = NSLocalizedString("website", tableName: "LoginManager", comment: "Label displayed above the website row in Login Detail View.")
             loginCell.descriptionLabel.text = login.hostname
+            websiteField = loginCell.descriptionLabel
+            websiteField?.accessibilityIdentifier = "websiteField"
             return loginCell
 
         case .lastModifiedSeparator:

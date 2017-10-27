@@ -14,7 +14,7 @@ class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
         super.init()
         self.title = AuthenticationStrings.turnOffPasscode
         self.panes = [
-            PasscodePane(title: AuthenticationStrings.enterPasscode),
+            PasscodePane(title: AuthenticationStrings.enterPasscode, passcodeSize: authenticationInfo?.passcode?.count ?? 6),
         ]
     }
     

@@ -36,13 +36,17 @@ class LoginManagerTests: KIFTestCase {
         })
         
         if BrowserUtils.iPad() {
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("TopTabsViewController.tabsButton"))
-                .perform(grey_tap())
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
+            let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
+                                              grey_accessibilityID("menu-Settings")])
+            EarlGrey.select(elementWithMatcher: settings_button).perform(grey_tap())
         } else {
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("URLBarView.tabsButton")).perform(grey_tap())
+            let menu_button = grey_allOf([grey_accessibilityLabel("Menu"),
+                                              grey_accessibilityID("TabToolbar.menuButton")])
+            EarlGrey.select(elementWithMatcher: menu_button).perform(grey_tap())
+            EarlGrey.select(elementWithMatcher: grey_text("Settings")).perform(grey_tap())
         }
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_text("Settings")).perform(grey_tap())
+        
         let success = menuAppeared?.wait(withTimeout: 20)
         GREYAssertTrue(success!, reason: "Failed to display settings dialog")
         
@@ -52,7 +56,6 @@ class LoginManagerTests: KIFTestCase {
     fileprivate func closeLoginManager() {
         tester().tapView(withAccessibilityLabel: "Settings")
         tester().tapView(withAccessibilityLabel: "Done")
-        tester().tapView(withAccessibilityLabel: "home")
     }
 
     fileprivate func generateLogins() {
@@ -72,6 +75,23 @@ class LoginManagerTests: KIFTestCase {
         }
     }
 
+    func waitForMatcher(name: String) {
+        let matcher = grey_allOf([grey_accessibilityLabel(name),
+                                  grey_kindOfClass(NSClassFromString("UICalloutBarButton")!),
+                                  grey_sufficientlyVisible()])
+
+        let menuShown = GREYCondition(name: "Wait for " + name) {
+            var errorOrNil: NSError?
+
+            EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &errorOrNil)
+            let success = errorOrNil == nil
+            return success
+        }
+        let success = menuShown?.wait(withTimeout: 10)
+        GREYAssertTrue(success!, reason: name + " Menu not shown")
+        EarlGrey.select(elementWithMatcher: matcher).perform(grey_tap())
+    }
+    
     fileprivate func generateStringListWithFormat(_ format: String, numRange: CountableRange<Int>, prefixes: String) -> [String] {
         return prefixes.characters.map { char in
        
@@ -158,46 +178,36 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "k0@email.com, http://k0.com")
         closeLoginManager()
     }
+    
 
     func testDetailPasswordMenuOptions() {
         openLoginManager()
-
-        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-
-        tester().waitForView(withAccessibilityLabel: "password")
-
-        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
-        var passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
         
-        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
-        let centerOfCell = CGPoint(x: passwordCell.frame.width / 2, y: passwordCell.frame.height / 2)
-        XCTAssertTrue(passwordCell.descriptionLabel.isSecureTextEntry)
-
-        // Tap the 'Reveal' menu option
-        passwordCell.tap(at: centerOfCell)
-        tester().waitForView(withAccessibilityLabel: "Reveal")
-        tester().tapView(withAccessibilityLabel: "Reveal")
-
-        passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
-        XCTAssertFalse(passwordCell.descriptionLabel.isSecureTextEntry)
-
-        // Tap the 'Hide' menu option
-        passwordCell.tap(at: centerOfCell)
-        tester().waitForView(withAccessibilityLabel: "Hide")
-        tester().tapView(withAccessibilityLabel: "Hide")
-
-        passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
-        XCTAssertTrue(passwordCell.descriptionLabel.isSecureTextEntry)
-
-        // Tap the 'Copy' menu option
-        passwordCell.tap(at: centerOfCell)
-        tester().waitForView(withAccessibilityLabel: "Copy")
-        tester().tapView(withAccessibilityLabel: "Copy")
-
+        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+            tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
+            
+        tester().waitForView(withAccessibilityLabel: "password")
+        
+        var passwordField = tester().waitForView(withAccessibilityIdentifier: "passwordField") as! UITextField
+        XCTAssertTrue(passwordField.isSecureTextEntry)
+        
+        // Tap the ‘Reveal’ menu option
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("passwordField")).perform(grey_tap())
+        waitForMatcher(name: "Reveal")
+        passwordField = tester().waitForView(withAccessibilityIdentifier: "passwordField") as! UITextField
+        XCTAssertFalse(passwordField.isSecureTextEntry)
+        
+        // Tap the ‘Hide’ menu option
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("passwordField")).perform(grey_tap())
+        waitForMatcher(name: "Hide")
+        passwordField = tester().waitForView(withAccessibilityIdentifier: "passwordField") as! UITextField
+        XCTAssertTrue(passwordField.isSecureTextEntry)
+        
+        // Tap the ‘Copy’ menu option
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("passwordField")).perform(grey_tap())
+        waitForMatcher(name: "Copy")
+        
         XCTAssertEqual(UIPasteboard.general.string, "passworda0")
-
         tester().tapView(withAccessibilityLabel: "Logins")
         closeLoginManager()
     }
@@ -210,28 +220,17 @@ class LoginManagerTests: KIFTestCase {
 
         tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
-        let websiteCell = list.cellForRow(at: IndexPath(row: 0, section: 0)) as! LoginTableViewCell
-
-        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
-        let centerOfCell = CGPoint(x: websiteCell.frame.width / 2, y: websiteCell.frame.height / 2)
-
-        // Tap the 'Copy' menu option
-        websiteCell.tap(at: centerOfCell)
-        websiteCell.tap(at: centerOfCell)
-        tester().waitForView(withAccessibilityLabel: "Copy")
-        tester().tapView(withAccessibilityLabel: "Copy")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
+        waitForMatcher(name: "Copy")
 
         XCTAssertEqual(UIPasteboard.general.string, "http://a0.com")
 
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        websiteCell.tap(at: centerOfCell)
-        tester().waitForView(withAccessibilityLabel: "Open & Fill")
-        tester().tapView(withAccessibilityLabel: "Open & Fill")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
+        waitForMatcher(name: "Open & Fill")
 
         tester().wait(forTimeInterval: 2)
-        tester().waitForViewWithAccessibilityValue("a0.com")
+        tester().waitForViewWithAccessibilityValue("a0.com/")
     }
 
     func testOpenAndFillFromNormalContext() {
@@ -242,21 +241,12 @@ class LoginManagerTests: KIFTestCase {
 
         tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
-        let websiteCell = list.cellForRow(at: IndexPath(row: 0, section: 0)) as! LoginTableViewCell
-
-        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
-        let centerOfCell = CGPoint(x: websiteCell.frame.width / 2, y: websiteCell.frame.height / 2)
-
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        websiteCell.tap(at: centerOfCell)
-        websiteCell.tap(at: centerOfCell)
-        tester().waitForView(withAccessibilityLabel: "Open & Fill")
-        tester().tapView(withAccessibilityLabel: "Open & Fill")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
+        waitForMatcher(name: "Open & Fill")
 
         tester().wait(forTimeInterval: 5)
-        tester().waitForViewWithAccessibilityValue("a0.com")
+        tester().waitForViewWithAccessibilityValue("a0.com/")
     }
 
     func testOpenAndFillFromPrivateContext() {
@@ -264,13 +254,18 @@ class LoginManagerTests: KIFTestCase {
             EarlGrey.select(elementWithMatcher: grey_accessibilityID("TopTabsViewController.tabsButton"))
             .perform(grey_tap())
         } else {
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("URLBarView.tabsButton")).perform(grey_tap())
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("TabToolbar.tabsButton")).perform(grey_tap())
         }
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Mode")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Add Tab")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_allOf([grey_accessibilityID("SettingsMenuItem"),
-        grey_kindOfClass(NSClassFromString("Client.MenuItemCollectionViewCell")!)]))
-            .perform(grey_tap())
+        if BrowserUtils.iPad() {
+            let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
+                                              grey_accessibilityID("menu-Settings")])
+            EarlGrey.select(elementWithMatcher: settings_button).perform(grey_tap())
+        } else {
+            EarlGrey.select(elementWithMatcher: grey_text("Settings")).perform(grey_tap())
+        }
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins")).perform(grey_tap())
     
         tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
@@ -278,21 +273,12 @@ class LoginManagerTests: KIFTestCase {
 
         tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
-        let websiteCell = list.cellForRow(at: IndexPath(row: 0, section: 0)) as! LoginTableViewCell
-
-        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
-        let centerOfCell = CGPoint(x: websiteCell.frame.width / 2, y: websiteCell.frame.height / 2)
-
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        websiteCell.tap(at: centerOfCell)
-        websiteCell.tap(at: centerOfCell)
-        tester().waitForView(withAccessibilityLabel: "Open & Fill")
-        tester().tapView(withAccessibilityLabel: "Open & Fill")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
+        waitForMatcher(name: "Open & Fill")
 
         tester().wait(forTimeInterval: 2)
-        tester().waitForViewWithAccessibilityValue("a0.com")
+        tester().waitForViewWithAccessibilityValue("a0.com/")
     }
 
     func testDetailUsernameMenuOptions() {
@@ -303,20 +289,11 @@ class LoginManagerTests: KIFTestCase {
 
         tester().waitForView(withAccessibilityLabel: "password")
 
-        let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
-        let usernameCell = list.cellForRow(at: IndexPath(row: 1, section: 0)) as! LoginTableViewCell
+        // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("usernameField")).perform(grey_tap())
+        waitForMatcher(name: "Copy")
 
-        // tapViewWithAcessibilityLabel fails when called directly because the cell is not a descendant in the
-        // responder chain since it's a cell so instead use the underlying tapAtPoint method.
-        let centerOfCell = CGPoint(x: usernameCell.frame.width / 2, y: usernameCell.frame.height / 2)
-
-        // Tap the 'Copy' menu option
-        usernameCell.tap(at: centerOfCell)
-        usernameCell.tap(at: centerOfCell)
-        tester().waitForView(withAccessibilityLabel: "Copy")
-        tester().tapView(withAccessibilityLabel: "Copy")
-
-        XCTAssertEqual(UIPasteboard.general.string, "a0@email.com")
+        XCTAssertEqual(UIPasteboard.general.string!, "a0@email.com")
 
         tester().tapView(withAccessibilityLabel: "Logins")
         closeLoginManager()
