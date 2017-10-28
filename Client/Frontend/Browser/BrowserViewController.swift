@@ -2485,6 +2485,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
         let settingsNavigationController = SettingsNavigationController(rootViewController: vcToPresent)
 		settingsNavigationController.modalPresentationStyle = .formSheet
+        settingsNavigationController.navigationBar.isTranslucent = false
         self.present(settingsNavigationController, animated: true, completion: nil)
     }
 
@@ -2524,7 +2525,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let isPrivate = currentTab.isPrivate
 
             let addTab = { (rURL: URL, isPrivate: Bool) in
-                self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                     let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
                     LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Long Press Context Menu" as AnyObject])
                     guard !self.topTabsVisible else {
@@ -2537,7 +2537,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                         }
                     })
                     self.show(buttonToast: toast)
-                })
             }
 
             if !isPrivate {
