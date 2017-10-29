@@ -147,7 +147,7 @@ public struct AppConstants {
     ///  Toggle the feature that shows the blue 'Open copied link' banner
     public static let MOZ_CLIPBOARD_BAR: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
@@ -223,11 +223,11 @@ public struct AppConstants {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+            return false
         #elseif MOZ_CHANNEL_FENNEC
-            return true
+            return false
         #else
-            return true
+            return false
         #endif
     }()
 }

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+chruby 2.3.1
+bundle install  
+bundle exec danger --fail-on-errors=false  
+
 #
 # Add our Adjust keys to the build depending on the scheme. We use the sandbox for beta so
 # that we have some insight in beta usage.
