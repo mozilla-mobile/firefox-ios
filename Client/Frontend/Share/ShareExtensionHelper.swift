@@ -14,7 +14,6 @@ class ShareExtensionHelper: NSObject {
     fileprivate let selectedURL: URL
     fileprivate var onePasswordExtensionItem: NSExtensionItem!
     // Wechat share extension doesn't like our default data ID which is a modified to support password managers.
-    fileprivate let customDataTypeIdentifers = ["com.tencent.xin.sharetimeline"]
     fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
 
     init(url: URL, tab: Tab?) {
@@ -54,7 +53,6 @@ class ShareExtensionHelper: NSObject {
         // activityViewController(activityViewController:, activityType:) is called,
         // which is after the user taps the button. So a million cycles away.
         findLoginExtensionItem()
-
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             if !completed {
