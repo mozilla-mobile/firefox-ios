@@ -13,7 +13,6 @@ class ShareExtensionHelper: NSObject {
 
     fileprivate let selectedURL: URL
     fileprivate var onePasswordExtensionItem: NSExtensionItem!
-    // Wechat share extension doesn't like our default data ID which is a modified to support password managers.
     fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
 
     init(url: URL, tab: Tab?) {
