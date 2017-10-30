@@ -46,8 +46,8 @@ class ToolbarTests: BaseTestCase {
         XCTAssertTrue(app.buttons["Reload"].isEnabled)
 
         navigator.openURL(urlString: website2)
-        waitForValueContains(app.textFields["url"], value: website2)
         waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: website2)
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
 
