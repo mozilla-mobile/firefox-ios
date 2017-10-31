@@ -21,7 +21,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     override func tearDown() {
         BrowserUtils.resetToAboutHome(tester())
-        BrowserUtils.clearPrivateData(tester: tester())
     }
 
     func visitSites(noOfSites: Int) -> [(title: String, domain: String, dispDomain: String, url: String)] {
@@ -92,49 +91,19 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
-        var errorOrNil: NSError?
         
         let url1 = urls[0].url
         let url2 = urls[1].url
+        tester().waitForView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().waitForView(withAccessibilityLabel: url1)
+        tester().waitForView(withAccessibilityLabel: url2)
 
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
-        let url1Shown = GREYCondition(name: "Wait for URL 1") {
-            var errorOrNil: NSError?
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
-                .assert(grey_notNil(), error: &errorOrNil)
-            let success = errorOrNil == nil
-            return success
-        }
-        let URL1success = url1Shown?.wait(withTimeout: 10)
-        GREYAssertTrue(URL1success!, reason: "URL 1 Not Shown")
-
-        let url2Shown = GREYCondition(name: "Wait for URL 2") {
-            var errorOrNil: NSError?
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2))
-                .assert(grey_notNil(), error: &errorOrNil)
-            let success = errorOrNil == nil
-            return success
-        }
-        let URL2success = url2Shown?.wait(withTimeout: 10)
-        GREYAssertTrue(URL2success!, reason: "URL 2 Not Shown")
-
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1)).assert(grey_notNil())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2)).assert(grey_notNil())
-        
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
-        
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
-            .assert(grey_notNil(), error: &errorOrNil)
-        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
-        GREYInteractionErrorCode.elementNotFoundErrorCode,
-                       "Expected to have removed history row \(url1)")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2))
-            .assert(grey_notNil(), error: &errorOrNil)
-        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
-        GREYInteractionErrorCode.elementNotFoundErrorCode,
-                       "Expected to have removed history row \(url2)")
+        tester().tapView(withAccessibilityLabel: "Bookmarks")
+        tester().tapView(withAccessibilityLabel: "History")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: url1)
+        tester().waitForAbsenceOfView(withAccessibilityLabel: url2)
     }
 
     func testDisabledHistoryDoesNotClearHistoryPanel() {

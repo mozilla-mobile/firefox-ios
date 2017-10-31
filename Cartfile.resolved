@@ -12,7 +12,7 @@ github "AgileBits/onepassword-extension" "a614e290396346e3cb69e4951656eb8033390f
 github "mozilla/readability" "ccc8e9bf4c5400814d9b7a3ea83c21540da4c76f"
 github "SwiftyJSON/SwiftyJSON" "3.1.4"
 github "farhanpatel/JSONSchema.swift" "1c052b83baa8c497e12cde6a8afca0f54574612f"
-github "google/EarlGrey" "1.11.0"
+github "google/EarlGrey" "1.12.1"
 github "jhugman/SwiftRouter" "7b446fd063846ce2961b7518bb2386ffcbcc94d8"
 github "rs/SDWebImage" "4.1.0"
 github "mozilla-mobile/telemetry-ios" "786264f2f31520c3c8b589ab2f5bdf7d0adbf86a"
