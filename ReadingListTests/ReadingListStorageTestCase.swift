@@ -167,7 +167,7 @@ class ReadingListStorageTestCase: XCTestCase {
         }
     }
 
-    // Helpers that croak if the storage call was not succesful
+    // Helpers that croak if the storage call was not successful
 
     func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
         let result = storage.createRecordWithURL(url, title: title, addedBy: addedBy)
