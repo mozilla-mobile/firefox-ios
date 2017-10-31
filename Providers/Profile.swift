@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Alamofire
-import Foundation
 import Account
 import ReadingList
 import Shared
@@ -715,14 +713,18 @@ open class BrowserProfile: Profile {
                         return
                     }
 
-                    let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation".asURL!
+                    guard let url = URL(string: "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation") else {
+                        return
+                    }
+
                     var request = URLRequest(url: url)
                     request.httpMethod = "POST"
                     request.httpBody = body
-                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
-                    SessionManager.default.request(request).responseData { response in
-                        log.debug("Bookmark validation upload response: \(response.response?.statusCode ?? -1).")
+                    URLSession.shared.dataTask(with: request) { data, response, error in
+                        let httpResponse = response as? HTTPURLResponse
+                        log.debug("Bookmark validation upload response: \(httpResponse?.statusCode ?? -1).")
                     }
                 }
             }

@@ -7,9 +7,6 @@ import Storage
 import Sync
 import UserNotifications
 
-private let log = Logger.browserLogger
-private let CategorySentTab = "org.mozilla.ios.SentTab.placeholder"
-
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay?
     var profile: ExtensionProfile?
@@ -20,38 +17,30 @@ class NotificationService: UNNotificationServiceExtension {
     // AppDelegate.application(_:didReceiveRemoteNotification:completionHandler:)
     // Once the notification is tapped, then the same userInfo is passed to the same method in the AppDelegate.
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        DispatchQueue.global().async {
-            let userInfo = request.content.userInfo
-            if Logger.logPII && log.isEnabledFor(level: .info) {
-                // This will be visible in the Console.app when a push notification is received.
-                NSLog("NotificationService APNS NOTIFICATION \(userInfo)")
-            }
+        let userInfo = request.content.userInfo
 
-            guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
-                Sentry.shared.sendWithStacktrace(message: "No notification content", tag: SentryTag.notificationService)
-                return self.didFinish(PushMessage.accountVerified)
-            }
+        guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
+            return self.didFinish(PushMessage.accountVerified)
+        }
 
-            if self.profile == nil {
-                self.profile = ExtensionProfile(localName: "profile")
-            }
+        if self.profile == nil {
+            self.profile = ExtensionProfile(localName: "profile")
+        }
 
-            guard let profile = self.profile else {
-                Sentry.shared.send(message: "Could not initialize profile", tag: .notificationService, severity: .fatal)
-                self.didFinish(with: .noProfile)
-                return
-            }
+        guard let profile = self.profile else {
+            self.didFinish(with: .noProfile)
+            return
+        }
 
-            let queue = profile.queue
-            let display = SyncDataDisplay(content: content, contentHandler: contentHandler, tabQueue: queue)
-            self.display = display
-            profile.syncDelegate = display
+        let queue = profile.queue
+        let display = SyncDataDisplay(content: content, contentHandler: contentHandler, tabQueue: queue)
+        self.display = display
+        profile.syncDelegate = display
 
-            let handler = FxAPushMessageHandler(with: profile)
+        let handler = FxAPushMessageHandler(with: profile)
 
-            handler.handle(userInfo: userInfo).upon { res in
-                self.didFinish(res.successValue, with: res.failureValue as? PushMessageError)
-            }
+        handler.handle(userInfo: userInfo).upon { res in
+            self.didFinish(res.successValue, with: res.failureValue as? PushMessageError)
         }
     }
 
@@ -59,7 +48,6 @@ class NotificationService: UNNotificationServiceExtension {
         profile?.shutdown()
 
         guard let display = self.display else {
-            Sentry.shared.send(message: "Could not get SyncDelegate for displaying notification.", tag: .notificationService, severity: .fatal)
             return
         }
 
@@ -70,8 +58,6 @@ class NotificationService: UNNotificationServiceExtension {
         display.messageDelivered = false
         display.displayNotification(what, with: error)
         if !display.messageDelivered {
-            let string = ["message": "\(what?.messageType.rawValue ?? "nil"), error=\(error?.description ?? "nil")"]
-            Sentry.shared.send(message: "Empty notification", tag: .notificationService, extra: string)
             display.displayUnknownMessageNotification()
         }
     }
@@ -100,7 +86,6 @@ class SyncDataDisplay {
 
     func displayNotification(_ message: PushMessage? = nil, with error: PushMessageError? = nil) {
         guard let message = message, error == nil else {
-            Sentry.shared.send(message: "PushMessageError", tag: SentryTag.notificationService, description: "\(error?.description ??? "nil")")
             return displayUnknownMessageNotification()
         }
 
@@ -162,7 +147,6 @@ extension SyncDataDisplay {
         } else {
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
         }
-        Sentry.shared.sendWithStacktrace(message: "Unknown notification message", tag: SentryTag.notificationService)
     }
 }
 
@@ -171,7 +155,7 @@ extension SyncDataDisplay {
         // We will need to be more precise about calling these SentTab alerts
         // once we are a) detecting different types of notifications and b) adding actions.
         // For now, we need to add them so we can handle zero-tab sent-tab-notifications.
-        notificationContent.categoryIdentifier = CategorySentTab
+        notificationContent.categoryIdentifier = "org.mozilla.ios.SentTab.placeholder"
 
         var userInfo = notificationContent.userInfo
 
@@ -196,12 +180,9 @@ extension SyncDataDisplay {
 
         let center = UNUserNotificationCenter.current()
         center.getDeliveredNotifications { notifications in
-            let extra = ["notificationCount": "\(notifications.count)"]
-            Sentry.shared.send(message: "deliveredNotification count", tag: SentryTag.notificationService, extra: extra)
-
             // Let's deal with sent-tab-notifications
             let sentTabNotifications = notifications.filter {
-                $0.request.content.categoryIdentifier == CategorySentTab
+                $0.request.content.categoryIdentifier == self.notificationContent.categoryIdentifier
             }
 
             // We can delete zero tab sent-tab-notifications
