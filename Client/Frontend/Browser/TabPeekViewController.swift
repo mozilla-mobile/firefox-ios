@@ -19,7 +19,6 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     fileprivate static let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
     fileprivate static let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Reading List")
-    fileprivate static let PreviewActionSendToDevice = NSLocalizedString("Send to Device", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to send the current tab to another device")
     fileprivate static let PreviewActionCopyURL = NSLocalizedString("Copy URL", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
     fileprivate static let PreviewActionCloseTab = NSLocalizedString("Close Tab", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to close the current tab")
 
@@ -55,7 +54,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                     })
             }
             if self.hasRemoteClients {
-                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionSendToDevice, style: .default) { previewAction, viewController in
+                actions.append(UIPreviewAction(title: Strings.SendToDeviceTitle, style: .default) { previewAction, viewController in
                     guard let clientPicker = self.clientPicker else { return }
                     self.delegate?.tabPeekRequestsPresentationOf(clientPicker)
                     })

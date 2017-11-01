@@ -177,7 +177,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        let sendToDevice = PhotonActionSheetItem(title: Strings.AppMenuSendToDeviceTitleString, iconString: "menu-Send-to-Device") { action in
+        let sendToDevice = PhotonActionSheetItem(title: Strings.SendToDeviceTitle, iconString: "menu-Send-to-Device") { action in
             guard let bvc = presentableVC as? PresentableVC & InstructionsViewControllerDelegate & ClientPickerViewControllerDelegate else { return }
             if !self.profile.hasAccount() {
                 let instructionsViewController = InstructionsViewController()
@@ -216,12 +216,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        var middleActions = [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites]
-        if AppConstants.MOZ_SENDTAB_IN_PAGE_ACTIONS {
-            middleActions.append(sendToDevice)
-        }
-        
-        return [topActions, middleActions, [share]]
+        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, sendToDevice], [share]]
     }
 }
 
