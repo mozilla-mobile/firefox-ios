@@ -23,7 +23,10 @@ class SearchSuggestClient {
 
     lazy fileprivate var alamofire: SessionManager = {
         let configuration = URLSessionConfiguration.ephemeral
-        return SessionManager.managerWithUserAgent(self.userAgent, configuration: configuration)
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = self.userAgent
+        configuration.httpAdditionalHeaders = defaultHeaders
+        return SessionManager(configuration: configuration)
     }()
 
     init(searchEngine: OpenSearchEngine, userAgent: String) {

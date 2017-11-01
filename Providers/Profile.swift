@@ -2,18 +2,29 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Alamofire
-import Foundation
+// IMPORTANT!: Please take into consideration when adding new imports to
+// this file that it is utilized by external components besides the core
+// application (i.e. App Extensions). Introducing new dependencies here
+// may have unintended negative consequences for App Extensions such as
+// increased startup times which may lead to termination by the OS.
 import Account
-import ReadingList
 import Shared
 import Storage
 import Sync
 import XCGLogger
 import SwiftKeychainWrapper
 import Deferred
-import SwiftyJSON
-import SyncTelemetry
+
+// Import these dependencies ONLY for the main `Client` application target.
+#if MOZ_TARGET_CLIENT
+    import SwiftyJSON
+    import SyncTelemetry
+#endif
+
+// Import these dependencies for ALL targets *EXCEPT* `NotificationService`.
+#if !MOZ_TARGET_NOTIFICATIONSERVICE
+    import ReadingList
+#endif
 
 private let log = Logger.syncLogger
 
@@ -118,11 +129,14 @@ protocol Profile: class {
     var metadata: Metadata { get }
     var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
-    var readingList: ReadingListService? { get }
     var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
     var panelDataObservers: PanelDataObservers { get }
+
+    #if !MOZ_TARGET_NOTIFICATIONSERVICE
+        var readingList: ReadingListService? { get }
+    #endif
 
     var isShutdown: Bool { get }
     
@@ -398,9 +412,11 @@ open class BrowserProfile: Profile {
         return self.makePrefs()
     }()
 
-    lazy var readingList: ReadingListService? = {
-        return ReadingListService(profileStoragePath: self.files.rootPath as String)
-    }()
+    #if !MOZ_TARGET_NOTIFICATIONSERVICE
+        lazy var readingList: ReadingListService? = {
+            return ReadingListService(profileStoragePath: self.files.rootPath as String)
+        }()
+    #endif
 
     lazy var remoteClientsAndTabs: RemoteClientsAndTabs & ResettableSyncStorage & AccountRemovalDelegate & RemoteDevices = {
         return SQLiteRemoteClientsAndTabs(db: self.db)
@@ -633,13 +649,18 @@ open class BrowserProfile: Profile {
 
             syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
 
-            if AppInfo.isApplication {
+            #if MOZ_TARGET_CLIENT
                 if let account = profile.account, canSendUsageData() {
-                    sendSyncPing(account: account, result: result)
+                    SyncPing.from(result: result,
+                                  account: account,
+                                  remoteClientsAndTabs: profile.remoteClientsAndTabs,
+                                  prefs: prefs,
+                                  why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
                 } else {
                     log.debug("Profile isn't sending usage data. Not sending sync status event.")
                 }
-            }
+            #endif
+
             // Dont notify if we are performing a sync in the background. This prevents more db access from happening
             if !self.backgrounded {
                 notifySyncing(notification: NotificationProfileDidFinishSyncing)
@@ -649,14 +670,6 @@ open class BrowserProfile: Profile {
 
         func canSendUsageData() -> Bool {
             return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
-        }
-
-        private func sendSyncPing(account: FirefoxAccount, result: SyncOperationResult) {
-            SyncPing.from(result: result,
-                          account: account,
-                          remoteClientsAndTabs: self.profile.remoteClientsAndTabs,
-                          prefs: self.prefs,
-                          why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
         }
 
         private func notifySyncing(notification: Notification.Name) {
@@ -678,54 +691,60 @@ open class BrowserProfile: Profile {
         }
 
         func onBookmarkBufferValidated(notification: NSNotification) {
-            // We don't send this ad hoc telemetry on the release channel.
-            guard AppConstants.BuildChannel != AppBuildChannel.release else {
-                return
-            }
+            #if MOZ_TARGET_CLIENT
+                // We don't send this ad hoc telemetry on the release channel.
+                guard AppConstants.BuildChannel != AppBuildChannel.release else {
+                    return
+                }
 
-            guard profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true else {
-                log.debug("Profile isn't sending usage data. Not sending bookmark event.")
-                return
-            }
+                guard profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true else {
+                    log.debug("Profile isn't sending usage data. Not sending bookmark event.")
+                    return
+                }
 
-            guard let validations = (notification.object as? Box<[String: Bool]>)?.value else {
-                log.warning("Notification didn't have validations.")
-                return
-            }
+                guard let validations = (notification.object as? Box<[String: Bool]>)?.value else {
+                    log.warning("Notification didn't have validations.")
+                    return
+                }
 
-            let attempt: Int32 = self.prefs.intForKey("bookmarkvalidationattempt") ?? 1
-            self.prefs.setInt(attempt + 1, forKey: "bookmarkvalidationattempt")
+                let attempt: Int32 = self.prefs.intForKey("bookmarkvalidationattempt") ?? 1
+                self.prefs.setInt(attempt + 1, forKey: "bookmarkvalidationattempt")
 
-            // Capture the buffer count ASAP, not in the delayed op, because the merge could wipe it!
-            let bufferRows = (self.profile.bookmarks as? MergedSQLiteBookmarks)?.synchronousBufferCount()
+                // Capture the buffer count ASAP, not in the delayed op, because the merge could wipe it!
+                let bufferRows = (self.profile.bookmarks as? MergedSQLiteBookmarks)?.synchronousBufferCount()
 
-            self.doInBackgroundAfter(300) {
-                self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
-                    // We would love to include the version and OS etc. of each remote client,
-                    // but we don't store that information. For now, just do a count.
-                    let clientCount = clients.count
+                self.doInBackgroundAfter(300) {
+                    self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
+                        // We would love to include the version and OS etc. of each remote client,
+                        // but we don't store that information. For now, just do a count.
+                        let clientCount = clients.count
 
-                    let id = DeviceInfo.clientIdentifier(self.prefs)
-                    let ping = makeAdHocBookmarkMergePing(Bundle.main, clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations, clientCount: clientCount)
-                    let payload = ping.stringValue
+                        let id = DeviceInfo.clientIdentifier(self.prefs)
+                        let ping = makeAdHocBookmarkMergePing(Bundle.main, clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations, clientCount: clientCount)
+                        let payload = ping.stringValue
 
-                    log.debug("Payload is: \(payload)")
-                    guard let body = payload.data(using: String.Encoding.utf8) else {
-                        log.debug("Invalid JSON!")
-                        return
-                    }
+                        log.debug("Payload is: \(payload)")
+                        guard let body = payload.data(using: String.Encoding.utf8) else {
+                            log.debug("Invalid JSON!")
+                            return
+                        }
 
-                    let url = "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation".asURL!
-                    var request = URLRequest(url: url)
-                    request.httpMethod = "POST"
-                    request.httpBody = body
-                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                        guard let url = URL(string: "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation") else {
+                            return
+                        }
 
-                    SessionManager.default.request(request).responseData { response in
-                        log.debug("Bookmark validation upload response: \(response.response?.statusCode ?? -1).")
+                        var request = URLRequest(url: url)
+                        request.httpMethod = "POST"
+                        request.httpBody = body
+                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                        URLSession.shared.dataTask(with: request) { data, response, error in
+                            let httpResponse = response as? HTTPURLResponse
+                            log.debug("Bookmark validation upload response: \(httpResponse?.statusCode ?? -1).")
+                        }
                     }
                 }
-            }
+            #endif
         }
 
         private func handleRecreationOfDatabaseNamed(name: String?) -> Success {
