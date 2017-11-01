@@ -432,7 +432,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         // database file to a backup location and start over with a brand new one.
         switch self.prepareSchema() {
         case .success:
-            log.debug("Database succesfully created or updated.")
+            log.debug("Database successfully created or updated.")
         case .failure:
             Sentry.shared.sendWithStacktrace(message: "Failed to create or update the database schema.", tag: SentryTag.swiftData, severity: .error)
             return nil
