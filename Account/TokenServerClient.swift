@@ -139,7 +139,10 @@ open class TokenServerClient {
     lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.tokenServerClientUserAgent
         let configuration = URLSessionConfiguration.ephemeral
-        return SessionManager.managerWithUserAgent(ua, configuration: configuration)
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = ua
+        configuration.httpAdditionalHeaders = defaultHeaders
+        return SessionManager(configuration: configuration)
     }()
 
     open func token(_ assertion: String, clientState: String? = nil) -> Deferred<Maybe<TokenServerToken>> {
