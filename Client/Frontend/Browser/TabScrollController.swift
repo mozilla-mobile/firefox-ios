@@ -190,7 +190,7 @@ private extension TabScrollingController {
                     scrollWithDelta(delta)
                 }
 
-                if headerTopOffset == -topScrollHeight {
+                if headerTopOffset == -topScrollHeight && footerBottomOffset == bottomScrollHeight {
                     toolbarState = .collapsed
                 } else if headerTopOffset == 0 {
                     toolbarState = .visible
