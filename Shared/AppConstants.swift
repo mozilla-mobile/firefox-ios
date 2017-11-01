@@ -196,19 +196,6 @@ public struct AppConstants {
         #endif
     }()
 
-    /// Toggle the feature that adds 'Send to Device' to the page actions menu
-    public static let MOZ_SENDTAB_IN_PAGE_ACTIONS: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
     /// The maximum length of a URL stored by Firefox. Shared with Places on desktop.
     public static let DB_URL_LENGTH_MAX = 65536
 
