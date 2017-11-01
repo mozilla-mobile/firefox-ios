@@ -78,7 +78,10 @@ public class PushClient {
     lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.fxaUserAgent
         let configuration = URLSessionConfiguration.ephemeral
-        return SessionManager.managerWithUserAgent(ua, configuration: configuration)
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = ua
+        configuration.httpAdditionalHeaders = defaultHeaders
+        return SessionManager(configuration: configuration)
     }()
 
     public init(endpointURL: NSURL, experimentalMode: Bool = false) {

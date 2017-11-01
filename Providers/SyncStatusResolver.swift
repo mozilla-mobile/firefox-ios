@@ -2,10 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Sync
-import XCGLogger
-import Deferred
 import Shared
 import Storage
 
@@ -48,8 +45,6 @@ public func ==(a: SyncDisplayState, b: SyncDisplayState) -> Bool {
     }
 }
 
-private let log = Logger.syncLogger
-
 /*
  * Translates the fine-grained SyncStatuses of each sync engine into a more coarse-grained
  * display-oriented state for displaying warnings/errors to the user.
@@ -70,7 +65,7 @@ public struct SyncStatusResolver {
 
         // Run through the engine results and produce a relevant display status for each one
         let displayStates: [SyncDisplayState] = results.map { (engineIdentifier, syncStatus) in
-            log.debug("Sync status for \(engineIdentifier): \(syncStatus)")
+            print("Sync status for \(engineIdentifier): \(syncStatus)")
 
             // Explicitly call out each of the enum cases to let us lean on the compiler when
             // we add new error states
@@ -130,7 +125,7 @@ public struct SyncStatusResolver {
             }
         }
 
-        log.debug("Resolved sync display state: \(aggregate)")
+        print("Resolved sync display state: \(aggregate)")
         return aggregate
     }
 }

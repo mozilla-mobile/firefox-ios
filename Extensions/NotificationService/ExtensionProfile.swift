@@ -3,32 +3,32 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Deferred
-import Foundation
 import Shared
-import Storage
 import Sync
 
 // This is a cut down version of the Profile. 
 // This will only ever be used in the NotificationService extension.
 // It allows us to customize the SyncDelegate, and later the SyncManager.
 class ExtensionProfile: BrowserProfile {
-    override var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage {
-        get {
-            fatalError("Cannot use logins.db in extension")
-        }
-        set {}
-    }
-
     init(localName: String) {
         super.init(localName: localName, clear: false)
-        syncManager = ExtensionSyncManager(profile: self)
+        self.syncManager = ExtensionSyncManager(profile: self)
     }
 }
 
 fileprivate let extensionSafeNames = Set(["clients"])
 
-class ExtensionSyncManager: BrowserProfile.BrowserSyncManager {
+// Mock class required by `BrowserProfile`
+open class PanelDataObservers {
+    init(profile: Any) {}
+}
 
+// Mock class required by `BrowserProfile`
+open class SearchEngines {
+    init(prefs: Any, files: Any) {}
+}
+
+class ExtensionSyncManager: BrowserProfile.BrowserSyncManager {
     init(profile: ExtensionProfile) {
         super.init(profile: profile)
     }

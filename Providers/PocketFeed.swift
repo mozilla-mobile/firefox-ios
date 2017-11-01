@@ -60,7 +60,10 @@ class Pocket {
     lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.defaultClientUserAgent
         let configuration = URLSessionConfiguration.default
-        return SessionManager.managerWithUserAgent(ua, configuration: configuration)
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = ua
+        configuration.httpAdditionalHeaders = defaultHeaders
+        return SessionManager(configuration: configuration)
     }()
 
     private func findCachedResponse(for request: URLRequest) -> [String: Any]? {
