@@ -40,9 +40,7 @@ class AuthenticationTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
         // Save the credentials.
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Save Login"))
-            .inRoot(grey_kindOfClass(NSClassFromString("Client.SnackButton")!))
-            .perform(grey_tap())
+        tester().tapView(withAccessibilityIdentifier: "SaveLoginPrompt.saveLoginButton")
         
         logOut()
         loadAuthPage()
