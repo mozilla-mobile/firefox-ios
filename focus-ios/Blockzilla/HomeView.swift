@@ -60,7 +60,7 @@ class HomeView: UIView {
 
         settingsButton.snp.makeConstraints { make in
             make.top.equalTo(self).offset(15)
-            make.trailing.equalTo(self).inset(16)
+            make.trailing.equalTo(safeAreaLayoutGuide).inset(16)
             make.height.width.equalTo(24)
         }
     }

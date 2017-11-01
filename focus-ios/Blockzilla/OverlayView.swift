@@ -38,7 +38,7 @@ class OverlayView: UIView {
         searchBorder.backgroundColor = UIConstants.colors.settingsButtonBorder
         addSubview(searchBorder)
         searchButton.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(self)
+            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
         searchBorder.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
@@ -71,9 +71,11 @@ class OverlayView: UIView {
             make.height.equalTo(1)
         }
     }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
     func setUpOverlayButton (button: InsetButton) {
         button.titleLabel?.lineBreakMode = .byTruncatingTail
         if UIView.userInterfaceLayoutDirection(for: button.semanticContentAttribute) == .rightToLeft {

@@ -161,7 +161,8 @@ class URLBar: UIView {
         let toolsetButtonWidthMultiplier = 0.08
 
         toolset.backButton.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
+            make.leading.equalTo(safeAreaLayoutGuide)
+            make.centerY.equalTo(self)
 
             showToolsetConstraints.append(make.width.equalTo(self).multipliedBy(toolsetButtonWidthMultiplier).constraint)
 
@@ -221,7 +222,8 @@ class URLBar: UIView {
         }
 
         toolset.sendButton.snp.makeConstraints { make in
-            make.centerY.trailing.equalTo(self)
+            make.trailing.equalTo(safeAreaLayoutGuide)
+            make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
 

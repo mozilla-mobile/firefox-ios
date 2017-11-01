@@ -3,11 +3,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import SnapKit
 
 class BrowserToolbar: UIView {
     private let toolset = BrowserToolset()
     private let backgroundDark = GradientBackgroundView()
     private let backgroundBright = GradientBackgroundView(alpha: 0.2)
+    private let stackView = UIStackView()
 
     init() {
         super.init(frame: CGRect.zero)
@@ -28,7 +30,6 @@ class BrowserToolbar: UIView {
         borderView.alpha = 0.9
         addSubview(borderView)
 
-        let stackView = UIStackView()
         stackView.distribution = .fillEqually
 
         stackView.addArrangedSubview(toolset.backButton)
@@ -43,7 +44,9 @@ class BrowserToolbar: UIView {
         }
 
         stackView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
+            make.top.right.left.equalTo(self)
+            make.height.equalTo(UIConstants.layout.browserToolbarHeight)
+            make.bottom.equalTo(safeAreaLayoutGuide)
         }
 
         background.snp.makeConstraints { make in
