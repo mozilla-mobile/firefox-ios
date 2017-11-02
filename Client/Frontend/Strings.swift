@@ -16,6 +16,11 @@ private func applicationBundle() -> Bundle {
     return Bundle(url: applicationBundleURL) ?? bundle
 }
 
+extension Strings {
+    public static let OKString = NSLocalizedString("OK", comment: "OK button")
+    public static let CancelString = NSLocalizedString("Cancel", comment: "Label for Cancel button")
+}
+
 // SendTo extension.
 extension Strings {
     public static let SendToCancelButton = NSLocalizedString("SendTo.Cancel.Button", bundle: applicationBundle(), value: "Cancel", comment: "Button title for cancelling SendTo screen")

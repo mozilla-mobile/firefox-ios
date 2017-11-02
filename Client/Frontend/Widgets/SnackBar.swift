@@ -8,6 +8,8 @@ import Shared
 
 class SnackBarUX {
     static var MaxWidth: CGFloat = 400
+    static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)
+    static let HighlightText = UIColor(red: 42/255, green: 121/255, blue: 213/255, alpha: 1.0)
 }
 
 /**
@@ -26,7 +28,7 @@ class SnackButton: UIButton {
      */
     lazy var highlightImg: UIImage = {
         let size = CGSize(width: 1, height: 1)
-        return UIImage.createWithColor(size, color: UIConstants.HighlightColor)
+        return UIImage.createWithColor(size, color: SnackBarUX.HighlightColor)
     }()
 
     init(title: String, accessibilityIdentifier: String, callback: @escaping (_ bar: SnackBar) -> Void) {
@@ -37,7 +39,7 @@ class SnackButton: UIButton {
         setTitle(title, for: UIControlState())
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         setBackgroundImage(highlightImg, for: .highlighted)
-        setTitleColor(UIConstants.HighlightText, for: .highlighted)
+        setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
 
         addTarget(self, action: #selector(SnackButton.onClick), for: .touchUpInside)
 
@@ -282,15 +284,15 @@ class TimerSnackBar: SnackBar {
     }
 
     static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL) {
-        let msg =  NSAttributedString(string: Strings.ExternalLinkAppStoreConfirmationTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        let msg =  NSAttributedString(string: Strings.ExternalLinkAppStoreConfirmationTitle, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
         let bar = TimerSnackBar(attrText: msg,
                              img: UIImage(named: "defaultFavicon"),
                              buttons: [
-                                SnackButton(title: UIConstants.OKString, accessibilityIdentifier: "ConfirmOpenInAppStore", callback: { bar in
+                                SnackButton(title: Strings.OKString, accessibilityIdentifier: "ConfirmOpenInAppStore", callback: { bar in
                                     tab.removeSnackbar(bar)
                                     UIApplication.shared.open(appStoreURL, options: [:])
                                 }),
-                                SnackButton(title: UIConstants.CancelString, accessibilityIdentifier: "CancelOpenInAppStore", callback: { bar in
+                                SnackButton(title: Strings.CancelString, accessibilityIdentifier: "CancelOpenInAppStore", callback: { bar in
                                     tab.removeSnackbar(bar)
                                 })
             ])

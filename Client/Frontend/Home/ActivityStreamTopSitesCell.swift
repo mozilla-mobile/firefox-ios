@@ -7,9 +7,8 @@ import Shared
 import SDWebImage
 import Storage
 
-struct TopSiteCellUX {
+private struct TopSiteCellUX {
     static let TitleHeight: CGFloat = 20
-    static let TitleBackgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.7)
     static let TitleTextColor = UIColor.black
     static let TitleFont = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
@@ -20,7 +19,7 @@ struct TopSiteCellUX {
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
     static let PinIconSize: CGFloat = 12
-    static let PinColor = UIColor(rgb: 0x272727)
+    static let PinColor = UIColor.Defaults.Grey60 //TODO //wrong
 }
 
 /*
@@ -191,7 +190,7 @@ class EmptyTopsiteDecorationCell: UICollectionReusableView {
     }
 }
 
-struct ASHorizontalScrollCellUX {
+private struct ASHorizontalScrollCellUX {
     static let TopSiteCellIdentifier = "TopSiteItemCell"
     static let TopSiteEmptyCellIdentifier = "TopSiteItemEmptyCell"
 
@@ -472,7 +471,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 /*
     Defines the number of items to show in topsites for different size classes.
 */
-struct ASTopSiteSourceUX {
+private struct ASTopSiteSourceUX {
     static let verticalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 1, UIUserInterfaceSizeClass.regular: 2, UIUserInterfaceSizeClass.unspecified: 0]
     static let maxNumberOfPages = 2
     static let CellIdentifier = "TopSiteItemCell"

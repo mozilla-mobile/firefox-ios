@@ -4,7 +4,7 @@
 
 import UIKit
 
-class PrivateModeButton: ToggleButton {
+class PrivateModeButton: ToggleButton, Themeable {
     var light: Bool = false
     
     override init(frame: CGRect) {
@@ -19,11 +19,11 @@ class PrivateModeButton: ToggleButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func styleForMode(privateMode isPrivate: Bool) {
-        self.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0x272727)
+    func applyTheme(_ theme: Theme) {
+        self.tintColor = UIColor.Browser.Tint.colorFor(theme)
         self.imageView?.tintColor = self.tintColor
-        self.isSelected = isPrivate
-        self.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+        self.isSelected = theme == .Private
+        self.accessibilityValue = self.isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
     }
 }
 

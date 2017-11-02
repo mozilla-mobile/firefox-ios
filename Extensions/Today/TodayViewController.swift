@@ -16,7 +16,7 @@ struct TodayStrings {
     static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
 }
 
-struct TodayUX {
+private struct TodayUX {
     static let privateBrowsingColor = UIColor(rgb: 0xCE6EFC)
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
     static let linkTextSize: CGFloat = 10.0
@@ -25,7 +25,6 @@ struct TodayUX {
     static let copyLinkImageWidth: CGFloat = 23
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
-    static let iOS9LeftMargin: CGFloat = 40
 }
 
 @objc (TodayViewController)

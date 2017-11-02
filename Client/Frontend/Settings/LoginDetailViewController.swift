@@ -90,8 +90,8 @@ class LoginDetailViewController: SensitiveViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        tableView.separatorColor = UIConstants.TableViewSeparatorColor
-        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
+        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
         tableView.accessibilityIdentifier = "Login Detail List"
         tableView.delegate = self
         tableView.dataSource = self
@@ -101,7 +101,7 @@ class LoginDetailViewController: SensitiveViewController {
 
         // Add a line on top of the table view so when the user pulls down it looks 'correct'.
         let topLine = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: tableView.frame.width, height: 0.5)))
-        topLine.backgroundColor = UIConstants.TableViewSeparatorColor
+        topLine.backgroundColor = SettingsUX.TableViewSeparatorColor
         tableView.tableHeaderView = topLine
 
         // Normally UITableViewControllers handle responding to content inset changes from keyboard events when editing

@@ -2,17 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
-import UIKit
 import Shared
 import SnapKit
-import XCGLogger
 
-private let log = Logger.browserLogger
-
-struct URLBarViewUX {
+private struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0xB0D5FB)
+
     static let LocationLeftPadding: CGFloat = 8
     static let Padding: CGFloat = 10
     static let LocationHeight: CGFloat = 40
@@ -21,40 +17,11 @@ struct URLBarViewUX {
     static let TextFieldCornerRadius: CGFloat = 8
     static let TextFieldBorderWidth: CGFloat = 1
     static let TextFieldBorderWidthSelected: CGFloat = 4
-    // offset from edge of tabs button
-    static let ProgressTintColor = UIColor(rgb: 0x00dcfc)
     static let ProgressBarHeight: CGFloat = 3
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
-    static let ToolbarButtonInsets = UIEdgeInsets(top: Padding, left: Padding, bottom: Padding, right: Padding)
-
-    static let Themes: [String: Theme] = {
-        var themes = [String: Theme]()
-        var theme = Theme()
-        theme.borderColor = UIColor(rgb: 0x2D2D31)
-        theme.backgroundColor = UIColor(rgb: 0x38383D)
-        theme.activeBorderColor = UIColor(rgb: 0x4a4a4f)
-        theme.tintColor = UIColor(rgb: 0xf9f9fa)
-        theme.textColor = UIColor(rgb: 0xf9f9fa)
-        theme.buttonTintColor = UIColor(rgb: 0xD2d2d4)
-        theme.disabledButtonColor = UIColor.gray
-        theme.highlightButtonColor = UIColor(rgb: 0xAC39FF)
-        themes[Theme.PrivateMode] = theme
-
-        theme = Theme()
-        theme.borderColor =  UIColor(rgb: 0x737373).withAlphaComponent(0.3)
-        theme.activeBorderColor = TextFieldActiveBorderColor
-        theme.disabledButtonColor = UIColor.lightGray
-        theme.highlightButtonColor = UIColor(rgb: 0x00A2FE)
-        theme.tintColor = ProgressTintColor
-        theme.textColor = UIColor(rgb: 0x272727)
-        theme.backgroundColor = UIConstants.AppBackgroundColor
-        theme.buttonTintColor = UIColor(rgb: 0x272727)
-        themes[Theme.NormalMode] = theme
-
-        return themes
-    }()
+    static let ToolbarButtonInsets = UIEdgeInsets(equalInset: Padding)
 }
 
 protocol URLBarDelegate: class {
@@ -108,7 +75,7 @@ class URLBarView: UIView {
         }
     }
 
-    fileprivate var currentTheme: String = Theme.NormalMode
+    fileprivate var currentTheme: Theme = .Normal
 
     var toolbarIsShowing = false
     var topTabsIsShowing = false
@@ -668,27 +635,21 @@ extension URLBarView {
 }
 
 extension URLBarView: Themeable {
-    
-    func applyTheme(_ themeName: String) {
-        locationView.applyTheme(themeName)
-        locationTextField?.applyTheme(themeName)
 
-        guard let theme = URLBarViewUX.Themes[themeName] else {
-            fatalError("Theme not found")
-        }
-        
-        let isPrivate = themeName == Theme.PrivateMode
-        
-        progressBar.setGradientColors(startColor: UIConstants.LoadingStartColor.color(isPBM: isPrivate), endColor: UIConstants.LoadingEndColor.color(isPBM: isPrivate))
-        currentTheme = themeName
-        locationBorderColor = theme.borderColor!
-        locationActiveBorderColor = theme.activeBorderColor!
-        cancelTintColor = theme.buttonTintColor
-        showQRButtonTintColor = theme.buttonTintColor
-        backgroundColor = theme.backgroundColor
-        self.actionButtons.forEach { $0.applyTheme(themeName) }
-        tabsButton.applyTheme(themeName)
-        line.backgroundColor = UIConstants.URLBarDivider.color(isPBM: isPrivate)
+    func applyTheme(_ theme: Theme) {
+        locationView.applyTheme(theme)
+        locationTextField?.applyTheme(theme)
+        self.actionButtons.forEach { $0.applyTheme(theme) }
+        tabsButton.applyTheme(theme)
+
+        progressBar.setGradientColors(startColor: UIColor.LoadingBar.Start.colorFor(theme), endColor: UIColor.LoadingBar.End.colorFor(theme))
+        currentTheme = theme
+        locationBorderColor = UIColor.URLBar.Border.colorFor(theme).withAlphaComponent(0.3)
+        locationActiveBorderColor = UIColor.URLBar.ActiveBorder.colorFor(theme)
+        cancelTintColor = UIColor.Browser.Tint.colorFor(theme)
+        showQRButtonTintColor = UIColor.Browser.Tint.colorFor(theme)
+        backgroundColor = UIColor.Browser.Background.colorFor(theme)
+        line.backgroundColor = UIColor.Browser.URLBarDivider.colorFor(theme)
         locationContainer.layer.shadowColor = self.locationBorderColor.cgColor
     }
 }
@@ -697,7 +658,7 @@ extension URLBarView: Themeable {
 // This subclass creates a strong shadow on the URLBar
 class TabLocationContainerView: UIView {
     
-    struct LocationContainerUX {
+    private struct LocationContainerUX {
         static let CornerRadius: CGFloat = 4
         static let ShadowRadius: CGFloat = 2
         static let ShadowOpacity: Float = 1
@@ -729,23 +690,6 @@ class TabLocationContainerView: UIView {
 }
 
 class ToolbarTextField: AutocompleteTextField {
-    static let Themes: [String: Theme] = {
-        var themes = [String: Theme]()
-        var theme = Theme()
-        theme.backgroundColor = UIColor(rgb: 0x636369)
-        theme.textColor = UIColor.white
-        theme.buttonTintColor = UIColor.white
-        theme.highlightColor = UIConstants.PrivateModeInputHighlightColor
-        themes[Theme.PrivateMode] = theme
-
-        theme = Theme()
-        theme.backgroundColor = .white
-        theme.textColor = UIColor(rgb: 0x272727)
-        theme.highlightColor = AutocompleteTextFieldUX.HighlightColor
-        themes[Theme.NormalMode] = theme
-
-        return themes
-    }()
 
     dynamic var clearButtonTintColor: UIColor? {
         didSet {
@@ -813,14 +757,11 @@ class ToolbarTextField: AutocompleteTextField {
 }
 
 extension ToolbarTextField: Themeable {
-    func applyTheme(_ themeName: String) {
-        guard let theme = ToolbarTextField.Themes[themeName] else {
-            fatalError("Theme not found")
-        }
 
-        backgroundColor = theme.backgroundColor
-        textColor = theme.textColor
-        clearButtonTintColor = theme.buttonTintColor
-        highlightColor = theme.highlightColor!
+    func applyTheme(_ theme: Theme) {
+        backgroundColor = UIColor.TextField.Background.colorFor(theme)
+        textColor = UIColor.TextField.TextAndTint.colorFor(theme)
+        clearButtonTintColor = textColor
+        highlightColor = UIColor.TextField.Highlight.colorFor(theme)
     }
 }

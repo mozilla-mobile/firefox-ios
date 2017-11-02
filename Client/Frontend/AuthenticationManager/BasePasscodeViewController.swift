@@ -25,7 +25,7 @@ class BasePasscodeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        view.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.dismissAnimated))
         automaticallyAdjustsScrollViewInsets = false
     }
