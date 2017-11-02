@@ -62,6 +62,7 @@ class FxAPushMessageTest: XCTestCase {
             email: "testtest@test.com",
             uid: "uid",
             deviceRegistration: nil,
+            declinedEngines: nil,
             stateKeyLabel: "xxx",
             state: SeparatedState())
 
@@ -87,6 +88,7 @@ class FxAPushMessageTest: XCTestCase {
             email: "testtest@test.com",
             uid: "uid",
             deviceRegistration: nil,
+            declinedEngines: nil,
             stateKeyLabel: "xxx",
             state: SeparatedState())
 

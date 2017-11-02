@@ -1098,13 +1098,21 @@ open class BrowserProfile: Profile {
 
         func engineEnablementChangesForAccount(account: FirefoxAccount, profile: Profile) -> [String: Bool]? {
             var enginesEnablements: [String: Bool] = [:]
-            // Bundle in authState the engines the user activated/disabled since the last sync.
-            TogglableEngines.forEach { engine in
-                let stateChangedPref = "engine.\(engine).enabledStateChanged"
-                if let _ = self.prefsForSync.boolForKey(stateChangedPref),
-                    let enabled = self.prefsForSync.boolForKey("engine.\(engine).enabled") {
-                    enginesEnablements[engine] = enabled
-                    self.prefsForSync.setObject(nil, forKey: stateChangedPref)
+            // We just created the account, the user went through the Choose What to Sync screen on FxA.
+            if let declined = account.declinedEngines {
+                declined.forEach { enginesEnablements[$0] = false }
+                account.declinedEngines = nil
+                // Persist account changes so we don't try to decline engines on the next sync.
+                profile.flushAccount()
+            } else {
+                // Bundle in authState the engines the user activated/disabled since the last sync.
+                TogglableEngines.forEach { engine in
+                    let stateChangedPref = "engine.\(engine).enabledStateChanged"
+                    if let _ = self.prefsForSync.boolForKey(stateChangedPref),
+                        let enabled = self.prefsForSync.boolForKey("engine.\(engine).enabled") {
+                        enginesEnablements[engine] = enabled
+                        self.prefsForSync.setObject(nil, forKey: stateChangedPref)
+                    }
                 }
             }
             return enginesEnablements
