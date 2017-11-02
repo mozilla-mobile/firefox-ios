@@ -182,6 +182,12 @@ extension URL {
         }
     }
 
+    /// String suitable for displaying outside of the app, for example in notifications, were Data Detectors will
+    /// linkify the text and make it into a openable-in-Safari link.
+    public var absoluteDisplayExternalString: String {
+        return self.absoluteDisplayString.replacingOccurrences(of: ".", with: "\u{2024}")
+    }
+
     public var displayURL: URL? {
         if self.isReaderModeURL {
             return self.decodeReaderModeURL?.havingRemovedAuthorisationComponents()

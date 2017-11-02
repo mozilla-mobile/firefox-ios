@@ -467,4 +467,31 @@ class NSURLExtensionsTests: XCTestCase {
         XCTAssertEqual("http://foo.com/bar/?ppp=123&rrr=aaa", urlE.absoluteString)
     }
 
+    func testHidingFromDataDetectors() {
+        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else {
+            XCTFail()
+            return
+        }
+
+        let urls = ["https://example.com", "example.com", "http://example.com"]
+        for u in urls {
+            let url = URL(string: u)!
+
+            let original = url.absoluteDisplayString
+            let matches = detector.matches(in: original, options: [], range: NSMakeRange(0, original.count))
+            guard matches.count > 0 else {
+                print("\(url) doesn't match as a URL")
+                continue
+            }
+
+            let modified = url.absoluteDisplayExternalString
+            XCTAssertNotEqual(original, modified)
+            
+            let newMatches = detector.matches(in: modified, options: [], range: NSMakeRange(0, modified.count))
+
+            XCTAssertEqual(0, newMatches.count, "\(modified) is not a valid URL")
+        }
+
+    }
+
 }
