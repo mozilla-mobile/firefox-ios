@@ -19,6 +19,7 @@ let BrowserTabMenu = "BrowserTabMenu"
 let PageOptionsMenu = "PageOptionsMenu"
 let FindInPage = "FindInPage"
 let SettingsScreen = "SettingsScreen"
+let SyncSettings = "SyncSettings"
 let HomePageSettings = "HomePageSettings"
 let PasscodeSettings = "PasscodeSettings"
 let PasscodeIntervalSettings = "PasscodeIntervalSettings"
@@ -39,6 +40,7 @@ let NewTabChoiceSettings = "NewTabChoiceSettings"
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
 let allSettingsScreens = [
+    SyncSettings,
     SearchSettings,
     AddCustomSearchSettings,
     NewTabSettings,
@@ -349,6 +351,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
     map.addScreenState(SettingsScreen) { screenState in
         let table = app.tables.element(boundBy: 0)
 
+        screenState.tap(table.cells["Sync"], to: SyncSettings)
         screenState.tap(table.cells["Search"], to: SearchSettings)
         screenState.tap(table.cells["NewTab"], to: NewTabSettings)
         screenState.tap(table.cells["Homepage"], to: HomePageSettings)
@@ -373,6 +376,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
     map.addScreenState(SearchSettings) { screenState in
         let table = app.tables.element(boundBy: 0)
         screenState.tap(table.cells["customEngineViewButton"], to: AddCustomSearchSettings)
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(SyncSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 

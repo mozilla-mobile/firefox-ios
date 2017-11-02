@@ -16,6 +16,7 @@ import SwiftyJSON
 private let log = Logger.syncLogger
 
 class MockSyncAuthState: SyncAuthState {
+    var enginesEnablements: [String : Bool]?
 
     let serverRoot: String
     let kB: Data
@@ -161,7 +162,7 @@ class MetaGlobalTests: XCTestCase {
 
     func testCryptoKeysMissing() {
         // To recover from a missing crypto/keys, fresh start.
-        storeMetaGlobal(metaGlobal: createMetaGlobal())
+        storeMetaGlobal(metaGlobal: createMetaGlobal(enginesEnablements: nil))
 
         let afterStores = Date.now()
         let expectation = self.expectation(description: "Waiting on value.")

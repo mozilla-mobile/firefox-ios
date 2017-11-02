@@ -138,6 +138,7 @@ private let PrefClientName = "clientName"
 private let PrefClientGUID = "clientGUID"
 private let PrefHashedUID = "hashedUID"
 private let PrefEngineConfiguration = "engineConfiguration"
+private let PrefEnginesEnablements = "enginesEnablements"
 private let PrefDeviceID = "deviceID"
 
 class PrefsBackoffStorage: BackoffStorage {
@@ -198,6 +199,8 @@ open class Scratchpad {
         fileprivate var keyLabel: String
         var localCommands: Set<LocalCommand>
         var engineConfiguration: EngineConfiguration?
+        // Engines that were manually enabled/disabled by the user since our last sync.
+        var enginesEnablements: [String: Bool]?
         var clientGUID: String
         var clientName: String
         var fxaDeviceId: String
@@ -214,6 +217,7 @@ open class Scratchpad {
             self.keyLabel = p.keyLabel
             self.localCommands = p.localCommands
             self.engineConfiguration = p.engineConfiguration
+            self.enginesEnablements = p.enginesEnablements
             self.clientGUID = p.clientGUID
             self.clientName = p.clientName
             self.fxaDeviceId = p.fxaDeviceId
@@ -270,6 +274,11 @@ open class Scratchpad {
             return self
         }
 
+        open func clearEnginesEnablements() -> Builder {
+            self.enginesEnablements = nil
+            return self
+        }
+
         open func setGlobal(_ global: Fetched<MetaGlobal>?) -> Builder {
             self.global = global
             if let global = global {
@@ -292,6 +301,7 @@ open class Scratchpad {
                     keyLabel: self.keyLabel,
                     localCommands: self.localCommands,
                     engines: self.engineConfiguration,
+                    enginesEnablements: self.enginesEnablements,
                     clientGUID: self.clientGUID,
                     clientName: self.clientName,
                     fxaDeviceId: self.fxaDeviceId,
@@ -344,6 +354,7 @@ open class Scratchpad {
 
     // Enablement states.
     let engineConfiguration: EngineConfiguration?
+    let enginesEnablements: [String: Bool]?
 
     // What's our client name?
     let clientName: String
@@ -367,6 +378,7 @@ open class Scratchpad {
          keyLabel: String,
          localCommands: Set<LocalCommand>,
          engines: EngineConfiguration?,
+         enginesEnablements: [String: Bool]?,
          clientGUID: String,
          clientName: String,
          fxaDeviceId: String,
@@ -380,6 +392,7 @@ open class Scratchpad {
         self.keyLabel = keyLabel
         self.global = m
         self.engineConfiguration = engines
+        self.enginesEnablements = enginesEnablements
         self.localCommands = localCommands
         self.clientGUID = clientGUID
         self.clientName = clientName
@@ -397,6 +410,7 @@ open class Scratchpad {
         self.keyLabel = Bytes.generateGUID()
         self.global = nil
         self.engineConfiguration = nil
+        self.enginesEnablements = nil
         self.localCommands = Set()
         self.clientGUID = Bytes.generateGUID()
         self.clientName = DeviceInfo.defaultClientName()
@@ -493,6 +507,10 @@ open class Scratchpad {
             }
         }
 
+        if let enginesEnablements = prefs.dictionaryForKey(PrefEnginesEnablements) {
+            b.enginesEnablements = enginesEnablements as? [String: Bool]
+        }
+
         return b.build()
     }
 
@@ -572,6 +590,12 @@ open class Scratchpad {
             prefs.setString(engineConfiguration.toJSON().stringValue()!, forKey: PrefEngineConfiguration)
         } else {
             prefs.removeObjectForKey(PrefEngineConfiguration)
+        }
+
+        if let enginesEnablements = self.enginesEnablements {
+            prefs.setObject(enginesEnablements, forKey: PrefEnginesEnablements)
+        } else {
+            prefs.removeObjectForKey(PrefEnginesEnablements)
         }
 
         return self

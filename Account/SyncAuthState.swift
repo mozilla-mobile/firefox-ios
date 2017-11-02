@@ -22,6 +22,7 @@ public protocol SyncAuthState {
     func invalidate()
     func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>>
     var deviceID: String? { get }
+    var enginesEnablements: [String: Bool]? { get set }
 }
 
 public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
@@ -56,6 +57,15 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
     fileprivate let cache: KeychainCache<SyncAuthStateCache>
     public var deviceID: String? {
         return account.deviceRegistration?.id
+    }
+    var _engineEnablements: [String: Bool]?
+    public var enginesEnablements: [String : Bool]? {
+        get {
+            return _engineEnablements
+        }
+        set(val) {
+            _engineEnablements = val
+        }
     }
 
     init(account: FirefoxAccount, cache: KeychainCache<SyncAuthStateCache>) {
