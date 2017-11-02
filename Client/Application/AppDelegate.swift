@@ -861,7 +861,7 @@ class AppSyncDelegate: SyncDelegate {
                         title = Strings.SentTab_TabArrivingNotification_NoDevice_title
                     }
                     notification.alertTitle = title
-                    notification.alertBody = url.absoluteDisplayString
+                    notification.alertBody = url.absoluteDisplayExternalString
                     notification.userInfo = [TabSendURLKey: url.absoluteString, TabSendTitleKey: title]
                     notification.alertAction = nil
 
