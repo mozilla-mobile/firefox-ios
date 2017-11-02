@@ -165,7 +165,7 @@ extension SyncDataDisplay {
             return [
                 "title": t.title,
                 "url": t.url.absoluteString,
-                "displayURL": t.url.absoluteDisplayString,
+                "displayURL": t.url.absoluteDisplayExternalString,
                 "deviceName": t.deviceName as Any,
                 ] as NSDictionary
         }
