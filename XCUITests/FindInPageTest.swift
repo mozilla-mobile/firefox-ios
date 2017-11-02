@@ -105,6 +105,7 @@ class FindInPageTests: BaseTestCase {
         let textToFind = "from"
 
         // Long press on the word to be found
+        waitUntilPageLoad()
         waitforExistence(app.webViews.staticTexts[textToFind])
         let stringToFind = app.webViews.staticTexts.matching(identifier: textToFind)
         let firstStringToFind = stringToFind.element(boundBy: 0)

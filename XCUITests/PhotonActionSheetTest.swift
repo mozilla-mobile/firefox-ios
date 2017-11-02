@@ -15,7 +15,7 @@ class PhotonActionSheetTest: BaseTestCase {
     }
 
     func testPinToTop() {
-        navigator.openURL(urlString: "http://www.yahoo.com")
+        navigator.openURL(urlString: "http://example.com")
         waitUntilPageLoad()
         // Open Action Sheet
         app.buttons["TabLocationView.pageOptionsButton"].tap()
@@ -35,11 +35,11 @@ class PhotonActionSheetTest: BaseTestCase {
 
         // Verify that the site is pinned to top
         let cell = app.cells["TopSite"].firstMatch
-        XCTAssertEqual(cell.label, "yahoo")
+        XCTAssertEqual(cell.label, "example")
 
         // Remove pin
         cell.press(forDuration: 2)
-        app.cells["Remove Pinned Site"].tap()
+        app.cells["Remove"].tap()
     }
 
     func testShareOptionIsShown() {
@@ -72,8 +72,8 @@ class PhotonActionSheetTest: BaseTestCase {
         app.collectionViews.cells/*@START_MENU_TOKEN@*/.collectionViews.containing(.button, identifier:"Copy")/*[[".collectionViews.containing(.button, identifier:\"Create PDF\")",".collectionViews.containing(.button, identifier:\"Print\")",".collectionViews.containing(.button, identifier:\"Copy\")"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.buttons["More"].tap()
 
         // Enable Send Tab
-        waitforExistence(app.tables.children(matching: .cell).matching(identifier: "0").element(boundBy: 0).switches["Send Tab"])
-        app.tables.children(matching: .cell).matching(identifier: "0").element(boundBy: 0).switches["Send Tab"].tap()
+        let sendTabButton = app.tables.cells.switches["Send Tab"]
+        sendTabButton.tap()
         app.navigationBars["Activities"].buttons["Done"].tap()
 
         // Send Tab option appears on the Share options sheet
