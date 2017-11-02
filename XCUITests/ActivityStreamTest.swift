@@ -195,7 +195,6 @@ class ActivityStreamTest: BaseTestCase {
         TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!]
             .press(forDuration: 1)
         selectOptionFromContextMenu(option: "Open in New Private Tab")
-        waitUntilPageLoad()
 
         // Check that two tabs are open and one of them is the default top site one
         navigator.goto(PrivateTabTray)
@@ -301,6 +300,7 @@ class ActivityStreamTest: BaseTestCase {
 
          // Go to a website
          navigator.openURL(urlString: newTopSite["url"]!)
+         waitUntilPageLoad()
 
          // Go back to Top Sites from context menu
          navigator.browserPerformAction(.openTopSitesOption)
@@ -313,25 +313,34 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.openURL(urlString: "http://example.com")
         waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: "example.com")
         navigator.openURL(urlString: "http://mozilla.org")
         waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: "mozilla.org")
         navigator.openURL(urlString: "http://apple.com")
         waitUntilPageLoad()
-        navigator.openURL(urlString: "http://yahoo.com")
+        waitForValueContains(app.textFields["url"], value: "apple.com")
+        navigator.openURL(urlString: "http://slack.com")
         waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: "slack.com")
 
         if iPad() {
             // Test timeout on BB when loading these pages
             navigator.openURL(urlString: "http://cvs.com")
             waitUntilPageLoad()
-            navigator.openURL(urlString: "http://walmart.com")
+            waitForValueContains(app.textFields["url"], value: "cvs.com")
+            navigator.openURL(urlString: "http://linkedin.com")
             waitUntilPageLoad()
+            waitForValueContains(app.textFields["url"], value: "linkedin.com")
             navigator.openURL(urlString: "http://zara.com")
             waitUntilPageLoad()
+            waitForValueContains(app.textFields["url"], value: "zara.com")
             navigator.openURL(urlString: "http://twitter.com")
             waitUntilPageLoad()
+            waitForValueContains(app.textFields["url"], value: "twitter.com")
             navigator.openURL(urlString: "http://instagram.com")
             waitUntilPageLoad()
+            waitForValueContains(app.textFields["url"], value: "instagram.com")
         }
         navigator.goto(URLBarOpen)
         waitforExistence(pagecontrolButton)
@@ -350,6 +359,7 @@ class ActivityStreamTest: BaseTestCase {
         XCUIDevice.shared().orientation = .landscapeLeft
 
         navigator.openURL(urlString: "http://example.com")
+        waitUntilPageLoad()
         if app.buttons["URLBarView.backButton"].isEnabled {
             app.buttons["URLBarView.backButton"].tap()
         } else {
