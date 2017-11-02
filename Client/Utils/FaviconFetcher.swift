@@ -101,9 +101,11 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     lazy fileprivate var alamofire: SessionManager = {
         let configuration = URLSessionConfiguration.default
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = userAgent
+        configuration.httpAdditionalHeaders = defaultHeaders
         configuration.timeoutIntervalForRequest = 5
-
-        return SessionManager.managerWithUserAgent(userAgent, configuration: configuration)
+        return SessionManager(configuration: configuration)
     }()
 
     fileprivate func fetchDataForURL(_ url: URL) -> Deferred<Maybe<Data>> {

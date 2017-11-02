@@ -13,8 +13,7 @@ class ShareExtensionHelper: NSObject {
 
     fileprivate let selectedURL: URL
     fileprivate var onePasswordExtensionItem: NSExtensionItem!
-    // Wechat share extension doesn't like our default data ID which is a modified to support password managers.
-    fileprivate let customDataTypeIdentifers = ["com.tencent.xin.sharetimeline"]
+    fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
 
     init(url: URL, tab: Tab?) {
         self.selectedURL = tab?.canonicalURL?.displayURL ?? url
@@ -52,9 +51,7 @@ class ShareExtensionHelper: NSObject {
         // This needs to be ready by the time the share menu has been displayed and
         // activityViewController(activityViewController:, activityType:) is called,
         // which is after the user taps the button. So a million cycles away.
-        if ShareExtensionHelper.isPasswordManagerExtensionAvailable() {
-            findLoginExtensionItem()
-        }
+        findLoginExtensionItem()
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             if !completed {
@@ -99,19 +96,16 @@ extension ShareExtensionHelper: UIActivityItemSource {
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivityType?) -> String {
-        return "public.url"
+        if let type = activityType, isPasswordManagerActivityType(type.rawValue) {
+            return browserFillIdentifier
+        }
+        return activityType == nil ? browserFillIdentifier : kUTTypeURL as String
     }
 }
 
 private extension ShareExtensionHelper {
-    static func isPasswordManagerExtensionAvailable() -> Bool {
-        return OnePasswordExtension.shared().isAppExtensionAvailable()
-    }
 
     func isPasswordManagerActivityType(_ activityType: String?) -> Bool {
-        if !ShareExtensionHelper.isPasswordManagerExtensionAvailable() {
-            return false
-        }
         // A 'password' substring covers the most cases, such as pwsafe and 1Password.
         // com.agilebits.onepassword-ios.extension
         // com.app77.ios.pwsafe2.find-login-action-password-actionExtension

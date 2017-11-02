@@ -17,6 +17,14 @@ public let OneHourInMilliseconds = 60 * OneMinuteInMilliseconds
 public let OneMinuteInMilliseconds = 60 * OneSecondInMilliseconds
 public let OneSecondInMilliseconds: UInt64 = 1000
 
+fileprivate let rfc822DateFormatter: DateFormatter = {
+    let dateFormatter = DateFormatter()
+    dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
+    dateFormatter.dateFormat = "EEE',' dd MMM yyyy HH':'mm':'ss 'GMT'"
+    dateFormatter.locale = Locale(identifier: "en_US")
+    return dateFormatter
+}()
+
 extension Timestamp {
     public static func uptimeInMilliseconds() -> Timestamp {
         return Timestamp(DispatchTime.now().uptimeNanoseconds) / 1000000
@@ -85,6 +93,10 @@ extension Date {
         }
 
         return String(format: NSLocalizedString("just now", comment: "Relative time for a tab that was visited within the last few moments."))
+    }
+
+    public func toRFC822String() -> String {
+        return rfc822DateFormatter.string(from: self)
     }
 }
 

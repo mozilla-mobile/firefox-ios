@@ -220,10 +220,7 @@
 		3964B09C1EA8F32C00F2EEF4 /* FeatureSwitchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3964B09B1EA8F32C00F2EEF4 /* FeatureSwitchTests.swift */; };
 		396E38CC1EE0816C00CC180F /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		396E38DD1EE081DA00CC180F /* SyncStatusResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */; };
-		396E38DE1EE081F500CC180F /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
-		396E38DF1EE0820400CC180F /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68F36971EA694000048CF44 /* PanelDataObservers.swift */; };
 		396E38E01EE0821B00CC180F /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
-		396E38E11EE0823100CC180F /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		396E38E31EE083A400CC180F /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		396E38E61EE0843500CC180F /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
 		396E38ED1EE0C63500CC180F /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
@@ -321,7 +318,6 @@
 		7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B4980A71CE363ED0017547C /* Settings.xcassets */; };
 		7B604F861C494983006EEEC3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F851C494983006EEEC3 /* Alamofire.framework */; };
 		7B604F871C494995006EEEC3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F851C494983006EEEC3 /* Alamofire.framework */; };
-		7B604F881C4949A4006EEEC3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F851C494983006EEEC3 /* Alamofire.framework */; };
 		7B604F891C4949B1006EEEC3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F851C494983006EEEC3 /* Alamofire.framework */; };
 		7B604F8A1C4949C1006EEEC3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F851C494983006EEEC3 /* Alamofire.framework */; };
 		7B604F901C494B0F006EEEC3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F851C494983006EEEC3 /* Alamofire.framework */; };
@@ -398,6 +394,12 @@
 		D02816C21ECA5E2A00240CAA /* HistoryStateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */; };
 		D02816D21ECA60DF00240CAA /* HistoryStateHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D02816D11ECA60DF00240CAA /* HistoryStateHelper.js */; };
 		D02818611EF056C800240CAA /* SentryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02818601EF056C800240CAA /* SentryIntegration.swift */; };
+		D09A0CD81FAA23F6009A0273 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		D09A0CD91FAA2413009A0273 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		D09A0CDA1FAA24C2009A0273 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
+		D09A0CDB1FAA24C8009A0273 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		D09A0CDC1FAA24CC009A0273 /* Account.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA435FB1ABB83B4008031D1 /* Account.framework */; };
+		D09A0CDD1FAA24D0009A0273 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		D0B29EE01F460BDF00C7CEFC /* LoginsSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B29EDF1F460BDF00C7CEFC /* LoginsSchema.swift */; };
 		D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D301AAED1A3A55B70078DD1D /* TabTrayController.swift */; };
 		D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D30684F01C84F12A002D8D82 /* SearchPlugins */; };
@@ -621,7 +623,6 @@
 		E650759C1E37F7AB006961AC /* DeferredUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650756C1E37F7AB006961AC /* DeferredUtils.swift */; };
 		E650759D1E37F7AB006961AC /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650756D1E37F7AB006961AC /* DeviceInfo.swift */; };
 		E650759E1E37F7AB006961AC /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = E650756E1E37F7AB006961AC /* effective_tld_names.dat */; };
-		E650759F1E37F7AB006961AC /* AlamofireExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075701E37F7AB006961AC /* AlamofireExtensions.swift */; };
 		E65075A01E37F7AB006961AC /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075711E37F7AB006961AC /* ArrayExtensions.swift */; };
 		E65075A11E37F7AB006961AC /* HashExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075721E37F7AB006961AC /* HashExtensions.swift */; };
 		E65075A21E37F7AB006961AC /* HexExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075731E37F7AB006961AC /* HexExtensions.swift */; };
@@ -694,7 +695,6 @@
 		E69DB08B1E97DEAA008A67E6 /* SyncTelemetry.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* SyncTelemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E69DB0A81E97DF22008A67E6 /* SyncTelemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* SyncTelemetry.framework */; };
 		E69DB0A91E97DF73008A67E6 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
-		E69DB0AA1E97DFD4008A67E6 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		E69DB0B71E97E2AC008A67E6 /* SyncTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0B51E97E2AC008A67E6 /* SyncTelemetry.swift */; };
 		E69DB0BD1E97E301008A67E6 /* ActivityStreamTopics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0BA1E97E301008A67E6 /* ActivityStreamTopics.swift */; };
 		E69DB0C31E97E320008A67E6 /* BookmarkTelemetryPing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0C01E97E320008A67E6 /* BookmarkTelemetryPing.swift */; };
@@ -863,20 +863,6 @@
 			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
 			remoteInfo = Storage;
 		};
-		2F9A72351ABB867B00F9F05D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FA435FA1ABB83B4008031D1;
-			remoteInfo = Account;
-		};
-		2F9A72371ABB868100F9F05D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FA435FA1ABB83B4008031D1;
-			remoteInfo = Account;
-		};
 		2FA436101ABB83B4008031D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -939,20 +925,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 390527491C874D35007E0BB7;
 			remoteInfo = Today;
-		};
-		396E38E91EE0C48A00CC180F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
-			remoteInfo = Storage;
-		};
-		396E38EB1EE0C48A00CC180F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FA435FA1ABB83B4008031D1;
-			remoteInfo = Account;
 		};
 		397848E01ED86605004C0C0B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1058,6 +1030,132 @@
 			proxyType = 1;
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
+		};
+		D09A0CDE1FAA2577009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
+		};
+		D09A0CE01FAA25C5009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
+		};
+		D09A0CE41FAA2C18009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
+		};
+		D09A0CE61FAA2C1B009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
+			remoteInfo = Storage;
+		};
+		D09A0CE81FAA2C1E009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2827315D1ABC9BE600AA1954;
+			remoteInfo = Sync;
+		};
+		D09A0CEA1FAA2C38009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4D567171ADECE2700F1EFE7;
+			remoteInfo = ReadingList;
+		};
+		D09A0CEC1FAA2C4C009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
+		};
+		D09A0CEE1FAA2C66009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 28F951FA19D0F9FA00DCE892;
+			remoteInfo = FxA;
+		};
+		D09A0CF01FAA2C7E009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
+		};
+		D09A0CF21FAA2C81009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2827315D1ABC9BE600AA1954;
+			remoteInfo = Sync;
+		};
+		D09A0CF41FAA2C99009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4D567171ADECE2700F1EFE7;
+			remoteInfo = ReadingList;
+		};
+		D09A0CF61FAA2CB2009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 28F951FA19D0F9FA00DCE892;
+			remoteInfo = FxA;
+		};
+		D09A0CF81FAA2CBF009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
+		};
+		D09A0CFA1FAA2CC2009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2827315D1ABC9BE600AA1954;
+			remoteInfo = Sync;
+		};
+		D09A0CFC1FAA2CC5009A0273 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4D567171ADECE2700F1EFE7;
+			remoteInfo = ReadingList;
+		};
+		D0EA58121FA836CA00D03ED1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2827315D1ABC9BE600AA1954;
+			remoteInfo = Sync;
+		};
+		D0EA58141FA836CE00D03ED1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
+			remoteInfo = Storage;
+		};
+		D0EA58161FA836D200D03ED1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
 		};
 		D30EBB631C75503800105AE9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1842,7 +1940,6 @@
 		E650756C1E37F7AB006961AC /* DeferredUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeferredUtils.swift; sourceTree = "<group>"; };
 		E650756D1E37F7AB006961AC /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		E650756E1E37F7AB006961AC /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = effective_tld_names.dat; sourceTree = "<group>"; };
-		E65075701E37F7AB006961AC /* AlamofireExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireExtensions.swift; sourceTree = "<group>"; };
 		E65075711E37F7AB006961AC /* ArrayExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		E65075721E37F7AB006961AC /* HashExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashExtensions.swift; sourceTree = "<group>"; };
 		E65075731E37F7AB006961AC /* HexExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexExtensions.swift; sourceTree = "<group>"; };
@@ -1986,6 +2083,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D09A0CDC1FAA24CC009A0273 /* Account.framework in Frameworks */,
+				D09A0CDD1FAA24D0009A0273 /* FxA.framework in Frameworks */,
+				D09A0CDB1FAA24C8009A0273 /* Shared.framework in Frameworks */,
+				D09A0CDA1FAA24C2009A0273 /* Storage.framework in Frameworks */,
 				E69DB0A81E97DF22008A67E6 /* SyncTelemetry.framework in Frameworks */,
 				7B604F901C494B0F006EEEC3 /* Alamofire.framework in Frameworks */,
 			);
@@ -2005,7 +2106,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B604F881C4949A4006EEEC3 /* Alamofire.framework in Frameworks */,
 				7BA4A9641C4CFE840091D032 /* Deferred.framework in Frameworks */,
 				7BA4A94C1C4CF03B0091D032 /* SwiftKeychainWrapper.framework in Frameworks */,
 				7B604FBC1C495E1E006EEEC3 /* XCGLogger.framework in Frameworks */,
@@ -2016,32 +2116,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBA31D861F799BE20055463D /* Telemetry.framework in Frameworks */,
-				E46175F41EBB73A10021AE8A /* Sentry.framework in Frameworks */,
-				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
-				E69DB08A1E97DEAA008A67E6 /* SyncTelemetry.framework in Frameworks */,
-				7B604F861C494983006EEEC3 /* Alamofire.framework in Frameworks */,
-				7B604F9B1C4950F2006EEEC3 /* SDWebImage.framework in Frameworks */,
-				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
-				7B604FA21C495268006EEEC3 /* SnapKit.framework in Frameworks */,
-				7BA4A9471C4CED900091D032 /* GCDWebServers.framework in Frameworks */,
-				7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */,
-				7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */,
-				7B6050011C49653B006EEEC3 /* AdjustSdk.framework in Frameworks */,
-				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
-				E4B334881BBF23F3004E2BFF /* iAd.framework in Frameworks */,
-				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				E6231C031B90A466005ABB0D /* libstdc++.6.0.9.tbd in Frameworks */,
+				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
-				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
-				2FCAE2311ABB51F800877008 /* Storage.framework in Frameworks */,
+				E4A888161A95679500CDC337 /* FxA.framework in Frameworks */,
 				2FA436121ABB83B4008031D1 /* Account.framework in Frameworks */,
 				E4D5672F1ADECE2800F1EFE7 /* ReadingList.framework in Frameworks */,
-				3B4988CE1E42B01800A12FDA /* SwiftyJSON.framework in Frameworks */,
-				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
-				E4A888161A95679500CDC337 /* FxA.framework in Frameworks */,
+				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
+				2FCAE2311ABB51F800877008 /* Storage.framework in Frameworks */,
 				282731751ABC9BE700AA1954 /* Sync.framework in Frameworks */,
+				E69DB08A1E97DEAA008A67E6 /* SyncTelemetry.framework in Frameworks */,
+				7B6050011C49653B006EEEC3 /* AdjustSdk.framework in Frameworks */,
+				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
+				7B604F861C494983006EEEC3 /* Alamofire.framework in Frameworks */,
+				3BA9A0231D2C208C00BD418C /* Fuzi.framework in Frameworks */,
+				7BA4A9471C4CED900091D032 /* GCDWebServers.framework in Frameworks */,
+				E4B334881BBF23F3004E2BFF /* iAd.framework in Frameworks */,
+				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				E4F2DAC01F620C0300A556CD /* Leanplum.framework in Frameworks */,
+				7BA4A94A1C4CEFC70091D032 /* OnePasswordExtension.framework in Frameworks */,
+				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
+				7B604F9B1C4950F2006EEEC3 /* SDWebImage.framework in Frameworks */,
+				E46175F41EBB73A10021AE8A /* Sentry.framework in Frameworks */,
+				7B604FA21C495268006EEEC3 /* SnapKit.framework in Frameworks */,
+				3B4988CE1E42B01800A12FDA /* SwiftyJSON.framework in Frameworks */,
+				EBA31D861F799BE20055463D /* Telemetry.framework in Frameworks */,
+				7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2050,6 +2150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E60222DC1C6E55610061C436 /* FxA.framework in Frameworks */,
+				D09A0CD91FAA2413009A0273 /* Shared.framework in Frameworks */,
 				7B604F891C4949B1006EEEC3 /* Alamofire.framework in Frameworks */,
 				7B604FBE1C495E4E006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
@@ -2070,6 +2171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B742CCF1B32493E00EE9264 /* libsqlcipher.a in Frameworks */,
+				D09A0CD81FAA23F6009A0273 /* Shared.framework in Frameworks */,
 				7B604FBD1C495E31006EEEC3 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2087,8 +2189,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				39409A3F1C90E68300DAE683 /* Shared.framework in Frameworks */,
-				39D9E6851C89E9690071FADA /* SnapKit.framework in Frameworks */,
 				3905274C1C874D35007E0BB7 /* NotificationCenter.framework in Frameworks */,
+				39D9E6851C89E9690071FADA /* SnapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2147,12 +2249,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B604F9E1C49514A006EEEC3 /* SDWebImage.framework in Frameworks */,
 				2805F5A61B8BCA7A00268FD1 /* ReadingList.framework in Frameworks */,
-				E444F8271B4C1E8800FEB19B /* Sync.framework in Frameworks */,
-				E444F7E51B4B1CB600FEB19B /* ImageIO.framework in Frameworks */,
 				E444F7DC1B4B1B7E00FEB19B /* Shared.framework in Frameworks */,
 				E4BA8A8A1B4B10F400BC2E95 /* Storage.framework in Frameworks */,
+				E444F8271B4C1E8800FEB19B /* Sync.framework in Frameworks */,
+				E444F7E51B4B1CB600FEB19B /* ImageIO.framework in Frameworks */,
+				7B604F9E1C49514A006EEEC3 /* SDWebImage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2160,9 +2262,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4483B5A1ADED63300B485A7 /* Shared.framework in Frameworks */,
 				E60222E31C6E57B20061C436 /* SQLite.framework in Frameworks */,
 				7B604F911C494B3C006EEEC3 /* Alamofire.framework in Frameworks */,
-				E4483B5A1ADED63300B485A7 /* Shared.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2178,7 +2280,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E69DB0AA1E97DFD4008A67E6 /* FxA.framework in Frameworks */,
 				E69DB0A91E97DF73008A67E6 /* Shared.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2212,15 +2313,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BA9A0321D2C2C0500BD418C /* Fuzi.framework in Frameworks */,
-				7B604F871C494995006EEEC3 /* Alamofire.framework in Frameworks */,
-				7B604F9D1C495143006EEEC3 /* SDWebImage.framework in Frameworks */,
+				2FC244B31A855E05007CE41D /* FxA.framework in Frameworks */,
 				28078A471B1507EF0053B46A /* ReadingList.framework in Frameworks */,
-				2868FA061ADF7B69000D9B1D /* Sync.framework in Frameworks */,
 				28C8D1391AD4CE9100F62011 /* Shared.framework in Frameworks */,
 				28C8D11D1AD4CE8900F62011 /* Storage.framework in Frameworks */,
+				2868FA061ADF7B69000D9B1D /* Sync.framework in Frameworks */,
+				7B604F871C494995006EEEC3 /* Alamofire.framework in Frameworks */,
+				3BA9A0321D2C2C0500BD418C /* Fuzi.framework in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
-				2FC244B31A855E05007CE41D /* FxA.framework in Frameworks */,
+				7B604F9D1C495143006EEEC3 /* SDWebImage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2228,15 +2329,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FC244B81A855E0D007CE41D /* FxA.framework in Frameworks */,
+				28293BB51B333EA2004A65EC /* ReadingList.framework in Frameworks */,
+				28C8D13B1AD4CEB100F62011 /* Shared.framework in Frameworks */,
+				28C8D13C1AD4CEB400F62011 /* Storage.framework in Frameworks */,
+				2868FA231ADF7B70000D9B1D /* Sync.framework in Frameworks */,
 				3BA9A0311D2C2C0400BD418C /* Fuzi.framework in Frameworks */,
+				0B75AEAA1AC20FBC0015E5DC /* ImageIO.framework in Frameworks */,
 				7B604F9C1C495135006EEEC3 /* SDWebImage.framework in Frameworks */,
 				7B604FA31C4952A4006EEEC3 /* SnapKit.framework in Frameworks */,
-				28293BB51B333EA2004A65EC /* ReadingList.framework in Frameworks */,
-				2868FA231ADF7B70000D9B1D /* Sync.framework in Frameworks */,
-				28C8D13C1AD4CEB400F62011 /* Storage.framework in Frameworks */,
-				28C8D13B1AD4CEB100F62011 /* Shared.framework in Frameworks */,
-				0B75AEAA1AC20FBC0015E5DC /* ImageIO.framework in Frameworks */,
-				2FC244B81A855E0D007CE41D /* FxA.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3237,7 +3338,6 @@
 		E650756F1E37F7AB006961AC /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				E65075701E37F7AB006961AC /* AlamofireExtensions.swift */,
 				E65075711E37F7AB006961AC /* ArrayExtensions.swift */,
 				E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */,
 				E65075721E37F7AB006961AC /* HashExtensions.swift */,
@@ -3802,11 +3902,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				E69DB0A71E97DEF6008A67E6 /* PBXTargetDependency */,
-				E4EE05B01BA3A0A10021B3A7 /* PBXTargetDependency */,
 				2F77F6B91ABCAF0700484F3A /* PBXTargetDependency */,
 				2F77F69D1ABCAEFE00484F3A /* PBXTargetDependency */,
 				2F11EE501ABCAE910083902D /* PBXTargetDependency */,
+				E4EE05B01BA3A0A10021B3A7 /* PBXTargetDependency */,
+				E69DB0A71E97DEF6008A67E6 /* PBXTargetDependency */,
 			);
 			name = Sync;
 			productName = Sync;
@@ -3941,6 +4041,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D09A0CED1FAA2C4C009A0273 /* PBXTargetDependency */,
 			);
 			name = Today;
 			productName = Today;
@@ -3958,8 +4059,9 @@
 			buildRules = (
 			);
 			dependencies = (
-				396E38EC1EE0C48A00CC180F /* PBXTargetDependency */,
-				396E38EA1EE0C48A00CC180F /* PBXTargetDependency */,
+				D0EA58131FA836CA00D03ED1 /* PBXTargetDependency */,
+				D0EA58151FA836CE00D03ED1 /* PBXTargetDependency */,
+				D0EA58171FA836D200D03ED1 /* PBXTargetDependency */,
 			);
 			name = NotificationService;
 			productName = NotificationService;
@@ -4070,6 +4172,10 @@
 			buildRules = (
 			);
 			dependencies = (
+				D09A0CEB1FAA2C38009A0273 /* PBXTargetDependency */,
+				D09A0CE51FAA2C18009A0273 /* PBXTargetDependency */,
+				D09A0CE71FAA2C1B009A0273 /* PBXTargetDependency */,
+				D09A0CE91FAA2C1E009A0273 /* PBXTargetDependency */,
 			);
 			name = ViewLater;
 			productName = ViewLater;
@@ -4088,6 +4194,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D09A0CDF1FAA2577009A0273 /* PBXTargetDependency */,
 				7B9A62F91C400303005C83DC /* PBXTargetDependency */,
 			);
 			name = ReadingList;
@@ -4126,6 +4233,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D09A0CE11FAA25C5009A0273 /* PBXTargetDependency */,
 			);
 			name = SyncTelemetry;
 			productName = SyncTelemetry;
@@ -4186,18 +4294,18 @@
 			buildRules = (
 			);
 			dependencies = (
-				F84B22521A0920C600AAB793 /* PBXTargetDependency */,
-				F84B22651A09210A00AAB793 /* PBXTargetDependency */,
 				E4A888191A95679500CDC337 /* PBXTargetDependency */,
+				2FA436111ABB83B4008031D1 /* PBXTargetDependency */,
+				E4D5672E1ADECE2800F1EFE7 /* PBXTargetDependency */,
 				288A2D9C1AB8B3260023ABC3 /* PBXTargetDependency */,
 				2FCAE2301ABB51F800877008 /* PBXTargetDependency */,
-				2FA436111ABB83B4008031D1 /* PBXTargetDependency */,
 				282731741ABC9BE700AA1954 /* PBXTargetDependency */,
-				E4D5672E1ADECE2800F1EFE7 /* PBXTargetDependency */,
-				E4BA8A341B4B0A1700BC2E95 /* PBXTargetDependency */,
-				390527551C874D35007E0BB7 /* PBXTargetDependency */,
 				E69DB0891E97DEAA008A67E6 /* PBXTargetDependency */,
 				397848E11ED86605004C0C0B /* PBXTargetDependency */,
+				F84B22651A09210A00AAB793 /* PBXTargetDependency */,
+				F84B22521A0920C600AAB793 /* PBXTargetDependency */,
+				390527551C874D35007E0BB7 /* PBXTargetDependency */,
+				E4BA8A341B4B0A1700BC2E95 /* PBXTargetDependency */,
 			);
 			name = Client;
 			productName = Client;
@@ -4235,8 +4343,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				2F9A72381ABB868100F9F05D /* PBXTargetDependency */,
+				D09A0CEF1FAA2C66009A0273 /* PBXTargetDependency */,
+				D09A0CF51FAA2C99009A0273 /* PBXTargetDependency */,
+				D09A0CF11FAA2C7E009A0273 /* PBXTargetDependency */,
 				2F9A72321ABB856100F9F05D /* PBXTargetDependency */,
+				D09A0CF31FAA2C81009A0273 /* PBXTargetDependency */,
 			);
 			name = ShareTo;
 			productName = ShareToFirefox;
@@ -4254,8 +4365,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				2F9A72361ABB867B00F9F05D /* PBXTargetDependency */,
+				D09A0CF71FAA2CB2009A0273 /* PBXTargetDependency */,
+				D09A0CFD1FAA2CC5009A0273 /* PBXTargetDependency */,
+				D09A0CF91FAA2CBF009A0273 /* PBXTargetDependency */,
 				2F9A72341ABB856A00F9F05D /* PBXTargetDependency */,
+				D09A0CFB1FAA2CC2009A0273 /* PBXTargetDependency */,
 			);
 			name = SendTo;
 			productName = SendToDevice;
@@ -5045,7 +5159,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E650759F1E37F7AB006961AC /* AlamofireExtensions.swift in Sources */,
 				E65075991E37F7AB006961AC /* Cancellable.swift in Sources */,
 				E65075BE1E37F7AB006961AC /* TimeConstants.swift in Sources */,
 				E65075B21E37F7AB006961AC /* Functions.swift in Sources */,
@@ -5232,15 +5345,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				396E38DF1EE0820400CC180F /* PanelDataObservers.swift in Sources */,
 				397848DE1ED86605004C0C0B /* NotificationService.swift in Sources */,
-				396E38DE1EE081F500CC180F /* SearchEngines.swift in Sources */,
+				396E38EE1EE0C6ED00CC180F /* ExtensionProfile.swift in Sources */,
 				396E38CC1EE0816C00CC180F /* Profile.swift in Sources */,
 				396E38E01EE0821B00CC180F /* NSUserDefaultsPrefs.swift in Sources */,
 				396E38DD1EE081DA00CC180F /* SyncStatusResolver.swift in Sources */,
 				396E38F21EE0C8ED00CC180F /* FxAPushMessageHandler.swift in Sources */,
-				396E38E11EE0823100CC180F /* OpenSearch.swift in Sources */,
-				396E38EE1EE0C6ED00CC180F /* ExtensionProfile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5751,16 +5861,6 @@
 			target = 2FCAE2191ABB51F800877008 /* Storage */;
 			targetProxy = 2F9A72331ABB856A00F9F05D /* PBXContainerItemProxy */;
 		};
-		2F9A72361ABB867B00F9F05D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2FA435FA1ABB83B4008031D1 /* Account */;
-			targetProxy = 2F9A72351ABB867B00F9F05D /* PBXContainerItemProxy */;
-		};
-		2F9A72381ABB868100F9F05D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2FA435FA1ABB83B4008031D1 /* Account */;
-			targetProxy = 2F9A72371ABB868100F9F05D /* PBXContainerItemProxy */;
-		};
 		2FA436111ABB83B4008031D1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2FA435FA1ABB83B4008031D1 /* Account */;
@@ -5801,16 +5901,6 @@
 			target = 390527491C874D35007E0BB7 /* Today */;
 			targetProxy = 390527541C874D35007E0BB7 /* PBXContainerItemProxy */;
 		};
-		396E38EA1EE0C48A00CC180F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2FCAE2191ABB51F800877008 /* Storage */;
-			targetProxy = 396E38E91EE0C48A00CC180F /* PBXContainerItemProxy */;
-		};
-		396E38EC1EE0C48A00CC180F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2FA435FA1ABB83B4008031D1 /* Account */;
-			targetProxy = 396E38EB1EE0C48A00CC180F /* PBXContainerItemProxy */;
-		};
 		397848E11ED86605004C0C0B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 397848DA1ED86605004C0C0B /* NotificationService */;
@@ -5850,6 +5940,96 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 7BEB645C1C7346100092C02E /* PBXContainerItemProxy */;
+		};
+		D09A0CDF1FAA2577009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = D09A0CDE1FAA2577009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CE11FAA25C5009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = D09A0CE01FAA25C5009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CE51FAA2C18009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = D09A0CE41FAA2C18009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CE71FAA2C1B009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2FCAE2191ABB51F800877008 /* Storage */;
+			targetProxy = D09A0CE61FAA2C1B009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CE91FAA2C1E009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2827315D1ABC9BE600AA1954 /* Sync */;
+			targetProxy = D09A0CE81FAA2C1E009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CEB1FAA2C38009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4D567171ADECE2700F1EFE7 /* ReadingList */;
+			targetProxy = D09A0CEA1FAA2C38009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CED1FAA2C4C009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = D09A0CEC1FAA2C4C009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CEF1FAA2C66009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FxA;
+			targetProxy = D09A0CEE1FAA2C66009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CF11FAA2C7E009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = D09A0CF01FAA2C7E009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CF31FAA2C81009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2827315D1ABC9BE600AA1954 /* Sync */;
+			targetProxy = D09A0CF21FAA2C81009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CF51FAA2C99009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4D567171ADECE2700F1EFE7 /* ReadingList */;
+			targetProxy = D09A0CF41FAA2C99009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CF71FAA2CB2009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FxA;
+			targetProxy = D09A0CF61FAA2CB2009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CF91FAA2CBF009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = D09A0CF81FAA2CBF009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CFB1FAA2CC2009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2827315D1ABC9BE600AA1954 /* Sync */;
+			targetProxy = D09A0CFA1FAA2CC2009A0273 /* PBXContainerItemProxy */;
+		};
+		D09A0CFD1FAA2CC5009A0273 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4D567171ADECE2700F1EFE7 /* ReadingList */;
+			targetProxy = D09A0CFC1FAA2CC5009A0273 /* PBXContainerItemProxy */;
+		};
+		D0EA58131FA836CA00D03ED1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2827315D1ABC9BE600AA1954 /* Sync */;
+			targetProxy = D0EA58121FA836CA00D03ED1 /* PBXContainerItemProxy */;
+		};
+		D0EA58151FA836CE00D03ED1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2FCAE2191ABB51F800877008 /* Storage */;
+			targetProxy = D0EA58141FA836CE00D03ED1 /* PBXContainerItemProxy */;
+		};
+		D0EA58171FA836D200D03ED1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = D0EA58161FA836D200D03ED1 /* PBXContainerItemProxy */;
 		};
 		D39FA1661A83E0EC00EE869C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -6122,6 +6302,7 @@
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec Today Development";
@@ -6141,6 +6322,7 @@
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Today Development";
@@ -6160,6 +6342,7 @@
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Today Development";
@@ -6177,7 +6360,9 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_LDFLAGS = "";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.FennecEnterprise.NotificationService;
 				PRODUCT_NAME = NotificationService;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -6221,10 +6406,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -6233,9 +6414,11 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "2ca221e2-03db-45b5-ad98-41b0caa46000";
@@ -6290,8 +6473,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Firefox.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -6345,8 +6530,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.FirefoxBeta.NotificationService2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -6783,6 +6970,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_CLIENT";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Development";
@@ -6826,6 +7014,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox ShareTo Development";
@@ -6852,6 +7041,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SENDTO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox SendTo Development";
@@ -7097,6 +7287,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_VIEWLATER";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec View Later Development";
@@ -7122,6 +7313,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_VIEWLATER";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox View Later Development";
@@ -7826,6 +8018,7 @@
 					"-framework",
 					CoreMedia,
 				);
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_CLIENT";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "FennecEnterprise Development";
@@ -7852,6 +8045,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_SENDTO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "FennecEnterprise SendTo Development";
@@ -7876,6 +8070,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "FennecEnterprise Share To Development";
@@ -7897,6 +8092,7 @@
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = "FennecEnterprise Today Development";
@@ -7921,6 +8117,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_VIEWLATER";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "FennecEnterprise ViewLater Development";
@@ -8433,6 +8630,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_CLIENT";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Development";
@@ -8476,6 +8674,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_SENDTO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta SentTo Development";
@@ -8500,6 +8699,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta ShareTo Development";
@@ -8526,6 +8726,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ViewLater/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_VIEWLATER";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta ViewLater Development";
@@ -8892,6 +9093,7 @@
 					"-framework",
 					CoreMedia,
 				);
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_CLIENT";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec Development";
@@ -8935,6 +9137,7 @@
 				);
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec ShareTo Development";
@@ -8961,6 +9164,7 @@
 				);
 				INFOPLIST_FILE = Extensions/SendTo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_SENDTO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec SendTo Development";
