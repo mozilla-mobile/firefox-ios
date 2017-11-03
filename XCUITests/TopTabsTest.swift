@@ -41,6 +41,7 @@ class TopTabsTest: BaseTestCase {
     func testAddTabFromTabTray() {
         navigator.goto(TabTray)
         navigator.openURL(urlString: url)
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: urlValue)
         // The tabs counter shows the correct number
         let tabsOpen = app.buttons["Show Tabs"].value

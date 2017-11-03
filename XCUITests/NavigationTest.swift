@@ -5,7 +5,7 @@
 import XCTest
 
 let website_1 = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
-let website_2 = ["url": "www.yahoo.com", "label": "Yahoo", "value": "yahoo"]
+let website_2 = ["url": "www.example.com", "label": "Example", "value": "example"]
 
 let urlAddOns = "addons.mozilla.org"
 
@@ -46,6 +46,7 @@ class NavigationTest: BaseTestCase {
 
         // Once an url has been open, the back button is enabled but not the forward button
         navigator.openURL(urlString: website_1["url"]!)
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_1["value"]!)
         if iPad() {
             XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
@@ -57,6 +58,7 @@ class NavigationTest: BaseTestCase {
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
         navigator.openURL(urlString:  website_2["url"]!)
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["value"]!)
         if iPad() {
             XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
@@ -69,7 +71,7 @@ class NavigationTest: BaseTestCase {
             // Go back to previous visited web site
             app.buttons["TabToolbar.backButton"].tap()
         }
-
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_1["value"]!)
 
         if iPad() {
@@ -78,6 +80,7 @@ class NavigationTest: BaseTestCase {
             // Go forward to next visited web site
             app.buttons["TabToolbar.forwardButton"].tap()
         }
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["value"]!)
     }
 
@@ -172,21 +175,25 @@ class NavigationTest: BaseTestCase {
         let goToDesktopFromMobile = app.webViews.links.staticTexts["View classic desktop site"]
         // Open URL by default in mobile view
         navigator.openURL(urlString: urlAddOns)
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: urlAddOns)
         waitforExistence(goToDesktopFromMobile)
 
         // From the website go to Desktop view
         goToDesktopFromMobile.tap()
+        waitUntilPageLoad()
         checkDesktopView()
 
         // From the website go back to Mobile view
         app.webViews.links.staticTexts["View Mobile Site"].tap()
+        waitUntilPageLoad()
         checkMobileView()
     }
 
     func testToggleBetweenMobileAndDesktopSiteFromMenu() {
         clearData()
         navigator.openURL(urlString: urlAddOns)
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: urlAddOns)
         
         // Mobile view by default, desktop view should be available
@@ -218,17 +225,20 @@ class NavigationTest: BaseTestCase {
 
         // Mobile view by default, desktop view should be available
         navigator.browserPerformAction(.toggleDesktopOption)
+        waitforNoExistence(app.tables["Context Menu"])
         checkDesktopView()
 
         // Select any link to navigate to another site and check if the view is kept in desktop view
         waitforExistence(app.webViews.links["Featured ›"])
         app.webViews.links["Featured ›"].tap()
+        waitUntilPageLoad()
         checkDesktopView()
     }
 
     func testReloadPreservesMobileOrDesktopSite() {
         clearData()
         navigator.openURL(urlString: urlAddOns)
+        waitUntilPageLoad()
 
         // Mobile view by default, desktop view should be available
         navigator.browserPerformAction(.toggleDesktopOption)
@@ -245,8 +255,8 @@ class NavigationTest: BaseTestCase {
         // From desktop view it is posible to change to mobile view again
         navigator.nowAt(BrowserTab)
         navigator.browserPerformAction(.toggleDesktopOption)
-        waitForValueContains(app.textFields["url"], value: urlAddOns)
         waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: urlAddOns)
 
         // After reloading a website the mobile view should be kept
         if iPad() {

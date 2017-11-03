@@ -437,7 +437,10 @@ open class Sync15StorageClient {
     lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.syncUserAgent
         let configuration = URLSessionConfiguration.ephemeral
-        return SessionManager.managerWithUserAgent(ua, configuration: configuration)
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = ua
+        configuration.httpAdditionalHeaders = defaultHeaders
+        return SessionManager(configuration: configuration)
     }()
 
     func requestGET(_ url: URL) -> DataRequest {

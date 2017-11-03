@@ -3,13 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Deferred
-import Foundation
 import Shared
 import SwiftyJSON
-import Sync
-import XCGLogger
 
-private let log = Logger.syncLogger
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
 /// This class provides handles push messages from FxA.
@@ -70,7 +66,7 @@ extension FxAPushMessageHandler {
 
         let rawValue = json["command"].stringValue
         guard let command = PushMessageType(rawValue: rawValue) else {
-            log.warning("Command \(rawValue) received but not recognized")
+            print("Command \(rawValue) received but not recognized")
             return deferMaybe(PushMessageError.messageIncomplete)
         }
 
@@ -187,7 +183,7 @@ extension FxAPushMessageHandler {
 extension FxAPushMessageHandler {
     func handleCollectionChanged(_ data: JSON?) -> PushMessageResult {
         guard let collections = data?["collections"].arrayObject as? [String] else {
-            log.warning("collections_changed received but incomplete: \(data ?? "nil")")
+            print("collections_changed received but incomplete: \(data ?? "nil")")
             return deferMaybe(PushMessageError.messageIncomplete)
         }
         // Possible values: "addons", "bookmarks", "history", "forms", "prefs", "tabs", "passwords", "clients"
@@ -201,15 +197,15 @@ extension FxAPushMessageHandler {
 fileprivate extension FxAPushMessageHandler {
     func unimplemented(_ messageType: PushMessageType, with param: String? = nil) -> PushMessageResult {
         if let param = param {
-            log.warning("\(messageType) message received with parameter = \(param), but unimplemented")
+            print("\(messageType) message received with parameter = \(param), but unimplemented")
         } else {
-            log.warning("\(messageType) message received, but unimplemented")
+            print("\(messageType) message received, but unimplemented")
         }
         return deferMaybe(PushMessageError.unimplemented(messageType))
     }
 
     func messageIncomplete(_ messageType: PushMessageType) -> PushMessageResult {
-        log.info("\(messageType) message received, but incomplete")
+        print("\(messageType) message received, but incomplete")
         return deferMaybe(PushMessageError.messageIncomplete)
     }
 }

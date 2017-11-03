@@ -43,7 +43,14 @@ class ClipboardBarDisplayHandler: NSObject {
     }
     
     @objc private func SELUIPasteboardChanged() {
+        // UIPasteboardChanged gets triggered when callng UIPasteboard.general
+         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIPasteboardChanged, object: nil)
+
         UIPasteboard.general.asyncURL().uponQueue(.main) { res in
+            defer {
+                NotificationCenter.default.addObserver(self, selector: #selector(self.SELUIPasteboardChanged), name: NSNotification.Name.UIPasteboardChanged, object: nil)
+            }
+
             guard let copiedURL: URL? = res.successValue,
                 let url = copiedURL else {
                     return

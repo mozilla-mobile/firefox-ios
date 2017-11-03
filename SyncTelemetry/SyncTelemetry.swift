@@ -4,7 +4,6 @@
 
 import Alamofire
 import Foundation
-import GCDWebServers
 import XCGLogger
 import SwiftyJSON
 import Shared
@@ -76,7 +75,7 @@ open class SyncTelemetry {
 
         request.httpMethod = "POST"
         request.httpBody = body
-        request.addValue(GCDWebServerFormatRFC822(Date()), forHTTPHeaderField: "Date")
+        request.addValue(Date().toRFC822String(), forHTTPHeaderField: "Date")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         SessionManager.default.request(request).response { response in
