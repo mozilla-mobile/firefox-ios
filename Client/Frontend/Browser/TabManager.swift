@@ -361,16 +361,7 @@ class TabManager: NSObject {
         }
 
         if tab.isPrivate {
-            // Wipe clean data associated with this tab when it is removed.
-            let dataTypes = Set([WKWebsiteDataTypeCookies,
-                                 WKWebsiteDataTypeLocalStorage,
-                                 WKWebsiteDataTypeSessionStorage,
-                                 WKWebsiteDataTypeWebSQLDatabases,
-                                 WKWebsiteDataTypeIndexedDBDatabases])
-
-            tab.webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
-                                                                   modifiedSince: Date.distantPast,
-                                                                   completionHandler: {})
+            removeAllBrowsingDataForTab(tab)
         }
 
         let oldSelectedTab = selectedTab
@@ -447,8 +438,25 @@ class TabManager: NSObject {
 
     /// Removes all private tabs from the manager without notifying delegates.
     private func removeAllPrivateTabs() {
+        tabs.forEach { tab in
+            if tab.isPrivate {
+                removeAllBrowsingDataForTab(tab)
+            }
+        }
+
         tabs = tabs.filter { !$0.isPrivate }
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: nil) }
+    }
+
+    func removeAllBrowsingDataForTab(_ tab: Tab, completionHandler: @escaping () -> Void = {}) {
+        let dataTypes = Set([WKWebsiteDataTypeCookies,
+                             WKWebsiteDataTypeLocalStorage,
+                             WKWebsiteDataTypeSessionStorage,
+                             WKWebsiteDataTypeWebSQLDatabases,
+                             WKWebsiteDataTypeIndexedDBDatabases])
+        tab.webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
+                                                               modifiedSince: Date.distantPast,
+                                                               completionHandler: completionHandler)
     }
 
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
