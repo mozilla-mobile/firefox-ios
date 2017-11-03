@@ -445,7 +445,6 @@ class TabManager: NSObject {
         }
 
         tabs = tabs.filter { !$0.isPrivate }
-        delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: nil) }
     }
 
     func removeAllBrowsingDataForTab(_ tab: Tab, completionHandler: @escaping () -> Void = {}) {
