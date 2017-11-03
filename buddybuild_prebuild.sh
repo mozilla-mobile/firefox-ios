@@ -28,14 +28,15 @@ if [ "$BUDDYBUILD_SCHEME" != "Firefox" ]; then
 fi
 
 #
-# Leanplum is set to production for all builds. Only Fennec locally will use
-# development settings, because those are not intended to ship to actual users.
+# Leanplum is included only for the Firefox and FirefoxBeta builds.
 #
 
-echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
-/usr/libexec/PlistBuddy -c "Set LeanplumAppId $LEANPLUM_APP_ID" "Client/Info.plist"
-/usr/libexec/PlistBuddy -c "Set LeanplumEnvironment production" "Client/Info.plist"
-/usr/libexec/PlistBuddy -c "Set LeanplumKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+if [ "$BUDDYBUILD_SCHEME" = "Firefox" ] || [ "$BUDDYBUILD_SCHEME" = "FirefoxBeta" ]; then
+  echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
+  /usr/libexec/PlistBuddy -c "Set LeanplumAppId $LEANPLUM_APP_ID" "Client/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set LeanplumEnvironment production" "Client/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set LeanplumKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+fi
 
 echo "Setting up Pocket Stories API Key"
 if [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
