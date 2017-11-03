@@ -169,7 +169,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let leanplum = LeanplumIntegration.sharedInstance
         leanplum.setup(profile: profile)
-        leanplum.setEnabled(true)
+
+        // We don't want to call LeanPlum if we really don't have to,
+        // so wrap it in a conditional.
+        if sendUsageData && !AppConstants.IsRunningTest {
+            leanplum.setEnabled(true)
+        }
 
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
