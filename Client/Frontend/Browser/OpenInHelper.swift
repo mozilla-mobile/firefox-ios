@@ -25,6 +25,17 @@ enum MimeType: String {
     case PDF = "application/pdf"
     case PASS = "application/vnd.apple.pkpass"
     case EPUB = "application/epub+zip"
+    
+    var `extension`: String {
+        switch self {
+            case .PDF:
+                return "pdf"
+            case .EPUB:
+                return "epub"
+            default:
+                return ""
+        }
+    }
 }
 
 protocol OpenInHelper {
@@ -34,7 +45,7 @@ protocol OpenInHelper {
 }
 
 struct OpenIn {
-    static let helpers: [OpenInHelper.Type] = [OpenPdfOrEpubInHelper.self, OpenPassBookHelper.self, ShareFileHelper.self]
+    static let helpers: [OpenInHelper.Type] = [OpenPassBookHelper.self, OpenFileHelper.self, ShareFileHelper.self]
     
     static func helperForResponse(_ response: URLResponse) -> OpenInHelper? {
         return helpers.flatMap { $0.init(response: response) }.first
@@ -104,21 +115,16 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
             return
         }
         let passLibrary = PKPassLibrary()
-        if passLibrary.containsPass(pass) {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(pass.passURL!, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(pass.passURL!)
-            }
+        if passLibrary.containsPass(pass), let passURL = pass.passURL {
+            UIApplication.shared.open(passURL, options: [:], completionHandler: nil)
         } else {
             let addController = PKAddPassesViewController(pass: pass)
             UIApplication.shared.keyWindow?.rootViewController?.present(addController, animated: true, completion: nil)
         }
-
     }
 }
 
-class OpenPdfOrEpubInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDelegate {
+class OpenFileHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDelegate {
     fileprivate var url: URL
     fileprivate var docController: UIDocumentInteractionController?
     fileprivate var openInURL: URL?
@@ -132,8 +138,7 @@ class OpenPdfOrEpubInHelper: NSObject, OpenInHelper, UIDocumentInteractionContro
     fileprivate var filepath: URL?
 
     required init?(response: URLResponse) {
-        guard let MIMEType = response.mimeType,
-            (MIMEType == MimeType.PDF.rawValue || MIMEType == MimeType.EPUB.rawValue) && UIApplication.shared.canOpenURL(URL(string: "itms-books:")!),
+        guard let MIMEType = response.mimeType, MimeType(rawValue: MIMEType) != nil && UIApplication.shared.canOpenURL(URL(string: "itms-books:")!),
             let responseURL = response.url else { return nil }
         url = responseURL
         super.init()
@@ -143,13 +148,8 @@ class OpenPdfOrEpubInHelper: NSObject, OpenInHelper, UIDocumentInteractionContro
     fileprivate func setFilePath(_ suggestedFilename: String, mimeType: String) {
         var filename = suggestedFilename
         let pathExtension = filename.asURL?.pathExtension
-        if pathExtension == nil {
-            if (mimeType == MimeType.PDF.rawValue) {
-                filename.append(".pdf")
-            }
-            else {
-                filename.append(".epub")
-            }
+        if pathExtension == nil, let fileExtension = MimeType(rawValue: mimeType)?.extension {
+            filename.append(fileExtension)
         }
         filepath = documentDirectory.appendingPathComponent(filename)
     }
@@ -167,7 +167,7 @@ class OpenPdfOrEpubInHelper: NSObject, OpenInHelper, UIDocumentInteractionContro
     func getOpenInView() -> OpenInView {
         let overlayView = OpenInView()
 
-        overlayView.openInButton.addTarget(self, action: #selector(OpenPdfOrEpubInHelper.open), for: .touchUpInside)
+        overlayView.openInButton.addTarget(self, action: #selector(OpenFileHelper.open), for: .touchUpInside)
         return overlayView
     }
 
