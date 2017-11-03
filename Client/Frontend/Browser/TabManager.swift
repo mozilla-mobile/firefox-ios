@@ -448,7 +448,6 @@ class TabManager: NSObject {
     /// Removes all private tabs from the manager without notifying delegates.
     private func removeAllPrivateTabs() {
         tabs = tabs.filter { !$0.isPrivate }
-        delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: nil) }
     }
 
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
