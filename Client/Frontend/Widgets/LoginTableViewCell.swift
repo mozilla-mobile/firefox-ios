@@ -83,6 +83,7 @@ class LoginTableViewCell: UITableViewCell {
         label.accessibilityElementsHidden = true
         label.adjustsFontSizeToFitWidth = false
         label.delegate = self
+        label.isAccessibilityElement = true
         return label
     }()
 
