@@ -205,7 +205,8 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        let tab: Tab! = tabManager[webView]
-        navigateInTab(tab: tab, to: navigation)
+        if let tab = tabManager[webView] {
+            navigateInTab(tab: tab, to: navigation)
+        }
     }
 }
