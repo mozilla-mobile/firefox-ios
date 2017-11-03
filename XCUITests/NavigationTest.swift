@@ -7,7 +7,8 @@ import XCTest
 let website_1 = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
 let website_2 = ["url": "www.example.com", "label": "Example", "value": "example"]
 
-let urlAddOns = "addons.mozilla.org"
+let urlAddons = "addons.mozilla.org"
+let urlGoogle = "www.google.com"
 
 let requestMobileSiteLabel = "Request Mobile Site"
 let requestDesktopSiteLabel = "Request Desktop Site"
@@ -152,13 +153,13 @@ class NavigationTest: BaseTestCase {
     }
 
     private func checkMobileView() {
-        let mobileViewElement = app.webViews.links.staticTexts["View classic desktop site"]
+        let mobileViewElement = app.webViews.links.staticTexts["Use precise location"]
         waitforExistence(mobileViewElement)
         XCTAssertTrue (mobileViewElement.exists, "Mobile view is not available")
     }
 
     private func checkDesktopView() {
-        let desktopViewElement = app.webViews.links.staticTexts["View Mobile Site"]
+        let desktopViewElement = app.webViews.links.staticTexts["About Google"]
         waitforExistence(desktopViewElement)
         XCTAssertTrue (desktopViewElement.exists, "Desktop view is not available")
     }
@@ -173,37 +174,45 @@ class NavigationTest: BaseTestCase {
     func testToggleBetweenMobileAndDesktopSiteFromSite() {
         clearData()
         let goToDesktopFromMobile = app.webViews.links.staticTexts["View classic desktop site"]
-        // Open URL by default in mobile view
-        navigator.openURL(urlString: urlAddOns)
+        // Open URL by default in mobile view. This web site works changing views using their links not with the menu options
+        navigator.openURL(urlString: urlAddons)
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: urlAddOns)
+        waitForValueContains(app.textFields["url"], value: urlAddons)
         waitforExistence(goToDesktopFromMobile)
 
         // From the website go to Desktop view
         goToDesktopFromMobile.tap()
         waitUntilPageLoad()
-        checkDesktopView()
+
+        let desktopViewElement = app.webViews.links.staticTexts["View Mobile Site"]
+        waitforExistence(desktopViewElement)
+        XCTAssertTrue (desktopViewElement.exists, "Desktop view is not available")
 
         // From the website go back to Mobile view
         app.webViews.links.staticTexts["View Mobile Site"].tap()
         waitUntilPageLoad()
-        checkMobileView()
+
+        let mobileViewElement = app.webViews.links.staticTexts["View classic desktop site"]
+        waitforExistence(mobileViewElement)
+        XCTAssertTrue (mobileViewElement.exists, "Mobile view is not available")
     }
 
     func testToggleBetweenMobileAndDesktopSiteFromMenu() {
         clearData()
-        navigator.openURL(urlString: urlAddOns)
+        navigator.openURL(urlString: urlGoogle)
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: urlAddOns)
+        waitForValueContains(app.textFields["url"], value: "google")
         
         // Mobile view by default, desktop view should be available
         navigator.browserPerformAction(.toggleDesktopOption)
         checkDesktopSite()
+        checkDesktopView()
 
         // From desktop view it is posible to change to mobile view again
         navigator.nowAt(BrowserTab)
         navigator.browserPerformAction(.toggleDesktopOption)
         checkMobileSite()
+        checkMobileView()
     }
 
     private func checkMobileSite() {
@@ -220,28 +229,31 @@ class NavigationTest: BaseTestCase {
     
     func testNavigationPreservesDesktopSiteOnSameHost() {
         clearData()
-        navigator.openURL(urlString: urlAddOns)
+        navigator.openURL(urlString: urlGoogle)
         waitUntilPageLoad()
 
         // Mobile view by default, desktop view should be available
         navigator.browserPerformAction(.toggleDesktopOption)
         waitforNoExistence(app.tables["Context Menu"])
+        waitUntilPageLoad()
         checkDesktopView()
 
         // Select any link to navigate to another site and check if the view is kept in desktop view
-        waitforExistence(app.webViews.links["Featured ›"])
-        app.webViews.links["Featured ›"].tap()
-        waitUntilPageLoad()
-        checkDesktopView()
+        waitforExistence(app.webViews.links["Images"])
+        app.webViews.links["Images"].tap()
+
+        // About Google appear on desktop view but not in mobile view
+        waitforExistence(app.webViews.links["About Google"])
     }
 
     func testReloadPreservesMobileOrDesktopSite() {
         clearData()
-        navigator.openURL(urlString: urlAddOns)
+        navigator.openURL(urlString: urlGoogle)
         waitUntilPageLoad()
 
         // Mobile view by default, desktop view should be available
         navigator.browserPerformAction(.toggleDesktopOption)
+        waitUntilPageLoad()
 
         // After reloading a website the desktop view should be kept
         if iPad() {
@@ -249,14 +261,14 @@ class NavigationTest: BaseTestCase {
         } else {
                 app.buttons["TabToolbar.stopReloadButton"].tap()
         }
-        waitForValueContains(app.textFields["url"], value: urlAddOns)
+        waitForValueContains(app.textFields["url"], value: "google")
+        waitUntilPageLoad()
         checkDesktopView()
 
         // From desktop view it is posible to change to mobile view again
         navigator.nowAt(BrowserTab)
         navigator.browserPerformAction(.toggleDesktopOption)
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: urlAddOns)
 
         // After reloading a website the mobile view should be kept
         if iPad() {
@@ -273,8 +285,8 @@ class NavigationTest: BaseTestCase {
         let desktopViewElement = app.webViews.links.staticTexts["Mobile"]
 
         // Open first url and keep it in mobile view
-        navigator.openURL(urlString: urlAddOns)
-        waitForValueContains(app.textFields["url"], value: urlAddOns)
+        navigator.openURL(urlString: urlGoogle)
+        waitForValueContains(app.textFields["url"], value: urlGoogle)
         checkMobileView()
         // Open a second url and change it to desktop view
         navigator.openURL(urlString: "www.linkedin.com")
@@ -286,7 +298,7 @@ class NavigationTest: BaseTestCase {
 
         // Go back to first url and check that the view is still mobile view
         app.buttons["TabToolbar.backButton"].tap()
-        waitForValueContains(app.textFields["url"], value: urlAddOns)
+        waitForValueContains(app.textFields["url"], value: urlGoogle)
         checkMobileView()
 
         // Go forward to second url and check that the view is still desktop view
