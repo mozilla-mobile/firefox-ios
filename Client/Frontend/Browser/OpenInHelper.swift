@@ -26,12 +26,12 @@ enum MimeType: String {
     case PASS = "application/vnd.apple.pkpass"
     case EPUB = "application/epub+zip"
     
-    var `extension`: String {
+    var fileExtension: String {
         switch self {
             case .PDF:
-                return "pdf"
+                return ".pdf"
             case .EPUB:
-                return "epub"
+                return ".epub"
             default:
                 return ""
         }
@@ -136,20 +136,23 @@ class OpenFileHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDel
     }()
 
     fileprivate var filepath: URL?
+    
+    static let iBooksURL = URL(string: "itms-books:")!
 
     required init?(response: URLResponse) {
-        guard let MIMEType = response.mimeType, MimeType(rawValue: MIMEType) != nil && UIApplication.shared.canOpenURL(URL(string: "itms-books:")!),
-            let responseURL = response.url else { return nil }
+        guard let MIME = MimeType(rawValue: response.mimeType ?? ""), let responseURL = response.url, UIApplication.shared.canOpenURL(OpenFileHelper.iBooksURL)
+            else { return nil }
         url = responseURL
         super.init()
-        setFilePath(response.suggestedFilename ?? url.lastPathComponent, mimeType: MIMEType)
+        setFilePath(response.suggestedFilename ?? url.lastPathComponent, mimeType: MIME)
     }
 
-    fileprivate func setFilePath(_ suggestedFilename: String, mimeType: String) {
-        var filename = suggestedFilename
-        let pathExtension = filename.asURL?.pathExtension
-        if pathExtension == nil, let fileExtension = MimeType(rawValue: mimeType)?.extension {
-            filename.append(fileExtension)
+    fileprivate func setFilePath(_ suggestedFilename: String, mimeType: MimeType) {
+        let filename: String
+        if suggestedFilename.asURL?.pathExtension == nil {
+            filename = suggestedFilename + mimeType.fileExtension
+        } else {
+            filename = suggestedFilename
         }
         filepath = documentDirectory.appendingPathComponent(filename)
     }
