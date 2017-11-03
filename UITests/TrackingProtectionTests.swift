@@ -87,8 +87,20 @@ class TrackingProtectionTests: KIFTestCase {
     
     func testNormalTrackingProtection() {
         
-        // Initially, Tracking Protection is enabled on Private tabs only. open site with a tracker on a regular tab.
-        // Image should be open since the tracking protection is turned off
+        openTPSetting()
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
+        closeTPSetting()
+
+        if BrowserUtils.iPad() {
+        EarlGrey.select(elementWithMatcher:grey_accessibilityID("TopTabsViewController.tabsButton"))
+                .perform(grey_tap())
+        } else {
+            EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabToolbar.tabsButton"))
+                .perform(grey_tap())
+        }
+        EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabTrayController.addTabButton"))
+            .perform(grey_tap())
+
         checkTrackingProtection(isBlocking: false)
 
         openTPSetting()
@@ -104,7 +116,8 @@ class TrackingProtectionTests: KIFTestCase {
     
     func testPrivateTabPageTrackingProtection() {
         if BrowserUtils.iPad() {
-            EarlGrey.select(elementWithMatcher:grey_accessibilityID("TopTabsViewController.tabsButton"))
+            EarlGrey.select(elementWithMatcher:
+                grey_accessibilityID("TopTabsViewController.tabsButton"))
                 .perform(grey_tap())
         } else {
             EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabToolbar.tabsButton"))
