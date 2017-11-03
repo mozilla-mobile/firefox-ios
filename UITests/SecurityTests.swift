@@ -49,11 +49,15 @@ class SecurityTests: KIFTestCase {
     /// in a new tab via window.open(). Make sure nothing happens.
     func testErrorExploit() {
         // We should only have one tab open.
-         tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "2", traits: UIAccessibilityTraitButton)
+        var value = tester().waitForView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
+        let tabcount = value?.accessibilityValue
+
         tester().tapWebViewElementWithAccessibilityLabel("Error exploit")
-        
+
         // Make sure a new tab wasn't opened.
-        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "2", traits: UIAccessibilityTraitButton)
+        value = tester().waitForView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
+        let newTabcount = value?.accessibilityValue
+        XCTAssert(tabcount != nil && tabcount == newTabcount)
     }
     
     /// Tap the New tab exploit button, which tries to piggyback off of an error page
