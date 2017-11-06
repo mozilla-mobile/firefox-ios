@@ -31,19 +31,9 @@ class TopTabsHeaderFooter: UICollectionReusableView {
 
     func arrangeLine(_ kind: String) {
         line.snp.removeConstraints()
-        switch kind {
-            case UICollectionElementKindSectionHeader:
-                line.snp.makeConstraints { make in
-                    make.trailing.equalTo(self)
-                }
-            case UICollectionElementKindSectionFooter:
-                line.snp.makeConstraints { make in
-                    make.leading.equalTo(self)
-                }
-            default:
-                break
-        }
+
         line.snp.makeConstraints { make in
+            make.centerX.equalTo(self)
             make.height.equalTo(TopTabsUX.SeparatorHeight)
             make.width.equalTo(TopTabsUX.SeparatorWidth)
             make.top.equalTo(self).offset(TopTabsUX.SeparatorYOffset)
