@@ -208,6 +208,10 @@ class TopTabCell: UICollectionViewCell {
         self.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: self.frame.size.width + (TopTabCell.ShadowOffsetSize * 2), height: self.frame.size.height), cornerRadius: 0).cgPath
         self.layer.shadowOffset = CGSize(width: -TopTabCell.ShadowOffsetSize, height: 0)
     }
+
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        layer.zPosition = CGFloat(layoutAttributes.zIndex)
+    }
 }
 
 class TopTabFader: UIView {
