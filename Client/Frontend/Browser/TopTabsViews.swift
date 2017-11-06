@@ -50,6 +50,10 @@ class TopTabsHeaderFooter: UICollectionReusableView {
         }
     }
 
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        layer.zPosition = CGFloat(layoutAttributes.zIndex)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
