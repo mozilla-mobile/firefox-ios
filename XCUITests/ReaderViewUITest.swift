@@ -140,4 +140,45 @@ class ReaderViewTest: BaseTestCase {
         navigator.browserPerformAction(.openReadingListOption)
         checkReadingListNumberOfItems(items: 1)
     }
+
+    func testOpenSavedForReadingLongPressInNewTab() {
+        // Add item to Reading List
+        addContentToReaderView()
+        navigator.browserPerformAction(.openReadingListOption)
+
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual(numTab, "1")
+
+        // Long tap on the item just saved
+        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        savedToReadingList.press(forDuration: 1)
+
+        // Select to open in New Tab
+        waitforExistence(app.tables["Context Menu"])
+        app.tables.cells["quick_action_new_tab"].tap()
+
+        // Now there should be two tabs open
+        let numTabAfter = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual(numTabAfter, "2")
+    }
+
+    func testRemoveSavedForReadingLongPress() {
+        // Add item to Reading List
+        addContentToReaderView()
+        navigator.browserPerformAction(.openReadingListOption)
+
+        // Long tap on the item just saved and choose remove
+        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        savedToReadingList.press(forDuration: 1)
+        waitforExistence(app.tables["Context Menu"])
+        app.tables.cells["action_remove"].tap()
+
+        // Verify the item has been removed
+        waitforNoExistence(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
+        XCTAssertFalse(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
+    }
+
+    func testOpenSavedForReadingLongPressInPrivateTab() {
+        // To Be defined once the new FxScreenGraph lands
+    }
 }
