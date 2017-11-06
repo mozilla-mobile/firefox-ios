@@ -53,6 +53,11 @@ struct UIConstants {
         static let urlTextHighlight = UIColor(rgb: 0xB5007F)
         static let urlTextPlaceholder = UIColor(white: 1, alpha: 0.4)
         static let urlTextShadow = UIColor.black
+
+        static let trackingProtectionPrimary = UIColor(rgb: 0xFFFFFF)
+        static let trackingProtectionSecondary = UIColor(rgb: 0xB2B2B2)
+        static let trackingProtectionBreakdownBackground = UIColor(rgb: 0x414146)
+        static let trackingProtectionLearnMore = UIColor(rgb: 0x0A84FF)
     }
 
     struct fonts {
@@ -82,7 +87,7 @@ struct UIConstants {
         static let browserToolbarHeight: CGFloat = 44
         static let copyButtonAnimationDuration: TimeInterval = 0.1
         static let deleteAnimationDuration: TimeInterval = 0.15
-        static let lockIconInset: Float = 6
+        static let lockIconInset: Float = 4
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
         static let progressVisibilityAnimationDuration: TimeInterval = 0.25

@@ -33,21 +33,32 @@ protocol WebControllerDelegate: class {
     func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView)
     func webController(_ controller: WebController, stateDidChange state: BrowserState)
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
+    func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus)
 }
-
-
 
 class WebViewController: UIViewController, WebController {
     weak var delegate: WebControllerDelegate?
 
     private var browserView = WKWebView()
     private var progressObserver: NSKeyValueObservation?
+    fileprivate var trackingProtecitonStatus = TrackingProtectionStatus.on(TrackingInformation()) {
+        didSet {
+            delegate?.webController(self, didUpdateTrackingProtectionStatus: trackingProtecitonStatus)
+        }
+    }
+
+    fileprivate var trackingInformation = TrackingInformation() {
+        didSet {
+            if case .on = trackingProtecitonStatus { trackingProtecitonStatus = .on(trackingInformation) }
+        }
+    }
 
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
+
         setupWebview()
         ContentBlockerHelper.shared.handler = reloadBlockers(_:)
     }
@@ -56,6 +67,7 @@ class WebViewController: UIViewController, WebController {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
+        trackingProtecitonStatus = .on(TrackingInformation())
         browserView = WKWebView()
         setupWebview()
     }
@@ -74,13 +86,13 @@ class WebViewController: UIViewController, WebController {
         browserView.scrollView.delegate = self
         browserView.navigationDelegate = self
         browserView.uiDelegate = self
+
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
 
-        ContentBlockerHelper.shared.getBlockLists { lists in
-            self.reloadBlockers(lists)
-        }
+        setupBlockLists()
+        setupUserScripts()
 
         view.addSubview(browserView)
         browserView.snp.makeConstraints { make in
@@ -98,6 +110,38 @@ class WebViewController: UIViewController, WebController {
     fileprivate func updateBackForwardState(webView: WKWebView) {
         delegate?.webController(self, didUpdateCanGoBack: canGoBack)
         delegate?.webController(self, didUpdateCanGoForward: canGoForward)
+    }
+
+    private func setupBlockLists() {
+        ContentBlockerHelper.shared.getBlockLists { lists in
+            self.reloadBlockers(lists)
+        }
+    }
+
+    private func setupUserScripts() {
+        browserView.configuration.userContentController.add(self, name: "focusTrackingProtection")
+        let source = try! String(contentsOf: Bundle.main.url(forResource: "preload", withExtension: "js")!)
+        let script = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        browserView.configuration.userContentController.addUserScript(script)
+
+        browserView.configuration.userContentController.add(self, name: "focusTrackingProtectionPostLoad")
+        let source2 = try! String(contentsOf: Bundle.main.url(forResource: "postload", withExtension: "js")!)
+        let script2 = WKUserScript(source: source2, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
+        browserView.configuration.userContentController.addUserScript(script2)
+    }
+
+    func disableTrackingProtection() {
+        browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtection")
+        browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtectionPostLoad")
+        browserView.configuration.userContentController.removeAllUserScripts()
+        browserView.configuration.userContentController.removeAllContentRuleLists()
+        trackingProtecitonStatus = .off
+    }
+
+    func enableTrackingProtection() {
+        setupBlockLists()
+        setupUserScripts()
+        trackingProtecitonStatus = .on(TrackingInformation())
     }
 }
 
@@ -122,11 +166,13 @@ extension WebViewController: UIScrollViewDelegate {
 extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
+        if case .on = trackingProtecitonStatus { trackingInformation = TrackingInformation() }
+
         updateBackForwardState(webView: webView)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        delegate?.webControllerDidFinishNavigation(self)    
+        delegate?.webControllerDidFinishNavigation(self)
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
@@ -155,5 +201,21 @@ extension WebViewController: WKUIDelegate {
         }
 
         return nil
+    }
+}
+
+
+extension WebViewController: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard let body = message.body as? [String: String],
+              let urlString = body["url"] else { return }
+
+        guard var components = URLComponents(string: urlString) else { return }
+        components.scheme = "http"
+        guard let url = components.url else { return }
+
+        if let listItem = TrackingProtection.shared.isBlocked(url: url) {
+            trackingInformation = trackingInformation.create(byAddingListItem: listItem)
+        }
     }
 }

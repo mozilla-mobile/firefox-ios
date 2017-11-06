@@ -8,8 +8,18 @@ import SnapKit
 import Telemetry
 
 class BrowserViewController: UIViewController {
+    private class DrawerView: UIView {
+        override var intrinsicContentSize: CGSize { return CGSize(width: 320, height: 0) }
+    }
+
+    private let mainContainerView = UIView(frame: .zero)
+    private let drawerContainerView = DrawerView(frame: .zero)
+    private let drawerOverlayView = UIView()
+    
     private let webViewController = WebViewController()
     private let webViewContainer = UIView()
+
+    private let trackingProtectionSummaryController = TrackingProtectionSummaryViewController()
 
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
@@ -20,6 +30,7 @@ class BrowserViewController: UIViewController {
     fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
 
+    fileprivate var drawerConstraint: Constraint!
     fileprivate var toolbarBottomConstraint: Constraint!
     fileprivate var urlBarTopConstraint: Constraint!
     fileprivate var homeViewBottomConstraint: Constraint!
@@ -34,6 +45,13 @@ class BrowserViewController: UIViewController {
         case expanded
         case transitioning
         case animating
+    }
+
+    private var trackingProtectionStatus: TrackingProtectionStatus = .on(TrackingInformation()) {
+        didSet {
+            trackingProtectionSummaryController.trackingProtectionStatus = trackingProtectionStatus
+            urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus)
+        }
     }
 
     private var homeViewContainer = UIView()
@@ -53,73 +71,108 @@ class BrowserViewController: UIViewController {
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
+        drawerContainerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.addSubview(mainContainerView)
+        view.addSubview(drawerContainerView)
+
+        drawerOverlayView.backgroundColor = UIColor(white: 0, alpha: 0.8)
+        drawerOverlayView.layer.opacity = 0
+        drawerOverlayView.isHidden = true
+        drawerOverlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideDrawer)))
+        view.addSubview(drawerOverlayView)
+        drawerOverlayView.snp.makeConstraints { make in
+            make.edges.equalTo(mainContainerView.snp.edges)
+        }
+
+        mainContainerView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.width.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.equalTo(drawerContainerView.snp.trailing)
+        }
+
+        drawerContainerView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.width.lessThanOrEqualTo(320)
+            make.trailing.lessThanOrEqualToSuperview().offset(-55)
+            make.trailing.equalTo(view.snp.leading).priority(500)
+
+            self.drawerConstraint = make.leading.equalToSuperview().constraint
+        }
+        self.drawerConstraint.deactivate()
+
+        trackingProtectionSummaryController.delegate = self
+        containTrackingProtectionSummary()
+
         webViewController.delegate = self
 
         let background = GradientBackgroundView(alpha: 0.7, startPoint: CGPoint.zero, endPoint: CGPoint(x: 1, y: 1))
-        view.addSubview(background)
+        mainContainerView.addSubview(background)
 
-        view.addSubview(homeViewContainer)
+        mainContainerView.addSubview(homeViewContainer)
 
         webViewContainer.isHidden = true
-        view.addSubview(webViewContainer)
+        mainContainerView.addSubview(webViewContainer)
 
         urlBarContainer.alpha = 0
-        view.addSubview(urlBarContainer)
+        mainContainerView.addSubview(urlBarContainer)
 
         browserToolbar.isHidden = true
         browserToolbar.alpha = 0
         browserToolbar.delegate = self
         browserToolbar.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(browserToolbar)
+        mainContainerView.addSubview(browserToolbar)
 
         overlayView.isHidden = true
         overlayView.alpha = 0
         overlayView.delegate = self
         overlayView.backgroundColor = UIConstants.colors.overlayBackground
-        view.addSubview(overlayView)
+        mainContainerView.addSubview(overlayView)
 
         background.snp.makeConstraints { make in
-            make.edges.equalTo(view)
+            make.edges.equalTo(mainContainerView)
         }
 
         urlBarContainer.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(view)
-            make.height.equalTo(view).multipliedBy(0.6).priority(500)
+            make.top.leading.trailing.equalTo(mainContainerView)
+            make.height.equalTo(mainContainerView).multipliedBy(0.6).priority(500)
         }
 
         browserToolbar.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(view)
-            toolbarBottomConstraint = make.bottom.equalTo(view).constraint
+
+            make.leading.trailing.equalTo(mainContainerView)
+            toolbarBottomConstraint = make.bottom.equalTo(mainContainerView).constraint
         }
 
         homeViewContainer.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalTo(view)
-            homeViewBottomConstraint = make.bottom.equalTo(view).constraint
+            make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalTo(mainContainerView)
+            homeViewBottomConstraint = make.bottom.equalTo(mainContainerView).constraint
             homeViewBottomConstraint.activate()
         }
 
         webViewContainer.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom).priority(500)
-            make.bottom.equalTo(view).priority(500)
+            make.bottom.equalTo(mainContainerView).priority(500)
             browserBottomConstraint = make.bottom.equalTo(browserToolbar.snp.top).priority(1000).constraint
 
             if !showsToolsetInURLBar {
                 browserBottomConstraint.activate()
             }
 
-            make.leading.trailing.equalTo(view)
+            make.leading.trailing.equalTo(mainContainerView)
         }
 
         overlayView.snp.makeConstraints { make in
             make.top.equalTo(urlBarContainer.snp.bottom)
-            make.leading.trailing.bottom.equalTo(view)
+            make.leading.trailing.bottom.equalTo(mainContainerView)
         }
 
         // true if device is an iPad or is an iPhone in landscape mode
@@ -164,6 +217,16 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    private func containTrackingProtectionSummary() {
+        addChildViewController(trackingProtectionSummaryController)
+        drawerContainerView.addSubview(trackingProtectionSummaryController.view)
+        trackingProtectionSummaryController.didMove(toParentViewController: self)
+
+        trackingProtectionSummaryController.view.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+
     private func createHomeView() {
         let homeView = HomeView()
         homeView.delegate = self
@@ -190,10 +253,10 @@ class BrowserViewController: UIViewController {
         urlBar.toolsetDelegate = self
         urlBar.shrinkFromView = urlBarContainer
         urlBar.showToolset = showsToolsetInURLBar
-        view.insertSubview(urlBar, aboveSubview: urlBarContainer)
+        mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
         urlBar.snp.makeConstraints { make in
-            urlBarTopConstraint = make.top.equalTo(view.safeAreaLayoutGuide.snp.top).constraint
+            urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
             topURLBarConstraints = [
                 urlBarTopConstraint,
                 make.leading.trailing.bottom.equalTo(urlBarContainer).constraint
@@ -201,7 +264,7 @@ class BrowserViewController: UIViewController {
 
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
-            make.leading.equalTo(view.safeAreaLayoutGuide).priority(500)
+            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(500)
             make.top.equalTo(homeView).priority(500)
 
             // Note: this padding here is in addition to the 8px that’s already applied for the Cancel action
@@ -210,13 +273,32 @@ class BrowserViewController: UIViewController {
         topURLBarConstraints.forEach { $0.deactivate() }
     }
 
+    @objc fileprivate func hideDrawer() {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
+            self.drawerConstraint.deactivate()
+            self.drawerOverlayView.layer.opacity = 0
+            self.view.layoutIfNeeded()
+        }, completion: { completed in
+            self.drawerOverlayView.isHidden = true
+        })
+    }
+
+    fileprivate func showDrawer() {
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
+            self.drawerConstraint.activate()
+            self.drawerOverlayView.isHidden = false
+            self.drawerOverlayView.layer.opacity = 1
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
+
     fileprivate func resetBrowser() {
         // Screenshot the browser, showing the screenshot on top.
-        let image = view.screenshot()
+        let image = mainContainerView.screenshot()
         let screenshotView = UIImageView(image: image)
-        view.addSubview(screenshotView)
+        mainContainerView.addSubview(screenshotView)
         screenshotView.snp.makeConstraints { make in
-            make.edges.equalTo(view)
+            make.edges.equalTo(mainContainerView)
         }
 
         // Reset the views. These changes won't be immediately visible since they'll be under the screenshot.
@@ -232,22 +314,22 @@ class BrowserViewController: UIViewController {
         WebCacheUtils.reset()
 
         // Zoom out on the screenshot, then slide down, then remove it.
-        view.layoutIfNeeded()
+        mainContainerView.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
             screenshotView.snp.remakeConstraints { make in
-                make.center.equalTo(self.view)
-                make.size.equalTo(self.view).multipliedBy(0.9)
+                make.center.equalTo(self.mainContainerView)
+                make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
             }
-            self.view.layoutIfNeeded()
+            self.mainContainerView.layoutIfNeeded()
         }, completion: { _ in
             UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
                 screenshotView.snp.remakeConstraints { make in
-                    make.centerX.equalTo(self.view)
-                    make.top.equalTo(self.view.snp.bottom)
-                    make.size.equalTo(self.view).multipliedBy(0.9)
+                    make.centerX.equalTo(self.mainContainerView)
+                    make.top.equalTo(self.mainContainerView.snp.bottom)
+                    make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
                 }
                 screenshotView.alpha = 0
-                self.view.layoutIfNeeded()
+                self.mainContainerView.layoutIfNeeded()
             }, completion: { _ in
                 self.urlBar.becomeFirstResponder()
                 Toast(text: UIConstants.strings.eraseMessage).show()
@@ -363,6 +445,14 @@ class BrowserViewController: UIViewController {
     @objc private func goForward() {
         webViewController.goForward()
     }
+
+    private func toggleURLBarBackground(isBright: Bool) {
+        if case .on = trackingProtectionStatus {
+            urlBarContainer.isBright = isBright
+        } else {
+            urlBarContainer.isBright = false
+        }
+    }
     
     override var keyCommands: [UIKeyCommand]? {
         return [
@@ -403,7 +493,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidDismiss(_ urlBar: URLBar) {
         overlayView.dismiss()
-        urlBarContainer.isBright = !webViewController.isLoading
+        toggleURLBarBackground(isBright: !webViewController.isLoading)
     }
 
     func urlBarDidPressDelete(_ urlBar: URLBar) {
@@ -412,7 +502,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidFocus(_ urlBar: URLBar) {
         overlayView.present()
-        urlBarContainer.isBright = false
+        toggleURLBarBackground(isBright: false)
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
@@ -429,6 +519,10 @@ extension BrowserViewController: URLBarDelegate {
             self.urlBarContainer.alpha = 0
             self.view.layoutIfNeeded()
         }
+    }
+
+    func urlBarDidTapShield(_ urlBar: URLBar) {
+        showDrawer()
     }
 }
 
@@ -514,7 +608,7 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
         browserToolbar.isLoading = true
-        urlBarContainer.isBright = false
+        toggleURLBarBackground(isBright: false)
         showToolbars()
     }
 
@@ -524,7 +618,7 @@ extension BrowserViewController: WebControllerDelegate {
         }
         urlBar.isLoading = false
         browserToolbar.isLoading = false
-        urlBarContainer.isBright = !urlBar.isEditing
+        toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
     }
 
@@ -532,7 +626,7 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
         browserToolbar.isLoading = false
-        urlBarContainer.isBright = true
+        toggleURLBarBackground(isBright: true)
         urlBar.progressBar.hideProgressBar()
     }
 
@@ -630,6 +724,10 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
 
+    func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
+        trackingProtectionStatus = trackingStatus
+    }
+
     private func showToolbars() {
         let scrollView = webViewController.scrollView
 
@@ -707,6 +805,23 @@ extension BrowserViewController: WhatsNewDelegate {
     func didShowWhatsNew() {
         UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
         UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
+    }
+}
+
+extension BrowserViewController: TrackingProtectionSummaryDelegate {
+    func trackingProtectionSummaryControllerDidTapClose(_ controller: TrackingProtectionSummaryViewController) {
+        hideDrawer()
+    }
+
+    func trackingProtectionSummaryControllerDidToggleTrackingProtection(_ enabled: Bool) {
+        if enabled {
+            webViewController.enableTrackingProtection()
+        } else {
+            webViewController.disableTrackingProtection()
+        }
+
+        webViewController.reload()
+        hideDrawer()
     }
 }
 

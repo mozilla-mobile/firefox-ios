@@ -116,7 +116,26 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 4 {
+        switch section {
+        case 2:
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.trackersDescriptionLabel, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
+            let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+            subtitle.append(space)
+            subtitle.append(learnMore)
+            cell.detailTextLabel?.attributedText = subtitle
+            cell.detailTextLabel?.numberOfLines = 0
+            cell.accessibilityIdentifier = "SettingsViewController.trackingProtectionLearnMoreCell"
+            cell.selectionStyle = .none
+            cell.backgroundColor = UIConstants.colors.background
+            cell.layoutMargins = UIEdgeInsets.zero
+
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedTrackingProtectionLearnMoreFooter))
+            cell.addGestureRecognizer(tapGesture)
+
+            return cell
+        case 4:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
             let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
@@ -134,8 +153,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.addGestureRecognizer(tapGesture)
 
             return cell
+        default: return nil
         }
-        return nil
+    }
+
+    @objc func tappedTrackingProtectionLearnMoreFooter(sender: UIGestureRecognizer) {
+        guard let url = SupportUtils.URLForTopic(topic: "tracking-protection-focus-ios") else { return }
+        let contentViewController = SettingsContentViewController(url: url)
+        navigationController?.pushViewController(contentViewController, animated: true)
     }
 
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
@@ -145,7 +170,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return section == 4 ? 50 : 0
+        return section == 4 || section == 2 ? 50 : 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
