@@ -3,5 +3,5 @@ github "SnapKit/SnapKit" "4.0.0"
 github "adjust/ios_sdk" "v4.11.5"
 github "cezheng/Fuzi" "master"
 github "mozilla-mobile/AutocompleteTextField" "master"
-github "mozilla-mobile/telemetry-ios" ~> 1.0.4
+github "mozilla-mobile/telemetry-ios" ~> 1.0.6
 github "getsentry/sentry-cocoa" "3.2.1"

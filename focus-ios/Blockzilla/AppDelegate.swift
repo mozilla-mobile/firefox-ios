@@ -190,6 +190,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
+
         splashView?.animateHidden(true, duration: 0.25)
         if let url = queuedUrl {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
@@ -206,13 +208,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     }
     
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Start a new telemetry session and record an event indicating that we have entered the
-        // foreground. This only gets called for subsequent foregrounds after the initial launch.
-        Telemetry.default.recordSessionStart()
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
-    }
-    
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Record an event indicating that we have entered the background and end our telemetry
         // session. This gets called every time the app goes to background but should not get
@@ -221,14 +216,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
-        Telemetry.default.recordSessionEnd()
-        
-        // Add the CorePing and FocusEventPing to the queue and schedule them for upload in the
-        // background at iOS's discretion (usually happens immediately).
-        Telemetry.default.queue(pingType: CorePingBuilder.PingType)
-        Telemetry.default.queue(pingType: FocusEventPingBuilder.PingType)
-        Telemetry.default.scheduleUpload(pingType: CorePingBuilder.PingType)
-        Telemetry.default.scheduleUpload(pingType: FocusEventPingBuilder.PingType)
     }
 }
 
@@ -282,8 +269,6 @@ extension AppDelegate {
         Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
         
         // Start the telemetry session and record an event indicating that we have entered the
-        // foreground since `applicationWillEnterForeground(_:)` does not get called at launch.
-        Telemetry.default.recordSessionStart()
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
         
         // Only include Adjust SDK in Focus and NOT in Klar builds.
