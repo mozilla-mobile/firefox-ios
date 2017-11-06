@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blokeatu publizitatearen jarraipena";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Zenbait iragarkik guneen bisiten jarraipena egiten dute, iragarkietan klik egiteko beharrik gabe ere";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Blokeatu analitiken jarraipena";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Sakatzea edo korritzea bezalako jarduerak bildu, analizatu eta neurtzeko erabiltzen da";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokeatu webeko letra-tipoak";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Blokeatu bestelako edukien jarraipena";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Gaituz gero, zenbait orrik espero gabeko portaera izan lezakete";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Blokeatu sare sozialetako jarraipena";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Guneetan txertatuta zure bisiten jarraipena egin eta partekatzeko botoien tankerako eginbideak bistaratzeko";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Zenbait bideo eta web orri apur litzake";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Ireki %@ aplikazioan";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Hautatu helbide-barra";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Kopiatu duzun lotura: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "\"%@\" aplikazioak zure argazkietarako sarbidea nahi du";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Iragarkien jarraipen-elementuak";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Estatistiken jarraipen-elementuak";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Edukien jarraipen-elementuak";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Jarraipenaren babesa desgaituta";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Sare sozialetako jarraipen-elementuak";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Desgaitu %@ itxi edo EZABATU sakatu arte.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Jarraipenaren babesa";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Aukeratu %@(e)k iragarki, estatistika, sare sozial edo bestelako jarraipen-elementuak blokeatzen dituen.";
 

@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blokker sporfølgjarar for reklame";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Nokre annonsar sporfølgjer nettstadbesøk, sjølv om du ikkje klikkar på annonsane";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Blokker sporfølgjarar for analyser";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Brukt for å samle inn, analysere og måle aktivitetar som tastetrykk og rulling";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokker nettskrifter";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Blokker andre innhaldssporfølgjarar";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Aktivering kan føre til at nokre sider oppfører seg uventa";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Blokker sporfølgjarar for sosiale media";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Innebygd på nettstadar for å spore besøka dine og å vise funksjonalitet som dele-knappar";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Kan øydeleggja nokre videoar og nettsider";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Opne i %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Vel adresselinje";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Lenka du kopierte: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ønskjer tilgang til bilda dine";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Annonse-sporfølgjarar";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Analyse-sporfølgjarar";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Innhalds-sporfølgjarar";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Sporingsvern av";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Sosiale sporfølgjarar";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Deaktiver til du lukkar %@ eller trykkjer SLETT.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Sporingsvern";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Vel om %@ blokkerer annonse-, analyse-, sosiale- og andre sporfølgjarar.";
 

@@ -95,7 +95,7 @@
 "FirstRun.buttonLabel" = "OK!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Automatycznie blokuj śledzące elementy podczas przeglądania stron. Wystarczy stuknąć, aby usunąć z urządzenia odwiedzone strony, wyszukiwania i hasła.";
+"FirstRun.messageLabelDescription" = "Automatycznie blokuj śledzące elementy podczas przeglądania stron. Wystarczy stuknąć, by usunąć z urządzenia odwiedzone strony, wyszukiwania i hasła.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Przeglądaj, jak gdyby nikt nie patrzył";
@@ -143,7 +143,7 @@
 "Settings.blockOtherYes" = "Rozumiem";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla dokłada wszelkich starań, by zbierać jednie niezbędne dane w celu dostarczania i ulepszania aplikacji %@.";
+"Settings.detailTextSendUsageData" = "Mozilla dokłada wszelkich starań, by zbierać jedynie niezbędne dane w celu dostarczania i ulepszania aplikacji %@.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Więcej informacji.";
@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blokowanie śledzących reklam";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Niektóre reklamy (nawet nie kliknięte) śledzą odwiedziny zawierających je stron.";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Blokowanie śledzących statystyk";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Skrypty statystyk analizują oraz mierzą aktywności takie jak kliknięcia i przewijanie.";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blokowanie czcionek sieciowych";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Blokowanie pozostałych śledzących";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Włączenie tej opcji może spowodować nieoczekiwane zachowania niektórych stron.";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Blokowanie śledzących społecznościowych";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Osadzane na stronach, by śledzić odwiedziny zawierających je stron i dodawać np. przyciski udostępniania.";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Może uniemożliwiać oglądanie niektórych filmów i stron WWW.";
@@ -192,6 +204,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Przesyłanie danych o użyciu";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Co nowego?";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Pobierz Firefoksa";
@@ -223,6 +238,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Otwórz w aplikacji %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Wyświetl pasek adresu";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Skopiowany odnośnik: %@";
 
@@ -249,4 +267,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "%@ chce uzyskać dostęp do Zdjęć";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Śledzące reklamy";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Śledzące statystyki";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Pozostałe śledzące";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Ochrona przed śledzeniem jest wyłączona";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Śledzące społecznościowe";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Wyłącz do zamknięcia aplikacji lub stuknięcia „Usuń”";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Ochrona przed śledzeniem";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Wybierz, czy %@ będzie blokował reklamy, statystyki, elementy społecznościowe i inne śledzące.";
 

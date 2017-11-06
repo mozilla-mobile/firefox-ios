@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Блокувати рекламу зі стеженням";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Деяка реклама відстежує відвідування сайтів, навіть якщо ви на неї не натискали";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Блокувати аналітику зі стеженням";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Використовуються для збору, аналізу та вимірювання активності, наприклад, дотики і прокручування";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Блокувати веб-шрифти";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Блокувати інші елементи стеження";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Увімкнення цієї функції може викликати непередбачувану поведінку деяких сторінок";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Блокувати стеження соціальних мереж";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Вбудовуються в сайти для відстеження ваших відвідувань та показу додаткових функцій, наприклад, кнопки \"Поділитися\"";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Може пошкодити деякі відео і веб-сторінки";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Відкрити в %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Виберіть панель адреси";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Ваше скопійоване посилання: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” бажає отримати доступ до ваших фотографій";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Стеження реклами";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Стеження аналітики";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Стеження вмісту";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Захист від стеження вимкнено";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Стеження соціальних мереж";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Вимкнути до закриття %@, або оберіть СТЕРТИ.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Захист від стеження";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Визначте, чи буде %@ блокувати рекламу, аналітику, соціальне та інше стеження.";
 

@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Reklam izləyicilərini əngəllə";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Bəzi reklamlar onlara klikləməsəniz belə sayt ziyarətlərinizi izləyirlər";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Analiz izləyicilərini əngəllə";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Toxunma və sürüşdürmə kimi aktivlikləri yığıb, ölçüb, analiz etmək üçün işlədilir";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Web şriftlərini əngəllə";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Digər məzmun izləyicilərini əngəllə";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Aktivləşdirmə bəzi səhifələrdə gözlənilməz səhvlərə səbəb ola bilər";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Sosial izləyiciləri əngəllə";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Ziyarətinizi izləmək və paylaşma düymələri kimi funksionallıqları göstərmək üçün saytlara yerləşdirilir";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Bəzi video və saytları işlənməz hala gətirə bilər";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ ilə aç";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Mövqe Sətrini Seç";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Köçürdüyünüz keçid: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” şəkillərinizə keçid əldə etmək istəyir";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Reklam izləyiciləri";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Analiz izləyiciləri";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Məzmun izləyiciləri";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "İzlənmə Qoruması sönülüdür";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Sosial izləyicilər";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "%@ səyyahını qapatana və ya POZ düyməsinə basana qədər söndür.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "İzlənmə Qoruması";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "%@ səyyahının reklam, analiz, sosial və digər izləyiciləri əngəlləməsini seçin.";
 

@@ -1,0 +1,177 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Lue lisää";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Ohje";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Tietosuojakäytäntö";
+
+/* Label for row in About screen */
+"About.rowRights" = "Oikeutesi";
+
+/* Title for the About screen */
+"About.screenTitle" = "Tietoja";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Edellinen";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Seuraava";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Päivitä";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Asetukset";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Jaa";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Pysäytä";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Yritä uudestaan";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Peruuta";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Avaa";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Peruuta";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Avaa App Store";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Selaa. Tyhjennä. Toista.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Peruuta";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Lisää";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Valitse Safari ja sen jälkeen Sisällönestäjät";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Ei kiitos";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Ymmärrän";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia %@en jakelun ja kehittämisen kannalta.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Lue lisää.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Asetukset";
+
+/* Title for the search engine row */
+"Settings.searchSection" = "HAKUKONE";
+
+/* Title for the search engine selection screen */
+"Settings.searchTitle" = "Hakukone";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGROINTI";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "SUORITUSKYKY";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "YKSITYISYYS";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Estä mainosseuraimet";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Estä analytiikkaseuraimet";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Estä verkkosivujen kirjasinlajit";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Estä muut sisältöseuraimet";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Estä sosiaalisen median seuraimet";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Saattaa rikkoa jotkin videot ja verkkosivut";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Lähetä käyttötilastoja";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Peruuta";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Liitä ja avaa";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "TYHJENNÄ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Selaushistoria tyhjennetty.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Kirjoita osoite tai hakusana";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Hae %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Seuraimia estetty";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Kopioitu linkki: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Kopioi kuva";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Kopioi linkki";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Tallenna kuva";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Jaa linkki";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Avaa asetukset";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Mainosseuraimet";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Analytiikkaseuraimet";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Sisältöseuraimet";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Seurannan suojaus pois päältä";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Sosiaaliset seuraimet";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Seurannan suojaus";
+

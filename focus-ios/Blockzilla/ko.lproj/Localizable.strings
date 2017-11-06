@@ -19,6 +19,9 @@
 /* Label for row in About screen */
 "About.rowHelp" = "도움말";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "개인 정보 보호 정책";
+
 /* Label for row in About screen */
 "About.rowRights" = "사용자 권리";
 
@@ -58,6 +61,15 @@
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "재시도";
 
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "취소";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@가 다른 앱을 열려고 합니다";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "열기";
+
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "통화";
 
@@ -73,6 +85,9 @@
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "App Store 열기";
 
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@가 App Store를 열려고 합니다.";
+
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "지도 열기";
 
@@ -84,6 +99,9 @@
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "누구도 감시하지 않는 자유로운 웹 여행";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Apple Handoff가 동기화중";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "자동화된 사생활 보호 브라우저";
@@ -124,6 +142,12 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "차단";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla는 %@ 이용에 더 나은 서비스를 제공하고 향상시키는 데 오직 필요한 정보만을 수집합니다.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "더 알아보기.";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "설정";
 
@@ -148,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "광고 추적기 차단";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "특정 광고의 경우, 광고를 클릭하지 않은 경우에도 방문 기록을 추적합니다";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "분석용 추적기 차단";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "탭한 기록이나 스크롤과 같은 사용자 활동 내역을 수집하고 분석하는데 사용됩니다";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "웹 폰트 차단";
@@ -157,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "기타 콘텐츠 추적기 차단";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "설정 시 웹 페이지가 제대로 표시되지 않을 수 있습니다";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "소셜 추적기 차단";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "사용자의 방문 기록을 추적하거나 공유 버튼과 같은 기능을 표시하기 위해 사이트에 내장되어 있습니다";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "동영상이나 웹 페이지가 제대로 표시되지 않을 수 있음";
@@ -166,17 +202,14 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "익명으로 사용 데이터 보내기";
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "사용현황 데이터 보내기";
 
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "상세정보";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox 앱 설치";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Focus에서 열기";
+"ShareMenu.OpenInFocus" = "%@에서 열기";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "취소";
@@ -195,4 +228,64 @@
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "%@ 검색";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "차단된 추적기";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@에서 열기";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "주소창 선택";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "복사된 링크: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "이미지 복사";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "링크 복사";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "이미지 저장";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "링크 공유";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@가 %2$@를 열려고 합니다";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "이미지를 카메라롤에 저장할 수 있게 되었습니다";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "설정 열기";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@”가 사진에 접근하려고 합니다";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "광고 추적기";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "분석용 추적기";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "콘텐츠 추적기";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "추적 차단 해제";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "소셜 추적기";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "%@를 닫을 때까지 비활성화하거나 ERASE를 누르세요.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "추적 차단";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "광고 액세스 분석, 소셜 등 추적을 %@가 어떻게 차단할지 선택하세요.";
 

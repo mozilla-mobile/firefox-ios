@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "ปิดกั้นตัวติดตามของโฆษณา";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "โฆษณาบางตัวติดตามการเยี่ยมชมไซต์ แม้ว่าคุณไม่ได้คลิกโฆษณา";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "ปิดกั้นตัวติดตามของการวิเคราะห์";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "ใช้เพื่อเก็บรวบรวม วิเคราะห์ และวัดกิจกรรมอย่างการแตะและการเลื่อน";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "ปิดกั้นแบบอักษรเว็บ";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "ปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "การเปิดใช้งานอาจส่งผลให้หน้าบางส่วนทำงานอย่างไม่คาดคิด";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "ปิดกั้นตัวติดตามทางสังคม";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "ฝังอยู่ในไซต์เพื่อติดตามการเยี่ยมชมของคุณและแสดงผลฟังก์ชันอย่างปุ่มแบ่งปัน";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "อาจทำให้วิดีโอและหน้าเว็บบางส่วนไม่สมบูรณ์";
@@ -215,13 +227,16 @@
 "URL.placeholderText" = "ค้นหาหรือป้อนที่อยู่";
 
 /* Label displayed for search button when typing in the URL bar */
-"URL.searchLabel" = "ค้นหาสำหรับ %@";
+"URL.searchLabel" = "ค้นหา %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "ตัวติดตามที่ถูกปิดกั้น";
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "เปิดใน %@";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "เลือกแถบตำแหน่งที่ตั้ง";
 
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "ลิงก์ที่คุณคัดลอก: %@";
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ต้องการเข้าถึงรูปภาพของคุณ";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "ตัวติดตามของโฆษณา";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "ตัวติดตามของการวิเคราะห์";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "ตัวติดตามของเนื้อหา";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "การป้องกันการติดตามปิดอยู่";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "ตัวติดตามทางสังคม";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "ปิดใช้งานจนกระทั่งคุณปิด %@ หรือแตะ ล้าง";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "การป้องกันการติดตาม";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "เลือกว่าจะให้ %@ ปิดกั้นตัวติดตามของโฆษณา, การวิเคราะห์, สังคม และอื่น ๆ หรือไม่";
 

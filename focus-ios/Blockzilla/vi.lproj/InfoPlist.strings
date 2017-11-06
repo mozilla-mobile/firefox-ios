@@ -1,0 +1,12 @@
+/* (No Comment) */
+"NSCameraUsageDescription" = "Điều này cho phép bạn chụp và tải hình ảnh lên.";
+
+/* (No Comment) */
+"NSLocationWhenInUseUsageDescription" = "Trang web bạn truy cập có thể yêu cầu vị trí của bạn.";
+
+/* (No Comment) */
+"NSMicrophoneUsageDescription" = "Điều này cho phép bạn quay và tải video lên.";
+
+/* (No Comment) */
+"NSPhotoLibraryUsageDescription" = "Điều này cho phép bạn lưu và tải hình ảnh lên.";
+

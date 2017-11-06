@@ -1,0 +1,12 @@
+/* (No Comment) */
+"NSCameraUsageDescription" = "यसले तपाईँलाई तस्विर लिन र अपलोड गर्न दिन्छ।";
+
+/* (No Comment) */
+"NSLocationWhenInUseUsageDescription" = "तपाईँले भ्रमण गर्ने वेबसाइटले तपाईँको स्थान अनुरोध गर्न सक्छ।";
+
+/* (No Comment) */
+"NSMicrophoneUsageDescription" = "यसले तपाईँलाई भिडियो सङ्ग्रह गर्न र अपलोड गर्न दिन्छ।";
+
+/* (No Comment) */
+"NSPhotoLibraryUsageDescription" = "यसले तपाईँलाई तस्विर संङ्ग्रह गर्न र अपलोड गर्न दिन्छ।";
+

@@ -172,8 +172,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "追跡広告をブロック";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "公告によっては、あなたがその広告をクリックしなくてもユーザーが訪れたサイトを追跡します";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "アクセス解析をブロック";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "タップやスクロールなどの操作を収集、解析、計測するために使用されます";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "ウェブフォントをブロック";
@@ -181,8 +187,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "他の追跡コンテンツをブロック";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "有効にすると、一部のページが予期しない動作をすることがあります";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "ソーシャル追跡をブロック";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "ユーザーの訪問を追跡するためサイトに埋め込まれ、共有ボタンのように表示されています";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "動画やウェブページが正常に表示されない場合があります";
@@ -223,6 +235,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ で開く";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "ロケーションバーを選択";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "コピーしたリンク: %@";
 
@@ -249,4 +264,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "「%@」が写真へのアクセスを求めています";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "追跡広告";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "アクセス解析";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "追跡コンテンツ";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "トラッキング保護はオフです";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "ソーシャル追跡";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "%@ を閉じるまで無効化するか「消去」をタップしてください。";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "トラッキング保護";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "広告、アクセス解析、ソーシャルなどトラッキングを %@ がどのようにブロックするか選択してください。";
 

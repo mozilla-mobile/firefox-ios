@@ -95,10 +95,10 @@
 "FirstRun.buttonLabel" = "OK, ENTENDI!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Bloqueie automaticamente os rastreadores online enquanto navega. Em seguida, toque para apagar páginas visitadas, pesquisas, cookies e senhas do seu dispositivo.";
+"FirstRun.messageLabelDescription" = "Bloqueie automaticamente os rastreadores on-line enquanto navega. Em seguida, toque para apagar páginas visitadas, pesquisas, cookies e senhas do seu dispositivo.";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Navegar como se ninguém estivesse olhando.";
+"FirstRun.messageLabelTagline" = "Navegue como se ninguém estivesse olhando.";
 
 /* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
 "Focus.handoffSyncing" = "O Apple Handoff está sincronizando";
