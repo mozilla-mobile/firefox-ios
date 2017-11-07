@@ -49,14 +49,21 @@ class SecurityTests: KIFTestCase {
     /// in a new tab via window.open(). Make sure nothing happens.
     func testErrorExploit() {
         // We should only have one tab open.
-        var value = tester().waitForView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
-        let tabcount = value?.accessibilityValue
+        let tabcount:String?
+        if BrowserUtils.iPad() {
+            tabcount = tester().waitForView(withAccessibilityIdentifier: "TopTabsViewController.tabsButton")?.accessibilityValue
+        } else {
+            tabcount = tester().waitForView(withAccessibilityIdentifier: "TabToolbar.tabsButton")?.accessibilityValue
+        }
 
+        // After running the exploit, make sure a new tab wasn't opened.
         tester().tapWebViewElementWithAccessibilityLabel("Error exploit")
-
-        // Make sure a new tab wasn't opened.
-        value = tester().waitForView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
-        let newTabcount = value?.accessibilityValue
+        let newTabcount:String?
+        if BrowserUtils.iPad() {
+            newTabcount = tester().waitForView(withAccessibilityIdentifier: "TopTabsViewController.tabsButton")?.accessibilityValue
+        } else {
+            newTabcount = tester().waitForView(withAccessibilityIdentifier: "TabToolbar.tabsButton")?.accessibilityValue
+        }
         XCTAssert(tabcount != nil && tabcount == newTabcount)
     }
     
