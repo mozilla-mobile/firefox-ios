@@ -34,7 +34,6 @@
 		746BD9261F75C43C00BE8DB9 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */; };
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
 		746D78FB1F4E0095002EB522 /* ShareSheetActivities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D78FA1F4E0095002EB522 /* ShareSheetActivities.swift */; };
-		74CC0ADF1FAD28DE00972A78 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 74CC0AE11FAD28DE00972A78 /* InfoPlist.strings */; };
 		A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C4943B406FCA9B74B4E186 /* CoreText.framework */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
@@ -282,19 +281,15 @@
 		74CC0ADA1FAD28DB00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0ADB1FAD28DC00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		74CC0ADC1FAD28DD00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		74CC0AE01FAD28DE00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0AE21FAD290100972A78 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0AE31FAD290100972A78 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		74CC0AE41FAD290200972A78 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		74CC0AE51FAD290500972A78 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0AE61FAD291C00972A78 /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0AE71FAD291D00972A78 /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Localizable.strings; sourceTree = "<group>"; };
 		74CC0AE81FAD291D00972A78 /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		74CC0AE91FAD291D00972A78 /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0AEA1FAD293C00972A78 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		74CC0AEB1FAD293D00972A78 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		74CC0AEC1FAD293E00972A78 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		74CC0AED1FAD293E00972A78 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		80D9AA926EFBD788739486EB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		885AD5B8AB73EB0DA9702536 /* BuddyBuildSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BuddyBuildSDK.framework; sourceTree = "<group>"; };
 		A89766D31F57DCA8008183C5 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -721,7 +716,6 @@
 		745DC5DB1F39221100661635 /* OpenInFocus */ = {
 			isa = PBXGroup;
 			children = (
-				74CC0AE11FAD28DE00972A78 /* InfoPlist.strings */,
 				745DC5DC1F39221100661635 /* ActionViewController.swift */,
 				745DC5E11F39221100661635 /* Info.plist */,
 				742C99D31F3A3AD200717D69 /* Assets.xcassets */,
@@ -1173,7 +1167,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */,
-				74CC0ADF1FAD28DE00972A78 /* InfoPlist.strings in Resources */,
 				A89766DA1F57DCA9008183C5 /* (null) in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1422,17 +1415,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		74CC0AE11FAD28DE00972A78 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				74CC0AE01FAD28DE00972A78 /* fi */,
-				74CC0AE51FAD290500972A78 /* vi */,
-				74CC0AE91FAD291D00972A78 /* ast */,
-				74CC0AED1FAD293E00972A78 /* ne-NP */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		D343DCC41C44356500D7EEE8 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
