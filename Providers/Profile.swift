@@ -1096,13 +1096,42 @@ open class BrowserProfile: Profile {
             }
         }
 
+        func engineEnablementChangesForAccount(account: FirefoxAccount, profile: Profile) -> [String: Bool]? {
+            var enginesEnablements: [String: Bool] = [:]
+            // We just created the account, the user went through the Choose What to Sync screen on FxA.
+            if let declined = account.declinedEngines {
+                declined.forEach { enginesEnablements[$0] = false }
+                account.declinedEngines = nil
+                // Persist account changes so we don't try to decline engines on the next sync.
+                profile.flushAccount()
+            } else {
+                // Bundle in authState the engines the user activated/disabled since the last sync.
+                TogglableEngines.forEach { engine in
+                    let stateChangedPref = "engine.\(engine).enabledStateChanged"
+                    if let _ = self.prefsForSync.boolForKey(stateChangedPref),
+                        let enabled = self.prefsForSync.boolForKey("engine.\(engine).enabled") {
+                        enginesEnablements[engine] = enabled
+                        self.prefsForSync.setObject(nil, forKey: stateChangedPref)
+                    }
+                }
+            }
+            return enginesEnablements
+        }
+
         // This SHOULD NOT be called directly: use syncSeveral instead.
         fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)],
                                   account: FirefoxAccount,
                                   statsSession: SyncOperationStatsSession, why: SyncReason) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             log.info("Syncing \(synchronizers.map { $0.0 })")
-            let authState = account.syncAuthState
+            var authState = account.syncAuthState
             let delegate = self.profile.getSyncDelegate()
+            if let enginesEnablements = self.engineEnablementChangesForAccount(account: account, profile: profile),
+               !enginesEnablements.isEmpty {
+                authState?.enginesEnablements = enginesEnablements
+                log.debug("engines to enable: \(enginesEnablements.flatMap { $0.value ? $0.key : nil })")
+                log.debug("engines to disable: \(enginesEnablements.flatMap { !$0.value ? $0.key : nil })")
+            }
+
             let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState!)
 
             let function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[EngineStatus]>> = { delegate, syncPrefs, ready in
@@ -1116,6 +1145,12 @@ open class BrowserProfile: Profile {
             }
             
             return readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
+                let updateEnginePref: ((String, Bool) -> Void) = { engine, enabled in
+                    self.prefsForSync.setBool(enabled, forKey: "engine.\(engine).enabled")
+                }
+                ready.engineConfiguration?.enabled.forEach { updateEnginePref($0, true) }
+                ready.engineConfiguration?.declined.forEach { updateEnginePref($0, false) }
+
                 statsSession.start()
                 return function(delegate, self.prefsForSync, ready)
             }

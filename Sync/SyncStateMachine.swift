@@ -12,14 +12,16 @@ private let log = Logger.syncLogger
 
 private let StorageVersionCurrent = 5
 
-// Names of collections for which a synchronizer is implemented locally.
-private let LocalEngines: [String] = [
+// Names of collections that can be enabled/disabled locally.
+public let TogglableEngines: [String] = [
     "bookmarks",
-    "clients",
     "history",
-    "passwords",
     "tabs",
+    "passwords"
 ]
+
+// Names of collections for which a synchronizer is implemented locally.
+private let LocalEngines: [String] = TogglableEngines + ["clients"]
 
 // Names of collections which will appear in a default meta/global produced locally.
 // Map collection name to engine version.  See http://docs.services.mozilla.com/sync/objectformats.html.
@@ -40,22 +42,40 @@ private let DefaultEngines: [String: Int] = [
 // meta/global produced locally.
 private let DefaultDeclined: [String] = [String]()
 
-// public for testing.
-public func createMetaGlobalWithEngineConfiguration(_ engineConfiguration: EngineConfiguration) -> MetaGlobal {
+public func computeNewEngines(_ engineConfiguration: EngineConfiguration, enginesEnablements: [String: Bool]?) -> (engines: [String: EngineMeta], declined: [String]) {
+    var enabled: Set<String> = Set(engineConfiguration.enabled)
+    var declined: Set<String> = Set(engineConfiguration.declined)
     var engines: [String: EngineMeta] = [:]
-    for engine in engineConfiguration.enabled {
+
+    if let enginesEnablements = enginesEnablements {
+        let enabledLocally = Set(enginesEnablements.filter { $0.value }.map { $0.key })
+        let declinedLocally = Set(enginesEnablements.filter { !$0.value }.map { $0.key })
+        enabled.subtract(declinedLocally)
+        declined.subtract(enabledLocally)
+        enabled.formUnion(enabledLocally)
+        declined.formUnion(declinedLocally)
+    }
+
+    for engine in enabled {
         // We take this device's version, or, if we don't know the correct version, 0.  Another client should recognize
         // the engine, see an old version, wipe and start again.
         // TODO: this client does not yet do this wipe-and-update itself!
         let version = DefaultEngines[engine] ?? 0
         engines[engine] = EngineMeta(version: version, syncID: Bytes.generateGUID())
     }
-    return MetaGlobal(syncID: Bytes.generateGUID(), storageVersion: StorageVersionCurrent, engines: engines, declined: engineConfiguration.declined)
+
+    return (engines: engines, declined: Array(declined))
 }
 
-public func createMetaGlobal() -> MetaGlobal {
+// public for testing.
+public func createMetaGlobalWithEngineConfiguration(_ engineConfiguration: EngineConfiguration, enginesEnablements: [String: Bool]?) -> MetaGlobal {
+    let (engines, declined) = computeNewEngines(engineConfiguration, enginesEnablements: enginesEnablements)
+    return MetaGlobal(syncID: Bytes.generateGUID(), storageVersion: StorageVersionCurrent, engines: engines, declined: declined)
+}
+
+public func createMetaGlobal(enginesEnablements: [String: Bool]?) -> MetaGlobal {
     let engineConfiguration = EngineConfiguration(enabled: Array(DefaultEngines.keys), declined: DefaultDeclined)
-    return createMetaGlobalWithEngineConfiguration(engineConfiguration)
+    return createMetaGlobalWithEngineConfiguration(engineConfiguration, enginesEnablements: enginesEnablements)
 }
 
 public typealias TokenSource = () -> Deferred<Maybe<TokenServerToken>>
@@ -144,6 +164,11 @@ open class SyncStateMachine {
                 log.warning("Device registration has not taken place before sync.")
             }
             b.hashedUID = token.hashedFxAUID
+
+            if let enginesEnablements = authState.enginesEnablements,
+               !enginesEnablements.isEmpty {
+                b.enginesEnablements = enginesEnablements
+            }
 
             // Detect if we've changed anything in our client record from the last time we synced…
             let ourClientUnchanged = (b.fxaDeviceId == scratchpad.fxaDeviceId)
@@ -466,17 +491,20 @@ open class ServerConfigurationRequiredError: RecoverableSyncState {
 
     open func advance() -> Deferred<Maybe<SyncState>> {
         let client = self.previousState.client!
-        let s = self.previousState.scratchpad.evolve()
+        let oldScratchpad = self.previousState.scratchpad
+        let enginesEnablements = oldScratchpad.enginesEnablements
+        let s = oldScratchpad.evolve()
                 .setGlobal(nil)
                 .addLocalCommandsFromKeys(nil)
                 .setKeys(nil)
+                .clearEnginesEnablements()
                 .build().checkpoint()
         // Upload a new meta/global ...
         let metaGlobal: MetaGlobal
         if let oldEngineConfiguration = s.engineConfiguration {
-            metaGlobal = createMetaGlobalWithEngineConfiguration(oldEngineConfiguration)
+            metaGlobal = createMetaGlobalWithEngineConfiguration(oldEngineConfiguration, enginesEnablements: enginesEnablements)
         } else {
-            metaGlobal = createMetaGlobal()
+            metaGlobal = createMetaGlobal(enginesEnablements: s.enginesEnablements)
         }
         return client.uploadMetaGlobal(metaGlobal, ifUnmodifiedSince: nil)
             // ... and a new crypto/keys.
@@ -806,6 +834,17 @@ open class HasMetaGlobal: BaseSyncStateWithInfo {
     }
 
     override open func advance() -> Deferred<Maybe<SyncState>> {
+        // Check if we have enabled/disabled some engines.
+        if let enginesEnablements = self.scratchpad.enginesEnablements,
+           let oldMetaGlobal = self.scratchpad.global {
+            let (engines, declined) = computeNewEngines(oldMetaGlobal.value.engineConfiguration(), enginesEnablements: enginesEnablements)
+            let newMetaGlobal = MetaGlobal(syncID: oldMetaGlobal.value.syncID, storageVersion: oldMetaGlobal.value.storageVersion, engines: engines, declined: declined)
+            return self.client.uploadMetaGlobal(newMetaGlobal, ifUnmodifiedSince: oldMetaGlobal.timestamp) >>> {
+                self.scratchpad = self.scratchpad.evolve().clearEnginesEnablements().build().checkpoint()
+                return deferMaybe(NeedsFreshMetaGlobal.fromState(self))
+            }
+        }
+
         // Check if crypto/keys is fresh in the cache already.
         if let keys = self.scratchpad.keys, keys.value.valid {
             if let cryptoModified = self.info.modified("crypto") {
@@ -910,6 +949,10 @@ open class Ready: BaseSyncStateWithInfo {
 
     public var hashedFxADeviceID: String {
         return (scratchpad.fxaDeviceId + token.hashedFxAUID).sha256.hexEncodedString
+    }
+
+    public var engineConfiguration: EngineConfiguration? {
+        return scratchpad.engineConfiguration
     }
 
     public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys) {

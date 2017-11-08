@@ -127,6 +127,11 @@ extension Strings {
     public static let FirefoxSyncFailedTitle = NSLocalizedString("SyncState.Failed.Title", value: "Syncing has failed", comment: "Title for Sync status message when synchronization failed to complete")
     public static let FirefoxSyncTroubleshootTitle = NSLocalizedString("Settings.TroubleShootSync.Title", value: "Troubleshoot", comment: "Title of link to help page to find out how to solve Sync issues")
 
+    public static let FirefoxSyncBookmarksEngine = NSLocalizedString("Bookmarks", comment: "Toggle bookmarks syncing setting")
+    public static let FirefoxSyncHistoryEngine = NSLocalizedString("History", comment: "Toggle history syncing setting")
+    public static let FirefoxSyncTabsEngine = NSLocalizedString("Open Tabs", comment: "Toggle tabs syncing setting")
+    public static let FirefoxSyncLoginsEngine = NSLocalizedString("Logins", comment: "Toggle logins syncing setting")
+
     public static func localizedStringForSyncComponent(_ componentName: String) -> String? {
         switch componentName {
         case "bookmarks":
@@ -156,6 +161,8 @@ extension Strings {
     public static let FxAManageAccount = NSLocalizedString("FxA.ManageAccount", value: "Manage Account", comment: "Button label to goto Firefox Account settings")
     public static let FxASyncNow = NSLocalizedString("FxA.SyncNow", value: "Sync Now", comment: "Button label to Sync your Firefox Account")
     public static let FxANoInternetConnection = NSLocalizedString("FxA.NoInternetConnection", value: "No Internet Connection", comment: "Label when no internet is present")
+    public static let SettingsSyncSectionName = NSLocalizedString("Settings.Sync.SectionName", value: "Sync Options", comment: "Label used as an item in Settings. When touched it will open a dialog to configure the sync options.")
+    public static let SettingsSyncTitle = NSLocalizedString("Settings.Sync.Title", value: "Sync Options", comment: "Title displayed in header of the sync setting panel.")
     
     // Surface error strings
     public static let FxAAccountVerificationRequiredSurface = NSLocalizedString("FxA.AccountVerificationRequiredSurface", value: "You need to verify %@. Check your email for the verification link from Firefox.", comment: "Message explaining that user needs to check email for Firefox Account verfication link.")

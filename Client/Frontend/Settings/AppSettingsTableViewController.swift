@@ -88,7 +88,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 AdvanceAccountSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
-                SyncNowSetting(settings: self)
+                SyncNowSetting(settings: self),
+                SyncSetting(settings: self)
             ] + accountChinaSyncSetting + accountDebugSettings)]
 
         settings += [ SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]

@@ -775,6 +775,28 @@ class SearchSetting: Setting {
     }
 }
 
+class SyncSetting: Setting {
+    let profile: Profile
+
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return "Sync" }
+
+    override var hidden: Bool { return !(profile.hasAccount() && profile.hasSyncableAccount() && profile.syncManager.lastSyncFinishTime != nil) }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+
+        super.init(title: NSAttributedString(string: Strings.SettingsSyncSectionName, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = SyncContentSettingsViewController()
+        viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 class LoginsSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!

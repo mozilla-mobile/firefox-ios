@@ -36,6 +36,9 @@ open class FirefoxAccount {
     
     open var deviceRegistration: FxADeviceRegistration?
 
+    // Only set one time in the Choose What to Sync FxA screen shown during registration.
+    open var declinedEngines: [String]?
+
     open var configuration: FirefoxAccountConfiguration
 
     open var pushRegistration: PushRegistration?
@@ -55,14 +58,15 @@ open class FirefoxAccount {
         return stateCache.value!.actionNeeded
     }
 
-    public convenience init(configuration: FirefoxAccountConfiguration, email: String, uid: String, deviceRegistration: FxADeviceRegistration?, stateKeyLabel: String, state: FxAState) {
-        self.init(configuration: configuration, email: email, uid: uid, deviceRegistration: deviceRegistration, stateCache: KeychainCache(branch: "account.state", label: stateKeyLabel, value: state))
+    public convenience init(configuration: FirefoxAccountConfiguration, email: String, uid: String, deviceRegistration: FxADeviceRegistration?, declinedEngines: [String]?, stateKeyLabel: String, state: FxAState) {
+        self.init(configuration: configuration, email: email, uid: uid, deviceRegistration: deviceRegistration, declinedEngines: declinedEngines, stateCache: KeychainCache(branch: "account.state", label: stateKeyLabel, value: state))
     }
 
-    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, deviceRegistration: FxADeviceRegistration?, stateCache: KeychainCache<FxAState>) {
+    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, deviceRegistration: FxADeviceRegistration?, declinedEngines: [String]?, stateCache: KeychainCache<FxAState>) {
         self.email = email
         self.uid = uid
         self.deviceRegistration = deviceRegistration
+        self.declinedEngines = declinedEngines
         self.configuration = configuration
         self.stateCache = stateCache
         self.stateCache.checkpoint()
@@ -79,10 +83,11 @@ open class FirefoxAccount {
             let unwrapkB = data["unwrapBKey"].string?.hexDecodedData else {
                 return nil
         }
+        let declinedEngines = data["declinedSyncEngines"].array?.flatMap { $0.string }
 
         let verified = data["verified"].bool ?? false
         return FirefoxAccount.from(configuration: configuration,
-            andParametersWithEmail: email, uid: uid, deviceRegistration: nil, verified: verified,
+            andParametersWithEmail: email, uid: uid, deviceRegistration: nil, declinedEngines: declinedEngines, verified: verified,
             sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
     }
 
@@ -90,7 +95,7 @@ open class FirefoxAccount {
                          andLoginResponse response: FxALoginResponse,
                          unwrapkB: Data) -> FirefoxAccount {
         return FirefoxAccount.from(configuration: configuration,
-            andParametersWithEmail: response.remoteEmail, uid: response.uid, deviceRegistration: nil, verified: response.verified,
+                                   andParametersWithEmail: response.remoteEmail, uid: response.uid, deviceRegistration: nil, declinedEngines: nil, verified: response.verified,
             sessionToken: response.sessionToken as Data, keyFetchToken: response.keyFetchToken as Data, unwrapkB: unwrapkB)
     }
 
@@ -98,6 +103,7 @@ open class FirefoxAccount {
                                 andParametersWithEmail email: String,
                                 uid: String,
                                 deviceRegistration: FxADeviceRegistration?,
+                                declinedEngines: [String]?,
                                 verified: Bool,
                                 sessionToken: Data,
                                 keyFetchToken: Data,
@@ -124,6 +130,7 @@ open class FirefoxAccount {
             email: email,
             uid: uid,
             deviceRegistration: deviceRegistration,
+            declinedEngines: declinedEngines,
             stateKeyLabel: Bytes.generateGUID(),
             state: state
         )
@@ -136,6 +143,7 @@ open class FirefoxAccount {
         dict["email"] = email
         dict["uid"] = uid
         dict["deviceRegistration"] = deviceRegistration
+        dict["declinedEngines"] = declinedEngines
         dict["pushRegistration"] = pushRegistration
         dict["configurationLabel"] = configuration.label.rawValue
         dict["stateKeyLabel"] = stateCache.label
@@ -164,11 +172,13 @@ open class FirefoxAccount {
             let email = dictionary["email"] as? String,
             let uid = dictionary["uid"] as? String {
                 let deviceRegistration = dictionary["deviceRegistration"] as? FxADeviceRegistration
+                let declinedEngines = dictionary["declinedEngines"] as? [String]
                 let stateCache = KeychainCache.fromBranch("account.state", withLabel: dictionary["stateKeyLabel"] as? String, withDefault: SeparatedState(), factory: state)
                 let account = FirefoxAccount(
                     configuration: configurationLabel.toConfiguration(),
                     email: email, uid: uid,
                     deviceRegistration: deviceRegistration,
+                    declinedEngines: declinedEngines,
                     stateCache: stateCache)
                 account.pushRegistration = dictionary["pushRegistration"] as? PushRegistration
                 return account
