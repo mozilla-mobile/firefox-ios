@@ -484,7 +484,6 @@
 		E41F0D9B1ADFFC5600FC7387 /* ReadingListError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F0D9A1ADFFC5600FC7387 /* ReadingListError.swift */; };
 		E42736071EA858CF009C428E /* TabsPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42736061EA858CF009C428E /* TabsPayloadTests.swift */; };
 		E42CCDE81A23A73D00B794D3 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
-		E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4424B1F1AC6EBE100F44C38 /* ReaderSettings.xcassets */; };
 		E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4424B3B1AC71FB400F44C38 /* FiraSans-Book.ttf */; };
 		E444F7DC1B4B1B7E00FEB19B /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		E444F7DF1B4B1C1200FEB19B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
@@ -568,7 +567,6 @@
 		E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */; };
 		E4E25CCB1CA99E7400D0F088 /* HexExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E25CCA1CA99E7400D0F088 /* HexExtensionsTests.swift */; };
 		E4E7EB6D1C4AED5E0094275D /* SupportUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E7EB6C1C4AED5E0094275D /* SupportUtilsTests.swift */; };
-		E4ECCD8D1AB091470005E717 /* Reader.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4ECCD8C1AB091470005E717 /* Reader.xcassets */; };
 		E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */; };
 		E4F21AA61A13C4A300B0FAAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F21AA51A13C4A300B0FAAA /* Images.xcassets */; };
 		E4F2DAC01F620C0300A556CD /* Leanplum.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F2DABF1F620C0200A556CD /* Leanplum.framework */; };
@@ -1819,7 +1817,6 @@
 		E41F0D971ADFFB5400FC7387 /* ReadingListService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ReadingListService.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E41F0D9A1ADFFC5600FC7387 /* ReadingListError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListError.swift; sourceTree = "<group>"; };
 		E42736061EA858CF009C428E /* TabsPayloadTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabsPayloadTests.swift; path = SyncTests/TabsPayloadTests.swift; sourceTree = "<group>"; };
-		E4424B1F1AC6EBE100F44C38 /* ReaderSettings.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ReaderSettings.xcassets; sourceTree = "<group>"; };
 		E4424B3B1AC71FB400F44C38 /* FiraSans-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Book.ttf"; sourceTree = "<group>"; };
 		E46175F21EBB73A10021AE8A /* Sentry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sentry.framework; path = Carthage/Build/iOS/Sentry.framework; sourceTree = "<group>"; };
 		E47536EC1C85412C0022CC69 /* PrintHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrintHelper.swift; sourceTree = "<group>"; };
@@ -1895,7 +1892,6 @@
 		E4E0BB171AFBC9E4008D6260 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4E25CCA1CA99E7400D0F088 /* HexExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexExtensionsTests.swift; sourceTree = "<group>"; };
 		E4E7EB6C1C4AED5E0094275D /* SupportUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportUtilsTests.swift; sourceTree = "<group>"; };
-		E4ECCD8C1AB091470005E717 /* Reader.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Reader.xcassets; sourceTree = "<group>"; };
 		E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.ttf"; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E4F2DABF1F620C0200A556CD /* Leanplum.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Leanplum.framework; path = ThirdParty/Leanplum/Leanplum.framework; sourceTree = "<group>"; };
@@ -3755,8 +3751,6 @@
 				E4CD9F531A71506400318571 /* Reader.html */,
 				E4CD9F5A1A71506C00318571 /* Reader.css */,
 				E4CD9F6C1A77DD2800318571 /* ReaderModeStyleViewController.swift */,
-				E4ECCD8C1AB091470005E717 /* Reader.xcassets */,
-				E4424B1F1AC6EBE100F44C38 /* ReaderSettings.xcassets */,
 				E4A961171AC041C40069AD6F /* ReadabilityService.swift */,
 				E4A961331AC051360069AD6F /* ReadabilityTabHelper.swift */,
 				E4A961351AC052DE0069AD6F /* ReadabilityTabHelper.js */,
@@ -4945,7 +4939,6 @@
 				E4A961361AC052DE0069AD6F /* ReadabilityTabHelper.js in Resources */,
 				E4B7B7861A793CF20022C5E0 /* FiraSans-UltraLight.ttf in Resources */,
 				2F44FB2C1A9D5D8500FD20CC /* Home.xcassets in Resources */,
-				E4ECCD8D1AB091470005E717 /* Reader.xcassets in Resources */,
 				EB2A63401F3B515C004EF8B0 /* web-fonts.json in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
 				EB2A633B1F3B513B004EF8B0 /* disconnect-advertising.json in Resources */,
@@ -4953,7 +4946,6 @@
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
 				E49BFF591B1F48C3009368CC /* Readability.js in Resources */,
 				E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */,
-				E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
 				3B4262E51E538EC400CA681C /* MetadataHelper.js in Resources */,
 				E47536FC1C85415F0022CC69 /* PrintHelper.js in Resources */,
