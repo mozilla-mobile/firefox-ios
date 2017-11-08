@@ -174,6 +174,8 @@ class BoolSetting: Setting {
         let control = UISwitch()
         control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+        control.accessibilityIdentifier = prefKey
+        
         displayBool(control)
         if let title = title {
             if let status = status {

@@ -5,21 +5,6 @@
 import XCTest
 
 class TrackingProtectionTests: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        navigator = nil
-        app = nil
-        super.tearDown()
-    }
-
     // This test is to change the tracking protection to block known blockers
     func testTrackingProtection() {
         navigator.goto(SettingsScreen)

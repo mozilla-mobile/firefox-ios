@@ -24,6 +24,6 @@ for lang in $LOCALES; do
         --skip_open_summary \
         --derived_data_path l10n-screenshots-dd \
         --erase_simulator --localize_simulator \
-        --devices "iPhone 5s" --languages "$lang" \
+        -i "11.0.1" --devices "iPhone SE" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" > "l10n-screenshots/$lang/snapshot.log" 2>&1
 done

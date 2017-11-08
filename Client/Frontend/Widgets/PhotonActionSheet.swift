@@ -283,7 +283,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
         let action = actions[indexPath.section][indexPath.row]
-        
+        cell.accessibilityIdentifier = action.iconString
         cell.tintColor = action.isEnabled ? UIConstants.SystemBlueColor : self.tintColor
         cell.configureCell(action.title, imageString: action.iconString)
         return cell

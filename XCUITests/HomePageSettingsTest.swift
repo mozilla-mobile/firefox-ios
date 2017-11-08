@@ -5,19 +5,6 @@
 import XCTest
 
 class HomePageSettingsTest: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     // This test has moved from KIF UITest - accesses google.com instead of local webserver instance
     func testCurrentPage() {
         navigator.goto(BrowserTab)
