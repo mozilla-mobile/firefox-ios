@@ -5,21 +5,6 @@
 import XCTest
 
 class CopiedLinksTests: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        navigator = nil
-        app = nil
-        super.tearDown()
-    }
-
     // This test is enable Offer to open copied links, when opening firefox
     func testCopiedLinks() {
         navigator.goto(SettingsScreen)

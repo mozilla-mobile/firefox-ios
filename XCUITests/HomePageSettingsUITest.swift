@@ -9,19 +9,6 @@ let websiteUrl2 = "developer.mozilla.org"
 let invalidUrl = "1-2-3"
 
 class HomePageSettingsUITests: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     private func enterWebPageAsHomepage(text: String) {
         app.textFields["HomePageSettingTextField"].tap()
         app.textFields["HomePageSettingTextField"].typeText(text)

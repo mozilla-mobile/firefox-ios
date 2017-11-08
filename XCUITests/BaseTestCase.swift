@@ -5,13 +5,18 @@
 import XCTest
 
 class BaseTestCase: XCTestCase {
+    var navigator: Navigator<FxUserState>!
+    var app: XCUIApplication!
+    var userState: FxUserState!
 
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        let app = XCUIApplication()
+        app = XCUIApplication()
         app.terminate()
         restart(app, args: [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew])
+        navigator = createScreenGraph(for: self, with: app).navigator()
+        userState = navigator.userState
     }
 
     override func tearDown() {

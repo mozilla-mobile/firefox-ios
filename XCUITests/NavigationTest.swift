@@ -14,19 +14,6 @@ let requestMobileSiteLabel = "Request Mobile Site"
 let requestDesktopSiteLabel = "Request Desktop Site"
 
 class NavigationTest: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testNavigation() {
         navigator.goto(URLBarOpen)
         let urlPlaceholder = "Search or enter address"

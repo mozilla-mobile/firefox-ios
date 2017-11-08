@@ -5,19 +5,6 @@
 import XCTest
 
 class ReaderViewTest: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testLoadReaderContent() {
         navigator.goto(BrowserTab)
         app.buttons["Reader View"].tap()

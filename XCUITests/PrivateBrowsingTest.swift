@@ -11,20 +11,6 @@ let url1Label = "Internet for people, not profit — Mozilla"
 let url2Label = "Facebook - Log In or Sign Up"
 
 class PrivateBrowsingTest: BaseTestCase {
-
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testPrivateTabDoesNotTrackHistory() {
         navigator.openURL(urlString: url1)
         navigator.goto(BrowserTabMenu)

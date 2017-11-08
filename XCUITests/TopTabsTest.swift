@@ -15,19 +15,6 @@ let urlValueYah = "yahoo"
 let urlExample = "example.com"
 
 class TopTabsTest: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testAddTabFromSettings() {
         navigator.createNewTab()
         navigator.openURL(urlString: url)
