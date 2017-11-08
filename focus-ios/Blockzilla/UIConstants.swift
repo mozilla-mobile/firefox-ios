@@ -208,5 +208,10 @@ struct UIConstants {
         static let contentTrackerLabel = NSLocalizedString("trackingProtection.contentTrackerLabel", value: "Content trackers", comment: "label for content trackers.")
         static let selectLocationBarTitle = NSLocalizedString("browserShortcutDescription.selectLocationBar", value: "Select Location Bar", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
         static let trackersDescriptionLabel = NSLocalizedString("trackingProtection.trackerDescriptionLabel", value: "Choose whether %@ blocks ad, analytic, social, and other trackers.", comment: "General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar")
+        static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Power up your privacy", comment: "Title for the first panel 'Welcome' in the First Run tour.")
+        static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
+        static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "Take private browsing to the next level. Block ads and other content that can track you across sites and bog down page load times.", comment: "Description for the 'Welcome' panel in the First Run tour.")
+        static let CardTextSearch = NSLocalizedString("Intro.Slides.Search.Description", tableName: "Intro", value: "Searching for something different? Choose a different search engine.", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
+        static let SkipIntroButtonTitle = NSLocalizedString("Intro.Slides.Skip.Button", tableName: "Intro", value: "SKIP", comment: "Button to skip onboarding in Focus")
     }
 }
