@@ -89,7 +89,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url, options: [:])
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
         }
@@ -99,7 +99,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // iOS will always say yes. TODO Is this the same as isWhitelisted?
 
         if isAppleMapsURL(url) {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url, options: [:])
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
         }
@@ -120,7 +120,7 @@ extension BrowserViewController: WKNavigationDelegate {
             if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailScheme != "mailto" {
                 self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
             } else {
-                UIApplication.shared.openURL(url)
+                UIApplication.shared.open(url, options: [:])
             }
 
             LeanplumIntegration.sharedInstance.track(eventName: .openedMailtoLink)
