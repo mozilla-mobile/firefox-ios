@@ -9,7 +9,7 @@ import Storage
 
 struct TopSiteCellUX {
     static let TitleHeight: CGFloat = 20
-    static let TitleBackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.7)
+    static let TitleBackgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.7)
     static let TitleTextColor = UIColor.black
     static let TitleFont = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)

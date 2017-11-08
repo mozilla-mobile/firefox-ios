@@ -22,22 +22,6 @@ extension String {
 }
 
 class AuthenticationTest: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-        continueAfterFailure = false
-    }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        closeAuthenticationManager()
-        super.tearDown()
-    }
-
     fileprivate func typePasscode(_ passCode: String) {
         app.keys[passCode[0]].tap()
         app.keys[passCode[1]].tap()

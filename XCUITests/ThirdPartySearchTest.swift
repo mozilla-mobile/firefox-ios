@@ -5,20 +5,6 @@
 import XCTest
 
 class ThirdPartySearchTest: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-        dismissFirstRunUI()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     fileprivate func dismissKeyboardAssistant(forApp app: XCUIApplication) {
         if iPad() {
             let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]

@@ -7,20 +7,6 @@ import XCTest
 // NOTE: This test should be DISABLED on XCUITEST/UITEST scheme. This test should be run in conjunction with 
 // XCode Profiler to measure the memory/CPU load
 class SiteLoadTest: BaseTestCase {
-
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testLoadSite() {
 
         let site = ["http://www.forbes.com", "http://www.amazon.com", "http://theguardian.com", "http://www.reddit.com", "http://cnn.com"]

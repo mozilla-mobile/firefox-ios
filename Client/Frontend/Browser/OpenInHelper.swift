@@ -115,6 +115,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
             return
         }
         let passLibrary = PKPassLibrary()
+
         if passLibrary.containsPass(pass), let passURL = pass.passURL {
             UIApplication.shared.open(passURL, options: [:], completionHandler: nil)
         } else {

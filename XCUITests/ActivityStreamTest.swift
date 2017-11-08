@@ -9,15 +9,10 @@ let newTopSite = ["url": "www.mozilla.org", "topSiteLabel": "mozilla", "bookmark
 let allDefaultTopSites = ["facebook", "youtube", "amazon", "wikipedia", "twitter"]
 
 class ActivityStreamTest: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
     let TopSiteCellgroup = XCUIApplication().collectionViews.cells["TopSitesCell"]
 
     override func setUp() {
         super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
         dismissFirstRunUI()
     }
 

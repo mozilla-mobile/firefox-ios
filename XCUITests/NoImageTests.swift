@@ -4,47 +4,31 @@
 
 import XCTest
 
+let NoImageButtonIdentifier = "menu-NoImageMode"
+let ContextMenuIdentifier = "Context Menu"
+
 class NoImageTests: BaseTestCase {
-
-    var navigator: Navigator!
-    var app: XCUIApplication!
-    static let NoImageButtonIdentifier = "menu-NoImageMode"
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        navigator = nil
-        app = nil
-        super.tearDown()
-    }
-
     private func showImages() {
         navigator.goto(BrowserTabMenu)
-        app.tables["Context Menu"].cells["menu-NoImageMode"].tap()
+        app.tables[ContextMenuIdentifier].cells[NoImageButtonIdentifier].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func hideImages() {
         navigator.goto(BrowserTabMenu)
-        app.tables["Context Menu"].cells["menu-NoImageMode"].tap()
+        app.tables.cells[NoImageButtonIdentifier].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func checkShowImages() {
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables["Context Menu"].cells["menu-NoImageMode"])
-        XCTAssertTrue(app.tables["Context Menu"].cells["menu-NoImageMode"].staticTexts["Show Images"].exists)
+        waitforExistence(app.tables.cells[NoImageButtonIdentifier])
         navigator.goto(BrowserTab)
     }
 
     private func checkHideImages() {
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables["Context Menu"].cells["menu-NoImageMode"])
-        XCTAssertTrue(app.tables["Context Menu"].cells["menu-NoImageMode"].staticTexts["Hide Images"].exists)
+        waitforExistence(app.tables.cells[NoImageButtonIdentifier])
         navigator.goto(BrowserTab)
     }
 

@@ -8,19 +8,6 @@ private let LabelPrompt: String = "Turn on search suggestions?"
 private let SuggestedSite: String = "foobar2000.org"
 
 class SearchTests: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     private func typeOnSearchBar(text: String) {
         waitforExistence(app.textFields["address"])
         app.textFields["address"].typeText(text)

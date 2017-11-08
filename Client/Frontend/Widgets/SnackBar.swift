@@ -288,7 +288,7 @@ class TimerSnackBar: SnackBar {
                              buttons: [
                                 SnackButton(title: UIConstants.OKString, accessibilityIdentifier: "ConfirmOpenInAppStore", callback: { bar in
                                     tab.removeSnackbar(bar)
-                                    UIApplication.shared.openURL(appStoreURL)
+                                    UIApplication.shared.open(appStoreURL, options: [:])
                                 }),
                                 SnackButton(title: UIConstants.CancelString, accessibilityIdentifier: "CancelOpenInAppStore", callback: { bar in
                                     tab.removeSnackbar(bar)
