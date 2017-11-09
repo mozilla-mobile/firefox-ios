@@ -394,7 +394,7 @@ open class FirefoxAccount {
             } else {
                 log.warning("advance() completed but shared deferred is not existing deferred; ignoring potential bug!")
             }
-            os_unfair_lock_lock(&self.advanceLock)
+            os_unfair_lock_unlock(&self.advanceLock)
         }
         return deferred
     }
