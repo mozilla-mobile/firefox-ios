@@ -159,6 +159,8 @@ class FxUserState: UserState {
 
     var fxaUsername: String? = nil
     var fxaPassword: String? = nil
+
+    var numTabs: Int = 0
 }
 
 fileprivate let defaultURL = "https://www.mozilla.org/en-US/book/"
@@ -476,6 +478,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
             userState.isPrivate = !userState.isPrivate
         }
         screenState.tap(app.buttons["TabTrayController.removeTabsButton"], to: CloseTabMenu)
+
+        screenState.onEnter { userState in
+            userState.numTabs = Int(app.collectionViews.cells.count)
+        }
     }
 
     map.addScreenState(CloseTabMenu) { screenState in
@@ -615,7 +621,7 @@ extension Navigator where T == FxUserState {
         let app = XCUIApplication()
         self.goto(TabTray)
         app.buttons["TabTrayController.addTabButton"].tap()
-        self.nowAt(HomePanelsScreen)
+        self.nowAt(NewTabScreen)
     }
 
     // Add Tab(s) from the Tab Tray
