@@ -139,15 +139,15 @@ class LeanplumIntegration {
             return
         }
 
-        switch settings.environment {
-        case .development:
+        if settings.environment == .development || UIDevice.current.name.contains("MozMMADev") {
             log.info("LeanplumIntegration - Setting up for Development")
             Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
             Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.key)
-        case .production:
+        } else {
             log.info("LeanplumIntegration - Setting up for Production")
             Leanplum.setAppId(settings.appId, withProductionKey: settings.key)
         }
+
         Leanplum.syncResourcesAsync(true)
 
         if profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == nil {
