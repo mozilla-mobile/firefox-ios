@@ -600,11 +600,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
         // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
         if let url = userActivity.webpageURL {
-
+            let query = url.getQuery()
+            
+            // Check for fxa sign-in code and launch the login screen directly
+            if query["signin"] != nil {
+                browserViewController.launchFxAFromDeeplinkURL(url)
+                return true
+            }
+            
             // Per Adjust documenation, https://docs.adjust.com/en/universal-links/#running-campaigns-through-universal-links,
             // it is recommended that links contain the `deep_link` query parameter. This link will also
             // be url encoded.
-            let query = url.getQuery()
             if let deepLink = query["deep_link"]?.removingPercentEncoding, let url = URL(string: deepLink) {
                 browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
                 return true
