@@ -245,8 +245,16 @@ private extension TabScrollingController {
     }
 
     func animateToolbarsWithOffsets(_ animated: Bool, duration: TimeInterval, headerOffset: CGFloat, footerOffset: CGFloat, alpha: CGFloat, completion: ((_ finished: Bool) -> Void)?) {
+        guard let scrollView = scrollView else { return }
+        let initialContentOffset = scrollView.contentOffset
+
+        // If this function is used to fully animate the toolbar from hidden to shown, keep the page from scrolling by adjusting contentOffset.
+        let isShowFromScratch = self.headerTopOffset == -UIConstants.TopToolbarHeight && headerOffset == 0
 
         let animation: () -> Void = {
+            if isShowFromScratch {
+                scrollView.contentOffset = CGPoint(x: initialContentOffset.x, y: initialContentOffset.y + UIConstants.TopToolbarHeight)
+            }
             self.headerTopOffset = headerOffset
             self.footerBottomOffset = footerOffset
             self.urlBar?.updateAlphaForSubviews(alpha)
