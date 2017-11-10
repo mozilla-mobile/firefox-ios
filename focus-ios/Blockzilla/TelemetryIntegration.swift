@@ -21,6 +21,7 @@ class TelemetryEventMethod {
     public static let click = "click"
     public static let change = "change"
     public static let open = "open"
+    public static let close = "close"
     public static let cancel = "cancel"
     public static let openAppStore = "open_app_store"
     public static let openedFromExtension = "opened_from_extension"
@@ -40,4 +41,6 @@ class TelemetryEventObject {
     public static let copyImage = "copy_image_buuton"
     public static let saveImage = "save_image_button"
     public static let requestHandler = "request_handler"
+    public static let trackingProtectionDrawer = "tracking_protection_drawer"
+    public static let trackingProtectionToggle = "tracking_protection_toggle"
 }
