@@ -84,8 +84,6 @@ class OpenUtils {
             activityItems.append(TitleActivityItemProvider(title: title))
         }
         
-        activityItems.append(url as AnyObject)
-
         let shareController = UIActivityViewController(activityItems: activityItems, applicationActivities: activities)
 
         shareController.popoverPresentationController?.sourceView = anchor
