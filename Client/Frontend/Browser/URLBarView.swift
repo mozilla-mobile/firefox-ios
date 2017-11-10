@@ -162,8 +162,8 @@ class URLBarView: UIView {
         return cancelButton
     }()
     
-    var showQRScannerButton: UIButton = {
-        let button = UIButton()
+    fileprivate lazy var showQRScannerButton: InsetButton = {
+        let button = InsetButton()
         button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = "urlBar-scanQRCode"
         button.clipsToBounds = false
@@ -286,7 +286,8 @@ class URLBarView: UIView {
         
         showQRScannerButton.snp.makeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
-            make.trailing.equalTo(self).offset(-URLBarViewUX.Padding)
+            make.trailing.equalTo(self)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
     }
 
@@ -298,9 +299,7 @@ class URLBarView: UIView {
             self.locationContainer.snp.remakeConstraints { make in
                 let height = URLBarViewUX.LocationHeight + (URLBarViewUX.TextFieldBorderWidthSelected * 2)
                 make.height.equalTo(height)
-                // the offset is equal to the padding but minus the borderwidth
-                let padding = URLBarViewUX.Padding - URLBarViewUX.TextFieldBorderWidthSelected
-                make.trailing.equalTo(self.showQRScannerButton.snp.leading).offset(-padding)
+                make.trailing.equalTo(self.showQRScannerButton.snp.leading)
                 make.leading.equalTo(self.cancelButton.snp.trailing)
                 make.centerY.equalTo(self)
             }
