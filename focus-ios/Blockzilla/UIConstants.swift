@@ -123,7 +123,7 @@ struct UIConstants {
         static let aboutSafariBullet1 = NSLocalizedString("About.safariBullet1", value: "Block trackers for improved privacy", comment: "Label on About screen")
         static let aboutSafariBullet2 = NSLocalizedString("About.safariBullet2", value: "Block Web fonts to reduce page size", comment: "Label on About screen")
         static let aboutTitle = NSLocalizedString("About.screenTitle", value: "About Firefox Focus", comment: "Title for the About screen")
-        static let whatsNewTitle = NSLocalizedString("Settings.whatsNewTitle", value: "What's New", comment: "Title for What's new screen")
+        static let whatsNewTitle = NSLocalizedString("Settings.whatsNewTitle", value: "What’s New", comment: "Title for What's new screen")
         static let aboutTopLabel = NSLocalizedString("About.topLabel", value: "%@ puts you in control.", comment: "Label on About screen")
         static let browserBack = NSLocalizedString("Browser.backLabel", value: "Back", comment: "Accessibility label for the back button")
         static let browserForward = NSLocalizedString("Browser.forwardLabel", value: "Forward", comment: "Accessibility label for the forward button")
