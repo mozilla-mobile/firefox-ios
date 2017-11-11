@@ -13,6 +13,7 @@ protocol URLBarDelegate: class {
     func urlBarDidActivate(_ urlBar: URLBar)
     func urlBarDidDeactivate(_ urlBar: URLBar)
     func urlBarDidFocus(_ urlBar: URLBar)
+    func urlBarDidPressScrollTop(_: URLBar)
     func urlBarDidDismiss(_ urlBar: URLBar)
     func urlBarDidPressDelete(_ urlBar: URLBar)
     func urlBarDidTapShield(_ urlBar: URLBar)
@@ -52,9 +53,13 @@ class URLBar: UIView {
     private var isEditingConstraints = [Constraint]()
     private var preActivationConstraints = [Constraint]()
     private var postActivationConstraints = [Constraint]()
-    
+
     convenience init() {
         self.init(frame: CGRect.zero)
+
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
+        singleTap.numberOfTapsRequired = 1
+        addGestureRecognizer(singleTap)
 
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
@@ -402,7 +407,8 @@ class URLBar: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // Since the URL text field is smaller and centered on iPads, make sure
         // that touching the surrounding area will trigger editing.
-        if let touch = touches.first {
+        if urlText.isUserInteractionEnabled,
+            let touch = touches.first {
             let point = touch.location(in: urlTextContainer)
             if urlTextContainer.bounds.contains(point) {
                 urlText.becomeFirstResponder()
@@ -538,6 +544,18 @@ class URLBar: UIView {
         }
     }
 
+    @objc private func didSingleTap(sender: UITapGestureRecognizer) {
+        if urlText.isUserInteractionEnabled {
+            let y = sender.location(in: self).y
+            guard y < 10 else { return }
+            delegate?.urlBarDidPressScrollTop(self)
+        } else {
+            let y = sender.location(in: collapsedUrlAndLockWrapper).y
+            guard y < 18 else { return }
+            delegate?.urlBarDidPressScrollTop(self)
+        }
+    }
+
     /// Show the URL toolset buttons if we're on iPad/landscape and not editing; hide them otherwise.
     /// This method is intended to be called inside `UIView.animate` block.
     private func updateToolsetConstraints() {
@@ -617,7 +635,7 @@ class URLBar: UIView {
     }
 
     func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
-        self.isUserInteractionEnabled = (expandAlpha == 1)
+        self.urlText.isUserInteractionEnabled = (expandAlpha == 1)
 
         deleteButton.alpha = expandAlpha
         urlTextContainer.alpha = expandAlpha

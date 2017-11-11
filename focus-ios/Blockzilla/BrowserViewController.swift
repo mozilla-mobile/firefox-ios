@@ -473,6 +473,16 @@ extension BrowserViewController: URLBarDelegate {
         overlayView.setSearchQuery(query: text, animated: true)
     }
 
+    func urlBarDidPressScrollTop(_: URLBar) {
+        guard !urlBar.isEditing else { return }
+
+        switch scrollBarState {
+        case .expanded:  webViewController.scrollView.setContentOffset(.zero, animated: true)
+        case .collapsed: showToolbars()
+        default: break
+        }
+    }
+
     func urlBar(_ urlBar: URLBar, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
 
