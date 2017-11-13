@@ -91,8 +91,8 @@ class QRCodeViewController: UIViewController {
         if getAuthorizationStatus != AVAuthorizationStatus.denied {
             setupCamera()
         } else {
-            let alert = UIAlertController(title: "", message: NSLocalizedString("Please allow Firefox to access your device’s camera in ‘Settings’ -> ‘Privacy’ -> ‘Camera’.", comment: "Text of the prompt user to setup the camera authorization."), preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK button"), style: .default, handler: nil))
+            let alert = UIAlertController(title: "", message: Strings.ScanQRCodePermissionErrorMessage, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
 
@@ -204,6 +204,7 @@ class QRCodeViewController: UIViewController {
 
     func setupCamera() {
         guard let captureDevice = self.captureDevice else {
+            dismiss(animated: false)
             return
         }
 
@@ -258,8 +259,8 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         if metadataObjects == nil || metadataObjects.count == 0 {
             self.captureSession.stopRunning()
-            let alert = UIAlertController(title: "", message: NSLocalizedString("The data is invalid", comment: "Text of the prompt user the data is invalid"), preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "OK button"), style: .default, handler: { (UIAlertAction) in
+            let alert = UIAlertController(title: "", message: Strings.ScanQRCodeInvalidDataErrorMessage, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: { (UIAlertAction) in
                 self.captureSession.startRunning()
             }))
             self.present(alert, animated: true, completion: nil)
@@ -267,8 +268,7 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             self.captureSession.stopRunning()
             stopScanLineAnimation()
             self.dismiss(animated: true, completion: {
-                guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
-                    let qrCodeDelegate = self.qrCodeDelegate else {
+                guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject, let qrCodeDelegate = self.qrCodeDelegate else {
                         Sentry.shared.sendWithStacktrace(message: "Unable to scan QR code", tag: .general)
                         return
                 }
