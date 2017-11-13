@@ -928,7 +928,6 @@ class BrowserViewController: UIViewController {
 
     func updateUIForReaderHomeStateForTab(_ tab: Tab) {
         updateURLBarDisplayURL(tab)
-        scrollController.showToolbars(animated: false)
 
         if let url = tab.url {
             if url.isReaderModeURL {
@@ -1140,6 +1139,7 @@ class BrowserViewController: UIViewController {
 
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
         tabManager.expireSnackbars()
+        scrollController.showToolbars(animated: false)
 
         guard let webView = tab.webView else {
             print("Cannot navigate in tab without a webView")
