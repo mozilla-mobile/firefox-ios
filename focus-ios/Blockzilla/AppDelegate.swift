@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let prefWhatsNewCounter = "WhatsNewCounter"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
         setupContinuousDeploymentTooling()
         setupErrorTracking()
         setupTelemetry()
