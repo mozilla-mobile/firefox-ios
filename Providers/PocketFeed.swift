@@ -11,7 +11,7 @@ import Storage
 private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
 private let PocketGlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
 private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in milliseconds
-private let SupportedLocales = ["en_US", "en_GB", "en_CA", "de_DE", "de_AT", "de_CH"]
+private let SupportedLocales = ["en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
 
 /*s
  The Pocket class is used to fetch stories from the Pocked API.
