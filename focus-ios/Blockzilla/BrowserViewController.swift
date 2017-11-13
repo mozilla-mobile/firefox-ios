@@ -477,7 +477,12 @@ extension BrowserViewController: URLBarDelegate {
         guard !urlBar.isEditing else { return }
 
         switch scrollBarState {
-        case .expanded:  webViewController.scrollView.setContentOffset(.zero, animated: true)
+        case .expanded:
+            // Just scroll the vertical position so the page doesn't appear under
+            // the notch on the iPhone X
+            var point = webViewController.scrollView.contentOffset
+            point.y = 0
+            webViewController.scrollView.setContentOffset(point, animated: true)
         case .collapsed: showToolbars()
         default: break
         }
