@@ -39,8 +39,9 @@ let NewTabChoiceSettings = "NewTabChoiceSettings"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
+// This list should only be for settings screens that can be navigated to
+// without changing userState. i.e. don't need conditional edges to be available
 let allSettingsScreens = [
-    SyncSettings,
     SearchSettings,
     AddCustomSearchSettings,
     NewTabSettings,
@@ -155,6 +156,9 @@ class FxUserState: UserState {
     var nightMode = false
 
     var pocketInNewTab = false
+
+    var fxaUsername: String? = nil
+    var fxaPassword: String? = nil
 }
 
 fileprivate let defaultURL = "https://www.mozilla.org/en-US/book/"
@@ -216,7 +220,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
 
     // Some internally useful screen states.
     let WebPageLoading = "WebPageLoading"
-    let SettingsScreen2 = "\(SettingsScreen)-middle"
 
     map.addScreenState(NewTabScreen) { screenState in
         screenState.noop(to: HomePanelsScreen)
@@ -351,26 +354,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
     map.addScreenState(SettingsScreen) { screenState in
         let table = app.tables.element(boundBy: 0)
 
-        screenState.tap(table.cells["Sync"], to: SyncSettings)
+        screenState.tap(table.cells["Sync"], to: SyncSettings, if: "fxaUsername != nil")
         screenState.tap(table.cells["Search"], to: SearchSettings)
         screenState.tap(table.cells["NewTab"], to: NewTabSettings)
         screenState.tap(table.cells["Homepage"], to: HomePageSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
-        screenState.swipeUp(table, to: SettingsScreen2)
-
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(SettingsScreen2) { screenState in
-        let table = app.tables.element(boundBy: 0)
-        screenState.swipeDown(table, to: SettingsScreen)
-
         screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         screenState.tap(table.cells["Logins"], to: LoginsSettings)
         screenState.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
-
         screenState.tap(table.cells["TrackingProtection"], to: TrackingProtectionSettings)
         screenState.tap(table.cells["ShowTour"], to: ShowTourInSettings)
+
+        screenState.backAction = navigationControllerBackAction
     }
 
     map.addScreenState(SearchSettings) { screenState in
