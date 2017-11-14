@@ -36,6 +36,9 @@ let WebLinkContextMenu = "WebLinkContextMenu"
 let CloseTabMenu = "CloseTabMenu"
 let AddCustomSearchSettings = "AddCustomSearchSettings"
 let NewTabChoiceSettings = "NewTabChoiceSettings"
+let DisablePasscodeSettings = "DisablePasscodeSettings"
+let ChangePasscodeSettings = "ChangePasscodeSettings"
+let LockedLoginsSettings = "LockedLoginsSettings"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -121,6 +124,13 @@ class Action {
 
     static let SetPasscode = "SetPasscode"
     static let SetPasscodeTypeOnce = "SetPasscodeTypeOnce"
+    static let DisablePasscode = "DisablePasscode"
+    static let LoginPasscodeTypeIncorrectOne = "LoginPasscodeTypeIncorrectOne"
+    static let ChangePasscode = "ChangePasscode"
+    static let ChangePasscodeTypeOnce = "ChangePasscodeTypeOnce"
+    static let ConfirmPasscodeToChangePasscode = "ConfirmPasscodeToChangePasscode"
+    static let UnlockLoginsSettings = "UnlockLoginsSettings"
+    static let DisablePasscodeTypeIncorrectPasscode = "DisablePasscodeTypeIncorrectPasscode"
 
     static let TogglePocketInNewTab = "TogglePocketInNewTab"
 
@@ -153,6 +163,7 @@ class FxUserState: UserState {
 
     var passcode: String? = nil
     var newPasscode: String = "111111"
+    var wrongPasscode: String = "111112"
 
     var noImageMode = false
     var nightMode = false
@@ -180,6 +191,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
             app/*@START_MENU_TOKEN@*/.otherElements["PopoverDismissRegion"]/*[[".otherElements[\"dismiss popup\"]",".otherElements[\"PopoverDismissRegion\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         } else {
             app.buttons["PhotonMenu.cancel"].tap()
+        }
+    }
+
+    let cancelTypePasscode = {
+        if isTablet {
+            if (app.buttons["Cancel"].exists){
+                app.buttons["Cancel"].tap()
+            } else {
+                app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+            }
+        } else {
+            app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
         }
     }
 
@@ -368,7 +391,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         screenState.tap(table.cells["Homepage"], to: HomePageSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
-        screenState.tap(table.cells["Logins"], to: LoginsSettings)
+        screenState.tap(table.cells["Logins"], to: LoginsSettings, if: "passcode == nil")
+        screenState.tap(table.cells["Logins"], to: LockedLoginsSettings, if: "passcode != nil")
         screenState.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
         screenState.tap(table.cells["TrackingProtection"], to: TrackingProtectionSettings)
         screenState.tap(table.cells["ShowTour"], to: ShowTourInSettings)
@@ -413,7 +437,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         screenState.backAction = navigationControllerBackAction
         let table = app.tables.element(boundBy: 0)
         screenState.tap(table.cells["TurnOnPasscode"], to: SetPasscodeScreen, if: "passcode == nil")
+        screenState.tap(table.cells["TurnOffPasscode"], to: DisablePasscodeSettings, if: "passcode != nil")
         screenState.tap(table.cells["PasscodeInterval"], to: PasscodeIntervalSettings, if: "passcode != nil")
+        screenState.tap(table.cells["ChangePasscode"], to: ChangePasscodeSettings, if: "passcode != nil")
     }
 
     func typePasscode(_ passCode: String) {
@@ -432,6 +458,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         screenState.gesture(forAction: Action.SetPasscodeTypeOnce) { userState in
             typePasscode(userState.newPasscode)
         }
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(DisablePasscodeSettings) { screenState in
+        screenState.gesture(forAction: Action.DisablePasscode, transitionTo: PasscodeSettings) { userState in
+            if let passcode = userState.passcode {
+                typePasscode(passcode)
+            }
+        }
+
+        screenState.gesture(forAction: Action.DisablePasscodeTypeIncorrectPasscode) { userState in
+            typePasscode(userState.wrongPasscode)
+        }
+        screenState.backAction = navigationControllerBackAction
     }
 
     map.addScreenState(PasscodeIntervalSettings) { screenState in
@@ -443,8 +483,45 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         screenState.backAction = navigationControllerBackAction
     }
 
+    map.addScreenState(ChangePasscodeSettings) { screenState in
+        screenState.gesture(forAction: Action.ChangePasscode, transitionTo: PasscodeSettings) { userState in
+            if let passcode = userState.passcode {
+                typePasscode(passcode)
+                typePasscode(userState.newPasscode)
+                typePasscode(userState.newPasscode)
+                userState.passcode = userState.newPasscode
+            }
+        }
+
+        screenState.gesture(forAction: Action.ConfirmPasscodeToChangePasscode) { userState in
+            if let passcode = userState.passcode {
+                typePasscode(passcode)
+            }
+        }
+        screenState.gesture(forAction: Action.ChangePasscodeTypeOnce) { userState in
+            typePasscode(userState.newPasscode)
+        }
+        screenState.backAction = navigationControllerBackAction
+    }
+
     map.addScreenState(LoginsSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(LockedLoginsSettings) { screenState in
+        screenState.backAction = cancelTypePasscode
+        screenState.dismissOnUse = true
+
+        screenState.gesture(forAction: Action.LoginPasscodeTypeIncorrectOne) { userState in
+            typePasscode(userState.wrongPasscode)
+        }
+
+        // Gesture to get to the protected screen.
+        screenState.gesture(forAction: Action.UnlockLoginsSettings, transitionTo: LoginsSettings) { userState in
+            if let passcode = userState.passcode {
+                typePasscode(passcode)
+            }
+        }
     }
 
     map.addScreenState(ClearPrivateDataSettings) { screenState in
