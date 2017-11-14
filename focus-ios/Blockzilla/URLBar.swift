@@ -81,6 +81,7 @@ class URLBar: UIView {
         shieldIcon.contentMode = .center
         shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
 
         let gestureRecognizer = UITapGestureRecognizer()
         gestureRecognizer.numberOfTapsRequired = 1
