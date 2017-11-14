@@ -153,6 +153,27 @@ class TestSwiftData: XCTestCase {
         XCTAssertNil(verifyData(SwiftData(filename: path!, prevKey: "Secret2", schema: BrowserSchema(), files: files)), "Decrypted database")
     }
 
+    func testNulls() {
+        guard let db = swiftData else {
+            XCTFail("DB not open")
+            return
+        }
+        db.withConnection(SwiftData.Flags.readWriteCreate) { db in
+            try! db.executeChange("CREATE TABLE foo ( bar TEXT, baz INTEGER )")
+            try! db.executeChange("INSERT INTO foo VALUES (NULL, 1), ('here', 2)")
+            let shouldBeString = db.executeQuery("SELECT bar FROM foo WHERE baz = 2", factory: { (row) in row["bar"] }).asArray()[0]
+            guard let s = shouldBeString as? String else {
+                XCTFail("Couldn't cast.")
+                return
+            }
+            XCTAssertEqual(s, "here")
+
+            let shouldBeNull = db.executeQuery("SELECT bar FROM foo WHERE baz = 1", factory: { (row) in row["bar"] }).asArray()[0]
+            XCTAssertNil(shouldBeNull as? String)
+            XCTAssertNil(shouldBeNull)
+        }.succeeded()
+    }
+
     func testArrayCursor() {
         let data = ["One", "Two", "Three"]
         let t = ArrayCursor<String>(data: data)
