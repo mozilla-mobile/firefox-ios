@@ -5,6 +5,15 @@
 import XCTest
 
 class PhotonActionSheetTest: BaseTestCase {
+    var navigator: Navigator!
+    var app: XCUIApplication!
+
+    override func setUp() {
+        super.setUp()
+        app = XCUIApplication()
+        navigator = createScreenGraph(app).navigator(self)
+    }
+
     func testPinToTop() {
         navigator.openURL(urlString: "http://www.yahoo.com")
         waitUntilPageLoad()
