@@ -192,9 +192,10 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Open in New Private Tab")
 
         // Check that two tabs are open and one of them is the default top site one
-        navigator.goto(PrivateTabTray)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+
         waitforExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
-        let numTabsOpen = app.collectionViews.cells.count
+        let numTabsOpen = userState.numTabs
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
 
