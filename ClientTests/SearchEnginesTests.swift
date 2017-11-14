@@ -7,7 +7,7 @@ import Foundation
 import XCTest
 import Shared
 
-private let DefaultSearchEngineName = "Yahoo"
+private let DefaultSearchEngineName = "Google"
 private let ExpectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "Twitter", "Wikipedia", "Yahoo"]
 
 class SearchEnginesTests: XCTestCase {

@@ -1,5 +1,5 @@
 bing
 duckduckgo
-google-nocodes
-google:hidden
+google-nocodes:hidden
+google
 wikipedia-zh-TW
