@@ -105,19 +105,6 @@ public struct AppConstants {
         #endif
     }()
 
-    /// Toggles reporting our ad-hoc bookmark sync ping
-    public static let MOZ_ADHOC_SYNC_REPORTING: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return false
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
     /// Toggles the ability to add a custom search engine
     public static let MOZ_CUSTOM_SEARCH_ENGINE: Bool = {
         #if MOZ_CHANNEL_RELEASE
