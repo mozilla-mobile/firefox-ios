@@ -728,8 +728,8 @@ private class URLTextField: AutocompleteTextField {
 
 class TrackingProtectionBadge: UIView {
     let counterLabel = UILabel()
-    let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off"))
-    let trackingProtectionCounter = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_counter"))
+    let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off").imageFlippedForRightToLeftLayoutDirection())
+    let trackingProtectionCounter = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_counter").imageFlippedForRightToLeftLayoutDirection())
 
     override init(frame: CGRect) {
         super.init(frame: frame)

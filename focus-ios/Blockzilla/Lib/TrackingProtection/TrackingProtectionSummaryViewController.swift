@@ -286,7 +286,7 @@ class TrackingProtectionBreakdownView: UIView {
 }
 
 class TrackingProtectionToggleView: UIView {
-    private let icon = UIImageView(image: #imageLiteral(resourceName: "tracking_protection"))
+    private let icon = UIImageView(image: #imageLiteral(resourceName: "tracking_protection").imageFlippedForRightToLeftLayoutDirection())
     private let label = UILabel(frame: .zero)
     let toggle = UISwitch()
     private let borderView = UIView()
