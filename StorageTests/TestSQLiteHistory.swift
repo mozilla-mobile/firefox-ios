@@ -969,19 +969,19 @@ class TestSQLiteHistory: XCTestCase {
         
         XCTAssertTrue(insertDeferred.value.isSuccess)
 
-        // Now insert it again. This should update the domain
+        // Now insert it again. This should update the domain.
         history.addLocalVisit(SiteVisit(site: site, date: Date.nowMicroseconds(), type: VisitType.link)).succeeded()
 
-        // DomainID isn't normally exposed, so we manually query to get it
-        let resultsDeferred = db.withConnection { connection -> Cursor<Int> in
+        // domain_id isn't normally exposed, so we manually query to get it.
+        let resultsDeferred = db.withConnection { connection -> Cursor<Int?> in
             let sql = "SELECT domain_id FROM \(TableHistory) WHERE url = ?"
             let args: Args = [site.url]
-            return connection.executeQuery(sql, factory: IntFactory, withArgs: args)
+            return connection.executeQuery(sql, factory: { $0[0] as? Int }, withArgs: args)
         }
         
         let results = resultsDeferred.value.successValue!
-        
-        XCTAssertNotEqual(results[0]!, -1, "Domain id was updated")
+        let domain = results[0]!         // Unwrap to get the first item from the cursor.
+        XCTAssertNil(domain)
     }
 
     func testDomains() {
