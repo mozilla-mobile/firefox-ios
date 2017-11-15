@@ -270,10 +270,8 @@ class Tab: NSObject {
     }
 
     var displayTitle: String {
-        if let title = webView?.title {
-            if !title.isEmpty {
-                return title
-            }
+        if let title = webView?.title, !title.isEmpty {
+            return title
         }
 
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
@@ -404,20 +402,12 @@ class Tab: NSObject {
 
     func removeAllSnackbars() {
         // Enumerate backwards here because we'll remove items from the list as we go.
-        for i in (0..<bars.count).reversed() {
-            let bar = bars[i]
-            removeSnackbar(bar)
-        }
+        bars.reversed().forEach { removeSnackbar($0) }
     }
 
     func expireSnackbars() {
         // Enumerate backwards here because we may remove items from the list as we go.
-        for i in (0..<bars.count).reversed() {
-            let bar = bars[i]
-            if !bar.shouldPersist(self) {
-                removeSnackbar(bar)
-            }
-        }
+        bars.reversed().filter({ !$0.shouldPersist(self) }).forEach({ removeSnackbar($0) })
     }
 
     func setScreenshot(_ screenshot: UIImage?, revUUID: Bool = true) {
