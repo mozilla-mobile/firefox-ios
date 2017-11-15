@@ -29,7 +29,7 @@ class CollapsedURLTest: BaseTestCase {
         waitforExistence(element: app.webViews.otherElements["Licenses"])
         let webView = app.webViews.children(matching: .other).element
         webView.swipeUp()
-       
+        webView.swipeUp()
         let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
         waitforExistence(element: collapsedTruncatedurltextTextView)
         

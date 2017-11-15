@@ -51,12 +51,9 @@ class AsianLocaleTest: BaseTestCase {
             waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
         }
         
-		// Erase the history
+        // Erase the history, check it is on the initial page
 		app.buttons["ERASE"].tap()
-        waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
-		
-		// Check it is on the initial page
-		XCTAssertTrue(app.staticTexts["Browse. Erase. Repeat."].exists)
-		XCTAssertTrue(app.staticTexts["Automatic private browsing."].exists)
+        waitforExistence(element: app.staticTexts["Browse. Erase. Repeat."])
+        waitforExistence(element: app.staticTexts["Automatic private browsing."])
 	}
 }
