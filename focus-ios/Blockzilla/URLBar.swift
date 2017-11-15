@@ -228,6 +228,7 @@ class URLBar: UIView {
 
         shieldIcon.snp.makeConstraints { make in
             make.top.leading.bottom.equalToSuperview()
+            make.width.equalTo(24).priority(900)
 
             hideShieldConstraints.append(contentsOf:[
                 make.width.equalTo(0).constraint
@@ -247,7 +248,10 @@ class URLBar: UIView {
             make.top.bottom.equalTo(textAndLockContainer)
 
             make.leading.equalTo(textAndLockContainer).inset(UIConstants.layout.lockIconInset).priority(999)
-            make.trailing.equalTo(urlText.snp.leading).inset(-UIConstants.layout.lockIconInset).priority(999)
+
+            // Account for the content inset of the URLTextField to balance
+            // the spacing around the lock icon
+            make.trailing.equalTo(urlText.snp.leading).inset(-(UIConstants.layout.lockIconInset - 4)).priority(999)
 
             hideLockConstraints.append(contentsOf: [
                 make.leading.equalTo(textAndLockContainer.snp.leading).constraint,
@@ -464,6 +468,7 @@ class URLBar: UIView {
             } else {
                 self.hideShieldConstraints.forEach { $0.activate() }
             }
+            self.layoutIfNeeded()
         }
 
     }
@@ -730,6 +735,7 @@ class TrackingProtectionBadge: UIView {
     let counterLabel = UILabel()
     let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off").imageFlippedForRightToLeftLayoutDirection())
     let trackingProtectionCounter = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_counter").imageFlippedForRightToLeftLayoutDirection())
+    let counterLabelWrapper = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -740,8 +746,8 @@ class TrackingProtectionBadge: UIView {
     func setupViews() {
         counterLabel.backgroundColor = .clear
         counterLabel.textColor = UIColor.white
-        counterLabel.textAlignment = .left
-        counterLabel.font = UIFont.boldSystemFont(ofSize: 10)
+        counterLabel.textAlignment = .center
+        counterLabel.font = UIFont.boldSystemFont(ofSize: 8)
         counterLabel.text = "0"
         trackingProtectionOff.alpha = 0
         
@@ -749,13 +755,15 @@ class TrackingProtectionBadge: UIView {
         addSubview(trackingProtectionCounter)
         counterLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         counterLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        addSubview(counterLabel)
+        counterLabelWrapper.addSubview(counterLabel)
+        addSubview(counterLabelWrapper)
 
         trackingProtectionCounter.setContentHuggingPriority(.required, for: .horizontal)
         trackingProtectionCounter.snp.makeConstraints { make in
             make.leading.equalToSuperview().priority(1000)
             make.centerY.equalToSuperview().priority(500)
-            make.trailing.equalToSuperview().priority(500)
+            make.width.equalTo(24).priority(500)
+            make.trailing.equalToSuperview()
         }
 
         trackingProtectionOff.setContentHuggingPriority(.required, for: .horizontal)
@@ -763,11 +771,17 @@ class TrackingProtectionBadge: UIView {
             make.leading.equalToSuperview().priority(1000)
             make.centerY.equalToSuperview().priority(500)
         }
-        
+
+        counterLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        counterLabelWrapper.snp.makeConstraints { make in
+            make.width.height.equalTo(12)
+            make.bottom.equalTo(trackingProtectionCounter).offset(-2).priority(500)
+            make.leading.equalTo(trackingProtectionCounter).offset(13).priority(500)
+        }
+
         counterLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(trackingProtectionCounter).offset(-3).priority(500)
-            make.leading.equalTo(trackingProtectionCounter).offset(15).priority(1000)
-            make.trailing.equalTo(self)
+            make.centerY.centerX.equalToSuperview().priority(500)
+            make.leading.greaterThanOrEqualToSuperview().offset(2)
         }
     }
     
@@ -782,6 +796,7 @@ class TrackingProtectionBadge: UIView {
             trackingProtectionCounter.alpha = 1
             counterLabel.alpha = 1
             counterLabel.text = String(info.total)
+            counterLabel.sizeToFit()
         default:
             trackingProtectionOff.alpha = 1
             trackingProtectionCounter.alpha = 0
