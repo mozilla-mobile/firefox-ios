@@ -1537,6 +1537,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: toggleActionTitle, style: .default, handler: { _ in tab.toggleDesktopSite() }))
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
+        if #available(iOS 11, *) {
+            if let helper = tab.contentBlocker as? ContentBlockerHelper {
+                let state = helper.userOverrideForTrackingProtection
+                if state != .disallowUserOverride {
+                    let title = state == .forceDisabled ? Strings.TrackingProtectionReloadWith : Strings.TrackingProtectionReloadWithout
+                    controller.addAction(UIAlertAction(title: title, style: .default, handler: {_ in
+                        helper.overridePrefsAndReloadTab(enableTrackingProtection: state == .forceDisabled)
+                    }))
+                }
+            }
+        }
         controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
         controller.popoverPresentationController?.sourceRect = button.frame
         present(controller, animated: true, completion: nil)
