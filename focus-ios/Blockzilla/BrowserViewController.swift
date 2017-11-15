@@ -664,12 +664,8 @@ extension BrowserViewController: WebControllerDelegate {
         // from catching the global progress events.
         guard homeView == nil else { return }
 
-        if estimatedProgress == 0.1 {
-            urlBar.progressBar.animateHidden(false, duration: UIConstants.layout.progressVisibilityAnimationDuration)
-            urlBar.progressBar.animateGradient()
-            return
-        }
-
+        urlBar.progressBar.alpha = 1
+        urlBar.progressBar.isHidden = false
         urlBar.progressBar.setProgress(Float(estimatedProgress), animated: true)
     }
 

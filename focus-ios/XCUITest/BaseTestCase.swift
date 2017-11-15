@@ -130,8 +130,7 @@ class BaseTestCase: XCTestCase {
         let finishLoadingTimeout: TimeInterval = 30
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
-        expectation(for: NSPredicate(format: "exists = true"), evaluatedWith: progressIndicator, handler: nil)
-        expectation(for: NSPredicate(format: "value BEGINSWITH '0'"), evaluatedWith: progressIndicator, handler: nil)
+        expectation(for: NSPredicate(format: "exists != true"), evaluatedWith: progressIndicator, handler: nil)
         waitForExpectations(timeout: finishLoadingTimeout, handler: nil)
     }
 }
