@@ -134,6 +134,9 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test13ReloadButtonContextMenu() {
+        navigator.performAction(Action.ToggleTrackingProtectionSettingAlwaysOn)
+        navigator.goto(BrowserTab)
+
         navigator.openURL(loremIpsumURL)
         navigator.toggleOff(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
         navigator.goto(ReloadLongPressMenu)
@@ -141,7 +144,16 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         navigator.toggleOn(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
         navigator.goto(ReloadLongPressMenu)
         snapshot("13ContextMenuReloadButton-02", waitForLoadingIndicator: false)
-        navigator.back()
+
+        navigator.performAction(Action.ToggleTrackingProtectionPerTabEnabled)
+        navigator.goto(ReloadLongPressMenu)
+
+        // Snapshot of 'Reload *with* tracking protection'
+        snapshot("13ContextMenuReloadButton-03", waitForLoadingIndicator: false)
+
+        // return to default
+        navigator.performAction(Action.ToggleTrackingProtectionSettingPrivateOnly)
+        navigator.goto(BrowserTab)
     }
 
     func test16PasscodeSettings() {

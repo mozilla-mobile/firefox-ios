@@ -123,6 +123,11 @@ class Action {
     static let SetPasscodeTypeOnce = "SetPasscodeTypeOnce"
 
     static let TogglePocketInNewTab = "TogglePocketInNewTab"
+
+    static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
+    static let ToggleTrackingProtectionSettingAlwaysOn = "ToggleTrackingProtectionSettingAlwaysOn"
+    static let ToggleTrackingProtectionSettingPrivateOnly = "ToggleTrackingProtectionSettingPrivateOnly"
+    static let ToggleTrackingProtectionSettingOff = "ToggleTrackingProtectionSettingOff"
 }
 
 private var isTablet: Bool {
@@ -161,6 +166,10 @@ class FxUserState: UserState {
     var fxaPassword: String? = nil
 
     var numTabs: Int = 0
+
+    var trackingProtectionPerTabEnabled = true
+    enum TrackingProtectionSetting : Int { case alwaysOn; case privateOnly; case off }
+    var trackingProtectionSetting = TrackingProtectionSetting.privateOnly.rawValue // NSPredicate doesn't work with enum
 }
 
 fileprivate let defaultURL = "https://www.mozilla.org/en-US/book/"
@@ -466,6 +475,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
 
     map.addScreenState(TrackingProtectionSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
+
+        screenState.tap(app.cells["Settings.TrackingProtectionOption.OnLabel"], forAction: Action.ToggleTrackingProtectionSettingAlwaysOn) { userState in
+            userState.trackingProtectionSetting = FxUserState.TrackingProtectionSetting.alwaysOn.rawValue
+        }
+
+        screenState.tap(app.cells["Settings.TrackingProtectionOption.OnInPrivateBrowsingLabel"], forAction: Action.ToggleTrackingProtectionSettingPrivateOnly) { userState in
+            userState.trackingProtectionSetting = FxUserState.TrackingProtectionSetting.privateOnly.rawValue
+        }
+
+        screenState.tap(app.cells["Settings.TrackingProtectionOption.OffLabel"], forAction: Action.ToggleTrackingProtectionSettingOff) { userState in
+            userState.trackingProtectionSetting = FxUserState.TrackingProtectionSetting.off.rawValue
+        }
     }
 
     map.addScreenState(Intro_FxASignin) { screenState in
@@ -539,6 +560,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         let rdsButton = app.sheets.element(boundBy: 0).buttons.element(boundBy: 0)
         screenState.tap(rdsButton, forAction: Action.ToggleRequestDesktopSite) { userState in
             userState.requestDesktopSite = !userState.requestDesktopSite
+        }
+
+        let trackingProtectionButton = app.sheets.element(boundBy: 0).buttons.element(boundBy: 1)
+        let tpIsOn = "trackingProtectionSetting == \(FxUserState.TrackingProtectionSetting.alwaysOn.rawValue) || (trackingProtectionSetting == \(FxUserState.TrackingProtectionSetting.privateOnly.rawValue) && isPrivate == YES)"
+        screenState.tap(trackingProtectionButton, forAction: Action.ToggleTrackingProtectionPerTabEnabled, if: tpIsOn) { userState in
+            userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
     }
 
