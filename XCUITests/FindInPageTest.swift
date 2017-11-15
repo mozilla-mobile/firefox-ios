@@ -21,27 +21,27 @@ class FindInPageTests: BaseTestCase {
         app.textFields[""].typeText("Book")
 
         // Once there are matches, test previous/next buttons
-        waitforExistence(app.staticTexts["1/5"])
-        XCTAssertTrue(app.staticTexts["1/5"].exists)
+        waitforExistence(app.staticTexts["1/6"])
+        XCTAssertTrue(app.staticTexts["1/6"].exists)
 
         let nextInPageResultButton = app.buttons["Next in-page result"]
         nextInPageResultButton.tap()
-        waitforExistence(app.staticTexts["2/5"])
-        XCTAssertTrue(app.staticTexts["2/5"].exists)
+        waitforExistence(app.staticTexts["2/6"])
+        XCTAssertTrue(app.staticTexts["2/6"].exists)
 
         nextInPageResultButton.tap()
-        waitforExistence(app.staticTexts["3/5"])
-        XCTAssertTrue(app.staticTexts["3/5"].exists)
+        waitforExistence(app.staticTexts["3/6"])
+        XCTAssertTrue(app.staticTexts["3/6"].exists)
 
         let previousInPageResultButton = app.buttons["Previous in-page result"]
         previousInPageResultButton.tap()
 
-        waitforExistence(app.staticTexts["2/5"])
-        XCTAssertTrue(app.staticTexts["2/5"].exists)
+        waitforExistence(app.staticTexts["2/6"])
+        XCTAssertTrue(app.staticTexts["2/6"].exists)
 
         previousInPageResultButton.tap()
-        waitforExistence(app.staticTexts["1/5"])
-        XCTAssertTrue(app.staticTexts["1/5"].exists)
+        waitforExistence(app.staticTexts["1/6"])
+        XCTAssertTrue(app.staticTexts["1/6"].exists)
 
         // Tapping on close dismisses the search bar
         //app.buttons["Done"].tap()
