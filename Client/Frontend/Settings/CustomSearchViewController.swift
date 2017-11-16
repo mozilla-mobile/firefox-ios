@@ -128,25 +128,26 @@ class CustomSearchViewController: SettingsTableViewController {
             return URL(string: string)
         }
 
-        let titleField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineTitlePlaceholder, settingIsValid: { text in
-            return text != nil && text != ""
-        }, settingDidChange: {fieldText in
-            guard let title = fieldText else {
-                return
+        let titleField = CustomSearchEngineTextView(
+            accessibilityIdentifier: "customEngineTitle",
+            autocapitalizationType: .words,
+            placeholder: Strings.SettingsAddCustomEngineTitlePlaceholder,
+            settingIsValid: { text in return text != nil && text != "" },
+            settingDidChange: { fieldText in
+                guard let title = fieldText else { return }
+                self.engineTitle = title
             }
-            self.engineTitle = title
-        })
-        titleField.textField.accessibilityIdentifier = "customEngineTitle"
+        )
 
-        let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, height: 133, settingIsValid: { text in
-            //Can check url text text validity here.
-            return true
-        }, settingDidChange: {fieldText in
-            self.urlString = fieldText
-        })
-
-        urlField.textField.autocapitalizationType = .none
-        urlField.textField.accessibilityIdentifier = "customEngineUrl"
+        let urlField = CustomSearchEngineTextView(
+            accessibilityIdentifier: "customEngineUrl",
+            autocapitalizationType: .none,
+            keyboardType: .URL,
+            placeholder: Strings.SettingsAddCustomEngineURLPlaceholder,
+            height: 133,
+            settingIsValid: { text in return true }, //Can check url text text validity here.
+            settingDidChange: { fieldText in self.urlString = fieldText }
+        )
 
         let settings: [SettingSection] = [
             SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineTitleLabel), children: [titleField]),
@@ -174,6 +175,10 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     fileprivate let TextLabelHeight: CGFloat = 44
     fileprivate var TextFieldHeight: CGFloat = 44
 
+    fileprivate let _accessibilityIdentifier: String?
+    override var accessibilityIdentifier: String? { return _accessibilityIdentifier }
+    fileprivate let autocapitalizationType: UITextAutocapitalizationType
+    fileprivate let keyboardType: UIKeyboardType
     fileprivate let defaultValue: String?
     fileprivate let placeholder: String
     fileprivate let settingDidChange: ((String?) -> Void)?
@@ -182,7 +187,19 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     let textField = UITextView()
     let placeholderLabel = UILabel()
 
-    init(defaultValue: String? = nil, placeholder: String, height: CGFloat = 44, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
+    init(
+        accessibilityIdentifier: String? = nil,
+        autocapitalizationType: UITextAutocapitalizationType = .sentences,
+        defaultValue: String? = nil,
+        keyboardType: UIKeyboardType = .default,
+        placeholder: String,
+        height: CGFloat = 44,
+        settingIsValid isValueValid: ((String?) -> Bool)? = nil,
+        settingDidChange: ((String?) -> Void)? = nil
+    ) {
+        self._accessibilityIdentifier = accessibilityIdentifier
+        self.autocapitalizationType = autocapitalizationType
+        self.keyboardType = keyboardType
         self.defaultValue = defaultValue
         self.TextFieldHeight = height
         self.settingDidChange = settingDidChange
@@ -205,7 +222,9 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         textField.font = placeholderLabel.font
 
         textField.textContainer.lineFragmentPadding = 0
-        textField.keyboardType = .URL
+        textField.accessibilityIdentifier = accessibilityIdentifier
+        textField.autocapitalizationType = autocapitalizationType
+        textField.keyboardType = keyboardType
         textField.autocorrectionType = .no
         textField.delegate = self
         cell.isUserInteractionEnabled = true
