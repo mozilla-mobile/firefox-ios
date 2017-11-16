@@ -597,7 +597,7 @@ class BookmarkFactory {
     }
 
     fileprivate class func livemarkFactory(_ row: SDRow) -> BookmarkItem {
-        let id = row["id"] as! Int
+        let id = row["id"] as? Int
         let guid = row["guid"] as! String
         let url = row["siteUri"] as! String
         let title = row["title"] as? String ?? "Livemark"       // TODO
@@ -611,7 +611,7 @@ class BookmarkFactory {
     // We ignore queries altogether inside the model factory.
     fileprivate class func queryFactory(_ row: SDRow) -> BookmarkItem {
         log.warning("Creating a BookmarkItem from a query. This is almost certainly unexpected.")
-        let id = row["id"] as! Int
+        let id = row["id"] as? Int
         let guid = row["guid"] as! String
         let title = row["title"] as? String ?? SQLiteBookmarks.defaultItemTitle
         let isEditable = row.getBoolean("isEditable")           // Defaults to false.
@@ -622,7 +622,7 @@ class BookmarkFactory {
     }
 
     fileprivate class func separatorFactory(_ row: SDRow) -> BookmarkSeparator {
-        let id = row["id"] as! Int
+        let id = row["id"] as? Int
         let guid = row["guid"] as! String
         let separator = BookmarkSeparator(guid: guid)
         separator.id = id
@@ -630,7 +630,7 @@ class BookmarkFactory {
     }
 
     fileprivate class func itemRowFactory(_ row: SDRow, forceEditable: Bool = false) -> BookmarkItem {
-        let id = row["id"] as! Int
+        let id = row["id"] as? Int
         let guid = row["guid"] as! String
         let url = row["bmkUri"] as! String
         let title = row["title"] as? String ?? url
@@ -646,7 +646,7 @@ class BookmarkFactory {
     }
 
     fileprivate class func folderFactory(_ row: SDRow) -> BookmarkFolder {
-        let id = row["id"] as! Int
+        let id = row["id"] as? Int
         let guid = row["guid"] as! String
         let isEditable = row.getBoolean("isEditable")           // Defaults to false.
         let title = titleForSpecialGUID(guid) ??
