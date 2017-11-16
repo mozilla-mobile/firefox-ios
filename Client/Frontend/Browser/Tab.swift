@@ -8,6 +8,7 @@ import Storage
 import Shared
 import SwiftyJSON
 import XCGLogger
+import MobileCoreServices
 
 private let log = Logger.browserLogger
 
@@ -175,6 +176,13 @@ class Tab: NSObject {
             self.webView = webView
             self.webView?.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
             tabDelegate?.tab?(self, didCreateWebView: webView)
+
+            if #available(iOS 11.0, *) {
+                if let first = webView.scrollView.subviews.first {
+                    first.addInteraction(UIDropInteraction(delegate: webView))
+                    webView.isUserInteractionEnabled = true
+                }
+            }
         }
     }
 
@@ -533,6 +541,57 @@ private class TabWebView: WKWebView, MenuHelperInterface {
         becomeFirstResponder()
 
         return super.hitTest(point, with: event)
+    }
+}
+
+// TODO Add some detail on how this works and why we need to do this.
+
+var fooKey = ""
+
+@available(iOS 11.0, *)
+extension TabWebView: UIDropInteractionDelegate {
+
+    func getOriginalDelegate() -> UIDropInteractionDelegate? {
+        return (self.scrollView.subviews.first?.interactions[1] as? UIDropInteraction)?.delegate
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeURL as String]) && session.items.count == 1
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        if let originalDelegate = getOriginalDelegate() {
+            let proposal = originalDelegate.dropInteraction!(interaction, sessionDidUpdate: session)
+            if proposal.operation != .cancel {
+                print("MOO The webview can handle this")
+                objc_setAssociatedObject(session, &fooKey, true, .OBJC_ASSOCIATION_RETAIN)
+                return proposal
+            }
+        }
+        print("MOO The webview can not handle this")
+        return UIDropProposal(operation: .copy)
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        // If this is supposed to be handled by WKWebView, then forward it
+        if objc_getAssociatedObject(session, &fooKey) != nil {
+            getOriginalDelegate()?.dropInteraction!(interaction, performDrop: session)
+            return
+        }
+
+        // Otherwise we handle it
+        let _ = session.loadObjects(ofClass: URL.self) { urls in
+            self.load(URLRequest(url: urls[0]))
+        }
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: UIDropSession) {
+        print("MOO sessionDidExit")
+        // TODO Remove the associated object frmo the session, just in case
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnd session: UIDropSession) {
+        print("MOO sessionDidEnd")
     }
 }
 
