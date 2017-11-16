@@ -33,7 +33,7 @@ class NavigationTest: BaseTestCase {
         }
 
         // Once an url has been open, the back button is enabled but not the forward button
-        navigator.openURL(urlString: website_1["url"]!)
+        navigator.openURL(website_1["url"]!)
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_1["value"]!)
         if iPad() {
@@ -45,7 +45,7 @@ class NavigationTest: BaseTestCase {
         }
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
-        navigator.openURL(urlString:  website_2["url"]!)
+        navigator.openURL(website_2["url"]!)
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website_2["value"]!)
         if iPad() {
@@ -115,11 +115,11 @@ class NavigationTest: BaseTestCase {
 
     func testScrollsToTopWithMultipleTabs() {
         navigator.goto(TabTray)
-        navigator.openURL(urlString: website_1["url"]!)
+        navigator.openURL(website_1["url"]!)
         waitForValueContains(app.textFields["url"], value: website_1["value"]!)
 
         // Element at the TOP. TBChanged once the web page is correclty shown
-        let topElement = app.webViews.staticTexts["Internet for people, "]
+        let topElement = app.webViews.staticTexts["The new"]
 
         // Element at the BOTTOM
         let bottomElement = app.webViews.links.staticTexts["Contact Us"]
@@ -152,17 +152,15 @@ class NavigationTest: BaseTestCase {
     }
 
     private func clearData() {
-        navigator.goto(ClearPrivateDataSettings)
-        app.tables.staticTexts["Clear Private Data"].tap()
-        app.alerts.buttons["OK"].tap()
-        navigator.goto(HomePanel_TopSites)
+        navigator.performAction(Action.AcceptClearPrivateData)
+        navigator.goto(NewTabScreen)
     }
 
     func testToggleBetweenMobileAndDesktopSiteFromSite() {
         clearData()
         let goToDesktopFromMobile = app.webViews.links.staticTexts["View classic desktop site"]
         // Open URL by default in mobile view. This web site works changing views using their links not with the menu options
-        navigator.openURL(urlString: urlAddons)
+        navigator.openURL(urlAddons, waitForLoading: false)
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: urlAddons)
         waitforExistence(goToDesktopFromMobile)
@@ -171,12 +169,12 @@ class NavigationTest: BaseTestCase {
         goToDesktopFromMobile.tap()
         waitUntilPageLoad()
 
-        let desktopViewElement = app.webViews.links.staticTexts["View Mobile Site"]
+        let desktopViewElement = app.webViews.links.staticTexts["View the new site"]
         waitforExistence(desktopViewElement)
         XCTAssertTrue (desktopViewElement.exists, "Desktop view is not available")
 
         // From the website go back to Mobile view
-        app.webViews.links.staticTexts["View Mobile Site"].tap()
+        app.webViews.links.staticTexts["View the new site"].tap()
         waitUntilPageLoad()
 
         let mobileViewElement = app.webViews.links.staticTexts["View classic desktop site"]
@@ -186,7 +184,7 @@ class NavigationTest: BaseTestCase {
 
     func testToggleBetweenMobileAndDesktopSiteFromMenu() {
         clearData()
-        navigator.openURL(urlString: urlGoogle)
+        navigator.openURL(urlGoogle)
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "google")
         
@@ -216,7 +214,7 @@ class NavigationTest: BaseTestCase {
     
     func testNavigationPreservesDesktopSiteOnSameHost() {
         clearData()
-        navigator.openURL(urlString: urlGoogle)
+        navigator.openURL(urlGoogle)
         waitUntilPageLoad()
 
         // Mobile view by default, desktop view should be available
@@ -235,7 +233,7 @@ class NavigationTest: BaseTestCase {
 
     func testReloadPreservesMobileOrDesktopSite() {
         clearData()
-        navigator.openURL(urlString: urlGoogle)
+        navigator.openURL(urlGoogle)
         waitUntilPageLoad()
 
         // Mobile view by default, desktop view should be available

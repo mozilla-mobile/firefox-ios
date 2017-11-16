@@ -123,6 +123,8 @@ class Action {
     static let SetPasscodeTypeOnce = "SetPasscodeTypeOnce"
 
     static let TogglePocketInNewTab = "TogglePocketInNewTab"
+
+    static let AcceptClearPrivateData = "AcceptClearPrivateData"
 }
 
 private var isTablet: Bool {
@@ -442,6 +444,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
     }
 
     map.addScreenState(ClearPrivateDataSettings) { screenState in
+        screenState.gesture(forAction: Action.AcceptClearPrivateData) { userState in
+            app.tables.cells["ClearPrivateData"].tap()
+            app.alerts.buttons["OK"].tap()
+        }
         screenState.backAction = navigationControllerBackAction
     }
 
