@@ -129,6 +129,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
+                ImportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
                 EnableBookmarkMergingSetting(settings: self),
                 ForceCrashSetting(settings: self)

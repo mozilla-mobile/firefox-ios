@@ -78,25 +78,39 @@ open class FileAccessor {
         try FileManager.default.moveItem(atPath: fromPath, toPath: toPath.path)
     }
 
-    open func copyMatching(fromRelativeDirectory relativePath: String, toAbsoluteDirectory absolutePath: String, matching: (String) -> Bool) throws {
+    fileprivate func copyMatching(fromDirectory pathURL: URL, toDirectory destURL: URL, matching: (String) -> Bool) throws {
         let fileManager = FileManager.default
-        let pathURL = URL(fileURLWithPath: rootPath).appendingPathComponent(relativePath)
         let path = pathURL.path
-        let destURL = URL(fileURLWithPath: absolutePath, isDirectory: true)
-
         let files = try fileManager.contentsOfDirectory(atPath: path)
         for file in files {
             if !matching(file) {
                 continue
             }
 
-            let from = pathURL.appendingPathComponent(file, isDirectory: false).path
-            let to = destURL.appendingPathComponent(file, isDirectory: false).path
+            let from = pathURL.appendingPathComponent(file, isDirectory: false)
+            let to = destURL.appendingPathComponent(file, isDirectory: false)
             do {
-                try fileManager.copyItem(atPath: from, toPath: to)
+                if fileManager.fileExists(atPath: to.path) {
+                    _ = try fileManager.replaceItemAt(to, withItemAt: from)
+                } else {
+                    try fileManager.copyItem(atPath: from.path, toPath: to.path)
+                }
             } catch {
+                print("Error replacing \(file)")
             }
         }
+    }
+
+    open func copyMatching(fromRelativeDirectory relativePath: String, toAbsoluteDirectory absolutePath: String, matching: (String) -> Bool) throws {
+        let pathURL = URL(fileURLWithPath: rootPath).appendingPathComponent(relativePath)
+        let destURL = URL(fileURLWithPath: absolutePath, isDirectory: true)
+        try copyMatching(fromDirectory: pathURL, toDirectory: destURL, matching: matching)
+    }
+
+    open func copyMatching(fromAbsoluteDirectory absolutePath: String, toRelativeDirectory relativePath: String, matching: (String) -> Bool) throws {
+        let pathURL = URL(fileURLWithPath: absolutePath, isDirectory: true)
+        let destURL = URL(fileURLWithPath: rootPath).appendingPathComponent(relativePath)
+        try copyMatching(fromDirectory: pathURL, toDirectory: destURL, matching: matching)
     }
 
     open func copy(_ fromRelativePath: String, toAbsolutePath: String) throws -> Bool {
