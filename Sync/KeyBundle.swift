@@ -62,6 +62,7 @@ open class KeyBundle: Hashable {
         let data = NSMutableData(bytes: result, length: digestLen)
 
         result.deinitialize()
+        result.deallocate(capacity: digestLen)
         return data as Data
     }
 
@@ -76,6 +77,7 @@ open class KeyBundle: Hashable {
         }
 
         result.deinitialize()
+        result.deallocate(capacity: digestLen)
         return String(hash)
     }
 
