@@ -5,6 +5,10 @@
 # that we have some insight in beta usage.
 #
 
+FocusEnterprise="Focus (Enterprise)"
+FocusRelease="Focus"
+KlarRelease="Klar"
+
 if [ "$BUDDYBUILD_SCHEME" == FocusEnterprise ]; then
   echo "Setting Adjust token to SANDBOX for $BUDDYBUILD_SCHEME"
   /usr/libexec/PlistBuddy -c "Set AppToken $ADJUST_TOKEN_RELEASE" "$BUDDYBUILD_WORKSPACE/Blockzilla/Adjust-Focus.plist"
