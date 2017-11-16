@@ -9,10 +9,10 @@ class PrivateModeButton: ToggleButton, Themeable {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
-        self.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
+        accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
+        accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
         let maskImage = UIImage(named: "smallPrivateMask")?.withRenderingMode(.alwaysTemplate)
-        self.setImage(maskImage, for: UIControlState())
+        setImage(maskImage, for: UIControlState())
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -20,10 +20,10 @@ class PrivateModeButton: ToggleButton, Themeable {
     }
     
     func applyTheme(_ theme: Theme) {
-        self.tintColor = UIColor.Browser.Tint.colorFor(theme)
-        self.imageView?.tintColor = self.tintColor
-        self.isSelected = theme == .Private
-        self.accessibilityValue = self.isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+        tintColor = UIColor.Browser.Tint.colorFor(theme)
+        imageView?.tintColor = tintColor
+        isSelected = theme == .Private
+        accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
     }
 }
 

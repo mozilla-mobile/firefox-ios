@@ -353,8 +353,8 @@ class URLBarView: UIView {
     }
 
     func updateAlphaForSubviews(_ alpha: CGFloat) {
-        self.locationContainer.alpha = alpha
-        self.alpha = alpha
+        locationContainer.alpha = alpha
+        alpha = alpha
     }
 
     func updateProgressBar(_ progress: Float) {
@@ -423,53 +423,53 @@ class URLBarView: UIView {
 
     func prepareOverlayAnimation() {
         // Make sure everything is showing during the transition (we'll hide it afterwards).
-        self.bringSubview(toFront: self.locationContainer)
-        self.cancelButton.isHidden = false
-        self.showQRScannerButton.isHidden = false
-        self.progressBar.isHidden = false
-        self.menuButton.isHidden = !self.toolbarIsShowing
-        self.forwardButton.isHidden = !self.toolbarIsShowing
-        self.backButton.isHidden = !self.toolbarIsShowing
-        self.tabsButton.isHidden = !self.toolbarIsShowing || topTabsIsShowing
-        self.stopReloadButton.isHidden = !self.toolbarIsShowing
+        bringSubview(toFront: self.locationContainer)
+        cancelButton.isHidden = false
+        showQRScannerButton.isHidden = false
+        progressBar.isHidden = false
+        menuButton.isHidden = !toolbarIsShowing
+        forwardButton.isHidden = !toolbarIsShowing
+        backButton.isHidden = !toolbarIsShowing
+        tabsButton.isHidden = !toolbarIsShowing || topTabsIsShowing
+        stopReloadButton.isHidden = !toolbarIsShowing
     }
 
     func transitionToOverlay(_ didCancel: Bool = false) {
-        self.cancelButton.alpha = inOverlayMode ? 1 : 0
-        self.showQRScannerButton.alpha = inOverlayMode ? 1 : 0
-        self.progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
-        self.tabsButton.alpha = inOverlayMode ? 0 : 1
-        self.menuButton.alpha = inOverlayMode ? 0 : 1
-        self.forwardButton.alpha = inOverlayMode ? 0 : 1
-        self.backButton.alpha = inOverlayMode ? 0 : 1
-        self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
+        cancelButton.alpha = inOverlayMode ? 1 : 0
+        showQRScannerButton.alpha = inOverlayMode ? 1 : 0
+        progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
+        tabsButton.alpha = inOverlayMode ? 0 : 1
+        menuButton.alpha = inOverlayMode ? 0 : 1
+        forwardButton.alpha = inOverlayMode ? 0 : 1
+        backButton.alpha = inOverlayMode ? 0 : 1
+        stopReloadButton.alpha = inOverlayMode ? 0 : 1
 
         let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.cgColor
 
         if inOverlayMode {
-            self.line.isHidden = inOverlayMode
+            line.isHidden = inOverlayMode
             // Make the editable text field span the entire URL bar, covering the lock and reader icons.
-            self.locationTextField?.snp.remakeConstraints { make in
+            locationTextField?.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationView)
             }
         } else {
             // Shrink the editable text field back to the size of the location view before hiding it.
-            self.locationTextField?.snp.remakeConstraints { make in
+            locationTextField?.snp.remakeConstraints { make in
                 make.edges.equalTo(self.locationView.urlTextField)
             }
         }
     }
 
     func updateViewsForOverlayModeAndToolbarChanges() {
-        self.cancelButton.isHidden = !inOverlayMode
-        self.showQRScannerButton.isHidden = !inOverlayMode
-        self.progressBar.isHidden = inOverlayMode
-        self.menuButton.isHidden = !self.toolbarIsShowing || inOverlayMode
-        self.forwardButton.isHidden = !self.toolbarIsShowing || inOverlayMode
-        self.backButton.isHidden = !self.toolbarIsShowing || inOverlayMode
-        self.tabsButton.isHidden = !self.toolbarIsShowing || inOverlayMode || topTabsIsShowing
-        self.stopReloadButton.isHidden = !self.toolbarIsShowing || inOverlayMode
+        cancelButton.isHidden = !inOverlayMode
+        showQRScannerButton.isHidden = !inOverlayMode
+        progressBar.isHidden = inOverlayMode
+        menuButton.isHidden = !toolbarIsShowing || inOverlayMode
+        forwardButton.isHidden = !toolbarIsShowing || inOverlayMode
+        backButton.isHidden = !toolbarIsShowing || inOverlayMode
+        tabsButton.isHidden = !toolbarIsShowing || inOverlayMode || topTabsIsShowing
+        stopReloadButton.isHidden = !toolbarIsShowing || inOverlayMode
     }
 
     func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
@@ -515,7 +515,7 @@ extension URLBarView: TabToolbarProtocol {
     }
 
     func updateTabCount(_ count: Int, animated: Bool = true) {
-        self.tabsButton.updateTabCount(count, animated: animated)
+        tabsButton.updateTabCount(count, animated: animated)
     }
 
     func updateReloadStatus(_ isLoading: Bool) {
@@ -639,7 +639,7 @@ extension URLBarView: Themeable {
     func applyTheme(_ theme: Theme) {
         locationView.applyTheme(theme)
         locationTextField?.applyTheme(theme)
-        self.actionButtons.forEach { $0.applyTheme(theme) }
+        actionButtons.forEach { $0.applyTheme(theme) }
         tabsButton.applyTheme(theme)
 
         progressBar.setGradientColors(startColor: UIColor.LoadingBar.Start.colorFor(theme), endColor: UIColor.LoadingBar.End.colorFor(theme))
@@ -650,7 +650,7 @@ extension URLBarView: Themeable {
         showQRButtonTintColor = UIColor.Browser.Tint.colorFor(theme)
         backgroundColor = UIColor.Browser.Background.colorFor(theme)
         line.backgroundColor = UIColor.Browser.URLBarDivider.colorFor(theme)
-        locationContainer.layer.shadowColor = self.locationBorderColor.cgColor
+        locationContainer.layer.shadowColor = locationBorderColor.cgColor
     }
 }
 

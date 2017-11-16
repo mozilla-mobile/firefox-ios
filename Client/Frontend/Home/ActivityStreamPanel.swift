@@ -958,7 +958,7 @@ struct ActivityStreamTracker {
 
 // MARK: - Section Header View
 private struct ASHeaderViewUX {
-    static let SeperatorColor =  UIColor(rgb: 0xedecea) //random color
+    static let SeperatorColor =  UIColor(rgb: 0xedecea) //Color not found in Photon
     static let TextFont = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
     static let SeperatorHeight = 1
     static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASPanelUX.MinimumInsets : ASPanelUX.MinimumInsets
