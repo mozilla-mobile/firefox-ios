@@ -309,12 +309,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         screenState.tap(app.buttons["HomePanels.History"], to: HomePanel_History)
         screenState.tap(app.buttons["HomePanels.ReadingList"], to: HomePanel_ReadingList)
 
-        screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray, if: "isTablet == true")
-        screenState.gesture(to: TabTray, if: "isTablet == false") {
-            if (app.buttons["TabToolbar.tabsButton"].exists) {
-                app.buttons["TabToolbar.tabsButton"].tap()
-            } else {
-                app.buttons["URLBarView.tabsButton"].tap()
+        // Workaround to bug Bug 1417522
+        if isTablet {
+            screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
+        } else {
+            screenState.gesture(to: TabTray) {
+                if (app.buttons["TabToolbar.tabsButton"].exists) {
+                    app.buttons["TabToolbar.tabsButton"].tap()
+                } else {
+                    app.buttons["URLBarView.tabsButton"].tap()
+                }
             }
         }
     }
