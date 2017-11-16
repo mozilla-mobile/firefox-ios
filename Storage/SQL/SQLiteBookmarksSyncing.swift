@@ -716,7 +716,7 @@ ViewBookmarksBufferStructureOnMirror,
 private let bufferParentidMatchesStructure = [
 "SELECT b.guid, b.parentid, s.parent, s.child, s.idx FROM",
 TableBookmarksBuffer, "b JOIN", TableBookmarksBufferStructure,
-"s ON b.guid = s.child WHERE b.parentid IS NOT s.parent",
+"s ON b.guid = s.child WHERE b.is_deleted IS 0 AND b.parentid IS NOT s.parent",
 ].joined(separator: " ")
 
 public enum BufferInconsistency {
