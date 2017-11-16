@@ -94,7 +94,11 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         view.addSubview(startBrowsingButton)
         startBrowsingButton.snp.makeConstraints { (make) -> Void in
-            make.left.right.bottom.equalTo(self.view)
+            if #available(iOS 11.0, *) {
+                make.left.right.bottom.equalTo(self.view.safeAreaLayoutGuide)
+            } else {
+                make.left.right.bottom.equalTo(self.view)
+            }
             make.height.equalTo(IntroViewControllerUX.StartBrowsingButtonHeight)
         }
 
