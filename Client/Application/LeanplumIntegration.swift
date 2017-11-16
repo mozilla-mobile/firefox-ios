@@ -7,9 +7,9 @@ import AdSupport
 import Shared
 import Leanplum
 
-private let LeanplumEnvironmentKey = "LeanplumEnvironment"
 private let LeanplumAppIdKey = "LeanplumAppId"
-private let LeanplumKeyKey = "LeanplumKey"
+private let LeanplumProductionKeyKey = "LeanplumProductionKey"
+private let LeanplumDevelopmentKeyKey = "LeanplumDevelopmentKey"
 private let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
 
 // FxA Custom Leanplum message template for A/B testing
@@ -32,11 +32,6 @@ let LpmtDefaultOkButtonText = NSLocalizedString("Enable Push", comment: "Default
 let LpmtDefaultLaterButtonText = NSLocalizedString("Don't Enable", comment: "Default push alert cancel button text")
 
 private let log = Logger.browserLogger
-
-private enum LeanplumEnvironment: String {
-    case development = "development"
-    case production = "production"
-}
 
 enum LeanplumEventName: String {
     case firstRun = "E_First_Run"
@@ -91,9 +86,9 @@ private enum SupportedLocales: String {
 }
 
 private struct LeanplumSettings {
-    var environment: LeanplumEnvironment
     var appId: String
-    var key: String
+    var productionKey: String
+    var developmentKey: String
 }
 
 class LeanplumIntegration {
@@ -139,15 +134,19 @@ class LeanplumIntegration {
             return
         }
 
-        switch settings.environment {
-        case .development:
-            log.info("LeanplumIntegration - Setting up for Development")
+        if UIDevice.current.name.contains("MozMMADev") {
+            NSLog("LeanplumIntegration - Setting up for Development")
             Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
-            Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.key)
-        case .production:
-            log.info("LeanplumIntegration - Setting up for Production")
-            Leanplum.setAppId(settings.appId, withProductionKey: settings.key)
+            Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.developmentKey)
+        } else {
+            NSLog("LeanplumIntegration - Setting up for Production")
+            Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
         }
+
+        if let deviceId = Leanplum.deviceId() {
+            NSLog("LeanplumIntegration - Device ID is \(deviceId)")
+        }
+
         Leanplum.syncResourcesAsync(true)
 
         if profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == nil {
@@ -271,7 +270,9 @@ class LeanplumIntegration {
         guard let environmentString = bundle.object(forInfoDictionaryKey: LeanplumEnvironmentKey) as? String,
               let environment = LeanplumEnvironment(rawValue: environmentString),
               let appId = bundle.object(forInfoDictionaryKey: LeanplumAppIdKey) as? String,
-              let key = bundle.object(forInfoDictionaryKey: LeanplumKeyKey) as? String else {
+              let productionKey = bundle.object(forInfoDictionaryKey: LeanplumProductionKeyKey) as? String,
+              let developmentKey = bundle.object(forInfoDictionaryKey: LeanplumDevelopmentKeyKey) as? String,
+            else {
             return nil
         }
         return LeanplumSettings(environment: environment, appId: appId, key: key)
