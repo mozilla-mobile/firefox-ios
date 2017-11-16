@@ -4,7 +4,7 @@
 
 import XCTest
 
-let defaultSearchEngine1 = "Yahoo"
+let defaultSearchEngine1 = "Google"
 let defaultSearchEngine2 = "Amazon.com"
 let customSearchEngine = ["name": "youtube", "url": "http://youtube.com/search?q=%s"]
 

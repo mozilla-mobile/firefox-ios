@@ -5,7 +5,7 @@
 import XCTest
 
 private let LabelPrompt: String = "Turn on search suggestions?"
-private let SuggestedSite: String = "foobar2000.org"
+private let SuggestedSite: String = "foobar2000"
 
 class SearchTests: BaseTestCase {
     var navigator: Navigator!
@@ -173,6 +173,6 @@ class SearchTests: BaseTestCase {
 
     func testDefaultSearchEngine() {
         navigator.goto(SearchSettings)
-        XCTAssert(app.tables.staticTexts["Yahoo"].exists)
+        XCTAssert(app.tables.staticTexts["Google"].exists)
     }
 }
