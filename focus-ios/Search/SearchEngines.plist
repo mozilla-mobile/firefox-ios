@@ -130,7 +130,7 @@
   </array>
   <key>en-CA</key>
   <array>
-    <string>google-nocodes</string>
+    <string>google</string>
     <string>yahoo</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
@@ -149,8 +149,8 @@
   </array>
   <key>en-US</key>
   <array>
+    <string>google-2018</string>
     <string>yahoo</string>
-    <string>google-nocodes</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -590,8 +590,8 @@
   </array>
   <key>ru-UA</key>
   <array>
+    <string>google</string>
     <string>yandex-ru</string>
-    <string>google-nocodes</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-ru</string>
@@ -690,7 +690,7 @@
   </array>
   <key>uk-UA</key>
   <array>
-    <string>google-nocodes</string>
+    <string>google</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-uk</string>
@@ -724,14 +724,15 @@
   </array>
   <key>zh-HK</key>
   <array>
-    <string>google-nocodes</string>
+    <string>google</string>
     <string>duckduckgo</string>
     <string>wikipedia-zh-TW</string>
   </array>
   <key>zh-TW</key>
   <array>
-    <string>google-nocodes</string>
+    <string>google</string>
     <string>duckduckgo</string>
     <string>wikipedia-zh-TW</string>
   </array>
 </dict>
+
