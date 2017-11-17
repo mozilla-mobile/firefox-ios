@@ -200,6 +200,10 @@ extension PhotonActionSheetProtocol {
             presentShareMenu(url, tab, buttonView, .up)
         }
 
+        let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "action_remove") { action in
+            self.tabManager.removeTab(tab)
+        }
+
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
             UIPasteboard.general.url = tab.canonicalURL?.displayURL
             success(Strings.AppMenuCopyURLConfirmMessage)
@@ -216,7 +220,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, sendToDevice], [share]]
+        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, sendToDevice, closeTab], [share]]
     }
 }
 
