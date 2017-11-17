@@ -223,7 +223,7 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesBookmarkNewTopSite () {
         // Bookmark a new TopSite
-        navigator.openURL(urlString: newTopSite["url"]!)
+        navigator.openURL(newTopSite["url"]!)
         waitUntilPageLoad()
         if iPad() {
             app.buttons["URLBarView.backButton"].tap()
@@ -262,7 +262,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesShareNewTopSite () {
-        navigator.openURL(urlString: newTopSite["url"]!)
+        navigator.openURL(newTopSite["url"]!)
         waitUntilPageLoad()
         navigator.goto(TabTray)
         navigator.goto(HomePanelsScreen)
@@ -295,7 +295,7 @@ class ActivityStreamTest: BaseTestCase {
          checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
 
          // Go to a website
-         navigator.openURL(urlString: newTopSite["url"]!)
+         navigator.openURL(newTopSite["url"]!)
          waitUntilPageLoad()
 
          // Go back to Top Sites from context menu
@@ -307,34 +307,34 @@ class ActivityStreamTest: BaseTestCase {
         let pagecontrolButton = TopSiteCellgroup.buttons["Next Page"]
         XCTAssertFalse(pagecontrolButton.exists, "The Page Control button must not exist. Only 5 elements should be on the page")
 
-        navigator.openURL(urlString: "http://example.com")
+        navigator.openURL("http://example.com")
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "example.com")
-        navigator.openURL(urlString: "http://mozilla.org")
+        navigator.openURL("http://mozilla.org")
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "mozilla.org")
-        navigator.openURL(urlString: "http://apple.com")
+        navigator.openURL("http://apple.com")
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "apple.com")
-        navigator.openURL(urlString: "http://slack.com")
+        navigator.openURL("http://slack.com")
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "slack.com")
 
         if iPad() {
             // Test timeout on BB when loading these pages
-            navigator.openURL(urlString: "http://cvs.com")
+            navigator.openURL("http://cvs.com")
             waitUntilPageLoad()
             waitForValueContains(app.textFields["url"], value: "cvs.com")
-            navigator.openURL(urlString: "http://linkedin.com")
+            navigator.openURL("http://linkedin.com")
             waitUntilPageLoad()
             waitForValueContains(app.textFields["url"], value: "linkedin.com")
-            navigator.openURL(urlString: "http://zara.com")
+            navigator.openURL("http://zara.com")
             waitUntilPageLoad()
             waitForValueContains(app.textFields["url"], value: "zara.com")
-            navigator.openURL(urlString: "http://twitter.com")
+            navigator.openURL("http://twitter.com")
             waitUntilPageLoad()
             waitForValueContains(app.textFields["url"], value: "twitter.com")
-            navigator.openURL(urlString: "http://instagram.com")
+            navigator.openURL("http://instagram.com")
             waitUntilPageLoad()
             waitForValueContains(app.textFields["url"], value: "instagram.com")
         }
@@ -354,7 +354,7 @@ class ActivityStreamTest: BaseTestCase {
     func testContextMenuInLandscape() {
         XCUIDevice.shared().orientation = .landscapeLeft
 
-        navigator.openURL(urlString: "http://example.com")
+        navigator.openURL("http://example.com")
         waitUntilPageLoad()
         if app.buttons["URLBarView.backButton"].isEnabled {
             app.buttons["URLBarView.backButton"].tap()
