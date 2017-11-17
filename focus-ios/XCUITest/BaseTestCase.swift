@@ -119,12 +119,17 @@ class BaseTestCase: XCTestCase {
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         
         searchOrEnterAddressTextField.typeText(url + "\n")
-        
+
+        // Wait for 2 seconds until the progressbar appears. Using waitForExistence is not reliable, since it
+        // sometimes waits until idle, and by that time progressbard has gone.
+        Thread.sleep(forTimeInterval: 2)
+
+        // Now check for progressBar to disappear
         if waitForLoadToFinish {
             waitForWebPageLoad()
         }
     }
-    
+
     func waitForWebPageLoad () {
         let app = XCUIApplication()
         let finishLoadingTimeout: TimeInterval = 30
