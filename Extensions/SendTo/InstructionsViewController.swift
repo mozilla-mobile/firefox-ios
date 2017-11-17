@@ -5,7 +5,7 @@
 import UIKit
 import SnapKit
 
-struct InstructionsViewControllerUX {
+private struct InstructionsViewControllerUX {
     static let TopPadding = CGFloat(20)
     static let TextFont = UIFont.systemFont(ofSize: UIFont.labelFontSize)
     static let TextColor = UIColor(rgb: 0x555555)

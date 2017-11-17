@@ -1143,7 +1143,9 @@ open class SDRow: Sequence {
         var ret: Any? = nil
 
         switch type {
-        case SQLITE_NULL, SQLITE_INTEGER:
+        case SQLITE_NULL:
+            return nil
+        case SQLITE_INTEGER:
             //Everyone expects this to be an Int. On Ints larger than 2^31 this will lose information.
             ret = Int(truncatingBitPattern: sqlite3_column_int64(statement.pointer, i))
         case SQLITE_TEXT:

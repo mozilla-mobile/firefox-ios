@@ -35,9 +35,9 @@ class RequirePasscodeIntervalViewController: UITableViewController {
         tableView.accessibilityIdentifier = "AuthenticationManager.passcodeIntervalTableView"
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
-        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
-        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
+        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight))
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.showTopBorder = false
         headerView.showBottomBorder = true

@@ -10,7 +10,7 @@ import Shared
  */
 extension SQLiteHistory {
     class func basicHistoryColumnFactory(_ row: SDRow) -> Site {
-        let id = row["historyID"] as! Int
+        let id = row["historyID"] as? Int
         let url = row["url"] as! String
         let title = row["title"] as! String
         let guid = row["guid"] as! String

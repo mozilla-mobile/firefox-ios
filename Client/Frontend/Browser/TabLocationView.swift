@@ -22,31 +22,11 @@ protocol TabLocationViewDelegate {
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }
 
-struct TabLocationViewUX {
+private struct TabLocationViewUX {
     static let HostFontColor = UIColor.black
     static let BaseURLFontColor = UIColor.gray
     static let LocationContentInset = 8
     static let URLBarPadding = 4
-
-    static let Themes: [String: Theme] = {
-        var themes = [String: Theme]()
-        var theme = Theme()
-        theme.URLFontColor = UIColor.lightGray
-        theme.textColor = UIColor(rgb: 0xf9f9fa)
-        theme.highlightButtonColor = UIConstants.PrivateModePurple
-        theme.buttonTintColor = UIColor(rgb: 0xADADb0)
-        theme.backgroundColor = UIColor(rgb: 0x636369)
-        themes[Theme.PrivateMode] = theme
-
-        theme = Theme()
-        theme.textColor = UIColor(rgb: 0x27)
-        theme.highlightButtonColor = UIColor(rgb: 0x00A2FE)
-        theme.buttonTintColor = UIColor(rgb: 0x737373)
-        theme.backgroundColor = .white
-        themes[Theme.NormalMode] = theme
-
-        return themes
-    }()
 }
 
 class TabLocationView: UIView {
@@ -129,7 +109,7 @@ class TabLocationView: UIView {
     fileprivate lazy var lockImageView: UIImageView = {
         let lockImageView = UIImageView(image: UIImage.templateImageNamed("lock_verified"))
         lockImageView.isHidden = true
-        lockImageView.tintColor = UIColor(rgb: 0x16DA00)
+        lockImageView.tintColor = UIColor.Defaults.LockGreen
         lockImageView.isAccessibilityElement = true
         lockImageView.contentMode = UIViewContentMode.center
         lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
@@ -166,7 +146,6 @@ class TabLocationView: UIView {
     lazy var separatorLine: UIView = {
         let line = UIView()
         line.layer.cornerRadius = 2
-        line.backgroundColor = UIColor(rgb: 0xE5E5E5)
         line.isHidden = true
         return line
     }()
@@ -309,21 +288,16 @@ extension TabLocationView: AccessibilityActionsSource {
 }
 
 extension TabLocationView: Themeable {
-    func applyTheme(_ themeName: String) {
-        guard let theme = TabLocationViewUX.Themes[themeName] else {
-            log.error("Unable to apply unknown theme \(themeName)")
-            return
-        }
-        let isPrivate = themeName == Theme.PrivateMode
-        backgroundColor = theme.backgroundColor
-        urlTextField.textColor = theme.textColor
-        readerModeButton.selectedTintColor = theme.highlightButtonColor
-        readerModeButton.unselectedTintColor = theme.buttonTintColor
-        pageOptionsButton.selectedTintColor = theme.highlightButtonColor
-
-        pageOptionsButton.unselectedTintColor = isPrivate ? UIColor(rgb: 0xD2d2d4) : UIColor(rgb: 0x272727)
+    func applyTheme(_ theme: Theme) {
+        backgroundColor = UIColor.TextField.Background.colorFor(theme)
+        urlTextField.textColor = UIColor.Browser.Tint.colorFor(theme)
+        readerModeButton.selectedTintColor = UIColor.TextField.ReaderModeButtonSelected.colorFor(theme)
+        readerModeButton.unselectedTintColor = UIColor.TextField.ReaderModeButtonUnselected.colorFor(theme)
+        
+        pageOptionsButton.selectedTintColor = UIColor.TextField.PageOptionsSelected.colorFor(theme)
+        pageOptionsButton.unselectedTintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
-        separatorLine.backgroundColor = isPrivate ? UIColor(rgb: 0x3f3f43) : UIColor(rgb: 0xE5E5E5)
+        separatorLine.backgroundColor = UIColor.TextField.Separator.colorFor(theme)
     }
 }
 

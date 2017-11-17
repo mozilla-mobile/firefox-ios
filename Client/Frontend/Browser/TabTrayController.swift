@@ -11,8 +11,8 @@ import Shared
 
 struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(6.0)
-    static let BackgroundColor = UIConstants.TabTrayBG
-    static let CellBackgroundColor = UIConstants.TabTrayBG
+    static let BackgroundColor = UIColor.TopTabs.Background
+    static let CellBackgroundColor = UIColor.TopTabs.Background
     static let TextBoxHeight = CGFloat(32.0)
     static let FaviconSize = CGFloat(20)
     static let Margin = CGFloat(15)
@@ -29,11 +29,11 @@ struct TabTrayControllerUX {
     static let MenuFixedWidth: CGFloat = 320
 }
 
-struct LightTabCellUX {
+private struct LightTabCellUX {
     static let TabTitleTextColor = UIColor.black
 }
 
-struct DarkTabCellUX {
+private struct DarkTabCellUX {
     static let TabTitleTextColor = UIColor.white
 }
 
@@ -254,7 +254,7 @@ class TabTrayController: UIViewController {
     fileprivate(set) internal var privateMode: Bool = false {
         didSet {
             tabDataSource.tabs = tabsToDisplay
-            toolbar.styleToolbar(privateMode)
+            toolbar.applyTheme(privateMode == true ? .Private : .Normal)
             collectionView?.reloadData()
         }
     }
@@ -834,7 +834,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     }
 }
 
-struct EmptyPrivateTabsViewUX {
+private struct EmptyPrivateTabsViewUX {
     static let TitleColor = UIColor.white
     static let TitleFont = UIFont.systemFont(ofSize: 22, weight: UIFontWeightMedium)
     static let DescriptionColor = UIColor.white
@@ -1045,17 +1045,17 @@ class TrayToolbar: UIView {
             make.size.equalTo(toolbarButtonSize)
         }
 
-        styleToolbar(false)
+        applyTheme(.Normal)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    fileprivate func styleToolbar(_ isPrivate: Bool) {
-        addTabButton.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0x272727)
-        deleteButton.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0x272727)
-        backgroundColor = isPrivate ? UIConstants.PrivateModeToolbarTintColor : UIColor(rgb: 0xf9f9fa)
-        maskButton.styleForMode(privateMode: isPrivate)
+    fileprivate func applyTheme(_ theme: Theme) {
+        addTabButton.tintColor = UIColor.Browser.Tint.colorFor(theme)
+        deleteButton.tintColor = UIColor.Browser.Tint.colorFor(theme)
+        backgroundColor = UIColor.TabTray.Background.colorFor(theme)
+        maskButton.applyTheme(theme)
     }
 }

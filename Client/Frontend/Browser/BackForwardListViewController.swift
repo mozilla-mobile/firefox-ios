@@ -8,9 +8,9 @@ import WebKit
 import Storage
 import SnapKit
 
-struct BackForwardViewUX {
+private struct BackForwardViewUX {
     static let RowHeight: CGFloat = 50
-    static let BackgroundColor = UIColor(rgb: 0xf9f9fa).withAlphaComponent(0.4)
+    static let BackgroundColor = UIColor.Defaults.Grey10.withAlphaComponent(0.4)
 }
 
 class BackForwardListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {

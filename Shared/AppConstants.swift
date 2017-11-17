@@ -69,15 +69,6 @@ public struct AppConstants {
         #endif
     }()
 
-    /// Flag indicating if we are running in Debug mode or not.
-    public static let isDebug: Bool = {
-        #if MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return false
-        #endif
-    }()
-
     /// Enables support for International Domain Names (IDN)
     /// Disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1312294
     public static let MOZ_PUNYCODE: Bool = {
@@ -98,19 +89,6 @@ public struct AppConstants {
             return true
         #elseif MOZ_CHANNEL_BETA
             return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    /// Toggles reporting our ad-hoc bookmark sync ping
-    public static let MOZ_ADHOC_SYNC_REPORTING: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return false
         #elseif MOZ_CHANNEL_FENNEC
             return true
         #else

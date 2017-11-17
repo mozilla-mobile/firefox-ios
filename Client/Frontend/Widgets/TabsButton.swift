@@ -5,41 +5,13 @@
 import Foundation
 import SnapKit
 import Shared
-import XCGLogger
 
-private let log = Logger.browserLogger
-
-struct TabsButtonUX {
-    static let TitleColor: UIColor = UIColor(rgb: 0x272727)
+private struct TabsButtonUX {
+    static let TitleColor: UIColor = UIColor.Defaults.Grey80
     static let TitleBackgroundColor: UIColor = UIColor.white
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 3
-    static let BorderColor: UIColor = UIColor.darkGray
-    static let TitleInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-
-    static let Themes: [String: Theme] = {
-        var themes = [String: Theme]()
-        var theme = Theme()
-        theme.borderColor = UIColor(rgb: 0xD2D2D4)
-        theme.backgroundColor = UIColor(rgb: 0x38383D)
-        theme.textColor = UIColor(rgb: 0xD2D2D4)
-        theme.highlightButtonColor = UIConstants.PrivateModePurple
-        theme.highlightTextColor = TabsButtonUX.TitleColor
-        theme.highlightBorderColor = UIConstants.PrivateModePurple
-        themes[Theme.PrivateMode] = theme
-
-        theme = Theme()
-        theme.borderColor = UIColor(rgb: 0x272727)
-        theme.backgroundColor = UIConstants.AppBackgroundColor
-        theme.textColor = UIColor(rgb: 0x272727)
-        theme.highlightButtonColor = TabsButtonUX.TitleColor
-        theme.highlightTextColor = TabsButtonUX.TitleBackgroundColor
-        theme.highlightBorderColor = TabsButtonUX.TitleColor
-        themes[Theme.NormalMode] = theme
-
-        return themes
-    }()
 }
 
 class TabsButton: UIButton {
@@ -239,17 +211,12 @@ class TabsButton: UIButton {
 }
 
 extension TabsButton: Themeable {
-    func applyTheme(_ themeName: String) {
-        guard let theme = TabsButtonUX.Themes[themeName] else {
-            fatalError("Theme not found")
-        }
-        titleBackgroundColor = theme.backgroundColor!
-        textColor = theme.textColor!
-
-        countLabel.textColor = textColor
-        borderView.color = textColor
-        labelBackground.backgroundColor = titleBackgroundColor
-
+    func applyTheme(_ theme: Theme) {
+        titleBackgroundColor = UIColor.Browser.Background.colorFor(theme)
+        textColor = UIColor.Browser.Tint.colorFor(theme)
+        countLabel.textColor = UIColor.Browser.Tint.colorFor(theme)
+        borderView.color = UIColor.Browser.Tint.colorFor(theme)
+        labelBackground.backgroundColor = UIColor.Browser.Background.colorFor(theme)
     }
 }
 

@@ -28,8 +28,8 @@ protocol ShareControllerDelegate {
 
 private struct ShareDialogControllerUX {
     static let CornerRadius: CGFloat = 4                                                            // Corner radius of the dialog
-
-    static let NavigationBarTintColor = UIColor(rgb: 0xf37c00)                                      // Tint color changes the text color in the navigation bar
+    static let PhotonBlue50 = UIColor(rgb: 0x0a84ff)
+    static let NavigationBarTintColor = PhotonBlue50                                                // Tint color changes the text color in the navigation bar
     static let NavigationBarCancelButtonFont = UIFont.systemFont(ofSize: UIFont.buttonFontSize)     // System default
     static let NavigationBarAddButtonFont = UIFont.boldSystemFont(ofSize: UIFont.buttonFontSize)    // System default
     static let NavigationBarIconSize = 40                                                           // Width and height of the icon
