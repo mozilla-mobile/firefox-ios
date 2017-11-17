@@ -18,17 +18,13 @@ class WebsiteMemoryTest: BaseTestCase {
     
     func testGoogleTextField() {
         let app = XCUIApplication()
-        var googleSearchField = app.webViews.searchFields["Search"]
-        
+        let googleSearchField = app.webViews.otherElements["Search"]
         // Enter 'google' on the search field to go to google site
         loadWebPage("google")
-        if app.webViews.otherElements["Search"].exists {
-            googleSearchField =  app.webViews.otherElements["Search"]
-        }
-        waitforEnable(element: googleSearchField)
         
         // type 'mozilla' (typing doesn't work cleanly with UIWebview, so had to paste from clipboard)
         UIPasteboard.general.string = "mozilla"
+
         googleSearchField.tap()
         googleSearchField.press(forDuration: 1.5)
         waitforExistence(element: app.menuItems["Paste"])
