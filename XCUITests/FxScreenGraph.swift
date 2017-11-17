@@ -167,9 +167,11 @@ class FxUserState: UserState {
 
     var numTabs: Int = 0
 
-    var trackingProtectionPerTabEnabled = true
+    var trackingProtectionPerTabEnabled = true // TP can be shut off on a per-tab basis
     enum TrackingProtectionSetting : Int { case alwaysOn; case privateOnly; case off }
     var trackingProtectionSetting = TrackingProtectionSetting.privateOnly.rawValue // NSPredicate doesn't work with enum
+    // Construct an NSPredicate with this condition to use it.
+    static let trackingProtectionIsOnCondition = "trackingProtectionSetting == \(FxUserState.TrackingProtectionSetting.alwaysOn.rawValue) || (trackingProtectionSetting == \(FxUserState.TrackingProtectionSetting.privateOnly.rawValue) && isPrivate == YES)"
 }
 
 fileprivate let defaultURL = "https://www.mozilla.org/en-US/book/"
@@ -563,8 +565,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         }
 
         let trackingProtectionButton = app.sheets.element(boundBy: 0).buttons.element(boundBy: 1)
-        let tpIsOn = "trackingProtectionSetting == \(FxUserState.TrackingProtectionSetting.alwaysOn.rawValue) || (trackingProtectionSetting == \(FxUserState.TrackingProtectionSetting.privateOnly.rawValue) && isPrivate == YES)"
-        screenState.tap(trackingProtectionButton, forAction: Action.ToggleTrackingProtectionPerTabEnabled, if: tpIsOn) { userState in
+
+        screenState.tap(trackingProtectionButton, forAction: Action.ToggleTrackingProtectionPerTabEnabled, if: FxUserState.trackingProtectionIsOnCondition) { userState in
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
     }
