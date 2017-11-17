@@ -4,26 +4,26 @@
 
 import UIKit
 
-class PrivateModeButton: ToggleButton {
+class PrivateModeButton: ToggleButton, Themeable {
     var light: Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
-        self.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
+        accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
+        accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
         let maskImage = UIImage(named: "smallPrivateMask")?.withRenderingMode(.alwaysTemplate)
-        self.setImage(maskImage, for: UIControlState())
+        setImage(maskImage, for: UIControlState())
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func styleForMode(privateMode isPrivate: Bool) {
-        self.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0x272727)
-        self.imageView?.tintColor = self.tintColor
-        self.isSelected = isPrivate
-        self.accessibilityValue = isPrivate ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+    func applyTheme(_ theme: Theme) {
+        tintColor = UIColor.Browser.Tint.colorFor(theme)
+        imageView?.tintColor = tintColor
+        isSelected = theme == .Private
+        accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
     }
 }
 

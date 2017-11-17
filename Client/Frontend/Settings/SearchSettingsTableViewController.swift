@@ -56,8 +56,8 @@ class SearchSettingsTableViewController: UITableViewController {
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
 
-        tableView.separatorColor = UIConstants.TableViewSeparatorColor
-        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
+        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .plain, target: self,
                                                                  action: #selector(SearchSettingsTableViewController.beginEditing))

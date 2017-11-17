@@ -8,16 +8,12 @@ import WebKit
 
 struct TopTabsUX {
     static let TopTabsViewHeight: CGFloat = 44
-    static let TopTabsBackgroundColor = UIColor(rgb: 0x2a2a2e)
-    static let TopTabsBackgroundPadding: CGFloat = 35
     static let TopTabsBackgroundShadowWidth: CGFloat = 12
     static let TabWidth: CGFloat = 190
-    static let CollectionViewPadding: CGFloat = 15
     static let FaderPading: CGFloat = 8
     static let SeparatorWidth: CGFloat = 1
     static let HighlightLineWidth: CGFloat = 3
     static let TabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
-    static let TabTitleWidth: CGFloat = 110
     static let TabTitlePadding: CGFloat = 10
     static let AnimationSpeed: TimeInterval = 0.1
     static let SeparatorYOffset: CGFloat = 7
@@ -156,10 +152,10 @@ class TopTabsViewController: UIViewController {
             make.edges.equalTo(topTabFader)
         }
 
-        view.backgroundColor = UIColor(rgb: 0x272727)
-        tabsButton.applyTheme(Theme.NormalMode)
+        view.backgroundColor = UIColor.Defaults.Grey80
+        tabsButton.applyTheme(.Normal)
         if let currentTab = tabManager.selectedTab {
-            applyTheme(currentTab.isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+            applyTheme(currentTab.isPrivate ? .Private : .Normal)
         }
         updateTabCount(tabStore.count, animated: false)
     }
@@ -252,15 +248,16 @@ class TopTabsViewController: UIViewController {
 }
 
 extension TopTabsViewController: Themeable {
-    func applyTheme(_ themeName: String) {
-        tabsButton.applyTheme(themeName)
-        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor(rgb: 0x272727)
-        tabsButton.textColor = UIColor(rgb: 0xb1b1b3)
-        isPrivate = (themeName == Theme.PrivateMode)
-        privateModeButton.styleForMode(privateMode: isPrivate)
-        privateModeButton.tintColor = isPrivate ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0xb1b1b3)
+    func applyTheme(_ theme: Theme) {
+        tabsButton.applyTheme(theme)
+        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Defaults.Grey80
+        tabsButton.textColor = UIColor.Defaults.Grey40
+
+        isPrivate = (theme == Theme.Private)
+        privateModeButton.applyTheme(theme)
+        privateModeButton.tintColor = UIColor.TopTabs.PrivateModeTint.colorFor(theme)
         privateModeButton.imageView?.tintColor = privateModeButton.tintColor
-        newTab.tintColor = UIColor(rgb: 0xb1b1b3)
+        newTab.tintColor = UIColor.Defaults.Grey40
         collectionView.backgroundColor = view.backgroundColor
     }
 }

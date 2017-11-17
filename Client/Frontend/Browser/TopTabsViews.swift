@@ -6,7 +6,7 @@ import Foundation
 
 struct TopTabsSeparatorUX {
     static let Identifier = "Separator"
-    static let Color = UIColor(rgb: 0x3c3c3d)
+    static let Color = UIColor.Defaults.Grey70
     static let Width: CGFloat = 1
 }
 
@@ -78,15 +78,15 @@ class TopTabCell: UICollectionViewCell {
     
     var selectedTab = false {
         didSet {
-            backgroundColor = selectedTab ? UIColor(rgb: 0xf9f9fa) : UIColor(rgb: 0x272727)
-            titleText.textColor = selectedTab ? UIColor(rgb: 0x0c0c0d) : UIColor(rgb: 0xb1b1b3)
+            backgroundColor = selectedTab ? UIColor.Defaults.Grey10 : UIColor.Defaults.Grey80
+            titleText.textColor = selectedTab ? UIColor.Defaults.Grey90 : UIColor.Defaults.Grey40
             highlightLine.isHidden = !selectedTab
-            closeButton.tintColor = selectedTab ? UIColor(rgb: 0x272727) : UIColor(rgb: 0xb1b1b3)
+            closeButton.tintColor = selectedTab ? UIColor.Defaults.Grey80 : UIColor.Defaults.Grey40
             // restyle if we are in PBM
             if style == .dark && selectedTab {
-                backgroundColor =  UIColor(rgb: 0x38383D)
-                titleText.textColor = UIColor(rgb: 0xf9f9fa)
-                closeButton.tintColor = UIColor(rgb: 0xf9f9fa)
+                backgroundColor =  UIColor.Defaults.Grey70
+                titleText.textColor = UIColor.Defaults.Grey10
+                closeButton.tintColor = UIColor.Defaults.Grey10
             }
             closeButton.backgroundColor = backgroundColor
             closeButton.layer.shadowColor = backgroundColor?.cgColor
@@ -116,7 +116,7 @@ class TopTabCell: UICollectionViewCell {
     let closeButton: UIButton = {
         let closeButton = UIButton()
         closeButton.setImage(UIImage.templateImageNamed("menu-CloseTabs"), for: UIControlState())
-        closeButton.tintColor = UIColor(rgb: 0xb1b1b3)
+        closeButton.tintColor = UIColor.Defaults.Grey40
         closeButton.imageEdgeInsets = UIEdgeInsets(top: 15, left: TopTabsUX.TabTitlePadding, bottom: 15, right: TopTabsUX.TabTitlePadding)
         closeButton.layer.shadowOpacity = 0.8
         closeButton.layer.masksToBounds = false
@@ -126,7 +126,7 @@ class TopTabCell: UICollectionViewCell {
 
     let highlightLine: UIView = {
         let line = UIView()
-        line.backgroundColor = UIColor(rgb: 0x0066DC)
+        line.backgroundColor = UIColor.Defaults.Blue60
         line.isHidden = true
         return line
     }()
@@ -177,11 +177,11 @@ class TopTabCell: UICollectionViewCell {
         case Style.light:
             titleText.textColor = UIColor.darkText
             backgroundColor = UIConstants.AppBackgroundColor
-            highlightLine.backgroundColor = UIColor(rgb: 0x0066DC)
+            highlightLine.backgroundColor = UIColor.Defaults.Blue60
         case Style.dark:
             titleText.textColor = UIColor.lightText
-            backgroundColor = UIColor(rgb: 0x38383D)
-            highlightLine.backgroundColor = UIColor(rgb: 0x9400ff)
+            backgroundColor = UIColor.Defaults.Grey70
+            highlightLine.backgroundColor = UIColor.Defaults.Purple50
         }
     }
     

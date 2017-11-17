@@ -6,6 +6,19 @@ import Account
 import Shared
 import UIKit
 
+struct SettingsUX {
+    static let TableViewHeaderBackgroundColor = UIConstants.AppBackgroundColor
+    static let TableViewHeaderTextColor = UIColor.Defaults.Grey50
+    static let TableViewRowTextColor = UIColor.Defaults.Grey90
+    static let TableViewDisabledRowTextColor = UIColor.lightGray
+    static let TableViewSeparatorColor = UIColor(rgb: 0xD1D1D4)
+    static let TableViewHeaderFooterHeight = CGFloat(44)
+    static let TableViewRowErrorTextColor = UIColor(red: 255/255, green: 0/255, blue: 26/255, alpha: 1.0)
+    static let TableViewRowWarningTextColor = UIColor(red: 245/255, green: 166/255, blue: 35/255, alpha: 1.0)
+    static let TableViewRowActionAccessoryColor = UIColor(red: 0.29, green: 0.56, blue: 0.89, alpha: 1.0)
+    static let TableViewRowSyncTextColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+}
+
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting: NSObject {
     fileprivate var _title: NSAttributedString?
@@ -159,9 +172,9 @@ class BoolSetting: Setting {
     convenience init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
-            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
+            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewHeaderTextColor])
         }
-        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
+        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
@@ -279,7 +292,7 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
-        let color = isValid(textField.text) ? UIConstants.TableViewRowTextColor : UIConstants.DestructiveRed
+        let color = isValid(textField.text) ? SettingsUX.TableViewRowTextColor : UIConstants.DestructiveRed
         textField.textColor = color
     }
 
@@ -357,7 +370,7 @@ class ButtonSetting: Setting {
         if isEnabled?() ?? true {
             cell.textLabel?.textColor = destructive ? UIConstants.DestructiveRed : UIConstants.HighlightBlue
         } else {
-            cell.textLabel?.textColor = UIConstants.TableViewDisabledRowTextColor
+            cell.textLabel?.textColor = SettingsUX.TableViewDisabledRowTextColor
         }
         cell.textLabel?.textAlignment = NSTextAlignment.center
         cell.accessibilityTraits = UIAccessibilityTraitButton
@@ -462,8 +475,8 @@ class SettingsTableViewController: UITableViewController {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
-        tableView.separatorColor = UIConstants.TableViewSeparatorColor
-        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
+        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
@@ -632,7 +645,7 @@ class SettingsTableViewController: UITableViewController {
     }
 }
 
-struct SettingsTableSectionHeaderFooterViewUX {
+private struct SettingsTableSectionHeaderFooterViewUX {
     static let titleHorizontalPadding: CGFloat = 15
     static let titleVerticalPadding: CGFloat = 6
     static let titleVerticalLongPadding: CGFloat = 20
@@ -665,7 +678,7 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
 
     lazy var titleLabel: UILabel = {
         var headerLabel = UILabel()
-        headerLabel.textColor = UIConstants.TableViewHeaderTextColor
+        headerLabel.textColor = SettingsUX.TableViewHeaderTextColor
         headerLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightRegular)
         headerLabel.numberOfLines = 0
         return headerLabel
@@ -685,7 +698,7 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        contentView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
         addSubview(topBorder)
         addSubview(bottomBorder)

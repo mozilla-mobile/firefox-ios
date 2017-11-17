@@ -146,7 +146,7 @@ extension BrowserViewController: WKNavigationDelegate {
             UIApplication.shared.open(url, options: [:]) { openedURL in
                 if !openedURL {
                     let alert = UIAlertController(title: Strings.UnableToOpenURLErrorTitle, message: Strings.UnableToOpenURLError, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: UIConstants.OKString, style: UIAlertActionStyle.default, handler: nil))
+                    alert.addAction(UIAlertAction(title: Strings.OKString, style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 }
             }
