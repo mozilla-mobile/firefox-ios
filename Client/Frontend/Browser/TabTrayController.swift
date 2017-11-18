@@ -393,7 +393,12 @@ class TabTrayController: UIViewController {
         }
 
         toolbar.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(view)
+            if #available(iOS 11.0, *) {
+                make.left.right.equalTo(view.safeAreaLayoutGuide)
+                make.bottom.equalToSuperview()
+            }else {
+                make.left.right.bottom.equalTo(view)
+            }
             make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
     }
