@@ -1893,8 +1893,11 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            self.alertStackView.insertArrangedSubview(buttonToast, at: 0)
-            buttonToast.showToast(duration: duration)
+            self.view.addSubview(buttonToast)
+            buttonToast.snp.makeConstraints { make in
+                make.left.right.equalTo(self.view)
+                make.bottom.equalTo(self.webViewContainer)
+            }
         }
     }
     
