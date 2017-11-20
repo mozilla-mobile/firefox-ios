@@ -146,6 +146,11 @@ class Tab: NSObject {
         }
     }
 
+    func deleteWebView() {
+        webView?.removeView()
+        webView = nil
+    }
+
     class func toTab(_ tab: Tab) -> RemoteTab? {
         if let displayURL = tab.url?.displayURL, RemoteTab.shouldIncludeURL(displayURL) {
             let history = Array(tab.historyList.filter(RemoteTab.shouldIncludeURL).reversed())
@@ -534,8 +539,21 @@ private protocol TabWebViewDelegate: class {
 private class TabWebView: WKWebView, MenuHelperInterface {
     fileprivate weak var delegate: TabWebViewDelegate?
 
+    static var instances = 0
+
+    override init(frame: CGRect, configuration: WKWebViewConfiguration) {
+        super.init(frame: frame, configuration: configuration)
+
+        TabWebView.instances += 1
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     deinit {
-        print("deinit: TabWebView")
+        TabWebView.instances -= 1
+        print("deinit: TabWebView, instances: \(TabWebView.instances)")
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {

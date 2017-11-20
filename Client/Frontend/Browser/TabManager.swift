@@ -421,19 +421,24 @@ class TabManager: NSObject {
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab) }
         }
 
-        if !tab.isPrivate && viableTabs.isEmpty {
-            addTab()
-        }
+        tab.deleteWebView()
 
-        // If the removed tab was selected, find the new tab to select.
-        if selectedTab != nil {
-            selectTab(selectedTab, previous: oldSelectedTab)
-        } else {
-            selectTab(tabs.last, previous: oldSelectedTab)
-        }
+        // Allows the WKWebView instance count to drop before creating another.
+        DispatchQueue.main.async {
+            if !tab.isPrivate && viableTabs.isEmpty {
+                self.addTab()
+            }
 
-        if flushToDisk {
-            storeChanges()
+            // If the removed tab was selected, find the new tab to select.
+            if self.selectedTab != nil {
+                self.selectTab(self.selectedTab, previous: oldSelectedTab)
+            } else {
+                self.selectTab(self.tabs.last, previous: oldSelectedTab)
+            }
+
+            if flushToDisk {
+                self.storeChanges()
+            }
         }
     }
 
