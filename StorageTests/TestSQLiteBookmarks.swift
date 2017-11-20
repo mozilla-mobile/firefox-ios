@@ -37,6 +37,158 @@ class TestTruncation: XCTestCase {
     }
 }
 
+class BrowserDBV15: Schema {
+    var name: String = "BROWSER"
+    var version: Int = 15
+
+    func getHistoryTableCreationString() -> String {
+        return "CREATE TABLE IF NOT EXISTS history (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
+            "url TEXT UNIQUE, " +                 // May only be null for deleted records.
+            "title TEXT NOT NULL, " +
+            "server_modified INTEGER, " +         // Can be null. Integer milliseconds.
+            "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
+            "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
+            "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
+            "domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " +
+            "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
+        ")"
+    }
+
+    func getDomainsTableCreationString() -> String {
+        return "CREATE TABLE IF NOT EXISTS \(TableDomains) (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "domain TEXT NOT NULL UNIQUE, " +
+            "showOnTopSites TINYINT NOT NULL DEFAULT 1" +
+        ")"
+    }
+
+    func getQueueTableCreationString() -> String {
+        return "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
+            "url TEXT NOT NULL UNIQUE, " +
+            "title TEXT" +
+        ") "
+    }
+
+    func getVisitsTableCreationString() -> String {
+        return "CREATE TABLE IF NOT EXISTS \(TableVisits) (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "siteID INTEGER NOT NULL REFERENCES history(id) ON DELETE CASCADE, " +
+            "date REAL NOT NULL, " +           // Microseconds since epoch.
+            "type INTEGER NOT NULL, " +
+            "is_local TINYINT NOT NULL, " +    // Some visits are local. Some are remote ('mirrored'). This boolean flag is the split.
+            "UNIQUE (siteID, date, type) " +
+        ") "
+    }
+
+    func getFaviconsTableCreationString() -> String {
+        return "CREATE TABLE IF NOT EXISTS favicons (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "url TEXT NOT NULL UNIQUE, " +
+            "width INTEGER, " +
+            "height INTEGER, " +
+            "type INTEGER NOT NULL, " +
+            "date REAL NOT NULL" +
+        ") "
+    }
+
+    func getBookmarksTableCreationStringForTable(_ table: String, withAdditionalColumns: String="") -> String {
+        // The stupid absence of naming conventions here is thanks to pre-Sync Weave. Sorry.
+        // For now we have the simplest possible schema: everything in one.
+        let sql =
+            "CREATE TABLE IF NOT EXISTS \(table) " +
+
+                // Shared fields.
+                "( id INTEGER PRIMARY KEY AUTOINCREMENT" +
+                ", guid TEXT NOT NULL UNIQUE" +
+                ", type TINYINT NOT NULL" +                    // Type enum.
+
+                // Record/envelope metadata that'll allow us to do merges.
+                ", is_deleted TINYINT NOT NULL DEFAULT 0" +    // Boolean
+
+                ", parentid TEXT" +                            // GUID
+                ", parentName TEXT" +
+
+                // Type-specific fields. These should be NOT NULL in many cases, but we're going
+                // for a sparse schema, so this'll do for now. Enforce these in the application code.
+                ", feedUri TEXT, siteUri TEXT" +               // LIVEMARKS
+                ", pos INT" +                                  // SEPARATORS
+                ", title TEXT, description TEXT" +             // FOLDERS, BOOKMARKS, QUERIES
+                ", bmkUri TEXT, tags TEXT, keyword TEXT" +     // BOOKMARKS, QUERIES
+                ", folderName TEXT, queryId TEXT" +            // QUERIES
+                withAdditionalColumns +
+                ", CONSTRAINT parentidOrDeleted CHECK (parentid IS NOT NULL OR is_deleted = 1)" +
+                ", CONSTRAINT parentNameOrDeleted CHECK (parentName IS NOT NULL OR is_deleted = 1)" +
+        ")"
+
+        return sql
+    }
+
+    func getBookmarksStructureTableCreationStringForTable(_ table: String, referencingMirror mirror: String) -> String {
+        let sql =
+            "CREATE TABLE IF NOT EXISTS \(table) " +
+                "( parent TEXT NOT NULL REFERENCES \(mirror)(guid) ON DELETE CASCADE" +
+                ", child TEXT NOT NULL" +      // Should be the GUID of a child.
+                ", idx INTEGER NOT NULL" +     // Should advance from 0.
+        ")"
+
+        return sql
+    }
+
+    let iconColumns = ", faviconID INTEGER REFERENCES \(TableFavicons)(id) ON DELETE SET NULL"
+    let mirrorColumns = ", is_overridden TINYINT NOT NULL DEFAULT 0"
+
+    let serverColumns = ", server_modified INTEGER NOT NULL" +    // Milliseconds.
+    ", hasDupe TINYINT NOT NULL DEFAULT 0"    // Boolean, 0 (false) if deleted.
+
+    let localColumns = ", local_modified INTEGER" +            // Can be null. Client clock. In extremis only.
+    ", sync_status TINYINT NOT NULL"        // SyncStatus enum. Set when changed or created.
+
+    func create(_ db: SQLiteDBConnection) -> Bool {
+        let bookmarksLocal = self.getBookmarksTableCreationStringForTable(TableBookmarksLocal, withAdditionalColumns: self.localColumns + self.iconColumns)
+        let bookmarksLocalStructure = self.getBookmarksStructureTableCreationStringForTable(TableBookmarksLocalStructure, referencingMirror: TableBookmarksLocal)
+        let bookmarksBuffer = getBookmarksTableCreationStringForTable(TableBookmarksBuffer, withAdditionalColumns: self.serverColumns)
+        let bookmarksBufferStructure = self.getBookmarksStructureTableCreationStringForTable(TableBookmarksBufferStructure, referencingMirror: TableBookmarksBuffer)
+        let bookmarksMirror = getBookmarksTableCreationStringForTable(TableBookmarksMirror, withAdditionalColumns: self.serverColumns + self.mirrorColumns + self.iconColumns)
+        let bookmarksMirrorStructure = self.getBookmarksStructureTableCreationStringForTable(TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)
+
+        let stmts = [
+            bookmarksLocal,
+            bookmarksLocalStructure,
+            bookmarksBuffer,
+            bookmarksBufferStructure,
+            bookmarksMirror,
+            bookmarksMirrorStructure,
+            self.getHistoryTableCreationString(),
+            self.getDomainsTableCreationString(),
+            self.getQueueTableCreationString(),
+            self.getVisitsTableCreationString(),
+            self.getFaviconsTableCreationString()
+        ]
+        do {
+            for sql in stmts {
+                try db.executeChange(sql, withArgs: nil)
+            }
+        } catch _ as NSError {
+            return false
+        }
+        return true
+    }
+
+    func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
+        // Do nothing
+        return false
+    }
+
+    func drop(_ db: SQLiteDBConnection) -> Bool {
+        // Do nothing
+        return false
+    }
+
+
+}
+
 class TestSQLiteBookmarks: XCTestCase {
     let files = MockFiles()
 
@@ -56,7 +208,24 @@ class TestSQLiteBookmarks: XCTestCase {
         self.remove("TSQLBtestLocalBookmarksModifications.db")
         self.remove("TSQLBtestApplyBufferUpdatedCompletionOp.db")
         self.remove("TSQLBtestApplyRecordsPendingDeletions.db")
+        self.remove("TSQLBtestDBUpgradeBeforeDateAdded.db")
         super.tearDown()
+    }
+
+    func testDateAddedMigration() {
+        let schema = BrowserDBV15()
+        let destination = BrowserSchema()
+        var db = BrowserDB(filename: "TSQLBtestDBUpgradeBeforeDateAdded.db", schema: schema, files: files)
+        XCTAssertTrue(db.withConnection({ connection -> Int in
+            connection.version
+        }).value.successValue == schema.version, "Creating BrowserSchema beforeDateAdded")
+        db.forceClose()
+
+        db = BrowserDB(filename: "TSQLBtestDBUpgradeBeforeDateAdded.db", schema: destination, files: files)
+        XCTAssertTrue(db.withConnection({ connection -> Int in
+            connection.version
+        }).value.successValue == destination.version, "Upgrading BrowserSchema to the latest version")
+        db.forceClose()
     }
 
     func testBookmarks() {
