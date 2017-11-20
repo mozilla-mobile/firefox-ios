@@ -414,6 +414,7 @@ class TabManager: NSObject {
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")
 
         // There's still some time between this and the webView being destroyed. We don't want to pick up any stray events.
+
         tab.webView?.navigationDelegate = nil
 
         if notify {
@@ -863,7 +864,7 @@ extension TabManager: WKNavigationDelegate {
     /// then we immediately reload it.
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        if let tab = selectedTab, tab.webView == webView {
+        if let tab = selectedTab, tab.webView?.matches(webView) ?? false {
             webView.reload()
         }
     }

@@ -21,7 +21,7 @@ extension WKNavigationAction {
 
 extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        if tabManager.selectedTab?.webView !== webView {
+        if !(tabManager.selectedTab?.webView?.matches(webView) ?? false) {
             return
         }
 

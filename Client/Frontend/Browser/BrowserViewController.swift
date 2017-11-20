@@ -805,7 +805,7 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        if let webView = tab.webView {
+        tab.webView?.access(self, retains: false) { webView in
             resetSpoofedUserAgentIfRequired(webView, newURL: url)
         }
 
@@ -859,10 +859,14 @@ class BrowserViewController: UIViewController {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         let webView = object as! WKWebView
         guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")"); return }
+
+        guard tabManager.selectedTab?.webView?.matches(webView) ?? false else {
+            return
+        }
+
         switch path {
         case KVOEstimatedProgress:
-            guard webView == tabManager.selectedTab?.webView,
-                let progress = change?[NSKeyValueChangeKey.newKey] as? Float else { break }
+            guard let progress = change?[NSKeyValueChangeKey.newKey] as? Float else { break }
             if !(webView.url?.isLocalUtility ?? false) {
                 urlBar.updateProgressBar(progress)
             } else {
@@ -870,10 +874,7 @@ class BrowserViewController: UIViewController {
             }
         case KVOLoading:
             guard let loading = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
-
-            if webView == tabManager.selectedTab?.webView {
-                navigationToolbar.updateReloadStatus(loading)
-            }
+            navigationToolbar.updateReloadStatus(loading)
 
             if !loading {
                 runScriptsOnWebView(webView)
@@ -901,13 +902,11 @@ class BrowserViewController: UIViewController {
                 navigateInTab(tab: tab)
             }
         case KVOCanGoBack:
-            guard webView == tabManager.selectedTab?.webView,
-                let canGoBack = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
+            guard let canGoBack = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
             
             navigationToolbar.updateBackStatus(canGoBack)
         case KVOCanGoForward:
-            guard webView == tabManager.selectedTab?.webView,
-                let canGoForward = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
+            guard let canGoForward = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
 
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
@@ -1141,37 +1140,32 @@ class BrowserViewController: UIViewController {
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
         tabManager.expireSnackbars()
 
-        guard let webView = tab.webView else {
-            print("Cannot navigate in tab without a webView")
-            return
-        }
+        tab.webView?.access(self, retains: true) { webView in
+            if let url = webView.url, !url.isErrorPageURL && !url.isAboutHomeURL {
+                tab.lastExecutedTime = Date.now()
 
-        if let url = webView.url, !url.isErrorPageURL && !url.isAboutHomeURL {
-            tab.lastExecutedTime = Date.now()
+                postLocationChangeNotificationForTab(tab, navigation: navigation)
 
-            postLocationChangeNotificationForTab(tab, navigation: navigation)
-            
-            // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
-            // because that event wil not always fire due to unreliable page caching. This will either let us know that
-            // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
-            // ignore the result because we are being called back asynchronous when the readermode status changes.
-            webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
+                // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
+                // because that event wil not always fire due to unreliable page caching. This will either let us know that
+                // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
+                // ignore the result because we are being called back asynchronous when the readermode status changes.
+                webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
 
-            // Re-run additional scripts in webView to extract updated favicons and metadata.
-            runScriptsOnWebView(webView)
-        }
-        
-        if tab === tabManager.selectedTab {
-            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
-            // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
-            // cursor land on the correct initial element, but if not followed by LayoutChanged,
-            // VoiceOver will sometimes be stuck on the element, not allowing user to move
-            // forward/backward. Strange, but LayoutChanged fixes that.
-            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
-        } else {
-            // To Screenshot a tab that is hidden we must add the webView,
-            // then wait enough time for the webview to render.
-            if let webView =  tab.webView {
+                // Re-run additional scripts in webView to extract updated favicons and metadata.
+                runScriptsOnWebView(webView)
+            }
+
+            if tab === tabManager.selectedTab {
+                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+                // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
+                // cursor land on the correct initial element, but if not followed by LayoutChanged,
+                // VoiceOver will sometimes be stuck on the element, not allowing user to move
+                // forward/backward. Strange, but LayoutChanged fixes that.
+                UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+            } else {
+                // To Screenshot a tab that is hidden we must add the webView,
+                // then wait enough time for the webview to render.
                 view.insertSubview(webView, at: 0)
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
                     self.screenshotHelper.takeScreenshot(tab)
@@ -1180,10 +1174,10 @@ class BrowserViewController: UIViewController {
                     }
                 }
             }
+
+            // Remember whether or not a desktop site was requested
+            tab.desktopSite = webView.customUserAgent?.isEmpty == false
         }
-        
-        // Remember whether or not a desktop site was requested
-        tab.desktopSite = webView.customUserAgent?.isEmpty == false
     }
     
     // MARK: open in helper utils
@@ -1885,11 +1879,7 @@ extension BrowserViewController: TabManagerDelegate {
         // and having multiple views with the same label confuses tests.
         if let wv = previous?.webView {
             removeOpenInView()
-            wv.endEditing(true)
-            wv.accessibilityLabel = nil
-            wv.accessibilityElementsHidden = true
-            wv.accessibilityIdentifier = nil
-            wv.removeFromSuperview()
+            wv.removeView()
         }
 
         if let tab = selected, let webView = tab.webView {
@@ -1909,14 +1899,16 @@ extension BrowserViewController: TabManagerDelegate {
             ReaderModeHandlers.readerModeCache = readerModeCache
 
             scrollController.tab = selected
-            webViewContainer.addSubview(webView)
-            webView.snp.makeConstraints { make in
-                make.top.equalTo(webViewContainerToolbar.snp.bottom)
-                make.left.right.bottom.equalTo(self.webViewContainer)
+            webView.access(self, retains: true) { webView in
+                webViewContainer.addSubview(webView)
+                webView.snp.makeConstraints { make in
+                    make.top.equalTo(webViewContainerToolbar.snp.bottom)
+                    make.left.right.bottom.equalTo(self.webViewContainer)
+                }
+                webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+                webView.accessibilityIdentifier = "contentView"
+                webView.accessibilityElementsHidden = false
             }
-            webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
-            webView.accessibilityIdentifier = "contentView"
-            webView.accessibilityElementsHidden = false
 
             if let url = webView.url {
                 let absoluteString = url.absoluteString
@@ -2070,12 +2062,17 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
-        return newTab.webView
+        var retainedWebView: WKWebView?
+        newTab.webView?.access(self, retains: true) { webView in
+            retainedWebView = webView
+        }
+        return retainedWebView
     }
 
     fileprivate func canDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+        let isSelected = tabManager.selectedTab?.webView?.matches(webView) ?? false
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)) && (self.presentedViewController == nil)
+        return (tabManager.selectedTab == nil ? false : isSelected) && (self.presentedViewController == nil)
     }
 
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
@@ -2143,7 +2140,7 @@ extension BrowserViewController: WKUIDelegate {
             // We rely on loading that page to get the restore callback to reset the restoring
             // flag, so if we fail to load that page, reset it here.
             if url.aboutComponent == "sessionrestore" {
-                tabManager.tabs.filter { $0.webView == webView }.first?.restoring = false
+                tabManager.tabs.filter { $0.webView?.matches(webView) ?? false }.first?.restoring = false
             }
         }
     }
@@ -2808,11 +2805,15 @@ extension BrowserViewController: KeyboardHelperDelegate {
             self.snackBars.layoutIfNeeded()
         }
 
-        if let webView = tabManager.selectedTab?.webView {
-            webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
-                guard let _ = result as? String else {
-                    return
-                }
+        guard let webView = tabManager.selectedTab?.webView else {
+            return
+        }
+
+        webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
+            guard let _ = result as? String else {
+                return
+            }
+            webView.access(self, retains: true) { webView in
                 self.addCustomSearchButtonToWebView(webView)
             }
         }
@@ -2846,7 +2847,7 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
     func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
         tab.restoring = false
 
-        if let tab = tabManager.selectedTab, tab.webView === tab.webView {
+        if let tab = tabManager.selectedTab {
             updateUIForReaderHomeStateForTab(tab)
         }
     }
