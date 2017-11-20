@@ -606,6 +606,7 @@ extension Navigator where T == FxUserState {
     }
 
     func openURL(_ urlString: String, waitForLoading: Bool = true) {
+        UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
         performAction(Action.LoadURL)
