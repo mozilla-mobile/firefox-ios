@@ -64,7 +64,7 @@ function beforeSubmit(form) {
 
   // Notify our `WKScriptMessageHandler` that we are about to submit this form.
   // This is where we actually serialize the form data for the HTTP request body.
-  webkit.messageHandlers.FormPostHelper.postMessage({
+  webkit.messageHandlers.formPostHelper.postMessage({
       action: (FORM_PROTO_PROPS.action.get.apply(form) || window.location.href),
       method: method,
       target: target,

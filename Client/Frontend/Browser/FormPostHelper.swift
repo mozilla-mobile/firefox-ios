@@ -70,7 +70,7 @@ class FormPostHelper: TabHelper {
     }
     
     func scriptMessageHandlerName() -> String? {
-        return "FormPostHelper"
+        return "formPostHelper"
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
