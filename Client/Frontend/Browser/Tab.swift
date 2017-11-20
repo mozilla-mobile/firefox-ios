@@ -127,7 +127,7 @@ class Tab: NSObject {
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
     var parent: Tab?
 
-    fileprivate var helperManager: HelperManager?
+    fileprivate let helperManager = HelperManager()
     fileprivate var configuration: WKWebViewConfiguration?
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
@@ -199,7 +199,6 @@ class Tab: NSObject {
             // which allows the content appear beneath the toolbars in the BrowserViewController
             webView.scrollView.layer.masksToBounds = false
             webView.navigationDelegate = navigationDelegate
-            helperManager = HelperManager(webView: webView)
 
             restore(webView)
 
@@ -367,11 +366,11 @@ class Tab: NSObject {
     }
 
     func addHelper(_ helper: TabHelper, name: String) {
-        helperManager!.addHelper(tab, helper, name: name)
+        helperManager.addHelper(self, helper, name: name)
     }
 
     func getHelper(name: String) -> TabHelper? {
-        return helperManager?.getHelper(name)
+        return helperManager.getHelper(name)
     }
 
     func hideContent(_ animated: Bool = false) {
