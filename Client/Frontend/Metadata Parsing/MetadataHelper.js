@@ -45,12 +45,7 @@ function MetadataWrapper(metadataparser) {
   }
  
   this.extractMetadata = function() {
-    if (window.__firefox__.pageMetadata) {
-      webkit.messageHandlers.metadataMessageHandler.postMessage(window.__firefox__.pageMetadata);
-      return;
-    }
- 
-    var metadata = metadataparser.getMetadata(window.document, window.location.href, metadataparser.metadataRules);
+    var metadata = metadataparser.getMetadata(window.document, document.URL);
     var imageURL = metadata["image"];
     if (imageURL) {
       if (isDataURI(imageURL)) {
