@@ -134,6 +134,9 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test13ReloadButtonContextMenu() {
+        navigator.toggleOn(userState.trackingProtectionSetting == FxUserState.TrackingProtectionSetting.alwaysOn.rawValue, withAction: Action.ToggleTrackingProtectionSettingAlwaysOn)
+        navigator.goto(BrowserTab)
+
         navigator.openURL(loremIpsumURL)
         navigator.toggleOff(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
         navigator.goto(ReloadLongPressMenu)
@@ -141,7 +144,12 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         navigator.toggleOn(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
         navigator.goto(ReloadLongPressMenu)
         snapshot("13ContextMenuReloadButton-02", waitForLoadingIndicator: false)
-        navigator.back()
+
+        navigator.toggleOff(userState.trackingProtectionPerTabEnabled, withAction: Action.ToggleTrackingProtectionPerTabEnabled)
+        navigator.goto(ReloadLongPressMenu)
+
+        // Snapshot of 'Reload *with* tracking protection' label, because trackingProtectionPerTabEnabled is false.
+        snapshot("13ContextMenuReloadButton-03", waitForLoadingIndicator: false)
     }
 
     func test16PasscodeSettings() {

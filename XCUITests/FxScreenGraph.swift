@@ -125,6 +125,11 @@ class Action {
     static let TogglePocketInNewTab = "TogglePocketInNewTab"
 
     static let AcceptClearPrivateData = "AcceptClearPrivateData"
+
+    static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
+    static let ToggleTrackingProtectionSettingAlwaysOn = "ToggleTrackingProtectionSettingAlwaysOn"
+    static let ToggleTrackingProtectionSettingPrivateOnly = "ToggleTrackingProtectionSettingPrivateOnly"
+    static let ToggleTrackingProtectionSettingOff = "ToggleTrackingProtectionSettingOff"
 }
 
 private var isTablet: Bool {
@@ -133,6 +138,9 @@ private var isTablet: Bool {
     // than avoiding the duplication of one line of code.
     return UIDevice.current.userInterfaceIdiom == .pad
 }
+
+// Matches the available options in app settings for enabling Tracking Protection
+fileprivate enum TrackingProtectionSetting : Int { case alwaysOn; case privateOnly; case off }
 
 class FxUserState: UserState {
     required init() {
@@ -163,6 +171,11 @@ class FxUserState: UserState {
     var fxaPassword: String? = nil
 
     var numTabs: Int = 0
+
+    var trackingProtectionPerTabEnabled = true // TP can be shut off on a per-tab basis
+    var trackingProtectionSetting = TrackingProtectionSetting.privateOnly.rawValue // NSPredicate doesn't work with enum
+    // Construct an NSPredicate with this condition to use it.
+    static let trackingProtectionIsOnCondition = "trackingProtectionSetting == \(TrackingProtectionSetting.alwaysOn.rawValue) || (trackingProtectionSetting == \(TrackingProtectionSetting.privateOnly.rawValue) && isPrivate == YES)"
 }
 
 fileprivate let defaultURL = "https://www.mozilla.org/en-US/book/"
@@ -476,6 +489,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
 
     map.addScreenState(TrackingProtectionSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
+
+        screenState.tap(app.cells["Settings.TrackingProtectionOption.OnLabel"], forAction: Action.ToggleTrackingProtectionSettingAlwaysOn) { userState in
+            userState.trackingProtectionSetting = TrackingProtectionSetting.alwaysOn.rawValue
+        }
+
+        screenState.tap(app.cells["Settings.TrackingProtectionOption.OnInPrivateBrowsingLabel"], forAction: Action.ToggleTrackingProtectionSettingPrivateOnly) { userState in
+            userState.trackingProtectionSetting = TrackingProtectionSetting.privateOnly.rawValue
+        }
+
+        screenState.tap(app.cells["Settings.TrackingProtectionOption.OffLabel"], forAction: Action.ToggleTrackingProtectionSettingOff) { userState in
+            userState.trackingProtectionSetting = TrackingProtectionSetting.off.rawValue
+        }
     }
 
     map.addScreenState(Intro_FxASignin) { screenState in
@@ -549,6 +574,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         let rdsButton = app.sheets.element(boundBy: 0).buttons.element(boundBy: 0)
         screenState.tap(rdsButton, forAction: Action.ToggleRequestDesktopSite) { userState in
             userState.requestDesktopSite = !userState.requestDesktopSite
+        }
+
+        let trackingProtectionButton = app.sheets.element(boundBy: 0).buttons.element(boundBy: 1)
+
+        screenState.tap(trackingProtectionButton, forAction: Action.ToggleTrackingProtectionPerTabEnabled, if: FxUserState.trackingProtectionIsOnCondition) { userState in
+            userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
     }
 
