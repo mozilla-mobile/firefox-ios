@@ -13,7 +13,7 @@ private struct PhotonActionSheetUX {
     static let SectionVerticalPadding: CGFloat = 13
     static let HeaderHeight: CGFloat = 80
     static let RowHeight: CGFloat = 44
-    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Defaults.Grey70
+    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? .black : UIColor.Defaults.Grey70
     static let PlaceholderImage = UIImage(named: "defaultTopSiteIcon")
     static let BorderWidth: CGFloat = 0.5
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
@@ -53,13 +53,13 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     private lazy var showCancelButton: Bool = {
         return self.style == .bottom && self.modalPresentationStyle != .popover
     }()
-    var tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    var tableView = UITableView(frame: .zero, style: .grouped)
     private var tintColor = UIColor.Defaults.Grey80
     private var outerScrollView = UIScrollView()
     
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
-        tapRecognizer.addTarget(self, action: #selector(PhotonActionSheet.dismiss(_:)))
+        tapRecognizer.addTarget(self, action: #selector(PhotonActionSheet.dismiss))
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.cancelsTouchesInView = false
         tapRecognizer.delegate = self
@@ -73,7 +73,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
-        button.addTarget(self, action: #selector(PhotonActionSheet.dismiss(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(PhotonActionSheet.dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = "PhotonMenu.cancel"
         return button
     }()
@@ -116,7 +116,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.delegate = self
         tableView.dataSource = self
         tableView.sectionFooterHeight = 0
-        tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag
+        tableView.keyboardDismissMode = .onDrag
         tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
         tableView.register(PhotonActionSheetHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.HeaderName)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
@@ -126,7 +126,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.separatorStyle = .none
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
-        let footer = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: tableView.frame.width, height: PhotonActionSheetUX.TablePadding)))
+        let footer = UIView(frame: CGRect(origin: .zero, size: CGSize(width: tableView.frame.width, height: PhotonActionSheetUX.TablePadding)))
         tableView.tableFooterView = footer
         tableView.tableHeaderView = footer.clone()
 
@@ -172,7 +172,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         if style == .bottom && self.modalPresentationStyle == .popover {
             // We are showing the menu in a popOver
             self.actions = actions.map({ $0.reversed() }).reversed()
-            tableView.frame = CGRect(origin: CGPoint.zero, size: self.preferredContentSize)
+            tableView.frame = CGRect(origin: .zero, size: self.preferredContentSize)
             return
         }
         
@@ -224,7 +224,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     override func updateViewConstraints() {
         if !self.showCancelButton {
-            tableView.frame = CGRect(origin: CGPoint.zero, size: self.preferredContentSize)
+            tableView.frame = CGRect(origin: .zero, size: self.preferredContentSize)
         }
         super.updateViewConstraints()
     }
@@ -325,7 +325,7 @@ private class PhotonActionSheetHeaderView: UITableViewHeaderFooterView {
     
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.center
+        siteImageView.contentMode = .center
         siteImageView.clipsToBounds = true
         siteImageView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         siteImageView.layer.borderColor = PhotonActionSheetUX.BorderColor.cgColor
@@ -367,7 +367,7 @@ private class PhotonActionSheetHeaderView: UITableViewHeaderFooterView {
     
     override func prepareForReuse() {
         self.siteImageView.image = nil
-        self.siteImageView.backgroundColor = UIColor.clear
+        self.siteImageView.backgroundColor = .clear
     }
     
     func configureWithSite(_ site: Site) {
@@ -399,7 +399,7 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
         self.backgroundView?.backgroundColor = .clear
-        separatorLineView.backgroundColor = UIColor.lightGray
+        separatorLineView.backgroundColor = .lightGray
         self.contentView.addSubview(separatorLineView)
         separatorLineView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
@@ -427,7 +427,7 @@ private class PhotonActionSheetCell: UITableViewCell {
     
     lazy var statusIcon: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.scaleAspectFit
+        siteImageView.contentMode = .scaleAspectFit
         siteImageView.clipsToBounds = true
         siteImageView.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
         return siteImageView

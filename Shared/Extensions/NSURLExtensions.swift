@@ -351,7 +351,7 @@ extension URL {
     }
 
     public func encodeReaderModeURL(_ baseReaderModeURL: String) -> URL? {
-        if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) {
+        if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
             if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
                 return aboutReaderURL
             }

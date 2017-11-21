@@ -42,7 +42,7 @@ extension UIImage {
     public static func createWithColor(_ size: CGSize, color: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         let context = UIGraphicsGetCurrentContext()
-        let rect = CGRect(origin: CGPoint.zero, size: size)
+        let rect = CGRect(origin: .zero, size: size)
         color.setFill()
         context!.fill(rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()

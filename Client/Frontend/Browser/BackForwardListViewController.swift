@@ -192,7 +192,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
 
     func setupDismissTap() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(BackForwardListViewController.handleTap))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tap.cancelsTouchesInView = false
         tap.delegate = self
         view.addGestureRecognizer(tap)

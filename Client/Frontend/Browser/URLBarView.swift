@@ -135,8 +135,8 @@ class URLBarView: UIView {
         button.accessibilityIdentifier = "urlBar-scanQRCode"
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(URLBarView.showQRScanner), for: .touchUpInside)
-        button.setContentHuggingPriority(1000, for: UILayoutConstraintAxis.horizontal)
-        button.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.horizontal)
+        button.setContentHuggingPriority(1000, for: .horizontal)
+        button.setContentCompressionResistancePriority(1000, for: .horizontal)
         return button
     }()
 
@@ -316,11 +316,11 @@ class URLBarView: UIView {
         
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.autocompleteDelegate = self
-        locationTextField.keyboardType = UIKeyboardType.webSearch
-        locationTextField.autocorrectionType = UITextAutocorrectionType.no
-        locationTextField.autocapitalizationType = UITextAutocapitalizationType.none
+        locationTextField.keyboardType = .webSearch
+        locationTextField.autocorrectionType = .no
+        locationTextField.autocapitalizationType = .none
         locationTextField.returnKeyType = UIReturnKeyType.go
-        locationTextField.clearButtonMode = UITextFieldViewMode.whileEditing
+        locationTextField.clearButtonMode = .whileEditing
         locationTextField.font = UIConstants.DefaultChromeFont
         locationTextField.accessibilityIdentifier = "address"
         locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
@@ -737,17 +737,14 @@ class ToolbarTextField: AutocompleteTextField {
 
         UIGraphicsBeginImageContextWithOptions(size, false, 2)
         let context = UIGraphicsGetCurrentContext()!
-        image.draw(at: CGPoint.zero, blendMode: CGBlendMode.normal, alpha: 1.0)
+        image.draw(at: .zero, blendMode: .normal, alpha: 1.0)
 
         context.setFillColor(color.cgColor)
-        context.setBlendMode(CGBlendMode.sourceIn)
+        context.setBlendMode(.sourceIn)
         context.setAlpha(1.0)
 
-        let rect = CGRect(
-            x: CGPoint.zero.x,
-            y: CGPoint.zero.y,
-            width: image.size.width,
-            height: image.size.height)
+        let rect = CGRect(origin: .zero, size: image.size)
+
         context.fill(rect)
         let tintedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()

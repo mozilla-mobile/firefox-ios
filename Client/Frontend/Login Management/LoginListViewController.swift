@@ -87,11 +87,11 @@ class LoginListViewController: SensitiveViewController {
         super.viewDidLoad()
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(LoginListViewController.remoteLoginsDidChange), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(LoginListViewController.dismissAlertController), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(remoteLoginsDidChange), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
-        self.view.backgroundColor = UIColor.white
+        self.view.backgroundColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginListViewController.beginEditing))
 
         self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen.")
@@ -154,7 +154,7 @@ class LoginListViewController: SensitiveViewController {
         notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         notificationCenter.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
         notificationCenter.removeObserver(self, name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
     }
 
     fileprivate func toggleDeleteBarButton() {
@@ -162,7 +162,7 @@ class LoginListViewController: SensitiveViewController {
         if loginSelectionController.selectedCount > 0 {
             if navigationItem.rightBarButtonItem == nil {
                 navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .plain, target: self, action: #selector(LoginListViewController.tappedDelete))
-                navigationItem.rightBarButtonItem?.tintColor = UIColor.red
+                navigationItem.rightBarButtonItem?.tintColor = .red
             }
         } else {
             navigationItem.rightBarButtonItem = nil

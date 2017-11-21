@@ -28,18 +28,18 @@ class ChevronView: UIView {
         didSet {
             switch style {
             case .rounded:
-                lineCapStyle = CGLineCap.round
-                lineJoinStyle = CGLineJoin.round
+                lineCapStyle = .round
+                lineJoinStyle = .round
             case .angular:
-                lineCapStyle = CGLineCap.butt
-                lineJoinStyle = CGLineJoin.miter
+                lineCapStyle = .butt
+                lineJoinStyle = .miter
 
             }
         }
     }
 
     init(direction: ChevronDirection) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
         self.direction = direction
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
@@ -49,8 +49,8 @@ class ChevronView: UIView {
                 self.direction = .left
             }
         }
-        self.backgroundColor = UIColor.clear
-        self.contentMode = UIViewContentMode.redraw
+        self.backgroundColor = .clear
+        self.contentMode = .redraw
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -277,7 +277,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         faviconLabel.text = faviconLetter
         faviconLabel.textAlignment = .center
         faviconLabel.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightMedium)
-        faviconLabel.textColor = UIColor.white
+        faviconLabel.textColor = .white
         UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
         faviconLabel.layer.render(in: UIGraphicsGetCurrentContext()!)
         faviconImage = UIGraphicsGetImageFromCurrentImageContext()!
@@ -311,7 +311,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             let filePath = Bundle.main.path(forResource: "TopSites/" + path, ofType: "png")
             if let filePath = filePath {
                 if color == "#fff" || color == "#FFF" {
-                    icons[url] = (UIColor.clear, filePath)
+                    icons[url] = (.clear, filePath)
                 } else {
                     icons[url] = (UIColor(colorString: color.replacingOccurrences(of: "#", with: "")), filePath)
                 }

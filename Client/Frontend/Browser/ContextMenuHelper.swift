@@ -40,7 +40,7 @@ class ContextMenuHelper: NSObject {
 
         if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") as? UILongPressGestureRecognizer {
             nativeLongPressRecognizer.removeTarget(nil, action: nil)
-            nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected(_:)))
+            nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected))
         }
     }
 
@@ -89,13 +89,13 @@ extension ContextMenuHelper: TabHelper {
 
         var linkURL: URL?
         if let urlString = data["link"] as? String,
-                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowedCharacterSet) {
             linkURL = URL(string: escapedURLString)
         }
 
         var imageURL: URL?
         if let urlString = data["image"] as? String,
-                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowedCharacterSet) {
             imageURL = URL(string: escapedURLString)
         }
 

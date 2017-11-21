@@ -20,9 +20,9 @@ private class HighlightableButton: UIButton {
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
-                self.backgroundColor = UIColor.white
+                self.backgroundColor = .white
             } else {
-                self.backgroundColor = UIColor.clear
+                self.backgroundColor = .clear
             }
         }
     }
@@ -39,13 +39,13 @@ class ButtonToast: UIView {
     }()
     fileprivate var animationConstraint: Constraint?
     fileprivate lazy var gestureRecognizer: UITapGestureRecognizer = {
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.handleTap(_:)))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.cancelsTouchesInView = false
         return gestureRecognizer
     }()
     
     init(labelText: String, descriptionText: String? = nil, buttonText: String, completion:@escaping (_ buttonPressed: Bool) -> Void) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         completionHandler = completion
         
         self.clipsToBounds = true
@@ -66,7 +66,7 @@ class ButtonToast: UIView {
     
     fileprivate func createView(_ labelText: String, descriptionText: String?, buttonText: String) -> UIView {
         let label = UILabel()
-        label.textColor = UIColor.white
+        label.textColor = .white
         label.font = SimpleToastUX.ToastFont
         label.text = labelText
         label.lineBreakMode = .byWordWrapping
@@ -85,14 +85,14 @@ class ButtonToast: UIView {
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.titleLabel?.minimumScaleFactor = 0.1
 
-        let recognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.buttonPressed(_:)))
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(buttonPressed))
         button.addGestureRecognizer(recognizer)
         toast.addSubview(button)
         var descriptionLabel: UILabel?
         
         if let text = descriptionText {
             let textLabel = UILabel()
-            textLabel.textColor = UIColor.white
+            textLabel.textColor = .white
             textLabel.font = SimpleToastUX.ToastFont
             textLabel.text = text
             textLabel.lineBreakMode = .byTruncatingTail

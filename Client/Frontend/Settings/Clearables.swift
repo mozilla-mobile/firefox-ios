@@ -79,7 +79,7 @@ class CacheClearable: Clearable {
 
     func clear() -> Success {
         let dataTypes = Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
-        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {})
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         log.debug("CacheClearable succeeded.")
         return succeed()
@@ -88,7 +88,7 @@ class CacheClearable: Clearable {
 
 private func deleteLibraryFolderContents(_ folder: String) throws {
     let manager = FileManager.default
-    let library = manager.urls(for: FileManager.SearchPathDirectory.libraryDirectory, in: .userDomainMask)[0]
+    let library = manager.urls(for: .libraryDirectory, in: .userDomainMask)[0]
     let dir = library.appendingPathComponent(folder)
     let contents = try manager.contentsOfDirectory(atPath: dir.path)
     for content in contents {
@@ -103,7 +103,7 @@ private func deleteLibraryFolderContents(_ folder: String) throws {
 
 private func deleteLibraryFolder(_ folder: String) throws {
     let manager = FileManager.default
-    let library = manager.urls(for: FileManager.SearchPathDirectory.libraryDirectory, in: .userDomainMask)[0]
+    let library = manager.urls(for: .libraryDirectory, in: .userDomainMask)[0]
     let dir = library.appendingPathComponent(folder)
     try manager.removeItem(at: dir)
 }
@@ -121,7 +121,7 @@ class SiteDataClearable: Clearable {
 
     func clear() -> Success {
         let dataTypes = Set([WKWebsiteDataTypeOfflineWebApplicationCache])
-        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {})
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         log.debug("SiteDataClearable succeeded.")
         return succeed()
@@ -140,8 +140,8 @@ class CookiesClearable: Clearable {
     }
 
     func clear() -> Success {
-        let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases])
-        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {})
+        let dataTypes : Set = [WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases]
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
 
         log.debug("CookiesClearable succeeded.")
         return succeed()

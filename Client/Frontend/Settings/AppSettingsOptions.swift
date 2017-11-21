@@ -71,7 +71,7 @@ class DisconnectSetting: WithAccountSetting {
         let alertController = UIAlertController(
             title: Strings.SettingsDisconnectSyncAlertTitle,
             message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'sign out firefox account' alert"),
-            preferredStyle: UIAlertControllerStyle.alert)
+            preferredStyle: .alert)
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel) { (action) in
                 // Do nothing.
@@ -91,7 +91,7 @@ class DisconnectSetting: WithAccountSetting {
 class SyncNowSetting: WithAccountSetting {
     static let NotificationUserInitiatedSyncManually = "NotificationUserInitiatedSyncManually"
     let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-    let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
+    let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: .clear)
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
     let syncIcon = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
     
@@ -962,7 +962,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(ChinaSyncServiceSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+        control.addTarget(self, action: #selector(ChinaSyncServiceSetting.switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? self.profile.isChinaEdition
         cell.accessoryView = control
         cell.selectionStyle = .none
@@ -1013,7 +1013,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(StageSyncServiceDebugSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? false
         cell.accessoryView = control
         cell.selectionStyle = .none

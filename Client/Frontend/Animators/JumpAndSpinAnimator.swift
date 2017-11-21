@@ -28,7 +28,7 @@ class JumpAndSpinAnimator: Animatable {
             viewToAnimate.layer.add(rotation, forKey: "rotateStar")
             }, completion: { finished in
                 UIView.animate(withDuration: self.AnimationDuration, delay: 0.15, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: [], animations: { () -> Void in
-                    viewToAnimate.transform = CGAffineTransform.identity
+                    viewToAnimate.transform = .identity
                     }, completion: completion)
         })
     }

@@ -43,7 +43,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.setImage(UIImage(named: "new_tab_button_highlight")?.withRenderingMode(.alwaysTemplate), for: .highlighted)
 
         let label = imageButton.label
-        label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
+        label.font = .systemFont(ofSize: TodayUX.imageButtonTextSize)
 
         imageButton.sizeToFit()
         return imageButton
@@ -61,7 +61,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let label = imageButton.label
         label.tintColor = TodayUX.privateBrowsingColor
         label.textColor = TodayUX.privateBrowsingColor
-        label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
+        label.font = .systemFont(ofSize: TodayUX.imageButtonTextSize)
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -73,13 +73,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.addTarget(self, action: #selector(onPressOpenClibpoard), for: .touchUpInside)
 
         // We need to set the background image/color for .Normal, so the whole button is tappable.
-        button.setBackgroundColor(UIColor.clear, forState: .normal)
+        button.setBackgroundColor(.clear, forState: .normal)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .highlighted)
 
         button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysTemplate), for: .normal)
 
-        button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
-        button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
+        button.label.font = .systemFont(ofSize: TodayUX.labelTextSize)
+        button.subtitleLabel.font = .systemFont(ofSize: TodayUX.linkTextSize)
         return button
     }()
 
@@ -88,7 +88,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = TodayUX.margin / 2
-        stackView.distribution = UIStackViewDistribution.fill
+        stackView.distribution = .fill
         stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
@@ -99,7 +99,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.spacing = 0
-        stackView.distribution = UIStackViewDistribution.fillEqually
+        stackView.distribution = .fillEqually
         let edge = self.view.frame.size.width * TodayUX.buttonsHorizontalMarginPercentage
         stackView.layoutMargins = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
         stackView.isLayoutMarginsRelativeArrangement = true
@@ -148,7 +148,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func widgetMarginInsets(forProposedMarginInsets defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
-        return UIEdgeInsets.zero
+        return .zero
     }
 
     func updateCopiedLink() {
@@ -236,7 +236,7 @@ class ImageButtonWithLabel: UIView {
         label.numberOfLines = 1
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
-        label.textColor = UIColor.white
+        label.textColor = .white
     }
 
     func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControlEvents) {
@@ -253,7 +253,7 @@ class ButtonWithSublabel: UIButton {
     }
 
     convenience init() {
-        self.init(frame: CGRect.zero)
+        self.init(frame: .zero)
     }
 
     override init(frame: CGRect) {
@@ -269,7 +269,7 @@ class ButtonWithSublabel: UIButton {
 
         let imageView = self.imageView!
         let subtitleLabel = self.subtitleLabel
-        subtitleLabel.textColor = UIColor.lightGray
+        subtitleLabel.textColor = .lightGray
         self.addSubview(subtitleLabel)
 
         imageView.snp.makeConstraints { make in

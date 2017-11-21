@@ -76,7 +76,7 @@ class LoginTableViewCell: UITableViewCell {
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
         label.textAlignment = .left
-        label.backgroundColor = UIColor.white
+        label.backgroundColor = .white
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
         label.autocorrectionType = .no
@@ -95,14 +95,14 @@ class LoginTableViewCell: UITableViewCell {
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
         label.textAlignment = .left
-        label.backgroundColor = UIColor.white
+        label.backgroundColor = .white
         label.numberOfLines = 1
         return label
     }()
 
     fileprivate lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = UIColor.white
+        imageView.backgroundColor = .white
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -183,8 +183,8 @@ class LoginTableViewCell: UITableViewCell {
         indentationWidth = 0
         selectionStyle = .none
 
-        contentView.backgroundColor = UIColor.white
-        labelContainer.backgroundColor = UIColor.white
+        contentView.backgroundColor = .white
+        labelContainer.backgroundColor = .white
 
         labelContainer.addSubview(highlightedLabel)
         labelContainer.addSubview(descriptionLabel)
@@ -216,7 +216,7 @@ class LoginTableViewCell: UITableViewCell {
 
         // Adjust indent frame
         var indentFrame = CGRect(
-            origin: CGPoint.zero,
+            origin: .zero,
             size: CGSize(width: LoginTableViewCellUX.indentWidth, height: frame.height))
 
         if !showingIndent {

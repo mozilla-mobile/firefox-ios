@@ -37,7 +37,7 @@ class SwipeAnimator: NSObject {
 
     var containerCenter: CGPoint {
         guard let animatingView = self.animatingView else {
-            return CGPoint.zero
+            return .zero
         }
         return CGPoint(x: animatingView.frame.width / 2, y: animatingView.frame.height / 2)
     }
@@ -48,7 +48,7 @@ class SwipeAnimator: NSObject {
 
         super.init()
 
-        self.panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(SwipeAnimator.didPan(_:)))
+        self.panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(didPan))
         animatingView.addGestureRecognizer(self.panGestureRecogniser)
         self.panGestureRecogniser.delegate = self
     }
@@ -63,7 +63,7 @@ class SwipeAnimator: NSObject {
 extension SwipeAnimator {
     fileprivate func animateBackToCenter() {
         UIView.animate(withDuration: params.recenterAnimationDuration, animations: {
-            self.animatingView?.transform = CGAffineTransform.identity
+            self.animatingView?.transform = .identity
             self.animatingView?.alpha = 1
         })
     }
@@ -89,7 +89,7 @@ extension SwipeAnimator {
 
     fileprivate func transformForTranslation(_ translation: CGFloat) -> CGAffineTransform {
         let swipeWidth = animatingView?.frame.size.width ?? 1
-        let totalRotationInRadians = CGFloat(params.totalRotationInDegrees / 180.0 * Double.pi)
+        let totalRotationInRadians = CGFloat(params.totalRotationInDegrees / 180.0 * .pi)
 
         // Determine rotation / scaling amounts by the distance to the edge
         let rotation = (translation / swipeWidth) * totalRotationInRadians

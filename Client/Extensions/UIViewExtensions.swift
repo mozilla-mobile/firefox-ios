@@ -72,7 +72,7 @@ extension UIView {
         roundedLayer.mask = maskLayer
 
         layer.insertSublayer(roundedLayer, at: 0)
-        backgroundColor = UIColor.clear
+        backgroundColor = .clear
     }
 
     /**

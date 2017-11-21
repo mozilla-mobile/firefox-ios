@@ -5,11 +5,11 @@
 import Foundation
 
 extension CharacterSet {
-    public static func URLAllowedCharacterSet() -> CharacterSet {
+    public static var URLAllowedCharacterSet: CharacterSet {
         return CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
     }
 
-    public static func SearchTermsAllowedCharacterSet() -> CharacterSet {
+    public static var SearchTermsAllowedCharacterSet: CharacterSet {
         return CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_.")
     }
 }

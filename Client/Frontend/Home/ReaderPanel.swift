@@ -92,14 +92,14 @@ class ReadingListTableViewCell: UITableViewCell {
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        backgroundColor = UIColor.clear
+        backgroundColor = .clear
 
         separatorInset = UIEdgeInsets(top: 0, left: 48, bottom: 0, right: 0)
-        layoutMargins = UIEdgeInsets.zero
+        layoutMargins = .zero
         preservesSuperviewLayoutMargins = false
 
         contentView.addSubview(readStatusImageView)
-        readStatusImageView.contentMode = UIViewContentMode.scaleAspectFit
+        readStatusImageView.contentMode = .scaleAspectFit
         readStatusImageView.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(ReadingListTableViewCellUX.ReadIndicatorWidth)
             make.height.equalTo(ReadingListTableViewCellUX.ReadIndicatorHeight)
@@ -182,7 +182,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     var profile: Profile!
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(ReadingListPanel.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
@@ -191,8 +191,8 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ReadingListPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ReadingListPanel.notificationReceived(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init!(coder aDecoder: NSCoder) {
@@ -207,8 +207,8 @@ class ReadingListPanel: UITableViewController, HomePanel {
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.separatorInset = UIEdgeInsets.zero
-        tableView.layoutMargins = UIEdgeInsets.zero
+        tableView.separatorInset = .zero
+        tableView.layoutMargins = .zero
         tableView.separatorColor = UIConstants.SeparatorColor
         tableView.register(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
 
@@ -270,9 +270,9 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     fileprivate func createEmptyStateOverview() -> UIView {
         let overlayView = UIScrollView(frame: tableView.bounds)
-        overlayView.backgroundColor = UIColor.white
+        overlayView.backgroundColor = .white
         // Unknown why this does not work with autolayout
-        overlayView.autoresizingMask = [UIViewAutoresizing.flexibleHeight, UIViewAutoresizing.flexibleWidth]
+        overlayView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 
         let containerView = UIView()
         overlayView.addSubview(containerView)
@@ -280,7 +280,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
         let welcomeLabel = UILabel()
         containerView.addSubview(welcomeLabel)
         welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
-        welcomeLabel.textAlignment = NSTextAlignment.center
+        welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
         welcomeLabel.adjustsFontSizeToFitWidth = true
@@ -407,7 +407,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
         if let record = records?[indexPath.row] {
             if let result = profile.readingList?.deleteRecord(record), result.isSuccess {
                 records?.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
                 // reshow empty state if no records left
                 if records?.count == 0 {
                     view.addSubview(emptyStateOverlayView)
@@ -422,7 +422,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
                 // TODO This is a bit odd because the success value of the update is an optional optional Record
                 if let successValue = result.successValue, let updatedRecord = successValue {
                     records?[indexPath.row] = updatedRecord
-                    tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             }
         }

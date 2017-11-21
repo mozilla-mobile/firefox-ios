@@ -87,7 +87,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
     func displayErrorAlert() {
         self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomSyncService)
         DispatchQueue.main.async {
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
         let alertController = UIAlertController(title: Strings.SettingsAdvanceAccountUrlErrorAlertTitle, message: Strings.SettingsAdvanceAccountUrlErrorAlertMessage, preferredStyle: .alert)
         let defaultAction = UIAlertAction(title: Strings.SettingsAdvanceAccountUrlErrorAlertOk, style: .default, handler: nil)
@@ -98,7 +98,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
     func displayNoServiceSetAlert() {
         self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomSyncService)
         DispatchQueue.main.async {
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
         let alertController = UIAlertController(title: Strings.SettingsAdvanceAccountUrlErrorAlertTitle, message: Strings.SettingsAdvanceAccountEmptyUrlErrorAlertMessage, preferredStyle: .alert)
         let defaultAction = UIAlertAction(title: Strings.SettingsAdvanceAccountUrlUpdatedAlertOk, style: .default, handler: nil)

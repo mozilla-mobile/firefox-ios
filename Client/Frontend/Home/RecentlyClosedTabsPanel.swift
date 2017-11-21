@@ -84,7 +84,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress))
     }()
 
     init() {
@@ -163,13 +163,7 @@ extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
         let closedTab = recentlyClosedTabs[indexPath.row]
-        let site: Site
-        if let title = closedTab.title {
-            site = Site(url: String(describing: closedTab.url), title: title)
-        } else {
-            site = Site(url: String(describing: closedTab.url), title: "")
-        }
-        return site
+        return Site(url: String(describing: closedTab.url), title: title ?? "")
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {

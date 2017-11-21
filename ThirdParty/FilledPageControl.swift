@@ -126,7 +126,7 @@ import UIKit
     }
 
     override open var intrinsicContentSize: CGSize {
-        return sizeThatFits(CGSize.zero)
+        return sizeThatFits(.zero)
     }
 
     override open func sizeThatFits(_ size: CGSize) -> CGSize {

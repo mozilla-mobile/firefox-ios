@@ -65,6 +65,6 @@ extension Data {
 
 extension Data {
     public var base64EncodedString: String {
-        return self.base64EncodedString(options: NSData.Base64EncodingOptions())
+        return self.base64EncodedString(options: [])
     }
 }

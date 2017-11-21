@@ -71,7 +71,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     var slideVerticalScaleFactor: CGFloat = 1.0
 
     override func viewDidLoad() {
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = .white
 
         // scale the slides down for iPhone 4S
         if view.frame.height <=  480 {
@@ -86,10 +86,10 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         }
 
         startBrowsingButton = UIButton()
-        startBrowsingButton.backgroundColor = UIColor.clear
+        startBrowsingButton.backgroundColor = .clear
         startBrowsingButton.setTitle(IntroViewControllerUX.StartBrowsingButtonTitle, for: UIControlState())
         startBrowsingButton.setTitleColor(IntroViewControllerUX.StartBrowsingButtonColor, for: UIControlState())
-        startBrowsingButton.addTarget(self, action: #selector(IntroViewController.SELstartBrowsing), for: UIControlEvents.touchUpInside)
+        startBrowsingButton.addTarget(self, action: #selector(IntroViewController.SELstartBrowsing), for: .touchUpInside)
         startBrowsingButton.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
 
         view.addSubview(startBrowsingButton)
@@ -103,7 +103,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         }
 
         scrollView = IntroOverlayScrollView()
-        scrollView.backgroundColor = UIColor.clear
+        scrollView.backgroundColor = .clear
         scrollView.accessibilityLabel = NSLocalizedString("Intro Tour Carousel", comment: "Accessibility label for the introduction tour carousel")
         scrollView.delegate = self
         scrollView.bounces = false
@@ -130,10 +130,10 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         
         pageControl = UIPageControl()
         pageControl.pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.3)
-        pageControl.currentPageIndicatorTintColor = UIColor.black
+        pageControl.currentPageIndicatorTintColor = .black
         pageControl.numberOfPages = IntroViewControllerUX.NumberOfCards
         pageControl.accessibilityIdentifier = "IntroViewController.pageControl"
-        pageControl.addTarget(self, action: #selector(IntroViewController.changePage), for: UIControlEvents.valueChanged)
+        pageControl.addTarget(self, action: #selector(IntroViewController.changePage), for: .valueChanged)
 
         view.addSubview(pageControl)
         pageControl.snp.makeConstraints { (make) -> Void in
@@ -148,7 +148,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             titleLabel.numberOfLines = 2
             titleLabel.adjustsFontSizeToFitWidth = true
             titleLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
-            titleLabel.textAlignment = NSTextAlignment.center
+            titleLabel.textAlignment = .center
             titleLabel.text = title
             titleLabels.append(titleLabel)
             introView.addSubview(titleLabel)
@@ -182,9 +182,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         signInButton = UIButton()
         signInButton.backgroundColor = IntroViewControllerUX.SignInButtonColor
         signInButton.setTitle(IntroViewControllerUX.SignInButtonTitle, for: UIControlState())
-        signInButton.setTitleColor(UIColor.white, for: UIControlState())
+        signInButton.setTitleColor(.white, for: UIControlState())
         signInButton.clipsToBounds = true
-        signInButton.addTarget(self, action: #selector(IntroViewController.SELlogin), for: UIControlEvents.touchUpInside)
+        signInButton.addTarget(self, action: #selector(SELlogin), for: .touchUpInside)
         signInButton.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(IntroViewControllerUX.SignInButtonHeight)
         }
@@ -231,7 +231,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -255,7 +255,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         for i in 0..<IntroViewControllerUX.NumberOfCards {
             if let imageView = slideContainer.subviews[i] as? UIImageView {
                 imageView.frame = CGRect(x: CGFloat(i)*scaledWidthOfSlide, y: 0, width: scaledWidthOfSlide, height: scaledHeightOfSlide)
-                imageView.contentMode = UIViewContentMode.scaleAspectFit
+                imageView.contentMode = .scaleAspectFit
             }
         }
         slideContainer.frame = CGRect(x: 0, y: 0, width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)
@@ -273,7 +273,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         // This actually does the right thing on iPad where the modally
         // presented version happily rotates with the iPad orientation.
-        return UIInterfaceOrientationMask.portrait
+        return .portrait
     }
 
     func SELstartBrowsing() {

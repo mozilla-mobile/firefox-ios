@@ -65,7 +65,7 @@ class LoginDetailViewController: SensitiveViewController {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginDetailViewController.dismissAlertController), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginDetailViewController.dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -100,7 +100,7 @@ class LoginDetailViewController: SensitiveViewController {
         tableView.tableFooterView = UIView()
 
         // Add a line on top of the table view so when the user pulls down it looks 'correct'.
-        let topLine = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: tableView.frame.width, height: 0.5)))
+        let topLine = UIView(frame: CGRect(origin: .zero, size: CGSize(width: tableView.frame.width, height: 0.5)))
         topLine.backgroundColor = SettingsUX.TableViewSeparatorColor
         tableView.tableHeaderView = topLine
 
@@ -112,7 +112,7 @@ class LoginDetailViewController: SensitiveViewController {
     deinit {
         let notificationCenter = NotificationCenter.default
         notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
     }
 
     override func viewDidLayoutSubviews() {
@@ -133,8 +133,8 @@ class LoginDetailViewController: SensitiveViewController {
         let itemsToShowFullWidthSeperator: [InfoItem] = [.deleteItem]
         itemsToShowFullWidthSeperator.forEach { item in
             let cell = tableView.cellForRow(at: IndexPath(row: item.rawValue, section: 0))
-            cell?.separatorInset = UIEdgeInsets.zero
-            cell?.layoutMargins = UIEdgeInsets.zero
+            cell?.separatorInset = .zero
+            cell?.layoutMargins = .zero
             cell?.preservesSuperviewLayoutMargins = false
         }
     }
@@ -190,7 +190,7 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .deleteItem:
             let deleteCell = tableView.dequeueReusableCell(withIdentifier: DefaultCellIdentifier, for: indexPath)
             deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
-            deleteCell.textLabel?.textAlignment = NSTextAlignment.center
+            deleteCell.textLabel?.textAlignment = .center
             deleteCell.textLabel?.textColor = UIConstants.DestructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraitButton
             return deleteCell

@@ -39,7 +39,7 @@ class TopTabsViewController: UIViewController {
     let faviconNotification = NSNotification.Name(rawValue: FaviconManager.FaviconDidLoad)
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: TopTabsViewLayout())
         collectionView.register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -51,21 +51,21 @@ class TopTabsViewController: UIViewController {
     
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: UIControlEvents.touchUpInside)
+        tabsButton.addTarget(self, action: #selector(tabsTrayTapped), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
     
     fileprivate lazy var newTab: UIButton = {
         let newTab = UIButton.newTabButton()
-        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: UIControlEvents.touchUpInside)
+        newTab.addTarget(self, action: #selector(newTabTapped), for: .touchUpInside)
         return newTab
     }()
     
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.light = true
-        privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: UIControlEvents.touchUpInside)
+        privateModeButton.addTarget(self, action: #selector(togglePrivateModeTapped), for: .touchUpInside)
         return privateModeButton
     }()
     
@@ -96,7 +96,7 @@ class TopTabsViewController: UIViewController {
         [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(TopTabsViewController.reloadFavicons(_:)), name: faviconNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadFavicons), name: faviconNotification, object: nil)
     }
     
     deinit {
@@ -441,7 +441,7 @@ extension TopTabsViewController {
     fileprivate func reloadData() {
         assertIsMainThread("reloadData must only be called from main thread")
 
-        if self.isUpdating || self.collectionView.frame == CGRect.zero {
+        if self.isUpdating || self.collectionView.frame == .zero {
             self.pendingReloadData = true
             return
         }
@@ -491,7 +491,7 @@ extension TopTabsViewController: TabManagerDelegate {
 
     // This helps make sure animations don't happen before the view is loaded.
     fileprivate var isRestoring: Bool {
-        return self.tabManager.isRestoring || self.collectionView.frame == CGRect.zero
+        return self.tabManager.isRestoring || self.collectionView.frame == .zero
     }
 
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {

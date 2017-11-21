@@ -36,7 +36,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     var refreshControl: UIRefreshControl?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(HistoryPanel.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(HistoryPanel.longPress))
     }()
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
@@ -56,7 +56,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Lifecycle
     init() {
         super.init(nibName: nil, bundle: nil)
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanel.notificationReceived(_:)), name: $0, object: nil) }
+        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanel.notificationReceived), name: $0, object: nil) }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -170,7 +170,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Refreshing TableView
     func addRefreshControl() {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(HistoryPanel.refresh), for: UIControlEvents.valueChanged)
+        refresh.addTarget(self, action: #selector(HistoryPanel.refresh), for: .valueChanged)
         self.refreshControl = refresh
         self.tableView.refreshControl = refresh
     }
@@ -224,12 +224,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     private func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.white
+        overlayView.backgroundColor = .white
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
         welcomeLabel.text = Strings.HistoryPanelEmptyStateTitle
-        welcomeLabel.textAlignment = NSTextAlignment.center
+        welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = HistoryPanelUX.WelcomeScreenItemTextColor
         welcomeLabel.numberOfLines = 0
@@ -328,11 +328,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func configureRecentlyClosed(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        cell.accessoryType = .disclosureIndicator
         cell.textLabel!.text = Strings.RecentlyClosedTabsButtonTitle
         cell.detailTextLabel!.text = ""
         cell.imageView!.image = UIImage(named: "recently_closed")
-        cell.imageView?.backgroundColor = UIColor.white
+        cell.imageView?.backgroundColor = .white
         if !hasRecentlyClosed {
             cell.textLabel?.alpha = 0.5
             cell.imageView!.alpha = 0.5
@@ -343,11 +343,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func configureSyncedTabs(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        cell.accessoryType = .disclosureIndicator
         cell.textLabel!.text = Strings.SyncedTabsTableViewCellTitle
         cell.detailTextLabel!.text = self.syncDetailText
         cell.imageView!.image = UIImage(named: "synced_devices")
-        cell.imageView?.backgroundColor = UIColor.white
+        cell.imageView?.backgroundColor = .white
         cell.accessibilityIdentifier = "HistoryPanel.syncedDevicesCell"
         return cell
     }
@@ -513,17 +513,17 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
                             self.tableView.beginUpdates()
                             if sectionsToAdd.count > 0 {
-                                self.tableView.insertSections(sectionsToAdd as IndexSet, with: UITableViewRowAnimation.left)
+                                self.tableView.insertSections(sectionsToAdd as IndexSet, with: .left)
                             }
                             if sectionsToDelete.count > 0 {
-                                self.tableView.deleteSections(sectionsToDelete as IndexSet, with: UITableViewRowAnimation.right)
+                                self.tableView.deleteSections(sectionsToDelete as IndexSet, with: .right)
                             }
                             if !rowsToDelete.isEmpty {
-                                self.tableView.deleteRows(at: rowsToDelete, with: UITableViewRowAnimation.right)
+                                self.tableView.deleteRows(at: rowsToDelete, with: .right)
                             }
 
                             if !rowsToAdd.isEmpty {
-                                self.tableView.insertRows(at: rowsToAdd, with: UITableViewRowAnimation.right)
+                                self.tableView.insertRows(at: rowsToAdd, with: .right)
                             }
                             
                             self.tableView.endUpdates()
@@ -540,7 +540,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
         let title = NSLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
 
-        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: title, handler: { (action, indexPath) in
+        let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
         })
         return [delete]

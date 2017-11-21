@@ -12,10 +12,10 @@ class Toolbar: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.clear
+        self.backgroundColor = .clear
 
         // Allow the view to redraw itself on rotation changes
-        contentMode = UIViewContentMode.redraw
+        contentMode = .redraw
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -25,8 +25,8 @@ class Toolbar: UIView {
     fileprivate func drawLine(_ context: CGContext, width: CGFloat, start: CGPoint, end: CGPoint) {
         context.setStrokeColor(UIConstants.BorderColor.cgColor)
         context.setLineWidth(width * (1 / UIScreen.main.scale) )
-        context.move(to: CGPoint(x: start.x, y: start.y))
-        context.addLine(to: CGPoint(x: end.x, y: end.y))
+        context.move(to: start)
+        context.addLine(to: end)
         context.strokePath()
     }
 
@@ -59,9 +59,9 @@ class Toolbar: UIView {
 
     func addButtons(_ buttons: [UIButton]) {
         for button in buttons {
-            button.setTitleColor(UIColor.black, for: UIControlState())
-            button.setTitleColor(UIColor.gray, for: UIControlState.disabled)
-            button.imageView?.contentMode = UIViewContentMode.scaleAspectFit
+            button.setTitleColor(.black, for: UIControlState())
+            button.setTitleColor(.gray, for: .disabled)
+            button.imageView?.contentMode = .scaleAspectFit
             addSubview(button)
         }
     }

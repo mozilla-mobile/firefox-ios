@@ -77,9 +77,9 @@ class Setting: NSObject {
         }
         cell.accessibilityTraits = UIAccessibilityTraitButton
         cell.indentationWidth = 0
-        cell.layoutMargins = UIEdgeInsets.zero
+        cell.layoutMargins = .zero
         // So that the separator line goes all the way to the left edge.
-        cell.separatorInset = UIEdgeInsets.zero
+        cell.separatorInset = .zero
     }
 
     // Called when the pref is tapped.
@@ -137,7 +137,7 @@ private class PaddedSwitch: UIView {
     fileprivate static let Padding: CGFloat = 8
 
     init(switchView: UISwitch) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
         addSubview(switchView)
 
@@ -186,7 +186,7 @@ class BoolSetting: Setting {
 
         let control = UISwitch()
         control.onTintColor = UIConstants.SystemBlueColor
-        control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
         
         displayBool(control)
@@ -372,7 +372,7 @@ class ButtonSetting: Setting {
         } else {
             cell.textLabel?.textColor = SettingsUX.TableViewDisabledRowTextColor
         }
-        cell.textLabel?.textAlignment = NSTextAlignment.center
+        cell.textLabel?.textAlignment = .center
         cell.accessibilityTraits = UIAccessibilityTraitButton
         cell.selectionStyle = .none
     }
@@ -487,8 +487,8 @@ class SettingsTableViewController: UITableViewController {
 
         settings = generateSettings()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: NotificationProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: NotificationProfileDidFinishSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELfirefoxAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
 
         tableView.reloadData()

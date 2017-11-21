@@ -16,7 +16,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     private var sharedItem: ShareItem?
 
     override func viewDidLoad() {
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = .white
 
         super.viewDidLoad()
 

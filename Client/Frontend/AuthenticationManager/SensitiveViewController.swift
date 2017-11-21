@@ -19,20 +19,20 @@ class SensitiveViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.checkIfUserRequiresValidation), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.blurContents), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(SensitiveViewController.hideLogins), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: .UIApplicationWillEnterForeground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: .UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(blurContents), name: .UIApplicationWillResignActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(hideLogins), name: .UIApplicationDidEnterBackground, object: nil)
 
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
+        notificationCenter.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
+        notificationCenter.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
     }
 
     func checkIfUserRequiresValidation() {

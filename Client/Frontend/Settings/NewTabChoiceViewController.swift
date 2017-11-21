@@ -35,7 +35,7 @@ class NewTabChoiceViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
         tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
-        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight))
+        let headerFooterFrame = CGRect(origin: .zero, size: CGSize(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight))
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.showTopBorder = false
         headerView.showBottomBorder = true
