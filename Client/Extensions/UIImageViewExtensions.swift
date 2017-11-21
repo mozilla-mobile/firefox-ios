@@ -72,16 +72,11 @@ open class ImageOperation: NSObject, SDWebImageOperation {
     open var cacheOperation: Operation?
 
     var cancelled: Bool {
-        if let cacheOperation = cacheOperation {
-            return cacheOperation.isCancelled
-        }
-        return false
+        return cacheOperation?.isCancelled ?? false
     }
 
     @objc open func cancel() {
-        if let cacheOperation = cacheOperation {
-            cacheOperation.cancel()
-        }
+        cacheOperation?.cancel()
     }
 }
 

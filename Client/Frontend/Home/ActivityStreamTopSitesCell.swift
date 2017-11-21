@@ -220,7 +220,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
 
     lazy fileprivate var pageControl: FilledPageControl = {
         let pageControl = FilledPageControl()
-        pageControl.tintColor = UIColor.gray
+        pageControl.tintColor = .gray
         pageControl.indicatorRadius = ASHorizontalScrollCellUX.PageControlRadius
         pageControl.isUserInteractionEnabled = true
         pageControl.isAccessibilityElement = true

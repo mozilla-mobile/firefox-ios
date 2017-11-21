@@ -77,7 +77,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let source = getJS()
         let userScript = WKUserScript(
             source: source,
-            injectionTime: WKUserScriptInjectionTime.atDocumentEnd,
+            injectionTime: .atDocumentEnd,
             forMainFrameOnly: true
         )
 

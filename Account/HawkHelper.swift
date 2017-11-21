@@ -120,7 +120,7 @@ open class HawkHelper {
 
     class func getBaseContentTypeFor(_ contentType: String?) -> String {
         if let contentType = contentType {
-            if let index = contentType.characters.index(of: ";") {
+            if let index = contentType.index(of: ";") {
                 return contentType.substring(to: index).trimmingCharacters(in: .whitespaces)
             } else {
                 return contentType.trimmingCharacters(in: .whitespaces)

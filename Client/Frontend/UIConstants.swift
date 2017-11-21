@@ -93,7 +93,7 @@ extension UIColor {
     // The back/forward/refresh/menu button (bottom toolbar)
     struct ToolbarButton {
         static let SelectedTint = BrowserColor(normal: Defaults.MobileBlueD, pbm: Defaults.MobilePurpleB)
-        static let DisabledTint = BrowserColor(normal: UIColor.lightGray, pbm: UIColor.gray)
+        static let DisabledTint = BrowserColor(normal: .lightGray, pbm: .gray)
     }
 
     struct LoadingBar {
@@ -151,7 +151,7 @@ public struct UIConstants {
     static let DefaultChromeSize: CGFloat = 16
     static let DefaultChromeSmallSize: CGFloat = 11
     static let PasscodeEntryFontSize: CGFloat = 36
-    static let DefaultChromeFont: UIFont = UIFont.systemFont(ofSize: DefaultChromeSize, weight: UIFontWeightRegular)
+    static let DefaultChromeFont: UIFont = .systemFont(ofSize: DefaultChromeSize, weight: UIFontWeightRegular)
     static let DefaultChromeSmallFontBold = UIFont.boldSystemFont(ofSize: DefaultChromeSmallSize)
     static let PasscodeEntryFont = UIFont.systemFont(ofSize: PasscodeEntryFontSize, weight: UIFontWeightBold)
 

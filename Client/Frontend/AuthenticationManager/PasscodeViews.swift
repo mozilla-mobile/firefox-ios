@@ -64,28 +64,28 @@ class PasscodeInputView: UIView, UIKeyInput {
     }
 
     @objc var hasText: Bool {
-        return inputtedCode.characters.count > 0
+        return inputtedCode.count > 0
     }
 
     @objc func insertText(_ text: String) {
-        guard inputtedCode.characters.count < passcodeSize else {
+        guard inputtedCode.count < passcodeSize else {
             return
         }
 
         inputtedCode += text
         setNeedsDisplay()
-        if inputtedCode.characters.count == passcodeSize {
+        if inputtedCode.count == passcodeSize {
             delegate?.passcodeInputView(self, didFinishEnteringCode: inputtedCode)
         }
     }
 
     // Required for implementing UIKeyInput
     @objc func deleteBackward() {
-        guard inputtedCode.characters.count > 0 else {
+        guard inputtedCode.count > 0 else {
             return
         }
 
-        inputtedCode.remove(at: inputtedCode.characters.index(before: inputtedCode.endIndex))
+        inputtedCode.remove(at: inputtedCode.index(before: inputtedCode.endIndex))
         setNeedsDisplay()
     }
 
@@ -103,7 +103,7 @@ class PasscodeInputView: UIView, UIKeyInput {
             var circleRect = CGRect(origin: .zero, size: circleSize)
             circleRect.center = CGPoint(x: (offset * CGFloat(index + 1))  - offset / 2, y: rect.height / 2)
 
-            if index < inputtedCode.characters.count {
+            if index < inputtedCode.count {
                 context.fillEllipse(in: circleRect)
             } else {
                 context.strokeEllipse(in: circleRect)

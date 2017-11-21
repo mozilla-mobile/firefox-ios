@@ -802,7 +802,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                 }
                 QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                                     withUserData: userData,
-                                                                                    toApplication: UIApplication.shared)
+                                                                                    toApplication: .shared)
                 site.setBookmarked(true)
                 self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: true, forceTopSites: true)
                 self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
