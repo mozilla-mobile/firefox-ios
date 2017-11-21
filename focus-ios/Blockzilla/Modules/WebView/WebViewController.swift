@@ -181,7 +181,13 @@ extension WebViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let present: (UIViewController) -> Void = { self.present($0, animated: true, completion: nil) }
-        let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? .allow : .cancel
+
+        // prevent Focus from opening universal links
+        // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
+        let allowDecision = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
+
+        let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? allowDecision : .cancel
+
         decisionHandler(decision)
     }
 }
@@ -208,7 +214,7 @@ extension WebViewController: WKUIDelegate {
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let body = message.body as? [String: String],
-              let urlString = body["url"] else { return }
+            let urlString = body["url"] else { return }
 
         guard var components = URLComponents(string: urlString) else { return }
         components.scheme = "http"
@@ -219,3 +225,4 @@ extension WebViewController: WKScriptMessageHandler {
         }
     }
 }
+
