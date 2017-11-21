@@ -724,7 +724,7 @@ open class BrowserProfile: Profile {
                         let payload = ping.stringValue
 
                         log.debug("Payload is: \(payload)")
-                        guard let body = payload.data(using: String.Encoding.utf8) else {
+                        guard let body = payload.data(using: .utf8) else {
                             log.debug("Invalid JSON!")
                             return
                         }

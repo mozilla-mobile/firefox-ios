@@ -81,7 +81,7 @@ class Tab: NSObject {
         guard let url = self.url else {
             return false
         }
-        return url.absoluteString.lengthOfBytes(using: String.Encoding.utf8) > AppConstants.DB_URL_LENGTH_MAX
+        return url.absoluteString.lengthOfBytes(using: .utf8) > AppConstants.DB_URL_LENGTH_MAX
     }
 
     // Use computed property so @available can be used to guard `noImageMode`.

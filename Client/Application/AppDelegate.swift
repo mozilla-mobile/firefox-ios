@@ -582,7 +582,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
 
             if DebugSettingsBundleOptions.attachTabStateToDebugEmail {
-                if let tabStateDebugData = TabManager.tabRestorationDebugInfo().data(using: String.Encoding.utf8) {
+                if let tabStateDebugData = TabManager.tabRestorationDebugInfo().data(using: .utf8) {
                     mailComposeViewController.addAttachmentData(tabStateDebugData, mimeType: "text/plain", fileName: "tabState.txt")
                 }
 

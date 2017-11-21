@@ -223,7 +223,7 @@ class SearchEngines {
         }
 
         let index = (searchDirectory as NSString).appendingPathComponent("list.txt")
-        let listFile = try? String(contentsOfFile: index, encoding: String.Encoding.utf8)
+        let listFile = try? String(contentsOfFile: index, encoding: .utf8)
         assert(listFile != nil, "Read the list of search engines")
 
         let engineNames = listFile!
@@ -254,7 +254,7 @@ class SearchEngines {
         }
 
         let defaultEngineFile = (searchDirectory as NSString).appendingPathComponent("default.txt")
-        let defaultEngineName = try? String(contentsOfFile: defaultEngineFile, encoding: String.Encoding.utf8).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        let defaultEngineName = try? String(contentsOfFile: defaultEngineFile, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
 
         return engines.sorted { e, _ in e.shortName == defaultEngineName }
     }

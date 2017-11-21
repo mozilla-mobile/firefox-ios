@@ -19,7 +19,7 @@ import XCTest
 open class LiveAccountTest: XCTestCase {
     lazy var signedInUser: JSON? = {
         if let path = Bundle(for: type(of: self)).path(forResource: "signedInUser.json", ofType: nil) {
-            if let contents = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) {
+            if let contents = try? String(contentsOfFile: path, encoding: .utf8) {
                 let json = JSON(parseJSON: contents)
                 if json.isError() {
                     return nil

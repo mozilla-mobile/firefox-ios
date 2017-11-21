@@ -9,7 +9,7 @@ class ReadingListBasicAuthAuthenticator: ReadingListAuthenticator {
 
     init(username: String, password: String) {
         let credentials = "\(username):\(password)"
-        let credentialsData = credentials.data(using: String.Encoding.utf8)!
+        let credentialsData = credentials.data(using: .utf8)!
         let encodedCredentials = credentialsData.base64EncodedString(options: NSData.Base64EncodingOptions())
         self.headers = ["Authorization": "Basic \(encodedCredentials)"]
     }
