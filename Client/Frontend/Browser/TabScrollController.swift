@@ -105,7 +105,8 @@ class TabScrollingController: NSObject {
     }
 
     func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
-        if toolbarState == .collapsed {
+        // Due to bug 1417152, when a PDF is showing, don't hide toolbar
+        if toolbarState == .collapsed || isTabShowingPDF {
             completion?(true)
             return
         }
@@ -180,6 +181,11 @@ private extension TabScrollingController {
                 scrollDirection = .down
             } else if delta < 0 {
                 scrollDirection = .up
+            }
+
+            // Due to bug 1417152, when a PDF is showing, don't hide toolbar (.down is hide toolbar gesture BTW).
+            if isTabShowingPDF && scrollDirection == .down {
+                return
             }
 
             lastContentOffset = translation.y
