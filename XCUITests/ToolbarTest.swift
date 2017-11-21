@@ -5,7 +5,7 @@
 import XCTest
 
 let website1: [String: String] = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
-let website2 = "yahoo.com"
+let website2 = "example.com"
 
 class ToolbarTests: BaseTestCase {
     override func setUp() {
