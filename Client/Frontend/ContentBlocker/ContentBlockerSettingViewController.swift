@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Telemetry
 
 @available(iOS 11.0, *)
 class ContentBlockerSettingsTableView: SettingsTableViewController {
@@ -71,6 +72,8 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
                 ContentBlockerHelper.prefsChanged()
 
                 LeanplumIntegration.sharedInstance.track(eventName: .trackingProtectionSettings, withParameters: ["Enabled option": option.rawValue as AnyObject])
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.appSettingChange, object: TelemetryEventObject.trackingProtectionEnabled, value: option.rawValue)
+
             })
         }
 
@@ -85,6 +88,7 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
                 ContentBlockerHelper.prefsChanged()
 
                 LeanplumIntegration.sharedInstance.track(eventName: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue as AnyObject])
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.appSettingChange, object: TelemetryEventObject.trackingProtectionStrength, value: option.rawValue)
             })
         }
 

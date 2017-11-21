@@ -34,11 +34,27 @@ class UnifiedTelemetry {
         }
 
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
+
+        // TODO: This will get renamed to remove the word 'Focus'
+        Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
     }
 
     @objc func uploadError(notification: NSNotification) {
         guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
         Sentry.shared.send(message: "Upload Error", tag: SentryTag.unifiedTelemetry, severity: .info, description: error.debugDescription)
     }
+}
+
+class TelemetryEventCategory {
+    public static let action = "action"
+}
+
+class TelemetryEventMethod {
+    public static let appSettingChange = "app_setting_change"
+}
+
+class TelemetryEventObject {
+    public static let trackingProtectionEnabled = "tracking_protection_enabled"
+    public static let trackingProtectionStrength = "tracking_protection_strength"
 }
 
