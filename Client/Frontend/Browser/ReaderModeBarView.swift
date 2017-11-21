@@ -44,24 +44,6 @@ protocol ReaderModeBarViewDelegate {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
 }
 
-struct ReaderModeBarViewUX {
-
-    static let Themes: [String: Theme] = {
-        var themes = [String: Theme]()
-        var theme = Theme()
-        theme.backgroundColor = UIColor(rgb: 0x38383D)
-        theme.buttonTintColor = UIColor(rgb: 0xf9f9fA)
-        themes[Theme.PrivateMode] = theme
-
-        theme = Theme()
-        theme.backgroundColor = UIColor(rgb: 0xf9f9fA)
-        theme.buttonTintColor = UIColor(rgb: 0x272727)
-        themes[Theme.NormalMode] = theme
-
-        return themes
-    }()
-}
-
 class ReaderModeBarView: UIView {
     var delegate: ReaderModeBarViewDelegate?
 
@@ -158,13 +140,9 @@ class ReaderModeBarView: UIView {
 }
 
 extension ReaderModeBarView: Themeable {
-    func applyTheme(_ themeName: String) {
-        guard let theme = ReaderModeBarViewUX.Themes[themeName] else {
-            log.error("Unable to apply unknown theme \(themeName)")
-            return
-        }
 
-        backgroundColor = theme.backgroundColor
-        buttonTintColor = theme.buttonTintColor!
+    func applyTheme(_ theme: Theme) {
+        backgroundColor = UIColor.Browser.Background.colorFor(theme)
+        buttonTintColor = UIColor.Browser.Tint.colorFor(theme)
     }
 }

@@ -7,7 +7,7 @@ import Storage
 
 class BackForwardTableViewCell: UITableViewCell {
     
-    struct BackForwardViewCellUX {
+    private struct BackForwardViewCellUX {
         static let bgColor = UIColor.gray
         static let faviconWidth = 29
         static let faviconPadding: CGFloat = 20
@@ -16,6 +16,7 @@ class BackForwardTableViewCell: UITableViewCell {
         static let borderBold = 5
         static let IconSize = 23
         static let fontSize: CGFloat = 12.0
+        static let textColor = UIColor.Defaults.Grey80
     }
     
     lazy var faviconView: UIImageView = {
@@ -33,7 +34,7 @@ class BackForwardTableViewCell: UITableViewCell {
         let label = UILabel()
         label.text = " "
         label.font = label.font.withSize(BackForwardViewCellUX.fontSize)
-        label.textColor = UIColor(rgb: 0x272727)
+        label.textColor = BackForwardViewCellUX.textColor
         return label
     }()
 

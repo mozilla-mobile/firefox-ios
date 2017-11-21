@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Storage
 
-struct ActivityStreamHighlightCellUX {
+private struct ActivityStreamHighlightCellUX {
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x353535)
     static let BorderWidth: CGFloat = 0.5
     static let CellSideOffset = 20
@@ -15,7 +15,7 @@ struct ActivityStreamHighlightCellUX {
     static let SiteImageViewSize: CGSize = UIDevice.current.userInterfaceIdiom == .pad ? CGSize(width: 99, height: 120) : CGSize(width: 99, height: 90)
     static let StatusIconSize = 12
     static let FaviconSize = CGSize(width: 45, height: 45)
-    static let DescriptionLabelColor = UIColor(rgb: 0x919191)
+    static let DescriptionLabelColor = UIColor(rgb: 0x919191) // Not found in Photon colors
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
@@ -185,7 +185,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
     }
 }
 
-struct HighlightIntroCellUX {
+private struct HighlightIntroCellUX {
     static let margin: CGFloat = 20
     static let foxImageWidth: CGFloat = 168
 }

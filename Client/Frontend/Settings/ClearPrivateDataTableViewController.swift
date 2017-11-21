@@ -53,9 +53,9 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
         tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
-        tableView.separatorColor = UIConstants.TableViewSeparatorColor
-        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: UIConstants.TableViewHeaderFooterHeight))
+        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
+        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
     }
@@ -164,7 +164,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UIConstants.TableViewHeaderFooterHeight
+        return SettingsUX.TableViewHeaderFooterHeight
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
