@@ -267,7 +267,7 @@ private class SQLiteDBStatement {
             } else if obj is String {
                 typealias CFunction = @convention(c) (UnsafeMutableRawPointer?) -> Void
                 let transient = unsafeBitCast(-1, to: CFunction.self)
-                status = sqlite3_bind_text(pointer, Int32(index+1), (obj as! String).cString(using: String.Encoding.utf8)!, -1, transient)
+                status = sqlite3_bind_text(pointer, Int32(index+1), (obj as! String).cString(using: .utf8)!, -1, transient)
             } else if obj is Data {
                 status = sqlite3_bind_blob(pointer, Int32(index+1), ((obj as! Data) as NSData).bytes, -1, nil)
             } else if obj is Date {
@@ -882,7 +882,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     /// Open the connection. This is called when the db is created. You should not call it yourself.
     fileprivate func openWithFlags(_ flags: Int32) -> NSError? {
-        let status = sqlite3_open_v2(filename.cString(using: String.Encoding.utf8)!, &sqliteDB, flags, nil)
+        let status = sqlite3_open_v2(filename.cString(using: .utf8)!, &sqliteDB, flags, nil)
         if status != SQLITE_OK {
             return createErr("During: Opening Database with Flags", status: Int(status))
         }

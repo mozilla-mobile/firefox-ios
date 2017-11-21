@@ -32,7 +32,7 @@ struct AboutLicenseHandler {
 
 extension GCDWebServerDataResponse {
     convenience init(XHTML: String) {
-        let data = XHTML.data(using: String.Encoding.utf8, allowLossyConversion: false)
+        let data = XHTML.data(using: .utf8, allowLossyConversion: false)
         self.init(data: data, contentType: "application/xhtml+xml; charset=utf-8")
     }
 }

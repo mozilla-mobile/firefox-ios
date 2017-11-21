@@ -40,7 +40,7 @@ class MockingURLProtocol: URLProtocol {
                                          headerFields: [:])
 
         self.client?.urlProtocol(self, didReceive: response!, cacheStoragePolicy: .notAllowed)
-        self.client?.urlProtocol(self, didLoad: "".data(using: String.Encoding.utf8)!)
+        self.client?.urlProtocol(self, didLoad: "".data(using: .utf8)!)
         self.client?.urlProtocolDidFinishLoading(self)
     }
 

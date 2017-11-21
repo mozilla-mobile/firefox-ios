@@ -44,7 +44,7 @@ extension SystemUtils {
         if fm.fileExists(atPath: lockFile) {
             return
         }
-        let contents = "Device is unlocked".data(using: String.Encoding.utf8)
+        let contents = "Device is unlocked".data(using: .utf8)
         fm.createFile(atPath: lockFile, contents: contents, attributes: [FileAttributeKey.protectionKey.rawValue: FileProtectionType.complete])
     }
 

@@ -14,7 +14,7 @@ class RecordTests: XCTestCase {
     func testGUIDs() {
         let s = Bytes.generateGUID()
         print("Got GUID: \(s)", terminator: "\n")
-        XCTAssertEqual(12, s.lengthOfBytes(using: String.Encoding.utf8))
+        XCTAssertEqual(12, s.lengthOfBytes(using: .utf8))
     }
 
     func testSwiftyJSONSerializingControlChars() {
