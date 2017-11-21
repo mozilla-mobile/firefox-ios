@@ -66,7 +66,7 @@ class FileAccessorTests: XCTestCase {
         let path = (testDir as NSString).appendingPathComponent(filename)
         let success: Bool
         do {
-            try "foo".write(toFile: path, atomically: false, encoding: String.Encoding.utf8)
+            try "foo".write(toFile: path, atomically: false, encoding: .utf8)
             success = true
         } catch _ {
             success = false

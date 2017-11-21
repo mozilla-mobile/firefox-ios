@@ -876,7 +876,7 @@ extension TabManager {
         let tabs = TabManager.tabsToRestore()?.map { $0.jsonDictionary } ?? []
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: tabs, options: [.prettyPrinted])
-            return String(data: jsonData, encoding: String.Encoding.utf8) ?? ""
+            return String(data: jsonData, encoding: .utf8) ?? ""
         } catch _ {
             return ""
         }

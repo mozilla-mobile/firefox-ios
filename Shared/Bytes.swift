@@ -39,7 +39,7 @@ open class Bytes {
      * This is to allow HMAC to be computed of the raw base64 string.
      */
     open class func dataFromBase64(_ b64: String) -> Data? {
-        return b64.data(using: String.Encoding.ascii, allowLossyConversion: false)
+        return b64.data(using: .ascii, allowLossyConversion: false)
     }
 
     func fromHex(_ str: String) -> Data {

@@ -27,7 +27,7 @@ class LiveStorageClientTests: LiveAccountTest {
         let authorizer: Authorizer = {
             (r: URLRequest) -> URLRequest in
             var request = r
-            let helper = HawkHelper(id: token.id, key: token.key.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
+            let helper = HawkHelper(id: token.id, key: token.key.data(using: .utf8, allowLossyConversion: false)!)
             request.addValue(helper.getAuthorizationValueFor(r), forHTTPHeaderField: "Authorization")
             return request
         }

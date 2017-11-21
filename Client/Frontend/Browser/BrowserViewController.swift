@@ -1629,6 +1629,9 @@ extension BrowserViewController: TabDelegate {
 
         webView.uiDelegate = self
 
+        let formPostHelper = FormPostHelper(tab: tab)
+        tab.addHelper(formPostHelper, name: FormPostHelper.name())
+
         let readerMode = ReaderMode(tab: tab)
         readerMode.delegate = self
         tab.addHelper(readerMode, name: ReaderMode.name())
@@ -2064,8 +2067,15 @@ extension BrowserViewController: WKUIDelegate {
             screenshotHelper.takeScreenshot(currentTab)
         }
 
+        let request: URLRequest
+        if let formPostHelper = parentTab.getHelper(name: "FormPostHelper") as? FormPostHelper {
+            request = formPostHelper.urlRequestForNavigationAction(navigationAction)
+        } else {
+            request = navigationAction.request
+        }
+
         // If the page uses window.open() or target="_blank", open the page in a new tab.
-        let newTab = tabManager.addTab(navigationAction.request, configuration: configuration, afterTab: parentTab, isPrivate: parentTab.isPrivate)
+        let newTab = tabManager.addTab(request, configuration: configuration, afterTab: parentTab, isPrivate: parentTab.isPrivate)
         tabManager.selectTab(newTab)
 
         // If the page we just opened has a bad scheme, we return nil here so that JavaScript does not

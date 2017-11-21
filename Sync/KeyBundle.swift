@@ -201,7 +201,7 @@ open class KeyBundle: Hashable {
                 let ciphertext = ciphertext.base64EncodedString
 
                 // The HMAC is computed over the base64 string. As bytes. Yes, I know.
-                if let encodedCiphertextBytes = ciphertext.data(using: String.Encoding.ascii, allowLossyConversion: false) {
+                if let encodedCiphertextBytes = ciphertext.data(using: .ascii, allowLossyConversion: false) {
                     let hmac = self.hmacString(encodedCiphertextBytes)
                     let iv = iv.base64EncodedString
 

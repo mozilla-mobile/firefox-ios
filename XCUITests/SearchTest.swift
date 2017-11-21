@@ -139,12 +139,9 @@ class SearchTests: BaseTestCase {
         let tablesQuery2 = app.tables
         tablesQuery2.staticTexts[searchEngine].tap()
 
-        navigator.openURL(urlString: "foo")
+        navigator.openURL("foo")
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
-
-        // Go here so that next time it is possible to access settings
-        navigator.goto(BrowserTabMenu)
         }
 
     func testSearchEngine() {

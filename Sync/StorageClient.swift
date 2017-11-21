@@ -337,7 +337,7 @@ open class Sync15StorageClient {
         self.authorizer = {
             (r: URLRequest) -> URLRequest in
             var req = r
-            let helper = HawkHelper(id: token.id, key: token.key.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
+            let helper = HawkHelper(id: token.id, key: token.key.data(using: .utf8, allowLossyConversion: false)!)
             req.setValue(helper.getAuthorizationValueFor(r), forHTTPHeaderField: "Authorization")
             return req
         }
@@ -469,7 +469,7 @@ open class Sync15StorageClient {
             req.setValue(millisecondsToDecimalSeconds(ifUnmodifiedSince), forHTTPHeaderField: "X-If-Unmodified-Since")
         }
 
-        req.httpBody = body.data(using: String.Encoding.utf8)!
+        req.httpBody = body.data(using: .utf8)!
         let authorized: URLRequest = self.authorizer(req)
         return alamofire.request(authorized)
     }
