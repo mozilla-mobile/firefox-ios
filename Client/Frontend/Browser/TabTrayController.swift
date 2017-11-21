@@ -1063,4 +1063,3 @@ class TrayToolbar: UIView {
         maskButton.applyTheme(theme)
     }
 }
-
