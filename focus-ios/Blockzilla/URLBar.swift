@@ -749,6 +749,7 @@ class TrackingProtectionBadge: UIView {
         counterLabel.textAlignment = .center
         counterLabel.font = UIFont.boldSystemFont(ofSize: 8)
         counterLabel.text = "0"
+        counterLabel.accessibilityIdentifier = "TrackingProtectionBadge.counterLabel"
         trackingProtectionOff.alpha = 0
         
         addSubview(trackingProtectionOff)

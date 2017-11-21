@@ -145,6 +145,7 @@ class TrackingProtectionBreakdownItem: UIView {
 
         counterLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         counterLabel.textColor = UIConstants.colors.trackingProtectionPrimary
+        counterLabel.accessibilityIdentifier = "TrackingProtectionBreakdownItem.counterLabel"
         addSubview(counterLabel)
 
         indicatorView.snp.makeConstraints { make in
@@ -314,6 +315,7 @@ class TrackingProtectionToggleView: UIView {
         addSubview(label)
 
         toggle.onTintColor = UIConstants.colors.toggleOn
+        toggle.accessibilityIdentifier = "TrackingProtectionToggleView.toggleTrackingProtection"
         addSubview(toggle)
 
         borderView.backgroundColor = UIConstants.colors.settingsSeparator
@@ -381,6 +383,7 @@ class TrackingProtectionView: UIView {
         backgroundColor = UIConstants.colors.background
 
         closeButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
+        closeButton.accessibilityIdentifier = "TrackingProtectionView.closeButton"
         addSubview(closeButton)
         addSubview(scrollView)
 
