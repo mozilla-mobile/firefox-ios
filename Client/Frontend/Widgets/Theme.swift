@@ -3,21 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import Foundation
 
-struct Theme {
-    var URLFontColor: UIColor?
-    var hostFontColor: UIColor?
-    var backgroundColor: UIColor?
-    var textColor: UIColor?
-    var highlightColor: UIColor?
-    var tintColor: UIColor?
-    var buttonTintColor: UIColor?
-    var activeBorderColor: UIColor?
-    var borderColor: UIColor?
-    var highlightButtonColor: UIColor?
-    var highlightBorderColor: UIColor?
-    var highlightTextColor: UIColor?
-    var disabledButtonColor: UIColor?
+protocol Themeable {
+    func applyTheme(_ theme: Theme)
+}
 
-    static let PrivateMode = "Private"
-    static let NormalMode = "Normal"
+enum Theme: String {
+    case Private
+    case Normal
 }

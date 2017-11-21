@@ -16,7 +16,7 @@ class CurrentTabSetting: Setting {
 
     init(profile: Profile) {
         self.profile = profile
-        super.init(title: NSAttributedString(string: NewTabAccessors.getNewTabPage(profile.prefs).settingTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NewTabAccessors.getNewTabPage(profile.prefs).settingTitle, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

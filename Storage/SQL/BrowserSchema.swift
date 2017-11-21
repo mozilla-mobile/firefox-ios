@@ -954,9 +954,7 @@ open class BrowserSchema: Schema {
             "CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureChild) " +
             "ON \(TableBookmarksMirrorStructure) (child)"
             if !self.run(db, queries: [
-                self.bufferBookmarksView,
                 self.bufferBookmarksStructureView,
-                self.localBookmarksView,
                 self.localBookmarksStructureView,
                 indexMirrorStructureChild]) {
                 return false
@@ -968,11 +966,7 @@ open class BrowserSchema: Schema {
             if !self.run(db, queries: [
                 "DROP VIEW IF EXISTS \(ViewBookmarksBufferStructureOnMirror)",
                 "DROP VIEW IF EXISTS \(ViewBookmarksLocalStructureOnMirror)",
-                "DROP VIEW IF EXISTS \(ViewBookmarksBufferOnMirror)",
-                "DROP VIEW IF EXISTS \(ViewBookmarksLocalOnMirror)",
-                self.bufferBookmarksView,
                 self.bufferBookmarksStructureView,
-                self.localBookmarksView,
                 self.localBookmarksStructureView]) {
                 return false
             }
@@ -988,14 +982,15 @@ open class BrowserSchema: Schema {
             }
         }
 
-        if from < 17 && to >= 17 {
-            if !self.run(db, queries: [
-                // Adds the local_modified, server_modified times to the local bookmarks view
-                "DROP VIEW IF EXISTS \(ViewBookmarksLocalOnMirror)",
-                self.localBookmarksView]) {
-                return false
-            }
-        }
+        // That view is re-created later
+        // if from < 17 && to >= 17 {
+        //     if !self.run(db, queries: [
+        //         // Adds the local_modified, server_modified times to the local bookmarks view
+        //         "DROP VIEW IF EXISTS \(ViewBookmarksLocalOnMirror)",
+        //         self.localBookmarksView]) {
+        //         return false
+        //     }
+        // }
 
         if from < 18 && to >= 18 {
             if !self.run(db, queries: [
@@ -1014,13 +1009,14 @@ open class BrowserSchema: Schema {
             }
         }
 
-        if from < 20 && to >= 20 {
-            if !self.run(db, queries: [
-                "DROP VIEW IF EXISTS \(ViewBookmarksBufferOnMirror)",
-                self.bufferBookmarksView]) {
-                return false
-            }
-        }
+        // That view is re-created later
+        // if from < 20 && to >= 20 {
+        //     if !self.run(db, queries: [
+        //         "DROP VIEW IF EXISTS \(ViewBookmarksBufferOnMirror)",
+        //         self.bufferBookmarksView]) {
+        //         return false
+        //     }
+        // }
 
         if from < 21 && to >= 21 {
             if !self.run(db, queries: [
@@ -1097,8 +1093,7 @@ open class BrowserSchema: Schema {
 
         if from < 28 && to >= 28 {
             if !self.run(db, queries: [
-                self.pendingBookmarksDeletions,
-                self.bufferBookmarksWithDeletionsView
+                self.pendingBookmarksDeletions
             ]) {
                 return false
             }

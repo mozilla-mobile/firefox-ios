@@ -30,9 +30,9 @@ class OpenWithSettingsViewController: UITableViewController {
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
-        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
-        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
+        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight))
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle.uppercased()
         headerView.showTopBorder = false

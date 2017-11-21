@@ -12,7 +12,7 @@ protocol ClientPickerViewControllerDelegate {
     func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient])
 }
 
-struct ClientPickerViewControllerUX {
+private struct ClientPickerViewControllerUX {
     static let TableHeaderRowHeight = CGFloat(50)
     static let TableHeaderTextFont = UIFont.systemFont(ofSize: 16)
     static let TableHeaderTextColor = UIColor.gray

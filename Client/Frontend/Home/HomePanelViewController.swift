@@ -59,23 +59,7 @@ enum HomePanelType: Int {
 }
 
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
-    static let Themes: [String: Theme] = {
-        var themes = [String: Theme]()
-        var theme = Theme()
-        theme.backgroundColor = UIConstants.AppBackgroundColor
-        theme.buttonTintColor = UIColor(rgb: 0x7e7e7f)
-        theme.highlightButtonColor = UIConstants.HighlightBlue
-        themes[Theme.PrivateMode] = theme
 
-        theme = Theme()
-        theme.backgroundColor = UIConstants.AppBackgroundColor
-        theme.buttonTintColor = UIColor(rgb: 0x7e7e7f)
-        theme.highlightButtonColor = UIConstants.HighlightBlue
-        themes[Theme.NormalMode] = theme
-        
-        return themes
-    }()
-    
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [HomePanelDescriptor]!
@@ -305,16 +289,12 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
 // MARK: UIAppearance
 extension HomePanelViewController: Themeable {
-    func applyTheme(_ themeName: String) {
-        guard let theme = HomePanelViewController.Themes[themeName] else {
-            fatalError("Theme not found")
-        }
-        
-        highlightLine.backgroundColor = theme.highlightButtonColor
-        buttonContainerView.backgroundColor = theme.backgroundColor
-        self.view.backgroundColor = theme.backgroundColor
-        buttonTintColor = theme.buttonTintColor
-        buttonSelectedTintColor = theme.highlightButtonColor
+    func applyTheme(_ theme: Theme) {
+        buttonContainerView.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
+        view.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
+        buttonTintColor = UIColor.HomePanel.ToolbarTint.colorFor(theme)
+        buttonSelectedTintColor = UIColor.HomePanel.ToolbarHighlight.colorFor(theme)
+        highlightLine.backgroundColor = UIColor.HomePanel.ToolbarHighlight.colorFor(theme)
         updateButtonTints()
     }
 }

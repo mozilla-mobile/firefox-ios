@@ -16,7 +16,7 @@ private let log = Logger.browserLogger
 struct OpenInViewUX {
     static let ViewHeight: CGFloat = 40.0
     static let TextFont = UIFont.systemFont(ofSize: 16)
-    static let TextColor = UIColor(red: 74.0/255.0, green: 144.0/255.0, blue: 226.0/255.0, alpha: 1.0)
+    static let TextColor = UIColor.Defaults.Blue60
     static let TextOffset = -15
     static let OpenInString = NSLocalizedString("Open in…", comment: "String indicating that the file can be opened in another application on the device")
 }

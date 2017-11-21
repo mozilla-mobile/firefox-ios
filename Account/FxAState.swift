@@ -144,7 +144,7 @@ open class FxAState: JSONLiteralConvertible {
         return JSON([
             "version": StateSchemaVersion,
             "label": self.label.rawValue,
-        ] as NSDictionary)
+        ])
     }
 }
 
@@ -168,7 +168,7 @@ open class TokenState: FxAState {
     open override func asJSON() -> JSON {
         var d: [String: JSON] = super.asJSON().dictionary!
         d["sessionToken"] = JSON(sessionToken.hexEncodedString as NSString)
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 }
 
@@ -187,7 +187,7 @@ open class ReadyForKeys: TokenState {
         var d: [String: JSON] = super.asJSON().dictionary!
         d["keyFetchToken"] = JSON(keyFetchToken.hexEncodedString as NSString)
         d["unwrapkB"] = JSON(unwrapkB.hexEncodedString as NSString)
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 }
 
@@ -209,7 +209,7 @@ open class EngagedBeforeVerifiedState: ReadyForKeys {
         var d = super.asJSON().dictionary!
         d["knownUnverifiedAt"] = JSON(NSNumber(value: knownUnverifiedAt))
         d["lastNotifiedUserAt"] = JSON(NSNumber(value: lastNotifiedUserAt))
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 
     func withUnwrapKey(_ unwrapkB: Data) -> EngagedBeforeVerifiedState {
@@ -246,7 +246,7 @@ open class TokenAndKeys: TokenState {
         var d = super.asJSON().dictionary!
         d["kA"] = JSON(kA.hexEncodedString as NSString)
         d["kB"] = JSON(kB.hexEncodedString as NSString)
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 }
 
@@ -268,9 +268,9 @@ open class TokenKeysAndKeyPair: TokenAndKeys {
 
     open override func asJSON() -> JSON {
         var d = super.asJSON().dictionary!
-        d["keyPair"] = JSON(keyPair.jsonRepresentation() as NSDictionary)
+        d["keyPair"] = JSON(keyPair.jsonRepresentation())
         d["keyPairExpiresAt"] = JSON(NSNumber(value: keyPairExpiresAt))
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 
     func isKeyPairExpired(_ now: Timestamp) -> Bool {
@@ -298,7 +298,7 @@ open class MarriedState: TokenKeysAndKeyPair {
         var d = super.asJSON().dictionary!
         d["certificate"] = JSON(certificate as NSString)
         d["certificateExpiresAt"] = JSON(NSNumber(value: certificateExpiresAt))
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 
     func isCertificateExpired(_ now: Timestamp) -> Bool {
