@@ -50,3 +50,4 @@ open class MailtoLinkHandler {
         return providerDict
     }
 }
+
