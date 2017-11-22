@@ -2,30 +2,58 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-public let NotificationDataLoginDidChange = Notification.Name("Data:Login:DidChange")
+extension Notification.Name {
 
-// add a property to allow the observation of firefox accounts
-public let NotificationFirefoxAccountChanged = Notification.Name("FirefoxAccountChangedNotification")
+    public static let DataLoginDidChange = Notification.Name("DataLoginDidChange")
 
-public let NotificationFirefoxAccountProfileChanged = Notification.Name("NotificationFirefoxAccountProfileChanged")
+    // add a property to allow the observation of firefox accounts
+    public static let FirefoxAccountChanged = Notification.Name("FirefoxAccountChanged")
 
-public let NotificationFirefoxAccountDeviceRegistrationUpdated = Notification.Name("FirefoxAccountDeviceRegistrationUpdated")
+    public static let FirefoxAccountProfileChanged = Notification.Name("FirefoxAccountProfileChanged")
 
-public let NotificationPrivateDataClearedHistory = Notification.Name("PrivateDataClearedHistoryNotification")
+    public static let FirefoxAccountDeviceRegistrationUpdated = Notification.Name("FirefoxAccountDeviceRegistrationUpdated")
 
-// Fired when the user finishes navigating to a page and the location has changed
-public let NotificationOnLocationChange = Notification.Name("OnLocationChange")
+    public static let PrivateDataClearedHistory = Notification.Name("PrivateDataClearedHistory")
 
-// Fired when a the page metadata extraction script has completed and is being passed back to the native client
-public let NotificationOnPageMetadataFetched = Notification.Name("OnPageMetadataFetched")
+    // Fired when the user finishes navigating to a page and the location has changed
+    public static let OnLocationChange = Notification.Name("OnLocationChange")
 
-// Fired when the login synchronizer has finished applying remote changes
-public let NotificationDataRemoteLoginChangesWereApplied = Notification.Name("NotificationDataRemoteLoginChangesWereApplied")
+    // Fired when a the page metadata extraction script has completed and is being passed back to the native client
+    public static let OnPageMetadataFetched = Notification.Name("OnPageMetadataFetched")
 
-// Fired when the FxA account has been verified. This should only be fired by the FxALoginStateMachine.
-public let NotificationFirefoxAccountVerified = Notification.Name("FirefoxAccountVerifiedNotification")
+    // Fired when the login synchronizer has finished applying remote changes
+    public static let DataRemoteLoginChangesWereApplied = Notification.Name("DataRemoteLoginChangesWereApplied")
 
-// MARK: Notification UserInfo Keys
-public let NotificationUserInfoKeyHasSyncableAccount = Notification.Name("NotificationUserInfoKeyHasSyncableAccount")
+    // Fired when the FxA account has been verified. This should only be fired by the FxALoginStateMachine.
+    public static let FirefoxAccountVerified = Notification.Name("FirefoxAccountVerified")
 
-public let NotificationDidRestoreSession = Notification.Name("NotificationDidRestoreSession")
+    // MARK: Notification UserInfo Keys
+    public static let UserInfoKeyHasSyncableAccount = Notification.Name("UserInfoKeyHasSyncableAccount")
+
+    public static let DidRestoreSession = Notification.Name("DidRestoreSession")
+
+    public static let ContentBlockerUpdateNeeded = Notification.Name("ContentBlockerUpdateNeeded")
+
+    public static let LocationChange = Notification.Name("OnLocationChange")
+
+    public static let DynamicFontChanged = Notification.Name("DynamicFontChanged")
+    public static let PasscodeDidChange = Notification.Name("PasscodeDidChange")
+    public static let PasscodeDidCreate = Notification.Name("PasscodeDidCreate")
+    public static let PasscodeDidRemove = Notification.Name("PasscodeDidRemove")
+
+    public static let DatabaseWasRecreated = Notification.Name("DatabaseWasRecreated")
+
+    public static let ReachabilityStatusChanged = Notification.Name("ReachabilityStatusChanged")
+
+    public static let UserInitiatedSyncManually = Notification.Name("UserInitiatedSyncManually")
+
+    public static let ProfileDidStartSyncing = Notification.Name("ProfileDidStartSyncing")
+    public static let ProfileDidFinishSyncing = Notification.Name("ProfileDidFinishSyncing")
+
+    public static let BookmarkBufferValidated = Notification.Name("BookmarkBufferValidated")
+
+    public static let FaviconDidLoad = Notification.Name("FaviconManagerFaviconDidLoad")
+
+    public static let BookmarkStatusChanged = Notification.Name("BookmarkStatusChanged")
+
+}

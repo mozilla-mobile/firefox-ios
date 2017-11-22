@@ -99,11 +99,7 @@ open class TokenServerClient {
     }
 
     fileprivate class func parseTimestampHeader(_ header: String?) -> Timestamp? {
-        if let timestampString = header {
-            return decimalSecondsStringToTimestamp(timestampString)
-        } else {
-            return nil
-        }
+        return header.flatMap(decimalSecondsStringToTimestamp)
     }
 
     fileprivate class func remoteError(fromJSON json: JSON, statusCode: Int, remoteTimestampHeader: String?) -> TokenServerError? {

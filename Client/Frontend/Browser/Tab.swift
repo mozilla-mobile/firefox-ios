@@ -180,14 +180,14 @@ class Tab: NSObject {
             configuration!.preferences = WKPreferences()
             configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
             configuration!.allowsInlineMediaPlayback = true
-            let webView = TabWebView(frame: CGRect.zero, configuration: configuration!)
+            let webView = TabWebView(frame: .zero, configuration: configuration!)
             webView.delegate = self
             configuration = nil
 
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.allowsBackForwardNavigationGestures = true
             webView.allowsLinkPreview = false
-            webView.backgroundColor = UIColor.lightGray
+            webView.backgroundColor = .lightGray
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
@@ -457,14 +457,7 @@ class Tab: NSObject {
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
-        var tab = parent
-        while tab != nil {
-            if tab! == ancestor {
-                return true
-            }
-            tab = tab?.parent
-        }
-        return false
+        return sequence(first: parent) { $0?.parent }.contains { $0 === ancestor }
     }
 
     func setNightMode(_ enabled: Bool) {
@@ -472,14 +465,14 @@ class Tab: NSObject {
     }
 
     func injectUserScriptWith(fileName: String, type: String = "js", injectionTime: WKUserScriptInjectionTime = .atDocumentEnd, mainFrameOnly: Bool = true) {
-        guard let webView = self.webView else {
+        guard let webView = self.webView,
+            let path = Bundle.main.path(forResource: fileName, ofType: type),
+            let source = try? String(contentsOfFile: path) else {
             return
         }
-        if let path = Bundle.main.path(forResource: fileName, ofType: type),
-            let source = try? String(contentsOfFile: path) {
-            let userScript = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
-            webView.configuration.userContentController.addUserScript(userScript)
-        }
+
+        let userScript = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
+        webView.configuration.userContentController.addUserScript(userScript)
     }
 }
 
@@ -499,12 +492,9 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
 
     @objc func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         for helper in helpers.values {
-            if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
-                if scriptMessageHandlerName == message.name {
-                    helper.userContentController(userContentController, didReceiveScriptMessage: message)
-                    return
-                }
-            }
+            guard let name = helper.scriptMessageHandlerName(), name == message.name
+                else { continue }
+            helper.userContentController(userContentController, didReceiveScriptMessage: message)
         }
     }
 

@@ -34,14 +34,14 @@ class SnackButton: UIButton {
     init(title: String, accessibilityIdentifier: String, callback: @escaping (_ bar: SnackBar) -> Void) {
         self.callback = callback
 
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
-        setTitle(title, for: UIControlState())
+        setTitle(title, for: [])
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         setBackgroundImage(highlightImg, for: .highlighted)
         setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
 
-        addTarget(self, action: #selector(SnackButton.onClick), for: .touchUpInside)
+        addTarget(self, action: #selector(onClick), for: .touchUpInside)
 
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -96,9 +96,9 @@ class SnackBar: UIView {
         textLabel = UILabel()
         contentView = UIView()
         buttonsView = Toolbar()
-        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.extraLight))
+        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
 
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
         imageView.image = img
         textLabel.attributedText = attrText
@@ -115,7 +115,7 @@ class SnackBar: UIView {
         textLabel = UILabel()
         contentView = UIView()
         buttonsView = Toolbar()
-        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.extraLight))
+        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
 
         super.init(frame: frame)
     }
@@ -129,17 +129,17 @@ class SnackBar: UIView {
         contentView.addSubview(textLabel)
         addSubview(buttonsView)
 
-        self.backgroundColor = UIColor.clear
+        self.backgroundColor = .clear
         buttonsView.drawTopBorder = true
         buttonsView.drawBottomBorder = false
         buttonsView.drawSeperators = true
 
-        imageView.contentMode = UIViewContentMode.left
+        imageView.contentMode = .left
 
         textLabel.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
-        textLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+        textLabel.lineBreakMode = .byWordWrapping
         textLabel.numberOfLines = 0
-        textLabel.backgroundColor = UIColor.clear
+        textLabel.backgroundColor = .clear
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -161,8 +161,8 @@ class SnackBar: UIView {
     fileprivate func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
         context.setStrokeColor(UIConstants.BorderColor.cgColor)
         context.setLineWidth(1)
-        context.move(to: CGPoint(x: start.x, y: start.y))
-        context.addLine(to: CGPoint(x: end.x, y: end.y))
+        context.move(to: start)
+        context.addLine(to: end)
         context.strokePath()
     }
 
@@ -301,8 +301,8 @@ class TimerSnackBar: SnackBar {
     }
     
     override func show() {
-        self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(TimerSnackBar.SELTimerDone), userInfo: nil, repeats: false)
-        RunLoop.current.add(self.timer!, forMode: RunLoopMode.defaultRunLoopMode)
+        self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(SELTimerDone), userInfo: nil, repeats: false)
+        RunLoop.current.add(self.timer!, forMode: .defaultRunLoopMode)
         super.show()
     }
 

@@ -37,10 +37,10 @@ class LiveStorageClientTests: LiveAccountTest {
         let encrypter = Keys(defaultBundle: keyBundle).encrypter("crypto", encoder: encoder)
 
         let workQueue = DispatchQueue.global(qos: DispatchQoS.default.qosClass)
-        let resultQueue = DispatchQueue.main
+
         let backoff = MockBackoffStorage()
 
-        let storageClient = Sync15StorageClient(serverURI: cryptoURI!, authorizer: authorizer, workQueue: workQueue, resultQueue: resultQueue, backoff: backoff)
+        let storageClient = Sync15StorageClient(serverURI: cryptoURI!, authorizer: authorizer, workQueue: workQueue, resultQueue: .main, backoff: backoff)
         let keysFetcher = storageClient.clientForCollection("crypto", encrypter: encrypter)
 
         return keysFetcher.get("keys").map({ res in
@@ -117,7 +117,7 @@ class LiveStorageClientTests: LiveAccountTest {
                 XCTAssertTrue(ready.collectionKeys.defaultBundle.encKey.count == 32)
                 XCTAssertTrue(ready.scratchpad.global != nil)
                 if let clients = ready.scratchpad.global?.value.engines["clients"] {
-                    XCTAssertTrue(clients.syncID.characters.count == 12)
+                    XCTAssertTrue(clients.syncID.count == 12)
                 }
             }
             XCTAssertTrue(result.isSuccess)

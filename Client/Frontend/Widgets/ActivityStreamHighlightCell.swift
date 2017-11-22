@@ -47,15 +47,15 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
-        descriptionLabel.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
+        descriptionLabel.setContentCompressionResistancePriority(1000, for: .vertical)
         return descriptionLabel
     }()
 
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.scaleAspectFit
+        siteImageView.contentMode = .scaleAspectFit
         siteImageView.clipsToBounds = true
-        siteImageView.contentMode = UIViewContentMode.center
+        siteImageView.contentMode = .center
         siteImageView.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
         siteImageView.layer.borderColor = ActivityStreamHighlightCellUX.BorderColor.cgColor
         siteImageView.layer.borderWidth = ActivityStreamHighlightCellUX.BorderWidth
@@ -65,7 +65,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var statusIcon: UIImageView = {
         let statusIcon = UIImageView()
-        statusIcon.contentMode = UIViewContentMode.scaleAspectFit
+        statusIcon.contentMode = .scaleAspectFit
         statusIcon.clipsToBounds = true
         statusIcon.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
         return statusIcon
@@ -141,8 +141,8 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.siteImageView.image = nil
-        contentView.backgroundColor = UIColor.clear
-        siteImageView.backgroundColor = UIColor.clear
+        contentView.backgroundColor = .clear
+        siteImageView.backgroundColor = .clear
     }
 
     func configureWithSite(_ site: Site) {
@@ -162,7 +162,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         }
 
         self.domainLabel.text = site.tileURL.hostSLD
-        self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
+        self.titleLabel.text = site.title.count <= 1 ? site.url : site.title
 
         if let bookmarked = site.bookmarked, bookmarked {
             self.descriptionLabel.text = Strings.HighlightBookmarkText
@@ -195,7 +195,7 @@ class HighlightIntroCell: UICollectionViewCell {
     lazy var titleLabel: UILabel = {
         let textLabel = UILabel()
         textLabel.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
-        textLabel.textColor = UIColor.black
+        textLabel.textColor = .black
         textLabel.numberOfLines = 1
         textLabel.adjustsFontSizeToFitWidth = true
         textLabel.minimumScaleFactor = 0.8
@@ -205,7 +205,7 @@ class HighlightIntroCell: UICollectionViewCell {
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
-        label.textColor = UIColor.darkGray
+        label.textColor = .darkGray
         label.numberOfLines = 0
         return label
     }()

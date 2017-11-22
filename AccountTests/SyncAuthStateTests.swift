@@ -16,7 +16,7 @@ class SyncAuthStateTests: LiveAccountTest {
         syncAuthState(Date.now()).upon { result in
             if let (token, forKey) = result.successValue {
                 let uidString = NSNumber(value: token.uid).stringValue
-                XCTAssertTrue(token.api_endpoint.endsWith(uidString))
+                XCTAssertTrue(token.api_endpoint.hasSuffix(uidString))
                 XCTAssertNotNil(forKey)
             } else {
                 if let error = result.failureValue as? AccountError {

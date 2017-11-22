@@ -72,7 +72,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     fileprivate func commonInit() {
         super.delegate = self
-        super.addTarget(self, action: #selector(AutocompleteTextField.textDidChange(_:)), for: UIControlEvents.editingChanged)
+        super.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         notifyTextChanged = debounce(0.1, action: {
             if self.isEditing {
                 self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.normalizeString(self.text ?? ""))
@@ -138,7 +138,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     fileprivate func normalizeString(_ string: String) -> String {
-        return string.lowercased().stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces)
+        return string.lowercased().stringByTrimmingLeadingCharactersInSet(.whitespaces)
     }
 
     /// Commits the completion by setting the text and removing the highlight.
@@ -176,14 +176,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
 
         let normalized = normalizeString(text)
-        guard suggestion.startsWith(normalized) && normalized.characters.count < suggestion.characters.count else {
+        guard suggestion.hasPrefix(normalized) && normalized.count < suggestion.count else {
             hideCursor = false
             return
         }
 
-        let suggestionText = suggestion.substring(from: suggestion.characters.index(suggestion.startIndex, offsetBy: normalized.characters.count))
+        let suggestionText = suggestion.substring(from: suggestion.index(suggestion.startIndex, offsetBy: normalized.count))
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
-        autocompleteText.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSRange(location: 0, length: suggestionText.characters.count))
+        autocompleteText.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSRange(location: 0, length: suggestionText.count))
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
         autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
         if let l = autocompleteTextLabel {
@@ -194,7 +194,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func caretRect(for position: UITextPosition) -> CGRect {
-        return hideCursor ? CGRect.zero : super.caretRect(for: position)
+        return hideCursor ? .zero : super.caretRect(for: position)
     }
 
     private func createAutocompleteLabelWith(_ autocompleteText: NSAttributedString) -> UILabel {
@@ -206,7 +206,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         label.backgroundColor = self.backgroundColor
         label.textColor = self.textColor
 
-        let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
+        let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: .usesLineFragmentOrigin, context: nil)
         frame.origin.x = (enteredTextSize?.width.rounded() ?? 0)
         frame.size.width = self.frame.size.width - frame.origin.x
         frame.size.height = self.frame.size.height - 1

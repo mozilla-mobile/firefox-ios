@@ -171,7 +171,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                     continue //Skip the rest of the loop. But don't stop the loop
                 }
 
-                if href.endsWith(".ico") {
+                if href.hasSuffix(".ico") {
                     iconType = .guess
                 }
 
@@ -242,7 +242,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     // Returns a single Favicon UIImage for a given URL
     class func fetchFavImageForURL(forURL url: URL, profile: Profile) -> Deferred<Maybe<UIImage>> {
         let deferred = Deferred<Maybe<UIImage>>()
-        FaviconFetcher.getForURL(url.domainURL, profile: profile).uponQueue(DispatchQueue.main) { result in
+        FaviconFetcher.getForURL(url.domainURL, profile: profile).uponQueue(.main) { result in
             var iconURL: URL?
             if let favicons = result.successValue, favicons.count > 0, let faviconImageURL = favicons.first?.url.asURL {
                 iconURL = faviconImageURL
@@ -262,7 +262,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     // Returns the default favicon for a site based on the first letter of the site's domain
     class func getDefaultFavicon(_ url: URL) -> UIImage {
-        guard let character = url.baseDomain?.characters.first else {
+        guard let character = url.baseDomain?.first else {
             return defaultFavicon
         }
 
@@ -277,7 +277,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         faviconLabel.text = faviconLetter
         faviconLabel.textAlignment = .center
         faviconLabel.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightMedium)
-        faviconLabel.textColor = UIColor.white
+        faviconLabel.textColor = .white
         UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
         faviconLabel.layer.render(in: UIGraphicsGetCurrentContext()!)
         faviconImage = UIGraphicsGetImageFromCurrentImageContext()!
@@ -290,7 +290,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     // Returns a color based on the url's hash
     class func getDefaultColor(_ url: URL) -> UIColor {
         guard let hash = url.baseDomain?.hashValue else {
-            return UIColor.gray
+            return .gray
         }
         let index = abs(hash) % (UIConstants.DefaultColorStrings.count - 1)
         let colorHex = UIConstants.DefaultColorStrings[index]
@@ -311,7 +311,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             let filePath = Bundle.main.path(forResource: "TopSites/" + path, ofType: "png")
             if let filePath = filePath {
                 if color == "#fff" || color == "#FFF" {
-                    icons[url] = (UIColor.clear, filePath)
+                    icons[url] = (.clear, filePath)
                 } else {
                     icons[url] = (UIColor(colorString: color.replacingOccurrences(of: "#", with: "")), filePath)
                 }

@@ -51,7 +51,7 @@ class ReaderModeBarView: UIView {
     var settingsButton: UIButton!
     var listStatusButton: UIButton!
 
-    dynamic var buttonTintColor: UIColor = UIColor.clear {
+    dynamic var buttonTintColor: UIColor = .clear {
         didSet {
             readStatusButton.tintColor = self.buttonTintColor
             settingsButton.tintColor = self.buttonTintColor
@@ -62,7 +62,7 @@ class ReaderModeBarView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        readStatusButton = createButton(.markAsRead, action: #selector(ReaderModeBarView.SELtappedReadStatusButton(_:)))
+        readStatusButton = createButton(.markAsRead, action: #selector(SELtappedReadStatusButton))
         readStatusButton.accessibilityIdentifier = "ReaderModeBarView.readStatusButton"
         readStatusButton.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(self)
@@ -70,14 +70,14 @@ class ReaderModeBarView: UIView {
             make.width.equalTo(80)
         }
 
-        settingsButton = createButton(.settings, action: #selector(ReaderModeBarView.SELtappedSettingsButton(_:)))
+        settingsButton = createButton(.settings, action: #selector(SELtappedSettingsButton))
         settingsButton.accessibilityIdentifier = "ReaderModeBarView.settingsButton"
         settingsButton.snp.makeConstraints { (make) -> Void in
             make.height.centerX.centerY.equalTo(self)
             make.width.equalTo(80)
         }
 
-        listStatusButton = createButton(.addToReadingList, action: #selector(ReaderModeBarView.SELtappedListStatusButton(_:)))
+        listStatusButton = createButton(.addToReadingList, action: #selector(SELtappedListStatusButton))
         listStatusButton.accessibilityIdentifier = "ReaderModeBarView.listStatusButton"
         listStatusButton.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(self)
@@ -105,7 +105,7 @@ class ReaderModeBarView: UIView {
     fileprivate func createButton(_ type: ReaderModeBarButtonType, action: Selector) -> UIButton {
         let button = UIButton()
         addSubview(button)
-        button.setImage(type.image, for: UIControlState())
+        button.setImage(type.image, for: [])
         button.addTarget(self, action: action, for: .touchUpInside)
         return button
     }
@@ -125,7 +125,7 @@ class ReaderModeBarView: UIView {
     var unread: Bool = true {
         didSet {
             let buttonType: ReaderModeBarButtonType = unread && added ? .markAsRead : .markAsUnread
-            readStatusButton.setImage(buttonType.image, for: UIControlState())
+            readStatusButton.setImage(buttonType.image, for: [])
             readStatusButton.isEnabled = added
             readStatusButton.alpha = added ? 1.0 : 0.6
         }
@@ -134,7 +134,7 @@ class ReaderModeBarView: UIView {
     var added: Bool = false {
         didSet {
             let buttonType: ReaderModeBarButtonType = added ? .removeFromReadingList : .addToReadingList
-            listStatusButton.setImage(buttonType.image, for: UIControlState())
+            listStatusButton.setImage(buttonType.image, for: [])
         }
     }
 }

@@ -11,7 +11,7 @@ import Deferred
 
 class MockFiles: FileAccessor {
     init() {
-        let docPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
+        let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         super.init(rootPath: (docPath as NSString).appendingPathComponent("testing"))
     }
 }
@@ -42,7 +42,7 @@ class MockMalformableLogin: LoginData {
 
     required init(guid: String, hostname: String, username: String, password: String, formSubmitURL: String) {
         self.guid = guid
-        self.credentials = URLCredential(user: username, password: password, persistence: URLCredential.Persistence.none)
+        self.credentials = URLCredential(user: username, password: password, persistence: .none)
         self.hostname = hostname
         self.password = password
         self.username = username

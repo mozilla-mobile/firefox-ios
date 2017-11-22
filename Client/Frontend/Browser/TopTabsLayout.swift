@@ -16,7 +16,7 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     }
     
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets.zero
+        return .zero
     }
     
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -51,7 +51,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
     override func prepare() {
         super.prepare()
         self.minimumLineSpacing = TopTabsUX.SeparatorWidth
-        scrollDirection = UICollectionViewScrollDirection.horizontal
+        scrollDirection = .horizontal
         register(TopTabsSeparator.self, forDecorationViewOfKind: TopTabsSeparatorUX.Identifier)
     }
     
@@ -64,21 +64,20 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         guard indexPath.row < self.collectionView!.numberOfItems(inSection: 0) else {
             let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: indexPath)
-            separatorAttr.frame = CGRect.zero
+            separatorAttr.frame = .zero
             separatorAttr.zIndex = SeparatorZIndex
             return separatorAttr
         }
 
         if let attr = self.decorationAttributeArr[indexPath.item] {
             return attr
-        } else {
-            // Compute the separator if it does not exist in the cache
-            let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: indexPath)
-            let x = TopTabsUX.TopTabsBackgroundShadowWidth + ((CGFloat(indexPath.row) * (TopTabsUX.TabWidth + TopTabsUX.SeparatorWidth)) - TopTabsUX.SeparatorWidth)
-            separatorAttr.frame = CGRect(x: x, y: separatorYOffset, width: TopTabsUX.SeparatorWidth, height: separatorSize)
-            separatorAttr.zIndex = SeparatorZIndex
-            return separatorAttr
         }
+        // Compute the separator if it does not exist in the cache
+        let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: indexPath)
+        let x = TopTabsUX.TopTabsBackgroundShadowWidth + ((CGFloat(indexPath.row) * (TopTabsUX.TabWidth + TopTabsUX.SeparatorWidth)) - TopTabsUX.SeparatorWidth)
+        separatorAttr.frame = CGRect(x: x, y: separatorYOffset, width: TopTabsUX.SeparatorWidth, height: separatorSize)
+        separatorAttr.zIndex = SeparatorZIndex
+        return separatorAttr
     }
 
     override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {

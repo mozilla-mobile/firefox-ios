@@ -70,24 +70,22 @@ extension FxAPushMessageHandler {
             return deferMaybe(PushMessageError.messageIncomplete)
         }
 
-        let result: PushMessageResult
         switch command {
         case .deviceConnected:
-            result = handleDeviceConnected(json["data"])
+            return handleDeviceConnected(json["data"])
         case .deviceDisconnected:
-            result = handleDeviceDisconnected(json["data"])
+            return handleDeviceDisconnected(json["data"])
         case .profileUpdated:
-            result = handleProfileUpdated()
+            return handleProfileUpdated()
         case .passwordChanged:
-            result = handlePasswordChanged()
+            return handlePasswordChanged()
         case .passwordReset:
-            result = handlePasswordReset()
+            return handlePasswordReset()
         case .collectionChanged:
-            result = handleCollectionChanged(json["data"])
+            return handleCollectionChanged(json["data"])
         case .accountVerified:
-            result = handleVerification()
+            return handleVerification()
         }
-        return result
     }
 }
 
@@ -236,9 +234,9 @@ enum PushMessage: Equatable {
 
     var messageType: PushMessageType {
         switch self {
-        case .deviceConnected(_):
+        case .deviceConnected:
             return .deviceConnected
-        case .deviceDisconnected(_):
+        case .deviceDisconnected:
             return .deviceDisconnected
         case .thisDeviceDisconnected:
             return .deviceDisconnected
@@ -256,17 +254,13 @@ enum PushMessage: Equatable {
     }
 
     public static func ==(lhs: PushMessage, rhs: PushMessage) -> Bool {
-        guard lhs.messageType == rhs.messageType else {
-            return false
-        }
-
         switch (lhs, rhs) {
-        case (.deviceConnected(let lName), .deviceConnected(let rName)):
+        case let (.deviceConnected(lName), .deviceConnected(rName)):
             return lName == rName
-        case (.collectionChanged(let lList), .collectionChanged(let rList)):
+        case let (.collectionChanged(lList), .collectionChanged(rList)):
             return lList == rList
         default:
-            return true
+            return false
         }
     }
 }

@@ -71,37 +71,37 @@ class TabCell: UICollectionViewCell {
     var margin = CGFloat(0)
 
     override init(frame: CGRect) {
-        self.backgroundHolder.backgroundColor = UIColor.white
+        self.backgroundHolder.backgroundColor = .white
         self.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         self.backgroundHolder.clipsToBounds = true
         self.backgroundHolder.backgroundColor = TabTrayControllerUX.CellBackgroundColor
 
-        self.screenshotView.contentMode = UIViewContentMode.scaleAspectFill
+        self.screenshotView.contentMode = .scaleAspectFill
         self.screenshotView.clipsToBounds = true
         self.screenshotView.isUserInteractionEnabled = false
         self.screenshotView.alignLeft = true
         self.screenshotView.alignTop = true
         screenshotView.backgroundColor = UIConstants.AppBackgroundColor
 
-        self.favicon.backgroundColor = UIColor.clear
+        self.favicon.backgroundColor = .clear
         self.favicon.layer.cornerRadius = 2.0
         self.favicon.layer.masksToBounds = true
 
         self.titleText = UILabel()
-        self.titleText.textAlignment = NSTextAlignment.left
+        self.titleText.textAlignment = .left
         self.titleText.isUserInteractionEnabled = false
         self.titleText.numberOfLines = 1
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
 
         self.closeButton = UIButton()
-        self.closeButton.setImage(UIImage.templateImageNamed("nav-stop"), for: UIControlState())
-        self.closeButton.tintColor = UIColor.lightGray
+        self.closeButton.setImage(UIImage.templateImageNamed("nav-stop"), for: [])
+        self.closeButton.tintColor = .lightGray
         self.closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
 
         super.init(frame: frame)
         
         self.animator = SwipeAnimator(animatingView: self)
-        self.closeButton.addTarget(self, action: #selector(TabCell.close), for: UIControlEvents.touchUpInside)
+        self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.screenshotView)
@@ -127,7 +127,7 @@ class TabCell: UICollectionViewCell {
             self.titleText.textColor = DarkTabCellUX.TabTitleTextColor
         }
 
-        titleText.backgroundColor = UIColor.clear
+        titleText.backgroundColor = .clear
 
         title.contentView.addSubview(self.closeButton)
         title.contentView.addSubview(self.titleText)
@@ -162,7 +162,7 @@ class TabCell: UICollectionViewCell {
             y: margin,
             width: w,
             height: h)
-        screenshotView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: backgroundHolder.frame.size)
+        screenshotView.frame = CGRect(size: backgroundHolder.frame.size)
 
         title.frame = CGRect(x: 0,
             y: 0,
@@ -193,10 +193,10 @@ class TabCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         // Reset any close animations.
-        backgroundHolder.transform = CGAffineTransform.identity
+        backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
-        layer.shadowOffset = CGSize.zero
+        layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0
     }
@@ -242,12 +242,12 @@ class TabTrayController: UIViewController {
 
     var collectionView: UICollectionView!
     var draggedCell: TabCell?
-    var dragOffset: CGPoint = CGPoint.zero
+    var dragOffset: CGPoint = .zero
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
-        toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.didClickAddTab), for: .touchUpInside)
-        toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.didTogglePrivateMode), for: .touchUpInside)
-        toolbar.deleteButton.addTarget(self, action: #selector(TabTrayController.didTapDelete(_:)), for: .touchUpInside)
+        toolbar.addTabButton.addTarget(self, action: #selector(didClickAddTab), for: .touchUpInside)
+        toolbar.maskButton.addTarget(self, action: #selector(didTogglePrivateMode), for: .touchUpInside)
+        toolbar.deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
         return toolbar
     }()
 
@@ -265,7 +265,7 @@ class TabTrayController: UIViewController {
 
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
-        emptyView.learnMoreButton.addTarget(self, action: #selector(TabTrayController.didTapLearnMore), for: UIControlEvents.touchUpInside)
+        emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
         return emptyView
     }()
 
@@ -301,7 +301,7 @@ class TabTrayController: UIViewController {
     }
 
     func dynamicFontChanged(_ notification: Notification) {
-        guard notification.name == NotificationDynamicFontChanged else { return }
+        guard notification.name == .DynamicFontChanged else { return }
 
         self.collectionView.reloadData()
     }
@@ -342,9 +342,9 @@ class TabTrayController: UIViewController {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.appWillResignActiveNotification), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.appDidBecomeActiveNotification), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.dynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -379,7 +379,7 @@ class TabTrayController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent //this will need to be fixed
+        return .lightContent //this will need to be fixed
     }
 
     fileprivate func makeConstraints() {
@@ -413,7 +413,7 @@ class TabTrayController: UIViewController {
 
         let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
         controller.popoverDelegate = self
-		controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
+		controller.modalPresentationStyle = .formSheet
         present(controller, animated: true, completion: nil)
     }
 
@@ -469,7 +469,7 @@ class TabTrayController: UIViewController {
         UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: { () -> Void in
             fromView.transform = scaleDownTransform
             fromView.alpha = 0
-            toView.transform = CGAffineTransform.identity
+            toView.transform = .identity
             toView.alpha = 1
         }) { finished in
             if fromView != self.emptyPrivateTabsView {
@@ -535,7 +535,7 @@ extension TabTrayController {
     func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
-        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: {
             self.collectionView.alpha = 1
         },
         completion: nil)
@@ -740,7 +740,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         let tab = tabs[indexPath.item]
         tabCell.style = tab.isPrivate ? .dark : .light
         tabCell.titleText.text = tab.displayTitle
-        tabCell.closeButton.tintColor = tab.isPrivate ? UIColor.white : UIColor.gray
+        tabCell.closeButton.tintColor = tab.isPrivate ? .white : .gray
 
         if !tab.displayTitle.isEmpty {
             tabCell.accessibilityLabel = tab.displayTitle
@@ -756,7 +756,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
             let defaultFavicon = UIImage(named: "defaultFavicon")
             if tab.isPrivate {
                 tabCell.favicon.image = defaultFavicon
-                tabCell.favicon.tintColor = UIColor.white
+                tabCell.favicon.tintColor = .white
             } else {
                 tabCell.favicon.image = defaultFavicon
             }
@@ -807,9 +807,9 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     fileprivate func cellHeightForCurrentDevice() -> CGFloat {
         let shortHeight = TabTrayControllerUX.TextBoxHeight * 6
 
-        if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact {
+        if self.traitCollection.verticalSizeClass == .compact {
             return shortHeight
-        } else if self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.compact {
+        } else if self.traitCollection.horizontalSizeClass == .compact {
             return shortHeight
         } else {
             return TabTrayControllerUX.TextBoxHeight * 8
@@ -856,7 +856,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
         let label = UILabel()
         label.textColor = EmptyPrivateTabsViewUX.TitleColor
         label.font = EmptyPrivateTabsViewUX.TitleFont
-        label.textAlignment = NSTextAlignment.center
+        label.textAlignment = .center
         return label
     }()
 
@@ -864,7 +864,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
         let label = UILabel()
         label.textColor = EmptyPrivateTabsViewUX.DescriptionColor
         label.font = EmptyPrivateTabsViewUX.DescriptionFont
-        label.textAlignment = NSTextAlignment.center
+        label.textAlignment = .center
         label.numberOfLines = 0
         label.preferredMaxLayoutWidth = EmptyPrivateTabsViewUX.MaxDescriptionWidth
         return label
@@ -874,8 +874,8 @@ fileprivate class EmptyPrivateTabsView: UIView {
         let button = UIButton(type: .system)
         button.setTitle(
             NSLocalizedString("Learn More", tableName: "PrivateBrowsing", comment: "Text button displayed when there are no tabs open while in private mode"),
-            for: UIControlState())
-        button.setTitleColor(UIConstants.PrivateModeTextHighlightColor, for: UIControlState())
+            for: [])
+        button.setTitleColor(UIConstants.PrivateModeTextHighlightColor, for: [])
         button.titleLabel?.font = EmptyPrivateTabsViewUX.LearnMoreFont
         return button
     }()
@@ -992,7 +992,7 @@ extension TabTrayController: UIAdaptivePresentationControllerDelegate, UIPopover
     // Returning None here makes sure that the Popover is actually presented as a Popover and
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return UIModalPresentationStyle.none
+        return .none
     }
 }
 

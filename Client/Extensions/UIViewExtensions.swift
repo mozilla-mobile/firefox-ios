@@ -11,7 +11,7 @@ extension UIView {
     func screenshot(_ size: CGSize, offset: CGPoint? = nil, quality: CGFloat = 1) -> UIImage? {
         assert(0...1 ~= quality)
 
-        let offset = offset ?? CGPoint(x: 0, y: 0)
+        let offset = offset ?? .zero
 
         UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale * quality)
         drawHierarchy(in: CGRect(origin: offset, size: frame.size), afterScreenUpdates: false)
@@ -72,7 +72,7 @@ extension UIView {
         roundedLayer.mask = maskLayer
 
         layer.insertSublayer(roundedLayer, at: 0)
-        backgroundColor = UIColor.clear
+        backgroundColor = .clear
     }
 
     /**

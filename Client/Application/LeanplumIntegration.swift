@@ -284,13 +284,13 @@ class LeanplumIntegration {
         // Ref: https://github.com/Leanplum/Leanplum-iOS-Samples/blob/master/iOS_customMessageTemplates/iOS_customMessageTemplates/LPMessageTemplates.m
         let args: [LPActionArg] = [
             LPActionArg(named: LpmtArgTitleText, with: LpmtDefaultAskToAskTitle),
-            LPActionArg(named: LpmtArgTitleColor, with: UIColor.black),
+            LPActionArg(named: LpmtArgTitleColor, with: .black),
             LPActionArg(named: LpmtArgMessageText, with: LpmtDefaultAskToAskMessage),
-            LPActionArg(named: LpmtArgMessageColor, with: UIColor.black),
+            LPActionArg(named: LpmtArgMessageColor, with: .black),
             LPActionArg(named: LpmtArgAcceptButtonText, with: LpmtDefaultOkButtonText),
             LPActionArg(named: LpmtArgCancelAction, withAction: nil),
             LPActionArg(named: LpmtArgCancelButtonText, with: LpmtDefaultLaterButtonText),
-            LPActionArg(named: LpmtArgCancelButtonTextColor, with: UIColor.gray)
+            LPActionArg(named: LpmtArgCancelButtonTextColor, with: .gray)
         ]
         
         let responder: LeanplumActionBlock = { (context) -> Bool in
@@ -321,7 +321,7 @@ class LeanplumIntegration {
             alert.addAction(UIAlertAction(title: acceptText, style: .default, handler: { (action) -> Void in
                 // Log accept event and present push permission modal
                 context.runTrackedActionNamed(LpmtArgAcceptAction)
-                FxALoginHelper.sharedInstance.requestUserNotifications(UIApplication.shared)
+                FxALoginHelper.sharedInstance.requestUserNotifications(.shared)
                 self.profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
             }))
             

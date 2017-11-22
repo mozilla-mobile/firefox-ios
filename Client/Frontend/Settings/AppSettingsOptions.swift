@@ -71,7 +71,7 @@ class DisconnectSetting: WithAccountSetting {
         let alertController = UIAlertController(
             title: Strings.SettingsDisconnectSyncAlertTitle,
             message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'sign out firefox account' alert"),
-            preferredStyle: UIAlertControllerStyle.alert)
+            preferredStyle: .alert)
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel) { (action) in
                 // Do nothing.
@@ -89,9 +89,9 @@ class DisconnectSetting: WithAccountSetting {
 }
 
 class SyncNowSetting: WithAccountSetting {
-    static let NotificationUserInitiatedSyncManually = "NotificationUserInitiatedSyncManually"
+
     let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-    let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
+    let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: .clear)
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
     let syncIcon = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
     
@@ -100,7 +100,7 @@ class SyncNowSetting: WithAccountSetting {
     
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(SyncNowSetting.stopRotateSyncIcon), name: NotificationProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidFinishSyncing, object: nil)
     }
     
     fileprivate lazy var timestampFormatter: DateFormatter = {
@@ -274,7 +274,7 @@ class SyncNowSetting: WithAccountSetting {
             continuousRotateAnimation.toValue = CGFloat(Double.pi)
             continuousRotateAnimation.isRemovedOnCompletion = true
             continuousRotateAnimation.duration = 0.5
-            continuousRotateAnimation.repeatCount = Float.infinity
+            continuousRotateAnimation.repeatCount = .infinity
             
             // To ensure sync icon is aligned properly with user's avatar, an image is created with proper
             // dimensions and color, then the scaled sync icon is added as a subview.
@@ -316,7 +316,7 @@ class SyncNowSetting: WithAccountSetting {
             return
         }
         
-        NotificationCenter.default.post(name: Notification.Name(rawValue: SyncNowSetting.NotificationUserInitiatedSyncManually), object: nil)
+        NotificationCenter.default.post(name: .UserInitiatedSyncManually, object: nil)
         profile.syncManager.syncEverything(why: .syncNow)
     }
 }
@@ -325,7 +325,7 @@ class SyncNowSetting: WithAccountSetting {
 class AccountStatusSetting: WithAccountSetting {
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(AccountStatusSetting.updateAccount(notification:)), name: NotificationFirefoxAccountProfileChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .FirefoxAccountProfileChanged, object: nil)
     }
     
     func updateAccount(notification: Notification) {
@@ -402,7 +402,7 @@ class AccountStatusSetting: WithAccountSetting {
             }
             
             let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-            let range = NSRange(location: 0, length: string.characters.count)
+            let range = NSRange(location: 0, length: string.count)
             let attrs = [NSForegroundColorAttributeName: orange]
             let res = NSMutableAttributedString(string: string)
             res.setAttributes(attrs, range: range)
@@ -528,7 +528,7 @@ class DeleteExportedDataSetting: HiddenSetting {
         do {
             let files = try fileManager.contentsOfDirectory(atPath: documentsPath)
             for file in files {
-                if file.startsWith("browser.") || file.startsWith("logins.") {
+                if file.hasPrefix("browser.") || file.hasPrefix("logins.") {
                     try fileManager.removeItemInDirectory(documentsPath, named: file)
                 }
             }
@@ -550,7 +550,7 @@ class ExportBrowserDataSetting: HiddenSetting {
             let log = Logger.syncLogger
             try self.settings.profile.files.copyMatching(fromRelativeDirectory: "", toAbsoluteDirectory: documentsPath) { file in
                 log.debug("Matcher: \(file)")
-                return file.startsWith("browser.") || file.startsWith("logins.") || file.startsWith("metadata.")
+                return file.hasPrefix("browser.") || file.hasPrefix("logins.") || file.hasPrefix("metadata.")
             }
         } catch {
             print("Couldn't export browser data: \(error).")
@@ -962,7 +962,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(ChinaSyncServiceSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? self.profile.isChinaEdition
         cell.accessoryView = control
         cell.selectionStyle = .none
@@ -1013,7 +1013,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(StageSyncServiceDebugSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? false
         cell.accessoryView = control
         cell.selectionStyle = .none

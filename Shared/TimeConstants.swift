@@ -55,7 +55,7 @@ extension Date {
     public func toRelativeTimeString() -> String {
         let now = Date()
 
-        let units: NSCalendar.Unit = [NSCalendar.Unit.second, NSCalendar.Unit.minute, NSCalendar.Unit.day, NSCalendar.Unit.weekOfYear, NSCalendar.Unit.month, NSCalendar.Unit.year, NSCalendar.Unit.hour]
+        let units: NSCalendar.Unit = [.second, .minute, .day, NSCalendar.Unit.weekOfYear, .month, .year, .hour]
 
         let components = (Calendar.current as NSCalendar).components(units,
             from: self,
@@ -63,7 +63,7 @@ extension Date {
             options: [])
         
         if components.year! > 0 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: .short, timeStyle: .short))
         }
 
         if components.month == 1 {
@@ -71,7 +71,7 @@ extension Date {
         }
 
         if components.month! > 1 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: .short, timeStyle: .short))
         }
 
         if components.weekOfYear! > 0 {
@@ -87,7 +87,7 @@ extension Date {
         }
 
         if components.hour! > 0 || components.minute! > 0 {
-            let absoluteTime = DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.none, timeStyle: DateFormatter.Style.short)
+            let absoluteTime = DateFormatter.localizedString(from: self, dateStyle: .none, timeStyle: .short)
             let format = NSLocalizedString("today at %@", comment: "Relative date for date older than a minute.")
             return String(format: format, absoluteTime)
         }
@@ -142,28 +142,18 @@ public func someKindOfTimestampStringToTimestamp(_ input: String) -> Timestamp? 
 }
 
 public func decimalSecondsStringToTimestamp(_ input: String) -> Timestamp? {
+    let factor = 1000.0
     var double = 0.0
-    if Scanner(string: input).scanDouble(&double) {
+    guard Scanner(string: input).scanDouble(&double),
         // This should never happen. Hah!
-        if double.isNaN || double.isInfinite {
-            return nil
-        }
-
+        double.isNaN || double.isInfinite,
         // `double` will be either huge or negatively huge on overflow, and 0 on underflow.
         // We clamp to reasonable ranges.
-        if double < 0 {
-            return nil
-        }
-
-        let millis = double * 1000
-        if millis >= MaxTimestampAsDouble {
+        double < 0,
             // Not representable as a timestamp.
-            return nil
-        }
+        double * factor < MaxTimestampAsDouble else { return nil }
 
-        return Timestamp(millis)
-    }
-    return nil
+    return Timestamp(double * factor)
 }
 
 public func millisecondsToDecimalSeconds(_ input: Timestamp) -> String {

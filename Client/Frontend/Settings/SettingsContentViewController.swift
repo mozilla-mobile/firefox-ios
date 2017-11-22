@@ -26,11 +26,10 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             if isLoaded {
                 UIView.transition(from: interstitialView, to: webView,
                     duration: 0.5,
-                    options: UIViewAnimationOptions.transitionCrossDissolve,
-                    completion: { finished in
+                    options: .transitionCrossDissolve) { _ in
                         self.interstitialView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
-                })
+                }
             }
         }
     }
@@ -41,11 +40,10 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
                 interstitialErrorView.isHidden = false
                 UIView.transition(from: interstitialSpinnerView, to: interstitialErrorView,
                     duration: 0.5,
-                    options: UIViewAnimationOptions.transitionCrossDissolve,
-                    completion: { finished in
+                    options: .transitionCrossDissolve) { _ in
                         self.interstitialSpinnerView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
-                })
+                }
             }
         }
     }
@@ -63,7 +61,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             return
         }
         if timeout > 0 {
-            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SettingsContentViewController.SELdidTimeOut), userInfo: nil, repeats: false)
+            self.timer = .scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SELdidTimeOut), userInfo: nil, repeats: false)
         } else {
             self.timer = nil
         }
@@ -71,7 +69,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.interstitialSpinnerView.startAnimating()
     }
 
-    init(backgroundColor: UIColor = UIColor.white, title: NSAttributedString? = nil) {
+    init(backgroundColor: UIColor = .white, title: NSAttributedString? = nil) {
         interstitialBackgroundColor = backgroundColor
         settingsTitle = title
         super.init(nibName: nil, bundle: nil)
@@ -124,14 +122,14 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         // Keeping the background constant prevents a pop of mismatched color.
         view.backgroundColor = interstitialBackgroundColor
 
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         view.addSubview(spinner)
 
         let error = UILabel()
         if let _ = settingsTitle {
             error.text = TODOPageLoadErrorString
-            error.textColor = UIColor.red // Firefox Orange!
-            error.textAlignment = NSTextAlignment.center
+            error.textColor = .red // Firefox Orange!
+            error.textAlignment = .center
         }
         error.isHidden = true
         view.addSubview(error)

@@ -46,7 +46,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             self.url = profile.accountConfiguration.signInURL
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(FxAContentViewController.userDidVerify(_:)), name: NotificationFirefoxAccountVerified, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,7 +77,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let source = getJS()
         let userScript = WKUserScript(
             source: source,
-            injectionTime: WKUserScriptInjectionTime.atDocumentEnd,
+            injectionTime: .atDocumentEnd,
             forMainFrameOnly: true
         )
 
@@ -233,7 +233,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     fileprivate func getJS() -> String {
         let fileRoot = Bundle.main.path(forResource: "FxASignIn", ofType: "js")
-        return (try! NSString(contentsOfFile: fileRoot!, encoding: String.Encoding.utf8.rawValue)) as String
+        return (try! String(contentsOfFile: fileRoot!, encoding: .utf8))
     }
 
     override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

@@ -75,7 +75,7 @@ class TabManager: NSObject {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
-        configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        configuration.websiteDataStore = .nonPersistent()
         return configuration
     }()
 
@@ -106,7 +106,7 @@ class TabManager: NSObject {
 
         addNavigationDelegate(self)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(TabManager.prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
     }
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
@@ -454,7 +454,7 @@ class TabManager: NSObject {
                              WKWebsiteDataTypeWebSQLDatabases,
                              WKWebsiteDataTypeIndexedDBDatabases])
         tab.webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
-                                                               modifiedSince: Date.distantPast,
+                                                               modifiedSince: .distantPast,
                                                                completionHandler: completionHandler)
     }
 
@@ -836,10 +836,8 @@ extension TabManager: WKNavigationDelegate {
         // only store changes if this is not an error page
         // as we current handle tab restore as error page redirects then this ensures that we don't
         // call storeChanges unnecessarily on startup
-        if let url = webView.url {
-            if !url.isErrorPageURL {
-                storeChanges()
-            }
+        if let url = webView.url, !url.isErrorPageURL {
+            storeChanges()
         }
     }
 
@@ -863,9 +861,7 @@ extension TabManager: WKNavigationDelegate {
     /// then we immediately reload it.
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        if let tab = selectedTab, tab.webView == webView {
-            webView.reload()
-        }
+        selectedTab?.webView?.reload()
     }
 }
 
@@ -917,7 +913,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
             let authenticatingDelegates = delegates.filter { wv in
-                return wv.responds(to: #selector(WKNavigationDelegate.webView(_:didReceive:completionHandler:)))
+                return wv.responds(to: #selector(webView(_:didReceive:completionHandler:)))
             }
 
             guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {

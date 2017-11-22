@@ -32,7 +32,7 @@ struct SimpleToast {
 
     fileprivate func createView() -> UILabel {
         let toast = UILabel()
-        toast.textColor = UIColor.white
+        toast.textColor = .white
         toast.backgroundColor = SimpleToastUX.ToastDefaultColor
         toast.font = SimpleToastUX.ToastFont
         toast.textAlignment = .center

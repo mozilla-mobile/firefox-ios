@@ -120,7 +120,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         updateButtons()
 
         // Gesture recognizer to dismiss the keyboard in the URLBarView when the buttonContainerView is tapped
-        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HomePanelViewController.dismissKeyboard(_:)))
+        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
     }
@@ -177,7 +177,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+        return .lightContent
     }
 
     fileprivate func hideCurrentPanel() {
@@ -213,9 +213,9 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     fileprivate func updateButtons() {
         for panel in panels {
             let button = UIButton()
-            button.addTarget(self, action: #selector(HomePanelViewController.tappedButton(_:)), for: .touchUpInside)
+            button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
             if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)") {
-                button.setImage(image, for: UIControlState.normal)
+                button.setImage(image, for: .normal)
             }
             button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 4, right: 0)
             button.accessibilityLabel = panel.accessibilityLabel

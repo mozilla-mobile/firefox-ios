@@ -34,7 +34,7 @@ public extension UIImageView {
     private func color(forImage image: UIImage, andURL url: URL, completed completionBlock: ((UIColor, URL?) -> Void)? = nil) {
         guard let domain = url.baseDomain else {
             self.backgroundColor = .gray
-            completionBlock?(UIColor.gray, url)
+            completionBlock?(.gray, url)
             return
         }
 
@@ -45,8 +45,8 @@ public extension UIImageView {
             image.getColors(scaleDownSize: CGSize(width: 25, height: 25)) {colors in
                 let isSame = [colors.primary, colors.secondary, colors.detail].every { $0 == colors.primary }
                 if isSame {
-                    completionBlock?(UIColor.white, url)
-                    FaviconFetcher.colors[domain] = UIColor.white
+                    completionBlock?(.white, url)
+                    FaviconFetcher.colors[domain] = .white
                 } else {
                     completionBlock?(colors.background, url)
                     FaviconFetcher.colors[domain] = colors.background
@@ -72,16 +72,11 @@ open class ImageOperation: NSObject, SDWebImageOperation {
     open var cacheOperation: Operation?
 
     var cancelled: Bool {
-        if let cacheOperation = cacheOperation {
-            return cacheOperation.isCancelled
-        }
-        return false
+        return cacheOperation?.isCancelled ?? false
     }
 
     @objc open func cancel() {
-        if let cacheOperation = cacheOperation {
-            cacheOperation.cancel()
-        }
+        cacheOperation?.cancel()
     }
 }
 

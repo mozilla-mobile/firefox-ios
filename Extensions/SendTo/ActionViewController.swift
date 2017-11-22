@@ -16,7 +16,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     private var sharedItem: ShareItem?
 
     override func viewDidLoad() {
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = .white
 
         super.viewDidLoad()
 
@@ -55,7 +55,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
         }
 
         let profile = BrowserProfile(localName: "profile")
-        profile.sendItems([item], toClients: clients).uponQueue(DispatchQueue.main) { result in
+        profile.sendItems([item], toClients: clients).uponQueue(.main) { result in
             profile.shutdown()
             self.finish()
         }

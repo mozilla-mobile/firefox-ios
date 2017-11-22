@@ -28,8 +28,6 @@ import Deferred
 
 private let log = Logger.syncLogger
 
-public let NotificationProfileDidStartSyncing = Notification.Name("NotificationProfileDidStartSyncing")
-public let NotificationProfileDidFinishSyncing = Notification.Name("NotificationProfileDidFinishSyncing")
 
 public let ProfileRemoteTabsSyncDelay: TimeInterval = 0.1
 
@@ -77,7 +75,7 @@ class ProfileFileAccessor: FileAccessor {
             rootPath = url.path
         } else {
             log.error("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
-            rootPath = (NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
+            rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
         }
 
         super.init(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
@@ -259,8 +257,8 @@ open class BrowserProfile: Profile {
 
         let notificationCenter = NotificationCenter.default
 
-        notificationCenter.addObserver(self, selector: #selector(onLocationChange(notification:)), name: NotificationOnLocationChange, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched(notification:)), name: NotificationOnPageMetadataFetched, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onLocationChange), name: .LocationChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched), name: .OnPageMetadataFetched, object: nil)
 
         if isNewProfile {
             log.info("New profile. Removing old account metadata.")
@@ -539,7 +537,7 @@ open class BrowserProfile: Profile {
         self.account = nil
 
         // Tell any observers that our account has changed.
-        NotificationCenter.default.post(name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.post(name: .FirefoxAccountChanged, object: nil)
 
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
@@ -556,8 +554,8 @@ open class BrowserProfile: Profile {
             // Many of the observers for this notifications are on the main thread,
             // so we should post the notification there, just in case we're not already
             // on the main thread.
-            let userInfo = [NotificationUserInfoKeyHasSyncableAccount: self.hasSyncableAccount()]
-            NotificationCenter.default.post(name: NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
+            let userInfo = [Notification.Name.UserInfoKeyHasSyncableAccount: self.hasSyncableAccount()]
+            NotificationCenter.default.post(name: .FirefoxAccountChanged, object: nil, userInfo: userInfo)
         }
 
         self.syncManager.onAddedAccount()
@@ -638,7 +636,7 @@ open class BrowserProfile: Profile {
         fileprivate var syncReducer: AsyncReducer<EngineResults, EngineTasks>?
 
         fileprivate func beginSyncing() {
-            notifySyncing(notification: NotificationProfileDidStartSyncing)
+            notifySyncing(notification: .ProfileDidStartSyncing)
         }
 
         fileprivate func endSyncing(_ result: SyncOperationResult) {
@@ -663,7 +661,7 @@ open class BrowserProfile: Profile {
 
             // Dont notify if we are performing a sync in the background. This prevents more db access from happening
             if !self.backgrounded {
-                notifySyncing(notification: NotificationProfileDidFinishSyncing)
+                notifySyncing(notification: .ProfileDidFinishSyncing)
             }
             syncReducer = nil
         }
@@ -683,11 +681,13 @@ open class BrowserProfile: Profile {
             super.init()
 
             let center = NotificationCenter.default
-            center.addObserver(self, selector: #selector(onDatabaseWasRecreated(notification:)), name: NotificationDatabaseWasRecreated, object: nil)
-            center.addObserver(self, selector: #selector(onLoginDidChange(_:)), name: NotificationDataLoginDidChange, object: nil)
-            center.addObserver(self, selector: #selector(onStartSyncing(_:)), name: NotificationProfileDidStartSyncing, object: nil)
-            center.addObserver(self, selector: #selector(onFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
-            center.addObserver(self, selector: #selector(onBookmarkBufferValidated(notification:)), name: NotificationBookmarkBufferValidated, object: nil)
+            center.addObserver(self, selector: #selector(onDatabaseWasRecreated), name: .DatabaseWasRecreated, object: nil)
+            center.addObserver(self, selector: #selector(onLoginDidChange), name: .DataLoginDidChange, object: nil)
+
+
+            center.addObserver(self, selector: #selector(onStartSyncing), name: .ProfileDidStartSyncing, object: nil)
+            center.addObserver(self, selector: #selector(onFinishSyncing), name: .ProfileDidFinishSyncing, object: nil)
+            center.addObserver(self, selector: #selector(onBookmarkBufferValidated), name: .BookmarkBufferValidated, object: nil)
         }
 
         func onBookmarkBufferValidated(notification: NSNotification) {
@@ -940,7 +940,7 @@ open class BrowserProfile: Profile {
             }
 
             let interval = FifteenMinutes
-            let selector = #selector(BrowserSyncManager.syncOnTimer)
+            let selector = #selector(syncOnTimer)
             log.debug("Starting sync timer.")
             self.syncTimer = repeatingTimerAtInterval(interval, selector: selector)
         }

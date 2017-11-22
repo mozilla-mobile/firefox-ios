@@ -28,19 +28,19 @@ class ContextMenuHelper: NSObject {
         self.tab = tab
 
         guard let path = Bundle.main.path(forResource: "ContextMenu", ofType: "js"),
-                let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String,
+                let source = try? String(contentsOfFile: path, encoding: .utf8),
                 let webView = tab.webView else {
             return
         }
 
-        let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
+        let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
         webView.configuration.userContentController.addUserScript(userScript)
 
         nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:") as? UILongPressGestureRecognizer
 
         if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") as? UILongPressGestureRecognizer {
             nativeLongPressRecognizer.removeTarget(nil, action: nil)
-            nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected(_:)))
+            nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected))
         }
     }
 
@@ -89,13 +89,13 @@ extension ContextMenuHelper: TabHelper {
 
         var linkURL: URL?
         if let urlString = data["link"] as? String,
-                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowedCharacterSet) {
             linkURL = URL(string: escapedURLString)
         }
 
         var imageURL: URL?
         if let urlString = data["image"] as? String,
-                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowedCharacterSet) {
             imageURL = URL(string: escapedURLString)
         }
 

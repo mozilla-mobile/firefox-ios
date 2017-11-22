@@ -302,7 +302,7 @@ open class FxAClient10 {
         let authPW = (quickStretchedPW as NSData).deriveHKDFSHA256Key(withSalt: Data(), contextInfo: FxAClient10.KW("authPW"), length: 32) as NSData
 
         let parameters = [
-            "email": NSString(data: emailUTF8, encoding: String.Encoding.utf8.rawValue)!,
+            "email": String(data: emailUTF8, encoding: .utf8) as NSString!,
             "authPW": authPW.base16EncodedString(options: NSDataBase16EncodingOptions.lowerCase) as NSString,
         ]
 

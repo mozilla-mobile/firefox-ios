@@ -69,7 +69,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate var sessionStart: Timestamp?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     // Not used for displaying. Only used for calculating layout.
@@ -93,8 +93,8 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         collectionView?.addGestureRecognizer(longPressRecognizer)
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(didChangeFontSize(notification:)),
-                                               name: NotificationDynamicFontChanged,
+                                               selector: #selector(didChangeFontSize),
+                                               name: .DynamicFontChanged,
                                                object: nil)
         
     }
@@ -173,14 +173,14 @@ extension ActivityStreamPanel {
         var headerHeight: CGSize {
             switch self {
             case .highlights, .pocket: return CGSize(width: 50, height: 40)
-            case .topSites: return CGSize(width: 0, height: 0)
+            case .topSites: return .zero
             case .highlightIntro: return CGSize(width: 50, height: 2)
             }
         }
 
         var footerHeight: CGSize {
             switch self {
-            case .highlights, .highlightIntro, .pocket: return CGSize.zero
+            case .highlights, .highlightIntro, .pocket: return .zero
             case .topSites: return CGSize(width: 50, height: 5)
             }
         }
@@ -299,7 +299,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                 case .pocket:
                     view.title = title
                     view.moreButton.isHidden = false
-                    view.moreButton.addTarget(self, action: #selector(ActivityStreamPanel.showMorePocketStories), for: .touchUpInside)
+                    view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
                     return view
                 case .topSites:
                     return UICollectionReusableView()
@@ -328,7 +328,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
         switch Section(indexPath.section) {
         case .highlights:
             if highlights.isEmpty {
-                return CGSize.zero
+                return .zero
             }
             return cellSize
         case .topSites:
@@ -344,11 +344,11 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         switch Section(section) {
         case .highlights:
-            return highlights.isEmpty ? CGSize.zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
+            return highlights.isEmpty ? .zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
         case .highlightIntro:
-            return !highlights.isEmpty ? CGSize.zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
+            return !highlights.isEmpty ? .zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
         case .pocket:
-            return pocketStories.isEmpty ? CGSize.zero : Section(section).headerHeight
+            return pocketStories.isEmpty ? .zero : Section(section).headerHeight
         case .topSites:
             return Section(section).headerHeight
         }
@@ -357,7 +357,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         switch Section(section) {
         case .highlights, .highlightIntro, .pocket:
-            return CGSize.zero
+            return .zero
         case .topSites:
             return Section(section).footerHeight
         }
@@ -665,7 +665,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        guard longPressGestureRecognizer.state == .began else { return }
 
         let point = longPressGestureRecognizer.location(in: self.collectionView)
         guard let indexPath = self.collectionView?.indexPathForItem(at: point) else { return }
@@ -802,7 +802,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                 }
                 QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                                     withUserData: userData,
-                                                                                    toApplication: UIApplication.shared)
+                                                                                    toApplication: .shared)
                 site.setBookmarked(true)
                 self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: true, forceTopSites: true)
                 self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
@@ -824,8 +824,8 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }
             if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad, let popoverController = controller.popoverPresentationController {
-                let cellRect = sourceView?.frame ?? CGRect.zero
-                let cellFrameInSuperview = self.collectionView?.convert(cellRect, to: self.collectionView) ?? CGRect.zero
+                let cellRect = sourceView?.frame ?? .zero
+                let cellFrameInSuperview = self.collectionView?.convert(cellRect, to: self.collectionView) ?? .zero
 
                 popoverController.sourceView = sourceView
                 popoverController.sourceRect = CGRect(origin: CGPoint(x: cellFrameInSuperview.size.width/2, y: cellFrameInSuperview.height/2), size: .zero)
@@ -972,7 +972,7 @@ class ASFooterView: UICollectionReusableView {
 
         let seperatorLine = UIView()
         seperatorLine.backgroundColor = ASHeaderViewUX.SeperatorColor
-        self.backgroundColor = UIColor.clear
+        self.backgroundColor = .clear
         addSubview(seperatorLine)
         seperatorLine.snp.makeConstraints { make in
             make.height.equalTo(ASHeaderViewUX.SeperatorHeight)
@@ -991,7 +991,7 @@ class ASHeaderView: UICollectionReusableView {
     lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = self.title
-        titleLabel.textColor = UIColor.gray
+        titleLabel.textColor = .gray
         titleLabel.font = ASHeaderViewUX.TextFont
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
@@ -1006,7 +1006,7 @@ class ASHeaderView: UICollectionReusableView {
         button.titleLabel?.font = ASHeaderViewUX.TextFont
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
-        button.setTitleColor(.gray, for: UIControlState.highlighted)
+        button.setTitleColor(.gray, for: .highlighted)
         return button
     }()
 
@@ -1039,7 +1039,7 @@ class ASHeaderView: UICollectionReusableView {
             make.bottom.equalTo(self)
             self.rightConstraint = make.trailing.equalTo(self).inset(-titleInsets).constraint
         }
-        moreButton.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: UILayoutConstraintAxis.horizontal)
+        moreButton.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
             self.leftConstraint = make.leading.equalTo(self).inset(titleInsets).constraint
             make.trailing.equalTo(moreButton.snp.leading).inset(-ASHeaderViewUX.TitleTopInset)

@@ -133,15 +133,13 @@ class SearchEngines {
     }
 
     fileprivate func getDisabledEngineNames() -> [String: Bool] {
-        if let disabledEngineNames = self.prefs.stringArrayForKey(DisabledEngineNames) {
-            var disabledEngineDict = [String: Bool]()
-            for engineName in disabledEngineNames {
-                disabledEngineDict[engineName] = true
-            }
-            return disabledEngineDict
-        } else {
-            return [String: Bool]()
+        guard let disabledEngineNames = self.prefs.stringArrayForKey(DisabledEngineNames) else { return [:] }
+        var disabledEngineDict = [String: Bool]()
+        for engineName in disabledEngineNames {
+            disabledEngineDict[engineName] = true
         }
+        return disabledEngineDict
+
     }
 
     fileprivate func customEngineFilePath() -> String {
@@ -227,14 +225,14 @@ class SearchEngines {
         assert(listFile != nil, "Read the list of search engines")
 
         let engineNames = listFile!
-            .trimmingCharacters(in: CharacterSet.newlines)
-            .components(separatedBy: CharacterSet.newlines)
+            .trimmingCharacters(in: .newlines)
+            .components(separatedBy: .newlines)
 
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
         for engineName in engineNames {
             // Ignore hidden engines in list.txt
-            if engineName.endsWith(":hidden") {
+            if engineName.hasSuffix(":hidden") {
                 continue
             }
 

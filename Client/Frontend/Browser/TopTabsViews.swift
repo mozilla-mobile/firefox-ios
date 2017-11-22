@@ -98,7 +98,7 @@ class TopTabCell: UICollectionViewCell {
     
     let titleText: UILabel = {
         let titleText = UILabel()
-        titleText.textAlignment = NSTextAlignment.left
+        titleText.textAlignment = .left
         titleText.isUserInteractionEnabled = false
         titleText.numberOfLines = 1
         titleText.lineBreakMode = .byCharWrapping
@@ -115,7 +115,7 @@ class TopTabCell: UICollectionViewCell {
     
     let closeButton: UIButton = {
         let closeButton = UIButton()
-        closeButton.setImage(UIImage.templateImageNamed("menu-CloseTabs"), for: UIControlState())
+        closeButton.setImage(UIImage.templateImageNamed("menu-CloseTabs"), for: [])
         closeButton.tintColor = UIColor.Defaults.Grey40
         closeButton.imageEdgeInsets = UIEdgeInsets(top: 15, left: TopTabsUX.TabTitlePadding, bottom: 15, right: TopTabsUX.TabTitlePadding)
         closeButton.layer.shadowOpacity = 0.8
@@ -136,7 +136,7 @@ class TopTabCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), for: UIControlEvents.touchUpInside)
+        closeButton.addTarget(self, action: #selector(closeTab), for: .touchUpInside)
 
         contentView.addSubview(titleText)
         contentView.addSubview(closeButton)
@@ -175,11 +175,11 @@ class TopTabCell: UICollectionViewCell {
     fileprivate func applyStyle(_ style: Style) {
         switch style {
         case Style.light:
-            titleText.textColor = UIColor.darkText
+            titleText.textColor = .darkText
             backgroundColor = UIConstants.AppBackgroundColor
             highlightLine.backgroundColor = UIColor.Defaults.Blue60
         case Style.dark:
-            titleText.textColor = UIColor.lightText
+            titleText.textColor = .lightText
             backgroundColor = UIColor.Defaults.Grey70
             highlightLine.backgroundColor = UIColor.Defaults.Purple50
         }
@@ -223,12 +223,12 @@ class TopTabFader: UIView {
         hMaskLayer.locations = [0.00, 0.005, 0.995, 1.0]
         hMaskLayer.startPoint = CGPoint(x: 0, y: 0.5)
         hMaskLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
-        hMaskLayer.anchorPoint = CGPoint.zero
+        hMaskLayer.anchorPoint = .zero
         return hMaskLayer
     }()
     
     init() {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         layer.mask = hMaskLayer
     }
     

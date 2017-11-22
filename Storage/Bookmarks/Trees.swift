@@ -45,60 +45,47 @@ public enum BookmarkTreeNode: Comparable {
 
     public func hasChildList(_ nodes: [BookmarkTreeNode]) -> Bool {
         if case let .folder(_, ours) = self {
-            return ours.elementsEqual(nodes, by: { $0.recordGUID == $1.recordGUID })
+            return ours.elementsEqual(nodes) { $0.recordGUID == $1.recordGUID }
         }
         return false
     }
 
     public func hasSameChildListAs(_ other: BookmarkTreeNode) -> Bool {
-        if case let .folder(_, ours) = self {
-            if case let .folder(_, theirs) = other {
-                return ours.elementsEqual(theirs, by: { $0.recordGUID == $1.recordGUID })
-            }
+        switch (self, other) {
+        case let (.folder(_, l), .folder(_, r)):
+            return l.elementsEqual(r) { $0.recordGUID == $1.recordGUID }
+        default:
+            return false
         }
-        return false
     }
 
     // Returns false for unknowns.
     public func isSameTypeAs(_ other: BookmarkTreeNode) -> Bool {
-        switch self {
-        case .folder:
-            if case .folder = other {
-                return true
-            }
-        case .nonFolder:
-            if case .nonFolder = other {
-                return true
-            }
+        switch (self, other) {
+        case (.folder, .folder),
+             (.nonFolder, .nonFolder):
+            return true
         default:
             return false
         }
-        return false
     }
-}
 
-public func == (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
-    switch lhs {
-    case let .folder(guid, children):
-        if case let .folder(rguid, rchildren) = rhs {
+    public static func == (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
+        switch (lhs, rhs) {
+        case let (.folder(guid, children), .folder(rguid, rchildren)):
             return guid == rguid && children == rchildren
-        }
-        return false
-    case let .nonFolder(guid):
-        if case let .nonFolder(rguid) = rhs {
+        case let (.nonFolder(guid), .nonFolder(rguid)):
             return guid == rguid
-        }
-        return false
-    case let .unknown(guid):
-        if case let .unknown(rguid) = rhs {
+        case let (.unknown(guid), .unknown(rguid)):
             return guid == rguid
+        default:
+            return false
         }
-        return false
     }
-}
 
-public func < (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
-    return lhs.recordGUID < rhs.recordGUID
+    public static func < (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
+        return lhs.recordGUID < rhs.recordGUID
+    }
 }
 
 typealias StructureRow = (parent: GUID, child: GUID, type: BookmarkNodeType?)

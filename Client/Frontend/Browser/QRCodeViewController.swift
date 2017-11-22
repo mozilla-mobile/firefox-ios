@@ -37,8 +37,8 @@ class QRCodeViewController: UIViewController {
     private lazy var instructionsLabel: UILabel = {
         let label = UILabel()
         label.text = Strings.ScanQRCodeInstructionsLabel
-        label.textColor = UIColor.white
-        label.textAlignment = NSTextAlignment.center
+        label.textColor = .white
+        label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()
@@ -76,14 +76,14 @@ class QRCodeViewController: UIViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: QRCodeViewControllerUX.navigationBarTitleColor]
 
         // Setup the NavigationItem
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-goBack"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(goBack))
-        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.white
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-goBack"), style: .plain, target: self, action: #selector(goBack))
+        self.navigationItem.leftBarButtonItem?.tintColor = .white
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-light"), style: .plain, target: self, action: #selector(openLight))
         if captureDevice.hasTorch {
-            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+            self.navigationItem.rightBarButtonItem?.tintColor = .white
         } else {
-            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.gray
+            self.navigationItem.rightBarButtonItem?.tintColor = .gray
             self.navigationItem.rightBarButtonItem?.isEnabled = false
         }
 
@@ -181,17 +181,17 @@ class QRCodeViewController: UIViewController {
         if isLightOn {
             do {
                 try captureDevice.lockForConfiguration()
-                captureDevice.torchMode = AVCaptureTorchMode.off
+                captureDevice.torchMode = .off
                 captureDevice.unlockForConfiguration()
                 navigationItem.rightBarButtonItem?.image = UIImage(named: "qrcode-light")
-                navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+                navigationItem.rightBarButtonItem?.tintColor = .white
             } catch {
                 print(error)
             }
         } else {
             do {
                 try captureDevice.lockForConfiguration()
-                captureDevice.torchMode = AVCaptureTorchMode.on
+                captureDevice.torchMode = .on
                 captureDevice.unlockForConfiguration()
                 navigationItem.rightBarButtonItem?.image = UIImage(named: "qrcode-isLighting")
                 navigationItem.rightBarButtonItem?.tintColor = QRCodeViewControllerUX.isLightingNavigationItemColor
@@ -217,7 +217,7 @@ class QRCodeViewController: UIViewController {
         let output = AVCaptureMetadataOutput()
         if captureSession.canAddOutput(output) {
             captureSession.addOutput(output)
-            output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            output.setMetadataObjectsDelegate(self, queue: .main)
             output.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
         }
         if let videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession) {
@@ -242,15 +242,15 @@ class QRCodeViewController: UIViewController {
         videoPreviewLayer.frame = UIScreen.main.bounds
         switch toInterfaceOrientation {
         case .portrait:
-            videoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientation.portrait
+            videoPreviewLayer.connection.videoOrientation = .portrait
         case .landscapeLeft:
-            videoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
+            videoPreviewLayer.connection.videoOrientation = .landscapeLeft
         case .landscapeRight:
-            videoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
+            videoPreviewLayer.connection.videoOrientation = .landscapeRight
         case .portraitUpsideDown:
-            videoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
+            videoPreviewLayer.connection.videoOrientation = .portraitUpsideDown
         default:
-            videoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientation.portrait
+            videoPreviewLayer.connection.videoOrientation = .portrait
         }
     }
 }

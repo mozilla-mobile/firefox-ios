@@ -9,7 +9,6 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
 
 // MARK: - Placeholder strings for Bug 1232810.
 
@@ -30,7 +29,7 @@ private struct BookmarksPanelUX {
     static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
     static let BookmarkFolderBGColor = UIColor.Defaults.Grey10.withAlphaComponent(0.3)
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemTextColor = UIColor.gray
+    static let WelcomeScreenItemTextColor: UIColor = .gray
     static let WelcomeScreenItemWidth = 170
     static let SeparatorRowHeight: CGFloat = 0.5
     static let IconSize: CGFloat = 23
@@ -46,7 +45,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var refreshControl: UIRefreshControl?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(BookmarksPanel.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
@@ -56,7 +55,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(BookmarksPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
 
         self.tableView.register(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
         self.tableView.register(BookmarkFolderTableViewCell.self, forCellReuseIdentifier: BookmarkFolderCellIdentifier)
@@ -80,14 +79,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        refreshControl?.addTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(refreshBookmarks), for: .valueChanged)
 
         loadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        refreshControl?.removeTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
+        refreshControl?.removeTarget(self, action: #selector(refreshBookmarks), for: .valueChanged)
     }
     
     func loadData() {
@@ -112,7 +111,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged:
+        case .FirefoxAccountChanged:
             self.reloadData()
             break
         default:
@@ -133,7 +132,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.white
+        overlayView.backgroundColor = .white
 
         let logoImageView = UIImageView(image: UIImage(named: "emptyBookmarks"))
         overlayView.addSubview(logoImageView)
@@ -150,7 +149,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
         welcomeLabel.text = emptyBookmarksText
-        welcomeLabel.textAlignment = NSTextAlignment.center
+        welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = BookmarksPanelUX.WelcomeScreenItemTextColor
         welcomeLabel.numberOfLines = 0
@@ -210,7 +209,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
         presentContextMenu(for: indexPath)
@@ -343,7 +342,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             nextController.bookmarkFolder = folder
             nextController.homePanelDelegate = self.homePanelDelegate
             nextController.profile = self.profile
-            source.modelFactory.uponQueue(DispatchQueue.main) { maybe in
+            source.modelFactory.uponQueue(.main) { maybe in
                 guard let factory = maybe.successValue else {
                     // Nothing we can do.
                     return
@@ -393,7 +392,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
-        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: title, handler: { (action, indexPath) in
+        let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
             self.deleteBookmark(indexPath: indexPath, source: source)
         })
 
@@ -435,11 +434,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         self.tableView.beginUpdates()
         self.source = source.removeGUIDFromCurrent(bookmark.guid)
-        self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.left)
+        self.tableView.deleteRows(at: [indexPath], with: .left)
         self.tableView.endUpdates()
         self.updateEmptyPanelState()
 
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: BookmarkStatusChangedNotification), object: bookmark, userInfo: ["added": false]
+        NotificationCenter.default.post(name: .BookmarkStatusChanged, object: bookmark, userInfo: ["added": false]
         )
     }
 }
@@ -493,12 +492,12 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = BookmarksPanelUX.BookmarkFolderBGColor
-        textLabel?.backgroundColor = UIColor.clear
+        textLabel?.backgroundColor = .clear
         textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
 
         imageView?.image = UIImage(named: "bookmarkFolder")
-        accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-        separatorInset = UIEdgeInsets.zero
+        accessoryType = .disclosureIndicator
+        separatorInset = .zero
     }
 
     override func layoutSubviews() {
@@ -547,7 +546,7 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
 
         isUserInteractionEnabled = true
 
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(BookmarkFolderTableViewHeader.viewWasTapped(_:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewWasTapped))
         tapGestureRecognizer.numberOfTapsRequired = 1
         addGestureRecognizer(tapGestureRecognizer)
 

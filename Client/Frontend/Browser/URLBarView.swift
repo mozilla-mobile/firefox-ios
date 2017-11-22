@@ -124,7 +124,7 @@ class URLBarView: UIView {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
-        cancelButton.addTarget(self, action: #selector(URLBarView.SELdidClickCancel), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(SELdidClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
     }()
@@ -134,15 +134,15 @@ class URLBarView: UIView {
         button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = "urlBar-scanQRCode"
         button.clipsToBounds = false
-        button.addTarget(self, action: #selector(URLBarView.showQRScanner), for: .touchUpInside)
-        button.setContentHuggingPriority(1000, for: UILayoutConstraintAxis.horizontal)
-        button.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.horizontal)
+        button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
+        button.setContentHuggingPriority(1000, for: .horizontal)
+        button.setContentCompressionResistancePriority(1000, for: .horizontal)
         return button
     }()
 
     fileprivate lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(URLBarView.SELtappedScrollToTopArea), for: .touchUpInside)
+        button.addTarget(self, action: #selector(SELtappedScrollToTopArea), for: .touchUpInside)
         return button
     }()
 
@@ -316,11 +316,11 @@ class URLBarView: UIView {
         
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.autocompleteDelegate = self
-        locationTextField.keyboardType = UIKeyboardType.webSearch
-        locationTextField.autocorrectionType = UITextAutocorrectionType.no
-        locationTextField.autocapitalizationType = UITextAutocapitalizationType.none
+        locationTextField.keyboardType = .webSearch
+        locationTextField.autocorrectionType = .no
+        locationTextField.autocapitalizationType = .none
         locationTextField.returnKeyType = UIReturnKeyType.go
-        locationTextField.clearButtonMode = UITextFieldViewMode.whileEditing
+        locationTextField.clearButtonMode = .whileEditing
         locationTextField.font = UIConstants.DefaultChromeFont
         locationTextField.accessibilityIdentifier = "address"
         locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
@@ -716,15 +716,14 @@ class ToolbarTextField: AutocompleteTextField {
         // subviews, find the clear button, and tint it ourselves. Thanks to Mikael Hellman for the tip:
         // http://stackoverflow.com/questions/27944781/how-to-change-the-tint-color-of-the-clear-button-on-a-uitextfield
         for view in subviews as [UIView] {
-            if let button = view as? UIButton {
-                if let image = button.image(for: UIControlState()) {
-                    if tintedClearImage == nil {
-                        tintedClearImage = tintImage(image, color: clearButtonTintColor)
-                    }
+            if let button = view as? UIButton,
+                let image = button.image(for: []){
+                if tintedClearImage == nil {
+                    tintedClearImage = tintImage(image, color: clearButtonTintColor)
+                }
 
-                    if button.imageView?.image != tintedClearImage {
-                        button.setImage(tintedClearImage, for: UIControlState())
-                    }
+                if button.imageView?.image != tintedClearImage {
+                    button.setImage(tintedClearImage, for: [])
                 }
             }
         }
@@ -737,17 +736,14 @@ class ToolbarTextField: AutocompleteTextField {
 
         UIGraphicsBeginImageContextWithOptions(size, false, 2)
         let context = UIGraphicsGetCurrentContext()!
-        image.draw(at: CGPoint.zero, blendMode: CGBlendMode.normal, alpha: 1.0)
+        image.draw(at: .zero, blendMode: .normal, alpha: 1.0)
 
         context.setFillColor(color.cgColor)
-        context.setBlendMode(CGBlendMode.sourceIn)
+        context.setBlendMode(.sourceIn)
         context.setAlpha(1.0)
 
-        let rect = CGRect(
-            x: CGPoint.zero.x,
-            y: CGPoint.zero.y,
-            width: image.size.width,
-            height: image.size.height)
+        let rect = CGRect(size: image.size)
+
         context.fill(rect)
         let tintedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()

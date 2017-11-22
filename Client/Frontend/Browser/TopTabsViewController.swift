@@ -36,10 +36,9 @@ class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var isPrivate = false
-    let faviconNotification = NSNotification.Name(rawValue: FaviconManager.FaviconDidLoad)
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: TopTabsViewLayout())
         collectionView.register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -51,21 +50,21 @@ class TopTabsViewController: UIViewController {
     
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: UIControlEvents.touchUpInside)
+        tabsButton.addTarget(self, action: #selector(tabsTrayTapped), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
     
     fileprivate lazy var newTab: UIButton = {
         let newTab = UIButton.newTabButton()
-        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: UIControlEvents.touchUpInside)
+        newTab.addTarget(self, action: #selector(newTabTapped), for: .touchUpInside)
         return newTab
     }()
     
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.light = true
-        privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: UIControlEvents.touchUpInside)
+        privateModeButton.addTarget(self, action: #selector(togglePrivateModeTapped), for: .touchUpInside)
         return privateModeButton
     }()
     
@@ -96,7 +95,7 @@ class TopTabsViewController: UIViewController {
         [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(TopTabsViewController.reloadFavicons(_:)), name: faviconNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadFavicons), name: .FaviconDidLoad, object: nil)
     }
     
     deinit {
@@ -226,24 +225,24 @@ class TopTabsViewController: UIViewController {
     func scrollToCurrentTab(_ animated: Bool = true, centerCell: Bool = false) {
         assertIsMainThread("Only animate on the main thread")
 
-        guard let currentTab = tabManager.selectedTab, let index = tabStore.index(of: currentTab), !collectionView.frame.isEmpty else {
+        guard let currentTab = tabManager.selectedTab, let index = tabStore.index(of: currentTab), !collectionView.frame.isEmpty,
+            let frame = collectionView.layoutAttributesForItem(at: IndexPath(row: index, section: 0))?.frame else {
             return
         }
-        if let frame = collectionView.layoutAttributesForItem(at: IndexPath(row: index, section: 0))?.frame {
-            if centerCell {
-                collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: false)
-            } else {
-                // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
-                let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
-                if animated {
-                    UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: { 
-                        self.collectionView.scrollRectToVisible(padFrame, animated: true)
-                    })
-                } else {
-                    collectionView.scrollRectToVisible(padFrame, animated: false)
-                }
-            }
+
+        if centerCell {
+            collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: false)
+            return
         }
+        // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
+        let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
+        if animated {
+            UIView.animate(withDuration: TopTabsUX.AnimationSpeed) {
+                self.collectionView.scrollRectToVisible(padFrame, animated: true)
+            }
+            return
+        }
+        collectionView.scrollRectToVisible(padFrame, animated: false)
     }
 }
 
@@ -441,7 +440,7 @@ extension TopTabsViewController {
     fileprivate func reloadData() {
         assertIsMainThread("reloadData must only be called from main thread")
 
-        if self.isUpdating || self.collectionView.frame == CGRect.zero {
+        if self.isUpdating || self.collectionView.frame == .zero {
             self.pendingReloadData = true
             return
         }
@@ -491,7 +490,7 @@ extension TopTabsViewController: TabManagerDelegate {
 
     // This helps make sure animations don't happen before the view is loaded.
     fileprivate var isRestoring: Bool {
-        return self.tabManager.isRestoring || self.collectionView.frame == CGRect.zero
+        return self.tabManager.isRestoring || self.collectionView.frame == .zero
     }
 
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {

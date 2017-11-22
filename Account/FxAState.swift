@@ -54,78 +54,78 @@ func state(fromJSON json: JSON) -> FxAState? {
 }
 
 func stateV1(fromJSON json: JSON) -> FxAState? {
-    if let labelString = json["label"].string {
-        if let label = FxAStateLabel(rawValue: labelString) {
-            switch label {
-            case .engagedBeforeVerified:
-                if let
-                    sessionToken = json["sessionToken"].string?.hexDecodedData,
-                    let keyFetchToken = json["keyFetchToken"].string?.hexDecodedData,
-                    let unwrapkB = json["unwrapkB"].string?.hexDecodedData,
-                    let knownUnverifiedAt = json["knownUnverifiedAt"].int64,
-                    let lastNotifiedUserAt = json["lastNotifiedUserAt"].int64 {
-                    return EngagedBeforeVerifiedState(
-                        knownUnverifiedAt: UInt64(knownUnverifiedAt), lastNotifiedUserAt: UInt64(lastNotifiedUserAt),
-                        sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
-                }
+    guard let labelString = json["label"].string,
+        let label = FxAStateLabel(rawValue: labelString) else { return nil }
 
-            case .engagedAfterVerified:
-                if let
-                    sessionToken = json["sessionToken"].string?.hexDecodedData,
-                    let keyFetchToken = json["keyFetchToken"].string?.hexDecodedData,
-                    let unwrapkB = json["unwrapkB"].string?.hexDecodedData {
-                    return EngagedAfterVerifiedState(sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
-                }
-
-            case .cohabitingBeforeKeyPair:
-                if let
-                    sessionToken = json["sessionToken"].string?.hexDecodedData,
-                    let kA = json["kA"].string?.hexDecodedData,
-                    let kB = json["kB"].string?.hexDecodedData {
-                    return CohabitingBeforeKeyPairState(sessionToken: sessionToken, kA: kA, kB: kB)
-                }
-
-            case .cohabitingAfterKeyPair:
-                if let
-                    sessionToken = json["sessionToken"].string?.hexDecodedData,
-                    let kA = json["kA"].string?.hexDecodedData,
-                    let kB = json["kB"].string?.hexDecodedData,
-                    let keyPairJSON = json["keyPair"].dictionaryObject,
-                    let keyPair = RSAKeyPair(jsonRepresentation: keyPairJSON),
-                    let keyPairExpiresAt = json["keyPairExpiresAt"].int64 {
-                        return CohabitingAfterKeyPairState(sessionToken: sessionToken, kA: kA, kB: kB,
-                            keyPair: keyPair, keyPairExpiresAt: UInt64(keyPairExpiresAt))
-                }
-
-            case .married:
-                if let
-                    sessionToken = json["sessionToken"].string?.hexDecodedData,
-                    let kA = json["kA"].string?.hexDecodedData,
-                    let kB = json["kB"].string?.hexDecodedData,
-                    let keyPairJSON = json["keyPair"].dictionaryObject,
-                    let keyPair = RSAKeyPair(jsonRepresentation: keyPairJSON),
-                    let keyPairExpiresAt = json["keyPairExpiresAt"].int64,
-                    let certificate = json["certificate"].string,
-                    let certificateExpiresAt = json["certificateExpiresAt"].int64 {
-                    return MarriedState(sessionToken: sessionToken, kA: kA, kB: kB,
-                        keyPair: keyPair, keyPairExpiresAt: UInt64(keyPairExpiresAt),
-                        certificate: certificate, certificateExpiresAt: UInt64(certificateExpiresAt))
-                }
-
-            case .separated:
-                return SeparatedState()
-
-            case .doghouse:
-                return DoghouseState()
-            }
+    switch label {
+    case .engagedBeforeVerified:
+        if let
+            sessionToken = json["sessionToken"].string?.hexDecodedData,
+            let keyFetchToken = json["keyFetchToken"].string?.hexDecodedData,
+            let unwrapkB = json["unwrapkB"].string?.hexDecodedData,
+            let knownUnverifiedAt = json["knownUnverifiedAt"].int64,
+            let lastNotifiedUserAt = json["lastNotifiedUserAt"].int64 {
+            return EngagedBeforeVerifiedState(
+                knownUnverifiedAt: UInt64(knownUnverifiedAt), lastNotifiedUserAt: UInt64(lastNotifiedUserAt),
+                sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
         }
+
+    case .engagedAfterVerified:
+        if let
+            sessionToken = json["sessionToken"].string?.hexDecodedData,
+            let keyFetchToken = json["keyFetchToken"].string?.hexDecodedData,
+            let unwrapkB = json["unwrapkB"].string?.hexDecodedData {
+            return EngagedAfterVerifiedState(sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
+        }
+
+    case .cohabitingBeforeKeyPair:
+        if let
+            sessionToken = json["sessionToken"].string?.hexDecodedData,
+            let kA = json["kA"].string?.hexDecodedData,
+            let kB = json["kB"].string?.hexDecodedData {
+            return CohabitingBeforeKeyPairState(sessionToken: sessionToken, kA: kA, kB: kB)
+        }
+
+    case .cohabitingAfterKeyPair:
+        if let
+            sessionToken = json["sessionToken"].string?.hexDecodedData,
+            let kA = json["kA"].string?.hexDecodedData,
+            let kB = json["kB"].string?.hexDecodedData,
+            let keyPairJSON = json["keyPair"].dictionaryObject,
+            let keyPair = RSAKeyPair(jsonRepresentation: keyPairJSON),
+            let keyPairExpiresAt = json["keyPairExpiresAt"].int64 {
+                return CohabitingAfterKeyPairState(sessionToken: sessionToken, kA: kA, kB: kB,
+                    keyPair: keyPair, keyPairExpiresAt: UInt64(keyPairExpiresAt))
+        }
+
+    case .married:
+        if let
+            sessionToken = json["sessionToken"].string?.hexDecodedData,
+            let kA = json["kA"].string?.hexDecodedData,
+            let kB = json["kB"].string?.hexDecodedData,
+            let keyPairJSON = json["keyPair"].dictionaryObject,
+            let keyPair = RSAKeyPair(jsonRepresentation: keyPairJSON),
+            let keyPairExpiresAt = json["keyPairExpiresAt"].int64,
+            let certificate = json["certificate"].string,
+            let certificateExpiresAt = json["certificateExpiresAt"].int64 {
+            return MarriedState(sessionToken: sessionToken, kA: kA, kB: kB,
+                keyPair: keyPair, keyPairExpiresAt: UInt64(keyPairExpiresAt),
+                certificate: certificate, certificateExpiresAt: UInt64(certificateExpiresAt))
+        }
+
+    case .separated:
+        return SeparatedState()
+
+    case .doghouse:
+        return DoghouseState()
+
     }
     return nil
 }
 
 // Not an externally facing state!
 open class FxAState: JSONLiteralConvertible {
-    open var label: FxAStateLabel { return FxAStateLabel.separated } // This is bogus, but we have to do something!
+    open var label: FxAStateLabel { return .separated } // This is bogus, but we have to do something!
 
     open var actionNeeded: FxAActionNeeded {
         // Kind of nice to have this in one place.
@@ -149,7 +149,7 @@ open class FxAState: JSONLiteralConvertible {
 }
 
 open class SeparatedState: FxAState {
-    override open var label: FxAStateLabel { return FxAStateLabel.separated }
+    override open var label: FxAStateLabel { return .separated }
 
     override public init() {
         super.init()
@@ -192,7 +192,7 @@ open class ReadyForKeys: TokenState {
 }
 
 open class EngagedBeforeVerifiedState: ReadyForKeys {
-    override open var label: FxAStateLabel { return FxAStateLabel.engagedBeforeVerified }
+    override open var label: FxAStateLabel { return .engagedBeforeVerified }
 
     // Timestamp, in milliseconds after the epoch, when we first knew the account was unverified.
     // Use this to avoid nagging the user to verify her account immediately after connecting.
@@ -220,7 +220,7 @@ open class EngagedBeforeVerifiedState: ReadyForKeys {
 }
 
 open class EngagedAfterVerifiedState: ReadyForKeys {
-    override open var label: FxAStateLabel { return FxAStateLabel.engagedAfterVerified }
+    override open var label: FxAStateLabel { return .engagedAfterVerified }
 
     override public init(sessionToken: Data, keyFetchToken: Data, unwrapkB: Data) {
         super.init(sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
@@ -251,7 +251,7 @@ open class TokenAndKeys: TokenState {
 }
 
 open class CohabitingBeforeKeyPairState: TokenAndKeys {
-    override open var label: FxAStateLabel { return FxAStateLabel.cohabitingBeforeKeyPair }
+    override open var label: FxAStateLabel { return .cohabitingBeforeKeyPair }
 }
 
 // Not an externally facing state!
@@ -279,11 +279,11 @@ open class TokenKeysAndKeyPair: TokenAndKeys {
 }
 
 open class CohabitingAfterKeyPairState: TokenKeysAndKeyPair {
-    override open var label: FxAStateLabel { return FxAStateLabel.cohabitingAfterKeyPair }
+    override open var label: FxAStateLabel { return .cohabitingAfterKeyPair }
 }
 
 open class MarriedState: TokenKeysAndKeyPair {
-    override open var label: FxAStateLabel { return FxAStateLabel.married }
+    override open var label: FxAStateLabel { return .married }
 
     let certificate: String
     let certificateExpiresAt: Timestamp
@@ -330,7 +330,7 @@ open class MarriedState: TokenKeysAndKeyPair {
 }
 
 open class DoghouseState: FxAState {
-    override open var label: FxAStateLabel { return FxAStateLabel.doghouse }
+    override open var label: FxAStateLabel { return .doghouse }
 
     override public init() {
         super.init()

@@ -37,7 +37,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
         tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
-        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight))
+        let headerFooterFrame = CGRect(size: CGSize(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight))
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.showTopBorder = false
         headerView.showBottomBorder = true
@@ -59,7 +59,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BasicCheckmarkCell, for: indexPath)
         let option = intervalOptions[indexPath.row]
-        let intervalTitle = NSAttributedString.tableRowTitle(option.settingTitle, enabled: true)
+        let intervalTitle = NSAttributedString(tableRowTitle: option.settingTitle, enabled: true)
         cell.textLabel?.attributedText = intervalTitle
         cell.accessoryType = authenticationInfo?.requiredPasscodeInterval == option ? .checkmark : .none
         return cell

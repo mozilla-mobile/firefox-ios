@@ -26,13 +26,13 @@ public extension URL {
         let urlString = absoluteString
 
         // Extract 'to' value
-        let toStart = urlString.characters.index(urlString.startIndex, offsetBy: "mailto:".characters.count)
-        let toEnd = urlString.characters.index(of: "?") ?? urlString.endIndex
+        let toStart = urlString.index(urlString.startIndex, offsetBy: "mailto:".count)
+        let toEnd = urlString.index(of: "?") ?? urlString.endIndex
 
         let to = urlString.substring(with: toStart..<toEnd)
 
         guard toEnd != urlString.endIndex else {
-            return MailToMetadata(to: to, headers: [String: String]())
+            return MailToMetadata(to: to, headers: [:])
         }
 
         // Extract headers

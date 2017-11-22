@@ -16,7 +16,7 @@ class PhotonActionSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning
     }()
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let screens = (from: transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)!, to: transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)!)
+        let screens = (from: transitionContext.viewController(forKey: .from)!, to: transitionContext.viewController(forKey: .to)!)
         
         guard let actionSheet = (self.presenting ? screens.to : screens.from) as? PhotonActionSheet else {
             return

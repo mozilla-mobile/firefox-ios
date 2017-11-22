@@ -13,7 +13,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         super.setUp()
         // We undo the localhost/127.0.0.1 switch in order to get 'localhost' in accessibility labels.
         webRoot = SimplePageServer.start()
-            .replacingOccurrences(of: "127.0.0.1", with: "localhost", options: NSString.CompareOptions(), range: nil)
+            .replacingOccurrences(of: "127.0.0.1", with: "localhost", options: [], range: nil)
         BrowserUtils.dismissFirstRunUI()
     }
     

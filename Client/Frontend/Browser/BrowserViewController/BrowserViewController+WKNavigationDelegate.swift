@@ -146,7 +146,7 @@ extension BrowserViewController: WKNavigationDelegate {
             UIApplication.shared.open(url, options: [:]) { openedURL in
                 if !openedURL {
                     let alert = UIAlertController(title: Strings.UnableToOpenURLErrorTitle, message: Strings.UnableToOpenURLError, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: Strings.OKString, style: UIAlertActionStyle.default, handler: nil))
+                    alert.addAction(UIAlertAction(title: Strings.OKString, style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 }
             }
@@ -184,7 +184,7 @@ extension BrowserViewController: WKNavigationDelegate {
         tabManager.selectTab(tab)
 
         let loginsHelper = tab.getHelper(name: LoginsHelper.name()) as? LoginsHelper
-        Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(DispatchQueue.main) { res in
+        Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(.main) { res in
             if let credentials = res.successValue {
                 completionHandler(.useCredential, credentials.credentials)
             } else {

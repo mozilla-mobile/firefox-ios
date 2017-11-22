@@ -8,8 +8,8 @@ import SnapKit
 private struct SearchInputViewUX {
 
     static let horizontalSpacing: CGFloat = 16
-    static let titleFont: UIFont = UIFont.systemFont(ofSize: 16)
-    static let titleColor: UIColor = UIColor.lightGray
+    static let titleFont: UIFont = .systemFont(ofSize: 16)
+    static let titleColor: UIColor = .lightGray
     static let inputColor: UIColor = UIConstants.HighlightBlue
     static let borderColor: UIColor = UIConstants.SeparatorColor
     static let borderLineWidth: CGFloat = 0.5
@@ -40,7 +40,7 @@ class SearchInputView: UIView {
         textField.delegate = self
         textField.textColor = SearchInputViewUX.inputColor
         textField.tintColor = SearchInputViewUX.inputColor
-        textField.addTarget(self, action: #selector(SearchInputView.inputTextDidChange(_:)), for: .editingChanged)
+        textField.addTarget(self, action: #selector(inputTextDidChange), for: .editingChanged)
         textField.accessibilityLabel = NSLocalizedString("Search Input Field", tableName: "LoginManager", comment: "Accessibility label for the search input field in the Logins list")
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
@@ -61,8 +61,8 @@ class SearchInputView: UIView {
 
     fileprivate lazy var closeButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(SearchInputView.tappedClose), for: .touchUpInside)
-        button.setImage(UIImage(named: "clear"), for: UIControlState())
+        button.addTarget(self, action: #selector(tappedClose), for: .touchUpInside)
+        button.setImage(UIImage(named: "clear"), for: [])
         button.accessibilityLabel = NSLocalizedString("Clear Search", tableName: "LoginManager",
             comment: "Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode")
         return button
@@ -78,8 +78,8 @@ class SearchInputView: UIView {
 
     fileprivate lazy var overlay: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.white
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SearchInputView.tappedSearch)))
+        view.backgroundColor = .white
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedSearch)))
 
         view.isAccessibilityElement = true
         view.accessibilityLabel =  NSLocalizedString("Enter Search Mode", tableName: "LoginManager", comment: "Accessibility label for entering search mode for logins")
@@ -107,7 +107,7 @@ class SearchInputView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = UIColor.white
+        backgroundColor = .white
         isUserInteractionEnabled = true
 
         addSubview(inputField)
@@ -197,7 +197,7 @@ extension SearchInputView: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         // If there is no text, go back to showing the title view
-        if (textField.text?.characters.count ?? 0) == 0 {
+        if (textField.text?.count ?? 0) == 0 {
             isEditing = false
             delegate?.searchInputViewFinishedEditing(self)
         }

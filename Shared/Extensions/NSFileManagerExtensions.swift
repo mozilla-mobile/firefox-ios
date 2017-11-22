@@ -18,11 +18,7 @@ public enum NSFileManagerExtensionsErrorCodes: Int {
 public extension FileManager {
 
     private func directoryEnumeratorForURL(_ url: URL) throws -> FileManager.DirectoryEnumerator {
-        let prefetchedProperties = [
-            URLResourceKey.isRegularFileKey,
-            URLResourceKey.fileAllocatedSizeKey,
-            URLResourceKey.totalFileAllocatedSizeKey
-        ]
+        let prefetchedProperties: [URLResourceKey] = [.isRegularFileKey, .fileAllocatedSizeKey, .totalFileAllocatedSizeKey]
 
         // If we run into an issue getting an enumerator for the given URL, capture the error and bail out later.
         var enumeratorError: NSError?

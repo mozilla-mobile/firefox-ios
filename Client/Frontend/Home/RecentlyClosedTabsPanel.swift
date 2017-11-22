@@ -34,7 +34,7 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
 
     fileprivate lazy var historyBackButton: HistoryBackButton = {
         let button = HistoryBackButton()
-        button.addTarget(self, action: #selector(RecentlyClosedTabsPanel.historyBackButtonWasTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(historyBackButtonWasTapped), for: .touchUpInside)
         return button
     }()
 
@@ -84,7 +84,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     init() {
@@ -103,7 +103,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
         presentContextMenu(for: indexPath)
@@ -163,13 +163,7 @@ extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
         let closedTab = recentlyClosedTabs[indexPath.row]
-        let site: Site
-        if let title = closedTab.title {
-            site = Site(url: String(describing: closedTab.url), title: title)
-        } else {
-            site = Site(url: String(describing: closedTab.url), title: "")
-        }
-        return site
+        return Site(url: String(describing: closedTab.url), title: title ?? "")
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {

@@ -197,8 +197,8 @@ extension KIFUITestActor {
             if result as! String == "undefined" {
                 let bundle = Bundle(for: BrowserTests.self)
                 let path = bundle.path(forResource: "KIFHelper", ofType: "js")!
-                let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue)
-                webView.evaluateJavaScript(source as String, completionHandler: nil)
+                let source = try! String(contentsOfFile: path, encoding: .utf8)
+                webView.evaluateJavaScript(source, completionHandler: nil)
             }
             stepResult = KIFTestStepResult.success
         }
@@ -313,7 +313,7 @@ class BrowserUtils {
         info["url"] = url
         info["title"] = title
         info["visitType"] = VisitType.link.rawValue
-        notificationCenter.post(name: Notification.Name(rawValue: "OnLocationChange"), object: self, userInfo: info)
+        notificationCenter.post(name: .LocationChange, object: self, userInfo: info)
     }
 
     fileprivate class func clearHistoryItemAtIndex(_ index: IndexPath, tester: KIFUITestActor) {
@@ -415,7 +415,7 @@ class BrowserUtils {
 class SimplePageServer {
     class func getPageData(_ name: String, ext: String = "html") -> String {
         let pageDataPath = Bundle(for: self).path(forResource: name, ofType: ext)!
-        return (try! NSString(contentsOfFile: pageDataPath, encoding: String.Encoding.utf8.rawValue)) as String
+        return (try! String(contentsOfFile: pageDataPath, encoding: .utf8))
     }
 
     class func start() -> String {
@@ -639,10 +639,10 @@ class PasscodeUtils {
     }
 
     static func enterPasscode(_ tester: KIFUITestActor, digits: String) {
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.startIndex]))
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 1)]))
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 2)]))
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 3)]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.startIndex]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 1)]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 2)]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 3)]))
     }
 }
 

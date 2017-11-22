@@ -35,10 +35,10 @@ private func loadEntriesFromDisk() -> TLDEntryMap? {
             let key: String
             if entry.isWild {
                 // Trim off the '*.' part of the line
-                key = line.substring(from: line.characters.index(line.startIndex, offsetBy: 2))
+                key = line.substring(from: line.index(line.startIndex, offsetBy: 2))
             } else if entry.isException {
                 // Trim off the '!' part of the line
-                key = line.substring(from: line.characters.index(line.startIndex, offsetBy: 1))
+                key = line.substring(from: line.index(line.startIndex, offsetBy: 1))
             } else {
                 key = line
             }
@@ -58,35 +58,23 @@ extension URL {
 
     public func allocatedFileSize() -> Int64 {
         // First try to get the total allocated size and in failing that, get the file allocated size
-        return getResourceLongLongForKey(URLResourceKey.totalFileAllocatedSizeKey.rawValue)
-            ?? getResourceLongLongForKey(URLResourceKey.fileAllocatedSizeKey.rawValue)
-            ?? 0
+        return resourceLongLong(for: .totalFileAllocatedSizeKey) ?? resourceLongLong(for: .fileAllocatedSizeKey) ?? 0
     }
 
-    public func getResourceValueForKey(_ key: String) -> Any? {
-        let resourceKey = URLResourceKey(key)
-        let keySet = Set<URLResourceKey>([resourceKey])
-
-        var val: Any?
-        do {
-            let values = try resourceValues(forKeys: keySet)
-            val = values.allValues[resourceKey]
-        } catch _ {
-            return nil
-        }
-        return val
+    public func resource(for key : URLResourceKey) -> Any? {
+        return (try? resourceValues(forKeys: [key]))?.allValues[key]
     }
 
-    public func getResourceLongLongForKey(_ key: String) -> Int64? {
-        return (getResourceValueForKey(key) as? NSNumber)?.int64Value
+    public func resourceLongLong(for key: URLResourceKey) -> Int64? {
+        return (resource(for: key) as? NSNumber)?.int64Value
     }
 
-    public func getResourceBoolForKey(_ key: String) -> Bool? {
-        return getResourceValueForKey(key) as? Bool
+    public func resourceBool(for key: URLResourceKey) -> Bool? {
+        return resource(for: key) as? Bool
     }
 
     public var isRegularFile: Bool {
-        return getResourceBoolForKey(URLResourceKey.isRegularFileKey.rawValue) ?? false
+        return resourceBool(for: .isRegularFileKey) ?? false
     }
 
     public func lastComponentIsPrefixedBy(_ prefix: String) -> Bool {
@@ -162,21 +150,18 @@ extension URL {
     }
 
     public var normalizedHostAndPath: String? {
-        if let normalizedHost = self.normalizedHost {
-            return normalizedHost + self.path
-        }
-        return nil
+        return normalizedHost.flatMap { $0 + self.path }
     }
 
     public var absoluteDisplayString: String {
         var urlString = self.absoluteString
         // For http URLs, get rid of the trailing slash if the path is empty or '/'
-        if (self.scheme == "http" || self.scheme == "https") && (self.path == "/") && urlString.endsWith("/") {
-            urlString = urlString.substring(to: urlString.characters.index(urlString.endIndex, offsetBy: -1))
+        if (self.scheme == "http" || self.scheme == "https") && (self.path == "/") && urlString.hasSuffix("/") {
+            urlString = urlString.substring(to: urlString.index(urlString.endIndex, offsetBy: -1))
         }
         // If it's basic http, strip out the string but leave anything else in
         if urlString.hasPrefix("http://") {
-            return urlString.substring(from: urlString.characters.index(urlString.startIndex, offsetBy: 7))
+            return urlString.substring(from: urlString.index(urlString.startIndex, offsetBy: 7))
         } else {
             return urlString
         }
@@ -194,11 +179,7 @@ extension URL {
         }
 
         if self.isErrorPageURL {
-            if let decodedURL = self.originalURLFromErrorURL {
-                return decodedURL.displayURL
-            } else {
-                return nil
-            }
+            return originalURLFromErrorURL?.displayURL
         }
 
         if !self.isAboutURL {
@@ -267,20 +248,12 @@ extension URL {
     :returns: The public suffix for within the given hostname.
     */
     public var publicSuffix: String? {
-        if let host = self.host {
-            return publicSuffixFromHost(host, withAdditionalParts: 0)
-        } else {
-            return nil
-        }
+        return host.flatMap { publicSuffixFromHost($0, withAdditionalParts: 0) }
     }
 
     public func isWebPage(includeDataURIs: Bool = true) -> Bool {
         let schemes = includeDataURIs ? ["http", "https", "data"] : ["http", "https"]
-        if let scheme = scheme, schemes.contains(scheme) {
-            return true
-        }
-
-        return false
+        return scheme.map { schemes.contains($0) } ?? false
     }
 
     // This helps find local urls that we do not want to show loading bars on.
@@ -290,7 +263,7 @@ extension URL {
             return false
         }
         let utilityURLs = ["/errors", "/about/sessionrestore", "/about/home", "/reader-mode"]
-        return utilityURLs.contains { self.path.startsWith($0) }
+        return utilityURLs.contains { self.path.hasPrefix($0) }
     }
 
     public var isLocal: Bool {
@@ -335,28 +308,26 @@ extension URL {
 
 extension URL {
     public var isReaderModeURL: Bool {
-        let scheme = self.scheme, host = self.host, path = self.path
-        return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
+         return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
     }
 
     public var decodeReaderModeURL: URL? {
-        if self.isReaderModeURL {
-            if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems, queryItems.count == 1 {
-                if let queryItem = queryItems.first, let value = queryItem.value {
-                    return URL(string: value)
-                }
-            }
+        guard self.isReaderModeURL,
+            let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+            let queryItems = components.queryItems, queryItems.count == 1,
+            let queryItem = queryItems.first,
+            let value = queryItem.value else {
+                return nil
         }
-        return nil
+        return URL(string: value)
     }
 
     public func encodeReaderModeURL(_ baseReaderModeURL: String) -> URL? {
-        if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) {
-            if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
-                return aboutReaderURL
-            }
+        guard let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics),
+            let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)") else {
+                return nil
         }
-        return nil
+        return aboutReaderURL
     }
 }
 
@@ -400,7 +371,7 @@ extension URL {
         guard let scheme = self.scheme, let host = self.host else {
             return nil
         }
-        if scheme == "http" && host == "localhost" && path.startsWith(aboutPath) {
+        if scheme == "http" && host == "localhost" && path.hasPrefix(aboutPath) {
             return path.substring(from: aboutPath.endIndex)
         }
         return nil
@@ -477,9 +448,9 @@ private extension URL {
         if additionalPartCount > 0 {
             if let suffix = suffix {
                 // Take out the public suffixed and add in the additional parts we want.
-                let literalFromEnd: NSString.CompareOptions = [NSString.CompareOptions.literal,        // Match the string exactly.
-                                     NSString.CompareOptions.backwards,      // Search from the end.
-                                     NSString.CompareOptions.anchored]         // Stick to the end.
+                let literalFromEnd: NSString.CompareOptions = [.literal,        // Match the string exactly.
+                                     .backwards,      // Search from the end.
+                                     .anchored]         // Stick to the end.
                 let suffixlessHost = host.replacingOccurrences(of: suffix, with: "", options: literalFromEnd, range: nil)
                 let suffixlessTokens = suffixlessHost.components(separatedBy: ".").filter { $0 != "" }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)

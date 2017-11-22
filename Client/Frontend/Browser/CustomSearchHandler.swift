@@ -11,8 +11,8 @@ class CustomSearchHelper: TabHelper {
     required init(tab: Tab) {
         self.tab = tab
         if let path = Bundle.main.path(forResource: "CustomSearchHelper", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
+            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
+                let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
