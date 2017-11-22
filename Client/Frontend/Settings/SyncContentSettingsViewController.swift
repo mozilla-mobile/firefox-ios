@@ -66,6 +66,42 @@ class DisconnectSetting: Setting {
     }
 }
 
+class DeviceNamePersister: SettingValuePersister {
+    let profile: Profile
+
+    init(profile: Profile) {
+        self.profile = profile
+    }
+
+    func readPersistedValue() -> String? {
+        return self.profile.getAccount()?.deviceName
+    }
+
+    func writePersistedValue(value: String?) {
+    }
+}
+
+class DeviceNameSetting: StringSetting {
+
+    override var Padding: CGFloat {
+        get { return 16 }
+        set { super.Padding = newValue }
+    }
+
+    init(settings: SettingsTableViewController) {
+        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: self.settingIsValid)
+    }
+
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        textField.textAlignment = .left
+    }
+
+    func settingIsValid(value: String?) -> Bool {
+        return !(value?.isEmpty ?? true)
+    }
+}
+
 class SyncContentSettingsViewController: SettingsTableViewController {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
 
@@ -112,9 +148,12 @@ class SyncContentSettingsViewController: SettingsTableViewController {
 
         let enginesSection = SettingSection(title: NSAttributedString(string: Strings.FxASettingsSyncSettings), footerTitle: nil, children: [bookmarks, history, tabs, passwords])
 
+        let deviceName = DeviceNameSetting(settings: self)
+        let deviceNameSection = SettingSection(title: NSAttributedString(string: Strings.FxASettingsDeviceName), footerTitle: nil, children: [deviceName])
+
         let disconnect = DisconnectSetting(settings: self)
         let disconnectSection = SettingSection(title: nil, footerTitle: nil, children: [disconnect])
 
-        return [manageSection, enginesSection, disconnectSection]
+        return [manageSection, enginesSection, deviceNameSection, disconnectSection]
     }
 }

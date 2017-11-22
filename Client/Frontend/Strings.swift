@@ -180,6 +180,7 @@ extension Strings {
     public static let FxANoInternetConnection = NSLocalizedString("FxA.NoInternetConnection", value: "No Internet Connection", comment: "Label when no internet is present")
     public static let FxASettingsTitle = NSLocalizedString("Settings.FxA.Title", value: "Firefox Account", comment: "Title displayed in header of the FxA settings panel.")
     public static let FxASettingsSyncSettings = NSLocalizedString("Settings.FxA.Sync.SectionName", value: "Sync Settings", comment: "Label used as an section title in the Firefox Accounts Settings screen.")
+    public static let FxASettingsDeviceName = NSLocalizedString("Settings.FxA.DeviceName", value: "Device Name", comment: "Label used for the device name settings section.")
     
     // Surface error strings
     public static let FxAAccountVerificationRequiredSurface = NSLocalizedString("FxA.AccountVerificationRequiredSurface", value: "You need to verify %@. Check your email for the verification link from Firefox.", comment: "Message explaining that user needs to check email for Firefox Account verfication link.")
