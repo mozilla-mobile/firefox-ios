@@ -82,7 +82,7 @@ class LoginsHelper: TabHelper {
         for (index, key) in keys.enumerated() {
             let replace = replacements[index]
             let range = string.range(of: key,
-                options: NSString.CompareOptions.literal,
+                options: .literal,
                 range: nil,
                 locale: nil)!
             string.replaceSubrange(range, with: replace)
