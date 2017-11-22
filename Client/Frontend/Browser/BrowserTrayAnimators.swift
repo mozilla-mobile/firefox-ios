@@ -292,7 +292,7 @@ private func transformToolbarsToFrame(_ toolbars: [UIView?], toRect endRect: CGR
 
         // Transform from origin to where we want them to end up
         if let toolbarFrame = toolbar?.frame {
-            toolbar?.transform = CGAffineTransformMakeRectToRect(toolbarFrame, toFrame: endRect)
+            toolbar?.transform = CGAffineTransform(from: toolbarFrame, to: endRect)
         }
     }
 }

@@ -67,7 +67,7 @@ class NewTabChoiceViewController: UITableViewController {
         let enabled = (option != .homePage) || hasHomePage
 
         cell.accessoryType = (currentChoice == option) ? .checkmark : .none
-        cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.settingTitle, enabled: enabled)
+        cell.textLabel?.attributedText = NSAttributedString(tableRowTitle: option.settingTitle, enabled: enabled)
         cell.isUserInteractionEnabled = enabled
 
         return cell
