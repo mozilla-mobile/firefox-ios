@@ -4,6 +4,7 @@
 
 import UIKit
 import SnapKit
+import Shared
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
@@ -105,8 +106,8 @@ class TabScrollingController: NSObject {
     }
 
     func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
-        // Due to bug 1417152, when a PDF is showing, don't hide toolbar
-        if toolbarState == .collapsed || isTabShowingPDF {
+        // Due to bug 1417152, when a PDF is showing, don't hide toolbar. The is a beta-only experiment.
+        if AppConstants.BuildChannel != .release, toolbarState == .collapsed || isTabShowingPDF {
             completion?(true)
             return
         }
@@ -183,8 +184,8 @@ private extension TabScrollingController {
                 scrollDirection = .up
             }
 
-            // Due to bug 1417152, when a PDF is showing, don't hide toolbar (.down is hide toolbar gesture BTW).
-            if isTabShowingPDF && scrollDirection == .down {
+            // Due to bug 1417152, when a PDF is showing, don't hide toolbar (.down is hide toolbar gesture BTW). Beta-only experiment.
+            if isTabShowingPDF && scrollDirection == .down && AppConstants.BuildChannel != .release {
                 return
             }
 
