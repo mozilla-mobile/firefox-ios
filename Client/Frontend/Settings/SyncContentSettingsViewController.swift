@@ -84,6 +84,7 @@ class DeviceNamePersister: SettingValuePersister {
         }
         account.updateDeviceName(newName)
         self.profile.flushAccount()
+        _ = self.profile.syncManager.syncNamedCollections(why: .clientNameChanged, names: ["clients"])
     }
 }
 

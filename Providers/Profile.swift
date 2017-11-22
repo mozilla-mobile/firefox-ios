@@ -1132,6 +1132,8 @@ open class BrowserProfile: Profile {
                 log.debug("engines to disable: \(enginesEnablements.flatMap { !$0.value ? $0.key : nil })")
             }
 
+            authState?.clientName = account.deviceName
+
             let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState!)
 
             let function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[EngineStatus]>> = { delegate, syncPrefs, ready in

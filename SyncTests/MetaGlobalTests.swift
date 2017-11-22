@@ -16,6 +16,8 @@ import SwiftyJSON
 private let log = Logger.syncLogger
 
 class MockSyncAuthState: SyncAuthState {
+    var clientName: String?
+
     var enginesEnablements: [String : Bool]?
 
     let serverRoot: String

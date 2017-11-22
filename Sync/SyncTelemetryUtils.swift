@@ -23,6 +23,7 @@ public enum SyncReason: String {
     case didLogin = "didLogin"
     case push = "push"
     case engineEnabled = "engineEnabled"
+    case clientNameChanged = "clientNameChanged"
 }
 
 public enum SyncPingReason: String {
