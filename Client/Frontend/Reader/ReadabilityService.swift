@@ -45,7 +45,7 @@ class ReadabilityOperation: Operation, WKNavigationDelegate, ReadabilityTabHelpe
 
             if let readabilityTabHelper = ReadabilityTabHelper(tab: self.tab) {
                 readabilityTabHelper.delegate = self
-                self.tab.addHelper(readabilityTabHelper, name: ReadabilityTabHelper.name())
+                self.tab.addContentScript(readabilityTabHelper, name: ReadabilityTabHelper.name())
             }
 
             // Load the page in the webview. This either fails with a navigation error, or we get a readability

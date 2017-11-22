@@ -10,7 +10,7 @@ import WebKit
 
 private let log = Logger.browserLogger
 
-class MetadataParserHelper: TabHelper {
+class MetadataParserHelper: TabContentScript {
     private weak var tab: Tab?
     private let profile: Profile
 

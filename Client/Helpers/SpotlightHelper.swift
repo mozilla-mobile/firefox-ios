@@ -132,7 +132,7 @@ class SpotlightHelper: NSObject {
     }
 }
 
-extension SpotlightHelper: TabHelper {
+extension SpotlightHelper: TabContentScript {
     static func name() -> String {
         return "SpotlightHelper"
     }

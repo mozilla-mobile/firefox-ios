@@ -10,7 +10,7 @@ struct NoImageModePrefsKey {
     static let NoImageModeStatus = PrefsKeys.KeyNoImageModeStatus
 }
 
-class NoImageModeHelper: TabHelper {
+class NoImageModeHelper: TabContentScript {
     fileprivate weak var tab: Tab?
 
     required init(tab: Tab) {

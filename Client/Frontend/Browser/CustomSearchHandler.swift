@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-class CustomSearchHelper: TabHelper {
+class CustomSearchHelper: TabContentScript {
     fileprivate weak var tab: Tab?
 
     required init(tab: Tab) {
