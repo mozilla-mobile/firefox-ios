@@ -118,7 +118,7 @@ class LoginsHelper: TabHelper {
 
         profile.logins
                .getLoginsForProtectionSpace(login.protectionSpace, withUsername: login.username)
-               .uponQueue(DispatchQueue.main) { res in
+               .uponQueue(.main) { res in
             if let data = res.successValue {
                 log.debug("Found \(data.count) logins.")
                 for saved in data {
@@ -217,7 +217,7 @@ class LoginsHelper: TabHelper {
     }
 
     fileprivate func requestLogins(_ login: LoginData, requestId: String) {
-        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(DispatchQueue.main) { res in
+        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(.main) { res in
             var jsonObj = [String: Any]()
             if let cursor = res.successValue {
                 log.debug("Found \(cursor.count) logins.")

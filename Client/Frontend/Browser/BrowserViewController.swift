@@ -965,7 +965,7 @@ class BrowserViewController: UIViewController {
         }
 
         profile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(url).uponQueue(DispatchQueue.main) { [weak tab] result in
+            $0.isBookmarked(url).uponQueue(.main) { [weak tab] result in
                 guard let bookmarked = result.successValue else {
                     print("Error getting bookmark status: \(result.failureValue ??? "nil").")
                     return
@@ -1461,7 +1461,7 @@ extension BrowserViewController: URLBarDelegate {
         let possibleKeyword = trimmedText.substring(to: possibleKeywordQuerySeparatorSpace)
         let possibleQuery = trimmedText.substring(from: trimmedText.index(after: possibleKeywordQuerySeparatorSpace))
 
-        profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(DispatchQueue.main) { result in
+        profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(.main) { result in
             if var urlString = result.successValue,
                 let escapedQuery = possibleQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
                 let range = urlString.range(of: "%s") {
@@ -1935,7 +1935,7 @@ extension BrowserViewController: TabManagerDelegate {
                 } else {
                     profile.bookmarks.modelFactory >>== { [weak tab] in
                         $0.isBookmarked(absoluteString)
-                            .uponQueue(DispatchQueue.main) {
+                            .uponQueue(.main) {
                             guard let isBookmarked = $0.successValue else {
                                 print("Error getting bookmark status: \($0.failureValue ??? "nil").")
                                 return
@@ -2987,7 +2987,7 @@ extension BrowserViewController: ClientPickerViewControllerDelegate, Instruction
             present(alert, animated: true, completion: nil)
             return
         }
-        profile.sendItems([shareItem], toClients: clients).uponQueue(DispatchQueue.main) { _ in
+        profile.sendItems([shareItem], toClients: clients).uponQueue(.main) { _ in
             self.popToBVC()
         }
     }

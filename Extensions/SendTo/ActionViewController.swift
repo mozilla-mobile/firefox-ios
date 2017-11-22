@@ -55,7 +55,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
         }
 
         let profile = BrowserProfile(localName: "profile")
-        profile.sendItems([item], toClients: clients).uponQueue(DispatchQueue.main) { result in
+        profile.sendItems([item], toClients: clients).uponQueue(.main) { result in
             profile.shutdown()
             self.finish()
         }

@@ -50,7 +50,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
             inProgress = deferred as? Cancellable
 
-            deferred.uponQueue(DispatchQueue.main) { result in
+            deferred.uponQueue(.main) { result in
                 self.inProgress = nil
 
                 // Failed cursors are excluded in .get().

@@ -17,13 +17,13 @@ private struct RemoteTabsPanelUX {
     static let RowHeight = SiteTableViewControllerUX.RowHeight
     static let HeaderBackgroundColor = UIColor.Defaults.Grey10
 
-    static let EmptyStateTitleTextColor = UIColor.darkGray
+    static let EmptyStateTitleTextColor: UIColor = .darkGray
 
-    static let EmptyStateInstructionsTextColor = UIColor.gray
+    static let EmptyStateInstructionsTextColor: UIColor = .gray
     static let EmptyStateInstructionsWidth = 170
     static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
     static let EmptyStateSignInButtonColor = UIColor(red: 0.3, green: 0.62, blue: 1, alpha: 1)
-    static let EmptyStateSignInButtonTitleColor = UIColor.white
+    static let EmptyStateSignInButtonTitleColor: UIColor = .white
     static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
     static let EmptyStateSignInButtonHeight = 44
     static let EmptyStateSignInButtonWidth = 200
@@ -556,7 +556,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             return
         }
 
-        self.profile.getCachedClientsAndTabs().uponQueue(DispatchQueue.main) { result in
+        self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
             if let clientAndTabs = result.successValue {
                 self.updateDelegateClientAndTabData(clientAndTabs)
             }
@@ -565,7 +565,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime) ?? 0
             if Date.now() > lastSyncTime && Date.now() - lastSyncTime > OneSecondInMilliseconds * 5 {
                 self.startRefreshing()
-                self.profile.getClientsAndTabs().uponQueue(DispatchQueue.main) { result in
+                self.profile.getClientsAndTabs().uponQueue(.main) { result in
                     // We set the last sync time to now, regardless of whether the sync was successful, to avoid trying to sync over
                     // and over again in cases whether the client is unable to sync (e.g. when there is no network connectivity).
                     self.profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)

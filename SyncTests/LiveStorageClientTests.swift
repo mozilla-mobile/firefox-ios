@@ -37,10 +37,10 @@ class LiveStorageClientTests: LiveAccountTest {
         let encrypter = Keys(defaultBundle: keyBundle).encrypter("crypto", encoder: encoder)
 
         let workQueue = DispatchQueue.global(qos: DispatchQoS.default.qosClass)
-        let resultQueue = DispatchQueue.main
+
         let backoff = MockBackoffStorage()
 
-        let storageClient = Sync15StorageClient(serverURI: cryptoURI!, authorizer: authorizer, workQueue: workQueue, resultQueue: resultQueue, backoff: backoff)
+        let storageClient = Sync15StorageClient(serverURI: cryptoURI!, authorizer: authorizer, workQueue: workQueue, resultQueue: .main, backoff: backoff)
         let keysFetcher = storageClient.clientForCollection("crypto", encrypter: encrypter)
 
         return keysFetcher.get("keys").map({ res in

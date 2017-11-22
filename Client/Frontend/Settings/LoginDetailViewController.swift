@@ -279,9 +279,9 @@ extension LoginDetailViewController {
     }
 
     func deleteLogin() {
-        profile.logins.hasSyncedLogins().uponQueue(DispatchQueue.main) { yes in
+        profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
-                self.profile.logins.removeLoginByGUID(self.login.guid).uponQueue(DispatchQueue.main) { _ in
+                self.profile.logins.removeLoginByGUID(self.login.guid).uponQueue(.main) { _ in
                     _ = self.navigationController?.popViewController(animated: true)
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
@@ -292,7 +292,7 @@ extension LoginDetailViewController {
 
     func SELonProfileDidFinishSyncing() {
         // Reload details after syncing.
-        profile.logins.getLoginDataForGUID(login.guid).uponQueue(DispatchQueue.main) { result in
+        profile.logins.getLoginDataForGUID(login.guid).uponQueue(.main) { result in
             if let syncedLogin = result.successValue {
                 self.login = syncedLogin
             }

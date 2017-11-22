@@ -184,7 +184,7 @@ extension BrowserViewController: WKNavigationDelegate {
         tabManager.selectTab(tab)
 
         let loginsHelper = tab.getHelper(name: LoginsHelper.name()) as? LoginsHelper
-        Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(DispatchQueue.main) { res in
+        Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(.main) { res in
             if let credentials = res.successValue {
                 completionHandler(.useCredential, credentials.credentials)
             } else {

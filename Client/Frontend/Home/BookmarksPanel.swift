@@ -29,7 +29,7 @@ private struct BookmarksPanelUX {
     static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
     static let BookmarkFolderBGColor = UIColor.Defaults.Grey10.withAlphaComponent(0.3)
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemTextColor = UIColor.gray
+    static let WelcomeScreenItemTextColor: UIColor = .gray
     static let WelcomeScreenItemWidth = 170
     static let SeparatorRowHeight: CGFloat = 0.5
     static let IconSize: CGFloat = 23
@@ -342,7 +342,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             nextController.bookmarkFolder = folder
             nextController.homePanelDelegate = self.homePanelDelegate
             nextController.profile = self.profile
-            source.modelFactory.uponQueue(DispatchQueue.main) { maybe in
+            source.modelFactory.uponQueue(.main) { maybe in
                 guard let factory = maybe.successValue else {
                     // Nothing we can do.
                     return

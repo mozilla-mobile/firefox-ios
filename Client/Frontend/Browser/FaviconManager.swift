@@ -109,7 +109,7 @@ class FaviconManager: TabHelper {
                     }
                 }
             }
-            loadFavicons(tab, profile: profile, favicons: favicons).uponQueue(DispatchQueue.main) { result in
+            loadFavicons(tab, profile: profile, favicons: favicons).uponQueue(.main) { result in
                 let results = result.flatMap({ $0.successValue })
                 let faviconsReadOnly = favicons
                 if results.count == 1 && faviconsReadOnly[0].type == .guess {

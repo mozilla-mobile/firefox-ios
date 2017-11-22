@@ -99,7 +99,7 @@ class StorageClientTests: XCTestCase {
         let jA = "{\"id\":\"aaaaaa\",\"histUri\":\"http://foo.com/\",\"title\": \"ñ\",\"visits\":[{\"date\":1222222222222222,\"type\":1}]}"
         let rA = Record<CleartextPayloadJSON>(id: "aaaaaa", payload: CleartextPayloadJSON(JSON(parseJSON: jA)), modified: 10000, sortindex: 123, ttl: 1000000)
 
-        let storageClient = Sync15StorageClient(serverURI: "http://example.com/".asURL!, authorizer: identity, workQueue: DispatchQueue.main, resultQueue: DispatchQueue.main, backoff: MockBackoffStorage())
+        let storageClient = Sync15StorageClient(serverURI: "http://example.com/".asURL!, authorizer: identity, workQueue: .main, resultQueue: .main, backoff: MockBackoffStorage())
         let collectionClient = storageClient.clientForCollection("foo", encrypter: RecordEncrypter<CleartextPayloadJSON>(serializer: massivify, factory: { CleartextPayloadJSON($0) }))
         let result = synchronizer.uploadRecords([rA], lastTimestamp: Date.now(), storageClient: collectionClient, onUpload: { _ in deferMaybe(Date.now()) })
 

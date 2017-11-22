@@ -32,7 +32,7 @@ class CustomSearchEnginesTest: XCTestCase {
         let title = "YASE"
 
         let expectation = self.expectation(description: "Waiting on favicon fetching")
-        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(DispatchQueue.main) { result in
+        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(.main) { result in
             XCTAssertNotNil(result.successValue, "Make sure the new engine is not nil")
             let engine = result.successValue!
             XCTAssertEqual(engine.shortName, title)
@@ -51,7 +51,7 @@ class CustomSearchEnginesTest: XCTestCase {
         let title = "YASE"
 
         let expectation = self.expectation(description: "Waiting on favicon fetching")
-        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(DispatchQueue.main) { result in
+        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(.main) { result in
             XCTAssertNil(result.successValue, "Make sure the new engine is nil")
             expectation.fulfill()
         }

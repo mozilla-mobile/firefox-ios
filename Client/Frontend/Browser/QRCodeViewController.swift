@@ -217,7 +217,7 @@ class QRCodeViewController: UIViewController {
         let output = AVCaptureMetadataOutput()
         if captureSession.canAddOutput(output) {
             captureSession.addOutput(output)
-            output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            output.setMetadataObjectsDelegate(self, queue: .main)
             output.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
         }
         if let videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession) {

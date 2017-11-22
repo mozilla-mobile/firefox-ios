@@ -72,7 +72,7 @@ class ActivityStreamDataObserver: DataObserver {
         }
 
         self.delegate?.willInvalidateDataSources(forceHighlights: highlights, forceTopSites: topSites)
-        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(DispatchQueue.main) { _ in
+        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(.main) { _ in
             if shouldInvalidateTopSites {
                 self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
             }
