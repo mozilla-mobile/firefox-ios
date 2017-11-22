@@ -2762,7 +2762,11 @@ extension BrowserViewController {
         let inputAssistant = webContentView.inputAssistantItem
         let item = UIBarButtonItem(customView: customSearchEngineButton)
         customSearchBarButton = item
-        inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
+        _ = Try(withTry: {
+            inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
+        }) { (exception) in
+            Sentry.shared.send(message: "Failed adding custom search button to input assistant", tag: .general, severity: .error, description: "\(exception ??? "nil")")
+        }
     }
 
     func addCustomSearchEngineForFocusedElement() {
