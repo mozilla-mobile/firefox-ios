@@ -182,7 +182,7 @@ class SearchSettingsTableViewController: UITableViewController {
     // Don't show delete button on the left.
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         if indexPath.section == SectionDefault || indexPath.item + 1 == model.orderedEngines.count {
-            return UITableViewCellEditingStyle.none
+            return .none
         }
 
         let index = indexPath.item + 1

@@ -126,7 +126,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         }
         let moveToIndexPath = IndexPath(row: index-2, section: 0)
         tableView.reloadRows(at: [moveToIndexPath], with: .none)
-        tableView.scrollToRow(at: moveToIndexPath, at: UITableViewScrollPosition.middle, animated: false)
+        tableView.scrollToRow(at: moveToIndexPath, at: .middle, animated: false)
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {

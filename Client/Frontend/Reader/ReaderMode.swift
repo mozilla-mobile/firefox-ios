@@ -68,19 +68,19 @@ enum ReaderModeFontSize: Int {
 
     static var defaultSize: ReaderModeFontSize {
         switch UIApplication.shared.preferredContentSizeCategory {
-        case UIContentSizeCategory.extraSmall:
+        case .extraSmall:
             return .size1
-        case UIContentSizeCategory.small:
+        case .small:
             return .size3
-        case UIContentSizeCategory.medium:
+        case .medium:
             return .size5
-        case UIContentSizeCategory.large:
+        case .large:
             return .size7
-        case UIContentSizeCategory.extraLarge:
+        case .extraLarge:
             return .size9
-        case UIContentSizeCategory.extraExtraLarge:
+        case .extraExtraLarge:
             return .size11
-        case UIContentSizeCategory.extraExtraExtraLarge:
+        case .extraExtraExtraLarge:
             return .size13
         default:
             return .size5
@@ -119,23 +119,16 @@ struct ReaderModeStyle {
 
     /// Initialize the style from a dictionary, taken from the profile. Returns nil if the object cannot be decoded.
     init?(dict: [String: Any]) {
-        let themeRawValue = dict["theme"] as? String
-        let fontTypeRawValue = dict["fontType"] as? String
-        let fontSizeRawValue = dict["fontSize"] as? Int
-        if themeRawValue == nil || fontTypeRawValue == nil || fontSizeRawValue == nil {
-            return nil
-        }
+        guard let themeRawValue = dict["theme"] as? String,
+            let fontTypeRawValue = dict["fontType"] as? String,
+            let fontSizeRawValue = dict["fontSize"] as? Int,
+            let theme = ReaderModeTheme(rawValue: themeRawValue),
+            let fontType = ReaderModeFontType(rawValue: fontTypeRawValue),
+            let fontSize = ReaderModeFontSize(rawValue: fontSizeRawValue) else { return nil }
 
-        let theme = ReaderModeTheme(rawValue: themeRawValue!)
-        let fontType = ReaderModeFontType(rawValue: fontTypeRawValue!)
-        let fontSize = ReaderModeFontSize(rawValue: fontSizeRawValue!)
-        if theme == nil || fontType == nil || fontSize == nil {
-            return nil
-        }
-
-        self.theme = theme!
-        self.fontType = fontType!
-        self.fontSize = fontSize!
+        self.theme = theme
+        self.fontType = fontType
+        self.fontSize = fontSize
     }
 }
 
@@ -150,47 +143,40 @@ struct ReadabilityResult {
     var credits = ""
 
     init?(object: AnyObject?) {
-        if let dict = object as? NSDictionary {
-            if let uri = dict["uri"] as? NSDictionary {
-                if let url = uri["spec"] as? String {
-                    self.url = url
-                }
-                if let host = uri["host"] as? String {
-                    self.domain = host
-                }
+        guard let dict = object as? NSDictionary else { return nil }
+        if let uri = dict["uri"] as? NSDictionary {
+            if let url = uri["spec"] as? String {
+                self.url = url
             }
-            if let content = dict["content"] as? String {
-                self.content = content
+            if let host = uri["host"] as? String {
+                self.domain = host
             }
-            if let title = dict["title"] as? String {
-                self.title = title
-            }
-            if let credits = dict["byline"] as? String {
-                self.credits = credits
-            }
-        } else {
-            return nil
+        }
+        if let content = dict["content"] as? String {
+            self.content = content
+        }
+        if let title = dict["title"] as? String {
+            self.title = title
+        }
+        if let credits = dict["byline"] as? String {
+            self.credits = credits
         }
     }
 
     /// Initialize from a JSON encoded string
     init?(string: String) {
         let object = JSON(parseJSON: string)
-        let domain = object["domain"].string
-        let url = object["url"].string
-        let content = object["content"].string
-        let title = object["title"].string
-        let credits = object["credits"].string
+        guard let domain = object["domain"].string,
+            let url = object["url"].string,
+            let content = object["content"].string,
+            let title = object["title"].string,
+            let credits = object["credits"].string else { return nil }
 
-        if domain == nil || url == nil || content == nil || title == nil || credits == nil {
-            return nil
-        }
-
-        self.domain = domain!
-        self.url = url!
-        self.content = content!
-        self.title = title!
-        self.credits = credits!
+        self.domain = domain
+        self.url = url
+        self.content = content
+        self.title = title
+        self.credits = credits
     }
 
     /// Encode to a dictionary, which can then for example be json encoded
@@ -228,19 +214,17 @@ class ReaderMode: TabHelper {
         self.tab = tab
 
         // This is a WKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.
-        if let path = Bundle.main.path(forResource: "Readability", ofType: "js") {
-            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
-                let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
-                tab.webView!.configuration.userContentController.addUserScript(userScript)
-            }
+        if let path = Bundle.main.path(forResource: "Readability", ofType: "js"),
+            let source = try? String(contentsOfFile: path, encoding: .utf8) {
+            let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+            tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
 
         // This is executed after a page has been loaded. It executes Readability and then fires a script message to let us know if the page is compatible with reader mode.
-        if let path = Bundle.main.path(forResource: "ReaderMode", ofType: "js") {
-            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
-                let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
-                tab.webView!.configuration.userContentController.addUserScript(userScript)
-            }
+        if let path = Bundle.main.path(forResource: "ReaderMode", ofType: "js"),
+            let source = try? String(contentsOfFile: path, encoding: .utf8) {
+            let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+            tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
 
@@ -266,31 +250,27 @@ class ReaderMode: TabHelper {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let msg = message.body as? Dictionary<String, String> {
-            if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
-                switch messageType {
-                    case .pageEvent:
-                        if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] ?? "Invalid") {
-                            handleReaderPageEvent(readerPageEvent)
-                        }
-                        break
-                    case .stateChange:
-                        if let readerModeState = ReaderModeState(rawValue: msg["Value"] ?? "Invalid") {
-                            handleReaderModeStateChange(readerModeState)
-                        }
-                        break
-                }
+        guard let msg = message.body as? Dictionary<String, String>,
+            let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") else { return }
+
+        switch messageType {
+        case .pageEvent:
+            if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] ?? "Invalid") {
+                handleReaderPageEvent(readerPageEvent)
+            }
+        case .stateChange:
+            if let readerModeState = ReaderModeState(rawValue: msg["Value"] ?? "Invalid") {
+                handleReaderModeStateChange(readerModeState)
             }
         }
     }
 
     var style: ReaderModeStyle = DefaultReaderModeStyle {
         didSet {
-            if state == ReaderModeState.active {
-                tab?.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: { (object, error) -> Void in
-                    return
-                })
-            }
+            guard state == ReaderModeState.active else { return }
+            tab?.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: { (object, error) -> Void in
+                return
+            })
         }
     }
 }

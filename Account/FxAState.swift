@@ -55,7 +55,7 @@ func state(fromJSON json: JSON) -> FxAState? {
 
 func stateV1(fromJSON json: JSON) -> FxAState? {
     guard let labelString = json["label"].string,
-    let label = FxAStateLabel(rawValue: labelString)else { return nil }
+        let label = FxAStateLabel(rawValue: labelString) else { return nil }
 
     switch label {
     case .engagedBeforeVerified:
@@ -118,7 +118,9 @@ func stateV1(fromJSON json: JSON) -> FxAState? {
 
     case .doghouse:
         return DoghouseState()
+
     }
+    return nil
 }
 
 // Not an externally facing state!
