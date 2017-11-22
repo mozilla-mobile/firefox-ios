@@ -37,7 +37,8 @@ class FirefoxAccountTests: XCTestCase {
                 deviceRegistration: (d["deviceRegistration"] as! FxADeviceRegistration),
                 declinedEngines: nil,
                 stateKeyLabel: Bytes.generateGUID(),
-                state: SeparatedState())
+                state: SeparatedState(),
+                deviceName: "my iphone")
 
         account1.pushRegistration = d["pushRegistration"] as? PushRegistration
 

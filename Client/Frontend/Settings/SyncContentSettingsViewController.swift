@@ -78,6 +78,12 @@ class DeviceNamePersister: SettingValuePersister {
     }
 
     func writePersistedValue(value: String?) {
+        guard let newName = value,
+              let account = self.profile.getAccount() else {
+            return
+        }
+        account.updateDeviceName(newName)
+        self.profile.flushAccount()
     }
 }
 
