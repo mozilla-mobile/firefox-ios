@@ -39,7 +39,7 @@ class TestFavicons: ProfileTest {
                     XCTFail("Not a valid URL provided for a favicon.")
                     return expectation.fulfill()
                 }
-                XCTAssertNotEqual(image.size, CGSize(width: 0, height: 0))
+                XCTAssertNotEqual(image.size, .zero)
                 expectation.fulfill()
             })
 

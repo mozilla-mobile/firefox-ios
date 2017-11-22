@@ -173,7 +173,7 @@ extension ActivityStreamPanel {
         var headerHeight: CGSize {
             switch self {
             case .highlights, .pocket: return CGSize(width: 50, height: 40)
-            case .topSites: return CGSize(width: 0, height: 0)
+            case .topSites: return .zero
             case .highlightIntro: return CGSize(width: 50, height: 2)
             }
         }
