@@ -133,15 +133,13 @@ class SearchEngines {
     }
 
     fileprivate func getDisabledEngineNames() -> [String: Bool] {
-        if let disabledEngineNames = self.prefs.stringArrayForKey(DisabledEngineNames) {
-            var disabledEngineDict = [String: Bool]()
-            for engineName in disabledEngineNames {
-                disabledEngineDict[engineName] = true
-            }
-            return disabledEngineDict
-        } else {
-            return [String: Bool]()
+        guard let disabledEngineNames = self.prefs.stringArrayForKey(DisabledEngineNames) else { return [:] }
+        var disabledEngineDict = [String: Bool]()
+        for engineName in disabledEngineNames {
+            disabledEngineDict[engineName] = true
         }
+        return disabledEngineDict
+
     }
 
     fileprivate func customEngineFilePath() -> String {

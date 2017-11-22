@@ -32,7 +32,7 @@ public extension URL {
         let to = urlString.substring(with: toStart..<toEnd)
 
         guard toEnd != urlString.endIndex else {
-            return MailToMetadata(to: to, headers: [String: String]())
+            return MailToMetadata(to: to, headers: [:])
         }
 
         // Extract headers

@@ -1127,16 +1127,18 @@ class BrowserViewController: UIViewController {
     }
     
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
-        let notificationCenter = NotificationCenter.default
-        var info = [AnyHashable: Any]()
-        info["url"] = tab.url?.displayURL
-        info["title"] = tab.title
+
+        var info : [AnyHashable: Any] = [
+            "url": tab.url?.displayURL as Any,
+            "title": tab.title as Any,
+            "isPrivate": tab.isPrivate
+        ]
+
         if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
             info["visitType"] = visitType
         }
-        info["isPrivate"] = tab.isPrivate
         
-        notificationCenter.post(name: .LocationChange, object: self, userInfo: info)
+        NotificationCenter.default.post(name: .LocationChange, object: self, userInfo: info)
     }
 
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
@@ -2957,7 +2959,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidTogglePrivateMode() {
-        guard let selectedTab = tabManager.selectedTab else {
+        guard let _ = tabManager.selectedTab else {
             return
         }
         urlBar.leaveOverlayMode()
