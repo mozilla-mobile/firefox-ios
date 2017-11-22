@@ -59,7 +59,7 @@ class Toolbar: UIView {
 
     func addButtons(_ buttons: [UIButton]) {
         for button in buttons {
-            button.setTitleColor(.black, for: UIControlState())
+            button.setTitleColor(.black, for: [])
             button.setTitleColor(.gray, for: .disabled)
             button.imageView?.contentMode = .scaleAspectFit
             addSubview(button)

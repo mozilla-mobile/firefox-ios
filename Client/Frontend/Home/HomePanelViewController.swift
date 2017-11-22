@@ -215,7 +215,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             let button = UIButton()
             button.addTarget(self, action: #selector(HomePanelViewController.tappedButton), for: .touchUpInside)
             if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)") {
-                button.setImage(image, for: UIControlState.normal)
+                button.setImage(image, for: .normal)
             }
             button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 4, right: 0)
             button.accessibilityLabel = panel.accessibilityLabel

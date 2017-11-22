@@ -94,7 +94,7 @@ class TabCell: UICollectionViewCell {
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
 
         self.closeButton = UIButton()
-        self.closeButton.setImage(UIImage.templateImageNamed("nav-stop"), for: UIControlState())
+        self.closeButton.setImage(UIImage.templateImageNamed("nav-stop"), for: [])
         self.closeButton.tintColor = .lightGray
         self.closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
 
@@ -870,8 +870,8 @@ fileprivate class EmptyPrivateTabsView: UIView {
         let button = UIButton(type: .system)
         button.setTitle(
             NSLocalizedString("Learn More", tableName: "PrivateBrowsing", comment: "Text button displayed when there are no tabs open while in private mode"),
-            for: UIControlState())
-        button.setTitleColor(UIConstants.PrivateModeTextHighlightColor, for: UIControlState())
+            for: [])
+        button.setTitleColor(UIConstants.PrivateModeTextHighlightColor, for: [])
         button.titleLabel?.font = EmptyPrivateTabsViewUX.LearnMoreFont
         return button
     }()

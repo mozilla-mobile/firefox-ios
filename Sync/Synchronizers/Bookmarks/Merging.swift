@@ -106,7 +106,7 @@ open class BookmarksMergeErrorTreeIsUnrooted: BookmarksMergeConsistencyError {
     }
 }
 
-enum MergeState<T> {
+enum MergeState<T: Equatable>: Equatable {
     case unknown              // Default state.
     case unchanged            // Nothing changed: no work needed.
     case remote               // Take the associated remote value.
@@ -141,24 +141,23 @@ enum MergeState<T> {
             return "New"
         }
     }
-}
 
-func ==<T: Equatable>(lhs: MergeState<T>, rhs: MergeState<T>) -> Bool {
-    switch (lhs, rhs) {
-    case (.unknown, .unknown):
-        return true
-    case (.unchanged, .unchanged):
-        return true
-    case (.remote, .remote):
-        return true
-    case (.local, .local):
-        return true
-    case let (.new(lh), .new(rh)):
-        return lh == rh
-    default:
-        return false
+    static func ==(lhs: MergeState, rhs: MergeState) -> Bool {
+        switch (lhs, rhs) {
+        case (.unknown, .unknown),
+             (.unchanged, .unchanged),
+             (.remote, .remote),
+             (.local, .local):
+            return true
+        case let (.new(lh), .new(rh)):
+            return lh == rh
+        default:
+            return false
+        }
     }
 }
+
+
 
 /**
  * Using this:

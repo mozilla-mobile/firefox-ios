@@ -105,7 +105,7 @@ class ReaderModeBarView: UIView {
     fileprivate func createButton(_ type: ReaderModeBarButtonType, action: Selector) -> UIButton {
         let button = UIButton()
         addSubview(button)
-        button.setImage(type.image, for: UIControlState())
+        button.setImage(type.image, for: [])
         button.addTarget(self, action: action, for: .touchUpInside)
         return button
     }
@@ -125,7 +125,7 @@ class ReaderModeBarView: UIView {
     var unread: Bool = true {
         didSet {
             let buttonType: ReaderModeBarButtonType = unread && added ? .markAsRead : .markAsUnread
-            readStatusButton.setImage(buttonType.image, for: UIControlState())
+            readStatusButton.setImage(buttonType.image, for: [])
             readStatusButton.isEnabled = added
             readStatusButton.alpha = added ? 1.0 : 0.6
         }
@@ -134,7 +134,7 @@ class ReaderModeBarView: UIView {
     var added: Bool = false {
         didSet {
             let buttonType: ReaderModeBarButtonType = added ? .removeFromReadingList : .addToReadingList
-            listStatusButton.setImage(buttonType.image, for: UIControlState())
+            listStatusButton.setImage(buttonType.image, for: [])
         }
     }
 }

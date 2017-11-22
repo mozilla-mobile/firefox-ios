@@ -236,9 +236,9 @@ enum PushMessage: Equatable {
 
     var messageType: PushMessageType {
         switch self {
-        case .deviceConnected(_):
+        case .deviceConnected:
             return .deviceConnected
-        case .deviceDisconnected(_):
+        case .deviceDisconnected:
             return .deviceDisconnected
         case .thisDeviceDisconnected:
             return .deviceDisconnected
@@ -256,17 +256,13 @@ enum PushMessage: Equatable {
     }
 
     public static func ==(lhs: PushMessage, rhs: PushMessage) -> Bool {
-        guard lhs.messageType == rhs.messageType else {
-            return false
-        }
-
         switch (lhs, rhs) {
-        case (.deviceConnected(let lName), .deviceConnected(let rName)):
+        case let (.deviceConnected(lName), .deviceConnected(rName)):
             return lName == rName
-        case (.collectionChanged(let lList), .collectionChanged(let rList)):
+        case let (.collectionChanged(lList), .collectionChanged(rList)):
             return lList == rList
         default:
-            return true
+            return false
         }
     }
 }

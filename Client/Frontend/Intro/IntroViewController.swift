@@ -87,8 +87,8 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         startBrowsingButton = UIButton()
         startBrowsingButton.backgroundColor = .clear
-        startBrowsingButton.setTitle(IntroViewControllerUX.StartBrowsingButtonTitle, for: UIControlState())
-        startBrowsingButton.setTitleColor(IntroViewControllerUX.StartBrowsingButtonColor, for: UIControlState())
+        startBrowsingButton.setTitle(IntroViewControllerUX.StartBrowsingButtonTitle, for: [])
+        startBrowsingButton.setTitleColor(IntroViewControllerUX.StartBrowsingButtonColor, for: [])
         startBrowsingButton.addTarget(self, action: #selector(IntroViewController.SELstartBrowsing), for: .touchUpInside)
         startBrowsingButton.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
 
@@ -181,8 +181,8 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         // Sync card, with sign in to sync button.
         signInButton = UIButton()
         signInButton.backgroundColor = IntroViewControllerUX.SignInButtonColor
-        signInButton.setTitle(IntroViewControllerUX.SignInButtonTitle, for: UIControlState())
-        signInButton.setTitleColor(.white, for: UIControlState())
+        signInButton.setTitle(IntroViewControllerUX.SignInButtonTitle, for: [])
+        signInButton.setTitleColor(.white, for: [])
         signInButton.clipsToBounds = true
         signInButton.addTarget(self, action: #selector(SELlogin), for: .touchUpInside)
         signInButton.snp.makeConstraints { (make) -> Void in
