@@ -58,35 +58,23 @@ extension URL {
 
     public func allocatedFileSize() -> Int64 {
         // First try to get the total allocated size and in failing that, get the file allocated size
-        return getResourceLongLongForKey(URLResourceKey.totalFileAllocatedSizeKey.rawValue)
-            ?? getResourceLongLongForKey(URLResourceKey.fileAllocatedSizeKey.rawValue)
-            ?? 0
+        return resourceLongLong(for: .totalFileAllocatedSizeKey) ?? resourceLongLong(for: .fileAllocatedSizeKey) ?? 0
     }
 
-    public func getResourceValueForKey(_ key: String) -> Any? {
-        let resourceKey = URLResourceKey(key)
-        let keySet = Set<URLResourceKey>([resourceKey])
-
-        var val: Any?
-        do {
-            let values = try resourceValues(forKeys: keySet)
-            val = values.allValues[resourceKey]
-        } catch _ {
-            return nil
-        }
-        return val
+    public func resource(for key : URLResourceKey) -> Any? {
+        return (try? resourceValues(forKeys: [key]))?.allValues[key]
     }
 
-    public func getResourceLongLongForKey(_ key: String) -> Int64? {
-        return (getResourceValueForKey(key) as? NSNumber)?.int64Value
+    public func resourceLongLong(for key: URLResourceKey) -> Int64? {
+        return (resource(for: key) as? NSNumber)?.int64Value
     }
 
-    public func getResourceBoolForKey(_ key: String) -> Bool? {
-        return getResourceValueForKey(key) as? Bool
+    public func resourceBool(for key: URLResourceKey) -> Bool? {
+        return resource(for: key) as? Bool
     }
 
     public var isRegularFile: Bool {
-        return getResourceBoolForKey(URLResourceKey.isRegularFileKey.rawValue) ?? false
+        return resourceBool(for: .isRegularFileKey) ?? false
     }
 
     public func lastComponentIsPrefixedBy(_ prefix: String) -> Bool {
