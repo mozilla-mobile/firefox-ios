@@ -67,10 +67,7 @@ enum NewTabPage: String {
     }
 
     var url: URL? {
-        guard let homePanel = self.homePanelType else {
-            return nil
-        }
-        return homePanel.localhostURL as URL
+        return homePanelType?.localhostURL as URL?
     }
 
     static let allValues = [blankPage, topSites, bookmarks, history, readingList, homePage]
