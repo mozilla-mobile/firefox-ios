@@ -130,22 +130,18 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: ClientPickerViewControllerDelegate) {
         assert(Thread.current.isMainThread)
 
-        guard let tab = self.tab else {
+        guard let tab = self.tab,
+            let displayURL = tab.url?.absoluteString, !displayURL.isEmpty else {
             return
         }
 
-        guard let displayURL = tab.url?.absoluteString, displayURL.count > 0 else {
-            return
-        }
-
-        let mainQueue = DispatchQueue.main
         browserProfile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(displayURL).uponQueue(mainQueue) {
+            $0.isBookmarked(displayURL).uponQueue(.main) {
                 self.isBookmarked = $0.successValue ?? false
             }
         }
 
-        browserProfile.remoteClientsAndTabs.getClientGUIDs().uponQueue(mainQueue) {
+        browserProfile.remoteClientsAndTabs.getClientGUIDs().uponQueue(.main) {
             guard let clientGUIDs = $0.successValue else {
                 return
             }
