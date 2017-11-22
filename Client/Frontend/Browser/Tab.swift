@@ -457,14 +457,7 @@ class Tab: NSObject {
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
-        var tab = parent
-        while tab != nil {
-            if tab! == ancestor {
-                return true
-            }
-            tab = tab?.parent
-        }
-        return false
+        return sequence(first: parent) { $0?.parent }.contains { $0 === ancestor }
     }
 
     func setNightMode(_ enabled: Bool) {
@@ -472,14 +465,14 @@ class Tab: NSObject {
     }
 
     func injectUserScriptWith(fileName: String, type: String = "js", injectionTime: WKUserScriptInjectionTime = .atDocumentEnd, mainFrameOnly: Bool = true) {
-        guard let webView = self.webView else {
+        guard let webView = self.webView,
+            let path = Bundle.main.path(forResource: fileName, ofType: type),
+            let source = try? String(contentsOfFile: path) else {
             return
         }
-        if let path = Bundle.main.path(forResource: fileName, ofType: type),
-            let source = try? String(contentsOfFile: path) {
-            let userScript = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
-            webView.configuration.userContentController.addUserScript(userScript)
-        }
+
+        let userScript = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
+        webView.configuration.userContentController.addUserScript(userScript)
     }
 }
 

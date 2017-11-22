@@ -75,7 +75,7 @@ class TabManager: NSObject {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
-        configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        configuration.websiteDataStore = .nonPersistent()
         return configuration
     }()
 
@@ -454,7 +454,7 @@ class TabManager: NSObject {
                              WKWebsiteDataTypeWebSQLDatabases,
                              WKWebsiteDataTypeIndexedDBDatabases])
         tab.webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
-                                                               modifiedSince: Date.distantPast,
+                                                               modifiedSince: .distantPast,
                                                                completionHandler: completionHandler)
     }
 
