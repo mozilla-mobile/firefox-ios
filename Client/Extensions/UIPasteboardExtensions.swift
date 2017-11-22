@@ -24,11 +24,9 @@ extension UIPasteboard {
     }
 
     private var syncURL: URL? {
-        if let string = UIPasteboard.general.string,
-            let url = URL(string: string), url.isWebPage() {
+        return UIPasteboard.general.string.flatMap {
+            guard let url = URL(string: $0), url.isWebPage() else { return nil }
             return url
-        } else {
-            return nil
         }
     }
 

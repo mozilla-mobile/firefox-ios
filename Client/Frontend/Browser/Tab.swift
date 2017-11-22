@@ -492,12 +492,9 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
 
     @objc func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         for helper in helpers.values {
-            if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
-                if scriptMessageHandlerName == message.name {
-                    helper.userContentController(userContentController, didReceiveScriptMessage: message)
-                    return
-                }
-            }
+            guard let name = helper.scriptMessageHandlerName(), name == message.name
+                else { continue }
+            helper.userContentController(userContentController, didReceiveScriptMessage: message)
         }
     }
 
