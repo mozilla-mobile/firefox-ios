@@ -225,24 +225,24 @@ class TopTabsViewController: UIViewController {
     func scrollToCurrentTab(_ animated: Bool = true, centerCell: Bool = false) {
         assertIsMainThread("Only animate on the main thread")
 
-        guard let currentTab = tabManager.selectedTab, let index = tabStore.index(of: currentTab), !collectionView.frame.isEmpty else {
+        guard let currentTab = tabManager.selectedTab, let index = tabStore.index(of: currentTab), !collectionView.frame.isEmpty,
+            let frame = collectionView.layoutAttributesForItem(at: IndexPath(row: index, section: 0))?.frame else {
             return
         }
-        if let frame = collectionView.layoutAttributesForItem(at: IndexPath(row: index, section: 0))?.frame {
-            if centerCell {
-                collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: false)
-            } else {
-                // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
-                let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
-                if animated {
-                    UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: { 
-                        self.collectionView.scrollRectToVisible(padFrame, animated: true)
-                    })
-                } else {
-                    collectionView.scrollRectToVisible(padFrame, animated: false)
-                }
-            }
+
+        if centerCell {
+            collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: false)
+            return
         }
+        // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
+        let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
+        if animated {
+            UIView.animate(withDuration: TopTabsUX.AnimationSpeed) {
+                self.collectionView.scrollRectToVisible(padFrame, animated: true)
+            }
+            return
+        }
+        collectionView.scrollRectToVisible(padFrame, animated: false)
     }
 }
 

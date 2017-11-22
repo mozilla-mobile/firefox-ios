@@ -12,19 +12,14 @@ struct SessionRestoreHandler {
     static func register(_ webServer: WebServer) {
         // Register the handler that accepts /about/sessionrestore?history=...&currentpage=... requests.
         webServer.registerHandlerForMethod("GET", module: "about", resource: "sessionrestore") { _ in
-            if let sessionRestorePath = Bundle.main.path(forResource: "SessionRestore", ofType: "html") {
-                do {
-                    let sessionRestoreString = try String(contentsOfFile: sessionRestorePath)
+            guard let sessionRestorePath = Bundle.main.path(forResource: "SessionRestore", ofType: "html"),
+                let sessionRestoreString = try? String(contentsOfFile: sessionRestorePath) else { return GCDWebServerResponse(statusCode: 404)}
 
-                    defer {
-                        NotificationCenter.default.post(name: .DidRestoreSession, object: self)
-                    }
-
-                    return GCDWebServerDataResponse(html: sessionRestoreString)
-                } catch _ {}
+            defer {
+                NotificationCenter.default.post(name: .DidRestoreSession, object: self)
             }
 
-            return GCDWebServerResponse(statusCode: 404)
+            return GCDWebServerDataResponse(html: sessionRestoreString)
         }
     }
 }
