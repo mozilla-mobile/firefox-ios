@@ -182,5 +182,18 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.timer = nil
         self.isLoaded = true
     }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let isLicensePage = navigationAction.request.url?.pathComponents.last.map({ $0 == "licenses.html" }) ?? false
+
+        guard !isLicensePage else {
+            decisionHandler(.cancel)
+            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else { return }
+            UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
+            return
+        }
+
+        decisionHandler(.allow)
+    }
 }
 

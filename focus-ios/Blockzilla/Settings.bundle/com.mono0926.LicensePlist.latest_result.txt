@@ -1,0 +1,21 @@
+name: focus-ios, nameSpecified: Firefox Focus, owner: mozilla-mobile, version: 
+
+name: SCSiriWaveformView, nameSpecified: , owner: stefanceriu, version: 
+
+name: SnapKit, nameSpecified: , owner: SnapKit, version: 4.0.0
+
+name: ios_sdk, nameSpecified: Adjust, owner: adjust, version: v4.11.5
+
+name: Fuzi, nameSpecified: , owner: cezheng, version: 5ba8c81
+
+name: sentry-cocoa, nameSpecified: Sentry, owner: getsentry, version: 3.2.1
+
+name: AutocompleteTextField, nameSpecified: , owner: mozilla-mobile, version: a815acf
+
+name: telemetry-ios, nameSpecified: Telemetry, owner: mozilla-mobile, version: v1.0.6
+
+name: GCDWebServer, nameSpecified: , owner: swisspol, version: 3.3.3
+
+add-version-numbers: false
+
+LicensePlist Version: 1.7.0
