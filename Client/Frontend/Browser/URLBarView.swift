@@ -216,14 +216,22 @@ class URLBarView: UIView {
         }
 
         cancelButton.snp.makeConstraints { make in
+            if #available(iOS 11.0, *) {
+                make.leading.equalTo(self.safeAreaLayoutGuide)
+            } else {
+                make.leading.equalTo(self)
+            }
             make.centerY.equalTo(self.locationContainer)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
-            make.leading.equalTo(self)
         }
 
         backButton.snp.makeConstraints { make in
+            if #available(iOS 11.0, *) {
+                make.leading.equalTo(self.safeAreaLayoutGuide).offset(URLBarViewUX.Padding)
+            } else {
+                make.leading.equalTo(self).offset(URLBarViewUX.Padding)
+            }
             make.centerY.equalTo(self)
-            make.leading.equalTo(self).offset(URLBarViewUX.Padding)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
@@ -240,7 +248,12 @@ class URLBarView: UIView {
         }
 
         menuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.snp.trailing).offset(-URLBarViewUX.Padding)
+            if #available(iOS 11.0, *) {
+                make.trailing.equalTo(self.safeAreaLayoutGuide.snp.trailing).offset(-URLBarViewUX.Padding)
+            } else {
+                make.trailing.equalTo(self.snp.trailing).offset(-URLBarViewUX.Padding)
+            }
+            
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
@@ -252,8 +265,12 @@ class URLBarView: UIView {
         }
         
         showQRScannerButton.snp.makeConstraints { make in
+            if #available(iOS 11.0, *) {
+                make.trailing.equalTo(self.safeAreaLayoutGuide)
+            } else {
+                make.trailing.equalTo(self)
+            }
             make.centerY.equalTo(self.locationContainer)
-            make.trailing.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
     }
