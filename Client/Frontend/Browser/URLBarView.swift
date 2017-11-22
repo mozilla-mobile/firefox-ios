@@ -742,7 +742,7 @@ class ToolbarTextField: AutocompleteTextField {
         context.setBlendMode(.sourceIn)
         context.setAlpha(1.0)
 
-        let rect = CGRect(origin: .zero, size: image.size)
+        let rect = CGRect(size: image.size)
 
         context.fill(rect)
         let tintedImage = UIGraphicsGetImageFromCurrentImageContext()!

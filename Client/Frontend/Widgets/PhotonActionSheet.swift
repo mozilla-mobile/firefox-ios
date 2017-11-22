@@ -126,7 +126,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.separatorStyle = .none
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
-        let footer = UIView(frame: CGRect(origin: .zero, size: CGSize(width: tableView.frame.width, height: PhotonActionSheetUX.TablePadding)))
+        let footer = UIView(frame: CGRect(size: CGSize(width: tableView.frame.width, height: PhotonActionSheetUX.TablePadding)))
         tableView.tableFooterView = footer
         tableView.tableHeaderView = footer.clone()
 
@@ -172,7 +172,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         if style == .bottom && self.modalPresentationStyle == .popover {
             // We are showing the menu in a popOver
             self.actions = actions.map({ $0.reversed() }).reversed()
-            tableView.frame = CGRect(origin: .zero, size: self.preferredContentSize)
+            tableView.frame = CGRect(size: self.preferredContentSize)
             return
         }
         
@@ -224,7 +224,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     override func updateViewConstraints() {
         if !self.showCancelButton {
-            tableView.frame = CGRect(origin: .zero, size: self.preferredContentSize)
+            tableView.frame = CGRect(size: self.preferredContentSize)
         }
         super.updateViewConstraints()
     }

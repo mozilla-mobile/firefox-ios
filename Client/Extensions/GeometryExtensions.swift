@@ -13,6 +13,10 @@ extension CGRect {
             self.origin = CGPoint(x: newValue.x - size.width / 2, y: newValue.y - size.height / 2)
         }
     }
+
+    init(size: CGSize) {
+        self.init(origin: .zero, size: size)
+    }
 }
 
 extension UIEdgeInsets {

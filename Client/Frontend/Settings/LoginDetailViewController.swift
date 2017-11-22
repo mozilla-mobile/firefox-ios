@@ -100,7 +100,7 @@ class LoginDetailViewController: SensitiveViewController {
         tableView.tableFooterView = UIView()
 
         // Add a line on top of the table view so when the user pulls down it looks 'correct'.
-        let topLine = UIView(frame: CGRect(origin: .zero, size: CGSize(width: tableView.frame.width, height: 0.5)))
+        let topLine = UIView(frame: CGRect(size: CGSize(width: tableView.frame.width, height: 0.5)))
         topLine.backgroundColor = SettingsUX.TableViewSeparatorColor
         tableView.tableHeaderView = topLine
 
