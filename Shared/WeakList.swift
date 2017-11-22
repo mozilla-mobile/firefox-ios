@@ -4,6 +4,17 @@
 
 import Foundation
 
+// Holds object member weakly. Swift weak keyword has limited scope,
+// for instance returning a weak var or passing a weak var to a function will
+// make it strongly referenced.  
+public struct Weak<T> where T: AnyObject {
+    public weak var object: T?
+
+    public init(_ object: T?) {
+        self.object = object
+    }
+}
+
 /**
  * A list that weakly holds references to its items.
  * Note that while the references themselves are cleared, their wrapper objects
