@@ -56,37 +56,6 @@ class ConnectSetting: WithoutAccountSetting {
     }
 }
 
-// Sync setting for disconnecting a Firefox Account.  Shown when we have an account.
-class DisconnectSetting: WithAccountSetting {
-    override var accessoryType: UITableViewCellAccessoryType { return .none }
-    override var textAlignment: NSTextAlignment { return .center }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.SettingsDisconnectSyncButton, attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
-    }
-
-    override var accessibilityIdentifier: String? { return "SignOut" }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let alertController = UIAlertController(
-            title: Strings.SettingsDisconnectSyncAlertTitle,
-            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'sign out firefox account' alert"),
-            preferredStyle: UIAlertControllerStyle.alert)
-        alertController.addAction(
-            UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel) { (action) in
-                // Do nothing.
-            })
-        alertController.addAction(
-            UIAlertAction(title: Strings.SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
-                FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
-                self.settings.settings = self.settings.generateSettings()
-                self.settings.SELfirefoxAccountDidChange()
-                LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
-            })
-        navigationController?.present(alertController, animated: true, completion: nil)
-    }
-}
-
 class SyncNowSetting: WithAccountSetting {
     static let NotificationUserInitiatedSyncManually = "NotificationUserInitiatedSyncManually"
     let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
@@ -416,7 +385,12 @@ class AccountStatusSetting: WithAccountSetting {
 
         if let account = profile.getAccount() {
             switch account.actionNeeded {
-            case .none, .needsVerification:
+            case .none:
+                let viewController = SyncContentSettingsViewController()
+                viewController.profile = profile
+                navigationController?.pushViewController(viewController, animated: true)
+                return
+            case .needsVerification:
                 var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
                 if let url = try? cs?.asURL() {
@@ -769,28 +743,6 @@ class SearchSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = SearchSettingsTableViewController()
         viewController.model = profile.searchEngines
-        viewController.profile = profile
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
-class SyncSetting: Setting {
-    let profile: Profile
-
-    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
-
-    override var accessibilityIdentifier: String? { return "Sync" }
-
-    override var hidden: Bool { return !(profile.hasAccount() && profile.hasSyncableAccount() && profile.syncManager.lastSyncFinishTime != nil) }
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-
-        super.init(title: NSAttributedString(string: Strings.SettingsSyncSectionName, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = SyncContentSettingsViewController()
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }

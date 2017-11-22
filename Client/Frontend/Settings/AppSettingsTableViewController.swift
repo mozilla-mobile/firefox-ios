@@ -88,11 +88,10 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 AdvanceAccountSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
-                SyncNowSetting(settings: self),
-                SyncSetting(settings: self)
+                SyncNowSetting(settings: self)
             ] + accountChinaSyncSetting + accountDebugSettings)]
 
-        settings += [ SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]
+        settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
 
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
@@ -133,10 +132,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 EnableBookmarkMergingSetting(settings: self),
                 ForceCrashSetting(settings: self)
             ])]
-    
-            if profile.hasAccount() {
-                settings += [SettingSection(title: nil, footerTitle: NSAttributedString(string: ""), children: [DisconnectSetting(settings: self)])]
-            }
 
         return settings
     }

@@ -230,7 +230,7 @@ class BoolSetting: Setting {
 class StringSetting: Setting, UITextFieldDelegate {
 
     let prefKey: String
-    fileprivate let Padding: CGFloat = 8
+    var Padding: CGFloat = 8
 
     fileprivate let prefs: Prefs
     fileprivate let defaultValue: String?
