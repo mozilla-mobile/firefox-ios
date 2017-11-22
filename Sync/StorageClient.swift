@@ -126,8 +126,8 @@ open class ServerInBackoffError: MaybeErrorType, SyncPingFailureFormattable {
 
     open var description: String {
         let formatter = DateFormatter()
-        formatter.dateStyle = DateFormatter.Style.short
-        formatter.timeStyle = DateFormatter.Style.medium
+        formatter.dateStyle = .short
+        formatter.timeStyle = .medium
         let s = formatter.string(from: Date.fromTimestamp(self.until))
         return "Server in backoff until \(s)."
     }

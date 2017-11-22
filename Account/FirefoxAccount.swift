@@ -138,28 +138,25 @@ open class FirefoxAccount {
     }
 
     open func dictionary() -> [String: Any] {
-        var dict: [String: Any] = [:]
-        dict["version"] = AccountSchemaVersion
-        dict["email"] = email
-        dict["uid"] = uid
-        dict["deviceRegistration"] = deviceRegistration
-        dict["declinedEngines"] = declinedEngines
-        dict["pushRegistration"] = pushRegistration
-        dict["configurationLabel"] = configuration.label.rawValue
-        dict["stateKeyLabel"] = stateCache.label
-        return dict
+        return [
+            "version": AccountSchemaVersion,
+            "email": email,
+            "uid": uid,
+            "deviceRegistration": deviceRegistration as Any,
+            "declinedEngines": declinedEngines as Any,
+            "pushRegistration": pushRegistration as Any,
+            "configurationLabel": configuration.label.rawValue,
+            "stateKeyLabel": stateCache.label]
     }
 
     open class func fromDictionary(_ dictionary: [String: Any]) -> FirefoxAccount? {
-        if let version = dictionary["version"] as? Int {
-            // As of this writing, the current version, v2, is backward compatible with v1. The only
-            // field added is pushRegistration, which is ok to be nil. If it is nil, then the app
-            // will attempt registration when it starts up.
-            if version <= AccountSchemaVersion {
-                return FirefoxAccount.fromDictionaryV1(dictionary)
-            }
-        }
-        return nil
+        // As of this writing, the current version, v2, is backward compatible with v1. The only
+        // field added is pushRegistration, which is ok to be nil. If it is nil, then the app
+        // will attempt registration when it starts up.
+
+        guard let version = dictionary["version"] as? Int, version <= AccountSchemaVersion else { return nil }
+
+        return FirefoxAccount.fromDictionaryV1(dictionary)
     }
 
     fileprivate class func fromDictionaryV1(_ dictionary: [String: Any]) -> FirefoxAccount? {

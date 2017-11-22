@@ -70,24 +70,22 @@ extension FxAPushMessageHandler {
             return deferMaybe(PushMessageError.messageIncomplete)
         }
 
-        let result: PushMessageResult
         switch command {
         case .deviceConnected:
-            result = handleDeviceConnected(json["data"])
+            return handleDeviceConnected(json["data"])
         case .deviceDisconnected:
-            result = handleDeviceDisconnected(json["data"])
+            return handleDeviceDisconnected(json["data"])
         case .profileUpdated:
-            result = handleProfileUpdated()
+            return handleProfileUpdated()
         case .passwordChanged:
-            result = handlePasswordChanged()
+            return handlePasswordChanged()
         case .passwordReset:
-            result = handlePasswordReset()
+            return handlePasswordReset()
         case .collectionChanged:
-            result = handleCollectionChanged(json["data"])
+            return handleCollectionChanged(json["data"])
         case .accountVerified:
-            result = handleVerification()
+            return handleVerification()
         }
-        return result
     }
 }
 

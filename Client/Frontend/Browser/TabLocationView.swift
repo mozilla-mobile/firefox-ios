@@ -16,7 +16,7 @@ protocol TabLocationViewDelegate {
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton)
     func tabLocationViewDidLongPressPageOptions(_ tabLocationVIew: TabLocationView)
-    
+
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
@@ -97,7 +97,7 @@ class TabLocationView: UIView {
         urlTextField.addGestureRecognizer(self.tapRecognizer)
 
         // Prevent the field from compressing the toolbar buttons on the 4S in landscape.
-        urlTextField.setContentCompressionResistancePriority(250, for: UILayoutConstraintAxis.horizontal)
+        urlTextField.setContentCompressionResistancePriority(250, for: .horizontal)
         urlTextField.attributedPlaceholder = self.placeholder
         urlTextField.accessibilityIdentifier = "url"
         urlTextField.accessibilityActionsSource = self
