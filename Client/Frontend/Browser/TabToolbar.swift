@@ -256,15 +256,15 @@ class TabToolbar: Toolbar, TabToolbarProtocol {
 
     override func draw(_ rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
-            drawLine(context, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
+            drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
         }
     }
 
     fileprivate func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
         context.setStrokeColor(UIColor.black.withAlphaComponent(0.05).cgColor)
         context.setLineWidth(2)
-        context.move(to: CGPoint(x: start.x, y: start.y))
-        context.addLine(to: CGPoint(x: end.x, y: end.y))
+        context.move(to: start)
+        context.addLine(to: end)
         context.strokePath()
     }
 }

@@ -33,7 +33,7 @@ class Toolbar: UIView {
     override func draw(_ rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
             if drawTopBorder {
-                drawLine(context, width: 1, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
+                drawLine(context, width: 1, start: .zero, end: CGPoint(x: frame.width, y: 0))
             }
 
             if drawBottomBorder {

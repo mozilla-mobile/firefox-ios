@@ -52,7 +52,7 @@ extension UIImage {
 
     public func createScaled(_ size: CGSize) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: size))
+        draw(in: CGRect(origin: .zero, size: size))
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return scaledImage!

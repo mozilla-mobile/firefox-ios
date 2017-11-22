@@ -162,7 +162,7 @@ class TabCell: UICollectionViewCell {
             y: margin,
             width: w,
             height: h)
-        screenshotView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: backgroundHolder.frame.size)
+        screenshotView.frame = CGRect(origin: .zero, size: backgroundHolder.frame.size)
 
         title.frame = CGRect(x: 0,
             y: 0,
