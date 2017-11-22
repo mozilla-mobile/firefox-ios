@@ -59,7 +59,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                     self.load(cursor)
                     for site in cursor {
                         if let url = site?.url,
-                               let completion = self.completionForURL(url) {
+                            let completion = self.completionForURL(url) {
                             self.urlBar.setAutocompleteSuggestion(completion)
                             return
                         }
