@@ -61,7 +61,8 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
 
     override func generateSettings() -> [SettingSection] {
         let enabledSetting: [CheckmarkSetting] = EnabledStates.map { option in
-            return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: nil, isEnabled: {
+            let id = ContentBlockerHelper.EnabledState.accessibilityId(for: option)
+            return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: nil, accessibilityIdentifier: id, isEnabled: {
                 return option == self.currentEnabledState
             }, onChanged: {
                 self.currentEnabledState = option
@@ -74,7 +75,8 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
         }
 
         let strengthSetting: [CheckmarkSetting] = BlockingStrengths.map { option in
-            return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: NSAttributedString(string: option.subtitle), isEnabled: {
+            let id = ContentBlockerHelper.BlockingStrength.accessibilityId(for: option)
+            return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: NSAttributedString(string: option.subtitle), accessibilityIdentifier: id, isEnabled: {
                 return option == self.currentBlockingStrength
             }, onChanged: {
                 self.currentBlockingStrength = option
