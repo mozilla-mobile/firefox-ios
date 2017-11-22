@@ -2675,7 +2675,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             .validate(statusCode: 200..<300)
             .response { response in
                 if let data = response.data,
-                   let image = UIImage.dataIsGIF(data) ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
+                   let image = data.isGif ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
                     success(image)
                 }
             }
