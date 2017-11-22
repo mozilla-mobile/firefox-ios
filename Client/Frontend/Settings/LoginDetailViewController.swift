@@ -111,7 +111,7 @@ class LoginDetailViewController: SensitiveViewController {
 
     deinit {
         let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
+        notificationCenter.removeObserver(self, name: .ProfileDidFinishSyncing, object: nil)
         notificationCenter.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
     }
 

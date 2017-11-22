@@ -49,6 +49,6 @@ class MetadataParserHelper: TabHelper {
 
         tab.pageMetadata = pageMetadata
 
-        NotificationCenter.default.post(name: NotificationOnPageMetadataFetched, object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: .OnPageMetadataFetched, object: nil, userInfo: userInfo)
     }
 }

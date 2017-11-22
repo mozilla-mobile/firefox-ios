@@ -93,8 +93,8 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         collectionView?.addGestureRecognizer(longPressRecognizer)
 
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(didChangeFontSize(notification:)),
-                                               name: NotificationDynamicFontChanged,
+                                               selector: #selector(didChangeFontSize),
+                                               name: .DynamicFontChanged,
                                                object: nil)
         
     }

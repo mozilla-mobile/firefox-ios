@@ -9,7 +9,6 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
 
 // MARK: - Placeholder strings for Bug 1232810.
 
@@ -56,7 +55,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
 
         self.tableView.register(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
         self.tableView.register(BookmarkFolderTableViewCell.self, forCellReuseIdentifier: BookmarkFolderCellIdentifier)
@@ -112,7 +111,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged:
+        case .FirefoxAccountChanged:
             self.reloadData()
             break
         default:
@@ -439,7 +438,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         self.tableView.endUpdates()
         self.updateEmptyPanelState()
 
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: BookmarkStatusChangedNotification), object: bookmark, userInfo: ["added": false]
+        NotificationCenter.default.post(name: .BookmarkStatusChanged, object: bookmark, userInfo: ["added": false]
         )
     }
 }

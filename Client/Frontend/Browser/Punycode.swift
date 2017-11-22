@@ -188,7 +188,7 @@ extension String {
         var labels = self.components(separatedBy: ".")
         for (index, part) in labels.enumerated() {
             if isValidPunycodeScala(part) {
-                let changeStr = part.substring(from: part.characters.index(part.startIndex, offsetBy: 4))
+                let changeStr = part.substring(from: part.index(part.startIndex, offsetBy: 4))
                 labels[index] = decode(changeStr)
             }
         }

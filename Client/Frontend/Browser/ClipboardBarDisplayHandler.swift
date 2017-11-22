@@ -33,7 +33,7 @@ class ClipboardBarDisplayHandler: NSObject {
 
         NotificationCenter.default.addObserver(self, selector: #selector(SELUIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELAppWillEnterForegroundNotification), name: .UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: NotificationDidRestoreSession, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: .DidRestoreSession, object: nil)
     }
 
     deinit {
@@ -75,7 +75,7 @@ class ClipboardBarDisplayHandler: NSObject {
                 firstTabLoaded = true
             }
 
-            NotificationCenter.default.removeObserver(self, name: NotificationDidRestoreSession, object: nil)
+            NotificationCenter.default.removeObserver(self, name: .DidRestoreSession, object: nil)
 
             sessionRestored = true
             checkIfShouldDisplayBar()

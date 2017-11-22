@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import SwiftKeychainWrapper
 
-let NotificationPasscodeDidCreate   = "NotificationPasscodeDidCreate"
+
 
 /// Displayed to the user when setting up a passcode.
 class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputViewDelegate {
@@ -63,6 +63,6 @@ class SetupPasscodeViewController: PagingPasscodeViewController, PasscodeInputVi
     fileprivate func createPasscodeWithCode(_ code: String) {
         KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(AuthenticationKeychainInfo(passcode: code))
         let notificationCenter = NotificationCenter.default
-        notificationCenter.post(name: Notification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
+        notificationCenter.post(name: .PasscodeDidCreate, object: nil)
     }
 }

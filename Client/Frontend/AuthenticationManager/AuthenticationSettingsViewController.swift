@@ -234,18 +234,15 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         updateTitleForTouchIDState()
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .PasscodeDidRemove, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .PasscodeDidCreate, object: nil)
         notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .UIApplicationDidBecomeActive, object: nil)
 
         tableView.accessibilityIdentifier = "AuthenticationManager.settingsTableView"
     }
 
     deinit {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
-        notificationCenter.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func generateSettings() -> [SettingSection] {

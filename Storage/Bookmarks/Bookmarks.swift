@@ -25,7 +25,6 @@ public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalD
     func applyBufferUpdatedCompletionOp(_ op: BufferUpdatedCompletionOp) -> Success
 }
 
-public let NotificationBookmarkBufferValidated = Notification.Name("NotificationBookmarkBufferValidated")
 
 public protocol BookmarkBufferStorage: class {
     func isEmpty() -> Deferred<Maybe<Bool>>

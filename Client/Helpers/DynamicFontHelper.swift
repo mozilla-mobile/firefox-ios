@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-let NotificationDynamicFontChanged = Notification.Name("NotificationDynamicFontChanged")
+
 
 private let iPadFactor: CGFloat = 1.06
 private let iPhoneFactor: CGFloat = 0.88
@@ -189,7 +189,7 @@ class DynamicFontHelper: NSObject {
 
     func SELcontentSizeCategoryDidChange(_ notification: Notification) {
         refreshFonts()
-        let notification = Notification(name: NotificationDynamicFontChanged, object: nil)
+        let notification = Notification(name: .DynamicFontChanged, object: nil)
         NotificationCenter.default.post(notification)
     }
 }

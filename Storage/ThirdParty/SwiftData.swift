@@ -464,7 +464,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             // reset Sync and start over in the case of corruption.
             defer {
                 let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent
-                NotificationCenter.default.post(name: NotificationDatabaseWasRecreated, object: baseFilename)
+                NotificationCenter.default.post(name: .DatabaseWasRecreated, object: baseFilename)
             }
 
             // Now that we've got a brand new database file, let's call `prepareSchema()` on
@@ -494,10 +494,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     fileprivate func reKey(_ oldKey: String?, newKey: String?) -> NSError? {
-        sqlite3_key(sqliteDB, oldKey ?? "", Int32((oldKey ?? "").characters.count))
-        sqlite3_rekey(sqliteDB, newKey ?? "", Int32((newKey ?? "").characters.count))
+        sqlite3_key(sqliteDB, oldKey ?? "", Int32((oldKey ?? "").count))
+        sqlite3_rekey(sqliteDB, newKey ?? "", Int32((newKey ?? "").count))
         // Check that the new key actually works
-        sqlite3_key(sqliteDB, newKey ?? "", Int32((newKey ?? "").characters.count))
+        sqlite3_key(sqliteDB, newKey ?? "", Int32((newKey ?? "").count))
         let cursor = executeQuery("SELECT count(*) FROM sqlite_master;", factory: IntFactory, withArgs: nil as Args?)
         if cursor.status != .success {
             return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Rekey failed"])

@@ -487,9 +487,9 @@ class SettingsTableViewController: UITableViewController {
 
         settings = generateSettings()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: NotificationProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: NotificationProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELfirefoxAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELfirefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
 
         tableView.reloadData()
     }
@@ -501,9 +501,9 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .ProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .FirefoxAccountChanged, object: nil)
     }
 
     // Override to provide settings in subclasses
@@ -637,10 +637,10 @@ class SettingsTableViewController: UITableViewController {
     fileprivate func heightForLabel(_ label: UILabel, width: CGFloat, text: String?) -> CGFloat {
         guard let text = text else { return 0 }
 
-        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+        let size = CGSize(width: width, height: .greatestFiniteMagnitude)
         let attrs = [NSFontAttributeName: label.font as Any]
         let boundingRect = NSString(string: text).boundingRect(with: size,
-            options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
+            options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }
 }

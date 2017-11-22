@@ -112,7 +112,7 @@ open class SQLiteLogins: BrowserLogins {
 
         // For now we don't care about the contents.
         // This posts immediately to the shared notification center.
-        NotificationCenter.default.post(name: NotificationDataLoginDidChange, object: nil)
+        NotificationCenter.default.post(name: .DataLoginDidChange, object: nil)
     }
 
     open func getUsageDataForLoginByGUID(_ guid: GUID) -> Deferred<Maybe<LoginUsageData>> {

@@ -11,7 +11,6 @@ import Deferred
 import Sync
 
 class FaviconManager: TabHelper {
-    static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
     
     let profile: Profile!
     weak var tab: Tab?
@@ -118,7 +117,7 @@ class FaviconManager: TabHelper {
                     self.noFaviconAvailable(tab, atURL: currentURL as URL)
                 }
 
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: FaviconManager.FaviconDidLoad), object: tab)
+                NotificationCenter.default.post(name: .FaviconDidLoad, object: tab)
             }
         }
     }

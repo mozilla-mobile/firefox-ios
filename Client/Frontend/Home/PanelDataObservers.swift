@@ -41,12 +41,12 @@ class ActivityStreamDataObserver: DataObserver {
     weak var delegate: DataObserverDelegate?
     private var invalidationTime = OneMinuteInMilliseconds * 15
 
-    fileprivate let events = [NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory]
+    fileprivate let events: [Notification.Name] = [.FirefoxAccountChanged, .ProfileDidFinishSyncing, .PrivateDataClearedHistory]
 
     init(profile: Profile) {
         self.profile = profile
         self.profile.history.setTopSitesCacheSize(ActivityStreamTopSiteCacheSize)
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived), name: $0, object: nil) }
+        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
 
     /*
@@ -88,7 +88,7 @@ class ActivityStreamDataObserver: DataObserver {
 
     @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case NotificationProfileDidFinishSyncing, NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
+        case .ProfileDidFinishSyncing, .FirefoxAccountChanged, .PrivateDataClearedHistory:
              refreshIfNeeded(forceHighlights: true, forceTopSites: true)
         default:
             log.warning("Received unexpected notification \(notification.name)")

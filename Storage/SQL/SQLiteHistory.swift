@@ -354,7 +354,7 @@ extension SQLiteHistory: BrowserHistory {
             }
 
             for i in words.indices where i != index {
-                if words[i].range(of: word) != nil && (words[i].characters.count != word.characters.count || i < index) {
+                if words[i].range(of: word) != nil && (words[i].count != word.count || i < index) {
                     return false
                 }
             }
