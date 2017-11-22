@@ -327,7 +327,7 @@ class MockSyncServer {
 
         let matchPut: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
             guard method == "PUT",
-                path?.startsWith(basePath) ?? false else {
+                path?.hasPrefix(basePath) ?? false else {
                 return nil
             }
             return GCDWebServerDataRequest(method: method, url: url, headers: headers, path: path, query: query)
@@ -353,7 +353,7 @@ class MockSyncServer {
         }
 
         let matchDelete: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
-            guard method == "DELETE" && (path?.startsWith(basePath))! else {
+            guard method == "DELETE" && (path?.hasPrefix(basePath))! else {
                 return nil
             }
             return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)
@@ -398,7 +398,7 @@ class MockSyncServer {
         }
 
         let match: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
-            guard method == "GET", path?.startsWith(storagePath) ?? false else {
+            guard method == "GET", path?.hasPrefix(storagePath) ?? false else {
                 return nil
             }
             return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)

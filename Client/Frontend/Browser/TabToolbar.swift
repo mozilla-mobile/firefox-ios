@@ -157,7 +157,7 @@ class ToolbarButton: UIButton {
         adjustsImageWhenHighlighted = false
         selectedTintColor = tintColor
         unselectedTintColor = tintColor
-        disabledTintColor = UIColor.gray
+        disabledTintColor = .gray
     }
 
     required init?(coder aDecoder: NSCoder) {

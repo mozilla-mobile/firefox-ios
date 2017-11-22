@@ -234,7 +234,7 @@ class SearchEngines {
         let parser = OpenSearchParser(pluginMode: true)
         for engineName in engineNames {
             // Ignore hidden engines in list.txt
-            if engineName.endsWith(":hidden") {
+            if engineName.hasSuffix(":hidden") {
                 continue
             }
 

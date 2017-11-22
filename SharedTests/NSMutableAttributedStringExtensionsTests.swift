@@ -20,30 +20,30 @@ class NSMutableAttributedStringExtensionsTests: XCTestCase {
     func testColorsSubstring() {
         let substring = "bc"
         let example = NSMutableAttributedString(string: "abcd")
-        example.colorSubstring(substring, withColor: UIColor.red)
+        example.colorSubstring(substring, withColor: .red)
 
-        XCTAssertFalse(checkCharacterAtPosition(0, isColored: UIColor.red, inString: example))
+        XCTAssertFalse(checkCharacterAtPosition(0, isColored: .red, inString: example))
         for position in 1..<3 {
-            XCTAssertTrue(checkCharacterAtPosition(position, isColored: UIColor.red, inString: example))
+            XCTAssertTrue(checkCharacterAtPosition(position, isColored: .red, inString: example))
         }
-        XCTAssertFalse(checkCharacterAtPosition(3, isColored: UIColor.red, inString: example))
+        XCTAssertFalse(checkCharacterAtPosition(3, isColored: .red, inString: example))
     }
 
     func testDoesNothingWithEmptySubstring() {
         let substring = ""
         let example = NSMutableAttributedString(string: "abcd")
-        example.colorSubstring(substring, withColor: UIColor.red)
-        for position in 0..<example.string.characters.count {
-            XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.red, inString: example))
+        example.colorSubstring(substring, withColor: .red)
+        for position in 0..<example.string.count {
+            XCTAssertFalse(checkCharacterAtPosition(position, isColored: .red, inString: example))
         }
     }
 
     func testDoesNothingWhenSubstringNotFound() {
         let substring = "yyz"
         let example = NSMutableAttributedString(string: "abcd")
-        example.colorSubstring(substring, withColor: UIColor.red)
-        for position in 0..<example.string.characters.count {
-            XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.red, inString: example))
+        example.colorSubstring(substring, withColor: .red)
+        for position in 0..<example.string.count {
+            XCTAssertFalse(checkCharacterAtPosition(position, isColored: .red, inString: example))
         }
     }
 }

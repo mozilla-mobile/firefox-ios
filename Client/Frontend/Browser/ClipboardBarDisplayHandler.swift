@@ -91,7 +91,7 @@ class ClipboardBarDisplayHandler: NSObject {
             let firstTab = self.firstTab,
             let webView = firstTab.webView,
             let url = firstTab.url?.absoluteString,
-            !url.startsWith("\(WebServer.sharedInstance.base)/about/sessionrestore?history=") else {
+            !url.hasPrefix("\(WebServer.sharedInstance.base)/about/sessionrestore?history=") else {
             return
         }
 

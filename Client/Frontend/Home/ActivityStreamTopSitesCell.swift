@@ -231,7 +231,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
     }()
 
     lazy fileprivate var pageControlPress: UITapGestureRecognizer = {
-        let press = UITapGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handlePageTap))
+        let press = UITapGestureRecognizer(target: self, action: #selector(handlePageTap))
    //     press.delegate = self
         return press
     }()
@@ -472,7 +472,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     Defines the number of items to show in topsites for different size classes.
 */
 private struct ASTopSiteSourceUX {
-    static let verticalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 1, UIUserInterfaceSizeClass.regular: 2, UIUserInterfaceSizeClass.unspecified: 0]
+    static let verticalItemsForTraitSizes: [UIUserInterfaceSizeClass : Int] = [.compact: 1, .regular: 2, .unspecified: 0]
     static let maxNumberOfPages = 2
     static let CellIdentifier = "TopSiteItemCell"
 }

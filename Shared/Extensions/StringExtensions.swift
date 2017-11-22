@@ -5,28 +5,6 @@
 import Foundation
 
 public extension String {
-    public func startsWith(_ other: String) -> Bool {
-        // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
-        if other.isEmpty {
-            return true
-        }
-        if let range = self.range(of: other, options: .anchored) {
-            return range.lowerBound == self.startIndex
-        }
-        return false
-    }
-
-    public func endsWith(_ other: String) -> Bool {
-        // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
-        if other.isEmpty {
-            return true
-        }
-        if let range = self.range(of: other, options: [.anchored, .backwards]) {
-            return range.upperBound == self.endIndex
-        }
-        return false
-    }
-
     func escape() -> String? {
         // We can't guaruntee that strings have a valid string encoding, as this is an entry point for tainted data,
         // we should be very careful about forcefully dereferencing optional types.
@@ -37,7 +15,7 @@ public extension String {
     }
 
     func unescape() -> String? {
-        return self.removingPercentEncoding
+        return removingPercentEncoding
     }
 
     /**
@@ -51,11 +29,11 @@ public extension String {
     :returns: A String with `maxLength` characters or less
     */
     func ellipsize(maxLength: Int) -> String {
-        if (maxLength >= 2) && (self.characters.count > maxLength) {
-            let index1 = self.characters.index(self.startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
-            let index2 = self.characters.index(self.endIndex, offsetBy: maxLength / -2)
+        if (maxLength >= 2) && (count > maxLength) {
+            let index1 = index(startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
+            let index2 = index(endIndex, offsetBy: maxLength / -2)
 
-            return self.substring(to: index1) + "…\u{2060}" + self.substring(from: index2)
+            return substring(to: index1) + "…\u{2060}" + substring(from: index2)
         }
         return self
     }
@@ -86,11 +64,11 @@ public extension String {
     /// Adds a newline at the closest space from the middle of a string.
     /// Example turning "Mark as Read" into "Mark as\n Read"
     public func stringSplitWithNewline() -> String {
-        let mid = self.characters.count/2
+        let mid = count/2
 
-        let arr: [Int] = self.characters.indices.flatMap {
-            if self.characters[$0] == " " {
-                return self.distance(from: startIndex, to: $0)
+        let arr: [Int] = indices.flatMap {
+            if self[$0] == " " {
+                return distance(from: startIndex, to: $0)
             }
 
             return nil
@@ -99,7 +77,7 @@ public extension String {
             return self
         }
         var newString = self
-        newString.insert("\n", at: newString.characters.index(newString.characters.startIndex, offsetBy: closest.element))
+        newString.insert("\n", at: newString.index(newString.startIndex, offsetBy: closest.element))
         return newString
     }
 }

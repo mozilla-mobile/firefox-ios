@@ -7,26 +7,6 @@ import XCTest
 
 class StringExtensionsTests: XCTestCase {
 
-    func testStartsWith() {
-        XCTAssertTrue("abcde".startsWith("abcde"))
-        XCTAssertTrue("abcde".startsWith(""))
-        XCTAssertTrue("abcde".startsWith("a"))
-        XCTAssertTrue("abcdea".startsWith("a"))
-        XCTAssertFalse("abcde".startsWith("fa"))
-        XCTAssertFalse("abcde".startsWith("af"))
-        XCTAssertFalse("abcde".startsWith("b"))
-    }
-
-    func testEndsWith() {
-        XCTAssertTrue("abcde".endsWith("abcde"))
-        XCTAssertTrue("abcde".endsWith(""))
-        XCTAssertTrue("abcde".endsWith("e"))
-        XCTAssertTrue("abcdea".endsWith("a"))
-        XCTAssertFalse("abcde".endsWith("fe"))
-        XCTAssertFalse("abcde".endsWith("ef"))
-        XCTAssertFalse("abcde".endsWith("d"))
-    }
-
     func testEllipsize() {
         // Odd maxLength. Note that we ellipsize with a Unicode join character to avoid wrapping.
         XCTAssertEqual("abcd…\u{2060}fgh", "abcdefgh".ellipsize(maxLength: 7))
