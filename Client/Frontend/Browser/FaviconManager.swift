@@ -61,8 +61,10 @@ class FaviconManager: TabHelper {
         let url = currentURL.absoluteString
         let site = Site(url: url, title: "")
 
+        weak var tab = tab
+
         func loadImageCompleted(_ img: UIImage?, _ url: URL?) {
-            guard let img = img, let urlString = url?.absoluteString else {
+            guard let tab = tab, let img = img, let urlString = url?.absoluteString else {
                 deferred.fill(Maybe(failure: FaviconError()))
                 return
             }
