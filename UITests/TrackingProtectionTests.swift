@@ -18,9 +18,9 @@ class TrackingProtectionTests: KIFTestCase {
     }
     
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
-        BrowserUtils.clearPrivateData(tester: tester())
         super.tearDown()
+        BrowserUtils.resetToAboutHome()
+        BrowserUtils.clearPrivateData()
     }
 
     private func checkTrackingProtection(isBlocking: Bool) {
