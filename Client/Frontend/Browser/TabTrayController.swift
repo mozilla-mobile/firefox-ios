@@ -101,7 +101,7 @@ class TabCell: UICollectionViewCell {
         super.init(frame: frame)
         
         self.animator = SwipeAnimator(animatingView: self)
-        self.closeButton.addTarget(self, action: #selector(TabCell.close), for: .touchUpInside)
+        self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.screenshotView)

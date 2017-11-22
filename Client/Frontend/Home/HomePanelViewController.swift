@@ -213,7 +213,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     fileprivate func updateButtons() {
         for panel in panels {
             let button = UIButton()
-            button.addTarget(self, action: #selector(HomePanelViewController.tappedButton), for: .touchUpInside)
+            button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
             if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)") {
                 button.setImage(image, for: .normal)
             }

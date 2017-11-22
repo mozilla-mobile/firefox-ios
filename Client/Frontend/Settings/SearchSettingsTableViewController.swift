@@ -60,7 +60,7 @@ class SearchSettingsTableViewController: UITableViewController {
         tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .plain, target: self,
-                                                                 action: #selector(SearchSettingsTableViewController.beginEditing))
+                                                            action: #selector(beginEditing))
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -97,7 +97,7 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
                 let toggle = UISwitch()
                 toggle.onTintColor = UIConstants.ControlTintColor
-                toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.didToggleSearchSuggestions), for: .valueChanged)
+                toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
                 cell.selectionStyle = .none
@@ -281,7 +281,7 @@ class SearchSettingsTableViewController: UITableViewController {
         }
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
         navigationItem.rightBarButtonItem?.action = editing ?
-            #selector(SearchSettingsTableViewController.finishEditing) : #selector(SearchSettingsTableViewController.beginEditing)
+            #selector(finishEditing) : #selector(beginEditing)
         tableView.reloadData()
     }
 }

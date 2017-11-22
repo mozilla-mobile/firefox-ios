@@ -113,7 +113,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
             options: [], metrics: nil, views: (views as? [String: AnyObject])!))
         
         let cx = NSLayoutConstraint(item: shareDialogController.view, attribute: .centerX,
-            relatedBy: NSLayoutRelation.equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0)
+            relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0)
         cx.priority = 1000 // TODO: Why does UILayoutPriorityRequired give a linker error? SDK Bug?
         view.addConstraint(cx)
         

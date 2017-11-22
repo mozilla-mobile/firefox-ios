@@ -90,7 +90,7 @@ class TestBrowserDB: XCTestCase {
 
         let center = NotificationCenter.default
         let listener = MockListener()
-        center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated), name: .DatabaseWasRecreated, object: nil)
+        center.addObserver(listener, selector: #selector(onDatabaseWasRecreated), name: .DatabaseWasRecreated, object: nil)
         defer { center.removeObserver(listener) }
 
         // It'll still fail, but it moved our old DB.
@@ -111,7 +111,7 @@ class TestBrowserDB: XCTestCase {
         let shmBAttributes = try! files.attributesForFileAt(relativePath: "foo.db-shm")
         let creationB = shmBAttributes[FileAttributeKey.creationDate] as! Date
         let inodeB = (shmBAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
-        XCTAssertTrue(creationA.compare(creationB) != ComparisonResult.orderedDescending)
+        XCTAssertTrue(creationA.compare(creationB) != .orderedDescending)
         XCTAssertNotEqual(inodeA, inodeB)
 
         XCTAssertTrue(files.exists("foo.db.bak.1"))

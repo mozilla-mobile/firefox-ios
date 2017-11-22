@@ -46,7 +46,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             self.url = profile.accountConfiguration.signInURL
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(FxAContentViewController.userDidVerify), name: .FirefoxAccountVerified, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {

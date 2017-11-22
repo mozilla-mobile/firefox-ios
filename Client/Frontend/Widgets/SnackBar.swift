@@ -41,7 +41,7 @@ class SnackButton: UIButton {
         setBackgroundImage(highlightImg, for: .highlighted)
         setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
 
-        addTarget(self, action: #selector(SnackButton.onClick), for: .touchUpInside)
+        addTarget(self, action: #selector(onClick), for: .touchUpInside)
 
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -301,7 +301,7 @@ class TimerSnackBar: SnackBar {
     }
     
     override func show() {
-        self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(TimerSnackBar.SELTimerDone), userInfo: nil, repeats: false)
+        self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(SELTimerDone), userInfo: nil, repeats: false)
         RunLoop.current.add(self.timer!, forMode: .defaultRunLoopMode)
         super.show()
     }

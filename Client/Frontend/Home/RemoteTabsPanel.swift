@@ -381,11 +381,11 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         signInButton.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
-        signInButton.addTarget(self, action: #selector(RemoteTabsNotLoggedInCell.SELsignIn), for: .touchUpInside)
+        signInButton.addTarget(self, action: #selector(SELsignIn), for: .touchUpInside)
         contentView.addSubview(signInButton)
 
         createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), for: [])
-        createAnAccountButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
+        createAnAccountButton.titleLabel?.font = .preferredFont(forTextStyle: .caption1)
         createAnAccountButton.addTarget(self, action: #selector(SELcreateAnAccount), for: .touchUpInside)
         contentView.addSubview(createAnAccountButton)
 
@@ -479,7 +479,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     }
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(RemoteTabsTableViewController.longPress))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     override func viewDidLoad() {
@@ -499,13 +499,13 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        refreshControl?.addTarget(self, action: #selector(RemoteTabsTableViewController.refreshTabs), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(refreshTabs), for: .valueChanged)
         refreshTabs()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        refreshControl?.removeTarget(self, action: #selector(RemoteTabsTableViewController.refreshTabs), for: .valueChanged)
+        refreshControl?.removeTarget(self, action: #selector(refreshTabs), for: .valueChanged)
     }
 
     fileprivate func startRefreshing() {
