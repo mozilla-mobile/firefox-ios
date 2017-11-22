@@ -26,11 +26,10 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             if isLoaded {
                 UIView.transition(from: interstitialView, to: webView,
                     duration: 0.5,
-                    options: .transitionCrossDissolve,
-                    completion: { finished in
+                    options: .transitionCrossDissolve) { _ in
                         self.interstitialView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
-                })
+                }
             }
         }
     }
@@ -41,11 +40,10 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
                 interstitialErrorView.isHidden = false
                 UIView.transition(from: interstitialSpinnerView, to: interstitialErrorView,
                     duration: 0.5,
-                    options: .transitionCrossDissolve,
-                    completion: { finished in
+                    options: .transitionCrossDissolve) { _ in
                         self.interstitialSpinnerView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
-                })
+                }
             }
         }
     }
@@ -63,7 +61,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             return
         }
         if timeout > 0 {
-            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SELdidTimeOut), userInfo: nil, repeats: false)
+            self.timer = .scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SELdidTimeOut), userInfo: nil, repeats: false)
         } else {
             self.timer = nil
         }
