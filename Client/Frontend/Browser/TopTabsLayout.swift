@@ -51,7 +51,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
     override func prepare() {
         super.prepare()
         self.minimumLineSpacing = TopTabsUX.SeparatorWidth
-        scrollDirection = UICollectionViewScrollDirection.horizontal
+        scrollDirection = .horizontal
         register(TopTabsSeparator.self, forDecorationViewOfKind: TopTabsSeparatorUX.Identifier)
     }
     

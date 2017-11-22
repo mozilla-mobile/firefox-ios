@@ -46,7 +46,7 @@ private extension TrayToBrowserAnimator {
         container.insertSubview(tabCollectionViewSnapshot, at: 0)
 
         // Create a fake cell to use for the upscaling animation
-        let startingFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView, atIndex: expandFromIndex)
+        let startingFrame = tabTray.collectionView.collapsedCellFrame(at: expandFromIndex)
         let cell = createTransitionCellFromTab(bvc.tabManager.selectedTab, withFrame: startingFrame)
         cell.backgroundHolder.layer.cornerRadius = 0
 
@@ -97,10 +97,9 @@ private extension TrayToBrowserAnimator {
 
 class BrowserToTrayAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        if let bvc = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) as? BrowserViewController,
-           let tabTray = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to) as? TabTrayController {
-            transitionFromBrowser(bvc, toTabTray: tabTray, usingContext: transitionContext)
-        }
+        guard let bvc = transitionContext.viewController(forKey: .from) as? BrowserViewController,
+            let tabTray = transitionContext.viewController(forKey: .to) as? TabTrayController else { return }
+        transitionFromBrowser(bvc, toTabTray: tabTray, usingContext: transitionContext)
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -161,8 +160,8 @@ private extension BrowserToTrayAnimator {
 
         DispatchQueue.main.async {
             tabTray.collectionView.isHidden = true
-            let finalFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView,
-                atIndex: scrollToIndex)
+            let finalFrame = tabTray.collectionView.collapsedCellFrame(at: scrollToIndex)
+
             tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
 
             UIView.animate(withDuration: self.transitionDuration(using: transitionContext),
@@ -240,11 +239,11 @@ private func headerTransform(_ frame: CGRect, toFrame finalFrame: CGRect, contai
 }
 
 //MARK: Private Helper Methods
-private func calculateCollapsedCellFrameUsingCollectionView(_ collectionView: UICollectionView, atIndex index: Int) -> CGRect {
-    if let attr = collectionView.collectionViewLayout.layoutAttributesForItem(at: IndexPath(item: index, section: 0)) {
-        return collectionView.convert(attr.frame, to: collectionView.superview)
-    } else {
-        return .zero
+
+private extension UICollectionView {
+    func collapsedCellFrame(at index: Int) -> CGRect {
+        guard let attr = collectionViewLayout.layoutAttributesForItem(at: IndexPath(item: index, section: 0)) else { return .zero }
+        return convert(attr.frame, to: superview)
     }
 }
 
