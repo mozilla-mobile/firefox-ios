@@ -89,12 +89,28 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let webViewAccessibilityLabel = tab?.webView?.accessibilityLabel {
+
+        guard let webView = tab?.webView else { return }
+
+        if let webViewAccessibilityLabel = webView.accessibilityLabel {
             previewAccessibilityLabel = String(format: NSLocalizedString("Preview of %@", tableName: "3DTouchActions", comment: "Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab."), webViewAccessibilityLabel)
         }
         // if there is no screenshot, load the URL in a web page
         // otherwise just show the screenshot
-        setupWebView(tab?.webView)
+
+        if let url = webView.url, !isIgnoredURL(url) {
+            let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
+            self.view.addSubview(clonedWebView)
+            clonedWebView.snp.makeConstraints { make in
+                make.edges.equalTo(self.view)
+            }
+
+            clonedWebView.accessibilityLabel = previewAccessibilityLabel
+            clonedWebView.allowsLinkPreview = false
+            clonedWebView.navigationDelegate = self
+            clonedWebView.load(URLRequest(url: url))
+        }
+
         guard let screenshot = tab?.screenshot else { return }
         setupWithScreenshot(screenshot)
     }
@@ -109,22 +125,6 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
         screenShot = imageView
         screenShot?.accessibilityLabel = previewAccessibilityLabel
-    }
-
-    fileprivate func setupWebView(_ webView: WKWebView?) {
-        guard let webView = webView, let url = webView.url, !isIgnoredURL(url) else { return }
-        let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
-        clonedWebView.allowsLinkPreview = false
-        webView.accessibilityLabel = previewAccessibilityLabel
-        self.view.addSubview(clonedWebView)
-
-        clonedWebView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
-
-        clonedWebView.navigationDelegate = self
-
-        clonedWebView.load(URLRequest(url: url))
     }
 
     func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: ClientPickerViewControllerDelegate) {
