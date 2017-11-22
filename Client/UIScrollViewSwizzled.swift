@@ -5,6 +5,7 @@
 import Shared
 
 // Workaround for bug 1417152, whereby NaN bounds are being set on the scrollview when viewing PDFs in the web view.
+// Is fixed in WebKit, remove this file when the fix arrives in iOS release.
 
 private let swizzling: (UIScrollView.Type) -> Void = { obj in
     let originalSelector = #selector(setter: UIView.bounds)
@@ -16,11 +17,6 @@ private let swizzling: (UIScrollView.Type) -> Void = { obj in
 
 extension UIScrollView {
     open override class func initialize() {
-        // This code will mask the problem, so disable it in Beta in order that we can research it further.
-        guard AppConstants.BuildChannel == .release else {
-            return
-        }
-
         // make sure this isn't a subclass
         guard self === UIScrollView.self else {
             return
