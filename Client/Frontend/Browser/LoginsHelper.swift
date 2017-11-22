@@ -30,7 +30,8 @@ class LoginsHelper: TabHelper {
         self.tab = tab
         self.profile = profile
 
-        if let path = Bundle.main.path(forResource: "LoginsHelper", ofType: "js"), let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+        if let path = Bundle.main.path(forResource: "LoginsHelper", ofType: "js"),
+            let source = try? String(contentsOfFile: path, encoding: .utf8) {
             let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }

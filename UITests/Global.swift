@@ -197,8 +197,8 @@ extension KIFUITestActor {
             if result as! String == "undefined" {
                 let bundle = Bundle(for: BrowserTests.self)
                 let path = bundle.path(forResource: "KIFHelper", ofType: "js")!
-                let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue)
-                webView.evaluateJavaScript(source as String, completionHandler: nil)
+                let source = try! String(contentsOfFile: path, encoding: .utf8)
+                webView.evaluateJavaScript(source, completionHandler: nil)
             }
             stepResult = KIFTestStepResult.success
         }
@@ -415,7 +415,7 @@ class BrowserUtils {
 class SimplePageServer {
     class func getPageData(_ name: String, ext: String = "html") -> String {
         let pageDataPath = Bundle(for: self).path(forResource: name, ofType: ext)!
-        return (try! NSString(contentsOfFile: pageDataPath, encoding: String.Encoding.utf8.rawValue)) as String
+        return (try! String(contentsOfFile: pageDataPath, encoding: .utf8))
     }
 
     class func start() -> String {

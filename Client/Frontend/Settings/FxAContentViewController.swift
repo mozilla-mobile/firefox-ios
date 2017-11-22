@@ -233,7 +233,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     fileprivate func getJS() -> String {
         let fileRoot = Bundle.main.path(forResource: "FxASignIn", ofType: "js")
-        return (try! NSString(contentsOfFile: fileRoot!, encoding: String.Encoding.utf8.rawValue)) as String
+        return (try! String(contentsOfFile: fileRoot!, encoding: .utf8))
     }
 
     override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

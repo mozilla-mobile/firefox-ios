@@ -104,9 +104,11 @@ open class KeyBundle: Hashable {
         if success == CCCryptorStatus(kCCSuccess) {
             // Hooray!
             let d = Data(bytes: b, count: Int(copied))
-            let s = NSString(data: d, encoding: String.Encoding.utf8.rawValue)
-            b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)
-            return s as String?
+            defer {
+                b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)
+            }
+
+            return String(data: d, encoding: .utf8)
         }
 
         b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)

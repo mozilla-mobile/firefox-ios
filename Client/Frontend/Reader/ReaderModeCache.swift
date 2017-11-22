@@ -83,14 +83,14 @@ class DiskReaderModeCache: ReaderModeCache {
 
         try FileManager.default.createDirectory(atPath: cacheDirectoryPath, withIntermediateDirectories: true, attributes: nil)
         let string: String = readabilityResult.encode()
-        try string.write(toFile: contentFilePath, atomically: true, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
+        try string.write(toFile: contentFilePath, atomically: true, encoding: .utf8)
         return
     }
 
     func get(_ url: URL) throws -> ReadabilityResult {
         if let (_, contentFilePath) = cachePathsForURL(url), FileManager.default.fileExists(atPath: contentFilePath) {
-            let string = try NSString(contentsOfFile: contentFilePath, encoding: String.Encoding.utf8.rawValue)
-            if let value = ReadabilityResult(string: string as String) {
+            let string = try String(contentsOfFile: contentFilePath, encoding: .utf8)
+            if let value = ReadabilityResult(string: string) {
                 return value
             }
         }

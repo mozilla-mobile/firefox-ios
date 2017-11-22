@@ -229,7 +229,7 @@ class ReaderMode: TabHelper {
 
         // This is a WKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.
         if let path = Bundle.main.path(forResource: "Readability", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
                 let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
@@ -237,7 +237,7 @@ class ReaderMode: TabHelper {
 
         // This is executed after a page has been loaded. It executes Readability and then fires a script message to let us know if the page is compatible with reader mode.
         if let path = Bundle.main.path(forResource: "ReaderMode", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
                 let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
