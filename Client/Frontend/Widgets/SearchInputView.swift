@@ -8,8 +8,8 @@ import SnapKit
 private struct SearchInputViewUX {
 
     static let horizontalSpacing: CGFloat = 16
-    static let titleFont: UIFont = UIFont.systemFont(ofSize: 16)
-    static let titleColor: UIColor = UIColor.lightGray
+    static let titleFont: UIFont = .systemFont(ofSize: 16)
+    static let titleColor: UIColor = .lightGray
     static let inputColor: UIColor = UIConstants.HighlightBlue
     static let borderColor: UIColor = UIConstants.SeparatorColor
     static let borderLineWidth: CGFloat = 0.5

@@ -24,8 +24,8 @@ class DiskImageStoreTests: XCTestCase {
         var success = false
 
         // Avoid image comparison and use size of the image for equality
-        let redImage = makeImageWithColor(UIColor.red, size: CGSize(width: 100, height: 100))
-        let blueImage = makeImageWithColor(UIColor.blue, size: CGSize(width: 17, height: 17))
+        let redImage = makeImageWithColor(.red, size: CGSize(width: 100, height: 100))
+        let blueImage = makeImageWithColor(.blue, size: CGSize(width: 17, height: 17))
 
         [(key: "blue", image: blueImage), (key: "red", image: redImage)].forEach() { (key, image) in
             XCTAssertNil(getImage(key), "\(key) key is nil")
@@ -43,7 +43,7 @@ class DiskImageStoreTests: XCTestCase {
     }
 
     private func makeImageWithColor(_ color: UIColor, size: CGSize) -> UIImage {
-        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        let rect = CGRect(origin: .zero, size: size)
         UIGraphicsBeginImageContextWithOptions(size, false, 1.0)
         color.setFill()
         UIRectFill(rect)
