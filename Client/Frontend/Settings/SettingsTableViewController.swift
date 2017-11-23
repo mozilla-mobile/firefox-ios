@@ -224,29 +224,60 @@ class BoolSetting: Setting {
     }
 }
 
+class PrefPersister: SettingValuePersister {
+    fileprivate let prefs: Prefs
+    let prefKey: String
+
+    init(prefs: Prefs, prefKey: String) {
+        self.prefs = prefs
+        self.prefKey = prefKey
+    }
+
+    func readPersistedValue() -> String? {
+        return prefs.stringForKey(prefKey)
+    }
+
+    func writePersistedValue(value: String?) {
+        if let value = value {
+            prefs.setString(value, forKey: prefKey)
+        } else {
+            prefs.removeObjectForKey(prefKey)
+        }
+    }
+}
+
+class StringPrefSetting: StringSetting {
+    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
+        super.init(defaultValue: defaultValue, placeholder: placeholder, accessibilityIdentifier: accessibilityIdentifier, persister: PrefPersister(prefs: prefs, prefKey: prefKey), settingIsValid: isValueValid, settingDidChange: settingDidChange)
+    }
+}
+
+protocol SettingValuePersister {
+    func readPersistedValue() -> String?
+    func writePersistedValue(value: String?)
+}
+
 /// A helper class for a setting backed by a UITextField.
 /// This takes an optional settingIsValid and settingDidChange callback
 /// If settingIsValid returns false, the Setting will not change and the text remains red.
 class StringSetting: Setting, UITextFieldDelegate {
 
-    let prefKey: String
     var Padding: CGFloat = 8
 
-    fileprivate let prefs: Prefs
     fileprivate let defaultValue: String?
     fileprivate let placeholder: String
     fileprivate let settingDidChange: ((String?) -> Void)?
     fileprivate let settingIsValid: ((String?) -> Bool)?
+    fileprivate let persister: SettingValuePersister
 
     let textField = UITextField()
 
-    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
-        self.prefs = prefs
-        self.prefKey = prefKey
+    init(defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, persister: SettingValuePersister, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
         self.defaultValue = defaultValue
         self.settingDidChange = settingDidChange
         self.settingIsValid = isValueValid
         self.placeholder = placeholder
+        self.persister = persister
 
         super.init()
         self.accessibilityIdentifier = accessibilityIdentifier
@@ -270,7 +301,7 @@ class StringSetting: Setting, UITextFieldDelegate {
             make.trailing.equalTo(cell.contentView).offset(-Padding)
             make.leading.equalTo(cell.contentView).offset(Padding)
         }
-        textField.text = prefs.stringForKey(prefKey) ?? defaultValue
+        textField.text = self.persister.readPersistedValue() ?? defaultValue
         textFieldDidChange(textField)
     }
 
@@ -306,11 +337,7 @@ class StringSetting: Setting, UITextFieldDelegate {
         if !isValid(text) {
             return
         }
-        if let text = prepareValidValue(userInput: text) {
-            prefs.setString(text, forKey: prefKey)
-        } else {
-            prefs.removeObjectForKey(prefKey)
-        }
+        self.persister.writePersistedValue(value: prepareValidValue(userInput: text))
         // Call settingDidChange with text or nil.
         settingDidChange?(text)
     }
