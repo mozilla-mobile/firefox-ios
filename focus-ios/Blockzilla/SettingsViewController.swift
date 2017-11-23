@@ -261,7 +261,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         var groupingOffset = 16
         switch section {
         case 0:
-            labelText = UIConstants.strings.settingsSearchSection
+            labelText = UIConstants.strings.settingsSearchTitle
             groupingOffset = 3
         case 1: labelText = UIConstants.strings.toggleSectionIntegration
         case 2: labelText = UIConstants.strings.toggleSectionPrivacy
