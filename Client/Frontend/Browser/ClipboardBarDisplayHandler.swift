@@ -22,7 +22,7 @@ class ClipboardBarDisplayHandler: NSObject {
     private var firstTabLoaded = false
     private var prefs: Prefs
     private var lastDisplayedURL: String?
-    private var firstTab: Tab?
+    private weak var firstTab: Tab?
     var clipboardToast: ButtonToast?
     
     init(prefs: Prefs, tabManager: TabManager) {

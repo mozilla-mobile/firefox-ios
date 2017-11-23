@@ -25,6 +25,7 @@ private let KVOURL = "URL"
 private let KVOTitle = "title"
 private let KVOCanGoBack = "canGoBack"
 private let KVOCanGoForward = "canGoForward"
+private let KVOs = [KVOEstimatedProgress, KVOLoading, KVOCanGoBack, KVOCanGoForward, KVOURL, KVOTitle]
 private let KVOContentSize = "contentSize"
 
 private let ActionSheetTitleMaxLength = 120
@@ -50,9 +51,8 @@ class BrowserViewController: UIViewController {
     fileprivate var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
     fileprivate var searchLoader: SearchLoader!
-    fileprivate let snackBars = UIView()
+    fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     fileprivate var findInPageBar: FindInPageBar?
-    fileprivate let findInPageContainer = UIView()
 
     lazy var mailtoLinkHandler: MailtoLinkHandler = MailtoLinkHandler()
 
@@ -96,10 +96,7 @@ class BrowserViewController: UIViewController {
 
     fileprivate var keyboardState: KeyboardState?
 
-    var didRemoveAllTabs: Bool = false
     var pendingToast: ButtonToast? // A toast that might be waiting for BVC to appear before displaying
-
-    let WhiteListedUrls = ["\\/\\/itunes\\.apple\\.com\\/"]
 
     // Tracking navigation items to record history types.
     // TODO: weak references?
@@ -110,7 +107,7 @@ class BrowserViewController: UIViewController {
     }
     
     var topTabsViewController: TopTabsViewController?
-    let topTabsContainer = UIView(frame: CGRect.zero)
+    let topTabsContainer = UIView()
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
@@ -181,9 +178,9 @@ class BrowserViewController: UIViewController {
 
     func toggleSnackBarVisibility(show: Bool) {
         if show {
-            UIView.animate(withDuration: 0.1, animations: { self.snackBars.isHidden = false })
+            UIView.animate(withDuration: 0.1, animations: { self.alertStackView.isHidden = false })
         } else {
-            snackBars.isHidden = true
+            alertStackView.isHidden = true
         }
     }
 
@@ -374,11 +371,10 @@ class BrowserViewController: UIViewController {
 
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
 
+        view.addSubview(alertStackView)
         footer = UIView()
-        self.view.addSubview(footer)
-        self.view.addSubview(snackBars)
-        snackBars.backgroundColor = UIColor.clear
-        self.view.addSubview(findInPageContainer)
+        view.addSubview(footer)
+        alertStackView.axis = .vertical
 
         if AppConstants.MOZ_CLIPBOARD_BAR {
             clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
@@ -388,7 +384,7 @@ class BrowserViewController: UIViewController {
         scrollController.urlBar = urlBar
         scrollController.header = header
         scrollController.footer = footer
-        scrollController.snackBars = snackBars
+        scrollController.snackBars = alertStackView
         scrollController.webViewContainerToolbar = webViewContainerToolbar
 
         self.updateToolbarStateForTraitCollection(self.traitCollection)
@@ -521,28 +517,24 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showRestoreTabsAlert() {
-        if !canRestoreTabs() {
+        guard canRestoreTabs() else {
             self.tabManager.addTabAndSelect()
             return
         }
-
         let alert = UIAlertController.restoreTabsAlert(
             okayCallback: { _ in
                 self.tabManager.restoreTabs()
-                self.updateTabCountUsingTabManager(self.tabManager, animated: false)
             },
             noCallback: { _ in
                 self.tabManager.addTabAndSelect()
-                self.updateTabCountUsingTabManager(self.tabManager, animated: false)
             }
         )
-
         self.present(alert, animated: true, completion: nil)
     }
 
     fileprivate func canRestoreTabs() -> Bool {
         guard let tabsToRestore = TabManager.tabsToRestore() else { return false }
-        return tabsToRestore.count > 0
+        return !tabsToRestore.isEmpty
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -654,7 +646,6 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.equalTo(self.view)
         }
 
-        updateSnackBarConstraints()
         urlBar.setNeedsUpdateConstraints()
 
         // Remake constraints even if we're already showing the home controller.
@@ -669,9 +660,10 @@ class BrowserViewController: UIViewController {
             }
         }
 
-        findInPageContainer.snp.remakeConstraints { make in
-            make.left.right.equalTo(self.view)
-
+        alertStackView.snp.remakeConstraints { make in
+            make.centerX.equalTo(self.view)
+            make.width.lessThanOrEqualTo(self.view.snp.width)
+            make.width.lessThanOrEqualTo(SnackBarUX.MaxWidth)
             if let keyboardHeight = keyboardState?.intersectionHeightForView(self.view), keyboardHeight > 0 {
                 make.bottom.equalTo(self.view).offset(-keyboardHeight)
             } else if let toolbar = self.toolbar {
@@ -943,15 +935,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func isWhitelistedUrl(_ url: URL) -> Bool {
-        for entry in WhiteListedUrls {
-            if let _ = url.absoluteString.range(of: entry, options: .regularExpression) {
-                return UIApplication.shared.canOpenURL(url)
-            }
-        }
-        return false
-    }
-
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
@@ -1084,10 +1067,9 @@ class BrowserViewController: UIViewController {
                 let findInPageBar = FindInPageBar()
                 self.findInPageBar = findInPageBar
                 findInPageBar.delegate = self
-                findInPageContainer.addSubview(findInPageBar)
+                alertStackView.addArrangedSubview(findInPageBar)
 
                 findInPageBar.snp.makeConstraints { make in
-                    make.edges.equalTo(findInPageContainer)
                     make.height.equalTo(UIConstants.ToolbarHeight)
                 }
 
@@ -1168,18 +1150,17 @@ class BrowserViewController: UIViewController {
             // VoiceOver will sometimes be stuck on the element, not allowing user to move
             // forward/backward. Strange, but LayoutChanged fixes that.
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
-        } else {
+        } else if let webView = tab.webView {
             // To Screenshot a tab that is hidden we must add the webView,
             // then wait enough time for the webview to render.
-            if let webView =  tab.webView {
-                view.insertSubview(webView, at: 0)
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-                    self.screenshotHelper.takeScreenshot(tab)
-                    if webView.superview == self.view {
-                        webView.removeFromSuperview()
-                    }
+            view.insertSubview(webView, at: 0)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                self.screenshotHelper.takeScreenshot(tab)
+                if webView.superview == self.view {
+                    webView.removeFromSuperview()
                 }
             }
+
         }
         
         // Remember whether or not a desktop site was requested
@@ -1616,17 +1597,9 @@ extension BrowserViewController: TabDelegate {
 
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.frame = webViewContainer.frame
-        // Observers that live as long as the tab. Make sure these are all cleared
-        // in willDeleteWebView below!
-        webView.addObserver(self, forKeyPath: KVOEstimatedProgress, options: .new, context: nil)
-        webView.addObserver(self, forKeyPath: KVOLoading, options: .new, context: nil)
-        webView.addObserver(self, forKeyPath: KVOCanGoBack, options: .new, context: nil)
-        webView.addObserver(self, forKeyPath: KVOCanGoForward, options: .new, context: nil)
-        tab.webView?.addObserver(self, forKeyPath: KVOURL, options: .new, context: nil)
-        tab.webView?.addObserver(self, forKeyPath: KVOTitle, options: .new, context: nil)
-
+        // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
+        KVOs.forEach { webView.addObserver(self, forKeyPath: $0, options: .new, context: nil) }
         webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOContentSize, options: .new, context: nil)
-
         webView.uiDelegate = self
 
         let formPostHelper = FormPostHelper(tab: tab)
@@ -1692,129 +1665,37 @@ extension BrowserViewController: TabDelegate {
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
         tab.cancelQueuedAlerts()
-
-        webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
-        webView.removeObserver(self, forKeyPath: KVOLoading)
-        webView.removeObserver(self, forKeyPath: KVOCanGoBack)
-        webView.removeObserver(self, forKeyPath: KVOCanGoForward)
+        KVOs.forEach { webView.removeObserver(self, forKeyPath: $0) }
         webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOContentSize)
-        webView.removeObserver(self, forKeyPath: KVOURL)
-        webView.removeObserver(self, forKeyPath: KVOTitle)
-
         webView.uiDelegate = nil
         webView.scrollView.delegate = nil
         webView.removeFromSuperview()
     }
 
     fileprivate func findSnackbar(_ barToFind: SnackBar) -> Int? {
-        let bars = snackBars.subviews
+        let bars = alertStackView.arrangedSubviews
         for (index, bar) in bars.enumerated() where bar === barToFind {
             return index
         }
         return nil
     }
 
-    fileprivate func updateSnackBarConstraints() {
-        snackBars.snp.remakeConstraints { make in
-            make.bottom.equalTo(findInPageContainer.snp.top)
-
-            let bars = self.snackBars.subviews
-            if bars.count > 0 {
-                let view = bars[bars.count-1]
-                make.top.equalTo(view.snp.top)
-            } else {
-                make.height.equalTo(0)
-            }
-
-            if traitCollection.horizontalSizeClass != .regular {
-                make.leading.trailing.equalTo(self.view)
-                self.snackBars.layer.borderWidth = 0
-            } else {
-                make.centerX.equalTo(self.view)
-                make.width.equalTo(SnackBarUX.MaxWidth)
-                self.snackBars.layer.borderColor = UIConstants.BorderColor.cgColor
-                self.snackBars.layer.borderWidth = 1
-            }
-        }
-    }
-
-    // This removes the bar from its superview and updates constraints appropriately
-    fileprivate func finishRemovingBar(_ bar: SnackBar) {
-        // If there was a bar above this one, we need to remake its constraints.
-        if let index = findSnackbar(bar) {
-            // If the bar being removed isn't on the top of the list
-            let bars = snackBars.subviews
-            if index < bars.count-1 {
-                // Move the bar above this one
-                let nextbar = bars[index+1] as! SnackBar
-                nextbar.snp.makeConstraints { make in
-                    // If this wasn't the bottom bar, attach to the bar below it
-                    if index > 0 {
-                        let bar = bars[index-1] as! SnackBar
-                        nextbar.bottom = make.bottom.equalTo(bar.snp.top).constraint
-                    } else {
-                        // Otherwise, we attach it to the bottom of the snackbars
-                        nextbar.bottom = make.bottom.equalTo(self.snackBars.snp.bottom).constraint
-                    }
-                }
-            }
-        }
-
-        // Really remove the bar
-        bar.removeFromSuperview()
-    }
-
-    fileprivate func finishAddingBar(_ bar: SnackBar) {
-        snackBars.addSubview(bar)
-        bar.snp.makeConstraints { make in
-            // If there are already bars showing, add this on top of them
-            let bars = self.snackBars.subviews
-
-            // Add the bar on top of the stack
-            // We're the new top bar in the stack, so make sure we ignore ourself
-            if bars.count > 1 {
-                let view = bars[bars.count - 2]
-                bar.bottom = make.bottom.equalTo(view.snp.top).offset(0).constraint
-            } else {
-                bar.bottom = make.bottom.equalTo(self.snackBars.snp.bottom).offset(0).constraint
-            }
-            make.leading.trailing.equalTo(self.snackBars)
-        }
-    }
-
     func showBar(_ bar: SnackBar, animated: Bool) {
-        finishAddingBar(bar)
-        updateSnackBarConstraints()
-
-        bar.hide()
         view.layoutIfNeeded()
-        UIView.animate(withDuration: animated ? 0.25 : 0, animations: { () -> Void in
-            bar.show()
+        UIView.animate(withDuration: animated ? 0.25 : 0, animations: { _ in
+            self.alertStackView.insertArrangedSubview(bar, at: 0)
             self.view.layoutIfNeeded()
         })
     }
 
     func removeBar(_ bar: SnackBar, animated: Bool) {
-        if let _ = findSnackbar(bar) {
-            UIView.animate(withDuration: animated ? 0.25 : 0, animations: { () -> Void in
-                bar.hide()
-                self.view.layoutIfNeeded()
-            }, completion: { success in
-                // Really remove the bar
-                self.finishRemovingBar(bar)
-                self.updateSnackBarConstraints()
-            }) 
-        }
+        UIView.animate(withDuration: animated ? 0.25 : 0, animations: { _ in
+            bar.removeFromSuperview()
+        })
     }
 
     func removeAllBars() {
-        let bars = snackBars.subviews
-        for bar in bars {
-            if let bar = bar as? SnackBar {
-                bar.removeFromSuperview()
-            }
-        }
-        self.updateSnackBarConstraints()
+        alertStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
 
     func tab(_ tab: Tab, didAddSnackbar bar: SnackBar) {
@@ -1903,14 +1784,9 @@ extension BrowserViewController: TabManagerDelegate {
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
             if tab.isPrivate != previous?.isPrivate {
-                applyTheme(tab.isPrivate ? Theme.Private : Theme.Normal)
+                applyTheme(tab.isPrivate ? .Private : .Normal)
             }
-            if tab.isPrivate {
-                readerModeCache = MemoryReaderModeCache.sharedInstance
-                
-            } else {
-                readerModeCache = DiskReaderModeCache.sharedInstance
-            }
+            readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
             if let privateModeButton = topTabsViewController?.privateModeButton, previous != nil && previous?.isPrivate != tab.isPrivate {
                 privateModeButton.setSelected(tab.isPrivate, animated: true)
             }
@@ -2030,7 +1906,6 @@ extension BrowserViewController: TabManagerDelegate {
                 make.left.right.equalTo(self.view)
                 make.bottom.equalTo(self.webViewContainer)
             }
-            buttonToast.showToast(duration: duration)
         }
     }
     
@@ -2188,11 +2063,8 @@ extension BrowserViewController: WKUIDelegate {
             ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.url!, inWebView: webView)
             return decisionHandler(WKNavigationResponsePolicy.allow)
         }
-        
-        if openInHelper.openInView == nil {
-             openInHelper.openInView = navigationToolbar.menuButton
-        }
 
+        openInHelper.openInView = openInHelper.openInView ?? navigationToolbar.menuButton
         openInHelper.open()
         decisionHandler(WKNavigationResponsePolicy.cancel)
     }
@@ -2635,17 +2507,15 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     application.endBackgroundTask(taskId)
                 })
 
-                Alamofire.request(url)
-                    .validate(statusCode: 200..<300)
-                    .response { response in
-                        // Only set the image onto the pasteboard if the pasteboard hasn't changed since
-                        // fetching the image; otherwise, in low-bandwidth situations,
-                        // we might be overwriting something that the user has subsequently added.
-                        if changeCount == pasteboard.changeCount, let imageData = response.data, response.error == nil {
-                            pasteboard.addImageWithData(imageData, forURL: url)
-                        }
+                Alamofire.request(url).validate(statusCode: 200..<300).response { response in
+                    // Only set the image onto the pasteboard if the pasteboard hasn't changed since
+                    // fetching the image; otherwise, in low-bandwidth situations,
+                    // we might be overwriting something that the user has subsequently added.
+                    if changeCount == pasteboard.changeCount, let imageData = response.data, response.error == nil {
+                        pasteboard.addImageWithData(imageData, forURL: url)
+                    }
 
-                        application.endBackgroundTask(taskId)
+                    application.endBackgroundTask(taskId)
                 }
             }
             actionSheetController.addAction(copyAction)
@@ -2670,14 +2540,11 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     fileprivate func getImage(_ url: URL, success: @escaping (UIImage) -> Void) {
-        Alamofire.request(url)
-            .validate(statusCode: 200..<300)
-            .response { response in
-                if let data = response.data,
-                   let image = UIImage.dataIsGIF(data) ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
-                    success(image)
-                }
+        Alamofire.request(url).validate(statusCode: 200..<300).response { response in
+            if let data = response.data, let image = UIImage.dataIsGIF(data) ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
+                success(image)
             }
+        }
     }
 
     func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer) {
@@ -2762,7 +2629,11 @@ extension BrowserViewController {
         let inputAssistant = webContentView.inputAssistantItem
         let item = UIBarButtonItem(customView: customSearchEngineButton)
         customSearchBarButton = item
-        inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
+        _ = Try(withTry: {
+            inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
+        }) { (exception) in
+            Sentry.shared.send(message: "Failed adding custom search button to input assistant", tag: .general, severity: .error, description: "\(exception ??? "nil")")
+        }
     }
 
     func addCustomSearchEngineForFocusedElement() {
@@ -2819,21 +2690,22 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
         UIView.animate(withDuration: state.animationDuration) {
             UIView.setAnimationCurve(state.animationCurve)
-            self.findInPageContainer.layoutIfNeeded()
-            self.snackBars.layoutIfNeeded()
+            self.alertStackView.layoutIfNeeded()
         }
 
-        if let webView = tabManager.selectedTab?.webView {
-            webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
-                guard let _ = result as? String else {
-                    return
-                }
-                self.addCustomSearchButtonToWebView(webView)
+        guard let webView = tabManager.selectedTab?.webView else {
+            return
+        }
+        webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
+            guard let _ = result as? String else {
+                return
             }
+            self.addCustomSearchButtonToWebView(webView)
         }
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
@@ -2851,8 +2723,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
         UIView.animate(withDuration: state.animationDuration) {
             UIView.setAnimationCurve(state.animationCurve)
-            self.findInPageContainer.layoutIfNeeded()
-            self.snackBars.layoutIfNeeded()
+            self.alertStackView.layoutIfNeeded()
         }
     }
 }
@@ -2900,8 +2771,6 @@ extension BrowserViewController: Themeable {
     }
 }
 
-
-
 extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate {
     func findInPage(_ findInPage: FindInPageBar, didTextChange text: String) {
         find(text, function: "find")
@@ -2923,10 +2792,7 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
 
     fileprivate func find(_ text: String, function: String) {
         guard let webView = tabManager.selectedTab?.webView else { return }
-
-        let escaped = text.replacingOccurrences(of: "\\", with: "\\\\")
-                          .replacingOccurrences(of: "\"", with: "\\\"")
-
+        let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
         webView.evaluateJavaScript("__firefox__.\(function)(\"\(escaped)\")", completionHandler: nil)
     }
 
@@ -2956,7 +2822,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidTogglePrivateMode() {
-        guard let selectedTab = tabManager.selectedTab else {
+        guard let _ = tabManager.selectedTab else {
             return
         }
         urlBar.leaveOverlayMode()
@@ -2977,8 +2843,7 @@ extension BrowserViewController: ClientPickerViewControllerDelegate, Instruction
     }
 
     func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
-        guard let tab = tabManager.selectedTab,
-            let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
+        guard let tab = tabManager.selectedTab, let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
         let shareItem = ShareItem(url: url, title: tab.title, favicon: tab.displayFavicon)
         guard shareItem.isShareable else {
             let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .alert)
