@@ -194,6 +194,12 @@
                   Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
                </Test>
                <Test
+                  Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateMode()">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
+               </Test>
+               <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">
                </Test>
                <Test
