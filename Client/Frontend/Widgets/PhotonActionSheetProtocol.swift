@@ -183,6 +183,7 @@ extension PhotonActionSheetProtocol {
                 let instructionsViewController = InstructionsViewController()
                 instructionsViewController.delegate = bvc
                 let navigationController = UINavigationController(rootViewController: instructionsViewController)
+                navigationController.modalPresentationStyle = .formSheet
                 bvc.present(navigationController, animated: true, completion: nil)
                 return
             }
@@ -192,6 +193,7 @@ extension PhotonActionSheetProtocol {
             clientPickerViewController.profile = self.profile
             clientPickerViewController.profileNeedsShutdown = false
             let navigationController = UINavigationController(rootViewController: clientPickerViewController)
+            navigationController.modalPresentationStyle = .formSheet
             bvc.present(navigationController, animated: true, completion: nil)
         }
         
