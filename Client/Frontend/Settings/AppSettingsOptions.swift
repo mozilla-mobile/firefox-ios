@@ -558,6 +558,28 @@ class ExportBrowserDataSetting: HiddenSetting {
     }
 }
 
+class ImportBrowserDataSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        // Not localized for now.
+        return NSAttributedString(string: "Debug: copy databases from app container", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        do {
+            settings.profile.shutdown()
+            let log = Logger.syncLogger
+            try self.settings.profile.files.copyMatching(fromAbsoluteDirectory: documentsPath, toRelativeDirectory: "") { file in
+                log.debug("Matcher: \(file)")
+                return file.startsWith("browser.") || file.startsWith("logins.") || file.startsWith("metadata.")
+            }
+        } catch {
+            print("Couldn't import browser data: \(error).")
+        }
+        settings.profile.reopen()
+    }
+}
+
 /*
  FeatureSwitchSetting is a boolean switch for features that are enabled via a FeatureSwitch.
  These are usually features behind a partial release and not features released to the entire population.
