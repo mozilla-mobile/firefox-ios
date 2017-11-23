@@ -111,7 +111,7 @@ class SnackBar: UIView {
         super.init(frame: CGRect.zero)
 
         imageView.image = img ?? UIImage(named: "defaultFavicon")
-        textLabel.text = text + text + text
+        textLabel.text = text
         setup()
     }
 
