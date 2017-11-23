@@ -142,36 +142,31 @@ class LoginsHelper: TabHelper {
             return
         }
 
-        let promptMessage: NSAttributedString
+        let promptMessage: String
         if let username = login.username {
-            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptSaveLogin.Title", value: "Save login %@ for %@?", comment: "Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site.")
-            promptMessage = NSAttributedString(string: String(format: promptStringFormat, username, login.hostname))
+            promptMessage = String(format: Strings.SaveLoginUsernamePrompt, username, login.hostname)
         } else {
-            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptSavePassword.Title", value: "Save password for %@?", comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.")
-            promptMessage = NSAttributedString(string: String(format: promptStringFormat, login.hostname))
+            promptMessage = String(format: Strings.SaveLoginPrompt, login.hostname)
         }
 
-        if snackBar != nil {
-            tab?.removeSnackbar(snackBar!)
+        if let existingPrompt = self.snackBar {
+            tab?.removeSnackbar(existingPrompt)
         }
 
-        snackBar = TimerSnackBar(attrText: promptMessage,
-            img: UIImage(named: "key"),
-            buttons: [
-                SnackButton(title: Strings.LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton", callback: { (bar: SnackBar) -> Void in
-                    self.tab?.removeSnackbar(bar)
-                    self.snackBar = nil
-                    return
-                }),
-
-                SnackButton(title: Strings.LoginsHelperSaveLoginButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton", callback: { (bar: SnackBar) -> Void in
-                    self.tab?.removeSnackbar(bar)
-                    self.snackBar = nil
-                    self.profile.logins.addLogin(login)
-
-                    LeanplumIntegration.sharedInstance.track(eventName: .savedLoginAndPassword)
-                })
-            ])
+        snackBar = TimerSnackBar(text: promptMessage, img: UIImage(named: "key"))
+        let dontSave = SnackButton(title: Strings.LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton") { bar in
+            self.tab?.removeSnackbar(bar)
+            self.snackBar = nil
+            return
+        }
+        let save = SnackButton(title: Strings.LoginsHelperSaveLoginButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton") { bar in
+            self.tab?.removeSnackbar(bar)
+            self.snackBar = nil
+            self.profile.logins.addLogin(login)
+            LeanplumIntegration.sharedInstance.track(eventName: .savedLoginAndPassword)
+        }
+        snackBar?.addButton(dontSave)
+        snackBar?.addButton(save)
         tab?.addSnackbar(snackBar!)
     }
 
@@ -184,34 +179,28 @@ class LoginsHelper: TabHelper {
 
         let formatted: String
         if let username = new.username {
-            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptUpdateLogin.Title", value: "Update login %@ for %@?", comment: "Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site.")
-            formatted = String(format: promptStringFormat, username, new.hostname)
+            formatted = String(format: Strings.UpdateLoginUsernamePrompt, username, new.hostname)
         } else {
-            let promptStringFormat = NSLocalizedString("LoginsHelper.PromptUpdatePassword.Title", value: "Update password for %@?", comment: "Prompt for updating a password with no username. The parameter is the hostname of the site.")
-            formatted = String(format: promptStringFormat, new.hostname)
-        }
-        let promptMessage = NSAttributedString(string: formatted)
-
-        if snackBar != nil {
-            tab?.removeSnackbar(snackBar!)
+            formatted = String(format: Strings.UpdateLoginPrompt, new.hostname)
         }
 
-        snackBar = TimerSnackBar(attrText: promptMessage,
-            img: UIImage(named: "key"),
-            buttons: [
-                SnackButton(title: Strings.LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.dontSaveButton", callback: { (bar: SnackBar) -> Void in
-                    self.tab?.removeSnackbar(bar)
-                    self.snackBar = nil
-                    return
-                }),
+        if let existingPrompt = self.snackBar {
+            tab?.removeSnackbar(existingPrompt)
+        }
 
-                SnackButton(title: Strings.LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", callback: { (bar: SnackBar) -> Void in
-                    self.tab?.removeSnackbar(bar)
-                    self.snackBar = nil
-                    self.profile.logins.updateLoginByGUID(guid, new: new,
-                                                          significant: new.isSignificantlyDifferentFrom(old))
-                })
-            ])
+        snackBar = TimerSnackBar(text: formatted, img: UIImage(named: "key"))
+        let dontSave = SnackButton(title: Strings.LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.dontSaveButton") { bar in
+            self.tab?.removeSnackbar(bar)
+            self.snackBar = nil
+            return
+        }
+        let update = SnackButton(title: Strings.LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton") { bar in
+            self.tab?.removeSnackbar(bar)
+            self.snackBar = nil
+            self.profile.logins.updateLoginByGUID(guid, new: new, significant: new.isSignificantlyDifferentFrom(old))
+        }
+        snackBar?.addButton(dontSave)
+        snackBar?.addButton(update)
         tab?.addSnackbar(snackBar!)
     }
 
