@@ -142,8 +142,7 @@ class HistoryTests: KIFTestCase {
     }
     
     override func tearDown() {
-        //BrowserUtils.resetToAboutHome(tester())
-        BrowserUtils.clearPrivateData(tester: tester())
+        BrowserUtils.clearPrivateData()
         super.tearDown()
     }
 }

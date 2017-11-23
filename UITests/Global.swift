@@ -222,63 +222,43 @@ class BrowserUtils {
         case Cookies = "Cookies"
     }
     internal static let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
-    
-    /// Close all tabs to restore the browser to startup state.
-    class func resetToAboutHome(_ tester: KIFUITestActor) {
-        
-        do {
-            try tester.tryFindingTappableView(withAccessibilityLabel: "Cancel")
-            tester.tapView(withAccessibilityLabel: "Cancel")
-        } catch _ {
-        }
-        do {
-            try tester.tryFindingTappableView(withAccessibilityLabel: "Show Tabs")
-            tester.tapView(withAccessibilityLabel: "Show Tabs")
-        } catch _ {
-        
-        }
-        let tabsView = tester.waitForView(withAccessibilityLabel: "Tabs Tray").subviews.first as! UICollectionView
 
-        // Switch to Private Mode if we're not in it already.
-        do {
-            try tester.tryFindingTappableView(withAccessibilityLabel: "Private Mode", value: "Off", traits: UIAccessibilityTraitButton)
-            tester.tapView(withAccessibilityLabel: "Private Mode")
-        } catch _ {}
+    class func resetToAboutHome() {
+        var error: NSError?
+        // If there is a popup dialog, close. Otherwise, ignore the error and continue
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Cancel")).perform(grey_tap(), error: &error)
+        error = nil
 
-        // Clear all private tabs.
-        while tabsView.numberOfItems(inSection: 0) > 0 {
-            let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0))!
-            tester.swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
-            tester.waitForAbsenceOfView(withAccessibilityLabel: cell.accessibilityLabel)
-        }
-        tester.tapView(withAccessibilityLabel: "Private Mode")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("TabToolbar.tabsButton")).perform(grey_tap())
 
-        while tabsView.numberOfItems(inSection: 0) > 1 {
-            let oldCount = tabsView.numberOfItems(inSection: 0)
-            let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0))!
-            tester.swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
-            tester.waitForAnimationsToFinish()
-            XCTAssertEqual(oldCount-1, tabsView.numberOfItems(inSection: 0))
-        }
+        let goPrivateModeBtn = grey_allOf([grey_accessibilityID("TabTrayController.maskButton"), grey_accessibilityValue("Off")])
+        let goNormalModeBtn = grey_allOf([grey_accessibilityID("TabTrayController.maskButton"), grey_accessibilityValue("On")])
+        let closeAllBtn = grey_allOf([grey_accessibilityLabel("Close All Tabs"), grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)])
+        // Clear all Private and normal tabs
+        EarlGrey.select(elementWithMatcher: goPrivateModeBtn).assert(grey_notNil(), error: &error)
 
-        // When the last tab is closed, the tabs tray will automatically be closed
-        // since a new about:home tab will be selected.
-        if let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0)) {
-            tester.swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
-            tester.waitForTappableView(withAccessibilityLabel: "Show Tabs")
+        if (error == nil) { /* in normal mode now, go to Private mode  */
+            EarlGrey.select(elementWithMatcher: goPrivateModeBtn).perform(grey_tap())
         }
-    }
-    
-    //If it is a first run, first run window should be gone
-    class func dismissFirstRunUI(_ tester: KIFUITestActor) {
-        do {
-            try tester.tryFindingView(withAccessibilityLabel: "Intro Tour Carousel")
-            tester.swipeView(withAccessibilityLabel: "Intro Tour Carousel", in: KIFSwipeDirection.left)
-            tester.waitForTappableView(withAccessibilityLabel: "Start Browsing")
-            tester.tapView(withAccessibilityLabel: "Start Browsing")
-        } catch {
-            //First run dialog did not appear
-        }
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("TabTrayController.removeTabsButton")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: closeAllBtn).perform(grey_tap())
+
+        /* go to Normal mode */
+        EarlGrey.select(elementWithMatcher: goNormalModeBtn).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("TabTrayController.removeTabsButton")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: closeAllBtn).perform(grey_tap())
+
+        let topsiteAppeared = GREYCondition(name: "Wait for the topsite view", block: { _ in
+            var errorOrNil: NSError?
+            let matcher = grey_allOf([grey_accessibilityLabel("Show Tabs"),
+                                      grey_sufficientlyVisible()])
+            EarlGrey.select(elementWithMatcher: matcher)
+                .assert(grey_notNil(), error: &errorOrNil)
+            let success = errorOrNil == nil
+            return success
+        }).wait(withTimeout: 10)
+
+        GREYAssertTrue(topsiteAppeared, reason: "Failed to return to topsite view")
     }
 	
 	class func dismissFirstRunUI() {
@@ -322,61 +302,72 @@ class BrowserUtils {
             tester.tapView(withAccessibilityLabel: "Remove")
         }
     }
-    class func openClearPrivateDataDialog(_ swipe: Bool, tester: KIFUITestActor) {
-        tester.tapView(withAccessibilityLabel: "Menu")
-        
+
+
+
+    class func openClearPrivateDataDialog(_ swipe: Bool) {
+        let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
+                                                 grey_accessibilityID("menu-Settings")])
+        EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Menu")).perform(grey_tap())
+
         // Need this for simulator only
         if swipe {
-            tester.swipeView(withAccessibilityLabel: "Set Homepage", in: KIFSwipeDirection.left)
+            EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Set Homepage"))
+                .perform(grey_swipeFastInDirection(GREYDirection.left))
         }
-        tester.tapView(withAccessibilityLabel: "Settings")
-        tester.tapView(withAccessibilityLabel: "Clear Private Data")
-    }
-    
-    class func closeClearPrivateDataDialog(_ tester: KIFUITestActor) {
-        tester.tapView(withAccessibilityLabel: "Settings")
-        tester.tapView(withAccessibilityLabel: "Done")
-    }
-    
-    fileprivate class func acceptClearPrivateData(_ tester: KIFUITestActor) {
-        tester.waitForView(withAccessibilityLabel: "OK")
-        tester.tapView(withAccessibilityLabel: "OK")
-        tester.waitForView(withAccessibilityLabel: "Clear Private Data")
-    }
-    
-    fileprivate class func cancelClearPrivateData(_ tester: KIFUITestActor) {
-        tester.waitForView(withAccessibilityLabel: "Clear")
-        tester.tapView(withAccessibilityLabel: "Cancel")
-        tester.waitForView(withAccessibilityLabel: "Clear Private Data")
+        EarlGrey.select(elementWithMatcher:settings_button).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Clear Private Data"))
+            .using(searchAction: grey_scrollInDirection(.down, 200),
+                   onElementWithMatcher: grey_kindOfClass(UITableView.self))
+            .assert(grey_notNil())
+        EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Clear Private Data")).perform(grey_tap())
     }
 
-    class func clearPrivateData(_ clearables: Set<Clearable>? = AllClearables, swipe: Bool? = false, tester: KIFUITestActor) {
-        let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
+    class func closeClearPrivateDataDialog() {
+        let back_button = grey_allOf([grey_accessibilityLabel("Settings"),
+                                      grey_kindOfClass(NSClassFromString("_UIButtonBarButton")!)])
+
+        EarlGrey.select(elementWithMatcher:back_button).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher:grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
+            .perform(grey_tap())
+    }
     
-        openClearPrivateDataDialog(swipe!, tester: tester)
-        
+    fileprivate class func acceptClearPrivateData() {
+        EarlGrey.select(elementWithMatcher:grey_allOf([grey_accessibilityLabel("OK"), grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)])).perform(grey_tap())
+    }
+
+    fileprivate class func cancelClearPrivateData() {
+        EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Cancel")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Clear Private Data")).perform(grey_tap())
+    }
+
+    class func clearPrivateData(_ clearables: Set<Clearable>? = AllClearables, swipe: Bool? = false) {
+        let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
+
+        openClearPrivateDataDialog(swipe!)
+
         // Disable all items that we don't want to clear.
+
         for clearable in AllClearables {
-            // If we don't wait here, setOn:forSwitchWithAccessibilityLabel tries to use the UITableViewCell
-            // instead of the UISwitch. KIF bug?
-            tester.waitForView(withAccessibilityLabel: clearable.rawValue)
-//            tester.setOn(clearables!.contains(clearable), forSwitchWithAccessibilityLabel: clearable.rawValue)
             let switchControl = grey_allOf([grey_accessibilityLabel(clearable.rawValue),
-                                           grey_kindOfClass(UISwitch.self)])
+                                            grey_kindOfClass(UISwitch.self)])
+            let clearablePresent = GREYCondition(name: "Wait for URL field", block: { _ in
+                var errorOrNil: NSError?
+                EarlGrey.select(elementWithMatcher: switchControl)
+                    .assert(grey_notNil(), error: &errorOrNil)
+                return errorOrNil == nil
+            }).wait(withTimeout: 10)
+            GREYAssertTrue(clearablePresent, reason: "Failed to find clearable")
             EarlGrey.select(elementWithMatcher: switchControl).perform(grey_turnSwitchOn(clearables!.contains(clearable)))
         }
-        
-        
-        
-        tester.waitForView(withAccessibilityLabel: "Clear Private Data")
-        tester.tapView(withAccessibilityLabel: "Clear Private Data", traits: UIAccessibilityTraitButton)
-        acceptClearPrivateData(tester)
-        
-        closeClearPrivateDataDialog(tester)
+
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("ClearPrivateData")).perform(grey_tap())
+        acceptClearPrivateData()
+        closeClearPrivateDataDialog()
     }
     
     class func clearHistoryItems(_ tester: KIFUITestActor, numberOfTests: Int = -1) {
-        resetToAboutHome(tester)
+        resetToAboutHome()
         tester.tapView(withAccessibilityLabel: "History")
 
         let historyTable = tester.waitForView(withAccessibilityIdentifier: "History List") as! UITableView

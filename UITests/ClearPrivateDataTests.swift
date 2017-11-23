@@ -20,7 +20,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.resetToAboutHome()
     }
 
     func visitSites(noOfSites: Int) -> [(title: String, domain: String, dispDomain: String, url: String)] {
@@ -39,7 +39,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             = ("Page \(pageNo)", dom, dispDom, url)
             urls.append(tuple)
         }
-        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.resetToAboutHome()
         return urls
     }
 
@@ -72,8 +72,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testRemembersToggles() {
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe:false, tester: tester())
-        BrowserUtils.openClearPrivateDataDialog(false, tester: tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe:false)
+        BrowserUtils.openClearPrivateDataDialog(false)
 
         // Ensure the toggles match our settings.
         [
@@ -86,7 +86,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             .waitForView(withAccessibilityLabel: clearable.rawValue, value: switchValue, traits: UIAccessibilityTraitNone))
         }
 
-        BrowserUtils.closeClearPrivateDataDialog(tester())
+        BrowserUtils.closeClearPrivateDataDialog()
     }
 
     func testClearsHistoryPanel() {
@@ -99,7 +99,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForView(withAccessibilityLabel: url1)
         tester().waitForView(withAccessibilityLabel: url2)
 
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false)
         tester().tapView(withAccessibilityLabel: "Bookmarks")
         tester().tapView(withAccessibilityLabel: "History")
         tester().waitForAbsenceOfView(withAccessibilityLabel: url1)
@@ -112,7 +112,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         let url1 = urls[0].url
         let url2 = urls[1].url
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false, tester: tester())
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false)
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
 
         let historyListShown = GREYCondition(name: "Wait for history to appear", block: { _ in
@@ -149,14 +149,14 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(cookies.sessionStorage, "foo=bar")
 
         // Verify that cookies are not cleared when Cookies is deselected.
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cookies]), swipe: false, tester: tester())
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cookies]), swipe: false)
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "foo=bar")
         XCTAssertEqual(cookies.localStorage, "foo=bar")
         XCTAssertEqual(cookies.sessionStorage, "foo=bar")
 
         // Verify that cookies are cleared when Cookies is selected.
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cookies], swipe: false, tester: tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cookies], swipe: false)
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "")
         XCTAssertEqual(cookies.localStorage, "null")
@@ -176,12 +176,12 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let requests = cachedServer.requests
 
         // Verify that clearing non-cache items will keep the page in the cache.
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cache]), swipe: false, tester: tester())
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cache]), swipe: false)
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests)
 
         // Verify that clearing the cache will fire a new request.
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cache], swipe: false, tester: tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cache], swipe: false)
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests + 1)
     }
