@@ -54,22 +54,97 @@ class ShareFileHelper: NSObject, OpenInHelper {
     }
 
     func open() {
-        let alertController = UIAlertController(
-            title: Strings.OpenInDownloadHelperAlertTitle,
-            message: Strings.OpenInDownloadHelperAlertMessage,
-            preferredStyle: UIAlertControllerStyle.alert)
-        alertController.addAction( UIAlertAction(title: Strings.OpenInDownloadHelperAlertCancel, style: .cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .default) { (action) in
-            let objectsToShare = [self.url]
-            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-            if let sourceView = self.openInView, let popoverController = activityVC.popoverPresentationController {
-                popoverController.sourceView = sourceView
-                popoverController.sourceRect = CGRect(origin: CGPoint(x: sourceView.bounds.midX, y: sourceView.bounds.maxY), size: .zero)
-                popoverController.permittedArrowDirections = .up
+        let downloadingTitle = "Downloading..." /* Unlocalized */; _ = Strings.downloading
+        let downloadingAlert = UIAlertController(title: downloadingTitle, message: "", preferredStyle: .alert)
+        var isDownloaded = false
+        let rootVC = UIApplication.shared.keyWindow?.rootViewController
+        var newDestination = URL(string: "file:///")!
+        
+        let downloadTask = URLSession.shared.downloadTask(with: self.url) { (file, reponse, error) in
+            
+            isDownloaded = true
+            
+            if let error = error {
+                let errorTitle = "Error downloading file!" /* Unlocalized */; _ = Strings.downloadingError
+                
+                downloadingAlert.title = errorTitle
+                downloadingAlert.message = error.localizedDescription
             }
-            UIApplication.shared.keyWindow?.rootViewController?.present(activityVC, animated: true, completion: nil)
-        })
-        UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true, completion: nil)
+            
+            guard let docs = FileManager.default.urls(for: .documentDirectory, in: .allDomainsMask).first else { return }
+            
+            do {
+                let date = Date()
+                var fileName = "\(date.toRelativeTimeString())"
+                
+                if let fileName_ = reponse?.suggestedFilename {
+                    fileName = fileName_
+                }
+                
+                guard let file_ = file else { return }
+                
+                newDestination = docs.appendingPathComponent(fileName)
+                
+                if FileManager.default.fileExists(atPath: newDestination.path) {
+                    try FileManager.default.removeItem(at: newDestination)
+                }
+                
+                try FileManager.default.moveItem(at: file_, to: newDestination)
+                
+                DispatchQueue.main.async {
+                    let finishedTitle = "Download finished!" /* Unlocalized */; _ = Strings.downloadsFinishedTitle
+                    let finishedMessage = "Click Open to view the file" /* Unlocalized */; _ = Strings.open
+                    
+                    downloadingAlert.title = finishedTitle
+                    downloadingAlert.message = finishedMessage
+                    
+                    downloadingAlert.addAction(UIAlertAction(title: "Open", style: .default, handler: { (action) in
+                        let activityVC = UIActivityViewController(activityItems: [newDestination], applicationActivities: nil)
+                        rootVC?.present(activityVC, animated: true, completion: nil)
+                    }))
+                    
+                }
+            } catch let error {
+                let errorTitle = "Error downloading file!" /* Unlocalized */; _ = Strings.downloadingError
+                
+                downloadingAlert.title = errorTitle
+                downloadingAlert.message = error.localizedDescription
+            }
+        }
+        
+        downloadingAlert.addAction(UIAlertAction(title: Strings.CancelString, style: .cancel, handler: { (action) in
+            if isDownloaded {
+                do {
+                    try FileManager.default.removeItem(at: newDestination)
+                } catch _ {}
+            } else {
+                downloadTask.cancel()
+            }
+        }))
+        
+        rootVC?.present(downloadingAlert, animated: true, completion: nil)
+        
+        _ = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { (timer) in
+            
+            if isDownloaded {
+                timer.invalidate()
+                return
+            }
+            
+            let downloadedBytes = downloadTask.countOfBytesReceived
+            let fileSize = downloadTask.countOfBytesExpectedToReceive
+            
+            let downloadedBytesFormatted = ByteCountFormatter.string(fromByteCount: downloadedBytes, countStyle: .file)
+            var fileSizeFormatted = ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file)
+            
+            if fileSize == -1 {
+                fileSizeFormatted = "???"
+            }
+            
+            downloadingAlert.message = "\(downloadedBytesFormatted) / \(fileSizeFormatted)"
+        }
+        
+        downloadTask.resume()
     }
 }
 
