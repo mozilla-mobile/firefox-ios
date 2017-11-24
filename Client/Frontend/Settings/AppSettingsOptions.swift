@@ -81,8 +81,7 @@ class DisconnectSetting: WithAccountSetting {
                 FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
                 self.settings.settings = self.settings.generateSettings()
                 self.settings.SELfirefoxAccountDidChange()
-
-                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue: self.profile.hasAccount()])
+                LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
             })
         navigationController?.present(alertController, animated: true, completion: nil)
     }
@@ -711,8 +710,8 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             attributedStatusText: createStatusText(),
             settingDidChange: {
                 AdjustIntegration.setEnabled($0)
-                LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.telemetryOptIn.rawValue: $0])
-                LeanplumIntegration.sharedInstance.setEnabled($0)
+                LeanPlumClient.shared.set(attributes: [LPAttributeKey.telemetryOptIn: $0])
+                LeanPlumClient.shared.set(enabled: $0)
             }
         )
     }
@@ -827,7 +826,7 @@ class LoginsSetting: Setting {
     override func onClick(_: UINavigationController?) {
         guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
             settings?.navigateToLoginsList()
-            LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
+            LeanPlumClient.shared.track(event: .openedLogins)
             return
         }
 
@@ -836,7 +835,7 @@ class LoginsSetting: Setting {
             touchIDReason: AuthenticationStrings.loginsTouchReason,
             success: {
                 self.settings?.navigateToLoginsList()
-                LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
+                LeanPlumClient.shared.track(event: .openedLogins)
             },
             cancel: {
                 self.deselectRow()
@@ -847,7 +846,7 @@ class LoginsSetting: Setting {
             })
         } else {
             settings?.navigateToLoginsList()
-            LeanplumIntegration.sharedInstance.track(eventName: .openedLogins)
+            LeanPlumClient.shared.track(event: .openedLogins)
         }
     }
 }

@@ -163,9 +163,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         adjustIntegration = AdjustIntegration(profile: profile)
 
-        let leanplum = LeanplumIntegration.sharedInstance
-        leanplum.setup(profile: profile)
-        leanplum.setEnabled(true)
+        if LeanPlumClient.shouldEnable(profile: profile) {
+            LeanPlumClient.shared.setup(profile: profile)
+            LeanPlumClient.shared.set(enabled: true)
+        }
 
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
@@ -406,7 +407,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             self.browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
 
-        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "External App or Extension" as AnyObject])
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension" as AnyObject])
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.

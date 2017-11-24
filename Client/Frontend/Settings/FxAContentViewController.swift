@@ -140,10 +140,10 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         helper.application(app, didReceiveAccountJSON: data)
 
         if profile.hasAccount() {
-            LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue: true])
+            LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
         }
 
-        LeanplumIntegration.sharedInstance.track(eventName: LeanplumEventName.signsInFxa)
+        LeanPlumClient.shared.track(event: .signsInFxa)
     }
 
     @objc fileprivate func userDidVerify(_ notification: Notification) {
@@ -156,7 +156,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         // we only Notify via the FxALoginStateMachine.
         let flags = FxALoginFlags(pushEnabled: account.pushRegistration != nil,
                                   verified: true)
-        LeanplumIntegration.sharedInstance.setUserAttributes(attributes: [UserAttributeKeyName.signedInSync.rawValue: true])
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
         DispatchQueue.main.async {
             self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
         }
