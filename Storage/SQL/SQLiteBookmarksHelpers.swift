@@ -32,7 +32,7 @@ class BookmarkURLTooLargeError: MaybeErrorType {
 
 extension String {
     public func truncateToUTF8ByteCount(_ keep: Int) -> String {
-        let byteCount = self.lengthOfBytes(using: String.Encoding.utf8)
+        let byteCount = self.lengthOfBytes(using: .utf8)
         if byteCount <= keep {
             return self
         }
@@ -49,7 +49,7 @@ extension String {
 
 extension SQLiteBookmarks: ShareToDestination {
     public func addToMobileBookmarks(_ url: URL, title: String, favicon: Favicon?) -> Success {
-        if url.absoluteString.lengthOfBytes(using: String.Encoding.utf8) > AppConstants.DB_URL_LENGTH_MAX {
+        if url.absoluteString.lengthOfBytes(using: .utf8) > AppConstants.DB_URL_LENGTH_MAX {
             return deferMaybe(BookmarkURLTooLargeError())
         }
 

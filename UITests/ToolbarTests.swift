@@ -12,14 +12,14 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
 
     override func setUp() {
         webRoot = SimplePageServer.start()
-        BrowserUtils.dismissFirstRunUI(tester())
+        BrowserUtils.dismissFirstRunUI()
     }
 
     func testURLEntry() {
         let textField = tester().waitForView(withAccessibilityIdentifier: "url") as! UITextField
-        tester().tapView(withAccessibilityIdentifier: "url")
-        tester().enterText(intoCurrentFirstResponder: "foobar")
-        tester().tapView(withAccessibilityIdentifier: "goBack")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("foobar"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
         XCTAssertNotEqual(textField.text, "foobar", "Verify that the URL bar text clears on about:home")
 
         // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
@@ -32,17 +32,21 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "URL matches page URL")
 
-        tester().tapView(withAccessibilityIdentifier: "url")
-        tester().enterText(intoCurrentFirstResponder: "foobar")
-        tester().tapView(withAccessibilityIdentifier: "goBack")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("foobar"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
+        tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after entering text")
 
-        tester().tapView(withAccessibilityIdentifier: "url")
-        tester().clearTextFromFirstResponder()
-        tester().tapView(withAccessibilityIdentifier: "goBack")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(" "))
+
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
+        tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after clearing text")
     }
 
@@ -76,7 +80,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
             let value = UIInterfaceOrientation.portrait.rawValue
             UIDevice.current.setValue(value, forKey: "orientation")
         }
-        BrowserUtils.resetToAboutHome(tester())
-        BrowserUtils.clearPrivateData(tester: tester())
+        BrowserUtils.resetToAboutHome()
+        BrowserUtils.clearPrivateData()
     }
 }

@@ -8,11 +8,9 @@ let url = "www.mozilla.org"
 let urlLabel = "Internet for people, not profit — Mozilla"
 let urlValue = "mozilla.org"
 
-let urlYah = "www.yahoo.com"
-let urlLabelYah = "Yahoo"
-let urlValueYah = "yahoo"
-
 let urlExample = "example.com"
+let urlLabelExample = "Example Domain"
+let urlValueExample = "example"
 
 class TopTabsTest: BaseTestCase {
     func testAddTabFromSettings() {
@@ -94,7 +92,7 @@ class TopTabsTest: BaseTestCase {
         // Open two urls from tab tray and switch between them
         navigator.openURL(urlString: url)
         navigator.goto(TabTray)
-        navigator.openURL(urlString: urlYah)
+        navigator.openURL(urlString: urlExample)
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
@@ -104,9 +102,9 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
 
-        waitforExistence(app.collectionViews.cells[urlLabelYah])
-        app.collectionViews.cells[urlLabelYah].tap()
-        waitForValueContains(app.textFields["url"], value: urlValueYah)
+        waitforExistence(app.collectionViews.cells[urlLabelExample])
+        app.collectionViews.cells[urlLabelExample].tap()
+        waitForValueContains(app.textFields["url"], value: urlValueExample)
     }
 
     func testCloseOneTab() {

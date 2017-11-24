@@ -62,7 +62,7 @@ open class SyncTelemetry {
             pingString = ping.payload.stringValue()
         }
 
-        guard let body = pingString?.data(using: String.Encoding.utf8) else {
+        guard let body = pingString?.data(using: .utf8) else {
             log.error("Invalid data!")
             assertionFailure()
             return

@@ -38,7 +38,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     class func convertStringToHistory(_ history: String?) -> [URL] {
-        guard let data = history?.data(using: String.Encoding.utf8),
+        guard let data = history?.data(using: .utf8),
             let decoded = try? JSONSerialization.jsonObject(with: data, options: [JSONSerialization.ReadingOptions.allowFragments]),
             let urlStrings = decoded as? [String] else {
                 return []

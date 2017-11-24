@@ -55,6 +55,17 @@ class ContentBlockerHelper {
             }
         }
 
+        static func accessibilityId(for state: EnabledState) -> String {
+            switch state {
+            case .on:
+                return "Settings.TrackingProtectionOption.OnLabel"
+            case .onInPrivateBrowsing:
+                return "Settings.TrackingProtectionOption.OnInPrivateBrowsingLabel"
+            case .off:
+                return "Settings.TrackingProtectionOption.OffLabel"
+            }
+        }
+
         static let allOptions: [EnabledState] = [.on, .onInPrivateBrowsing, .off]
     }
 
@@ -78,6 +89,15 @@ class ContentBlockerHelper {
                 return Strings.TrackingProtectionOptionBlockListTypeBasicDescription
             case .strict:
                 return Strings.TrackingProtectionOptionBlockListTypeStrictDescription
+            }
+        }
+
+        static func accessibilityId(for strength: BlockingStrength) -> String {
+            switch strength {
+            case .basic:
+                return "Settings.TrackingProtectionOption.BlockListBasic"
+            case .strict:
+                return "Settings.TrackingProtectionOption.BlockListStrict"
             }
         }
 

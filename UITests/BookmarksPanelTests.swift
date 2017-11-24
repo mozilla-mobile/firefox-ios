@@ -18,7 +18,7 @@ class BookmarksPanelTests: KIFTestCase {
 	
     override func tearDown() {
         super.tearDown()
-		BrowserUtils.resetToAboutHome(tester()) 
+		BrowserUtils.resetToAboutHome() 
     }
 
     private func getAppBookmarkStorage() -> BookmarkBufferStorage? {
