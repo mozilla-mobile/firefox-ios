@@ -15,11 +15,12 @@ struct UIConstants {
         static let deleteButtonBackground = UIColor(white: 1, alpha: 0.2)
         static let deleteButtonBorder = UIColor(white: 1, alpha: 0.5)
         static let firstRunButton = UIColor.white
+        static let firstRunNextButton = UIColor(rgb: 0x9400FF)
         static let firstRunButtonBackground = UIColor(white: 1, alpha: 0.2)
         static let firstRunButtonBorder = UIColor(white: 1, alpha: 0.3)
         static let firstRunDisclaimer = UIColor(white: 1, alpha: 0.5)
-        static let firstRunMessage = UIColor.white
-        static let firstRunTitle = UIColor.white
+        static let firstRunMessage = UIColor(rgb: 0x737373)
+        static let firstRunTitle = UIColor(rgb: 0x212121)
         static let focusLightBlue = UIColor(rgb: 0x00A7E0)
         static let focusDarkBlue = UIColor(rgb: 0x005DA5)
         static let focusBlue = UIColor(rgb: 0x00A7E0)
@@ -66,10 +67,10 @@ struct UIConstants {
         static let copyButton = UIFont.systemFont(ofSize: 15)
         static let copyButtonQuery = UIFont.boldSystemFont(ofSize: 15)
         static let deleteButton = UIFont.systemFont(ofSize: 11)
-        static let firstRunButton = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
         static let firstRunDisclaimer = UIFont.systemFont(ofSize: 14)
         static let firstRunMessage = UIFont.systemFont(ofSize: 14)
-        static let firstRunTitle = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
+        static let firstRunTitle = UIFont.systemFont(ofSize: 18)
+        static let firstRunButton = UIFont.systemFont(ofSize: 16)
         static let homeLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.ultraLight)
         static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
         static let searchButton = UIFont.systemFont(ofSize: 15)
@@ -142,6 +143,7 @@ struct UIConstants {
         static let externalLinkOpenAppStoreTitle = NSLocalizedString("ExternalLink.openAppStoreTitle", value: "%@ wants to open the App Store.", comment: "Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar.")
         static let externalLinkTitle = NSLocalizedString("ExternalLink.messageTitleWithPlaceholder", value: "You are now leaving %@.", comment: "Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html")
         static let firstRunButton = NSLocalizedString("FirstRun.lastSlide.buttonLabel", value: "OK, Got It!", comment: "Label on button to dismiss first run UI")
+
         static let firstRunMessage = NSLocalizedString("FirstRun.messageLabelDescription", value: "Automatically block online trackers while you browse. Then tap to erase visited pages, searches, cookies and passwords from your device.", comment: "Message label on the first run screen")
         static let firstRunTitle = NSLocalizedString("FirstRun.messageLabelTagline", value: "Browse like no one’s watching.", comment: "Message label on the first run screen")
         static let homeLabel1 = NSLocalizedString("Home.descriptionLabel1", value: "Automatic private browsing.", comment: "First label for product description on the home screen")

@@ -35,6 +35,7 @@
 		746BD9261F75C43C00BE8DB9 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */; };
 		746BD9281F75C45A00BE8DB9 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */; };
 		746D78FB1F4E0095002EB522 /* ShareSheetActivities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D78FA1F4E0095002EB522 /* ShareSheetActivities.swift */; };
+		747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747ADA171FC38EFC00970132 /* IntroViewController.swift */; };
 		A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C4943B406FCA9B74B4E186 /* CoreText.framework */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
@@ -281,6 +282,7 @@
 		746BD9251F75C43C00BE8DB9 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		746BD9271F75C45A00BE8DB9 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		746D78FA1F4E0095002EB522 /* ShareSheetActivities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareSheetActivities.swift; sourceTree = "<group>"; };
+		747ADA171FC38EFC00970132 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		74CC0ADA1FAD28DB00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		74CC0ADB1FAD28DC00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		74CC0ADC1FAD28DD00972A78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -876,6 +878,7 @@
 		E4BF2DCA1BACE8CA00DA9D68 = {
 			isa = PBXGroup;
 			children = (
+				747ADA171FC38EFC00970132 /* IntroViewController.swift */,
 				D00A440E1EB8F40A00DB0218 /* Cartfile */,
 				D00A440F1EB8F40A00DB0218 /* Cartfile.resolved */,
 				D3E3CA801DA83FAF0079C94B /* Focus.entitlements */,
@@ -1356,6 +1359,7 @@
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
+				747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */,
 				D30AEEBB1DE4CB1B0096A2E7 /* FileManagerExtensions.swift in Sources */,
 				D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */,
 				D364DC261DC4163700562991 /* BrowserToolset.swift in Sources */,

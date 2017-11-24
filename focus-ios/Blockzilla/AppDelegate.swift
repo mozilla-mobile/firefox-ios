@@ -50,15 +50,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
         let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
-        if  needToShowFirstRunExperience {
-
+        if needToShowFirstRunExperience {
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
             DispatchQueue.main.async {
                 // Set the prefIntroVersion viewed number in the same context as the presentation.
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
+                
+                var firstRunViewController: UIViewController
+                
+                // Random number range [0 - 99], Coin Flip for A/B testing of Onboarding
+                let shouldShowNewIntro = arc4random_uniform(UInt32(100)) >= 50
+                if  shouldShowNewIntro {
+                    firstRunViewController = IntroViewController()
+                    Telemetry.default.recordEvent(category: TelemetryEventCategory.firstRun, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.onboarding, value: nil, extras: ["DidShowNewIntro": shouldShowNewIntro])
 
-                let firstRunViewController = FirstRunViewController()
+                } else {
+                    firstRunViewController = FirstRunViewController()
+                    Telemetry.default.recordEvent(category: TelemetryEventCategory.firstRun, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.onboarding, value: nil, extras: ["DidShowNewIntro": shouldShowNewIntro])
+                }
                 rootViewController.present(firstRunViewController, animated: false, completion: nil)
             }
         }
@@ -288,3 +298,4 @@ extension UINavigationController {
         return .lightContent
     }
 }
+

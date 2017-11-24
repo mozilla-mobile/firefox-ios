@@ -21,9 +21,14 @@ class BaseTestCase: XCTestCase {
     //If it is a first run, first run window should be gone
     func dismissFirstRunUI() {
         let firstRunUI = XCUIApplication().buttons["OK, Got It!"]
-        
+        let onboardingUI = XCUIApplication().buttons["Skip"]
+
         if (firstRunUI.exists) {
             firstRunUI.tap()
+        }
+
+        if (onboardingUI.exists) {
+            onboardingUI.tap()
         }
     }
     

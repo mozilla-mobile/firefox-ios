@@ -22,14 +22,14 @@ class FirstRunViewController: UIViewController {
         let title = UILabel()
         title.font = UIConstants.fonts.firstRunTitle
         title.numberOfLines = 0
-        title.textColor = UIConstants.colors.firstRunTitle
+        title.textColor = .white
         title.attributedText = NSAttributedString(string: UIConstants.strings.firstRunTitle, attributes: attributes)
         view.addSubview(title)
 
         let message = UILabel()
         message.font = UIConstants.fonts.firstRunMessage
         message.numberOfLines = 0
-        message.textColor = UIConstants.colors.firstRunMessage
+        message.textColor = .white
         message.attributedText = NSAttributedString(string: UIConstants.strings.firstRunMessage, attributes: attributes)
         view.addSubview(message)
 

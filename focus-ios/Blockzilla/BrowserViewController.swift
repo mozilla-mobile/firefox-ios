@@ -199,7 +199,10 @@ class BrowserViewController: UIViewController {
         let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
 
         if userHasSeenIntro && !urlBar.inBrowsingMode {
-            urlBar.becomeFirstResponder()
+            // Adds delay to not conflict with the dismissal of the Intro
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                self.urlBar.becomeFirstResponder()
+            }
         }
         
         homeView?.setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())

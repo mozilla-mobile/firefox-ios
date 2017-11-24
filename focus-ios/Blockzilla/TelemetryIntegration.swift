@@ -10,6 +10,7 @@ import Foundation
 
 class TelemetryEventCategory {
     public static let action = "action"
+    public static let firstRun = "first_run"
 }
 
 class TelemetryEventMethod {
@@ -21,6 +22,10 @@ class TelemetryEventMethod {
     public static let click = "click"
     public static let change = "change"
     public static let open = "open"
+    public static let coinFlip = "coin_flip"
+    public static let skip = "onboarding_skipped"
+    public static let completed = "onboarding_completed"
+    public static let showSlide = "onboarding_slide_shown"
     public static let close = "close"
     public static let cancel = "cancel"
     public static let openAppStore = "open_app_store"
@@ -34,6 +39,8 @@ class TelemetryEventObject {
     public static let app = "app"
     public static let searchBar = "search_bar"
     public static let eraseButton = "erase_button"
+    public static let onboarding = "new_onboarding_experience"
+    public static let firstRun = "previous_first_run_experience"
     public static let settingsButton = "settings_button"
     public static let setting = "setting"
     public static let menu = "menu"
