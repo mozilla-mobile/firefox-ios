@@ -228,7 +228,7 @@ class URLBarView: UIView {
         }
 
         forwardButton.snp.makeConstraints { make in
-            make.left.equalTo(self.backButton.safeArea.right)
+            make.left.equalTo(self.backButton.snp.right)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }

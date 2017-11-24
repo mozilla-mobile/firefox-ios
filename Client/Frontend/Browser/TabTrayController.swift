@@ -384,11 +384,9 @@ class TabTrayController: UIViewController {
 
     fileprivate func makeConstraints() {
         collectionView.snp.makeConstraints { make in
-            if #available(iOS 11.0, *) {
-                make.left.bottom.right.equalTo(view.safeAreaLayoutGuide)
-            } else {
-                make.left.bottom.right.equalTo(view)
-            }
+            make.left.equalTo(view.safeArea.left)
+            make.right.equalTo(view.safeArea.right)
+            make.bottom.equalTo(view.safeArea.bottom)
             make.top.equalTo(self.topLayoutGuide.snp.bottom)
         }
 
