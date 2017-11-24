@@ -55,15 +55,11 @@ extension Date {
     public func toRelativeTimeString() -> String {
         let now = Date()
 
-        let units: NSCalendar.Unit = [.second, .minute, .day, .weekOfYear, .month, .year, .hour]
+        let units: Set<Calendar.Component> = [.second, .minute, .day, .weekOfYear, .month, .year, .hour]
+        let components = Calendar.current.dateComponents(units, from: self, to: now)
 
-        let components = (Calendar.current as NSCalendar).components(units,
-            from: self,
-            to: now,
-            options: [])
-        
         if components.year! > 0 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: .short))
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: .short, timeStyle: .short))
         }
 
         if components.month == 1 {
@@ -71,7 +67,7 @@ extension Date {
         }
 
         if components.month! > 1 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: .short))
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: .short, timeStyle: .short))
         }
 
         if components.weekOfYear! > 0 {
