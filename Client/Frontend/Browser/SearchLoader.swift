@@ -50,7 +50,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
             inProgress = deferred as? Cancellable
 
-            deferred.uponQueue(DispatchQueue.main) { result in
+            deferred.upon() { result in
                 self.inProgress = nil
 
                 // Failed cursors are excluded in .get().
@@ -60,7 +60,9 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                     for site in cursor {
                         if let url = site?.url,
                                let completion = self.completionForURL(url) {
-                            self.urlBar.setAutocompleteSuggestion(completion)
+                            DispatchQueue.main.async {
+                                self.urlBar.setAutocompleteSuggestion(completion)
+                            }
                             return
                         }
                     }
@@ -68,7 +70,9 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                     // If there are no search history matches, try matching one of the Alexa top domains.
                     for domain in self.topDomains {
                         if let completion = self.completionForDomain(domain) {
-                            self.urlBar.setAutocompleteSuggestion(completion)
+                            DispatchQueue.main.async {
+                                self.urlBar.setAutocompleteSuggestion(completion)
+                            }
                             return
                         }
                     }
