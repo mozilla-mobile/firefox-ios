@@ -71,17 +71,17 @@ enum ReaderModeFontSize: Int {
         case UIContentSizeCategory.extraSmall:
             return .size1
         case UIContentSizeCategory.small:
-            return .size3
+            return .size2
         case UIContentSizeCategory.medium:
-            return .size5
+            return .size3
         case UIContentSizeCategory.large:
-            return .size7
+            return .size5
         case UIContentSizeCategory.extraLarge:
-            return .size9
+            return .size7
         case UIContentSizeCategory.extraExtraLarge:
-            return .size11
+            return .size9
         case UIContentSizeCategory.extraExtraExtraLarge:
-            return .size13
+            return .size12
         default:
             return .size5
         }
