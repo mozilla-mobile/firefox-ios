@@ -1135,7 +1135,8 @@ open class BrowserProfile: Profile {
         func syncEverythingSoon() {
             self.doInBackgroundAfter(SyncConstants.SyncOnForegroundAfterMillis) {
                 log.debug("Running delayed startup sync.")
-                self.syncEverything(why: .startup)
+//                self.syncEverything(why: .startup)
+                _ = self.syncNamedCollections(why: .startup, names: ["bookmarks"])
             }
         }
 
