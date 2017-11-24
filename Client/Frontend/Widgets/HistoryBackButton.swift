@@ -40,11 +40,7 @@ class HistoryBackButton: UIButton {
         backgroundColor = UIColor.white
 
         chevron.snp.makeConstraints { make in
-            if #available(iOS 11.0, *) {
-                make.leading.equalTo(self.safeAreaLayoutGuide).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
-            } else {
-                make.leading.equalTo(self).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
-            }
+            make.leading.equalTo(self.safeArea.leading).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
             make.centerY.equalTo(self)
             make.size.equalTo(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronSize)
         }
