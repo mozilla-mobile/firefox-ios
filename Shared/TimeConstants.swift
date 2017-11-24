@@ -55,7 +55,7 @@ extension Date {
     public func toRelativeTimeString() -> String {
         let now = Date()
 
-        let units: NSCalendar.Unit = [NSCalendar.Unit.second, NSCalendar.Unit.minute, NSCalendar.Unit.day, NSCalendar.Unit.weekOfYear, NSCalendar.Unit.month, NSCalendar.Unit.year, NSCalendar.Unit.hour]
+        let units: NSCalendar.Unit = [.second, .minute, .day, .weekOfYear, .month, .year, .hour]
 
         let components = (Calendar.current as NSCalendar).components(units,
             from: self,
@@ -63,7 +63,7 @@ extension Date {
             options: [])
         
         if components.year! > 0 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: .short))
         }
 
         if components.month == 1 {
@@ -71,7 +71,7 @@ extension Date {
         }
 
         if components.month! > 1 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: .short))
         }
 
         if components.weekOfYear! > 0 {
@@ -87,7 +87,7 @@ extension Date {
         }
 
         if components.hour! > 0 || components.minute! > 0 {
-            let absoluteTime = DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.none, timeStyle: DateFormatter.Style.short)
+            let absoluteTime = DateFormatter.localizedString(from: self, dateStyle: .none, timeStyle: .short)
             let format = NSLocalizedString("today at %@", comment: "Relative date for date older than a minute.")
             return String(format: format, absoluteTime)
         }
