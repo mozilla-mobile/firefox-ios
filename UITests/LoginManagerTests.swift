@@ -23,7 +23,7 @@ class LoginManagerTests: KIFTestCase {
         super.tearDown()
         clearLogins()
         PasscodeUtils.resetPasscode()
-        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.resetToAboutHome()
     }
     
     fileprivate func openLoginManager() {

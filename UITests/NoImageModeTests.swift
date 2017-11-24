@@ -17,14 +17,14 @@ class NoImageModeTests: KIFTestCase {
     }
 
     override func tearDown() {
-        BrowserUtils.clearPrivateData(tester: tester())
+        BrowserUtils.clearPrivateData()
         super.tearDown()
     }
 
     private func checkHiding(isOn: Bool) {
         let url = "\(webRoot!)/hide-images-test.html"
         TrackingProtectionTests.checkIfImageLoaded(url: url, shouldBlockImage: isOn)
-        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.resetToAboutHome()
     }
 
     func testHideImage() {
