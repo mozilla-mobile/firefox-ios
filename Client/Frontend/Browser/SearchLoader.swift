@@ -51,30 +51,33 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             inProgress = deferred as? Cancellable
 
             deferred.upon() { result in
-                self.inProgress = nil
-
+                DispatchQueue.main.async {
+                    self.inProgress = nil
+                }
                 // Failed cursors are excluded in .get().
-                if let cursor = result.successValue {
-                    // First, see if the query matches any URLs from the user's search history.
-                    self.load(cursor)
-                    for site in cursor {
-                        if let url = site?.url,
-                               let completion = self.completionForURL(url) {
-                            DispatchQueue.main.async {
-                                self.urlBar.setAutocompleteSuggestion(completion)
-                            }
-                            return
-                        }
-                    }
+                guard let cursor = result.successValue else {
+                    return
+                }
 
-                    // If there are no search history matches, try matching one of the Alexa top domains.
-                    for domain in self.topDomains {
-                        if let completion = self.completionForDomain(domain) {
-                            DispatchQueue.main.async {
-                                self.urlBar.setAutocompleteSuggestion(completion)
-                            }
-                            return
+                // First, see if the query matches any URLs from the user's search history.
+                self.load(cursor)
+                for site in cursor {
+                    if let url = site?.url,
+                           let completion = self.completionForURL(url) {
+                        DispatchQueue.main.async {
+                            self.urlBar.setAutocompleteSuggestion(completion)
                         }
+                        return
+                    }
+                }
+
+                // If there are no search history matches, try matching one of the Alexa top domains.
+                for domain in self.topDomains {
+                    if let completion = self.completionForDomain(domain) {
+                        DispatchQueue.main.async {
+                            self.urlBar.setAutocompleteSuggestion(completion)
+                        }
+                        return
                     }
                 }
             }
