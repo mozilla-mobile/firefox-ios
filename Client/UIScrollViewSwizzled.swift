@@ -18,7 +18,7 @@ private let swizzling: (UIScrollView.Type) -> Void = { obj in
 extension UIScrollView {
     open override class func initialize() {
         // make sure this isn't a subclass
-        guard self === UIScrollView.self else {
+        guard self == UIScrollView.self else {
             return
         }
         swizzling(self)
