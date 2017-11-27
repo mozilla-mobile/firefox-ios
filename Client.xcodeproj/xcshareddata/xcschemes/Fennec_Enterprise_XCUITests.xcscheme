@@ -190,7 +190,19 @@
             <Test
                Identifier = "TopTabsTest/testAddTabByLongPressTabsButton()">
             </Test>
-         </SkippedTests>            
+            <Test
+                Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
+            </Test>
+            <Test
+                Identifier = "NavigationTest/testReloadPreservesMobileOrDesktopSite()">
+            </Test>
+            <Test
+                Identifier = "NavigationTest/testScrollsToTopWithMultipleTabs()">
+            </Test>
+            <Test
+                Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
+            </Test>
+         </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
