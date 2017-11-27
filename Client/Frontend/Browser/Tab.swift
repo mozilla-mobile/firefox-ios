@@ -122,7 +122,7 @@ class Tab: NSObject {
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
     var parent: Tab?
 
-    fileprivate var helperManager: HelperManager?
+    fileprivate var helperManager = HelperManager()
     fileprivate var configuration: WKWebViewConfiguration?
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
@@ -193,7 +193,6 @@ class Tab: NSObject {
             // which allows the content appear beneath the toolbars in the BrowserViewController
             webView.scrollView.layer.masksToBounds = false
             webView.navigationDelegate = navigationDelegate
-            helperManager = HelperManager(webView: webView)
 
             restore(webView)
 
@@ -359,11 +358,11 @@ class Tab: NSObject {
     }
 
     func addHelper(_ helper: TabHelper, name: String) {
-        helperManager!.addHelper(helper, name: name)
+        helperManager.addHelper(helper, name: name, forTab: self)
     }
 
     func getHelper(name: String) -> TabHelper? {
-        return helperManager?.getHelper(name)
+        return helperManager.getHelper(name)
     }
 
     func hideContent(_ animated: Bool = false) {
@@ -481,11 +480,6 @@ extension Tab: TabWebViewDelegate {
 
 private class HelperManager: NSObject, WKScriptMessageHandler {
     fileprivate var helpers = [String: TabHelper]()
-    fileprivate weak var webView: WKWebView?
-
-    init(webView: WKWebView) {
-        self.webView = webView
-    }
 
     @objc func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         for helper in helpers.values {
@@ -498,7 +492,7 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
         }
     }
 
-    func addHelper(_ helper: TabHelper, name: String) {
+    func addHelper(_ helper: TabHelper, name: String, forTab tab: Tab) {
         if let _ = helpers[name] {
             assertionFailure("Duplicate helper added: \(name)")
         }
@@ -508,7 +502,7 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
         // If this helper handles script messages, then get the handler name and register it. The Browser
         // receives all messages and then dispatches them to the right TabHelper.
         if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
-            webView?.configuration.userContentController.add(self, name: scriptMessageHandlerName)
+            tab.webView?.configuration.userContentController.add(self, name: scriptMessageHandlerName)
         }
     }
 
