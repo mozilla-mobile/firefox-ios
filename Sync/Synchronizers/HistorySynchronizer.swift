@@ -133,6 +133,7 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             log.info("Uploading \(recs.count) history items…")
             return self.uploadRecords(recs, lastTimestamp: timestamp, storageClient: storageClient) { result, lastModified in
                 // We don't do anything with failed.
+                log.info("DECAFBAD uploadRecords finished, markAsSynchronized about to start")
                 return storage.markAsSynchronized(result.success, modified: lastModified ?? timestamp)
             }
         }
@@ -263,15 +264,20 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         }
 
         statsSession.start()
+        log.info("DECAFBAD Starting history download")
         return self.go(info, greenLight: greenLight, downloader: downloader, history: history)
             >>== { syncResult in
                 switch syncResult {
                 case .completed:
+                    log.info("DECAFBAD Completed history download, starting upload")
                     // When we're done downloading, we can upload.
                     return self.uploadOutgoingFromStorage(history,
                                                           lastTimestamp: 0,
                                                           withServer: historyClient)
-                       >>> { deferMaybe(self.completedWithStats) }
+                    >>> {
+                        log.info("DECAFBAD Completed history upload")
+                        return deferMaybe(self.completedWithStats)
+                    }
 
                 // If we didn't finish downloading, do nothing further -- just pass
                 // through the download result.
