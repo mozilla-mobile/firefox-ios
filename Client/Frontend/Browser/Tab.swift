@@ -456,17 +456,10 @@ class Tab: NSObject {
         return false
     }
 
-    private var nonNightModeBgColor: UIColor?
-
     func setNightMode(_ enabled: Bool) {
         webView?.evaluateJavaScript("window.__firefox__.NightMode.setEnabled(\(enabled))", completionHandler: nil)
-
-        // Default WKWebView bg color is nil, but in case this is changed, ensure it can be reset.
-        if nonNightModeBgColor == nil {
-            nonNightModeBgColor = webView?.backgroundColor
-        }
-
-        webView?.backgroundColor = enabled ? .black : nonNightModeBgColor
+        // WKWebView.isOpaque controls whether the background color has an effect
+        webView?.backgroundColor = .black
         // For WKWebView background color to take effect, isOpaque must be false, which is counter-intuitive. Default is true.
         webView?.isOpaque = !enabled
     }
