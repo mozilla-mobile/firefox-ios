@@ -188,6 +188,9 @@ class Tab: NSObject {
             webView.allowsBackForwardNavigationGestures = true
             webView.allowsLinkPreview = false
 
+            // Night mode enables this by toggling WKWebView.isOpaque, otherwise this has no effect.
+            webView.backgroundColor = .black
+
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
             webView.scrollView.layer.masksToBounds = false
@@ -458,9 +461,8 @@ class Tab: NSObject {
 
     func setNightMode(_ enabled: Bool) {
         webView?.evaluateJavaScript("window.__firefox__.NightMode.setEnabled(\(enabled))", completionHandler: nil)
-        // WKWebView.isOpaque controls whether the background color has an effect
-        webView?.backgroundColor = .black
         // For WKWebView background color to take effect, isOpaque must be false, which is counter-intuitive. Default is true.
+        // The color is previously set to black in the webview init
         webView?.isOpaque = !enabled
     }
 
