@@ -32,7 +32,14 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
 
     fileprivate lazy var topDomains: [String] = {
         let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
-        return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
+        let result: [String]
+        do {
+            result = try String(contentsOfFile: filePath!).components(separatedBy: "\n")
+        } catch {
+            Sentry.shared.send(message: "SearchLoader topDomains failed", tag: .general, severity: .error)
+            result = []
+        }
+        return result
     }()
 
     var query: String = "" {
