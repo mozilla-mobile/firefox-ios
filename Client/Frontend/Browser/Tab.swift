@@ -187,7 +187,9 @@ class Tab: NSObject {
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.allowsBackForwardNavigationGestures = true
             webView.allowsLinkPreview = false
-            webView.backgroundColor = UIColor.lightGray
+
+            // Night mode enables this by toggling WKWebView.isOpaque, otherwise this has no effect.
+            webView.backgroundColor = .black
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
@@ -458,6 +460,9 @@ class Tab: NSObject {
 
     func setNightMode(_ enabled: Bool) {
         webView?.evaluateJavaScript("window.__firefox__.NightMode.setEnabled(\(enabled))", completionHandler: nil)
+        // For WKWebView background color to take effect, isOpaque must be false, which is counter-intuitive. Default is true.
+        // The color is previously set to black in the webview init
+        webView?.isOpaque = !enabled
     }
 
     func injectUserScriptWith(fileName: String, type: String = "js", injectionTime: WKUserScriptInjectionTime = .atDocumentEnd, mainFrameOnly: Bool = true) {
