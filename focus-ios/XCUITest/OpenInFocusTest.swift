@@ -47,7 +47,7 @@ class OpenInFocusTest : BaseTestCase {
         let focusApp = XCUIApplication()
         let addressBarField = focusApp.textFields["URLBar.urlText"]
         waitForWebPageLoad()
-        waitforExistence(element: focusApp.images["Google"])
+        waitforExistence(element: focusApp.buttons["Google Search"])
         waitForValueContains(element: addressBarField, value: "https://www.google")
         waitforExistence(element: focusApp.buttons["ERASE"])  // check site is fully loaded
     }
