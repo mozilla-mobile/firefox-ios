@@ -10,7 +10,7 @@ class GradientBackgroundView: UIView {
 
         backgroundColor = UIConstants.colors.gradientBackground
 
-        configureGradientLayerWithPoints(start: startPoint, end: endPoint)
+        configureGradientLayerWithPoints(start: startPoint, end: endPoint, alpha: alpha)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -21,7 +21,7 @@ class GradientBackgroundView: UIView {
         return CAGradientLayer.self
     }
 
-    private func configureGradientLayerWithPoints(start startPoint: CGPoint, end endPoint: CGPoint) {
+    private func configureGradientLayerWithPoints(start startPoint: CGPoint, end endPoint: CGPoint, alpha: Float) {
         guard let gradient = self.layer as? CAGradientLayer else { return }
         gradient.startPoint = startPoint
         gradient.endPoint = endPoint
