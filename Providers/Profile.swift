@@ -1136,7 +1136,7 @@ open class BrowserProfile: Profile {
             self.doInBackgroundAfter(SyncConstants.SyncOnForegroundAfterMillis) {
                 log.debug("Running delayed startup sync.")
 //                self.syncEverything(why: .startup)
-                _ = self.syncNamedCollections(why: .startup, names: ["clients", "tabs", "logins", "bookmarks"])
+                _ = self.syncNamedCollections(why: .startup, names: ["history"])
             }
         }
 
