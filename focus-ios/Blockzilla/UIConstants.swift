@@ -232,8 +232,7 @@ struct UIConstants {
         static let InstalledSearchEngines = NSLocalizedString("Settings.Search.InstalledSearchEngines", value: "INSTALLED SEARCH ENGINES", comment: "Header for rows of installed search engines")
         static let NewSearchEngineAdded = NSLocalizedString("Settings.Search.NewSearchEngineAdded", value: "New Search Engine Added.", comment: "Toast displayed after adding a search engine")
 
-        static let enabled = NSLocalizedString("Enabled", value: "Enabled", comment: "label describing something as enabled")
-        static let disabled = NSLocalizedString("Disabled", value: "Disabled", comment: "label describing something as disabled")
+
         static let edit = NSLocalizedString("Edit", value: "Edit", comment: "Label on button to allow edits")
         static let done = NSLocalizedString("Done", value: "Done", comment: "Label on button to complete edits")
         static let cancelLabel = NSLocalizedString("Cancel", value: "Cancel", comment: "Label on button to cancel edits")
@@ -245,6 +244,9 @@ struct UIConstants {
         static let autocompleteCustomSectionTitle = NSLocalizedString("Autocomplete.customTitle", value: "CUSTOM URL LIST", comment: "Title for the default URL list section")
         static let autocompleteCustomSectionLabel = NSLocalizedString("Autocomplete.customLabel", value: "CUSTOM URLs", comment: "Label for button taking you to your custom Autocomplete URL list")
         static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
+        static let autocompleteCustomEnabled = NSLocalizedString("Autocomplete.enabled", value: "Enabled", comment: "label describing URL Autocomplete as enabled")
+        static let autocompleteCustomDisabled = NSLocalizedString("Autocomplete.disabled", value: "Disabled", comment: "label describing URL Autocomplete as disabled")
+
         static let autocompleteAddCustomUrlWithPlus = NSLocalizedString("Autocomplete.addCustomUrlWithPlus", value: "+ Add Custom URL", comment: "Label for button to add a custom URL with the + prefix")
         static let autocompleteAddCustomUrl = NSLocalizedString("Autocomplete.addCustomUrl", value: "Add Custom URL", comment: "Label for button to add a custom URL")
         static let autocompleteAddCustomUrlError = NSLocalizedString("Autocomplete.addCustomUrlError", value: "Double-check the URL you entered.", comment: "Label for error state when entering an invalid URL")
