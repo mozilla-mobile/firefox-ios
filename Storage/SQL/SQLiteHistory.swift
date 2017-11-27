@@ -887,6 +887,7 @@ extension SQLiteHistory: SyncableHistory {
     public func getModifiedHistoryToUpload() -> Deferred<Maybe<[(Place, [Visit])]>> {
         // What we want to do: find all history items that are flagged for upload, then find a number of recent visits for each item.
         // This was originally all in a single SQL query but was seperated into two to save some memory when returning back the cursor.
+        log.info("DECAFBAD")
         return getModifiedHistory(limit: 1000) >>== { self.attachVisitsTo(places: $0, visitLimit: 20) }
     }
 
@@ -899,13 +900,18 @@ extension SQLiteHistory: SyncableHistory {
         "LIMIT ?"
 
         var places = [Int: Place]()
+        var i = 0
         let placeFactory: (SDRow) -> Void = { row in
             let id = row["id"] as! Int
             let guid = row["guid"] as! String
             let url = row["url"] as! String
             let title = row["title"] as! String
+            log.info("New place \(i): \(id)")
+            i += 1
             places[id] = Place(guid: guid, url: url, title: title)
         }
+
+        log.info("DECAFBAD limit = \(limit): \(sql)")
 
         let args: Args = [limit]
         return db.runQuery(sql, args: args, factory: placeFactory) >>> { deferMaybe(places) }
@@ -941,14 +947,17 @@ extension SQLiteHistory: SyncableHistory {
         historyIDs.forEach { visits[$0] = [] }
 
         // Add each visit to its history item's list.
+        var i = 0
         let visitsAccumulator: (SDRow) -> Void = { row in
             let date = row.getTimestamp("visitDate")!
             let type = VisitType(rawValue: row["visitType"] as! Int)!
             let visit = Visit(date: date, type: type)
             let id = row["siteID"] as! Int
+            log.info("New place \(i): \(id)")
+            i += 1
             visits[id]?.append(visit)
         }
-
+        log.info("DECAFBAD limit = \(visitLimit): \(sql)")
         let args: Args = [visitLimit]
         return db.runQuery(sql, args: args, factory: visitsAccumulator) >>> {
             // Join up the places map we received as input with our visits map.
