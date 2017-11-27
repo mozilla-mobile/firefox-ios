@@ -5,7 +5,7 @@
 import Foundation
 import Telemetry
 
-private let internalSchemes = ["http", "https", "ftp", "file", "about", "javascript", "data"]
+private let internalSchemes: Set<String> = ["http", "https", "ftp", "file", "about", "javascript", "data"]
 
 class RequestHandler {
     func handle(request: URLRequest, alertCallback: (UIAlertController) -> ()) -> Bool {

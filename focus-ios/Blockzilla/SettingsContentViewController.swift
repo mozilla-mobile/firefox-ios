@@ -15,7 +15,7 @@ let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on 
  */
 class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     let interstitialBackgroundColor: UIColor
-    var url: URL!
+    var url: URL
     var timer: Timer?
     
     var isLoaded: Bool = false {

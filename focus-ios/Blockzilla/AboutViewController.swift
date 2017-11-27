@@ -6,19 +6,9 @@ import Foundation
 import UIKit
 
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
-    fileprivate let tableView = UITableView()
-    fileprivate let headerView = AboutHeaderView()
 
-    override func viewDidLoad() {
-        headerView.delegate = self
-
-        title = UIConstants.strings.aboutTitle
-
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
-
+    fileprivate lazy var tableView : UITableView = {
+        let tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = UIConstants.colors.background
@@ -28,6 +18,25 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         // Don't show trailing rows.
         tableView.tableFooterView = UIView(frame: CGRect.zero)
+        return tableView
+    }()
+
+    fileprivate let headerView = AboutHeaderView()
+
+    override func viewDidLoad() {
+        headerView.delegate = self
+
+        title = UIConstants.strings.aboutTitle
+
+        configureTableView()
+    }
+
+    private func configureTableView() {
+        view.addSubview(tableView)
+
+        tableView.snp.makeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
     }
 
     override var preferredStatusBarStyle : UIStatusBarStyle {
@@ -39,7 +48,15 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellID")
+        return cell ?? UITableViewCell()
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        configureCell(cell, forRowAt: indexPath)
+    }
+
+    private func configureCell(_ cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         switch (indexPath as NSIndexPath).row {
         case 0:
             cell.contentView.addSubview(headerView)
@@ -57,12 +74,10 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         let cellBG = UIView()
         cellBG.backgroundColor = UIConstants.colors.cellSelected
         cell.selectedBackgroundView = cellBG
-        
+
         cell.textLabel?.textColor = UIConstants.colors.defaultFont
         cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsets.zero
-
-        return cell
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -84,29 +99,31 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var url: URL? = nil
         switch (indexPath as NSIndexPath).row {
         case 1:
-            let url = URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")!
-            let contentViewController = SettingsContentViewController(url: url)
-            navigationController?.pushViewController(contentViewController, animated: true)
+            url = URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")
         case 2:
-            let url = LocalWebServer.sharedInstance.URLForPath("/\(AppInfo.config.rightsFile)")!
-            let contentViewController = SettingsContentViewController(url: url)
-            navigationController?.pushViewController(contentViewController, animated: true)
+            url = LocalWebServer.sharedInstance.URLForPath("/\(AppInfo.config.rightsFile)")
         case 3:
-            let url = URL(string: "https://www.mozilla.org/privacy/firefox-focus")!
-            let contentViewController = SettingsContentViewController(url: url)
-            navigationController?.pushViewController(contentViewController, animated: true)
+            url = URL(string: "https://www.mozilla.org/privacy/firefox-focus")
         default: break
         }
+
+        pushSettingsContentViewControllerWithURL(url)
 
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
-    fileprivate func aboutHeaderViewDidPressLearnMore(_ aboutHeaderView: AboutHeaderView) {
-        let url = URL(string: "https://www.mozilla.org/\(AppInfo.languageCode)/about/manifesto/")!
+    private func pushSettingsContentViewControllerWithURL(_ url: URL?) {
+        guard let url = url else { return }
         let contentViewController = SettingsContentViewController(url: url)
         navigationController?.pushViewController(contentViewController, animated: true)
+    }
+
+    fileprivate func aboutHeaderViewDidPressLearnMore(_ aboutHeaderView: AboutHeaderView) {
+        let url = URL(string: "https://www.mozilla.org/\(AppInfo.languageCode)/about/manifesto/")
+        pushSettingsContentViewControllerWithURL(url)
     }
 }
 
@@ -117,14 +134,12 @@ private protocol AboutHeaderViewDelegate: class {
 private class AboutHeaderView: UIView {
     weak var delegate: AboutHeaderViewDelegate?
 
-    init() {
-        super.init(frame: CGRect.zero)
-
-        translatesAutoresizingMaskIntoConstraints = false
-
+    private lazy var logo : UIImageView = {
         let logo = UIImageView(image: AppInfo.config.wordmark)
-        addSubview(logo)
+        return logo
+    }()
 
+    private lazy var aboutParagraph : UILabel = {
         let bulletStyle = NSMutableParagraphStyle()
         bulletStyle.firstLineHeadIndent = 15
         bulletStyle.headIndent = 29.5
@@ -141,33 +156,57 @@ private class AboutHeaderView: UIView {
             NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutSafariBullet1), attributes: bulletAttributes),
             NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutSafariBullet2 + "\n"), attributes: bulletAttributes),
             NSAttributedString(string: String(format: UIConstants.strings.aboutMissionLabel, AppInfo.productName)),
-        ]
+            ]
 
         let attributed = NSMutableAttributedString()
-        for string in paragraph {
-            attributed.append(string)
-        }
+        paragraph.forEach { attributed.append($0) }
 
-        let versionNumber = UILabel()
-        versionNumber.text = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
-        versionNumber.font = UIConstants.fonts.aboutText
-        versionNumber.textColor = UIConstants.colors.defaultFont.withAlphaComponent(0.5)
-        addSubview(versionNumber)
+
 
         let aboutParagraph = UILabel()
         aboutParagraph.attributedText = attributed
         aboutParagraph.textColor = UIConstants.colors.defaultFont
         aboutParagraph.font = UIConstants.fonts.aboutText
         aboutParagraph.numberOfLines = 0
-        addSubview(aboutParagraph)
+        return aboutParagraph
+    }()
 
+    private lazy var versionNumber: UILabel = {
+        let label = UILabel()
+        label.text = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        label.font = UIConstants.fonts.aboutText
+        label.textColor = UIConstants.colors.defaultFont.withAlphaComponent(0.5)
+        return label
+    }()
+
+    private lazy var learnMoreButton : UIButton = {
         let learnMoreButton = UIButton()
         learnMoreButton.setTitle(UIConstants.strings.aboutLearnMoreButton, for: .normal)
         learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: .normal)
         learnMoreButton.setTitleColor(UIConstants.colors.buttonHighlight, for: .highlighted)
         learnMoreButton.titleLabel?.font = UIConstants.fonts.aboutText
         learnMoreButton.addTarget(self, action: #selector(didPressLearnMore), for: .touchUpInside)
+        return learnMoreButton
+    }()
+
+    convenience init() {
+        self.init(frame: CGRect.zero)
+        addSubviews()
+        configureConstraints()
+    }
+
+    @objc private func didPressLearnMore() {
+        delegate?.aboutHeaderViewDidPressLearnMore(self)
+    }
+
+    private func addSubviews() {
+        addSubview(logo)
+        addSubview(aboutParagraph)
+        addSubview(versionNumber)
         addSubview(learnMoreButton)
+    }
+
+    private func configureConstraints() {
 
         logo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
@@ -196,11 +235,4 @@ private class AboutHeaderView: UIView {
         }
     }
 
-    @objc private func didPressLearnMore() {
-        delegate?.aboutHeaderViewDidPressLearnMore(self)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
