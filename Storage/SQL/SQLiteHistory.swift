@@ -939,7 +939,7 @@ extension SQLiteHistory: SyncableHistory {
         ") AS v1 " +
         "LEFT OUTER JOIN \(TableVisits) AS v2 ON v1.siteID = v2.siteID AND v1.date < v2.date " +
         "GROUP BY v1.date " +
-        "HAVING COUNT(*) < ?" +
+        "HAVING COUNT(*) < ? " +
         "ORDER BY v1.siteID, v1.date DESC"
 
         // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
@@ -953,20 +953,25 @@ extension SQLiteHistory: SyncableHistory {
             let type = VisitType(rawValue: row["visitType"] as! Int)!
             let visit = Visit(date: date, type: type)
             let id = row["siteID"] as! Int
-            log.info("New place \(i): \(id)")
+            log.info("DECAFBAD New visit \(i): \(id)")
             i += 1
             visits[id]?.append(visit)
         }
-        log.info("DECAFBAD limit = \(visitLimit): \(sql)")
+        log.info("DECAFBAD visitLimit = \(visitLimit): \(sql)")
         let args: Args = [visitLimit]
         return db.runQuery(sql, args: args, factory: visitsAccumulator) >>> {
             // Join up the places map we received as input with our visits map.
+            var i = 0
             let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
                 guard let visitsList = visits[id], !visitsList.isEmpty else {
                     return nil
                 }
+                log.info("DECAFBAD place # \(i), visitsList.count = \(visitsList.count)")
+                i += 1
                 return (place, visitsList)
             }
+
+            log.info("DECAFBAD returning placesAndVisits")
             return deferMaybe(placesAndVisits)
         }
     }
