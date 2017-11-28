@@ -933,7 +933,7 @@ extension SQLiteHistory: SyncableHistory {
         ") AS v1 " +
         "LEFT OUTER JOIN \(TableVisits) AS v2 ON v1.siteID = v2.siteID AND v1.date < v2.date " +
         "GROUP BY v1.date " +
-        "HAVING COUNT(*) < ?" +
+        "HAVING COUNT(*) < ? " +
         "ORDER BY v1.siteID, v1.date DESC"
 
         // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
