@@ -58,9 +58,10 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             inProgress = deferred as? Cancellable
 
             deferred.upon() { result in
-                DispatchQueue.main.async {
-                    self.inProgress = nil
+                guard let inProgress = self.inProgress, let deferred = deferred as? Cancellable, inProgress === deferred else {
+                    return
                 }
+
                 // Failed cursors are excluded in .get().
                 guard let cursor = result.successValue else {
                     return
@@ -69,8 +70,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 // First, see if the query matches any URLs from the user's search history.
                 self.load(cursor)
                 for site in cursor {
-                    if let url = site?.url,
-                           let completion = self.completionForURL(url) {
+                    if let url = site?.url,let completion = self.completionForURL(url) {
                         DispatchQueue.main.async {
                             self.urlBar.setAutocompleteSuggestion(completion)
                         }
@@ -78,13 +78,13 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                     }
                 }
 
-                // If there are no search history matches, try matching one of the Alexa top domains.
-                for domain in self.topDomains {
-                    if let completion = self.completionForDomain(domain) {
-                        DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    // If there are no search history matches, try matching one of the Alexa top domains.
+                    for domain in self.topDomains {
+                        if let completion = self.completionForDomain(domain) {
                             self.urlBar.setAutocompleteSuggestion(completion)
+                            return
                         }
-                        return
                     }
                 }
             }
