@@ -19,7 +19,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         let textField = tester().waitForView(withAccessibilityIdentifier: "url") as! UITextField
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("foobar"))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
+        tester().tapView(withAccessibilityIdentifier: "goBack")
         XCTAssertNotEqual(textField.text, "foobar", "Verify that the URL bar text clears on about:home")
 
         // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
@@ -38,7 +38,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
 
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("foobar"))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
+        tester().tapView(withAccessibilityIdentifier: "goBack")
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after entering text")
 
