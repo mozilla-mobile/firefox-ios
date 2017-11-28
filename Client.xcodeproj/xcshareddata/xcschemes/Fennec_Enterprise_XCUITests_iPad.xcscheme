@@ -202,6 +202,9 @@
                <Test
                   Identifier = "TopTabsTest/testAddTabByLongPressTabsButton()">
                </Test>
+               <Test
+                  Identifier = "TopTabsTest/testCloseTabFromLongPressTabsButton()">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

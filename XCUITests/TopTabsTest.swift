@@ -15,7 +15,7 @@ let urlValueExample = "example"
 class TopTabsTest: BaseTestCase {
     func testAddTabFromSettings() {
         navigator.createNewTab()
-        navigator.openURL(urlString: url)
+        navigator.openURL(url)
         waitForValueContains(app.textFields["url"], value: urlValue)
         waitforExistence(app.buttons["Show Tabs"])
         let numTab = app.buttons["Show Tabs"].value as? String
@@ -25,7 +25,7 @@ class TopTabsTest: BaseTestCase {
 
     func testAddTabFromTabTray() {
         navigator.goto(TabTray)
-        navigator.openURL(urlString: url)
+        navigator.openURL(url)
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: urlValue)
         // The tabs counter shows the correct number
@@ -38,12 +38,18 @@ class TopTabsTest: BaseTestCase {
     }
 
     private func checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: Int) {
-        let numTabsOpen = app.collectionViews.cells.count
-        XCTAssertEqual(numTabsOpen, UInt(expectedNumberOfTabsOpen), "The number of tabs open is not correct")
+        navigator.goto(TabTray)
+        let numTabsOpen = userState.numTabs
+        XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")
+    }
+
+    private func closeTabTrayView(goBackToBrowserTab: String) {
+        app.collectionViews.cells[goBackToBrowserTab].firstMatch.tap()
+        navigator.nowAt(BrowserTab)
     }
 
     func testAddTabFromContext() {
-        navigator.openURL(urlString: urlExample)
+        navigator.openURL(urlExample)
         // Initially there is only one tab open
         let tabsOpenInitially = app.buttons["Show Tabs"].value
         XCTAssertEqual("1", tabsOpenInitially as? String)
@@ -55,44 +61,31 @@ class TopTabsTest: BaseTestCase {
         waitUntilPageLoad()
 
         // Open tab tray to check that both tabs are there
-        navigator.goto(TabTray)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         waitforExistence(app.collectionViews.cells["Example Domain"])
         waitforExistence(app.collectionViews.cells["IANA — IANA-managed Reserved Domains"])
-
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
-        navigator.goto(BrowserTab)
-        app.buttons["TabToolbar.tabsButton"].press(forDuration: 1)
-
-        waitforExistence(app.buttons["New Tab"])
-        app.buttons["New Tab"].tap()
-        navigator.goto(TabTray)
-
+        navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
 
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
-        navigator.goto(BrowserTab)
-        app.buttons["TabToolbar.tabsButton"].press(forDuration: 1)
-
-        waitforExistence(app.buttons["New Private Tab"])
-        app.buttons["New Private Tab"].tap()
-        navigator.goto(TabTray)
-
+        navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         waitforExistence(app.buttons["TabTrayController.maskButton"])
         XCTAssertTrue(app.buttons["TabTrayController.maskButton"].isEnabled)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        XCTAssertTrue(userState.isPrivate)
     }
 
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
-        navigator.openURL(urlString: url)
+        navigator.openURL(url)
         navigator.goto(TabTray)
-        navigator.openURL(urlString: urlExample)
+        navigator.openURL(urlExample)
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
@@ -108,7 +101,7 @@ class TopTabsTest: BaseTestCase {
     }
 
     func testCloseOneTab() {
-        navigator.openURL(urlString: url)
+        navigator.openURL(url)
         waitUntilPageLoad()
         navigator.goto(TabTray)
 
@@ -124,7 +117,7 @@ class TopTabsTest: BaseTestCase {
 
     func testCloseAllTabsUndo() {
         // A different tab than home is open to do the proper checks
-        navigator.openURL(urlString: url)
+        navigator.openURL(url)
         waitUntilPageLoad()
         navigator.createSeveralTabsFromTabTray (numberTabs: 3)
         navigator.goto(TabTray)
@@ -136,15 +129,13 @@ class TopTabsTest: BaseTestCase {
         navigator.closeAllTabs()
         app.buttons["Undo"].tap()
         navigator.nowAt(BrowserTab)
-        navigator.goto(TabTray)
-
-        waitforExistence(app.collectionViews.cells[urlLabel])
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
+        waitforExistence(app.collectionViews.cells[urlLabel])
     }
 
     func testCloseAllTabs() {
         // A different tab than home is open to do the proper checks
-        navigator.openURL(urlString: url)
+        navigator.openURL(url)
         waitUntilPageLoad()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.createSeveralTabsFromTabTray (numberTabs: 3)
@@ -155,9 +146,40 @@ class TopTabsTest: BaseTestCase {
 
         // Close all tabs and check that the number of tabs is correct
         navigator.closeAllTabs()
-        navigator.goto(TabTray)
-
-        waitforNoExistence(app.collectionViews.cells[urlLabel])
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        waitforNoExistence(app.collectionViews.cells[urlLabel])
     }
+
+    func testCloseTabFromPageOptionsMenu() {
+        // Open two websites so that there are two tabs open and the page options menu is available
+        navigator.openURL(urlValue)
+        navigator.openNewURL(urlString: urlExample)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+
+        // Go back to one website so that the page options menu is available and close one tab from there
+        closeTabTrayView(goBackToBrowserTab: urlLabelExample)
+        navigator.performAction(Action.CloseTabFromPageOptions)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+
+        // Go back to the website left open, close it and check that it has been closed
+        closeTabTrayView(goBackToBrowserTab: urlLabel)
+        navigator.performAction(Action.CloseTabFromPageOptions)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        waitforNoExistence(app.collectionViews.cells[urlLabel])
+    }
+
+    func testCloseTabFromLongPressTabsButton() {
+        // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        closeTabTrayView(goBackToBrowserTab: "home")
+
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        closeTabTrayView(goBackToBrowserTab: "home")
+
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        closeTabTrayView(goBackToBrowserTab: "home")
+        }
 }
