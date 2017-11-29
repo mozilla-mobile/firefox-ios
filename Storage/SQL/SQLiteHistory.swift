@@ -929,7 +929,7 @@ extension SQLiteHistory: SyncableHistory {
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
 
         // Turn our lazy collection of integers into a comma-seperated string for the IN clause.
-        let historyIDs = Array(places.keys)
+        let historyIDs = Array(places.keys).filter { ![3649].contains($0) }
         let inClause = "siteID IN ( \(historyIDs.map(String.init).joined(separator: ",")) )"
 
         let sql =
@@ -972,7 +972,8 @@ extension SQLiteHistory: SyncableHistory {
             }
 
             log.info("DECAFBAD returning placesAndVisits")
-            return deferMaybe(placesAndVisits)
+            fatalError("We do not want to upload anything to disrupt this test account")
+//            return deferMaybe(placesAndVisits)
         }
     }
 
