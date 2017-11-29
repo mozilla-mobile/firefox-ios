@@ -41,6 +41,36 @@ import XCGLogger
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 private let log = Logger.syncLogger
 
+class DeferredDBOperation<T>: Deferred<T>, Cancellable {
+    fileprivate var dispatchWorkItem: DispatchWorkItem?
+    private var _running = false
+
+    func cancel() {
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
+        dispatchWorkItem?.cancel()
+    }
+
+    var cancelled: Bool {
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
+        return dispatchWorkItem?.isCancelled ?? false
+    }
+
+    var running: Bool {
+        get {
+            objc_sync_enter(self)
+            defer { objc_sync_exit(self) }
+            return _running
+        }
+        set {
+            objc_sync_enter(self)
+            defer { objc_sync_exit(self) }
+            _running = newValue
+        }
+    }
+}
+
 enum SQLiteDBConnectionCreatedResult {
     case success
     case failure
@@ -128,7 +158,7 @@ open class SwiftData {
      * close a database connection and run a block of code inside it.
      */
     func withConnection<T>(_ flags: SwiftData.Flags, synchronous: Bool = false, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
-        let deferred = Deferred<Maybe<T>>()
+        let deferred = DeferredDBOperation<Maybe<T>>()
 
         /**
          * We use a weak reference here instead of strongly retaining the connection because we don't want
@@ -140,6 +170,15 @@ open class SwiftData {
         let queue = self.sharedConnectionQueue
         
         func doWork() {
+            if deferred.cancelled {
+                return
+            }
+
+            deferred.running = true
+            defer {
+                deferred.running = false
+            }
+
             // By the time this dispatch block runs, it is possible the user has backgrounded the
             // app and the connection has been dealloc'ed since we last grabbed the reference
             guard let connection = SwiftData.ReuseConnections ? conn :
@@ -161,15 +200,15 @@ open class SwiftData {
                 deferred.fill(Maybe(failure: DatabaseError(err: err)))
             }
         }
-        
+
+        deferred.dispatchWorkItem = DispatchWorkItem {
+            doWork()
+        }
+
         if synchronous {
-            queue.sync {
-                doWork()
-            }
+            queue.sync(execute: deferred.dispatchWorkItem!)
         } else {
-            queue.async {
-                doWork()
-            }
+            queue.async(execute: deferred.dispatchWorkItem!)
         }
         
         return deferred
@@ -199,6 +238,12 @@ open class SwiftData {
     func reopenIfClosed() {
         sharedConnectionQueue.sync {
             self.closed = false
+        }
+    }
+
+    public func cancel() {
+        if let c = getSharedConnection() {
+            sqlite3_interrupt(c.sqliteDB)
         }
     }
 

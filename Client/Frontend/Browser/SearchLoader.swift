@@ -32,33 +32,37 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
 
     fileprivate lazy var topDomains: [String] = {
         let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
-        let result: [String]
         do {
-            result = try String(contentsOfFile: filePath!).components(separatedBy: "\n")
+            return try String(contentsOfFile: filePath!).components(separatedBy: "\n")
         } catch {
             Sentry.shared.send(message: "SearchLoader topDomains failed", tag: .general, severity: .error)
-            result = []
+            return []
         }
-        return result
     }()
+
+    private weak var currentDbQuery: Cancellable?
 
     var query: String = "" {
         didSet {
+            guard let profile = self.profile as? BrowserProfile else {
+                assert(false)
+                return
+            }
+
             if query.isEmpty {
                 self.load(Cursor(status: .success, msg: "Empty query"))
                 return
             }
 
-            if let inProgress = inProgress {
-                inProgress.cancel()
-                self.inProgress = nil
+            if let deferred = currentDbQuery {
+                profile.db.cancel(deferred)
             }
 
             let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
-            inProgress = deferred as? Cancellable
+            currentDbQuery = deferred as? Cancellable
 
             deferred.upon() { result in
-                guard let inProgress = self.inProgress, let deferred = deferred as? Cancellable, inProgress === deferred else {
+                guard let deferred = deferred as? Cancellable, !deferred.cancelled else {
                     return
                 }
 
@@ -70,7 +74,11 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 // First, see if the query matches any URLs from the user's search history.
                 self.load(cursor)
                 for site in cursor {
-                    if let url = site?.url,let completion = self.completionForURL(url) {
+                    if deferred.cancelled {
+                        return
+                    }
+
+                    if let url = site?.url, let completion = self.completionForURL(url) {
                         DispatchQueue.main.async {
                             self.urlBar.setAutocompleteSuggestion(completion)
                         }
@@ -79,6 +87,10 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 }
 
                 DispatchQueue.main.async {
+                    if deferred.cancelled {
+                        return
+                    }
+
                     // If there are no search history matches, try matching one of the Alexa top domains.
                     for domain in self.topDomains {
                         if let completion = self.completionForDomain(domain) {

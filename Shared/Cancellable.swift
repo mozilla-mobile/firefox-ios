@@ -5,4 +5,5 @@
 public protocol Cancellable: class {
     func cancel()
     var cancelled: Bool { get }
+    var running: Bool { get set }
 }
