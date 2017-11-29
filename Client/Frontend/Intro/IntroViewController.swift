@@ -190,7 +190,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         }
         
         let syncCardView = UIView()
-        // introViews.append(syncCardView)
         addCard(title: IntroViewControllerUX.CardTitleSync, text: IntroViewControllerUX.CardTextSync, introView: syncCardView)
 
         syncCardView.addSubview(signInButton)
@@ -229,6 +228,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         setActiveIntroView(introViews[0], forPage: 0)
         setupDynamicFonts()
     }
+  
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
@@ -279,30 +279,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     func SELstartBrowsing() {
         LeanplumIntegration.sharedInstance.track(eventName: .dismissedOnboarding)
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
-    }
-
-    func SELback() {
-        if introView == introViews[1] {
-            setActiveIntroView(introViews[0], forPage: 0)
-            scrollView.scrollRectToVisible(scrollView.subviews[0].frame, animated: true)
-            pageControl.currentPage = 0
-        } else if introView == introViews[2] {
-            setActiveIntroView(introViews[1], forPage: 1)
-            scrollView.scrollRectToVisible(scrollView.subviews[1].frame, animated: true)
-            pageControl.currentPage = 1
-        }
-    }
-
-    func SELforward() {
-        if introView == introViews[0] {
-            setActiveIntroView(introViews[1], forPage: 1)
-            scrollView.scrollRectToVisible(scrollView.subviews[1].frame, animated: true)
-            pageControl.currentPage = 1
-        } else if introView == introViews[1] {
-            setActiveIntroView(introViews[2], forPage: 2)
-            scrollView.scrollRectToVisible(scrollView.subviews[2].frame, animated: true)
-            pageControl.currentPage = 2
-        }
     }
 
     func SELlogin() {
