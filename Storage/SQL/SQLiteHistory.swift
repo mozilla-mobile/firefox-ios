@@ -929,52 +929,94 @@ extension SQLiteHistory: SyncableHistory {
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
 
         // Turn our lazy collection of integers into a comma-seperated string for the IN clause.
-        let historyIDs = Array(places.keys).filter { ![3649].contains($0) }
-        let inClause = "siteID IN ( \(historyIDs.map(String.init).joined(separator: ",")) )"
-
-        let sql =
-        "SELECT v1.siteID AS siteID, v1.date AS visitDate, v1.type AS visitType " +
-        "FROM (" +
-        "   SELECT * FROM \(TableVisits) WHERE \(inClause) AND type <> 0" +
-        ") AS v1 " +
-        "LEFT OUTER JOIN \(TableVisits) AS v2 ON v1.siteID = v2.siteID AND v1.date < v2.date " +
-        "GROUP BY v1.date " +
-        "HAVING COUNT(*) < ? " +
-        "ORDER BY v1.siteID, v1.date DESC"
-
-        // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
-        var visits = [Int: [Visit]]()
-        historyIDs.forEach { visits[$0] = [] }
-
-        // Add each visit to its history item's list.
-        var i = 0
-        let visitsAccumulator: (SDRow) -> Void = { row in
-            let date = row.getTimestamp("visitDate")!
-            let type = VisitType(rawValue: row["visitType"] as! Int)!
-            let visit = Visit(date: date, type: type)
-            let id = row["siteID"] as! Int
-            log.info("DECAFBAD New visit \(i): \(id)")
-            i += 1
-            visits[id]?.append(visit)
-        }
-        log.info("DECAFBAD visitLimit = \(visitLimit): \(sql)")
-        let args: Args = [visitLimit]
-        return db.runQuery(sql, args: args, factory: visitsAccumulator) >>> {
-            // Join up the places map we received as input with our visits map.
+        let historyIDs = Array(places.keys) //.filter { ![3649].contains($0) }
+//        let inClause = "siteID IN ( \(historyIDs.map(String.init).joined(separator: ",")) )"
+        //
+        //        let sql =
+        //        "SELECT v1.siteID AS siteID, v1.date AS visitDate, v1.type AS visitType " +
+        //        "FROM (" +
+        //        "   SELECT * FROM \(TableVisits) WHERE \(inClause) AND type <> 0" +
+        //        ") AS v1 " +
+        //        "LEFT OUTER JOIN \(TableVisits) AS v2 ON v1.siteID = v2.siteID AND v1.date < v2.date " +
+        //        "GROUP BY v1.date " +
+        //        "HAVING COUNT(*) < ? " +
+        //        "ORDER BY v1.siteID, v1.date DESC"
+        //
+        //        // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
+        //        var visits = [Int: [Visit]]()
+        //        historyIDs.forEach { visits[$0] = [] }
+        //
+        //        // Add each visit to its history item's list.
+        //        var i = 0
+        //        let visitsAccumulator: (SDRow) -> Void = { row in
+        //            let date = row.getTimestamp("visitDate")!
+        //            let type = VisitType(rawValue: row["visitType"] as! Int)!
+        //            let visit = Visit(date: date, type: type)
+        //            let id = row["siteID"] as! Int
+        //            log.info("DECAFBAD New visit \(i): \(id)")
+        //            i += 1
+        //            visits[id]?.append(visit)
+        //        }
+        //        log.info("DECAFBAD visitLimit = \(visitLimit): \(sql)")
+        //        let args: Args = [visitLimit]
+        //        return db.runQuery(sql, args: args, factory: visitsAccumulator) >>> {
+        //            // Join up the places map we received as input with our visits map.
+        //            var i = 0
+        //            let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
+        //                guard let visitsList = visits[id], !visitsList.isEmpty else {
+        //                    return nil
+        //                }
+        //                log.info("DECAFBAD place # \(i), visitsList.count = \(visitsList.count)")
+        //                i += 1
+        //                return (place, visitsList)
+        //            }
+        //
+        //            log.info("DECAFBAD returning placesAndVisits")
+        //            fatalError("We do not want to upload anything to disrupt this test account")
+        ////            return deferMaybe(placesAndVisits)
+        //        }
+        
+        let sql = "" +
+            "SELECT siteID, date AS visitDate, type AS visitType " +
+            "FROM \(TableVisits) " +
+            "WHERE siteID IN ( \(historyIDs.map(String.init).joined(separator: ",")) )" +
+            "ORDER BY date DESC"
+        
+            // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
+            var visits = [Int: [Visit]]()
+            historyIDs.forEach { visits[$0] = [] }
+    
+            // Add each visit to its history item's list.
             var i = 0
-            let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
-                guard let visitsList = visits[id], !visitsList.isEmpty else {
-                    return nil
-                }
-                log.info("DECAFBAD place # \(i), visitsList.count = \(visitsList.count)")
+            let visitsAccumulator: (SDRow) -> Void = { row in
+                let date = row.getTimestamp("visitDate")!
+                let type = VisitType(rawValue: row["visitType"] as! Int)!
+                let visit = Visit(date: date, type: type)
+                let id = row["siteID"] as! Int
+                log.info("DECAFBAD New visit \(i): \(id)")
                 i += 1
-                return (place, visitsList)
+                if visits[id]?.count ?? visitLimit < visitLimit {
+                    visits[id]?.append(visit)
+                }
             }
+            log.info("DECAFBAD visitLimit = \(visitLimit): \(sql)")
+            let args: Args = [visitLimit]
+            return db.runQuery(sql, args: args, factory: visitsAccumulator) >>> {
+                // Join up the places map we received as input with our visits map.
+                var i = 0
+                let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
+                    guard let visitsList = visits[id], !visitsList.isEmpty else {
+                        return nil
+                    }
+                    log.info("DECAFBAD place # \(i), visitsList.count = \(visitsList.count)")
+                    i += 1
+                    return (place, visitsList)
+                }
 
-            log.info("DECAFBAD returning placesAndVisits")
-            fatalError("We do not want to upload anything to disrupt this test account")
-//            return deferMaybe(placesAndVisits)
-        }
+                log.info("DECAFBAD returning placesAndVisits")
+                fatalError("We do not want to upload anything to disrupt this test account")
+                //            return deferMaybe(placesAndVisits)
+            }
     }
 
     public func markAsDeleted(_ guids: [GUID]) -> Success {
