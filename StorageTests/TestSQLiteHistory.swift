@@ -831,7 +831,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     // Test that our visit partitioning for frecency is correct.
-    func testHistoryLocalAndRemoteVisits() {
+    func xtestHistoryLocalAndRemoteVisits() {
         let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
