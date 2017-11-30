@@ -979,7 +979,7 @@ extension SQLiteHistory: SyncableHistory {
         let sql = "" +
             "SELECT siteID, date AS visitDate, type AS visitType " +
             "FROM \(TableVisits) " +
-            "WHERE siteID IN ( \(historyIDs.map(String.init).joined(separator: ",")) )" +
+            "WHERE siteID IN (\(historyIDs.map(String.init).joined(separator: ","))) " +
             "ORDER BY date DESC"
         
             // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
@@ -993,15 +993,23 @@ extension SQLiteHistory: SyncableHistory {
                 let type = VisitType(rawValue: row["visitType"] as! Int)!
                 let visit = Visit(date: date, type: type)
                 let id = row["siteID"] as! Int
-                log.info("DECAFBAD New visit \(i): \(id)")
-                i += 1
+                
                 if visits[id]?.count ?? visitLimit < visitLimit {
                     visits[id]?.append(visit)
+                    log.info("DECAFBAD New visit \(i): \(id)")
+                    i += 1
                 }
             }
             log.info("DECAFBAD visitLimit = \(visitLimit): \(sql)")
             let args: Args = [visitLimit]
-            return db.runQuery(sql, args: args, factory: visitsAccumulator) >>> {
+            return db.withConnection { connection -> Cursor<Void> in
+                let cursor = connection.executeQueryUnsafe(sql, factory: visitsAccumulator, withArgs: args)
+                let count = cursor.count
+                for i in 0..<count {
+                    _ = cursor[i]
+                }
+                return cursor
+            } >>> {
                 // Join up the places map we received as input with our visits map.
                 var i = 0
                 let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
