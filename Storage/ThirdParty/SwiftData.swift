@@ -242,8 +242,10 @@ open class SwiftData {
     }
 
     public func cancel() {
-        if let c = getSharedConnection() {
-            sqlite3_interrupt(c.sqliteDB)
+        self.sharedConnectionQueue.sync {
+            if let c = self.sharedConnection, let db = c.sqliteDB {
+                sqlite3_interrupt(db)
+            }
         }
     }
 
