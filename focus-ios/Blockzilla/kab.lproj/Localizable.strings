@@ -40,6 +40,51 @@
 /* Label on About screen */
 "About.topLabel" = "%@ ak-d-yefk afus ad teqqimeḍ d aqeṛṛu.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Rnu URL aganan";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Senned snat γef URL i t-skecmeḍ.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Amedya: example.com";
+
+/* Watermark for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Senṭeḍ neγ sekcem URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Rnu URL aganan";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Rnu u sefrek taččart tawurmant n URLs.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URLs iganen";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "CUSTOM URL LIST";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "URL aganan amaynut ittwarna.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "%@ ur yizmir ara ad yesεu taččart tawurmant i ugar n 450 n URLs deg ufeggag n tansiwin.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Taččart tawurmant";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "DEFAULT URL LIST";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Arurmid";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Ulac URLs iganen i ad d-nesken";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Irmed";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Γer deffir";
 
@@ -57,6 +102,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Seḥbes";
+
+/* Label on button to cancel edits */
+"Cancel" = "Sefsex";
+
+/* Label on button to complete edits */
+"Done" = "Immed";
+
+/* Label on button to allow edits */
+"Edit" = "Ẓreg";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Ɛreḍ tikelt nniḍen";
@@ -92,7 +146,7 @@
 "ExternalLink.openMapsButton" = "Ldi Iɣawasen";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "IH, GZIƔ!";
+"FirstRun.lastSlide.buttonLabel" = "IH, awi-t-id!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Sqqam s wudem awurman inedfaṛen mara tettinigeḍ. Senned ɣef tqeffalt Sfeḍ akken ad tekkseḍ isebtar yettwarzan, inadiyen, inagan n tuqqna akked wawalen uffiren.";
@@ -133,6 +187,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Ldi asnas n iɣewwaṛen";
 
+/* Save button label */
+"Save" = "Sekles";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Rnu amsedday n unadi nniḍen";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Rnu amsedday n unadi nniḍen";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Rnu amsedday n unadi";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Isem ad id-ttwasknen";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Amesday n unadi amaynut ittwarna.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Err-d imseddayen n unadi amezwer";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Isem n umsedday n unadi";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Nadi aḍris ad tesqedceḍ";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Senṭeḍ neγ sekcem aḍris n unadi. ya yellaq ilaq beddel awal unadi s : %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Taččart tawurmant URL";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Asewḥel n ineḍfaṛen nniḍen n ugbur yezmer ad isewḥel kra n tvidyutin akked isebtar web ad d-banen akken iwata.";
 
@@ -151,11 +241,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Iɣewwaṛen";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "AMSEDDAY N UNADI";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Amsedday n unadi";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Amsedday unadi";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SEARCH";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ASLEƔ";
@@ -204,6 +294,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Azen isefka n useqdec";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Amaynut";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Awi-d asnas Firefox";
@@ -265,6 +358,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” yebɣa ad yekcem ɣer tewlafin-inek";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Amedya: example.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Ineḍfaṛen n udellel";
 
@@ -276,6 +372,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Ammesten mgal asfuɣel yensa";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Issin ugar";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Ineḍfaṛen n iẓeḍwa imettanen";

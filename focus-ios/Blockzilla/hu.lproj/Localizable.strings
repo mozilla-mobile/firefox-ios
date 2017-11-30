@@ -40,6 +40,51 @@
 /* Label on About screen */
 "About.topLabel" = "A %@ visszaadja a kezébe az irányítást.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Egyéni URL hozzáadása";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Ellenőrizze a megadott URL-t.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Példa: example.com";
+
+/* Watermark for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Illessze be, vagy adja meg az URL-t";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Egyéni URL hozzáadása";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Automatikusan kiegészített URL-ek hozzáadása és kezelése.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Egyéni URL-ek";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "EGYÉNI URL-EK LISTÁJA";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Új egyéni URL hozzáadva.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Engedélyezés, hogy a %@ 450 népszerű URL-t automatikusan kiegészítsen a címsávban.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Automatikus kiegészítés";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "ALAPÉRTELMEZETT URL LISTA";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Letiltva";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Nincs megjelenítendő egyéni URL";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Engedélyezve";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Vissza";
 
@@ -57,6 +102,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Leállítás";
+
+/* Label on button to cancel edits */
+"Cancel" = "Mégse";
+
+/* Label on button to complete edits */
+"Done" = "Kész";
+
+/* Label on button to allow edits */
+"Edit" = "Szerkesztés";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Próbálja újra";
@@ -92,7 +146,7 @@
 "ExternalLink.openMapsButton" = "Térképek megnyitása";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, MEGVAN!";
+"FirstRun.lastSlide.buttonLabel" = "Rendben, értem";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Automatikusan blokkolja az online követőket böngészés közben. Aztán érintse meg a gombot a meglátogatott oldalak, keresések, sütik és jelszavak törléséhez az eszközéről.";
@@ -133,6 +187,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Beállítások app megnyitása";
 
+/* Save button label */
+"Save" = "Mentés";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "További keresőszolgáltatás felvétele";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ További keresőszolgáltatás felvétele";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Keresőszolgáltatás hozzáadása";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "TELEPÍTETT KERESŐSZOLGÁLTATÁSOK";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Megjelenítendő név";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Új keresőszolgáltatás hozzáadása.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Alapértelmezett keresőszolgáltatások visszaállítása";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Keresőszolgáltatás neve";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Használandó keresőkifejezés";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Másoljon vagy írjon be keresőkifejezést. Ha szükséges, helyettesítse a keresőkifejezést ezzel: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Automatikus URL kiegészítés";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "A többi tartalomkövető blokkolása eltörhet bizonyos videókat és weblapokat.";
 
@@ -151,11 +241,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Beállítások";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "KERESŐMOTOR";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Keresőszolgáltatás";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Keresőmotor";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "KERESÉS";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRÁCIÓ";
@@ -204,6 +294,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Használati adatok elküldése";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Újdonságok";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "App Store: Firefox";
@@ -265,6 +358,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "A „%@” szeretne hozzáférni a fényképeihez";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Példa: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Hirdetéskövetők";
 
@@ -276,6 +372,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Követés elleni védelem kikapcsolva";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "További tudnivalók";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Közösségi követők";

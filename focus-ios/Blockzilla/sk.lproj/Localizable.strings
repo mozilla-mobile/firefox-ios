@@ -40,6 +40,51 @@
 /* Label on About screen */
 "About.topLabel" = "%@ vám dáva kontrolu.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Pridať vlastnú URL";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Skontrolujte zadanú URL adresu.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Príklad: example.com";
+
+/* Watermark for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Prilepte alebo zadajte URL adresu";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Pridať vlastnú URL";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Pridanie a správa vlastných URL adries na dokončovanie.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Vlastné URL adresy";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "ZOZNAM VLASTNÝCH URL ADRIES";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Bola pridaná nová vlastná URL adresa.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Povolením tejto možnosti umožníte aplikácii %@ automaticky dokončovať viac než 450 populárnych URL adries.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Automatické dokončovanie";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "PREDVOLENÝ ZOZNAM URL ADRIES";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Zakázané";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Žiadne vlastné URL adresy na zobrazenie";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Povolené";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Naspäť";
 
@@ -57,6 +102,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Zastaviť";
+
+/* Label on button to cancel edits */
+"Cancel" = "Zrušiť";
+
+/* Label on button to complete edits */
+"Done" = "Hotovo";
+
+/* Label on button to allow edits */
+"Edit" = "Upraviť";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Skúsiť znova";
@@ -92,7 +146,7 @@
 "ExternalLink.openMapsButton" = "Otvoriť Mapy";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, ROZUMIEM!";
+"FirstRun.lastSlide.buttonLabel" = "Ok, rozumiem!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Automaticky počas prehliadania blokujte sledovacie prvky. Potom jedným ťuknutím z vášho zariadenia vymažte zoznam navštívených stránok, výsledky vyhľadávania, cookies a heslá.";
@@ -133,6 +187,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Otvorte aplikáciu Nastavenia";
 
+/* Save button label */
+"Save" = "Uložiť";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Pridať ďalší vyhľadávací modul";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Pridať ďalší vyhľadávací modul";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Pridať vyhľadávací modul";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "NAINŠTALOVANÉ VYHĽADÁVACIE MODULY";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Názov, ktorý sa bude zobrazovať";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Bol pridaný nový vyhľadávací modul.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Obnoviť predvolené vyhľadávacie moduly";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Názov vyhľadávacieho modulu";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Výraz vyhľadávania";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Prilepte alebo zadajte výraz vyhľadávania. Ak je to nutné, nahraďte výraz s: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Automatické dokončovanie URL adries";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokovanie ostatných sledovacích prvkov môže rozbiť niektoré videá a webové stránky.";
 
@@ -151,11 +241,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Nastavenia";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "VYHĽADÁVACÍ MODUL";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Vyhľadávací modul";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Vyhľadávací modul";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "VYHĽADÁVANIE";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRÁCIA";
@@ -204,6 +294,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Odosielať údaje o používaní";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Čo je nové";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Prevziať Firefox";
@@ -265,6 +358,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” žiada o prístup k vašim fotografiám";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Príklad: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Reklamné sledovacie prvky";
 
@@ -276,6 +372,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Ochrana pred sledovaním je vypnutá";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Ďalšie informácie";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sledovacie prvky sociálnych sietí";

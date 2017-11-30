@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Garantisci il permesso di registrare e caricare video.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Garantisci il permesso di salvare e caricare foto.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Garantisci il permesso di salvare e caricare foto.";
 

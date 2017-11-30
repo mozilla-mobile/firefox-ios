@@ -40,6 +40,51 @@
 /* Label on About screen */
 "About.topLabel" = "%@ надає вам контроль.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Додати власну URL-адресу";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Уважно перевірте введену URL-адресу.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Зразок: example.com";
+
+/* Watermark for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Вставте чи введіть URL-адресу";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Додати власну URL-адресу";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Додавайте і керуйте автозавершенням власних URL-адрес.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Власні URL";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "ПЕРЕЛІК ВЛАСНИХ URL";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Нову власну URL-адресу додано.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Увімкніть автозавершення в %@ для понад 450 популярних URL-адрес в панелі адреси.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Автозавершення";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "ТИПОВИЙ ПЕРЕЛІК URL";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Вимкнено";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Немає власних URL-адрес для показу";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Увімкнено";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Назад";
 
@@ -57,6 +102,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Стоп";
+
+/* Label on button to cancel edits */
+"Cancel" = "Скасувати";
+
+/* Label on button to complete edits */
+"Done" = "Готово";
+
+/* Label on button to allow edits */
+"Edit" = "Змінити";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Спробувати знову";
@@ -92,7 +146,7 @@
 "ExternalLink.openMapsButton" = "Відкрити карти";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "ГАРАЗД, ЗРОЗУМІЛО!";
+"FirstRun.lastSlide.buttonLabel" = "Гаразд, зрозуміло!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Автоматично блокуйте стеження онлайн під час перегляду. Потім торкніться, щоб стерти відвідані сторінки, пошукові запити, куки й паролі з вашого пристрою.";
@@ -133,6 +187,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Відкрийте параметри";
 
+/* Save button label */
+"Save" = "Зберегти";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Додати інший засіб пошуку";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Додати інший засіб пошуку";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Додати засіб пошуку";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "ВСТАНОВЛЕНІ ЗАСОБИ ПОШУКУ";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Назва для показу";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Новий засіб пошуку додано.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Відновити типові засоби пошуку";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Назва засобу пошуку";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Запит для пошуку";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Вставте або введіть запит для пошуку. Якщо необхідно, замініть пошуковий термін на: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Автозавершення URL";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Блокування інших елементів стеження може пошкодити деякі відео або веб-сторінки.";
 
@@ -151,11 +241,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Параметри";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "ЗАСІБ ПОШУКУ";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Засіб пошуку";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Засіб пошуку";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "ПОШУК";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ІНТЕГРАЦІЯ";
@@ -204,6 +294,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Надсилати дані про використання";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Що нового";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Отримати Firefox";
@@ -265,6 +358,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” бажає отримати доступ до ваших фотографій";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Зразок: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Стеження реклами";
 
@@ -276,6 +372,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Захист від стеження вимкнено";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Докладніше";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Стеження соціальних мереж";

@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Esto te permite hacer y subir vídeos.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Esto te permite guardar y subir fotos.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Esto te permite guardar y subir fotos.";
 

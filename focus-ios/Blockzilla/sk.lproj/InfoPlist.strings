@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Toto umožňuje tvoriť a nahrávať videá.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Toto umožňuje ukladať a nahrávať fotografie.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Toto umožňuje ukladať a odosielať fotografie.";
 

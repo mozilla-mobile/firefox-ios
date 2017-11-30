@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "此权限让您可以拍摄和上传视频。";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "此权限让您可以保存和上传照片。";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "此权限让您可以保存和上传照片。";
 

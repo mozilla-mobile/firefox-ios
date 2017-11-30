@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Hiermit können Sie Videos aufnehmen und hochladen.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Hiermit können Sie Fotos speichern und hochladen.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Hiermit können Sie Fotos speichern und hochladen.";
 

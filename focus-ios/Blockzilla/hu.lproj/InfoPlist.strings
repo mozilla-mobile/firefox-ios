@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Ez lehetővé teszi, hogy videókat készítsen és töltsön fel.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Ez lehetővé teszi, hogy fényképeket mentsen és töltsön fel.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Ez lehetővé teszi, hogy fényképeket mentsen és töltsön fel.";
 

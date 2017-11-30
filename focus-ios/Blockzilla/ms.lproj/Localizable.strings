@@ -40,6 +40,51 @@
 /* Label on About screen */
 "About.topLabel" = "%@ meletakkan anda dalam kawalan.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Tambah URL Penyesuaian";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Semak semula URL yang anda masukkan.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Contoh: example.com";
+
+/* Watermark for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Tampal atau masukkan URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Tambah URL Penyesuaian";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Tambah dan urus penyesuaian URLs auto-lengkap.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URLs Penyesuaian";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "SENARAI URL PENYESUAIAN";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Penyesuaian URL baru ditambah.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Aktifkan %@ supaya auto-lengkap lebih 450 URLs popular dalam bar alamat.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Auto-lengkap";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "SENARAI URL PIAWAI";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Dinyahdayakan";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Tiada URLs Penyesuaian untuk dipaparkan";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Didayakan";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Undur";
 
@@ -57,6 +102,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Berhenti";
+
+/* Label on button to cancel edits */
+"Cancel" = "Batal";
+
+/* Label on button to complete edits */
+"Done" = "Selesai";
+
+/* Label on button to allow edits */
+"Edit" = "Edit";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Cuba lagi";
@@ -92,7 +146,7 @@
 "ExternalLink.openMapsButton" = "Buka Maps";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, FAHAM!";
+"FirstRun.lastSlide.buttonLabel" = "OK, Faham!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Sekat penjejak atas talian secara automatik semasa anda berlayar. Kemudian tap untuk memadam halaman dilawati, carian, kuki dan kata laluan dari peranti anda.";
@@ -133,6 +187,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Buka Tetapan Aplikasi";
 
+/* Save button label */
+"Save" = "Simpan";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Tambah Enjin Carian Lain";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Tambah Enjin Carian Lain";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Tambah Enjin Carian";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "ENJIN CARIAN DIPASANG";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Nama untuk dipaparkan";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Enjin Carian Baru Ditambah.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Pulih Enjin Carian Piawai";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Nama enjin carian";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "String carian untuk digunakan";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Tampal atau masukkan string carian. Jika perlu, gantikan istilah carian dengan: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Auto-lengkap URL";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Penyekatan penjejak kandungan lain boleh mengganggu sesetengah kandungan video dan laman Web.";
 
@@ -151,11 +241,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Tetapan";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Enjin Carian";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Enjin Carian";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "Cari";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
@@ -204,6 +294,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Hantar data penggunaan";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Yang Terbaru";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Dapatkan app Firefox";
@@ -265,6 +358,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” Mahu Mengakses Foto Anda";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Contoh: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Penjejak iklan";
 
@@ -276,6 +372,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Perlindungan Penjejakan dinyahaktifkan";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Ketahui Selanjutnya";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Penjejak sosial";

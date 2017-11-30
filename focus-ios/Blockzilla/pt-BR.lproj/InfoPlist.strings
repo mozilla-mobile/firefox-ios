@@ -1,11 +1,14 @@
 /* (No Commment) */
-"NSCameraUsageDescription" = "Isto lhe permite tirar e enviar fotos.";
+"NSCameraUsageDescription" = "Isso permite tirar fotos e enviá-las.";
 
 /* (No Commment) */
 "NSLocationWhenInUseUsageDescription" = "Os sites que visita podem solicitar a sua localização.";
 
 /* (No Commment) */
 "NSMicrophoneUsageDescription" = "Isto lhe permite fazer e enviar vídeos.";
+
+/* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Isto lhe permite salvar e enviar fotos.";
 
 /* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Isto lhe permite salvar e enviar fotos.";

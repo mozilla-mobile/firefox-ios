@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Isto deixa-lhe tirar e carregar vídeos.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Isto deixa-lhe guardar e carregar fotos.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Isto deixa-lhe guardar e carregar fotos.";
 

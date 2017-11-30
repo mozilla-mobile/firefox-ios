@@ -40,6 +40,51 @@
 /* Label on About screen */
 "About.topLabel" = "%@ 让您掌控线上生活。";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "添加自定义网址";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "请复查您输入的网址。";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "例如：example.com";
+
+/* Watermark for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "粘贴或输入网址";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ 添加自定义网址";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "添加和管理自定义的自动完成网址。";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "自定义网址";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "自定义网址列表";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "已添加新的自定义网址。";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "启用在 %@ 地址栏自动完成超过 450 个流行网址。";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "自动完成";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "默认网址列表";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "已禁用";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "没有自定义网址";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "已启用";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "后退";
 
@@ -57,6 +102,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "停止";
+
+/* Label on button to cancel edits */
+"Cancel" = "取消";
+
+/* Label on button to complete edits */
+"Done" = "完成";
+
+/* Label on button to allow edits */
+"Edit" = "编辑";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "重试";
@@ -92,7 +146,7 @@
 "ExternalLink.openMapsButton" = "打开地图";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "明白了！";
+"FirstRun.lastSlide.buttonLabel" = "明白了";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "在您浏览时自动拦截在线跟踪器。一按即可清除您的设备上的访问记录、搜索记录、Cookie 以及密码。";
@@ -133,6 +187,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "打开“设置”应用";
 
+/* Save button label */
+"Save" = "保存";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "添加其他搜索引擎";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ 添加其他搜索引擎";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "添加搜索引擎";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "已安装的搜索引擎";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "显示名称";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "已添加新搜索引擎。";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "恢复默认搜索引擎";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "搜索引擎名称";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "搜索字符串";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "主角或输入搜索字符串。如果必要，用 %s 表示搜索关键词。";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "网址自动完成";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "拦截其他内容跟踪器可能对某些视频和网页有影响。";
 
@@ -151,11 +241,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "设置";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "搜索引擎";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "搜索引擎";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "搜索引擎";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "搜索";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "集成";
@@ -204,6 +294,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "发送使用统计";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "新版变化";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "获取 Firefox 应用";
@@ -265,6 +358,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@”想要访问您的照片";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "例如：searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "广告跟踪器";
 
@@ -276,6 +372,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "关闭追踪保护";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "详细了解";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "社交跟踪器";

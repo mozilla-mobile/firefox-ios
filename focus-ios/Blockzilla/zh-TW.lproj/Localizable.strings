@@ -40,6 +40,51 @@
 /* Label on About screen */
 "About.topLabel" = "%@ 讓您可自行控制線上生活。";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "新增自訂網址";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "請檢查您輸入的網址。";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "舉例: example.com";
+
+/* Watermark for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "貼上或輸入網址";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ 新增自訂網址";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "新增與管理自訂自動完成網址。";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "自訂網址";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "自訂網址清單";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "已新增自訂網址。";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "開啟後，即可在 %@ 網址列自動完成超過 450 組熱門網址。";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "自動完成";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "預設網址清單";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "已停用";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "沒有可顯示的自訂網址";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "已啟用";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "上一頁";
 
@@ -57,6 +102,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "停止";
+
+/* Label on button to cancel edits */
+"Cancel" = "取消";
+
+/* Label on button to complete edits */
+"Done" = "完成";
+
+/* Label on button to allow edits */
+"Edit" = "編輯";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "再試一次";
@@ -92,7 +146,7 @@
 "ExternalLink.openMapsButton" = "開啟地圖";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "好，知道了！";
+"FirstRun.lastSlide.buttonLabel" = "好，知道了！";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "自動在您上網時封鎖線上追蹤器；只要一點即可清除裝置中造訪過的頁面、搜尋、Cookie、密碼等紀錄。";
@@ -133,6 +187,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "開啟「設定」應用程式";
 
+/* Save button label */
+"Save" = "儲存";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "新增其他搜尋引擎";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ 新增其他搜尋引擎";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "新增搜尋引擎";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "安裝的搜尋引擎";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "要顯示的名稱";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "已加入新搜尋引擎。";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "還原預設搜尋引擎";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "搜尋引擎名稱";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "要使用的搜尋字串";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "請貼上或輸入搜尋字串。有需要的話，將搜尋詞修改為: %s。";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "網址自動完成";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "封鎖其他的內容追蹤器可能會影響網頁與影片載入。";
 
@@ -151,11 +241,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "設定";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "搜尋引擎";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "搜尋引擎";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "搜尋引擎";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "搜尋";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "整合";
@@ -204,6 +294,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "傳送使用資料";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "有什麼新鮮事";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "下載 Firefox";
@@ -265,6 +358,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "「%@」想存取您的照片";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "例如: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "廣告追蹤器";
 
@@ -276,6 +372,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "關閉追蹤保護";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "了解更多";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "社交追蹤器";

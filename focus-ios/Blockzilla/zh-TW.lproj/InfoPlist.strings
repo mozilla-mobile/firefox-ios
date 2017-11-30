@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "讓您可拍攝並上傳影片。";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "讓您可以儲存、上傳照片。";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "讓您可儲存並上傳圖片。";
 

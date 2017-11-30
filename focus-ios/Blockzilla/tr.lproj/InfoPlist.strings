@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Video çekmenizi ve yüklemenizi sağlar.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Fotoğrafları kaydetmenizi ve yüklemenizi sağlar.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Fotoğrafları kaydetmenizi ve yüklemenizi sağlar.";
 

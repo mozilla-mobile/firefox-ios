@@ -40,6 +40,51 @@
 /* Label on About screen */
 "About.topLabel" = "%@ geeft u de controle.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Aangepaste URL toevoegen";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Controleer de ingevoerde URL.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Voorbeeld: example.com";
+
+/* Watermark for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Plak of voer URL in";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Aangepaste URL toevoegen";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Eigen URL’s voor automatisch aanvullen toevoegen en beheren";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Aangepaste URL’s";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "AANGEPASTE URL-LIJST";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Nieuwe aangepaste URL toegevoegd.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Schakel dit in om %@ automatisch meer dan 450 populaire URL’s in de adresbalk te laten aanvullen.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Automatisch aanvullen";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "STANDAARD URL-LIJST";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Uitgeschakeld";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Geen aangepaste URL’s om weer te geven";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Ingeschakeld";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Terug";
 
@@ -57,6 +102,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Stoppen";
+
+/* Label on button to cancel edits */
+"Cancel" = "Annuleren";
+
+/* Label on button to complete edits */
+"Done" = "Gereed";
+
+/* Label on button to allow edits */
+"Edit" = "Bewerken";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Opnieuw proberen";
@@ -92,7 +146,7 @@
 "ExternalLink.openMapsButton" = "Maps openen";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, BEGREPEN!";
+"FirstRun.lastSlide.buttonLabel" = "OK, begrepen!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Blokkeer automatisch onlinetrackers terwijl u surft. Tik daarna om bezochte pagina’s, zoekopdrachten, cookies en wachtwoorden op uw apparaat te wissen.";
@@ -133,6 +187,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Instellingen openen";
 
+/* Save button label */
+"Save" = "Opslaan";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Nog een zoekmachine toevoegen";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Nog een zoekmachine toevoegen";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Zoekmachine toevoegen";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "GEÏNSTALLEERDE ZOEKMACHINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Weergavenaam";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Nieuwe zoekmachine toegevoegd.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Standaardzoekmachines terugzetten";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Naam van zoekmachine";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Te gebruiken zoekstring";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Plak of voer de zoekstring in. Vervang zo nodig de zoekterm door %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL’s automatisch aanvullen";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokkeren van andere inhoudstrackers kan sommige video’s en webpagina’s verstoren.";
 
@@ -151,11 +241,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Instellingen";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "ZOEKMACHINE";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Zoekmachine";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Zoekmachine";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "ZOEKEN";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATIE";
@@ -204,6 +294,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Gebruiksgegevens verzenden";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Wat is er nieuw";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox downloaden";
@@ -265,6 +358,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "‘%@’ vraagt om toegang tot uw foto’s";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Voorbeeld: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Advertentietrackers";
 
@@ -276,6 +372,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Bescherming tegen volgen uitgeschakeld";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Meer info";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sociale trackers";

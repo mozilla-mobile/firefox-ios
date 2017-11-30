@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Hiermee kunt u video’s maken en uploaden.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Hiermee kunt u foto’s opslaan en uploaden.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Hiermee kunt u foto’s opslaan en uploaden.";
 

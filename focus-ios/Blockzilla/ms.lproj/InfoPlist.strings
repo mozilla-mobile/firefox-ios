@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Ciri ini membolehkan anda mengambil dan memuat naik video.";
 
 /* (No Commment) */
+"NSPhotoLibraryAddUsageDescription" = "Ciri ini membolehkan anda menyimpan dan memuat naik foto.";
+
+/* (No Commment) */
 "NSPhotoLibraryUsageDescription" = "Ciri ini membolehkan anda menyimpan dan memuat naik foto.";
 
