@@ -232,7 +232,7 @@ class TrackingProtectionBreakdownView: UIView {
         addSubview(stackView)
         self.stackView = stackView
 
-        learnMoreButton.setTitle("Learn More", for: .normal)
+        learnMoreButton.setTitle(UIConstants.strings.trackingProtectionLearnMore, for: .normal)
         learnMoreButton.setTitleColor(UIConstants.colors.trackingProtectionLearnMore, for: .normal)
         learnMoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         learnMoreButton.contentHorizontalAlignment = .leading
