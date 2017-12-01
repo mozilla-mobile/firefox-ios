@@ -34,6 +34,52 @@ class SearchProviderTest: BaseTestCase {
             waitforExistence(element: app.staticTexts["Automatic private browsing."])
 		}
 	}
+    
+    func testAddRemoveCustomSearchProvider() {
+        app.buttons["Settings"].tap()
+        app.tables.cells["SettingsViewController.searchCell"].tap()
+        app.tables.cells["addSearchEngine"].tap()
+        
+        app.textFields["nameInput"].typeText("MDN")
+        app.textViews["templateInput"].tap()
+        app.textViews["templateInput"].typeText("https://developer.mozilla.org/en-US/search?q=%s")
+        app.navigationBars.buttons["save"].tap()
+        
+        XCTAssertTrue(app.tables.cells["MDN"].exists)
+        app.tables.cells["Wikipedia"].tap()
+        
+        app.tables.cells["SettingsViewController.searchCell"].tap()
+        
+        // enter edit mode
+        app.navigationBars.buttons["edit"].tap()
+        app.tables.cells["MDN"].buttons["Delete MDN"].tap()
+        app.tables.cells["MDN"].buttons["Delete"].tap()
+        
+        // leave edit mode
+        app.navigationBars.buttons["edit"].tap()
+    }
+    
+    func testRemoveDefaultSearchProvider() {
+        app.buttons["Settings"].tap()
+        app.tables.cells["SettingsViewController.searchCell"].tap()
+        
+        XCTAssertTrue(app.tables.cells["restoreDefaults"].exists)
+        
+        // enter edit mode
+        app.navigationBars.buttons["edit"].tap()
+        XCTAssertFalse(app.tables.cells["restoreDefaults"].exists)
+        
+        app.tables.cells["Wikipedia"].buttons["Delete Wikipedia"].tap()
+        app.tables.cells["Wikipedia"].buttons["Delete"].tap()
+        
+        // leave edit mode
+        app.navigationBars.buttons["edit"].tap()
+        
+        XCTAssertFalse(app.tables.cells["Wikipedia"].exists)
+        
+        app.tables.cells["restoreDefaults"].tap()
+        XCTAssertTrue(app.tables.cells["Wikipedia"].exists)
+    }
 	
 	private func changeSearchProvider(provider: String) {
 		
