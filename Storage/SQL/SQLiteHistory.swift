@@ -987,31 +987,34 @@ extension SQLiteHistory: SyncableHistory {
             historyIDs.forEach { visits[$0] = [] }
     
             // Add each visit to its history item's list.
-            var i = 0
-            let visitsAccumulator: (SDRow) -> Void = { row in
-                let date = row.getTimestamp("visitDate")!
-                let type = VisitType(rawValue: row["visitType"] as! Int)!
-                let visit = Visit(date: date, type: type)
-                let id = row["siteID"] as! Int
-                
-                if visits[id]?.count ?? visitLimit < visitLimit {
-                    visits[id]?.append(visit)
-                    log.info("DECAFBAD New visit \(i): \(id)")
-                    i += 1
-                }
-            }
+        
             log.info("DECAFBAD visitLimit = \(visitLimit): \(sql)")
-            let args: Args = [visitLimit]
-            return db.withConnection { connection -> Cursor<Void> in
-                let cursor = connection.executeQueryUnsafe(sql, factory: visitsAccumulator, withArgs: args)
-                let count = cursor.count
-                for i in 0..<count {
-                    _ = cursor[i]
-                }
-                return cursor
-            } >>> {
-                // Join up the places map we received as input with our visits map.
+        
+            let rowIdentity: (SDRow) -> SDRow = { $0 }
+        
+            let args: Args = []
+            return db.withConnection { connection -> Cursor<SDRow> in
+                return connection.executeQueryUnsafe(sql, factory: rowIdentity, withArgs: args)
+            } >>== { cursor in
                 var i = 0
+                let iterator = cursor.makeIterator()
+                for row in iterator {
+                    guard let row = row else { continue }
+                    let date = row.getTimestamp("visitDate")!
+                    let type = VisitType(rawValue: row["visitType"] as! Int)!
+                    let visit = Visit(date: date, type: type)
+                    let id = row["siteID"] as! Int
+                    
+                    if visits[id]?.count ?? visitLimit < visitLimit {
+                        visits[id]?.append(visit)
+                        log.info("DECAFBAD New visit \(i): \(id)")
+                        i += 1
+                    }
+                }
+                cursor.close()
+                
+                // Join up the places map we received as input with our visits map.
+                i = 0
                 let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
                     guard let visitsList = visits[id], !visitsList.isEmpty else {
                         return nil
@@ -1022,8 +1025,9 @@ extension SQLiteHistory: SyncableHistory {
                 }
 
                 log.info("DECAFBAD returning placesAndVisits")
-                fatalError("We do not want to upload anything to disrupt this test account")
+                
                 //            return deferMaybe(placesAndVisits)
+                return deferMaybe([])
             }
     }
 
