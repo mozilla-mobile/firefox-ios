@@ -6,8 +6,8 @@ import Foundation
 
 class SearchEngineManager {
     public static let prefKeyEngine = "prefKeyEngine"
-    private static let prefKeyDisabledEngines = "prefKeyDisabledEngines"
-    private static let prefKeyCustomEngines = "prefKeyCustomEngines"
+    public static let prefKeyDisabledEngines = "prefKeyDisabledEngines"
+    public static let prefKeyCustomEngines = "prefKeyCustomEngines"
 
     private let prefs: UserDefaults
     var engines = [SearchEngine]()
@@ -59,6 +59,11 @@ class SearchEngineManager {
     func removeEngine(engine: SearchEngine) {
         // If this is a custom engine then it should be removed from the custom engine array
         // otherwise this is a default engine and so it should be added to the disabled engines array
+        
+        if activeEngine.name == engine.name {
+            //Can not remove active engine
+            return
+        }
         
         let customEngines = readCustomEngines()
         let filteredEngines = customEngines.filter { (a:SearchEngine) -> Bool in
