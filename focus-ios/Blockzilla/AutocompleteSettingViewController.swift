@@ -153,6 +153,9 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             cell.backgroundColor = UIConstants.colors.background
             cell.layoutMargins = UIEdgeInsets.zero
 
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreDefaultTapped))
+            cell.addGestureRecognizer(tapGesture)
+
             return cell
         case 1:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
@@ -168,6 +171,9 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             cell.backgroundColor = UIConstants.colors.background
             cell.layoutMargins = UIEdgeInsets.zero
 
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreCustomapped))
+            cell.addGestureRecognizer(tapGesture)
+
             return cell
         default: return nil
         }
@@ -181,6 +187,18 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     @objc private func customToggleSwitched(_ sender: UISwitch) {
         let enabled = sender.isOn
         Settings.set(enabled, forToggle: .enableCustomDomainAutocomplete)
+    }
+
+    @objc private func learnMoreDefaultTapped() {
+        guard let url = SupportUtils.URLForTopic(topic: "autofill-domain-ios") else { return }
+        let contentViewController = SettingsContentViewController(url: url)
+        navigationController?.pushViewController(contentViewController, animated: true)
+    }
+
+    @objc private func learnMoreCustomapped() {
+        guard let url = SupportUtils.URLForTopic(topic: "autofill-domain-ios") else { return }
+        let contentViewController = SettingsContentViewController(url: url)
+        navigationController?.pushViewController(contentViewController, animated: true)
     }
 }
 
