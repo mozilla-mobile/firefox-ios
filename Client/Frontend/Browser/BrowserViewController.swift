@@ -311,7 +311,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELBookmarkStatusDidChange(_:)), name: NSNotification.Name(rawValue: BookmarkStatusChangedNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappWillResignActiveNotification), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappDidBecomeActiveNotification), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappDidEnterBackgroundNotification), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
@@ -818,23 +817,6 @@ class BrowserViewController: UIViewController {
         QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
             withUserData: userData,
             toApplication: UIApplication.shared)
-        if let tab = tabManager.getTabForURL(url) {
-            tab.isBookmarked = true
-        }
-    }
-
-    func SELBookmarkStatusDidChange(_ notification: Notification) {
-        if let bookmark = notification.object as? BookmarkItem {
-            if bookmark.url == urlBar.currentURL?.absoluteString {
-                if let userInfo = notification.userInfo as? Dictionary<String, Bool> {
-                    if userInfo["added"] != nil {
-                        if let tab = self.tabManager.getTabForURL(urlBar.currentURL!) {
-                            tab.isBookmarked = false
-                        }
-                    }
-                }
-            }
-        }
     }
 
     override func accessibilityPerformEscape() -> Bool {
@@ -945,16 +927,6 @@ class BrowserViewController: UIViewController {
 
         guard let url = tab.url?.displayURL?.absoluteString else {
             return
-        }
-
-        profile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(url).uponQueue(DispatchQueue.main) { [weak tab] result in
-                guard let bookmarked = result.successValue else {
-                    print("Error getting bookmark status: \(result.failureValue ??? "nil").")
-                    return
-                }
-                tab?.isBookmarked = bookmarked
-            }
         }
     }
     // MARK: Opening New Tabs
@@ -1289,13 +1261,14 @@ extension BrowserViewController: URLBarDelegate {
             SimpleToast().showAlertWithText(successMessage, bottomContainer: self.webViewContainer)
         }
         
-        guard let tab = tabManager.selectedTab, tab.url != nil else { return }
-        
-        // The logic of which actions appear when isnt final.
-        let pageActions = getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
-                                        findInPage: findInPageAction, presentableVC: self, success: successCallback)
+        guard let tab = tabManager.selectedTab, let urlString = tab.url?.absoluteString else { return }
 
-        presentSheetWith(actions: pageActions, on: self, from: button)
+        self.fetchBookmarkStatus(for: urlString) { (isBookmarked) in
+            let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
+                                                 findInPage: findInPageAction, presentableVC: self, isBookmarked: isBookmarked,
+                                                 success: successCallback)
+            self.presentSheetWith(actions: pageActions, on: self, from: button)
+        }
     }
     
     func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
@@ -1802,25 +1775,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            if let url = webView.url {
-                let absoluteString = url.absoluteString
-                // Don't bother fetching bookmark state for about/sessionrestore and about/home.
-                if url.isAboutURL {
-                    // Indeed, because we don't show the toolbar at all, don't even blank the star.
-                } else {
-                    profile.bookmarks.modelFactory >>== { [weak tab] in
-                        $0.isBookmarked(absoluteString)
-                            .uponQueue(DispatchQueue.main) {
-                            guard let isBookmarked = $0.successValue else {
-                                print("Error getting bookmark status: \($0.failureValue ??? "nil").")
-                                return
-                            }
-
-                            tab?.isBookmarked = isBookmarked
-                        }
-                    }
-                }
-            } else {
+            if webView.url == nil {
                 // The web view can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
                 tab.reload()

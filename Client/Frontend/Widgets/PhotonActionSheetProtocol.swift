@@ -113,6 +113,7 @@ extension PhotonActionSheetProtocol {
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
                        findInPage:  @escaping () -> Void,
                        presentableVC: PresentableVC,
+                       isBookmarked: Bool,
                        success: @escaping (String) -> Void) -> Array<[PhotonActionSheetItem]> {
         
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
@@ -144,7 +145,6 @@ extension PhotonActionSheetProtocol {
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                                 withUserData: userData,
                                                                                 toApplication: UIApplication.shared)
-            tab.isBookmarked = true
             success(Strings.AppMenuAddBookmarkConfirmMessage)
         }
         
@@ -155,7 +155,6 @@ extension PhotonActionSheetProtocol {
             self.profile.bookmarks.modelFactory >>== {
                 $0.removeByURL(absoluteString).uponQueue(.main) { res in
                     if res.isSuccess {
-                        tab.isBookmarked = false
                         success(Strings.AppMenuRemoveBookmarkConfirmMessage)
                     }
                 }
@@ -215,7 +214,7 @@ extension PhotonActionSheetProtocol {
 
         // Disable bookmarking and reading list if the URL is too long.
         if !tab.urlIsTooLong {
-            topActions.append(tab.isBookmarked ? removeBookmark : bookmarkPage)
+            topActions.append(isBookmarked ? removeBookmark : bookmarkPage)
 
             if tab.readerModeAvailableOrActive {
                 topActions.append(addReadingList)
@@ -223,6 +222,14 @@ extension PhotonActionSheetProtocol {
         }
 
         return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, sendToDevice, closeTab], [share]]
+    }
+
+    func fetchBookmarkStatus(for url: String, completionHandler: @escaping (Bool) -> Void) {
+        self.profile.bookmarks.modelFactory >>== {
+            $0.isBookmarked(url).uponQueue(.main) { result in
+                completionHandler(result.successValue ?? false)
+            }
+        }
     }
 }
 
