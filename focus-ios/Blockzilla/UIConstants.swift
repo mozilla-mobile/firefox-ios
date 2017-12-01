@@ -56,6 +56,8 @@ struct UIConstants {
         static let urlTextPlaceholder = UIColor(white: 1, alpha: 0.4)
         static let urlTextShadow = UIColor.black
 
+        static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
+
         static let trackingProtectionPrimary = UIColor(rgb: 0xFFFFFF)
         static let trackingProtectionSecondary = UIColor(rgb: 0xB2B2B2)
         static let trackingProtectionBreakdownBackground = UIColor(rgb: 0x414146)
@@ -82,6 +84,8 @@ struct UIConstants {
         static let toast = UIFont.systemFont(ofSize: 12)
         static let urlText = UIFont.systemFont(ofSize: 15)
         static let truncatedUrlText = UIFont.systemFont(ofSize: 12)
+        static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
+        static let settingsDescriptionText = UIFont.systemFont(ofSize: 12)
     }
 
     struct layout {
@@ -219,7 +223,7 @@ struct UIConstants {
         static let CardTextSearch = NSLocalizedString("Intro.Slides.Search.Description", tableName: "Intro", value: "Searching for something different? Choose a different search engine.", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
         static let AddSearchEngineButton = NSLocalizedString("Settings.Search.AddSearchEngineButton", value: "+ Add Another Search Engine", comment: "Text for button to add another search engine in settings")
         static let AddSearchEngineTitle = NSLocalizedString("Settings.Search.AddSearchEngineTitle", value: "Add Search Engine", comment: "Title on add search engine settings screen")
-        static let Save = NSLocalizedString("Save", value: "Save", comment: "Save button label")
+        static let save = NSLocalizedString("Save", value: "Save", comment: "Save button label")
         static let NameToDisplay = NSLocalizedString("Settings.Search.NameToDisplay", value: "Name to display", comment: "Label for input field for the name of the search engine to be added")
         static let AddSearchEngineName = NSLocalizedString("Settings.Search.SearchEngineName", value: "Search engine name", comment: "Placeholder text for input of new search engine name")
         static let AddSearchEngineTemplate = NSLocalizedString("Settings.Search.SearchTemplate", value: "Search string to use", comment: "Label for input of search engine template")
@@ -260,6 +264,5 @@ struct UIConstants {
         static let autocompleteAddCustomUrlExample = NSLocalizedString("Autocomplete.addCustomUrlExample", value: "Example: example.com", comment: "A label displaying an example URL")
         static let autocompleteEmptyState = NSLocalizedString("Autocomplete.emptyState", value: "No Custom URLs to display", comment: "Label for button to add a custom URL")
         static let autocompleteCustomURLAdded = NSLocalizedString("Autocomplete.customUrlAdded", value: "New Custom URL added.", comment: "Label for toast alerting a custom URL has been added")
-
     }
 }

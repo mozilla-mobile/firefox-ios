@@ -29,7 +29,7 @@ class URLBar: UIView {
 
     fileprivate let cancelButton = InsetButton()
     fileprivate let deleteButton = InsetButton()
-    fileprivate let domainCompletion = DomainCompletion()
+    fileprivate let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
     private let toolset = BrowserToolset()
     private let urlTextContainer = UIView()
@@ -154,6 +154,7 @@ class URLBar: UIView {
         cancelButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         addSubview(cancelButton)
 
         deleteButton.isHidden = true

@@ -128,7 +128,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     
     private func setupEvents() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddSearchEngineViewController.cancelTapped))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "save"
         templateInput.delegate = self
     }

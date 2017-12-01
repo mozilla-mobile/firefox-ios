@@ -137,4 +137,58 @@ class SettingAppearanceTest: BaseTestCase {
         app.buttons["ERASE"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
     }
+    
+    func testDisableAutocomplete() {
+        // Navigate to Settings
+        app.buttons["Settings"].tap()
+        
+        // Navigate to Autocomplete Settings
+        app.tables.cells["SettingsViewController.autocompleteCell"].tap()
+        
+        // Verify that autocomplete is enabled
+        waitforExistence(element: app.tables.switches["toggleAutocompleteSwitch"])
+        let toggle = app.tables.switches["toggleAutocompleteSwitch"]
+        XCTAssertEqual(toggle.value as! String, "1")
+
+        
+        // Turn autocomplete off
+        toggle.tap()
+        XCTAssertEqual(toggle.value as! String, "0")
+
+        // Turn autocomplete back on
+        toggle.tap()
+    }
+    
+    func testAddRemoveCustomDomain() {
+        // Navigate to Settings
+        app.buttons["Settings"].tap()
+        
+        // Navigate to Autocomplete Settings
+        app.tables.cells["SettingsViewController.autocompleteCell"].tap()
+        
+        // Navigate to the customURL list
+        app.tables.cells["customURLS"].tap()
+
+        // Navigate to add domain screen
+        app.tables.cells["addCustomDomainCell"].tap()
+        
+        // Edit Text Field
+        let urlInput = app.textFields["urlInput"]
+        urlInput.typeText("mozilla.org")
+        app.navigationBars.buttons["saveButton"].tap()
+        
+        // Validate that the new domain shows up in the Autocomplete Settings
+        XCTAssertTrue(app.tables.cells["mozilla.org"].exists)
+        
+        // Start Editing
+        app.navigationBars.buttons["editButton"].tap()
+        app.tables.cells["mozilla.org"].buttons["Delete mozilla.org"].tap()
+        app.tables.cells["mozilla.org"].buttons["Delete"].tap()
+        
+        // Finish Editing
+        app.navigationBars.buttons["editButton"].tap()
+        
+        // Validate that the domain is gone
+        XCTAssertFalse(app.tables.cells["mozilla.org"].exists)
+    }
 }

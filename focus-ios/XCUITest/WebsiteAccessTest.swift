@@ -52,4 +52,70 @@ class WebsiteAccessTests: BaseTestCase {
         waitforExistence(element: app.staticTexts["Browse. Erase. Repeat."])
         waitforExistence(element: app.staticTexts["Automatic private browsing."])
     }
+    
+    func testDisableAutocomplete() {
+        // Disable Autocomplete
+        app.buttons["Settings"].tap()
+        app.tables.cells["SettingsViewController.autocompleteCell"].tap()
+        var toggle = app.tables.switches["toggleAutocompleteSwitch"]
+        toggle.tap()
+        
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        
+        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        
+        searchOrEnterAddressTextField.typeText("mozilla")
+        waitforExistence(element: app.buttons["Search for mozilla"])
+        waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla")
+        app.buttons["URLBar.cancelButton"].tap()
+        
+        // Enable autocomplete
+        app.buttons["Settings"].tap()
+        app.tables.cells["SettingsViewController.autocompleteCell"].tap()
+        toggle = app.tables.switches["toggleAutocompleteSwitch"]
+        toggle.tap()
+        
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        
+        searchOrEnterAddressTextField.typeText("mozilla")
+        waitforExistence(element: app.buttons["Search for mozilla"])
+        waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla.org/")
+        app.buttons["URLBar.cancelButton"].tap()
+    }
+    
+    func testAutocompleteCustomDomain() {
+        // Add Custom Domain
+        app.buttons["Settings"].tap()
+        app.tables.cells["SettingsViewController.autocompleteCell"].tap()
+        app.tables.cells["customURLS"].tap()
+        app.tables.cells["addCustomDomainCell"].tap()
+
+        let urlInput = app.textFields["urlInput"]
+        urlInput.typeText("getfirefox.com")
+        app.navigationBars.buttons["saveButton"].tap()
+        
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        
+        // Test auto completing the domain
+        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        searchOrEnterAddressTextField.typeText("getfire")
+        waitforExistence(element: app.buttons["Search for getfire"])
+        waitForValueMatch(element: searchOrEnterAddressTextField, value: "getfirefox.com/")
+        
+        // Remove the custom domain
+        app.buttons["URLBar.cancelButton"].tap()
+        app.buttons["Settings"].tap()
+        app.tables.cells["SettingsViewController.autocompleteCell"].tap()
+        app.tables.cells["customURLS"].tap()
+        app.navigationBars.buttons["editButton"].tap()
+        app.tables.cells["getfirefox.com"].buttons["Delete getfirefox.com"].tap()
+        app.tables.cells["getfirefox.com"].buttons["Delete"].tap()
+        
+        // Finish Editing
+        app.navigationBars.buttons["editButton"].tap()
+    }
 }
