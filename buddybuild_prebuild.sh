@@ -19,9 +19,7 @@ fi
 # Enable File Sharing on all builds except release
 #
 
-if [ "$BUDDYBUILD_SCHEME" != "Firefox" ]; then
-  /usr/libexec/PlistBuddy -c "Add UIFileSharingEnabled bool true" "Client/Info.plist"
-fi
+/usr/libexec/PlistBuddy -c "Add UIFileSharingEnabled bool true" "Client/Info.plist"
 
 #
 # Leanplum is included only for the Firefox and FirefoxBeta builds.
