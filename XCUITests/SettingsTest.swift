@@ -16,6 +16,7 @@ class SettingsTest: BaseTestCase {
         XCTAssertTrue(helpMenu.isEnabled)
         helpMenu.tap()
 
+        waitforExistence(app.textFields["url"])
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "support.mozilla.org")
         waitforExistence(app.webViews.staticTexts["Firefox for iOS"])

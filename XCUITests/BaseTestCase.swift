@@ -56,7 +56,7 @@ class BaseTestCase: XCTestCase {
         waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
     }
 
-    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
+    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 7.0, file: String, line: UInt) {
         let predicate = NSPredicate(format: predicateString)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
