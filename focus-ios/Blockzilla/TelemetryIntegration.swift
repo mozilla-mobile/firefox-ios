@@ -22,6 +22,7 @@ class TelemetryEventMethod {
     public static let click = "click"
     public static let change = "change"
     public static let open = "open"
+    public static let show = "show"
     public static let coinFlip = "coin_flip"
     public static let skip = "onboarding_skipped"
     public static let completed = "onboarding_completed"
@@ -54,4 +55,5 @@ class TelemetryEventObject {
     public static let trackingProtectionDrawer = "tracking_protection_drawer"
     public static let trackingProtectionToggle = "tracking_protection_toggle"
     public static let websiteLink = "website_link"
+    public static let autofill = "autofill"
 }

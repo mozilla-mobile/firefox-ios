@@ -37,6 +37,7 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>org-appextension-feature-password-management</string>
 		<string>googlechromes</string>
 		<string>googlechrome</string>
 		<string>firefox</string>

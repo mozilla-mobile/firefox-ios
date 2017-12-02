@@ -5,6 +5,7 @@
 import UIKit
 import WebKit
 import Telemetry
+import OnePasswordExtension
 
 protocol BrowserState {
     var url: URL? { get }
@@ -41,6 +42,7 @@ class WebViewController: UIViewController, WebController {
     weak var delegate: WebControllerDelegate?
 
     private var browserView = WKWebView()
+    var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
     fileprivate var trackingProtecitonStatus = TrackingProtectionStatus.on(TrackingInformation()) {
         didSet {
@@ -233,3 +235,22 @@ extension WebViewController: WKScriptMessageHandler {
     }
 }
 
+extension WebViewController {
+    func createPasswordManagerExtensionItem() {
+        OnePasswordExtension.shared().createExtensionItem(forWebView: browserView, completion: {(extensionItem, error) -> Void in
+            if extensionItem == nil {
+                return
+            }
+            // Set the 1Password extension item property
+            self.onePasswordExtensionItem = extensionItem
+        })
+    }
+    
+    func fillPasswords(returnedItems: [AnyObject]) {
+        OnePasswordExtension.shared().fillReturnedItems(returnedItems, intoWebView: browserView, completion: { (success, returnedItemsError) -> Void in
+            if !success {
+                return
+            }
+        })
+    }
+}

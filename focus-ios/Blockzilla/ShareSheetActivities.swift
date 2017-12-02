@@ -3,9 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Telemetry
 
 class OpenInFirefoxActivity: UIActivity {
     fileprivate let url: URL
+    private let app = UIApplication.shared
     
     init(url: URL) {
         self.url = url
@@ -20,17 +22,29 @@ class OpenInFirefoxActivity: UIActivity {
     }
 
     override func perform() {
-        OpenUtils.openInFirefox(url: url)
+        openInFirefox(url: url)
         activityDidFinish(true)
     }
 
     override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         return true
     }
+
+    func openInFirefox(url: URL) {
+        guard let escaped = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
+            let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)&private=true"),
+            app.canOpenURL(firefoxURL) else {
+                return
+        }
+        
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "firefox")
+        app.open(firefoxURL, options: [:])
+    }
 }
 
 class OpenInSafariActivity: UIActivity {
     fileprivate let url: URL
+    private let app = UIApplication.shared
 
     init(url: URL) {
         self.url = url
@@ -45,17 +59,23 @@ class OpenInSafariActivity: UIActivity {
     }
 
     override func perform() {
-        OpenUtils.openInSafari(url: url)
+        openInSafari(url: url)
         activityDidFinish(true)
     }
 
     override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         return true
     }
+    
+    func openInSafari(url: URL) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.menu, value: "default")
+        app.open(url, options: [:])
+    }
 }
 
 class OpenInChromeActivity: UIActivity {
     fileprivate let url: URL
+    private let app = UIApplication.shared
 
     init(url: URL) {
         self.url = url
@@ -70,12 +90,31 @@ class OpenInChromeActivity: UIActivity {
     }
 
     override func perform() {
-        OpenUtils.openInChrome(url: url)
+        openInChrome(url: url)
         activityDidFinish(true)
     }
 
     override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         return true
+    }
+    
+    func openInChrome(url: URL) {
+        // Code pulled from https://github.com/GoogleChrome/OpenInChrome
+        // Replace the URL Scheme with the Chrome equivalent.
+        var chromeScheme: String?
+        if (url.scheme == "http") {
+            chromeScheme = "googlechrome"
+        } else if (url.scheme == "https") {
+            chromeScheme = "googlechromes"
+        }
+        
+        // Proceed only if a valid Google Chrome URI Scheme is available.
+        guard let scheme = chromeScheme,
+            let rangeForScheme = url.absoluteString.range(of: ":"),
+            let chromeURL = URL(string: scheme + url.absoluteString[rangeForScheme.lowerBound...]) else { return }
+        
+        // Open the URL with Chrome.
+        app.open(chromeURL, options: [:])
     }
 }
 
@@ -106,4 +145,3 @@ class TitleActivityItemProvider: UIActivityItemProvider {
         return placeholderItem as! String
     }
 }
-
