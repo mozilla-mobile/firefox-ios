@@ -33,7 +33,7 @@ protocol CustomAutocompleteSource: AutocompleteSource {
 }
 
 class CustomCompletionSource: CustomAutocompleteSource {
-
+    private lazy var regex = try! NSRegularExpression(pattern: "^(\\s+)?(?:https?:\\/\\/)?(?:www\\.)?", options: [.caseInsensitive])
     var enabled: Bool { return Settings.getToggle(.enableCustomDomainAutocomplete) }
 
     func getSuggestions() -> AutoCompleteSuggestions {
@@ -41,24 +41,28 @@ class CustomCompletionSource: CustomAutocompleteSource {
     }
 
     func add(suggestion: String) -> CustomCompletionResult {
-        guard !suggestion.isEmpty else { return .error(.invalidUrl) }
+        let sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSMakeRange(0, suggestion.count), withTemplate: "")
+
+        guard !sanitizedSuggestion.isEmpty else { return .error(.invalidUrl) }
 
         var domains = getSuggestions()
-        guard !domains.contains(suggestion) else { return .error(.duplicateDomain) }
+        guard !domains.contains(sanitizedSuggestion) else { return .error(.duplicateDomain) }
 
-        domains.append(suggestion)
+        domains.append(sanitizedSuggestion)
         Settings.setCustomDomainSetting(domains: domains)
 
         return .success(())
     }
 
     func add(suggestion: String, atIndex: Int) -> CustomCompletionResult {
-        guard !suggestion.isEmpty else { return .error(.invalidUrl) }
+        let sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSMakeRange(0, suggestion.count), withTemplate: "")
+
+        guard !sanitizedSuggestion.isEmpty else { return .error(.invalidUrl) }
 
         var domains = getSuggestions()
-        guard !domains.contains(suggestion) else { return .error(.duplicateDomain) }
+        guard !domains.contains(sanitizedSuggestion) else { return .error(.duplicateDomain) }
 
-        domains.insert(suggestion, at: atIndex)
+        domains.insert(sanitizedSuggestion, at: atIndex)
         Settings.setCustomDomainSetting(domains: domains)
 
         return .success(())
