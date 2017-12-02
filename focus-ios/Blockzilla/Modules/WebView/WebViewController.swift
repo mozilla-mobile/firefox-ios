@@ -4,6 +4,7 @@
 
 import UIKit
 import WebKit
+import Telemetry
 
 protocol BrowserState {
     var url: URL? { get }
@@ -191,7 +192,9 @@ extension WebViewController: WKNavigationDelegate {
         let allowDecision = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
 
         let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? allowDecision : .cancel
-
+        if navigationAction.navigationType == .linkActivated && browserView.url != navigationAction.request.url {
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.websiteLink)
+        }
         decisionHandler(decision)
     }
 }
