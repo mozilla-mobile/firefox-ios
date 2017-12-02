@@ -131,6 +131,8 @@ class WebViewController: UIViewController, WebController {
     }
 
     func disableTrackingProtection() {
+        guard case .on = trackingProtecitonStatus else { return }
+
         browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtection")
         browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtectionPostLoad")
         browserView.configuration.userContentController.removeAllUserScripts()
@@ -139,6 +141,8 @@ class WebViewController: UIViewController, WebController {
     }
 
     func enableTrackingProtection() {
+        guard case .off = trackingProtecitonStatus else { return }
+
         setupBlockLists()
         setupUserScripts()
         trackingProtecitonStatus = .on(TrackingInformation())
