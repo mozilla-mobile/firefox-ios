@@ -134,25 +134,6 @@ open class SwiftData {
         assert(sqlite3_threadsafe() == 2)
     }
 
-    fileprivate func getSharedConnection() -> ConcreteSQLiteDBConnection? {
-        var connection: ConcreteSQLiteDBConnection?
-
-        sharedConnectionQueue.sync {
-            if self.closed {
-                log.warning(">>> Database is closed for \(self.filename)")
-                return
-            }
-
-            if self.sharedConnection == nil {
-                log.debug(">>> Creating shared SQLiteDBConnection for \(self.filename) on thread \(Thread.current).")
-                self.sharedConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
-            }
-            connection = self.sharedConnection
-        }
-
-        return connection
-    }
-
     /**
      * The real meat of all the execute methods. This is used internally to open and
      * close a database connection and run a block of code inside it.
@@ -160,15 +141,8 @@ open class SwiftData {
     func withConnection<T>(_ flags: SwiftData.Flags, synchronous: Bool = false, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
         let deferred = DeferredDBOperation<Maybe<T>>()
 
-        /**
-         * We use a weak reference here instead of strongly retaining the connection because we don't want
-         * any control over when the connection deallocs. If the only owner of the connection (SwiftData)
-         * decides to dealloc it, we should respect that since the deinit method of the connection is tied
-         * to the app lifecycle. This is to prevent background disk access causing springboard crashes.
-         */
-        weak var conn = getSharedConnection()
         let queue = self.sharedConnectionQueue
-        
+
         func doWork() {
             if deferred.cancelled {
                 return
@@ -179,14 +153,17 @@ open class SwiftData {
                 deferred.running = false
             }
 
+            if !self.closed && self.sharedConnection == nil {
+                self.sharedConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
+            }
 
             // By the time this dispatch block runs, it is possible the user has backgrounded the
             // app and the connection has been dealloc'ed since we last grabbed the reference
-            guard let connection = SwiftData.ReuseConnections ? conn :
-                ConcreteSQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
+            guard let connection = SwiftData.ReuseConnections ? self.sharedConnection :
+                ConcreteSQLiteDBConnection(filename: self.filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
                     do {
                         _ = try callback(FailedSQLiteDBConnection())
-                        
+
                         deferred.fill(Maybe(failure: NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])))
                     } catch let err as NSError {
                         deferred.fill(Maybe(failure: DatabaseError(err: err)))
@@ -204,7 +181,6 @@ open class SwiftData {
 
         let work = DispatchWorkItem { doWork() }
         deferred.dispatchWorkItem = work
-
 
         if synchronous {
             queue.sync(execute: work)
@@ -225,8 +201,9 @@ open class SwiftData {
         }
     }
 
-    /// Don't use this unless you know what you're doing. The deinitializer
-    /// should be used to achieve refcounting semantics.
+    /// Don't use this unless you know what you're doing. The deinitializer should be used to achieve refcounting semantics.
+    /// The shutdown is *sync*, meaning the queue will complete the current db operations before closing.
+    /// If an operation is queued with an open connection, it will execute before this runs.
     func forceClose() {
         sharedConnectionQueue.sync {
             self.closed = true
@@ -239,6 +216,14 @@ open class SwiftData {
     func reopenIfClosed() {
         sharedConnectionQueue.sync {
             self.closed = false
+        }
+    }
+
+    public func cancel() {
+        sharedConnectionQueue.async {
+            if let c = self.sharedConnection, let db = c.sqliteDB {
+                sqlite3_interrupt(db)
+            }
         }
     }
 
@@ -255,14 +240,6 @@ open class SwiftData {
                 return SQLITE_OPEN_READWRITE
             case .readWriteCreate:
                 return SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
-            }
-        }
-    }
-
-    public func cancel() {
-        sharedConnectionQueue.async {
-            if let c = self.sharedConnection, let db = c.sqliteDB {
-                sqlite3_interrupt(db)
             }
         }
     }
