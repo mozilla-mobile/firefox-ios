@@ -13,7 +13,8 @@ class SearchSettingsViewController: UITableViewController {
     weak var delegate: SearchSettingsViewControllerDelegate?
 
     private let searchEngineManager: SearchEngineManager
-
+    private var isInEditMode = false
+    
     init(searchEngineManager: SearchEngineManager) {
         self.searchEngineManager = searchEngineManager
         super.init(nibName: nil, bundle: nil)
@@ -56,7 +57,7 @@ class SearchSettingsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let numberOfEngines = searchEngineManager.engines.count
-        if tableView.isEditing {
+        if isInEditMode { // NOTE: This is false when a user is swiping to delete but tableView.isEditing is true
             return numberOfEngines
         }
         
@@ -177,12 +178,14 @@ class SearchSettingsViewController: UITableViewController {
         if editingStyle == .delete {
             tableView.beginUpdates()
             searchEngineManager.removeEngine(engine:searchEngineManager.engines[indexPath.row])
+            
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }
     }
     
     @objc func toggleEditing() {
+        isInEditMode = !isInEditMode
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.Edit : UIConstants.strings.Done
         tableView.setEditing(!tableView.isEditing, animated: true)
         tableView.reloadData()
