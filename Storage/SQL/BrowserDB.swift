@@ -206,6 +206,12 @@ open class BrowserDB {
         }
     }
 
+    func runQueryUnsafe<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
+        return withConnection { connection -> Cursor<T> in
+            connection.executeQueryUnsafe(sql, factory: factory, withArgs: args)
+        }
+    }
+
     func queryReturnsResults(_ sql: String, args: Args? = nil) -> Deferred<Maybe<Bool>> {
         return runQuery(sql, args: args, factory: { _ in true })
          >>== { deferMaybe($0[0] ?? false) }
