@@ -1263,7 +1263,8 @@ extension BrowserViewController: URLBarDelegate {
         
         guard let tab = tabManager.selectedTab, let urlString = tab.url?.absoluteString else { return }
 
-        self.fetchBookmarkStatus(for: urlString) { (isBookmarked) in
+        fetchBookmarkStatus(for: urlString).uponQueue(.main) {
+            let isBookmarked = $0.successValue ?? false
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
                                                  findInPage: findInPageAction, presentableVC: self, isBookmarked: isBookmarked,
                                                  success: successCallback)

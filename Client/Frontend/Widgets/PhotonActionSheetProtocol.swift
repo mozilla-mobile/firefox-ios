@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Storage
+import Deferred
 
 protocol PhotonActionSheetProtocol {
     var tabManager: TabManager { get }
@@ -224,11 +225,12 @@ extension PhotonActionSheetProtocol {
         return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, sendToDevice, closeTab], [share]]
     }
 
-    func fetchBookmarkStatus(for url: String, completionHandler: @escaping (Bool) -> Void) {
-        self.profile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(url).uponQueue(.main) { result in
-                completionHandler(result.successValue ?? false)
+    func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
+        return self.profile.bookmarks.modelFactory.bind {
+            guard let factory = $0.successValue else {
+                return deferMaybe(false)
             }
+            return factory.isBookmarked(url)
         }
     }
 }
