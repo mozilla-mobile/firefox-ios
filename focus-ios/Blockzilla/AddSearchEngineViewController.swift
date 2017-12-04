@@ -66,6 +66,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.font = UIFont.systemFont(ofSize: 15)
         templateInput.contentInset = UIEdgeInsets(top: 5, left: 7, bottom: 7, right: 5)
         templateInput.accessibilityIdentifier = "templateInput"
+        templateInput.autocapitalizationType = .none
         container.addSubview(templateInput)
 
         templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
