@@ -32,6 +32,13 @@ open class BrowserDB {
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil, schema: schema, files: files)
     }
 
+    public func cancel(_ dbOperation: Cancellable) {
+        dbOperation.cancel()
+        if dbOperation.running {
+            db.cancel()
+        }
+    }
+
     // For testing purposes or other cases where we want to ensure that this `BrowserDB`
     // instance has been initialized (schema is created/updated).
     public func touch() -> Success {

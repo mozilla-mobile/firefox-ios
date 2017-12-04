@@ -387,22 +387,27 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         case .bookmarksAndHistory:
             let cell = super.tableView(tableView, cellForRowAt: indexPath)
-            if let site = data[indexPath.row] {
-                if let cell = cell as? TwoLineTableViewCell {
-                    let isBookmark = site.bookmarked ?? false
-                    cell.setLines(site.title, detailText: site.url)
-                    cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
-                    cell.imageView!.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                    cell.imageView!.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                    cell.imageView?.setIcon(site.icon, forURL: site.tileURL, completed: { (color, url) in
-                        if site.tileURL == url {
-                            cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-                            cell.imageView?.contentMode = .center
-                            cell.imageView?.backgroundColor = color
-                        }
-                    })
+            DispatchQueue.global().async {
+                guard let site = self.data[indexPath.row] else { return }
+
+                DispatchQueue.main.async {
+                    if let cell = cell as? TwoLineTableViewCell {
+                        let isBookmark = site.bookmarked ?? false
+                        cell.setLines(site.title, detailText: site.url)
+                        cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
+                        cell.imageView!.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+                        cell.imageView!.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+                        cell.imageView?.setIcon(site.icon, forURL: site.tileURL, completed: { (color, url) in
+                            if site.tileURL == url {
+                                cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                                cell.imageView?.contentMode = .center
+                                cell.imageView?.backgroundColor = color
+                            }
+                        })
+                    }
                 }
             }
+
             return cell
         }
     }

@@ -26,8 +26,12 @@ open class Loader<T, ListenerType: LoaderListener> where T == ListenerType.T {
     }
 
     open func load(_ data: T) {
-        for listener in listeners {
-            listener.loader(dataLoaded: data)
+        if !Thread.isMainThread {
+            DispatchQueue.main.async {
+                self.listeners.forEach { $0.loader(dataLoaded: data) }
+            }
+        } else {
+            listeners.forEach { $0.loader(dataLoaded: data) }
         }
     }
 }
