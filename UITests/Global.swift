@@ -229,7 +229,11 @@ class BrowserUtils {
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Cancel")).perform(grey_tap(), error: &error)
         error = nil
 
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("TabToolbar.tabsButton")).perform(grey_tap())
+        if iPad() {
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("TopTabsViewController.tabsButton")).perform(grey_tap())
+        } else {
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("TabToolbar.tabsButton")).perform(grey_tap())
+        }
 
         let goPrivateModeBtn = grey_allOf([grey_accessibilityID("TabTrayController.maskButton"), grey_accessibilityValue("Off")])
         let goNormalModeBtn = grey_allOf([grey_accessibilityID("TabTrayController.maskButton"), grey_accessibilityValue("On")])
@@ -318,7 +322,7 @@ class BrowserUtils {
         EarlGrey.select(elementWithMatcher:settings_button).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Clear Private Data"))
             .using(searchAction: grey_scrollInDirection(.down, 200),
-                   onElementWithMatcher: grey_kindOfClass(UITableView.self))
+                   onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
             .assert(grey_notNil())
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Clear Private Data")).perform(grey_tap())
     }
