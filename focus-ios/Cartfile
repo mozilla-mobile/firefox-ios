@@ -5,4 +5,4 @@ github "cezheng/Fuzi" "master"
 github "mozilla-mobile/AutocompleteTextField" "master"
 github "mozilla-mobile/telemetry-ios" ~> 1.0.6
 github "getsentry/sentry-cocoa" "3.2.1"
-github "AgileBits/onepassword-extension" "add-framework-support"
+github "AgileBits/onepassword-extension" "new/carthage+ios10"
