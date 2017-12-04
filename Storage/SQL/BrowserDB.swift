@@ -32,6 +32,14 @@ open class BrowserDB {
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil, schema: schema, files: files)
     }
 
+    // Remove the DB op from the queue (by marking it cancelled), and if it is already running tell sqlite to cancel it.
+    public func cancel(databaseOperation: Cancellable) {
+        databaseOperation.cancel()
+        if databaseOperation.running {
+            db.cancel()
+        }
+    }
+
     // For testing purposes or other cases where we want to ensure that this `BrowserDB`
     // instance has been initialized (schema is created/updated).
     public func touch() -> Success {

@@ -35,8 +35,15 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
     }()
 
+    private weak var currentDbQuery: Cancellable?
+
     var query: String = "" {
         didSet {
+            guard let profile = self.profile as? BrowserProfile else {
+                assertionFailure("nil profile")
+                return
+            }
+
             if query.isEmpty {
                 self.load(Cursor(status: .success, msg: "Empty query"))
                 return
@@ -47,11 +54,17 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 self.inProgress = nil
             }
 
+            if let currentDbQuery = currentDbQuery {
+                profile.db.cancel(databaseOperation: currentDbQuery)
+            }
+
             let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
-            inProgress = deferred as? Cancellable
+            currentDbQuery = deferred as? Cancellable
 
             deferred.uponQueue(DispatchQueue.main) { result in
-                self.inProgress = nil
+                guard let deferred = deferred as? Cancellable, !deferred.cancelled else {
+                    return
+                }
 
                 // Failed cursors are excluded in .get().
                 if let cursor = result.successValue {
