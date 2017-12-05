@@ -22,7 +22,6 @@ typealias SearchLoader = _SearchLoader<AnyObject, AnyObject>
 class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController> {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
-    fileprivate var inProgress: Cancellable?
 
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile
@@ -51,13 +50,8 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 return
             }
 
-            if let inProgress = inProgress {
-                inProgress.cancel()
-                self.inProgress = nil
-            }
-
             if let currentDbQuery = currentDbQuery {
-                profile.db.cancel({ [weak currentDbQuery] in return currentDbQuery})
+                profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
             }
 
             let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
