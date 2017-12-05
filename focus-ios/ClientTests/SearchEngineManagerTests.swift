@@ -33,7 +33,7 @@ class SearchEngineManagerTests: XCTestCase {
         XCTAssertEqual(manager.activeEngine.name, CUSTOM_ENGINE_NAME)
         
         // Verify that it persisted the custom engine and updated the default engine
-        XCTAssertEqual(mockUserDefaults.setCalls, 2)
+        XCTAssertEqual(mockUserDefaults.setCalls, 3)
     }
     
     func testRemoveDefaultEngine() {
@@ -41,7 +41,7 @@ class SearchEngineManagerTests: XCTestCase {
         let engineToRemove = manager.engines[1]
         manager.removeEngine(engine: engineToRemove)
         
-        XCTAssertEqual(mockUserDefaults.setCalls, 1)
+        XCTAssertEqual(mockUserDefaults.setCalls, 2)
         XCTAssertFalse(manager.engines.contains(where: { (engine) -> Bool in
             return engine.name == engineToRemove.name
         }))
@@ -53,7 +53,7 @@ class SearchEngineManagerTests: XCTestCase {
         manager.activeEngine = manager.engines[0]
         manager.removeEngine(engine: engineAdded)
         
-        XCTAssertEqual(mockUserDefaults.setCalls, 4)
+        XCTAssertEqual(mockUserDefaults.setCalls, 5)
         XCTAssertFalse(manager.engines.contains(where: { (engine) -> Bool in
             return engine.name == engineAdded.name
         }))
@@ -78,7 +78,7 @@ class SearchEngineManagerTests: XCTestCase {
         
         XCTAssertEqual(manager.engines.count, numberOfEngines)
         XCTAssertEqual(manager.activeEngine.name, activeEngine.name)
-        XCTAssertEqual(mockUserDefaults.setCalls, 0)
+        XCTAssertEqual(mockUserDefaults.setCalls, 1)
     }
 }
 
