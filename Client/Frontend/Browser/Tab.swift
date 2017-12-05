@@ -27,7 +27,6 @@ protocol TabDelegate {
 struct TabState {
     var isPrivate: Bool = false
     var desktopSite: Bool = false
-    var isBookmarked: Bool = false
     var url: URL?
     var title: String?
     var favicon: Favicon?
@@ -47,7 +46,7 @@ class Tab: NSObject {
     }
 
     var tabState: TabState {
-        return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, isBookmarked: isBookmarked, url: url, title: displayTitle, favicon: displayFavicon)
+        return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, url: url, title: displayTitle, favicon: displayFavicon)
     }
 
     // PageMetadata is derived from the page content itself, and as such lags behind the
@@ -107,7 +106,6 @@ class Tab: NSObject {
     /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
     /// be managed by the web view's navigation delegate.
     var desktopSite: Bool = false
-    var isBookmarked: Bool = false
     
     var readerModeAvailableOrActive: Bool {
         if let readerMode = self.getHelper(name: "ReaderMode") as? ReaderMode {

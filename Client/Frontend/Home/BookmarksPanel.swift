@@ -9,8 +9,6 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
-
 // MARK: - Placeholder strings for Bug 1232810.
 
 let deleteWarningTitle = NSLocalizedString("This folder isn’t empty.", tableName: "BookmarkPanelDeleteConfirm", comment: "Title of the confirmation alert when the user tries to delete a folder that still contains bookmarks and/or folders.")
@@ -438,9 +436,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.left)
         self.tableView.endUpdates()
         self.updateEmptyPanelState()
-
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: BookmarkStatusChangedNotification), object: bookmark, userInfo: ["added": false]
-        )
     }
 }
 
