@@ -1029,8 +1029,7 @@ class BrowserViewController: UIViewController {
         }
 
         present(controller, animated: true, completion: nil)
-
-        LeanplumIntegration.sharedInstance.track(eventName: .userSharedWebpage)
+        LeanPlumClient.shared.track(event: .userSharedWebpage)
     }
 
     func updateFindInPageVisibility(visible: Bool) {
@@ -1293,7 +1292,7 @@ extension BrowserViewController: URLBarDelegate {
                 case .available:
                     enableReaderMode()
 
-                    LeanplumIntegration.sharedInstance.track(eventName: .useReaderView)
+                    LeanPlumClient.shared.track(event: .useReaderView)
                 case .active:
                     disableReaderMode()
                 case .unavailable:
@@ -1455,7 +1454,7 @@ extension BrowserViewController: URLBarDelegate {
             showHomePanelController(inline: false)
         }
 
-        LeanplumIntegration.sharedInstance.track(eventName: .interactWithURLBar)
+        LeanPlumClient.shared.track(event: .interactWithURLBar)
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
@@ -2386,7 +2385,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let addTab = { (rURL: URL, isPrivate: Bool) in
                     let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
-                    LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Long Press Context Menu" as AnyObject])
+                    LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Long Press Context Menu" as AnyObject])
                     guard !self.topTabsVisible else {
                         return
                     }
@@ -2514,7 +2513,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 extension BrowserViewController {
     func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
         if error == nil {
-            LeanplumIntegration.sharedInstance.track(eventName: .saveImage)
+            LeanPlumClient.shared.track(event: .saveImage)
         }
     }
 }

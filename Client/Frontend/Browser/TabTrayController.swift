@@ -417,7 +417,7 @@ class TabTrayController: UIViewController {
 
     func didClickAddTab() {
         openNewTab()
-        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Tab Tray" as AnyObject])
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray" as AnyObject])
     }
 
     func didTapLearnMore() {
