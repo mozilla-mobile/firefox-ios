@@ -123,7 +123,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 UIApplication.shared.openURL(url)
             }
 
-            LeanplumIntegration.sharedInstance.track(eventName: .openedMailtoLink)
+            LeanPlumClient.shared.track(event: .openedMailtoLink)
             decisionHandler(WKNavigationActionPolicy.cancel)
             return
         }

@@ -123,7 +123,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
                 .upon { result in
                     assert(result.isSuccess, "Private data cleared successfully")
 
-                    LeanplumIntegration.sharedInstance.track(eventName: .clearPrivateData)
+                    LeanPlumClient.shared.track(event: .clearPrivateData)
 
                     self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
 
