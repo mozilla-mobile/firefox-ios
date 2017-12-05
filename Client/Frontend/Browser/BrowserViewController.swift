@@ -1862,6 +1862,7 @@ extension BrowserViewController: TabManagerDelegate {
                 make.left.right.equalTo(self.view)
                 make.bottom.equalTo(self.webViewContainer)
             }
+            buttonToast.showToast(duration: duration)
         }
     }
     
