@@ -61,6 +61,8 @@ class Tab: NSObject {
         return self.url
     }
 
+    var userActivity: NSUserActivity? = nil
+
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
     var bars = [SnackBar]()
