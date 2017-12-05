@@ -230,6 +230,14 @@ open class SwiftData {
         }
     }
 
+    public func suspendQueue() {
+        sharedConnectionQueue.suspend()
+    }
+
+    public func resumeQueue() {
+        sharedConnectionQueue.resume()
+    }
+
     public enum Flags {
         case readOnly
         case readWrite

@@ -37,6 +37,12 @@ open class BrowserDB {
     // Swift compiler bug: failing to compile WeakRef<Cancellable> here.
     public func cancel(databaseOperation: WeakRef<AnyObject>) {
         weak var databaseOperation = databaseOperation.value as? Cancellable
+
+        db.suspendQueue()
+        defer {
+            db.resumeQueue()
+        }
+
         databaseOperation?.cancel()
         if databaseOperation?.running ?? false {
             db.cancel()
