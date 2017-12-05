@@ -860,6 +860,14 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         try executeChange("VACUUM")
     }
 
+    // Developers can manually add a call to this to trace to console.
+    func traceOn() {
+        sqlite3_trace(sqliteDB, { _, sql in
+            guard let sql = sql else { return }
+            print(String(cString: sql))
+        }, nil)
+    }
+
     /// Creates an error from a sqlite status. Will print to the console if debug_enabled is set.
     /// Do not call this unless you're going to return this error.
     fileprivate func createErr(_ description: String, status: Int) -> NSError {
