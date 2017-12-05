@@ -35,7 +35,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
     }()
 
-    private weak var currentDbQuery: Cancellable?
+    private var currentDbQuery: Cancellable?
 
     var query: String = "" {
         didSet {
@@ -62,6 +62,10 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             currentDbQuery = deferred as? Cancellable
 
             deferred.uponQueue(DispatchQueue.main) { result in
+                defer {
+                    self.currentDbQuery = nil
+                }
+
                 guard let deferred = deferred as? Cancellable, !deferred.cancelled else {
                     return
                 }

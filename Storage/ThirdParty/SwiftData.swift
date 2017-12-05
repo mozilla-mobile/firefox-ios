@@ -157,8 +157,6 @@ open class SwiftData {
                 self.sharedConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
             }
 
-            // By the time this dispatch block runs, it is possible the user has backgrounded the
-            // app and the connection has been dealloc'ed since we last grabbed the reference
             guard let connection = SwiftData.ReuseConnections ? self.sharedConnection :
                 ConcreteSQLiteDBConnection(filename: self.filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
                     do {
@@ -220,10 +218,8 @@ open class SwiftData {
     }
 
     public func cancel() {
-        sharedConnectionQueue.async {
-            if let c = self.sharedConnection, let db = c.sqliteDB {
-                sqlite3_interrupt(db)
-            }
+        if let db = sharedConnection?.sqliteDB, !closed {
+            sqlite3_interrupt(db)
         }
     }
 
