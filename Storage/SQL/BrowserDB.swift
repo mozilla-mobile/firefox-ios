@@ -33,9 +33,11 @@ open class BrowserDB {
     }
 
     // Remove the DB op from the queue (by marking it cancelled), and if it is already running tell sqlite to cancel it.
-    public func cancel(databaseOperation: Cancellable) {
-        databaseOperation.cancel()
-        if databaseOperation.running {
+    // At any point the operation could complete on another thread, so it is held weakly.
+    public func cancel(_ weakDBOperationGetter: () -> Cancellable?) {
+        weak var databaseOperation = weakDBOperationGetter()
+        databaseOperation?.cancel()
+        if databaseOperation?.running ?? false {
             db.cancel()
         }
     }

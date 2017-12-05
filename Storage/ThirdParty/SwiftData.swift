@@ -41,6 +41,12 @@ import XCGLogger
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 private let log = Logger.syncLogger
 
+public class DBOperationCancelled : MaybeErrorType {
+    public var description: String {
+        return "Database operation cancelled"
+    }
+}
+
 class DeferredDBOperation<T>: Deferred<T>, Cancellable {
     fileprivate var dispatchWorkItem: DispatchWorkItem?
     private var _running = false
@@ -145,6 +151,7 @@ open class SwiftData {
 
         func doWork() {
             if deferred.cancelled {
+                deferred.fill(Maybe(failure: DBOperationCancelled()))
                 return
             }
 

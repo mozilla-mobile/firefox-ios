@@ -35,7 +35,9 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
     }()
 
-    private var currentDbQuery: Cancellable?
+    // `weak` usage here allows deferred queue to be the owner. The deferred is always filled and this set to nil,
+    // this is defensive against any changes to queue (or cancellation) behaviour in future.
+    private weak var currentDbQuery: Cancellable?
 
     var query: String = "" {
         didSet {
@@ -55,7 +57,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             }
 
             if let currentDbQuery = currentDbQuery {
-                profile.db.cancel(databaseOperation: currentDbQuery)
+                profile.db.cancel({ [weak currentDbQuery] in return currentDbQuery})
             }
 
             let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
