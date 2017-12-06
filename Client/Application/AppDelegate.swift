@@ -720,6 +720,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 break
             case .readingList:
                 addToReadingList(response.notification)
+                UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .readingListItem, value: .shareExtension)
                 break
             default:
                 break

@@ -33,6 +33,12 @@ class UnifiedTelemetry {
             return outputDict
         }
 
+        Telemetry.default.beforeSerializePing(pingType: MobileEventPingBuilder.PingType) { (inputDict) -> [String : Any?] in
+            var outputDict = inputDict
+            print(outputDict)
+            return outputDict
+        }
+        
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
         Telemetry.default.add(pingBuilderType: MobileEventPingBuilder.self)
     }
@@ -52,6 +58,7 @@ extension UnifiedTelemetry {
     public enum EventMethod: String {
         case add = "add"
         case background = "background"
+        case change = "change"
         case delete = "delete"
         case foreground = "foreground"
         case open = "open"
@@ -79,14 +86,20 @@ extension UnifiedTelemetry {
         case homePanelTopSites = "home-panel-top-sites"
         case longPress = "long-press"
         case markAsRead = "mark-as-read"
+        case markAsUnread = "mark-as-unread"
         case pageActionMenu = "page-action-menu"
         case readerModeToolbar = "reader-mode-toolbar"
+        case readingListPanel = "reading-list-panel"
         case shareExtension = "share-extension"
         case shareMenu = "share-menu"
         case swipe = "swipe"
     }
 
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String : Any?]? = nil) {
-        Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value?.rawValue, extras: extras)
+    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String : Any?]? = nil) {
+        Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value.rawValue, extras: extras)
+    }
+
+    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String : Any?]? = nil) {
+        Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value, extras: extras)
     }
 }
