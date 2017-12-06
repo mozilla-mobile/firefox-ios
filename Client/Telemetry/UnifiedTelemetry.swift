@@ -77,14 +77,11 @@ extension UnifiedTelemetry {
     }
 
     public enum EventValue: String {
+        case activityStream = "activity-stream"
         case appMenu = "app-menu"
         case awesomebarResults = "awesomebar-results"
         case bookmarksPanel = "bookmarks-panel"
-        case homePanelHighlights = "home-panel-highlights"
-        case homePanelPocketStories = "home-panel-pocket-stories"
         case homePanelTabButton = "home-panel-tab-button"
-        case homePanelTopSites = "home-panel-top-sites"
-        case longPress = "long-press"
         case markAsRead = "mark-as-read"
         case markAsUnread = "mark-as-unread"
         case pageActionMenu = "page-action-menu"
@@ -92,7 +89,6 @@ extension UnifiedTelemetry {
         case readingListPanel = "reading-list-panel"
         case shareExtension = "share-extension"
         case shareMenu = "share-menu"
-        case swipe = "swipe"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String : Any?]? = nil) {
