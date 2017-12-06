@@ -109,6 +109,47 @@ class SnapshotTests: XCTestCase {
 
         snapshot("08PasteAndGo")
     }
+    
+    func test09TrackingProtection() {
+        let app = XCUIApplication()
+         // Skip the Intro
+        app.buttons["skipButton.button"].tap()
+        // Inject a string into clipboard
+        let clipboardString = "Hello world"
+        UIPasteboard.general.string = clipboardString
+
+        // Enter 'mozilla' on the search field
+        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
+        searchOrEnterAddressTextField.typeText("mozilla.org\n")
+
+        // Check the correct site is reached
+        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.mozilla.org/")
+        app.otherElements["URLBar.trackingProtectionIcon"].tap()
+        snapshot("09TrackingProtection")
+    }
+    
+    func test10CustomSearchEngines() {
+        let app = XCUIApplication()
+        // Skip the Intro
+        app.buttons["skipButton.button"].tap()
+        // Cancel URLBar
+        app.buttons["URLBar.cancelButton"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
+        app.cells["SettingsViewController.searchCell"].tap()
+        app.cells["addSearchEngine"].tap()
+        snapshot("10CustomSearchEngines")
+    }
+    
+    func test11AutocompleteURLs() {
+        let app = XCUIApplication()
+        // Skip the Intro
+        app.buttons["skipButton.button"].tap()
+        // Cancel URLBar
+        app.buttons["URLBar.cancelButton"].tap()
+        app.buttons["HomeView.settingsButton"].tap()
+        app.cells["SettingsViewController.autocompleteCell"].tap()
+        snapshot("11AutocompleteURLs")
+    }
 
     func waitForValueContains(element:XCUIElement, value:String, file: String = #file, line: UInt = #line) {
         let predicateText = "value CONTAINS " + "'" + value + "'"
