@@ -21,6 +21,16 @@ class UnifiedTelemetry {
         telemetryConfig.isCollectionEnabled = sendUsageData
         telemetryConfig.isUploadEnabled = sendUsageData
 
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.blockPopups", withDefaultValue: true)
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.saveLogins", withDefaultValue: true)
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.showClipboardBar", withDefaultValue: false)
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.settings.closePrivateTabs", withDefaultValue: false)
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASPocketStoriesVisible", withDefaultValue: true)
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASBookmarkHighlightsVisible", withDefaultValue: true)
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASRecentHighlightsVisible", withDefaultValue: true)
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.enabled", withDefaultValue: "onInPrivateBrowsing")
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.strength", withDefaultValue: "basic")
+
         let prefs = profile.prefs
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
             var outputDict = inputDict // make a mutable copy
@@ -35,7 +45,12 @@ class UnifiedTelemetry {
 
         Telemetry.default.beforeSerializePing(pingType: MobileEventPingBuilder.PingType) { (inputDict) -> [String : Any?] in
             var outputDict = inputDict
-            print(outputDict)
+            var settings: [String : Any?] = inputDict["settings"] as? [String : Any?] ?? [:]
+
+            let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
+            settings["defaultSearchEngine"] = searchEngines.defaultEngine.engineID ?? "custom"
+
+            outputDict["settings"] = settings
             return outputDict
         }
         

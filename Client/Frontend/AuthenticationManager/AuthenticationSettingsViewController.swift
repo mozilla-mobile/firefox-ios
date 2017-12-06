@@ -260,7 +260,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         let localAuthContext = LAContext()
         if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             let title: String
-            if #available(iOS 11.0, *), localAuthContext.biometryType == .faceID {
+            if #available(iOS 11.0, *), localAuthContext.biometryType == .typeFaceID {
                 title = AuthenticationStrings.faceIDPasscodeSetting
             } else {
                 title = AuthenticationStrings.touchIDPasscodeSetting
@@ -284,7 +284,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         let localAuthContext = LAContext()
         if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             let title: String
-            if #available(iOS 11.0, *), localAuthContext.biometryType == .faceID {
+            if #available(iOS 11.0, *), localAuthContext.biometryType == .typeFaceID {
                 title = Strings.UseFaceID
             } else {
                 title = Strings.UseTouchID
