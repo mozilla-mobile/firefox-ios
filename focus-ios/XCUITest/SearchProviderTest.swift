@@ -44,7 +44,10 @@ class SearchProviderTest: BaseTestCase {
         app.textViews["templateInput"].tap()
         app.textViews["templateInput"].typeText("https://developer.mozilla.org/en-US/search?q=%s")
         app.navigationBars.buttons["save"].tap()
-        
+
+        let toast = app.staticTexts["Toast.label"]
+        waitforNoExistence(element: toast)
+
         XCTAssertTrue(app.tables.cells["MDN"].exists)
         app.tables.cells["Wikipedia"].tap()
         
