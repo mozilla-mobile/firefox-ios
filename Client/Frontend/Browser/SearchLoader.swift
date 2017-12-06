@@ -22,7 +22,6 @@ typealias SearchLoader = _SearchLoader<AnyObject, AnyObject>
 class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController> {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
-    fileprivate var inProgress: Cancellable?
 
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile
@@ -35,23 +34,37 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
     }()
 
+    // `weak` usage here allows deferred queue to be the owner. The deferred is always filled and this set to nil,
+    // this is defensive against any changes to queue (or cancellation) behaviour in future.
+    private weak var currentDbQuery: Cancellable?
+
     var query: String = "" {
         didSet {
+            guard let profile = self.profile as? BrowserProfile else {
+                assertionFailure("nil profile")
+                return
+            }
+
             if query.isEmpty {
                 self.load(Cursor(status: .success, msg: "Empty query"))
                 return
             }
 
-            if let inProgress = inProgress {
-                inProgress.cancel()
-                self.inProgress = nil
+            if let currentDbQuery = currentDbQuery {
+                profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
             }
 
             let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
-            inProgress = deferred as? Cancellable
+            currentDbQuery = deferred as? Cancellable
 
             deferred.uponQueue(DispatchQueue.main) { result in
-                self.inProgress = nil
+                defer {
+                    self.currentDbQuery = nil
+                }
+
+                guard let deferred = deferred as? Cancellable, !deferred.cancelled else {
+                    return
+                }
 
                 // Failed cursors are excluded in .get().
                 if let cursor = result.successValue {
