@@ -1,0 +1,22 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Yandex</ShortName>
+<Description>Yandex Türkiye arama motoru</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAqFBMVEUAAAD29PL29PL29PP29PLd3d3w8PD29fP/JQD7ion35uT28/H8bmz36+r6paT+Lh7+KRL+Jwz41tX4ysn4wcD7h4X8dHL+OTD27+333t37lZT7jYz8aWb9Qz3+JQH36Of34+H40tH5vLv5uLj5sbD5rKv8e3n9WVb9Uk/9TUn9SEP+Myf+Jgb32tr4xMP6nJv7mpn7goH8gH78X1z9Pzb+NSn+JQD8Yl99ghQbAAAAB3RSTlMA88/IbQYbgu4OFQAAAe5JREFUaN7t2slywjAMBmCzKjSsISxhXwtlXwp9/zcr+VsQKfQU6dCpdfLooG/isWVPxsaYTDqVIIVIpNIZc4lsktQimTUmo1YfQsakSTXSJkWqkTIJUo2EIeWwgAUsYAFVwK84lyhhrALUnTA+MNYA3BKACSEUAB/1y01CKAAHAHWMYwG1/CXqg4cZOgHw4wPvKNT+ma4ifXLjAy1U6j58GNI1ig8EPZQaPv2woQBAM5TKRZMef1dsYIpajWcT1xIBCmUUq0aSizDVC+ID3BP296kAqRnJABtUW7rEsUWqKAS4DZTbEMc8TFQKQgC1AbxyYoCl2yEpYA2gxHNURGIsAvCMOCO6xhFgUw4oAsjfFu6Kp0wGKFQivX8CryoIUD5yenV4a0sBvnO3bJplNCdRwF3eLfwxNE8O4PY/5daxIFnAA3Dk68RWGKC3sOqqfz0sewNpoHhrb21upJJAH1thfv2WqSjAi/8cfG3jckEeGH0fkmPuGnIAb4UuHdD3pAHeCsMuOrcG4AHIn9FIpQHeCtxI5QFsBW6k4gC2At+E5QGcCtxI5QGcCtxIxQG+IO0IoQDQHsAaYxUgB+AFYwtYwAJEFrCABYgs8DR2zi9X97/5c9wCFrDAfwK0Hw2oP3tQf7ih/vRE/fGM+vOfTzkzCrugwvNDAAAAAElFTkSuQmCC</Image>
+<Url type="application/x-suggestions+json" method="GET" template="http://suggest.yandex.com.tr/suggest-ff.cgi">
+  <Param name="part" value="{searchTerms}"/>
+  <Param name="uil" value="tr"/>
+</Url>
+<Url type="text/html" method="GET" template="https://yandex.com.tr/search">
+  <Param name="clid" value="2186727"/>
+  <Param name="text" value="{searchTerms}"/>
+</Url>
+<Url type="application/x-moz-tabletsearch" method="GET" template="https://yandex.com.tr/search">
+  <Param name="clid" value="2186733"/>
+  <Param name="text" value="{searchTerms}"/>
+</Url>
+</SearchPlugin>

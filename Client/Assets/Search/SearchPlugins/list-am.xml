@@ -1,0 +1,13 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>List.am</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgBAMAAAAQtmoLAAAALVBMVEUAAAD5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn2GAD3pQAGS/4MT/6sFqU0AAAACnRSTlMA0gbC+W9sG8bzJdSJ+wAAAJRJREFUWMNjYFAzWUU0cE5iYGCXWkUCWFjAoLiKJCDEkEWahmUMVqRpWMzgRZqGJQyrSASjGkY1DAYNu5HAqIZRDaMaRjUMBg2DsKgckRreIQEQf80ZBMCq4e1dOLg3qmFUw6iGUQ0oGkguZoZKUTmqYVQDMiB1EGElQxdpGlYwRJGmYSnJQy2kD+YwqFqRMNASxAAAvbpat7MH5gcAAAAASUVORK5CYII=</Image>
+<SearchForm>http://www.list.am/category?q=</SearchForm>
+<Url type="text/html" method="GET" template="http://www.list.am/category">
+  <Param name="q" value="{searchTerms}"/>
+</Url>
+</SearchPlugin>
