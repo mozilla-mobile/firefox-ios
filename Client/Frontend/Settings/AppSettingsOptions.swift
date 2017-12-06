@@ -844,7 +844,7 @@ class TouchIDPasscodeSetting: Setting {
 
         let title: String
         if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-            if #available(iOS 11.0, *), localAuthContext.biometryType == .typeFaceID {
+            if #available(iOS 11.0, *), localAuthContext.biometryType == .faceID {
                 title = AuthenticationStrings.faceIDPasscodeSetting
             } else {
                 title = AuthenticationStrings.touchIDPasscodeSetting
