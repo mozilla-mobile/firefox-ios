@@ -1005,6 +1005,20 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return self.executeQuery(sqlStr, factory: factory, withArgs: nil)
     }
 
+    func explain(query sqlStr: String, withArgs args: Args?) {
+        do {
+            let qp = try SQLiteDBStatement(connection: self, query: "EXPLAIN QUERY PLAN " + sqlStr, args: args)
+            let qpFactory: ((SDRow) -> String) = { row in
+                return "id: \(row[0] as! Int), order: \(row[1] as! Int), from: \(row[2] as! Int), details: \(row[3] as! String)"
+            }
+            let qpCursor = FilledSQLiteCursor<String>(statement: qp, factory: qpFactory)
+            print("⦿ EXPLAIN QUERY ---------------- ")
+            qpCursor.forEach { print("⦿ EXPLAIN: \($0 ?? "")") }
+        } catch {
+            print("Explain query plan failed!")
+        }
+    }
+
     /// Queries the database.
     /// Returns a cursor pre-filled with the complete result set.
     public func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T), withArgs args: Args?) -> Cursor<T> {
@@ -1016,6 +1030,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             error = error1
             statement = nil
         }
+
+        #if LOG_SQL_EXPLAIN
+            explain(query: sqlStr, withArgs: args)
+        #endif
 
         // Close, not reset -- this isn't going to be reused, and the FilledSQLiteCursor
         // consumes everything.
