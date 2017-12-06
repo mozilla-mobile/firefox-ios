@@ -277,7 +277,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
 
     map.addScreenState(NewTabScreen) { screenState in
         screenState.noop(to: HomePanelsScreen)
-        screenState.tap(app.buttons["TabToolbar.tabsButton"], to: TabTray)
+        //screenState.tap(app.buttons["TabToolbar.tabsButton"], to: TabTray)
+        if isTablet {
+            screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
+        } else {
+            screenState.gesture(to: TabTray) {
+                if (app.buttons["TabToolbar.tabsButton"].exists) {
+                    app.buttons["TabToolbar.tabsButton"].tap()
+                } else {
+                    app.buttons["URLBarView.tabsButton"].tap()
+                }
+            }
+        }
         makeURLBarAvailable(screenState)
         screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
         screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarNewTab, if: "tablet == true") { userState in
