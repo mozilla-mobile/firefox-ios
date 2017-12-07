@@ -79,7 +79,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func cancelTapped() {
-        self.navigationController?.popViewController(animated: true)
+        finish()
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
