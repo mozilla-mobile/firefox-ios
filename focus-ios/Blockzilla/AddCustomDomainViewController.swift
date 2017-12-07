@@ -6,11 +6,16 @@ import Foundation
 import AutocompleteTextField
 import Telemetry
 
+protocol AddCustomDomainViewControllerDelegate: class {
+    func addCustomDomainViewControllerDidFinish(_ viewController: AddCustomDomainViewController)
+}
+
 class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     private let autocompleteSource: CustomAutocompleteSource
     private let inputLabel = UILabel()
     private let textInput: UITextField = InsetTextField(insetBy: 10)
     private let inputDescription = UILabel()
+    weak var delegate: AddCustomDomainViewControllerDelegate?
     
     init(autocompleteSource: CustomAutocompleteSource) {
         self.autocompleteSource = autocompleteSource
@@ -91,13 +96,22 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
 
         switch autocompleteSource.add(suggestion: domain) {
         case .error(.duplicateDomain):
-            self.navigationController?.popViewController(animated: true)
+            finish()
         case .error(let error):
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
+            finish()
+        }
+    }
+
+    private func finish() {
+        delegate?.addCustomDomainViewControllerDidFinish(self)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            dismiss(animated: true, completion: nil)
+        } else {
             self.navigationController?.popViewController(animated: true)
         }
     }

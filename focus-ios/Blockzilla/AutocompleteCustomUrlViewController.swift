@@ -149,6 +149,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
 
         if indexPath.row == domains.count {
             let viewController = AddCustomDomainViewController(autocompleteSource: customAutocompleteSource)
+            viewController.delegate = self
 
             // Present the ViewController modallu on the iPad
             if UIDevice.current.userInterfaceIdiom == .pad {
@@ -203,3 +204,9 @@ extension AutocompleteCustomUrlViewController: UITableViewDelegate {
     }
 }
 
+extension AutocompleteCustomUrlViewController: AddCustomDomainViewControllerDelegate {
+    func addCustomDomainViewControllerDidFinish(_ viewController: AddCustomDomainViewController) {
+        navigationItem.rightBarButtonItem?.isEnabled = domains.count > 0
+        tableView.reloadData()
+    }
+}
