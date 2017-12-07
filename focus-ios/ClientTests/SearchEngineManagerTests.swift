@@ -80,6 +80,26 @@ class SearchEngineManagerTests: XCTestCase {
         XCTAssertEqual(manager.activeEngine.name, activeEngine.name)
         XCTAssertEqual(mockUserDefaults.setCalls, 1)
     }
+    
+    func testEmptyIsNotValidSearchEngineName() {
+        let manager = SearchEngineManager(prefs: mockUserDefaults)
+        XCTAssertFalse(manager.isValidSearchEngineName(""))
+    }
+    
+    func testCustomEngineIsNotValidSearchEngineName() {
+        let manager = SearchEngineManager(prefs: mockUserDefaults)
+        XCTAssertTrue(manager.isValidSearchEngineName(CUSTOM_ENGINE_NAME))
+        _ = manager.addEngine(name: CUSTOM_ENGINE_NAME, template: CUSTOM_ENGINE_TEMPLATE)
+        XCTAssertFalse(manager.isValidSearchEngineName(CUSTOM_ENGINE_NAME))
+    }
+    
+    func testDisabledEngineIsNotValidSearchEngineName() {
+        let manager = SearchEngineManager(prefs: mockUserDefaults)
+        let engineToRemove = manager.engines[1]
+        XCTAssertFalse(manager.isValidSearchEngineName(engineToRemove.name))
+        manager.removeEngine(engine: engineToRemove)
+        XCTAssertFalse(manager.isValidSearchEngineName(engineToRemove.name))
+    }
 }
 
 class MockUserDefaults: UserDefaults {

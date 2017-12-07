@@ -144,7 +144,7 @@ class SearchSettingsViewController: UITableViewController {
         
         if indexPath.item == engines.count {
             // Add search engine tapped
-            let vc = AddSearchEngineViewController(delegate: self)
+            let vc = AddSearchEngineViewController(delegate: self, searchEngineManager: searchEngineManager)
             navigationController?.pushViewController(vc, animated: true)
         } else if indexPath.item > engines.count {
             // Restore default engines tapped

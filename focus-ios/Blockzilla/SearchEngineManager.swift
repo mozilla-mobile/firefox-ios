@@ -81,6 +81,22 @@ class SearchEngineManager {
         loadEngines()
     }
     
+    func isValidSearchEngineName(_ name: String) -> Bool {
+        if name.isEmpty {
+            return false
+        }
+        
+        var names = engines.map { (engine) -> String in
+            return engine.name
+        }
+        
+        names = names + getDisabledDefaultEngineNames()
+        
+        return !names.contains(where: { (n) -> Bool in
+            return n == name
+        })
+    }
+    
     private func loadEngines() {
         
         // Get the directories to look for engines, from most to least specific.

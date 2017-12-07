@@ -10,6 +10,7 @@ protocol AddSearchEngineDelegate {
 
 class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private var delegate: AddSearchEngineDelegate
+    private var searchEngineManager: SearchEngineManager
     
     private let leftMargin = 10
     private let rowHeight = 44
@@ -18,8 +19,9 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private var templateInput = UITextView()
     private var templatePlaceholderLabel = UILabel()
     
-    init(delegate: AddSearchEngineDelegate) {
+    init(delegate: AddSearchEngineDelegate, searchEngineManager: SearchEngineManager) {
         self.delegate = delegate
+        self.searchEngineManager = searchEngineManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -142,25 +144,38 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         guard let name = nameInput.text else { return }
         guard let template = templateInput.text else { return }
         
+        if !AddSearchEngineViewController.isValidTemplate(template) || !searchEngineManager.isValidSearchEngineName(name) {
+            Toast(text: UIConstants.strings.errorTryAgain).show()
+            return
+        }
+        
         delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
         Toast(text: UIConstants.strings.NewSearchEngineAdded).show()
         self.navigationController?.popViewController(animated: true)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        templatePlaceholderLabel.isHidden = !isNullOrEmpty(text: textView.text)
+        templatePlaceholderLabel.isHidden = !textView.text.isEmpty
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        templatePlaceholderLabel.isHidden = !isNullOrEmpty(text: textView.text)
+        templatePlaceholderLabel.isHidden = !textView.text.isEmpty
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        templatePlaceholderLabel.isHidden = !isNullOrEmpty(text: textView.text)
+        templatePlaceholderLabel.isHidden = !textView.text.isEmpty
     }
     
-    private func isNullOrEmpty(text:String?) -> Bool{
-        guard let text = text else { return true }
-        return text.isEmpty
+    static func isValidTemplate(_ template:String) -> Bool {
+        if template.isEmpty {
+            return false
+        }
+        
+        if !template.contains("%s") {
+            return false
+        }
+        
+        guard let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!) else { return false }
+        return url.isWebPage()
     }
 }
