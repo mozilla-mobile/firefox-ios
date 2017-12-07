@@ -334,6 +334,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         case let item as BookmarkItem:
             homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.bookmark)
             LeanPlumClient.shared.track(event: .openedBookmark)
+            UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
             break
 
         case let folder as BookmarkFolder:
@@ -395,6 +396,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: title, handler: { (action, indexPath) in
             self.deleteBookmark(indexPath: indexPath, source: source)
+            UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "swipe"])
         })
 
         return [delete]
@@ -471,6 +473,7 @@ extension BookmarksPanel: HomePanelContextMenu {
         if source.current.itemIsEditableAtIndex(indexPath.row) {
             let removeAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
                 self.deleteBookmark(indexPath: indexPath, source: source)
+                UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "long-press"])
             })
             actions.append(removeAction)
         }

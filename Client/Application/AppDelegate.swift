@@ -450,6 +450,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 self.launchFromURL(params)
             }
         }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -464,6 +466,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         defaults.synchronize()
 
         syncOnDidEnterBackground(application: application)
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .background, object: .app)
     }
 
     fileprivate func syncOnDidEnterBackground(application: UIApplication) {

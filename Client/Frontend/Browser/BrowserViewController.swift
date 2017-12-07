@@ -1336,10 +1336,11 @@ extension BrowserViewController: URLBarDelegate {
                 switch readerMode.state {
                 case .available:
                     enableReaderMode()
-
+                    UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
                     LeanPlumClient.shared.track(event: .useReaderView)
                 case .active:
                     disableReaderMode()
+                    UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
                 case .unavailable:
                     break
                 }

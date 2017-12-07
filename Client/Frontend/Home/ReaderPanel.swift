@@ -400,11 +400,13 @@ class ReadingListPanel: UITableViewController, HomePanel {
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.bookmark
             homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType)
+            UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .readingListItem)
         }
     }
     
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
+            UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
             if let result = profile.readingList?.deleteRecord(record), result.isSuccess {
                 records?.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
@@ -418,6 +420,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     fileprivate func toggleItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
+            UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readingListItem, value: !record.unread ? .markAsUnread : .markAsRead, extras: [ "from": "reading-list-panel" ])
             if let result = profile.readingList?.updateRecord(record, unread: !record.unread), result.isSuccess {
                 // TODO This is a bit odd because the success value of the update is an optional optional Record
                 if let successValue = result.successValue, let updatedRecord = successValue {
