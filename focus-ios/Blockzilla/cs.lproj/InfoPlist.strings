@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Toto vám dovolí pořizovat a nahrávat fotografie.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Servery, které navštěvujete, mohou chtít znát vaše umístění.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Toto vám dovolí pořizovat a nahrávat videa.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Toto vám dovolí ukládat a nahrávat fotografie.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Toto vám dovolí ukládat a nahrávat fotografie.";
 

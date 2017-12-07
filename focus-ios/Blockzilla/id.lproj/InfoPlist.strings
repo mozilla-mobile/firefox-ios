@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Izinkan mengambil dan mengunggah foto.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Situs web yang Anda kunjungi dapat meminta lokasi Anda.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Izinkan mengambil dan mengunggah video.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Ini memungkinkan Anda menyimpan dan mengunggah foto.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Izinkan menyimpan dan mengunggah foto.";
 

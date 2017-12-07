@@ -19,6 +19,9 @@
 /* Label for row in About screen */
 "About.rowHelp" = "सहायता";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "गोपनीयता सूचना";
+
 /* Label for row in About screen */
 "About.rowRights" = "आपके अधिकार";
 
@@ -58,6 +61,15 @@
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "पुनः प्रयास करें";
 
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "रद्द करें";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ एक और ऐप को खोलना चाहता है";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "खोलें";
+
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "कॉल करें";
 
@@ -73,17 +85,20 @@
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "ऐप्प स्टोर खोलें";
 
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ ऐप स्टोर खोलना चाहता है.";
+
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "नक्शा खोलें";
-
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "अच्छा, समझ गया!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "आप ब्राउज करने के दौरान ऑनलाइन ट्रैकर्स को स्वचालित रूप से रोकें. तब अपने उपकरण से देखे गये पृष्ठों, खोजों, कुकीज और कूटशब्दों को मिटाने के लिए दबाएँ.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "ऐसे ब्राउज करें जैसे कोई नही देख रहा है.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "ऐपल हैंडऑफ़ समक्रमिक हो रहा है";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "स्वचालित निजी ब्राउज़िंग.";
@@ -124,14 +139,14 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "मैं समझता हूँ";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla मात्र वही एकत्रित करने का प्रयास करता है जिसकी हमें %@ को बेहतर बनाने और सबको उपलब्ध कराने के लिए आवश्यकता है.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "और जानें.";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "सेटिंग्स";
-
-/* Title for the search engine row */
-"Settings.searchSection" = "खोज इंजिन";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "खोज इंजन";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "एकीकरण";
@@ -148,8 +163,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "विज्ञापन ट्रैकर्स को अवरुद्ध करें";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "कुछ विज्ञापन साइट भ्रमण पर निगाह रखते हैं, भले ही आप विज्ञापनों को क्लिक न करें";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "वैश्लेषिकी ट्रैकर्स को अवरुद्ध करें";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "टैपिंग और स्क्रॉलिंग जैसी गतिविधियों को एकत्रित, विश्लेषण और मापने के लिए उपयोग किया जाता है";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "वेब फ़ॉन्ट को अवरुद्ध करें";
@@ -157,8 +178,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "अन्य सामग्री ट्रैकर्स को अवरुद्ध करें";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "सक्षम करने पर कुछ पृष्ठ अनपेक्षित व्यवहार कर सकते हैं";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "सामाजिक ट्रैकर्स को रोकें‌";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "साइटों पर सन्निहित, आपके भ्रमणों पर निगाह रखने और साझा बटन जैसे कार्यक्षमता प्रदर्शित करने के लिए";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "कुछ वीडियो और वेब पृष्ठों को नुकसान पहुँच सकता है";
@@ -166,14 +193,23 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "अज्ञात उपयोग आँकड़ा भेजें";
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "उपयोग डेटा भेजें";
 
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "अधिक जानें";
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "क्या नया है";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Firefox एप्लिकेशन पाएं";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "%@ में खोलें";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "रद्द करें";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "चिपकाएँ और बढ़ें";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "मिटाएँ";
@@ -186,4 +222,64 @@
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "%@ के लिए खोजें";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ट्रैकर्स अवरुद्ध";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ में खोलें";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "स्थान पट्टी का चयन करें";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "लिंक जो आपने कॉपी किया: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "चित्र कॉपी करें";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "लिंक कॉपी करें";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "चित्र सहेजें";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "लिंक साझा करें";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ को खोलना चाहता है";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "यह आपको अपने कैमरा रोल में चित्रों को सहेजने की अनुमति देता है";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "सेटिंग्स खोलें";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” आपकी तस्वीरें एक्सेस करना चाहता है";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "विज्ञापन ट्रैकर्स";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "विश्लेषणात्मक ट्रैकर्स";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "सामग्री ट्रैकर";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "ट्रैकिंग सुरक्षा बंद";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "सामाजिक ट्रैकर्स";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "आपके %@ बंद करने या ERASE टैप करने तक अक्षम करें.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "ट्रैकिंग सुरक्षा";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "चुनें कि क्या %@ विज्ञापनों, विश्लेषणों, सामाजिक, और अन्य ट्रैकर्स को अवरुद्ध करे.";
 

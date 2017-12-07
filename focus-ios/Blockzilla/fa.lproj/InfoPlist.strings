@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "به شما اجازه گرفتن و بارگذاری تصاویر را می‌دهد.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "وب‌سایت‌هایی که بازدید می‌کنید ممکن است مکان شما را درخواست کنند.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "به شما اجازه گرفتن و بارگذاری ویدئوها را می‌دهد.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "این به شما اجازه می‌ دهد تصاویر ذخیره و بارگذاری کنید.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "به شما اجازه گرفتن و بارگذاری تصاویر را می‌دهد.";
 

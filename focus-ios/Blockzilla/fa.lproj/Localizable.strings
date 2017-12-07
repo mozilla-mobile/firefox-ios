@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "برنامهٔ %@ شما را در کنترل قرار می‌دهد.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "اضافه کردن نشانی سفارشی";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "نشانی که وارد کردید را دوباره بررسی کنید.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "مثال: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "نشانی برای اضافه کردن";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "جای‌گذاری یا ورود نشانی";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ اضافه کردن نشانی سفارشی";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "اضافه و مدیریت کردنِ تکمیل خودکار نشانی‌های سفارشی.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "نشانی‌های سفارشی";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "فهرست نشانی‌های سفارشی";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "نشانیِ سفارشیِ جدید اضافه شد.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "برای داشتن تکمیل خودکار %@ برای بیش از ۴۵۰ نشانی محبوب در نوار آدرس، فعال کنید.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "تکمیل خودکار";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "فهرست نشانی‌های پیش‌فرض";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "غیرفعال شد";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "هیچ نشانی سفارشی برای نمایش وجود ندارد";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "فعال شد";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "بازگشت";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "توقف";
+
+/* Label on button to cancel edits */
+"Cancel" = "لغو";
+
+/* Label on button to complete edits */
+"Done" = "انجام شد";
+
+/* Label on button to allow edits */
+"Edit" = "ویرایش";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "تلاش دوباره";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "باز کردن نقشه";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "باشه، متوجه شدم!";
+"FirstRun.lastSlide.buttonLabel" = "باشه، گرفتم!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "به طور خودکار ردیاب‌های آنلاین را هنگام مرورِ خود مسدود کنید. سپس تنها با یک ضربه صفحه‌های بازدید کرده، جست‌وجوها، کوکی‌ها و گذرواژه‌های خود را از روی دستگاه حذف کنید.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "باز کردن برنامهٔ تنظیمات";
 
+/* Save button label */
+"Save" = "ذخیره";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "اضافه کردن موتور جست‌وجو دیگر";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ اضافه کردن موتور جست‌وجو دیگر";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "اضافه کردن موتور جست‌وجو";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "موتورهای جست‌وجو نصب شده";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "نام جهت نمایش";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "موتور جست‌وجو جدید اضافه شد.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "بازآوری موتورهای جست‌وجو پیش‌فرض";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "نام موتور جست‌وجو";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "رشته جست‌وجو برای اضافه کردن";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "جای‌گذاری یا ورود رشتهٔ جست‌وجو. در صورت لزوم، شرط جست‌وجو را با %s جایگزین کنید.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "تکمیل خودکار نشانی";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "مسدود کردن سایر ردیاب‌های محتوا ممکن است باعث خراب شدن تعدادی از فیلم‌ها و صفحات وب شود.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "تنظیمات";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "موتور جست‌وجو";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "موتور جست‌وجو";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "موتور جستجو";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "جست‌وجو";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "یکپارچگی";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ارسال اطلاعاتِ استفاده";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "چه چیزهایی جدید است";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "دریافت برنامه Firefox";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” تمایل دارد به تصاویر شما دسترسی داشته باشد";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "مثال: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "دنبال کننده تبلیغ";
 
@@ -277,6 +376,9 @@
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "محافظت در مقابل دنبال شدن خاموش شد";
 
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "اطلاعات بیشتر";
+
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "دنبال کنندگان اجتماعی";
 
@@ -284,7 +386,7 @@
 "trackingProtection.toggleDescription1" = "غیرفعال باشد تا زمان که شما %@ را ببنیدید یا بر روی ERASE کلیک کنید.";
 
 /* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "محاظفت در مقابل دنبال شدن";
+"trackingProtection.toggleLabel" = "محافظت در مقابل دنبال شدن";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "انتخاب مسدود کردن دنبال‌ کنندگان تبلیغ،شبکه‌های اجتما‌عی، تجزیه‌ و‌تحلیل کنندگان توسط %@.";

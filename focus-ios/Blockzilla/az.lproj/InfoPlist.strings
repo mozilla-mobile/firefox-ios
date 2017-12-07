@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Bu, şəkilləri çəkmə və yükləməyinizə imkan verir.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Ziyarət etdiyiniz saytlar mövqeyinizi istəyə bilər.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Bu, videoları çəkməyinizə və yükləməyinizə imkan verir.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Bu, şəkilləri saxlama və yükləməyinizə imkan verir.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Bu, şəkilləri saxlama və yükləməyinizə imkan verir.";
 

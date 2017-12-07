@@ -40,6 +40,48 @@
 /* Label on About screen */
 "About.topLabel" = "%@ date'l control.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Amestar URL personalizada";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Volvi comprobar la URL qu'introduxesti.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Exemplu: exemplu.com";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Apega o introduz la URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Amestar URL personalizada";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Amiesta o xestiona URLs personalizaes d'autocompletáu.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URLs personalizaes";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "LLISTÁU D'URLs PERSONALIZAES";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Amestóse una URL nueva personalizada.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Autocompletáu";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "LLISTÁU D'URLs POR DEFEUTU";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Desactivóse";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Nun hai URLs personalizaes p'amosar";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Activóse";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Atrás";
 
@@ -57,6 +99,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Atrás";
+
+/* Label on button to cancel edits */
+"Cancel" = "Encaboxar";
+
+/* Label on button to complete edits */
+"Done" = "Fecho";
+
+/* Label on button to allow edits */
+"Edit" = "Editar";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Tentar de nueves";
@@ -92,7 +143,7 @@
 "ExternalLink.openMapsButton" = "Abrir Mapes";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "¡VAL, ENTENDÍLO!";
+"FirstRun.lastSlide.buttonLabel" = "¡Val, entendílo!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Bloquia automáticamente los rastrexadores en llinia mentanto restoles. Dempués calca pa desaniciar les páxines visitaes, guetes, cookies y contraseñes del to preséu.";
@@ -133,6 +184,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Abrir aplicación d'axustes";
 
+/* Save button label */
+"Save" = "Guardar";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Amestar otru motor de gueta";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Amestar otru motor de gueta";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Amestar motor de gueta";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "MOTORES DE GUETA INSTALAOS";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Nome p'amosar";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Amestóse'l motor de gueta nuevu.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Reafitar motores de gueta";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Nome del motor de gueta";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Cadena de gueta pa usar";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Apega o introduz la cadena de gueta. Si ye preciso, troca'l términu de gueta con: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Autocompletáu d'URLs";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Bloquiar el conteníu de los rastrexadores podría romper delles páxines web y videos.";
 
@@ -151,11 +238,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Axustes";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "MOTOR DE GUETA";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Motor de gueta";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Motor de gueta";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "GUETA";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRACIÓN";
@@ -204,6 +291,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Unviar datos d'usu";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Qué hai nuevo";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Consiguir Firefox";
@@ -264,6 +354,9 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "A «%@» prestaría-y acceder a les tos semeyes";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Exemplu: motordegueta.com/search/?q=%s";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Rastrexadores d'anuncios";

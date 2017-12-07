@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ transdonas al vi la regadon.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Aldoni personecigitan adreson";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Kontrolu denove la tajpitan adreson.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Ekzemplo: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Aldonota adreso";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Algui aŭ tajpi adreson";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Aldoni personecigitan adreson";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Aldoni kaj administri aŭtomatan kompletigon de personecigitaj adresoj.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Personecigitaj adresoj";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "LISTO DE PERSONECIGITAJ ADRESOJ";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Nova personecigita adreso aldonita.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Aktivigu por igi %@ aŭtomate kompletigi pli ol 450 popularajn adresojn en la adresa strio.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Aŭtomata kompletigo";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "NORMA LISTO DE ADRESOJ";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Malaktiva";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Ne estas personecigitaj adresoj";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Aktiva";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Reen";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Haltigi";
+
+/* Label on button to cancel edits */
+"Cancel" = "Nuligi";
+
+/* Label on button to complete edits */
+"Done" = "Farita";
+
+/* Label on button to allow edits */
+"Edit" = "Redakti";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Klopodi denove";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "Malfermi mapojn";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "En ordo, mi komprenis!";
+"FirstRun.lastSlide.buttonLabel" = "En ordo, mi komprenis!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Aŭtomate bloku retajn spurilojn dum vi retumas. Poste tuŝetu por forigi vizititajn paĝojn, serĉojn, kuketojn kaj pasvortojn el via aparato.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Malfermu la agordan programon";
 
+/* Save button label */
+"Save" = "Konservi";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Aldoni alian serĉilon";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Aldoni alian serĉilon";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Aldoni alian serĉilon";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALITAJ SERĈILOJ";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Montrata nomo";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Nova serĉilo aldonita.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Remeti normajn serĉilojn";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Nomo de serĉilo";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Serĉa teksto";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Alguu aŭ tajpu tekston. Se bezonatas, anstataŭigu la serĉan tekston per: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Aŭtomata kompletigo de adresoj";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokado de aliaj enhavaj spuriloj povus paneigi filmetojn kaj retpaĝojn.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Agordoj";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "SERĈILO";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Serĉilo";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Serĉilo";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SERĈI";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRO";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Sendi datumojn pri uzo";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Novaĵoj";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Ricevi Firefox";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ŝatus aliri viajn fotojn";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Ekzemplo: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Reklamaj spuriloj";
 
@@ -276,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Protekto kontraŭ spurado malŝaltita";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Pli da informo";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sociaj spuriloj";

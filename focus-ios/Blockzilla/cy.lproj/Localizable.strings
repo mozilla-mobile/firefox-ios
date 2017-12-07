@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "Chi sy'n rheoli gyda %@.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Ychwanegu URL Cyfaddas";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Gwiriwch yr URL rydych wedi ei roi.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Esiampl: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URLau i'w hychwanegu";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Gludo neu rhoi URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Ychwanegu URL cyfaddas";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Ychwanegu a rheoli URLs awtogwblhau cyfaddas.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URLau cyfaddas";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "RHESTR URL CYFADDAS";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "URL Cyfaddas Newydd wedi ei Ychwanegu.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Galluogi i %@ awtogwblhau dros 450 URL poblogaidd yn y bar cyfeiriad.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Awtogwblhau";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "RHESTR URL RHAGOSODEDIG";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Analluogwyd";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Dim URLau Cyfaddas i'w harddangos";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Galluogwyd";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Nôl";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Atal";
+
+/* Label on button to cancel edits */
+"Cancel" = "Diddymu";
+
+/* Label on button to complete edits */
+"Done" = "Gorffen";
+
+/* Label on button to allow edits */
+"Edit" = "Golygu";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Ceisiwch eto";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "Agor Maps";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "IAWN, RWY'N DEALL!";
+"FirstRun.lastSlide.buttonLabel" = "Iawn, Wedi deall!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Rhwystrwch tracwyr ar-lein yn awtomatig wrth i chi bori. Gallwch dapio i ddileu tudalennau, chwilio, cwcis a chyfrineiriau oddi ar eich dyfais.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Agor Gosodiadau'r Ap";
 
+/* Save button label */
+"Save" = "Cadw";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Ychwanegu Peiriant Chwilio Arall";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Ychwanegu Peiriant Chwilio Arall";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Ychwanegu Peiriant Chwilio";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "PEIRIANNAU CHWILIO WEDI'U GOSOD";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Enw i'w ddangos";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Peiriant Chwilio Newydd Wedi'i Ychwanegu.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Adfer Peiriannau Chwilio Rhagosodedig";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Enw peiriant chwilio";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Llinyn chwilio i'w ddefnyddio";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Gludwch neu gyflwyno llinyn chwilio. Os oes angen, newidiwch y termau chwilio gyda: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Awtogwblhau URL";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Gall rwystro tracwyr cynnwys eraill dorri rhai fideos a thudalennau Gwe.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Gosodiadau";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "PEIRIANT CHWILIO";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Peiriant Chwilio";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Peiriant Chwilio";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "CHWILIO";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGREIDDIO";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Anfon data defnydd";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Be sy'n Newydd";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Estyn Ap Firefox";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "Hoffai “%@” Gael Mynediad at Eich Lluniau";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Esampl: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Tracwyr hysbysebion";
 
@@ -276,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Diogelu rhag Tracio i ffwrdd";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Dysgu Rhagor";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Tracwyr cymdeithasol";

@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Wis uw volledige surfgeschiedenis, wachtwoorden en cookies wanneer u wilt met één tik.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Uw geschiedenis behoort tot het verleden";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Volgende";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Op zoek naar iets anders? Kies een andere zoekmachine.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Zoeken op uw manier";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Overslaan";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Breng privénavigatie naar een hoger niveau. Blokkeer advertenties en andere inhoud die u op websites kunnen volgen en laadtijden van pagina’s verlengen.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Vergroot uw privacy";
+

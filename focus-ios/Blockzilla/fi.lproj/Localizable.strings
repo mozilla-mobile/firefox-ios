@@ -76,12 +76,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Asetukset";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "HAKUKONE";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Hakukone";
-
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGROINTI";
 

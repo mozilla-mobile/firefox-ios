@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Tio ĉi permesas al vi preni fotojn.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Vizititaj retejoj povas peti vian pozicion.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Tio ĉi permesas al vi preni kaj alŝuti filmetojn.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Tio ĉi permesas al vi konservi kaj alŝuti fotojn.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Tio ĉi permesas al vi konservi kaj alŝuti fotojn.";
 

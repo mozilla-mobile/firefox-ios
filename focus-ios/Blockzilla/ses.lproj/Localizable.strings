@@ -76,9 +76,6 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Kanandey feeri";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "AYYO, AY FAHAM!";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Ga interneti ganakey gagay nda boŋse waati kaŋ war ga naaru. Adiši karkar ka moo gunantey, ceeciyaney, aleewawey nda šennikufaley tuusu war jinaa ga.";
 
@@ -127,12 +124,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Kayandiyaney";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "CEECIJINAY";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Ceecijinay";
-
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "MARGAYAN";
 
@@ -165,12 +156,6 @@
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
-
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Sanba goyyan bayhaya bila nda maa";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Ka bay ka tonton";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Naŋ";

@@ -1,0 +1,18 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Sakatze hutsarekin, garbitu edozein unetan zure nabigatze-historia osoa, pasahitzak eta cookieak.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Zure historia iragana da";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Zerbait desberdinaren bila? Aukeratu beste bilaketa-motor bat.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Bilaketa, zure erara";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Eraman nabigatze pribatua hurrengo mailara. Blokeatu iragarkiak eta webguneetan zehar zure jarraipena egin edo orrien karga-denbora makal dezaketen edukiak.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Indartu zure pribatutasuna";
+

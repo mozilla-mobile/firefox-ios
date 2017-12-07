@@ -40,6 +40,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ vám dává kontrolu.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Přidat vlastní URL adresu";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Zpět";
 
@@ -90,9 +93,6 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Otevřít Mapy";
-
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, CHÁPU!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Automaticky blokuje sledovací prvky, zatímco procházíte. Poté stačí klepnout pro vymazání zobrazených stránek, vyhledávání, cookies a hesel z vašeho zařízení.";
@@ -151,12 +151,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Nastavení";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "VYHLEDÁVACÍ MODUL";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Vyhledávací modul";
-
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRACE";
 
@@ -204,6 +198,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Odesílat údaje o používání";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Co je nového";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Získat Firefox";

@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Esto déxate facer y xubir semeyes.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Los sitios que visites podríen solicitar el to allugamientu.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Esto déxate facer y xubir vídeos.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Esto déxate guardar y xubir semeyes.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Esto déxate guardar y xubir semeyes.";
 

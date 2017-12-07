@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ giúp bạn kiểm soát.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Thêm URL tùy chỉnh";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Kiểm tra lại URL mà bạn đã nhập.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Ví dụ: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL muốn thêm";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Dán hoặc nhập URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Thêm URL tùy chỉnh";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Thêm và quản lý các URL tùy chỉnh tự động điền.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URL tùy chỉnh";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "DANH SÁCH URL TÙY CHỈNH";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "URL tùy chỉnh mới đã được thêm vào.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Cho phép tự đồng điền %@ trên 450 URL phổ biến trên thanh địa chỉ.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Tự động điền";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "DANH SÁCH URL MẶC ĐỊNH";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Đã tắt";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Không có URL tùy chỉnh nào được hiển thị";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Đã bật";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Quay lại";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Dừng";
+
+/* Label on button to cancel edits */
+"Cancel" = "Hủy bỏ";
+
+/* Label on button to complete edits */
+"Done" = "Xong";
+
+/* Label on button to allow edits */
+"Edit" = "Chỉnh sửa";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Thử lại";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "Mở Bản đồ";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "Đã hiểu!";
+"FirstRun.lastSlide.buttonLabel" = "OK, được rồi!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Tự động chặn các trình theo dõi trực tuyến trong khi duyệt web. Sau đó chạm để xóa các trang đã ghé thăm, tìm kiếm, cookie và mật khẩu từ thiết bị của bạn.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Mở Cài đặt";
 
+/* Save button label */
+"Save" = "Lưu";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Thêm công cụ tìm kiếm khác";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Thêm công cụ tìm kiếm khác";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Thêm công cụ tìm kiếm";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "CÔNG CỤ TÌM KIẾM ĐÃ CÀI ĐẶT";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Tên hiển thị";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Đã thêm công cụ tìm kiếm mới.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Phục hồi các công cụ tìm kiếm mặc định";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Tên công cụ tìm kiếm";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Chuỗi tìm kiếm sử dụng";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Dán hoặc nhập chuỗi tìm kiếm. Nếu cần, hãy thay thế cụm từ tìm kiếm bằng: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL tự động điền";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Chặn các trình theo dõi nội dung khác có thể dẫn đến việc không xem được một vài video và trang web.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Cài đặt";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Công cụ tìm kiếm";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Công cụ tìm kiếm";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "TÌM KIẾM";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Gửi dữ liệu sử dụng";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Có gì mới";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Tải ứng dụng Firefox";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” muốn truy cập vào ảnh của bạn";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Ví dụ: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Trình theo dõi quảng cáo";
 
@@ -276,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Chống theo dõi tắt";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Tìm hiểu thêm";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Trình theo dõi xã hội";

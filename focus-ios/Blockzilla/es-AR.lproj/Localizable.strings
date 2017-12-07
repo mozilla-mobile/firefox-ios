@@ -40,6 +40,45 @@
 /* Label on About screen */
 "About.topLabel" = "%@ te da el control.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Agregar URL oersonalizada";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Vuelva a revisar la URL ingresada.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Ejemplo: ejemplo.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL para agregar";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Pegar o ingresar URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Agregar URL personalizada";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URLs personalizadas";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Nueva URL personalizada agregada.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Habilitar para que %@ autocomplete más de 450 URLs populares en la barra de direcciones.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Autocompletar";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Deshabilitado";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "No hay URLs personalizadas para mostrar";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Habilitado";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Atrás";
 
@@ -57,6 +96,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Detener";
+
+/* Label on button to cancel edits */
+"Cancel" = "Cancelar";
+
+/* Label on button to complete edits */
+"Done" = "Listo";
+
+/* Label on button to allow edits */
+"Edit" = "Editar";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Reintentar";
@@ -92,7 +140,7 @@
 "ExternalLink.openMapsButton" = "Abrir Maps";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, ¡ENTENDIDO!";
+"FirstRun.lastSlide.buttonLabel" = "¡Listo, lo entendí!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Bloqueá automáticamente rastreadores en línea al navegar. Después tocá para borrar páginas visitadas, búsquedas, cookies y contraseñas de tu dispositivo.";
@@ -133,6 +181,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Abrir los Ajustes de la aplicación";
 
+/* Save button label */
+"Save" = "Guardar";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Agregar otro buscador";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Agregar otro buscador";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Agregar buscador";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "BUSCADORES INSTALADOS";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Nombre para mostrar";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Se agregó un buscador nuevo.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Restaurar buscador predeterminado";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Nombre del buscador";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Cadena de búsqueda a usar";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Pegá o ingresá la cadena de búsqueda. SI es necesario, reemplazá el término de búsqueda con %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Autocompletar URL";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Bloquear otros rastreadores de contenidos puede hacer que algunos videos y páginas web fallen.";
 
@@ -151,11 +235,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Configuración";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "BUSCADOR";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Buscador";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Buscador";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "BUSCAR";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRACIÓN";
@@ -204,6 +288,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Enviar datos de uso";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Lo nuevo";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Conseguí la aplicación Firefox";
@@ -265,6 +352,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” quiere acceder a tus fotos";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Ejemplo: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Rastreadores de publicidad";
 
@@ -276,6 +366,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Protección de rastreo deshabilitada";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Conocer más";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Rastreadores sociales";

@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Удалите в любой момент одним нажатием всю историю веб-сёрфинга, пароли и куки.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Ваша история является только вашей";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Следующая";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Искали что-то другое? Выберите другую поисковую систему.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Ваш поиск, Ваш Интернет";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Пропустить";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Поднимите приватный просмотр на новый уровень. Блокируйте рекламу и другое содержимое, которое может отслеживать вас и замедлять загрузку страниц.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Усильте свою приватность";
+

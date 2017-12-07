@@ -91,9 +91,6 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "పటములు తెరువు";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "సరే, అర్థమయ్యింది!";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "మీరు విహరిస్తున్నపుడు స్వయంచాలితంగా ఆన్లైన్ ట్రాకర్లని నిరోధించండి. ఆ తరువాత సందర్శించిన పేజీలను, శోధనలు, సంకేతపదాలు మరియు కుక్కీలని మీ పరికరం నుండి చెరపండి.";
 
@@ -151,12 +148,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "అమరికలు";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "శోధన యంత్రము";
-
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
 
@@ -193,6 +184,9 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "వినియోగించిన డేటాను పంపు";
 
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "కొత్త విశేషాలు ఏమిటి";
+
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox App ను పొందండి";
 
@@ -223,6 +217,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ లో తెరువు";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "లొకేషన్ బార్ ఎంచుకోండి";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "మీరు నకలు తీసిన లంకె: %@";
 
@@ -249,4 +246,7 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” మీ ఫోటోలను యాక్సెస్ చేయాలని అనుకుంటున్నారు";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "యాడ్ ట్రాకర్లు";
 

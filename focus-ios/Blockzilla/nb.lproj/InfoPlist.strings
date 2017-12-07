@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Dette gjør det mulig å ta og laste opp bilder.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Nettsider du besøker kan be om din plassering.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Dette gjør det mulig å ta og laste opp videoer.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Dette gjør det mulig å lagre og laste opp bilder.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Dette gjør det mulig å lagre og laste opp bilder.";
 

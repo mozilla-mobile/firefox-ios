@@ -1,0 +1,18 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "अपने ब्राउज़िंग सत्र का इतिहास, कूटशब्दो, और स्मृतिशेषों को किसी भी समय एक टैप में मिटाएँ.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "आपका इतिहास अब इतिहास है";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "कुछ अलग खोज रहे हैं? एक दूसरा खोज इंजन चुनें.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "आपकी खोज, आपका तरीका";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "निजी ब्राउज़िंग को अगले स्तर पर ले जाएँ. उन विज्ञापनों और अन्य तत्वों को रोकें जो आपको साइटों पर पीछा करते हैं और पृष्ट लोड समय को बढ़ाते हैं.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "अपनी गोपनीयता को बढ़ाएं";
+

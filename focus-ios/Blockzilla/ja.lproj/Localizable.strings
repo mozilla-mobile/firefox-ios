@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ でプライバシーを管理できます。";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "カスタム URL を追加";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "入力した URL をよく確認してください。";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "例: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "追加する URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "URL を入力するかペーストしてください";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+カスタム URL を追加";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "カスタム自動補完 URL の追加と管理。";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "カスタム URL";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "カスタム URL のリスト";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "新しいカスタム URL を追加しました。";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "有効にすると、%1$s のアドレスバーで 450 以上の人気の URL が自動補完されます。";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "自動補完";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "デフォルト URL リスト";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "無効";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "表示するカスタム URL はありません";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "有効";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "戻る";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "中止";
+
+/* Label on button to cancel edits */
+"Cancel" = "キャンセル";
+
+/* Label on button to complete edits */
+"Done" = "完了";
+
+/* Label on button to allow edits */
+"Edit" = "編集";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "再試行";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "マップを開く";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK! 使います";
+"FirstRun.lastSlide.buttonLabel" = "OK";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "ブラウジング中のオンライン追跡を自動的にブロックします。タップするだけで、訪問したページ、検索履歴、Cookie、パスワードを端末から消去できます。";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "環境設定アプリを開きます";
 
+/* Save button label */
+"Save" = "保存";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "別の検索エンジンを追加";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ 別の検索エンジンを追加";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "検索エンジンを追加";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "インストール済み検索エンジン";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "表示名";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "新規検索エンジンを追加しました。";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "デフォルト検索エンジンに戻す";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "検索エンジン名";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "使用する検索語";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "検索 URL をペーストまたは入力してください。必要に応じて、検索語を %s で置き換えてください。";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL 自動補完";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "他の追跡コンテンツをブロックすると、動画やウェブページが正常に表示されない場合があります。";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "環境設定";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "検索エンジン";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "検索エンジン";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "検索エンジン";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "検索";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "統合";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "使用状況データを送信";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "新機能";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox アプリを入手する";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "「%@」が写真へのアクセスを求めています";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "入力例: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "追跡広告";
 
@@ -275,7 +374,10 @@
 "trackingProtection.contentTrackerLabel" = "追跡コンテンツ";
 
 /* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "トラッキング保護はオフです";
+"trackingProtection.disabledLabel" = "トラッキング防止はオフです";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "詳細情報";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "ソーシャル追跡";
@@ -284,7 +386,7 @@
 "trackingProtection.toggleDescription1" = "%@ を閉じるまで無効化するか「消去」をタップしてください。";
 
 /* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "トラッキング保護";
+"trackingProtection.toggleLabel" = "トラッキング防止";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.trackerDescriptionLabel" = "広告、アクセス解析、ソーシャルなどトラッキングを %@ がどのようにブロックするか選択してください。";

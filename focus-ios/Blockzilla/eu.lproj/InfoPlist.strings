@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Honekin argazkiak atera eta igo ditzakezu.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Bisitatutako webguneek zure kokapena eska lezakete.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Honekin bideoak graba eta igo ditzakezu.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Honekin argazkiak gorde eta igo ditzakezu.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Honekin argazkiak gorde eta igo ditzakezu.";
 

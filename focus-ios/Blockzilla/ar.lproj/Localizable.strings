@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "يعطيك %@ الدفة.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "أضِف مسارا مخصصا";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "تحقق من المسار الذي أدخلته.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "مثال: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "المسار لإضافته";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "ألصِق مسارا أو أدخِله";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ أضِف مسارا مخصصا";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "أضِف وأدِر إكمال المسارات المخصصة تلقائيا.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "المسارات المخصصة";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "قائمة المسارات المخصصة";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "أُضيف مسار مخصص جديد.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "فعّله ليُكمل %@ تلقائيا أكثر من ٤٥٠ عنوان وب في شريط العناوين.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "الإكمال التلقائي";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "قائمة المسارات المبدئية";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "معطّل";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "لا مسارات مخصصة لعرضها";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "مفعّل";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "السابق";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "أوقف";
+
+/* Label on button to cancel edits */
+"Cancel" = "ألغِ";
+
+/* Label on button to complete edits */
+"Done" = "تم";
+
+/* Label on button to allow edits */
+"Edit" = "حرّر";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "أعِد المحاولة";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "افتح الخرائط";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "شكرا، فهمت.";
+"FirstRun.lastSlide.buttonLabel" = "حسنًا، فهمت";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "احجب متعقبات الإنترنت تلقائيًا أثناء التصفح. ثم انقر لمسح الصفحات التي زرتها، و تأريخ البحث، و الكعكات، و كلمات السر من جهازك.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "افتح تطبيق الإعدادات";
 
+/* Save button label */
+"Save" = "احفظ";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "أضف محرك بحث آخر";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ أضف محرك بحث آخر";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "أضف محرك بحث";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "محركات البحث المثبتة";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "اسم العرض";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "أُضيف محرك البحث الجديد.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "استعد محركات البحث المبدئية";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "اسم محرك البحث";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "نص البحث المستخدم";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "انقر أو أدخِل نص البحث. إن استلزم الأمر اسبتدل مصطلح البحث بِ‍: ‎%s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "إكمال المسارات تلقائيا";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "حجب متعقبات المحتوى الأخرى قد يعطل بعض الڤديو و صفحات الوب.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "الإعدادات";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "محرك البحث";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "محرك البحث";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "محرك البحث";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "البحث";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "التكامل";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "أرسل بيانات الاستخدام";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "ما الجديد";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "نزّل تطبيق فَيرفُكس";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "يريد ”%@“ الوصول إلى صورك";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "مثال: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "متعقبات الإعلانات";
 
@@ -276,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "الحماية من التعقّب معطّلة";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "اطّلع على المزيد";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "متعقبات المواقع الاجتماعية";

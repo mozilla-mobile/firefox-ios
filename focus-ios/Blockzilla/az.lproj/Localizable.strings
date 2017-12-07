@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ idarəni sizə verir.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Fərdi ünvan əlavə et";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Daxil etdiyiniz ünvanı bir də yoxlayın.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Məsələn: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Əlavə ediləcək ünvan";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Ünvanı yapışdırın və ya daxil edin";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Fərdi ünvan əlavə et";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Avtomatik tamamlanacaq fərdi ünvanları idarə edin.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Fərdi Ünvanlar";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "FƏRDİ ÜNVAN SİYAHISI";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Yeni fərdi ünvan əlavə edildi.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "%@ səyyahının 450 məşhur ünvanı avtomatik tamamlamasını aktivləşdirin.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Avtomatik Tamamlama";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "ÖN SEÇİLMİŞ ÜNVAN SİYAHISI";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Söndürülüb";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Göstəriləcək fərdi ünvan yoxdur";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Aktivdir";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Geri";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Dayandır";
+
+/* Label on button to cancel edits */
+"Cancel" = "Ləğv et";
+
+/* Label on button to complete edits */
+"Done" = "Oldu";
+
+/* Label on button to allow edits */
+"Edit" = "Düzəlt";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Təkrar yoxla";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "Xəritələri Aç";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "Başa Düşdüm!";
+"FirstRun.lastSlide.buttonLabel" = "Tamam, başa düşdüm!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "İnternetdə gəzərkən avtomatik olaraq onlayn izləyiciləri əngəlləyin. Sonra ziyarət edilən səhifələri, axtar, çərəz və parolları cihazınızdan pozmaq üçün basın.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Tənzimləmələr Tətbiqini Aç";
 
+/* Save button label */
+"Save" = "Saxla";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Digər axtarış mühərriyini əlavə et";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Digər axtarış mühərriyini əlavə et";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Axtarış mühərriyi əlavə et";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "QURULU AXTARIŞ MÜHƏRRİKLƏRİ";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Göstəriləcək ad";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Yeni axtarış mühərriyi əlavə edildi.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "İlkin axtarış nizamlarını bərpa et";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Axtarış mühərriyinin adı";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "İstifadə ediləcək axtarış sətri";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Axtarış sətrini daxil edin və ya yapışdırın. Əgər lazımdırsa, axtarış ifadəsini bununla dəyişin: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Ünvan Avtomatik Tamamlama";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Digər məzmun izləyicilərini əngəlləmək bəzi video və saytları işlənməz hala gətirə bilər.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Tənzimləmələr";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "AXTARIŞ MÜHƏRRİKİ";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Axtarış Mühərriyi";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Axtarış Mühərriki";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "AXTARIŞ";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "İNTEQRASİYA";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "İstifadə məlumatlarını göndər";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Yeniliklər";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox-u Qur";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” şəkillərinizə keçid əldə etmək istəyir";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Məsələn: mozillaz.org/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Reklam izləyiciləri";
 
@@ -276,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "İzlənmə Qoruması sönülüdür";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Ətraflı Öyrən";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sosial izləyicilər";

@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Bheir seo comas dhut dealbhan a thogail is a luchdadh suas.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Dh’fhaoidte gun iarr làraichean-lìn air an tadhal thu d’ ionad.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Bheir seo comas dhut video a thogail is a luchdadh suas.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Bheir seo comas dhut dealbhan a shàbhaladh is a luchdadh suas.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Bheir seo comas dhut dealbhan a shàbhaladh is a luchdadh suas.";
 

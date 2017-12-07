@@ -40,6 +40,36 @@
 /* Label on About screen */
 "About.topLabel" = "%@ ให้คุณได้ควบคุม";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "เพิ่ม URL ที่กำหนดเอง";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "ตัวอย่าง: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL ที่จะเพิ่ม";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "วางหรือป้อน URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ เพิ่ม URL ที่กำหนดเอง";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URL ที่กำหนดเอง";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "รายการ URL ที่กำหนดเอง";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "เพิ่ม URL ที่กำหนดเองใหม่แล้ว";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "รายการ URL เริ่มต้น";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "ไม่มี URL ที่กำหนดเองที่จะแสดงผล";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ย้อนกลับ";
 
@@ -57,6 +87,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "หยุด";
+
+/* Label on button to cancel edits */
+"Cancel" = "ยกเลิก";
+
+/* Label on button to complete edits */
+"Done" = "เสร็จสิ้น";
+
+/* Label on button to allow edits */
+"Edit" = "แก้ไข";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "ลองอีกครั้ง";
@@ -92,7 +131,7 @@
 "ExternalLink.openMapsButton" = "เปิดแผนที่";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "ตกลง เข้าใจแล้ว!";
+"FirstRun.lastSlide.buttonLabel" = "ตกลง เข้าใจแล้ว!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "ปิดกั้นตัวติดตามออนไลน์โดยอัตโนมัติขณะที่คุณท่องเว็บ จากนั้นแตะเพื่อล้างหน้าที่เยี่ยมชม, การค้นหา, คุกกี้ และรหัสผ่านจากอุปกรณ์ของคุณ";
@@ -133,6 +172,39 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "เปิดแอป การตั้งค่า";
 
+/* Save button label */
+"Save" = "บันทึก";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "เพิ่มเครื่องมือค้นหาอื่น";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ เพิ่มเครื่องมือค้นหาอื่น";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "เพิ่มเครื่องมือค้นหา";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "เครื่องมือค้นหาที่ติดตั้งไว้";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "ชื่อที่จะแสดงผล";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "เพิ่มเครื่องมือค้นหาใหม่แล้ว";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "เรียกคืนเครื่องมือค้นหาเริ่มต้น";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "ชื่อเครื่องมือค้นหา";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "สตริงการค้นหาที่จะใช้";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "วางหรือป้อนสตริงการค้นหา หากจำเป็นให้แทนที่คำค้นหาด้วย: %s";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "การปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ อาจทำให้วิดีโอและหน้าเว็บบางส่วนไม่สมบูรณ์";
 
@@ -151,11 +223,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "การตั้งค่า";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "เครื่องมือค้นหา";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "เครื่องมือค้นหา";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "เครื่องมือค้นหา";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "ค้นหา";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "การผนวกรวม";
@@ -204,6 +276,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ส่งข้อมูลการใช้งาน";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "มีอะไรใหม่";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "รับแอป Firefox";
@@ -265,6 +340,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ต้องการเข้าถึงรูปภาพของคุณ";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ตัวอย่าง: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "ตัวติดตามของโฆษณา";
 
@@ -276,6 +354,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "การป้องกันการติดตามปิดอยู่";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "เรียนรู้เพิ่มเติม";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "ตัวติดตามทางสังคม";

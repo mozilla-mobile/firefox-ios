@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Одним дотиком, будь-коли стирайте всю історію сеансу, паролі та куки.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Ваша історія залишається історією";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Далі";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Шукаєте щось інше? Оберіть інший пошуковий засіб.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Ваш пошук, ваш шлях";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Пропустити";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Перейдіть на вищий рівень приватного перегляду. Блокуйте рекламу та інший вміст, що може стежити за вами на сайтах і сповільнювати завантаження сторінок.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Прокачайте вашу приватність";
+

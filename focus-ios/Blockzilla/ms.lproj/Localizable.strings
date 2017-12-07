@@ -49,7 +49,10 @@
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "Contoh: example.com";
 
-/* Watermark for the input field to add a custom URL */
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL untuk ditambah";
+
+/* Placeholder for the input field to add a custom URL */
 "Autocomplete.addCustomUrlPlaceholder" = "Tampal atau masukkan URL";
 
 /* Label for button to add a custom URL with the + prefix */

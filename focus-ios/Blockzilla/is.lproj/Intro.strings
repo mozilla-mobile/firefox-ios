@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Hreinsa feril, lykilorð, smákökur hvenær sem er með einni snertingu.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Þitt ferli er farið";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Áfram";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Ertu að leita að einhverju nýju? Prófaðu aðra leitarvél.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Leitin þín á þinn hátt";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Sleppa";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Betrumbæta einkavafra notkun. Loka á auglýsingar og annað efni sem getur fylgjast með þér og hægt á vafranum.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Auka friðhelgina þína";
+

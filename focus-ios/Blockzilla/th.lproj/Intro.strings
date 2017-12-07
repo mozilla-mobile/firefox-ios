@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "ล้างประวัติ, รหัสผ่าน และคุกกี้ในวาระการท่องเว็บทั้งหมดของคุณได้ทุกเวลาด้วยการแตะครั้งเดียว";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "ประวัติของคุณคือประวัติ";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "ถัดไป";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "กำลังค้นหาอย่างอื่น? เลือกเครื่องมือค้นหาอื่น";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "การค้นหาของคุณในแบบของคุณ";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "ข้าม";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "นำการท่องเว็บแบบส่วนตัวไปสู่ระดับถัดไป ปิดกั้นโฆษณาและเนื้อหาอื่น ๆ ที่สามารถติดตามคุณระหว่างไซต์และลดเวลาในการโหลดหน้า";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "เพิ่มความเป็นส่วนตัวของคุณ";
+

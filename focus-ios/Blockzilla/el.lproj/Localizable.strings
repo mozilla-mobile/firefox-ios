@@ -91,9 +91,6 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Άνοιγμα Χαρτών";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, ΤΟ 'ΠΙΑΣΑ!";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Αποκλείστε αυτόματα τα διαδικτυακά trackers όσο περιηγείστε. Έπειτα, πατήστε για διαγραφή του ιστορικού, των αναζητήσεων, των cookies και των κωδικών πρόσβασης από τη συσκευή σας.";
 
@@ -150,12 +147,6 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Ρυθμίσεις";
-
-/* Title for the search engine row */
-"Settings.searchSection" = "ΜΗΧΑΝΗ ΑΝΑΖΗΤΗΣΗΣ";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Μηχανή αναζήτησης";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ΕΝΣΩΜΑΤΩΣΗ";
@@ -223,6 +214,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Άνοιγμα σε %@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Επιλέξτε γραμμή τοποθεσίας";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Αντιγραμμένος σύνδεσμος: %@";
 
@@ -249,4 +243,13 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "Το “%@” θα ήθελε πρόσβαση στις φωτογραφίες σας";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Προστασία από παρακολούθηση ανενεργή";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Απενεργοποίηση μέχρι να κλείσετε το %@ ή να πατήσετε ΔΙΑΓΡΑΦΗ.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Προστασία από παρακολούθηση";
 

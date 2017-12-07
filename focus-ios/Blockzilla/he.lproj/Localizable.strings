@@ -19,6 +19,9 @@
 /* Label for row in About screen */
 "About.rowHelp" = "עזרה";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "הצהרת פרטיות";
+
 /* Label for row in About screen */
 "About.rowRights" = "הזכויות שלך";
 
@@ -88,14 +91,14 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "פתיחת מפות";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "קיבלתי!";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "חסימת מעקב מקוון אוטומטית במהלך הגלישה שלך, ואז מחיקת רשימת האתרים שביקרת בהם, חיפושים, עוגיות וססמאות מההתקן שלך.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "גלישה כאילו אף־אחד אינו צופה בך.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Handoff מבית Apple מסתנכרן";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "גלישה פרטית אוטומטית.";
@@ -136,14 +139,14 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "הבנתי";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla חותרת לאסוף רק מה שנדרש לצורך שיפור %@ לטובת הכלל.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "מידע נוסף.";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "הגדרות";
-
-/* Title for the search engine row */
-"Settings.searchSection" = "מנוע חיפוש";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "מנוע חיפוש";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "הטמעה";
@@ -160,8 +163,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "חסימת מעקב פרסומות";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "ישנן פרסומות העוקבות אחרי ביקורים באתרים, גם אם לא לוחצים על הפרסומות";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "חסימת מעקב של כלי ניתוח";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "משמש לאיסוף, ניתוח ומדידת פעילויות כמו הקשה וגלילה";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "חסימת גופני רשת";
@@ -169,8 +178,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "חסימת מעקב תוכן אחר";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "הפעלת אפשרות זו עשויה לגרום למספר דפים להתנהג בצורה לא צפויה";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "חסימת רכיבי מעקב חברתיים";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "מוטמעים באתרים כדי לעקוב אחר הביקורים שלך ולהציג תכונות כגון כפתורי שיתוף";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "עלולה לשבש את פעילותם של דפי אינטרנט ומספר סרטונים";
@@ -178,17 +193,14 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "שליחת נתוני שימוש אנונימיים";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "מידע נוסף";
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "שליחת נתוני שימוש";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "קבלו את Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "פתיחה ב־Focus";
+"ShareMenu.OpenInFocus" = "פתיחה ב־%@";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ביטול";
@@ -214,6 +226,12 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "פתיחה ב־%@";
 
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "בחירת סרגל מיקום";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "קישור שהעתקת: %@";
+
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "העתקת תמונה";
 
@@ -237,4 +255,28 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "ל־“%@” נדרשת גישה אל התמונות שלך";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "עוקבי פרסומות";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "עוקבי ניתוח נתונים";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "עוקבי תוכן";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "הגנת מעקב כבויה";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "עוקבים חברתיים";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "ניטרול עד לסגירת %@ או לחיצה על מחיקה.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "הגנת מעקב";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "ניתן לבחור האם לחסום פרסומות, ניתוחי מידע, שירותים חברתיים ושאר רכיבי מעקב ב־%@.";
 

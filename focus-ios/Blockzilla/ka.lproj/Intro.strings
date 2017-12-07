@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "წაშალეთ თქვენი დათვალიერების ისტორია, პაროლები და ა.შ. ნებისმიერ დროს, მხოლოდ ერთი შეხებით.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "თქვენი ისტორია უკვე ისტორიის საკუთრებაა";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "შემდეგი";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "რამე განსხვავებულს ეძებთ? აირჩიეთ სხვა საძიებო სისტემა.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "მოიძიეთ გვერდები, თქვენებურად";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "გამოტოვება";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "პირადი მონაცემების უსაფრთხოება ახალ დონეზეა აყვანილი. შეზღუდეთ სარეკლამო და სხვა შიგთავსი, რომლითაც საიტებზე თქვენი დევნაა შესაძლებელი და შეამცირეთ გვერდების ჩატვირთვის დრო.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "გააძლიერეთ პირადი მონაცემების დაცვა";
+

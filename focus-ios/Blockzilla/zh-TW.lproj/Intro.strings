@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "只要輕鬆一點，就能清除這次上網的所有瀏覽紀錄、儲存密碼、Cookie 等資料。";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "瀏覽紀錄就是紀錄";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "下一步";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "想找找別的東西？選一套不同的搜尋引擎試試。";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "用你的方式搜尋";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "略過";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "隱私瀏覽功能變得更強大了。現在可封鎖廣告，以及其他可在不同網站間追蹤您的上網紀錄，又拖慢網頁載入的追蹤器。";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "加強您的隱私";
+

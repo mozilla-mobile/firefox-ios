@@ -91,9 +91,6 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "ನಕ್ಷೆಗಳನ್ನು ತೆರೆ";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, GOT IT!";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "ನೀವು ಬ್ರೌಸ್ ಮಾಡುವಾಗ ಆನ್ಲೈನ್ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ನಿರ್ಬಂಧಿಸಿ. ನಂತರ ನಿಮ್ಮ ಸಾಧನದಿಂದ ಭೇಟಿ ನೀಡಿದ ಪುಟಗಳು, ಹುಡುಕಾಟಗಳು, ಕುಕೀಗಳು ಮತ್ತು ಗುಪ್ತಪದಗಳನ್ನು ಅಳಿಸಲು ಮೆಲ್ಲ ತಟ್ಟಿ.";
 
@@ -150,12 +147,6 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "ಸಿದ್ಧತೆಗಳು";
-
-/* Title for the search engine row */
-"Settings.searchSection" = "‍ಹುಡುಕು‍ ಇಂಜಿನ್‍";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "ಹುಡುಕು ಇಂಜಿನ್‍";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";

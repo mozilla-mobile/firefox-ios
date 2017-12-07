@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "写真を撮影してアップロードできます。";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "訪れたウェブサイトがあなたの位置情報を要求しています。";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "動画を撮影してアップロードできます。";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "写真を保存してアップロードできます。";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "写真を保存してアップロードできます。";
 

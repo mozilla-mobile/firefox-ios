@@ -1,15 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Ez lehetővé teszi, hogy fényképeket készítsen és töltsön fel.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "A meglátogatott webhelyek kérhetik az Ön helyét.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Ez lehetővé teszi, hogy videókat készítsen és töltsön fel.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "Ez lehetővé teszi, hogy fényképeket mentsen és töltsön fel.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Ez lehetővé teszi, hogy fényképeket mentsen és töltsön fel.";
 

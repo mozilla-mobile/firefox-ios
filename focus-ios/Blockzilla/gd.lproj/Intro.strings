@@ -1,0 +1,12 @@
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "A’ lorg rudeigin eile? Feuch einnsean-luirg eadar-dhealaichte.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Dèan lorg a-rèir do thoil fhèin";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Cuir spionnadh sa bhrabhsadh phrìobhaideach. Bac sanasachd is susbaint eile a thracaicheadh tu air feadh làraichean agus a chuireadh maille air luchdadh dhuilleagan.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Cuir spionnadh ’nad phrìobhaideachd";
+

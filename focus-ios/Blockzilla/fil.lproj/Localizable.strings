@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ binibigyan ka ng kontrol.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Dagdagan ang Custom URL";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Lagyan ng check ang URL na iyong ipinasok.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Halimbawa: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL na idagdag";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "I-paste o ilagay ang URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Magdagdag ng Custom na URL";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Magdagdag at pamahalaan ang mga custom na autocomplete na URLs.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Custom URLs";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "CUSTOM URL LIST";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Idinagdag ang Bagong Custom na URL.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Paganahin na magkaroon ng %@ autocomplete sa 450 mga popular na URL sa address bar.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Autocomplete";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "DEFAULT URL LIST";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Hindi pinagana";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Walang mga Custom na URLs na ipapakita";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Pinagana";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Balikan";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Huminto";
+
+/* Label on button to cancel edits */
+"Cancel" = "Kanselahin";
+
+/* Label on button to complete edits */
+"Done" = "Tapos na";
+
+/* Label on button to allow edits */
+"Edit" = "I-edit";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Subukang muli";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "Buksan ang Mapa";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, GOT IT!";
+"FirstRun.lastSlide.buttonLabel" = "OK, nakuha ko na!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Awtomatikong i-block ang mga online trackers habang nagba-browse ka. Pagkatapos ay tapikin upang burahin ang binisita na mga pahina, mga paghahanap, cookies at mga password mula sa iyong aparato.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Buksan ang mga Setting App";
 
+/* Save button label */
+"Save" = "I-save";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Magdagdag ng Panibagong Search Engine";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Magdagdag ng Panibagong Search Engine";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Magdagdag ng Search Engine";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Pangalan na ipapakita";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Idinagdag ang Bagong Search Engine.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Ibalik ang Mga Default na Mga Search Engine";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Pangalan ng search engine";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Maghanap ng string na gagamitin";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "I-paste o ilagay ang string ng paghahanap. Kung kinakailangan, palitan ang termino ng paghahanap gamit ang: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL Autocomplete";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Ang pag-block ng iba pang nilalaman ng trackers ay maaaring masira ang ilang mga video at mga pahina ng Web pages.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Mga Setting";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Search Engine";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Search Engine";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SEARCH";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Ipadala ang data ng paggamit";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Ano ang Bago";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Kumuha ng Firefox App";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” Gusto I-access ang Iyong Mga Larawan";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Halimbawa: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Mga tagasubaybay ng ad";
 
@@ -276,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Ang pagsubaybay na proteksyon ay sarado";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Matuto ng Higit pa";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Mga social tracker";

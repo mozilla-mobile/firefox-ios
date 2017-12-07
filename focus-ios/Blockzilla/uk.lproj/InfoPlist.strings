@@ -1,15 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Це дозволяє вам знімати й вивантажувати фото.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Відвідувані вами веб-сайти можуть запитувати ваше розташування.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Це дозволяє вам знімати й вивантажувати відео.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "Це дозволяє вам знімати й вивантажувати фото.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Це дозволяє вам зберігати й вивантажувати фото.";
 

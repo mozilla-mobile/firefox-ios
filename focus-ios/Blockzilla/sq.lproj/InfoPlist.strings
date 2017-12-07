@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Kjo ju lejon të bëni dhe ngarkoni foto.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Sajtet që vizitoni mund të kërkojmë të dinë vendndodhjen tuaj.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Kjo ju lejon të xhironi dhe ngarkoni video.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Kjo ju lejon të ruani dhe ngarkoni foto.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Kjo ju lejon të ruani dhe ngarkoni foto.";
 

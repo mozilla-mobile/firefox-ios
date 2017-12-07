@@ -49,7 +49,10 @@
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "Voorbeeld: example.com";
 
-/* Watermark for the input field to add a custom URL */
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Toe te voegen URL";
+
+/* Placeholder for the input field to add a custom URL */
 "Autocomplete.addCustomUrlPlaceholder" = "Plak of voer URL in";
 
 /* Label for button to add a custom URL with the + prefix */

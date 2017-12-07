@@ -19,6 +19,9 @@
 /* Label for row in About screen */
 "About.rowHelp" = "உதவி";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "தனியுரிம கொள்கை";
+
 /* Label for row in About screen */
 "About.rowRights" = "உரிமைகள்";
 
@@ -58,6 +61,12 @@
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "மீண்டும் முயற்சி";
 
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "ரத்து";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "திற";
+
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "அழை";
 
@@ -75,9 +84,6 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "வரைபடத்தைத் திற";
-
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "சரி, புரிந்தது!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "நீங்கள் உலாவும் போது தடமறிபவைகளை தானாக தடு. உங்கள் சாதனத்தில் நீங்கள் பார்த்த வலைப்பக்கங்கள், தேடல்கள், நினைவிகள், மற்றும் கடவுச்சொல்லை அகற்ற தட்டவும்.";
@@ -124,14 +130,11 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "எனக்கு புரிந்தது";
 
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "மேலும் அறிய.";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "அமைவுகள்";
-
-/* Title for the search engine row */
-"Settings.searchSection" = "தேடுபொறி";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "தேடுபொறி";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ஒன்றிணைத்தல்";
@@ -166,17 +169,11 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "சப்பாரி";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "பெயரற்ற பயனளவு தரவை அனுப்பு";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "மேலும் அறிக";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "பயர்பாக்ஸ் செயலியைப் பெறுக";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "போஃசில் திற";
+"ShareMenu.OpenInFocus" = "%@ திறக்கவும்";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ரத்து";
@@ -195,4 +192,13 @@
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "%@ சொல்லைத் தேடு";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "இருப்பிடப் பட்டையைத் தேர்ந்தெடு";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "படத்தை நகலெடு";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "படத்தைச் சேமி";
 

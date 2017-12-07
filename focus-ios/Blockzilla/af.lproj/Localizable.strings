@@ -76,9 +76,6 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Maak Maps oop";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "REG SO! HET DIT!";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Blokkeer speurders op die web outomaties. Raak dan op ’n knoppie om besoekte bladsye, soektogte, koekies en wagwoorde vanaf die toestel uit te vee.";
 
@@ -127,12 +124,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Instellings";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "SOEKENJIN";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Soekenjin";
-
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRASIE";
 
@@ -165,12 +156,6 @@
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
-
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Stuur anonieme gebruiksdata";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Meer inligting";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Kanselleer";

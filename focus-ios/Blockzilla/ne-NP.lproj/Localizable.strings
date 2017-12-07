@@ -13,6 +13,9 @@
 /* Label for row in About screen */
 "About.rowHelp" = "मद्दत";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "गोपनीयता नीति";
+
 /* Label for row in About screen */
 "About.rowRights" = "तपाईँका अधिकारहरु";
 
@@ -27,6 +30,48 @@
 
 /* Label on About screen */
 "About.topLabel" = "%@ ले तपाईंलाई नियन्त्रणमा राख्छ।";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "अनुकूल URL थप्नुहोस्";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "तपाइँले प्रविष्ट गर्नुभएको URL पुन: जाँच गर्नुहोस् ।";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Example: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "थप्नु पर्ने URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "URL टाँस्नुहोस् वा प्रविष्ट गर्नुहोस्";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ अनुकूल URL थप्नुहोस्";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "स्वत: पूर्ण URLहरू थप्नुहोस र व्यवस्थापन गर्नुहोस् ।";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "अनुकूल URLहरू";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "अनुकूल URL सूची";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "नयाँ अनुकुल URL थपियो ।";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "स्वत: पूर्ण";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "पूर्वनिर्धारिक URL सूची";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "अक्षम पारिएको";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "सक्षम पारिएको";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "पछाडि";
@@ -46,8 +91,26 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "रोक्नुहोस्";
 
+/* Label on button to cancel edits */
+"Cancel" = "रद्द गर्नुहोस्";
+
+/* Label on button to complete edits */
+"Done" = "सम्पन्न भयो";
+
+/* Label on button to allow edits */
+"Edit" = "सम्पादन गर्नुहोस्";
+
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "फेरि प्रयास गर्नुहोस्";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "रद्द गर्नुहोस्";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ले अर्को अनुप्रयोग खोल्न चाहन्छ";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "खोल्नुहोस्";
 
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "फोन गर्नुहोस्";
@@ -67,6 +130,12 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Maps खोल्नुहोस्";
 
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "ठीक छ, थाहा पाएँ!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "कसैले नहेरे जसरी ब्राउज गर्नुहोस्";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "रद्द गर्नुहोस्";
 
@@ -78,4 +147,196 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ सक्षम पार्नुहोस्";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ सक्षम पारिएको छैन ।";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "सेटिङ्ग अनुप्रयोग खोल्नुहोस्";
+
+/* Save button label */
+"Save" = "सङ्ग्रह गर्नुहोस्";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "अर्को खोजी इन्जिन थप्नुहोस्";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ अ‌र्को खोजी इन्जिन थप्नुहोस्";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "खोज इन्जिन थप्नुहोस्";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "देखाउने नाम";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "नयाँ खोजी इन्जिन थपियो ।";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "पूर्वानिर्धारीत खोज इन्जिन पुनर्स्थापना गर्नुहोस् ";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "खोजी इन्जिनको नाम";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "प्रयोग गर्न स्ट्रिङ खोजी गर्नुहोस्";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL स्वत: पूर्ण";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "पर्दैन, धन्यबाद";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "मैले बुझेँ";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla सबैको लागि %@ प्रदान र सुधार गर्न आवश्यक कुरा मात्र संकलन गर्ने प्रयास गर्दछ ।";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "थप जान्नुहोस् ।";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "सेटिङहरू";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "खोजी इन्जिन";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SEARCH";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "PERFORMANCE";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVACY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "विज्ञापन ट्रयाकरहरू अवरुद्द गर्नुहोस्";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "विश्लेषणात्मक ट्रयाकहरू अवरुद्द गर्नुहोस्";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "ट्याप गर्ने र स्क्रोल गर्ने जस्ता क्रियाकलापहरू संकलन, विश्लेषण र माप गर्न प्रयोग गरियो";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "वेब फन्टहरू अवरुद्ध गर्नुहोस्";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "अन्य सामग्री ट्रयाकरहरू ब्लक गर्नुहोस्";
+
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "सक्षम पार्नाले केहि पृष्ठहरू अनपेक्षित रूपमा व्यवहार गर्न सक्छन्";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "सामाजिक ट्रयाकहरू अवरुद्द गर्नुहोस्";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "केहि भिडियोहरु र वेब पेजहरू बिग्रन सक्छ";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "सफारी";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "उपयोग डाटा पठाउनुहोस्";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "नयाँ के छ";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Firefox App पाउनुहोस्";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "%@मा खोल्नुहोस्";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "रद्द गर्नुहोस्";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "टाँस्नुहोस् र जानुहोस्";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "मेट्नुहोस्";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "तपाईंको ब्राउजिङ इतिहास मेटाईयो ।";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "खोज्नुहोस् वा ठेगाना प्रविष्ट गर्नुहोस्";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@को खोजी गर्नुहोस्";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "त्ट्रयाकरहरु अवरुद्ध गरियो";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@मा खोल्नुहोस्";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "स्थानपट्टी चयन गर्नुहोस्";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "तपाईँले प्रतिलिपी गर्नुभएको लिन्क: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "तस्विर प्रतिलिपि गर्नुहोस्";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "लिङ्कको प्रतिलिपि बनाउनुहोस्";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "तस्विर सङ्ग्रह गर्नुहोस्";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "लिङ्क साझा गर्नुहोस्";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ ले %2$@ खोल्न चाहन्छ";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "यसले तस्विरहरु तपाईँको क्यामेरा रोलमा सङ्ग्रह गर्न दिन्छ";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "सेटिङ्गहरू खोल्नुहोस्";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "\"%@\" ले तपाईँको तस्बिरहरूमा पहुँच बनाउन चाहन्छ";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Example: searchengineexample.com/search/?q=%s";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "विज्ञापन ट्रयाकरहरू";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "विश्लेषणात्मक ट्रयाकरहरू";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "सामग्री ट्रयाकरहरू";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "ट्रयाकिङ्ग सुरक्षा बन्द छ";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "थप जान्नुहोस्";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "सामाजिक ट्रयाकरहरू";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "ट्रयाकिङ्ग सुरक्षा";
 

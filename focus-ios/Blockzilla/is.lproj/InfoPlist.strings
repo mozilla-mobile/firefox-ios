@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Hér getur þú tekið og hlaðið upp myndum.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Vefsvæði sem þú skoðar gætu beðið um staðsetninguna þína.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Hér getur þú tekið og hlaðið upp myndböndum.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Hér getur þú vistað og hlaðið upp myndum.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Hér getur þú tekið og hlaðið upp myndum.";
 

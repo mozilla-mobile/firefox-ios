@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "تمام تاریخچه،‌کلمه عبور،‌و کوکی های جلسه مرورگر خود را در هر زمانی تنها با یک لمس پاک کنید.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "تایخچه شما تاریخچه خود شماست";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "بعدی";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "دنبال چیز متفاوتی میگردید؟ موتور جست‌وجو متفاوتی را انتخاب کنید.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "جست‌وجو شما،‌راه شما";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "پرش";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "پیشرفت مرورگر خصوصی به سطحی بالاتر. مسدود کردن تبلیغات و محتواهای دیگر که می‌تواند شما را در طول بازدید وب‌سایت ها رهگیری کنند یا زمان بارگذاری صفحه را همانند گیرکردن در باتلاق کم کنند.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "حریم شخصی خود را ارتقاع دهید";
+

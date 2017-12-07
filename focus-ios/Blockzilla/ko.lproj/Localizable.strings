@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@로 데이터 제어가 가능합니다.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "사용자 정의 URL 추가";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "입력한 URL을 다시 확인하세요.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "예: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "추가할 URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "URL 입력 또는 붙여넣기";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ 사용자 정의 URL 추가";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "사용자 정의 자동 완성 URL을 추가하고 관리합니다.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "사용자 정의 URL";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "사용자 정의 URL 목록";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "새 사용자 정의 URL이 추가되었습니다.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "%@ 자동 완성 기능을 활성화해서 450개가 넘는 자주 찾는 URL을 주소창에서 사용해 보세요.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "자동완성";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "기본 URL 목록";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "사용 안 함";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "표시할 사용자 정의 URL 없음";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "사용함";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "뒤로";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "중지";
+
+/* Label on button to cancel edits */
+"Cancel" = "취소";
+
+/* Label on button to complete edits */
+"Done" = "완료";
+
+/* Label on button to allow edits */
+"Edit" = "수정";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "재시도";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "지도 열기";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "알겠습니다!";
+"FirstRun.lastSlide.buttonLabel" = "네, 알겠습니다!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "검색 중 온라인 추적을 자동으로 차단합니다. 클릭만으로 방문한 페이지, 검색 기록, 쿠키, 암호를 단말기에서 삭제할 수 있습니다.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "앱 설정 열기";
 
+/* Save button label */
+"Save" = "저장";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "다른 검색 엔진 추가";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ 다른 검색 엔진 추가";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "검색 엔진 추가";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "설치된 검색 엔진";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "표시할 이름";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "새 검색 엔진이 추가되었습니다.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "기본 검색 엔진 되돌리기";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "검색 엔진 이름";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "사용할 검색 문구";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "검색 문구를 붙여넣거나 입력하세요. 필요한 경우, 검색 용어를 %s로 바꾸실 수 있습니다.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL 자동 완성";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "기타 콘텐츠 추적기를 차단하면, 동영상이나 웹 페이지가 제대로 표시되지 않을 수 있습니다.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "설정";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "검색엔진";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "검색 엔진";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "검색엔진";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "검색";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "통합";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "사용현황 데이터 보내기";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "새로운 기능";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox 앱 설치";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@”가 사진에 접근하려고 합니다";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "예: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "광고 추적기";
 
@@ -276,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "추적 차단 해제";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "자세히 보기";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "소셜 추적기";

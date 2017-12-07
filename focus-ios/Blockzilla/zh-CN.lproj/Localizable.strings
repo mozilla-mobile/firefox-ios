@@ -49,7 +49,10 @@
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "例如：example.com";
 
-/* Watermark for the input field to add a custom URL */
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "要添加的网址";
+
+/* Placeholder for the input field to add a custom URL */
 "Autocomplete.addCustomUrlPlaceholder" = "粘贴或输入网址";
 
 /* Label for button to add a custom URL with the + prefix */

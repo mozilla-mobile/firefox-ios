@@ -1,12 +1,12 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Pozwoli to robić i wgrywać zdjęcia.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Pozwoli to odwiedzanym stronom żądać informacji o położeniu.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Pozwoli to kręcić i wgrywać filmy.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Pozwoli to zachowywać i wgrywać zdjęcia.";
 

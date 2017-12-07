@@ -76,9 +76,6 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Oscail Mapaí";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "TUIGIM!";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Cuir cosc ar lorgairí ar líne go huathoibríoch le linn brabhsála. Ansin, tapáil chun na leathanaigh ar thug tú cuairt orthu a bhánú ó do ghléas, chomh maith le haon fhianáin, focail fhaire, nó cuardaigh a rinne tú.";
 
@@ -127,12 +124,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Socruithe";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "INNEALL CUARDAIGH";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Inneall Cuardaigh";
-
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "COMHTHÁTHÚ";
 
@@ -166,14 +157,14 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Seol sonraí úsáide gan ainm";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Tuilleadh eolais";
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Faigh an Aip Firefox";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cealaigh";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Greamaigh agus Téigh";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "BÁNAIGH";

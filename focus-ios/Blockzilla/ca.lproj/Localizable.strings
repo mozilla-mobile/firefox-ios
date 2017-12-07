@@ -58,6 +58,15 @@
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Torna-ho a provar";
 
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Cancel·la";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "El %@ vol obrir una altra aplicació";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Obre";
+
 /* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.callButton" = "Truca";
 
@@ -75,9 +84,6 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Obre els Mapes";
-
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "ENTESOS";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Bloqueu automàticament els elements que us fan el seguiment mentre navegueu. Esborreu amb un sol toc les pàgines visitades, cerques, galetes i contrasenyes del dispositiu.";
@@ -127,12 +133,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Paràmetres";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "MOTOR DE CERCA";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Motor de cerca";
-
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRACIÓ";
 
@@ -166,17 +166,8 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Envia dades d'ús anònimes";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Més informació";
-
-/* Text for the share menu option when a user wants to open a page in Firefox but doesn't have it installed. */
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Instal·leu el Firefox";
-
-/* Text for the share menu option when a user wants to open a page in Focus. */
-"ShareMenu.OpenInFocus" = "Obre al Focus";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancel·la";
@@ -195,4 +186,16 @@
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Cerca %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Elements blocats";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Copia la imatge";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Desa la imatge";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "El %1$@ vol obrir %2$@";
 

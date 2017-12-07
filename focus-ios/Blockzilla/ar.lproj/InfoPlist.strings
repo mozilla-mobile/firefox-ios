@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "يتيح لك هذا أخذ الصور و رفعها.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "المواقع التي تزورها يمكن أن تطلب معرفة مكانك.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "يتيح لك هذا تصوير الڤديو و رفعه.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "يتيح لك هذا حفظ الصور و رفعها.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "يتيح لك هذا حفظ الصور و رفعها.";
 

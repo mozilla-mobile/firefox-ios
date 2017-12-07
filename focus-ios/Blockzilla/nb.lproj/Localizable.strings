@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ gir deg kontroll.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Legg til egendefinert nettadresse";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Dobbeltsjekk nettadressen du skrev inn.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Eksempel: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Nettadresse å legge til";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Lim inn eller skriv inn nettadresse";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Legg til egendefinert nettadresse";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Legg til og administrer tilpassede nettadresser for autofullføring.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Tilpassede nettadresser";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "TILPASSEDE NETTADRESSELISTE";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Ny tilpasset nettadresse lagt til.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Aktiver at %@ autofullfører over 450 populære nettadresser i adressefeltet.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Autofullfør";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "STANDARD-NETTADRESSELISTE";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Slått av";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Ingen tilpassede adresser å vise";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Påslått";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Tilbake";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Stopp";
+
+/* Label on button to cancel edits */
+"Cancel" = "Avbryt";
+
+/* Label on button to complete edits */
+"Done" = "Ferdig";
+
+/* Label on button to allow edits */
+"Edit" = "Rediger";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Prøv igjen";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "Åpne kart";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, SKJØNNER!";
+"FirstRun.lastSlide.buttonLabel" = "OK, jeg skjønner!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Automatisk blokkering av nettsporere mens du surfer. Deretter trykker du for å slette besøkte sider, søk, informasjonskapsler og passord fra enheten.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Åpne innstillinger-appen";
 
+/* Save button label */
+"Save" = "Lagre";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Legg til en annen søkemotor";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Legg til en annen søkemotor";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Legg til søkemotor";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLERTE SØKEMOTORER";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Visningsnavn";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Ny søkemotor lagt til.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Gjenopprett standard søkemotorer";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Søkemotornavn";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Søkestreng å bruke";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Lim inn eller skriv inn søkestrengen. Om nødvendig, erstatt søkeordet med: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Netadresse-autofullføring";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokkering av andre innholdssporere kan ødelegge noen videoer og nettsider.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Innstillinger";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "SØKEMOTOR";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Søkemotor";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Søkemotor";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SØK";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRASJON";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Send bruksdata";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Hva er nytt";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Hent Firefox-appen";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ønsker tilgang til bildene dine";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Eksempel: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Annonse-sporere";
 
@@ -276,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Sporingsbeskyttelse av";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Les mer";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sosiale media-sporere";

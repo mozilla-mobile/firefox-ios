@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Acest lucru îți permite să realizezi și să încarci fotografii.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Site-urile web pe care le vizitezi îți pot solicita locația.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Acest lucru îți permite să realizezi și să încarci videoclipuri.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Acest lucru îți permite să salvezi și să încarci fotografii.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Acest lucru îți permite să salvezi și să încarci fotografii.";
 

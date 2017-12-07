@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "随时一键清除您的所有浏览记录、密码及 Cookie。";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "您的记录只属于您";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "下一步";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "想搜点不一样的东西？还可以选择其他搜索引擎。";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "你的搜索，由你而定";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "跳过";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "将隐私浏览带入全新水平。屏蔽可以跨网站跟踪您的广告和其他内容，并减少网页加载时间。";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "强化您的隐私";
+

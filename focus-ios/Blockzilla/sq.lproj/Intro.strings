@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Fshini kurdo, me një prekje të vetme, historikun e shfletimit për sesionin, fjalëkalimet, cookie-t.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Historiku juaj i takon të shkuarës";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Pasuesi";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Po kërkoni për diçka tjetër? Zgjidhni një tjetër motor kërkimesh.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Kërkimi juaj, me mënyrën tuaj";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Anashkaloje";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Kalojeni shfletimin privat në nivelin pasues. Bllokoni reklama dhe lëndë tjetër që mund t’ju gjurmojë nga sajti në sajt dhe të ulë kohën e ngarkimit të faqeve.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Fuqizoni privatësinë tuaj";
+

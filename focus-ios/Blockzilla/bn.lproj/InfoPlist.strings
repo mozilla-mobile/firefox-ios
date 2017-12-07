@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "এটা আপনাকে ছবি তোলা এবং আপলোড করার সুযোগ দেবে।";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "যেসকল ওয়েবসাইটগুলি আপনি দেখছেন, সেগুলো আপনার অবস্থান জানতে চাইতে পারে।";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "এটা আপনাকে ভিডিও নেওয়া এবং আপোলড করার সুযোগ দেবে।";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "এটা আপনাকে ছবি সংরক্ষণ এবং আপলোড করার সুযোগ দেবে।";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "এটা আপনাকে ছবি সংরক্ষণ এবং আপলোড করার সুযোগ দেবে।";
 

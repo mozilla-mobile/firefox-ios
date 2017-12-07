@@ -91,9 +91,6 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Otwórz w „Mapy”";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK!";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Automatycznie blokuj śledzące elementy podczas przeglądania stron. Wystarczy stuknąć, by usunąć z urządzenia odwiedzone strony, wyszukiwania i hasła.";
 
@@ -151,12 +148,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Ustawienia";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "Wyszukiwanie";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Wyszukiwanie";
-
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "Integracja";
 
@@ -204,9 +195,6 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Przesyłanie danych o użyciu";
-
-/* Title for What's new screen */
-"Settings.whatsNewTitle" = "Co nowego?";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Pobierz Firefoksa";

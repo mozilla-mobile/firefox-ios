@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Бұл арқылы фотоларды түсіріп, жүктеуге болады.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Сіз ашатын веб-сайттар сізден орналасуыңызды сұрауы мүмкін.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Бұл арқылы видеоларды түсіріп, жүктеуге болады.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Бұл арқылы фотоларды сақтап, жүктеуге болады.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Бұл арқылы фотоларды сақтап, жүктеуге болады.";
 

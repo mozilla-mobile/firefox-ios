@@ -1,0 +1,393 @@
+/* Button on About screen */
+"About.learnMoreButton" = "ვრცლად";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ შექმნილია Mozilla-ს მიერ. ჩვენი მიზანია ჯანსაღი, გახსნილი ინტერნეტის ხელშეწყობა.";
+
+/* Label on About screen */
+"About.privateBullet1" = "მოიძიეთ და დაათვალიერეთ პირდაპირ პროგრამაში";
+
+/* Label on About screen */
+"About.privateBullet2" = "შეზღუდეთ მეთვალყურეები (ან დაუშვით პარამეტრებიდან)";
+
+/* Label on About screen */
+"About.privateBullet3" = "გაასუფთავეთ, ფუნთუშების, ძიებისა და საიტების ისტორიის წასაშლელად";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "გამოიყენეთ პირად ბრაუზერად:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "დახმარება";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "პირადულობის დებულება";
+
+/* Label for row in About screen */
+"About.rowRights" = "თქვენი უფლებები";
+
+/* Label on About screen */
+"About.safariBullet1" = "შეზღუდეთ თვალთვალი, მეტი პირადულობისთვის";
+
+/* Label on About screen */
+"About.safariBullet2" = "შეზღუდეთ ვებშრიფტები, გვერდის ზომის შესამცირებლად";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "გამოიყენეთ, Safari-ს დამატებად:";
+
+/* Title for the About screen */
+"About.screenTitle" = "შესახებ";
+
+/* Label on About screen */
+"About.topLabel" = "%@ გიბრუნებთ მართვის სადავეებს.";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "საკუთარი URL მისამართის დამატება";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "გადაამოწმეთ შეყვანილი URL.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "მაგალითად: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL დასამატებლად";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "ჩასვით ან შეიყვანეთ URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ საკუთარი URL მისამართის დამატება";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "დაამატეთ და მართეთ საკუთარი URLs მისამართები.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "საკუთარი URL მისამართები";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "საკუთარი URL ჩამონათვალი";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "ახალი საკუთარი URL დაემატა.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "ჩართეთ და %@-ში გექნებათ 450-ზე მეტი სასურველი URLs ბმული მისამართების ზოლში.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "თვითშევსება";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "ნაგულისხმევი URL ჩამონათვალი";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "გამორთულია";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "საკუთარი URLs მისამართები არაა დამატებული";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "ჩართულია";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "უკან";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "წინ";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "განახლება";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "პარამეტრები";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "გაზიარება";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "შეჩერება";
+
+/* Label on button to cancel edits */
+"Cancel" = "გაუქმება";
+
+/* Label on button to complete edits */
+"Done" = "მზადაა";
+
+/* Label on button to allow edits */
+"Edit" = "ჩასწორება";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "ხელმეორედ ცდა";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "გაუქმება";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ ცდილობს სხვა პროგრამის გახსნას";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "გახსნა";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "დარეკვა";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "გაუქმება";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "ელფოსტა";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "თქვენ ტოვებთ %@-ს.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "App Store-ის გახსნა";
+
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ ცდილობს App Store-ის გახსნას";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Maps რუკის გახსნა";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "კარგი, გასაგებია!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "გვერდების მონახულებისას, თვალყურისმდევნელი ელემენტები მუდმივად შეზღუდულია. დასრულებისას კი ერთი შეხებით წაიშლება მონახულებული გვერდები, ძიების ისტორია, ფუნთუშები და პაროლები, თქვენი მოწყობილობიდან.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "მოინახულეთ გვერდები მეთვალყურეების გარეშე.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "მიმდინარეობს Apple Handoff-ის სინქრონიზაცია";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "მხოლოდ თვალიერების პირადი რეჟიმი.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "მონახულება. წაშლა. თავიდან დაწყება.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "გაუქმება";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (პირადი ბრაუზერი)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "სხვა";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "დააჭირეთ Safari-ს და გადადით შიგთავსის შემზღუდველებზე (Content Blockers)";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "ჩართეთ %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ არაა ჩართული.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "გახსენით სისტემის პარამეტრები";
+
+/* Save button label */
+"Save" = "შენახვა";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "სხვა საძიებო სისტემის დამატება";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ სხვა საძიებო სისტემის დამატება";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "საძიებო სისტემის დამატება";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "დაყენებული საძიებო სისტემები";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "გამოსაჩენი სახელი";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "ახალი საძიებო სისტემა დამატებულია.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "ნაგულისხმევი საძიებო სისტემების აღდგენა";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "საძიებო სისტემის სახელი";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "საძიებო ფრაზა";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "ჩასვით ან შეიყვანეთ საძიებო ფრაზა. თუ საჭიროა, შეცვალეთ სიტყვა %s-ით.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL თვითშევსება";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "შიგთავსის სხვა მეთვალყურე ელემენტების შეზღუდვის შედეგად, შესაძლოა ვიდეოებმა გამართულად ვერ იმუშაოს ვებგვერდებზე.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "არა, გმადლობთ";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "გასაგებია";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რაც საჭიროა %@-ის გასაუმჯობესებლად.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "ვრცლად.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "პარამეტრები";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "საძიებო სისტემა";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "ძიება";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "შეთავსება";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "წარმადობა";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "პირადულობა";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "თვალთვალის აკრძალვა";
+
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "ზოგიერთი სარეკლამო ელემენტი, თვალს ადევნებს თქვენს გადაადგილებას საიტებზე, მაშინაც კი როცა მათზე არ აწკაპებთ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "სტატისტიკური აღრიცხვის ელემენტების შეზღუდვა";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "გამოიყენება მონაცემთა აღრიცხვისთვის, დამუშავებისა და ისეთი მოქმედებების შესამოწმებლად, როგორიცაა თითის შეხება და გვერდის გადაადგილება";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "საიტის შრიფტების შეზღუდვა";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "სხვა მეთვალყურე ელემენტების შეზღუდვა";
+
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "ჩართვის შედეგად, ზოგიერთმა ვებგვერდმა, შესაძლოა გამართულად ვერ იმუშაოს";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "სოც. ქსელების მეთვალყურეების შეზღუდვა";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "თქვენს გადაადგილებაზე თვალყურის მისადევნებლად, საიტებზე განთავსებულია მოწონების, ან გაზიარების ღილაკების სახით";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "შესაძლოა ზოგიერთმა საიტმა, ან ვიდეომ არ იმუშაოს გამართულად";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "მონაცემების აღრიცხვა";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "რა სიახლეებია";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "გადმოწერეთ Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "გახსნა %@-ით";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "გაუქმება";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ჩასმა & გადასვლა";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "გასუფთავება";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "მონახულებული გვერდების ისტორია წაიშალა.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "მოძებნეთ ან შეიყვანეთ მისამართი";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "ძიება: %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "შეზღუდული მეთვალყურეები";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "გახსნა %@-ით";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "მისამართების ველზე გადასვლა";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "დაკოპირებული ბმული: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "სურათის დაკოპირება";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "ბმულის დაკოპირება";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "სურათის შენახვა";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "ბმულის გაზიარება";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ ცდილობს გახსნას %2$@";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "საშუალებას გაძლევთ, თქვენი სურათების ფოტოგალერეაში შენახვის";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "პარამეტრების გახსნა";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” ცდილობს თქვენს სურათებთან წვდომის მიღებას";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "მაგალითად: searchengineexample.com/search/?q=%s";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "სარეკლამო მეთვალყურე";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "სტატისტიკის აღმრიცხველი";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "შიგთავსის აღმრიცხველი";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "დაცვა გამორთულია";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "ვრცლად";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "სოც. ქსელის მეთვალყურე";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "გამოირთვება %@-ის დახურვამდე, ან გასუფთავებამდე.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "თვალთვალისგან დაცვა";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "მიუთითეთ, %@-მა შეზღუდოს თუ არა, სარეკლამო, სტატისტიკის, სოც. ქსელებისა და სხვა სახის მეთვალყურეები.";
+

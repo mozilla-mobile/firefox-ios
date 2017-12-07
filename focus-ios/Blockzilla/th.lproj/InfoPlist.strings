@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "สิ่งนี้ช่วยให้คุณถ่ายและอัปโหลดรูปภาพ";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "เว็บไซต์ที่คุณเยี่ยมชมอาจร้องขอตำแหน่งที่ตั้งของคุณ";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "สิ่งนี้ช่วยให้คุณถ่ายและอัปโหลดวิดีโอ";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "สิ่งนี้ช่วยให้คุณบันทึกและอัปโหลดรูปภาพ";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "สิ่งนี้ช่วยให้คุณบันทึกและอัปโหลดรูปภาพ";
 

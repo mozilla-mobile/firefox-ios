@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Bersihkan semua riwayat sesi penjelajahan, sandi, dan kuki Anda kapan pun dalam sekali ketuk saja.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Riwayat Anda adalah sejarah";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Selanjutnya";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Mencari sesuatu yang berbeda? Pilih mesin pencari yang berbeda.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Pencarian Anda, cara Anda";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Lewati";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Membawa penjelajahan pribadi ke tingkat lebih tinggi. Blokir iklan dan konten lainnya yang dapat melacak Anda di seluruh situs dan memperlambat waktu buka laman.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Perkuat privasi Anda";
+

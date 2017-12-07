@@ -91,9 +91,6 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Maps ကို ဖွင့်ပါ";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "ကောင်းပြီ၊ သိပါပြီ။";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "သင်ကြည့်ရှုနေစဉ်အတွင်း အွန်လိုင်းနောက်ယောက်ခံ ကိရိယာများကို အလိုအလျောက် ပိတ်ပင်ပါသည်။ လည်ပတ် ကြည့်ရှုခဲ့သော ဝဘ်စာမျက်နှာများ၊ ရှာဖွေမှုများ၊ ကွတ်ကီးများနှင့် စကားဝှက်များကို တို့ထိပြီး ဖယ်ရှားရှင်းလင်းနိုင်သည်။";
 
@@ -150,12 +147,6 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "အပြင်အဆင်များ";
-
-/* Title for the search engine row */
-"Settings.searchSection" = "SEARCH ENGINE";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "ရှာဖွေရေး ယန္တရား";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";

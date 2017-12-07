@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "İstediğiniz zaman tek bir dokunuşla gezinti geçmişinizi, parolaları ve çerezleri temizleyebilirsiniz.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Geçmiş geçmişte kaldı";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "İleri";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Başka bir şey mi arıyorsunuz? Farklı bir arama motoru seçebilirsiniz.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Senin araman, senin kararın";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Geç";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Gizli gezintiyi daha da geliştirdik. Gezdiğiniz siteleri takip eden ve sayfaların yüklenmesini yavaşlatan reklamları ve diğer içerikleri engelleyebilirsiniz.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Gizliliğini güçlendir";
+

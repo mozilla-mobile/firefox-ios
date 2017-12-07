@@ -29,7 +29,7 @@
 "About.safariBullet1" = "Bloquear rastreadores para melhorar a privacidade";
 
 /* Label on About screen */
-"About.safariBullet2" = "Bloquear fontes da Web para reduzir o tamanho da página";
+"About.safariBullet2" = "Bloquear fontes web para reduzir o tamanho da página";
 
 /* Label on About screen */
 "About.safariBulletHeader" = "Usá-lo como uma extensão do Safari:";
@@ -49,7 +49,10 @@
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "Exemplo: exemplo.com";
 
-/* Watermark for the input field to add a custom URL */
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL a adicionar";
+
+/* Placeholder for the input field to add a custom URL */
 "Autocomplete.addCustomUrlPlaceholder" = "Cole ou digite a URL";
 
 /* Label for button to add a custom URL with the + prefix */
@@ -71,7 +74,7 @@
 "Autocomplete.defaultDescriptoin" = "Habilite o %@ para ter preenchimento automático de mais de 450 URLs populares na barra de endereços.";
 
 /* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Autocompletar";
+"Autocomplete.defaultLabel" = "Preenchimento automático";
 
 /* Title for the default URL list section */
 "Autocomplete.defaultTitle" = "LISTA DE URLs PREDEFINIDA";
@@ -221,7 +224,7 @@
 "Settings.Search.SearchTemplatePlaceholder" = "Colar ou inserir um termo de pesquisa. Se necessário, substituir o termo da pesquisa com: %s.";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "Autocompletar URL";
+"Settings.autocompleteSection" = "Preenchimento automático de URL";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "O bloqueio de outros rastreadores pode quebrar alguns vídeos e páginas da Web.";

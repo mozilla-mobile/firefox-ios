@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Omogoča fotografiranje in pošiljanje fotografij.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Spletne strani lahko zahtevajo vašo lokacijo.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Omogoča snemanje in nalaganje videa.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Omogoča shranjevanje in pošiljanje fotografij.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Omogoča shranjevanje in pošiljanje fotografij.";
 

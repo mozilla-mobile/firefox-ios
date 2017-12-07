@@ -1,0 +1,393 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Saznaj više";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ je produciran od Mozille. naša misija je da podstičemo zdrav i otvoren Internet.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Traži direktno u aplikaciji";
+
+/* Label on About screen */
+"About.privateBullet2" = "Blokirajte tragače (ili ažurirajte podešavanja kako biste omogućili traganje)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Obrišite za brisanje kolačića, kao i pretragu i historiju pregledanja";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Koristi kao privatni browser:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Pomoć";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Napomena o privatnosti";
+
+/* Label for row in About screen */
+"About.rowRights" = "Vaša prava";
+
+/* Label on About screen */
+"About.safariBullet1" = "Blokiraj tragače za poboljšanu privatnost";
+
+/* Label on About screen */
+"About.safariBullet2" = "Blokiraj web fontove za smanjene veličine stranice";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Koristi kao Safari ekstenziju:";
+
+/* Title for the About screen */
+"About.screenTitle" = "O nama";
+
+/* Label on About screen */
+"About.topLabel" = "%@ vam daje kontrolu.";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Dodaj prilagođeni URL";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Dvaput provjerite URL koji ste unijeli.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Primjer: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL za dodavanje";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Zalijepite ili unesite URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Dodaj prilagođeni URL";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Dodajte i upravljajte prilagođenim automatski završenim URL-ovima.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Prilagođeni URL-ovi";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "PRILAGOĐENA URL LISTA";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Novi prilagođeni URL dodan.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Omogućite da %@ automatski završi preko 450 popularnih URL adresa u adresnoj traci.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Automatsko završavanje";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "IZVORNA URL LISTA";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Onemogućeno";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Nema prilagođenih URL-ova za prikaz";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Omogućeno";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Nazad";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Naprijed";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Obnovi";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Postavke";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Dijeli";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Zaustavi";
+
+/* Label on button to cancel edits */
+"Cancel" = "Otkaži";
+
+/* Label on button to complete edits */
+"Done" = "Gotovo";
+
+/* Label on button to allow edits */
+"Edit" = "Uredi";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Pokušaj ponovo";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Otkaži";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ želi da otvori drugu aplikaciju";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Otvori";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Nazovi";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Otkaži";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Email";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Sada napuštate %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Otvori App Store";
+
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ želi da otvori App Store.";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Otvori mape";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "U redu, razumijem!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Automatski blokirajte online tragače dok pretražujete. Zatim dodirnite da biste obrisali posjećene stranice, pretraživanja, kolačiće i lozinke sa vašeg uređaja.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Istražujte kao da vas niko ne gleda.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Apple Handoff se sinhronizuje";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Automatsko privatno pretraživanje.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Pretražuj. Briši. Ponovi.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Otkaži";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Privatno pretraživanje)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Više";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Dodirni Safari, onda izaberi Blokere sadržaja";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Omogući %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ nije omogućeno.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Otvorite postavke aplikacije";
+
+/* Save button label */
+"Save" = "Sačuvaj";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Dodaj novi pretraživač";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Dodaj novi pretraživač";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Dodaj pretraživač";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALIRANI PRETRAŽIVAČI";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Ime za prikaz";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Novi pretraživač dodan.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Vrati izvorne pretraživače";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Naziv pretraživača";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Pretraži tekst za korištenje";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Zalijepite ili unesite tekst pretrage. Ako je neophodno, zamijenite ga sa: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Automatsko završavanje URL-a";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blokiranje drugih tragača sadržaja može prekinuti neki video i web stranice.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Ne, hvala";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Shvatam";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozila nastoji prikupljati samo ono što je potrebno da osigura i poboljša %@ za sve.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Saznajte više.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Postavke";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Pretraživač";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "TRAŽI";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "PERFORMANCE";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVACY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Blokiraj reklame";
+
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Neke reklame prate posjete stranica, čak i kad ne klinete na reklame";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Blokiraj analitičke pratioce";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Koristi se za sakupljanje, analiziranje i mjerenje aktivnosti kao što su tipkanje i skrolovanje";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blokiraj web fontove";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Blokiraj pratioce ostalog sadržaja";
+
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Omogućavanje može uticati loše na neke stranice";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Blokiraj društvene pratioce";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Ugrađene u stranice kako bi pratile vaše posjete i da prikažu funkcije kao što su dugmići za dijeljenje";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Može oštetiti neki video i web stranice";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Šalji podatke o korištenju";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Šta je novo";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Preuzmi Firefox aplikaciju";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Otvori u %@";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Otkaži";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Zalijepi & idi";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ERASE";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Vaša historija pretraživanja je izbrisana.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Tražite ili upišite adresu";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Traži %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Blokirani pratioci";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Otvori u %@";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Izaberite traku lokacije";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Link koji ste kopirali: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Kopiraj sliku";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Kopiraj link";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Spasi sliku";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Podijeli link";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ želi otvoriti %2$@";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Ovo vam omogućava da sačuvate sliku u Camera Roll";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Otvori postavke";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” bi želio pristupiti vašim fotografijama";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Primjer: searchengineexample.com/search/?q=%s";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Ad tragači";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Analitički tragači";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Tragači sadržaja";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Zaštita praćenja isključena";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Saznajte više";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Socijalni tragači";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Onemogući dok ne zatvoriš %@ ili dodirni ERASE.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Zaštita od praćenja";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Birajte da li %@ blokirati reklame, analitike, socijalne mreže i druge tragače.";
+

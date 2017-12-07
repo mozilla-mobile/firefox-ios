@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ gefur þér stjórn.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Bæta við sérsniðnu URL";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Farðu aftur yfir URL sem þú sláðir inn.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Til dæmis: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL til að bæta við";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Líma eða slá inn";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Bæta við sérsniðnu URL";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Bæta við og sýsla með sjálfvirka leiðréttingu á URL.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Sérsniðið URL";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "SÉRSNIÐINN URL LISTI";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Nýtt sérsniðið URL bætt við.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Virkja sjálfvirku leiðréttingu fyrir %@ í staðsetningarslá á rúmlega 450 vinsælum slóðum.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Sjálfvirk leiðrétting";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "SJÁLFGEFINN URL LISTI";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Óvirkt";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Engin sérsniðin URL til sýnis";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Virkt";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Til baka";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Stöðva";
+
+/* Label on button to cancel edits */
+"Cancel" = "Hætta við";
+
+/* Label on button to complete edits */
+"Done" = "Búið";
+
+/* Label on button to allow edits */
+"Edit" = "Breyta";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Reyna aftur";
@@ -92,7 +149,7 @@
 "ExternalLink.openMapsButton" = "Opna landakort";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "OK, SAMÞYKKT!";
+"FirstRun.lastSlide.buttonLabel" = "Í lagi, ég skil";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Loka sjálfvirkt á tengda rekjara á meðan þú vafrar. Snertu síðan til að eyða heimsóttum síðum, uppflettingum, smákökum og lykilorðum úr tæki þínu.";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Opna stillingar";
 
+/* Save button label */
+"Save" = "Vista";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Bæta við annari leitarvél";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+Bæta við annari leitarvél";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Bæta við leitarvél";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "UPPSETTAR LEITARVÉLAR";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Heiti sem birtist";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Ný leitarvél bætt við.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Endurheimta upprunalegar leitarvélar";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Heiti leitarvélar";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Leitarstrengur sem á að nota";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Líma eða skrá inn leitarstreng. Skipta út leitarheiti með: %s, ef nauðsynlegt.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Sjálfvirk leiðrétting á slóðum";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Að loka á aðra efnisrekjara gæti haft áhrif á sum myndbönd og vefsíður.";
 
@@ -151,11 +244,11 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Stillingar";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "LEITARVÉL";
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Leitarvél";
 
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Leitarvél";
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "LEITA";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "SAMÞÆTTING";
@@ -204,6 +297,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Senda notkunarupplýsingar";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Hvað er nýtt";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Sækja Firefox smáforritið";
@@ -265,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "\"%@\" vill aðgang að myndunum þínum";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Til dæmis: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Auglýsinga rekjarar";
 
@@ -276,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Vörn gegn rekjurum ekki virk";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Fræðast meira";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Samfélagslegir rekjarar";

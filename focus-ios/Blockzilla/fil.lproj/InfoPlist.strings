@@ -1,12 +1,15 @@
-/* (No Commment) */
+/* (No Comment) */
 "NSCameraUsageDescription" = "Maaari kang kumuha at mag-upload ng mga larawan dito.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Maaaring hingin ng mga website na binibisita mo ang iyon lokasyon.";
 
-/* (No Commment) */
+/* (No Comment) */
 "NSMicrophoneUsageDescription" = "Maaari kang kumuha at mag-upload ng mga larawan dito.";
 
-/* (No Commment) */
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Pinapayagan ka nito na i-save at mag-upload ng mga larawan.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Maaari kang kumuha at mag-upload ng mga larawan dito.";
 

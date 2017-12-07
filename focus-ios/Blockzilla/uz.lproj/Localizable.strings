@@ -76,9 +76,6 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Xaritalarni ochish";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "Tushundim!";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Internetga kirganingizda kuzatuvchilar avtomatik tarzda bloklaydi. So‘ngra kirilgan sahifalar, qidiruv, kuki va parollarni qurilmadan o‘chirish uchun tugmachani bosing.";
 
@@ -127,12 +124,6 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Sozlamalar";
 
-/* Title for the search engine row */
-"Settings.searchSection" = "QIDIRUV TIZIMI";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Qidiruv tizimi";
-
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATSIYA";
 
@@ -165,12 +156,6 @@
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
-
-/* Label for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageData" = "Foydalanish ma’lumotlarini anonim tarzda jo‘natish";
-
-/* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.toggleSendAnonymousUsageDataSubtitle" = "Batafsil ma’lumot";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Bekor qilish";

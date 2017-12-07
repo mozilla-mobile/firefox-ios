@@ -91,9 +91,6 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Digeriñ an arload kartennoù";
 
-/* Label on button to dismiss first run UI */
-"FirstRun.buttonLabel" = "Mat eo, komprenet em eus!";
-
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Stankit an heulierien enlinenn ent emgefreek pa verdeit. Stokit evit dilemel ar pajennoù gweladennet, an toupinoù, an enklaskoù hag ar gerioù-tremen eus ho trevnad.";
 
@@ -150,12 +147,6 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Arventennoù";
-
-/* Title for the search engine row */
-"Settings.searchSection" = "LUSKER ENKLASK";
-
-/* Title for the search engine selection screen */
-"Settings.searchTitle" = "Lusker enklask";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ENFRAMMAÑ";
