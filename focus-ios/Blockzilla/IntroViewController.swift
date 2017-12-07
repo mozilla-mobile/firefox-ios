@@ -94,7 +94,7 @@ class IntroViewController: UIViewController {
     }
     
     @objc func didTapSkipButton() {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.firstRun, method: TelemetryEventMethod.skip, object: TelemetryEventObject.onboarding)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "skip")
         backgroundDark.removeFromSuperview()
         backgroundBright.removeFromSuperview()
         dismiss(animated: true, completion: nil)
@@ -111,7 +111,7 @@ class IntroViewController: UIViewController {
 
 extension IntroViewController: ScrollViewControllerDelegate {
     func scrollViewController(scrollViewController: ScrollViewController, didDismissSlideDeck bool: Bool) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.firstRun, method: TelemetryEventMethod.completed, object: TelemetryEventObject.onboarding)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.onboarding, value: "finish")
         backgroundDark.removeFromSuperview()
         backgroundBright.removeFromSuperview()
         dismiss(animated: true, completion: nil)
@@ -122,7 +122,7 @@ extension IntroViewController: ScrollViewControllerDelegate {
     }
     
     func scrollViewController(scrollViewController: ScrollViewController, didUpdatePageIndex index: Int) {
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.firstRun, method: TelemetryEventMethod.showSlide, object: TelemetryEventObject.onboarding, value: String(index))
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.onboarding, value: String(index))
         pageControl.currentPage = index
         if index == pageControl.numberOfPages - 1 {
             isBright = true

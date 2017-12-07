@@ -66,11 +66,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let shouldShowNewIntro = arc4random_uniform(UInt32(100)) >= 50
                 if  shouldShowNewIntro {
                     firstRunViewController = IntroViewController()
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.firstRun, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.onboarding, value: nil, extras: ["DidShowNewIntro": shouldShowNewIntro])
+                    Telemetry.default.recordEvent(category: TelemetryEventCategory.firstRun, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.onboarding)
 
                 } else {
                     firstRunViewController = FirstRunViewController()
-                    Telemetry.default.recordEvent(category: TelemetryEventCategory.firstRun, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.onboarding, value: nil, extras: ["DidShowNewIntro": shouldShowNewIntro])
+                    Telemetry.default.recordEvent(category: TelemetryEventCategory.firstRun, method: TelemetryEventMethod.coinFlip, object: TelemetryEventObject.firstRun)
                 }
                 rootViewController.present(firstRunViewController, animated: false, completion: nil)
             }

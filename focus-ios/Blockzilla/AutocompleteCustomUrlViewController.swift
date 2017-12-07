@@ -171,7 +171,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         if editingStyle == .delete {
             tableView.beginUpdates()
             _ = customAutocompleteSource.remove(at: indexPath.row)
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainRemoved, object: TelemetryEventObject.setting)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainRemoved, object: TelemetryEventObject.customDomain)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
 
@@ -193,7 +193,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         let itemToMove = domains[sourceIndexPath.row]
         _ = customAutocompleteSource.remove(at: sourceIndexPath.row)
         _ = customAutocompleteSource.add(suggestion: itemToMove, atIndex: destinationIndexPath.row)
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainReordered, object: TelemetryEventObject.setting)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainReordered, object: TelemetryEventObject.customDomain)
     }
 }
 

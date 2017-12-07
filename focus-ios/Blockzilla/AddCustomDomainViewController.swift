@@ -96,7 +96,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
             guard !error.message.isEmpty else { return }
             Toast(text: error.message).show()
         case .success:
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.customDomainAdded, object: TelemetryEventObject.setting)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
             self.navigationController?.popViewController(animated: true)
         }
