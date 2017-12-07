@@ -10,7 +10,6 @@ import Foundation
 
 class TelemetryEventCategory {
     public static let action = "action"
-    public static let firstRun = "first_run"
 }
 
 class TelemetryEventMethod {
