@@ -939,10 +939,10 @@ extension SQLiteHistory: SyncableHistory {
         // Since we have a known Out Of Memory issue here, let's avoid extra data structures.
         let rowIdentity: (SDRow) -> SDRow = { $0 }
 
-        // We'll need to runQueryUnsafe so we get a LiveCursor, i.e. we don't get the cursor
+        // We'll need to runQueryUnsafe so we get a LiveSQLiteCursor, i.e. we don't get the cursor
         // contents into memory all at once.
-        return db.runQueryUnsafe(sql, args: nil, factory: rowIdentity) { (cursor: Cursor<SDRow>) ->  [Int: [Visit]] in
-            // Accumulate a mapping of site IDs to list of visits. Each list should be less than visitLimit.
+        return db.runQueryUnsafe(sql, args: nil, factory: rowIdentity) { (cursor: Cursor<SDRow>) -> [Int: [Visit]] in
+            // Accumulate a mapping of site IDs to list of visits. Each list should be shorter than visitLimit.
             // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
             var visits = [Int: [Visit]]()
             historyIDs.forEach { visits[$0] = [] }
@@ -950,8 +950,11 @@ extension SQLiteHistory: SyncableHistory {
             // We need to iterate through these explicitly, without relying on the
             // factory.
             for row in cursor.makeIterator() {
-                guard let row = row,
-                    let id = row["siteID"] as? Int,
+                guard let row = row, cursor.status == .success else {
+                    throw NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: cursor.statusMessage])
+                }
+                
+                guard let id = row["siteID"] as? Int,
                     let existingCount = visits[id]?.count,
                     existingCount < visitLimit else {
                         continue
