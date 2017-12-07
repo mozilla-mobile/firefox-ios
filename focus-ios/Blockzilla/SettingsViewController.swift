@@ -8,11 +8,38 @@ import UIKit
 import Telemetry
 
 class SettingsTableViewSearchCell: UITableViewCell {
-    let accessoryLabel = UILabel()
+    private let newLabel = UILabel()
+    private let accessoryLabel = UILabel()
+    private let spacerView = UIView()
+
+    var accessoryLabelText: String? {
+        get { return accessoryLabel.text }
+        set {
+            accessoryLabel.text = newValue
+            accessoryLabel.sizeToFit()
+        }
+    }
+
+    var label: String? {
+        get { return newLabel.text }
+        set {
+            newLabel.text = newValue
+            newLabel.sizeToFit()
+        }
+    }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        newLabel.numberOfLines = 0
+        newLabel.lineBreakMode = .byWordWrapping
+        textLabel?.numberOfLines = 0
+        textLabel?.text = " "
+
         contentView.addSubview(accessoryLabel)
+        contentView.addSubview(newLabel)
+        contentView.addSubview(spacerView)
+
+        newLabel.textColor = UIConstants.colors.settingsTextLabel
         accessoryLabel.textColor = UIConstants.colors.settingsDetailLabel
         accessoryType = .disclosureIndicator
 
@@ -20,10 +47,27 @@ class SettingsTableViewSearchCell: UITableViewCell {
         backgroundColorView.backgroundColor = UIConstants.colors.cellSelected
         selectedBackgroundView = backgroundColorView
 
+        accessoryLabel.setContentHuggingPriority(.required, for: .horizontal)
+        accessoryLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         accessoryLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.trailing.centerY.equalToSuperview()
         }
+
+        newLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        newLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+
+        spacerView.snp.makeConstraints { make in
+            make.top.bottom.leading.equalToSuperview()
+            make.trailing.equalTo(textLabel!.snp.leading)
+        }
+
+        newLabel.snp.makeConstraints { make in
+            make.leading.equalTo(spacerView.snp.trailing)
+            make.top.equalToSuperview().offset(11)
+            make.bottom.equalToSuperview().offset(-11)
+            make.trailing.equalTo(accessoryLabel.snp.leading).offset(-10)
+        }
+
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -212,8 +256,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let accessoryLabel = indexPath.row == 0 ? searchEngineManager.activeEngine.name : autocompleteLabel
             let identifier = indexPath.row == 0 ? "SettingsViewController.searchCell" : "SettingsViewController.autocompleteCell"
 
-            searchCell.textLabel?.text = label
-            searchCell.accessoryLabel.text = accessoryLabel
+            searchCell.accessoryLabelText = accessoryLabel
+            searchCell.label = label
             searchCell.accessoryType = .disclosureIndicator
             searchCell.accessibilityIdentifier = identifier
 
@@ -262,8 +306,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // Height for the Search Engine and Learn More row.
-        if indexPath.section == 0 ||
-            indexPath.section == 5 ||
+        if indexPath.section == 0 { return UITableViewAutomaticDimension }
+        if indexPath.section == 5 ||
             (indexPath.section == 4 && indexPath.row == 1) {
             return 44
         }
@@ -434,7 +478,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
 extension SettingsViewController: SearchSettingsViewControllerDelegate {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine) {
-        (tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingsTableViewSearchCell)?.accessoryLabel.text = engine.name
+        (tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingsTableViewSearchCell)?.accessoryLabelText = engine.name
     }
 }
 
