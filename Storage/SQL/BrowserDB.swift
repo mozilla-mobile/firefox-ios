@@ -206,9 +206,11 @@ open class BrowserDB {
         }
     }
 
-    func runQueryUnsafe<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
-        return withConnection { connection -> Cursor<T> in
-            connection.executeQueryUnsafe(sql, factory: factory, withArgs: args)
+    func runQueryUnsafe<T, U>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T, block: @escaping (Cursor<T>) throws -> U) -> Deferred<Maybe<U>> {
+        return withConnection { connection -> U in
+            let cursor = connection.executeQueryUnsafe(sql, factory: factory, withArgs: args)
+            defer { cursor.close() }
+            return try block(cursor)
         }
     }
 
