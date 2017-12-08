@@ -96,6 +96,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         exampleLabel.numberOfLines = 0
         exampleLabel.attributedText = subtitle
         exampleLabel.font = UIFont.systemFont(ofSize: 12)
+        exampleLabel.isUserInteractionEnabled = true
 
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreTapped))
