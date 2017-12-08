@@ -27,7 +27,7 @@ class SearchSettingsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = UIConstants.strings.settingsSearchTitle
+        navigationItem.title = UIConstants.strings.settingsSearchLabel
         view.backgroundColor = UIConstants.colors.background
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.selectRow(at: IndexPath(row: 0, section: 1), animated: false, scrollPosition: .none)
