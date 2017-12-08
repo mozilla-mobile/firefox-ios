@@ -336,6 +336,48 @@ class TabManagerTests: XCTestCase {
         delegate.verify("Not all delegate methods were called")
     }
 
+    func testDelegatesCalledWhenRemovingPrivateTabs() {
+        //setup
+        let profile = TabManagerMockProfile()
+        let delegate = MockTabManagerDelegate()
+        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+        profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
+
+        // create one private and one normal tab
+        let tab = manager.addTab()
+        let newTab = manager.addTab()
+        manager.selectTab(tab)
+        manager.selectTab(manager.addTab(isPrivate: true))
+        manager.addDelegate(delegate)
+
+        // Double check a few things
+        XCTAssertEqual(manager.selectedTab?.isPrivate, true, "The selected tab should be the private tab")
+        XCTAssertEqual(manager.privateTabs.count, 1, "There should only be one private tab")
+
+        // switch to normal mode. Which should delete the private tabs
+        manager.willSwitchTabMode()
+
+        //make sure tabs are cleared properly and indexes are reset
+        XCTAssertEqual(manager.privateTabs.count, 0, "Private tab should have been deleted")
+        XCTAssertEqual(manager.selectedIndex, -1, "The selected index should have been reset")
+
+        // didSelect should still be called when switching between a nil tab
+        let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
+            XCTAssertNil(tabs[1], "there should be no previous tab")
+            let next = tabs[0]!
+            XCTAssertFalse(next.isPrivate)
+        }
+
+        // make sure delegate method is actually called
+        delegate.expect([didSelect])
+
+        // select the new tab to trigger the delegate methods
+        manager.selectTab(newTab)
+
+        // check
+        delegate.verify("Not all delegate methods were called")
+    }
+
     func testDeleteFirstTab() {
         let profile = TabManagerMockProfile()
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)
