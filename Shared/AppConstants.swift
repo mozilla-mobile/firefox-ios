@@ -151,7 +151,7 @@ public struct AppConstants {
     /// Toggle the use of Leanplum.
     public static let MOZ_ENABLE_LEANPLUM: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
