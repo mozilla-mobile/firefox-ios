@@ -30,8 +30,8 @@ fi
 if [ "$BUDDYBUILD_SCHEME" = "Firefox" ] || [ "$BUDDYBUILD_SCHEME" = "FirefoxBeta" ]; then
   echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
   /usr/libexec/PlistBuddy -c "Set LeanplumAppId $LEANPLUM_APP_ID" "Client/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set LeanplumEnvironment production" "Client/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set LeanplumKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set LeanplumProductionKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set LeanplumDevelopmentKey $LEANPLUM_KEY_DEVELOPMENT" "Client/Info.plist"
 fi
 
 echo "Setting up Pocket Stories API Key"

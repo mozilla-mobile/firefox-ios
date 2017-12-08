@@ -7,9 +7,9 @@ import AdSupport
 import Shared
 import Leanplum
 
-private let LPEnvironmentKey = "LeanplumEnvironment"
 private let LPAppIdKey = "LeanplumAppId"
-private let LPKeyKey = "LeanplumKey"
+private let LPProductionKeyKey = "LeanplumProductionKey"
+private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
 private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
 
 // FxA Custom Leanplum message template for A/B testing push notifications.
@@ -32,11 +32,6 @@ private struct LPMessage {
 }
 
 private let log = Logger.browserLogger
-
-private enum LPEnvironment: String {
-    case development
-    case production
-}
 
 enum LPEvent: String {
     case firstRun = "E_First_Run"
@@ -81,9 +76,9 @@ private let supportedLocales = ["en_US", "de_DE", "en_GB", "en_CA", "en_AU", "zh
                         "fr_FR", "it_IT", "id_ID", "id_ID", "pt_BR", "pl_PL", "ru_RU", "es_ES", "es_MX"]
 
 private struct LPSettings {
-    var environment: LPEnvironment
     var appId: String
-    var key: String
+    var developmentKey: String
+    var productionKey: String
 }
 
 class LeanPlumClient {
@@ -118,14 +113,13 @@ class LeanPlumClient {
             return
         }
 
-        switch settings.environment {
-            case .development:
-                log.info("LeanplumIntegration - Setting up for Development")
-                Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
-                Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.key)
-            case .production:
-                log.info("LeanplumIntegration - Setting up for Production")
-                Leanplum.setAppId(settings.appId, withProductionKey: settings.key)
+        if UIDevice.current.name.contains("MozMMADev") {
+            log.info("LeanplumIntegration - Setting up for Development")
+            Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
+            Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.developmentKey)
+        } else {
+            log.info("LeanplumIntegration - Setting up for Production")
+            Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
         }
 
         Leanplum.syncResourcesAsync(true)
@@ -231,13 +225,12 @@ class LeanPlumClient {
 
     private func getSettings() -> LPSettings? {
         let bundle = Bundle.main
-        guard let environmentString = bundle.object(forInfoDictionaryKey: LPEnvironmentKey) as? String,
-              let environment = LPEnvironment(rawValue: environmentString),
-              let appId = bundle.object(forInfoDictionaryKey: LPAppIdKey) as? String,
-              let key = bundle.object(forInfoDictionaryKey: LPKeyKey) as? String else {
+        guard let appId = bundle.object(forInfoDictionaryKey: LPAppIdKey) as? String,
+              let productionKey = bundle.object(forInfoDictionaryKey: LPProductionKeyKey) as? String,
+              let developmentKey = bundle.object(forInfoDictionaryKey: LPDevelopmentKeyKey) as? String else {
             return nil
         }
-        return LPSettings(environment: environment, appId: appId, key: key)
+        return LPSettings(appId: appId, developmentKey: developmentKey, productionKey: productionKey)
     }
     
     // This must be called before `Leanplum.start` in order to correctly setup
