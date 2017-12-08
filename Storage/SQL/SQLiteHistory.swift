@@ -932,18 +932,17 @@ extension SQLiteHistory: SyncableHistory {
                 "SELECT siteID, date AS visitDate, type AS visitType " +
                 "FROM \(TableVisits) " +
                 "WHERE siteID IN (\(historyIDs.map(String.init).joined(separator: ","))) " +
-                "ORDER BY date DESC"
+                "ORDER BY siteID DESC, date DESC"
 
         // We want to get a tuple Visit and Place here. We can either have an explicit tuple factory
         // or we use an identity function, and make do without creating extra data structures.
         // Since we have a known Out Of Memory issue here, let's avoid extra data structures.
         let rowIdentity: (SDRow) -> SDRow = { $0 }
 
-        // We'll need to runQueryUnsafe so we get a LiveCursor, i.e. we don't get the cursor
+        // We'll need to runQueryUnsafe so we get a LiveSQLiteCursor, i.e. we don't get the cursor
         // contents into memory all at once.
-        return db.runQueryUnsafe(sql, args: nil, factory: rowIdentity) >>== { cursor in
-            defer { cursor.close() }
-
+        return db.runQueryUnsafe(sql, args: nil, factory: rowIdentity) { (cursor: Cursor<SDRow>) -> [Int: [Visit]] in
+            // Accumulate a mapping of site IDs to list of visits. Each list should be shorter than visitLimit.
             // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
             var visits = [Int: [Visit]]()
             historyIDs.forEach { visits[$0] = [] }
@@ -951,19 +950,31 @@ extension SQLiteHistory: SyncableHistory {
             // We need to iterate through these explicitly, without relying on the
             // factory.
             for row in cursor.makeIterator() {
-                guard let row = row else { break }
-                let date = row.getTimestamp("visitDate")!
-                let type = VisitType(rawValue: row["visitType"] as! Int)!
+                guard let row = row, cursor.status == .success else {
+                    throw NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: cursor.statusMessage])
+                }
+                
+                guard let id = row["siteID"] as? Int,
+                    let existingCount = visits[id]?.count,
+                    existingCount < visitLimit else {
+                        continue
+                }
+
+                guard let date = row.getTimestamp("visitDate"),
+                    let visitType = row["visitType"] as? Int,
+                    let type = VisitType(rawValue: visitType) else {
+                        continue
+                }
+
                 let visit = Visit(date: date, type: type)
-                let id = row["siteID"] as! Int
 
                 // Append the visits in descending date order, so we only get the
                 // most recent top N.
-                if visits[id]?.count ?? visitLimit < visitLimit {
-                    visits[id]?.append(visit)
-                }
+                visits[id]?.append(visit)
             }
 
+            return visits
+        } >>== { visits in
             // Join up the places map we received as input with our visits map.
             let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
                 guard let visitsList = visits[id], !visitsList.isEmpty else {
@@ -974,7 +985,7 @@ extension SQLiteHistory: SyncableHistory {
 
             let recentVisitCount = placesAndVisits.reduce(0) { $0 + $1.1.count }
 
-            log.info("Attaching \(placesAndVisits.count) places to \(recentVisitCount) most recent visits, from a total \(cursor.count) new visits")
+            log.info("Attaching \(placesAndVisits.count) places to \(recentVisitCount) most recent visits")
             return deferMaybe(placesAndVisits)
         }
     }
