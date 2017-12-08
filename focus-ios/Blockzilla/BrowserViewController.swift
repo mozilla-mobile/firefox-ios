@@ -194,22 +194,23 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
-
-        // Prevent the keyboard from showing up until after the user has viewed the Intro.
-        let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
-
-        if userHasSeenIntro && !urlBar.inBrowsingMode {
-            // Adds delay to not conflict with the dismissal of the Intro
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                self.urlBar.becomeFirstResponder()
-            }
-        }
         
         homeView?.setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
         
         super.viewWillAppear(animated)
     }
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        // Prevent the keyboard from showing up until after the user has viewed the Intro.
+        let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
+        
+        if userHasSeenIntro && !urlBar.inBrowsingMode {
+            self.urlBar.becomeFirstResponder()
+        }
+        
+        super.viewDidAppear(animated)
+    }
+    
     private func containWebView() {
         addChildViewController(webViewController)
         webViewContainer.addSubview(webViewController.view)
