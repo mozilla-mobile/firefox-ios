@@ -13,7 +13,7 @@ protocol HistoryStateHelperDelegate: class {
 // WKWebView that intercepts calls to `history.pushState()` and
 // `history.replaceState()` so that the BrowserViewController is
 // notified when the user navigates a single-page web application.
-class HistoryStateHelper: TabHelper {
+class HistoryStateHelper: TabContentScript {
     weak var delegate: HistoryStateHelperDelegate?
     fileprivate weak var tab: Tab?
     

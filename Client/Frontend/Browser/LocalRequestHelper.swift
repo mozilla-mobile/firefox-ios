@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-class LocalRequestHelper: TabHelper {
+class LocalRequestHelper: TabContentScript {
     func scriptMessageHandlerName() -> String? {
         return "localRequestHelper"
     }

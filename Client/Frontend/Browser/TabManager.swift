@@ -39,6 +39,7 @@ class WeakTabManagerDelegate {
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager: NSObject {
     fileprivate var delegates = [WeakTabManagerDelegate]()
+    fileprivate var tabEventHandlers = TabEventHandlers.default.handlers
     weak var stateDelegate: TabManagerStateDelegate?
 
     func addDelegate(_ delegate: TabManagerDelegate) {
@@ -193,6 +194,12 @@ class TabManager: NSObject {
         selectedTab?.createWebview()
 
         delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous) }
+        if let tab = previous {
+            TabEvent.post(.didLoseFocus, for: tab)
+        }
+        if let tab = selectedTab {
+            TabEvent.post(.didGainFocus, for: tab)
+        }
     }
 
     func shouldClearPrivateTabs() -> Bool {
@@ -418,6 +425,7 @@ class TabManager: NSObject {
 
         if notify {
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab) }
+            TabEvent.post(.didClose, for: tab)
         }
 
         if !tab.isPrivate && viableTabs.isEmpty {

@@ -9,7 +9,7 @@ import Shared
 import SwiftyJSON
 import XCGLogger
 
-protocol TabHelper {
+protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
@@ -61,6 +61,8 @@ class Tab: NSObject {
         return self.url
     }
 
+    var userActivity: NSUserActivity? = nil
+
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
     var bars = [SnackBar]()
@@ -108,7 +110,7 @@ class Tab: NSObject {
     var desktopSite: Bool = false
     
     var readerModeAvailableOrActive: Bool {
-        if let readerMode = self.getHelper(name: "ReaderMode") as? ReaderMode {
+        if let readerMode = self.getContentScript(name: "ReaderMode") as? ReaderMode {
             return readerMode.state != .unavailable
         }
         return false
@@ -120,7 +122,8 @@ class Tab: NSObject {
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
     var parent: Tab?
 
-    fileprivate var helperManager = HelperManager()
+    fileprivate var contentScriptManager = TabContentScriptManager()
+
     fileprivate var configuration: WKWebViewConfiguration?
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
@@ -357,12 +360,12 @@ class Tab: NSObject {
         }
     }
 
-    func addHelper(_ helper: TabHelper, name: String) {
-        helperManager.addHelper(helper, name: name, forTab: self)
+    func addContentScript(_ helper: TabContentScript, name: String) {
+        contentScriptManager.addContentScript(helper, name: name, forTab: self)
     }
 
-    func getHelper(name: String) -> TabHelper? {
-        return helperManager.getHelper(name)
+    func getContentScript(name: String) -> TabContentScript? {
+        return contentScriptManager.getContentScript(name)
     }
 
     func hideContent(_ animated: Bool = false) {
@@ -481,8 +484,8 @@ extension Tab: TabWebViewDelegate {
     }
 }
 
-private class HelperManager: NSObject, WKScriptMessageHandler {
-    fileprivate var helpers = [String: TabHelper]()
+private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
+    fileprivate var helpers = [String: TabContentScript]()
 
     @objc func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         for helper in helpers.values {
@@ -495,7 +498,7 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
         }
     }
 
-    func addHelper(_ helper: TabHelper, name: String, forTab tab: Tab) {
+    func addContentScript(_ helper: TabContentScript, name: String, forTab tab: Tab) {
         if let _ = helpers[name] {
             assertionFailure("Duplicate helper added: \(name)")
         }
@@ -509,7 +512,7 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
         }
     }
 
-    func getHelper(_ name: String) -> TabHelper? {
+    func getContentScript(_ name: String) -> TabContentScript? {
         return helpers[name]
     }
 }

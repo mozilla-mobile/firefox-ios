@@ -10,7 +10,7 @@ import SDWebImage
 import Deferred
 import Sync
 
-class FaviconManager: TabHelper {
+class FaviconManager: TabContentScript {
     static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
     
     let profile: Profile!
