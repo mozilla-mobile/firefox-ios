@@ -446,6 +446,10 @@ class TabManager: NSObject {
 
     /// Removes all private tabs from the manager without notifying delegates.
     private func removeAllPrivateTabs() {
+        // reset the selectedTabIndex if we are on a private tab because we will be removing it.
+        if selectedTab?.isPrivate ?? false {
+            _selectedIndex = -1
+        }
         tabs.forEach { tab in
             if tab.isPrivate {
                 removeAllBrowsingDataForTab(tab)
