@@ -9,8 +9,12 @@ protocol AddSearchEngineDelegate {
 }
 
 class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
+    private let REQUEST_TIMEOUT: TimeInterval = 4
+
     private var delegate: AddSearchEngineDelegate
     private var searchEngineManager: SearchEngineManager
+    private var saveButton: UIBarButtonItem?
+    private var dataTask: URLSessionDataTask?
     
     private let leftMargin = 10
     private let rowHeight = 44
@@ -22,6 +26,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     init(delegate: AddSearchEngineDelegate, searchEngineManager: SearchEngineManager) {
         self.delegate = delegate
         self.searchEngineManager = searchEngineManager
+
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,6 +39,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         
         setupUI()
         setupEvents()
+        navigationItem.rightBarButtonItem?.isEnabled = false
         nameInput.becomeFirstResponder()
     }
     
@@ -55,6 +61,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.leftViewMode = .always
         nameInput.font = UIFont.systemFont(ofSize: 15)
         nameInput.accessibilityIdentifier = "nameInput"
+        nameInput.autocorrectionType = .no
         container.addSubview(nameInput)
         
         let templateLabel = UILabel()
@@ -66,9 +73,10 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.textColor = UIConstants.colors.settingsTextLabel
         templateInput.keyboardType = .URL
         templateInput.font = UIFont.systemFont(ofSize: 15)
-        templateInput.contentInset = UIEdgeInsets(top: 5, left: 7, bottom: 7, right: 5)
         templateInput.accessibilityIdentifier = "templateInput"
         templateInput.autocapitalizationType = .none
+        templateInput.keyboardAppearance = .dark
+        templateInput.autocorrectionType = .no
         container.addSubview(templateInput)
 
         templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
@@ -76,12 +84,22 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
         templatePlaceholderLabel.font = UIFont.systemFont(ofSize: 15)
         templatePlaceholderLabel.numberOfLines = 0
-        templateInput.addSubview(templatePlaceholderLabel)
+        container.addSubview(templatePlaceholderLabel)
 
         let exampleLabel = UILabel()
-        exampleLabel.text = UIConstants.strings.AddSearchEngineTemplateExample
-        exampleLabel.textColor = UIConstants.colors.settingsTextLabel
+        let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+        let subtitle = NSMutableAttributedString(string: UIConstants.strings.AddSearchEngineTemplateExample, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
+        let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+        subtitle.append(space)
+        subtitle.append(learnMore)
+
+        exampleLabel.numberOfLines = 0
+        exampleLabel.attributedText = subtitle
         exampleLabel.font = UIFont.systemFont(ofSize: 12)
+
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreTapped))
+        exampleLabel.addGestureRecognizer(tapGesture)
         container.addSubview(exampleLabel)
         
         container.snp.makeConstraints { (make) in
@@ -90,7 +108,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         }
         
         nameLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(20)
+            make.top.equalToSuperview().offset(16)
             make.height.equalTo(rowHeight)
             make.leftMargin.equalTo(leftMargin)
             make.width.equalToSuperview()
@@ -101,9 +119,9 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             make.height.equalTo(rowHeight)
             make.width.equalToSuperview()
         }
-        
+
         templateLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(nameInput.snp.bottom).offset(20)
+            make.top.equalTo(nameInput.snp.bottom).offset(16)
             make.left.equalTo(leftMargin)
             make.height.equalTo(rowHeight)
         }
@@ -113,30 +131,40 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             make.height.equalTo(88)
             make.width.equalToSuperview()
         }
-        
+
         templatePlaceholderLabel.snp.makeConstraints { (make) in
             make.width.equalToSuperview()
             make.height.equalTo(44)
-            make.top.equalTo(0)
+            make.top.equalTo(templateInput)
             make.left.equalTo(3)
         }
         
         exampleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(templateInput.snp.bottom)
-            make.width.equalToSuperview()
-            make.left.equalTo(leftMargin)
-            make.height.equalTo(rowHeight)
+            make.top.equalTo(templateInput.snp.bottom).offset(2)
+            make.leading.equalToSuperview().offset(leftMargin)
+            make.trailing.equalToSuperview().offset(-leftMargin)
         }
     }
-    
+
+    @objc func learnMoreTapped() {
+        guard let url = SupportUtils.URLForTopic(topic: "add-search-engine-ios") else { return }
+        let contentViewController = SettingsContentViewController(url: url)
+        navigationController?.pushViewController(contentViewController, animated: true)
+    }
+
     private func setupEvents() {
+        saveButton = UIBarButtonItem(title: UIConstants.strings.save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
+        saveButton?.accessibilityIdentifier = "save"
+
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddSearchEngineViewController.cancelTapped))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.save, style: .plain, target: self, action: #selector(AddSearchEngineViewController.saveTapped))
-        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "save"
+        navigationItem.rightBarButtonItem = saveButton
+
         templateInput.delegate = self
+        nameInput.delegate = self
     }
     
     @objc func cancelTapped() {
+        dataTask?.cancel()
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -145,13 +173,60 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         guard let template = templateInput.text else { return }
         
         if !AddSearchEngineViewController.isValidTemplate(template) || !searchEngineManager.isValidSearchEngineName(name) {
-            Toast(text: UIConstants.strings.errorTryAgain).show()
+            presentRetryError()
+            showIndicator(false)
             return
         }
-        
-        delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
-        Toast(text: UIConstants.strings.NewSearchEngineAdded).show()
-        self.navigationController?.popViewController(animated: true)
+
+        showIndicator(true)
+
+        let searchString = template.replacingOccurrences(of: "%s", with: "Firefox Focus".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
+
+        guard let url = URL(string: searchString) else {
+            presentRetryError()
+            showIndicator(false)
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "HEAD"
+
+        request.timeoutInterval = REQUEST_TIMEOUT
+
+        dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let statusCode = response.flatMap({ $0 as? HTTPURLResponse })?.statusCode else {
+                DispatchQueue.main.async { self.presentRetryError(); self.showIndicator(false) }
+                return }
+
+            DispatchQueue.main.async {
+                guard statusCode < 400 else {
+                    self.presentRetryError()
+                    self.navigationItem.rightBarButtonItem = self.saveButton
+                    return }
+
+                self.delegate.addSearchEngineViewController(self, name: name, searchTemplate: template)
+                Toast(text: UIConstants.strings.NewSearchEngineAdded).show()
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+
+        dataTask?.resume()
+    }
+
+    private func presentRetryError() {
+        let controller = UIAlertController(title: UIConstants.strings.autocompleteAddCustomUrlError, message: nil, preferredStyle: .alert)
+        controller.addAction(UIAlertAction(title: UIConstants.strings.errorTryAgain, style: .default, handler: { _ in
+
+        }))
+        self.present(controller, animated: true, completion: nil)
+    }
+
+    func showIndicator(_ shouldShow: Bool) {
+        guard shouldShow else { self.navigationItem.rightBarButtonItem = self.saveButton; return }
+
+        let indicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: indicatorView)
+        indicatorView.startAnimating()
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -160,6 +235,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         templatePlaceholderLabel.isHidden = !textView.text.isEmpty
+        navigationItem.rightBarButtonItem?.isEnabled = !templateInput.text.isEmpty && !nameInput.text!.isEmpty
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -177,5 +253,12 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         
         guard let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!) else { return false }
         return url.isWebPage()
+    }
+}
+
+extension AddSearchEngineViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        navigationItem.rightBarButtonItem?.isEnabled = !templateInput.text.isEmpty && !nameInput.text!.isEmpty
+        return true
     }
 }

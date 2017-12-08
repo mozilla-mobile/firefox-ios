@@ -76,22 +76,28 @@ class SearchSettingsViewController: UITableViewController {
             return cell
         } else if indexPath.item > engines.count {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "restoreDefaultEngines")
-            cell.textLabel?.text = UIConstants.strings.RestoreSearchEnginesLabel
+            let label = UILabel()
+            label.text = UIConstants.strings.RestoreSearchEnginesLabel
+            label.font = UIFont.systemFont(ofSize: 17)
+            label.textColor = UIConstants.colors.settingsTextLabel
+
+            cell.textLabel?.text = " "
             cell.backgroundColor = UIConstants.colors.background
             cell.accessibilityIdentifier = "restoreDefaults"
             cell.selectedBackgroundView = getBackgroundView()
-            cell.textLabel?.snp.makeConstraints({ (make) in
+            cell.addSubview(label)
+            label.snp.makeConstraints({ (make) in
                 make.topMargin.equalTo(44)
                 make.centerY.equalTo(66)
                 make.leadingMargin.equalTo(16)
             })
             
             if searchEngineManager.hasDisabledDefaultEngine() {
-                cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
+                label.textColor = UIConstants.colors.settingsTextLabel
                 cell.selectionStyle = .default
                 cell.isUserInteractionEnabled = true
             } else {
-                cell.textLabel?.textColor = UIConstants.colors.settingsDisabled
+                label.textColor = UIConstants.colors.settingsDisabled
                 cell.selectionStyle = .none
                 cell.isUserInteractionEnabled = false
             }
