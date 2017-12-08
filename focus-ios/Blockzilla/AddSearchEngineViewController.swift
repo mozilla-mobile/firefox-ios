@@ -63,13 +63,24 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.accessibilityIdentifier = "nameInput"
         nameInput.autocorrectionType = .no
         container.addSubview(nameInput)
+
+        let templateContainer = UIView()
+        templateContainer.backgroundColor = UIConstants.colors.cellSelected
+        container.addSubview(templateContainer)
+
+        templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
+        templatePlaceholderLabel.textColor = UIConstants.colors.settingsDetailLabel
+        templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
+        templatePlaceholderLabel.font = UIFont.systemFont(ofSize: 15)
+        templatePlaceholderLabel.numberOfLines = 0
+        templateContainer.addSubview(templatePlaceholderLabel)
         
         let templateLabel = UILabel()
         templateLabel.text = UIConstants.strings.AddSearchEngineTemplate
         templateLabel.textColor = UIConstants.colors.settingsTextLabel
         container.addSubview(templateLabel)
-        
-        templateInput.backgroundColor = UIConstants.colors.cellSelected
+
+        templateInput.backgroundColor = .clear
         templateInput.textColor = UIConstants.colors.settingsTextLabel
         templateInput.keyboardType = .URL
         templateInput.font = UIFont.systemFont(ofSize: 15)
@@ -77,14 +88,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.autocapitalizationType = .none
         templateInput.keyboardAppearance = .dark
         templateInput.autocorrectionType = .no
-        container.addSubview(templateInput)
-
-        templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
-        templatePlaceholderLabel.textColor = UIConstants.colors.settingsDetailLabel
-        templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
-        templatePlaceholderLabel.font = UIFont.systemFont(ofSize: 15)
-        templatePlaceholderLabel.numberOfLines = 0
-        container.addSubview(templatePlaceholderLabel)
+        templateContainer.addSubview(templateInput)
 
         let exampleLabel = UILabel()
         let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
@@ -126,18 +130,26 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             make.left.equalTo(leftMargin)
             make.height.equalTo(rowHeight)
         }
-        
-        templateInput.snp.makeConstraints { (make) in
+
+        templateContainer.snp.makeConstraints { (make) in
             make.top.equalTo(templateLabel.snp.bottom)
             make.height.equalTo(88)
             make.width.equalToSuperview()
         }
 
+        
+        templateInput.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-4)
+            make.leading.equalToSuperview().offset(5)
+        }
+
         templatePlaceholderLabel.snp.makeConstraints { (make) in
-            make.width.equalToSuperview()
             make.height.equalTo(44)
-            make.top.equalTo(templateInput)
-            make.left.equalTo(3)
+            make.top.equalToSuperview().offset(4)
+            make.leading.equalToSuperview().offset(9)
+            make.trailing.equalToSuperview().offset(-leftMargin)
         }
         
         exampleLabel.snp.makeConstraints { (make) in

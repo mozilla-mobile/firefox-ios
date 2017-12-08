@@ -89,7 +89,7 @@ class SearchSettingsViewController: UITableViewController {
             label.snp.makeConstraints({ (make) in
                 make.topMargin.equalTo(44)
                 make.centerY.equalTo(66)
-                make.leadingMargin.equalTo(16)
+                make.leading.equalTo(cell.textLabel!)
             })
             
             if searchEngineManager.hasDisabledDefaultEngine() {
