@@ -255,7 +255,7 @@ class ErrorPageHelper {
     }
 }
 
-extension ErrorPageHelper: TabHelper {
+extension ErrorPageHelper: TabContentScript {
     static func name() -> String {
         return "ErrorPageHelper"
     }

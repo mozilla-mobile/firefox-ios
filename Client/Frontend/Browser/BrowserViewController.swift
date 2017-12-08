@@ -741,7 +741,7 @@ class BrowserViewController: UIViewController {
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
 
                 // Refresh the reading view toolbar since the article record may have changed
-                if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
+                if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
                     self.showReaderModeBar(animated: false)
                 }
             })
@@ -921,6 +921,9 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func runScriptsOnWebView(_ webView: WKWebView) {
+        guard let url = webView.url, url.isWebPage(), !url.isLocal else {
+            return
+        }
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler: nil)
         webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
 
@@ -1338,7 +1341,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
         if let tab = tabManager.selectedTab {
-            if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
+            if let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode {
                 switch readerMode.state {
                 case .available:
                     enableReaderMode()
@@ -1529,7 +1532,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
+        guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
             return
         }
 
@@ -1619,60 +1622,60 @@ extension BrowserViewController: TabDelegate {
 
         let readerMode = ReaderMode(tab: tab)
         readerMode.delegate = self
-        tab.addHelper(readerMode, name: ReaderMode.name())
+        tab.addContentScript(readerMode, name: ReaderMode.name())
 
         let favicons = FaviconManager(tab: tab, profile: profile)
-        tab.addHelper(favicons, name: FaviconManager.name())
+        tab.addContentScript(favicons, name: FaviconManager.name())
 
         // only add the logins helper if the tab is not a private browsing tab
         if !tab.isPrivate {
             let logins = LoginsHelper(tab: tab, profile: profile)
-            tab.addHelper(logins, name: LoginsHelper.name())
+            tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self
-        tab.addHelper(contextMenuHelper, name: ContextMenuHelper.name())
+        tab.addContentScript(contextMenuHelper, name: ContextMenuHelper.name())
 
         let errorHelper = ErrorPageHelper()
-        tab.addHelper(errorHelper, name: ErrorPageHelper.name())
+        tab.addContentScript(errorHelper, name: ErrorPageHelper.name())
 
         let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
         sessionRestoreHelper.delegate = self
-        tab.addHelper(sessionRestoreHelper, name: SessionRestoreHelper.name())
+        tab.addContentScript(sessionRestoreHelper, name: SessionRestoreHelper.name())
 
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
-        tab.addHelper(findInPageHelper, name: FindInPageHelper.name())
+        tab.addContentScript(findInPageHelper, name: FindInPageHelper.name())
 
         let noImageModeHelper = NoImageModeHelper(tab: tab)
-        tab.addHelper(noImageModeHelper, name: NoImageModeHelper.name())
+        tab.addContentScript(noImageModeHelper, name: NoImageModeHelper.name())
         
         let printHelper = PrintHelper(tab: tab)
-        tab.addHelper(printHelper, name: PrintHelper.name())
+        tab.addContentScript(printHelper, name: PrintHelper.name())
 
         let customSearchHelper = CustomSearchHelper(tab: tab)
-        tab.addHelper(customSearchHelper, name: CustomSearchHelper.name())
+        tab.addContentScript(customSearchHelper, name: CustomSearchHelper.name())
 
         let nightModeHelper = NightModeHelper(tab: tab)
-        tab.addHelper(nightModeHelper, name: NightModeHelper.name())
+        tab.addContentScript(nightModeHelper, name: NightModeHelper.name())
 
         // XXX: Bug 1390200 - Disable NSUserActivity/CoreSpotlight temporarily
         // let spotlightHelper = SpotlightHelper(tab: tab)
         // tab.addHelper(spotlightHelper, name: SpotlightHelper.name())
 
-        tab.addHelper(LocalRequestHelper(), name: LocalRequestHelper.name())
+        tab.addContentScript(LocalRequestHelper(), name: LocalRequestHelper.name())
 
         let historyStateHelper = HistoryStateHelper(tab: tab)
         historyStateHelper.delegate = self
-        tab.addHelper(historyStateHelper, name: HistoryStateHelper.name())
+        tab.addContentScript(historyStateHelper, name: HistoryStateHelper.name())
         
         if #available(iOS 11, *) {
             (tab.contentBlocker as? ContentBlockerHelper)?.setupForWebView()
         }
 
         let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
-        tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
+        tab.addContentScript(metadataHelper, name: MetadataParserHelper.name())
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
@@ -1949,7 +1952,7 @@ extension BrowserViewController: TabManagerDelegate {
             self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
         }
 
-        if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
+        if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
             urlBar.updateReaderModeState(readerMode.state)
             if readerMode.state == .active {
                 showReaderModeBar(animated: false)
@@ -2217,7 +2220,7 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
         // Change the reader mode style on all tabs that have reader mode active
         for tabIndex in 0..<tabManager.count {
             if let tab = tabManager[tabIndex] {
-                if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
+                if let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode {
                     if readerMode.state == ReaderModeState.active {
                         readerMode.style = style
                     }
@@ -2349,7 +2352,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
         switch buttonType {
         case .settings:
-            if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode, readerMode.state == ReaderModeState.active {
+            if let readerMode = tabManager.selectedTab?.getContentScript(name: "ReaderMode") as? ReaderMode, readerMode.state == ReaderModeState.active {
                 var readerModeStyle = DefaultReaderModeStyle
                 if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
                     if let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {

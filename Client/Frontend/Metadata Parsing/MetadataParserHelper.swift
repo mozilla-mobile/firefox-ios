@@ -10,7 +10,7 @@ import WebKit
 
 private let log = Logger.browserLogger
 
-class MetadataParserHelper: TabHelper {
+class MetadataParserHelper: TabContentScript {
     private weak var tab: Tab?
     private let profile: Profile
 
@@ -49,6 +49,7 @@ class MetadataParserHelper: TabHelper {
 
         tab.pageMetadata = pageMetadata
 
+        TabEvent.post(.didLoadPageMetadata(pageMetadata), for: tab)
         NotificationCenter.default.post(name: NotificationOnPageMetadataFetched, object: nil, userInfo: userInfo)
     }
 }

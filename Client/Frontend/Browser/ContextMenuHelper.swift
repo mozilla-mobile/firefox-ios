@@ -73,7 +73,7 @@ class ContextMenuHelper: NSObject {
     }
 }
 
-extension ContextMenuHelper: TabHelper {
+extension ContextMenuHelper: TabContentScript {
     class func name() -> String {
         return "ContextMenuHelper"
     }

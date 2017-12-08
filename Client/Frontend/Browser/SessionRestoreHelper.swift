@@ -9,7 +9,7 @@ protocol SessionRestoreHelperDelegate: class {
     func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab)
 }
 
-class SessionRestoreHelper: TabHelper {
+class SessionRestoreHelper: TabContentScript {
     weak var delegate: SessionRestoreHelperDelegate?
     fileprivate weak var tab: Tab?
 

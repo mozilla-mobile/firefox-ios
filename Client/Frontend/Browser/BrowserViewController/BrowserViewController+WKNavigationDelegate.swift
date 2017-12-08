@@ -183,7 +183,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // The challenge may come from a background tab, so ensure it's the one visible.
         tabManager.selectTab(tab)
 
-        let loginsHelper = tab.getHelper(name: LoginsHelper.name()) as? LoginsHelper
+        let loginsHelper = tab.getContentScript(name: LoginsHelper.name()) as? LoginsHelper
         Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(DispatchQueue.main) { res in
             if let credentials = res.successValue {
                 completionHandler(.useCredential, credentials.credentials)

@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import WebKit
 
-class PrintHelper: TabHelper {
+class PrintHelper: TabContentScript {
     fileprivate weak var tab: Tab?
 
     class func name() -> String {

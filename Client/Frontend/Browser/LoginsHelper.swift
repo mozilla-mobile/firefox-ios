@@ -12,7 +12,7 @@ import SwiftyJSON
 
 private let log = Logger.browserLogger
 
-class LoginsHelper: TabHelper {
+class LoginsHelper: TabContentScript {
     fileprivate weak var tab: Tab?
     fileprivate let profile: Profile
     fileprivate var snackBar: SnackBar?

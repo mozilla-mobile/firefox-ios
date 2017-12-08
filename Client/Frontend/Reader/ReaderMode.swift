@@ -213,7 +213,7 @@ protocol ReaderModeDelegate {
 
 let ReaderModeNamespace = "window.__firefox__.reader"
 
-class ReaderMode: TabHelper {
+class ReaderMode: TabContentScript {
     var delegate: ReaderModeDelegate?
 
     fileprivate weak var tab: Tab?
