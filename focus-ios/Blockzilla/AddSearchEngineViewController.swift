@@ -189,8 +189,6 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         }
 
         var request = URLRequest(url: url)
-        request.httpMethod = "HEAD"
-
         request.timeoutInterval = REQUEST_TIMEOUT
 
         dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
