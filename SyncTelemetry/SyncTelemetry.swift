@@ -86,6 +86,8 @@ open class SyncTelemetry {
     private static func commonPingFormat(forType type: TelemetryDocType) -> [String: Any] {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         let date = formatter.string(from: NSDate() as Date)
         let displayVersion =  [
             AppInfo.appVersion,
