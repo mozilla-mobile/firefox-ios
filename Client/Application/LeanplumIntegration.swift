@@ -122,10 +122,6 @@ class LeanPlumClient {
             Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
         }
 
-        if let deviceId = Leanplum.deviceId() {
-            log.info("LeanplumIntegration - DeviceID = \(deviceId)")
-        }
-
         Leanplum.syncResourcesAsync(true)
 
         let attributes: [AnyHashable: Any] = [
