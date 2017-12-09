@@ -1,1 +1,23 @@
-/* No Localized Strings */
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Du kan når som helst slette hele din browserhistorik, dine gemte adgangskoder og dine cookies med et enkelt tryk.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Din historik er historie";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Next";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Leder du efter noget andet? Vælg en anden søgetjeneste.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Søgning på dine præmisser";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Skip";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Tag privat browsing til næste niveau. Bloker reklamer og andet indhold, der kan spore din færden på nettet og gøre det langsommere at indlæse sider.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Styrk dit privatliv";

@@ -1,1 +1,23 @@
-/* No Localized Strings */
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "আপনার সম্পূর্ণ ব্রাউজিং সেশনের ইতিহাস, পাসওয়ার্ডগুলি, কুকিকে একবার ট্যাপ করে যে কোনো সময় সাফ করুন।";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "আপনার ইতিহাস হল ইতিহাস";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "পরবর্তী";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "ভিন্ন কিছু খোঁজ করছেন? একটি নতুন সার্চইঞ্জিন ব্যবহার করে দেখুন।";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "আপনার খোঁজ, আপনার পথ";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "এড়িয়ে যান";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "ব্যাক্তিগত ব্রাউজিং কে আরেক উচ্চতায় নিয়ে যান। বিজ্ঞাপন আর অন্যান্য কনটেন্ট ব্লক করুন, যারা আপনাকে সকল ওয়েবসাইটে অনুসরণ করে বেড়ায় আর আপনার পেজ লোডিং টাইম অনেকগুন বাড়িয়ে দেয়।";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "আপনার ব্যক্তিগত গোপনীয়তাকে শক্তিশালী করুন";

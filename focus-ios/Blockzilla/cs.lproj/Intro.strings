@@ -1,1 +1,23 @@
-/* No Localized Strings */
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Vyčistěte kdykoli celou vaši historii prohlížení, hesla a soubory cookie jedním klepnutím.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Vaše historie je historie";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Další";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Hledáte něco jiného? Zvolte si jako výchozí jiný vyhledávací modul.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Vaše hledání, vaše cesta";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Přeskočit";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Anonymní prohlížení dostalo nový rozměr. Blokuje reklamy a další obsah, který vás sleduje napříč stránkami a zpomaluje načítání.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Posuňte své soukromí na vyšší úroveň";

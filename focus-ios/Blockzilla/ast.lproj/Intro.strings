@@ -1,1 +1,23 @@
-/* No Localized Strings */
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Llimpia tol to historial de restolar, contraseñes y cookies cuando quieras con un calcu.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "El to historial ye historia";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Siguiente";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "¿Guetes daqué diferente? Escueyi un motor de gueta distintu.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Les guetes al to xeitu";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Saltar";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Lleva lo de restolar en privao a otru nivel. Bloquia anuncios y otru conteníu que puea rastrexate en sitios web y aumenten los tiempos de carga.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Potencia la to privacidá";
