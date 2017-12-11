@@ -351,9 +351,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         screenState.dismissOnUse = true
         // Would like to use app.otherElements.deviceStatusBars.networkLoadingIndicators.element
         // but this means exposing some of SnapshotHelper to another target.
-        screenState.onEnterWaitFor("exists != true",
-                                   element: app.progressIndicators.element(boundBy: 0),
-                                   if: "waitForLoading == true")
+        if !(app.progressIndicators.element(boundBy: 0).exists) {
+            screenState.onEnterWaitFor("exists != true", element: app.progressIndicators.element(boundBy: 0), if: "waitForLoading == true")
+        } else {
+            screenState.onEnterWaitFor(element: app.progressIndicators.element(boundBy: 0), if: "waitForLoading == false")
+        }
 
         screenState.noop(to: BrowserTab, if: "waitForLoading == true")
         screenState.noop(to: BasicAuthDialog, if: "waitForLoading == false")
