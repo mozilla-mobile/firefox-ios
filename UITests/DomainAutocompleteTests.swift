@@ -10,6 +10,7 @@ class DomainAutocompleteTests: KIFTestCase {
     override func setUp() {
 
         super.setUp()
+        BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
     
