@@ -36,7 +36,7 @@ class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var isPrivate = false
-    let faviconNotification = NSNotification.Name(rawValue: FaviconManager.FaviconDidLoad)
+    let faviconNotification = NSNotification.Name(rawValue: MetadataParserHelper.FaviconDidLoad)
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())

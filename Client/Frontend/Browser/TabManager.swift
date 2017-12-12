@@ -747,7 +747,7 @@ extension TabManager {
             tab.url = nil
 
             if let faviconURL = savedTab.faviconURL {
-                let icon = Favicon(url: faviconURL, date: Date(), type: IconType.noneFound)
+                let icon = Favicon(url: faviconURL, date: Date())
                 icon.width = 1
                 tab.favicons.append(icon)
             }

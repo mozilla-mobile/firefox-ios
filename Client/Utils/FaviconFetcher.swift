@@ -149,47 +149,19 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                 return self.parseHTMLForFavicons(url)
             }
 
-            var bestType = IconType.noneFound
             for link in root.xpath("//head//link[contains(@rel, 'icon')]") {
-                var iconType: IconType? = nil
-                if let rel = link["rel"] {
-                    switch rel {
-                    case "shortcut icon":
-                        iconType = .icon
-                    case "icon":
-                        iconType = .icon
-                    case "apple-touch-icon":
-                        iconType = .appleIcon
-                    case "apple-touch-icon-precomposed":
-                        iconType = .appleIconPrecomposed
-                    default:
-                        iconType = nil
-                    }
-                }
-
-                guard let href = link["href"], iconType != nil else {
+                guard let href = link["href"] else {
                     continue //Skip the rest of the loop. But don't stop the loop
                 }
 
-                if href.endsWith(".ico") {
-                    iconType = .guess
-                }
-
-                if let type = iconType, !bestType.isPreferredTo(type), let iconUrl = NSURL(string: href, relativeTo: url as URL), let absoluteString = iconUrl.absoluteString {
-                    let icon = Favicon(url: absoluteString, date: NSDate() as Date, type: type)
-                    // If we already have a list of Favicons going already, then add it…
-                    if type == bestType {
-                        icons.append(icon)
-                    } else {
-                        // otherwise, this is the first in a new best yet type.
-                        icons = [icon]
-                        bestType = type
-                    }
+                if let iconUrl = NSURL(string: href, relativeTo: url as URL), let absoluteString = iconUrl.absoluteString {
+                    let icon = Favicon(url: absoluteString)
+                    icons = [icon]
                 }
 
                 // If we haven't got any options icons, then use the default at the root of the domain.
                 if let url = NSURL(string: "/favicon.ico", relativeTo: url as URL), icons.isEmpty, let absoluteString = url.absoluteString {
-                    let icon = Favicon(url: absoluteString, date: NSDate() as Date, type: .guess)
+                    let icon = Favicon(url: absoluteString)
                     icons = [icon]
                 }
 
@@ -204,13 +176,13 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         let manager = SDWebImageManager.shared()
         let site = Site(url: siteUrl.absoluteString, title: "")
 
-        var fav = Favicon(url: url, type: icon.type)
+        var fav = Favicon(url: url)
         if let url = url.asURL {
             var fetch: SDWebImageOperation?
             fetch = manager.loadImage(with: url,
                 options: .lowPriority,
                 progress: { (receivedSize, expectedSize, _) in
-                    if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
+                    if receivedSize > MetadataParserHelper.MaximumFaviconSize || expectedSize > MetadataParserHelper.MaximumFaviconSize {
                         fetch?.cancel()
                     }
                 },
@@ -219,7 +191,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                         deferred.fill(Maybe(failure: FaviconError()))
                         return
                     }
-                    fav = Favicon(url: url.absoluteString, type: icon.type)
+                    fav = Favicon(url: url.absoluteString)
 
                     if let img = img {
                         fav.width = Int(img.size.width)
