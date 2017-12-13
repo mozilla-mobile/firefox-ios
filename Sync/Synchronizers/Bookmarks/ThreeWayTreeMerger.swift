@@ -606,7 +606,7 @@ class ThreeWayTreeMerger {
                 }
 
                 log.debug("Comparing local (\(local.localModified ??? "0")) to remote (\(remote.serverModified)) clock for two-way value merge of \(guid).")
-                if (local.localModified ?? 0) > remote.serverModified {
+                if let localModified = local.localModified, localModified > remote.serverModified {
                     // If we're taking the local record because it was modified, check to see
                     // whether the remote record has a creation date that we want to keep.
                     let dateAddedRemote = remote.dateAdded ?? remote.serverModified

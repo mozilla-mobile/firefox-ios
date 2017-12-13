@@ -823,7 +823,7 @@ extension SQLiteHistory: SyncableHistory {
                     // Uh oh, it changed locally.
                     // This might well just be a visit change, but we can't tell. Usually this conflict is harmless.
                     log.debug("Warning: history item \(place.guid) changed both locally and remotely. Comparing timestamps from different clocks!")
-                    if (metadata.localModified ?? 0) > modified {
+                    if let localModified = metadata.localModified, localModified > modified {
                         log.debug("Local changes overriding remote.")
 
                         // Update server modified time only. (Though it'll be overwritten again after a successful upload.)
