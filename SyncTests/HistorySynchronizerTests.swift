@@ -120,7 +120,7 @@ extension MockSyncableHistory: SyncableHistory {
                         log.debug("Local modified: \(existingLocal.localModified ??? "nil"); remote: \(modified).")
 
                         // Should always be a value if marked as changed.
-                        if existingLocal.localModified! > modified {
+                        if let localModified = existingLocal.localModified, localModified > modified {
                             // Nothing to do: it's marked as changed.
                             log.debug("Discarding remote non-visit changes!")
                             self.places[place.guid]?.serverModified = modified
