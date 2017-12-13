@@ -13,6 +13,7 @@ class BookmarksPanelTests: KIFTestCase {
     
     override func setUp() {
         super.setUp()
+        BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
 	}
 	

@@ -11,6 +11,7 @@ class SecurityTests: KIFTestCase {
     
     override func setUp() {
         webRoot = SimplePageServer.start()
+        BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
         super.setUp()
     }

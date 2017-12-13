@@ -264,7 +264,15 @@ class BrowserUtils {
 
         GREYAssertTrue(topsiteAppeared, reason: "Failed to return to topsite view")
     }
-	
+
+    class func configEarlGrey() {
+        GREYConfiguration.sharedInstance().setValue(2, forConfigKey: kGREYConfigKeyCALayerMaxAnimationDuration)
+        GREYConfiguration.sharedInstance().setValue(false, forConfigKey: kGREYConfigKeyActionConstraintsEnabled)
+        GREYConfiguration.sharedInstance().setValue(2, forConfigKey: kGREYConfigKeyDelayedPerformMaxTrackableDuration)
+        GREYConfiguration.sharedInstance().setValue(100, forConfigKey: kGREYConfigKeyInteractionTimeoutDuration)
+        GREYConfiguration.sharedInstance().setValue(["."], forConfigKey: kGREYConfigKeyURLBlacklistRegex)
+    }
+
 	class func dismissFirstRunUI() {
 		var error: NSError?
         

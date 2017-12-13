@@ -12,6 +12,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
 
     override func setUp() {
         webRoot = SimplePageServer.start()
+        BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
 

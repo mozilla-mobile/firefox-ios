@@ -16,6 +16,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
+        BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
 
