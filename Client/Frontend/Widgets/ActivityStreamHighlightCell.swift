@@ -101,7 +101,8 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
         siteImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView)
-            make.leading.trailing.equalTo(contentView)
+            make.leading.equalTo(contentView.safeArea.leading)
+            make.trailing.equalTo(contentView.safeArea.trailing)
             make.centerX.equalTo(contentView)
             make.height.equalTo(ActivityStreamHighlightCellUX.SiteImageViewSize)
         }
