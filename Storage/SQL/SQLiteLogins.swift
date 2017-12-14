@@ -79,7 +79,7 @@ open class SQLiteLogins: BrowserLogins {
     class func LocalLoginFactory(_ row: SDRow) -> LocalLogin {
         let login = self.constructLogin(row, c: LocalLogin.self)
 
-        login.localModified = row.getTimestamp("local_modified")!
+        login.localModified = row.getTimestamp("local_modified") ?? 0
         login.isDeleted = row.getBoolean("is_deleted")
         login.syncStatus = SyncStatus(rawValue: row["sync_status"] as! Int)!
 

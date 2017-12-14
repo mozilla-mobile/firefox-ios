@@ -14,6 +14,7 @@ class LoginInputTests: KIFTestCase {
         super.setUp()
         profile = (UIApplication.shared.delegate as! AppDelegate).profile!
         webRoot = SimplePageServer.start()
+        BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
     
