@@ -108,7 +108,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         }
 
         selectedOverlay.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
+            make.edges.equalTo(contentView.safeArea.edges)
         }
 
         domainLabel.snp.makeConstraints { make in
