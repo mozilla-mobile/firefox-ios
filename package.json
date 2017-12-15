@@ -1,0 +1,19 @@
+{
+  "name": "firefox-ios",
+  "version": "1.0.0",
+  "description": "Firefox for iOS",
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mozilla-mobile/firefox-ios.git"
+  },
+  "license": "MPL-2.0",
+  "dependencies": {
+    "glob": "^7.1.2",
+    "readability": "git+https://github.com/mozilla/readability.git",
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack": "^3.10.0"
+  }
+}

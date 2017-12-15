@@ -897,8 +897,7 @@ class BrowserViewController: UIViewController {
         guard let url = webView.url, url.isWebPage(), !url.isLocal else {
             return
         }
-        webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler: nil)
-        webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
+        webView.evaluateJavaScript("__firefox__.metadata && __firefox__.metadata.extractMetadata()", completionHandler: nil)
 
         if #available(iOS 11, *) {
             if NoImageModeHelper.isActivated(profile.prefs) {

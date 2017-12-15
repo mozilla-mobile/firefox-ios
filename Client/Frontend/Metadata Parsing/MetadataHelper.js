@@ -5,15 +5,6 @@
 (function() {
 "use strict";
 
-if (!window.__firefox__) {
-  Object.defineProperty(window, '__firefox__', {
-    enumerable: false,
-    configurable: false,
-    writable: false,
-    value: {}
-  });
-}
-
 function MetadataWrapper(metadataparser) {
   var dataURIRegex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
 

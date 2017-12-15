@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# 
+#
 # Install all the required dependencies for building and deploying Firefox for iOS
 # Assumes you already have git otherwise you wouldn't have this setup script
 #
@@ -34,7 +34,7 @@ fi
 #
 # Check if python is installed
 #
-if [ ! -e $(python -c 'from distutils.sysconfig import get_makefile_filename as m; print m()') ]; then 
+if [ ! -e $(python -c 'from distutils.sysconfig import get_makefile_filename as m; print m()') ]; then
 	# Install python
 	echo "Installing python"
 	brew install python
@@ -42,7 +42,7 @@ else
 	echo "python already installed"
 fi
 
-# 
+#
 # Check if virtualenv is installed
 #
 which -s virtualenv
@@ -62,7 +62,7 @@ else
 fi
 
 #
-# Check is Carthage is installed
+# Check if Carthage is installed
 #
 which -s carthage
 if [[ $? != 0 ]] ; then
@@ -71,6 +71,18 @@ if [[ $? != 0 ]] ; then
     brew install carthage
 else
 	echo "Carthage already installed"
+fi
+
+#
+# Check if Node is installed
+#
+which -s node
+if [[ $? != 0 ]] ; then
+    # Install Node
+	echo "Installing Node.js"
+    brew install node
+else
+	echo "Node.js already installed"
 fi
 
 #
@@ -85,4 +97,3 @@ if [[ $? != 0 ]] ; then
 else
 	echo "fastlane already installed"
 fi
-

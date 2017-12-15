@@ -1,3 +1,4 @@
+/* vim: set ts=2 sts=2 sw=2 et tw=80: */
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -5,25 +6,17 @@
 (function() {
 "use strict";
 
-if (!window.__firefox__) {
-  Object.defineProperty(window, '__firefox__', {
-    enumerable: false,
-    configurable: false,
-    writable: false,
-    value: {}
-  });
-}
-
-Object.defineProperty(window.__firefox__, 'NightMode', {
+Object.defineProperty(window.__firefox__, "NightMode", {
   enumerable: false,
   configurable: false,
   writable: false,
   value: { enabled: false }
 });
 
-const NIGHT_MODE_INVERT_FILTER_CSS = 'brightness(80%) invert(100%) hue-rotate(180deg)';
+const NIGHT_MODE_INVERT_FILTER_CSS = "brightness(80%) invert(100%) hue-rotate(180deg)";
 
-const NIGHT_MODE_STYLESHEET = `html {
+const NIGHT_MODE_STYLESHEET =
+`html {
   -webkit-filter: hue-rotate(180deg) invert(100%) !important;
 }
 img,video {
@@ -37,16 +30,16 @@ function getStyleElement() {
     return styleElement;
   }
 
-  styleElement = document.createElement('style');
-  styleElement.type = 'text/css';
+  styleElement = document.createElement("style");
+  styleElement.type = "text/css";
   styleElement.appendChild(document.createTextNode(NIGHT_MODE_STYLESHEET));
 
   return styleElement;
 }
 
 function applyInvertFilterToChildBackgroundImageElements(parentNode) {
-  parentNode.querySelectorAll('[style*="background"]').forEach(function(el) {
-    if ((el.style.backgroundImage || '').startsWith('url')) {
+  parentNode.querySelectorAll("[style*=\"background\"]").forEach(function(el) {
+    if ((el.style.backgroundImage || "").startsWith("url")) {
       applyInvertFilterToElement(el);
     }
   });
@@ -78,7 +71,7 @@ var observer = new MutationObserver(function(mutations) {
   });
 });
 
-Object.defineProperty(window.__firefox__.NightMode, 'setEnabled', {
+Object.defineProperty(window.__firefox__.NightMode, "setEnabled", {
   enumerable: false,
   configurable: false,
   writable: false,

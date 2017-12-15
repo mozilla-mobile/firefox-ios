@@ -27,15 +27,6 @@ class ContextMenuHelper: NSObject {
 
         self.tab = tab
 
-        guard let path = Bundle.main.path(forResource: "ContextMenu", ofType: "js"),
-                let source = try? String(contentsOfFile: path, encoding: .utf8),
-                let webView = tab.webView else {
-            return
-        }
-
-        let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
-        webView.configuration.userContentController.addUserScript(userScript)
-
         nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:") as? UILongPressGestureRecognizer
 
         if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") as? UILongPressGestureRecognizer {

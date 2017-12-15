@@ -29,11 +29,6 @@ class LoginsHelper: TabContentScript {
     required init(tab: Tab, profile: Profile) {
         self.tab = tab
         self.profile = profile
-
-        if let path = Bundle.main.path(forResource: "LoginsHelper", ofType: "js"), let source = try? String(contentsOfFile: path, encoding: .utf8) {
-            let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
-            tab.webView!.configuration.userContentController.addUserScript(userScript)
-        }
     }
 
     func scriptMessageHandlerName() -> String? {
