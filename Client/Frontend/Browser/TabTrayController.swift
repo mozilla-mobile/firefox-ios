@@ -500,7 +500,7 @@ class TabTrayController: UIViewController {
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
         self.collectionView.performBatchUpdates({ _ in
-            let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
+            _ = self.tabManager.addTab(request, isPrivate: self.privateMode)
         }, completion: { finished in
             // The addTab delegate method will pop to the BVC no need to do anything here.
             self.toolbar.isUserInteractionEnabled = true
@@ -976,7 +976,7 @@ extension TabTrayController: ClientPickerViewControllerDelegate {
 
     func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
         if let item = clientPickerViewController.shareItem {
-            self.profile.sendItems([item], toClients: clients)
+            _ = self.profile.sendItems([item], toClients: clients)
         }
         clientPickerViewController.dismiss(animated: true, completion: nil)
     }
