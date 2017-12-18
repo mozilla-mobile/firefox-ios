@@ -587,13 +587,14 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView) {
-        guard var (locationText, isSearchQuery) = delegate?.urlBarDisplayTextForURL(locationView.url as URL?) else { return }
+        guard let (locationText, isSearchQuery) = delegate?.urlBarDisplayTextForURL(locationView.url as URL?) else { return }
 
+        var overlayText = locationText
         // Make sure to use the result from urlBarDisplayTextForURL as it is responsible for extracting out search terms when on a search page
         if let text = locationText, let url = URL(string: text), let host = url.host, AppConstants.MOZ_PUNYCODE {
-            locationText = url.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
+            overlayText = url.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         }
-        enterOverlayMode(locationText, pasted: false, search: isSearchQuery)
+        enterOverlayMode(overlayText, pasted: false, search: isSearchQuery)
     }
 
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView) {
