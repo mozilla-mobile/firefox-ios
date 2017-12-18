@@ -809,7 +809,7 @@ class BrowserViewController: UIViewController {
         guard let url = tabState.url else { return }
         let absoluteString = url.absoluteString
         let shareItem = ShareItem(url: absoluteString, title: tabState.title, favicon: tabState.favicon)
-        profile.bookmarks.shareItem(shareItem)
+        let _ = profile.bookmarks.shareItem(shareItem)
         var userData = [QuickActions.TabURLKey: shareItem.url]
         if let title = shareItem.title {
             userData[QuickActions.TabTitleKey] = title
@@ -927,11 +927,8 @@ class BrowserViewController: UIViewController {
 
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
-
-        guard let url = tab.url?.displayURL?.absoluteString else {
-            return
-        }
     }
+
     // MARK: Opening New Tabs
 
     func switchToPrivacyMode(isPrivate: Bool ) {
