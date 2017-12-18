@@ -19,13 +19,13 @@ import SwiftyJSON
 import Telemetry
 import Sentry
 
-private let KVOs = [
-    KVOConstants.estimatedProgress,
-    KVOConstants.loading,
-    KVOConstants.canGoBack,
-    KVOConstants.canGoForward,
-    KVOConstants.URL,
-    KVOConstants.title,
+private let KVOs: [KVOConstants] = [
+    .estimatedProgress,
+    .loading,
+    .canGoBack,
+    .canGoForward,
+    .URL,
+    .title,
 ]
 
 private let ActionSheetTitleMaxLength = 120
@@ -832,14 +832,13 @@ class BrowserViewController: UIViewController {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         let webView = object as! WKWebView
-        guard let kp = keyPath,
-              let path = KVOConstants(rawValue: kp) else {
+        guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
 
         switch path {
-        case KVOConstants.estimatedProgress:
+        case .estimatedProgress:
             guard webView == tabManager.selectedTab?.webView,
                 let progress = change?[NSKeyValueChangeKey.newKey] as? Float else { break }
             if !(webView.url?.isLocalUtility ?? false) {
@@ -847,7 +846,7 @@ class BrowserViewController: UIViewController {
             } else {
                 urlBar.hideProgressBar()
             }
-        case KVOConstants.loading:
+        case .loading:
             guard let loading = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
 
             if webView == tabManager.selectedTab?.webView {
@@ -857,7 +856,7 @@ class BrowserViewController: UIViewController {
             if !loading {
                 runScriptsOnWebView(webView)
             }
-        case KVOConstants.URL:
+        case .URL:
             guard let tab = tabManager[webView] else { break }
 
             // To prevent spoofing, only change the URL immediately if the new URL is on
@@ -870,7 +869,7 @@ class BrowserViewController: UIViewController {
                     updateUIForReaderHomeStateForTab(tab)
                 }
             }
-        case KVOConstants.title:
+        case .title:
             guard let tab = tabManager[webView] else { break }
             
             // Ensure that the tab title *actually* changed to prevent repeated calls
@@ -879,12 +878,12 @@ class BrowserViewController: UIViewController {
             if !title.isEmpty && title != tab.lastTitle {
                 navigateInTab(tab: tab)
             }
-        case KVOConstants.canGoBack:
+        case .canGoBack:
             guard webView == tabManager.selectedTab?.webView,
                 let canGoBack = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
             
             navigationToolbar.updateBackStatus(canGoBack)
-        case KVOConstants.canGoForward:
+        case .canGoForward:
             guard webView == tabManager.selectedTab?.webView,
                 let canGoForward = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
 
