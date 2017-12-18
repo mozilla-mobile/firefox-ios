@@ -101,6 +101,8 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             toggle.addTarget(self, action: #selector(defaultToggleSwitched(_:)), for: .valueChanged)
             toggle.accessibilityIdentifier = "toggleAutocompleteSwitch"
             toggle.isOn = Settings.getToggle(.enableDomainAutocomplete)
+            toggle.onTintColor = UIConstants.colors.toggleOn
+            toggle.tintColor = UIConstants.colors.toggleOff
             cell.accessoryView = PaddedSwitch(switchView: toggle)
             
         } else {
@@ -112,6 +114,8 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
                 toggle.addTarget(self, action: #selector(customToggleSwitched(_:)), for: .valueChanged)
                 toggle.accessibilityIdentifier = "toggleCustomAutocompleteSwitch"
                 toggle.isOn = Settings.getToggle(.enableCustomDomainAutocomplete)
+                toggle.onTintColor = UIConstants.colors.toggleOn
+                toggle.tintColor = UIConstants.colors.toggleOff
                 cell.accessoryView = PaddedSwitch(switchView: toggle)
             } else {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "newDomainCell")
