@@ -24,6 +24,11 @@ protocol TabDelegate {
     @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
+@objc
+protocol URLChangeDelegate {
+    func tab(_ tab: Tab, urlDidChangeTo url: URL)
+}
+
 struct TabState {
     var isPrivate: Bool = false
     var desktopSite: Bool = false
@@ -65,6 +70,7 @@ class Tab: NSObject {
 
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
+    weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
     var bars = [SnackBar]()
     var favicons = [Favicon]()
     var lastExecutedTime: Timestamp?
@@ -239,8 +245,8 @@ class Tab: NSObject {
 
     deinit {
         if let webView = webView {
-            tabDelegate?.tab?(self, willDeleteWebView: webView)
             webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
+            tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
     }
 
@@ -446,6 +452,11 @@ class Tab: NSObject {
             let path = keyPath, path == KVOConstants.URL.rawValue else {
             return assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
+        guard let url = self.webView?.url else {
+            return
+        }
+
+        self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
@@ -474,6 +485,16 @@ class Tab: NSObject {
             let source = try? String(contentsOfFile: path) {
             let userScript = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
             webView.configuration.userContentController.addUserScript(userScript)
+        }
+    }
+
+    func observeURLChanges(delegate: URLChangeDelegate) {
+        self.urlDidChangeDelegate = delegate
+    }
+
+    func removeURLChangeObserver(delegate: URLChangeDelegate) {
+        if let existing = self.urlDidChangeDelegate, existing === delegate {
+            self.urlDidChangeDelegate = nil
         }
     }
 }
