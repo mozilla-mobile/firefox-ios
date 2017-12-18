@@ -66,7 +66,7 @@ class Tab: NSObject {
         return self.url
     }
 
-    var userActivity: NSUserActivity? = nil
+    var userActivity: NSUserActivity?
 
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
