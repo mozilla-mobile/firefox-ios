@@ -10,6 +10,16 @@ public enum AppBuildChannel: String {
     case developer = "developer"
 }
 
+public enum KVOConstants: String {
+    case loading = "loading"
+    case estimatedProgress = "estimatedProgress"
+    case URL = "URL"
+    case title = "title"
+    case canGoBack = "canGoBack"
+    case canGoForward = "canGoForward"
+    case contentSize = "contentSize"
+}
+
 public struct AppConstants {
     public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.arguments.contains(LaunchArguments.Test)
     

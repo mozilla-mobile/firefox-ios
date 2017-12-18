@@ -19,14 +19,14 @@ import SwiftyJSON
 import Telemetry
 import Sentry
 
-private let KVOLoading = "loading"
-private let KVOEstimatedProgress = "estimatedProgress"
-private let KVOURL = "URL"
-private let KVOTitle = "title"
-private let KVOCanGoBack = "canGoBack"
-private let KVOCanGoForward = "canGoForward"
-private let KVOs = [KVOEstimatedProgress, KVOLoading, KVOCanGoBack, KVOCanGoForward, KVOURL, KVOTitle]
-private let KVOContentSize = "contentSize"
+private let KVOs = [
+    KVOConstants.estimatedProgress,
+    KVOConstants.loading,
+    KVOConstants.canGoBack,
+    KVOConstants.canGoForward,
+    KVOConstants.URL,
+    KVOConstants.title,
+]
 
 private let ActionSheetTitleMaxLength = 120
 
@@ -832,9 +832,14 @@ class BrowserViewController: UIViewController {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         let webView = object as! WKWebView
-        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")"); return }
+        guard let kp = keyPath,
+              let path = KVOConstants(rawValue: kp) else {
+            assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
+            return
+        }
+
         switch path {
-        case KVOEstimatedProgress:
+        case KVOConstants.estimatedProgress:
             guard webView == tabManager.selectedTab?.webView,
                 let progress = change?[NSKeyValueChangeKey.newKey] as? Float else { break }
             if !(webView.url?.isLocalUtility ?? false) {
@@ -842,7 +847,7 @@ class BrowserViewController: UIViewController {
             } else {
                 urlBar.hideProgressBar()
             }
-        case KVOLoading:
+        case KVOConstants.loading:
             guard let loading = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
 
             if webView == tabManager.selectedTab?.webView {
@@ -852,7 +857,7 @@ class BrowserViewController: UIViewController {
             if !loading {
                 runScriptsOnWebView(webView)
             }
-        case KVOURL:
+        case KVOConstants.URL:
             guard let tab = tabManager[webView] else { break }
 
             // To prevent spoofing, only change the URL immediately if the new URL is on
@@ -865,7 +870,7 @@ class BrowserViewController: UIViewController {
                     updateUIForReaderHomeStateForTab(tab)
                 }
             }
-        case KVOTitle:
+        case KVOConstants.title:
             guard let tab = tabManager[webView] else { break }
             
             // Ensure that the tab title *actually* changed to prevent repeated calls
@@ -874,12 +879,12 @@ class BrowserViewController: UIViewController {
             if !title.isEmpty && title != tab.lastTitle {
                 navigateInTab(tab: tab)
             }
-        case KVOCanGoBack:
+        case KVOConstants.canGoBack:
             guard webView == tabManager.selectedTab?.webView,
                 let canGoBack = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
             
             navigationToolbar.updateBackStatus(canGoBack)
-        case KVOCanGoForward:
+        case KVOConstants.canGoForward:
             guard webView == tabManager.selectedTab?.webView,
                 let canGoForward = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
 
@@ -1572,8 +1577,8 @@ extension BrowserViewController: TabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.frame = webViewContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
-        KVOs.forEach { webView.addObserver(self, forKeyPath: $0, options: .new, context: nil) }
-        webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOContentSize, options: .new, context: nil)
+        KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
+        webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue, options: .new, context: nil)
         webView.uiDelegate = self
 
         let formPostHelper = FormPostHelper(tab: tab)
@@ -1639,8 +1644,8 @@ extension BrowserViewController: TabDelegate {
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
         tab.cancelQueuedAlerts()
-        KVOs.forEach { webView.removeObserver(self, forKeyPath: $0) }
-        webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOContentSize)
+        KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
+        webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
         webView.uiDelegate = nil
         webView.scrollView.delegate = nil
         webView.removeFromSuperview()

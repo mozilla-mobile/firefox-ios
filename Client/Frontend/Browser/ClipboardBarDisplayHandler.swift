@@ -38,7 +38,7 @@ class ClipboardBarDisplayHandler: NSObject {
 
     deinit {
         if !firstTabLoaded {
-            firstTab?.webView?.removeObserver(self, forKeyPath: "URL")
+            firstTab?.webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         }
     }
     
@@ -70,7 +70,7 @@ class ClipboardBarDisplayHandler: NSObject {
                 let firstTab = tabManager.selectedTab,
                 let webView = firstTab.webView {
                 self.firstTab = firstTab
-                webView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
+                webView.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
             } else {
                 firstTabLoaded = true
             }
@@ -87,7 +87,7 @@ class ClipboardBarDisplayHandler: NSObject {
         // before checking if we should display the clipboard bar.
         guard sessionRestored,
             let path = keyPath,
-            path == "URL",
+            path == KVOConstants.URL.rawValue,
             let firstTab = self.firstTab,
             let webView = firstTab.webView,
             let url = firstTab.url?.absoluteString,
@@ -95,7 +95,7 @@ class ClipboardBarDisplayHandler: NSObject {
             return
         }
 
-        webView.removeObserver(self, forKeyPath: "URL")
+        webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
 
         firstTabLoaded = true
         checkIfShouldDisplayBar()
