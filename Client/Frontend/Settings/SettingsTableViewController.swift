@@ -699,11 +699,14 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        backgroundView = UIView()
+        backgroundView!.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
         addSubview(topBorder)
         addSubview(bottomBorder)
+    }
 
+    override func layoutSubviews() {
         setupInitialConstraints()
     }
 
@@ -720,6 +723,12 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
         topBorder.snp.makeConstraints { make in
             make.top.left.right.equalTo(self)
             make.height.equalTo(0.5)
+        }
+
+        backgroundView?.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalToSuperview()
+            make.center.equalToSuperview()
         }
 
         remakeTitleAlignmentConstraints()
@@ -746,6 +755,15 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
                 make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
                 make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
                 make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
+            }
+        }
+
+        if #available(iOS 11.0, *) {
+            if let window = UIApplication.shared.keyWindow, window.safeAreaInsets.left != 0  {
+                // For iPhone X and similar, landscape mode
+                titleLabel.snp.remakeConstraints({ make in
+                    make.left.right.equalTo(self).inset(self.safeAreaInsets)
+                })
             }
         }
     }
