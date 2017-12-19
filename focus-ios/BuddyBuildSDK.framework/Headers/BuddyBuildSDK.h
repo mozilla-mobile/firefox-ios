@@ -3,9 +3,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIApplication.h>
 
-typedef NSString*(^BBReturnNSStringCallback)();
-typedef BOOL (^BBReturnBooleanCallback)();
-typedef void (^BBCallback)();
+typedef NSString*(^BBReturnNSStringCallback)(void);
+typedef BOOL (^BBReturnBooleanCallback)(void);
+typedef void (^BBCallback)(void);
 
 @interface BuddyBuildSDK : NSObject
 
@@ -20,10 +20,10 @@ typedef void (^BBCallback)();
 + (void)setup;
 
 /*
- * Associate arbitrary key/value pairs with your crash reports
+ * Associate arbitrary key/value pairs with your crash reports and user feedback
  * which will be visible from the buddybuild dashboard
  */
-+ (void) setCrashMetadataObject:(id)object forKey:(NSString*)key;
++ (void)setMetadataObject:(id)object forKey:(NSString*)key;
 
 /*
  * Programatically trigger the screenshot feedback UI without pressing the screenshot buttons
@@ -40,7 +40,7 @@ typedef void (^BBCallback)();
  * However, if you send out a build to a mailing list, or through TestFlight or
  * the App Store we are unable to infer who they are. If you see 'Unknown User'
  * this is likely the cause.
-
+ 
  * Often you'll know the identity of your user, for example, after they've
  * logged in. You can provide buddybuild a callback to identify the current user.
  */
@@ -115,24 +115,53 @@ typedef void (^BBCallback)();
 
 + (NSString*)branchName;
 
-/*
- * Returns the user's email or more specifically, the email that was used to download and deploy the build.
- * Returns "Unknown User" in cases where buddybuild is unable to identify the user.
- * This is the same email seen in crash instances and feedbacks in the dashboard
- * NOTE: To be called after [BuddyBuildSDK setup]
- * this is different than the one returned in the user display name callback.
-*/
-+ (NSString*)userEmail;
-
 /* Manually invoke the screenshot tutorial
  * If you don't want it to appear on app launch, disable it in the
  * dashboard by going to settings -> buddybuildSDK -> Feature Settings and turning off the screenshot tutorial
  * You will be able to show it at any time from anywhere in your app
  */
-+ (void) showScreenshotTutorial;
++ (void)showScreenshotTutorial;
 
 
-+(void) crash;
++ (void)crash;
+
+/*
+ * Logs to the console only while the debugger is attached (when running in Xcode)
+ * They can be downloaded in crash instances and feedbacks in the dashboard
+ */
++ (void)log:(NSString *)message;
+
+/*
+ * Starts recording video when running a UI test case.
+ * Should be called after each "[[[XCUIApplication alloc] init] launch];" in your UI tests codebase.
+ * Only run in buddybuild while the UI tests run. It will not run locally, on real iOS devices or on TestFlight and App Store installs.
+ */
++ (void)startUITests;
+
+/*
+ * Stops recording video at the end of a UI test case.
+ * Should be called before each "[super tearDown];" in your UI tests codebase.
+ * Only run in buddybuild while the UI tests run. It will not run locally, on real iOS devices or on TestFlight and App Store installs.
+ 
+ */
++ (void)stopUITests;
+
+/*
+ * Should be called in your app delegate in -[UIApplication application:didReceiveRemoteNotification:fetchCompletionHandler].
+ * Only run in buddybuild while the UI tests run. It will not run locally, on real iOS devices or on TestFlight and App Store installs.
+ */
++ (void)uiTestsDidReceiveRemoteNotification:(NSDictionary *)userInfo;
+
+/*
+ * DEPRECATED IN SDK 1.0.16+, use setMetadataObject:forKey:
+ */
++ (void)setCrashMetadataObject:(id)object forKey:(NSString*)key __deprecated_msg("Use setMetadataObject:forKey: instead");
+
+/*
+ * DEPRECATED IN SDK 1.0.17+
+ */
++ (NSString*)userEmail __deprecated_msg("No longer available");
+
 
 @end
 
