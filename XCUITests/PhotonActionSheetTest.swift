@@ -44,7 +44,6 @@ class PhotonActionSheetTest: BaseTestCase {
 
     func testShareOptionIsShown() {
         navigator.browserPerformAction(.shareOption)
-        app.buttons["TabLocationView.pageOptionsButton"].press(forDuration: 1)
 
         // Wait to see the Share options sheet
         waitforExistence(app.buttons["Copy"])
@@ -52,6 +51,7 @@ class PhotonActionSheetTest: BaseTestCase {
 
     func testShareOptionIsShownFromShortCut() {
         navigator.goto(BrowserTab)
+        waitUntilPageLoad()
         app.buttons["TabLocationView.pageOptionsButton"].press(forDuration: 1)
         // Wait to see the Share options sheet
         waitforExistence(app.buttons["Copy"])
