@@ -71,9 +71,10 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                     // First, see if the query matches any URLs from the user's search history.
                     self.load(cursor)
                     for site in cursor {
-                        if let url = site?.url,
-                               let completion = self.completionForURL(url) {
-                            self.urlBar.setAutocompleteSuggestion(completion)
+                        if let url = site?.url, let completion = self.completionForURL(url) {
+                            if oldValue.count < self.query.count {
+                                self.urlBar.setAutocompleteSuggestion(completion)
+                            }
                             return
                         }
                     }
@@ -81,7 +82,9 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                     // If there are no search history matches, try matching one of the Alexa top domains.
                     for domain in self.topDomains {
                         if let completion = self.completionForDomain(domain) {
-                            self.urlBar.setAutocompleteSuggestion(completion)
+                            if oldValue.count < self.query.count {
+                                self.urlBar.setAutocompleteSuggestion(completion)
+                            }
                             return
                         }
                     }
