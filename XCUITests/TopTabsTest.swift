@@ -133,6 +133,26 @@ class TopTabsTest: BaseTestCase {
         waitforExistence(app.collectionViews.cells[urlLabel])
     }
 
+    func testCloseAllTabsPrivateModeUndo() {
+        // A different tab than home is open to do the proper checks
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(url)
+        waitUntilPageLoad()
+        navigator.createSeveralTabsFromTabTray (numberTabs: 3)
+        navigator.goto(TabTray)
+
+        waitforExistence(app.collectionViews.cells[urlLabel])
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
+
+        // Close all tabs, undo it and check that the number of tabs is correct
+        navigator.closeAllTabs()
+        XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
+        app.buttons["Undo"].tap()
+        navigator.nowAt(BrowserTab)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
+        waitforExistence(app.collectionViews.cells[urlLabel])
+    }
+
     func testCloseAllTabs() {
         // A different tab than home is open to do the proper checks
         navigator.openURL(url)
@@ -148,6 +168,23 @@ class TopTabsTest: BaseTestCase {
         navigator.closeAllTabs()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         waitforNoExistence(app.collectionViews.cells[urlLabel])
+    }
+
+    func testCloseAllTabsPrivateMode() {
+        // A different tab than home is open to do the proper checks
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(url)
+        waitUntilPageLoad()
+        // Add several tabs from tab tray menu and check that the  number is correct before closing all
+        navigator.createSeveralTabsFromTabTray (numberTabs: 3)
+        navigator.goto(TabTray)
+
+        waitforExistence(app.collectionViews.cells[urlLabel])
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
+
+        // Close all tabs and check that the number of tabs is correct
+        navigator.closeAllTabs()
+        XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
     }
 
     func testCloseTabFromPageOptionsMenu() {
