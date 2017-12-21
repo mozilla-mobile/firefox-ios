@@ -1,0 +1,16 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Google</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,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</Image>
+<Url type="application/x-suggestions+json" method="GET" template="https://www.google.com/complete/search?client=firefox&amp;q={searchTerms}"/>
+<Url type="text/html" method="GET" template="https://www.google.com/search">
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="ie" value="utf-8"/>
+  <Param name="oe" value="utf-8"/>
+</Url>
+<SearchForm>https://www.google.com</SearchForm>
+</SearchPlugin>
