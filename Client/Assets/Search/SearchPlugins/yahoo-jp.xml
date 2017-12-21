@@ -1,0 +1,16 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Yahoo! JAPAN</ShortName>
+<Description>検索エンジン - Yahoo!検索</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAxlBMVEUAAAD/////////////////////////////////ADP/r7///f3/Bjj/Czz/JVH/Hkz/2uH/b4z/aYf/+/z/6+//ma7/9Pb/xtL/vcr/VHb/F0X/EkH/9vj/8vX/7/L/nrL/iqL/dZH/Xn7/PmX/K1b/Dz//1t//0dr/wc3/s8L/qLn/YoH/WXr/Sm7/RGr/lKr/kKb/e5b/T3L/OWH/Mlv/HEn/5uv/4ef/3uX/ytX/q7z/o7b/gJr/IU3/hp7/co7/ucf/ZINYCJxYAAAACHRSTlMA8Qz3rqoz9iHWq2MAAAKtSURBVGje7ZrZlqIwEEDRVrtiEB1RxH3flx4d7VZ7mZn//6nxCJ0SkEga8zB9ch9N5JJUpYrDQdO0ZDoBUkikk9qJzCNI4zFzuv8HkMhDUkuDVNJaAqSS0EAySqAESqAESqAESqAEdxb8Ijx68QU7rqATX1AnodSN1SG+AEqV9rq6zZFLPrKHQuu+QaaFHkG6IMRoxBGgokiQiW+wQMLoU4AeMboVeksA9GIN+ZZvLEeukyucBs9xrM2nDb4AzCVhLADhZfNPAJgw26Zd4gnAurhM2zf2XDl+9Dy58L7o2OfrdQmy5Qqg9I5rH8EV6OBzhdMS+9EgSIUvgNGQTR1YEKTjjBmVkASY36xFts4rE6/OyN+mV8qol24KoIzTy/6xtrN5M/DQJ4ynKNUUj4M+vrY/g4IvboQxoFEE5or9wWgGD+LCCm4bHs8oAmhhKlWB0VyyvPdSxdlRG86YZTtebz84B3ECfhpssv4SVQAzDIObj5P6ecv2EOAPm/sm0DJ/s3/tWufUOifvssXLiXxDQGBi6m0oUMdXpHCFPHGZCTX95xqGwaziDgQYs7INQgKwMQx9PHVB3ojLWFAAa+LhNWTa1h0vgqjA9HSAdthWYhESFUBBj9Cjy1iEhAUwx97QgBCWbhEyvyL4wQQ1CMFyV2lDPEEeQsiyIiRBgLuo72UJqHMc1yBLUHHKlSVN0CovdSxC9xQgzeOaShQgcc+BFMGCCYZXz8CsEU8w1bkCapDhfNr8oqAxLq/IBatqsdspH+2DhX63WbwIC9qGUSNh4EOXewMGFRZsCAdWNUdYpwUFZo6Es/M/TAwtYUEzy8HGdvS0GWInkvMqgdrF2meIv/XLEBclUAIlAFACJVACgP9QIP2zhxRIJSX/0xMtI9HwkNFOJFOyPv9Jne7/HyIEPtcrxWwlAAAAAElFTkSuQmCC</Image>
+<Url type="text/html" method="GET" template="https://search.yahoo.co.jp/search">
+  <Param name="p" value="{searchTerms}"/>
+  <Param name="ei" value="UTF-8"/>
+  <Param name="fr" value="mozff" />
+</Url>
+<SearchForm>https://search.yahoo.co.jp/</SearchForm>
+</SearchPlugin>

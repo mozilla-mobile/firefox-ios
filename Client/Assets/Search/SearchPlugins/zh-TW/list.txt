@@ -1,5 +1,0 @@
-bing
-duckduckgo
-google-nocodes:hidden
-google
-wikipedia-zh-TW
