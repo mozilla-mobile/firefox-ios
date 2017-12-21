@@ -69,7 +69,7 @@ class NewTabChoiceViewController: UITableViewController {
         cell.accessoryType = (currentChoice == option) ? .checkmark : .none
         cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.settingTitle, enabled: enabled)
         cell.isUserInteractionEnabled = enabled
-
+        cell.accessibilityIdentifier = option.rawValue
         return cell
     }
 
