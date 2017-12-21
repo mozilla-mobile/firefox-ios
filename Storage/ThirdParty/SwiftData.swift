@@ -513,6 +513,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 return nil
             }
         }
+
+        if debug_enabled {
+            traceOn()
+        }
     }
 
     deinit {
@@ -896,6 +900,14 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         try executeChange("VACUUM")
     }
 
+    // Developers can manually add a call to this to trace to console.
+    func traceOn() {
+        sqlite3_trace(sqliteDB, { _, sql in
+            guard let sql = sql else { return }
+            print(String(cString: sql))
+        }, nil)
+    }
+
     /// Creates an error from a sqlite status. Will print to the console if debug_enabled is set.
     /// Do not call this unless you're going to return this error.
     fileprivate func createErr(_ description: String, status: Int) -> NSError {
@@ -981,6 +993,15 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         // Close, not reset -- this isn't going to be reused.
         defer { statement?.close() }
 
+        if debug_enabled {
+            let timer = PerformanceTimer(thresholdSeconds: 0.01, label: "executeChange")
+            defer {
+                timer.stopAndPrint()
+            }
+
+            explain(query: sqlStr, withArgs: args)
+        }
+
         if let error = error {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
@@ -1003,6 +1024,20 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     public func executeQuery<T>(_ sqlStr: String, factory: @escaping ((SDRow) -> T)) -> Cursor<T> {
         return self.executeQuery(sqlStr, factory: factory, withArgs: nil)
+    }
+
+    func explain(query sqlStr: String, withArgs args: Args?) {
+        do {
+            let qp = try SQLiteDBStatement(connection: self, query: "EXPLAIN QUERY PLAN \(sqlStr)", args: args)
+            let qpFactory: ((SDRow) -> String) = { row in
+                return "id: \(row[0] as! Int), order: \(row[1] as! Int), from: \(row[2] as! Int), details: \(row[3] as! String)"
+            }
+            let qpCursor = FilledSQLiteCursor<String>(statement: qp, factory: qpFactory)
+            print("⦿ EXPLAIN QUERY (Columns: id, order, from, details) ---------------- ")
+            qpCursor.forEach { print("⦿ EXPLAIN: \($0 ?? "")") }
+        } catch {
+            print("Explain query plan failed!")
+        }
     }
 
     /// Queries the database.
@@ -1030,6 +1065,15 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(String(sqlStr.characters.prefix(500))).")
 
             return Cursor<T>(err: error)
+        }
+
+        if debug_enabled {
+            let timer = PerformanceTimer(thresholdSeconds: 0.01, label: "executeQuery")
+            defer {
+                timer.stopAndPrint()
+            }
+
+            explain(query: sqlStr, withArgs: args)
         }
 
         return FilledSQLiteCursor<T>(statement: statement!, factory: factory)
