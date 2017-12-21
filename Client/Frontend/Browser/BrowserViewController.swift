@@ -1451,6 +1451,12 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
+        guard let profile = profile as? BrowserProfile else {
+            return
+        }
+
+        searchLoader.searchStateEntered()
+        
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         } else {

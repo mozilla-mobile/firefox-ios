@@ -23,6 +23,8 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
 
+    private var optimizedFrecency: OptimizedFrecency?
+
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile
         self.urlBar = urlBar
@@ -33,6 +35,12 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
         return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
     }()
+
+    // Call every time the UI is in a mode where searching is performed.
+    // A temp table is created which speeds up conscutive queries, but 'freezes' the db state.
+    public func searchStateEntered() {
+        optimizedFrecency = profile.history.getOptimizedFrecency()
+    }
 
     // `weak` usage here allows deferred queue to be the owner. The deferred is always filled and this set to nil,
     // this is defensive against any changes to queue (or cancellation) behaviour in future.
@@ -46,7 +54,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             }
 
             if query.isEmpty {
-                self.load(Cursor(status: .success, msg: "Empty query"))
+                load(Cursor(status: .success, msg: "Empty query"))
                 return
             }
 
@@ -54,7 +62,15 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
             }
 
-            let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
+            if optimizedFrecency == nil {
+                assertionFailure("SearchLoader setup not called.")
+                Sentry.shared.send(message: "SearchLoader setup not called", severity: .error)
+                searchStateEntered()
+            }
+            guard let optimizedFrecency = optimizedFrecency else { return }
+
+            // When search mode is entered the requisite temp table is generated to speed up repeated queries, see BrowserViewController.urlBarDidEnterOverlayMode()
+            let deferred = optimizedFrecency.getSites(historyLimit: 100, bookmarksLimit: 5, whereURLContains: query)
             currentDbQuery = deferred as? Cancellable
 
             deferred.uponQueue(.main) { result in
