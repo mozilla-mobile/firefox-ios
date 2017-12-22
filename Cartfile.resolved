@@ -8,7 +8,7 @@ github "SnapKit/SnapKit" "3.1.2"
 github "jrendel/SwiftKeychainWrapper" "3.0.1"
 github "DaveWoodCom/XCGLogger" "Version_4.0.0"
 github "adjust/ios_sdk" "v4.11.5"
-github "AgileBits/onepassword-app-extension" bcc4cc97fed9a6e73fa204f2e61138e353cb3ef7
+github "AgileBits/onepassword-app-extension" "bcc4cc97fed9a6e73fa204f2e61138e353cb3ef7"
 github "mozilla/readability" "ccc8e9bf4c5400814d9b7a3ea83c21540da4c76f"
 github "SwiftyJSON/SwiftyJSON" "3.1.4"
 github "farhanpatel/JSONSchema.swift" "1c052b83baa8c497e12cde6a8afca0f54574612f"
