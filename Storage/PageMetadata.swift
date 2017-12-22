@@ -30,7 +30,15 @@ public struct PageMetadata {
     public let type: String?
     public let providerName: String?
     public let faviconURL: String?
-    public let keywords: String?
+    public let keywordsString: String?
+    public var keywords: Set<String> {
+        guard let string = keywordsString else {
+            return Set()
+        }
+
+        let strings = string.split(separator: ",", omittingEmptySubsequences: true).map(String.init)
+        return Set(strings)
+    }
 
     public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, mediaDataURI: String?, faviconURL: String? = nil, keywords: String? = nil, cacheImages: Bool = true) {
         self.id = id
@@ -41,7 +49,7 @@ public struct PageMetadata {
         self.type = type
         self.providerName = providerName
         self.faviconURL = faviconURL
-        self.keywords = keywords
+        self.keywordsString = keywords
 
         if let urlString = mediaURL, let url = URL(string: urlString), cacheImages {
             self.cacheImage(fromDataURI: mediaDataURI, forURL: url)

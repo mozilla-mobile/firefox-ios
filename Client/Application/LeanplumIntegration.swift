@@ -7,38 +7,33 @@ import AdSupport
 import Shared
 import Leanplum
 
-private let LeanplumEnvironmentKey = "LeanplumEnvironment"
-private let LeanplumAppIdKey = "LeanplumAppId"
-private let LeanplumKeyKey = "LeanplumKey"
-private let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+private let LPAppIdKey = "LeanplumAppId"
+private let LPProductionKeyKey = "LeanplumProductionKey"
+private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
+private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
 
-// FxA Custom Leanplum message template for A/B testing
-// push notifications.
-let LpmtFxAPrePush = "FxA Prepush v1"
-let LpmtArgAcceptAction = "Accept action"
-let LpmtArgCancelAction = "Cancel action"
-let LpmtArgTitleText = "Title.Text"
-let LpmtArgTitleColor = "Title.Color"
-let LpmtArgMessageText = "Message.Text"
-let LpmtArgMessageColor = "Message.Color"
-let LpmtArgAcceptButtonText = "Accept button.Text"
-let LpmtArgCancelButtonText = "Cancel button.Text"
-let LpmtArgCancelButtonTextColor = "Cancel button.Text color"
-
-// These defaults are overridden though Leanplum webUI
-let LpmtDefaultAskToAskTitle = NSLocalizedString("Firefox Sync Requires Push", comment: "Default push to ask title")
-let LpmtDefaultAskToAskMessage = NSLocalizedString("Firefox will stay in sync faster with Push Notifications enabled.", comment: "Default push to ask message")
-let LpmtDefaultOkButtonText = NSLocalizedString("Enable Push", comment: "Default push alert ok button text")
-let LpmtDefaultLaterButtonText = NSLocalizedString("Don't Enable", comment: "Default push alert cancel button text")
+// FxA Custom Leanplum message template for A/B testing push notifications.
+private struct LPMessage {
+    static let FxAPrePush = "FxA Prepush v1"
+    static let ArgAcceptAction = "Accept action"
+    static let ArgCancelAction = "Cancel action"
+    static let ArgTitleText = "Title.Text"
+    static let ArgTitleColor = "Title.Color"
+    static let ArgMessageText = "Message.Text"
+    static let ArgMessageColor = "Message.Color"
+    static let ArgAcceptButtonText = "Accept button.Text"
+    static let ArgCancelButtonText = "Cancel button.Text"
+    static let ArgCancelButtonTextColor = "Cancel button.Text color"
+    // These defaults are overridden though Leanplum webUI
+    static let DefaultAskToAskTitle = NSLocalizedString("Firefox Sync Requires Push", comment: "Default push to ask title")
+    static let DefaultAskToAskMessage = NSLocalizedString("Firefox will stay in sync faster with Push Notifications enabled.", comment: "Default push to ask message")
+    static let DefaultOkButtonText = NSLocalizedString("Enable Push", comment: "Default push alert ok button text")
+    static let DefaultLaterButtonText = NSLocalizedString("Don't Enable", comment: "Default push alert cancel button text")
+}
 
 private let log = Logger.browserLogger
 
-private enum LeanplumEnvironment: String {
-    case development = "development"
-    case production = "production"
-}
-
-enum LeanplumEventName: String {
+enum LPEvent: String {
     case firstRun = "E_First_Run"
     case secondRun = "E_Second_Run"
     case openedApp = "E_Opened_App"
@@ -62,52 +57,50 @@ enum LeanplumEventName: String {
     case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
 }
 
-enum UserAttributeKeyName: String {
-    case focusInstalled = "Focus Installed"
-    case klarInstalled = "Klar Installed"
-    case signedInSync = "Signed In Sync"
-    case mailtoIsDefault = "Mailto Is Default"
-    case pocketInstalled = "Pocket Installed"
-    case telemetryOptIn = "Telemetry Opt In"
+struct LPAttributeKey {
+    static let focusInstalled = "Focus Installed"
+    static let klarInstalled = "Klar Installed"
+    static let signedInSync = "Signed In Sync"
+    static let mailtoIsDefault = "Mailto Is Default"
+    static let pocketInstalled = "Pocket Installed"
+    static let telemetryOptIn = "Telemetry Opt In"
 }
 
-private enum SupportedLocales: String {
-    case US = "en_US"
-    case DE = "de_DE"
-    case UK = "en_GB"
-    case CA_EN = "en_CA"
-    case AU = "en_AU"
-    case TW = "zh_TW"
-    case HK = "en_HK"
-    case SG_EN = "en_SG"
-    case FR = "fr_FR"
-    case IT = "it_IT"
-    case ID = "id_ID"
-    case PT_BR = "pt_BR"
-    case PL = "pl_PL"
-    case RU = "ru_RU"
-    case ES_ES = "es_ES"
-    case ES_MX = "es_MX"
+struct MozillaAppSchemes {
+    static let focus = "firefox-focus"
+    static let focusDE = "firefox-klar"
+    static let pocket = "pocket"
 }
 
-private struct LeanplumSettings {
-    var environment: LeanplumEnvironment
+private let supportedLocales = ["en_US", "de_DE", "en_GB", "en_CA", "en_AU", "zh_TW", "en_HK", "en_SG",
+                        "fr_FR", "it_IT", "id_ID", "id_ID", "pt_BR", "pl_PL", "ru_RU", "es_ES", "es_MX"]
+
+private struct LPSettings {
     var appId: String
-    var key: String
+    var developmentKey: String
+    var productionKey: String
 }
 
-class LeanplumIntegration {
-    static let sharedInstance = LeanplumIntegration()
+class LeanPlumClient {
+    static let shared = LeanPlumClient()
 
     // Setup
+    private weak var profile: Profile?
+    private var prefs: Prefs? { return profile?.prefs }
+    private var enabled: Bool = true
 
-    fileprivate weak var profile: Profile?
-    private var enabled: Bool = false
-    
-    fileprivate func shouldSendToLP() -> Bool {
+    private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
         assert(Thread.isMainThread)
-        return enabled && Leanplum.hasStarted() && !UIApplication.isInPrivateMode
+        return UIApplication.isInPrivateMode
+    }
+    
+    private func isLPEnabled() -> Bool {
+        return enabled && Leanplum.hasStarted()
+    }
+
+    static func shouldEnable(profile: Profile) -> Bool {
+        return AppConstants.MOZ_ENABLE_LEANPLUM && (profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true)
     }
 
     func setup(profile: Profile) {
@@ -115,166 +108,129 @@ class LeanplumIntegration {
     }
 
     fileprivate func start() {
-        guard AppConstants.MOZ_ENABLE_LEANPLUM else {
-            enabled = false
+        guard let settings = getSettings(), supportedLocales.contains(Locale.current.identifier), !Leanplum.hasStarted() else {
+            log.error("LeanplumIntegration - Could not be started")
             return
         }
 
-        self.enabled = self.profile?.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
-        if !self.enabled {
-            return
-        }
-        
-        guard SupportedLocales(rawValue: Locale.current.identifier) != nil else {
-            return
-        }
-
-        if Leanplum.hasStarted() {
-            log.error("LeanplumIntegration - Already initialized")
-            return
-        }
-
-        guard let settings = getSettings() else {
-            log.error("LeanplumIntegration - Could not load settings from Info.plist")
-            return
-        }
-
-        switch settings.environment {
-        case .development:
+        if UIDevice.current.name.contains("MozMMADev") {
             log.info("LeanplumIntegration - Setting up for Development")
             Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
-            Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.key)
-        case .production:
+            Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.developmentKey)
+        } else {
             log.info("LeanplumIntegration - Setting up for Production")
-            Leanplum.setAppId(settings.appId, withProductionKey: settings.key)
+            Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
         }
+
         Leanplum.syncResourcesAsync(true)
 
-        if profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == nil {
-            profile?.prefs.setBool(!canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
-        }
-
-        if profile?.prefs.boolForKey(PrefsKeys.HasPocketInstalled) == nil {
-            profile?.prefs.setBool(!canInstallPocket(), forKey: PrefsKeys.HasPocketInstalled)
-        }
-
-        var userAttributesDict = [AnyHashable: Any]()
-        userAttributesDict[UserAttributeKeyName.mailtoIsDefault.rawValue] = mailtoIsDefault()
-        userAttributesDict[UserAttributeKeyName.focusInstalled.rawValue] = !canInstallFocus()
-        userAttributesDict[UserAttributeKeyName.klarInstalled.rawValue] = !canInstallKlar()
-        userAttributesDict[UserAttributeKeyName.pocketInstalled.rawValue] = !canInstallPocket()
-        userAttributesDict[UserAttributeKeyName.signedInSync.rawValue] = profile?.hasAccount()
+        let attributes: [AnyHashable: Any] = [
+            LPAttributeKey.mailtoIsDefault: mailtoIsDefault(),
+            LPAttributeKey.focusInstalled: focusInstalled(),
+            LPAttributeKey.klarInstalled: klarInstalled(),
+            LPAttributeKey.pocketInstalled: pocketInstalled(),
+            LPAttributeKey.signedInSync: profile?.hasAccount() ?? false
+        ]
 
         self.setupCustomTemplates()
         
-        Leanplum.start(withUserId: nil, userAttributes: userAttributesDict, responseHandler: { _ in
-            self.track(eventName: LeanplumEventName.openedApp)
+        Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
+            self.track(event: .openedApp)
 
             // We need to check if the app is a clean install to use for
             // preventing the What's New URL from appearing.
-            if self.profile?.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
-                self.profile?.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-                self.track(eventName: .firstRun)
-            } else if self.profile?.prefs.boolForKey("SecondRun") == nil {
-                self.profile?.prefs.setBool(true, forKey: "SecondRun")
-                self.track(eventName: .secondRun)
+            if self.prefs?.intForKey(IntroViewControllerSeenProfileKey) == nil {
+                self.prefs?.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+                self.track(event: .firstRun)
+            } else if self.prefs?.boolForKey("SecondRun") == nil {
+                self.prefs?.setBool(true, forKey: "SecondRun")
+                self.track(event: .secondRun)
             }
 
-            // Only drops Leanplum event when a user has installed Focus (from a fresh state or a re-install)
-            if self.profile?.prefs.boolForKey(PrefsKeys.HasFocusInstalled) == self.canInstallFocus() {
-                self.profile?.prefs.setBool(!self.canInstallFocus(), forKey: PrefsKeys.HasFocusInstalled)
-                if !self.canInstallFocus() {
-                    self.track(eventName: LeanplumEventName.downloadedFocus)
-                }
-            }
-
-            // Only drops Leanplum event when a user has installed Pocket (from a fresh state or a re-install)
-            if self.profile?.prefs.boolForKey(PrefsKeys.HasPocketInstalled) == self.canInstallPocket() {
-                self.profile?.prefs.setBool(!self.canInstallPocket(), forKey: PrefsKeys.HasPocketInstalled)
-                if !self.canInstallPocket() {
-                    self.track(eventName: LeanplumEventName.downloadedPocket)
-                }
-            }
+            self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
+            self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
         })
     }
 
     // Events
-
-    func track(eventName: LeanplumEventName) {
-        DispatchQueue.main.async(execute: {
-            if self.shouldSendToLP() {
-                Leanplum.track(eventName.rawValue)
-            }
-        })
-    }
-
-    func track(eventName: LeanplumEventName, withParameters parameters: [String: AnyObject]) {
-        DispatchQueue.main.async(execute: {
-            if self.shouldSendToLP() {
-                Leanplum.track(eventName.rawValue, withParameters: parameters)
-            }
-        })
-    }
-
-    // Utils
-    
-    func setEnabled(_ enabled: Bool) {
-        guard AppConstants.MOZ_ENABLE_LEANPLUM else {
+    func track(event: LPEvent, withParameters parameters: [String: AnyObject]? = nil) {
+        guard isLPEnabled() else {
             return
         }
+        ensureMainThread {
+            guard !self.isPrivateMode() else {
+                return
+            }
+            if let params = parameters {
+                Leanplum.track(event.rawValue, withParameters: params)
+            } else {
+                Leanplum.track(event.rawValue)
+            }
+        }
+    }
+
+    func set(attributes: [AnyHashable: Any]) {
+        guard isLPEnabled() else {
+            return
+        }
+        ensureMainThread {
+            if !self.isPrivateMode() {
+                Leanplum.setUserAttributes(attributes)
+            }
+        }
+    }
+
+    func set(enabled: Bool) {
         // Setting up Test Mode stops sending things to server.
         if enabled { start() }
         self.enabled = enabled
         Leanplum.setTestModeEnabled(!enabled)
     }
 
-    func canInstallFocus() -> Bool {
-        guard let focus = URL(string: "firefox-focus://") else {
-            return false
+    /*
+     This is used to determine if an app was installed after firefox was installed
+     */
+    private func checkIfAppWasInstalled(key: String, isAppInstalled: Bool, lpEvent: LPEvent) {
+        // if no key is present. create one and set it.
+        // if the app is already installed then the flag will set true and the second block will never run
+        if self.prefs?.boolForKey(key) == nil {
+            self.prefs?.setBool(isAppInstalled, forKey: key)
         }
-        return !UIApplication.shared.canOpenURL(focus)
-    }
-
-    func canInstallKlar() -> Bool {
-        guard let klar = URL(string: "firefox-klar://") else {
-            return false
+        // on a subsquent launch if the app is installed and the key is false then switch the flag to true
+        if !(self.prefs?.boolForKey(key) ?? false), isAppInstalled {
+            self.prefs?.setBool(isAppInstalled, forKey: key)
+            self.track(event: lpEvent)
         }
-        return !UIApplication.shared.canOpenURL(klar)
     }
 
-    func canInstallPocket() -> Bool {
-        guard let pocket = URL(string: "pocket://") else {
-            return false
-        }
-        return !UIApplication.shared.canOpenURL(pocket)
+    private func canOpenApp(scheme: String) -> Bool {
+        return URL(string: "\(scheme)://").flatMap { UIApplication.shared.canOpenURL($0) } ?? false
     }
 
-    func mailtoIsDefault() -> Bool {
-        if let option = self.profile?.prefs.stringForKey(PrefsKeys.KeyMailToOption), option != "mailto:" {
-            return false
-        }
-        return true
+    private func focusInstalled() -> Bool {
+        return canOpenApp(scheme: MozillaAppSchemes.focus)
     }
 
-    func setUserAttributes(attributes: [AnyHashable: Any]) {
-        DispatchQueue.main.async(execute: {
-            if self.shouldSendToLP() {
-                Leanplum.setUserAttributes(attributes)
-            }
-        })
+    private func klarInstalled() -> Bool {
+        return canOpenApp(scheme: MozillaAppSchemes.focusDE)
     }
 
-    // Private
+    private func pocketInstalled() -> Bool {
+        return canOpenApp(scheme: MozillaAppSchemes.pocket)
+    }
 
-    private func getSettings() -> LeanplumSettings? {
+    private func mailtoIsDefault() -> Bool {
+        return (prefs?.stringForKey(PrefsKeys.KeyMailToOption) ?? "mailto:") == "mailto:"
+    }
+
+    private func getSettings() -> LPSettings? {
         let bundle = Bundle.main
-        guard let environmentString = bundle.object(forInfoDictionaryKey: LeanplumEnvironmentKey) as? String,
-              let environment = LeanplumEnvironment(rawValue: environmentString),
-              let appId = bundle.object(forInfoDictionaryKey: LeanplumAppIdKey) as? String,
-              let key = bundle.object(forInfoDictionaryKey: LeanplumKeyKey) as? String else {
+        guard let appId = bundle.object(forInfoDictionaryKey: LPAppIdKey) as? String,
+              let productionKey = bundle.object(forInfoDictionaryKey: LPProductionKeyKey) as? String,
+              let developmentKey = bundle.object(forInfoDictionaryKey: LPDevelopmentKeyKey) as? String else {
             return nil
         }
-        return LeanplumSettings(environment: environment, appId: appId, key: key)
+        return LPSettings(appId: appId, developmentKey: developmentKey, productionKey: productionKey)
     }
     
     // This must be called before `Leanplum.start` in order to correctly setup
@@ -283,14 +239,14 @@ class LeanplumIntegration {
         // These properties are exposed through the Leanplum web interface.
         // Ref: https://github.com/Leanplum/Leanplum-iOS-Samples/blob/master/iOS_customMessageTemplates/iOS_customMessageTemplates/LPMessageTemplates.m
         let args: [LPActionArg] = [
-            LPActionArg(named: LpmtArgTitleText, with: LpmtDefaultAskToAskTitle),
-            LPActionArg(named: LpmtArgTitleColor, with: UIColor.black),
-            LPActionArg(named: LpmtArgMessageText, with: LpmtDefaultAskToAskMessage),
-            LPActionArg(named: LpmtArgMessageColor, with: UIColor.black),
-            LPActionArg(named: LpmtArgAcceptButtonText, with: LpmtDefaultOkButtonText),
-            LPActionArg(named: LpmtArgCancelAction, withAction: nil),
-            LPActionArg(named: LpmtArgCancelButtonText, with: LpmtDefaultLaterButtonText),
-            LPActionArg(named: LpmtArgCancelButtonTextColor, with: UIColor.gray)
+            LPActionArg(named: LPMessage.ArgTitleText, with: LPMessage.DefaultAskToAskTitle),
+            LPActionArg(named: LPMessage.ArgTitleColor, with: UIColor.black),
+            LPActionArg(named: LPMessage.ArgMessageText, with: LPMessage.DefaultAskToAskMessage),
+            LPActionArg(named: LPMessage.ArgMessageColor, with: UIColor.black),
+            LPActionArg(named: LPMessage.ArgAcceptButtonText, with: LPMessage.DefaultOkButtonText),
+            LPActionArg(named: LPMessage.ArgCancelAction, withAction: nil),
+            LPActionArg(named: LPMessage.ArgCancelButtonText, with: LPMessage.DefaultLaterButtonText),
+            LPActionArg(named: LPMessage.ArgCancelButtonTextColor, with: UIColor.gray)
         ]
         
         let responder: LeanplumActionBlock = { (context) -> Bool in
@@ -299,30 +255,26 @@ class LeanplumIntegration {
             }
             
             // Don't display permission screen if they have already allowed/disabled push permissions
-            if self.profile?.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? false {
+            if self.prefs?.boolForKey(AppRequestedUserNotificationsPrefKey) ?? false {
                 FxALoginHelper.sharedInstance.readyForSyncing()
                 return false
             }
             
             // Present Alert View onto the current top view controller
             let rootViewController = UIApplication.topViewController()
-            let title = NSLocalizedString(context.stringNamed(LpmtArgTitleText), comment: "")
-            let message = NSLocalizedString(context.stringNamed(LpmtArgMessageText), comment: "")
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            
-            let cancelText = NSLocalizedString(context.stringNamed(LpmtArgCancelButtonText), comment: "")
-            alert.addAction(UIAlertAction(title: cancelText, style: .cancel, handler: { (action) -> Void in
+            let alert = UIAlertController(title: context.stringNamed(LPMessage.ArgTitleText), message: context.stringNamed(LPMessage.ArgMessageText), preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: context.stringNamed(LPMessage.ArgCancelButtonText), style: .cancel, handler: { (action) -> Void in
                 // Log cancel event and call ready for syncing
-                context.runTrackedActionNamed(LpmtArgCancelAction)
+                context.runTrackedActionNamed(LPMessage.ArgCancelAction)
                 FxALoginHelper.sharedInstance.readyForSyncing()
             }))
-            
-            let acceptText = NSLocalizedString(context.stringNamed(LpmtArgAcceptButtonText), comment: "")
-            alert.addAction(UIAlertAction(title: acceptText, style: .default, handler: { (action) -> Void in
+
+            alert.addAction(UIAlertAction(title: context.stringNamed(LPMessage.ArgAcceptButtonText), style: .default, handler: { (action) -> Void in
                 // Log accept event and present push permission modal
-                context.runTrackedActionNamed(LpmtArgAcceptAction)
+                context.runTrackedActionNamed(LPMessage.ArgAcceptAction)
                 FxALoginHelper.sharedInstance.requestUserNotifications(UIApplication.shared)
-                self.profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
+                self.prefs?.setBool(true, forKey: AppRequestedUserNotificationsPrefKey)
             }))
             
             rootViewController?.present(alert, animated: true, completion: nil)
@@ -330,7 +282,7 @@ class LeanplumIntegration {
         }
         
         // Register or update the custom Leanplum message
-        Leanplum.defineAction(LpmtFxAPrePush, of: kLeanplumActionKindMessage, withArguments: args, withOptions: [:], withResponder: responder)
+        Leanplum.defineAction(LPMessage.FxAPrePush, of: kLeanplumActionKindMessage, withArguments: args, withOptions: [:], withResponder: responder)
     }
 }
 

@@ -40,7 +40,7 @@ class HistoryBackButton: UIButton {
         backgroundColor = UIColor.white
 
         chevron.snp.makeConstraints { make in
-            make.leading.equalTo(self).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
+            make.leading.equalTo(self.safeArea.leading).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
             make.centerY.equalTo(self)
             make.size.equalTo(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronSize)
         }

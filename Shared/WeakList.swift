@@ -55,10 +55,10 @@ open class WeakList<T: AnyObject>: Sequence {
     }
 }
 
-private class WeakRef<T: AnyObject> {
-    weak var value: T?
+open class WeakRef<T: AnyObject> {
+    public weak var value: T?
 
-    init(_ value: T) {
+    public init(_ value: T) {
         self.value = value
     }
 }

@@ -11,7 +11,7 @@ struct NightModePrefsKey {
     static let NightModeStatus = PrefsKeys.KeyNightModeStatus
 }
 
-class NightModeHelper: TabHelper {
+class NightModeHelper: TabContentScript {
     fileprivate weak var tab: Tab?
 
     required init(tab: Tab) {

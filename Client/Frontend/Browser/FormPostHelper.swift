@@ -53,7 +53,7 @@ struct FormPostData {
     }
 }
 
-class FormPostHelper: TabHelper {
+class FormPostHelper: TabContentScript {
     fileprivate weak var tab: Tab?
     fileprivate var blankTargetFormPosts: [FormPostData] = []
 

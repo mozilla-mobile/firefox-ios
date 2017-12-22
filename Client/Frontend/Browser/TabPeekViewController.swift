@@ -115,7 +115,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         guard let webView = webView, let url = webView.url, !isIgnoredURL(url) else { return }
         let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
         clonedWebView.allowsLinkPreview = false
-        webView.accessibilityLabel = previewAccessibilityLabel
+        clonedWebView.accessibilityLabel = previewAccessibilityLabel
         self.view.addSubview(clonedWebView)
 
         clonedWebView.snp.makeConstraints { make in

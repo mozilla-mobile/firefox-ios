@@ -49,6 +49,33 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
+    func testAddToReadingListPrivateMode() {
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        // Initially reading list is empty
+        navigator.goto(HomePanel_ReadingList)
+
+        // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
+        XCTAssertFalse(app.buttons["HomePanels.ReadingList"].isEnabled)
+        XCTAssertTrue(app.buttons["HomePanels.Bookmarks"].isEnabled)
+        checkReadingListNumberOfItems(items: 0)
+
+        // Add item to reading list and check that it appears
+        addContentToReaderView()
+        navigator.goto(HomePanel_ReadingList)
+        waitforExistence(app.buttons["HomePanels.ReadingList"])
+
+        // Check that there is one item
+        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        waitforExistence(savedToReadingList)
+        XCTAssertTrue(savedToReadingList.exists)
+        checkReadingListNumberOfItems(items: 1)
+
+        // Check that it appears on regular mode
+        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.goto(HomePanel_ReadingList)
+        checkReadingListNumberOfItems(items: 1)
+    }
+
     func testMarkAsReadAndUreadFromReaderView() {
         addContentToReaderView()
 

@@ -384,11 +384,9 @@ class TabTrayController: UIViewController {
 
     fileprivate func makeConstraints() {
         collectionView.snp.makeConstraints { make in
-            if #available(iOS 11.0, *) {
-                make.left.bottom.right.equalTo(view.safeAreaLayoutGuide)
-            } else {
-                make.left.bottom.right.equalTo(view)
-            }
+            make.left.equalTo(view.safeArea.left)
+            make.right.equalTo(view.safeArea.right)
+            make.bottom.equalTo(view.safeArea.bottom)
             make.top.equalTo(self.topLayoutGuide.snp.bottom)
         }
 
@@ -419,7 +417,7 @@ class TabTrayController: UIViewController {
 
     func didClickAddTab() {
         openNewTab()
-        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Tab Tray" as AnyObject])
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray" as AnyObject])
     }
 
     func didTapLearnMore() {
@@ -502,7 +500,7 @@ class TabTrayController: UIViewController {
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
         self.collectionView.performBatchUpdates({ _ in
-            let tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
+            _ = self.tabManager.addTab(request, isPrivate: self.privateMode)
         }, completion: { finished in
             // The addTab delegate method will pop to the BVC no need to do anything here.
             self.toolbar.isUserInteractionEnabled = true
@@ -978,7 +976,7 @@ extension TabTrayController: ClientPickerViewControllerDelegate {
 
     func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
         if let item = clientPickerViewController.shareItem {
-            self.profile.sendItems([item], toClients: clients)
+            _ = self.profile.sendItems([item], toClients: clients)
         }
         clientPickerViewController.dismiss(animated: true, completion: nil)
     }

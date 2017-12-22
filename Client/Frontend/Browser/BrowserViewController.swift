@@ -19,14 +19,14 @@ import SwiftyJSON
 import Telemetry
 import Sentry
 
-private let KVOLoading = "loading"
-private let KVOEstimatedProgress = "estimatedProgress"
-private let KVOURL = "URL"
-private let KVOTitle = "title"
-private let KVOCanGoBack = "canGoBack"
-private let KVOCanGoForward = "canGoForward"
-private let KVOs = [KVOEstimatedProgress, KVOLoading, KVOCanGoBack, KVOCanGoForward, KVOURL, KVOTitle]
-private let KVOContentSize = "contentSize"
+private let KVOs: [KVOConstants] = [
+    .estimatedProgress,
+    .loading,
+    .canGoBack,
+    .canGoForward,
+    .URL,
+    .title,
+]
 
 private let ActionSheetTitleMaxLength = 120
 
@@ -311,7 +311,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELBookmarkStatusDidChange(_:)), name: NSNotification.Name(rawValue: BookmarkStatusChangedNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappWillResignActiveNotification), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappDidBecomeActiveNotification), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappDidEnterBackgroundNotification), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
@@ -732,7 +731,7 @@ class BrowserViewController: UIViewController {
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
 
                 // Refresh the reading view toolbar since the article record may have changed
-                if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
+                if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
                     self.showReaderModeBar(animated: false)
                 }
             })
@@ -810,7 +809,7 @@ class BrowserViewController: UIViewController {
         guard let url = tabState.url else { return }
         let absoluteString = url.absoluteString
         let shareItem = ShareItem(url: absoluteString, title: tabState.title, favicon: tabState.favicon)
-        profile.bookmarks.shareItem(shareItem)
+        _ = profile.bookmarks.shareItem(shareItem)
         var userData = [QuickActions.TabURLKey: shareItem.url]
         if let title = shareItem.title {
             userData[QuickActions.TabTitleKey] = title
@@ -818,23 +817,6 @@ class BrowserViewController: UIViewController {
         QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
             withUserData: userData,
             toApplication: UIApplication.shared)
-        if let tab = tabManager.getTabForURL(url) {
-            tab.isBookmarked = true
-        }
-    }
-
-    func SELBookmarkStatusDidChange(_ notification: Notification) {
-        if let bookmark = notification.object as? BookmarkItem {
-            if bookmark.url == urlBar.currentURL?.absoluteString {
-                if let userInfo = notification.userInfo as? Dictionary<String, Bool> {
-                    if userInfo["added"] != nil {
-                        if let tab = self.tabManager.getTabForURL(urlBar.currentURL!) {
-                            tab.isBookmarked = false
-                        }
-                    }
-                }
-            }
-        }
     }
 
     override func accessibilityPerformEscape() -> Bool {
@@ -850,9 +832,13 @@ class BrowserViewController: UIViewController {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         let webView = object as! WKWebView
-        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")"); return }
+        guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
+            assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
+            return
+        }
+
         switch path {
-        case KVOEstimatedProgress:
+        case .estimatedProgress:
             guard webView == tabManager.selectedTab?.webView,
                 let progress = change?[NSKeyValueChangeKey.newKey] as? Float else { break }
             if !(webView.url?.isLocalUtility ?? false) {
@@ -860,7 +846,7 @@ class BrowserViewController: UIViewController {
             } else {
                 urlBar.hideProgressBar()
             }
-        case KVOLoading:
+        case .loading:
             guard let loading = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
 
             if webView == tabManager.selectedTab?.webView {
@@ -870,7 +856,7 @@ class BrowserViewController: UIViewController {
             if !loading {
                 runScriptsOnWebView(webView)
             }
-        case KVOURL:
+        case .URL:
             guard let tab = tabManager[webView] else { break }
 
             // To prevent spoofing, only change the URL immediately if the new URL is on
@@ -883,7 +869,7 @@ class BrowserViewController: UIViewController {
                     updateUIForReaderHomeStateForTab(tab)
                 }
             }
-        case KVOTitle:
+        case .title:
             guard let tab = tabManager[webView] else { break }
             
             // Ensure that the tab title *actually* changed to prevent repeated calls
@@ -892,12 +878,12 @@ class BrowserViewController: UIViewController {
             if !title.isEmpty && title != tab.lastTitle {
                 navigateInTab(tab: tab)
             }
-        case KVOCanGoBack:
+        case .canGoBack:
             guard webView == tabManager.selectedTab?.webView,
                 let canGoBack = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
             
             navigationToolbar.updateBackStatus(canGoBack)
-        case KVOCanGoForward:
+        case .canGoForward:
             guard webView == tabManager.selectedTab?.webView,
                 let canGoForward = change?[NSKeyValueChangeKey.newKey] as? Bool else { break }
 
@@ -908,6 +894,9 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func runScriptsOnWebView(_ webView: WKWebView) {
+        guard let url = webView.url, url.isWebPage(), !url.isLocal else {
+            return
+        }
         webView.evaluateJavaScript("__firefox__.favicons.getFavicons()", completionHandler: nil)
         webView.evaluateJavaScript("__firefox__.metadata.extractMetadata()", completionHandler: nil)
 
@@ -942,21 +931,8 @@ class BrowserViewController: UIViewController {
 
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
-
-        guard let url = tab.url?.displayURL?.absoluteString else {
-            return
-        }
-
-        profile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(url).uponQueue(DispatchQueue.main) { [weak tab] result in
-                guard let bookmarked = result.successValue else {
-                    print("Error getting bookmark status: \(result.failureValue ??? "nil").")
-                    return
-                }
-                tab?.isBookmarked = bookmarked
-            }
-        }
     }
+
     // MARK: Opening New Tabs
 
     func switchToPrivacyMode(isPrivate: Bool ) {
@@ -1057,8 +1033,7 @@ class BrowserViewController: UIViewController {
         }
 
         present(controller, animated: true, completion: nil)
-
-        LeanplumIntegration.sharedInstance.track(eventName: .userSharedWebpage)
+        LeanPlumClient.shared.track(event: .userSharedWebpage)
     }
 
     func updateFindInPageVisibility(visible: Bool) {
@@ -1289,13 +1264,15 @@ extension BrowserViewController: URLBarDelegate {
             SimpleToast().showAlertWithText(successMessage, bottomContainer: self.webViewContainer)
         }
         
-        guard let tab = tabManager.selectedTab, tab.url != nil else { return }
-        
-        // The logic of which actions appear when isnt final.
-        let pageActions = getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
-                                        findInPage: findInPageAction, presentableVC: self, success: successCallback)
+        guard let tab = tabManager.selectedTab, let urlString = tab.url?.absoluteString else { return }
 
-        presentSheetWith(actions: pageActions, on: self, from: button)
+        fetchBookmarkStatus(for: urlString).uponQueue(.main) {
+            let isBookmarked = $0.successValue ?? false
+            let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
+                                                 findInPage: findInPageAction, presentableVC: self, isBookmarked: isBookmarked,
+                                                 success: successCallback)
+            self.presentSheetWith(actions: pageActions, on: self, from: button)
+        }
     }
     
     func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
@@ -1314,14 +1291,15 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
         if let tab = tabManager.selectedTab {
-            if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
+            if let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode {
                 switch readerMode.state {
                 case .available:
                     enableReaderMode()
-
-                    LeanplumIntegration.sharedInstance.track(eventName: .useReaderView)
+                    UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
+                    LeanPlumClient.shared.track(event: .useReaderView)
                 case .active:
                     disableReaderMode()
+                    UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
                 case .unavailable:
                     break
                 }
@@ -1481,7 +1459,7 @@ extension BrowserViewController: URLBarDelegate {
             showHomePanelController(inline: false)
         }
 
-        LeanplumIntegration.sharedInstance.track(eventName: .interactWithURLBar)
+        LeanPlumClient.shared.track(event: .interactWithURLBar)
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
@@ -1504,7 +1482,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getHelper(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
+        guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
             return
         }
 
@@ -1598,75 +1576,75 @@ extension BrowserViewController: TabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.frame = webViewContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
-        KVOs.forEach { webView.addObserver(self, forKeyPath: $0, options: .new, context: nil) }
-        webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOContentSize, options: .new, context: nil)
+        KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
+        webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue, options: .new, context: nil)
         webView.uiDelegate = self
 
         let formPostHelper = FormPostHelper(tab: tab)
-        tab.addHelper(formPostHelper, name: FormPostHelper.name())
+        tab.addContentScript(formPostHelper, name: FormPostHelper.name())
 
         let readerMode = ReaderMode(tab: tab)
         readerMode.delegate = self
-        tab.addHelper(readerMode, name: ReaderMode.name())
+        tab.addContentScript(readerMode, name: ReaderMode.name())
 
         let favicons = FaviconManager(tab: tab, profile: profile)
-        tab.addHelper(favicons, name: FaviconManager.name())
+        tab.addContentScript(favicons, name: FaviconManager.name())
 
         // only add the logins helper if the tab is not a private browsing tab
         if !tab.isPrivate {
             let logins = LoginsHelper(tab: tab, profile: profile)
-            tab.addHelper(logins, name: LoginsHelper.name())
+            tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self
-        tab.addHelper(contextMenuHelper, name: ContextMenuHelper.name())
+        tab.addContentScript(contextMenuHelper, name: ContextMenuHelper.name())
 
         let errorHelper = ErrorPageHelper()
-        tab.addHelper(errorHelper, name: ErrorPageHelper.name())
+        tab.addContentScript(errorHelper, name: ErrorPageHelper.name())
 
         let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
         sessionRestoreHelper.delegate = self
-        tab.addHelper(sessionRestoreHelper, name: SessionRestoreHelper.name())
+        tab.addContentScript(sessionRestoreHelper, name: SessionRestoreHelper.name())
 
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
-        tab.addHelper(findInPageHelper, name: FindInPageHelper.name())
+        tab.addContentScript(findInPageHelper, name: FindInPageHelper.name())
 
         let noImageModeHelper = NoImageModeHelper(tab: tab)
-        tab.addHelper(noImageModeHelper, name: NoImageModeHelper.name())
+        tab.addContentScript(noImageModeHelper, name: NoImageModeHelper.name())
         
         let printHelper = PrintHelper(tab: tab)
-        tab.addHelper(printHelper, name: PrintHelper.name())
+        tab.addContentScript(printHelper, name: PrintHelper.name())
 
         let customSearchHelper = CustomSearchHelper(tab: tab)
-        tab.addHelper(customSearchHelper, name: CustomSearchHelper.name())
+        tab.addContentScript(customSearchHelper, name: CustomSearchHelper.name())
 
         let nightModeHelper = NightModeHelper(tab: tab)
-        tab.addHelper(nightModeHelper, name: NightModeHelper.name())
+        tab.addContentScript(nightModeHelper, name: NightModeHelper.name())
 
         // XXX: Bug 1390200 - Disable NSUserActivity/CoreSpotlight temporarily
         // let spotlightHelper = SpotlightHelper(tab: tab)
         // tab.addHelper(spotlightHelper, name: SpotlightHelper.name())
 
-        tab.addHelper(LocalRequestHelper(), name: LocalRequestHelper.name())
+        tab.addContentScript(LocalRequestHelper(), name: LocalRequestHelper.name())
 
         let historyStateHelper = HistoryStateHelper(tab: tab)
         historyStateHelper.delegate = self
-        tab.addHelper(historyStateHelper, name: HistoryStateHelper.name())
+        tab.addContentScript(historyStateHelper, name: HistoryStateHelper.name())
         
         if #available(iOS 11, *) {
             (tab.contentBlocker as? ContentBlockerHelper)?.setupForWebView()
         }
 
         let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
-        tab.addHelper(metadataHelper, name: MetadataParserHelper.name())
+        tab.addContentScript(metadataHelper, name: MetadataParserHelper.name())
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
         tab.cancelQueuedAlerts()
-        KVOs.forEach { webView.removeObserver(self, forKeyPath: $0) }
-        webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOContentSize)
+        KVOs.forEach { webView.removeObserver(self, forKeyPath: $0.rawValue) }
+        webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue)
         webView.uiDelegate = nil
         webView.scrollView.delegate = nil
         webView.removeFromSuperview()
@@ -1802,25 +1780,7 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            if let url = webView.url {
-                let absoluteString = url.absoluteString
-                // Don't bother fetching bookmark state for about/sessionrestore and about/home.
-                if url.isAboutURL {
-                    // Indeed, because we don't show the toolbar at all, don't even blank the star.
-                } else {
-                    profile.bookmarks.modelFactory >>== { [weak tab] in
-                        $0.isBookmarked(absoluteString)
-                            .uponQueue(DispatchQueue.main) {
-                            guard let isBookmarked = $0.successValue else {
-                                print("Error getting bookmark status: \($0.failureValue ??? "nil").")
-                                return
-                            }
-
-                            tab?.isBookmarked = isBookmarked
-                        }
-                    }
-                }
-            } else {
+            if webView.url == nil {
                 // The web view can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
                 tab.reload()
@@ -1847,7 +1807,7 @@ extension BrowserViewController: TabManagerDelegate {
             self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
         }
 
-        if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
+        if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
             urlBar.updateReaderModeState(readerMode.state)
             if readerMode.state == .active {
                 showReaderModeBar(animated: false)
@@ -1906,6 +1866,7 @@ extension BrowserViewController: TabManagerDelegate {
                 make.left.right.equalTo(self.view)
                 make.bottom.equalTo(self.webViewContainer)
             }
+            buttonToast.showToast(duration: duration)
         }
     }
     
@@ -1943,7 +1904,7 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         let request: URLRequest
-        if let formPostHelper = parentTab.getHelper(name: "FormPostHelper") as? FormPostHelper {
+        if let formPostHelper = parentTab.getContentScript(name: "FormPostHelper") as? FormPostHelper {
             request = formPostHelper.urlRequestForNavigationAction(navigationAction)
         } else {
             request = navigationAction.request
@@ -2118,7 +2079,7 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
         // Change the reader mode style on all tabs that have reader mode active
         for tabIndex in 0..<tabManager.count {
             if let tab = tabManager[tabIndex] {
-                if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
+                if let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode {
                     if readerMode.state == ReaderModeState.active {
                         readerMode.style = style
                     }
@@ -2250,7 +2211,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
         switch buttonType {
         case .settings:
-            if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode, readerMode.state == ReaderModeState.active {
+            if let readerMode = tabManager.selectedTab?.getContentScript(name: "ReaderMode") as? ReaderMode, readerMode.state == ReaderModeState.active {
                 var readerModeStyle = DefaultReaderModeStyle
                 if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
                     if let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
@@ -2429,7 +2390,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let addTab = { (rURL: URL, isPrivate: Bool) in
                     let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
-                    LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "Long Press Context Menu" as AnyObject])
+                    LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Long Press Context Menu" as AnyObject])
                     guard !self.topTabsVisible else {
                         return
                     }
@@ -2557,7 +2518,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 extension BrowserViewController {
     func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
         if error == nil {
-            LeanplumIntegration.sharedInstance.track(eventName: .saveImage)
+            LeanPlumClient.shared.track(event: .saveImage)
         }
     }
 }

@@ -823,7 +823,7 @@ extension SQLiteHistory: SyncableHistory {
                     // Uh oh, it changed locally.
                     // This might well just be a visit change, but we can't tell. Usually this conflict is harmless.
                     log.debug("Warning: history item \(place.guid) changed both locally and remotely. Comparing timestamps from different clocks!")
-                    if metadata.localModified! > modified {
+                    if let localModified = metadata.localModified, localModified > modified {
                         log.debug("Local changes overriding remote.")
 
                         // Update server modified time only. (Though it'll be overwritten again after a successful upload.)
@@ -915,42 +915,66 @@ extension SQLiteHistory: SyncableHistory {
         // A difficulty here: we don't want to fetch *all* visits, only some number of the most recent.
         // (It's not enough to only get new ones, because the server record should contain more.)
         //
-        // That's the greatest-N-per-group problem in SQL. Please read and understand the solution
-        // to this (particularly how the LEFT OUTER JOIN/HAVING clause works) before changing this query!
+        // That's the greatest-N-per-group problem. We used to do this in SQL, joining
+        // the visits table to a subselect of visits table, however, ran into OOM issues (Bug 1417034)
         //
-        // We can do this in a single query, rather than the N+1 that desktop takes.
+        // Now, we want a more dumb approach with no joins in SQL and doing group-by-site and limit-to-N in swift.
+        //
+        // We do this in a single query, rather than the N+1 that desktop takes.
+        //
         // We then need to flatten the cursor. We do that by collecting
         // places as a side-effect of the factory, producing visits as a result, and merging in memory.
 
         // Turn our lazy collection of integers into a comma-seperated string for the IN clause.
         let historyIDs = Array(places.keys)
-        let inClause = "siteID IN ( \(historyIDs.map(String.init).joined(separator: ",")) )"
 
         let sql =
-        "SELECT v1.siteID AS siteID, v1.date AS visitDate, v1.type AS visitType " +
-        "FROM (" +
-        "   SELECT * FROM \(TableVisits) WHERE \(inClause) AND type <> 0" +
-        ") AS v1 " +
-        "LEFT OUTER JOIN \(TableVisits) AS v2 ON v1.siteID = v2.siteID AND v1.date < v2.date " +
-        "GROUP BY v1.date " +
-        "HAVING COUNT(*) < ?" +
-        "ORDER BY v1.siteID, v1.date DESC"
+                "SELECT siteID, date AS visitDate, type AS visitType " +
+                "FROM \(TableVisits) " +
+                "WHERE siteID IN (\(historyIDs.map(String.init).joined(separator: ","))) " +
+                "ORDER BY siteID DESC, date DESC"
 
-        // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
-        var visits = [Int: [Visit]]()
-        historyIDs.forEach { visits[$0] = [] }
+        // We want to get a tuple Visit and Place here. We can either have an explicit tuple factory
+        // or we use an identity function, and make do without creating extra data structures.
+        // Since we have a known Out Of Memory issue here, let's avoid extra data structures.
+        let rowIdentity: (SDRow) -> SDRow = { $0 }
 
-        // Add each visit to its history item's list.
-        let visitsAccumulator: (SDRow) -> Void = { row in
-            let date = row.getTimestamp("visitDate")!
-            let type = VisitType(rawValue: row["visitType"] as! Int)!
-            let visit = Visit(date: date, type: type)
-            let id = row["siteID"] as! Int
-            visits[id]?.append(visit)
-        }
+        // We'll need to runQueryUnsafe so we get a LiveSQLiteCursor, i.e. we don't get the cursor
+        // contents into memory all at once.
+        return db.runQueryUnsafe(sql, args: nil, factory: rowIdentity) { (cursor: Cursor<SDRow>) -> [Int: [Visit]] in
+            // Accumulate a mapping of site IDs to list of visits. Each list should be shorter than visitLimit.
+            // Seed our accumulator with empty lists since we already know which IDs we will be fetching.
+            var visits = [Int: [Visit]]()
+            historyIDs.forEach { visits[$0] = [] }
 
-        let args: Args = [visitLimit]
-        return db.runQuery(sql, args: args, factory: visitsAccumulator) >>> {
+            // We need to iterate through these explicitly, without relying on the
+            // factory.
+            for row in cursor.makeIterator() {
+                guard let row = row, cursor.status == .success else {
+                    throw NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: cursor.statusMessage])
+                }
+                
+                guard let id = row["siteID"] as? Int,
+                    let existingCount = visits[id]?.count,
+                    existingCount < visitLimit else {
+                        continue
+                }
+
+                guard let date = row.getTimestamp("visitDate"),
+                    let visitType = row["visitType"] as? Int,
+                    let type = VisitType(rawValue: visitType) else {
+                        continue
+                }
+
+                let visit = Visit(date: date, type: type)
+
+                // Append the visits in descending date order, so we only get the
+                // most recent top N.
+                visits[id]?.append(visit)
+            }
+
+            return visits
+        } >>== { visits in
             // Join up the places map we received as input with our visits map.
             let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
                 guard let visitsList = visits[id], !visitsList.isEmpty else {
@@ -958,6 +982,10 @@ extension SQLiteHistory: SyncableHistory {
                 }
                 return (place, visitsList)
             }
+
+            let recentVisitCount = placesAndVisits.reduce(0) { $0 + $1.1.count }
+
+            log.info("Attaching \(placesAndVisits.count) places to \(recentVisitCount) most recent visits")
             return deferMaybe(placesAndVisits)
         }
     }

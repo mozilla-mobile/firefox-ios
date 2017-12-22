@@ -163,9 +163,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         adjustIntegration = AdjustIntegration(profile: profile)
 
-        let leanplum = LeanplumIntegration.sharedInstance
-        leanplum.setup(profile: profile)
-        leanplum.setEnabled(true)
+        if LeanPlumClient.shouldEnable(profile: profile) {
+            LeanPlumClient.shared.setup(profile: profile)
+            LeanPlumClient.shared.set(enabled: true)
+        }
 
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
@@ -377,7 +378,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
                 // FxA form filling requires a `signin` query param and host = fxa-signin
                 // Ex. firefox://fxa-signin?signin=<token>&someQuery=<data>...
-                guard let signinQuery = query["signin"] else {
+                guard query["signin"] != nil else {
                     break
                 }
                 let fxaParams: FxALaunchParams
@@ -392,9 +393,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func launchFxAFromURL(_ params: FxALaunchParams) {
-        guard params.query != nil else {
-            return
-        }
         self.browserViewController.presentSignInViewController(params)
     }
 
@@ -406,7 +404,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             self.browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
 
-        LeanplumIntegration.sharedInstance.track(eventName: .openedNewTab, withParameters: ["Source": "External App or Extension" as AnyObject])
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension" as AnyObject])
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
@@ -458,6 +456,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 self.launchFromURL(params)
             }
         }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -472,6 +472,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         defaults.synchronize()
 
         syncOnDidEnterBackground(application: application)
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .background, object: .app)
     }
 
     fileprivate func syncOnDidEnterBackground(application: UIApplication) {
@@ -645,7 +647,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     fileprivate func addBookmark(_ notification: UNNotification) {
         if let alertURL = notification.request.content.userInfo[TabSendURLKey] as? String,
             let title = notification.request.content.userInfo[TabSendTitleKey] as? String {
-            let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: alertURL), title: title, favicon: nil)
+            let tabState = TabState(isPrivate: false, desktopSite: false, url: URL(string: alertURL), title: title, favicon: nil)
                 browserViewController.addBookmark(tabState)
 
                 let userData = [QuickActions.TabURLKey: alertURL,

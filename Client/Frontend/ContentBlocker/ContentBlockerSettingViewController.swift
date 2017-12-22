@@ -70,7 +70,8 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
                 self.tableView.reloadData()
                 ContentBlockerHelper.prefsChanged()
 
-                LeanplumIntegration.sharedInstance.track(eventName: .trackingProtectionSettings, withParameters: ["Enabled option": option.rawValue as AnyObject])
+                LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Enabled option": option.rawValue as AnyObject])
+                UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockerHelper.PrefKeyEnabledState, extras: ["to": option.rawValue])
             })
         }
 
@@ -84,7 +85,8 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
                 self.tableView.reloadData()
                 ContentBlockerHelper.prefsChanged()
 
-                LeanplumIntegration.sharedInstance.track(eventName: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue as AnyObject])
+                LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue as AnyObject])
+                UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockerHelper.PrefKeyStrength, extras: ["to": option.rawValue])
             })
         }
 

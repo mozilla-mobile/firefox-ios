@@ -17,6 +17,7 @@ class LoginManagerTests: KIFTestCase {
         webRoot = SimplePageServer.start()
         generateLogins()
         BrowserUtils.dismissFirstRunUI()
+        BrowserUtils.configEarlGrey()
     }
     
     override func tearDown() {
@@ -151,7 +152,8 @@ class LoginManagerTests: KIFTestCase {
         list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
         tester().waitForView(withAccessibilityLabel: "d9@email.com")
         XCTAssertEqual(list.numberOfRows(inSection: 0), 1)
-        
+
+        tester().wait(forTimeInterval: 2)
         tester().tapView(withAccessibilityLabel: "Clear Search")
         // Filter by something that doesn't match anything
         tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
@@ -226,7 +228,7 @@ class LoginManagerTests: KIFTestCase {
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
         waitForMatcher(name: "Open & Fill")
-        
+
         tester().wait(forTimeInterval: 2)
         tester().waitForViewWithAccessibilityValue("a0.com/")
         XCTAssertEqual(UIPasteboard.general.string, "http://a0.com")

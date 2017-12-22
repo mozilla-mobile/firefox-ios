@@ -9,7 +9,7 @@ protocol ReadabilityTabHelperDelegate {
     func readabilityTabHelper(_ readabilityTabHelper: ReadabilityTabHelper, didFinishWithReadabilityResult result: ReadabilityResult)
 }
 
-class ReadabilityTabHelper: TabHelper {
+class ReadabilityTabHelper: TabContentScript {
     var delegate: ReadabilityTabHelperDelegate?
 
     class func name() -> String {

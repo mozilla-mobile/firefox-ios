@@ -32,6 +32,23 @@ open class BrowserDB {
         self.db = SwiftData(filename: file, key: secretKey, prevKey: nil, schema: schema, files: files)
     }
 
+    // Remove the DB op from the queue (by marking it cancelled), and if it is already running tell sqlite to cancel it.
+    // At any point the operation could complete on another thread, so it is held weakly.
+    // Swift compiler bug: failing to compile WeakRef<Cancellable> here.
+    public func cancel(databaseOperation: WeakRef<AnyObject>) {
+        weak var databaseOperation = databaseOperation.value as? Cancellable
+
+        db.suspendQueue()
+        defer {
+            db.resumeQueue()
+        }
+
+        databaseOperation?.cancel()
+        if databaseOperation?.running ?? false {
+            db.cancel()
+        }
+    }
+
     // For testing purposes or other cases where we want to ensure that this `BrowserDB`
     // instance has been initialized (schema is created/updated).
     public func touch() -> Success {
@@ -186,6 +203,14 @@ open class BrowserDB {
     func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
         return withConnection { connection -> Cursor<T> in
             connection.executeQuery(sql, factory: factory, withArgs: args)
+        }
+    }
+
+    func runQueryUnsafe<T, U>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T, block: @escaping (Cursor<T>) throws -> U) -> Deferred<Maybe<U>> {
+        return withConnection { connection -> U in
+            let cursor = connection.executeQueryUnsafe(sql, factory: factory, withArgs: args)
+            defer { cursor.close() }
+            return try block(cursor)
         }
     }
 

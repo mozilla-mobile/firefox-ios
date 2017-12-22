@@ -216,14 +216,14 @@ class URLBarView: UIView {
         }
 
         cancelButton.snp.makeConstraints { make in
+            make.leading.equalTo(self.safeArea.leading)
             make.centerY.equalTo(self.locationContainer)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
-            make.leading.equalTo(self)
         }
 
         backButton.snp.makeConstraints { make in
+            make.leading.equalTo(self.safeArea.leading).offset(URLBarViewUX.Padding)
             make.centerY.equalTo(self)
-            make.leading.equalTo(self).offset(URLBarViewUX.Padding)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
@@ -240,7 +240,7 @@ class URLBarView: UIView {
         }
 
         menuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.snp.trailing).offset(-URLBarViewUX.Padding)
+            make.trailing.equalTo(self.safeArea.trailing).offset(-URLBarViewUX.Padding)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
@@ -252,8 +252,8 @@ class URLBarView: UIView {
         }
         
         showQRScannerButton.snp.makeConstraints { make in
+            make.trailing.equalTo(self.safeArea.trailing)
             make.centerY.equalTo(self.locationContainer)
-            make.trailing.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
     }
@@ -556,13 +556,14 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView) {
-        guard var (locationText, isSearchQuery) = delegate?.urlBarDisplayTextForURL(locationView.url as URL?) else { return }
+        guard let (locationText, isSearchQuery) = delegate?.urlBarDisplayTextForURL(locationView.url as URL?) else { return }
 
+        var overlayText = locationText
         // Make sure to use the result from urlBarDisplayTextForURL as it is responsible for extracting out search terms when on a search page
         if let text = locationText, let url = URL(string: text), let host = url.host, AppConstants.MOZ_PUNYCODE {
-            locationText = url.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
+            overlayText = url.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         }
-        enterOverlayMode(locationText, pasted: false, search: isSearchQuery)
+        enterOverlayMode(overlayText, pasted: false, search: isSearchQuery)
     }
 
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView) {

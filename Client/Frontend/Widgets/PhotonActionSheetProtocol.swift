@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Storage
+import Deferred
 
 protocol PhotonActionSheetProtocol {
     var tabManager: TabManager { get }
@@ -45,6 +46,7 @@ extension PhotonActionSheetProtocol {
 
         let openBookmarks = PhotonActionSheetItem(title: Strings.AppMenuBookmarksTitleString, iconString: "menu-panel-Bookmarks") { action in
             tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
+            UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .bookmarksPanel, value: .appMenu)
         }
         
         let openHistory = PhotonActionSheetItem(title: Strings.AppMenuHistoryTitleString, iconString: "menu-panel-History") { action in
@@ -113,6 +115,7 @@ extension PhotonActionSheetProtocol {
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
                        findInPage:  @escaping () -> Void,
                        presentableVC: PresentableVC,
+                       isBookmarked: Bool,
                        success: @escaping (String) -> Void) -> Array<[PhotonActionSheetItem]> {
         
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
@@ -124,6 +127,7 @@ extension PhotonActionSheetProtocol {
             guard let url = tab.url?.displayURL else { return }
 
             self.profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
+            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
             success(Strings.AppMenuAddToReadingListConfirmMessage)
         }
 
@@ -144,7 +148,7 @@ extension PhotonActionSheetProtocol {
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                                 withUserData: userData,
                                                                                 toApplication: UIApplication.shared)
-            tab.isBookmarked = true
+            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
             success(Strings.AppMenuAddBookmarkConfirmMessage)
         }
         
@@ -155,7 +159,7 @@ extension PhotonActionSheetProtocol {
             self.profile.bookmarks.modelFactory >>== {
                 $0.removeByURL(absoluteString).uponQueue(.main) { res in
                     if res.isSuccess {
-                        tab.isBookmarked = false
+                        UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
                         success(Strings.AppMenuRemoveBookmarkConfirmMessage)
                     }
                 }
@@ -215,7 +219,7 @@ extension PhotonActionSheetProtocol {
 
         // Disable bookmarking and reading list if the URL is too long.
         if !tab.urlIsTooLong {
-            topActions.append(tab.isBookmarked ? removeBookmark : bookmarkPage)
+            topActions.append(isBookmarked ? removeBookmark : bookmarkPage)
 
             if tab.readerModeAvailableOrActive {
                 topActions.append(addReadingList)
@@ -223,6 +227,15 @@ extension PhotonActionSheetProtocol {
         }
 
         return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, sendToDevice, closeTab], [share]]
+    }
+
+    func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
+        return self.profile.bookmarks.modelFactory.bind {
+            guard let factory = $0.successValue else {
+                return deferMaybe(false)
+            }
+            return factory.isBookmarked(url)
+        }
     }
 }
 

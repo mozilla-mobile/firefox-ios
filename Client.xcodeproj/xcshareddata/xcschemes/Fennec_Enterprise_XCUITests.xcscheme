@@ -182,6 +182,24 @@
                   Identifier = "HomePageUITest">
                </Test>
                <Test
+                  Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testReloadPreservesMobileOrDesktopSite()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testScrollsToTopWithMultipleTabs()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateMode()">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
+               </Test>
+               <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">
                </Test>
                <Test

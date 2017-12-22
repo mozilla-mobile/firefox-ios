@@ -39,6 +39,7 @@ let NewTabChoiceSettings = "NewTabChoiceSettings"
 let DisablePasscodeSettings = "DisablePasscodeSettings"
 let ChangePasscodeSettings = "ChangePasscodeSettings"
 let LockedLoginsSettings = "LockedLoginsSettings"
+let TabTrayLongPressMenu = "TabTrayLongPressMenu"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -114,13 +115,22 @@ class Action {
 
     static let ReloadURL = "ReloadURL"
 
+    static let OpenNewTabFromTabTray = "OpenNewTabFromTabTray"
+
     static let TogglePrivateMode = "TogglePrivateBrowing"
+    static let TogglePrivateModeFromTabBarHomePanel = "TogglePrivateModeFromTabBarHomePanel"
+    static let TogglePrivateModeFromTabBarBrowserTab = "TogglePrivateModeFromTabBarBrowserTab"
+    static let TogglePrivateModeFromTabBarNewTab = "TogglePrivateModeFromTabBarNewTab"
+
     static let ToggleRequestDesktopSite = "ToggleRequestDesktopSite"
     static let ToggleNightMode = "ToggleNightMode"
     static let ToggleNoImageMode = "ToggleNoImageMode"
 
     static let Bookmark = "Bookmark"
     static let BookmarkThreeDots = "BookmarkThreeDots"
+
+    static let OpenPrivateTabLongPressTabsButton = "OpenPrivateTabLongPressTabsButton"
+    static let OpenNewTabLongPressTabsButton = "OpenNewTabLongPressTabsButton"
 
     static let SetPasscode = "SetPasscode"
     static let SetPasscodeTypeOnce = "SetPasscodeTypeOnce"
@@ -133,6 +143,12 @@ class Action {
     static let DisablePasscodeTypeIncorrectPasscode = "DisablePasscodeTypeIncorrectPasscode"
 
     static let TogglePocketInNewTab = "TogglePocketInNewTab"
+    static let ToggleBookmarksInNewTab = "ToggleBookmarksInNewTab"
+    static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
+
+    static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"
+    static let SelectNewTabAsBookmarksPage = "SelectNewTabAsBookmarksPage"
+    static let SelectNewTabAsHistoryPage = "SelectNewTabAsHistoryPage"
 
     static let AcceptClearPrivateData = "AcceptClearPrivateData"
 
@@ -140,6 +156,10 @@ class Action {
     static let ToggleTrackingProtectionSettingAlwaysOn = "ToggleTrackingProtectionSettingAlwaysOn"
     static let ToggleTrackingProtectionSettingPrivateOnly = "ToggleTrackingProtectionSettingPrivateOnly"
     static let ToggleTrackingProtectionSettingOff = "ToggleTrackingProtectionSettingOff"
+
+    static let CloseTab = "CloseTab"
+    static let CloseTabFromPageOptions = "CloseTabFromPageOptions"
+    static let CloseTabFromTabTrayLongPressMenu = "CloseTabFromTabTrayLongPressMenu"
 }
 
 private var isTablet: Bool {
@@ -177,6 +197,8 @@ class FxUserState: UserState {
     var nightMode = false
 
     var pocketInNewTab = false
+    var bookmarksInNewTab = true
+    var historyInNewTab = true
 
     var fxaUsername: String? = nil
     var fxaPassword: String? = nil
@@ -263,8 +285,22 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
 
     map.addScreenState(NewTabScreen) { screenState in
         screenState.noop(to: HomePanelsScreen)
+        if isTablet {
+            screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
+        } else {
+            screenState.gesture(to: TabTray) {
+                if (app.buttons["TabToolbar.tabsButton"].exists) {
+                    app.buttons["TabToolbar.tabsButton"].tap()
+                } else {
+                    app.buttons["URLBarView.tabsButton"].tap()
+                }
+            }
+        }
         makeURLBarAvailable(screenState)
         screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarNewTab, if: "tablet == true") { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
     }
 
     map.addScreenState(URLBarLongPressMenu) { screenState in
@@ -323,9 +359,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         screenState.dismissOnUse = true
         // Would like to use app.otherElements.deviceStatusBars.networkLoadingIndicators.element
         // but this means exposing some of SnapshotHelper to another target.
-        screenState.onEnterWaitFor("exists != true",
-                                   element: app.progressIndicators.element(boundBy: 0),
-                                   if: "waitForLoading == true")
+        if !(app.progressIndicators.element(boundBy: 0).exists) {
+            screenState.onEnterWaitFor("exists != true", element: app.progressIndicators.element(boundBy: 0), if: "waitForLoading == true")
+        } else {
+            screenState.onEnterWaitFor(element: app.progressIndicators.element(boundBy: 0), if: "waitForLoading == false")
+        }
 
         screenState.noop(to: BrowserTab, if: "waitForLoading == true")
         screenState.noop(to: BasicAuthDialog, if: "waitForLoading == false")
@@ -344,6 +382,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         screenState.tap(app.buttons["HomePanels.Bookmarks"], to: HomePanel_Bookmarks)
         screenState.tap(app.buttons["HomePanels.History"], to: HomePanel_History)
         screenState.tap(app.buttons["HomePanels.ReadingList"], to: HomePanel_ReadingList)
+
+        screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarHomePanel, if: "tablet == true") { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
 
         // Workaround to bug Bug 1417522
         if isTablet {
@@ -434,12 +476,29 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
             userState.pocketInNewTab = !userState.pocketInNewTab
             table.switches["ASPocketStoriesVisible"].tap()
         }
+        screenState.gesture(forAction: Action.ToggleBookmarksInNewTab) { userState in
+            userState.bookmarksInNewTab = !userState.bookmarksInNewTab
+            table.switches["ASBookmarkHighlightsVisible"].tap()
+        }
+        screenState.gesture(forAction: Action.ToggleHistoryInNewTab) { userState in
+            userState.historyInNewTab = !userState.historyInNewTab
+            table.switches["ASRecentHighlightsVisible"].tap()
+        }
         screenState.backAction = navigationControllerBackAction
     }
 
     map.addScreenState(NewTabChoiceSettings) { screenState in
-        let table = app.tables.element(boundBy: 0)
+        let table = app.tables["NewTabPage.Setting.Options"]
         screenState.backAction = navigationControllerBackAction
+        screenState.gesture(forAction: Action.SelectNewTabAsBlankPage) { UserState in
+            table.cells["Blank"].tap()
+        }
+        screenState.gesture(forAction: Action.SelectNewTabAsBookmarksPage) { UserState in
+            table.cells["Bookmarks"].tap()
+        }
+        screenState.gesture(forAction: Action.SelectNewTabAsHistoryPage) { UserState in
+            table.cells["History"].tap()
+        }
     }
 
     map.addScreenState(HomePageSettings) { screenState in
@@ -581,11 +640,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
     }
 
     map.addScreenState(Intro_FxASignin) { screenState in
-       screenState.tap(app.navigationBars["Client.FxAContentView"].buttons.element(boundBy: 0), to: HomePanelsScreen)
+        screenState.tap(app.navigationBars["Client.FxAContentView"].buttons.element(boundBy: 0), to: HomePanelsScreen)
     }
 
     map.addScreenState(TabTray) { screenState in
-        screenState.tap(app.buttons["TabTrayController.addTabButton"], to: NewTabScreen)
+        screenState.tap(app.buttons["TabTrayController.addTabButton"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
         screenState.tap(app.buttons["TabTrayController.maskButton"], forAction: Action.TogglePrivateMode) { userState in
             userState.isPrivate = !userState.isPrivate
         }
@@ -593,6 +652,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
 
         screenState.onEnter { userState in
             userState.numTabs = Int(app.collectionViews.cells.count)
+        }
+    }
+
+    // This menu is only available for iPhone, NOT for iPad, no menu when long tapping on tabs button
+    if !isTablet {
+        map.addScreenState(TabTrayLongPressMenu) { screenState in
+            screenState.dismissOnUse = true
+            screenState.tap(app.buttons["New Tab"], forAction: Action.OpenNewTabLongPressTabsButton, transitionTo: NewTabScreen)
+            screenState.tap(app.buttons["New Private Tab"], forAction: Action.OpenPrivateTabLongPressTabsButton, transitionTo: NewTabScreen) { userState in
+                userState.isPrivate = !userState.isPrivate
+            }
+            screenState.tap(app.buttons["Close Tab"], forAction: Action.CloseTabFromTabTrayLongPressMenu, Action.CloseTab, transitionTo: HomePanelsScreen)
         }
     }
 
@@ -642,6 +713,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         let reloadButton = app.buttons["TabToolbar.stopReloadButton"]
         screenState.press(reloadButton, to: ReloadLongPressMenu)
         screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
+
+        // For iPad there is no long press on tabs button
+        if !isTablet {
+            let tabsButton = app.buttons["TabToolbar.tabsButton"]
+            screenState.press(tabsButton, to: TabTrayLongPressMenu)
+        }
+
+        screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarBrowserTab) { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
     }
 
     map.addScreenState(ReloadLongPressMenu) { screenState in
@@ -674,6 +755,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
     map.addScreenState(PageOptionsMenu) {screenState in
         screenState.tap(app.tables["Context Menu"].cells["menu-FindInPage"], to: FindInPage)
         screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
+        screenState.tap(app.tables["Context Menu"].cells["action_remove"], forAction: Action.CloseTabFromPageOptions, Action.CloseTab, transitionTo: HomePanelsScreen)
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
     }
@@ -724,7 +806,7 @@ extension Navigator where T == FxUserState {
     func openNewURL(urlString: String) {
         self.goto(TabTray)
         createNewTab()
-        self.openURL(urlString: urlString)
+        self.openURL(urlString)
     }
 
     // Closes all Tabs from the option in TabTrayMenu

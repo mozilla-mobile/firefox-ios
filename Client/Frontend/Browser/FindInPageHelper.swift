@@ -11,7 +11,7 @@ protocol FindInPageHelperDelegate: class {
     func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int)
 }
 
-class FindInPageHelper: TabHelper {
+class FindInPageHelper: TabContentScript {
     weak var delegate: FindInPageHelperDelegate?
     fileprivate weak var tab: Tab?
 
