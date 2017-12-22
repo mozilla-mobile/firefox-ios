@@ -24,9 +24,9 @@ open class Bytes {
     open class func generateGUID() -> GUID {
         // Turns the standard NSData encoding into the URL-safe variant that Sync expects.
         return generateRandomBytes(9)
-            .base64EncodedString(options: NSData.Base64EncodingOptions())
-            .replacingOccurrences(of: "/", with: "_", options: NSString.CompareOptions(), range: nil)
-            .replacingOccurrences(of: "+", with: "-", options: NSString.CompareOptions(), range: nil)
+            .base64EncodedString(options: [])
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "+", with: "-")
     }
 
     open class func decodeBase64(_ b64: String) -> Data? {
