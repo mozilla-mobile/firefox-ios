@@ -529,7 +529,7 @@ fileprivate class SuggestionCell: UITableViewCell {
 
     @objc
     func SELdidLongPressSuggestion(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.began {
+        if recognizer.state == .began {
             if let button = recognizer.view as! UIButton? {
                 delegate?.suggestionCell(self, didLongPressSuggestion: button.titleLabel!.text!)
             }

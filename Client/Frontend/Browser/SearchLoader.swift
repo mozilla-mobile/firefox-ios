@@ -57,7 +57,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
             currentDbQuery = deferred as? Cancellable
 
-            deferred.uponQueue(DispatchQueue.main) { result in
+            deferred.uponQueue(.main) { result in
                 defer {
                     self.currentDbQuery = nil
                 }

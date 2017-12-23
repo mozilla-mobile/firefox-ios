@@ -98,7 +98,7 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didLongPressBack(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.began {
+        if recognizer.state == .began {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressBack(toolbar, button: toolbar.backButton)
         }
     }
@@ -116,7 +116,7 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didLongPressForward(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.began {
+        if recognizer.state == .began {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressForward(toolbar, button: toolbar.forwardButton)
         }
     }
@@ -134,7 +134,7 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didLongPressStopReload(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.began && !loading {
+        if recognizer.state == .began && !loading {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressReload(toolbar, button: toolbar.stopReloadButton)
         }
     }

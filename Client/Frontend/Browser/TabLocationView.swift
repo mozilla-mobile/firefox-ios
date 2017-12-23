@@ -227,7 +227,7 @@ class TabLocationView: UIView {
     }
 
     func SELlongPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.began {
+        if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressReaderMode(self)
         }
     }
@@ -241,7 +241,7 @@ class TabLocationView: UIView {
     }
 
     func SELlongPressLocation(_ recognizer: UITapGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.began {
+        if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressLocation(self)
         }
     }

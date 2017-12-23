@@ -14,7 +14,7 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
         ExtensionUtils.extractSharedItemFromExtensionContext(context, completionHandler: { (item, error) -> Void in
             if let item = item, error == nil && item.isShareable {
                 let profile = BrowserProfile(localName: "profile")
-                profile.queue.addToQueue(item).uponQueue(DispatchQueue.main) { _ in
+                profile.queue.addToQueue(item).uponQueue(.main) { _ in
                     profile.shutdown()
                     context.completeRequest(returningItems: [], completionHandler: nil)
                 }

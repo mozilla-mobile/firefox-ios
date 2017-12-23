@@ -24,7 +24,7 @@ class FaviconManager: TabContentScript {
 
         if let path = Bundle.main.path(forResource: "Favicons", ofType: "js") {
             if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
+                let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -112,7 +112,7 @@ class FaviconManager: TabContentScript {
                     }
                 }
             }
-            loadFavicons(tab, profile: profile, favicons: favicons).uponQueue(DispatchQueue.main) { result in
+            loadFavicons(tab, profile: profile, favicons: favicons).uponQueue(.main) { result in
                 let results = result.flatMap({ $0.successValue })
                 let faviconsReadOnly = favicons
                 if results.count == 1 && faviconsReadOnly[0].type == .guess {

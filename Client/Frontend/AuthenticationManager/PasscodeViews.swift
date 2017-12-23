@@ -141,7 +141,7 @@ class PasscodePane: UIView {
 
     init(title: String? = nil, passcodeSize: Int = 4) {
         codeInputView = PasscodeInputView(passcodeSize: passcodeSize)
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
         titleLabel.text = title

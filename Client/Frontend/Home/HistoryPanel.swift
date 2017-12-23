@@ -67,7 +67,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "History List"
-        updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
+        updateSyncedDevicesCount().uponQueue(.main) { result in
             self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
         }
     }
@@ -86,7 +86,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         if profile.hasSyncableAccount() {
             syncDetailText = " "
-            updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
+            updateSyncedDevicesCount().uponQueue(.main) { result in
                 self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
             }
         } else {
@@ -154,14 +154,14 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func resyncHistory() {
-        profile.syncManager.syncHistory().uponQueue(DispatchQueue.main) { result in
+        profile.syncManager.syncHistory().uponQueue(.main) { result in
             if result.isSuccess {
                 self.reloadData()
             } else {
                 self.endRefreshing()
             }
 
-            self.updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
+            self.updateSyncedDevicesCount().uponQueue(.main) { result in
                 self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
             }
         }
@@ -196,7 +196,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     override func reloadData() {
-        self.fetchData().uponQueue(DispatchQueue.main) { result in
+        self.fetchData().uponQueue(.main) { result in
             if let data = result.successValue {
                 self.setData(data)
                 self.tableView.reloadData()
@@ -462,7 +462,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             // Deferred instead of using callbacks.
             self.profile.history.removeHistoryForURL(site.url)
                 .upon { res in
-                    self.fetchData().uponQueue(DispatchQueue.main) { result in
+                    self.fetchData().uponQueue(.main) { result in
                         // If a section will be empty after removal, we must remove the section itself.
                         if let data = result.successValue {
 

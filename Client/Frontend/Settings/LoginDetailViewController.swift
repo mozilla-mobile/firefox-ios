@@ -65,7 +65,7 @@ class LoginDetailViewController: SensitiveViewController {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginDetailViewController.dismissAlertController), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -112,7 +112,7 @@ class LoginDetailViewController: SensitiveViewController {
     deinit {
         let notificationCenter = NotificationCenter.default
         notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
     }
 
     override func viewDidLayoutSubviews() {
@@ -281,9 +281,9 @@ extension LoginDetailViewController {
     }
 
     func deleteLogin() {
-        profile.logins.hasSyncedLogins().uponQueue(DispatchQueue.main) { yes in
+        profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
-                self.profile.logins.removeLoginByGUID(self.login.guid).uponQueue(DispatchQueue.main) { _ in
+                self.profile.logins.removeLoginByGUID(self.login.guid).uponQueue(.main) { _ in
                     _ = self.navigationController?.popViewController(animated: true)
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
@@ -294,7 +294,7 @@ extension LoginDetailViewController {
 
     func SELonProfileDidFinishSyncing() {
         // Reload details after syncing.
-        profile.logins.getLoginDataForGUID(login.guid).uponQueue(DispatchQueue.main) { result in
+        profile.logins.getLoginDataForGUID(login.guid).uponQueue(.main) { result in
             if let syncedLogin = result.successValue {
                 self.login = syncedLogin
             }
@@ -307,12 +307,12 @@ extension LoginDetailViewController {
         let cell = tableView.cellForRow(at: InfoItem.usernameItem.indexPath) as! LoginTableViewCell
         cell.descriptionLabel.becomeFirstResponder()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(LoginDetailViewController.SELdoneEditing))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SELdoneEditing))
     }
 
     func SELdoneEditing() {
         editingInfo = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginDetailViewController.SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(SELedit))
         
         defer {
             // Required to get UI to reload with changed state
