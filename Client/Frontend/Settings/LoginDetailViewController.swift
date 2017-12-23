@@ -133,8 +133,8 @@ class LoginDetailViewController: SensitiveViewController {
         let itemsToShowFullWidthSeperator: [InfoItem] = [.deleteItem]
         itemsToShowFullWidthSeperator.forEach { item in
             let cell = tableView.cellForRow(at: IndexPath(row: item.rawValue, section: 0))
-            cell?.separatorInset = UIEdgeInsets.zero
-            cell?.layoutMargins = UIEdgeInsets.zero
+            cell?.separatorInset = .zero
+            cell?.layoutMargins = .zero
             cell?.preservesSuperviewLayoutMargins = false
         }
     }

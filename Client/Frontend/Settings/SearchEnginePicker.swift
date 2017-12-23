@@ -26,7 +26,7 @@ class SearchEnginePicker: UITableViewController {
         cell.textLabel?.text = engine.shortName
         cell.imageView?.image = engine.image.createScaled(CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize))
         if engine.shortName == selectedSearchEngineName {
-            cell.accessoryType = UITableViewCellAccessoryType.checkmark
+            cell.accessoryType = .checkmark
         }
         return cell
     }
@@ -34,11 +34,11 @@ class SearchEnginePicker: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let engine = engines[indexPath.item]
         delegate?.searchEnginePicker(self, didSelectSearchEngine: engine)
-        tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCellAccessoryType.checkmark
+        tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
     }
 
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCellAccessoryType.none
+        tableView.cellForRow(at: indexPath)?.accessoryType = .none
     }
 
     func cancel() {

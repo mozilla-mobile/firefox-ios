@@ -200,7 +200,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         //search settings icon
         let searchButton = UIButton()
-        searchButton.setImage(UIImage(named: "quickSearch"), for: UIControlState())
+        searchButton.setImage(UIImage(named: "quickSearch"), for: [])
         searchButton.imageView?.contentMode = UIViewContentMode.center
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
         searchButton.addTarget(self, action: #selector(SearchViewController.SELdidClickSearchButton), for: UIControlEvents.touchUpInside)
@@ -224,7 +224,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         leftEdge = searchButton.snp.right
         for engine in quickSearchEngines {
             let engineButton = UIButton()
-            engineButton.setImage(engine.image, for: UIControlState())
+            engineButton.setImage(engine.image, for: [])
             engineButton.imageView?.contentMode = UIViewContentMode.scaleAspectFit
             engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
             engineButton.addTarget(self, action: #selector(SearchViewController.SELdidSelectEngine(_:)), for: UIControlEvents.touchUpInside)
@@ -482,9 +482,9 @@ fileprivate class SuggestionCell: UITableViewCell {
 
         isAccessibilityElement = false
         accessibilityLabel = nil
-        layoutMargins = UIEdgeInsets.zero
-        separatorInset = UIEdgeInsets.zero
-        selectionStyle = UITableViewCellSelectionStyle.none
+        layoutMargins = .zero
+        separatorInset = .zero
+        selectionStyle = .none
 
         container.backgroundColor = UIColor.clear
         contentView.backgroundColor = UIColor.clear
@@ -504,14 +504,14 @@ fileprivate class SuggestionCell: UITableViewCell {
 
             for suggestion in suggestions {
                 let button = SuggestionButton()
-                button.setTitle(suggestion, for: UIControlState())
+                button.setTitle(suggestion, for: [])
                 button.addTarget(self, action: #selector(SuggestionCell.SELdidSelectSuggestion(_:)), for: UIControlEvents.touchUpInside)
                 button.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(SuggestionCell.SELdidLongPressSuggestion(_:))))
 
                 // If this is the first image, add the search icon.
                 if container.subviews.isEmpty {
                     let image = UIImage(named: SearchViewControllerUX.SearchImage)
-                    button.setImage(image, for: UIControlState())
+                    button.setImage(image, for: [])
                     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
                 }
 
@@ -610,7 +610,7 @@ fileprivate class SuggestionButton: InsetButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        setTitleColor(UIConstants.HighlightBlue, for: UIControlState())
+        setTitleColor(UIConstants.HighlightBlue, for: [])
         setTitleColor(UIColor.white, for: UIControlState.highlighted)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         backgroundColor = SearchViewControllerUX.SuggestionBackgroundColor

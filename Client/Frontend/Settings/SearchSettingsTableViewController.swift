@@ -85,7 +85,7 @@ class SearchSettingsTableViewController: UITableViewController {
             case ItemDefaultEngine:
                 engine = model.defaultEngine
                 cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
-                cell.editingAccessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
                 cell.accessibilityValue = engine.shortName
                 cell.textLabel?.text = engine.shortName
@@ -131,7 +131,7 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.selectionStyle = .none
             } else {
                 cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
-                cell.editingAccessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = Strings.SettingsAddCustomEngineTitle
                 cell.accessibilityIdentifier = "customEngineViewButton"
                 cell.textLabel?.text = Strings.SettingsAddCustomEngine
@@ -139,7 +139,7 @@ class SearchSettingsTableViewController: UITableViewController {
         }
 
         // So that the seperator line goes all the way to the left edge.
-        cell.separatorInset = UIEdgeInsets.zero
+        cell.separatorInset = .zero
 
         return cell
     }

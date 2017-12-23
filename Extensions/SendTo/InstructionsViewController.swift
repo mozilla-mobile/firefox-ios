@@ -44,7 +44,7 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
     view.addSubview(label1)
     label1.text = introText
     label1.numberOfLines = 0
-    label1.lineBreakMode = NSLineBreakMode.byWordWrapping
+    label1.lineBreakMode = .byWordWrapping
     label1.font = InstructionsViewControllerUX.TextFont
     label1.textColor = InstructionsViewControllerUX.TextColor
     label1.textAlignment = NSTextAlignment.center
@@ -57,7 +57,7 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
     let label2 = UILabel()
     view.addSubview(label2)
     label2.numberOfLines = 0
-    label2.lineBreakMode = NSLineBreakMode.byWordWrapping
+    label2.lineBreakMode = .byWordWrapping
     label2.font = InstructionsViewControllerUX.TextFont
     label2.textColor = InstructionsViewControllerUX.TextColor
     label2.textAlignment = NSTextAlignment.center

@@ -60,8 +60,8 @@ class LoginListViewController: SensitiveViewController {
     fileprivate lazy var selectionButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = LoginListUX.selectionButtonFont
-        button.setTitle(self.selectAllTitle, for: UIControlState())
-        button.setTitleColor(LoginListUX.selectionButtonTextColor, for: UIControlState())
+        button.setTitle(self.selectAllTitle, for: [])
+        button.setTitleColor(LoginListUX.selectionButtonTextColor, for: [])
         button.backgroundColor = LoginListUX.selectionButtonBackground
         button.addTarget(self, action: #selector(LoginListViewController.tappedSelectionButton), for: .touchUpInside)
         return button
@@ -171,9 +171,9 @@ class LoginListViewController: SensitiveViewController {
 
     fileprivate func toggleSelectionTitle() {
         if loginSelectionController.selectedCount == loginDataSource.count {
-            selectionButton.setTitle(deselectAllTitle, for: UIControlState())
+            selectionButton.setTitle(deselectAllTitle, for: [])
         } else {
-            selectionButton.setTitle(selectAllTitle, for: UIControlState())
+            selectionButton.setTitle(selectAllTitle, for: [])
         }
     }
 

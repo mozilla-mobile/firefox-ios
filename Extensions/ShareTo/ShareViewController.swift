@@ -95,11 +95,11 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
             target: self,
             action: #selector(ShareDialogController.cancel)
         )
-        navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarCancelButtonFont], for: UIControlState())
+        navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarCancelButtonFont], for: [])
         navItem.leftBarButtonItem?.accessibilityIdentifier = "ShareDialogController.navigationItem.leftBarButtonItem"
 
         navItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Add", tableName: "ShareTo", comment: "Add button in the share dialog"), style: UIBarButtonItemStyle.done, target: self, action: #selector(ShareDialogController.add))
-        navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarAddButtonFont], for: UIControlState())
+        navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarAddButtonFont], for: [])
 
         let logo = UIImageView(image: UIImage(named: "Icon-Small"))
         logo.contentMode = UIViewContentMode.scaleAspectFit // TODO Can go away if icon is provided in correct size
@@ -112,7 +112,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         let titleView = UILabel()
         titleView.translatesAutoresizingMaskIntoConstraints = false
         titleView.numberOfLines = ShareDialogControllerUX.ItemTitleMaxNumberOfLines
-        titleView.lineBreakMode = NSLineBreakMode.byTruncatingTail
+        titleView.lineBreakMode = .byTruncatingTail
         titleView.text = item.title
         titleView.font = ShareDialogControllerUX.ItemTitleFontMedium
         view.addSubview(titleView)
@@ -122,7 +122,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         let linkView = UILabel()
         linkView.translatesAutoresizingMaskIntoConstraints = false
         linkView.numberOfLines = ShareDialogControllerUX.ItemLinkMaxNumberOfLines
-        linkView.lineBreakMode = NSLineBreakMode.byTruncatingTail
+        linkView.lineBreakMode = .byTruncatingTail
         linkView.text = item.url
         linkView.font = ShareDialogControllerUX.ItemLinkFont
         view.addSubview(linkView)
@@ -145,8 +145,8 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
 
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.separatorInset = UIEdgeInsets.zero
-        tableView.layoutMargins = UIEdgeInsets.zero
+        tableView.separatorInset = .zero
+        tableView.layoutMargins = .zero
         tableView.isUserInteractionEnabled = true
         tableView.delegate = self
         tableView.allowsSelection = true
@@ -219,9 +219,9 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         let cell = UITableViewCell()
         cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGray : ShareDialogControllerUX.TableRowTextColor
         cell.textLabel?.font = ShareDialogControllerUX.TableRowFont
-        cell.accessoryType = selectedShareDestinations.contains(ShareDestinations[indexPath.row].code) ? UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
+        cell.accessoryType = selectedShareDestinations.contains(ShareDestinations[indexPath.row].code) ? .checkmark : .none
         cell.tintColor = ShareDialogControllerUX.TableRowTintColor
-        cell.layoutMargins = UIEdgeInsets.zero
+        cell.layoutMargins = .zero
         cell.textLabel?.text = ShareDestinations[indexPath.row].name
         cell.textLabel?.adjustsFontSizeToFitWidth = true
         cell.textLabel?.minimumScaleFactor = ShareDialogControllerUX.TableRowFontMinScale

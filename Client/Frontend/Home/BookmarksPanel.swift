@@ -495,8 +495,8 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
         textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
 
         imageView?.image = UIImage(named: "bookmarkFolder")
-        accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-        separatorInset = UIEdgeInsets.zero
+        accessoryType = .disclosureIndicator
+        separatorInset = .zero
     }
 
     override func layoutSubviews() {

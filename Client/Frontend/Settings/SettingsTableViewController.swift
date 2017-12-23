@@ -77,9 +77,9 @@ class Setting: NSObject {
         }
         cell.accessibilityTraits = UIAccessibilityTraitButton
         cell.indentationWidth = 0
-        cell.layoutMargins = UIEdgeInsets.zero
+        cell.layoutMargins = .zero
         // So that the separator line goes all the way to the left edge.
-        cell.separatorInset = UIEdgeInsets.zero
+        cell.separatorInset = .zero
     }
 
     // Called when the pref is tapped.
