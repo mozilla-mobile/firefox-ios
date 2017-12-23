@@ -139,7 +139,7 @@ class ContentBlockerHelper {
     }
 
     func setupForWebView() {
-        NotificationCenter.default.addObserver(self, selector: #selector(ContentBlockerHelper.updateTab), name: NSNotification.Name(rawValue: NotificationContentBlockerUpdateNeeded), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTab), name: NSNotification.Name(rawValue: NotificationContentBlockerUpdateNeeded), object: nil)
         addActiveRulesToTab()
     }
 

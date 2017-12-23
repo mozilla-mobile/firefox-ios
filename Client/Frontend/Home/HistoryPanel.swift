@@ -36,7 +36,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     var refreshControl: UIRefreshControl?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(HistoryPanel.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(HistoryPanel.longPress))
     }()
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
@@ -56,7 +56,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Lifecycle
     init() {
         super.init(nibName: nil, bundle: nil)
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanel.notificationReceived(_:)), name: $0, object: nil) }
+        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanel.notificationReceived), name: $0, object: nil) }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -170,7 +170,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Refreshing TableView
     func addRefreshControl() {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(HistoryPanel.refresh), for: UIControlEvents.valueChanged)
+        refresh.addTarget(self, action: #selector(HistoryPanel.refresh), for: .valueChanged)
         self.refreshControl = refresh
         self.tableView.refreshControl = refresh
     }

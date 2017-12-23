@@ -32,7 +32,7 @@ class DynamicFontHelper: NSObject {
      * Starts monitoring the ContentSizeCategory chantes
      */
     func startObserving() {
-        NotificationCenter.default.addObserver(self, selector: #selector(DynamicFontHelper.SELcontentSizeCategoryDidChange(_:)), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(DynamicFontHelper.SELcontentSizeCategoryDidChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
     }
 
     deinit {

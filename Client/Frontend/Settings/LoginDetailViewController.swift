@@ -190,7 +190,7 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .deleteItem:
             let deleteCell = tableView.dequeueReusableCell(withIdentifier: DefaultCellIdentifier, for: indexPath)
             deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
-            deleteCell.textLabel?.textAlignment = NSTextAlignment.center
+            deleteCell.textLabel?.textAlignment = .center
             deleteCell.textLabel?.textColor = UIConstants.DestructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraitButton
             return deleteCell

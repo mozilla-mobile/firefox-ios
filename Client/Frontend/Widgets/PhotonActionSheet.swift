@@ -59,7 +59,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
-        tapRecognizer.addTarget(self, action: #selector(PhotonActionSheet.dismiss(_:)))
+        tapRecognizer.addTarget(self, action: #selector(PhotonActionSheet.dismiss))
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.cancelsTouchesInView = false
         tapRecognizer.delegate = self
@@ -73,7 +73,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
-        button.addTarget(self, action: #selector(PhotonActionSheet.dismiss(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(PhotonActionSheet.dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = "PhotonMenu.cancel"
         return button
     }()
@@ -325,7 +325,7 @@ private class PhotonActionSheetHeaderView: UITableViewHeaderFooterView {
     
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.center
+        siteImageView.contentMode = .center
         siteImageView.clipsToBounds = true
         siteImageView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         siteImageView.layer.borderColor = PhotonActionSheetUX.BorderColor.cgColor
@@ -427,7 +427,7 @@ private class PhotonActionSheetCell: UITableViewCell {
     
     lazy var statusIcon: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.scaleAspectFit
+        siteImageView.contentMode = .scaleAspectFit
         siteImageView.clipsToBounds = true
         siteImageView.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
         return siteImageView

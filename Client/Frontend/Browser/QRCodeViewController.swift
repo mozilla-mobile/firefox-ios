@@ -38,7 +38,7 @@ class QRCodeViewController: UIViewController {
         let label = UILabel()
         label.text = Strings.ScanQRCodeInstructionsLabel
         label.textColor = UIColor.white
-        label.textAlignment = NSTextAlignment.center
+        label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()

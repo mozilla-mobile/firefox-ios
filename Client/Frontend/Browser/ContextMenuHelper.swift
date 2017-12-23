@@ -40,7 +40,7 @@ class ContextMenuHelper: NSObject {
 
         if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") as? UILongPressGestureRecognizer {
             nativeLongPressRecognizer.removeTarget(nil, action: nil)
-            nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected(_:)))
+            nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected))
         }
     }
 

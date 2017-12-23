@@ -47,7 +47,7 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
     label1.lineBreakMode = .byWordWrapping
     label1.font = InstructionsViewControllerUX.TextFont
     label1.textColor = InstructionsViewControllerUX.TextColor
-    label1.textAlignment = NSTextAlignment.center
+    label1.textAlignment = .center
     label1.snp.makeConstraints { (make) -> Void in
         make.width.equalTo(250)
         make.top.equalTo(imageView.snp.bottom).offset(InstructionsViewControllerUX.TopPadding)
@@ -60,7 +60,7 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
     label2.lineBreakMode = .byWordWrapping
     label2.font = InstructionsViewControllerUX.TextFont
     label2.textColor = InstructionsViewControllerUX.TextColor
-    label2.textAlignment = NSTextAlignment.center
+    label2.textAlignment = .center
     label2.attributedText = highlightLink(showMeText as NSString, withColor: InstructionsViewControllerUX.LinkColor)
     label2.snp.makeConstraints { (make) -> Void in
         make.width.equalTo(250)

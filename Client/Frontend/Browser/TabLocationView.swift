@@ -111,7 +111,7 @@ class TabLocationView: UIView {
         lockImageView.isHidden = true
         lockImageView.tintColor = UIColor.Defaults.LockGreen
         lockImageView.isAccessibilityElement = true
-        lockImageView.contentMode = UIViewContentMode.center
+        lockImageView.contentMode = .center
         lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
         return lockImageView
     }()
@@ -120,9 +120,9 @@ class TabLocationView: UIView {
         let readerModeButton = ReaderModeButton(frame: CGRect.zero)
         readerModeButton.isHidden = true
         readerModeButton.addTarget(self, action: #selector(TabLocationView.SELtapReaderModeButton), for: .touchUpInside)
-        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELlongPressReaderModeButton(_:))))
+        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELlongPressReaderModeButton)))
         readerModeButton.isAccessibilityElement = true
-        readerModeButton.imageView?.contentMode = UIViewContentMode.scaleAspectFit
+        readerModeButton.imageView?.contentMode = .scaleAspectFit
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
         readerModeButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
         readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(TabLocationView.SELreaderModeCustomAction))]
@@ -153,8 +153,8 @@ class TabLocationView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELlongPressLocation(_:)))
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(TabLocationView.SELtapLocation(_:)))
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELlongPressLocation))
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(TabLocationView.SELtapLocation))
 
         addSubview(urlTextField)
         addSubview(lockImageView)

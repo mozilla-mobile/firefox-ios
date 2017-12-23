@@ -50,7 +50,7 @@ class ChevronView: UIView {
             }
         }
         self.backgroundColor = UIColor.clear
-        self.contentMode = UIViewContentMode.redraw
+        self.contentMode = .redraw
     }
 
     required init?(coder aDecoder: NSCoder) {

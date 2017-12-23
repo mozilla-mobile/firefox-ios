@@ -186,7 +186,7 @@ class BoolSetting: Setting {
 
         let control = UISwitch()
         control.onTintColor = UIConstants.SystemBlueColor
-        control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+        control.addTarget(self, action: #selector(BoolSetting.switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
         
         displayBool(control)
@@ -373,7 +373,7 @@ class ButtonSetting: Setting {
         } else {
             cell.textLabel?.textColor = SettingsUX.TableViewDisabledRowTextColor
         }
-        cell.textLabel?.textAlignment = NSTextAlignment.center
+        cell.textLabel?.textAlignment = .center
         cell.accessibilityTraits = UIAccessibilityTraitButton
         cell.selectionStyle = .none
     }

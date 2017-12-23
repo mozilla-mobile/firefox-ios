@@ -102,7 +102,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarAddButtonFont], for: [])
 
         let logo = UIImageView(image: UIImage(named: "Icon-Small"))
-        logo.contentMode = UIViewContentMode.scaleAspectFit // TODO Can go away if icon is provided in correct size
+        logo.contentMode = .scaleAspectFit // TODO Can go away if icon is provided in correct size
         navItem.titleView = logo
 
         navBar.pushItem(navItem, animated: false)

@@ -153,7 +153,7 @@ class CustomSearchViewController: SettingsTableViewController {
             SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineURLLabel), footerTitle: NSAttributedString(string: "http://youtube.com/search?q=%s"), children: [urlField])
         ]
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine(_:)))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
 
         return settings

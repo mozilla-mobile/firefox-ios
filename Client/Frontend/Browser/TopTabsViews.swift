@@ -98,7 +98,7 @@ class TopTabCell: UICollectionViewCell {
     
     let titleText: UILabel = {
         let titleText = UILabel()
-        titleText.textAlignment = NSTextAlignment.left
+        titleText.textAlignment = .left
         titleText.isUserInteractionEnabled = false
         titleText.numberOfLines = 1
         titleText.lineBreakMode = .byCharWrapping
@@ -136,7 +136,7 @@ class TopTabCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), for: UIControlEvents.touchUpInside)
+        closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), for: .touchUpInside)
 
         contentView.addSubview(titleText)
         contentView.addSubview(closeButton)

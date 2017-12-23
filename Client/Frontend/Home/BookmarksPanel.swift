@@ -44,7 +44,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var refreshControl: UIRefreshControl?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(BookmarksPanel.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
@@ -54,7 +54,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(BookmarksPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
 
         self.tableView.register(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
         self.tableView.register(BookmarkFolderTableViewCell.self, forCellReuseIdentifier: BookmarkFolderCellIdentifier)
@@ -148,7 +148,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
         welcomeLabel.text = emptyBookmarksText
-        welcomeLabel.textAlignment = NSTextAlignment.center
+        welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = BookmarksPanelUX.WelcomeScreenItemTextColor
         welcomeLabel.numberOfLines = 0
@@ -545,7 +545,7 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
 
         isUserInteractionEnabled = true
 
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(BookmarkFolderTableViewHeader.viewWasTapped(_:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewWasTapped))
         tapGestureRecognizer.numberOfTapsRequired = 1
         addGestureRecognizer(tapGestureRecognizer)
 

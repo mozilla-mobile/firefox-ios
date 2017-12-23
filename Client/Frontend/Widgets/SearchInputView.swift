@@ -40,7 +40,7 @@ class SearchInputView: UIView {
         textField.delegate = self
         textField.textColor = SearchInputViewUX.inputColor
         textField.tintColor = SearchInputViewUX.inputColor
-        textField.addTarget(self, action: #selector(SearchInputView.inputTextDidChange(_:)), for: .editingChanged)
+        textField.addTarget(self, action: #selector(SearchInputView.inputTextDidChange), for: .editingChanged)
         textField.accessibilityLabel = NSLocalizedString("Search Input Field", tableName: "LoginManager", comment: "Accessibility label for the search input field in the Logins list")
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none

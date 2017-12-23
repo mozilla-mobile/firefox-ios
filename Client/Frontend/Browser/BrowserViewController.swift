@@ -59,8 +59,8 @@ class BrowserViewController: UIViewController {
     lazy fileprivate var customSearchEngineButton: UIButton = {
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "AddSearch")?.withRenderingMode(.alwaysTemplate), for: [])
-        searchButton.addTarget(self, action: #selector(BrowserViewController.addCustomSearchEngineForFocusedElement), for: .touchUpInside)
-        searchButton.accessibilityIdentifier = "BrowserViewController.customSearchEngineButton"
+        searchButton.addTarget(self, action: #selector(addCustomSearchEngineForFocusedElement), for: .touchUpInside)
+        searchButton.accessibilityIdentifier = "customSearchEngineButton"
         return searchButton
     }()
 
@@ -311,9 +311,9 @@ class BrowserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappWillResignActiveNotification), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappDidBecomeActiveNotification), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELappDidEnterBackgroundNotification), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELappWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELappDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELappDidEnterBackgroundNotification), name: .UIApplicationDidEnterBackground, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         webViewContainerBackdrop = UIView()
@@ -331,7 +331,7 @@ class BrowserViewController: UIViewController {
 
         topTouchArea = UIButton()
         topTouchArea.isAccessibilityElement = false
-        topTouchArea.addTarget(self, action: #selector(BrowserViewController.SELtappedTopArea), for: UIControlEvents.touchUpInside)
+        topTouchArea.addTarget(self, action: #selector(SELtappedTopArea), for: .touchUpInside)
         view.addSubview(topTouchArea)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
@@ -598,7 +598,7 @@ class BrowserViewController: UIViewController {
         footer.alpha = 1
 
         [header, footer, readerModeBar].forEach { view in
-                view?.transform = CGAffineTransform.identity
+                view?.transform = .identity
         }
         statusBarOverlay.isHidden = false
     }
@@ -914,7 +914,7 @@ class BrowserViewController: UIViewController {
         if let url = tab.url {
             if url.isReaderModeURL {
                 showReaderModeBar(animated: false)
-                NotificationCenter.default.addObserver(self, selector: #selector(BrowserViewController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
             } else {
                 hideReaderModeBar(animated: false)
                 NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
@@ -2343,7 +2343,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         } else {
             let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions)
             signInVC.delegate = self            
-            signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(BrowserViewController.dismissSignInViewController))
+            signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
             vcToPresent = signInVC
         }
 

@@ -89,7 +89,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         startBrowsingButton.backgroundColor = UIColor.clear
         startBrowsingButton.setTitle(IntroViewControllerUX.StartBrowsingButtonTitle, for: [])
         startBrowsingButton.setTitleColor(IntroViewControllerUX.StartBrowsingButtonColor, for: [])
-        startBrowsingButton.addTarget(self, action: #selector(IntroViewController.SELstartBrowsing), for: UIControlEvents.touchUpInside)
+        startBrowsingButton.addTarget(self, action: #selector(IntroViewController.SELstartBrowsing), for: .touchUpInside)
         startBrowsingButton.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
 
         view.addSubview(startBrowsingButton)
@@ -145,7 +145,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             titleLabel.numberOfLines = 2
             titleLabel.adjustsFontSizeToFitWidth = true
             titleLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
-            titleLabel.textAlignment = NSTextAlignment.center
+            titleLabel.textAlignment = .center
             titleLabel.text = title
             titleLabels.append(titleLabel)
             introView.addSubview(titleLabel)
@@ -228,7 +228,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -252,7 +252,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         for i in 0..<IntroViewControllerUX.NumberOfCards {
             if let imageView = slideContainer.subviews[i] as? UIImageView {
                 imageView.frame = CGRect(x: CGFloat(i)*scaledWidthOfSlide, y: 0, width: scaledWidthOfSlide, height: scaledHeightOfSlide)
-                imageView.contentMode = UIViewContentMode.scaleAspectFit
+                imageView.contentMode = .scaleAspectFit
             }
         }
         slideContainer.frame = CGRect(x: 0, y: 0, width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)

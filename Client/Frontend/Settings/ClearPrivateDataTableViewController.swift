@@ -61,13 +61,13 @@ class ClearPrivateDataTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
 
         if indexPath.section == SectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
             let control = UISwitch()
             control.onTintColor = UIConstants.ControlTintColor
-            control.addTarget(self, action: #selector(ClearPrivateDataTableViewController.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+            control.addTarget(self, action: #selector(ClearPrivateDataTableViewController.switchValueChanged), for: .valueChanged)
             control.isOn = toggles[indexPath.item]
             cell.accessoryView = control
             cell.selectionStyle = .none
@@ -75,7 +75,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
         } else {
             assert(indexPath.section == SectionButton)
             cell.textLabel?.text = Strings.SettingsClearPrivateDataClearButton
-            cell.textLabel?.textAlignment = NSTextAlignment.center
+            cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = UIConstants.DestructiveRed
             cell.accessibilityTraits = UIAccessibilityTraitButton
             cell.accessibilityIdentifier = "ClearPrivateData"

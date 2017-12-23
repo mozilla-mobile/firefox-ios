@@ -101,7 +101,7 @@ class ToggleButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentMode = UIViewContentMode.redraw
+        contentMode = .redraw
         insertSubview(backgroundView, belowSubview: imageView!)
     }
 

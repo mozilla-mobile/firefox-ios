@@ -53,9 +53,9 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.scaleAspectFit
+        siteImageView.contentMode = .scaleAspectFit
         siteImageView.clipsToBounds = true
-        siteImageView.contentMode = UIViewContentMode.center
+        siteImageView.contentMode = .center
         siteImageView.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
         siteImageView.layer.borderColor = ActivityStreamHighlightCellUX.BorderColor.cgColor
         siteImageView.layer.borderWidth = ActivityStreamHighlightCellUX.BorderWidth
@@ -65,7 +65,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var statusIcon: UIImageView = {
         let statusIcon = UIImageView()
-        statusIcon.contentMode = UIViewContentMode.scaleAspectFit
+        statusIcon.contentMode = .scaleAspectFit
         statusIcon.clipsToBounds = true
         statusIcon.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
         return statusIcon

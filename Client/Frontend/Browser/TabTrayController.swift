@@ -76,7 +76,7 @@ class TabCell: UICollectionViewCell {
         self.backgroundHolder.clipsToBounds = true
         self.backgroundHolder.backgroundColor = TabTrayControllerUX.CellBackgroundColor
 
-        self.screenshotView.contentMode = UIViewContentMode.scaleAspectFill
+        self.screenshotView.contentMode = .scaleAspectFill
         self.screenshotView.clipsToBounds = true
         self.screenshotView.isUserInteractionEnabled = false
         self.screenshotView.alignLeft = true
@@ -88,7 +88,7 @@ class TabCell: UICollectionViewCell {
         self.favicon.layer.masksToBounds = true
 
         self.titleText = UILabel()
-        self.titleText.textAlignment = NSTextAlignment.left
+        self.titleText.textAlignment = .left
         self.titleText.isUserInteractionEnabled = false
         self.titleText.numberOfLines = 1
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
@@ -101,7 +101,7 @@ class TabCell: UICollectionViewCell {
         super.init(frame: frame)
         
         self.animator = SwipeAnimator(animatingView: self)
-        self.closeButton.addTarget(self, action: #selector(TabCell.close), for: UIControlEvents.touchUpInside)
+        self.closeButton.addTarget(self, action: #selector(TabCell.close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.screenshotView)
@@ -127,7 +127,7 @@ class TabCell: UICollectionViewCell {
             self.titleText.textColor = DarkTabCellUX.TabTitleTextColor
         }
 
-        titleText.backgroundColor = UIColor.clear
+        titleText.backgroundColor = .clear
 
         title.contentView.addSubview(self.closeButton)
         title.contentView.addSubview(self.titleText)
@@ -193,10 +193,10 @@ class TabCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         // Reset any close animations.
-        backgroundHolder.transform = CGAffineTransform.identity
+        backgroundHolder.transform = .identity
         backgroundHolder.alpha = 1
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
-        layer.shadowOffset = CGSize.zero
+        layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0
     }
@@ -247,7 +247,7 @@ class TabTrayController: UIViewController {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.didClickAddTab), for: .touchUpInside)
         toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.didTogglePrivateMode), for: .touchUpInside)
-        toolbar.deleteButton.addTarget(self, action: #selector(TabTrayController.didTapDelete(_:)), for: .touchUpInside)
+        toolbar.deleteButton.addTarget(self, action: #selector(TabTrayController.didTapDelete), for: .touchUpInside)
         return toolbar
     }()
 
@@ -265,7 +265,7 @@ class TabTrayController: UIViewController {
 
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
-        emptyView.learnMoreButton.addTarget(self, action: #selector(TabTrayController.didTapLearnMore), for: UIControlEvents.touchUpInside)
+        emptyView.learnMoreButton.addTarget(self, action: #selector(TabTrayController.didTapLearnMore), for: .touchUpInside)
         return emptyView
     }()
 
@@ -467,7 +467,7 @@ class TabTrayController: UIViewController {
         UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: { () -> Void in
             fromView.transform = scaleDownTransform
             fromView.alpha = 0
-            toView.transform = CGAffineTransform.identity
+            toView.transform = .identity
             toView.alpha = 1
         }) { finished in
             if fromView != self.emptyPrivateTabsView {
@@ -854,7 +854,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
         let label = UILabel()
         label.textColor = EmptyPrivateTabsViewUX.TitleColor
         label.font = EmptyPrivateTabsViewUX.TitleFont
-        label.textAlignment = NSTextAlignment.center
+        label.textAlignment = .center
         return label
     }()
 
@@ -862,7 +862,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
         let label = UILabel()
         label.textColor = EmptyPrivateTabsViewUX.DescriptionColor
         label.font = EmptyPrivateTabsViewUX.DescriptionFont
-        label.textAlignment = NSTextAlignment.center
+        label.textAlignment = .center
         label.numberOfLines = 0
         label.preferredMaxLayoutWidth = EmptyPrivateTabsViewUX.MaxDescriptionWidth
         return label

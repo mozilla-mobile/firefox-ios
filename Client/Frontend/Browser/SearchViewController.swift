@@ -65,7 +65,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     // Cell for the suggestion flow layout. Since heightForHeaderInSection is called *before*
     // cellForRowAtIndexPath, we create the cell to find its height before it's added to the table.
-    fileprivate let suggestionCell = SuggestionCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+    fileprivate let suggestionCell = SuggestionCell(style: .default, reuseIdentifier: nil)
 
     static var userAgent: String?
 
@@ -80,7 +80,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.PanelBackgroundColor
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.light))
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         view.addSubview(blur)
 
         super.viewDidLoad()
@@ -122,7 +122,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         suggestionCell.delegate = self
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SearchViewController.SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
     }
 
     func SELDynamicFontChanged(_ notification: Notification) {
@@ -201,9 +201,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         //search settings icon
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "quickSearch"), for: [])
-        searchButton.imageView?.contentMode = UIViewContentMode.center
+        searchButton.imageView?.contentMode = .center
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-        searchButton.addTarget(self, action: #selector(SearchViewController.SELdidClickSearchButton), for: UIControlEvents.touchUpInside)
+        searchButton.addTarget(self, action: #selector(SearchViewController.SELdidClickSearchButton), for: .touchUpInside)
         searchButton.accessibilityLabel = String(format: NSLocalizedString("Search Settings", tableName: "Search", comment: "Label for search settings button."))
 
         searchButton.imageView?.snp.makeConstraints { make in
@@ -225,9 +225,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         for engine in quickSearchEngines {
             let engineButton = UIButton()
             engineButton.setImage(engine.image, for: [])
-            engineButton.imageView?.contentMode = UIViewContentMode.scaleAspectFit
+            engineButton.imageView?.contentMode = .scaleAspectFit
             engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-            engineButton.addTarget(self, action: #selector(SearchViewController.SELdidSelectEngine(_:)), for: UIControlEvents.touchUpInside)
+            engineButton.addTarget(self, action: #selector(SearchViewController.SELdidSelectEngine), for: .touchUpInside)
             engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
 
             engineButton.imageView?.snp.makeConstraints { make in
@@ -505,8 +505,8 @@ fileprivate class SuggestionCell: UITableViewCell {
             for suggestion in suggestions {
                 let button = SuggestionButton()
                 button.setTitle(suggestion, for: [])
-                button.addTarget(self, action: #selector(SuggestionCell.SELdidSelectSuggestion(_:)), for: UIControlEvents.touchUpInside)
-                button.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(SuggestionCell.SELdidLongPressSuggestion(_:))))
+                button.addTarget(self, action: #selector(SELdidSelectSuggestion), for: .touchUpInside)
+                button.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(SuggestionCell.SELdidLongPressSuggestion)))
 
                 // If this is the first image, add the search icon.
                 if container.subviews.isEmpty {

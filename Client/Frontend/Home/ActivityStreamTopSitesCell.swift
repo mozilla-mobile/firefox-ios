@@ -231,7 +231,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
     }()
 
     lazy fileprivate var pageControlPress: UITapGestureRecognizer = {
-        let press = UITapGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handlePageTap(_:)))
+        let press = UITapGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handlePageTap))
    //     press.delegate = self
         return press
     }()

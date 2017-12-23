@@ -39,7 +39,7 @@ class ButtonToast: UIView {
     }()
     fileprivate var animationConstraint: Constraint?
     fileprivate lazy var gestureRecognizer: UITapGestureRecognizer = {
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.handleTap(_:)))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.handleTap))
         gestureRecognizer.cancelsTouchesInView = false
         return gestureRecognizer
     }()
@@ -85,7 +85,7 @@ class ButtonToast: UIView {
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.titleLabel?.minimumScaleFactor = 0.1
 
-        let recognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.buttonPressed(_:)))
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(buttonPressed))
         button.addGestureRecognizer(recognizer)
         toast.addSubview(button)
         var descriptionLabel: UILabel?
