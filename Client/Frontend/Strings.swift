@@ -485,7 +485,17 @@ extension Strings {
     public static let SettingsDoNotTrackOptionAlwaysOn = NSLocalizedString("Settings.DNT.OptionAlwaysOn", value: "Always", comment: "DNT Settings option for always on")
 }
 
+// Download files
+extension Strings {
+    public static let downloading = NSLocalizedString("downloads.Downloading", comment: "Downloading alert title")
+    public static let downloadingError = NSLocalizedString("downloads.error", comment: "Download error alert title")
+    public static let open = NSLocalizedString("downloads.open", comment: "Open button shown when a file is downloaded")
+    public static let downloadsFinishedTitle = NSLocalizedString("downloads.finished", comment: "Title for alert shown when a file is downloaded")
+    public static let downloadsFinishedMessage = NSLocalizedString("downloads.finishedMessage", comment: "Message for alert shown when a file is downloaded")
+}
+
 // MARK: Deprecated Strings (to be removed in next version)
 private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
 private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")
 private let logOutDestructive = NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert")
+
