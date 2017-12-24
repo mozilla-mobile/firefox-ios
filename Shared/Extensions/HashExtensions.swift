@@ -53,7 +53,7 @@ extension String {
 
 extension Data {
     public var utf8EncodedString: String? {
-        return NSString(data: self, encoding: String.Encoding.utf8.rawValue) as String?
+        return String(data: self, encoding: .utf8)
     }
 }
 

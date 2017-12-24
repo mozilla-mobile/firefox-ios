@@ -162,10 +162,7 @@ extension URL {
     }
 
     public var normalizedHostAndPath: String? {
-        if let normalizedHost = self.normalizedHost {
-            return normalizedHost + self.path
-        }
-        return nil
+        return normalizedHost.flatMap { $0 + self.path }
     }
 
     public var absoluteDisplayString: String {
@@ -194,11 +191,7 @@ extension URL {
         }
 
         if self.isErrorPageURL {
-            if let decodedURL = self.originalURLFromErrorURL {
-                return decodedURL.displayURL
-            } else {
-                return nil
-            }
+            return originalURLFromErrorURL?.displayURL
         }
 
         if !self.isAboutURL {
@@ -267,20 +260,12 @@ extension URL {
     :returns: The public suffix for within the given hostname.
     */
     public var publicSuffix: String? {
-        if let host = self.host {
-            return publicSuffixFromHost(host, withAdditionalParts: 0)
-        } else {
-            return nil
-        }
+        return host.flatMap { publicSuffixFromHost($0, withAdditionalParts: 0) }
     }
 
     public func isWebPage(includeDataURIs: Bool = true) -> Bool {
         let schemes = includeDataURIs ? ["http", "https", "data"] : ["http", "https"]
-        if let scheme = scheme, schemes.contains(scheme) {
-            return true
-        }
-
-        return false
+        return scheme.map { schemes.contains($0) } ?? false
     }
 
     // This helps find local urls that we do not want to show loading bars on.
@@ -351,7 +336,7 @@ extension URL {
     }
 
     public func encodeReaderModeURL(_ baseReaderModeURL: String) -> URL? {
-        if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) {
+        if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
             if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
                 return aboutReaderURL
             }
@@ -477,9 +462,9 @@ private extension URL {
         if additionalPartCount > 0 {
             if let suffix = suffix {
                 // Take out the public suffixed and add in the additional parts we want.
-                let literalFromEnd: NSString.CompareOptions = [NSString.CompareOptions.literal,        // Match the string exactly.
-                                     NSString.CompareOptions.backwards,      // Search from the end.
-                                     NSString.CompareOptions.anchored]         // Stick to the end.
+                let literalFromEnd: NSString.CompareOptions = [.literal,        // Match the string exactly.
+                                     .backwards,      // Search from the end.
+                                     .anchored]         // Stick to the end.
                 let suffixlessHost = host.replacingOccurrences(of: suffix, with: "", options: literalFromEnd, range: nil)
                 let suffixlessTokens = suffixlessHost.components(separatedBy: ".").filter { $0 != "" }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)

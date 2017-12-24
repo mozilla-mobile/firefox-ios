@@ -620,7 +620,7 @@
 		E65075921E37F7AB006961AC /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075621E37F7AB006961AC /* Accessibility.swift */; };
 		E65075931E37F7AB006961AC /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075631E37F7AB006961AC /* AppConstants.swift */; };
 		E65075941E37F7AB006961AC /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075641E37F7AB006961AC /* AppInfo.swift */; };
-		E65075951E37F7AB006961AC /* AssertionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075651E37F7AB006961AC /* AssertionUtils.swift */; };
+		E65075951E37F7AB006961AC /* GeneralUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075651E37F7AB006961AC /* GeneralUtils.swift */; };
 		E65075961E37F7AB006961AC /* AsyncReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075661E37F7AB006961AC /* AsyncReducer.swift */; };
 		E65075971E37F7AB006961AC /* AuthenticationKeychainInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075671E37F7AB006961AC /* AuthenticationKeychainInfo.swift */; };
 		E65075981E37F7AB006961AC /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075681E37F7AB006961AC /* Bytes.swift */; };
@@ -1942,7 +1942,7 @@
 		E65075621E37F7AB006961AC /* Accessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accessibility.swift; sourceTree = "<group>"; };
 		E65075631E37F7AB006961AC /* AppConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		E65075641E37F7AB006961AC /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
-		E65075651E37F7AB006961AC /* AssertionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssertionUtils.swift; sourceTree = "<group>"; };
+		E65075651E37F7AB006961AC /* GeneralUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralUtils.swift; sourceTree = "<group>"; };
 		E65075661E37F7AB006961AC /* AsyncReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncReducer.swift; sourceTree = "<group>"; };
 		E65075671E37F7AB006961AC /* AuthenticationKeychainInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationKeychainInfo.swift; sourceTree = "<group>"; };
 		E65075681E37F7AB006961AC /* Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
@@ -3271,7 +3271,7 @@
 				E65075621E37F7AB006961AC /* Accessibility.swift */,
 				E65075631E37F7AB006961AC /* AppConstants.swift */,
 				E65075641E37F7AB006961AC /* AppInfo.swift */,
-				E65075651E37F7AB006961AC /* AssertionUtils.swift */,
+				E65075651E37F7AB006961AC /* GeneralUtils.swift */,
 				E65075661E37F7AB006961AC /* AsyncReducer.swift */,
 				E65075671E37F7AB006961AC /* AuthenticationKeychainInfo.swift */,
 				E65075681E37F7AB006961AC /* Bytes.swift */,
@@ -5196,7 +5196,7 @@
 				E65075931E37F7AB006961AC /* AppConstants.swift in Sources */,
 				E65075B81E37F7AB006961AC /* NotificationConstants.swift in Sources */,
 				E65075AC1E37F7AB006961AC /* StringExtensions.swift in Sources */,
-				E65075951E37F7AB006961AC /* AssertionUtils.swift in Sources */,
+				E65075951E37F7AB006961AC /* GeneralUtils.swift in Sources */,
 				E683F0C21E93D4E90035D990 /* DictionaryExtensions.swift in Sources */,
 				E650759B1E37F7AB006961AC /* CrashSimulator.m in Sources */,
 				288A2DB51AB8B38D0023ABC3 /* Error.swift in Sources */,
