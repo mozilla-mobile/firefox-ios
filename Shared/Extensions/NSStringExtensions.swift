@@ -6,14 +6,8 @@ import Foundation
 
 extension String {
     public static func contentsOfFileWithResourceName(_ name: String, ofType type: String, fromBundle bundle: Bundle, encoding: String.Encoding, error: NSErrorPointer) -> String? {
-        if let path = bundle.path(forResource: name, ofType: type) {
-            do {
-                return try String(contentsOfFile: path, encoding: encoding)
-            } catch {
-                return nil
-            }
-        } else {
-            return nil
+        return bundle.path(forResource: name, ofType: type).flatMap {
+            try? String(contentsOfFile: $0, encoding: encoding)
         }
     }
 }

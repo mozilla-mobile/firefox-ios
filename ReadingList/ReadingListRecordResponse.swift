@@ -17,12 +17,6 @@ class ReadingListRecordResponse: ReadingListResponse {
     }
 
     var record: ReadingListServerRecord? {
-        get {
-            if let json = self.json {
-                return ReadingListServerRecord(json: json)
-            } else {
-                return nil
-            }
-        }
+        return json.flatMap { ReadingListServerRecord(json: $0) }
     }
 }

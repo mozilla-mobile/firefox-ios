@@ -71,7 +71,7 @@ class DisconnectSetting: WithAccountSetting {
         let alertController = UIAlertController(
             title: Strings.SettingsDisconnectSyncAlertTitle,
             message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'sign out firefox account' alert"),
-            preferredStyle: UIAlertControllerStyle.alert)
+            preferredStyle: .alert)
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel) { (action) in
                 // Do nothing.
@@ -203,7 +203,7 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     fileprivate lazy var troubleshootButton: UIButton = {
-        let troubleshootButton = UIButton(type: UIButtonType.roundedRect)
+        let troubleshootButton = UIButton(type: .roundedRect)
         troubleshootButton.setTitle(Strings.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
         troubleshootButton.tintColor = SettingsUX.TableViewRowActionAccessoryColor

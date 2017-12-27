@@ -24,7 +24,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertNotEqual(textField.text, "foobar", "Verify that the URL bar text clears on about:home")
 
         // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
-        let localhostURL = webRoot.replacingOccurrences(of: "127.0.0.1", with: "localhost", options: NSString.CompareOptions(), range: nil)
+        let localhostURL = webRoot.replacingOccurrences(of: "127.0.0.1", with: "localhost", options: [], range: nil)
         let url = "\(localhostURL)/numberedPage.html?page=1"
 
         // URL without "http://".
@@ -52,7 +52,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testUserInfoRemovedFromURL() {
-        let hostWithUsername = webRoot.replacingOccurrences(of: "127.0.0.1", with: "username:password@127.0.0.1", options: NSString.CompareOptions(), range: nil)
+        let hostWithUsername = webRoot.replacingOccurrences(of: "127.0.0.1", with: "username:password@127.0.0.1", options: [], range: nil)
         let urlWithUserInfo = "\(hostWithUsername)/numberedPage.html?page=1"
         let url = "\(webRoot!)/numberedPage.html?page=1"
 

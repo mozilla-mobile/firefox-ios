@@ -11,7 +11,7 @@ public extension String {
             return true
         }
         if let range = self.range(of: other,
-                options: NSString.CompareOptions.anchored) {
+                options: .anchored) {
             return range.lowerBound == self.startIndex
         }
         return false
@@ -23,7 +23,7 @@ public extension String {
             return true
         }
         if let range = self.range(of: other,
-                options: [NSString.CompareOptions.anchored, NSString.CompareOptions.backwards]) {
+                options: [.anchored, .backwards]) {
             return range.upperBound == self.endIndex
         }
         return false
@@ -63,7 +63,7 @@ public extension String {
     }
 
     private var stringWithAdditionalEscaping: String {
-        return self.replacingOccurrences(of: "|", with: "%7C", options: NSString.CompareOptions(), range: nil)
+        return self.replacingOccurrences(of: "|", with: "%7C", options: [], range: nil)
     }
 
     public var asURL: URL? {

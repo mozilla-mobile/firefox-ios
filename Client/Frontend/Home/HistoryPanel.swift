@@ -36,7 +36,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     var refreshControl: UIRefreshControl?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(HistoryPanel.longPress))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
