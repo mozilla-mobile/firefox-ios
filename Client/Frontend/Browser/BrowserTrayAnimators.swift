@@ -219,7 +219,7 @@ private func footerTransform( _ frame: CGRect, toFrame finalFrame: CGRect, conta
 
     let scaleX = finalFrame.width / frame.width
 
-    var transform = .identity
+    var transform: CGAffineTransform = .identity
     transform = transform.translatedBy(x: translation.x, y: translation.y)
     transform = transform.scaledBy(x: scaleX, y: scaleX)
     return transform
@@ -233,7 +233,7 @@ private func headerTransform(_ frame: CGRect, toFrame finalFrame: CGRect, contai
 
     let scaleX = finalFrame.width / frame.width
 
-    var transform = .identity
+    var transform: CGAffineTransform = .identity
     transform = transform.translatedBy(x: translation.x, y: translation.y)
     transform = transform.scaledBy(x: scaleX, y: scaleX)
     return transform
