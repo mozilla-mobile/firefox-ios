@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import MappaMundi
 import XCTest
 
 let FirstRun = "OptionalFirstRun"
@@ -176,10 +177,6 @@ class FxUserState: UserState {
     required init() {
         super.init()
         initialScreenState = FirstRun
-    }
-
-    var isTablet: Bool {
-        return UIDevice.current.userInterfaceIdiom == .pad
     }
 
     var isPrivate = false
