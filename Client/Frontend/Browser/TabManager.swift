@@ -873,7 +873,6 @@ extension TabManager: WKNavigationDelegate {
 
     /// Called when the WKWebView's content process has gone away. If this happens for the currently selected tab
     /// then we immediately reload it.
-
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         if let tab = selectedTab, tab.webView == webView {
             webView.reload()
@@ -924,6 +923,12 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         for delegate in delegates {
             delegate.webView?(webView, didFinish: navigation)
+        }
+    }
+
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        for delegate in delegates {
+            delegate.webViewWebContentProcessDidTerminate?(webView)
         }
     }
 
