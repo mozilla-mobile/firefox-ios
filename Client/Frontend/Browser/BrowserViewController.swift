@@ -1046,6 +1046,7 @@ class BrowserViewController: UIViewController {
 
                 findInPageBar.snp.makeConstraints { make in
                     make.height.equalTo(UIConstants.ToolbarHeight)
+                    make.leading.trailing.equalTo(self.view)
                 }
 
                 updateViewConstraints()
