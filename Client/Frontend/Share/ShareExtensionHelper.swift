@@ -60,7 +60,8 @@ class ShareExtensionHelper: NSObject {
             }
             // Bug 1392418 - When copying a url using the share extension there are 2 urls in the pasteboard.
             // Make sure the pasteboard only has one url.
-            if let url = UIPasteboard.general.urls?.first {
+            // pasteboard requires you use hasURLs to check for urls
+            if UIPasteboard.general.hasURLs, let url = UIPasteboard.general.urls?.first {
                 UIPasteboard.general.urls = [url]
             }
 
