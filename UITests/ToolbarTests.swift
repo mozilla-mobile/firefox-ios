@@ -19,7 +19,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
     func testURLEntry() {
         let textField = tester().waitForView(withAccessibilityIdentifier: "url") as! UITextField
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("foobar"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText("foobar"))
         tester().tapView(withAccessibilityIdentifier: "goBack")
         XCTAssertNotEqual(textField.text, "foobar", "Verify that the URL bar text clears on about:home")
 
@@ -38,7 +38,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(textField.text, displayURL, "URL matches page URL")
 
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("foobar"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText("foobar"))
         tester().tapView(withAccessibilityIdentifier: "goBack")
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after entering text")
