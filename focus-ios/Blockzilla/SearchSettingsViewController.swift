@@ -80,6 +80,8 @@ class SearchSettingsViewController: UITableViewController {
             label.text = UIConstants.strings.RestoreSearchEnginesLabel
             label.font = UIFont.systemFont(ofSize: 17)
             label.textColor = UIConstants.colors.settingsTextLabel
+            label.numberOfLines = 0
+            label.lineBreakMode = .byWordWrapping
 
             cell.textLabel?.text = " "
             cell.backgroundColor = UIConstants.colors.background
@@ -90,6 +92,8 @@ class SearchSettingsViewController: UITableViewController {
                 make.topMargin.equalTo(44)
                 make.centerY.equalTo(66)
                 make.leading.equalTo(cell.textLabel!)
+                make.trailing.equalTo(cell.textLabel!)
+                make.bottom.equalTo(cell.snp.bottom)
             })
             
             if searchEngineManager.hasDisabledDefaultEngine() {
