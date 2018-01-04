@@ -187,7 +187,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         ]
 
         for constraint in constraints {
-            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: constraint, options: NSLayoutFormatOptions(), metrics: nil, views: views))
+            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: constraint, options: [], metrics: nil, views: views))
         }
     }
 
