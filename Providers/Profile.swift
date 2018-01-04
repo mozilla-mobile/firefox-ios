@@ -77,7 +77,7 @@ class ProfileFileAccessor: FileAccessor {
             rootPath = url.path
         } else {
             log.error("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
-            rootPath = (NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0])
+            rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
         }
 
         super.init(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
