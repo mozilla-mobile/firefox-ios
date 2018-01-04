@@ -116,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         do {
             // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
         } catch _ {
             print("Error: Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
         }
