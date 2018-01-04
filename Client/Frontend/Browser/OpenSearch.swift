@@ -132,8 +132,8 @@ class OpenSearchEngine: NSObject, NSCoding {
             if let encodedSearchTemplate = searchTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
                 let localeString = Locale.current.identifier
                 let urlString = encodedSearchTemplate
-                    .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: String.CompareOptions.literal, range: nil)
-                    .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: String.CompareOptions.literal, range: nil)
+                    .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: .literal, range: nil)
+                    .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
                 return URL(string: urlString)
             }
         }
