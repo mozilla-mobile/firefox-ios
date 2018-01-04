@@ -239,7 +239,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
             selectedShareDestinations.add(code)
         }
         tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-        
+
         navItem.rightBarButtonItem?.isEnabled = (selectedShareDestinations.count != 0)
     }
 }

@@ -33,7 +33,7 @@ open class FirefoxAccount {
     open let uid: String
 
     open var fxaProfile: FxAProfile?
-    
+
     open var deviceRegistration: FxADeviceRegistration?
 
     // Only set one time in the Choose What to Sync FxA screen shown during registration.
