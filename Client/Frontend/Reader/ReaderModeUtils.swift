@@ -18,40 +18,18 @@ struct ReaderModeUtils {
     }
 
     static func generateReaderContent(_ readabilityResult: ReadabilityResult, initialStyle: ReaderModeStyle) -> String? {
-        if let stylePath = Bundle.main.path(forResource: "Reader", ofType: "css") {
-            do {
-                let css = try NSString(contentsOfFile: stylePath, encoding: String.Encoding.utf8.rawValue)
-                if let tmplPath = Bundle.main.path(forResource: "Reader", ofType: "html") {
-                    do {
-                        let tmpl = try NSMutableString(contentsOfFile: tmplPath, encoding: String.Encoding.utf8.rawValue)
-                        tmpl.replaceOccurrences(of: "%READER-CSS%", with: css as String,
-                            options: [], range: NSRange(location: 0, length: tmpl.length))
+        guard let stylePath = Bundle.main.path(forResource: "Reader", ofType: "css"),
+            let css = try? String(contentsOfFile: stylePath, encoding: .utf8),
+            let tmplPath = Bundle.main.path(forResource: "Reader", ofType: "html"),
+            let tmpl = try? String(contentsOfFile: tmplPath, encoding: .utf8) else { return nil }
 
-                        tmpl.replaceOccurrences(of: "%READER-STYLE%", with: initialStyle.encode(),
-                            options: [], range: NSRange(location: 0, length: tmpl.length))
+        return tmpl.replacingOccurrences(of: "%READER-CSS%", with: css)
+            .replacingOccurrences(of: "%READER-STYLE%", with: initialStyle.encode())
+            .replacingOccurrences(of: "%READER-DOMAIN%", with: simplifyDomain(readabilityResult.domain))
+            .replacingOccurrences(of: "%READER-URL%", with: readabilityResult.url)
+            .replacingOccurrences(of: "%READER-TITLE%", with: readabilityResult.title)
+            .replacingOccurrences(of: "%READER-CREDITS%", with: readabilityResult.credits)
+            .replacingOccurrences(of: "%READER-CONTENT%", with: readabilityResult.content)
 
-                        tmpl.replaceOccurrences(of: "%READER-DOMAIN%", with: simplifyDomain(readabilityResult.domain),
-                            options: [], range: NSRange(location: 0, length: tmpl.length))
-
-                        tmpl.replaceOccurrences(of: "%READER-URL%", with: readabilityResult.url,
-                            options: [], range: NSRange(location: 0, length: tmpl.length))
-
-                        tmpl.replaceOccurrences(of: "%READER-TITLE%", with: readabilityResult.title,
-                            options: [], range: NSRange(location: 0, length: tmpl.length))
-
-                        tmpl.replaceOccurrences(of: "%READER-CREDITS%", with: readabilityResult.credits,
-                            options: [], range: NSRange(location: 0, length: tmpl.length))
-
-                        tmpl.replaceOccurrences(of: "%READER-CONTENT%", with: readabilityResult.content,
-                            options: [], range: NSRange(location: 0, length: tmpl.length))
-
-                        return tmpl as String
-                    } catch _ {
-                    }
-                }
-            } catch _ {
-            }
-        }
-        return nil
     }
 }
