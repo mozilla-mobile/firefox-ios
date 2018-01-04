@@ -98,7 +98,7 @@ class TopTabCell: UICollectionViewCell {
     
     let titleText: UILabel = {
         let titleText = UILabel()
-        titleText.textAlignment = NSTextAlignment.left
+        titleText.textAlignment = .left
         titleText.isUserInteractionEnabled = false
         titleText.numberOfLines = 1
         titleText.lineBreakMode = .byCharWrapping
@@ -115,7 +115,7 @@ class TopTabCell: UICollectionViewCell {
     
     let closeButton: UIButton = {
         let closeButton = UIButton()
-        closeButton.setImage(UIImage.templateImageNamed("menu-CloseTabs"), for: UIControlState())
+        closeButton.setImage(UIImage.templateImageNamed("menu-CloseTabs"), for: [])
         closeButton.tintColor = UIColor.Defaults.Grey40
         closeButton.imageEdgeInsets = UIEdgeInsets(top: 15, left: TopTabsUX.TabTitlePadding, bottom: 15, right: TopTabsUX.TabTitlePadding)
         closeButton.layer.shadowOpacity = 0.8
@@ -136,7 +136,7 @@ class TopTabCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), for: UIControlEvents.touchUpInside)
+        closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), for: .touchUpInside)
 
         contentView.addSubview(titleText)
         contentView.addSubview(closeButton)

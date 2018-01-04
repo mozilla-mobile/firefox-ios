@@ -40,7 +40,7 @@ class TwoLineTableViewCell: UITableViewCell {
         twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
 
         indentationWidth = 0
-        layoutMargins = UIEdgeInsets.zero
+        layoutMargins = .zero
 
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
     }
@@ -143,7 +143,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
         contentView.addSubview(_detailTextLabel)
         contentView.addSubview(imageView)
 
-        layoutMargins = UIEdgeInsets.zero
+        layoutMargins = .zero
     }
 
     required init?(coder aDecoder: NSCoder) {

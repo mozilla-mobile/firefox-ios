@@ -196,7 +196,7 @@ class TouchIDSetting: Setting {
         let accessoryContainer = UIView(frame: control.frame)
         accessoryContainer.addSubview(control)
 
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(TouchIDSetting.switchTapped))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(switchTapped))
         accessoryContainer.addGestureRecognizer(gesture)
 
         cell.accessoryView = accessoryContainer
@@ -234,9 +234,9 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         updateTitleForTouchIDState()
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .UIApplicationDidBecomeActive, object: nil)
 
         tableView.accessibilityIdentifier = "AuthenticationManager.settingsTableView"
     }
@@ -245,7 +245,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         let notificationCenter = NotificationCenter.default
         notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
         notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
     }
 
     override func generateSettings() -> [SettingSection] {

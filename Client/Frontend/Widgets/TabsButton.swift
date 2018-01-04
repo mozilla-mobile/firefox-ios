@@ -54,7 +54,7 @@ class TabsButton: UIButton {
         let label = UILabel()
         label.font = TabsButtonUX.TitleFont
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
-        label.textAlignment = NSTextAlignment.center
+        label.textAlignment = .center
         label.isUserInteractionEnabled = false
         return label
     }()
@@ -155,7 +155,7 @@ class TabsButton: UIButton {
 
             self.clonedTabsButton = newTabsButton
             newTabsButton.frame = self.bounds
-            newTabsButton.addTarget(self, action: #selector(TabsButton.cloneDidClickTabs), for: UIControlEvents.touchUpInside)
+            newTabsButton.addTarget(self, action: #selector(TabsButton.cloneDidClickTabs), for: .touchUpInside)
             newTabsButton.countLabel.text = countToBe
             newTabsButton.accessibilityValue = countToBe
             newTabsButton.insideButton.frame = self.insideButton.frame
@@ -206,7 +206,7 @@ class TabsButton: UIButton {
         }
     }
     func cloneDidClickTabs() {
-        sendActions(for: UIControlEvents.touchUpInside)
+        sendActions(for: .touchUpInside)
     }
 }
 

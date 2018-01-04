@@ -101,7 +101,7 @@ extension PhotonActionSheetProtocol {
 
             let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
             controller.popoverDelegate = vcDelegate
-            controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
+            controller.modalPresentationStyle = .formSheet
             vcDelegate.present(controller, animated: true, completion: nil)
         }
 

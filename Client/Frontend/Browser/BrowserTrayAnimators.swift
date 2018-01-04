@@ -171,7 +171,7 @@ private extension BrowserToTrayAnimator {
                 options: UIViewAnimationOptions(),
                 animations: {
                 cell.frame = finalFrame
-                cell.title.transform = CGAffineTransform.identity
+                cell.title.transform = .identity
                 cell.layoutIfNeeded()
                 
                 UIApplication.shared.windows.first?.backgroundColor = TabTrayControllerUX.BackgroundColor
@@ -183,7 +183,7 @@ private extension BrowserToTrayAnimator {
                 bvc.footer.alpha = 0
                 tabCollectionViewSnapshot.alpha = 1
 
-                tabTray.toolbar.transform = CGAffineTransform.identity
+                tabTray.toolbar.transform = .identity
                 resetTransformsForViews([tabCollectionViewSnapshot])
             }, completion: { finished in
                 // Remove any of the views we used for the animation
@@ -219,7 +219,7 @@ private func footerTransform( _ frame: CGRect, toFrame finalFrame: CGRect, conta
 
     let scaleX = finalFrame.width / frame.width
 
-    var transform = CGAffineTransform.identity
+    var transform: CGAffineTransform = .identity
     transform = transform.translatedBy(x: translation.x, y: translation.y)
     transform = transform.scaledBy(x: scaleX, y: scaleX)
     return transform
@@ -233,7 +233,7 @@ private func headerTransform(_ frame: CGRect, toFrame finalFrame: CGRect, contai
 
     let scaleX = finalFrame.width / frame.width
 
-    var transform = CGAffineTransform.identity
+    var transform: CGAffineTransform = .identity
     transform = transform.translatedBy(x: translation.x, y: translation.y)
     transform = transform.scaledBy(x: scaleX, y: scaleX)
     return transform
@@ -282,14 +282,14 @@ private func toggleWebViewVisibility(_ show: Bool, usingTabManager tabManager: T
 private func resetTransformsForViews(_ views: [UIView?]) {
     for view in views {
         // Reset back to origin
-        view?.transform = CGAffineTransform.identity
+        view?.transform = .identity
     }
 }
 
 private func transformToolbarsToFrame(_ toolbars: [UIView?], toRect endRect: CGRect) {
     for toolbar in toolbars {
         // Reset back to origin
-        toolbar?.transform = CGAffineTransform.identity
+        toolbar?.transform = .identity
 
         // Transform from origin to where we want them to end up
         if let toolbarFrame = toolbar?.frame {

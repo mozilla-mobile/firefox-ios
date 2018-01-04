@@ -28,7 +28,7 @@ class TestFavicons: ProfileTest {
         let profile = MockProfile()
         // I want a site that also has an iOS app so I can get "apple-touch-icon-precomposed" icons as well
         let url = URL(string: "https://instagram.com")
-        FaviconFetcher.getForURL(url!, profile: profile).uponQueue(DispatchQueue.main) { result in
+        FaviconFetcher.getForURL(url!, profile: profile).uponQueue(.main) { result in
             guard let favicons = result.successValue, favicons.count > 0, let url = favicons.first?.url.asURL else {
                 XCTFail("Favicons were not found.")
                 return expectation.fulfill()

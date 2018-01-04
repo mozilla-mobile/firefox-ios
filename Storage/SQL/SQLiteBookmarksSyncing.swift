@@ -1199,7 +1199,7 @@ extension MergedSQLiteBookmarks {
             if op.bufferValuesToMoveFromLocal.count > 0 {
                 guard let allChildren = op.mobileRoot.children else {
                     let err = DatabaseError(description: "Absent mobileRoot children. Aborting.")
-                    log.error("applyBufferUpdatedCompletionOp(_:) encountered error: \(err.localizedDescription)")
+                    log.error("applyBufferUpdatedCompletionOp encountered error: \(err.localizedDescription)")
                     throw err
                 }
                 let offset = allChildren.count - op.bufferValuesToMoveFromLocal.count

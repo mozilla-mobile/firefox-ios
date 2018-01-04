@@ -46,7 +46,7 @@ class ActivityStreamDataObserver: DataObserver {
     init(profile: Profile) {
         self.profile = profile
         self.profile.history.setTopSitesCacheSize(ActivityStreamTopSiteCacheSize)
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived(_:)), name: $0, object: nil) }
+        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived), name: $0, object: nil) }
     }
 
     /*
@@ -72,7 +72,7 @@ class ActivityStreamDataObserver: DataObserver {
         }
 
         self.delegate?.willInvalidateDataSources(forceHighlights: highlights, forceTopSites: topSites)
-        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(DispatchQueue.main) { _ in
+        self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(.main) { _ in
             if shouldInvalidateTopSites {
                 self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
             }

@@ -192,7 +192,7 @@ class ReadingListClient {
         if let json = json {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             do {
-                request.httpBody = try JSONSerialization.data(withJSONObject: json, options: JSONSerialization.WritingOptions.prettyPrinted)
+                request.httpBody = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
             } catch _ {
                 request.httpBody = nil
             } // TODO Handle errors here

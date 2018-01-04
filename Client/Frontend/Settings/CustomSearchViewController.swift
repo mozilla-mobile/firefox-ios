@@ -55,7 +55,7 @@ class CustomSearchViewController: SettingsTableViewController {
         let trimmedQuery = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        createEngine(forQuery: trimmedQuery, andName: trimmedTitle).uponQueue(DispatchQueue.main) { result in
+        createEngine(forQuery: trimmedQuery, andName: trimmedTitle).uponQueue(.main) { result in
             self.spinnerView.stopAnimating()
             guard let engine = result.successValue else {
                 let alert: UIAlertController
@@ -91,7 +91,7 @@ class CustomSearchViewController: SettingsTableViewController {
             return deferred
         }
         
-        FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(DispatchQueue.main) { result in
+        FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(.main) { result in
             let image = result.successValue ?? FaviconFetcher.getDefaultFavicon(url)
             let engine = OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
 
@@ -153,7 +153,7 @@ class CustomSearchViewController: SettingsTableViewController {
             SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineURLLabel), footerTitle: NSAttributedString(string: "http://youtube.com/search?q=%s"), children: [urlField])
         ]
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine(_:)))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
 
         return settings

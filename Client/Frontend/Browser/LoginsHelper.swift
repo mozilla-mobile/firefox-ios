@@ -31,7 +31,7 @@ class LoginsHelper: TabContentScript {
         self.profile = profile
 
         if let path = Bundle.main.path(forResource: "LoginsHelper", ofType: "js"), let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
+            let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
@@ -117,7 +117,7 @@ class LoginsHelper: TabContentScript {
 
         profile.logins
                .getLoginsForProtectionSpace(login.protectionSpace, withUsername: login.username)
-               .uponQueue(DispatchQueue.main) { res in
+               .uponQueue(.main) { res in
             if let data = res.successValue {
                 log.debug("Found \(data.count) logins.")
                 for saved in data {
@@ -205,7 +205,7 @@ class LoginsHelper: TabContentScript {
     }
 
     fileprivate func requestLogins(_ login: LoginData, requestId: String) {
-        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(DispatchQueue.main) { res in
+        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(.main) { res in
             var jsonObj = [String: Any]()
             if let cursor = res.successValue {
                 log.debug("Found \(cursor.count) logins.")

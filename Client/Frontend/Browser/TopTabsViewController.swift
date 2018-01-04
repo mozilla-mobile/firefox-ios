@@ -51,21 +51,21 @@ class TopTabsViewController: UIViewController {
     
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: UIControlEvents.touchUpInside)
+        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
     
     fileprivate lazy var newTab: UIButton = {
         let newTab = UIButton.newTabButton()
-        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: UIControlEvents.touchUpInside)
+        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
         return newTab
     }()
     
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.light = true
-        privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: UIControlEvents.touchUpInside)
+        privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
         return privateModeButton
     }()
     
@@ -96,7 +96,7 @@ class TopTabsViewController: UIViewController {
         [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(TopTabsViewController.reloadFavicons(_:)), name: faviconNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(TopTabsViewController.reloadFavicons), name: faviconNotification, object: nil)
     }
     
     deinit {

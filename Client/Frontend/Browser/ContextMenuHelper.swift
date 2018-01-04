@@ -33,14 +33,14 @@ class ContextMenuHelper: NSObject {
             return
         }
 
-        let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
+        let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
         webView.configuration.userContentController.addUserScript(userScript)
 
         nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:") as? UILongPressGestureRecognizer
 
         if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") as? UILongPressGestureRecognizer {
             nativeLongPressRecognizer.removeTarget(nil, action: nil)
-            nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected(_:)))
+            nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected))
         }
     }
 

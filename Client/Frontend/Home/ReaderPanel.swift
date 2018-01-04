@@ -95,11 +95,11 @@ class ReadingListTableViewCell: UITableViewCell {
         backgroundColor = UIColor.clear
 
         separatorInset = UIEdgeInsets(top: 0, left: 48, bottom: 0, right: 0)
-        layoutMargins = UIEdgeInsets.zero
+        layoutMargins = .zero
         preservesSuperviewLayoutMargins = false
 
         contentView.addSubview(readStatusImageView)
-        readStatusImageView.contentMode = UIViewContentMode.scaleAspectFit
+        readStatusImageView.contentMode = .scaleAspectFit
         readStatusImageView.snp.makeConstraints { (make) -> Void in
             make.width.equalTo(ReadingListTableViewCellUX.ReadIndicatorWidth)
             make.height.equalTo(ReadingListTableViewCellUX.ReadIndicatorHeight)
@@ -182,7 +182,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     var profile: Profile!
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(ReadingListPanel.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(ReadingListPanel.longPress))
     }()
 
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
@@ -191,8 +191,8 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ReadingListPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ReadingListPanel.notificationReceived(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReadingListPanel.notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ReadingListPanel.notificationReceived), name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init!(coder aDecoder: NSCoder) {
@@ -207,8 +207,8 @@ class ReadingListPanel: UITableViewController, HomePanel {
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.separatorInset = UIEdgeInsets.zero
-        tableView.layoutMargins = UIEdgeInsets.zero
+        tableView.separatorInset = .zero
+        tableView.layoutMargins = .zero
         tableView.separatorColor = UIConstants.SeparatorColor
         tableView.register(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
 
@@ -280,7 +280,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
         let welcomeLabel = UILabel()
         containerView.addSubview(welcomeLabel)
         welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
-        welcomeLabel.textAlignment = NSTextAlignment.center
+        welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
         welcomeLabel.adjustsFontSizeToFitWidth = true
@@ -344,7 +344,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
         presentContextMenu(for: indexPath)

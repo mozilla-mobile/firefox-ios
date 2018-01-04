@@ -195,7 +195,7 @@ extension SQLiteHistory: BrowserHistory {
             }
             
             let err = DatabaseError(description: "Unable to update or insert site; Invalid key returned")
-            log.error("recordVisitedSite(_:) encountered an error: \(err.localizedDescription)")
+            log.error("recordVisitedSite encountered an error: \(err.localizedDescription)")
             throw err
         }
     }

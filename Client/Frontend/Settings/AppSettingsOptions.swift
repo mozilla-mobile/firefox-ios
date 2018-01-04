@@ -172,7 +172,7 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     fileprivate lazy var troubleshootButton: UIButton = {
-        let troubleshootButton = UIButton(type: UIButtonType.roundedRect)
+        let troubleshootButton = UIButton(type: .roundedRect)
         troubleshootButton.setTitle(Strings.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
         troubleshootButton.tintColor = SettingsUX.TableViewRowActionAccessoryColor
@@ -242,7 +242,7 @@ class SyncNowSetting: WithAccountSetting {
             continuousRotateAnimation.toValue = CGFloat(Double.pi)
             continuousRotateAnimation.isRemovedOnCompletion = true
             continuousRotateAnimation.duration = 0.5
-            continuousRotateAnimation.repeatCount = Float.infinity
+            continuousRotateAnimation.repeatCount = .infinity
             
             // To ensure sync icon is aligned properly with user's avatar, an image is created with proper
             // dimensions and color, then the scaled sync icon is added as a subview.
@@ -913,7 +913,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(ChinaSyncServiceSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? self.profile.isChinaEdition
         cell.accessoryView = control
         cell.selectionStyle = .none
@@ -964,7 +964,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(StageSyncServiceDebugSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
+        control.addTarget(self, action: #selector(StageSyncServiceDebugSetting.switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? false
         cell.accessoryView = control
         cell.selectionStyle = .none

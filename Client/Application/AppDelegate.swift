@@ -150,7 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.window!.rootViewController = rootViewController
 
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
+        NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
                 profile.readingList?.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
@@ -220,7 +220,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
             let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
             controller.popoverDelegate = self.browserViewController
-            controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
+            controller.modalPresentationStyle = .formSheet
 
             rootNav.present(controller, animated: true, completion: nil)
 
@@ -491,7 +491,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         })
 
         if profile.hasSyncableAccount() {
-            profile.syncManager.syncEverything(why: .backgrounded).uponQueue(DispatchQueue.main) { _ in
+            profile.syncManager.syncEverything(why: .backgrounded).uponQueue(.main) { _ in
                 self.shutdownProfileWhenNotActive(application)
                 application.endBackgroundTask(taskId)
             }
@@ -503,7 +503,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     fileprivate func shutdownProfileWhenNotActive(_ application: UIApplication) {
         // Only shutdown the profile if we are not in the foreground
-        guard application.applicationState != UIApplicationState.active else {
+        guard application.applicationState != .active else {
             return
         }
 
@@ -660,7 +660,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if let alertURL = notification.request.content.userInfo[TabSendURLKey] as? String,
             let title = notification.request.content.userInfo[TabSendTitleKey] as? String {
             if let urlToOpen = URL(string: alertURL) {
-                NotificationCenter.default.post(name: NSNotification.Name.FSReadingListAddReadingListItem, object: self, userInfo: ["URL": urlToOpen, "Title": title])
+                NotificationCenter.default.post(name: .FSReadingListAddReadingListItem, object: self, userInfo: ["URL": urlToOpen, "Title": title])
             }
         }
     }
@@ -675,9 +675,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 // MARK: - Root View Controller Animations
 extension AppDelegate: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-            if operation == UINavigationControllerOperation.push {
+            if operation == .push {
                 return BrowserToTrayAnimator()
-            } else if operation == UINavigationControllerOperation.pop {
+            } else if operation == .pop {
                 return TrayToBrowserAnimator()
             } else {
                 return nil
@@ -776,7 +776,7 @@ extension AppDelegate {
                 self.receivedURLs = receivedURLs
                 
                 // If we're in the foreground, load the queued tabs now.
-                if application.applicationState == UIApplicationState.active {
+                if application.applicationState == .active {
                     DispatchQueue.main.async {
                         self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
                         self.receivedURLs = nil

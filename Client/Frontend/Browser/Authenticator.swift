@@ -40,7 +40,7 @@ class Authenticator {
 
         // Otherwise, try to look them up and show the prompt.
         if let loginsHelper = loginsHelper {
-            return findMatchingCredentialsForChallenge(challenge, fromLoginsProvider: loginsHelper.logins).bindQueue(DispatchQueue.main) { result in
+            return findMatchingCredentialsForChallenge(challenge, fromLoginsProvider: loginsHelper.logins).bindQueue(.main) { result in
                 guard let credentials = result.successValue else {
                     return deferMaybe(result.failureValue ?? LoginDataError(description: "Unknown error when finding credentials"))
                 }
@@ -109,16 +109,16 @@ class Authenticator {
         if !(protectionSpace.realm?.isEmpty ?? true) {
             let msg = NSLocalizedString("A username and password are being requested by %@. The site says: %@", comment: "Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string")
             let formatted = NSString(format: msg as NSString, protectionSpace.host, protectionSpace.realm ?? "") as String
-            alert = UIAlertController(title: title, message: formatted, preferredStyle: UIAlertControllerStyle.alert)
+            alert = UIAlertController(title: title, message: formatted, preferredStyle: .alert)
         } else {
             let msg = NSLocalizedString("A username and password are being requested by %@.", comment: "Authentication prompt message with no realm. Parameter is the hostname of the site")
             let formatted = NSString(format: msg as NSString, protectionSpace.host) as String
-            alert = UIAlertController(title: title, message: formatted, preferredStyle: UIAlertControllerStyle.alert)
+            alert = UIAlertController(title: title, message: formatted, preferredStyle: .alert)
         }
 
         // Add a button to log in.
         let action = UIAlertAction(title: LogInButtonTitle,
-            style: UIAlertActionStyle.default) { (action) -> Void in
+            style: .default) { (action) -> Void in
                 guard let user = alert.textFields?[0].text, let pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginDataError(description: "Username and Password required"))); return }
 
                 let login = Login.createWithCredential(URLCredential(user: user, password: pass, persistence: .forSession), protectionSpace: protectionSpace)

@@ -684,9 +684,9 @@ open class BrowserProfile: Profile {
 
             let center = NotificationCenter.default
             center.addObserver(self, selector: #selector(onDatabaseWasRecreated(notification:)), name: NotificationDatabaseWasRecreated, object: nil)
-            center.addObserver(self, selector: #selector(onLoginDidChange(_:)), name: NotificationDataLoginDidChange, object: nil)
-            center.addObserver(self, selector: #selector(onStartSyncing(_:)), name: NotificationProfileDidStartSyncing, object: nil)
-            center.addObserver(self, selector: #selector(onFinishSyncing(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
+            center.addObserver(self, selector: #selector(onLoginDidChange), name: NotificationDataLoginDidChange, object: nil)
+            center.addObserver(self, selector: #selector(onStartSyncing), name: NotificationProfileDidStartSyncing, object: nil)
+            center.addObserver(self, selector: #selector(onFinishSyncing), name: NotificationProfileDidFinishSyncing, object: nil)
             center.addObserver(self, selector: #selector(onBookmarkBufferValidated(notification:)), name: NotificationBookmarkBufferValidated, object: nil)
         }
 

@@ -31,18 +31,18 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
 
         super.init()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SELUIPasteboardChanged), name: NSNotification.Name.UIPasteboardChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELAppWillEnterForegroundNotification), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELUIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELAppWillEnterForegroundNotification), name: .UIApplicationWillEnterForeground, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: NotificationDidRestoreSession, object: nil)
     }
     
     @objc private func SELUIPasteboardChanged() {
         // UIPasteboardChanged gets triggered when calling UIPasteboard.general.
-         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIPasteboardChanged, object: nil)
+         NotificationCenter.default.removeObserver(self, name: .UIPasteboardChanged, object: nil)
 
         UIPasteboard.general.asyncURL().uponQueue(.main) { res in
             defer {
-                NotificationCenter.default.addObserver(self, selector: #selector(self.SELUIPasteboardChanged), name: NSNotification.Name.UIPasteboardChanged, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.SELUIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
             }
 
             guard let copiedURL: URL? = res.successValue,

@@ -65,7 +65,7 @@ class TabScrollingController: NSObject {
     }
 
     fileprivate lazy var panGesture: UIPanGestureRecognizer = {
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(TabScrollingController.handlePan(_:)))
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(TabScrollingController.handlePan))
         panGesture.maximumNumberOfTouches = 1
         panGesture.delegate = self
         return panGesture

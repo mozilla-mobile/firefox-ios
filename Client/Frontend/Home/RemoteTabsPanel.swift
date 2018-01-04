@@ -55,8 +55,8 @@ class RemoteTabsPanel: UIViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(RemoteTabsPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(RemoteTabsPanel.notificationReceived(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(RemoteTabsPanel.notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(RemoteTabsPanel.notificationReceived), name: NotificationProfileDidFinishSyncing, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -290,14 +290,14 @@ class RemoteTabsErrorCell: UITableViewCell {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
-        titleLabel.textAlignment = NSTextAlignment.center
+        titleLabel.textAlignment = .center
         titleLabel.textColor = RemoteTabsPanelUX.EmptyStateTitleTextColor
         containerView.addSubview(titleLabel)
 
         let instructionsLabel = UILabel()
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         instructionsLabel.text = error.localizedString()
-        instructionsLabel.textAlignment = NSTextAlignment.center
+        instructionsLabel.textAlignment = .center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
         containerView.addSubview(instructionsLabel)
@@ -364,29 +364,29 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
-        titleLabel.textAlignment = NSTextAlignment.center
+        titleLabel.textAlignment = .center
         titleLabel.textColor = RemoteTabsPanelUX.EmptyStateTitleTextColor
         contentView.addSubview(titleLabel)
 
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         instructionsLabel.text = Strings.EmptySyncedTabsPanelStateDescription
-        instructionsLabel.textAlignment = NSTextAlignment.center
+        instructionsLabel.textAlignment = .center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
         contentView.addSubview(instructionsLabel)
 
         signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
-        signInButton.setTitle(NSLocalizedString("Sign in", comment: "See http://mzl.la/1Qtkf0j"), for: UIControlState())
-        signInButton.setTitleColor(RemoteTabsPanelUX.EmptyStateSignInButtonTitleColor, for: UIControlState())
-        signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.subheadline)
+        signInButton.setTitle(NSLocalizedString("Sign in", comment: "See http://mzl.la/1Qtkf0j"), for: [])
+        signInButton.setTitleColor(RemoteTabsPanelUX.EmptyStateSignInButtonTitleColor, for: [])
+        signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
-        signInButton.addTarget(self, action: #selector(RemoteTabsNotLoggedInCell.SELsignIn), for: UIControlEvents.touchUpInside)
+        signInButton.addTarget(self, action: #selector(RemoteTabsNotLoggedInCell.SELsignIn), for: .touchUpInside)
         contentView.addSubview(signInButton)
 
-        createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), for: UIControlState())
-        createAnAccountButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.caption1)
-        createAnAccountButton.addTarget(self, action: #selector(RemoteTabsNotLoggedInCell.SELcreateAnAccount), for: UIControlEvents.touchUpInside)
+        createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), for: [])
+        createAnAccountButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
+        createAnAccountButton.addTarget(self, action: #selector(RemoteTabsNotLoggedInCell.SELcreateAnAccount), for: .touchUpInside)
         contentView.addSubview(createAnAccountButton)
 
         imageView.snp.makeConstraints { (make) -> Void in
@@ -479,7 +479,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     }
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(RemoteTabsTableViewController.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(RemoteTabsTableViewController.longPress))
     }()
 
     override func viewDidLoad() {
@@ -489,7 +489,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         tableView.register(TwoLineTableViewCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
 
         tableView.rowHeight = RemoteTabsPanelUX.RowHeight
-        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.separatorInset = .zero
 
         tableView.delegate = nil
         tableView.dataSource = nil
@@ -556,7 +556,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             return
         }
 
-        self.profile.getCachedClientsAndTabs().uponQueue(DispatchQueue.main) { result in
+        self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
             if let clientAndTabs = result.successValue {
                 self.updateDelegateClientAndTabData(clientAndTabs)
             }
@@ -565,7 +565,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime) ?? 0
             if Date.now() > lastSyncTime && Date.now() - lastSyncTime > OneSecondInMilliseconds * 5 {
                 self.startRefreshing()
-                self.profile.getClientsAndTabs().uponQueue(DispatchQueue.main) { result in
+                self.profile.getClientsAndTabs().uponQueue(.main) { result in
                     // We set the last sync time to now, regardless of whether the sync was successful, to avoid trying to sync over
                     // and over again in cases whether the client is unable to sync (e.g. when there is no network connectivity).
                     self.profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)
@@ -586,7 +586,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
         presentContextMenu(for: indexPath)

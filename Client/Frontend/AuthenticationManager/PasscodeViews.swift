@@ -141,7 +141,7 @@ class PasscodePane: UIView {
 
     init(title: String? = nil, passcodeSize: Int = 4) {
         codeInputView = PasscodeInputView(passcodeSize: passcodeSize)
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
         titleLabel.text = title
@@ -166,8 +166,8 @@ class PasscodePane: UIView {
             make.size.equalTo(PasscodeUX.PasscodeFieldSize)
         }
         layoutIfNeeded()
-        NotificationCenter.default.addObserver(self, selector: #selector(PasscodePane.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(PasscodePane.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
     }
 
     func shakePasscode() {

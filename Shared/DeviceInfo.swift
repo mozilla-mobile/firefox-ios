@@ -61,9 +61,7 @@ open class DeviceInfo {
     open class func hasConnectivity() -> Bool {
         let status = Reach().connectionStatus()
         switch status {
-        case .online(.wwan):
-            return true
-        case .online(.wiFi):
+        case .online(.wwan), .online(.wiFi):
             return true
         default:
             return false

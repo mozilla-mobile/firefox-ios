@@ -30,8 +30,7 @@ open class Bytes {
     }
 
     open class func decodeBase64(_ b64: String) -> Data? {
-        return Data(base64Encoded: b64,
-                      options: NSData.Base64DecodingOptions())
+        return Data(base64Encoded: b64, options: [])
     }
 
     /**

@@ -26,18 +26,18 @@ class ThirdPartySearchAlerts: UIAlertController {
         let alert = ThirdPartySearchAlerts(
             title: Strings.ThirdPartySearchAddTitle,
             message: Strings.ThirdPartySearchAddMessage,
-            preferredStyle: UIAlertControllerStyle.alert
+            preferredStyle: .alert
         )
 
         let noOption = UIAlertAction(
             title: Strings.ThirdPartySearchCancelButton,
-            style: UIAlertActionStyle.cancel,
+            style: .cancel,
             handler: nil
         )
 
         let okayOption = UIAlertAction(
             title: Strings.ThirdPartySearchOkayButton,
-            style: UIAlertActionStyle.default,
+            style: .default,
             handler: okayCallback
         )
 
@@ -72,12 +72,12 @@ class ThirdPartySearchAlerts: UIAlertController {
         let alert = ThirdPartySearchAlerts(
             title: title,
             message: message,
-            preferredStyle: UIAlertControllerStyle.alert
+            preferredStyle: .alert
         )
         
         let okayOption = UIAlertAction(
             title: Strings.ThirdPartySearchOkayButton,
-            style: UIAlertActionStyle.default,
+            style: .default,
             handler: nil
         )
         

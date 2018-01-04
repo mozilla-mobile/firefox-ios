@@ -69,7 +69,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate var sessionStart: Timestamp?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress))
     }()
 
     // Not used for displaying. Only used for calculating layout.
@@ -665,7 +665,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        guard longPressGestureRecognizer.state == .began else { return }
 
         let point = longPressGestureRecognizer.location(in: self.collectionView)
         guard let indexPath = self.collectionView?.indexPathForItem(at: point) else { return }

@@ -66,9 +66,9 @@ open class KeyboardHelper: NSObject {
      * Starts monitoring the keyboard state.
      */
     open func startObserving() {
-        NotificationCenter.default.addObserver(self, selector: #selector(KeyboardHelper.SELkeyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(KeyboardHelper.SELkeyboardDidShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(KeyboardHelper.SELkeyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELkeyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELkeyboardDidShow), name: .UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELkeyboardWillHide), name: .UIKeyboardWillHide, object: nil)
     }
 
     deinit {
