@@ -77,7 +77,7 @@ class InstructionsViewController: UIViewController {
         edgesForExtendedLayout = []
         view.backgroundColor = UIColor.white
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", tableName: "SendTo", comment: "Close button in top navigation bar"), style: UIBarButtonItemStyle.done, target: self, action: #selector(InstructionsViewController.close))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", tableName: "SendTo", comment: "Close button in top navigation bar"), style: .done, target: self, action: #selector(InstructionsViewController.close))
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "InstructionsViewController.navigationItem.leftBarButtonItem"
 
         setupHelpView(view,

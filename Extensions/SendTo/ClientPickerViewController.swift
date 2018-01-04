@@ -190,7 +190,7 @@ class ClientPickerViewController: UITableViewController {
                     if self.clients.count == 0 {
                         self.navigationItem.rightBarButtonItem = nil
                     } else {
-                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Send", tableName: "SendTo", comment: "Navigation bar button to Send the current page to a device"), style: UIBarButtonItemStyle.done, target: self, action: #selector(self.send))
+                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Send", tableName: "SendTo", comment: "Navigation bar button to Send the current page to a device"), style: .done, target: self, action: #selector(self.send))
                         self.navigationItem.rightBarButtonItem?.isEnabled = false
                     }
                     self.selectedClients.removeAllObjects()
