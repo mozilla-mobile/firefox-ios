@@ -805,9 +805,9 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     fileprivate func cellHeightForCurrentDevice() -> CGFloat {
         let shortHeight = TabTrayControllerUX.TextBoxHeight * 6
 
-        if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact {
+        if self.traitCollection.verticalSizeClass == .compact {
             return shortHeight
-        } else if self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.compact {
+        } else if self.traitCollection.horizontalSizeClass == .compact {
             return shortHeight
         } else {
             return TabTrayControllerUX.TextBoxHeight * 8
