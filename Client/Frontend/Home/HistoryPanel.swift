@@ -58,7 +58,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         super.init(nibName: nil, bundle: nil)
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanel.notificationReceived), name: $0, object: nil) }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -103,7 +103,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             presentContextMenu(for: indexPath)
         }
     }
-    
+
     // MARK: - History Data Store
     func updateNumberOfSyncedDevices(_ count: Int?) {
         if let count = count, count > 0 {
@@ -525,7 +525,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                             if !rowsToAdd.isEmpty {
                                 self.tableView.insertRows(at: rowsToAdd, with: .right)
                             }
-                            
+
                             self.tableView.endUpdates()
                             self.updateEmptyPanelState()
                         }

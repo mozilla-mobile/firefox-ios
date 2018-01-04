@@ -81,7 +81,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.AppBackgroundColor
-        
+
         buttonContainerView.axis = .horizontal
         buttonContainerView.alignment = .fill
         buttonContainerView.distribution = .fillEqually
@@ -91,7 +91,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).")
         view.addSubview(buttonContainerView)
         buttonContainerView.addSubview(highlightLine)
-        
+
         self.buttonContainerBottomBorderView = UIView()
         self.view.addSubview(buttonContainerBottomBorderView)
         buttonContainerBottomBorderView.backgroundColor = HomePanelViewControllerUX.ButtonContainerBorderColor
@@ -227,7 +227,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             self.buttonContainerView.addArrangedSubview(button)
         }
     }
-    
+
     func updateButtonTints() {
         var selectedbutton: UIView?
         for (index, button) in self.buttons.enumerated() {
@@ -284,7 +284,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func homePanelDidRequestToSignIn(_ homePanel: HomePanel) {
         delegate?.homePanelViewControllerDidRequestToSignIn(self)
     }
-    
+
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }

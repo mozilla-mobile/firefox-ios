@@ -94,7 +94,7 @@ class LeanPlumClient {
         assert(Thread.isMainThread)
         return UIApplication.isInPrivateMode
     }
-    
+
     private func isLPEnabled() -> Bool {
         return enabled && Leanplum.hasStarted()
     }
@@ -133,7 +133,7 @@ class LeanPlumClient {
         ]
 
         self.setupCustomTemplates()
-        
+
         Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
 
@@ -232,7 +232,7 @@ class LeanPlumClient {
         }
         return LPSettings(appId: appId, developmentKey: developmentKey, productionKey: productionKey)
     }
-    
+
     // This must be called before `Leanplum.start` in order to correctly setup
     // custom message templates.
     private func setupCustomTemplates() {
@@ -248,18 +248,18 @@ class LeanPlumClient {
             LPActionArg(named: LPMessage.ArgCancelButtonText, with: LPMessage.DefaultLaterButtonText),
             LPActionArg(named: LPMessage.ArgCancelButtonTextColor, with: UIColor.gray)
         ]
-        
+
         let responder: LeanplumActionBlock = { (context) -> Bool in
             guard let context = context else {
                 return false
             }
-            
+
             // Don't display permission screen if they have already allowed/disabled push permissions
             if self.prefs?.boolForKey(AppRequestedUserNotificationsPrefKey) ?? false {
                 FxALoginHelper.sharedInstance.readyForSyncing()
                 return false
             }
-            
+
             // Present Alert View onto the current top view controller
             let rootViewController = UIApplication.topViewController()
             let alert = UIAlertController(title: context.stringNamed(LPMessage.ArgTitleText), message: context.stringNamed(LPMessage.ArgMessageText), preferredStyle: .alert)
@@ -276,11 +276,11 @@ class LeanPlumClient {
                 FxALoginHelper.sharedInstance.requestUserNotifications(UIApplication.shared)
                 self.prefs?.setBool(true, forKey: AppRequestedUserNotificationsPrefKey)
             }))
-            
+
             rootViewController?.present(alert, animated: true, completion: nil)
             return true
         }
-        
+
         // Register or update the custom Leanplum message
         Leanplum.defineAction(LPMessage.FxAPrePush, of: kLeanplumActionKindMessage, withArguments: args, withOptions: [:], withResponder: responder)
     }

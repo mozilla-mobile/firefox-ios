@@ -271,7 +271,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     func SELdidClickSearchButton() {
-        self.searchDelegate?.presentSearchSettingsController()  
+        self.searchDelegate?.presentSearchSettingsController()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {

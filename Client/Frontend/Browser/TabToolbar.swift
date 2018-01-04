@@ -106,7 +106,7 @@ open class TabToolbarHelper: NSObject {
     func didClickTabs() {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressTabs(toolbar, button: toolbar.tabsButton)
     }
-    
+
     func didLongPressTabs(_ recognizer: UILongPressGestureRecognizer) {
         toolbar.tabToolbarDelegate?.tabToolbarDidLongPressTabs(toolbar, button: toolbar.tabsButton)
     }
@@ -167,7 +167,7 @@ class ToolbarButton: UIButton {
             self.tintColor = isHighlighted ? selectedTintColor : unselectedTintColor
         }
     }
-    
+
     override open var isEnabled: Bool {
         didSet {
             self.tintColor = isEnabled ? unselectedTintColor : disabledTintColor
@@ -179,7 +179,7 @@ class ToolbarButton: UIButton {
             self.imageView?.tintColor = self.tintColor
         }
     }
-    
+
 }
 
 extension ToolbarButton: Themeable {

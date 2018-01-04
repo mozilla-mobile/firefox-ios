@@ -34,7 +34,7 @@ protocol OpenInHelper {
 
 struct OpenIn {
     static let helpers: [OpenInHelper.Type] = [OpenPdfInHelper.self, OpenPassBookHelper.self, ShareFileHelper.self]
-    
+
     static func helperForResponse(_ response: URLResponse) -> OpenInHelper? {
         return helpers.flatMap { $0.init(response: response) }.first
     }

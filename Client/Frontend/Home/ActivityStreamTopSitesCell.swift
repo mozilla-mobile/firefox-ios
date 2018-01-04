@@ -463,7 +463,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top) + insets.top
         frame.size = itemSize
         attr.frame = frame
-        
+
         return attr
     }
 }
@@ -483,7 +483,7 @@ protocol ASHorizontalLayoutDelegate {
 }
 
 /*
- This Delegate/DataSource is used to manage the ASHorizontalScrollCell's UICollectionView. 
+ This Delegate/DataSource is used to manage the ASHorizontalScrollCell's UICollectionView.
  This is left generic enough for it to be re used for other parts of Activity Stream.
  */
 

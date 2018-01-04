@@ -29,10 +29,10 @@ protocol SwipeAnimatorDelegate: class {
 class SwipeAnimator: NSObject {
     weak var delegate: SwipeAnimatorDelegate?
     weak var animatingView: UIView?
-    
+
     fileprivate var prevOffset: CGPoint?
     fileprivate let params: SwipeAnimationParameters
-    
+
     fileprivate var panGestureRecogniser: UIPanGestureRecognizer!
 
     var containerCenter: CGPoint {

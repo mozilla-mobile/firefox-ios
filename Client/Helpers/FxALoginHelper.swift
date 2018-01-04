@@ -48,9 +48,9 @@ enum PushNotificationError: MaybeErrorType {
     }
 }
 
-/// This class manages the from successful login for FxAccounts to 
-/// asking the user for notification permissions, registering for 
-/// remote push notifications (APNS), then creating an account and 
+/// This class manages the from successful login for FxAccounts to
+/// asking the user for notification permissions, registering for
+/// remote push notifications (APNS), then creating an account and
 /// storing it in the profile.
 class FxALoginHelper {
     static var sharedInstance: FxALoginHelper = {
@@ -131,7 +131,7 @@ class FxALoginHelper {
     }
 
     // This is called when the user logs into a new FxA account.
-    // It manages the asking for user permission for notification and registration 
+    // It manages the asking for user permission for notification and registration
     // for APNS and WebPush notifications.
     func application(_ application: UIApplication, didReceiveAccountJSON data: JSON) {
         if data["keyFetchToken"].stringValue() == nil || data["unwrapBKey"].stringValue() == nil {
@@ -148,11 +148,11 @@ class FxALoginHelper {
         }
         accountVerified = data["verified"].bool ?? false
         self.account = account
-        
+
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             account.updateProfile()
         }
-        
+
         if AppConstants.MOZ_ENABLE_LEANPLUM && AppConstants.MOZ_FXA_LEANPLUM_AB_PUSH_TEST {
             // If Leanplum A/B push notification tests are enabled, defer to them for
             // displaying the pre-push permission dialog. If user dismisses it, we will still have
@@ -160,7 +160,7 @@ class FxALoginHelper {
             // `apnsRegisterDidFail` to finish setting up Autopush.
             return readyForSyncing()
         }
-        
+
         requestUserNotifications(application)
     }
 
@@ -172,7 +172,7 @@ class FxALoginHelper {
     func requestUserNotifications(_ application: UIApplication) {
         if let deferred = self.apnsTokenDeferred, deferred.isFilled,
             let token = deferred.value.successValue {
-            // If we have an account, then it'll go through ahead and register 
+            // If we have an account, then it'll go through ahead and register
             // with autopush here.
             // If not we'll just bail. The Deferred will do the rest.
             return self.apnsRegisterDidSucceed(token)
@@ -210,7 +210,7 @@ class FxALoginHelper {
             readyForSyncing()
         }
     }
-        
+
     func getPushConfiguration() -> PushConfiguration? {
         let label = PushConfigurationLabel(rawValue: AppConstants.scheme)
         return label?.toConfiguration()
@@ -284,12 +284,12 @@ class FxALoginHelper {
             return
         }
 
-        // The only way we can tell if the account has been verified is to 
+        // The only way we can tell if the account has been verified is to
         // start a sync. If it works, then yay,
         account.advance().upon { state in
             guard state.actionNeeded == .needsVerification else {
                 // Verification has occurred remotely, and we can proceed.
-                // The state machine will have told any listening UIs that 
+                // The state machine will have told any listening UIs that
                 // we're done.
                 return self.performVerifiedSync(profile, account: account)
             }
@@ -320,11 +320,11 @@ extension FxALoginHelper {
         // According to https://developer.apple.com/documentation/uikit/uiapplication/1623093-unregisterforremotenotifications
         // we should be calling:
         application.unregisterForRemoteNotifications()
-        // However, https://forums.developer.apple.com/message/179264#179264 advises against it, suggesting there is 
+        // However, https://forums.developer.apple.com/message/179264#179264 advises against it, suggesting there is
         // a 24h period after unregistering where re-registering fails. This doesn't seem to be the case (for me)
         // but this may be useful to know if QA/user-testing find this a problem.
 
-        // Whatever, we should unregister from the autopush server. That means we definitely won't be getting any 
+        // Whatever, we should unregister from the autopush server. That means we definitely won't be getting any
         // messages.
         if let pushRegistration = self.account.pushRegistration,
             let pushClient = self.pushClient {

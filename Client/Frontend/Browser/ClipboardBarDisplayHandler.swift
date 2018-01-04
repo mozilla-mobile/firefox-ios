@@ -24,7 +24,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
     private var lastDisplayedURL: String?
     private weak var firstTab: Tab?
     var clipboardToast: ButtonToast?
-    
+
     init(prefs: Prefs, tabManager: TabManager) {
         self.prefs = prefs
         self.tabManager = tabManager
@@ -35,7 +35,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(SELAppWillEnterForegroundNotification), name: .UIApplicationWillEnterForeground, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: NotificationDidRestoreSession, object: nil)
     }
-    
+
     @objc private func SELUIPasteboardChanged() {
         // UIPasteboardChanged gets triggered when calling UIPasteboard.general.
          NotificationCenter.default.removeObserver(self, name: .UIPasteboardChanged, object: nil)
@@ -108,7 +108,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         sessionStarted = false
         return true
     }
-    
+
     // If we already displayed this URL on the previous session, or in an already open
     // tab, we shouldn't display it again
     private func isClipboardURLAlreadyDisplayed(_ clipboardURL: String) -> Bool {
@@ -122,7 +122,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         }
         return false
     }
-    
+
     func checkIfShouldDisplayBar() {
         guard self.prefs.boolForKey("showClipboardBar") ?? false else {
             // There's no point in doing any of this work unless the

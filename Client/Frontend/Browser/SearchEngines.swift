@@ -178,7 +178,7 @@ class SearchEngines {
         if !directories.contains(fallbackIdentifier) {
             directories.append(fallbackIdentifier)
         }
-        
+
         return directories.map { (path) -> String in
             return basePath.appendingPathComponent(path)
         }

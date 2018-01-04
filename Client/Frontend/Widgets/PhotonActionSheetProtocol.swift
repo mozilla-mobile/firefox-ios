@@ -19,12 +19,12 @@ extension PhotonActionSheetProtocol {
     typealias MenuAction = () -> Void
     typealias IsPrivateTab = Bool
     typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
-    
+
     func presentSheetWith(actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, supressPopover: Bool = false) {
         let sheet = PhotonActionSheet(actions: actions)
         sheet.modalPresentationStyle =  (UIDevice.current.userInterfaceIdiom == .pad && !supressPopover) ? .popover : .overCurrentContext
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
-        
+
         if let popoverVC = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
@@ -34,7 +34,7 @@ extension PhotonActionSheetProtocol {
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
-    
+
     //Returns a list of actions which is used to build a menu
     //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
     func getHomePanelActions() -> [PhotonActionSheetItem] {
@@ -48,19 +48,19 @@ extension PhotonActionSheetProtocol {
             tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
             UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .bookmarksPanel, value: .appMenu)
         }
-        
+
         let openHistory = PhotonActionSheetItem(title: Strings.AppMenuHistoryTitleString, iconString: "menu-panel-History") { action in
             tab.loadRequest(PrivilegedRequest(url: HomePanelType.history.localhostURL) as URLRequest)
         }
-        
+
         let openReadingList = PhotonActionSheetItem(title: Strings.AppMenuReadingListTitleString, iconString: "menu-panel-ReadingList") { action in
             tab.loadRequest(PrivilegedRequest(url: HomePanelType.readingList.localhostURL) as URLRequest)
         }
-        
+
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
             HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
         }
-        
+
         var actions = [openTopSites, openBookmarks, openReadingList, openHistory]
         if HomePageHelper(prefs: self.profile.prefs).isHomePageAvailable {
             actions.insert(openHomePage, at: 0)
@@ -68,15 +68,15 @@ extension PhotonActionSheetProtocol {
 
         return actions
     }
-    
+
     /*
      Returns a list of actions which is used to build the general browser menu
      These items repersent global options that are presented in the menu
      TODO: These icons should all have the icons and use Strings.swift
      */
-    
+
     typealias PageOptionsVC = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
-    
+
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         var noImageMode: PhotonActionSheetItem? = nil
         if #available(iOS 11, *) {
@@ -110,19 +110,19 @@ extension PhotonActionSheetProtocol {
         }
         return [nightMode, openSettings]
     }
-    
+
     func getTabActions(tab: Tab, buttonView: UIView,
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
                        findInPage:  @escaping () -> Void,
                        presentableVC: PresentableVC,
                        isBookmarked: Bool,
                        success: @escaping (String) -> Void) -> Array<[PhotonActionSheetItem]> {
-        
+
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
             tab.toggleDesktopSite()
         }
-        
+
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
             guard let url = tab.url?.displayURL else { return }
 
@@ -151,7 +151,7 @@ extension PhotonActionSheetProtocol {
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
             success(Strings.AppMenuAddBookmarkConfirmMessage)
         }
-        
+
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { action in
             //TODO: can all this logic go somewhere else?
             guard let url = tab.url?.displayURL else { return }
@@ -165,18 +165,18 @@ extension PhotonActionSheetProtocol {
                 }
             }
         }
-        
+
         let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { action in
             guard let url = tab.url?.displayURL,
                   let sql = self.profile.history as? SQLiteHistory else { return }
             let absoluteString = url.absoluteString
-            
+
             sql.getSitesForURLs([absoluteString]) >>== { result in
                 guard let siteOp = result.asArray().first, let site = siteOp else {
                     log.warning("Could not get site for \(absoluteString)")
                     return
                 }
-                
+
                 _ = self.profile.history.addPinnedTopSite(site).value
             }
         }
@@ -200,7 +200,7 @@ extension PhotonActionSheetProtocol {
             navigationController.modalPresentationStyle = .formSheet
             bvc.present(navigationController, animated: true, completion: nil)
         }
-        
+
         let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let url = tab.canonicalURL?.displayURL else { return }
             presentShareMenu(url, tab, buttonView, .up)

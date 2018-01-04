@@ -229,7 +229,7 @@ class TimerSnackBar: SnackBar {
         bar.addButton(cancelButton)
         tab.addSnackbar(bar)
     }
-    
+
     override func show() {
         self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(TimerSnackBar.timerDone), userInfo: nil, repeats: false)
         RunLoop.current.add(self.timer!, forMode: RunLoopMode.defaultRunLoopMode)

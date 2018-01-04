@@ -23,7 +23,7 @@ class ChevronView: UIView {
     fileprivate var lineJoinStyle = CGLineJoin.round
 
     var lineWidth: CGFloat = 3.0
-    
+
     var style: ChevronStyle = .rounded {
         didSet {
             switch style {

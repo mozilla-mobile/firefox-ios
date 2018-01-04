@@ -53,7 +53,7 @@ class UnifiedTelemetry {
             outputDict["settings"] = settings
             return outputDict
         }
-        
+
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
         Telemetry.default.add(pingBuilderType: MobileEventPingBuilder.self)
     }

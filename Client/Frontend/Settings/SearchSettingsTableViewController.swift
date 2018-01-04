@@ -20,14 +20,14 @@ class SearchSettingsTableViewController: UITableViewController {
     fileprivate let NumberOfSections = 2
     fileprivate let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
     fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-    
+
     fileprivate var showDeletion = false
-    
+
     var profile: Profile?
     var tabManager: TabManager?
 
     fileprivate var isEditable: Bool {
-        // If the default engine is a custom one, make sure we have more than one since we can't edit the default. 
+        // If the default engine is a custom one, make sure we have more than one since we can't edit the default.
         // Otherwise, enable editing if we have at least one custom engine.
         let customEngineCount = model.orderedEngines.filter({$0.isCustomEngine}).count
         return model.defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0

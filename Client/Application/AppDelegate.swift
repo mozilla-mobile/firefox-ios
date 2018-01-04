@@ -88,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
         Sentry.shared.setup(sendUsageData: sendUsageData)
-        
+
         // Set the Firefox UA for browsing.
         setUserAgent()
 
@@ -299,7 +299,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             print("Setting up BuddyBuild SDK")
             BuddyBuildSDK.setup()
         #endif
-        
+
         window!.makeKeyAndVisible()
 
         // Now roll logs.
@@ -512,7 +512,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // The reason we need to call this method here instead of `applicationDidBecomeActive`
-        // is that this method is only invoked whenever the application is entering the foreground where as 
+        // is that this method is only invoked whenever the application is entering the foreground where as
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
     }
@@ -603,13 +603,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
         if let url = userActivity.webpageURL {
             let query = url.getQuery()
-            
+
             // Check for fxa sign-in code and launch the login screen directly
             if query["signin"] != nil {
                 browserViewController.launchFxAFromDeeplinkURL(url)
                 return true
             }
-            
+
             // Per Adjust documenation, https://docs.adjust.com/en/universal-links/#running-campaigns-through-universal-links,
             // it is recommended that links contain the `deep_link` query parameter. This link will also
             // be url encoded.
@@ -758,7 +758,7 @@ extension AppDelegate {
             return completionHandler(.noData)
         }
 
-        // NotificationService will have decrypted the push message, and done some syncing 
+        // NotificationService will have decrypted the push message, and done some syncing
         // activity. If the `client` collection was synced, and there are `displayURI` commands (i.e. sent tabs)
         // NotificationService will have collected them for us in the userInfo.
         if let serializedTabs = userInfo["sentTabs"] as? [[String: String]] {
@@ -774,7 +774,7 @@ extension AppDelegate {
                 // Remember which URLs we received so we can filter them out later when
                 // loading the queued tabs.
                 self.receivedURLs = receivedURLs
-                
+
                 // If we're in the foreground, load the queued tabs now.
                 if application.applicationState == .active {
                     DispatchQueue.main.async {
@@ -791,7 +791,7 @@ extension AppDelegate {
         //
         // The only thing left to do now is to perform actions that can only be performed
         // while the app is foregrounded.
-        // 
+        //
         // Use the push message handler to re-parse the message,
         // this time with a BrowserProfile and processing the return
         // differently than in NotificationService.

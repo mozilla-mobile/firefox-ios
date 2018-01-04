@@ -16,7 +16,7 @@ protocol TabLocationViewDelegate {
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton)
     func tabLocationViewDidLongPressPageOptions(_ tabLocationVIew: TabLocationView)
-    
+
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
@@ -128,7 +128,7 @@ class TabLocationView: UIView {
         readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(TabLocationView.SELreaderModeCustomAction))]
         return readerModeButton
     }()
-    
+
     lazy var pageOptionsButton: ToolbarButton = {
         let pageOptionsButton = ToolbarButton(frame: CGRect.zero)
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
@@ -142,7 +142,7 @@ class TabLocationView: UIView {
         pageOptionsButton.addGestureRecognizer(longPressGesture)
         return pageOptionsButton
     }()
-    
+
     lazy var separatorLine: UIView = {
         let line = UIView()
         line.layer.cornerRadius = 2
@@ -174,14 +174,14 @@ class TabLocationView: UIView {
             make.width.equalTo(44)
             make.height.equalTo(self)
         }
-        
+
         separatorLine.snp.makeConstraints { make in
             make.width.equalTo(1)
             make.height.equalTo(26)
             make.trailing.equalTo(pageOptionsButton.snp.leading)
             make.centerY.equalTo(self)
         }
-        
+
         readerModeButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.trailing.equalTo(separatorLine.snp.leading).offset(-9)
@@ -231,11 +231,11 @@ class TabLocationView: UIView {
             delegate?.tabLocationViewDidLongPressReaderMode(self)
         }
     }
-    
+
     func SELDidPressPageOptionsButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapPageOptions(self, from: button)
     }
-    
+
     func SELDidLongPressPageOptionsButton(_ recognizer: UILongPressGestureRecognizer) {
         delegate?.tabLocationViewDidLongPressPageOptions(self)
     }
@@ -293,7 +293,7 @@ extension TabLocationView: Themeable {
         urlTextField.textColor = UIColor.Browser.Tint.colorFor(theme)
         readerModeButton.selectedTintColor = UIColor.TextField.ReaderModeButtonSelected.colorFor(theme)
         readerModeButton.unselectedTintColor = UIColor.TextField.ReaderModeButtonUnselected.colorFor(theme)
-        
+
         pageOptionsButton.selectedTintColor = UIColor.TextField.PageOptionsSelected.colorFor(theme)
         pageOptionsButton.unselectedTintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
@@ -309,11 +309,11 @@ class ReaderModeButton: UIButton {
         adjustsImageWhenHighlighted = false
         setImage(UIImage.templateImageNamed("reader"), for: .normal)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override var isSelected: Bool {
         didSet {
             self.tintColor = (isHighlighted || isSelected) ? selectedTintColor : unselectedTintColor
@@ -331,9 +331,9 @@ class ReaderModeButton: UIButton {
             self.imageView?.tintColor = self.tintColor
         }
     }
-    
+
     var _readerModeState: ReaderModeState = ReaderModeState.unavailable
-    
+
     var readerModeState: ReaderModeState {
         get {
             return _readerModeState

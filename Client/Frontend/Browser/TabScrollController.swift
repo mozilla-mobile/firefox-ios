@@ -202,7 +202,7 @@ private extension TabScrollingController {
             if gesture.state == .ended || gesture.state == .cancelled {
                 lastContentOffset = 0
             }
-            
+
             showOrHideWebViewContainerToolbar()
         }
     }
@@ -274,7 +274,7 @@ private extension TabScrollingController {
     func checkScrollHeightIsLargeEnoughForScrolling() -> Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height ?? 0
     }
-    
+
     func showOrHideWebViewContainerToolbar() {
         if contentOffset.y >= webViewContainerToolbar?.frame.height ?? 0 {
             webViewContainerToolbar?.isHidden = true
@@ -317,7 +317,7 @@ extension TabScrollingController: UIScrollViewDelegate {
         if isZoomedOut {
             scrollView.zoomScale = scrollView.minimumZoomScale
         } else if roundNum(scrollView.zoomScale) > roundNum(self.lastZoomedScale) && self.lastZoomedScale != 0 {
-            //When we have manually zoomed in we want to preserve that scale. 
+            //When we have manually zoomed in we want to preserve that scale.
             //But sometimes when we rotate a larger zoomScale is appled. In that case apply the lastZoomedScale
             scrollView.zoomScale = self.lastZoomedScale
         }
