@@ -228,7 +228,7 @@ class TopTabFader: UIView {
     }()
 
     init() {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         layer.mask = hMaskLayer
     }
 

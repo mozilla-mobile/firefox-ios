@@ -547,7 +547,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
 
         tableView.isScrollEnabled = false
         tableView.allowsSelection = false
-        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        tableView.tableFooterView = UIView(frame: .zero)
 
         // Short circuit if the user is not logged in
         if !profile.hasSyncableAccount() {

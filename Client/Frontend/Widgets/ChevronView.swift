@@ -39,7 +39,7 @@ class ChevronView: UIView {
     }
 
     init(direction: ChevronDirection) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
         self.direction = direction
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {

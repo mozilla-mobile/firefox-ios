@@ -45,7 +45,7 @@ class ButtonToast: UIView {
     }()
 
     init(labelText: String, descriptionText: String? = nil, buttonText: String, completion:@escaping (_ buttonPressed: Bool) -> Void) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         completionHandler = completion
 
         self.clipsToBounds = true

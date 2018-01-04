@@ -39,7 +39,7 @@ class TopTabsViewController: UIViewController {
     let faviconNotification = NSNotification.Name(rawValue: FaviconManager.FaviconDidLoad)
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: TopTabsViewLayout())
         collectionView.register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false

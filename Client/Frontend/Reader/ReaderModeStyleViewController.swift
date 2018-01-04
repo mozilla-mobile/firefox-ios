@@ -253,7 +253,7 @@ class FontTypeButton: UIButton {
     var fontType: ReaderModeFontType = .sansSerif
 
     convenience init(fontType: ReaderModeFontType) {
-        self.init(frame: CGRect.zero)
+        self.init(frame: .zero)
         self.fontType = fontType
         setTitleColor(ReaderModeStyleViewControllerUX.FontTypeTitleSelectedColor, for: .selected)
         setTitleColor(ReaderModeStyleViewControllerUX.FontTypeTitleNormalColor, for: [])
@@ -284,7 +284,7 @@ class FontSizeButton: UIButton {
     var fontSizeAction: FontSizeAction = .bigger
 
     convenience init(fontSizeAction: FontSizeAction) {
-        self.init(frame: CGRect.zero)
+        self.init(frame: .zero)
         self.fontSizeAction = fontSizeAction
 
         setTitleColor(ReaderModeStyleViewControllerUX.FontSizeButtonTextColorEnabled, for: .normal)

@@ -253,7 +253,7 @@ class ButtonWithSublabel: UIButton {
     }
 
     convenience init() {
-        self.init(frame: CGRect.zero)
+        self.init(frame: .zero)
     }
 
     override init(frame: CGRect) {

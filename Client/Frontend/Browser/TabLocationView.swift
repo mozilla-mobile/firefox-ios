@@ -117,7 +117,7 @@ class TabLocationView: UIView {
     }()
 
     fileprivate lazy var readerModeButton: ReaderModeButton = {
-        let readerModeButton = ReaderModeButton(frame: CGRect.zero)
+        let readerModeButton = ReaderModeButton(frame: .zero)
         readerModeButton.isHidden = true
         readerModeButton.addTarget(self, action: #selector(TabLocationView.SELtapReaderModeButton), for: .touchUpInside)
         readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELlongPressReaderModeButton)))
@@ -130,7 +130,7 @@ class TabLocationView: UIView {
     }()
 
     lazy var pageOptionsButton: ToolbarButton = {
-        let pageOptionsButton = ToolbarButton(frame: CGRect.zero)
+        let pageOptionsButton = ToolbarButton(frame: .zero)
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
         pageOptionsButton.isHidden = true
         pageOptionsButton.addTarget(self, action: #selector(TabLocationView.SELDidPressPageOptionsButton), for: .touchUpInside)

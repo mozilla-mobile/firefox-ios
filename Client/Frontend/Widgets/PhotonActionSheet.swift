@@ -53,7 +53,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     private lazy var showCancelButton: Bool = {
         return self.style == .bottom && self.modalPresentationStyle != .popover
     }()
-    var tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    var tableView = UITableView(frame: .zero, style: .grouped)
     private var tintColor = UIColor.Defaults.Grey80
     private var outerScrollView = UIScrollView()
 

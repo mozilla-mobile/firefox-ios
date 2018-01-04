@@ -47,7 +47,7 @@ class PasscodeInputView: UIView, UIKeyInput {
     }
 
     convenience init(passcodeSize: Int) {
-        self.init(frame: CGRect.zero, passcodeSize: passcodeSize)
+        self.init(frame: .zero, passcodeSize: passcodeSize)
     }
 
     required init?(coder aDecoder: NSCoder) {

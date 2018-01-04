@@ -85,7 +85,7 @@ class BrowserViewController: UIViewController {
     var header: UIView!
     var footer: UIView!
     fileprivate var topTouchArea: UIButton!
-    let urlBarTopTabsContainer = UIView(frame: CGRect.zero)
+    let urlBarTopTabsContainer = UIView(frame: .zero)
     var topTabsVisible: Bool {
         return topTabsViewController != nil
     }
@@ -2114,7 +2114,7 @@ extension BrowserViewController {
 
     func showReaderModeBar(animated: Bool) {
         if self.readerModeBar == nil {
-            let readerModeBar = ReaderModeBarView(frame: CGRect.zero)
+            let readerModeBar = ReaderModeBarView(frame: .zero)
             readerModeBar.delegate = self
             view.insertSubview(readerModeBar, belowSubview: header)
             self.readerModeBar = readerModeBar

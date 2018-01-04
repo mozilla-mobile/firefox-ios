@@ -210,7 +210,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
     lazy var collectionView: UICollectionView = {
         let layout  = HorizontalFlowLayout()
         layout.itemSize = ASHorizontalScrollCellUX.TopSiteItemSize
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
         collectionView.backgroundColor = UIColor.clear
         collectionView.showsHorizontalScrollIndicator = false

@@ -32,7 +32,7 @@ class SnackButton: UIButton {
     init(title: String, accessibilityIdentifier: String, callback: @escaping SnackBarCallback) {
         self.callback = callback
 
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
         setTitle(title, for: .normal)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
@@ -108,7 +108,7 @@ class SnackBar: UIView {
     var bottom: Constraint?
 
     init(text: String, img: UIImage?) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
         imageView.image = img ?? UIImage(named: "defaultFavicon")
         textLabel.text = text
