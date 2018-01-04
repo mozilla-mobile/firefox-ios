@@ -826,8 +826,8 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }
             if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad, let popoverController = controller.popoverPresentationController {
-                let cellRect = sourceView?.frame ?? CGRect.zero
-                let cellFrameInSuperview = self.collectionView?.convert(cellRect, to: self.collectionView) ?? CGRect.zero
+                let cellRect = sourceView?.frame ?? .zero
+                let cellFrameInSuperview = self.collectionView?.convert(cellRect, to: self.collectionView) ?? .zero
 
                 popoverController.sourceView = sourceView
                 popoverController.sourceRect = CGRect(origin: CGPoint(x: cellFrameInSuperview.size.width/2, y: cellFrameInSuperview.height/2), size: .zero)

@@ -573,7 +573,7 @@ fileprivate class SuggestionCell: UITableViewCell {
                     currentRow += 1
                     if currentRow >= SearchViewControllerUX.SuggestionCellMaxRows {
                         // Don't draw this button if it doesn't fit on the row.
-                        button.frame = CGRect.zero
+                        button.frame = .zero
                         continue
                     }
 

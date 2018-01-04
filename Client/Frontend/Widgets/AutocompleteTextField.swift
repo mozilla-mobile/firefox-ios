@@ -194,7 +194,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func caretRect(for position: UITextPosition) -> CGRect {
-        return hideCursor ? CGRect.zero : super.caretRect(for: position)
+        return hideCursor ? .zero : super.caretRect(for: position)
     }
 
     private func createAutocompleteLabelWith(_ autocompleteText: NSAttributedString) -> UILabel {
@@ -206,7 +206,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         label.backgroundColor = self.backgroundColor
         label.textColor = self.textColor
 
-        let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
+        let enteredTextSize = self.attributedText?.boundingRect(with: self.frame.size, options: .usesLineFragmentOrigin, context: nil)
         frame.origin.x = (enteredTextSize?.width.rounded() ?? 0)
         frame.size.width = self.frame.size.width - frame.origin.x
         frame.size.height = self.frame.size.height - 1

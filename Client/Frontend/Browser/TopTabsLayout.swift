@@ -64,7 +64,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         guard indexPath.row < self.collectionView!.numberOfItems(inSection: 0) else {
             let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: indexPath)
-            separatorAttr.frame = CGRect.zero
+            separatorAttr.frame = .zero
             separatorAttr.zIndex = SeparatorZIndex
             return separatorAttr
         }

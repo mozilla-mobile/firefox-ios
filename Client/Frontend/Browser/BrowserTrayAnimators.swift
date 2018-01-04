@@ -244,7 +244,7 @@ private func calculateCollapsedCellFrameUsingCollectionView(_ collectionView: UI
     if let attr = collectionView.collectionViewLayout.layoutAttributesForItem(at: IndexPath(item: index, section: 0)) {
         return collectionView.convert(attr.frame, to: collectionView.superview)
     } else {
-        return CGRect.zero
+        return .zero
     }
 }
 
