@@ -435,7 +435,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         self.tableView.beginUpdates()
         self.source = source.removeGUIDFromCurrent(bookmark.guid)
-        self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.left)
+        self.tableView.deleteRows(at: [indexPath], with: .left)
         self.tableView.endUpdates()
         self.updateEmptyPanelState()
     }
