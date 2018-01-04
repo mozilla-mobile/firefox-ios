@@ -28,11 +28,11 @@ class ChevronView: UIView {
         didSet {
             switch style {
             case .rounded:
-                lineCapStyle = CGLineCap.round
-                lineJoinStyle = CGLineJoin.round
+                lineCapStyle = .round
+                lineJoinStyle = .round
             case .angular:
-                lineCapStyle = CGLineCap.butt
-                lineJoinStyle = CGLineJoin.miter
+                lineCapStyle = .butt
+                lineJoinStyle = .miter
 
             }
         }

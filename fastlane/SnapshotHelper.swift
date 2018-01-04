@@ -82,7 +82,6 @@ open class Snapshot: NSObject {
         let path = cacheDirectory.appendingPathComponent("language.txt")
 
         do {
-
             deviceLanguage = try String(contentsOf: path, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
             app.launchArguments += ["-AppleLanguages", "(\(deviceLanguage))"]
         } catch {
