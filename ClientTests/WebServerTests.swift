@@ -27,7 +27,7 @@ class WebServerTests: XCTestCase {
         super.setUp()
         setupWebServer()
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }

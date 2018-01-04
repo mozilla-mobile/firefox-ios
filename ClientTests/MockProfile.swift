@@ -24,7 +24,7 @@ open class MockSyncManager: SyncManager {
     private func completedWithStats(collection: String) -> Deferred<Maybe<SyncStatus>> {
         return deferMaybe(SyncStatus.completed(SyncEngineStatsSession(collection: collection)))
     }
-    
+
     open func syncClients() -> SyncResult { return completedWithStats(collection: "mock_clients") }
     open func syncClientsThenTabs() -> SyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
     open func syncHistory() -> SyncResult { return completedWithStats(collection: "mock_history") }

@@ -9,9 +9,9 @@ class RelativeDatesTests: XCTestCase {
     func testRelativeDates() {
         let dateOrig = Date()
         var date = Date(timeInterval: 0, since: dateOrig)
-        
+
         XCTAssertEqual(date.toRelativeTimeString(), "just now")
-        
+
         date = Date(timeInterval: -10, since: dateOrig)
         XCTAssertEqual(date.toRelativeTimeString(), "just now")
 
@@ -27,13 +27,13 @@ class RelativeDatesTests: XCTestCase {
 
         date = calendar.date(byAdding: .day, value: -7, to: dateOrig)!
         XCTAssertEqual(date.toRelativeTimeString(), "more than a week ago")
-        
+
         date = calendar.date(byAdding: .day, value: -7 * 5, to: dateOrig)!
         XCTAssertEqual(date.toRelativeTimeString(), "more than a month ago")
-        
+
         date = Date(timeInterval: -60 * 60 * 24 * 7 * 5 * 2, since: dateOrig)
         XCTAssertEqual(date.toRelativeTimeString(), DateFormatter.localizedString(from: date, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
-        
+
         date = Date(timeInterval: -60 * 60 * 24 * 7 * 5 * 12 * 2, since: dateOrig)
         XCTAssertEqual(date.toRelativeTimeString(), DateFormatter.localizedString(from: date, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
     }

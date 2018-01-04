@@ -111,7 +111,7 @@ extension XCUIElementQuery {
 
         return self.elementBoundByIndex(0)
     }
-    
+
     func firstMatchingType( type: XCUIElementType) -> XCUIElement {
         return self.childrenMatchingType(type).elementBoundByIndex(0)
     }
