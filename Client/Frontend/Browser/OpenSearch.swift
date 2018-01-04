@@ -121,10 +121,10 @@ class OpenSearchEngine: NSObject, NSCoding {
     }
 
     fileprivate func getURLFromTemplate(_ searchTemplate: String, query: String) -> URL? {
-        if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.SearchTermsAllowedCharacterSet()) {
+        if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed) {
             // Escape the search template as well in case it contains not-safe characters like symbols
             let templateAllowedSet = NSMutableCharacterSet()
-            templateAllowedSet.formUnion(with: CharacterSet.URLAllowedCharacterSet())
+            templateAllowedSet.formUnion(with: .URLAllowed)
 
             // Allow brackets since we use them in our template as our insertion point
             templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
