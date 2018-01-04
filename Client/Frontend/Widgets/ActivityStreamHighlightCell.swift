@@ -47,7 +47,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
-        descriptionLabel.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
+        descriptionLabel.setContentCompressionResistancePriority(1000, for: .vertical)
         return descriptionLabel
     }()
 
