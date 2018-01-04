@@ -1008,7 +1008,7 @@ class ASHeaderView: UICollectionReusableView {
         button.titleLabel?.font = ASHeaderViewUX.TextFont
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
-        button.setTitleColor(.gray, for: UIControlState.highlighted)
+        button.setTitleColor(.gray, for: .highlighted)
         return button
     }()
 
@@ -1041,7 +1041,7 @@ class ASHeaderView: UICollectionReusableView {
             make.bottom.equalTo(self)
             self.rightConstraint = make.trailing.equalTo(self).inset(-titleInsets).constraint
         }
-        moreButton.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: UILayoutConstraintAxis.horizontal)
+        moreButton.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
             self.leftConstraint = make.leading.equalTo(self).inset(titleInsets).constraint
             make.trailing.equalTo(moreButton.snp.leading).inset(-ASHeaderViewUX.TitleTopInset)

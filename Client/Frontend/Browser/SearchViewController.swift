@@ -611,7 +611,7 @@ fileprivate class SuggestionButton: InsetButton {
         super.init(frame: frame)
 
         setTitleColor(UIConstants.HighlightBlue, for: [])
-        setTitleColor(UIColor.white, for: UIControlState.highlighted)
+        setTitleColor(UIColor.white, for: .highlighted)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         backgroundColor = SearchViewControllerUX.SuggestionBackgroundColor
         layer.borderColor = SearchViewControllerUX.SuggestionBorderColor.cgColor

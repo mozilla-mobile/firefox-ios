@@ -288,7 +288,7 @@ class FontSizeButton: UIButton {
         self.fontSizeAction = fontSizeAction
 
         setTitleColor(ReaderModeStyleViewControllerUX.FontSizeButtonTextColorEnabled, for: .normal)
-        setTitleColor(ReaderModeStyleViewControllerUX.FontSizeButtonTextColorDisabled, for: UIControlState.disabled)
+        setTitleColor(ReaderModeStyleViewControllerUX.FontSizeButtonTextColorDisabled, for: .disabled)
 
         switch fontSizeAction {
         case .smaller:
