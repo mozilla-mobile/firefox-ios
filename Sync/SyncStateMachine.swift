@@ -170,6 +170,10 @@ open class SyncStateMachine {
                 b.enginesEnablements = enginesEnablements
             }
 
+            if let clientName = authState.clientName {
+                b.clientName = clientName
+            }
+
             // Detect if we've changed anything in our client record from the last time we synced…
             let ourClientUnchanged = (b.fxaDeviceId == scratchpad.fxaDeviceId)
 

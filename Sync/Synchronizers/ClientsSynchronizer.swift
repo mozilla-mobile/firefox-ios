@@ -373,7 +373,8 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             >>== { self.processCommandsFromRecord(ours, withServer: storageClient) }
             >>== { (shouldUpload, commands) in
                 let isFirstSync = self.lastFetched == 0
-                return self.maybeUploadOurRecord(shouldUpload || self.why == .didLogin, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
+                let ourRecordDidChange = self.why == .didLogin || self.why == .clientNameChanged
+                return self.maybeUploadOurRecord(shouldUpload || ourRecordDidChange, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
                     >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: storageClient) }
                     >>> {
                         log.debug("Running \(commands.count) commands.")
