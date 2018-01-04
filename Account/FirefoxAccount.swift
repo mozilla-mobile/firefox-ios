@@ -215,18 +215,18 @@ open class FirefoxAccount {
             return "Not in a Token State: \(state?.label.rawValue ?? "Empty State")"
         }
     }
-    
+
     public class FxAProfile {
         open var displayName: String?
         open let email: String
         open let avatar: Avatar
-        
+
         init(email: String, displayName: String?, avatar: String?) {
             self.email = email
             self.displayName = displayName
             self.avatar = Avatar(url: avatar?.asURL)
         }
-        
+
         enum ImageDownloadState {
             case notStarted
             case started
@@ -235,18 +235,18 @@ open class FirefoxAccount {
             case succeededMalformed
             case succeeded
         }
-        
+
         open class Avatar {
             open var image: UIImage?
             open let url: URL?
             var currentImageState: ImageDownloadState = .notStarted
-            
+
             init(url: URL?) {
                 self.image = UIImage(named: "placeholder-avatar")
                 self.url = url
                 self.updateAvatarImageState()
             }
-            
+
             func updateAvatarImageState() {
                 switch currentImageState {
                 case .notStarted:
@@ -260,7 +260,7 @@ open class FirefoxAccount {
                     break
                 }
             }
-            
+
             func downloadAvatar() {
                 SDWebImageManager.shared().loadImage(with: url, options: [.continueInBackground, .lowPriority], progress: nil) { (image, _, error, _, success, _) in
                     if let error = error {
@@ -274,12 +274,12 @@ open class FirefoxAccount {
                         }
                         return
                     }
-                    
+
                     if success == true && image == nil {
                         self.currentImageState = .succeededMalformed
                         return
                     }
-                    
+
                     self.image = image
                     self.currentImageState = .succeeded
                     NotificationCenter.default.post(name: NotificationFirefoxAccountProfileChanged, object: self)
@@ -300,7 +300,7 @@ open class FirefoxAccount {
             _ = self.registerOrUpdateDevice(session: session)
         }
     }
-    
+
     // Fetch current user's FxA profile. It contains the most updated email, displayName and avatar. This
     // emits two `NotificationFirefoxAccountProfileChanged`, once when the profile has been downloaded and
     // another when the avatar image has been downloaded.
@@ -308,14 +308,14 @@ open class FirefoxAccount {
         guard let session = stateCache.value as? TokenState else {
             return
         }
-        
+
         let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
         client.getProfile(withSessionToken: session.sessionToken as NSData) >>== { result in
             self.fxaProfile = FxAProfile(email: result.email, displayName: result.displayName, avatar: result.avatarURL)
             NotificationCenter.default.post(name: NotificationFirefoxAccountProfileChanged, object: self)
         }
     }
-    
+
     // Fetch the devices list from FxA then replace the current stored remote devices.
     open func updateFxADevices(remoteDevices: RemoteDevices) -> Success {
         guard let session = stateCache.value as? TokenState else {

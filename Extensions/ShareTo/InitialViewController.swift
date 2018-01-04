@@ -37,7 +37,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
             }
         })
     }
-    
+
     //
 
     func shareControllerDidCancel(_ shareController: ShareDialogController) {
@@ -55,7 +55,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
 
     func shareController(_ shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) {
         setLastUsedShareDestinations(destinations)
-        
+
         UIView.animate(withDuration: 0.25, animations: { () -> Void in
             self.shareDialogController.view.alpha = 0.0
         }, completion: { (Bool) -> Void in

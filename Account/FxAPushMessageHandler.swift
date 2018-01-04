@@ -146,7 +146,7 @@ extension FxAPushMessageHandler {
 
         let clients = profile.remoteClientsAndTabs
         let getClient = clients.getClient(fxaDeviceId: deviceId)
-        
+
         return getClient >>== { device in
             let message = PushMessage.deviceDisconnected(device?.name)
             if let id = device?.guid {
