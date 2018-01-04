@@ -11,7 +11,7 @@ open class KeysPayload: CleartextPayloadJSON {
         return super.isValid() &&
                self["default"].isArray()
     }
-    
+
     fileprivate func keyBundleFromPair(_ input: JSON) -> KeyBundle? {
         if let pair: [JSON] = input.array {
             if let encKey = pair[0].string {
@@ -38,18 +38,18 @@ open class KeysPayload: CleartextPayloadJSON {
         if !(obj is KeysPayload) {
             return false
         }
-        
+
         if !super.equalPayloads(obj) {
             return false
         }
-        
+
         let p = obj as! KeysPayload
         if p.defaultKeys != self.defaultKeys {
             return false
         }
 
         // TODO: check collections.
-        
+
         return true
     }
 }

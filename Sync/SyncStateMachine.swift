@@ -97,9 +97,9 @@ open class SyncStateMachine {
 
     let scratchpadPrefs: Prefs
 
-    /// Use this set of states to constrain the state machine to attempt the barest 
+    /// Use this set of states to constrain the state machine to attempt the barest
     /// minimum to get to Ready. This is suitable for extension uses. If it is not possible,
-    /// then no destructive or expensive actions are taken (e.g. total HTTP requests, 
+    /// then no destructive or expensive actions are taken (e.g. total HTTP requests,
     /// duration, records processed, database writes, fsyncs, blanking any local collections)
     public static let OptimisticStates = Set(SyncStateLabel.optimisticValues)
 
@@ -249,7 +249,7 @@ public enum SyncStateLabel: String {
     ]
 
     // This is the list of states needed to get to Ready, or failing.
-    // This is useful in circumstances where it is important to conserve time and/or battery, and failure 
+    // This is useful in circumstances where it is important to conserve time and/or battery, and failure
     // to timely sync is acceptable.
     static let optimisticValues: [SyncStateLabel] = [
         InitialWithLiveToken,

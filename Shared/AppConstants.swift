@@ -22,7 +22,7 @@ public enum KVOConstants: String {
 
 public struct AppConstants {
     public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.arguments.contains(LaunchArguments.Test)
-    
+
     public static let FxAiOSClientId = "1b1a3e44c54fbb58"
 
     /// Build Channel.
@@ -92,7 +92,7 @@ public struct AppConstants {
             return true
         #endif
     }()
-    
+
     ///  Enables/disables deep linking form fill for FxA
     public static let MOZ_FXA_DEEP_LINK_FORM_FILL: Bool = {
         #if MOZ_CHANNEL_RELEASE
@@ -170,7 +170,7 @@ public struct AppConstants {
             return false
         #endif
     }()
-    
+
     ///  Toggle the feature that shows updated FxA preferences cell
     public static let MOZ_SHOW_FXA_AVATAR: Bool = {
         #if MOZ_CHANNEL_RELEASE
@@ -192,7 +192,7 @@ public struct AppConstants {
 
     /// The maximum length of a bookmark description stored by Firefox. Shared with Places on desktop.
     public static let DB_DESCRIPTION_LENGTH_MAX = 1024
-    
+
     ///  Toggle FxA Leanplum A/B test for prompting push permissions
     public static let MOZ_FXA_LEANPLUM_AB_PUSH_TEST: Bool = {
         #if MOZ_CHANNEL_RELEASE
