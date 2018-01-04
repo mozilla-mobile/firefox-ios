@@ -294,7 +294,7 @@ class BrowserViewController: UIViewController {
     func SELappDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
-        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: {
             self.webViewContainer.alpha = 1
             self.urlBar.locationContainer.alpha = 1
             self.topTabsViewController?.switchForegroundStatus(isInForeground: true)

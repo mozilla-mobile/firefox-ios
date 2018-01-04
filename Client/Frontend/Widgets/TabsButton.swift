@@ -199,7 +199,7 @@ class TabsButton: UIButton {
             }
             
             if animated {
-                UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions(), animations: animate, completion: completion)
+                UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: [], animations: animate, completion: completion)
             } else {
                 completion(true)
             }

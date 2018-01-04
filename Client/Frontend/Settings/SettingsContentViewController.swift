@@ -26,7 +26,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             if isLoaded {
                 UIView.transition(from: interstitialView, to: webView,
                     duration: 0.5,
-                    options: UIViewAnimationOptions.transitionCrossDissolve,
+                    options: .transitionCrossDissolve,
                     completion: { finished in
                         self.interstitialView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
@@ -41,7 +41,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
                 interstitialErrorView.isHidden = false
                 UIView.transition(from: interstitialSpinnerView, to: interstitialErrorView,
                     duration: 0.5,
-                    options: UIViewAnimationOptions.transitionCrossDissolve,
+                    options: .transitionCrossDissolve,
                     completion: { finished in
                         self.interstitialSpinnerView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()

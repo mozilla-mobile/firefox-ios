@@ -67,7 +67,7 @@ private extension TrayToBrowserAnimator {
         UIView.animate(withDuration: self.transitionDuration(using: transitionContext),
             delay: 0, usingSpringWithDamping: 1,
             initialSpringVelocity: 0,
-            options: UIViewAnimationOptions(),
+            options: [],
             animations: {
             // Scale up the cell and reset the transforms for the header/footers
             cell.frame = finalFrame
@@ -168,7 +168,7 @@ private extension BrowserToTrayAnimator {
             UIView.animate(withDuration: self.transitionDuration(using: transitionContext),
                 delay: 0, usingSpringWithDamping: 1,
                 initialSpringVelocity: 0,
-                options: UIViewAnimationOptions(),
+                options: [],
                 animations: {
                 cell.frame = finalFrame
                 cell.title.transform = .identity
