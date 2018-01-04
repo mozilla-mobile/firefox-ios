@@ -178,6 +178,6 @@ class CustomSyncWebPageSetting: WebPageSetting {
                    placeholder: placeholder,
                    accessibilityIdentifier: accessibilityIdentifier,
                    settingDidChange: settingDidChange)
-        textField.clearButtonMode = UITextFieldViewMode.always
+        textField.clearButtonMode = .always
     }
 }
