@@ -68,7 +68,7 @@ class HomePageSettingsViewController: SettingsTableViewController {
     }
 }
 
-class WebPageSetting: StringSetting {
+class WebPageSetting: StringPrefSetting {
     init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingDidChange: ((String?) -> Void)? = nil) {
         super.init(prefs: prefs,
                    prefKey: prefKey,
