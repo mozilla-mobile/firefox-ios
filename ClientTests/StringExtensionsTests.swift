@@ -45,9 +45,9 @@ class StringExtensionsTests: XCTestCase {
     }
 
     func testStringByTrimmingLeadingCharactersInSet() {
-        XCTAssertEqual("foo   ", "   foo   ".stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces))
-        XCTAssertEqual("foo456", "123foo456".stringByTrimmingLeadingCharactersInSet(CharacterSet.decimalDigits))
-        XCTAssertEqual("", "123456".stringByTrimmingLeadingCharactersInSet(CharacterSet.decimalDigits))
+        XCTAssertEqual("foo   ", "   foo   ".stringByTrimmingLeadingCharactersInSet(.whitespaces))
+        XCTAssertEqual("foo456", "123foo456".stringByTrimmingLeadingCharactersInSet(.decimalDigits))
+        XCTAssertEqual("", "123456".stringByTrimmingLeadingCharactersInSet(.decimalDigits))
     }
 
     func testStringSplitWithNewline() {

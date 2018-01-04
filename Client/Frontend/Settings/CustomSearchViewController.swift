@@ -80,7 +80,7 @@ class CustomSearchViewController: SettingsTableViewController {
     func createEngine(forQuery query: String, andName name: String) -> Deferred<Maybe<OpenSearchEngine>> {
         let deferred = Deferred<Maybe<OpenSearchEngine>>()
         guard let template = getSearchTemplate(withString: query),
-            let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!), url.isWebPage() else {
+            let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!), url.isWebPage() else {
                 deferred.fill(Maybe(failure: CustomSearchError(.FormInput)))
                 return deferred
         }

@@ -82,8 +82,8 @@ open class Snapshot: NSObject {
         let path = cacheDirectory.appendingPathComponent("language.txt")
 
         do {
-            let trimCharacterSet = CharacterSet.whitespacesAndNewlines
-            deviceLanguage = try String(contentsOf: path, encoding: .utf8).trimmingCharacters(in: trimCharacterSet)
+
+            deviceLanguage = try String(contentsOf: path, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
             app.launchArguments += ["-AppleLanguages", "(\(deviceLanguage))"]
         } catch {
             print("Couldn't detect/set language...")
@@ -94,8 +94,7 @@ open class Snapshot: NSObject {
         let path = cacheDirectory.appendingPathComponent("locale.txt")
 
         do {
-            let trimCharacterSet = CharacterSet.whitespacesAndNewlines
-            locale = try String(contentsOf: path, encoding: .utf8).trimmingCharacters(in: trimCharacterSet)
+            locale = try String(contentsOf: path, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
         } catch {
             print("Couldn't detect/set locale...")
         }

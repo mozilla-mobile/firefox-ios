@@ -344,7 +344,7 @@ extension SQLiteHistory: BrowserHistory {
 
     fileprivate func computeWordsWithFilter(_ filter: String) -> [String] {
         // Split filter on whitespace.
-        let words = filter.components(separatedBy: CharacterSet.whitespaces)
+        let words = filter.components(separatedBy: .whitespaces)
 
         // Remove substrings and duplicates.
         // TODO: this can probably be improved.
@@ -390,7 +390,7 @@ extension SQLiteHistory: BrowserHistory {
                                                           includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
         let args: Args?
         let whereClause: String
-        if let filter = filter?.trimmingCharacters(in: CharacterSet.whitespaces), !filter.isEmpty {
+        if let filter = filter?.trimmingCharacters(in: .whitespaces), !filter.isEmpty {
             let perWordFragment = "((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?))"
             let perWordArgs: (String) -> Args = { ["%\($0)%", "%\($0)%"] }
             let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(filter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
@@ -467,7 +467,7 @@ extension SQLiteHistory: BrowserHistory {
         let whereClause: String
         let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
 
-        if let filter = filter?.trimmingCharacters(in: CharacterSet.whitespaces), !filter.isEmpty {
+        if let filter = filter?.trimmingCharacters(in: .whitespaces), !filter.isEmpty {
             let perWordFragment = "((url LIKE ?) OR (title LIKE ?))"
             let perWordArgs: (String) -> Args = { ["%\($0)%", "%\($0)%"] }
             let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(filter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)

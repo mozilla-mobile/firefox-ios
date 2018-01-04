@@ -227,8 +227,8 @@ class SearchEngines {
         assert(listFile != nil, "Read the list of search engines")
 
         let engineNames = listFile!
-            .trimmingCharacters(in: CharacterSet.newlines)
-            .components(separatedBy: CharacterSet.newlines)
+            .trimmingCharacters(in: .newlines)
+            .components(separatedBy: .newlines)
 
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)

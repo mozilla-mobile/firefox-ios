@@ -23,7 +23,7 @@ private func optStringArray(x: AnyObject?) -> [String]? {
     guard let str = x as? String else {
         return nil
     }
-    return str.components(separatedBy: ",").map { $0.trimmingCharacters(in:NSCharacterSet.whitespacesAndNewlines) }
+    return str.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
 }
 
 private struct SyncRequestSpec {

@@ -138,7 +138,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     fileprivate func normalizeString(_ string: String) -> String {
-        return string.lowercased().stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces)
+        return string.lowercased().stringByTrimmingLeadingCharactersInSet(.whitespaces)
     }
 
     /// Commits the completion by setting the text and removing the highlight.

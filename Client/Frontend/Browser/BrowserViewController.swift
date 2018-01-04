@@ -1410,7 +1410,7 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         // We couldn't build a URL, so check for a matching search keyword.
-        let trimmedText = text.trimmingCharacters(in: CharacterSet.whitespaces)
+        let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard let possibleKeywordQuerySeparatorSpace = trimmedText.characters.index(of: " ") else {
             submitSearchText(text)
             return
@@ -1421,7 +1421,7 @@ extension BrowserViewController: URLBarDelegate {
 
         profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(.main) { result in
             if var urlString = result.successValue,
-                let escapedQuery = possibleQuery.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed),
+                let escapedQuery = possibleQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
                 let range = urlString.range(of: "%s") {
                 urlString.replaceSubrange(range, with: escapedQuery)
 
@@ -2617,7 +2617,7 @@ extension BrowserViewController {
     func addSearchEngine(_ searchQuery: String, favicon: Favicon) {
         guard searchQuery != "",
             let iconURL = URL(string: favicon.url),
-            let url = URL(string: searchQuery.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!),
+            let url = URL(string: searchQuery.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!),
             let shortName = url.domainURL.host else {
                 let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                 self.present(alert, animated: true, completion: nil)
