@@ -940,7 +940,7 @@ open class BrowserProfile: Profile {
             }
 
             let interval = FifteenMinutes
-            let selector = #selector(BrowserSyncManager.syncOnTimer)
+            let selector = #selector(syncOnTimer)
             log.debug("Starting sync timer.")
             self.syncTimer = repeatingTimerAtInterval(interval, selector: selector)
         }

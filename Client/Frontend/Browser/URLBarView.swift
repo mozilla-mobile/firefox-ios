@@ -124,7 +124,7 @@ class URLBarView: UIView {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
-        cancelButton.addTarget(self, action: #selector(URLBarView.SELdidClickCancel), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(SELdidClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
     }()
@@ -134,7 +134,7 @@ class URLBarView: UIView {
         button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = "urlBar-scanQRCode"
         button.clipsToBounds = false
-        button.addTarget(self, action: #selector(URLBarView.showQRScanner), for: .touchUpInside)
+        button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
         button.setContentHuggingPriority(1000, for: .horizontal)
         button.setContentCompressionResistancePriority(1000, for: .horizontal)
         return button
@@ -142,7 +142,7 @@ class URLBarView: UIView {
 
     fileprivate lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(URLBarView.SELtappedScrollToTopArea), for: .touchUpInside)
+        button.addTarget(self, action: #selector(SELtappedScrollToTopArea), for: .touchUpInside)
         return button
     }()
 

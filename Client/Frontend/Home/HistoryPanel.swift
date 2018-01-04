@@ -56,7 +56,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Lifecycle
     init() {
         super.init(nibName: nil, bundle: nil)
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanel.notificationReceived), name: $0, object: nil) }
+        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -170,7 +170,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Refreshing TableView
     func addRefreshControl() {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(HistoryPanel.refresh), for: .valueChanged)
+        refresh.addTarget(self, action: #selector(refresh), for: .valueChanged)
         self.refreshControl = refresh
         self.tableView.refreshControl = refresh
     }

@@ -155,7 +155,7 @@ class TabsButton: UIButton {
 
             self.clonedTabsButton = newTabsButton
             newTabsButton.frame = self.bounds
-            newTabsButton.addTarget(self, action: #selector(TabsButton.cloneDidClickTabs), for: .touchUpInside)
+            newTabsButton.addTarget(self, action: #selector(cloneDidClickTabs), for: .touchUpInside)
             newTabsButton.countLabel.text = countToBe
             newTabsButton.accessibilityValue = countToBe
             newTabsButton.insideButton.frame = self.insideButton.frame

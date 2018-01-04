@@ -136,7 +136,7 @@ class TopTabCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(closeTab), for: .touchUpInside)
 
         contentView.addSubview(titleText)
         contentView.addSubview(closeButton)

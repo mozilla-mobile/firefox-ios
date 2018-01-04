@@ -38,7 +38,7 @@ class SnackButton: UIButton {
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
         setTitleColor(SettingsUX.TableViewRowTextColor, for: .normal)
-        addTarget(self, action: #selector(SnackButton.onClick), for: .touchUpInside)
+        addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
 
@@ -231,7 +231,7 @@ class TimerSnackBar: SnackBar {
     }
 
     override func show() {
-        self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(TimerSnackBar.timerDone), userInfo: nil, repeats: false)
+        self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(timerDone), userInfo: nil, repeats: false)
         RunLoop.current.add(self.timer!, forMode: RunLoopMode.defaultRunLoopMode)
         super.show()
     }

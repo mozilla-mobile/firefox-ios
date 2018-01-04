@@ -69,7 +69,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate var sessionStart: Timestamp?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(ActivityStreamPanel.longPress))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     // Not used for displaying. Only used for calculating layout.
@@ -299,7 +299,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                 case .pocket:
                     view.title = title
                     view.moreButton.isHidden = false
-                    view.moreButton.addTarget(self, action: #selector(ActivityStreamPanel.showMorePocketStories), for: .touchUpInside)
+                    view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
                     return view
                 case .topSites:
                     return UICollectionReusableView()

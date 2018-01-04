@@ -54,7 +54,7 @@ class ClientPickerViewController: UITableViewController {
             title: Strings.SendToCancelButton,
             style: .plain,
             target: self,
-            action: #selector(ClientPickerViewController.cancel)
+            action: #selector(cancel)
         )
 
         tableView.register(ClientPickerTableViewHeaderCell.self, forCellReuseIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier)

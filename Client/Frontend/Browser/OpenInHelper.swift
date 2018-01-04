@@ -156,7 +156,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     func getOpenInView() -> OpenInView {
         let overlayView = OpenInView()
 
-        overlayView.openInButton.addTarget(self, action: #selector(OpenPdfInHelper.open), for: .touchUpInside)
+        overlayView.openInButton.addTarget(self, action: #selector(open), for: .touchUpInside)
         return overlayView
     }
 

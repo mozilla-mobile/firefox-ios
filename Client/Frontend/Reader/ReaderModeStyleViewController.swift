@@ -77,7 +77,7 @@ class ReaderModeStyleViewController: UIViewController {
             FontTypeButton(fontType: ReaderModeFontType.serif)
         ]
 
-        setupButtons(fontTypeButtons, inRow: fontTypeRow, action: #selector(ReaderModeStyleViewController.SELchangeFontType))
+        setupButtons(fontTypeButtons, inRow: fontTypeRow, action: #selector(SELchangeFontType))
 
         // Font size row
 
@@ -105,7 +105,7 @@ class ReaderModeStyleViewController: UIViewController {
             FontSizeButton(fontSizeAction: FontSizeAction.bigger)
         ]
 
-        setupButtons(fontSizeButtons, inRow: fontSizeRow, action: #selector(ReaderModeStyleViewController.SELchangeFontSize))
+        setupButtons(fontSizeButtons, inRow: fontSizeRow, action: #selector(SELchangeFontSize))
 
         // Theme row
 
@@ -124,7 +124,7 @@ class ReaderModeStyleViewController: UIViewController {
             ThemeButton(theme: ReaderModeTheme.sepia)
         ]
 
-        setupButtons(themeButtons, inRow: themeRow, action: #selector(ReaderModeStyleViewController.SELchangeTheme))
+        setupButtons(themeButtons, inRow: themeRow, action: #selector(SELchangeTheme))
 
         // Brightness row
 
@@ -142,7 +142,7 @@ class ReaderModeStyleViewController: UIViewController {
         brightnessRow.addSubview(slider)
         slider.accessibilityLabel = NSLocalizedString("Brightness", comment: "Accessibility label for brightness adjustment slider in Reader Mode display settings")
         slider.tintColor = ReaderModeStyleViewControllerUX.BrightnessSliderTintColor
-        slider.addTarget(self, action: #selector(ReaderModeStyleViewController.SELchangeBrightness), for: .valueChanged)
+        slider.addTarget(self, action: #selector(SELchangeBrightness), for: .valueChanged)
 
         slider.snp.makeConstraints { make in
             make.center.equalTo(brightnessRow)

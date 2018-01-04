@@ -63,7 +63,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             return
         }
         if timeout > 0 {
-            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SettingsContentViewController.SELdidTimeOut), userInfo: nil, repeats: false)
+            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SELdidTimeOut), userInfo: nil, repeats: false)
         } else {
             self.timer = nil
         }

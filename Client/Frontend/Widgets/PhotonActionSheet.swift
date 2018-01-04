@@ -59,7 +59,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
-        tapRecognizer.addTarget(self, action: #selector(PhotonActionSheet.dismiss))
+        tapRecognizer.addTarget(self, action: #selector(dismiss))
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.cancelsTouchesInView = false
         tapRecognizer.delegate = self
@@ -73,7 +73,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
-        button.addTarget(self, action: #selector(PhotonActionSheet.dismiss), for: .touchUpInside)
+        button.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = "PhotonMenu.cancel"
         return button
     }()

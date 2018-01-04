@@ -186,7 +186,7 @@ class BoolSetting: Setting {
 
         let control = UISwitch()
         control.onTintColor = UIConstants.SystemBlueColor
-        control.addTarget(self, action: #selector(BoolSetting.switchValueChanged), for: .valueChanged)
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
 
         displayBool(control)
@@ -515,9 +515,9 @@ class SettingsTableViewController: UITableViewController {
 
         settings = generateSettings()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELfirefoxAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: NotificationProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: NotificationProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELfirefoxAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
 
         tableView.reloadData()
     }

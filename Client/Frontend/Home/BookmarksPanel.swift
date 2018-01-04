@@ -78,14 +78,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        refreshControl?.addTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(refreshBookmarks), for: .valueChanged)
 
         loadData()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        refreshControl?.removeTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
+        refreshControl?.removeTarget(self, action: #selector(refreshBookmarks), for: .valueChanged)
     }
 
     func loadData() {

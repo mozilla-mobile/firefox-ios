@@ -182,7 +182,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     var profile: Profile!
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(ReadingListPanel.longPress))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
@@ -191,8 +191,8 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ReadingListPanel.notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ReadingListPanel.notificationReceived), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init!(coder aDecoder: NSCoder) {

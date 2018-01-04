@@ -89,7 +89,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         startBrowsingButton.backgroundColor = UIColor.clear
         startBrowsingButton.setTitle(IntroViewControllerUX.StartBrowsingButtonTitle, for: [])
         startBrowsingButton.setTitleColor(IntroViewControllerUX.StartBrowsingButtonColor, for: [])
-        startBrowsingButton.addTarget(self, action: #selector(IntroViewController.SELstartBrowsing), for: .touchUpInside)
+        startBrowsingButton.addTarget(self, action: #selector(SELstartBrowsing), for: .touchUpInside)
         startBrowsingButton.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
 
         view.addSubview(startBrowsingButton)
@@ -130,7 +130,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         pageControl.currentPageIndicatorTintColor = UIColor.black
         pageControl.numberOfPages = IntroViewControllerUX.NumberOfCards
         pageControl.accessibilityIdentifier = "IntroViewController.pageControl"
-        pageControl.addTarget(self, action: #selector(IntroViewController.changePage), for: .valueChanged)
+        pageControl.addTarget(self, action: #selector(changePage), for: .valueChanged)
 
         view.addSubview(pageControl)
         pageControl.snp.makeConstraints { (make) -> Void in
@@ -181,7 +181,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         signInButton.setTitle(IntroViewControllerUX.SignInButtonTitle, for: [])
         signInButton.setTitleColor(UIColor.white, for: [])
         signInButton.clipsToBounds = true
-        signInButton.addTarget(self, action: #selector(IntroViewController.SELlogin), for: .touchUpInside)
+        signInButton.addTarget(self, action: #selector(SELlogin), for: .touchUpInside)
         signInButton.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(IntroViewControllerUX.SignInButtonHeight)
         }

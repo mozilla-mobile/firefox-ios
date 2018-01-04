@@ -68,7 +68,7 @@ class SyncNowSetting: WithAccountSetting {
 
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(SyncNowSetting.stopRotateSyncIcon), name: NotificationProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: NotificationProfileDidFinishSyncing, object: nil)
     }
 
     fileprivate lazy var timestampFormatter: DateFormatter = {
@@ -293,7 +293,7 @@ class SyncNowSetting: WithAccountSetting {
 class AccountStatusSetting: WithAccountSetting {
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(AccountStatusSetting.updateAccount), name: NotificationFirefoxAccountProfileChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: NotificationFirefoxAccountProfileChanged, object: nil)
     }
 
     func updateAccount(notification: Notification) {
@@ -964,7 +964,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(StageSyncServiceDebugSetting.switchValueChanged), for: .valueChanged)
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? false
         cell.accessoryView = control
         cell.selectionStyle = .none

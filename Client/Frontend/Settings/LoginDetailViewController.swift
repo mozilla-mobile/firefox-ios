@@ -75,7 +75,7 @@ class LoginDetailViewController: SensitiveViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginDetailViewController.SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(SELedit))
 
         tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)

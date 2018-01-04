@@ -107,7 +107,7 @@ class TabManager: NSObject {
 
         addNavigationDelegate(self)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(TabManager.prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
     }
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
@@ -934,7 +934,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
             let authenticatingDelegates = delegates.filter { wv in
-                return wv.responds(to: #selector(WKNavigationDelegate.webView(_:didReceive:completionHandler:)))
+                return wv.responds(to: #selector(webView(_:didReceive:completionHandler:)))
             }
 
             guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {

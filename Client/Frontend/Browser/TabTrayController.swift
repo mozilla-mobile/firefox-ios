@@ -101,7 +101,7 @@ class TabCell: UICollectionViewCell {
         super.init(frame: frame)
 
         self.animator = SwipeAnimator(animatingView: self)
-        self.closeButton.addTarget(self, action: #selector(TabCell.close), for: .touchUpInside)
+        self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.screenshotView)
@@ -245,9 +245,9 @@ class TabTrayController: UIViewController {
     var dragOffset: CGPoint = CGPoint.zero
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
-        toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.didClickAddTab), for: .touchUpInside)
-        toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.didTogglePrivateMode), for: .touchUpInside)
-        toolbar.deleteButton.addTarget(self, action: #selector(TabTrayController.didTapDelete), for: .touchUpInside)
+        toolbar.addTabButton.addTarget(self, action: #selector(didClickAddTab), for: .touchUpInside)
+        toolbar.maskButton.addTarget(self, action: #selector(didTogglePrivateMode), for: .touchUpInside)
+        toolbar.deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
         return toolbar
     }()
 
@@ -265,7 +265,7 @@ class TabTrayController: UIViewController {
 
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
-        emptyView.learnMoreButton.addTarget(self, action: #selector(TabTrayController.didTapLearnMore), for: .touchUpInside)
+        emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
         return emptyView
     }()
 
@@ -342,7 +342,7 @@ class TabTrayController: UIViewController {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.appWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
     }
