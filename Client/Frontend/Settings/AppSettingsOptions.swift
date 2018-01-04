@@ -293,7 +293,7 @@ class SyncNowSetting: WithAccountSetting {
 class AccountStatusSetting: WithAccountSetting {
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(AccountStatusSetting.updateAccount(notification:)), name: NotificationFirefoxAccountProfileChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AccountStatusSetting.updateAccount), name: NotificationFirefoxAccountProfileChanged, object: nil)
     }
 
     func updateAccount(notification: Notification) {

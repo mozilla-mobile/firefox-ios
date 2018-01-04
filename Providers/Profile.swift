@@ -259,8 +259,8 @@ open class BrowserProfile: Profile {
 
         let notificationCenter = NotificationCenter.default
 
-        notificationCenter.addObserver(self, selector: #selector(onLocationChange(notification:)), name: NotificationOnLocationChange, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched(notification:)), name: NotificationOnPageMetadataFetched, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onLocationChange), name: NotificationOnLocationChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched), name: NotificationOnPageMetadataFetched, object: nil)
 
         if isNewProfile {
             log.info("New profile. Removing old account metadata.")
@@ -683,11 +683,11 @@ open class BrowserProfile: Profile {
             super.init()
 
             let center = NotificationCenter.default
-            center.addObserver(self, selector: #selector(onDatabaseWasRecreated(notification:)), name: NotificationDatabaseWasRecreated, object: nil)
+            center.addObserver(self, selector: #selector(onDatabaseWasRecreated), name: NotificationDatabaseWasRecreated, object: nil)
             center.addObserver(self, selector: #selector(onLoginDidChange), name: NotificationDataLoginDidChange, object: nil)
             center.addObserver(self, selector: #selector(onStartSyncing), name: NotificationProfileDidStartSyncing, object: nil)
             center.addObserver(self, selector: #selector(onFinishSyncing), name: NotificationProfileDidFinishSyncing, object: nil)
-            center.addObserver(self, selector: #selector(onBookmarkBufferValidated(notification:)), name: NotificationBookmarkBufferValidated, object: nil)
+            center.addObserver(self, selector: #selector(onBookmarkBufferValidated), name: NotificationBookmarkBufferValidated, object: nil)
         }
 
         func onBookmarkBufferValidated(notification: NSNotification) {
