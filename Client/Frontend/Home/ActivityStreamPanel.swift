@@ -74,7 +74,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
     // Not used for displaying. Only used for calculating layout.
     lazy var topSiteCell: ASHorizontalScrollCell = {
-        let customCell = ASHorizontalScrollCell(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 0))
+        let customCell = ASHorizontalScrollCell(frame: CGRect(width: self.view.frame.size.width, height: 0))
         customCell.delegate = self.topSitesManager
         return customCell
     }()

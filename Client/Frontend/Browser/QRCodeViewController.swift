@@ -51,7 +51,7 @@ class QRCodeViewController: UIViewController {
         let size = UIDevice.current.userInterfaceIdiom == .pad ?
             CGSize(width: view.frame.width / 2, height: view.frame.width / 2) :
             CGSize(width: view.frame.width / 3 * 2, height: view.frame.width / 3 * 2)
-        var rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        var rect = CGRect(width: size.width, height: size.height)
         rect.center = UIScreen.main.bounds.center
         return rect
     }

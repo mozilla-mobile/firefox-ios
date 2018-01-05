@@ -505,7 +505,7 @@ class SettingsTableViewController: UITableViewController {
         tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.separatorColor = SettingsUX.TableViewSeparatorColor
         tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 30))
+        tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
     }

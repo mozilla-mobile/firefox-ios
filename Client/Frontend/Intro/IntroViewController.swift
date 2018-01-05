@@ -255,7 +255,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
                 imageView.contentMode = .scaleAspectFit
             }
         }
-        slideContainer.frame = CGRect(x: 0, y: 0, width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)
+        slideContainer.frame = CGRect(width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)
         scrollView.contentSize = CGSize(width: slideContainer.frame.width, height: slideContainer.frame.height)
     }
 

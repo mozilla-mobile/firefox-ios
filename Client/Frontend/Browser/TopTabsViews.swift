@@ -205,7 +205,7 @@ class TopTabCell: UICollectionViewCell {
         self.layer.shadowOpacity  = 1
         self.layer.shadowRadius = 0
 
-        self.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: self.frame.size.width + (TopTabCell.ShadowOffsetSize * 2), height: self.frame.size.height), cornerRadius: 0).cgPath
+        self.layer.shadowPath = UIBezierPath(roundedRect: CGRect(width: self.frame.size.width + (TopTabCell.ShadowOffsetSize * 2), height: self.frame.size.height), cornerRadius: 0).cgPath
         self.layer.shadowOffset = CGSize(width: -TopTabCell.ShadowOffsetSize, height: 0)
     }
 
@@ -239,7 +239,7 @@ class TopTabFader: UIView {
         let widthB = NSNumber(value: Float(1 - CGFloat(8) / frame.width))
 
         hMaskLayer.locations = [0.00, widthA, widthB, 1.0]
-        hMaskLayer.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+        hMaskLayer.frame = CGRect(width: frame.width, height: frame.height)
     }
 
     required init?(coder aDecoder: NSCoder) {

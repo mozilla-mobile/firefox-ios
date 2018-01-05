@@ -58,7 +58,7 @@ class ConnectSetting: WithoutAccountSetting {
 
 class SyncNowSetting: WithAccountSetting {
     static let NotificationUserInitiatedSyncManually = "NotificationUserInitiatedSyncManually"
-    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+    let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
     let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
     let syncIcon = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
@@ -415,7 +415,7 @@ class AccountStatusSetting: WithAccountSetting {
 
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
-            cell.imageView?.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            cell.imageView?.frame = CGRect(width: 30, height: 30)
             cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.height)! / 2
             cell.imageView?.layer.masksToBounds = true
             cell.imageView?.image = image

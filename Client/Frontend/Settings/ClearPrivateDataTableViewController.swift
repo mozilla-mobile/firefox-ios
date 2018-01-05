@@ -55,7 +55,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
         tableView.separatorColor = SettingsUX.TableViewSeparatorColor
         tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
-        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
+        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
     }
