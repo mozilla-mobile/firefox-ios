@@ -2502,7 +2502,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
     fileprivate func getImage(_ url: URL, success: @escaping (UIImage) -> Void) {
         Alamofire.request(url).validate(statusCode: 200..<300).response { response in
-            if let data = response.data, let image = UIImage.dataIsGIF(data) ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
+            if let data = response.data, let image = data.isGif ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
                 success(image)
             }
         }
