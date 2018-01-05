@@ -11,7 +11,6 @@
 //  Copyright © 2017 Felix Mau. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 open class GradientProgressBar: UIProgressView {

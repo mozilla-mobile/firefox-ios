@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Deferred
-import Foundation
 import MobileCoreServices
 import Shared
 import UIKit
