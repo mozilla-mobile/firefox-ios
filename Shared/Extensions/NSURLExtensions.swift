@@ -168,7 +168,7 @@ extension URL {
     public var absoluteDisplayString: String {
         var urlString = self.absoluteString
         // For http URLs, get rid of the trailing slash if the path is empty or '/'
-        if (self.scheme == "http" || self.scheme == "https") && (self.path == "/") && urlString.endsWith("/") {
+        if (self.scheme == "http" || self.scheme == "https") && (self.path == "/") && urlString.hasSuffix("/") {
             urlString = urlString.substring(to: urlString.characters.index(urlString.endIndex, offsetBy: -1))
         }
         // If it's basic http, strip out the string but leave anything else in
@@ -275,7 +275,7 @@ extension URL {
             return false
         }
         let utilityURLs = ["/errors", "/about/sessionrestore", "/about/home", "/reader-mode"]
-        return utilityURLs.contains { self.path.startsWith($0) }
+        return utilityURLs.contains { self.path.hasPrefix($0) }
     }
 
     public var isLocal: Bool {
@@ -385,7 +385,7 @@ extension URL {
         guard let scheme = self.scheme, let host = self.host else {
             return nil
         }
-        if scheme == "http" && host == "localhost" && path.startsWith(aboutPath) {
+        if scheme == "http" && host == "localhost" && path.hasPrefix(aboutPath) {
             return path.substring(from: aboutPath.endIndex)
         }
         return nil

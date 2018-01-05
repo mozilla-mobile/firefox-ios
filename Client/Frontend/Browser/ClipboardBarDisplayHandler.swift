@@ -88,7 +88,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         // Ugly hack to ensure we wait until we're finished restoring the session on the first tab
         // before checking if we should display the clipboard bar.
         guard sessionRestored,
-            !url.absoluteString.startsWith("\(WebServer.sharedInstance.base)/about/sessionrestore?history=") else {
+            !url.absoluteString.hasPrefix("\(WebServer.sharedInstance.base)/about/sessionrestore?history=") else {
             return
         }
 

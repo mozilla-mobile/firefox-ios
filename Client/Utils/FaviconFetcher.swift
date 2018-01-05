@@ -171,7 +171,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                     continue //Skip the rest of the loop. But don't stop the loop
                 }
 
-                if href.endsWith(".ico") {
+                if href.hasSuffix(".ico") {
                     iconType = .guess
                 }
 

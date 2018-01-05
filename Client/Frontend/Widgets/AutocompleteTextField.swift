@@ -176,7 +176,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
 
         let normalized = normalizeString(text)
-        guard suggestion.startsWith(normalized) && normalized.characters.count < suggestion.characters.count else {
+        guard suggestion.hasPrefix(normalized) && normalized.characters.count < suggestion.characters.count else {
             hideCursor = false
             return
         }

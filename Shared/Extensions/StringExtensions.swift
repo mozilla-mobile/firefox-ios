@@ -5,30 +5,6 @@
 import Foundation
 
 public extension String {
-    public func startsWith(_ other: String) -> Bool {
-        // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
-        if other.isEmpty {
-            return true
-        }
-        if let range = self.range(of: other,
-                options: .anchored) {
-            return range.lowerBound == self.startIndex
-        }
-        return false
-    }
-
-    public func endsWith(_ other: String) -> Bool {
-        // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
-        if other.isEmpty {
-            return true
-        }
-        if let range = self.range(of: other,
-                options: [.anchored, .backwards]) {
-            return range.upperBound == self.endIndex
-        }
-        return false
-    }
-
     func escape() -> String? {
         // We can't guaruntee that strings have a valid string encoding, as this is an entry point for tainted data,
         // we should be very careful about forcefully dereferencing optional types.
