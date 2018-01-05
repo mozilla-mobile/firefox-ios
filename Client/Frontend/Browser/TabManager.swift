@@ -848,10 +848,8 @@ extension TabManager: WKNavigationDelegate {
         // only store changes if this is not an error page
         // as we current handle tab restore as error page redirects then this ensures that we don't
         // call storeChanges unnecessarily on startup
-        if let url = webView.url {
-            if !url.isErrorPageURL {
-                storeChanges()
-            }
+        if let url = webView.url, !url.isErrorPageURL {
+            storeChanges()
         }
     }
 
@@ -938,7 +936,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
             }
 
             guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {
-                return completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
+                return completionHandler(.performDefaultHandling, nil)
             }
 
             firstAuthenticatingDelegate.webView?(webView, didReceive: challenge) { (disposition, credential) in

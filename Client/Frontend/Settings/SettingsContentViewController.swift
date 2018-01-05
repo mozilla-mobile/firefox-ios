@@ -162,7 +162,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             completionHandler(.useCredential, WebServer.sharedInstance.credentials)
             return
         }
-        completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
+        completionHandler(.performDefaultHandling, nil)
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
