@@ -301,7 +301,7 @@ class TabTrayController: UIViewController {
     }
 
     func dynamicFontChanged(_ notification: Notification) {
-        guard notification.name == NotificationDynamicFontChanged else { return }
+        guard notification.name == .DynamicFontChanged else { return }
 
         self.collectionView.reloadData()
     }
@@ -344,7 +344,7 @@ class TabTrayController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {

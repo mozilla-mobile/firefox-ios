@@ -157,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
         }
 
-        NotificationCenter.default.addObserver(forName: NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
+        NotificationCenter.default.addObserver(forName: .FirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
             profile.flushAccount()
         }
 

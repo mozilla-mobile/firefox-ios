@@ -500,7 +500,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             // reset Sync and start over in the case of corruption.
             defer {
                 let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent
-                NotificationCenter.default.post(name: NotificationDatabaseWasRecreated, object: baseFilename)
+                NotificationCenter.default.post(name: .DatabaseWasRecreated, object: baseFilename)
             }
 
             // Now that we've got a brand new database file, let's call `prepareSchema()` on

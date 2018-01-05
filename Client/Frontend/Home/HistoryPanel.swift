@@ -32,7 +32,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     private var currentSyncedDevicesCount: Int?
 
-    var events = [NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged]
+    var events: [Notification.Name] = [.FirefoxAccountChanged, .PrivateDataClearedHistory, .DynamicFontChanged]
     var refreshControl: UIRefreshControl?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -125,12 +125,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         reloadData()
 
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
+        case .FirefoxAccountChanged, .PrivateDataClearedHistory:
             if self.profile.hasSyncableAccount() {
                 resyncHistory()
             }
             break
-        case NotificationDynamicFontChanged:
+        case .DynamicFontChanged:
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
@@ -169,10 +169,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     // MARK: - Refreshing TableView
     func addRefreshControl() {
-        let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        self.refreshControl = refresh
-        self.tableView.refreshControl = refresh
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.refreshControl = control
+        self.tableView.refreshControl = control
     }
 
     func removeRefreshControl() {

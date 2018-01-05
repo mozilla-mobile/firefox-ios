@@ -7,8 +7,6 @@ import XCGLogger
 import Deferred
 import Shared
 
-public let NotificationDatabaseWasRecreated = Notification.Name("NotificationDatabaseWasRecreated")
-
 private let log = Logger.syncLogger
 
 public typealias Args = [Any?]

@@ -8,6 +8,16 @@ import SDWebImage
 
 private let imageLock = NSLock()
 
+extension CGRect {
+    public init(width: CGFloat, height: CGFloat) {
+        self.init(x: 0, y: 0, width: width, height: height)
+    }
+
+    public init(size: CGSize) {
+        self.init(origin: .zero, size: size)
+    }
+}
+
 extension UIImage {
     /// Despite docs that say otherwise, UIImage(data: NSData) isn't thread-safe (see bug 1223132).
     /// As a workaround, synchronize access to this initializer.

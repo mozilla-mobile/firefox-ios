@@ -914,10 +914,10 @@ class BrowserViewController: UIViewController {
         if let url = tab.url {
             if url.isReaderModeURL {
                 showReaderModeBar(animated: false)
-                NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: .DynamicFontChanged, object: nil)
             } else {
                 hideReaderModeBar(animated: false)
-                NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
+                NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
             }
 
             updateInContentHomePanel(url as URL)
@@ -1092,7 +1092,7 @@ class BrowserViewController: UIViewController {
             info["visitType"] = visitType
         }
         info["isPrivate"] = tab.isPrivate
-        notificationCenter.post(name: NotificationOnLocationChange, object: self, userInfo: info)
+        notificationCenter.post(name: .OnLocationChange, object: self, userInfo: info)
     }
 
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
@@ -2194,7 +2194,7 @@ extension BrowserViewController {
     }
 
     func SELDynamicFontChanged(_ notification: Notification) {
-        guard notification.name == NotificationDynamicFontChanged else { return }
+        guard notification.name == .DynamicFontChanged else { return }
 
         var readerModeStyle = DefaultReaderModeStyle
         if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {

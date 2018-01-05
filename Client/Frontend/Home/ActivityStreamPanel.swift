@@ -94,7 +94,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(didChangeFontSize),
-                                               name: NotificationDynamicFontChanged,
+                                               name: .DynamicFontChanged,
                                                object: nil)
 
     }

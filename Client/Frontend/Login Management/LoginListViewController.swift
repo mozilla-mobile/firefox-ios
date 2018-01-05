@@ -87,7 +87,7 @@ class LoginListViewController: SensitiveViewController {
         super.viewDidLoad()
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(remoteLoginsDidChange), name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(remoteLoginsDidChange), name: .DataRemoteLoginChangesWereApplied, object: nil)
         notificationCenter.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false

@@ -515,9 +515,9 @@ class SettingsTableViewController: UITableViewController {
 
         settings = generateSettings()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: NotificationProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: NotificationProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELfirefoxAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELfirefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
 
         tableView.reloadData()
     }

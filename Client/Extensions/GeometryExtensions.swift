@@ -5,14 +5,6 @@
 import UIKit
 
 extension CGRect {
-    init(width: CGFloat, height: CGFloat) {
-        self.init(x: 0, y: 0, width: width, height: height)
-    }
-
-    init(size: CGSize) {
-        self.init(origin: .zero, size: size)
-    }
-
     var center: CGPoint {
         get {
             return CGPoint(x: size.width / 2, y: size.height / 2)

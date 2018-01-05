@@ -177,6 +177,6 @@ class FxALoginStateMachine {
     }
 
     fileprivate func notifyAccountVerified() {
-        NotificationCenter.default.post(name: NotificationFirefoxAccountVerified, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: .FirefoxAccountVerified, object: nil, userInfo: nil)
     }
 }

@@ -55,8 +55,8 @@ class RemoteTabsPanel: UIViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: NotificationProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .ProfileDidFinishSyncing, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -91,7 +91,7 @@ class RemoteTabsPanel: UIViewController, HomePanel {
 
     func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing:
+        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
             DispatchQueue.main.async {
                 print(notification.name)
                 self.tableViewController.refreshTabs()

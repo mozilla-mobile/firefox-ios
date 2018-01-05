@@ -54,7 +54,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
 
         self.tableView.register(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
         self.tableView.register(BookmarkFolderTableViewCell.self, forCellReuseIdentifier: BookmarkFolderCellIdentifier)
@@ -110,7 +110,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged:
+        case .FirefoxAccountChanged:
             self.reloadData()
             break
         default:
