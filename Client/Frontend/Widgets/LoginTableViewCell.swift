@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import SnapKit
 import Storage
@@ -67,7 +66,7 @@ class LoginTableViewCell: UITableViewCell {
         if item == .usernameItem {
             return action == MenuHelper.SelectorCopy
         }
-        
+
         return false
     }
 
@@ -215,9 +214,7 @@ class LoginTableViewCell: UITableViewCell {
         super.layoutSubviews()
 
         // Adjust indent frame
-        var indentFrame = CGRect(
-            origin: CGPoint.zero,
-            size: CGSize(width: LoginTableViewCellUX.indentWidth, height: frame.height))
+        var indentFrame = CGRect(width: LoginTableViewCellUX.indentWidth, height: frame.height)
 
         if !showingIndent {
             indentFrame.origin.x = -LoginTableViewCellUX.indentWidth

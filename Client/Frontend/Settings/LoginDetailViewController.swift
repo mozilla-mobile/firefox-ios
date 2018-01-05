@@ -64,7 +64,7 @@ class LoginDetailViewController: SensitiveViewController {
         self.login = login
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
     }
 
@@ -75,7 +75,7 @@ class LoginDetailViewController: SensitiveViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginDetailViewController.SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(SELedit))
 
         tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
@@ -100,7 +100,7 @@ class LoginDetailViewController: SensitiveViewController {
         tableView.tableFooterView = UIView()
 
         // Add a line on top of the table view so when the user pulls down it looks 'correct'.
-        let topLine = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: tableView.frame.width, height: 0.5)))
+        let topLine = UIView(frame: CGRect(width: tableView.frame.width, height: 0.5))
         topLine.backgroundColor = SettingsUX.TableViewSeparatorColor
         tableView.tableHeaderView = topLine
 
@@ -110,9 +110,7 @@ class LoginDetailViewController: SensitiveViewController {
     }
 
     deinit {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func viewDidLayoutSubviews() {
@@ -226,11 +224,11 @@ extension LoginDetailViewController: UITableViewDelegate {
         if ![InfoItem.passwordItem, InfoItem.websiteItem, InfoItem.usernameItem].contains(item) {
             return
         }
-        
+
         guard let cell = tableView.cellForRow(at: indexPath) as? LoginTableViewCell else { return }
-        
+
         cell.becomeFirstResponder()
-        
+
         let menu = UIMenuController.shared
         menu.setTargetRect(cell.frame, in: self.tableView)
         menu.setMenuVisible(true, animated: true)
@@ -313,12 +311,12 @@ extension LoginDetailViewController {
     func SELdoneEditing() {
         editingInfo = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(SELedit))
-        
+
         defer {
             // Required to get UI to reload with changed state
             tableView.reloadData()
         }
-        
+
         // We only care to update if we changed something
         guard let username = usernameField?.text,
                   let password = passwordField?.text, username != login.username || password != login.password else {
@@ -365,7 +363,7 @@ extension LoginDetailViewController: LoginTableViewCellDelegate {
 
         return false
     }
-    
+
     func infoItemForCell(_ cell: LoginTableViewCell) -> InfoItem? {
         if let index = tableView.indexPath(for: cell),
             let item = InfoItem(rawValue: index.row) {

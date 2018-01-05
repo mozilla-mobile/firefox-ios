@@ -50,6 +50,6 @@ class MetadataParserHelper: TabContentScript {
         tab.pageMetadata = pageMetadata
 
         TabEvent.post(.didLoadPageMetadata(pageMetadata), for: tab)
-        NotificationCenter.default.post(name: NotificationOnPageMetadataFetched, object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: .OnPageMetadataFetched, object: nil, userInfo: userInfo)
     }
 }

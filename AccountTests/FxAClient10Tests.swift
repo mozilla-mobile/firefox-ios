@@ -151,7 +151,7 @@ class FxAClient10Tests: LiveAccountTest {
         }
         self.waitForExpectations(timeout: 10, handler: nil)
     }
-    
+
     func testProfileSuccess() {
         withVerifiedAccountNoExpectations { emailUTF8, quickStretchedPW in
             let stageConfiguration = StageFirefoxAccountConfiguration()

@@ -8,17 +8,17 @@ import Shared
 
 open class SQLiteFavicons {
     let db: BrowserDB
-    
+
     required public init(db: BrowserDB) {
         self.db = db
     }
-    
+
     public func getFaviconIDQuery(url: String) -> (sql: String, args: Args?) {
         var args: Args = []
         args.append(url)
         return (sql: "SELECT id FROM \(TableFavicons) WHERE url = ? LIMIT 1", args: args)
     }
-    
+
     public func getInsertFaviconQuery(favicon: Favicon) -> (sql: String, args: Args?) {
         var args: Args = []
         args.append(favicon.url)
@@ -28,7 +28,7 @@ open class SQLiteFavicons {
         args.append(favicon.type.rawValue)
         return (sql: "INSERT INTO \(TableFavicons) (url, width, height, date, type) VALUES (?,?,?,?,?)", args: args)
     }
-    
+
     public func getUpdateFaviconQuery(favicon: Favicon) -> (sql: String, args: Args?) {
         var args = Args()
         args.append(favicon.width)
@@ -38,7 +38,7 @@ open class SQLiteFavicons {
         args.append(favicon.url)
         return (sql: "UPDATE \(TableFavicons) SET width = ?, height = ?, date = ?, type = ? WHERE url = ?", args: args)
     }
-    
+
     public func getCleanupFaviconsQuery() -> (sql: String, args: Args?) {
         return (sql: "DELETE FROM \(TableFavicons) " +
             "WHERE \(TableFavicons).id NOT IN (" +
@@ -49,7 +49,7 @@ open class SQLiteFavicons {
             "SELECT faviconID FROM \(TableBookmarksMirror) WHERE faviconID IS NOT NULL" +
             ")", args: nil)
     }
-    
+
     public func insertOrUpdateFavicon(_ favicon: Favicon) -> Deferred<Maybe<Int>> {
         return db.withConnection { conn -> Int in
             self.insertOrUpdateFaviconInTransaction(favicon, conn: conn) ?? 0
@@ -59,7 +59,7 @@ open class SQLiteFavicons {
     func insertOrUpdateFaviconInTransaction(_ favicon: Favicon, conn: SQLiteDBConnection) -> Int? {
         let query = self.getFaviconIDQuery(url: favicon.url)
         let cursor = conn.executeQuery(query.sql, factory: IntFactory, withArgs: query.args)
-        
+
         if let id = cursor[0] {
             let updateQuery = self.getUpdateFaviconQuery(favicon: favicon)
             do {
@@ -67,20 +67,20 @@ open class SQLiteFavicons {
             } catch {
                 return nil
             }
-            
+
             return id
         }
-        
+
         let insertQuery = self.getInsertFaviconQuery(favicon: favicon)
         do {
             try conn.executeChange(insertQuery.sql, withArgs: insertQuery.args)
         } catch {
             return nil
         }
-        
+
         return conn.lastInsertedRowID
     }
-    
+
     public func cleanupFavicons() -> Success {
         return self.db.run([getCleanupFaviconsQuery()])
     }

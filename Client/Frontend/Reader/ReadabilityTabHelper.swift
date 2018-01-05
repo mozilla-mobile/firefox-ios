@@ -21,7 +21,7 @@ class ReadabilityTabHelper: TabContentScript {
            let readabilitySource = try? NSMutableString(contentsOfFile: readabilityPath, encoding: String.Encoding.utf8.rawValue),
            let readabilityTabHelperPath = Bundle.main.path(forResource: ReadabilityTabHelper.name(), ofType: "js"),
            let readabilityTabHelperSource = try? NSMutableString(contentsOfFile: readabilityTabHelperPath, encoding: String.Encoding.utf8.rawValue) {
-            readabilityTabHelperSource.replaceOccurrences(of: "%READABILITYJS%", with: readabilitySource as String, options: NSString.CompareOptions.literal, range: NSRange(location: 0, length: readabilityTabHelperSource.length))
+            readabilityTabHelperSource.replaceOccurrences(of: "%READABILITYJS%", with: readabilitySource as String, options: .literal, range: NSRange(location: 0, length: readabilityTabHelperSource.length))
             let userScript = WKUserScript(source: readabilityTabHelperSource as String, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }

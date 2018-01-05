@@ -8,15 +8,15 @@ import EarlGrey
 @testable import Client
 
 class BrowserTests: KIFTestCase {
-    
+
     private var webRoot: String!
-    
+
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
         BrowserUtils.dismissFirstRunUI()
     }
-    
+
     override func tearDown() {
         BrowserUtils.resetToAboutHome()
         BrowserUtils.clearPrivateData()
@@ -32,10 +32,10 @@ class BrowserTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("JS Prompt")
         //EarlGrey.select(elementWithMatcher: grey_kindOfClass(NSClassFromString("_UIAlertControllerInterfaceActionGroupView")!))
         //    .assert(grey_sufficientlyVisible())
-        
+
         // Show share sheet and wait for the JS prompt to fire
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Share")).perform(grey_tap())
-        
+
         if BrowserUtils.iPad() {
             // iPad does not have cancel btn to close dialog
             EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Share")).perform(grey_tap())
@@ -45,7 +45,7 @@ class BrowserTests: KIFTestCase {
                                       grey_sufficientlyVisible()])
             EarlGrey.select(elementWithMatcher: matcher).perform(grey_tap())
         }
-        
+
         // Check to see if the JS Prompt is dequeued and showing
         tester().waitForView(withAccessibilityLabel: "OK")
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))

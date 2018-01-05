@@ -32,7 +32,7 @@ class OpenWithSettingsViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
         tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
-        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight))
+        let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle.uppercased()
         headerView.showTopBorder = false
@@ -45,7 +45,7 @@ class OpenWithSettingsViewController: UITableViewController {
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
 
-        NotificationCenter.default.addObserver(self, selector: #selector(OpenWithSettingsViewController.appDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -73,7 +73,7 @@ class OpenWithSettingsViewController: UITableViewController {
                 }
             })
         }
-        
+
         if !previousChoiceAvailable {
             self.prefs.setString(mailProviderSource[0].scheme, forKey: PrefsKeys.KeyMailToOption)
         }

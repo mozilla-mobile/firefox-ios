@@ -6,7 +6,6 @@ import WebKit
 import Shared
 import Deferred
 
-fileprivate let NotificationContentBlockerUpdateNeeded = "NotificationContentBlockerUpdateNeeded"
 
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
@@ -105,7 +104,7 @@ class ContentBlockerHelper {
     }
 
     static func prefsChanged() {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: NotificationContentBlockerUpdateNeeded), object: nil)
+        NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
     }
 
     class func name() -> String {
@@ -139,7 +138,7 @@ class ContentBlockerHelper {
     }
 
     func setupForWebView() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTab), name: NSNotification.Name(rawValue: NotificationContentBlockerUpdateNeeded), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTab), name: .ContentBlockerUpdateNeeded, object: nil)
         addActiveRulesToTab()
     }
 
@@ -239,9 +238,10 @@ extension ContentBlockerHelper {
     fileprivate func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
         DispatchQueue.global().async {
             guard let path = Bundle.main.path(forResource: file, ofType: "json"),
-                let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String else {
+                let source = try? String(contentsOfFile: path, encoding: .utf8) else {
                     return
             }
+
             DispatchQueue.main.async {
                 completion(source)
             }

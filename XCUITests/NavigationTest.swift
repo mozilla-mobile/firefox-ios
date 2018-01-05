@@ -187,7 +187,7 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(urlGoogle)
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "google")
-        
+
         // Mobile view by default, desktop view should be available
         navigator.browserPerformAction(.toggleDesktopOption)
         checkDesktopSite()
@@ -205,13 +205,13 @@ class NavigationTest: BaseTestCase {
         waitforExistence(app.tables.cells["menu-RequestDesktopSite"].staticTexts[requestDesktopSiteLabel])
         navigator.goto(BrowserTab)
     }
-    
+
     private func checkDesktopSite() {
         app.buttons["TabLocationView.pageOptionsButton"].tap()
         waitforExistence(app.tables.cells["menu-RequestDesktopSite"].staticTexts[requestMobileSiteLabel])
         navigator.goto(BrowserTab)
     }
-    
+
     func testNavigationPreservesDesktopSiteOnSameHost() {
         clearData()
         navigator.openURL(urlGoogle)

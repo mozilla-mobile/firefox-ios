@@ -105,7 +105,7 @@ enum TabEvent {
             return .didClose
         }
     }
-    
+
     func handle(_ tab: Tab, with handler: TabEventHandler) {
         switch self {
         case .didLoadPageMetadata(let metadata):
@@ -161,7 +161,7 @@ extension TabEventHandler {
             }
         }
     }
-    
+
     func unregister(_ observers: TabObservers) {
         observers.forEach { observer in
             center.removeObserver(observer)

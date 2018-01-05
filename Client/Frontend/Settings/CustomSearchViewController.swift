@@ -12,17 +12,17 @@ import Deferred
 private let log = Logger.browserLogger
 
 class CustomSearchError: MaybeErrorType {
-    
+
     enum Reason {
         case DuplicateEngine, FormInput
     }
-    
+
     var reason: Reason!
-    
+
     internal var description: String {
         return "Search Engine Not Added"
     }
-    
+
     init(_ reason: Reason) {
         self.reason = reason
     }
@@ -46,30 +46,30 @@ class CustomSearchViewController: SettingsTableViewController {
             make.center.equalTo(self.view.snp.center)
         }
     }
-    
+
     var successCallback: (() -> Void)?
 
     fileprivate func addSearchEngine(_ searchQuery: String, title: String) {
         spinnerView.startAnimating()
-        
+
         let trimmedQuery = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
-        
+
         createEngine(forQuery: trimmedQuery, andName: trimmedTitle).uponQueue(.main) { result in
             self.spinnerView.stopAnimating()
             guard let engine = result.successValue else {
                 let alert: UIAlertController
                 let error = result.failureValue as? CustomSearchError
-                
+
                 alert = (error?.reason == .DuplicateEngine) ?
                     ThirdPartySearchAlerts.duplicateCustomEngine() : ThirdPartySearchAlerts.incorrectCustomEngineForm()
-                
+
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
                 self.present(alert, animated: true, completion: nil)
                 return
             }
             self.profile.searchEngines.addSearchEngine(engine)
-            
+
             CATransaction.begin() // Use transaction to call callback after animation has been completed
             CATransaction.setCompletionBlock(self.successCallback)
             _ = self.navigationController?.popViewController(animated: true)
@@ -80,17 +80,17 @@ class CustomSearchViewController: SettingsTableViewController {
     func createEngine(forQuery query: String, andName name: String) -> Deferred<Maybe<OpenSearchEngine>> {
         let deferred = Deferred<Maybe<OpenSearchEngine>>()
         guard let template = getSearchTemplate(withString: query),
-            let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!), url.isWebPage() else {
+            let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!), url.isWebPage() else {
                 deferred.fill(Maybe(failure: CustomSearchError(.FormInput)))
                 return deferred
         }
-        
+
         // ensure we haven't already stored this template
         guard engineExists(name: name, template: template) == false else {
             deferred.fill(Maybe(failure: CustomSearchError(.DuplicateEngine)))
             return deferred
         }
-        
+
         FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(.main) { result in
             let image = result.successValue ?? FaviconFetcher.getDefaultFavicon(url)
             let engine = OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
@@ -102,7 +102,7 @@ class CustomSearchViewController: SettingsTableViewController {
         }
         return deferred
     }
-    
+
     private func engineExists(name: String, template: String) -> Bool {
         return profile.searchEngines.orderedEngines.contains { (engine) -> Bool in
             return engine.shortName == name || engine.searchTemplate == template
@@ -201,7 +201,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         placeholderLabel.adjustsFontSizeToFitWidth = true
         placeholderLabel.textColor = UIColor(red: 0.0, green: 0.0, blue: 0.0980392, alpha: 0.22)
         placeholderLabel.text = placeholder
-        placeholderLabel.frame = CGRect(x: 0, y: 0, width: textField.frame.width, height: TextLabelHeight)
+        placeholderLabel.frame = CGRect(width: textField.frame.width, height: TextLabelHeight)
         textField.font = placeholderLabel.font
 
         textField.textContainer.lineFragmentPadding = 0

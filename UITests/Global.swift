@@ -85,7 +85,7 @@ extension KIFUITestActor {
                 }
                 return false
             }
-            
+
             return (element == nil) ? KIFTestStepResult.wait : KIFTestStepResult.success
         }
 
@@ -197,8 +197,8 @@ extension KIFUITestActor {
             if result as! String == "undefined" {
                 let bundle = Bundle(for: BrowserTests.self)
                 let path = bundle.path(forResource: "KIFHelper", ofType: "js")!
-                let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue)
-                webView.evaluateJavaScript(source as String, completionHandler: nil)
+                let source = try! String(contentsOfFile: path, encoding: .utf8)
+                webView.evaluateJavaScript(source, completionHandler: nil)
             }
             stepResult = KIFTestStepResult.success
         }
@@ -275,37 +275,36 @@ class BrowserUtils {
 
 	class func dismissFirstRunUI() {
 		var error: NSError?
-        
+
 		let matcher = grey_allOf([
 			grey_accessibilityID("IntroViewController.scrollView"), grey_sufficientlyVisible()])
-		
+
         EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &error)
-		
+
 		if error == nil {
             EarlGrey.select(elementWithMatcher: matcher).perform(grey_swipeFastInDirection(GREYDirection.left))
             let buttonMatcher = grey_allOf([
                 grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
-            
+
             EarlGrey.select(elementWithMatcher: buttonMatcher).assert(grey_notNil(), error: &error)
-        
+
             if error == nil {
                 EarlGrey.select(elementWithMatcher: buttonMatcher).perform(grey_tap())
             }
 		}
 	}
-    
+
     class func iPad() -> Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
 
     /// Injects a URL and title into the browser's history database.
     class func addHistoryEntry(_ title: String, url: URL) {
-        let notificationCenter = NotificationCenter.default
-        var info = [AnyHashable: Any]()
-        info["url"] = url
-        info["title"] = title
-        info["visitType"] = VisitType.link.rawValue
-        notificationCenter.post(name: Notification.Name(rawValue: "OnLocationChange"), object: self, userInfo: info)
+        let info: [AnyHashable: Any] = [
+            "url": url,
+            "title": title,
+            "visitType": VisitType.link.rawValue]
+        NotificationCenter.default.post(name: .OnLocationChange, object: self, userInfo: info)
     }
 
     fileprivate class func clearHistoryItemAtIndex(_ index: IndexPath, tester: KIFUITestActor) {
@@ -314,8 +313,6 @@ class BrowserUtils {
             tester.tapView(withAccessibilityLabel: "Remove")
         }
     }
-
-
 
     class func openClearPrivateDataDialog(_ swipe: Bool) {
         let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
@@ -343,7 +340,7 @@ class BrowserUtils {
         EarlGrey.select(elementWithMatcher:grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
             .perform(grey_tap())
     }
-    
+
     fileprivate class func acceptClearPrivateData() {
         EarlGrey.select(elementWithMatcher:grey_allOf([grey_accessibilityLabel("OK"), grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)])).perform(grey_tap())
     }
@@ -377,7 +374,7 @@ class BrowserUtils {
         acceptClearPrivateData()
         closeClearPrivateDataDialog()
     }
-    
+
     class func clearHistoryItems(_ tester: KIFUITestActor, numberOfTests: Int = -1) {
         resetToAboutHome()
         tester.tapView(withAccessibilityLabel: "History")
@@ -402,7 +399,7 @@ class BrowserUtils {
         // searches are async (and debounced), so we have to wait for the results to appear.
         tester.waitForViewWithAccessibilityValue(prefix + completion)
 
-        let autocompleteFieldlabel = textField.subviews.filter { $0.accessibilityIdentifier == "autocomplete" }.first as? UILabel
+        let autocompleteFieldlabel = textField.subviews.first { $0.accessibilityIdentifier == "autocomplete" } as? UILabel
 
         if completion == "" {
             XCTAssertTrue(autocompleteFieldlabel == nil, "The autocomplete was empty but the label still exists.")
@@ -411,14 +408,13 @@ class BrowserUtils {
 
         XCTAssertTrue(autocompleteFieldlabel != nil, "The autocomplete was not found")
         XCTAssertEqual(completion, autocompleteFieldlabel!.text, "Expected prefix matches actual prefix")
-
     }
 }
 
 class SimplePageServer {
     class func getPageData(_ name: String, ext: String = "html") -> String {
         let pageDataPath = Bundle(for: self).path(forResource: name, ofType: ext)!
-        return (try! NSString(contentsOfFile: pageDataPath, encoding: String.Encoding.utf8.rawValue)) as String
+        return try! String(contentsOfFile: pageDataPath, encoding: .utf8)
     }
 
     class func start() -> String {
@@ -459,7 +455,7 @@ class SimplePageServer {
         webServer.addHandler(forMethod: "GET", path: "/loginForm.html", request: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(html: self.getPageData("loginForm"))
         }
-        
+
         webServer.addHandler(forMethod: "GET", path: "/navigationDelegate.html", request: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(html: self.getPageData("navigationDelegate"))
         }

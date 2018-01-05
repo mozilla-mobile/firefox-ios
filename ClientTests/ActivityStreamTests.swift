@@ -90,7 +90,7 @@ extension ActivityStreamTests {
             }
         }
     }
-    
+
     func testHighlightEmitsEventOnTap() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
         panel.highlights = [mockSite]
@@ -166,7 +166,7 @@ extension ActivityStreamTests {
         let badSite = Site(url: "http://mozilla.org", title: "Mozilla")
         profile.recommendations = MockRecommender(highlights: [goodSite, badSite])
 
-        // Since invalidateHighlights calls back into the main thread, we can't 
+        // Since invalidateHighlights calls back into the main thread, we can't
         // simply call .value on this to block since the app will dead lock when
         // trying to call back onto a blocked main thread.
         let expect = XCTestExpectation(description: "Sent bad highlight pings")
@@ -197,7 +197,7 @@ extension ActivityStreamTests {
         let badSite = Site(url: "http://mozilla.org", title: "Mozilla")
         profile.history = MockTopSitesHistory(sites: [goodSite, badSite])
 
-        // Since invalidateHighlights calls back into the main thread, we can't 
+        // Since invalidateHighlights calls back into the main thread, we can't
         // simply call .value on this to block since the app will dead lock when
         // trying to call back onto a blocked main thread.
         let expect = XCTestExpectation(description: "Sent bad top site pings")
@@ -223,7 +223,7 @@ class MockPingClient: PingCentreClient {
         pingsReceived.append(data)
         return succeed()
     }
-    
+
     public func sendBatch(_ data: [[String : Any]], validate: Bool) -> Success {
         pingsReceived += data
         return succeed()
@@ -248,7 +248,7 @@ fileprivate class MockRecommender: HistoryRecommendations {
     func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         return deferMaybe(ArrayCursor(data: []))
     }
-    
+
     func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success {
         return succeed()
     }

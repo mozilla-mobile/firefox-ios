@@ -16,7 +16,8 @@ class NightModeHelper: TabContentScript {
 
     required init(tab: Tab) {
         self.tab = tab
-        if let path = Bundle.main.path(forResource: "NightModeHelper", ofType: "js"), let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+        if let path = Bundle.main.path(forResource: "NightModeHelper", ofType: "js"),
+            let source = try? String(contentsOfFile: path, encoding: .utf8) {
             let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
@@ -38,7 +39,7 @@ class NightModeHelper: TabContentScript {
         let isActive = prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
         setNightMode(prefs, tabManager: tabManager, enabled: !isActive)
     }
-    
+
     static func setNightMode(_ prefs: Prefs, tabManager: TabManager, enabled: Bool) {
         prefs.setBool(enabled, forKey: NightModePrefsKey.NightModeStatus)
         for tab in tabManager.tabs {

@@ -34,7 +34,7 @@ protocol OpenInHelper {
 
 struct OpenIn {
     static let helpers: [OpenInHelper.Type] = [OpenPdfInHelper.self, OpenPassBookHelper.self, ShareFileHelper.self]
-    
+
     static func helperForResponse(_ response: URLResponse) -> OpenInHelper? {
         return helpers.flatMap { $0.init(response: response) }.first
     }
@@ -156,7 +156,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     func getOpenInView() -> OpenInView {
         let overlayView = OpenInView()
 
-        overlayView.openInButton.addTarget(self, action: #selector(OpenPdfInHelper.open), for: .touchUpInside)
+        overlayView.openInButton.addTarget(self, action: #selector(open), for: .touchUpInside)
         return overlayView
     }
 
@@ -213,8 +213,8 @@ class OpenInView: UIView {
 
     init() {
         super.init(frame: .zero)
-        openInButton.setTitleColor(OpenInViewUX.TextColor, for: UIControlState.normal)
-        openInButton.setTitle(OpenInViewUX.OpenInString, for: UIControlState.normal)
+        openInButton.setTitleColor(OpenInViewUX.TextColor, for: .normal)
+        openInButton.setTitle(OpenInViewUX.OpenInString, for: .normal)
         openInButton.titleLabel?.font = OpenInViewUX.TextFont
         openInButton.sizeToFit()
         self.addSubview(openInButton)

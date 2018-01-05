@@ -23,23 +23,23 @@ class ChevronView: UIView {
     fileprivate var lineJoinStyle = CGLineJoin.round
 
     var lineWidth: CGFloat = 3.0
-    
+
     var style: ChevronStyle = .rounded {
         didSet {
             switch style {
             case .rounded:
-                lineCapStyle = CGLineCap.round
-                lineJoinStyle = CGLineJoin.round
+                lineCapStyle = .round
+                lineJoinStyle = .round
             case .angular:
-                lineCapStyle = CGLineCap.butt
-                lineJoinStyle = CGLineJoin.miter
+                lineCapStyle = .butt
+                lineJoinStyle = .miter
 
             }
         }
     }
 
     init(direction: ChevronDirection) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
         self.direction = direction
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {

@@ -26,7 +26,7 @@ open class FeatureSwitch {
     }
 
     /// Is this user a member of the bucket that is allowed to use this feature.
-    /// Bucketing is decided with the hash of a UUID, which is randomly generated and cached 
+    /// Bucketing is decided with the hash of a UUID, which is randomly generated and cached
     /// in the preferences.
     /// This gives us stable properties across restarts and new releases.
     open func isMember(_ prefs: Prefs) -> Bool {

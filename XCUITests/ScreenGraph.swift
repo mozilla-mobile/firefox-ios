@@ -9,7 +9,7 @@
  *
  * In your tests, you use a navigator which does the job of getting your tests from place to place in your application,
  * leaving you to concentrate on testing, rather than maintaining brittle and duplicated navigation code.
- * 
+ *
  * The shared graph may also have other uses, such as generating screen shots for the App Store or L10n translators.
  *
  * Under the hood, the ScreenGraph is using GameplayKit's path finding to do the heavy lifting.
@@ -319,9 +319,8 @@ class GraphNode<T: UserState> {
 }
 
 /**
- * The ScreenGraph is made up of nodes. It is not possible to init these directly, only by creating 
- * screen nodes from the ScreenGraph object.
- * 
+ * The ScreenGraph is made up of nodes. It is not possible to init these directly, only by creating * screen nodes from the ScreenGraph object.
+ *
  * The ScreenGraphNode has all the methods needed to define edges from this node to another node, using the usual
  * XCUIElement method of moving about.
  */
@@ -332,8 +331,8 @@ class ScreenStateNode<T: UserState>: GraphNode<T> {
     typealias UserStateChange = (T) -> ()
     fileprivate let noopUserStateChange: UserStateChange = { _ in }
 
-    // Iff this node has a backAction, this store temporarily stores 
-    // the node we were at before we got to this one. This becomes the node we return to when the backAction is 
+    // Iff this node has a backAction, this store temporarily stores
+    // the node we were at before we got to this one. This becomes the node we return to when the backAction is
     // invoked.
     fileprivate weak var returnNode: ScreenStateNode<T>?
 
@@ -343,13 +342,13 @@ class ScreenStateNode<T: UserState>: GraphNode<T> {
 
     /**
      * This is an action that will cause us to go back from where we came from.
-     * This is most useful when the same screen is accessible from multiple places, 
+     * This is most useful when the same screen is accessible from multiple places,
      * and we have a back button to return to where we came from.
      */
     var backAction: Gesture?
 
     /**
-     * This flag indicates that once we've moved on from this node, we can't come back to 
+     * This flag indicates that once we've moved on from this node, we can't come back to
      * it via `backAction`. This is especially useful for Menus, and dialogs.
      */
     var dismissOnUse: Bool = false
@@ -391,7 +390,7 @@ func waitOrTimeout(_ predicate: NSPredicate = existsPredicate, object: Any, time
 extension ScreenStateNode {
     /**
      * Declare that by performing the given action/gesture, then we can navigate from this node to the next.
-     * 
+     *
      * @param withElement – optional, but if provided will attempt to verify it is there before performing the action.
      * @param to – the destination node.
      */
@@ -415,7 +414,7 @@ extension ScreenStateNode {
 
         guard let _ = map?.namedScenes[nodeName] else {
             map?.xcTest.recordFailure(withDescription: "Node \(nodeName) has not been declared anywhere", inFile: file, atLine: line, expected: false)
-            return 
+            return
         }
         addEdge(nodeName, by: edge)
     }
@@ -805,7 +804,7 @@ class Navigator<T: UserState> {
 
     /**
      * Visit all nodes, calling the NodeVisitor the first time it is encountered.
-     * 
+     *
      * Some nodes may not be immediately available, depending on the state of the app.
      */
     func visitAll(_ file: String = #file, line: UInt = #line, f: @escaping NodeVisitor) {

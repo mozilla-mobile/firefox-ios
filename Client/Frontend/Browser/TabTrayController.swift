@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import SnapKit
 import Storage
@@ -99,9 +98,9 @@ class TabCell: UICollectionViewCell {
         self.closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
 
         super.init(frame: frame)
-        
+
         self.animator = SwipeAnimator(animatingView: self)
-        self.closeButton.addTarget(self, action: #selector(TabCell.close), for: .touchUpInside)
+        self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.screenshotView)
@@ -145,7 +144,7 @@ class TabCell: UICollectionViewCell {
         layer.masksToBounds = false
         // create a frame that is "BorderWidth" size bigger than the cell
         layer.shadowOffset = CGSize(width: -TabCell.BorderWidth, height: -TabCell.BorderWidth)
-        let shadowPath = CGRect(x: 0, y: 0, width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
+        let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
 
@@ -162,7 +161,7 @@ class TabCell: UICollectionViewCell {
             y: margin,
             width: w,
             height: h)
-        screenshotView.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: backgroundHolder.frame.size)
+        screenshotView.frame = CGRect(size: backgroundHolder.frame.size)
 
         title.frame = CGRect(x: 0,
             y: 0,
@@ -187,7 +186,7 @@ class TabCell: UICollectionViewCell {
 
         let top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
         titleText.frame.origin = CGPoint(x: titleText.frame.origin.x, y: max(0, top))
-        let shadowPath = CGRect(x: 0, y: 0, width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
+        let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
 
@@ -242,12 +241,12 @@ class TabTrayController: UIViewController {
 
     var collectionView: UICollectionView!
     var draggedCell: TabCell?
-    var dragOffset: CGPoint = CGPoint.zero
+    var dragOffset: CGPoint = .zero
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
-        toolbar.addTabButton.addTarget(self, action: #selector(TabTrayController.didClickAddTab), for: .touchUpInside)
-        toolbar.maskButton.addTarget(self, action: #selector(TabTrayController.didTogglePrivateMode), for: .touchUpInside)
-        toolbar.deleteButton.addTarget(self, action: #selector(TabTrayController.didTapDelete), for: .touchUpInside)
+        toolbar.addTabButton.addTarget(self, action: #selector(didClickAddTab), for: .touchUpInside)
+        toolbar.maskButton.addTarget(self, action: #selector(didTogglePrivateMode), for: .touchUpInside)
+        toolbar.deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
         return toolbar
     }()
 
@@ -265,7 +264,7 @@ class TabTrayController: UIViewController {
 
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
-        emptyView.learnMoreButton.addTarget(self, action: #selector(TabTrayController.didTapLearnMore), for: .touchUpInside)
+        emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
         return emptyView
     }()
 
@@ -301,7 +300,7 @@ class TabTrayController: UIViewController {
     }
 
     func dynamicFontChanged(_ notification: Notification) {
-        guard notification.name == NotificationDynamicFontChanged else { return }
+        guard notification.name == .DynamicFontChanged else { return }
 
         self.collectionView.reloadData()
     }
@@ -342,9 +341,9 @@ class TabTrayController: UIViewController {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(TabTrayController.appWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -493,7 +492,7 @@ class TabTrayController: UIViewController {
             didTogglePrivateMode()
         }
     }
-    
+
     fileprivate func openNewTab(_ request: URLRequest? = nil) {
         toolbar.isUserInteractionEnabled = false
 
@@ -533,7 +532,7 @@ extension TabTrayController {
     func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
-        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: {
             self.collectionView.alpha = 1
         },
         completion: nil)
@@ -605,7 +604,7 @@ extension TabTrayController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
     }
-    
+
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         guard privateMode else {
             return
@@ -769,7 +768,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabs.count
     }
-    
+
     @objc fileprivate func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let fromIndex = sourceIndexPath.item
         let toIndex = destinationIndexPath.item
@@ -805,9 +804,9 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
     fileprivate func cellHeightForCurrentDevice() -> CGFloat {
         let shortHeight = TabTrayControllerUX.TextBoxHeight * 6
 
-        if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.compact {
+        if self.traitCollection.verticalSizeClass == .compact {
             return shortHeight
-        } else if self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.compact {
+        } else if self.traitCollection.horizontalSizeClass == .compact {
             return shortHeight
         } else {
             return TabTrayControllerUX.TextBoxHeight * 8
@@ -1025,7 +1024,7 @@ class TrayToolbar: UIView {
         var buttonToCenter: UIButton?
         addSubview(deleteButton)
         buttonToCenter = deleteButton
-        
+
         maskButton.accessibilityIdentifier = "TabTrayController.maskButton"
 
         buttonToCenter?.snp.makeConstraints { make in

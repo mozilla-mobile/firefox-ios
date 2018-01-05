@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-
 import Shared
 import Storage
 import XCGLogger
@@ -34,7 +33,7 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
 
     fileprivate lazy var historyBackButton: HistoryBackButton = {
         let button = HistoryBackButton()
-        button.addTarget(self, action: #selector(RecentlyClosedTabsPanel.historyBackButtonWasTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(historyBackButtonWasTapped), for: .touchUpInside)
         return button
     }()
 
@@ -84,7 +83,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     init() {
@@ -117,16 +116,16 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         let tab = recentlyClosedTabs[indexPath.row]
         let displayURL = tab.url.displayURL ?? tab.url
         twoLineCell.setLines(tab.title, detailText: displayURL.absoluteDisplayString)
-        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!, type: .guess) : nil
+        let site: Favicon? = tab.faviconURL.flatMap { Favicon(url: $0, type: .guess) }
         cell.imageView!.layer.borderColor = RecentlyClosedPanelUX.IconBorderColor.cgColor
         cell.imageView!.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
-        cell.imageView?.setIcon(site, forURL: displayURL, completed: { (color, url) in
+        cell.imageView?.setIcon(site, forURL: displayURL) { (color, url) in
             if url == displayURL {
                 cell.imageView?.image = cell.imageView?.image?.createScaled(RecentlyClosedPanelUX.IconSize)
                 cell.imageView?.contentMode = .center
                 cell.imageView?.backgroundColor = color
             }
-        })
+        }
         return cell
     }
 
@@ -152,7 +151,6 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return profile.recentlyClosedTabs.tabs.count
     }
-
 }
 
 extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
@@ -163,13 +161,7 @@ extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
         let closedTab = recentlyClosedTabs[indexPath.row]
-        let site: Site
-        if let title = closedTab.title {
-            site = Site(url: String(describing: closedTab.url), title: title)
-        } else {
-            site = Site(url: String(describing: closedTab.url), title: "")
-        }
-        return site
+        return Site(url: String(describing: closedTab.url), title: title ?? "")
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {

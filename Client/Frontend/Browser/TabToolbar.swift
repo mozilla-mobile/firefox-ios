@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import SnapKit
 import Shared
@@ -65,30 +64,30 @@ open class TabToolbarHelper: NSObject {
 
         toolbar.backButton.setImage(UIImage.templateImageNamed("nav-back"), for: .normal)
         toolbar.backButton.accessibilityLabel = NSLocalizedString("Back", comment: "Accessibility label for the Back button in the tab toolbar.")
-        let longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: #selector(TabToolbarHelper.didLongPressBack))
+        let longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBack))
         toolbar.backButton.addGestureRecognizer(longPressGestureBackButton)
-        toolbar.backButton.addTarget(self, action: #selector(TabToolbarHelper.didClickBack), for: .touchUpInside)
+        toolbar.backButton.addTarget(self, action: #selector(didClickBack), for: .touchUpInside)
 
         toolbar.forwardButton.setImage(UIImage.templateImageNamed("nav-forward"), for: .normal)
         toolbar.forwardButton.accessibilityLabel = NSLocalizedString("Forward", comment: "Accessibility Label for the tab toolbar Forward button")
-        let longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: #selector(TabToolbarHelper.didLongPressForward))
+        let longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressForward))
         toolbar.forwardButton.addGestureRecognizer(longPressGestureForwardButton)
-        toolbar.forwardButton.addTarget(self, action: #selector(TabToolbarHelper.didClickForward), for: .touchUpInside)
+        toolbar.forwardButton.addTarget(self, action: #selector(didClickForward), for: .touchUpInside)
 
         toolbar.stopReloadButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
         toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
-        let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(TabToolbarHelper.didLongPressStopReload))
+        let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressStopReload))
         toolbar.stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
-        toolbar.stopReloadButton.addTarget(self, action: #selector(TabToolbarHelper.didClickStopReload), for: .touchUpInside)
+        toolbar.stopReloadButton.addTarget(self, action: #selector(didClickStopReload), for: .touchUpInside)
 
-        toolbar.tabsButton.addTarget(self, action: #selector(TabToolbarHelper.didClickTabs), for: .touchUpInside)
-        let longPressGestureTabsButton = UILongPressGestureRecognizer(target: self, action: #selector(TabToolbarHelper.didLongPressTabs))
+        toolbar.tabsButton.addTarget(self, action: #selector(didClickTabs), for: .touchUpInside)
+        let longPressGestureTabsButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTabs))
         toolbar.tabsButton.addGestureRecognizer(longPressGestureTabsButton)
 
         toolbar.menuButton.contentMode = .center
         toolbar.menuButton.setImage(UIImage.templateImageNamed("nav-menu"), for: .normal)
         toolbar.menuButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
-        toolbar.menuButton.addTarget(self, action: #selector(TabToolbarHelper.didClickMenu), for: .touchUpInside)
+        toolbar.menuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
         toolbar.menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
         setTheme(theme: .Normal, forButtons: toolbar.actionButtons)
     }
@@ -106,7 +105,7 @@ open class TabToolbarHelper: NSObject {
     func didClickTabs() {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressTabs(toolbar, button: toolbar.tabsButton)
     }
-    
+
     func didLongPressTabs(_ recognizer: UILongPressGestureRecognizer) {
         toolbar.tabToolbarDelegate?.tabToolbarDidLongPressTabs(toolbar, button: toolbar.tabsButton)
     }
@@ -167,7 +166,7 @@ class ToolbarButton: UIButton {
             self.tintColor = isHighlighted ? selectedTintColor : unselectedTintColor
         }
     }
-    
+
     override open var isEnabled: Bool {
         didSet {
             self.tintColor = isEnabled ? unselectedTintColor : disabledTintColor
@@ -179,7 +178,7 @@ class ToolbarButton: UIButton {
             self.imageView?.tintColor = self.tintColor
         }
     }
-    
+
 }
 
 extension ToolbarButton: Themeable {
@@ -245,7 +244,7 @@ class TabToolbar: UIView {
 
     override func draw(_ rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
-            drawLine(context, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
+            drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
         }
     }
 

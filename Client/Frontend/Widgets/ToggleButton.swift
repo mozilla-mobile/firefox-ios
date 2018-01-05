@@ -27,24 +27,24 @@ class ToggleButton: UIButton {
     fileprivate func updateMaskPathForSelectedState(_ selected: Bool) {
         let path = CGMutablePath()
         if selected {
-            var rect = CGRect(origin: CGPoint.zero, size: UX.BackgroundSize)
+            var rect = CGRect(size: UX.BackgroundSize)
             rect.center = maskShapeLayer.position
             path.addEllipse(in: rect)
         } else {
-            path.addEllipse(in: CGRect(origin: maskShapeLayer.position, size: CGSize.zero))
+            path.addEllipse(in: CGRect(origin: maskShapeLayer.position, size: .zero))
         }
         self.maskShapeLayer.path = path
     }
 
     fileprivate func animateSelection(_ selected: Bool) {
-        var endFrame = CGRect(origin: CGPoint.zero, size: UX.BackgroundSize)
+        var endFrame = CGRect(size: UX.BackgroundSize)
         endFrame.center = maskShapeLayer.position
 
         if selected {
             let animation = CAKeyframeAnimation(keyPath: "path")
 
             let startPath = CGMutablePath()
-            startPath.addEllipse(in: CGRect(origin: maskShapeLayer.position, size: CGSize.zero))
+            startPath.addEllipse(in: CGRect(origin: maskShapeLayer.position, size: .zero))
 
             let largerPath = CGMutablePath()
             let largerBounds = endFrame.insetBy(dx: -UX.ExpandDelta, dy: -UX.ExpandDelta)
@@ -73,7 +73,7 @@ class ToggleButton: UIButton {
             animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
 
             let toPath = CGMutablePath()
-            toPath.addEllipse(in: CGRect(origin: self.maskShapeLayer.bounds.center, size: CGSize.zero))
+            toPath.addEllipse(in: CGRect(origin: self.maskShapeLayer.bounds.center, size: .zero))
 
             self.maskShapeLayer.path = toPath
             self.maskShapeLayer.add(animation, forKey: "shrink")
@@ -107,7 +107,7 @@ class ToggleButton: UIButton {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        let zeroFrame = CGRect(origin: CGPoint.zero, size: frame.size)
+        let zeroFrame = CGRect(size: frame.size)
         backgroundView.frame = zeroFrame
 
         // Make the gradient larger than normal to allow the mask transition to show when it blows up

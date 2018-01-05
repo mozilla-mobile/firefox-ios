@@ -96,14 +96,14 @@ open class EarlGrey: NSObject {
         return EarlGreyImpl.invoked(fromFile: file.description, lineNumber: line)
             .selectElement(with: matcher)
     }
-    
+
     open class func setFailureHandler(handler: GREYFailureHandler,
                                       file: StaticString = #file,
                                       line: UInt = #line) {
         return EarlGreyImpl.invoked(fromFile: file.description, lineNumber: line)
             .setFailureHandler(handler)
     }
-    
+
     open class func handle(exception: GREYFrameworkException,
                            details: String,
                            file: StaticString = #file,
@@ -111,7 +111,7 @@ open class EarlGrey: NSObject {
         return EarlGreyImpl.invoked(fromFile: file.description, lineNumber: line)
             .handle(exception, details: details)
     }
-    
+
     @discardableResult open class func rotateDeviceTo(orientation: UIDeviceOrientation,
                                                       errorOrNil: UnsafeMutablePointer<NSError?>!,
                                                       file: StaticString = #file,
@@ -127,12 +127,12 @@ extension GREYInteraction {
     @discardableResult public func assert(_ matcher: @autoclosure () -> GREYMatcher) -> Self {
         return self.assert(with:matcher())
     }
-    
+
     @discardableResult public func assert(_ matcher: @autoclosure () -> GREYMatcher,
                                           error: UnsafeMutablePointer<NSError?>!) -> Self {
         return self.assert(with: matcher(), error: error)
     }
-    
+
     @discardableResult public func using(searchAction: GREYAction,
                                          onElementWithMatcher matcher: GREYMatcher) -> Self {
         return self.usingSearch(searchAction, onElementWith: matcher)
@@ -143,7 +143,7 @@ extension GREYCondition {
     open func waitWithTimeout(seconds: CFTimeInterval) -> Bool {
         return self.wait(withTimeout: seconds)
     }
-    
+
     open func waitWithTimeout(seconds: CFTimeInterval, pollInterval: CFTimeInterval)
         -> Bool {
             return self.wait(withTimeout: seconds, pollInterval: pollInterval)

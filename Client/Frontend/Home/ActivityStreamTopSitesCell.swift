@@ -210,7 +210,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
     lazy var collectionView: UICollectionView = {
         let layout  = HorizontalFlowLayout()
         layout.itemSize = ASHorizontalScrollCellUX.TopSiteItemSize
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
         collectionView.backgroundColor = UIColor.clear
         collectionView.showsHorizontalScrollIndicator = false
@@ -231,7 +231,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
     }()
 
     lazy fileprivate var pageControlPress: UITapGestureRecognizer = {
-        let press = UITapGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handlePageTap))
+        let press = UITapGestureRecognizer(target: self, action: #selector(handlePageTap))
    //     press.delegate = self
         return press
     }()
@@ -322,9 +322,9 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     override func prepare() {
         super.prepare()
         if boundsSize != self.collectionView?.frame.size {
-            self.collectionView?.setContentOffset(CGPoint.zero, animated: false)
+            self.collectionView?.setContentOffset(.zero, animated: false)
         }
-        boundsSize = self.collectionView?.frame.size ?? CGSize.zero
+        boundsSize = self.collectionView?.frame.size ?? .zero
         cachedAttributes = nil
         register(EmptyTopsiteDecorationCell.self, forDecorationViewOfKind: ASHorizontalScrollCellUX.TopSiteEmptyCellIdentifier)
     }
@@ -339,7 +339,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let width = size.width
         let height = size.height
         guard width != 0 else {
-            return (size: CGSize.zero, cellSize: self.itemSize, cellInsets: self.insets)
+            return (size: .zero, cellSize: self.itemSize, cellInsets: self.insets)
         }
 
         let horizontalItemsCount = maxHorizontalItemsCount(width: width)
@@ -463,7 +463,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top) + insets.top
         frame.size = itemSize
         attr.frame = frame
-        
+
         return attr
     }
 }
@@ -472,7 +472,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     Defines the number of items to show in topsites for different size classes.
 */
 private struct ASTopSiteSourceUX {
-    static let verticalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 1, UIUserInterfaceSizeClass.regular: 2, UIUserInterfaceSizeClass.unspecified: 0]
+    static let verticalItemsForTraitSizes: [UIUserInterfaceSizeClass: Int] = [.compact: 1, .regular: 2, .unspecified: 0]
     static let maxNumberOfPages = 2
     static let CellIdentifier = "TopSiteItemCell"
 }
@@ -483,7 +483,7 @@ protocol ASHorizontalLayoutDelegate {
 }
 
 /*
- This Delegate/DataSource is used to manage the ASHorizontalScrollCell's UICollectionView. 
+ This Delegate/DataSource is used to manage the ASHorizontalScrollCell's UICollectionView.
  This is left generic enough for it to be re used for other parts of Activity Stream.
  */
 

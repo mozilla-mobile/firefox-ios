@@ -131,7 +131,7 @@ extension FxAPushMessageHandler {
         }
 
         if let ourDeviceId = self.getOurDeviceId(), deviceId == ourDeviceId {
-            // We can't disconnect the device from the account until we have 
+            // We can't disconnect the device from the account until we have
             // access to the application, so we'll handle this properly in the AppDelegate,
             // by calling the FxALoginHelper.applicationDidDisonnect(application).
             profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
@@ -146,7 +146,7 @@ extension FxAPushMessageHandler {
 
         let clients = profile.remoteClientsAndTabs
         let getClient = clients.getClient(fxaDeviceId: deviceId)
-        
+
         return getClient >>== { device in
             let message = PushMessage.deviceDisconnected(device?.name)
             if let id = device?.guid {

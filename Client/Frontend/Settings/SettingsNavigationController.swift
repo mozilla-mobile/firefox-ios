@@ -16,7 +16,7 @@ class SettingsNavigationController: UINavigationController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.default
+        return .default
     }
 }
 
@@ -26,6 +26,6 @@ protocol PresentingModalViewControllerDelegate {
 
 class ModalSettingsNavigationController: UINavigationController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.default
+        return .default
     }
 }

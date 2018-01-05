@@ -48,9 +48,9 @@ class Setting: NSObject {
     var accessoryType: UITableViewCellAccessoryType { return .none }
 
     var textAlignment: NSTextAlignment { return .natural }
-    
+
     var image: UIImage? { return _image }
-    
+
     fileprivate(set) var enabled: Bool = true
 
     // Called when the cell is setup. Call if you need the default behaviour.
@@ -137,7 +137,7 @@ private class PaddedSwitch: UIView {
     fileprivate static let Padding: CGFloat = 8
 
     init(switchView: UISwitch) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
         addSubview(switchView)
 
@@ -186,9 +186,9 @@ class BoolSetting: Setting {
 
         let control = UISwitch()
         control.onTintColor = UIConstants.SystemBlueColor
-        control.addTarget(self, action: #selector(BoolSetting.switchValueChanged), for: .valueChanged)
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
-        
+
         displayBool(control)
         if let title = title {
             if let status = status {
@@ -500,12 +500,12 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.separatorColor = SettingsUX.TableViewSeparatorColor
         tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 30))
+        tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
     }
@@ -515,9 +515,9 @@ class SettingsTableViewController: UITableViewController {
 
         settings = generateSettings()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELfirefoxAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELfirefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
 
         tableView.reloadData()
     }
@@ -529,10 +529,7 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-    }
+        NotificationCenter.default.removeObserver(self)    }
 
     // Override to provide settings in subclasses
     func generateSettings() -> [SettingSection] {
@@ -604,7 +601,7 @@ class SettingsTableViewController: UITableViewController {
 
         return headerView
     }
-    
+
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
         guard let sectionFooter = sectionSetting.footerTitle?.string else {
@@ -668,7 +665,7 @@ class SettingsTableViewController: UITableViewController {
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
         let attrs = [NSFontAttributeName: label.font as Any]
         let boundingRect = NSString(string: text).boundingRect(with: size,
-            options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
+            options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }
 }

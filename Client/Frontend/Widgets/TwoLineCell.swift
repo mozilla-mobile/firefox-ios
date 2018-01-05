@@ -32,7 +32,7 @@ class TwoLineTableViewCell: UITableViewCell {
     }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
 
         contentView.addSubview(_textLabel)
         contentView.addSubview(_detailTextLabel)
@@ -76,7 +76,7 @@ class TwoLineTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         imageView?.backgroundColor = color
     }
-    
+
     func setRightBadge(_ badge: UIImage?) {
         if let badge = badge {
             self.accessoryView = UIImageView(image: badge)
@@ -99,7 +99,7 @@ class SiteTableViewCell: TwoLineTableViewCell {
     let borderView = UIView()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
     }
 
