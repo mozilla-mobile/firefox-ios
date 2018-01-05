@@ -61,7 +61,7 @@ struct ReaderModeHandlers {
                                 readerViewLoading.replaceOccurrences(of: "%ORIGINAL-URL%", with: url.absoluteString,
                                     options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 readerViewLoading.replaceOccurrences(of: "%LOADING-TEXT%", with: NSLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app."),
-                                    .literal, range: NSRange(location: 0, length: readerViewLoading.length))
+                                                                     options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 readerViewLoading.replaceOccurrences(of: "%LOADING-FAILED-TEXT%", with: NSLocalizedString("The page could not be displayed in Reader View.", comment: "Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
                                     options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 readerViewLoading.replaceOccurrences(of: "%LOAD-ORIGINAL-TEXT%", with: NSLocalizedString("Load original page", comment: "Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
