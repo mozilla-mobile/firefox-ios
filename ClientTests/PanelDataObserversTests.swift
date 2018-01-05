@@ -36,11 +36,11 @@ class PanelDataObserversTests: XCTestCase {
         let delegate = MockDataObserverDelegate()
         observer.delegate = delegate
 
-        NotificationCenter.default.post(name: NotificationFirefoxAccountChanged,
+        NotificationCenter.default.post(name: .FirefoxAccountChanged,
                                         object: nil)
-        NotificationCenter.default.post(name: NotificationProfileDidFinishSyncing,
+        NotificationCenter.default.post(name: .ProfileDidFinishSyncing,
                                         object: nil)
-        NotificationCenter.default.post(name: NotificationPrivateDataClearedHistory,
+        NotificationCenter.default.post(name: .PrivateDataClearedHistory,
                                         object: nil)
 
         waitForCondition(timeout: 5) { delegate.didInvalidateCount == 3 &&  delegate.willInvalidateCount == 3 }

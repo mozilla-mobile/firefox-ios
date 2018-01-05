@@ -7,26 +7,6 @@ import XCTest
 
 class StringExtensionsTests: XCTestCase {
 
-    func testStartsWith() {
-        XCTAssertTrue("abcde".startsWith("abcde"))
-        XCTAssertTrue("abcde".startsWith(""))
-        XCTAssertTrue("abcde".startsWith("a"))
-        XCTAssertTrue("abcdea".startsWith("a"))
-        XCTAssertFalse("abcde".startsWith("fa"))
-        XCTAssertFalse("abcde".startsWith("af"))
-        XCTAssertFalse("abcde".startsWith("b"))
-    }
-
-    func testEndsWith() {
-        XCTAssertTrue("abcde".endsWith("abcde"))
-        XCTAssertTrue("abcde".endsWith(""))
-        XCTAssertTrue("abcde".endsWith("e"))
-        XCTAssertTrue("abcdea".endsWith("a"))
-        XCTAssertFalse("abcde".endsWith("fe"))
-        XCTAssertFalse("abcde".endsWith("ef"))
-        XCTAssertFalse("abcde".endsWith("d"))
-    }
-
     func testEllipsize() {
         // Odd maxLength. Note that we ellipsize with a Unicode join character to avoid wrapping.
         XCTAssertEqual("abcd…\u{2060}fgh", "abcdefgh".ellipsize(maxLength: 7))
@@ -45,9 +25,9 @@ class StringExtensionsTests: XCTestCase {
     }
 
     func testStringByTrimmingLeadingCharactersInSet() {
-        XCTAssertEqual("foo   ", "   foo   ".stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces))
-        XCTAssertEqual("foo456", "123foo456".stringByTrimmingLeadingCharactersInSet(CharacterSet.decimalDigits))
-        XCTAssertEqual("", "123456".stringByTrimmingLeadingCharactersInSet(CharacterSet.decimalDigits))
+        XCTAssertEqual("foo   ", "   foo   ".stringByTrimmingLeadingCharactersInSet(.whitespaces))
+        XCTAssertEqual("foo456", "123foo456".stringByTrimmingLeadingCharactersInSet(.decimalDigits))
+        XCTAssertEqual("", "123456".stringByTrimmingLeadingCharactersInSet(.decimalDigits))
     }
 
     func testStringSplitWithNewline() {

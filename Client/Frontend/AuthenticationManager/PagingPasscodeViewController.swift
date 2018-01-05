@@ -82,7 +82,7 @@ extension PagingPasscodeViewController {
     }
 
     func scrollToPaneAtIndex(_ index: Int) {
-        UIView.animate(withDuration: PaneSwipeDuration, delay: 0, options: UIViewAnimationOptions(), animations: {
+        UIView.animate(withDuration: PaneSwipeDuration, delay: 0, options: [], animations: {
             self.pager.contentOffset = CGPoint(x: CGFloat(self.currentPaneIndex) * self.pager.frame.width, y: 0)
         }, completion: nil)
     }

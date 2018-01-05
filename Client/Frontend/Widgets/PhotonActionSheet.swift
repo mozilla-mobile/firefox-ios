@@ -53,13 +53,13 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     private lazy var showCancelButton: Bool = {
         return self.style == .bottom && self.modalPresentationStyle != .popover
     }()
-    var tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    var tableView = UITableView(frame: .zero, style: .grouped)
     private var tintColor = UIColor.Defaults.Grey80
     private var outerScrollView = UIScrollView()
     
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
-        tapRecognizer.addTarget(self, action: #selector(PhotonActionSheet.dismiss))
+        tapRecognizer.addTarget(self, action: #selector(dismiss))
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.cancelsTouchesInView = false
         tapRecognizer.delegate = self
@@ -73,7 +73,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
-        button.addTarget(self, action: #selector(PhotonActionSheet.dismiss), for: .touchUpInside)
+        button.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = "PhotonMenu.cancel"
         return button
     }()
@@ -116,7 +116,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.delegate = self
         tableView.dataSource = self
         tableView.sectionFooterHeight = 0
-        tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag
+        tableView.keyboardDismissMode = .onDrag
         tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
         tableView.register(PhotonActionSheetHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.HeaderName)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
@@ -126,7 +126,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.separatorStyle = .none
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
-        let footer = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: tableView.frame.width, height: PhotonActionSheetUX.TablePadding)))
+        let footer = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.TablePadding))
         tableView.tableFooterView = footer
         tableView.tableHeaderView = footer.clone()
 
@@ -157,7 +157,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
                 if #available(iOS 11, *) {
                     let bottomPad: CGFloat
                     if let window = UIApplication.shared.keyWindow, window.safeAreaInsets.bottom != 0  {
-                        // for iPhone X and similar 
+                        // for iPhone X and similar
                         bottomPad = 0
                     } else {
                         bottomPad = PhotonActionSheetUX.Padding
@@ -172,7 +172,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         if style == .bottom && self.modalPresentationStyle == .popover {
             // We are showing the menu in a popOver
             self.actions = actions.map({ $0.reversed() }).reversed()
-            tableView.frame = CGRect(origin: CGPoint.zero, size: self.preferredContentSize)
+            tableView.frame = CGRect(size: self.preferredContentSize)
             return
         }
         
@@ -224,7 +224,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     override func updateViewConstraints() {
         if !self.showCancelButton {
-            tableView.frame = CGRect(origin: CGPoint.zero, size: self.preferredContentSize)
+            tableView.frame = CGRect(size: self.preferredContentSize)
         }
         super.updateViewConstraints()
     }

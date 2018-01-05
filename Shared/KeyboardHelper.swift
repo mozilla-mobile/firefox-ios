@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Foundation
 
 /**
  * The keyboard state at the time of notification.

@@ -128,7 +128,7 @@ class Authenticator {
         alert.addAction(action)
 
         // Add a cancel button.
-        let cancel = UIAlertAction(title: CancelButtonTitle, style: UIAlertActionStyle.cancel) { (action) -> Void in
+        let cancel = UIAlertAction(title: CancelButtonTitle, style: .cancel) { (action) -> Void in
             deferred.fill(Maybe(failure: LoginDataError(description: "Save password cancelled")))
         }
         alert.addAction(cancel)

@@ -16,7 +16,7 @@ class RelativeDatesTests: XCTestCase {
         XCTAssertEqual(date.toRelativeTimeString(), "just now")
 
         date = Date(timeInterval: -60, since: dateOrig)
-        XCTAssertEqual(date.toRelativeTimeString(), ("today at " + DateFormatter.localizedString(from: date, dateStyle: DateFormatter.Style.none, timeStyle: DateFormatter.Style.short)))
+        XCTAssertEqual(date.toRelativeTimeString(), ("today at " + DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .short)))
 
         let calendar = Calendar.autoupdatingCurrent
         date = calendar.date(byAdding: .day, value: -1, to: dateOrig)!
@@ -32,9 +32,9 @@ class RelativeDatesTests: XCTestCase {
         XCTAssertEqual(date.toRelativeTimeString(), "more than a month ago")
         
         date = Date(timeInterval: -60 * 60 * 24 * 7 * 5 * 2, since: dateOrig)
-        XCTAssertEqual(date.toRelativeTimeString(), DateFormatter.localizedString(from: date, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
-        
+        XCTAssertEqual(date.toRelativeTimeString(), DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short))
+
         date = Date(timeInterval: -60 * 60 * 24 * 7 * 5 * 12 * 2, since: dateOrig)
-        XCTAssertEqual(date.toRelativeTimeString(), DateFormatter.localizedString(from: date, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
+        XCTAssertEqual(date.toRelativeTimeString(), DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short))
     }
 }

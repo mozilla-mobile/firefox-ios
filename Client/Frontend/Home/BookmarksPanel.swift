@@ -54,7 +54,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
 
         self.tableView.register(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
         self.tableView.register(BookmarkFolderTableViewCell.self, forCellReuseIdentifier: BookmarkFolderCellIdentifier)
@@ -77,15 +77,15 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        refreshControl?.addTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
+
+        refreshControl?.addTarget(self, action: #selector(refreshBookmarks), for: .valueChanged)
 
         loadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        refreshControl?.removeTarget(self, action: #selector(BookmarksPanel.refreshBookmarks), for: .valueChanged)
+        refreshControl?.removeTarget(self, action: #selector(refreshBookmarks), for: .valueChanged)
     }
     
     func loadData() {
@@ -110,7 +110,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged:
+        case .FirefoxAccountChanged:
             self.reloadData()
             break
         default:
@@ -435,7 +435,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         self.tableView.beginUpdates()
         self.source = source.removeGUIDFromCurrent(bookmark.guid)
-        self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.left)
+        self.tableView.deleteRows(at: [indexPath], with: .left)
         self.tableView.endUpdates()
         self.updateEmptyPanelState()
     }

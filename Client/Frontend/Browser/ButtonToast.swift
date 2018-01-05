@@ -19,11 +19,7 @@ struct ButtonToastUX {
 private class HighlightableButton: UIButton {
     override var isHighlighted: Bool {
         didSet {
-            if isHighlighted {
-                self.backgroundColor = UIColor.white
-            } else {
-                self.backgroundColor = UIColor.clear
-            }
+            self.backgroundColor = isHighlighted ? .white : .clear
         }
     }
 }
@@ -39,13 +35,13 @@ class ButtonToast: UIView {
     }()
     fileprivate var animationConstraint: Constraint?
     fileprivate lazy var gestureRecognizer: UITapGestureRecognizer = {
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.handleTap))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.cancelsTouchesInView = false
         return gestureRecognizer
     }()
     
     init(labelText: String, descriptionText: String? = nil, buttonText: String, completion:@escaping (_ buttonPressed: Bool) -> Void) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         completionHandler = completion
         
         self.clipsToBounds = true

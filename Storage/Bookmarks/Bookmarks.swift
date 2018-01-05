@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import Shared
 import Deferred
@@ -24,8 +23,6 @@ public protocol SyncableBookmarks: class, ResettableSyncStorage, AccountRemovalD
     func applyLocalOverrideCompletionOp(_ op: LocalOverrideCompletionOp, itemSources: ItemSources) -> Success
     func applyBufferUpdatedCompletionOp(_ op: BufferUpdatedCompletionOp) -> Success
 }
-
-public let NotificationBookmarkBufferValidated = Notification.Name("NotificationBookmarkBufferValidated")
 
 public protocol BookmarkBufferStorage: class {
     func isEmpty() -> Deferred<Maybe<Bool>>

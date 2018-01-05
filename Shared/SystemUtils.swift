@@ -29,9 +29,9 @@ public struct SystemUtils {
 }
 
 extension SystemUtils {
-    // This should be run on first run of the application. 
+    // This should be run on first run of the application.
     // It shouldn't be run from an extension.
-    // Its function is to write a lock file that is only accessible from the application, 
+    // Its function is to write a lock file that is only accessible from the application,
     // and not accessible from extension when the device is locked. Thus, we can tell if an extension is being run
     // when the device is locked.
     public static func onFirstRun() {

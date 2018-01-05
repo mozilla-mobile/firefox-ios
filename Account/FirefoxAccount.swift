@@ -282,7 +282,7 @@ open class FirefoxAccount {
                     
                     self.image = image
                     self.currentImageState = .succeeded
-                    NotificationCenter.default.post(name: NotificationFirefoxAccountProfileChanged, object: self)
+                    NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
                 }
             }
         }
@@ -312,7 +312,7 @@ open class FirefoxAccount {
         let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
         client.getProfile(withSessionToken: session.sessionToken as NSData) >>== { result in
             self.fxaProfile = FxAProfile(email: result.email, displayName: result.displayName, avatar: result.avatarURL)
-            NotificationCenter.default.post(name: NotificationFirefoxAccountProfileChanged, object: self)
+            NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }
     }
     
@@ -376,7 +376,7 @@ open class FirefoxAccount {
         let d = FxADeviceRegistrator.registerOrUpdateDevice(self, sessionToken: session.sessionToken as NSData)
         d.upon { result in
             if result.successValue != FxADeviceRegistrationResult.alreadyRegistered {
-                NotificationCenter.default.post(name: NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil)
+                NotificationCenter.default.post(name: .FirefoxAccountDeviceRegistrationUpdated, object: nil)
             }
         }
         return d >>> succeed

@@ -7,7 +7,7 @@ import Storage
 import Deferred
 import Shared
 
-/* 
+/*
  * A class that adheres to all the requirements for a profile's history property
  * with all of the methods set to fatalError. Use this class if you're looking to
  * mock out parts of the history API

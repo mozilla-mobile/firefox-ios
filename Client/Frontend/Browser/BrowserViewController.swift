@@ -1411,7 +1411,7 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         // We couldn't build a URL, so check for a matching search keyword.
-        let trimmedText = text.trimmingCharacters(in: CharacterSet.whitespaces)
+        let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard let possibleKeywordQuerySeparatorSpace = trimmedText.index(of: " ") else {
             submitSearchText(text)
             return
