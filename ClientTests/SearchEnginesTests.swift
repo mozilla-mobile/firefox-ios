@@ -160,4 +160,13 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-US")).flatMap({$0.shortName}), ["Google", "Yahoo", "Bing", "Amazon.com", "DuckDuckGo", "Twitter", "Wikipedia"])
     }
 
+    func testGetOrderedEngines() {
+        // setup an existing search engine in the profile
+        let profile = MockProfile()
+        profile.prefs.setObject(["Google"], forKey: "search.orderedEngineNames")
+        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)s
+        XCTAssert(engines.orderedEngines.count > 1, "There should be more than one search engine")
+        XCTAssertEqual(engines.orderedEngines.first!.shortName, "Google", "Google should be the first search engine")
+    }
+
 }

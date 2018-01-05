@@ -205,7 +205,6 @@ class SearchEngines {
         let unorderedEngines = customEngines + SearchEngines.getUnorderedBundledEnginesFor(locale: Locale.current)
 
         // might not work to change the default.
-        // if someone has added/removed an engine new engines or edits to the default engines might never be shown.
         guard let orderedEngineNames = prefs.stringArrayForKey(OrderedEngineNames) else {
             // We haven't persisted the engine order, so return whatever order we got from disk.
             return unorderedEngines
