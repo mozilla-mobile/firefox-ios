@@ -134,27 +134,15 @@ open class MockProfilePrefs: Prefs {
     }
 
     open func unsignedLongForKey(_ defaultName: String) -> UInt64? {
-        let num = things[name(defaultName)] as? UInt64
-        if let num = num {
-            return num
-        }
-        return nil
+        return things[name(defaultName)] as? UInt64
     }
 
     open func longForKey(_ defaultName: String) -> Int64? {
-        let num = things[name(defaultName)] as? Int64
-        if let num = num {
-            return num
-        }
-        return nil
+        return things[name(defaultName)] as? Int64
     }
 
     open func intForKey(_ defaultName: String) -> Int32? {
-        let num = things[name(defaultName)] as? Int32
-        if let num = num {
-            return num
-        }
-        return nil
+        return things[name(defaultName)] as? Int32
     }
 
     open func stringArrayForKey(_ defaultName: String) -> [String]? {
