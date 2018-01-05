@@ -652,7 +652,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
                 let userData = [QuickActions.TabURLKey: alertURL,
                     QuickActions.TabTitleKey: title]
-                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: UIApplication.shared)
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
         }
     }
 

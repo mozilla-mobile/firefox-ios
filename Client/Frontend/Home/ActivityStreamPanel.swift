@@ -803,7 +803,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
                 }
                 QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                                     withUserData: userData,
-                                                                                    toApplication: UIApplication.shared)
+                                                                                    toApplication: .shared)
                 site.setBookmarked(true)
                 self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: true, forceTopSites: true)
                 self.telemetry.reportEvent(.AddBookmark, source: pingSource, position: index)
@@ -825,7 +825,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             let controller = helper.createActivityViewController { completed, activityType in
                 self.telemetry.reportEvent(.Share, source: pingSource, position: index, shareProvider: activityType)
             }
-            if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad, let popoverController = controller.popoverPresentationController {
+            if UI_USER_INTERFACE_IDIOM() == .pad, let popoverController = controller.popoverPresentationController {
                 let cellRect = sourceView?.frame ?? .zero
                 let cellFrameInSuperview = self.collectionView?.convert(cellRect, to: self.collectionView) ?? .zero
 

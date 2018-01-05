@@ -147,7 +147,7 @@ extension PhotonActionSheetProtocol {
             }
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                                 withUserData: userData,
-                                                                                toApplication: UIApplication.shared)
+                                                                                toApplication: .shared)
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
             success(Strings.AppMenuAddBookmarkConfirmMessage)
         }

@@ -815,7 +815,7 @@ class BrowserViewController: UIViewController {
         }
         QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
             withUserData: userData,
-            toApplication: UIApplication.shared)
+            toApplication: .shared)
     }
 
     override func accessibilityPerformEscape() -> Bool {
