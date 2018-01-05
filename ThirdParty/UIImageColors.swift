@@ -158,11 +158,11 @@ extension UIImage {
         let sortedColorComparator: Comparator = { (main, other) -> ComparisonResult in
             let m = main as! PCCountedColor, o = other as! PCCountedColor
             if m.count < o.count {
-                return ComparisonResult.orderedDescending
+                return .orderedDescending
             } else if m.count == o.count {
-                return ComparisonResult.orderedSame
+                return .orderedSame
             } else {
-                return ComparisonResult.orderedAscending
+                return .orderedAscending
             }
         }
 
