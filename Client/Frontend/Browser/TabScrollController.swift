@@ -7,6 +7,12 @@ import SnapKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
+extension ClosedRange {
+    public func clamp(_ value: Bound) -> Bound {
+        return min(max(value, lowerBound), upperBound)
+    }
+}
+
 class TabScrollingController: NSObject {
     enum ScrollDirection {
         case up
@@ -219,13 +225,14 @@ private extension TabScrollingController {
         }
 
         var updatedOffset = headerTopOffset - delta
-        headerTopOffset = clamp(updatedOffset, min: -topScrollHeight, max: 0)
+
+        headerTopOffset = (-topScrollHeight...0).clamp(updatedOffset)
         if isHeaderDisplayedForGivenOffset(updatedOffset) {
             scrollView?.contentOffset = CGPoint(x: contentOffset.x, y: contentOffset.y - delta)
         }
 
         updatedOffset = footerBottomOffset + delta
-        footerBottomOffset = clamp(updatedOffset, min: 0, max: bottomScrollHeight)
+        footerBottomOffset = (0...bottomScrollHeight).clamp(updatedOffset)
 
         let alpha = 1 - abs(headerTopOffset / topScrollHeight)
         urlBar?.updateAlphaForSubviews(alpha)
@@ -233,15 +240,6 @@ private extension TabScrollingController {
 
     func isHeaderDisplayedForGivenOffset(_ offset: CGFloat) -> Bool {
         return offset > -topScrollHeight && offset < 0
-    }
-
-    func clamp(_ y: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
-        if y >= max {
-            return max
-        } else if y <= min {
-            return min
-        }
-        return y
     }
 
     func animateToolbarsWithOffsets(_ animated: Bool, duration: TimeInterval, headerOffset: CGFloat, footerOffset: CGFloat, alpha: CGFloat, completion: ((_ finished: Bool) -> Void)?) {

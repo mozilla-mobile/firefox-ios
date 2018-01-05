@@ -344,9 +344,9 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         switch Section(section) {
         case .highlights:
-            return highlights.isEmpty ? .zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
+            return highlights.isEmpty ? .zero : CGSize(width: self.view.frame.width, height: Section(section).headerHeight.height)
         case .highlightIntro:
-            return !highlights.isEmpty ? .zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
+            return !highlights.isEmpty ? .zero : CGSize(width: self.view.frame.width, height: Section(section).headerHeight.height)
         case .pocket:
             return pocketStories.isEmpty ? .zero : Section(section).headerHeight
         case .topSites:

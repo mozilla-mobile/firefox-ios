@@ -157,9 +157,9 @@ open class GradientProgressBar: UIProgressView {
         if progress == 1 {
             // Delay calling hide until the last animation has completed
             CATransaction.setCompletionBlock({
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DefaultValues.animationDuration, execute: {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + DefaultValues.animationDuration) {
                     self.hideProgressBar()
-                })
+                }
             })
         }
         CATransaction.commit()
