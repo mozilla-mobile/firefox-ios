@@ -40,7 +40,7 @@ open class SQLiteLogins: BrowserLogins {
     fileprivate class func constructLogin<T: Login>(_ row: SDRow, c: T.Type) -> T {
         let credential = URLCredential(user: row["username"] as? String ?? "",
             password: row["password"] as! String,
-            persistence: URLCredential.Persistence.none)
+            persistence: .none)
 
         // There was a bug in previous versions of the app where we saved only the hostname and not the
         // scheme and port in the DB. To work with these scheme-less hostnames, we try to extract the scheme and
