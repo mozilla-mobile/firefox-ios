@@ -88,7 +88,7 @@ class QRCodeViewController: UIViewController {
         }
 
         let getAuthorizationStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
-        if getAuthorizationStatus != AVAuthorizationStatus.denied {
+        if getAuthorizationStatus != .denied {
             setupCamera()
         } else {
             let alert = UIAlertController(title: "", message: Strings.ScanQRCodePermissionErrorMessage, preferredStyle: .alert)
