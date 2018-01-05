@@ -27,7 +27,7 @@ class ToggleButton: UIButton {
     fileprivate func updateMaskPathForSelectedState(_ selected: Bool) {
         let path = CGMutablePath()
         if selected {
-            var rect = CGRect(origin: CGPoint.zero, size: UX.BackgroundSize)
+            var rect = CGRect(size: UX.BackgroundSize)
             rect.center = maskShapeLayer.position
             path.addEllipse(in: rect)
         } else {
@@ -37,7 +37,7 @@ class ToggleButton: UIButton {
     }
 
     fileprivate func animateSelection(_ selected: Bool) {
-        var endFrame = CGRect(origin: CGPoint.zero, size: UX.BackgroundSize)
+        var endFrame = CGRect(size: UX.BackgroundSize)
         endFrame.center = maskShapeLayer.position
 
         if selected {
@@ -107,7 +107,7 @@ class ToggleButton: UIButton {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        let zeroFrame = CGRect(origin: CGPoint.zero, size: frame.size)
+        let zeroFrame = CGRect(size: frame.size)
         backgroundView.frame = zeroFrame
 
         // Make the gradient larger than normal to allow the mask transition to show when it blows up

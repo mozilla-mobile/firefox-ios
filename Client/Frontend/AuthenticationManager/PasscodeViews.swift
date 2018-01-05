@@ -100,7 +100,7 @@ class PasscodeInputView: UIView, UIKeyInput {
 
         (0..<passcodeSize).forEach { index in
             let offset = floor(rect.width / CGFloat(passcodeSize))
-            var circleRect = CGRect(origin: CGPoint.zero, size: circleSize)
+            var circleRect = CGRect(size: circleSize)
             circleRect.center = CGPoint(x: (offset * CGFloat(index + 1))  - offset / 2, y: rect.height / 2)
 
             if index < inputtedCode.characters.count {

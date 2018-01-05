@@ -215,9 +215,7 @@ class LoginTableViewCell: UITableViewCell {
         super.layoutSubviews()
 
         // Adjust indent frame
-        var indentFrame = CGRect(
-            origin: CGPoint.zero,
-            size: CGSize(width: LoginTableViewCellUX.indentWidth, height: frame.height))
+        var indentFrame = CGRect(width: LoginTableViewCellUX.indentWidth, height: frame.height)
 
         if !showingIndent {
             indentFrame.origin.x = -LoginTableViewCellUX.indentWidth
