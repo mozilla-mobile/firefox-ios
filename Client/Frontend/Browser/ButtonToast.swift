@@ -19,11 +19,7 @@ struct ButtonToastUX {
 private class HighlightableButton: UIButton {
     override var isHighlighted: Bool {
         didSet {
-            if isHighlighted {
-                self.backgroundColor = UIColor.white
-            } else {
-                self.backgroundColor = UIColor.clear
-            }
+            self.backgroundColor = isHighlighted ? .white : .clear
         }
     }
 }

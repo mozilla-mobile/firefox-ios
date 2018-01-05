@@ -11,11 +11,11 @@ private let logger = Logger.browserLogger
 
 private func presentNavAsFormSheet(_ presented: UINavigationController, presenter: UINavigationController?, settings: AuthenticationSettingsViewController?) {
     presented.modalPresentationStyle = .formSheet
-    presenter?.present(presented, animated: true, completion: {
+    presenter?.present(presented, animated: true) {
         if let selectedRow = settings?.tableView.indexPathForSelectedRow {
             settings?.tableView.deselectRow(at: selectedRow, animated: false)
         }
-    })
+    }
 }
 
 class TurnPasscodeOnSetting: Setting {

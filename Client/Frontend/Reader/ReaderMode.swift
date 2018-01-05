@@ -68,19 +68,19 @@ enum ReaderModeFontSize: Int {
 
     static var defaultSize: ReaderModeFontSize {
         switch UIApplication.shared.preferredContentSizeCategory {
-        case UIContentSizeCategory.extraSmall:
+        case .extraSmall:
             return .size1
-        case UIContentSizeCategory.small:
+        case .small:
             return .size2
-        case UIContentSizeCategory.medium:
+        case .medium:
             return .size3
-        case UIContentSizeCategory.large:
+        case .large:
             return .size5
-        case UIContentSizeCategory.extraLarge:
+        case .extraLarge:
             return .size7
-        case UIContentSizeCategory.extraExtraLarge:
+        case .extraExtraLarge:
             return .size9
-        case UIContentSizeCategory.extraExtraExtraLarge:
+        case .extraExtraExtraLarge:
             return .size12
         default:
             return .size5
