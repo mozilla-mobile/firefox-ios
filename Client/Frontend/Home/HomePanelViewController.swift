@@ -176,7 +176,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+        return .lightContent
     }
 
     fileprivate func hideCurrentPanel() {
