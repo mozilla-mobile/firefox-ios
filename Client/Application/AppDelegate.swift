@@ -675,13 +675,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 // MARK: - Root View Controller Animations
 extension AppDelegate: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-            if operation == .push {
-                return BrowserToTrayAnimator()
-            } else if operation == .pop {
-                return TrayToBrowserAnimator()
-            } else {
-                return nil
-            }
+        switch operation {
+        case .push:
+            return BrowserToTrayAnimator()
+        case .pop:
+            return TrayToBrowserAnimator()
+        default:
+            return nil
+        }
     }
 }
 
