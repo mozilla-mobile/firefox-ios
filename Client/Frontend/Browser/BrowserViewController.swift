@@ -1382,7 +1382,7 @@ extension BrowserViewController: URLBarDelegate {
         if let selectedTab = tabManager.selectedTab {
             // Only scroll to top if we are not showing the home view controller
             if homePanelController == nil {
-                selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
+                selectedTab.webView?.scrollView.setContentOffset(.zero, animated: true)
             }
         }
     }
@@ -2377,7 +2377,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         // state (e.g., long pressing a link before the document changes, then releasing after a
         // different page loads).
         let touchPoint = gestureRecognizer.location(in: view)
-        guard touchPoint != CGPoint.zero else { return }
+        guard touchPoint != .zero else { return }
 
         let touchSize = CGSize(width: 0, height: 16)
 

@@ -223,7 +223,7 @@ class TopTabFader: UIView {
         hMaskLayer.locations = [0.00, 0.005, 0.995, 1.0]
         hMaskLayer.startPoint = CGPoint(x: 0, y: 0.5)
         hMaskLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
-        hMaskLayer.anchorPoint = CGPoint.zero
+        hMaskLayer.anchorPoint = .zero
         return hMaskLayer
     }()
 

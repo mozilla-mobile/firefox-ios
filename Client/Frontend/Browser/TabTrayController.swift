@@ -242,7 +242,7 @@ class TabTrayController: UIViewController {
 
     var collectionView: UICollectionView!
     var draggedCell: TabCell?
-    var dragOffset: CGPoint = CGPoint.zero
+    var dragOffset: CGPoint = .zero
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(didClickAddTab), for: .touchUpInside)

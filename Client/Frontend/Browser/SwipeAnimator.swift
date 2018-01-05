@@ -37,7 +37,7 @@ class SwipeAnimator: NSObject {
 
     var containerCenter: CGPoint {
         guard let animatingView = self.animatingView else {
-            return CGPoint.zero
+            return .zero
         }
         return CGPoint(x: animatingView.frame.width / 2, y: animatingView.frame.height / 2)
     }
