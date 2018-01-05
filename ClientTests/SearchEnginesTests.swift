@@ -164,7 +164,7 @@ class SearchEnginesTests: XCTestCase {
         // setup an existing search engine in the profile
         let profile = MockProfile()
         profile.prefs.setObject(["Google"], forKey: "search.orderedEngineNames")
-        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)s
+        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
         XCTAssert(engines.orderedEngines.count > 1, "There should be more than one search engine")
         XCTAssertEqual(engines.orderedEngines.first!.shortName, "Google", "Google should be the first search engine")
     }
