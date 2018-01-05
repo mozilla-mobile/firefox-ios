@@ -110,7 +110,7 @@ class FxALoginHelper {
         // however, we need to deal with cases of asking for permissions too frequently.
         let asked = profile.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? true
         UNUserNotificationCenter.current().getNotificationSettings { settings in
-            if settings.authorizationStatus != UNAuthorizationStatus.authorized {
+            if settings.authorizationStatus != .authorized {
 
                 // If we've never asked(*), then we should probably ask.
                 // If we've asked already, then we should not ask again.
