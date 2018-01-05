@@ -139,6 +139,6 @@ class Pocket {
             return nil
         }
 
-        return URLRequest(url: feedURL, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 5)
+        return URLRequest(url: feedURL, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 5)
     }
 }
