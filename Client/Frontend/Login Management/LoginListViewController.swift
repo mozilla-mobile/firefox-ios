@@ -150,11 +150,7 @@ class LoginListViewController: SensitiveViewController {
     }
 
     deinit {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
-        notificationCenter.removeObserver(self, name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
-        notificationCenter.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 
     fileprivate func toggleDeleteBarButton() {

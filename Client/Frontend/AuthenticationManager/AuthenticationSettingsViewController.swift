@@ -242,10 +242,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
     }
 
     deinit {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
-        notificationCenter.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func generateSettings() -> [SettingSection] {

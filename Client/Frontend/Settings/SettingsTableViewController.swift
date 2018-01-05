@@ -529,10 +529,7 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-    }
+        NotificationCenter.default.removeObserver(self)    }
 
     // Override to provide settings in subclasses
     func generateSettings() -> [SettingSection] {

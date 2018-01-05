@@ -110,9 +110,7 @@ class LoginDetailViewController: SensitiveViewController {
     }
 
     deinit {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func viewDidLayoutSubviews() {

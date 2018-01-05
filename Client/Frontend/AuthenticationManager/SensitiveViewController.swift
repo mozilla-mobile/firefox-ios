@@ -27,12 +27,7 @@ class SensitiveViewController: UIViewController {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: .UIApplicationWillEnterForeground, object: nil)
-        notificationCenter.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
-        notificationCenter.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
-        notificationCenter.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 
     func checkIfUserRequiresValidation() {
