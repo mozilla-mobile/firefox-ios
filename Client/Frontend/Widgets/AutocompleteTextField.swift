@@ -82,8 +82,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override var keyCommands: [UIKeyCommand]? {
         return [
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(self.handleKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(self.handleKeyCommand(sender:)))
+            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [], action: #selector(handleKeyCommand)),
+            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [], action: #selector(handleKeyCommand))
         ]
     }
 

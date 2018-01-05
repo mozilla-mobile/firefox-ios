@@ -556,7 +556,7 @@ open class BrowserProfile: Profile {
             // Many of the observers for this notifications are on the main thread,
             // so we should post the notification there, just in case we're not already
             // on the main thread.
-            let userInfo = [NotificationUserInfoKeyHasSyncableAccount: self.hasSyncableAccount()]
+            let userInfo = [Notification.Name.UserInfoKeyHasSyncableAccount: self.hasSyncableAccount()]
             NotificationCenter.default.post(name: NotificationFirefoxAccountChanged, object: nil, userInfo: userInfo)
         }
 

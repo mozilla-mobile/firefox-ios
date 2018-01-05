@@ -25,7 +25,11 @@ public let NotificationDataRemoteLoginChangesWereApplied = Notification.Name("No
 // Fired when the FxA account has been verified. This should only be fired by the FxALoginStateMachine.
 public let NotificationFirefoxAccountVerified = Notification.Name("FirefoxAccountVerifiedNotification")
 
-// MARK: Notification UserInfo Keys
-public let NotificationUserInfoKeyHasSyncableAccount = Notification.Name("NotificationUserInfoKeyHasSyncableAccount")
 
-public let NotificationDidRestoreSession = Notification.Name("NotificationDidRestoreSession")
+extension Notification.Name {
+    public static let DidRestoreSession = Notification.Name("NotificationDidRestoreSession")
+
+    // MARK: Notification UserInfo Keys
+    public static let UserInfoKeyHasSyncableAccount = Notification.Name("NotificationUserInfoKeyHasSyncableAccount")
+
+}
