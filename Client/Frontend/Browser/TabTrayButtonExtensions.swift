@@ -30,7 +30,7 @@ class PrivateModeButton: ToggleButton, Themeable {
 extension UIButton {
     static func newTabButton() -> UIButton {
         let newTab = UIButton()
-        newTab.setImage(UIImage.templateImageNamed("quick_action_new_tab"), for: .normal)
+        newTab.setImage(UIImage(template: "quick_action_new_tab"), for: .normal)
         newTab.accessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility label for the New Tab button in the tab toolbar.")
         return newTab
     }

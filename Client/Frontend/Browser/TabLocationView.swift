@@ -106,7 +106,7 @@ class TabLocationView: UIView {
     }()
 
     fileprivate lazy var lockImageView: UIImageView = {
-        let lockImageView = UIImageView(image: UIImage.templateImageNamed("lock_verified"))
+        let lockImageView = UIImageView(image: UIImage(template: "lock_verified"))
         lockImageView.isHidden = true
         lockImageView.tintColor = UIColor.Defaults.LockGreen
         lockImageView.isAccessibilityElement = true
@@ -130,7 +130,7 @@ class TabLocationView: UIView {
 
     lazy var pageOptionsButton: ToolbarButton = {
         let pageOptionsButton = ToolbarButton(frame: .zero)
-        pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
+        pageOptionsButton.setImage(UIImage(template: "menu-More-Options"), for: .normal)
         pageOptionsButton.isHidden = true
         pageOptionsButton.addTarget(self, action: #selector(SELDidPressPageOptionsButton), for: .touchUpInside)
         pageOptionsButton.isAccessibilityElement = true
@@ -306,7 +306,7 @@ class ReaderModeButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         adjustsImageWhenHighlighted = false
-        setImage(UIImage.templateImageNamed("reader"), for: .normal)
+        setImage(UIImage(template: "reader"), for: .normal)
     }
 
     required init?(coder aDecoder: NSCoder) {

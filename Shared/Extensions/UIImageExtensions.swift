@@ -62,8 +62,9 @@ extension UIImage {
         return scaledImage!
     }
 
-    public static func templateImageNamed(_ name: String) -> UIImage? {
-        return UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
+    public convenience init?(template name: String) {
+        self.init(named: name)
+        withRenderingMode(.alwaysTemplate)
     }
 
     // TESTING ONLY: not for use in release/production code.

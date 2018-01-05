@@ -216,7 +216,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         for panel in panels {
             let button = UIButton()
             button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
-            if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)") {
+            if let image = UIImage(template: "panelIcon\(panel.imageName)") {
                 button.setImage(image, for: .normal)
             }
             button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 4, right: 0)

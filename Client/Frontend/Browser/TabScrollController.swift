@@ -160,7 +160,6 @@ class TabScrollingController: NSObject {
     fileprivate func roundNum(_ num: CGFloat) -> CGFloat {
         return round(100 * num) / 100
     }
-
 }
 
 private extension TabScrollingController {
