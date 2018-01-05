@@ -78,7 +78,7 @@ class SearchEngines {
         }
     }
 
-    var quickSearchEngines: [OpenSearchEngine]! {
+    var quickSearchEngines: [OpenSearchEngine] {
         get {
             return self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
         }
@@ -140,7 +140,7 @@ class SearchEngines {
             }
             return disabledEngineDict
         } else {
-            return [String: Bool]()
+            return [:]
         }
     }
 

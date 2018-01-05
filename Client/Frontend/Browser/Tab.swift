@@ -296,20 +296,11 @@ class Tab: NSObject {
     }
 
     var currentInitialURL: URL? {
-        get {
-            let initalURL = self.webView?.backForwardList.currentItem?.initialURL
-            return initalURL
-        }
+        return self.webView?.backForwardList.currentItem?.initialURL
     }
 
     var displayFavicon: Favicon? {
-        var width = 0
-        var largest: Favicon?
-        for icon in favicons where icon.width! > width {
-            width = icon.width!
-            largest = icon
-        }
-        return largest
+        return favicons.max { $0.width! < $1.width! }
     }
 
     var canGoBack: Bool {
@@ -460,14 +451,7 @@ class Tab: NSObject {
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
-        var tab = parent
-        while tab != nil {
-            if tab! == ancestor {
-                return true
-            }
-            tab = tab?.parent
-        }
-        return false
+        return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
     }
 
     func setNightMode(_ enabled: Bool) {
