@@ -738,10 +738,10 @@ class ToolbarTextField: AutocompleteTextField {
 
         UIGraphicsBeginImageContextWithOptions(size, false, 2)
         let context = UIGraphicsGetCurrentContext()!
-        image.draw(at: .zero, blendMode: CGBlendMode.normal, alpha: 1.0)
+        image.draw(at: .zero, blendMode: .normal, alpha: 1.0)
 
         context.setFillColor(color.cgColor)
-        context.setBlendMode(CGBlendMode.sourceIn)
+        context.setBlendMode(.sourceIn)
         context.setAlpha(1.0)
 
         let rect = CGRect(size: image.size)
