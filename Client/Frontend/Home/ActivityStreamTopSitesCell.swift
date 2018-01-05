@@ -324,7 +324,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         if boundsSize != self.collectionView?.frame.size {
             self.collectionView?.setContentOffset(CGPoint.zero, animated: false)
         }
-        boundsSize = self.collectionView?.frame.size ?? CGSize.zero
+        boundsSize = self.collectionView?.frame.size ?? .zero
         cachedAttributes = nil
         register(EmptyTopsiteDecorationCell.self, forDecorationViewOfKind: ASHorizontalScrollCellUX.TopSiteEmptyCellIdentifier)
     }
@@ -339,7 +339,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let width = size.width
         let height = size.height
         guard width != 0 else {
-            return (size: CGSize.zero, cellSize: self.itemSize, cellInsets: self.insets)
+            return (size: .zero, cellSize: self.itemSize, cellInsets: self.insets)
         }
 
         let horizontalItemsCount = maxHorizontalItemsCount(width: width)

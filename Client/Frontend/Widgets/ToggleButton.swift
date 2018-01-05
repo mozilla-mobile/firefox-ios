@@ -31,7 +31,7 @@ class ToggleButton: UIButton {
             rect.center = maskShapeLayer.position
             path.addEllipse(in: rect)
         } else {
-            path.addEllipse(in: CGRect(origin: maskShapeLayer.position, size: CGSize.zero))
+            path.addEllipse(in: CGRect(origin: maskShapeLayer.position, size: .zero))
         }
         self.maskShapeLayer.path = path
     }
@@ -44,7 +44,7 @@ class ToggleButton: UIButton {
             let animation = CAKeyframeAnimation(keyPath: "path")
 
             let startPath = CGMutablePath()
-            startPath.addEllipse(in: CGRect(origin: maskShapeLayer.position, size: CGSize.zero))
+            startPath.addEllipse(in: CGRect(origin: maskShapeLayer.position, size: .zero))
 
             let largerPath = CGMutablePath()
             let largerBounds = endFrame.insetBy(dx: -UX.ExpandDelta, dy: -UX.ExpandDelta)
@@ -73,7 +73,7 @@ class ToggleButton: UIButton {
             animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
 
             let toPath = CGMutablePath()
-            toPath.addEllipse(in: CGRect(origin: self.maskShapeLayer.bounds.center, size: CGSize.zero))
+            toPath.addEllipse(in: CGRect(origin: self.maskShapeLayer.bounds.center, size: .zero))
 
             self.maskShapeLayer.path = toPath
             self.maskShapeLayer.add(animation, forKey: "shrink")

@@ -73,7 +73,7 @@ class TabScrollingController: NSObject {
 
     fileprivate var scrollView: UIScrollView? { return tab?.webView?.scrollView }
     fileprivate var contentOffset: CGPoint { return scrollView?.contentOffset ?? CGPoint.zero }
-    fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? CGSize.zero }
+    fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     fileprivate var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     fileprivate var topScrollHeight: CGFloat { return header?.frame.height ?? 0 }
     fileprivate var bottomScrollHeight: CGFloat { return footer?.frame.height ?? 0 }

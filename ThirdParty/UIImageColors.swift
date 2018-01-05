@@ -117,7 +117,7 @@ extension UIImage {
      - parameter scaleDownSize:     Downscale size of image for sampling, if `CGSize.zero` is provided, the sample image is rescaled to a width of 250px and the aspect ratio height.
      - parameter completionHandler: `UIImageColors` for this image.
      */
-    public func getColors(scaleDownSize: CGSize = CGSize.zero, completionHandler: @escaping (UIImageColors) -> Void) {
+    public func getColors(scaleDownSize: CGSize = .zero, completionHandler: @escaping (UIImageColors) -> Void) {
         DispatchQueue.global().async {
             let result = self.getColors(scaleDownSize: scaleDownSize)
 
@@ -135,11 +135,11 @@ extension UIImage {
 
      - returns: `UIImageColors` for this image.
      */
-    public func getColors(scaleDownSize: CGSize = CGSize.zero) -> UIImageColors {
+    public func getColors(scaleDownSize: CGSize = .zero) -> UIImageColors {
 
         var scaleDownSize = scaleDownSize
 
-        if scaleDownSize == CGSize.zero {
+        if scaleDownSize == .zero {
             let ratio = self.size.width/self.size.height
             let r_width: CGFloat = 250
             scaleDownSize = CGSize(width: r_width, height: r_width/ratio)

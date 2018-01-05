@@ -180,7 +180,7 @@ extension ActivityStreamPanel {
 
         var footerHeight: CGSize {
             switch self {
-            case .highlights, .highlightIntro, .pocket: return CGSize.zero
+            case .highlights, .highlightIntro, .pocket: return .zero
             case .topSites: return CGSize(width: 50, height: 5)
             }
         }
@@ -328,7 +328,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
         switch Section(indexPath.section) {
         case .highlights:
             if highlights.isEmpty {
-                return CGSize.zero
+                return .zero
             }
             return cellSize
         case .topSites:
@@ -344,11 +344,11 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         switch Section(section) {
         case .highlights:
-            return highlights.isEmpty ? CGSize.zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
+            return highlights.isEmpty ? .zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
         case .highlightIntro:
-            return !highlights.isEmpty ? CGSize.zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
+            return !highlights.isEmpty ? .zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
         case .pocket:
-            return pocketStories.isEmpty ? CGSize.zero : Section(section).headerHeight
+            return pocketStories.isEmpty ? .zero : Section(section).headerHeight
         case .topSites:
             return Section(section).headerHeight
         }
@@ -357,7 +357,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         switch Section(section) {
         case .highlights, .highlightIntro, .pocket:
-            return CGSize.zero
+            return .zero
         case .topSites:
             return Section(section).footerHeight
         }
