@@ -21,7 +21,7 @@ private struct HistoryPanelUX {
 }
 
 private func getDate(_ dayOffset: Int) -> Date {
-    let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+    let calendar = Calendar(identifier: .gregorian)
     let nowComponents = (calendar as NSCalendar).components([.year, .month, .day], from: Date())
     let today = calendar.date(from: nowComponents)!
     return (calendar as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: dayOffset, to: today, options: [])!
@@ -94,7 +94,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
 
