@@ -63,7 +63,7 @@ public extension String {
     }
 
     private var stringWithAdditionalEscaping: String {
-        return self.replacingOccurrences(of: "|", with: "%7C", options: [], range: nil)
+        return self.replacingOccurrences(of: "|", with: "%7C")
     }
 
     public var asURL: URL? {
