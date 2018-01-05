@@ -725,20 +725,16 @@ extension ActivityStreamPanel: HomePanelContextMenu {
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        let site: Site
-
         switch Section(indexPath.section) {
         case .highlights:
-            site = highlights[indexPath.row]
+            return highlights[indexPath.row]
         case .pocket:
-            site = Site(url: pocketStories[indexPath.row].dedupeURL.absoluteString, title: pocketStories[indexPath.row].title)
+            return Site(url: pocketStories[indexPath.row].dedupeURL.absoluteString, title: pocketStories[indexPath.row].title)
         case .topSites:
-            site = topSitesManager.content[indexPath.item]
+            return topSitesManager.content[indexPath.item]
         case .highlightIntro:
             return nil
         }
-
-        return site
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
