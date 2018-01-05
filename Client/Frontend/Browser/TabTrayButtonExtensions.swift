@@ -6,7 +6,7 @@ import UIKit
 
 class PrivateModeButton: ToggleButton, Themeable {
     var light: Bool = false
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
@@ -14,11 +14,11 @@ class PrivateModeButton: ToggleButton, Themeable {
         let maskImage = UIImage(named: "smallPrivateMask")?.withRenderingMode(.alwaysTemplate)
         setImage(maskImage, for: [])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func applyTheme(_ theme: Theme) {
         tintColor = UIColor.Browser.Tint.colorFor(theme)
         imageView?.tintColor = tintColor
@@ -30,7 +30,7 @@ class PrivateModeButton: ToggleButton, Themeable {
 extension UIButton {
     static func newTabButton() -> UIButton {
         let newTab = UIButton()
-        newTab.setImage(UIImage.templateImageNamed("quick_action_new_tab"), for: .normal)
+        newTab.setImage(UIImage(template: "quick_action_new_tab"), for: .normal)
         newTab.accessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility label for the New Tab button in the tab toolbar.")
         return newTab
     }

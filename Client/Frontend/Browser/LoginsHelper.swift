@@ -30,7 +30,7 @@ class LoginsHelper: TabContentScript {
         self.tab = tab
         self.profile = profile
 
-        if let path = Bundle.main.path(forResource: "LoginsHelper", ofType: "js"), let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+        if let path = Bundle.main.path(forResource: "LoginsHelper", ofType: "js"), let source = try? String(contentsOfFile: path, encoding: .utf8) {
             let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
             tab.webView!.configuration.userContentController.addUserScript(userScript)
         }
@@ -47,10 +47,10 @@ class LoginsHelper: TabContentScript {
         // Check to see that we're in the foreground before trying to check the logins. We want to
         // make sure we don't try accessing the logins database while we're backgrounded to avoid
         // the system from terminating our app due to background disk access.
-        // 
+        //
         // See https://bugzilla.mozilla.org/show_bug.cgi?id=1307822 for details.
         guard UIApplication.shared.applicationState == .active && !profile.isShutdown else {
-            return 
+            return
         }
 
         // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
@@ -81,7 +81,7 @@ class LoginsHelper: TabContentScript {
         for (index, key) in keys.enumerated() {
             let replace = replacements[index]
             let range = string.range(of: key,
-                options: NSString.CompareOptions.literal,
+                options: .literal,
                 range: nil,
                 locale: nil)!
             string.replaceSubrange(range, with: replace)

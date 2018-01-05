@@ -15,7 +15,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     public init(db: BrowserDB) {
         self.db = db
     }
-    
+
     class func remoteClientFactory(_ row: SDRow) -> RemoteClient {
         let guid = row["guid"] as? String
         let name = row["name"] as! String
@@ -27,7 +27,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let fxaDeviceId = row["fxaDeviceId"] as? String
         return RemoteClient(guid: guid, name: name, modified: mod, type: type, formfactor: form, os: os, version: version, fxaDeviceId: fxaDeviceId)
     }
-    
+
     class func remoteTabFactory(_ row: SDRow) -> RemoteTab {
         let clientGUID = row["client_guid"] as? String
         let url = URL(string: row["url"] as! String)! // TODO: find a way to make this less dangerous.
@@ -43,12 +43,12 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             let urlStrings = decoded as? [String] else {
                 return []
         }
-        return optFilter(urlStrings.flatMap { URL(string: $0) }) 
+        return optFilter(urlStrings.flatMap { URL(string: $0) })
     }
 
     class func convertHistoryToString(_ history: [URL]) -> String? {
         let historyAsStrings = optFilter(history.map { $0.absoluteString })
-        
+
         guard let data = try? JSONSerialization.data(withJSONObject: historyAsStrings, options: []) else {
             return nil
         }
@@ -89,13 +89,13 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     SQLiteRemoteClientsAndTabs.convertHistoryToString(tab.history),
                     NSNumber(value: tab.lastUsed)
                 ]
-                
+
                 let lastInsertedRowID = connection.lastInsertedRowID
-                
+
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
                 try connection.executeChange("INSERT INTO \(TableTabs) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", withArgs: args)
-                
+
                 if connection.lastInsertedRowID == lastInsertedRowID {
                     log.debug("Unable to INSERT RemoteTab!")
                 } else {
@@ -125,9 +125,9 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     client.fxaDeviceId,
                     client.guid
                 ]
-                
+
                 try connection.executeChange("UPDATE \(TableClients) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, version = ?, fxaDeviceId = ? WHERE guid = ?", withArgs: args)
-                
+
                 if connection.numberOfRowsModified == 0 {
                     let args: Args = [
                         client.guid,
@@ -139,16 +139,16 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                         client.version,
                         client.fxaDeviceId
                     ]
-                    
+
                     let lastInsertedRowID = connection.lastInsertedRowID
-                    
+
                     try connection.executeChange("INSERT INTO \(TableClients) (guid, name, modified, type, formfactor, os, version, fxaDeviceId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", withArgs: args)
-                    
+
                     if connection.lastInsertedRowID == lastInsertedRowID {
                         log.debug("INSERT did not change last inserted row ID.")
                     }
                 }
-                
+
                 succeeded += 1
             }
 
@@ -323,17 +323,17 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
         return syncCommands
     }
-    
+
     func insert(_ db: SQLiteDBConnection, sql: String, args: Args?) throws -> Int? {
         let lastID = db.lastInsertedRowID
         try db.executeChange(sql, withArgs: args)
-        
+
         let id = db.lastInsertedRowID
         if id == lastID {
             log.debug("INSERT did not change last inserted row ID.")
             return nil
         }
-        
+
         return id
     }
 }

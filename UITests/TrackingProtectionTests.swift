@@ -8,16 +8,16 @@ import EarlGrey
 @testable import Client
 
 class TrackingProtectionTests: KIFTestCase {
-    
+
     private var webRoot: String!
-        
+
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
         BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
-    
+
     override func tearDown() {
         super.tearDown()
         BrowserUtils.resetToAboutHome()
@@ -33,7 +33,7 @@ class TrackingProtectionTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
-        
+
         let dialogAppeared = GREYCondition(name: "Wait for JS dialog") {
             var errorOrNil: NSError?
             EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))
@@ -44,7 +44,7 @@ class TrackingProtectionTests: KIFTestCase {
         }
         let success = dialogAppeared?.wait(withTimeout: 10)
         GREYAssertTrue(success!, reason: "Failed to display JS dialog")
-        
+
         if shouldBlockImage {
             EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("image not loaded."))
                 .assert(grey_notNil())
@@ -52,13 +52,13 @@ class TrackingProtectionTests: KIFTestCase {
             EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("image loaded."))
             .assert(grey_notNil())
         }
-        
+
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))
             .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .assert(grey_enabled())
             .perform((grey_tap()))
     }
-    
+
     func openTPSetting() {
         // Check tracking protection is enabled on private tabs only in Settings
         let menuAppeared = GREYCondition(name: "Wait for the Settings dialog to appear") {
@@ -71,7 +71,7 @@ class TrackingProtectionTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_text("Settings")).perform(grey_tap())
         let success = menuAppeared?.wait(withTimeout: 20)
         GREYAssertTrue(success!, reason: "Failed to display settings dialog")
-        
+
         // Scroll to Tracking Protection Menu
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Tracking Protection"))
             .using(searchAction: grey_scrollInDirection(GREYDirection.down, 200),
@@ -79,15 +79,15 @@ class TrackingProtectionTests: KIFTestCase {
             .assert(grey_notNil())
             .perform(grey_tap())
     }
-    
+
     func closeTPSetting() {
         // Exit to main view
         tester().tapView(withAccessibilityLabel: "Settings")
         tester().tapView(withAccessibilityLabel: "Done")
     }
-    
+
     func testNormalTrackingProtection() {
-        
+
         openTPSetting()
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
         closeTPSetting()
@@ -114,7 +114,7 @@ class TrackingProtectionTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
         closeTPSetting()
     }
-    
+
     func testPrivateTabPageTrackingProtection() {
         if BrowserUtils.iPad() {
             EarlGrey.select(elementWithMatcher:

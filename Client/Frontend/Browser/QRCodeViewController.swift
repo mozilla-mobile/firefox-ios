@@ -51,7 +51,7 @@ class QRCodeViewController: UIViewController {
         let size = UIDevice.current.userInterfaceIdiom == .pad ?
             CGSize(width: view.frame.width / 2, height: view.frame.width / 2) :
             CGSize(width: view.frame.width / 3 * 2, height: view.frame.width / 3 * 2)
-        var rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        var rect = CGRect(size: size)
         rect.center = UIScreen.main.bounds.center
         return rect
     }
@@ -76,7 +76,7 @@ class QRCodeViewController: UIViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: QRCodeViewControllerUX.navigationBarTitleColor]
 
         // Setup the NavigationItem
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-goBack"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(goBack))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-goBack"), style: .plain, target: self, action: #selector(goBack))
         self.navigationItem.leftBarButtonItem?.tintColor = UIColor.white
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-light"), style: .plain, target: self, action: #selector(openLight))
@@ -88,7 +88,7 @@ class QRCodeViewController: UIViewController {
         }
 
         let getAuthorizationStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
-        if getAuthorizationStatus != AVAuthorizationStatus.denied {
+        if getAuthorizationStatus != .denied {
             setupCamera()
         } else {
             let alert = UIAlertController(title: "", message: Strings.ScanQRCodePermissionErrorMessage, preferredStyle: .alert)

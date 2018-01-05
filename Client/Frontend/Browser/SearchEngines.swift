@@ -140,7 +140,7 @@ class SearchEngines {
             }
             return disabledEngineDict
         } else {
-            return [String: Bool]()
+            return [:]
         }
     }
 
@@ -178,7 +178,7 @@ class SearchEngines {
         if !directories.contains(fallbackIdentifier) {
             directories.append(fallbackIdentifier)
         }
-        
+
         return directories.map { (path) -> String in
             return basePath.appendingPathComponent(path)
         }
@@ -227,14 +227,14 @@ class SearchEngines {
         assert(listFile != nil, "Read the list of search engines")
 
         let engineNames = listFile!
-            .trimmingCharacters(in: CharacterSet.newlines)
-            .components(separatedBy: CharacterSet.newlines)
+            .trimmingCharacters(in: .newlines)
+            .components(separatedBy: .newlines)
 
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
         for engineName in engineNames {
             // Ignore hidden engines in list.txt
-            if engineName.endsWith(":hidden") {
+            if engineName.hasSuffix(":hidden") {
                 continue
             }
 

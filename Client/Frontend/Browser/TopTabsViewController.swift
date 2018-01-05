@@ -36,10 +36,9 @@ class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var isPrivate = false
-    let faviconNotification = NSNotification.Name(rawValue: FaviconManager.FaviconDidLoad)
 
     lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: TopTabsViewLayout())
         collectionView.register(TopTabCell.self, forCellWithReuseIdentifier: TopTabCell.Identifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -48,27 +47,27 @@ class TopTabsViewController: UIViewController {
         collectionView.accessibilityIdentifier = "Top Tabs View"
         return collectionView
     }()
-    
+
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
+        tabsButton.addTarget(self, action: #selector(tabsTrayTapped), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
-    
+
     fileprivate lazy var newTab: UIButton = {
         let newTab = UIButton.newTabButton()
-        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
+        newTab.addTarget(self, action: #selector(newTabTapped), for: .touchUpInside)
         return newTab
     }()
-    
+
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.light = true
-        privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
+        privateModeButton.addTarget(self, action: #selector(togglePrivateModeTapped), for: .touchUpInside)
         return privateModeButton
     }()
-    
+
     fileprivate lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
         let delegate = TopTabsLayoutDelegate()
         delegate.tabSelectionDelegate = self
@@ -96,13 +95,13 @@ class TopTabsViewController: UIViewController {
         [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(TopTabsViewController.reloadFavicons), name: faviconNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadFavicons), name: .FaviconDidLoad, object: nil)
     }
-    
+
     deinit {
         self.tabManager.removeDelegate(self)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -127,7 +126,7 @@ class TopTabsViewController: UIViewController {
         view.addSubview(tabsButton)
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
-        
+
         newTab.snp.makeConstraints { make in
             make.centerY.equalTo(view)
             make.trailing.equalTo(tabsButton.snp.leading).offset(-10)
@@ -159,7 +158,7 @@ class TopTabsViewController: UIViewController {
         }
         updateTabCount(tabStore.count, animated: false)
     }
-    
+
     func switchForegroundStatus(isInForeground reveal: Bool) {
         // Called when the app leaves the foreground to make sure no information is inadvertently revealed
         if let cells = self.collectionView.visibleCells as? [TopTabCell] {
@@ -170,15 +169,15 @@ class TopTabsViewController: UIViewController {
             }
         }
     }
-    
+
     func updateTabCount(_ count: Int, animated: Bool = true) {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
-    
+
     func tabsTrayTapped() {
         delegate?.topTabsDidPressTabs()
     }
-    
+
     func newTabTapped() {
         if pendingReloadData {
             return
@@ -222,7 +221,7 @@ class TopTabsViewController: UIViewController {
             }
         }
     }
-    
+
     func scrollToCurrentTab(_ animated: Bool = true, centerCell: Bool = false) {
         assertIsMainThread("Only animate on the main thread")
 
@@ -236,7 +235,7 @@ class TopTabsViewController: UIViewController {
                 // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
                 let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
                 if animated {
-                    UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: { 
+                    UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
                         self.collectionView.scrollRectToVisible(padFrame, animated: true)
                     })
                 } else {
@@ -280,11 +279,11 @@ extension TopTabsViewController: UICollectionViewDataSource {
         let index = indexPath.item
         let tabCell = collectionView.dequeueReusableCell(withReuseIdentifier: TopTabCell.Identifier, for: indexPath) as! TopTabCell
         tabCell.delegate = self
-        
+
         let tab = tabStore[index]
         tabCell.style = tab.isPrivate ? .dark : .light
         tabCell.titleText.text = tab.displayTitle
-        
+
         if tab.displayTitle.isEmpty {
             if tab.webView?.url?.baseDomain?.contains("localhost") ?? true {
                 tabCell.titleText.text = Strings.AppMenuNewTabTitleString
@@ -312,10 +311,10 @@ extension TopTabsViewController: UICollectionViewDataSource {
             tabCell.favicon.contentMode = .scaleAspectFit
             tabCell.favicon.backgroundColor = .clear
         }
-        
+
         return tabCell
     }
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabStore.count
     }
@@ -441,7 +440,7 @@ extension TopTabsViewController {
     fileprivate func reloadData() {
         assertIsMainThread("reloadData must only be called from main thread")
 
-        if self.isUpdating || self.collectionView.frame == CGRect.zero {
+        if self.isUpdating || self.collectionView.frame == .zero {
             self.pendingReloadData = true
             return
         }
@@ -460,7 +459,7 @@ extension TopTabsViewController {
             self.pendingReloadData = false
             self.performTabUpdates()
             self.newTab.isUserInteractionEnabled = true
-        }) 
+        })
     }
 }
 
@@ -491,7 +490,7 @@ extension TopTabsViewController: TabManagerDelegate {
 
     // This helps make sure animations don't happen before the view is loaded.
     fileprivate var isRestoring: Bool {
-        return self.tabManager.isRestoring || self.collectionView.frame == CGRect.zero
+        return self.tabManager.isRestoring || self.collectionView.frame == .zero
     }
 
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {

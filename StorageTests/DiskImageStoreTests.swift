@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Shared
 @testable import Storage
 import UIKit
@@ -43,7 +42,7 @@ class DiskImageStoreTests: XCTestCase {
     }
 
     private func makeImageWithColor(_ color: UIColor, size: CGSize) -> UIImage {
-        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        let rect = CGRect(size: size)
         UIGraphicsBeginImageContextWithOptions(size, false, 1.0)
         color.setFill()
         UIRectFill(rect)

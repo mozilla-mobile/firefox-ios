@@ -43,10 +43,10 @@ class ConnectSetting: WithoutAccountSetting {
         viewController.url = settings.profile.accountConfiguration.signInURL
         navigationController?.pushViewController(viewController, animated: true)
     }
-    
+
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        
+
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             let image = UIImage(named: "FxA-Default")
             cell.imageView?.image = image?.createScaled(CGSize(width: 30, height: 30))
@@ -57,20 +57,19 @@ class ConnectSetting: WithoutAccountSetting {
 }
 
 class SyncNowSetting: WithAccountSetting {
-    static let NotificationUserInitiatedSyncManually = "NotificationUserInitiatedSyncManually"
-    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+    let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
     let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
     let syncIcon = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
-    
+
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
     let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
-    
+
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(SyncNowSetting.stopRotateSyncIcon), name: NotificationProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidFinishSyncing, object: nil)
     }
-    
+
     fileprivate lazy var timestampFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -87,7 +86,7 @@ class SyncNowSetting: WithAccountSetting {
                 ]
             )
         }
-        
+
         return NSAttributedString(
             string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
             attributes: [
@@ -104,7 +103,7 @@ class SyncNowSetting: WithAccountSetting {
             self.imageView.layer.add(self.continuousRotateAnimation, forKey: "rotateKey")
         }
     }
-    
+
     func stopRotateSyncIcon() {
         DispatchQueue.main.async {
             self.imageView.layer.removeAllAnimations()
@@ -114,16 +113,16 @@ class SyncNowSetting: WithAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType { return .none }
 
     override var style: UITableViewCellStyle { return .value1 }
-    
+
     override var image: UIImage? {
         if !AppConstants.MOZ_SHOW_FXA_AVATAR {
             return nil
         }
-        
+
         guard let syncStatus = profile.syncManager.syncDisplayState else {
             return syncIcon
         }
-        
+
         switch syncStatus {
         case .inProgress:
             return syncBlueIcon
@@ -235,7 +234,7 @@ class SyncNowSetting: WithAccountSetting {
         }
         cell.accessoryType = accessoryType
         cell.isUserInteractionEnabled = !profile.syncManager.isSyncing && DeviceInfo.hasConnectivity()
-        
+
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             // Animation that loops continously until stopped
             continuousRotateAnimation.fromValue = 0.0
@@ -243,16 +242,16 @@ class SyncNowSetting: WithAccountSetting {
             continuousRotateAnimation.isRemovedOnCompletion = true
             continuousRotateAnimation.duration = 0.5
             continuousRotateAnimation.repeatCount = .infinity
-            
+
             // To ensure sync icon is aligned properly with user's avatar, an image is created with proper
             // dimensions and color, then the scaled sync icon is added as a subview.
             imageView.contentMode = .center
             imageView.image = image
-            
+
             cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
             cell.imageView?.image = syncIconWrapper
             cell.imageView?.addSubview(imageView)
-            
+
             if let syncStatus = profile.syncManager.syncDisplayState {
                 switch syncStatus {
                 case .inProgress:
@@ -283,8 +282,8 @@ class SyncNowSetting: WithAccountSetting {
         if !DeviceInfo.hasConnectivity() {
             return
         }
-        
-        NotificationCenter.default.post(name: Notification.Name(rawValue: SyncNowSetting.NotificationUserInitiatedSyncManually), object: nil)
+
+        NotificationCenter.default.post(name: .UserInitiatedSyncManually, object: nil)
         profile.syncManager.syncEverything(why: .syncNow)
     }
 }
@@ -293,28 +292,28 @@ class SyncNowSetting: WithAccountSetting {
 class AccountStatusSetting: WithAccountSetting {
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(AccountStatusSetting.updateAccount(notification:)), name: NotificationFirefoxAccountProfileChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .FirefoxAccountProfileChanged, object: nil)
     }
-    
+
     func updateAccount(notification: Notification) {
         DispatchQueue.main.async {
             self.settings.tableView.reloadData()
         }
     }
-    
+
     override var image: UIImage? {
         if !AppConstants.MOZ_SHOW_FXA_AVATAR {
             return nil
         }
-        
+
         if let image = profile.getAccount()?.fxaProfile?.avatar.image {
             return image.createScaled(CGSize(width: 30, height: 30))
         }
-        
+
         let image = UIImage(named: "placeholder-avatar")
         return image?.createScaled(CGSize(width: 30, height: 30))
     }
-    
+
     override var accessoryType: UITableViewCellAccessoryType {
         if let account = profile.getAccount() {
             switch account.actionNeeded {
@@ -337,15 +336,15 @@ class AccountStatusSetting: WithAccountSetting {
 
     override var title: NSAttributedString? {
         if let account = profile.getAccount() {
-            
+
             if let displayName = account.fxaProfile?.displayName {
                 return NSAttributedString(string: displayName, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSForegroundColorAttributeName: SettingsUX.TableViewRowSyncTextColor])
             }
-            
+
             if let email = account.fxaProfile?.email {
                 return NSAttributedString(string: email, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSForegroundColorAttributeName: SettingsUX.TableViewRowSyncTextColor])
             }
-            
+
             return NSAttributedString(string: account.email, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSForegroundColorAttributeName: SettingsUX.TableViewRowSyncTextColor])
         }
         return nil
@@ -354,7 +353,7 @@ class AccountStatusSetting: WithAccountSetting {
     override var status: NSAttributedString? {
         if let account = profile.getAccount() {
             var string: String
-            
+
             switch account.actionNeeded {
             case .none:
                 return nil
@@ -368,7 +367,7 @@ class AccountStatusSetting: WithAccountSetting {
                 string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
                 break
             }
-            
+
             let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
             let range = NSRange(location: 0, length: string.characters.count)
             let attrs = [NSForegroundColorAttributeName: orange]
@@ -412,10 +411,10 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        
+
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
-            cell.imageView?.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            cell.imageView?.frame = CGRect(width: 30, height: 30)
             cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.height)! / 2
             cell.imageView?.layer.masksToBounds = true
             cell.imageView?.image = image
@@ -501,7 +500,7 @@ class DeleteExportedDataSetting: HiddenSetting {
         do {
             let files = try fileManager.contentsOfDirectory(atPath: documentsPath)
             for file in files {
-                if file.startsWith("browser.") || file.startsWith("logins.") {
+                if file.hasPrefix("browser.") || file.hasPrefix("logins.") {
                     try fileManager.removeItemInDirectory(documentsPath, named: file)
                 }
             }
@@ -523,7 +522,7 @@ class ExportBrowserDataSetting: HiddenSetting {
             let log = Logger.syncLogger
             try self.settings.profile.files.copyMatching(fromRelativeDirectory: "", toAbsoluteDirectory: documentsPath) { file in
                 log.debug("Matcher: \(file)")
-                return file.startsWith("browser.") || file.startsWith("logins.") || file.startsWith("metadata.")
+                return file.hasPrefix("browser.") || file.hasPrefix("logins.") || file.hasPrefix("metadata.")
             }
         } catch {
             print("Couldn't export browser data: \(error).")
@@ -949,7 +948,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
         // FxA server or FxA stage servers.
         let isOn = prefs.boolForKey(prefKey) ?? false
         let isCustomSync = prefs.boolForKey(PrefsKeys.KeyUseCustomSyncService) ?? false
-        
+
         var configurationURL = ProductionFirefoxAccountConfiguration().authEndpointURL
         if isCustomSync {
             configurationURL = CustomFirefoxAccountConfiguration(prefs: profile.prefs).authEndpointURL
@@ -964,7 +963,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(StageSyncServiceDebugSetting.switchValueChanged), for: .valueChanged)
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? false
         cell.accessoryView = control
         cell.selectionStyle = .none
@@ -1040,26 +1039,26 @@ class OpenWithSetting: Setting {
 
 class AdvanceAccountSetting: HiddenSetting {
     let profile: Profile
-    
+
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
-    
+
     override var accessibilityIdentifier: String? { return "AdvanceAccount.Setting" }
-    
+
     override var title: NSAttributedString? {
         return NSAttributedString(string: Strings.SettingsAdvanceAccountTitle, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor])
     }
-    
+
     override init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         super.init(settings: settings)
     }
-    
+
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = AdvanceAccountSettingViewController()        
+        let viewController = AdvanceAccountSettingViewController()
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
-    
+
     override var hidden: Bool {
         return !ShowDebugSettings || profile.hasAccount()
     }

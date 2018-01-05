@@ -114,7 +114,7 @@ class Tab: NSObject {
     /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
     /// be managed by the web view's navigation delegate.
     var desktopSite: Bool = false
-    
+
     var readerModeAvailableOrActive: Bool {
         if let readerMode = self.getContentScript(name: "ReaderMode") as? ReaderMode {
             return readerMode.state != .unavailable
@@ -187,7 +187,7 @@ class Tab: NSObject {
             configuration!.preferences = WKPreferences()
             configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
             configuration!.allowsInlineMediaPlayback = true
-            let webView = TabWebView(frame: CGRect.zero, configuration: configuration!)
+            let webView = TabWebView(frame: .zero, configuration: configuration!)
             webView.delegate = self
             configuration = nil
 
@@ -296,20 +296,11 @@ class Tab: NSObject {
     }
 
     var currentInitialURL: URL? {
-        get {
-            let initalURL = self.webView?.backForwardList.currentItem?.initialURL
-            return initalURL
-        }
+        return self.webView?.backForwardList.currentItem?.initialURL
     }
 
     var displayFavicon: Favicon? {
-        var width = 0
-        var largest: Favicon?
-        for icon in favicons where icon.width! > width {
-            width = icon.width!
-            largest = icon
-        }
-        return largest
+        return favicons.max { $0.width! < $1.width! }
     }
 
     var canGoBack: Bool {
@@ -460,14 +451,7 @@ class Tab: NSObject {
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
-        var tab = parent
-        while tab != nil {
-            if tab! == ancestor {
-                return true
-            }
-            tab = tab?.parent
-        }
-        return false
+        return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
     }
 
     func setNightMode(_ enabled: Bool) {

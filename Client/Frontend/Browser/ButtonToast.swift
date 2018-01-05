@@ -19,17 +19,13 @@ struct ButtonToastUX {
 private class HighlightableButton: UIButton {
     override var isHighlighted: Bool {
         didSet {
-            if isHighlighted {
-                self.backgroundColor = UIColor.white
-            } else {
-                self.backgroundColor = UIColor.clear
-            }
+            self.backgroundColor = isHighlighted ? .white : .clear
         }
     }
 }
 
 class ButtonToast: UIView {
-    
+
     fileprivate var dismissed = false
     fileprivate var completionHandler: ((Bool) -> Void)?
     fileprivate lazy var toast: UIView = {
@@ -39,15 +35,15 @@ class ButtonToast: UIView {
     }()
     fileprivate var animationConstraint: Constraint?
     fileprivate lazy var gestureRecognizer: UITapGestureRecognizer = {
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.handleTap))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.cancelsTouchesInView = false
         return gestureRecognizer
     }()
-    
+
     init(labelText: String, descriptionText: String? = nil, buttonText: String, completion:@escaping (_ buttonPressed: Bool) -> Void) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         completionHandler = completion
-        
+
         self.clipsToBounds = true
         self.addSubview(createView(labelText, descriptionText: descriptionText, buttonText: buttonText))
 
@@ -59,11 +55,11 @@ class ButtonToast: UIView {
             make.height.equalTo(SimpleToastUX.ToastHeight)
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     fileprivate func createView(_ labelText: String, descriptionText: String?, buttonText: String) -> UIView {
         let label = UILabel()
         label.textColor = UIColor.white
@@ -72,7 +68,7 @@ class ButtonToast: UIView {
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         toast.addSubview(label)
-        
+
         let button = HighlightableButton()
         button.layer.cornerRadius = ButtonToastUX.ToastButtonBorderRadius
         button.layer.borderWidth = ButtonToastUX.ToastButtonBorderWidth
@@ -89,7 +85,7 @@ class ButtonToast: UIView {
         button.addGestureRecognizer(recognizer)
         toast.addSubview(button)
         var descriptionLabel: UILabel?
-        
+
         if let text = descriptionText {
             let textLabel = UILabel()
             textLabel.textColor = UIColor.white
@@ -99,7 +95,7 @@ class ButtonToast: UIView {
             toast.addSubview(textLabel)
             descriptionLabel = textLabel
         }
-        
+
         if let description = descriptionLabel {
             label.numberOfLines = 1 // if showing a description we cant wrap to the second line
             label.lineBreakMode = .byClipping
@@ -121,23 +117,23 @@ class ButtonToast: UIView {
                 make.trailing.equalTo(button.snp.leading).offset(-ButtonToastUX.TitleButtonPadding)
             }
         }
-        
+
         button.snp.makeConstraints { (make) in
             make.trailing.equalTo(toast).offset(-ButtonToastUX.ToastPadding)
             make.centerY.equalTo(toast)
             make.width.equalTo(button.titleLabel!.intrinsicContentSize.width + 2*ButtonToastUX.ToastButtonPadding)
         }
-        
+
         return toast
     }
-    
+
     fileprivate func dismiss(_ buttonPressed: Bool) {
         guard dismissed == false else {
             return
         }
         dismissed = true
         superview?.removeGestureRecognizer(gestureRecognizer)
-        
+
         UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
                 self.animationConstraint?.update(offset: SimpleToastUX.ToastHeight)
                 self.layoutIfNeeded()
@@ -150,7 +146,7 @@ class ButtonToast: UIView {
             }
         )
     }
-    
+
     func showToast(duration: DispatchTimeInterval = SimpleToastUX.ToastDismissAfter) {
         layoutIfNeeded()
         UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
@@ -164,17 +160,17 @@ class ButtonToast: UIView {
             }
         )
     }
-    
+
     @objc func buttonPressed(_ gestureRecognizer: UIGestureRecognizer) {
         self.completionHandler?(true)
         self.dismiss(true)
     }
-    
+
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         superview?.addGestureRecognizer(gestureRecognizer)
     }
-    
+
     func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
         dismiss(false)
     }

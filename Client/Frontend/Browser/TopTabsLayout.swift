@@ -6,23 +6,23 @@ import Foundation
 class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     weak var tabSelectionDelegate: TabSelectionDelegate?
     let HeaderFooterWidth = TopTabsUX.SeparatorWidth + TopTabsUX.FaderPading
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return TopTabsUX.SeparatorWidth
     }
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: TopTabsUX.TabWidth, height: collectionView.frame.height)
     }
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return .zero
     }
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return TopTabsUX.SeparatorWidth
     }
-    
+
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
     }
@@ -42,19 +42,19 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
     let separatorYOffset = TopTabsUX.SeparatorYOffset
     let separatorSize = TopTabsUX.SeparatorHeight
     let SeparatorZIndex = -2 ///Prevent the header/footer from appearing above the Tabs
-    
+
     override var collectionViewContentSize: CGSize {
         let tabsWidth = ((CGFloat(collectionView!.numberOfItems(inSection: 0))) * (TopTabsUX.TabWidth + TopTabsUX.SeparatorWidth)) - TopTabsUX.SeparatorWidth
         return CGSize(width: tabsWidth + (TopTabsUX.TopTabsBackgroundShadowWidth * 2), height: collectionView!.bounds.height)
     }
-    
+
     override func prepare() {
         super.prepare()
         self.minimumLineSpacing = TopTabsUX.SeparatorWidth
-        scrollDirection = UICollectionViewScrollDirection.horizontal
+        scrollDirection = .horizontal
         register(TopTabsSeparator.self, forDecorationViewOfKind: TopTabsSeparatorUX.Identifier)
     }
-    
+
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         decorationAttributeArr = [:]
         return true
@@ -64,7 +64,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         guard indexPath.row < self.collectionView!.numberOfItems(inSection: 0) else {
             let separatorAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: TopTabsSeparatorUX.Identifier, with: indexPath)
-            separatorAttr.frame = CGRect.zero
+            separatorAttr.frame = .zero
             separatorAttr.zIndex = SeparatorZIndex
             return separatorAttr
         }

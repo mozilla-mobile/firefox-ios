@@ -93,12 +93,12 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
             title: Strings.ShareToCancelButton,
             style: .plain,
             target: self,
-            action: #selector(ShareDialogController.cancel)
+            action: #selector(cancel)
         )
         navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarCancelButtonFont], for: [])
         navItem.leftBarButtonItem?.accessibilityIdentifier = "ShareDialogController.navigationItem.leftBarButtonItem"
 
-        navItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Add", tableName: "ShareTo", comment: "Add button in the share dialog"), style: UIBarButtonItemStyle.done, target: self, action: #selector(ShareDialogController.add))
+        navItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Add", tableName: "ShareTo", comment: "Add button in the share dialog"), style: .done, target: self, action: #selector(add))
         navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarAddButtonFont], for: [])
 
         let logo = UIImageView(image: UIImage(named: "Icon-Small"))
@@ -187,7 +187,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         ]
 
         for constraint in constraints {
-            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: constraint, options: NSLayoutFormatOptions(), metrics: nil, views: views))
+            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: constraint, options: [], metrics: nil, views: views))
         }
     }
 
@@ -238,8 +238,8 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         } else {
             selectedShareDestinations.add(code)
         }
-        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-        
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+
         navItem.rightBarButtonItem?.isEnabled = (selectedShareDestinations.count != 0)
     }
 }

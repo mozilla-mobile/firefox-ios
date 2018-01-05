@@ -152,6 +152,6 @@ class FxAPushMessageTest: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 10)
-        
+
     }
 }

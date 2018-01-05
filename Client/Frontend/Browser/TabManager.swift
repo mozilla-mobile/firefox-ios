@@ -107,7 +107,7 @@ class TabManager: NSObject {
 
         addNavigationDelegate(self)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(TabManager.prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
     }
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
@@ -282,22 +282,22 @@ class TabManager: NSObject {
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
-    
+
     func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
         assert(Thread.isMainThread)
-        
+
         let currentTabs = privateMode ? privateTabs : normalTabs
         let fromIndex = tabs.index(of: currentTabs[visibleFromIndex]) ?? tabs.count - 1
         let toIndex = tabs.index(of: currentTabs[visibleToIndex]) ?? tabs.count - 1
-        
+
         let previouslySelectedTab = selectedTab
-        
+
         tabs.insert(tabs.remove(at: fromIndex), at: toIndex)
-        
+
         if let previouslySelectedTab = previouslySelectedTab, let previousSelectedIndex = tabs.index(of: previouslySelectedTab) {
             _selectedIndex = previousSelectedIndex
         }
-        
+
         storeChanges()
     }
 
@@ -330,7 +330,7 @@ class TabManager: NSObject {
             let newTabChoice = NewTabAccessors.getNewTabPage(prefs)
             switch newTabChoice {
             case .homePage:
-                // We definitely have a homepage if we've got here 
+                // We definitely have a homepage if we've got here
                 // (so we can safely dereference it).
                 let url = HomePageAccessors.getHomePage(prefs)!
                 tab.loadRequest(URLRequest(url: url))
@@ -473,7 +473,7 @@ class TabManager: NSObject {
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
         tempTabs = tabs
         var tabsCopy = tabs
-        
+
         // Remove the current tab last to prevent switching tabs while removing tabs
         if let selectedTab = selectedTab {
             if let selectedIndex = tabsCopy.index(of: selectedTab) {
@@ -503,7 +503,7 @@ class TabManager: NSObject {
 
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
-    
+
     func undoCloseTabs() {
         guard let tempTabs = self.tempTabs, tempTabs.count > 0 else {
             return
@@ -523,7 +523,7 @@ class TabManager: NSObject {
         self.tempTabs?.removeAll()
         tabs.first?.createWebview()
     }
-    
+
     func eraseUndoCache() {
         tempTabs?.removeAll()
     }
@@ -534,7 +534,7 @@ class TabManager: NSObject {
         }
         storeChanges()
     }
-    
+
     func removeAll() {
         removeTabs(self.tabs)
     }
@@ -813,7 +813,7 @@ extension TabManager {
             }
         }
     }
-    
+
     func restoreTabs(_ savedTabs: [Tab]) {
         isRestoring = true
         for tab in savedTabs {
@@ -848,10 +848,8 @@ extension TabManager: WKNavigationDelegate {
         // only store changes if this is not an error page
         // as we current handle tab restore as error page redirects then this ensures that we don't
         // call storeChanges unnecessarily on startup
-        if let url = webView.url {
-            if !url.isErrorPageURL {
-                storeChanges()
-            }
+        if let url = webView.url, !url.isErrorPageURL {
+            storeChanges()
         }
     }
 
@@ -934,11 +932,11 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
             let authenticatingDelegates = delegates.filter { wv in
-                return wv.responds(to: #selector(WKNavigationDelegate.webView(_:didReceive:completionHandler:)))
+                return wv.responds(to: #selector(webView(_:didReceive:completionHandler:)))
             }
 
             guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {
-                return completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
+                return completionHandler(.performDefaultHandling, nil)
             }
 
             firstAuthenticatingDelegate.webView?(webView, didReceive: challenge) { (disposition, credential) in

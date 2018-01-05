@@ -7,8 +7,8 @@ import Shared
 
 class URIFixup {
     static func getURL(_ entry: String) -> URL? {
-        let trimmed = entry.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) else {
+        let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: .URLAllowed) else {
             return nil
         }
 

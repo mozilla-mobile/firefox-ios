@@ -81,7 +81,7 @@ import UIKit
         guard progress >= 0 && progress <= CGFloat(pageCount - 1) else { return }
 
         // mask rect w/ default stroke width
-        let insetRect = CGRect(x: 0, y: 0, width: indicatorDiameter, height: indicatorDiameter).insetBy(dx: inactiveRingWidth, dy: inactiveRingWidth)
+        let insetRect = CGRect(width: indicatorDiameter, height: indicatorDiameter).insetBy(dx: inactiveRingWidth, dy: inactiveRingWidth)
         let leftPageFloat = trunc(progress)
         let leftPageInt = Int(progress)
 
@@ -117,7 +117,7 @@ import UIKit
 
     fileprivate func layoutPageIndicators(_ layers: [CALayer]) {
         let layerDiameter = indicatorRadius * 2
-        var layerFrame = CGRect(x: 0, y: 0, width: layerDiameter, height: layerDiameter)
+        var layerFrame = CGRect(width: layerDiameter, height: layerDiameter)
         layers.forEach() { layer in
             layer.cornerRadius = self.indicatorRadius
             layer.frame = layerFrame
@@ -126,7 +126,7 @@ import UIKit
     }
 
     override open var intrinsicContentSize: CGSize {
-        return sizeThatFits(CGSize.zero)
+        return sizeThatFits(.zero)
     }
 
     override open func sizeThatFits(_ size: CGSize) -> CGSize {

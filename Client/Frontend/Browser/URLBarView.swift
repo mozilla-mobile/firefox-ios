@@ -105,7 +105,7 @@ class URLBarView: UIView {
         locationContainer.backgroundColor = .clear
         return locationContainer
     }()
-    
+
     let line = UIView()
 
     lazy var tabsButton: TabsButton = {
@@ -122,27 +122,27 @@ class URLBarView: UIView {
 
     fileprivate lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
-        cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
+        cancelButton.setImage(UIImage(template: "goBack"), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
-        cancelButton.addTarget(self, action: #selector(URLBarView.SELdidClickCancel), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(SELdidClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
     }()
-    
+
     fileprivate lazy var showQRScannerButton: InsetButton = {
         let button = InsetButton()
-        button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
+        button.setImage(UIImage(template: "menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = "urlBar-scanQRCode"
         button.clipsToBounds = false
-        button.addTarget(self, action: #selector(URLBarView.showQRScanner), for: .touchUpInside)
-        button.setContentHuggingPriority(1000, for: UILayoutConstraintAxis.horizontal)
-        button.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.horizontal)
+        button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
+        button.setContentHuggingPriority(1000, for: .horizontal)
+        button.setContentCompressionResistancePriority(1000, for: .horizontal)
         return button
     }()
 
     fileprivate lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(URLBarView.SELtappedScrollToTopArea), for: .touchUpInside)
+        button.addTarget(self, action: #selector(SELtappedScrollToTopArea), for: .touchUpInside)
         return button
     }()
 
@@ -182,10 +182,10 @@ class URLBarView: UIView {
 
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
-    
+
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton].forEach { addSubview($0) }
         [menuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach { addSubview($0) }
-        
+
         helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
 
@@ -194,12 +194,12 @@ class URLBarView: UIView {
     }
 
     fileprivate func setupConstraints() {
-        
+
         line.snp.makeConstraints { make in
             make.bottom.leading.trailing.equalTo(self)
             make.height.equalTo(1)
         }
-        
+
         scrollToTopButton.snp.makeConstraints { make in
             make.top.equalTo(self)
             make.left.right.equalTo(self.locationContainer)
@@ -244,13 +244,13 @@ class URLBarView: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-        
+
         tabsButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.menuButton.snp.leading)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-        
+
         showQRScannerButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.safeArea.trailing)
             make.centerY.equalTo(self.locationContainer)
@@ -302,7 +302,7 @@ class URLBarView: UIView {
         }
 
     }
-    
+
     func showQRScanner() {
         self.delegate?.urlBarDidPressQRButton(self)
     }
@@ -313,14 +313,14 @@ class URLBarView: UIView {
         locationTextField = ToolbarTextField()
 
         guard let locationTextField = locationTextField else { return }
-        
+
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.autocompleteDelegate = self
-        locationTextField.keyboardType = UIKeyboardType.webSearch
-        locationTextField.autocorrectionType = UITextAutocorrectionType.no
-        locationTextField.autocapitalizationType = UITextAutocapitalizationType.none
-        locationTextField.returnKeyType = UIReturnKeyType.go
-        locationTextField.clearButtonMode = UITextFieldViewMode.whileEditing
+        locationTextField.keyboardType = .webSearch
+        locationTextField.autocorrectionType = .no
+        locationTextField.autocapitalizationType = .none
+        locationTextField.returnKeyType = .go
+        locationTextField.clearButtonMode = .whileEditing
         locationTextField.font = UIConstants.DefaultChromeFont
         locationTextField.accessibilityIdentifier = "address"
         locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
@@ -329,7 +329,7 @@ class URLBarView: UIView {
         locationTextField.snp.remakeConstraints { make in
             make.edges.equalTo(self.locationView)
         }
-        
+
         locationTextField.applyTheme(currentTheme)
     }
 
@@ -505,7 +505,7 @@ class URLBarView: UIView {
 }
 
 extension URLBarView: TabToolbarProtocol {
-    
+
     func updateBackStatus(_ canGoBack: Bool) {
         backButton.isEnabled = canGoBack
     }
@@ -573,7 +573,7 @@ extension URLBarView: TabLocationViewDelegate {
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReload(self)
     }
-    
+
     func tabLocationViewDidTapStop(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressStop(self)
     }
@@ -581,11 +581,11 @@ extension URLBarView: TabLocationViewDelegate {
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
     }
-    
+
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton) {
         delegate?.urlBarDidPressPageOptions(self, from: tabLocationView.pageOptionsButton)
     }
-    
+
     func tabLocationViewDidLongPressPageOptions(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidLongPressPageOptions(self, from: tabLocationView.pageOptionsButton)
     }
@@ -627,7 +627,7 @@ extension URLBarView {
         get { return cancelButton.tintColor }
         set { return cancelButton.tintColor = newValue }
     }
-    
+
     dynamic var showQRButtonTintColor: UIColor? {
         get { return showQRScannerButton.tintColor }
         set { return showQRScannerButton.tintColor = newValue }
@@ -658,13 +658,13 @@ extension URLBarView: Themeable {
 // We need a subclass so we can setup the shadows correctly
 // This subclass creates a strong shadow on the URLBar
 class TabLocationContainerView: UIView {
-    
+
     private struct LocationContainerUX {
         static let CornerRadius: CGFloat = 4
         static let ShadowRadius: CGFloat = 2
         static let ShadowOpacity: Float = 1
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         let layer = self.layer
@@ -673,14 +673,14 @@ class TabLocationContainerView: UIView {
         layer.shadowOpacity = LocationContainerUX.ShadowOpacity
         layer.masksToBounds = false
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func layoutSubviews() {
         let layer = self.layer
-        
+
         layer.shadowOffset = CGSize(width: 0, height: 1)
         // the shadow appears 2px off from the view rect
         let shadowLength: CGFloat = 2
@@ -738,21 +738,17 @@ class ToolbarTextField: AutocompleteTextField {
 
         UIGraphicsBeginImageContextWithOptions(size, false, 2)
         let context = UIGraphicsGetCurrentContext()!
-        image.draw(at: CGPoint.zero, blendMode: CGBlendMode.normal, alpha: 1.0)
+        image.draw(at: .zero, blendMode: .normal, alpha: 1.0)
 
         context.setFillColor(color.cgColor)
-        context.setBlendMode(CGBlendMode.sourceIn)
+        context.setBlendMode(.sourceIn)
         context.setAlpha(1.0)
 
-        let rect = CGRect(
-            x: CGPoint.zero.x,
-            y: CGPoint.zero.y,
-            width: image.size.width,
-            height: image.size.height)
+        let rect = CGRect(size: image.size)
         context.fill(rect)
         let tintedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        
+
         return tintedImage
     }
 }

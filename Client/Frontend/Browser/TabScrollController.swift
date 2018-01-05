@@ -7,6 +7,12 @@ import SnapKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
+extension ClosedRange {
+    public func clamp(_ value: Bound) -> Bound {
+        return min(max(value, lowerBound), upperBound)
+    }
+}
+
 class TabScrollingController: NSObject {
     enum ScrollDirection {
         case up
@@ -65,19 +71,19 @@ class TabScrollingController: NSObject {
     }
 
     fileprivate lazy var panGesture: UIPanGestureRecognizer = {
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(TabScrollingController.handlePan))
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         panGesture.maximumNumberOfTouches = 1
         panGesture.delegate = self
         return panGesture
     }()
 
     fileprivate var scrollView: UIScrollView? { return tab?.webView?.scrollView }
-    fileprivate var contentOffset: CGPoint { return scrollView?.contentOffset ?? CGPoint.zero }
-    fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? CGSize.zero }
+    fileprivate var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
+    fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     fileprivate var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     fileprivate var topScrollHeight: CGFloat { return header?.frame.height ?? 0 }
     fileprivate var bottomScrollHeight: CGFloat { return footer?.frame.height ?? 0 }
-    fileprivate var snackBarsFrame: CGRect { return snackBars?.frame ?? CGRect.zero }
+    fileprivate var snackBarsFrame: CGRect { return snackBars?.frame ?? .zero }
 
     fileprivate var lastContentOffset: CGFloat = 0
     fileprivate var scrollDirection: ScrollDirection = .down
@@ -154,7 +160,6 @@ class TabScrollingController: NSObject {
     fileprivate func roundNum(_ num: CGFloat) -> CGFloat {
         return round(100 * num) / 100
     }
-
 }
 
 private extension TabScrollingController {
@@ -202,7 +207,7 @@ private extension TabScrollingController {
             if gesture.state == .ended || gesture.state == .cancelled {
                 lastContentOffset = 0
             }
-            
+
             showOrHideWebViewContainerToolbar()
         }
     }
@@ -219,13 +224,14 @@ private extension TabScrollingController {
         }
 
         var updatedOffset = headerTopOffset - delta
-        headerTopOffset = clamp(updatedOffset, min: -topScrollHeight, max: 0)
+
+        headerTopOffset = (-topScrollHeight...0).clamp(updatedOffset)
         if isHeaderDisplayedForGivenOffset(updatedOffset) {
             scrollView?.contentOffset = CGPoint(x: contentOffset.x, y: contentOffset.y - delta)
         }
 
         updatedOffset = footerBottomOffset + delta
-        footerBottomOffset = clamp(updatedOffset, min: 0, max: bottomScrollHeight)
+        footerBottomOffset = (0...bottomScrollHeight).clamp(updatedOffset)
 
         let alpha = 1 - abs(headerTopOffset / topScrollHeight)
         urlBar?.updateAlphaForSubviews(alpha)
@@ -233,15 +239,6 @@ private extension TabScrollingController {
 
     func isHeaderDisplayedForGivenOffset(_ offset: CGFloat) -> Bool {
         return offset > -topScrollHeight && offset < 0
-    }
-
-    func clamp(_ y: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
-        if y >= max {
-            return max
-        } else if y <= min {
-            return min
-        }
-        return y
     }
 
     func animateToolbarsWithOffsets(_ animated: Bool, duration: TimeInterval, headerOffset: CGFloat, footerOffset: CGFloat, alpha: CGFloat, completion: ((_ finished: Bool) -> Void)?) {
@@ -274,7 +271,7 @@ private extension TabScrollingController {
     func checkScrollHeightIsLargeEnoughForScrolling() -> Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height ?? 0
     }
-    
+
     func showOrHideWebViewContainerToolbar() {
         if contentOffset.y >= webViewContainerToolbar?.frame.height ?? 0 {
             webViewContainerToolbar?.isHidden = true
@@ -317,7 +314,7 @@ extension TabScrollingController: UIScrollViewDelegate {
         if isZoomedOut {
             scrollView.zoomScale = scrollView.minimumZoomScale
         } else if roundNum(scrollView.zoomScale) > roundNum(self.lastZoomedScale) && self.lastZoomedScale != 0 {
-            //When we have manually zoomed in we want to preserve that scale. 
+            //When we have manually zoomed in we want to preserve that scale.
             //But sometimes when we rotate a larger zoomScale is appled. In that case apply the lastZoomedScale
             scrollView.zoomScale = self.lastZoomedScale
         }

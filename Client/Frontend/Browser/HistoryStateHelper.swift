@@ -16,21 +16,21 @@ protocol HistoryStateHelperDelegate: class {
 class HistoryStateHelper: TabContentScript {
     weak var delegate: HistoryStateHelperDelegate?
     fileprivate weak var tab: Tab?
-    
+
     required init(tab: Tab) {
         self.tab = tab
         if let path = Bundle.main.path(forResource: "HistoryStateHelper", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
                 let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
     }
-    
+
     func scriptMessageHandlerName() -> String? {
         return "historyStateHelper"
     }
-    
+
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         if let tab = tab {
             DispatchQueue.main.async {
@@ -38,7 +38,7 @@ class HistoryStateHelper: TabContentScript {
             }
         }
     }
-    
+
     class func name() -> String {
         return "HistoryStateHelper"
     }

@@ -11,11 +11,10 @@ import Deferred
 import Sync
 
 class FaviconManager: TabContentScript {
-    static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
-    
+
     let profile: Profile!
     weak var tab: Tab?
-    
+
     static let maximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
 
     init(tab: Tab, profile: Profile) {
@@ -23,7 +22,7 @@ class FaviconManager: TabContentScript {
         self.tab = tab
 
         if let path = Bundle.main.path(forResource: "Favicons", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
+            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
                 let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
@@ -37,7 +36,7 @@ class FaviconManager: TabContentScript {
     func scriptMessageHandlerName() -> String? {
         return "faviconsMessageHandler"
     }
-    
+
     fileprivate func loadFavicons(_ tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<[Maybe<Favicon>]> {
         var deferreds: [() -> Deferred<Maybe<Favicon>>]
         deferreds = favicons.map { favicon in
@@ -53,7 +52,7 @@ class FaviconManager: TabContentScript {
         }
         return all(deferreds.map({$0()}))
     }
-    
+
     func getFavicon(_ tab: Tab, iconUrl: URL, currentURL: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let manager = SDWebImageManager.shared()
@@ -120,7 +119,7 @@ class FaviconManager: TabContentScript {
                     self.noFaviconAvailable(tab, atURL: currentURL as URL)
                 }
 
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: FaviconManager.FaviconDidLoad), object: tab)
+                NotificationCenter.default.post(name: .FaviconDidLoad, object: tab)
             }
         }
     }

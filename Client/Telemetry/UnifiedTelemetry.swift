@@ -10,7 +10,7 @@ import Telemetry
 //
 class UnifiedTelemetry {
     init(profile: Profile) {
-        NotificationCenter.default.addObserver(self, selector: #selector(uploadError(notification:)), name: Telemetry.notificationReportError, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(uploadError), name: Telemetry.notificationReportError, object: nil)
 
         let telemetryConfig = Telemetry.default.configuration
         telemetryConfig.appName = "Fennec"
@@ -53,7 +53,7 @@ class UnifiedTelemetry {
             outputDict["settings"] = settings
             return outputDict
         }
-        
+
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
         Telemetry.default.add(pingBuilderType: MobileEventPingBuilder.self)
     }

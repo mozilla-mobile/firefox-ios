@@ -118,7 +118,7 @@ class TestSwiftData: XCTestCase {
             let args: Args = [Bytes.generateGUID(), url, title]
             try connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
         }
-        
+
         return result.value.failureValue
     }
 

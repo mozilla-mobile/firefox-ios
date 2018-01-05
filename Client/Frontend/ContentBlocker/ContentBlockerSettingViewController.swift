@@ -48,7 +48,7 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
         self.prefs = prefs
         currentEnabledState = ContentBlockerHelper.EnabledState(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) ?? "") ?? .onInPrivateBrowsing
         currentBlockingStrength = ContentBlockerHelper.BlockingStrength(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength) ?? "") ?? .basic
-        
+
         super.init(style: .grouped)
 
         self.title = Strings.SettingsTrackingProtectionSectionName

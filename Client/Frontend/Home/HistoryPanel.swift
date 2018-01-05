@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-
 import Shared
 import Storage
 import XCGLogger
@@ -22,7 +21,7 @@ private struct HistoryPanelUX {
 }
 
 private func getDate(_ dayOffset: Int) -> Date {
-    let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+    let calendar = Calendar(identifier: .gregorian)
     let nowComponents = (calendar as NSCalendar).components([.year, .month, .day], from: Date())
     let today = calendar.date(from: nowComponents)!
     return (calendar as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: dayOffset, to: today, options: [])!
@@ -32,7 +31,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     private var currentSyncedDevicesCount: Int?
 
-    var events = [NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged]
+    var events: [Notification.Name] = [.FirefoxAccountChanged, .PrivateDataClearedHistory, .DynamicFontChanged]
     var refreshControl: UIRefreshControl?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -56,9 +55,9 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Lifecycle
     init() {
         super.init(nibName: nil, bundle: nil)
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanel.notificationReceived), name: $0, object: nil) }
+        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -95,7 +94,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
 
@@ -103,7 +102,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             presentContextMenu(for: indexPath)
         }
     }
-    
+
     // MARK: - History Data Store
     func updateNumberOfSyncedDevices(_ count: Int?) {
         if let count = count, count > 0 {
@@ -125,12 +124,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         reloadData()
 
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
+        case .FirefoxAccountChanged, .PrivateDataClearedHistory:
             if self.profile.hasSyncableAccount() {
                 resyncHistory()
             }
             break
-        case NotificationDynamicFontChanged:
+        case .DynamicFontChanged:
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
@@ -169,10 +168,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     // MARK: - Refreshing TableView
     func addRefreshControl() {
-        let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(HistoryPanel.refresh), for: .valueChanged)
-        self.refreshControl = refresh
-        self.tableView.refreshControl = refresh
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.refreshControl = control
+        self.tableView.refreshControl = control
     }
 
     func removeRefreshControl() {
@@ -525,7 +524,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                             if !rowsToAdd.isEmpty {
                                 self.tableView.insertRows(at: rowsToAdd, with: .right)
                             }
-                            
+
                             self.tableView.endUpdates()
                             self.updateEmptyPanelState()
                         }

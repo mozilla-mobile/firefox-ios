@@ -43,7 +43,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     static let multiRegionDomains = ["craigslist", "google", "amazon"]
 
     class func getDefaultIconForURL(url: URL) -> (color: UIColor, url: String)? {
-        
+
         // Problem: Sites like amazon exist with .ca/.de and many other tlds.
         // Solution: They are stored in the default icons list as "amazon" instead of "amazon.com" this allows us to have favicons for every tld."
         // Here, If the site is in the multiRegionDomain array look it up via its second level domain (amazon) instead of its baseDomain (amazon.com)
@@ -171,7 +171,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                     continue //Skip the rest of the loop. But don't stop the loop
                 }
 
-                if href.endsWith(".ico") {
+                if href.hasSuffix(".ico") {
                     iconType = .guess
                 }
 
@@ -273,7 +273,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         }
 
         var faviconImage = UIImage()
-        let faviconLabel = UILabel(frame: CGRect(x: 0, y: 0, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize))
+        let faviconLabel = UILabel(frame: CGRect(width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize))
         faviconLabel.text = faviconLetter
         faviconLabel.textAlignment = .center
         faviconLabel.font = UIFont.systemFont(ofSize: 18, weight: UIFontWeightMedium)

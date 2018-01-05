@@ -2,11 +2,26 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import SDWebImage
 
 private let imageLock = NSLock()
+
+extension CGRect {
+    public init(width: CGFloat, height: CGFloat) {
+        self.init(x: 0, y: 0, width: width, height: height)
+    }
+
+    public init(size: CGSize) {
+        self.init(origin: .zero, size: size)
+    }
+}
+
+extension Data {
+    public var isGif : Bool {
+        return [0x47, 0x49, 0x46].elementsEqual(prefix(3))
+    }
+}
 
 extension UIImage {
     /// Despite docs that say otherwise, UIImage(data: NSData) isn't thread-safe (see bug 1223132).
@@ -28,21 +43,10 @@ extension UIImage {
         return image
     }
 
-    public static func dataIsGIF(_ data: Data) -> Bool {
-        guard data.count > 3 else {
-            return false
-        }
-
-        // Look for "GIF" header to identify GIF images
-        var header = [UInt8](repeating: 0, count: 3)
-        data.copyBytes(to: &header, count: 3 * MemoryLayout<UInt8>.size)
-        return header == [0x47, 0x49, 0x46]
-    }
-
     public static func createWithColor(_ size: CGSize, color: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         let context = UIGraphicsGetCurrentContext()
-        let rect = CGRect(origin: CGPoint.zero, size: size)
+        let rect = CGRect(size: size)
         color.setFill()
         context!.fill(rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
@@ -52,14 +56,15 @@ extension UIImage {
 
     public func createScaled(_ size: CGSize) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: size))
+        draw(in: CGRect(size: size))
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return scaledImage!
     }
 
-    public static func templateImageNamed(_ name: String) -> UIImage? {
-        return UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
+    public convenience init?(template name: String) {
+        self.init(named: name)
+        withRenderingMode(.alwaysTemplate)
     }
 
     // TESTING ONLY: not for use in release/production code.

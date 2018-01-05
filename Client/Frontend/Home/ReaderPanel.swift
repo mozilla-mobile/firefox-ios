@@ -182,7 +182,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     var profile: Profile!
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(ReadingListPanel.longPress))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
@@ -191,8 +191,8 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ReadingListPanel.notificationReceived), name: NotificationFirefoxAccountChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ReadingListPanel.notificationReceived), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .DynamicFontChanged, object: nil)
     }
 
     required init!(coder aDecoder: NSCoder) {
@@ -231,10 +231,10 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged:
+        case .FirefoxAccountChanged:
             refreshReadingList()
             break
-        case NotificationDynamicFontChanged:
+        case .DynamicFontChanged:
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
@@ -403,13 +403,13 @@ class ReadingListPanel: UITableViewController, HomePanel {
             UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .readingListItem)
         }
     }
-    
+
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
             UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
             if let result = profile.readingList?.deleteRecord(record), result.isSuccess {
                 records?.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
                 // reshow empty state if no records left
                 if records?.count == 0 {
                     view.addSubview(emptyStateOverlayView)
@@ -425,7 +425,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
                 // TODO This is a bit odd because the success value of the update is an optional optional Record
                 if let successValue = result.successValue, let updatedRecord = successValue {
                     records?[indexPath.row] = updatedRecord
-                    tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             }
         }

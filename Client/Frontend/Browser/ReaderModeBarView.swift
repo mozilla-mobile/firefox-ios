@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import SnapKit
 import Shared
@@ -62,7 +61,7 @@ class ReaderModeBarView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        readStatusButton = createButton(.markAsRead, action: #selector(ReaderModeBarView.SELtappedReadStatusButton))
+        readStatusButton = createButton(.markAsRead, action: #selector(SELtappedReadStatusButton))
         readStatusButton.accessibilityIdentifier = "ReaderModeBarView.readStatusButton"
         readStatusButton.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(self)
@@ -70,14 +69,14 @@ class ReaderModeBarView: UIView {
             make.width.equalTo(80)
         }
 
-        settingsButton = createButton(.settings, action: #selector(ReaderModeBarView.SELtappedSettingsButton))
+        settingsButton = createButton(.settings, action: #selector(SELtappedSettingsButton))
         settingsButton.accessibilityIdentifier = "ReaderModeBarView.settingsButton"
         settingsButton.snp.makeConstraints { (make) -> Void in
             make.height.centerX.centerY.equalTo(self)
             make.width.equalTo(80)
         }
 
-        listStatusButton = createButton(.addToReadingList, action: #selector(ReaderModeBarView.SELtappedListStatusButton))
+        listStatusButton = createButton(.addToReadingList, action: #selector(SELtappedListStatusButton))
         listStatusButton.accessibilityIdentifier = "ReaderModeBarView.listStatusButton"
         listStatusButton.snp.makeConstraints { (make) -> Void in
             make.right.equalTo(self)
@@ -132,7 +131,7 @@ class ReaderModeBarView: UIView {
             readStatusButton.alpha = added ? 1.0 : 0.6
         }
     }
-    
+
     var added: Bool = false {
         didSet {
             let buttonType: ReaderModeBarButtonType = added ? .removeFromReadingList : .addToReadingList

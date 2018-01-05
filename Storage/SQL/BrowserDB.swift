@@ -7,8 +7,6 @@ import XCGLogger
 import Deferred
 import Shared
 
-public let NotificationDatabaseWasRecreated = Notification.Name("NotificationDatabaseWasRecreated")
-
 private let log = Logger.syncLogger
 
 public typealias Args = [Any?]
@@ -82,7 +80,7 @@ open class BrowserDB {
 
     @discardableResult func checkpoint() -> Success {
         log.debug("Checkpointing a BrowserDB.")
-        
+
         return transaction { connection in
             connection.checkpoint()
         }
@@ -160,7 +158,7 @@ open class BrowserDB {
     func write(_ sql: String, withArgs args: Args? = nil) -> Deferred<Maybe<Int>> {
         return withConnection { connection -> Int in
             try connection.executeChange(sql, withArgs: args)
-            
+
             let modified = connection.numberOfRowsModified
             log.debug("Modified rows: \(modified).")
             return modified

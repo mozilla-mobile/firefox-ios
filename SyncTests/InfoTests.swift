@@ -15,7 +15,7 @@ class InfoTests: XCTestCase {
 
         let oneA = JSON(parseJSON: "{\"foo\": 1234.0, \"bar\": 456.12}")
         let oneB = JSON(parseJSON: "{\"bar\": 456.12, \"foo\": 1234.0}")
-        
+
         let twoA = JSON(parseJSON: "{\"bar\": 456.12}")
         let twoB = JSON(parseJSON: "{\"foo\": 1234.0}")
 
@@ -28,7 +28,7 @@ class InfoTests: XCTestCase {
         XCTAssertTrue(iEmpty.same(iEmpty, collections: nil))
         XCTAssertTrue(iEmpty.same(iEmpty, collections: []))
         XCTAssertTrue(iEmpty.same(iEmpty, collections: ["anything"]))
-        
+
         XCTAssertTrue(iEmpty.same(iOneA, collections: []))
         XCTAssertTrue(iEmpty.same(iOneA, collections: ["anything"]))
         XCTAssertTrue(iOneA.same(iEmpty, collections: []))
@@ -43,12 +43,12 @@ class InfoTests: XCTestCase {
         XCTAssertTrue(iOneA.same(iOneA, collections: ["foo", "bar", "baz"]))
         XCTAssertTrue(iOneA.same(iOneB, collections: ["foo", "bar", "baz"]))
         XCTAssertTrue(iOneB.same(iOneA, collections: ["foo", "bar", "baz"]))
-        
+
         XCTAssertFalse(iTwoA.same(iOneA, collections: nil))
         XCTAssertTrue(iTwoA.same(iOneA, collections: ["bar", "baz"]))
         XCTAssertTrue(iOneA.same(iTwoA, collections: ["bar", "baz"]))
         XCTAssertTrue(iTwoB.same(iOneA, collections: ["foo", "baz"]))
-        
+
         XCTAssertFalse(iTwoA.same(iTwoB, collections: nil))
         XCTAssertFalse(iTwoA.same(iTwoB, collections: ["foo"]))
         XCTAssertFalse(iTwoA.same(iTwoB, collections: ["bar"]))
