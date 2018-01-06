@@ -757,15 +757,11 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
                 make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
             }
         }
-
-        if #available(iOS 11.0, *) {
-            if let window = UIApplication.shared.keyWindow, window.safeAreaInsets.left != 0  {
-                // For iPhone X and similar, landscape mode
-                titleLabel.snp.remakeConstraints({ make in
-                    make.left.right.equalTo(self).inset(self.safeAreaInsets)
-                })
-            }
-        }
+        
+        titleLabel.snp.remakeConstraints({ make in
+            make.left.equalTo(self.safeArea.left)
+            make.right.equalTo(self.safeArea.right)
+        })
     }
 }
 
