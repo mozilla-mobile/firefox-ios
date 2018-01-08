@@ -120,8 +120,10 @@ class LoginManagerTests: KIFTestCase {
         // In simulator, the typing is too fast for the screen to be updated properly
         // pausing after 'password' (which all login password contains) to update the screen seems to make the test reliable
         tester().enterText(intoCurrentFirstResponder: "k10")
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         tester().waitForAnimationsToFinish()
         tester().enterText(intoCurrentFirstResponder: "@email.com")
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         tester().waitForAnimationsToFinish()
         list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
         tester().waitForView(withAccessibilityLabel: "k10@email.com")
@@ -135,8 +137,9 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
         tester().enterText(intoCurrentFirstResponder: "http://k10")
         tester().waitForAnimationsToFinish()
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         tester().enterText(intoCurrentFirstResponder: ".com")
-        tester().waitForAnimationsToFinish()
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
         tester().waitForView(withAccessibilityLabel: "k10@email.com")
         XCTAssertEqual(list.numberOfRows(inSection: 0), 1)
@@ -148,12 +151,13 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
         tester().enterText(intoCurrentFirstResponder: "password")
         tester().waitForAnimationsToFinish()
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         tester().enterText(intoCurrentFirstResponder: "d9")
+        tester().waitForAnimationsToFinish()
         list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
         tester().waitForView(withAccessibilityLabel: "d9@email.com")
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         XCTAssertEqual(list.numberOfRows(inSection: 0), 1)
-
-        tester().wait(forTimeInterval: 2)
         tester().tapView(withAccessibilityLabel: "Clear Search")
         // Filter by something that doesn't match anything
         tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
