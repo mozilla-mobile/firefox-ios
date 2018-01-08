@@ -182,7 +182,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             fetch = manager.loadImage(with: url,
                 options: .lowPriority,
                 progress: { (receivedSize, expectedSize, _) in
-                    if receivedSize > MetadataParserHelper.MaximumFaviconSize || expectedSize > MetadataParserHelper.MaximumFaviconSize {
+                    if receivedSize > FaviconHandler.MaximumFaviconSize || expectedSize > FaviconHandler.MaximumFaviconSize {
                         fetch?.cancel()
                     }
                 },
