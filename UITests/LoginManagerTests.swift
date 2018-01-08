@@ -55,9 +55,19 @@ class LoginManagerTests: KIFTestCase {
     }
     
     fileprivate func closeLoginManager() {
-        tester().tapView(withAccessibilityLabel: "Settings")
-        tester().tapView(withAccessibilityLabel: "Done")
-    }
+        EarlGrey.select(elementWithMatcher:grey_allOf([grey_accessibilityLabel("Settings"), grey_kindOfClass(NSClassFromString("UIButtonLabel")!)])).perform(grey_tap())
+
+        let DoneAppeared = GREYCondition(name: "Wait for the Done button", block: { () -> Bool in
+            var errorOrNil: NSError?
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
+                .assert(grey_notNil(), error: &errorOrNil)
+            let success = errorOrNil == nil
+            return success
+        })
+        let success = DoneAppeared?.wait(withTimeout: 10)
+        GREYAssertTrue(success!, reason: "Failed to see Done button")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem")).perform(grey_tap())
+   }
     
     fileprivate func generateLogins() {
         let profile = (UIApplication.shared.delegate as! AppDelegate).profile!
@@ -250,7 +260,7 @@ class LoginManagerTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
         waitForMatcher(name: "Open & Fill")
         
-        tester().wait(forTimeInterval: 5)
+        tester().wait(forTimeInterval: 10)
         tester().waitForViewWithAccessibilityValue("a0.com/")
     }
     
@@ -282,7 +292,7 @@ class LoginManagerTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
         waitForMatcher(name: "Open & Fill")
         
-        tester().wait(forTimeInterval: 2)
+        tester().wait(forTimeInterval: 10)
         tester().waitForViewWithAccessibilityValue("a0.com/")
     }
     
