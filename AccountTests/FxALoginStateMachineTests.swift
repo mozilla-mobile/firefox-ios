@@ -135,10 +135,8 @@ class FxALoginStateMachineTests: XCTestCase {
             stateMachine.advance(fromState: engagedState, now: 0).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, FxAStateLabel.married.rawValue)
                 if let newState = newState as? MarriedState {
-                    // We get kA from the client directly.
-                    XCTAssertEqual(newState.kA.hexEncodedString, client.kA.hexEncodedString)
-                    // We unwrap kB by XORing.  The result is KeyLength (32) 0s.
-                    XCTAssertEqual(newState.kB.hexEncodedString, "0000000000000000000000000000000000000000000000000000000000000000")
+                    XCTAssertEqual(newState.kSync.hexEncodedString, "ec830aefab7dc43c66fb56acc16ed3b723f090ae6f50d6e610b55f4675dcbefba1351b80de8cbeff3c368949c34e8f5520ec7f1d4fa24a0970b437684259f946")
+                    XCTAssertEqual(newState.kXCS, "66687aadf862bd776c8fc18b8e9f8e20")
                 }
                 e.fulfill()
             }

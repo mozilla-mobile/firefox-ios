@@ -142,11 +142,15 @@ open class FxAClient10 {
      * lowercase-hex-encoded first 16 bytes of the SHA-256 hash of the
      * bytes of kB.
      */
-    open class func computeClientState(_ kB: Data) -> String? {
-        if kB.count != 32 {
-            return nil
-        }
+    open class func computeClientState(_ kB: Data) -> String {
         return kB.sha256.subdata(in: 0..<16).hexEncodedString
+    }
+
+    open class func deriveKSync(_ kB: Data) -> Data {
+        let salt = Data()
+        let contextInfo = FxAClient10.KW("oldsync")
+        let len: UInt = 64               // KeyLength + KeyLength, without type nonsense.
+        return (kB as NSData).deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: len)!
     }
 
     open class func quickStretchPW(_ email: Data, password: Data) -> Data {
