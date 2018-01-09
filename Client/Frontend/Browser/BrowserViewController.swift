@@ -490,7 +490,7 @@ class BrowserViewController: UIViewController {
         // not flash before we present. This change of alpha also participates in the animation when
         // the intro view is dismissed.
         if UIDevice.current.userInterfaceIdiom == .phone {
-            self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
+            self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
         }
 
         if !displayedRestoreTabsAlert && !cleanlyBackgrounded() && crashedLastLaunch() {
@@ -2287,12 +2287,12 @@ extension BrowserViewController: IntroViewControllerDelegate {
             return true
         }
         
-        if force || profile.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
+        if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
             let introViewController = IntroViewController()
             introViewController.delegate = self
             // On iPad we present it modally in a controller
             if topTabsVisible {
-                introViewController.preferredContentSize = CGSize(width: IntroViewControllerUX.Width, height: IntroViewControllerUX.Height)
+                introViewController.preferredContentSize = CGSize(width: IntroUX.Width, height: IntroUX.Height)
                 introViewController.modalPresentationStyle = .formSheet
             }
             present(introViewController, animated: animated) {
@@ -2318,7 +2318,9 @@ extension BrowserViewController: IntroViewControllerDelegate {
     }
 
     func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool) {
-        self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
+        self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+        LeanPlumClient.shared.track(event: .dismissedOnboarding)
+
         introViewController.dismiss(animated: true) { finished in
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
                 _ = self.navigationController?.popToRootViewController(animated: true)
