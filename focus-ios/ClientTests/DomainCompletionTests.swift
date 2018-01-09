@@ -11,6 +11,7 @@ class DomainCompletionTests: XCTestCase {
     private let HTTP_DOMAIN = "http://example.com"
     private let HTTPS_DOMAIN = "https://example.com"
     private let WWWW_DOMAIN = "https://www.example.com"
+    private let TEST_NO_PERIOD = "example"
     
     func testAddCustomDomain() {
         addADomain(domain: SIMPLE_DOMAIN)
@@ -34,7 +35,7 @@ class DomainCompletionTests: XCTestCase {
         case .error(let error):
             XCTAssertEqual(error, .duplicateDomain)
         case .success:
-            assertionFailure()
+            XCTFail()
         }
     }
     
@@ -42,9 +43,19 @@ class DomainCompletionTests: XCTestCase {
         Settings.setCustomDomainSetting(domains: [SIMPLE_DOMAIN])
         switch CustomCompletionSource().remove(at: 0) {
         case .error:
-            assertionFailure()
+            XCTFail()
         case .success:
             XCTAssertEqual(0, Settings.getCustomDomainSetting().count)
+        }
+    }
+    
+    func testAddCustomDomainWithoutPeriod() {
+        Settings.setCustomDomainSetting(domains: [])
+        switch CustomCompletionSource().add(suggestion: TEST_NO_PERIOD) {
+        case .error(let error):
+            XCTAssertEqual(error, .invalidUrl)
+        case .success:
+            XCTFail()
         }
     }
     
@@ -52,7 +63,7 @@ class DomainCompletionTests: XCTestCase {
         Settings.setCustomDomainSetting(domains: [])
         switch CustomCompletionSource().add(suggestion: domain) {
         case .error(_):
-            assertionFailure()
+            XCTFail()
         case .success:
             let domains = Settings.getCustomDomainSetting()
             XCTAssertEqual(domains.count, 1)

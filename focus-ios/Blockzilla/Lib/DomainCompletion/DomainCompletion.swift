@@ -44,6 +44,8 @@ class CustomCompletionSource: CustomAutocompleteSource {
         let sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSMakeRange(0, suggestion.count), withTemplate: "")
 
         guard !sanitizedSuggestion.isEmpty else { return .error(.invalidUrl) }
+        
+        guard sanitizedSuggestion.contains(".") else { return .error(.invalidUrl) }
 
         var domains = getSuggestions()
         guard !domains.contains(sanitizedSuggestion) else { return .error(.duplicateDomain) }
