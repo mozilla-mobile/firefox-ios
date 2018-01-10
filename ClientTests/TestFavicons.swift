@@ -14,7 +14,7 @@ class TestFavicons: ProfileTest {
     fileprivate func addSite(_ favicons: Favicons, url: String, s: Bool = true) {
         let expectation = self.expectation(description: "Wait for history")
         let site = Site(url: url, title: "")
-        let icon = Favicon(url: url + "/icon.png", type: IconType.icon)
+        let icon = Favicon(url: url + "/icon.png")
         favicons.addFavicon(icon, forSite: site).upon {
             XCTAssertEqual($0.isSuccess, s, "Icon added \(url)")
             expectation.fulfill()
@@ -33,7 +33,7 @@ class TestFavicons: ProfileTest {
                 XCTFail("Favicons were not found.")
                 return expectation.fulfill()
             }
-            XCTAssertGreaterThan(favicons.count, 1, "Instagram should have more than one Favicon.")
+            XCTAssertEqual(favicons.count, 1, "Instagram should have a Favicon.")
             SDWebImageManager.shared().loadImage(with: url, options: .retryFailed, progress: nil, completed: { (img, _, _, _, _, _) in
                 guard let image = img else {
                     XCTFail("Not a valid URL provided for a favicon.")

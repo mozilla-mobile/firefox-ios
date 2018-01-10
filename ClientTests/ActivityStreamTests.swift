@@ -154,7 +154,7 @@ extension ActivityStreamTests {
 
     func testBadStateEventsForHighlights() {
         let goodSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        goodSite.icon = Favicon(url: "http://image", date: Date(), type: .local)
+        goodSite.icon = Favicon(url: "http://image", date: Date())
         goodSite.metadata = PageMetadata(id: nil,
                                          siteURL: "http://mozilla.org",
                                          mediaURL: "http://image",
@@ -185,7 +185,7 @@ extension ActivityStreamTests {
 
     func testBadStateEventsForTopSites() {
         let goodSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        goodSite.icon = Favicon(url: "http://image", date: Date(), type: .local)
+        goodSite.icon = Favicon(url: "http://image", date: Date())
         goodSite.metadata = PageMetadata(id: nil,
                                          siteURL: "http://mozilla.org",
                                          mediaURL: "http://image",

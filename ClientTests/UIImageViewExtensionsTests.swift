@@ -43,7 +43,7 @@ class UIImageViewExtensionsTests: XCTestCase {
         }
 
         let favImageView = UIImageView()
-        favImageView.setIcon(Favicon(url: "http://localhost:6571/favicon/icon", type: .guess), forURL: URL(string: "http://localhost:6571"))
+        favImageView.setIcon(Favicon(url: "http://localhost:6571/favicon/icon"), forURL: URL(string: "http://localhost:6571"))
 
         let expect = expectation(description: "UIImageView async load")
         let time = Int64(2 * Double(NSEC_PER_SEC))
@@ -61,7 +61,7 @@ class UIImageViewExtensionsTests: XCTestCase {
         let gURL = URL(string: "http://nofavicon.com")
         let correctImage = FaviconFetcher.getDefaultFavicon(gURL!)
 
-        favImageView.setIcon(Favicon(url: gFavURL!.absoluteString, type: .guess), forURL: gURL)
+        favImageView.setIcon(Favicon(url: gFavURL!.absoluteString), forURL: gURL)
 
         let expect = expectation(description: "UIImageView async load")
         let time = Int64(2 * Double(NSEC_PER_SEC))
@@ -80,7 +80,7 @@ class UIImageViewExtensionsTests: XCTestCase {
         let defaultItem = FaviconFetcher.defaultIcons[gURL.baseDomain!]!
         let correctImage = UIImage(contentsOfFile: defaultItem.url)!
 
-        favImageView.setIcon(Favicon(url: gFavURL!.absoluteString, type: .guess), forURL: gURL)
+        favImageView.setIcon(Favicon(url: gFavURL!.absoluteString), forURL: gURL)
 
         let expect = expectation(description: "UIImageView async load")
         let time = Int64(2 * Double(NSEC_PER_SEC))

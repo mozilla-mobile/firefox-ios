@@ -332,12 +332,11 @@ extension TopTabsViewController: TabSelectionDelegate {
 
 extension TopTabsViewController: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
-        // Make sure animations only happen on the main thread.
-        DispatchQueue.main.async {
-            if self.tabStore.index(of: tab) != nil {
-                self.needReloads.append(tab)
-                self.performTabUpdates()
-            }
+        assertIsMainThread("Animations can only be performed from the main thread")
+
+        if self.tabStore.index(of: tab) != nil {
+            self.needReloads.append(tab)
+            self.performTabUpdates()
         }
     }
 }

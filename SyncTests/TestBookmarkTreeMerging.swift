@@ -864,7 +864,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksLocal)", int: 5)
         bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksLocalStructure)", int: 4)
 
-        bookmarks.local.db.run("INSERT INTO \(TableFavicons) (id, url, width, height, type, date) VALUES (11, 'http://example.org/favicon.ico', 16, 16, 0, \(Date.now()))").succeeded()
+        bookmarks.local.db.run("INSERT INTO \(TableFavicons) (id, url, width, height, date) VALUES (11, 'http://example.org/favicon.ico', 16, 16, \(Date.now()))").succeeded()
         bookmarks.local.db.run("INSERT INTO \(TableBookmarksLocal) (guid, type, date_added, title, parentid, parentName, sync_status, bmkUri, faviconID) VALUES ('somebookmark', \(BookmarkNodeType.bookmark.rawValue), \(Date.now()), 'Some Bookmark', '\(BookmarkRoots.MobileFolderGUID)', 'Mobile Bookmarks', \(SyncStatus.new.rawValue), 'http://example.org/', 11)").succeeded()
         bookmarks.local.db.run("INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) VALUES ('\(BookmarkRoots.MobileFolderGUID)', 'somebookmark', 0)").succeeded()
 

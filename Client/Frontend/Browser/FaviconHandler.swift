@@ -12,9 +12,10 @@ class FaviconHandler {
     static let MaximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
 
     private var tabObservers: TabObservers!
+    private let backgroundQueue = OperationQueue()
 
     init() {
-        self.tabObservers = registerFor(.didLoadPageMetadata, queue: .main)
+        self.tabObservers = registerFor(.didLoadPageMetadata, queue: backgroundQueue)
     }
 
     deinit {
@@ -70,10 +71,8 @@ extension FaviconHandler: TabEventHandler {
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
         tab.favicons.removeAll(keepingCapacity: false)
         if let faviconURL = metadata.faviconURL {
-            loadFaviconURL(faviconURL, forTab: tab).uponQueue(DispatchQueue.main) { result in
-                if let (favicon, data) = result.successValue {
-                    TabEvent.post(.didLoadFavicon(favicon, with: data), for: tab)
-                }
+            loadFaviconURL(faviconURL, forTab: tab) >>== { (favicon, data) in
+                TabEvent.post(.didLoadFavicon(favicon, with: data), for: tab)
             }
         }
     }

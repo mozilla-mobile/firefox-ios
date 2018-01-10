@@ -57,7 +57,6 @@ class BaseHistoricalBrowserSchema: Schema {
         "url TEXT NOT NULL UNIQUE, " +
         "width INTEGER, " +
         "height INTEGER, " +
-        "type INTEGER NOT NULL, " +
         "date REAL NOT NULL" +
         ") "
 
@@ -209,7 +208,6 @@ class BrowserSchemaV6: BaseHistoricalBrowserSchema {
             "\(TableFavicons).id AS iconID, " +
             "\(TableFavicons).url AS iconURL, " +
             "\(TableFavicons).date AS iconDate, " +
-            "\(TableFavicons).type AS iconType, " +
             "MAX(\(TableFavicons).width) AS iconWidth " +
             "FROM \(TableFaviconSites), \(TableFavicons) WHERE " +
             "\(TableFaviconSites).faviconID = \(TableFavicons).id " +
@@ -218,7 +216,7 @@ class BrowserSchemaV6: BaseHistoricalBrowserSchema {
         let historyIDsWithIcon =
         "CREATE VIEW IF NOT EXISTS \(ViewHistoryIDsWithWidestFavicons) AS " +
             "SELECT \(TableHistory).id AS id, " +
-            "iconID, iconURL, iconDate, iconType, iconWidth " +
+            "iconID, iconURL, iconDate, iconWidth " +
             "FROM \(TableHistory) " +
             "LEFT OUTER JOIN " +
         "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
@@ -364,7 +362,6 @@ class BrowserSchemaV7: BaseHistoricalBrowserSchema {
             "favicons.id AS iconID, " +
             "favicons.url AS iconURL, " +
             "favicons.date AS iconDate, " +
-            "favicons.type AS iconType, " +
             "MAX(favicons.width) AS iconWidth " +
             "FROM \(TableFaviconSites), favicons WHERE " +
             "\(TableFaviconSites).faviconID = favicons.id " +
@@ -373,7 +370,7 @@ class BrowserSchemaV7: BaseHistoricalBrowserSchema {
         let historyIDsWithIcon =
         "CREATE VIEW IF NOT EXISTS \(ViewHistoryIDsWithWidestFavicons) AS " +
             "SELECT history.id AS id, " +
-            "iconID, iconURL, iconDate, iconType, iconWidth " +
+            "iconID, iconURL, iconDate, iconWidth " +
             "FROM history " +
             "LEFT OUTER JOIN " +
         "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
@@ -479,7 +476,6 @@ class BrowserSchemaV8: BaseHistoricalBrowserSchema {
             "url TEXT NOT NULL UNIQUE, " +
             "width INTEGER, " +
             "height INTEGER, " +
-            "type INTEGER NOT NULL, " +
             "date REAL NOT NULL" +
         ") "
 
@@ -529,7 +525,6 @@ class BrowserSchemaV8: BaseHistoricalBrowserSchema {
             "favicons.id AS iconID, " +
             "favicons.url AS iconURL, " +
             "favicons.date AS iconDate, " +
-            "favicons.type AS iconType, " +
             "MAX(favicons.width) AS iconWidth " +
             "FROM \(TableFaviconSites), favicons WHERE " +
             "\(TableFaviconSites).faviconID = favicons.id " +
@@ -538,7 +533,7 @@ class BrowserSchemaV8: BaseHistoricalBrowserSchema {
         let historyIDsWithIcon =
         "CREATE VIEW IF NOT EXISTS \(ViewHistoryIDsWithWidestFavicons) AS " +
             "SELECT history.id AS id, " +
-            "iconID, iconURL, iconDate, iconType, iconWidth " +
+            "iconID, iconURL, iconDate, iconWidth " +
             "FROM history " +
             "LEFT OUTER JOIN " +
         "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
@@ -693,7 +688,6 @@ class BrowserSchemaV10: BaseHistoricalBrowserSchema {
             "url TEXT NOT NULL UNIQUE, " +
             "width INTEGER, " +
             "height INTEGER, " +
-            "type INTEGER NOT NULL, " +
             "date REAL NOT NULL" +
         ") "
 
@@ -743,7 +737,6 @@ class BrowserSchemaV10: BaseHistoricalBrowserSchema {
             "favicons.id AS iconID, " +
             "favicons.url AS iconURL, " +
             "favicons.date AS iconDate, " +
-            "favicons.type AS iconType, " +
             "MAX(favicons.width) AS iconWidth " +
             "FROM \(TableFaviconSites), favicons WHERE " +
             "\(TableFaviconSites).faviconID = favicons.id " +
@@ -752,7 +745,7 @@ class BrowserSchemaV10: BaseHistoricalBrowserSchema {
         let historyIDsWithIcon =
         "CREATE VIEW IF NOT EXISTS \(ViewHistoryIDsWithWidestFavicons) AS " +
             "SELECT history.id AS id, " +
-            "iconID, iconURL, iconDate, iconType, iconWidth " +
+            "iconID, iconURL, iconDate, iconWidth " +
             "FROM history " +
             "LEFT OUTER JOIN " +
         "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
@@ -933,7 +926,7 @@ class TestSQLiteHistory: XCTestCase {
             "INSERT INTO domains (id, domain) VALUES (1, 'example.com')",
             "INSERT INTO history (id, guid, url, title, server_modified, local_modified, is_deleted, should_upload, domain_id) VALUES (5, 'guid', 'http://www.example.com', 'title', 5, 10, 0, 1, 1)",
             "INSERT INTO visits (siteID, date, type, is_local) VALUES (5, 15, 1, 1)",
-            "INSERT INTO favicons (url, width, height, type, date) VALUES ('http://www.example.com/favicon.ico', 10, 10, 1, 20)",
+            "INSERT INTO favicons (url, width, height, date) VALUES ('http://www.example.com/favicon.ico', 10, 10, 20)",
             "INSERT INTO favicon_sites (siteID, faviconID) VALUES (5, 1)",
             "INSERT INTO bookmarks (guid, type, url, parent, faviconID, title) VALUES ('guid', 1, 'http://www.example.com', 0, 1, 'title')"
         ]
@@ -1173,7 +1166,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func updateFavicon() -> Success {
-            let fav = Favicon(url: "http://url2/", date: Date(), type: .icon)
+            let fav = Favicon(url: "http://url2/", date: Date())
             fav.id = 1
             let site = Site(url: "http://bookmarkedurl/", title: "My Bookmark")
             return history.addFavicon(fav, forSite: site) >>> succeed
