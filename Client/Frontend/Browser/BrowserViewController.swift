@@ -1618,6 +1618,9 @@ extension BrowserViewController: TabDelegate {
         let printHelper = PrintHelper(tab: tab)
         tab.addContentScript(printHelper, name: PrintHelper.name())
 
+        let windowHelper = WindowHelper(tab: tab)
+        tab.addContentScript(windowHelper, name: WindowHelper.name())
+
         let customSearchHelper = CustomSearchHelper(tab: tab)
         tab.addContentScript(customSearchHelper, name: CustomSearchHelper.name())
 
@@ -1888,8 +1891,8 @@ extension BrowserViewController: TabManagerDelegate {
     }
 }
 
-/// List of schemes that are allowed to open a popup window
-private let SchemesAllowedToOpenPopups = ["http", "https", "javascript", "data"]
+/// List of schemes that are allowed to open as a popup window
+private let SchemesAllowedToOpenAsPopups = ["http", "https", "javascript", "data", "about"]
 
 extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
@@ -1918,7 +1921,7 @@ extension BrowserViewController: WKUIDelegate {
         // If the page we just opened has a bad scheme, we return nil here so that JavaScript does not
         // get a reference to it which it can return from window.open() - this will end up as a
         // CFErrorHTTPBadURL being presented.
-        guard let scheme = (navigationAction.request as NSURLRequest).url?.scheme?.lowercased(), SchemesAllowedToOpenPopups.contains(scheme) else {
+        guard let scheme = (navigationAction.request as NSURLRequest).url?.scheme?.lowercased(), SchemesAllowedToOpenAsPopups.contains(scheme) else {
             return nil
         }
 
