@@ -14,13 +14,9 @@ open class KeyBundle: Hashable {
     let encKey: Data
     let hmacKey: Data
 
-    open class func fromKB(_ kB: Data) -> KeyBundle {
-        let salt = Data()
-        let contextInfo = FxAClient10.KW("oldsync")
-        let len: UInt = 64               // KeyLength + KeyLength, without type nonsense.
-        let derived = (kB as NSData).deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: len)!
-        return KeyBundle(encKey: derived.subdata(in: 0..<KeyLength),
-                         hmacKey: derived.subdata(in: KeyLength..<(2 * KeyLength)))
+    open class func fromKSync(_ kSync: Data) -> KeyBundle {
+        return KeyBundle(encKey: kSync.subdata(in: 0..<KeyLength),
+                         hmacKey: kSync.subdata(in: KeyLength..<(2 * KeyLength)))
     }
 
     open class func random() -> KeyBundle {

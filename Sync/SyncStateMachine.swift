@@ -143,16 +143,16 @@ open class SyncStateMachine {
 
     open func toReady(_ authState: SyncAuthState) -> ReadyDeferred {
         let token = authState.token(Date.now(), canBeExpired: false)
-        return chainDeferred(token, f: { (token, kB) in
+        return chainDeferred(token, f: { (token, kSync) in
             log.debug("Got token from auth state.")
             if Logger.logPII {
                 log.debug("Server is \(token.api_endpoint).")
             }
-            let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB))
+            let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync))
             if prior == nil {
                 log.info("No persisted Sync state. Starting over.")
             }
-            var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs)
+            var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKSync(kSync), persistingTo: self.scratchpadPrefs)
 
             // Take the scratchpad and add the fxaDeviceId from the state, and hashedUID from the token
             let b = Scratchpad.Builder(p: scratchpad)

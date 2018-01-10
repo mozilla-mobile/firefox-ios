@@ -131,7 +131,7 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
                 let tokenServerEndpointURL = self.account.configuration.sync15Configuration.tokenServerEndpointURL
                 let audience = TokenServerClient.getAudience(forURL: tokenServerEndpointURL)
                 let client = TokenServerClient(URL: tokenServerEndpointURL)
-                let clientState = FxAClient10.computeClientState(married.kB)
+                let clientState = married.kXCS
                 log.debug("Fetching token server token.")
                 let deferred = self.generateAssertionAndFetchTokenAt(audience, client: client, clientState: clientState, married: married, now: now, retryCount: 1)
                 deferred.upon { result in
@@ -139,13 +139,13 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
                     // One racer will win -- that's fine, presumably she has the freshest token.
                     // If not, that's okay, 'cuz the slightly dated token is still a valid token.
                     if let token = result.successValue {
-                        let newCache = SyncAuthStateCache(token: token, forKey: married.kB,
+                        let newCache = SyncAuthStateCache(token: token, forKey: married.kSync,
                             expiresAt: now + 1000 * token.durationInSeconds)
                         log.debug("Fetched token server token!  Token expires at \(newCache.expiresAt).")
                         self.cache.value = newCache
                     }
                 }
-                return chain(deferred, f: { (token: $0, forKey: married.kB) })
+                return chain(deferred, f: { (token: $0, forKey: married.kSync) })
             }
             return deferMaybe(result.failureValue!)
         }

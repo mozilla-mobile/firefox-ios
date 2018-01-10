@@ -21,15 +21,15 @@ class MockSyncAuthState: SyncAuthState {
     var enginesEnablements: [String : Bool]?
 
     let serverRoot: String
-    let kB: Data
+    let kSync: Data
 
     var deviceID: String? {
         return "mock_device_id"
     }
 
-    init(serverRoot: String, kB: Data) {
+    init(serverRoot: String, kSync: Data) {
         self.serverRoot = serverRoot
-        self.kB = kB
+        self.kSync = kSync
     }
 
     func invalidate() {
@@ -38,25 +38,25 @@ class MockSyncAuthState: SyncAuthState {
     func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>> {
         let token = TokenServerToken(id: "id", key: "key", api_endpoint: serverRoot, uid: UInt64(0), hashedFxAUID: "",
             durationInSeconds: UInt64(5 * 60), remoteTimestamp: Timestamp(now - 1))
-        return deferMaybe((token, self.kB))
+        return deferMaybe((token, self.kSync))
     }
 }
 
 class MetaGlobalTests: XCTestCase {
     var server: MockSyncServer!
     var serverRoot: String!
-    var kB: Data!
+    var kSync: Data!
     var syncPrefs: Prefs!
     var authState: SyncAuthState!
     var stateMachine: SyncStateMachine!
 
     override func setUp() {
-        kB = Data.randomOfLength(32)!
+        kSync = Data.randomOfLength(64)!
         server = MockSyncServer(username: "1234567")
         server.start()
         serverRoot = server.baseURL
         syncPrefs = MockProfilePrefs()
-        authState = MockSyncAuthState(serverRoot: serverRoot, kB: kB)
+        authState = MockSyncAuthState(serverRoot: serverRoot, kSync: kSync)
         stateMachine = SyncStateMachine(prefs: syncPrefs)
     }
 
@@ -70,7 +70,7 @@ class MetaGlobalTests: XCTestCase {
     }
 
     func storeCryptoKeys(keys: Keys) {
-        let keyBundle = KeyBundle.fromKB(kB)
+        let keyBundle = KeyBundle.fromKSync(kSync)
         let record = Record(id: "keys", payload: keys.asPayload())
         let envelope = EnvelopeJSON(keyBundle.serializer({ $0.json })(record)!)
         server.storeRecords(records: [envelope], inCollection: "crypto")
