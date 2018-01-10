@@ -50,7 +50,7 @@ class HomeView: UIView {
 
         description1.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(textLogo.snp.bottom).offset(30)
+            make.top.equalTo(textLogo.snp.bottom).offset(25)
         }
 
         description2.snp.makeConstraints { make in
