@@ -37,6 +37,11 @@ public protocol BrowserHistory {
     func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>>
 }
 
+/** An interface for fast repeated frecency queries. */
+public protocol OptimizedFrecency {
+    func getSites(historyLimit limit: Int, bookmarksLimit: Int, whereURLContains filter: String?, groupClause: String, whereData: String?) -> Deferred<Maybe<Cursor<Site>>>
+}
+
 /**
  * An interface for accessing recommendation content from Storage
  */

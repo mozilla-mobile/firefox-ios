@@ -65,12 +65,10 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             if optimizedFrecency == nil {
                 assertionFailure("SearchLoader setup not called.")
                 Sentry.shared.send(message: "SearchLoader setup not called", severity: .error)
-                searchStateEntered()
             }
             guard let optimizedFrecency = optimizedFrecency else { return }
 
-            // When search mode is entered the requisite temp table is generated to speed up repeated queries, see BrowserViewController.urlBarDidEnterOverlayMode()
-            let deferred = optimizedFrecency.getSites(historyLimit: 100, bookmarksLimit: 5, whereURLContains: query)
+            let deferred = optimizedFrecency.getSites(historyLimit: 100, bookmarksLimit: 5, whereURLContains: query, groupClause: "", whereData: nil)
             currentDbQuery = deferred as? Cancellable
 
             deferred.uponQueue(.main) { result in
