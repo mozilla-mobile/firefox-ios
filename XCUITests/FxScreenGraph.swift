@@ -791,7 +791,7 @@ extension Navigator where T == FxUserState {
 
     // Open a URL. Will use/re-use the first BrowserTab or NewTabScreen it comes to.
     @available(*, deprecated, message: "use openURL(_ urlString) instead")
-    func openURL(urlString: String) {
+    func openURL(String) {
         openURL(urlString)
     }
 

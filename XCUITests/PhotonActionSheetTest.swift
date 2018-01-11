@@ -6,7 +6,7 @@ import XCTest
 
 class PhotonActionSheetTest: BaseTestCase {
     func testPinToTop() {
-        navigator.openURL(urlString: "http://example.com")
+        navigator.openURL("http://example.com")
         waitUntilPageLoad()
         // Open Action Sheet
         app.buttons["TabLocationView.pageOptionsButton"].tap()

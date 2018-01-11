@@ -33,14 +33,14 @@ class ToolbarTests: BaseTestCase {
         XCTAssertFalse(app.buttons["Reload"].isEnabled)
 
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
-        navigator.openURL(urlString: website1["url"]!)
+        navigator.openURL(website1["url"]!)
         waitForValueContains(app.textFields["url"], value: website1["value"]!)
 
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
         XCTAssertTrue(app.buttons["Reload"].isEnabled)
 
-        navigator.openURL(urlString: website2)
+        navigator.openURL(website2)
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: website2)
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
@@ -76,7 +76,7 @@ class ToolbarTests: BaseTestCase {
     }
 
     func testClearURLTextUsingBackspace() {
-        navigator.openURL(urlString: website1["url"]!)
+        navigator.openURL(website1["url"]!)
         waitForValueContains(app.textFields["url"], value: website1["value"]!)
 
         // Simulate pressing on backspace key should remove the text

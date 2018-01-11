@@ -17,7 +17,7 @@ class HistoryTests: BaseTestCase {
     }
 
     func testOpenHistoryFromBrowserContextMenuOptions() {
-        navigator.openURL(urlString: webpage["url"]!)
+        navigator.openURL(webpage["url"]!)
         navigator.browserPerformAction(.openHistoryOption)
 
         // Go to History List from Browser context menu and there should be one entry
