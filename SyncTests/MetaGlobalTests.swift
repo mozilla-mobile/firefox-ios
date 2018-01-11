@@ -103,7 +103,7 @@ class MetaGlobalTests: XCTestCase {
         // Basic verifications.
         XCTAssertEqual(ready.collectionKeys.defaultBundle.encKey.count, 32)
         if let clients = ready.scratchpad.global?.value.engines["clients"] {
-            XCTAssertTrue(clients.syncID.characters.count == 12)
+            XCTAssertTrue(clients.syncID.count == 12)
         }
     }
 

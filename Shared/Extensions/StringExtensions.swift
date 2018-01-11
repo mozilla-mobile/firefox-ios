@@ -53,7 +53,7 @@ public extension String {
     :returns: A String with `maxLength` characters or less
     */
     func ellipsize(maxLength: Int) -> String {
-        if (maxLength >= 2) && (self.characters.count > maxLength) {
+        if (maxLength >= 2) && (self.count > maxLength) {
             let index1 = self.characters.index(self.startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
             let index2 = self.characters.index(self.endIndex, offsetBy: maxLength / -2)
 
@@ -88,7 +88,7 @@ public extension String {
     /// Adds a newline at the closest space from the middle of a string.
     /// Example turning "Mark as Read" into "Mark as\n Read"
     public func stringSplitWithNewline() -> String {
-        let mid = self.characters.count/2
+        let mid = self.count / 2
 
         let arr: [Int] = self.characters.indices.flatMap {
             if self.characters[$0] == " " {

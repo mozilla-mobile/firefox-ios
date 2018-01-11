@@ -86,7 +86,7 @@ class LoginsHelper: TabContentScript {
                 locale: nil)!
             string.replaceSubrange(range, with: replace)
             let nsRange = NSRange(location: string.characters.distance(from: string.startIndex, to: range.lowerBound),
-                                  length: replace.characters.count)
+                                  length: replace.count)
             ranges.append(nsRange)
         }
 

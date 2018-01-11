@@ -375,7 +375,7 @@ private class PhotonActionSheetHeaderView: UITableViewHeaderFooterView {
             self.siteImageView.backgroundColor = color
             self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheetUX.IconSize)
         }
-        self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
+        self.titleLabel.text = site.title.isEmpty ? site.url : site.title
         self.descriptionLabel.text = site.tileURL.baseDomain
     }
 }

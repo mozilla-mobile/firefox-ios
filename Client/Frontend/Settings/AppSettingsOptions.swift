@@ -370,7 +370,7 @@ class AccountStatusSetting: WithAccountSetting {
             }
             
             let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-            let range = NSRange(location: 0, length: string.characters.count)
+            let range = NSRange(location: 0, length: string.count)
             let attrs = [NSForegroundColorAttributeName: orange]
             let res = NSMutableAttributedString(string: string)
             res.setAttributes(attrs, range: range)

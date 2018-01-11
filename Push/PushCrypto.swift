@@ -300,14 +300,14 @@ extension String {
     var base64urlSafeDecodedData: Data? {
         // We call this method twice: once with the last two args as nil, 0 – this gets us the length
         // of the decoded string.
-        let length = ece_base64url_decode(self, self.characters.count, ECE_BASE64URL_REJECT_PADDING, nil, 0)
+        let length = ece_base64url_decode(self, self.count, ECE_BASE64URL_REJECT_PADDING, nil, 0)
         guard length > 0 else {
             return nil
         }
 
         // The second time, we actually decode, and copy it into a made to measure byte array.
         var bytes = [UInt8](repeating: 0, count: length)
-        let checkLength = ece_base64url_decode(self, self.characters.count, ECE_BASE64URL_REJECT_PADDING, &bytes, length)
+        let checkLength = ece_base64url_decode(self, self.count, ECE_BASE64URL_REJECT_PADDING, &bytes, length)
         guard checkLength == length else {
             return nil
         }

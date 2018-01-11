@@ -525,7 +525,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     fileprivate func setKey(_ key: String?) -> NSError? {
-        sqlite3_key(sqliteDB, key ?? "", Int32((key ?? "").characters.count))
+        sqlite3_key(sqliteDB, key ?? "", Int32((key ?? "").count))
         let cursor = executeQuery("SELECT count(*) FROM sqlite_master;", factory: IntFactory, withArgs: nil as Args?)
         if cursor.status != .success {
             return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid key"])
@@ -534,10 +534,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     fileprivate func reKey(_ oldKey: String?, newKey: String?) -> NSError? {
-        sqlite3_key(sqliteDB, oldKey ?? "", Int32((oldKey ?? "").characters.count))
-        sqlite3_rekey(sqliteDB, newKey ?? "", Int32((newKey ?? "").characters.count))
+        sqlite3_key(sqliteDB, oldKey ?? "", Int32((oldKey ?? "").count))
+        sqlite3_rekey(sqliteDB, newKey ?? "", Int32((newKey ?? "").count))
         // Check that the new key actually works
-        sqlite3_key(sqliteDB, newKey ?? "", Int32((newKey ?? "").characters.count))
+        sqlite3_key(sqliteDB, newKey ?? "", Int32((newKey ?? "").count))
         let cursor = executeQuery("SELECT count(*) FROM sqlite_master;", factory: IntFactory, withArgs: nil as Args?)
         if cursor.status != .success {
             return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Rekey failed"])

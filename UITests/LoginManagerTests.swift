@@ -79,7 +79,7 @@ class LoginManagerTests: KIFTestCase {
         let hostnames = generateStringListWithFormat("http://%@%d.com", numRange: numRange, prefixes: prefixes)
         let usernames = generateStringListWithFormat("%@%d@email.com", numRange: numRange, prefixes: prefixes)
         
-        (0..<(numRange.count * prefixes.characters.count)).forEach { index in
+        (0..<(numRange.count * prefixes.count)).forEach { index in
             let login = Login(guid: "\(index)", hostname: hostnames[index], username: usernames[index], password: passwords[index])
             login.formSubmitURL = hostnames[index]
             profile.logins.addLogin(login).value

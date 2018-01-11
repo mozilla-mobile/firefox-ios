@@ -162,7 +162,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         }
 
         self.domainLabel.text = site.tileURL.hostSLD
-        self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
+        self.titleLabel.text = site.title.isEmpty ? site.url : site.title
 
         if let bookmarked = site.bookmarked, bookmarked {
             self.descriptionLabel.text = Strings.HighlightBookmarkText

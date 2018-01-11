@@ -80,7 +80,7 @@ open class UserAgent {
         let webKitVersionRegex = try! NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: [])
 
         let match = webKitVersionRegex.firstMatch(in: userAgent, options: [],
-            range: NSRange(location: 0, length: userAgent.characters.count))
+            range: NSRange(location: 0, length: userAgent.count))
 
         if match == nil {
             print("Error: Unable to determine WebKit version in UA.")

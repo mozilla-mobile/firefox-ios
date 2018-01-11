@@ -197,7 +197,7 @@ extension SearchInputView: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         // If there is no text, go back to showing the title view
-        if (textField.text?.characters.count ?? 0) == 0 {
+        if textField.text?.isEmpty ?? true {
             isEditing = false
             delegate?.searchInputViewFinishedEditing(self)
         }
