@@ -85,7 +85,7 @@ class PasscodeInputView: UIView, UIKeyInput {
             return
         }
 
-        inputtedCode.remove(at: inputtedCode.characters.index(before: inputtedCode.endIndex))
+        inputtedCode.remove(at: inputtedCode.index(before: inputtedCode.endIndex))
         setNeedsDisplay()
     }
 

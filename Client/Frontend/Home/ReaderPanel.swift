@@ -149,7 +149,7 @@ class ReadingListTableViewCell: UITableViewCell {
         let hostname = url.host ?? ""
         for prefix in prefixesToSimplify {
             if hostname.hasPrefix(prefix) {
-                return hostname.substring(from: hostname.characters.index(hostname.startIndex, offsetBy: prefix.count))
+                return hostname.substring(from: hostname.index(hostname.startIndex, offsetBy: prefix.count))
             }
         }
         return hostname

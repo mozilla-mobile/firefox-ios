@@ -28,7 +28,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         let url = "\(localhostURL)/numberedPage.html?page=1"
 
         // URL without "http://".
-        let displayURL = "\(localhostURL)/numberedPage.html?page=1".substring(from: url.characters.index(url.startIndex, offsetBy: "http://".count))
+        let displayURL = "\(localhostURL)/numberedPage.html?page=1".substring(from: url.index(url.startIndex, offsetBy: "http://".count))
 
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))

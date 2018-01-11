@@ -262,7 +262,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     // Returns the default favicon for a site based on the first letter of the site's domain
     class func getDefaultFavicon(_ url: URL) -> UIImage {
-        guard let character = url.baseDomain?.characters.first else {
+        guard let character = url.baseDomain?.first else {
             return defaultFavicon
         }
 

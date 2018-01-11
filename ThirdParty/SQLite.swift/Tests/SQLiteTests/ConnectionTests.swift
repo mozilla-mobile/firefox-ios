@@ -327,7 +327,7 @@ class ConnectionTests : SQLiteTestCase {
     }
 
     func test_interrupt_interruptsLongRunningQuery() {
-        try! InsertUsers("abcdefghijklmnopqrstuvwxyz".characters.map { String($0) })
+        try! InsertUsers("abcdefghijklmnopqrstuvwxyz".map { String($0) })
         db.createFunction("sleep") { args in
             usleep(UInt32((args[0] as? Double ?? Double(args[0] as? Int64 ?? 1)) * 1_000_000))
             return nil

@@ -11,7 +11,7 @@ private let initialBias = 72
 private let initialN: Int = 128 // 0x80
 private let delimiter: Character = "-"; // '\x2D'
 private let prefixPunycode = "xn--"
-private let asciiPunycode = [Character]("abcdefghijklmnopqrstuvwxyz0123456789".characters)
+private let asciiPunycode = Array("abcdefghijklmnopqrstuvwxyz0123456789")
 
 extension String {
     fileprivate func toValue(_ index: Int) -> Character {
@@ -117,7 +117,7 @@ extension String {
     }
 
     fileprivate func decode(_ punycode: String) -> String {
-        var input = [Character](punycode.characters)
+        var input = Array(punycode)
         var output = [Character]()
         var i = 0
         var n = initialN
@@ -188,7 +188,7 @@ extension String {
         var labels = self.components(separatedBy: ".")
         for (index, part) in labels.enumerated() {
             if isValidPunycodeScala(part) {
-                let changeStr = part.substring(from: part.characters.index(part.startIndex, offsetBy: 4))
+                let changeStr = part.substring(from: part.index(part.startIndex, offsetBy: 4))
                 labels[index] = decode(changeStr)
             }
         }

@@ -35,10 +35,10 @@ private func loadEntriesFromDisk() -> TLDEntryMap? {
             let key: String
             if entry.isWild {
                 // Trim off the '*.' part of the line
-                key = line.substring(from: line.characters.index(line.startIndex, offsetBy: 2))
+                key = line.substring(from: line.index(line.startIndex, offsetBy: 2))
             } else if entry.isException {
                 // Trim off the '!' part of the line
-                key = line.substring(from: line.characters.index(line.startIndex, offsetBy: 1))
+                key = line.substring(from: line.index(line.startIndex, offsetBy: 1))
             } else {
                 key = line
             }
@@ -169,11 +169,11 @@ extension URL {
         var urlString = self.absoluteString
         // For http URLs, get rid of the trailing slash if the path is empty or '/'
         if (self.scheme == "http" || self.scheme == "https") && (self.path == "/") && urlString.endsWith("/") {
-            urlString = urlString.substring(to: urlString.characters.index(urlString.endIndex, offsetBy: -1))
+            urlString = urlString.substring(to: urlString.index(urlString.endIndex, offsetBy: -1))
         }
         // If it's basic http, strip out the string but leave anything else in
         if urlString.hasPrefix("http://") {
-            return urlString.substring(from: urlString.characters.index(urlString.startIndex, offsetBy: 7))
+            return urlString.substring(from: urlString.index(urlString.startIndex, offsetBy: 7))
         } else {
             return urlString
         }

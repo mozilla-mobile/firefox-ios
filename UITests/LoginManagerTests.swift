@@ -104,7 +104,7 @@ class LoginManagerTests: KIFTestCase {
     }
     
     fileprivate func generateStringListWithFormat(_ format: String, numRange: CountableRange<Int>, prefixes: String) -> [String] {
-        return prefixes.characters.map { char in
+        return prefixes.map { char in
             
             return numRange.map { num in
                 return String(format: format, "\(char)", num)

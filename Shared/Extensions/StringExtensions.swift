@@ -54,8 +54,8 @@ public extension String {
     */
     func ellipsize(maxLength: Int) -> String {
         if (maxLength >= 2) && (self.count > maxLength) {
-            let index1 = self.characters.index(self.startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
-            let index2 = self.characters.index(self.endIndex, offsetBy: maxLength / -2)
+            let index1 = self.index(self.startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
+            let index2 = self.index(self.endIndex, offsetBy: maxLength / -2)
 
             return self.substring(to: index1) + "…\u{2060}" + self.substring(from: index2)
         }
@@ -90,8 +90,8 @@ public extension String {
     public func stringSplitWithNewline() -> String {
         let mid = self.count / 2
 
-        let arr: [Int] = self.characters.indices.flatMap {
-            if self.characters[$0] == " " {
+        let arr: [Int] = self.indices.flatMap {
+            if self[$0] == " " {
                 return self.distance(from: startIndex, to: $0)
             }
 
@@ -101,7 +101,7 @@ public extension String {
             return self
         }
         var newString = self
-        newString.insert("\n", at: newString.characters.index(newString.characters.startIndex, offsetBy: closest.element))
+        newString.insert("\n", at: newString.index(newString.startIndex, offsetBy: closest.element))
         return newString
     }
 }

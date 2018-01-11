@@ -154,7 +154,7 @@ extension Table {
     fileprivate func indexName(_ columns: [Expressible]) -> Expressible {
         let string = (["index", clauses.from.name, "on"] + columns.map { $0.expression.template }).joined(separator: " ").lowercased()
 
-        let index = string.characters.reduce("") { underscored, character in
+        let index = string.reduce("") { underscored, character in
             guard character != "\"" else {
                 return underscored
             }
