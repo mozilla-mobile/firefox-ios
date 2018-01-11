@@ -11,7 +11,7 @@ struct ReaderModeUtils {
     static func simplifyDomain(_ domain: String) -> String {
         for prefix in DomainPrefixesToSimplify {
             if domain.hasPrefix(prefix) {
-                return domain.substring(from: domain.characters.index(domain.startIndex, offsetBy: prefix.characters.count))
+                return domain.substring(from: domain.index(domain.startIndex, offsetBy: prefix.count))
             }
         }
         return domain

@@ -12,7 +12,7 @@ public extension IdentifierString {
     func validate() -> Bool {
         // Regex located here: http://gecko.readthedocs.io/en/latest/toolkit/components/telemetry/telemetry/collection/events.html#limits
         let regex = try! NSRegularExpression(pattern: "^[a-zA-Z][a-zA-Z0-9_.]*[a-zA-Z0-9]$", options: [])
-        return regex.matches(in: self, options: [], range: NSRange(location: 0, length: self.characters.count)).count > 0
+        return regex.matches(in: self, options: [], range: NSRange(location: 0, length: self.count)).count > 0
     }
 }
 

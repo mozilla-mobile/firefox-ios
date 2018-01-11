@@ -511,7 +511,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         func titleForLogin(_ login: Login) -> Character {
             // Fallback to hostname if we can't extract a base domain.
             let titleString = domainLookup[login.guid]?.baseDomain?.uppercased() ?? login.hostname
-            return titleString.characters.first ?? Character("")
+            return titleString.first ?? Character("")
         }
 
         // Rules for sorting login URLS:

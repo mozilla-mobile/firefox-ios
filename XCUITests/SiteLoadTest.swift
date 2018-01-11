@@ -15,7 +15,7 @@ class SiteLoadTest: BaseTestCase {
         var counter = 0
         while Date() < futureDate {
             navigator.goto(URLBarOpen)
-            navigator.openURL(urlString: site[counter % 5])
+            navigator.openURL(site[counter % 5])
             sleep(5)
 
             navigator.nowAt(BrowserTab)

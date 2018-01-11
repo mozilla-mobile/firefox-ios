@@ -575,11 +575,11 @@ public final class Connection {
             } else if let result = result as? Int64 {
                 sqlite3_result_int64(context, result)
             } else if let result = result as? String {
-                sqlite3_result_text(context, result, Int32(result.characters.count), SQLITE_TRANSIENT)
+                sqlite3_result_text(context, result, Int32(result.count), SQLITE_TRANSIENT)
             } else if result == nil {
                 sqlite3_result_null(context)
             } else {
-                fatalError("unsupported result type: \(result)")
+                fatalError("unsupported result type: \(result ?? "empty result")")
             }
         }
         var flags = SQLITE_UTF8

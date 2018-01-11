@@ -642,10 +642,10 @@ class PasscodeUtils {
     }
 
     static func enterPasscode(_ tester: KIFUITestActor, digits: String) {
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.startIndex]))
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 1)]))
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 2)]))
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 3)]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.startIndex]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 1)]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 2)]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 3)]))
     }
 }
 

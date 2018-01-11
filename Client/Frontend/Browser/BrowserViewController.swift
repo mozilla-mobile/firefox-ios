@@ -1412,7 +1412,7 @@ extension BrowserViewController: URLBarDelegate {
 
         // We couldn't build a URL, so check for a matching search keyword.
         let trimmedText = text.trimmingCharacters(in: CharacterSet.whitespaces)
-        guard let possibleKeywordQuerySeparatorSpace = trimmedText.characters.index(of: " ") else {
+        guard let possibleKeywordQuerySeparatorSpace = trimmedText.index(of: " ") else {
             submitSearchText(text)
             return
         }
@@ -2708,12 +2708,12 @@ extension BrowserViewController: TabTrayDelegate {
     }
 
     func tabTrayDidAddBookmark(_ tab: Tab) {
-        guard let url = tab.url?.absoluteString, url.characters.count > 0 else { return }
+        guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
         self.addBookmark(tab.tabState)
     }
 
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord? {
-        guard let url = tab.url?.absoluteString, url.characters.count > 0 else { return nil }
+        guard let url = tab.url?.absoluteString, !url.isEmpty else { return nil }
         return profile.readingList?.createRecordWithURL(url, title: tab.title ?? url, addedBy: UIDevice.current.name).successValue
     }
 

@@ -33,7 +33,7 @@ class NSMutableAttributedStringExtensionsTests: XCTestCase {
         let substring = ""
         let example = NSMutableAttributedString(string: "abcd")
         example.colorSubstring(substring, withColor: UIColor.red)
-        for position in 0..<example.string.characters.count {
+        for position in 0..<example.string.count {
             XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.red, inString: example))
         }
     }
@@ -42,7 +42,7 @@ class NSMutableAttributedStringExtensionsTests: XCTestCase {
         let substring = "yyz"
         let example = NSMutableAttributedString(string: "abcd")
         example.colorSubstring(substring, withColor: UIColor.red)
-        for position in 0..<example.string.characters.count {
+        for position in 0..<example.string.count {
             XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.red, inString: example))
         }
     }

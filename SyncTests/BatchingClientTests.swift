@@ -242,7 +242,7 @@ class Sync15BatchClientTests: XCTestCase {
         var uploadedCollectionCount = 0
         var linesSent = [String]()
 
-        let allRecords: [Record<CleartextPayloadJSON>] = "ABCDEF".characters.reduce([]) { list, char in
+        let allRecords: [Record<CleartextPayloadJSON>] = "ABCDEF".reduce([]) { list, char in
             return list + [createRecordWithID(id: String(char))]
         }
 
@@ -319,7 +319,7 @@ class Sync15BatchClientTests: XCTestCase {
         var uploadedCollectionCount = 0
         var linesSent = [String]()
 
-        let allRecords: [Record<CleartextPayloadJSON>] = "ABC".characters.reduce([]) { list, char in
+        let allRecords: [Record<CleartextPayloadJSON>] = "ABC".reduce([]) { list, char in
             return list + [createRecordWithID(id: String(char))]
         }
 
@@ -390,7 +390,7 @@ class Sync15BatchClientTests: XCTestCase {
         var uploadedCollectionCount = 0
         var linesSent = [String]()
 
-        let allRecords: [Record<CleartextPayloadJSON>] = "ABCDE".characters.reduce([]) { list, char in
+        let allRecords: [Record<CleartextPayloadJSON>] = "ABCDE".reduce([]) { list, char in
             return list + [createRecordWithID(id: String(char))]
         }
 
@@ -523,7 +523,7 @@ class Sync15BatchClientTests: XCTestCase {
         var uploadedCollectionCount = 0
         var linesSent = [String]()
 
-        let allRecords: [Record<CleartextPayloadJSON>] = "ABCDEFGHIJKL".characters.reduce([]) { list, char in
+        let allRecords: [Record<CleartextPayloadJSON>] = "ABCDEFGHIJKL".reduce([]) { list, char in
             return list + [createRecordWithID(id: String(char))]
         }
 
