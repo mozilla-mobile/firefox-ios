@@ -68,7 +68,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             }
             guard let optimizedFrecency = optimizedFrecency else { return }
 
-            let deferred = optimizedFrecency.getSites(historyLimit: 100, bookmarksLimit: 5, whereURLContains: query, groupClause: "", whereData: nil)
+            let deferred = optimizedFrecency.getSites(historyLimit: 100, bookmarksLimit: 5, whereURLContains: query)
             currentDbQuery = deferred as? Cancellable
 
             deferred.uponQueue(.main) { result in

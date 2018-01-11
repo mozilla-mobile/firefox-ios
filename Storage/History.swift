@@ -39,7 +39,7 @@ public protocol BrowserHistory {
 
 /** An interface for fast repeated frecency queries. */
 public protocol OptimizedFrecency {
-    func getSites(historyLimit limit: Int, bookmarksLimit: Int, whereURLContains filter: String?, groupClause: String, whereData: String?) -> Deferred<Maybe<Cursor<Site>>>
+    func getSites(historyLimit limit: Int, bookmarksLimit: Int, whereURLContains filter: String?) -> Deferred<Maybe<Cursor<Site>>>
 }
 
 /**
