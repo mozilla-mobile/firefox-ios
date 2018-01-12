@@ -37,12 +37,11 @@ extension SQLiteHistory {
     }
 
     class func iconColumnFactory(_ row: SDRow) -> Favicon? {
-        if let iconType = row["iconType"] as? Int,
-            let iconURL = row["iconURL"] as? String,
+        if let iconURL = row["iconURL"] as? String,
             let iconDate = row["iconDate"] as? Double,
             let _ = row["iconID"] as? Int {
                 let date = Date(timeIntervalSince1970: iconDate)
-                return Favicon(url: iconURL, date: date, type: IconType(rawValue: iconType)!)
+                return Favicon(url: iconURL, date: date)
         }
         return nil
     }

@@ -1588,9 +1588,6 @@ extension BrowserViewController: TabDelegate {
         readerMode.delegate = self
         tab.addContentScript(readerMode, name: ReaderMode.name())
 
-        let favicons = FaviconManager(tab: tab, profile: profile)
-        tab.addContentScript(favicons, name: FaviconManager.name())
-
         // only add the logins helper if the tab is not a private browsing tab
         if !tab.isPrivate {
             let logins = LoginsHelper(tab: tab, profile: profile)

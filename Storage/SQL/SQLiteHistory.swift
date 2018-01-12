@@ -315,7 +315,7 @@ extension SQLiteHistory: BrowserHistory {
             "INSERT INTO \(TableCachedTopSites)",
             "SELECT historyID, url, title, guid, domain_id, domain,",
             "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,",
-            "iconID, iconURL, iconDate, iconType, iconWidth, frecencies",
+            "iconID, iconURL, iconDate, iconWidth, frecencies",
             "FROM (", query, ")"
             ].joined(separator: " ")
         return (insertQuery, args)
@@ -409,7 +409,7 @@ extension SQLiteHistory: BrowserHistory {
             "COALESCE(MAX(CASE visits.is_local WHEN 1 THEN visits.date ELSE 0 END), 0) AS localVisitDate,",
             "COALESCE(MAX(CASE visits.is_local WHEN 0 THEN visits.date ELSE 0 END), 0) AS remoteVisitDate,",
             "COALESCE(COUNT(visits.is_local), 0) AS visitCount",
-            includeIcon ? ", iconID, iconURL, iconDate, iconType, iconWidth" : "",
+            includeIcon ? ", iconID, iconURL, iconDate, iconWidth" : "",
         "FROM",
             "history",
                 "INNER JOIN domains ON domains.id = history.domain_id",
@@ -547,7 +547,7 @@ extension SQLiteHistory: BrowserHistory {
             let historyWithIconsSQL = [
                 "SELECT historyID, url, title, guid, domain_id, domain,",
                 "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,",
-                "iconID, iconURL, iconDate, iconType, iconWidth, frecencies, is_bookmarked",
+                "iconID, iconURL, iconDate, iconWidth, frecencies, is_bookmarked",
                 "FROM (", historySQL, ") LEFT OUTER JOIN",
                 "view_history_id_favicon ON historyID = view_history_id_favicon.id",
                 "ORDER BY frecencies DESC",
@@ -565,7 +565,7 @@ extension SQLiteHistory: BrowserHistory {
                 "SELECT NULL AS historyID, url, title, guid, NULL AS domain_id, NULL AS domain,",
                 "visitDate AS localVisitDate, 0 AS remoteVisitDate, 0 AS localVisitCount,",
                 "0 AS remoteVisitCount,",
-                "iconID, iconURL, iconDate, iconType, iconWidth,",
+                "iconID, iconURL, iconDate, iconWidth,",
                 "visitDate AS frecencies,",  // Fake this for ordering purposes.
                 "1 AS is_bookmarked",
                 "FROM", ViewAwesomebarBookmarksWithIcons,
@@ -604,7 +604,7 @@ extension SQLiteHistory: BrowserHistory {
 extension SQLiteHistory: Favicons {
     // These two getter functions are only exposed for testing purposes (and aren't part of the public interface).
     func getFaviconsForURL(_ url: String) -> Deferred<Maybe<Cursor<Favicon?>>> {
-        let sql = "SELECT iconID AS id, iconURL AS url, iconDate AS date, iconType AS type, iconWidth AS width FROM " +
+        let sql = "SELECT iconID AS id, iconURL AS url, iconDate AS date, iconWidth AS width FROM " +
             "\(ViewWidestFaviconsForSites), \(TableHistory) WHERE " +
             "\(TableHistory).id = siteID AND \(TableHistory).url = ?"
         let args: Args = [url]
@@ -617,7 +617,6 @@ extension SQLiteHistory: Favicons {
         "  \(TableFavicons).id AS id" +
         ", \(TableFavicons).url AS url" +
         ", \(TableFavicons).date AS date" +
-        ", \(TableFavicons).type AS type" +
         ", \(TableFavicons).width AS width" +
         " FROM \(TableFavicons), \(ViewBookmarksLocalOnMirror) AS bm" +
         " WHERE bm.faviconID = \(TableFavicons).id AND bm.bmkUri IS ?"
@@ -627,7 +626,7 @@ extension SQLiteHistory: Favicons {
 
     public func getSitesForURLs(_ urls: [String]) -> Deferred<Maybe<Cursor<Site?>>> {
         let inExpression = urls.joined(separator: "\",\"")
-        let sql = "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, iconID, iconURL, iconDate, iconType, iconWidth FROM " +
+        let sql = "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, iconID, iconURL, iconDate, iconWidth FROM " +
             "\(ViewWidestFaviconsForSites), \(TableHistory) WHERE " +
             "\(TableHistory).id = siteID AND \(TableHistory).url IN (\"\(inExpression)\")"
         let args: Args = []

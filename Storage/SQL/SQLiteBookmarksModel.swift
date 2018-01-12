@@ -289,7 +289,7 @@ extension SQLiteBookmarks {
             "       bookmarks.bmkUri AS bmkUri, bookmarks.siteUri AS siteUri,",
             "       bookmarks.folderName AS folderName,",
             "       bookmarks.isEditable AS isEditable,",
-            "       favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType",
+            "       favicons.url AS iconURL, favicons.date AS iconDate",
             "FROM (", values, ") AS bookmarks",
             "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id",
             "ORDER BY title ASC",
@@ -359,7 +359,7 @@ extension SQLiteBookmarks {
         "       bookmarks.bmkUri AS bmkUri, bookmarks.folderName AS folderName, " +
         "       bookmarks.idx AS idx, bookmarks._parent AS _parent, " +
         "       bookmarks.isEditable AS isEditable, " +
-        "       favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
+        "       favicons.url AS iconURL, favicons.date AS iconDate " +
         "FROM (\(fleshed)) AS bookmarks " +
         "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
 
@@ -587,12 +587,9 @@ class BookmarkFactory {
     fileprivate class func addIcon(_ bookmark: BookmarkNode, row: SDRow) {
         // TODO: share this logic with SQLiteHistory.
         if let faviconURL = row["iconURL"] as? String,
-           let date = row["iconDate"] as? Double,
-           let faviconType = row["iconType"] as? Int,
-           let type = IconType(rawValue: faviconType) {
+           let date = row["iconDate"] as? Double {
                 bookmark.favicon = Favicon(url: faviconURL,
-                                           date: Date(timeIntervalSince1970: date),
-                                           type: type)
+                                           date: Date(timeIntervalSince1970: date))
         }
     }
 
@@ -763,7 +760,7 @@ extension SQLiteBookmarks: SearchableBookmarks {
 
         let sql =
         "SELECT bookmarks.id AS id, bookmarks.type AS type, bookmarks.date_added AS date_added, guid, bookmarks.bmkUri AS bmkUri, title, " +
-        "favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
+        "favicons.url AS iconURL, favicons.date AS iconDate " +
         "FROM (\(inner)) AS bookmarks " +
         "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
 

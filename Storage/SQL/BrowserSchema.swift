@@ -128,7 +128,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 34    // Bug 1409777.
+    static let DefaultVersion = 35    // Bug 1406165.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -246,7 +246,6 @@ open class BrowserSchema: Schema {
             "iconID INTEGER, " +
             "iconURL TEXT, " +
             "iconDate REAL, " +
-            "iconType INTEGER, " +
             "iconWidth INTEGER, " +
             "frecencies REAL" +
         ")"
@@ -334,6 +333,15 @@ open class BrowserSchema: Schema {
             "visitCount INTEGER," +
             "visitDate DATETIME," +
             "is_bookmarked INTEGER" +
+    ") "
+
+    let faviconsCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "url TEXT NOT NULL UNIQUE, " +
+            "width INTEGER, " +
+            "height INTEGER, " +
+            "date REAL NOT NULL" +
     ") "
 
     let indexPageMetadataCacheKeyCreate =
@@ -579,7 +587,7 @@ open class BrowserSchema: Schema {
     "SELECT b.guid AS guid, b.url AS url, b.title AS title, " +
     "b.description AS description, b.visitDate AS visitDate, " +
     "f.id AS iconID, f.url AS iconURL, f.date AS iconDate, " +
-    "f.type AS iconType, f.width AS iconWidth " +
+    "f.width AS iconWidth " +
     "FROM \(ViewAwesomebarBookmarks) b " +
     "LEFT JOIN " +
     "\(TableFavicons) f ON f.id = b.faviconID"
@@ -602,16 +610,6 @@ open class BrowserSchema: Schema {
     ")"
 
     public func create(_ db: SQLiteDBConnection) -> Bool {
-        let favicons =
-        "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
-        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "url TEXT NOT NULL UNIQUE, " +
-        "width INTEGER, " +
-        "height INTEGER, " +
-        "type INTEGER NOT NULL, " +
-        "date REAL NOT NULL" +
-        ") "
-
         let history =
         "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -672,7 +670,6 @@ open class BrowserSchema: Schema {
         "\(TableFavicons).id AS iconID, " +
         "\(TableFavicons).url AS iconURL, " +
         "\(TableFavicons).date AS iconDate, " +
-        "\(TableFavicons).type AS iconType, " +
         "MAX(\(TableFavicons).width) AS iconWidth " +
         "FROM \(TableFaviconSites), \(TableFavicons) WHERE " +
         "\(TableFaviconSites).faviconID = \(TableFavicons).id " +
@@ -681,7 +678,7 @@ open class BrowserSchema: Schema {
         let historyIDsWithIcon =
         "CREATE VIEW IF NOT EXISTS \(ViewHistoryIDsWithWidestFavicons) AS " +
         "SELECT \(TableHistory).id AS id, " +
-        "iconID, iconURL, iconDate, iconType, iconWidth " +
+        "iconID, iconURL, iconDate, iconWidth " +
         "FROM \(TableHistory) " +
         "LEFT OUTER JOIN " +
         "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
@@ -715,7 +712,7 @@ open class BrowserSchema: Schema {
             // Tables.
             self.domainsTableCreate,
             history,
-            favicons,
+            faviconsCreate,
             visits,
             bookmarksBuffer,
             bookmarksBufferStructure,
@@ -1180,6 +1177,28 @@ open class BrowserSchema: Schema {
                 "  WHERE is_deleted = 0 AND length(title) > 4096",
                 ]) {
                 return false
+            }
+        }
+
+        if from < 35 && to >= 35 {
+            // If upgrading from a DB prior to 35, the `favicons` table would
+            // have already been created with a `type` column that should be
+            // removed. If `from` is `0`, then we are creating the schema from
+            // scratch and don't need to worry about altering the `favicons`
+            // table here. The only way to drop a column in SQLite is to rename
+            // the original table, create the table without the column to be
+            // dropped, and re-insert all the data to the new table from the old.
+            if from > 0 {
+                let columns = ["id", "url", "width", "height", "date"]
+
+                if !self.run(db, queries: [
+                    "ALTER TABLE \(TableFavicons) RENAME TO  \(TableFavicons)_old",
+                    faviconsCreate,
+                    "INSERT INTO \(TableFavicons) (\(columns.joined(separator: ","))) SELECT \(columns.joined(separator: ",")) FROM \(TableFavicons)_old",
+                    "DROP TABLE \(TableFavicons)_old"
+                    ]) {
+                    return false
+                }
             }
         }
 
