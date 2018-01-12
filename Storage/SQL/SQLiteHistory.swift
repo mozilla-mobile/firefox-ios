@@ -174,7 +174,7 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
         "LEFT JOIN \(ViewHistoryVisits) h ON b.url = h.url"
 
         db.withConnection { connection in
-            let existsQuery = "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' and name = '\(AwesomebarBookmarksTempTable)'"
+            let existsQuery = "SELECT COUNT(*) FROM sqlite_temp_master WHERE type = 'table' and name = '\(AwesomebarBookmarksTempTable)'"
             let tableExists = 1 == connection.executeQuery(existsQuery, factory: IntFactory).asArray().first
             if tableExists {
                 try connection.executeChange("DELETE FROM \(AwesomebarBookmarksTempTable)")
