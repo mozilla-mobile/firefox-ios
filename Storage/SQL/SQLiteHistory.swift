@@ -153,7 +153,7 @@ private let topSitesQuery = "SELECT \(TableCachedTopSites).*, \(TablePageMetadat
  >75% of the query time.
  The scope/lifetime of this object is important as the data is 'frozen' until a new instance is created.
  */
-fileprivate struct OptimizedFrecencyImpl : OptimizedFrecency {
+fileprivate struct FrecentHistoryImpl : FrecentHistory {
     private let db: BrowserDB
 
     init(db: BrowserDB) {
@@ -472,8 +472,8 @@ extension SQLiteHistory: BrowserHistory {
          >>> { self.addLocalVisitForExistingSite(visit) }
     }
 
-    public func getOptimizedFrecency() -> OptimizedFrecency {
-        return OptimizedFrecencyImpl(db: db)
+    public func getFrecentHistory() -> FrecentHistory {
+        return FrecentHistoryImpl(db: db)
     }
 
     public func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
@@ -497,7 +497,7 @@ extension SQLiteHistory: BrowserHistory {
 
         let (whereData, groupBy) = self.topSiteClauses()
         // Force unwrap to change from protocol to known implementation to access fileprivate method
-        let (frecencyQuery, args) = (getOptimizedFrecency() as! OptimizedFrecencyImpl).getFrecencyQuery(historyLimit: limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
+        let (frecencyQuery, args) = (getFrecentHistory() as! FrecentHistoryImpl).getFrecencyQuery(historyLimit: limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
 
         // We must project, because we get bookmarks in these results.
         let insertQuery = [

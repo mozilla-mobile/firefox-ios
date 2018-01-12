@@ -23,7 +23,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
 
-    private var optimizedFrecency: OptimizedFrecency?
+    private var frecentHistory: FrecentHistory?
 
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile
@@ -39,7 +39,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
     // Call every time the UI is in a mode where searching is performed.
     // A temp table is created which speeds up conscutive queries, but 'freezes' the db state.
     public func searchStateEntered() {
-        optimizedFrecency = profile.history.getOptimizedFrecency()
+        frecentHistory = profile.history.getFrecentHistory()
     }
 
     // `weak` usage here allows deferred queue to be the owner. The deferred is always filled and this set to nil,
@@ -62,13 +62,13 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
             }
 
-            if optimizedFrecency == nil {
+            if frecentHistory == nil {
                 assertionFailure("SearchLoader setup not called.")
                 Sentry.shared.send(message: "SearchLoader setup not called", severity: .error)
             }
-            guard let optimizedFrecency = optimizedFrecency else { return }
+            guard let frecentHistory = frecentHistory else { return }
 
-            let deferred = optimizedFrecency.getSites(historyLimit: 100, bookmarksLimit: 5, whereURLContains: query)
+            let deferred = frecentHistory.getSites(historyLimit: 100, bookmarksLimit: 5, whereURLContains: query)
             currentDbQuery = deferred as? Cancellable
 
             deferred.uponQueue(.main) { result in

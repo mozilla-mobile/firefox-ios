@@ -24,7 +24,7 @@ public protocol BrowserHistory {
     @discardableResult func removeHistoryForURL(_ url: String) -> Success
     func removeSiteFromTopSites(_ site: Site) -> Success
     func removeHostFromTopSites(_ host: String) -> Success
-    func getOptimizedFrecency() -> OptimizedFrecency
+    func getFrecentHistory() -> FrecentHistory
     func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
     func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
     func setTopSitesNeedsInvalidation()
@@ -38,7 +38,7 @@ public protocol BrowserHistory {
 }
 
 /** An interface for fast repeated frecency queries. */
-public protocol OptimizedFrecency {
+public protocol FrecentHistory {
     func getSites(historyLimit limit: Int, bookmarksLimit: Int, whereURLContains filter: String?) -> Deferred<Maybe<Cursor<Site>>>
 }
 
