@@ -50,7 +50,7 @@ class BrowserViewController: UIViewController {
     fileprivate var searchController: SearchViewController?
     fileprivate var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
-    fileprivate var searchLoader: SearchLoader!
+    fileprivate var searchLoader: SearchLoader?
     fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     fileprivate var findInPageBar: FindInPageBar?
 
@@ -367,8 +367,6 @@ class BrowserViewController: UIViewController {
             }
             return true
         })
-
-        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
 
         view.addSubview(alertStackView)
         footer = UIView()
@@ -763,7 +761,8 @@ class BrowserViewController: UIViewController {
         searchController!.searchDelegate = self
         searchController!.profile = self.profile
 
-        searchLoader.addListener(searchController!)
+        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+        searchLoader?.addListener(searchController!)
 
         addChildViewController(searchController!)
         view.addSubview(searchController!.view)
@@ -1393,7 +1392,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
-        searchLoader.query = text
+        searchLoader?.query = text
 
         if text.isEmpty {
             hideSearchController()
@@ -1454,8 +1453,6 @@ extension BrowserViewController: URLBarDelegate {
         guard let profile = profile as? BrowserProfile else {
             return
         }
-
-        searchLoader.searchStateEntered()
         
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)

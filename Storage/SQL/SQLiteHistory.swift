@@ -155,9 +155,12 @@ private let topSitesQuery = "SELECT \(TableCachedTopSites).*, \(TablePageMetadat
  */
 fileprivate struct FrecentHistoryImpl : FrecentHistory {
     private let db: BrowserDB
+    private let prefs: Prefs
 
-    init(db: BrowserDB) {
+    init(db: BrowserDB, prefs: Prefs) {
         self.db = db
+        self.prefs = prefs
+
         let create =
             "CREATE TEMP TABLE \(AwesomebarBookmarksTempTable) (" +
                 "guid TEXT, url TEXT, title TEXT, description TEXT, " +
@@ -196,7 +199,37 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
         return db.runQuery(query, args: args, factory: factory)
     }
 
-    func getFrecencyQuery(historyLimit: Int, bookmarksLimit: Int, whereURLContains filter: String? = nil, groupClause: String = "GROUP BY historyID ", whereData: String? = nil) -> (String, Args?) {
+    func updateTopSitesCacheQuery() -> (String, Args?) {
+        let limit = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? TopSiteCacheSize)
+
+        let (whereData, groupBy) = topSiteClauses()
+        let (frecencyQuery, args) = getFrecencyQuery(historyLimit: limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
+
+        // We must project, because we get bookmarks in these results.
+        let insertQuery = [
+            "WITH siteFrecency AS (\(frecencyQuery))",
+            "INSERT INTO \(TableCachedTopSites)",
+            "SELECT historyID, url, title, guid, domain_id, domain,",
+            "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,",
+            "iconID, iconURL, iconDate, iconWidth, frecencies",
+            "FROM (SELECT * FROM",
+            "siteFrecency LEFT JOIN view_history_id_favicon ON",
+            "siteFrecency.historyID = view_history_id_favicon.id)"
+            ].joined(separator: " ")
+
+        // @TODO: remove the LEFT JOIN to fill in the icon columns, it is just there because the code has been doing this historically.
+        // Those favicon data columns are not used, and view_history_id_favicon appears to only contain null data.
+
+        return (insertQuery, args)
+    }
+
+    private func topSiteClauses() -> (String, String) {
+        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') AND (\(TableDomains).domain NOT LIKE 'google.%') "
+        let groupBy = "GROUP BY domain_id "
+        return (whereData, groupBy)
+    }
+
+    private func getFrecencyQuery(historyLimit: Int, bookmarksLimit: Int, whereURLContains filter: String? = nil, groupClause: String = "GROUP BY historyID ", whereData: String? = nil) -> (String, Args?) {
         let includeBookmarks = bookmarksLimit > 0
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
@@ -473,7 +506,7 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getFrecentHistory() -> FrecentHistory {
-        return FrecentHistoryImpl(db: db)
+        return FrecentHistoryImpl(db: db, prefs: prefs)
     }
 
     public func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
@@ -492,33 +525,8 @@ extension SQLiteHistory: BrowserHistory {
         }
     }
 
-    fileprivate func updateTopSitesCacheQuery() -> (String, Args?) {
-        let limit = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? TopSiteCacheSize)
-
-        let (whereData, groupBy) = self.topSiteClauses()
-        // Force unwrap to change from protocol to known implementation to access fileprivate method
-        let (frecencyQuery, args) = (getFrecentHistory() as! FrecentHistoryImpl).getFrecencyQuery(historyLimit: limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
-
-        // We must project, because we get bookmarks in these results.
-        let insertQuery = [
-            "WITH siteFrecency AS (\(frecencyQuery))",
-            "INSERT INTO \(TableCachedTopSites)",
-            "SELECT historyID, url, title, guid, domain_id, domain,",
-            "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,",
-            "iconID, iconURL, iconDate, iconWidth, frecencies",
-            "FROM (SELECT * FROM",
-            "siteFrecency LEFT JOIN view_history_id_favicon ON",
-            "siteFrecency.historyID = view_history_id_favicon.id)"
-            ].joined(separator: " ")
-
-        // @TODO: remove the LEFT JOIN to fill in the icon columns, it is just there because the code has been doing this historically.
-        // Those favicon data columns are not used, and view_history_id_favicon appears to only contain null data.
-
-        return (insertQuery, args)
-    }
-
     public func refreshTopSitesQuery() -> [(String, Args?)] {
-        return [clearTopSitesQuery, updateTopSitesCacheQuery()]
+        return [clearTopSitesQuery, getFrecentHistory().updateTopSitesCacheQuery()]
     }
 
     public func clearTopSitesCache() -> Success {
@@ -530,12 +538,6 @@ extension SQLiteHistory: BrowserHistory {
 
     public func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         return self.getFilteredSitesByVisitDateWithLimit(limit, whereURLContains: nil, includeIcon: true)
-    }
-
-    fileprivate func topSiteClauses() -> (String, String) {
-        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') AND (\(TableDomains).domain NOT LIKE 'google.%') "
-        let groupBy = "GROUP BY domain_id "
-        return (whereData, groupBy)
     }
 
     fileprivate func getFilteredSitesByVisitDateWithLimit(_ limit: Int,
@@ -1048,4 +1050,3 @@ extension SQLiteHistory: AccountRemovalDelegate {
         return self.db.run(discard) >>> self.resetClient
     }
 }
-
