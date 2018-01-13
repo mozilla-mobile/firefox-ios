@@ -13,7 +13,7 @@ class ContentBlockerHelper {
     static let PrefKeyEnabledState = "prefkey.trackingprotection.enabled"
     static let PrefKeyStrength = "prefkey.trackingprotection.strength"
     fileprivate let blocklistBasic = ["disconnect-advertising", "disconnect-analytics", "disconnect-social"]
-    fileprivate let blocklistStrict = ["disconnect-content", "web-fonts"]
+    fileprivate let blocklistStrict = ["disconnect-content"]
     fileprivate let ruleStore: WKContentRuleListStore
     fileprivate weak var tab: Tab?
     fileprivate weak var profile: Profile?
