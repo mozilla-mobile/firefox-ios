@@ -661,7 +661,7 @@ class BrowserViewController: UIViewController {
 
         alertStackView.snp.remakeConstraints { make in
             make.centerX.equalTo(self.view)
-            make.width.lessThanOrEqualTo(self.view.snp.width)
+            make.width.equalTo(self.view.snp.width)
             make.width.lessThanOrEqualTo(SnackBarUX.MaxWidth)
             if let keyboardHeight = keyboardState?.intersectionHeightForView(self.view), keyboardHeight > 0 {
                 make.bottom.equalTo(self.view).offset(-keyboardHeight)
@@ -1046,7 +1046,6 @@ class BrowserViewController: UIViewController {
 
                 findInPageBar.snp.makeConstraints { make in
                     make.height.equalTo(UIConstants.ToolbarHeight)
-                    make.leading.trailing.equalTo(self.view)
                 }
 
                 updateViewConstraints()
