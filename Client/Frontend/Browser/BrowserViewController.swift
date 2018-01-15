@@ -914,10 +914,10 @@ class BrowserViewController: UIViewController {
         if let url = tab.url {
             if url.isReaderModeURL {
                 showReaderModeBar(animated: false)
-                NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: .DynamicFontChanged, object: nil)
             } else {
                 hideReaderModeBar(animated: false)
-                NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
+                NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
             }
 
             updateInContentHomePanel(url as URL)
@@ -1093,7 +1093,7 @@ class BrowserViewController: UIViewController {
             info["visitType"] = visitType
         }
         info["isPrivate"] = tab.isPrivate
-        notificationCenter.post(name: NotificationOnLocationChange, object: self, userInfo: info)
+        notificationCenter.post(name: .OnLocationChange, object: self, userInfo: info)
     }
 
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
@@ -1411,7 +1411,7 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         // We couldn't build a URL, so check for a matching search keyword.
-        let trimmedText = text.trimmingCharacters(in: CharacterSet.whitespaces)
+        let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard let possibleKeywordQuerySeparatorSpace = trimmedText.index(of: " ") else {
             submitSearchText(text)
             return
@@ -2192,7 +2192,7 @@ extension BrowserViewController {
     }
 
     func SELDynamicFontChanged(_ notification: Notification) {
-        guard notification.name == NotificationDynamicFontChanged else { return }
+        guard notification.name == .DynamicFontChanged else { return }
 
         var readerModeStyle = DefaultReaderModeStyle
         if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
@@ -2500,7 +2500,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
     fileprivate func getImage(_ url: URL, success: @escaping (UIImage) -> Void) {
         Alamofire.request(url).validate(statusCode: 200..<300).response { response in
-            if let data = response.data, let image = UIImage.dataIsGIF(data) ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
+            if let data = response.data, let image = data.isGIF ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
                 success(image)
             }
         }

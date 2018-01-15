@@ -33,7 +33,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
 
         NotificationCenter.default.addObserver(self, selector: #selector(SELUIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELAppWillEnterForegroundNotification), name: .UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: NotificationDidRestoreSession, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: .DidRestoreSession, object: nil)
     }
     
     @objc private func SELUIPasteboardChanged() {
@@ -77,7 +77,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
                 firstTabLoaded = true
             }
 
-            NotificationCenter.default.removeObserver(self, name: NotificationDidRestoreSession, object: nil)
+            NotificationCenter.default.removeObserver(self, name: .DidRestoreSession, object: nil)
 
             sessionRestored = true
             checkIfShouldDisplayBar()
@@ -88,7 +88,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         // Ugly hack to ensure we wait until we're finished restoring the session on the first tab
         // before checking if we should display the clipboard bar.
         guard sessionRestored,
-            !url.absoluteString.startsWith("\(WebServer.sharedInstance.base)/about/sessionrestore?history=") else {
+            !url.absoluteString.hasPrefix("\(WebServer.sharedInstance.base)/about/sessionrestore?history=") else {
             return
         }
 

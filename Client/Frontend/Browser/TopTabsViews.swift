@@ -135,8 +135,8 @@ class TopTabCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        closeButton.addTarget(self, action: #selector(TopTabCell.closeTab), for: .touchUpInside)
+
+        closeButton.addTarget(self, action: #selector(closeTab), for: .touchUpInside)
 
         contentView.addSubview(titleText)
         contentView.addSubview(closeButton)
@@ -205,7 +205,7 @@ class TopTabCell: UICollectionViewCell {
         self.layer.shadowOpacity  = 1
         self.layer.shadowRadius = 0
 
-        self.layer.shadowPath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: self.frame.size.width + (TopTabCell.ShadowOffsetSize * 2), height: self.frame.size.height), cornerRadius: 0).cgPath
+        self.layer.shadowPath = UIBezierPath(roundedRect: CGRect(width: self.frame.size.width + (TopTabCell.ShadowOffsetSize * 2), height: self.frame.size.height), cornerRadius: 0).cgPath
         self.layer.shadowOffset = CGSize(width: -TopTabCell.ShadowOffsetSize, height: 0)
     }
 
@@ -223,12 +223,12 @@ class TopTabFader: UIView {
         hMaskLayer.locations = [0.00, 0.005, 0.995, 1.0]
         hMaskLayer.startPoint = CGPoint(x: 0, y: 0.5)
         hMaskLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
-        hMaskLayer.anchorPoint = CGPoint.zero
+        hMaskLayer.anchorPoint = .zero
         return hMaskLayer
     }()
     
     init() {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         layer.mask = hMaskLayer
     }
     
@@ -239,7 +239,7 @@ class TopTabFader: UIView {
         let widthB = NSNumber(value: Float(1 - CGFloat(8) / frame.width))
 
         hMaskLayer.locations = [0.00, widthA, widthB, 1.0]
-        hMaskLayer.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+        hMaskLayer.frame = CGRect(width: frame.width, height: frame.height)
     }
     
     required init?(coder aDecoder: NSCoder) {

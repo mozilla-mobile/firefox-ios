@@ -116,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         do {
             // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
         } catch _ {
             print("Error: Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
         }
@@ -157,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
         }
 
-        NotificationCenter.default.addObserver(forName: NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
+        NotificationCenter.default.addObserver(forName: .FirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
             profile.flushAccount()
         }
 
@@ -512,7 +512,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // The reason we need to call this method here instead of `applicationDidBecomeActive`
-        // is that this method is only invoked whenever the application is entering the foreground where as 
+        // is that this method is only invoked whenever the application is entering the foreground where as
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
     }
@@ -652,7 +652,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
                 let userData = [QuickActions.TabURLKey: alertURL,
                     QuickActions.TabTitleKey: title]
-                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: UIApplication.shared)
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
         }
     }
 
@@ -675,13 +675,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 // MARK: - Root View Controller Animations
 extension AppDelegate: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-            if operation == .push {
-                return BrowserToTrayAnimator()
-            } else if operation == .pop {
-                return TrayToBrowserAnimator()
-            } else {
-                return nil
-            }
+        switch operation {
+        case .push:
+            return BrowserToTrayAnimator()
+        case .pop:
+            return TrayToBrowserAnimator()
+        default:
+            return nil
+        }
     }
 }
 
@@ -758,7 +759,7 @@ extension AppDelegate {
             return completionHandler(.noData)
         }
 
-        // NotificationService will have decrypted the push message, and done some syncing 
+        // NotificationService will have decrypted the push message, and done some syncing
         // activity. If the `client` collection was synced, and there are `displayURI` commands (i.e. sent tabs)
         // NotificationService will have collected them for us in the userInfo.
         if let serializedTabs = userInfo["sentTabs"] as? [[String: String]] {
@@ -791,7 +792,7 @@ extension AppDelegate {
         //
         // The only thing left to do now is to perform actions that can only be performed
         // while the app is foregrounded.
-        // 
+        //
         // Use the push message handler to re-parse the message,
         // this time with a BrowserProfile and processing the return
         // differently than in NotificationService.

@@ -5,7 +5,6 @@
 import UIKit
 import Shared
 import SnapKit
-import Foundation
 import FxA
 import Account
 
@@ -32,8 +31,8 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
         // log out when user clears their custom server preferences.
         self.profile.removeAccount()
     }
-    
-    func setCustomAccountPrefs(_ data: Data, url: URL) {        
+
+    func setCustomAccountPrefs(_ data: Data, url: URL) {
         guard let settings = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String:Any],
                 let customSyncToken = settings["sync_tokenserver_base_url"] as? String,
                 let customSyncProfile = settings["profile_server_base_url"] as? String,
@@ -87,7 +86,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
     func displayErrorAlert() {
         self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomSyncService)
         DispatchQueue.main.async {
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
         let alertController = UIAlertController(title: Strings.SettingsAdvanceAccountUrlErrorAlertTitle, message: Strings.SettingsAdvanceAccountUrlErrorAlertMessage, preferredStyle: .alert)
         let defaultAction = UIAlertAction(title: Strings.SettingsAdvanceAccountUrlErrorAlertOk, style: .default, handler: nil)
@@ -98,7 +97,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
     func displayNoServiceSetAlert() {
         self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomSyncService)
         DispatchQueue.main.async {
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
         let alertController = UIAlertController(title: Strings.SettingsAdvanceAccountUrlErrorAlertTitle, message: Strings.SettingsAdvanceAccountEmptyUrlErrorAlertMessage, preferredStyle: .alert)
         let defaultAction = UIAlertAction(title: Strings.SettingsAdvanceAccountUrlUpdatedAlertOk, style: .default, handler: nil)
@@ -178,6 +177,6 @@ class CustomSyncWebPageSetting: WebPageSetting {
                    placeholder: placeholder,
                    accessibilityIdentifier: accessibilityIdentifier,
                    settingDidChange: settingDidChange)
-        textField.clearButtonMode = UITextFieldViewMode.always
+        textField.clearButtonMode = .always
     }
 }

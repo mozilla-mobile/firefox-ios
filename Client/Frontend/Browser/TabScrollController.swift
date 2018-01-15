@@ -65,19 +65,19 @@ class TabScrollingController: NSObject {
     }
 
     fileprivate lazy var panGesture: UIPanGestureRecognizer = {
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(TabScrollingController.handlePan))
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         panGesture.maximumNumberOfTouches = 1
         panGesture.delegate = self
         return panGesture
     }()
 
     fileprivate var scrollView: UIScrollView? { return tab?.webView?.scrollView }
-    fileprivate var contentOffset: CGPoint { return scrollView?.contentOffset ?? CGPoint.zero }
-    fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? CGSize.zero }
+    fileprivate var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
+    fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     fileprivate var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     fileprivate var topScrollHeight: CGFloat { return header?.frame.height ?? 0 }
     fileprivate var bottomScrollHeight: CGFloat { return footer?.frame.height ?? 0 }
-    fileprivate var snackBarsFrame: CGRect { return snackBars?.frame ?? CGRect.zero }
+    fileprivate var snackBarsFrame: CGRect { return snackBars?.frame ?? .zero }
 
     fileprivate var lastContentOffset: CGFloat = 0
     fileprivate var scrollDirection: ScrollDirection = .down
@@ -317,7 +317,7 @@ extension TabScrollingController: UIScrollViewDelegate {
         if isZoomedOut {
             scrollView.zoomScale = scrollView.minimumZoomScale
         } else if roundNum(scrollView.zoomScale) > roundNum(self.lastZoomedScale) && self.lastZoomedScale != 0 {
-            //When we have manually zoomed in we want to preserve that scale. 
+            //When we have manually zoomed in we want to preserve that scale.
             //But sometimes when we rotate a larger zoomScale is appled. In that case apply the lastZoomedScale
             scrollView.zoomScale = self.lastZoomedScale
         }

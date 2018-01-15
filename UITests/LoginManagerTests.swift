@@ -194,8 +194,8 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "k0@email.com, http://k0.com")
         closeLoginManager()
     }
-    
-    
+
+
     func testDetailPasswordMenuOptions() {
         openLoginManager()
         
@@ -491,26 +491,26 @@ class LoginManagerTests: KIFTestCase {
     /*
      func testLoginListShowsNoResults() {
      openLoginManager()
-     
+
      tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
      let list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
      let oldLoginCount = countOfRowsInTableView(list)
-     
+
      // Find something that doesn't exist
      tester().tapView(withAccessibilityLabel: "Enter Search Mode")
      tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "")
      tester().enterText(intoCurrentFirstResponder: "asdfasdf")
-     
+
      // KIFTest has a bug where waitForViewWithAccessibilityLabel causes the lists to appear again on device,
      // so checking the number of rows instead
      XCTAssertEqual(oldLoginCount, 220)
      tester().waitForView(withAccessibilityLabel:"No logins found")
-     
+
      tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "")
-     
+
      // Erase search and make sure we see results instead
      tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-     
+
      closeLoginManager()
      }
      */
@@ -529,44 +529,44 @@ class LoginManagerTests: KIFTestCase {
     /*
      func testEditingDetailUsingReturnForNavigation() {
      openLoginManager()
-     
+
      tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
      tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-     
+
      tester().waitForView(withAccessibilityLabel: "password")
-     
+
      let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
-     
+
      tester().tapView(withAccessibilityLabel: "Edit")
-     
+
      // Check that we've selected the username field
      var firstResponder = UIApplication.shared.keyWindow?.firstResponder()
      let usernameCell = list.cellForRow(at: IndexPath(row: 1, section: 0)) as! LoginTableViewCell
      let usernameField = usernameCell.descriptionLabel
-     
+
      XCTAssertEqual(usernameField, firstResponder)
      tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedusername")
      tester().tapView(withAccessibilityLabel: "Next")
-     
+
      firstResponder = UIApplication.shared.keyWindow?.firstResponder()
      let passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
      let passwordField = passwordCell.descriptionLabel
-     
+
      // Check that we've navigated to the password field upon return and that the password is no longer displaying as dots
      XCTAssertEqual(passwordField, firstResponder)
      XCTAssertFalse(passwordField.isSecureTextEntry)
-     
+
      tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedpassword")
      tester().tapView(withAccessibilityLabel: "Done")
-     
+
      // Go back and find the changed login
      tester().tapView(withAccessibilityLabel: "Back")
      tester().tapView(withAccessibilityLabel: "Enter Search Mode")
      tester().enterText(intoCurrentFirstResponder: "changedusername")
-     
+
      let loginsList = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
      XCTAssertEqual(loginsList.numberOfRows(inSection: 0), 1)
-     
+
      closeLoginManager()
      }
      */

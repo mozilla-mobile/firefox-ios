@@ -75,7 +75,7 @@ class LoginDetailViewController: SensitiveViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(LoginDetailViewController.SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(SELedit))
 
         tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
@@ -100,7 +100,7 @@ class LoginDetailViewController: SensitiveViewController {
         tableView.tableFooterView = UIView()
 
         // Add a line on top of the table view so when the user pulls down it looks 'correct'.
-        let topLine = UIView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: tableView.frame.width, height: 0.5)))
+        let topLine = UIView(frame: CGRect(width: tableView.frame.width, height: 0.5))
         topLine.backgroundColor = SettingsUX.TableViewSeparatorColor
         tableView.tableHeaderView = topLine
 
@@ -110,9 +110,7 @@ class LoginDetailViewController: SensitiveViewController {
     }
 
     deinit {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        notificationCenter.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func viewDidLayoutSubviews() {

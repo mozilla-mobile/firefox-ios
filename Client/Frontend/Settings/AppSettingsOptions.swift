@@ -57,8 +57,7 @@ class ConnectSetting: WithoutAccountSetting {
 }
 
 class SyncNowSetting: WithAccountSetting {
-    static let NotificationUserInitiatedSyncManually = "NotificationUserInitiatedSyncManually"
-    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+    let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
     let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
     let syncIcon = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
@@ -68,7 +67,7 @@ class SyncNowSetting: WithAccountSetting {
     
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(SyncNowSetting.stopRotateSyncIcon), name: NotificationProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidFinishSyncing, object: nil)
     }
     
     fileprivate lazy var timestampFormatter: DateFormatter = {
@@ -283,8 +282,8 @@ class SyncNowSetting: WithAccountSetting {
         if !DeviceInfo.hasConnectivity() {
             return
         }
-        
-        NotificationCenter.default.post(name: Notification.Name(rawValue: SyncNowSetting.NotificationUserInitiatedSyncManually), object: nil)
+
+        NotificationCenter.default.post(name: .UserInitiatedSyncManually, object: nil)
         profile.syncManager.syncEverything(why: .syncNow)
     }
 }
@@ -293,7 +292,7 @@ class SyncNowSetting: WithAccountSetting {
 class AccountStatusSetting: WithAccountSetting {
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
-        NotificationCenter.default.addObserver(self, selector: #selector(AccountStatusSetting.updateAccount(notification:)), name: NotificationFirefoxAccountProfileChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .FirefoxAccountProfileChanged, object: nil)
     }
     
     func updateAccount(notification: Notification) {
@@ -415,7 +414,7 @@ class AccountStatusSetting: WithAccountSetting {
         
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
-            cell.imageView?.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            cell.imageView?.frame = CGRect(width: 30, height: 30)
             cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.height)! / 2
             cell.imageView?.layer.masksToBounds = true
             cell.imageView?.image = image
@@ -501,7 +500,7 @@ class DeleteExportedDataSetting: HiddenSetting {
         do {
             let files = try fileManager.contentsOfDirectory(atPath: documentsPath)
             for file in files {
-                if file.startsWith("browser.") || file.startsWith("logins.") {
+                if file.hasPrefix("browser.") || file.hasPrefix("logins.") {
                     try fileManager.removeItemInDirectory(documentsPath, named: file)
                 }
             }
@@ -523,7 +522,7 @@ class ExportBrowserDataSetting: HiddenSetting {
             let log = Logger.syncLogger
             try self.settings.profile.files.copyMatching(fromRelativeDirectory: "", toAbsoluteDirectory: documentsPath) { file in
                 log.debug("Matcher: \(file)")
-                return file.startsWith("browser.") || file.startsWith("logins.") || file.startsWith("metadata.")
+                return file.hasPrefix("browser.") || file.hasPrefix("logins.") || file.hasPrefix("metadata.")
             }
         } catch {
             print("Couldn't export browser data: \(error).")
@@ -964,7 +963,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         let control = UISwitch()
         control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(StageSyncServiceDebugSetting.switchValueChanged), for: .valueChanged)
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? false
         cell.accessoryView = control
         cell.selectionStyle = .none

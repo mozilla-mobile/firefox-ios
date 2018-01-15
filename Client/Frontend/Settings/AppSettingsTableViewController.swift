@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import Shared
 import Account
@@ -17,7 +16,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         navigationItem.title = NSLocalizedString("Settings", comment: "Title in the settings view controller title bar")
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
-            style: UIBarButtonItemStyle.done,
+            style: .done,
             target: navigationController, action: #selector((navigationController as! SettingsNavigationController).SELdone))
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 

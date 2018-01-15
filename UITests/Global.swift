@@ -197,8 +197,8 @@ extension KIFUITestActor {
             if result as! String == "undefined" {
                 let bundle = Bundle(for: BrowserTests.self)
                 let path = bundle.path(forResource: "KIFHelper", ofType: "js")!
-                let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue)
-                webView.evaluateJavaScript(source as String, completionHandler: nil)
+                let source = try! String(contentsOfFile: path, encoding: .utf8)
+                webView.evaluateJavaScript(source, completionHandler: nil)
             }
             stepResult = KIFTestStepResult.success
         }
@@ -300,12 +300,11 @@ class BrowserUtils {
 
     /// Injects a URL and title into the browser's history database.
     class func addHistoryEntry(_ title: String, url: URL) {
-        let notificationCenter = NotificationCenter.default
-        var info = [AnyHashable: Any]()
-        info["url"] = url
-        info["title"] = title
-        info["visitType"] = VisitType.link.rawValue
-        notificationCenter.post(name: Notification.Name(rawValue: "OnLocationChange"), object: self, userInfo: info)
+        let info: [AnyHashable: Any] = [
+            "url": url,
+            "title": title,
+            "visitType": VisitType.link.rawValue]
+        NotificationCenter.default.post(name: .OnLocationChange, object: self, userInfo: info)
     }
 
     fileprivate class func clearHistoryItemAtIndex(_ index: IndexPath, tester: KIFUITestActor) {
@@ -402,7 +401,7 @@ class BrowserUtils {
         // searches are async (and debounced), so we have to wait for the results to appear.
         tester.waitForViewWithAccessibilityValue(prefix + completion)
 
-        let autocompleteFieldlabel = textField.subviews.filter { $0.accessibilityIdentifier == "autocomplete" }.first as? UILabel
+        let autocompleteFieldlabel = textField.subviews.first { $0.accessibilityIdentifier == "autocomplete" } as? UILabel
 
         if completion == "" {
             XCTAssertTrue(autocompleteFieldlabel == nil, "The autocomplete was empty but the label still exists.")
@@ -411,14 +410,13 @@ class BrowserUtils {
 
         XCTAssertTrue(autocompleteFieldlabel != nil, "The autocomplete was not found")
         XCTAssertEqual(completion, autocompleteFieldlabel!.text, "Expected prefix matches actual prefix")
-
     }
 }
 
 class SimplePageServer {
     class func getPageData(_ name: String, ext: String = "html") -> String {
         let pageDataPath = Bundle(for: self).path(forResource: name, ofType: ext)!
-        return (try! NSString(contentsOfFile: pageDataPath, encoding: String.Encoding.utf8.rawValue)) as String
+        return try! String(contentsOfFile: pageDataPath, encoding: .utf8)
     }
 
     class func start() -> String {

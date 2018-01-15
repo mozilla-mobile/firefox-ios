@@ -3,14 +3,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Deferred
-import Foundation
 import MobileCoreServices
 import Shared
 import UIKit
 
 extension UIPasteboard {
     func addImageWithData(_ data: Data, forURL url: URL) {
-        let isGIF = UIImage.dataIsGIF(data)
+        let isGIF = data.isGIF
 
         // Setting pasteboard.items allows us to set multiple representations for the same item.
         items = [[
@@ -24,11 +23,9 @@ extension UIPasteboard {
     }
 
     private var syncURL: URL? {
-        if let string = UIPasteboard.general.string,
-            let url = URL(string: string), url.isWebPage() {
+        return UIPasteboard.general.string.flatMap {
+            guard let url = URL(string: $0), url.isWebPage() else { return nil }
             return url
-        } else {
-            return nil
         }
     }
 

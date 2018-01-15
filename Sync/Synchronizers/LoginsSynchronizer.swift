@@ -174,7 +174,7 @@ open class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             log.debug("Applying incoming password records from response timestamped \(ts), last modified \(lm).")
             log.debug("Records header hint: \(response.metadata.records ??? "nil")")
             return self.applyIncomingToStorage(logins, records: response.value, fetched: lm) >>> effect {
-                NotificationCenter.default.post(name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
+                NotificationCenter.default.post(name: .DataRemoteLoginChangesWereApplied, object: nil)
             }
         }
 

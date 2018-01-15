@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import Shared
 
@@ -77,7 +76,7 @@ class ReaderModeStyleViewController: UIViewController {
             FontTypeButton(fontType: ReaderModeFontType.serif)
         ]
 
-        setupButtons(fontTypeButtons, inRow: fontTypeRow, action: #selector(ReaderModeStyleViewController.SELchangeFontType))
+        setupButtons(fontTypeButtons, inRow: fontTypeRow, action: #selector(SELchangeFontType))
 
         // Font size row
 
@@ -105,7 +104,7 @@ class ReaderModeStyleViewController: UIViewController {
             FontSizeButton(fontSizeAction: FontSizeAction.bigger)
         ]
 
-        setupButtons(fontSizeButtons, inRow: fontSizeRow, action: #selector(ReaderModeStyleViewController.SELchangeFontSize))
+        setupButtons(fontSizeButtons, inRow: fontSizeRow, action: #selector(SELchangeFontSize))
 
         // Theme row
 
@@ -124,7 +123,7 @@ class ReaderModeStyleViewController: UIViewController {
             ThemeButton(theme: ReaderModeTheme.sepia)
         ]
 
-        setupButtons(themeButtons, inRow: themeRow, action: #selector(ReaderModeStyleViewController.SELchangeTheme))
+        setupButtons(themeButtons, inRow: themeRow, action: #selector(SELchangeTheme))
 
         // Brightness row
 
@@ -142,7 +141,7 @@ class ReaderModeStyleViewController: UIViewController {
         brightnessRow.addSubview(slider)
         slider.accessibilityLabel = NSLocalizedString("Brightness", comment: "Accessibility label for brightness adjustment slider in Reader Mode display settings")
         slider.tintColor = ReaderModeStyleViewControllerUX.BrightnessSliderTintColor
-        slider.addTarget(self, action: #selector(ReaderModeStyleViewController.SELchangeBrightness), for: .valueChanged)
+        slider.addTarget(self, action: #selector(SELchangeBrightness), for: .valueChanged)
 
         slider.snp.makeConstraints { make in
             make.center.equalTo(brightnessRow)
@@ -253,7 +252,7 @@ class FontTypeButton: UIButton {
     var fontType: ReaderModeFontType = .sansSerif
 
     convenience init(fontType: ReaderModeFontType) {
-        self.init(frame: CGRect.zero)
+        self.init(frame: .zero)
         self.fontType = fontType
         setTitleColor(ReaderModeStyleViewControllerUX.FontTypeTitleSelectedColor, for: .selected)
         setTitleColor(ReaderModeStyleViewControllerUX.FontTypeTitleNormalColor, for: [])
@@ -284,11 +283,11 @@ class FontSizeButton: UIButton {
     var fontSizeAction: FontSizeAction = .bigger
 
     convenience init(fontSizeAction: FontSizeAction) {
-        self.init(frame: CGRect.zero)
+        self.init(frame: .zero)
         self.fontSizeAction = fontSizeAction
 
         setTitleColor(ReaderModeStyleViewControllerUX.FontSizeButtonTextColorEnabled, for: .normal)
-        setTitleColor(ReaderModeStyleViewControllerUX.FontSizeButtonTextColorDisabled, for: UIControlState.disabled)
+        setTitleColor(ReaderModeStyleViewControllerUX.FontSizeButtonTextColorDisabled, for: .disabled)
 
         switch fontSizeAction {
         case .smaller:

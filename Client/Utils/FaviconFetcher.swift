@@ -126,7 +126,6 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return deferred
     }
 
-///Users/fpatel/Documents/firefox-ios/Client/Utils/FaviconFetcher.swift:117:77: Cannot convert value of type 'String' to expected argument type 'String.Index' (aka 'String.CharacterView.Index')
     // Loads and parses an html document and tries to find any known favicon-type tags for the page
     fileprivate func parseHTMLForFavicons(_ url: URL) -> Deferred<Maybe<[Favicon]>> {
         return fetchDataForURL(url).bind({ result -> Deferred<Maybe<[Favicon]>> in

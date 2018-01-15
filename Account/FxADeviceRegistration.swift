@@ -81,7 +81,7 @@ open class FxADeviceRegistrator {
         // within the last week, do nothing. We re-register weekly as a sanity check.
         if let registration = account.deviceRegistration, registration.version == DeviceRegistrationVersion &&
             Date.now() < registration.lastRegistered + OneWeekInMilliseconds {
-                return deferMaybe(FxADeviceRegistrationResult.alreadyRegistered)
+                return deferMaybe(.alreadyRegistered)
         }
 
         let pushParams: FxADevicePushParams?
@@ -97,10 +97,10 @@ open class FxADeviceRegistrator {
         let registrationResult: FxADeviceRegistrationResult
         if let registration = account.deviceRegistration {
             device = FxADevice.forUpdate(account.deviceName, id: registration.id, push: pushParams)
-            registrationResult = FxADeviceRegistrationResult.updated
+            registrationResult = .updated
         } else {
             device = FxADevice.forRegister(account.deviceName, type: "mobile", push: pushParams)
-            registrationResult = FxADeviceRegistrationResult.registered
+            registrationResult = .registered
         }
 
         let registeredDevice = client.registerOrUpdate(device: device, withSessionToken: sessionToken)

@@ -28,7 +28,7 @@ class ContextMenuHelper: NSObject {
         self.tab = tab
 
         guard let path = Bundle.main.path(forResource: "ContextMenu", ofType: "js"),
-                let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String,
+                let source = try? String(contentsOfFile: path, encoding: .utf8),
                 let webView = tab.webView else {
             return
         }
@@ -89,13 +89,13 @@ extension ContextMenuHelper: TabContentScript {
 
         var linkURL: URL?
         if let urlString = data["link"] as? String,
-                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowed) {
             linkURL = URL(string: escapedURLString)
         }
 
         var imageURL: URL?
         if let urlString = data["image"] as? String,
-                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowed) {
             imageURL = URL(string: escapedURLString)
         }
 
