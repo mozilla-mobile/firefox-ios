@@ -9,7 +9,7 @@ import UIKit
 
 extension UIPasteboard {
     func addImageWithData(_ data: Data, forURL url: URL) {
-        let isGIF = data.isGif
+        let isGIF = data.isGIF
 
         // Setting pasteboard.items allows us to set multiple representations for the same item.
         items = [[
