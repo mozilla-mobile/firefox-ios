@@ -274,6 +274,11 @@ extension IntroViewController {
         NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Profiler.end(bookend: .intro_did_appear)
+    }
+
     @objc func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
         setupDynamicFonts()

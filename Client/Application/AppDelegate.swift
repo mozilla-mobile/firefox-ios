@@ -199,6 +199,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
+        Profiler.setup() // NimbleDroid lib setup, runs in non-release only
+
         adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
         UNUserNotificationCenter.current().delegate = self
@@ -294,6 +296,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
+
+        // Workaround: delay for a few ms so that ND profiler doesn't hang up
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
+            Profiler.coldStartupEnd()
+            Profiler.begin(bookend: .bvc_did_appear)
+            Profiler.begin(bookend: .intro_did_appear)
+        }
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
