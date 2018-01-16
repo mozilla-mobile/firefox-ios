@@ -53,7 +53,7 @@ extension SyncUploadStats: DictionaryRepresentable {
     func asDictionary() -> [String: Any] {
         return [
             "sent": sent,
-            "sentFailed": sentFailed
+            "failed": sentFailed
         ]
     }
 }
