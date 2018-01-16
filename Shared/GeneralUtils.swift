@@ -4,6 +4,43 @@
 
 import Foundation
 
+// Wraps NimbleDroid to ensure it is disabled in release
+// Use underscores between words, as these constants are stringified for reporting.
+public struct Profiler {
+    public enum Bookend {
+        case bvc_did_appear
+        case url_autocomplete
+        case intro_did_appear
+        case history_panel_fetch
+        case load_url
+        case find_in_page
+    }
+
+    public static func setup() {
+        if AppConstants.BuildChannel != .release {
+            NDScenario.setup()
+        }
+    }
+
+    public static func coldStartupEnd() {
+        if AppConstants.BuildChannel != .release {
+            NDScenario.coldStartupEnd()
+        }
+    }
+
+    public static func begin(bookend: Bookend) {
+        if AppConstants.BuildChannel != .release {
+            NDScenario.begin(bookendID: "\(bookend)")
+        }
+    }
+
+    public static func end(bookend: Bookend) {
+        if AppConstants.BuildChannel != .release {
+            NDScenario.end(bookendID: "\(bookend)")
+        }
+    }
+}
+
 /**
  Assertion for checking that the call is being made on the main thread.
 

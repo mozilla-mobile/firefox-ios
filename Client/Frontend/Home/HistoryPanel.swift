@@ -159,6 +159,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
                 self.tableView.reloadData()
                 self.updateEmptyPanelState()
+                Profiler.end(bookend: .history_panel_fetch)
             }
         }
     }

@@ -367,6 +367,7 @@
 		C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
 		C8611CB01F71AEBA00C3DE7D /* NoImageModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */; };
 		C88601C61F4228AD00BBDE4F /* ContentBlockerSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88601B71F4228AD00BBDE4F /* ContentBlockerSettingViewController.swift */; };
+		C8D0858A200E5FE3009C60FC /* NimbleDroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D0857B200E5FE3009C60FC /* NimbleDroid.swift */; };
 		C8EB60C41F1FB12500F9B5B3 /* navigationDelegate.html in Resources */ = {isa = PBXBuildFile; fileRef = C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */; };
 		C8EB60DC1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */; };
 		C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */; };
@@ -699,6 +700,7 @@
 		EB9A179C20E69A7F00B12184 /* DarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179920E69A7E00B12184 /* DarkTheme.swift */; };
 		EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179A20E69A7E00B12184 /* Theme.swift */; };
 		EB9A179F20E6C1A200B12184 /* ThemedWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179E20E6C1A200B12184 /* ThemedWidgets.swift */; };
+		EB9969732010F1DD00C802F5 /* NimbleDroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D0857B200E5FE3009C60FC /* NimbleDroid.swift */; };
 		EBA31D791F7999030055463D /* SyncPingCentre.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D781F7999030055463D /* SyncPingCentre.swift */; };
 		EBA31D7B1F79990C0055463D /* SyncTelemetryEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7A1F79990C0055463D /* SyncTelemetryEvents.swift */; };
 		EBA31D7D1F79996E0055463D /* SyncTelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */; };
@@ -1511,6 +1513,7 @@
 		C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewSwizzled.swift; sourceTree = "<group>"; };
 		C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeTests.swift; sourceTree = "<group>"; };
 		C88601B71F4228AD00BBDE4F /* ContentBlockerSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlockerSettingViewController.swift; sourceTree = "<group>"; };
+		C8D0857B200E5FE3009C60FC /* NimbleDroid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NimbleDroid.swift; path = ThirdParty/NimbleDroid.swift; sourceTree = "<group>"; };
 		C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigationDelegate.html; sourceTree = "<group>"; };
 		C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationDelegateTests.swift; sourceTree = "<group>"; };
 		C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+WebViewDelegates.swift"; sourceTree = "<group>"; };
@@ -2282,6 +2285,7 @@
 		28CE83EF1A1D246900576538 /* Third-Party Source */ = {
 			isa = PBXGroup;
 			children = (
+				C8D0857B200E5FE3009C60FC /* NimbleDroid.swift */,
 				E66C5B451BDA81050051AA93 /* Apple */,
 				E659A6091EB7C1D300D7A6AD /* BuddyBuild */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
@@ -4741,6 +4745,8 @@
 				7B9BF91C1E43472E00CB24F4 /* JSONExtensions.swift in Sources */,
 				E65075BD1E37F7AB006961AC /* SystemUtils.swift in Sources */,
 				E65075AB1E37F7AB006961AC /* SetExtensions.swift in Sources */,
+				E65075A81E37F7AB006961AC /* NSStringExtensions.swift in Sources */,
+				EB9969732010F1DD00C802F5 /* NimbleDroid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5184,6 +5190,7 @@
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
 				E650755F1E37F756006961AC /* Try.m in Sources */,
 				3B6889C51D66950E002AC85E /* UIImageColors.swift in Sources */,
+				EB7A652020699C6100B52A5F /* WebPagesForTesting.swift in Sources */,
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
 				EB11A1042044A90E0018F749 /* ContentBlockerHelper+Whitelist.swift in Sources */,
