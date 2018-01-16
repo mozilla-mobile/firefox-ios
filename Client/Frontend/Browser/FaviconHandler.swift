@@ -41,16 +41,7 @@ class FaviconHandler {
             }
         }
 
-        let onCompleted: SDInternalCompletionBlock = { (img, data, _, _, _, url) -> Void in
-            guard let img = img, let urlString = url?.absoluteString else {
-                deferred.fill(Maybe(failure: FaviconError()))
-                return
-            }
-
-            let favicon = Favicon(url: urlString, date: Date())
-            favicon.width = Int(img.size.width)
-            favicon.height = Int(img.size.height)
-
+        let onSuccess: (Favicon, Data?) -> Void = { (favicon, data) -> Void in
             tab.favicons.append(favicon)
 
             if !tab.isPrivate, let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
@@ -62,7 +53,41 @@ class FaviconHandler {
             }
         }
 
-        fetch = manager.loadImage(with: iconURL, options: options, progress: onProgress, completed: onCompleted)
+        let onCompletedSiteFavicon: SDInternalCompletionBlock = { (img, data, _, _, _, url) -> Void in
+            guard let img = img, let urlString = url?.absoluteString else {
+                deferred.fill(Maybe(failure: FaviconError()))
+                return
+            }
+
+            let favicon = Favicon(url: urlString, date: Date())
+            favicon.width = Int(img.size.width)
+            favicon.height = Int(img.size.height)
+
+            onSuccess(favicon, data)
+        }
+
+        let onCompletedPageFavicon: SDInternalCompletionBlock = { (img, data, _, _, _, url) -> Void in
+            guard let img = img, let urlString = url?.absoluteString else {
+                // If we failed to download a page-level icon, try getting the domain-level icon
+                // instead before ultimately failing.
+                let siteIconURL = currentURL.domainURL.appendingPathComponent("favicon.ico")
+                if siteIconURL == url {
+                    deferred.fill(Maybe(failure: FaviconError()))
+                } else {
+                    fetch = manager.loadImage(with: siteIconURL, options: options, progress: onProgress, completed: onCompletedSiteFavicon)
+                }
+
+                return
+            }
+
+            let favicon = Favicon(url: urlString, date: Date())
+            favicon.width = Int(img.size.width)
+            favicon.height = Int(img.size.height)
+
+            onSuccess(favicon, data)
+        }
+
+        fetch = manager.loadImage(with: iconURL, options: options, progress: onProgress, completed: onCompletedPageFavicon)
         return deferred
     }
 }
