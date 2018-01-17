@@ -148,12 +148,13 @@ open class SQLiteHistory {
 
 private let topSitesQuery = "SELECT \(TableCachedTopSites).*, \(TablePageMetadata).provider_name FROM \(TableCachedTopSites) LEFT OUTER JOIN \(TablePageMetadata) ON \(TableCachedTopSites).url = \(TablePageMetadata).site_url ORDER BY frecencies DESC LIMIT (?)"
 
-/* The init for this will perform the heaviest part of the frecency query
- and create a temporary table that can be queried quickly. Currently this accounts for
- >75% of the query time.
- The scope/lifetime of this object is important as the data is 'frozen' until a new instance is created.
+/**
+ * The init for this will perform the heaviest part of the frecency query
+ * and create a temporary table that can be queried quickly. Currently this accounts for
+ * >75% of the query time.
+ * The scope/lifetime of this object is important as the data is 'frozen' until a new instance is created.
  */
-fileprivate struct FrecentHistoryImpl : FrecentHistory {
+fileprivate struct SQLiteFrecentHistory : FrecentHistory {
     private let db: BrowserDB
     private let prefs: Prefs
 
@@ -161,26 +162,22 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
         self.db = db
         self.prefs = prefs
 
+        let empty = "DELETE FROM \(TempTableAwesomebarBookmarks)"
         let create =
-            "CREATE TEMP TABLE \(AwesomebarBookmarksTempTable) (" +
+            "CREATE TEMP TABLE IF NOT EXISTS \(TempTableAwesomebarBookmarks) (" +
                 "guid TEXT, url TEXT, title TEXT, description TEXT, " +
         "faviconID INT, visitDate DATE)"
         let insert =
-            "INSERT INTO \(AwesomebarBookmarksTempTable) " +
+            "INSERT INTO \(TempTableAwesomebarBookmarks) " +
                 "SELECT b.guid AS guid, b.url AS url, b.title AS title, " +
                 "b.description AS description, b.faviconID AS faviconID, " +
                 "h.visitDate AS visitDate " +
                 "FROM \(ViewAwesomebarBookmarks) b " +
         "LEFT JOIN \(ViewHistoryVisits) h ON b.url = h.url"
 
-        db.withConnection { connection in
-            let existsQuery = "SELECT COUNT(*) FROM sqlite_temp_master WHERE type = 'table' and name = '\(AwesomebarBookmarksTempTable)'"
-            let tableExists = 1 == connection.executeQuery(existsQuery, factory: IntFactory).asArray().first
-            if tableExists {
-                try connection.executeChange("DELETE FROM \(AwesomebarBookmarksTempTable)")
-            } else {
-                try connection.executeChange(create)
-            }
+        let _ = db.transaction { connection in
+            try connection.executeChange(create)
+            try connection.executeChange(empty)
             try connection.executeChange(insert)
         }
     }
@@ -188,7 +185,7 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
     func getSites(whereURLContains filter: String?, historyLimit limit: Int, bookmarksLimit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         let factory = SQLiteHistory.basicHistoryColumnFactory
 
-        let params = FrecencyParams.urlCompletion(bookmarksLimit: bookmarksLimit, whereURLContains: filter ?? "", groupClause: "GROUP BY historyID ")
+        let params = FrecencyQueryParams.urlCompletion(bookmarksLimit: bookmarksLimit, whereURLContains: filter ?? "", groupClause: "GROUP BY historyID ")
         let (query, args) = getFrecencyQuery(historyLimit: limit, params: params)
 
         return db.runQuery(query, args: args, factory: factory)
@@ -198,7 +195,7 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
         let limit = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? TopSiteCacheSize)
 
         let (whereData, groupBy) = topSiteClauses()
-        let params = FrecencyParams.topSites(groupClause: groupBy, whereData: whereData)
+        let params = FrecencyQueryParams.topSites(groupClause: groupBy, whereData: whereData)
         let (frecencyQuery, args) = getFrecencyQuery(historyLimit: limit, params: params)
 
         // We must project, because we get bookmarks in these results.
@@ -226,12 +223,12 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
     }
 
 
-    enum FrecencyParams {
+    enum FrecencyQueryParams {
         case urlCompletion(bookmarksLimit: Int, whereURLContains: String, groupClause: String)
         case topSites(groupClause: String, whereData: String)
     }
 
-    private func getFrecencyQuery(historyLimit: Int, params: FrecencyParams) -> (String, Args?) {
+    private func getFrecencyQuery(historyLimit: Int, params: FrecencyQueryParams) -> (String, Args?) {
         let bookmarksLimit: Int
         let groupClause: String
         let whereData: String?
@@ -244,10 +241,10 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
             groupClause = group
             whereData = nil
         case let .topSites(group, whereArg):
-            groupClause = group
-            whereData = whereArg
             bookmarksLimit = 0
             urlFilter = nil
+            whereData = whereArg
+            groupClause = group
         }
 
         let includeBookmarks = bookmarksLimit > 0
@@ -341,7 +338,7 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
             "visitDate AS frecencies,",  // Fake this for ordering purposes.
             "0 as maxFrecency,", // Need this column for UNION
             "1 AS is_bookmarked",
-            "FROM \(AwesomebarBookmarksTempTable)",
+            "FROM \(TempTableAwesomebarBookmarks)",
             whereClause,                  // The columns match, so we can reuse this.
             "GROUP BY url",
             "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
@@ -526,7 +523,7 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getFrecentHistory() -> FrecentHistory {
-        return FrecentHistoryImpl(db: db, prefs: prefs)
+        return SQLiteFrecentHistory(db: db, prefs: prefs)
     }
 
     public func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
