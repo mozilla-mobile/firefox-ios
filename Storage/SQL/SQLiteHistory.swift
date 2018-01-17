@@ -185,16 +185,11 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
         }
     }
 
-    func getSites(historyLimit limit: Int, bookmarksLimit: Int, whereURLContains filter: String? = nil) -> Deferred<Maybe<Cursor<Site>>> {
+    func getSites(whereURLContains filter: String?, historyLimit limit: Int, bookmarksLimit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         let factory = SQLiteHistory.basicHistoryColumnFactory
 
-        let (query, args) = getFrecencyQuery(
-            historyLimit: limit,
-            bookmarksLimit: bookmarksLimit,
-            whereURLContains: filter,
-            groupClause: "GROUP BY historyID ",
-            whereData: nil
-        )
+        let params = FrecencyParams.urlCompletion(bookmarksLimit: bookmarksLimit, whereURLContains: filter ?? "", groupClause: "GROUP BY historyID ")
+        let (query, args) = getFrecencyQuery(historyLimit: limit, params: params)
 
         return db.runQuery(query, args: args, factory: factory)
     }
@@ -203,7 +198,8 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
         let limit = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? TopSiteCacheSize)
 
         let (whereData, groupBy) = topSiteClauses()
-        let (frecencyQuery, args) = getFrecencyQuery(historyLimit: limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
+        let params = FrecencyParams.topSites(groupClause: groupBy, whereData: whereData)
+        let (frecencyQuery, args) = getFrecencyQuery(historyLimit: limit, params: params)
 
         // We must project, because we get bookmarks in these results.
         let insertQuery = [
@@ -229,7 +225,31 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
         return (whereData, groupBy)
     }
 
-    private func getFrecencyQuery(historyLimit: Int, bookmarksLimit: Int, whereURLContains filter: String? = nil, groupClause: String = "GROUP BY historyID ", whereData: String? = nil) -> (String, Args?) {
+
+    enum FrecencyParams {
+        case urlCompletion(bookmarksLimit: Int, whereURLContains: String, groupClause: String)
+        case topSites(groupClause: String, whereData: String)
+    }
+
+    private func getFrecencyQuery(historyLimit: Int, params: FrecencyParams) -> (String, Args?) {
+        let bookmarksLimit: Int
+        let groupClause: String
+        let whereData: String?
+        let urlFilter: String?
+
+        switch params {
+        case let .urlCompletion(bmLimit, filter, group):
+            bookmarksLimit = bmLimit
+            urlFilter = filter
+            groupClause = group
+            whereData = nil
+        case let .topSites(group, whereArg):
+            groupClause = group
+            whereData = whereArg
+            bookmarksLimit = 0
+            urlFilter = nil
+        }
+
         let includeBookmarks = bookmarksLimit > 0
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
@@ -240,10 +260,10 @@ fileprivate struct FrecentHistoryImpl : FrecentHistory {
         let whereClause: String
         let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
 
-        if let filter = filter?.trimmingCharacters(in: .whitespaces), !filter.isEmpty {
+        if let urlFilter = urlFilter?.trimmingCharacters(in: .whitespaces), !urlFilter.isEmpty {
             let perWordFragment = "((url LIKE ?) OR (title LIKE ?))"
             let perWordArgs: (String) -> Args = { ["%\($0)%", "%\($0)%"] }
-            let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(filter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
+            let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(urlFilter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
 
             // No deleted item has a URL, so there is no need to explicitly add that here.
             whereClause = "WHERE (\(filterFragment))\(whereFragment)"

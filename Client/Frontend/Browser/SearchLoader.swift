@@ -57,7 +57,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
             }
 
-            let deferred = frecentHistory.getSites(historyLimit: 100, bookmarksLimit: 5, whereURLContains: query)
+            let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
             currentDbQuery = deferred as? Cancellable
 
             deferred.uponQueue(.main) { result in
