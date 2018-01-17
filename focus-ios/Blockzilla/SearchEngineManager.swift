@@ -31,7 +31,7 @@ class SearchEngineManager {
     
     func addEngine(name: String, template: String) -> SearchEngine {
         let correctedTemplate = template.replacingOccurrences(of: "%s", with: "{searchTerms}")
-        let engine = SearchEngine(name: name, image: nil, searchTemplate: correctedTemplate, suggestionsTemplate: nil)
+        let engine = SearchEngine(name: name, image: nil, searchTemplate: correctedTemplate, suggestionsTemplate: nil, isCustom: true)
         
         // Persist
         var customEngines = readCustomEngines()
@@ -110,7 +110,7 @@ class SearchEngineManager {
         let pluginsPath = Bundle.main.url(forResource: "SearchPlugins", withExtension: nil)!
         let enginesPath = Bundle.main.path(forResource: "SearchEngines", ofType: "plist")!
         let engineMap = NSDictionary(contentsOfFile: enginesPath) as! [String: [String]]
-        var engines = searchPaths.flatMap { engineMap[$0] }.first!
+        let engines = searchPaths.flatMap { engineMap[$0] }.first!
         
         // Find and parse the engines for this locale.
         self.engines = engines.flatMap { name in
@@ -147,7 +147,11 @@ class SearchEngineManager {
     private func readCustomEngines() -> [SearchEngine] {
         if let archiveData = prefs.value(forKey: SearchEngineManager.prefKeyCustomEngines) as? NSData {
             let archivedCustomEngines = NSKeyedUnarchiver.unarchiveObject(with: archiveData as Data)
-            return archivedCustomEngines as? [SearchEngine] ?? [SearchEngine]()
+            let customEngines = archivedCustomEngines as? [SearchEngine] ?? [SearchEngine]()
+            return customEngines.map { engine in
+                engine.isCustom = true
+                return engine
+            }
         }
         return [SearchEngine]()
     }

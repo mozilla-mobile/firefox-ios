@@ -32,6 +32,9 @@ class SearchEngineManagerTests: XCTestCase {
         // Verify that the engine is set as the active engine
         XCTAssertEqual(manager.activeEngine.name, CUSTOM_ENGINE_NAME)
         
+        // Verify that the engine is set to be a custom engine
+        XCTAssertTrue(manager.activeEngine.isCustom)
+        
         // Verify that it persisted the custom engine and updated the default engine
         XCTAssertEqual(mockUserDefaults.setCalls, 3)
     }
