@@ -863,7 +863,7 @@ class TestSQLiteHistory: XCTestCase {
             >>> { history.storeRemoteVisits([siteVisitBR1], forGUID: siteB.guid!) }
 
             >>> {
-                history.getFrecentHistory().getSites(historyLimit: 3, bookmarksLimit: 0, whereURLContains: nil)
+                history.getFrecentHistory().getSites(whereURLContains: nil, historyLimit: 3, bookmarksLimit: 0)
                 >>== { (sites: Cursor) -> Success in
                     XCTAssertEqual(3, sites.count)
 
@@ -990,23 +990,39 @@ class TestSQLiteHistory: XCTestCase {
         let site3 = Site(url: "http://www.example2.com/test1", title: "title three")
         let expectation = self.expectation(description: "First.")
 
+        let clearTopSites = "DELETE FROM \(TableCachedTopSites)"
+        let updateTopSites: [(String, Args?)] = [(clearTopSites, nil), (history.getFrecentHistory().updateTopSitesCacheQuery())]
+
+        func countTopSites() -> Deferred<Maybe<Cursor<Int>>> {
+            return db.runQuery("SELECT COUNT(*) from \(TableCachedTopSites)", args: nil, factory: { sdrow -> Int in
+                return sdrow[0] as? Int ?? 0
+            })
+        }
+
         history.clearHistory().bind({ success in
             return all([history.addLocalVisit(SiteVisit(site: site11, date: Date.nowMicroseconds(), type: VisitType.link)),
                         history.addLocalVisit(SiteVisit(site: site12, date: Date.nowMicroseconds(), type: VisitType.link)),
                         history.addLocalVisit(SiteVisit(site: site3, date: Date.nowMicroseconds(), type: VisitType.link))])
         }).bind({ (results: [Maybe<()>]) in
             return history.insertOrUpdatePlace(site13, modified: Date.nowMicroseconds())
-        }).bind({ guid in
+        }).bind({ guid -> Success in
             XCTAssertEqual(guid.successValue!, initialGuid, "Guid is correct")
-            return history.getFrecentHistory().getSites(historyLimit: 10, bookmarksLimit: 0, whereURLContains: nil)
-        }).bind({ (sites: Maybe<Cursor<Site>>) -> Success in
-            XCTAssert(sites.successValue!.count == 2, "2 sites returned")
-            return history.removeSiteFromTopSites(site11)
+            return db.run(updateTopSites)
         }).bind({ success in
+            XCTAssertTrue(success.isSuccess, "update was successful")
+            return countTopSites()
+        }).bind({ (count: Maybe<Cursor<Int>>) -> Success in
+            XCTAssert(count.successValue![0] == 2, "2 sites returned")
+            return history.removeSiteFromTopSites(site11)
+        }).bind({ success -> Success in
             XCTAssertTrue(success.isSuccess, "Remove was successful")
-            return history.getFrecentHistory().getSites(historyLimit: 10, bookmarksLimit: 0, whereURLContains: nil)
-        }).upon({ (sites: Maybe<Cursor<Site>>) in
-            XCTAssert(sites.successValue!.count == 1, "1 site returned")
+            return db.run(updateTopSites)
+        }).bind({ success -> Deferred<Maybe<Cursor<Int>>> in
+            XCTAssertTrue(success.isSuccess, "update was successful")
+            return countTopSites()
+        })
+        .upon({ (count: Maybe<Cursor<Int>>) in
+            XCTAssert(count.successValue![0] == 1, "1 site returned")
             expectation.fulfill()
         })
 
@@ -1055,7 +1071,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func checkSitesByFrecency(_ f: @escaping (Cursor<Site>) -> Success) -> () -> Success {
             return {
-                history.getFrecentHistory().getSites(historyLimit: 10, bookmarksLimit: 0, whereURLContains: nil)
+                history.getFrecentHistory().getSites(whereURLContains: nil, historyLimit: 10, bookmarksLimit: 0)
                     >>== f
             }
         }
@@ -1069,7 +1085,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func checkSitesWithFilter(_ filter: String, f: @escaping (Cursor<Site>) -> Success) -> () -> Success {
             return {
-                history.getFrecentHistory().getSites(historyLimit: 10, bookmarksLimit: 0, whereURLContains: filter)
+                history.getFrecentHistory().getSites(whereURLContains: filter, historyLimit: 10, bookmarksLimit: 0)
                 >>== f
             }
         }
