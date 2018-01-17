@@ -755,7 +755,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
     map.addScreenState(PageOptionsMenu) {screenState in
         screenState.tap(app.tables["Context Menu"].cells["menu-FindInPage"], to: FindInPage)
         screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
-        screenState.tap(app.tables["Context Menu"].cells["action_remove"], forAction: Action.CloseTabFromPageOptions, Action.CloseTab, transitionTo: HomePanelsScreen)
+        screenState.tap(app.tables["Context Menu"].cells["action_remove"], forAction: Action.CloseTabFromPageOptions, Action.CloseTab, transitionTo: HomePanelsScreen, if: "tablet != true")
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
     }
