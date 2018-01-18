@@ -25,7 +25,7 @@ open class SQLiteFavicons {
         args.append(favicon.width)
         args.append(favicon.height)
         args.append(favicon.date)
-        return (sql: "INSERT INTO \(TableFavicons) (url, width, height, date) VALUES (?,?,?,?)", args: args)
+        return (sql: "INSERT INTO \(TableFavicons) (url, width, height, type, date) VALUES (?,?,?,0,?)", args: args)
     }
     
     public func getUpdateFaviconQuery(favicon: Favicon) -> (sql: String, args: Args?) {
