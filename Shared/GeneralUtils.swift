@@ -4,6 +4,33 @@
 
 import Foundation
 
+// Wraps NimbleDroid to ensure it is disabled in release
+public struct Profiler {
+    public static func setup() {
+        if AppConstants.BuildChannel != .release {
+            NDScenario.setup()
+        }
+    }
+
+    public static func coldStartupEnd() {
+        if AppConstants.BuildChannel != .release {
+            NDScenario.coldStartupEnd()
+        }
+    }
+
+    public static func begin(bookendID: String) {
+        if AppConstants.BuildChannel != .release {
+            NDScenario.begin(bookendID: bookendID)
+        }
+    }
+
+    public static func end(bookendID: String) {
+        if AppConstants.BuildChannel != .release {
+            NDScenario.end(bookendID: bookendID)
+        }
+    }
+}
+
 /**
  Assertion for checking that the call is being made on the main thread.
 
