@@ -374,6 +374,7 @@ class BrowserViewController: UIViewController {
         footer = UIView()
         view.addSubview(footer)
         alertStackView.axis = .vertical
+        alertStackView.alignment = .center
 
         if AppConstants.MOZ_CLIPBOARD_BAR {
             clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
@@ -661,8 +662,7 @@ class BrowserViewController: UIViewController {
 
         alertStackView.snp.remakeConstraints { make in
             make.centerX.equalTo(self.view)
-            make.width.lessThanOrEqualTo(self.view.snp.width)
-            make.width.lessThanOrEqualTo(SnackBarUX.MaxWidth)
+            make.width.equalTo(self.view.snp.width)
             if let keyboardHeight = keyboardState?.intersectionHeightForView(self.view), keyboardHeight > 0 {
                 make.bottom.equalTo(self.view).offset(-keyboardHeight)
             } else if let toolbar = self.toolbar {
@@ -1046,7 +1046,7 @@ class BrowserViewController: UIViewController {
 
                 findInPageBar.snp.makeConstraints { make in
                     make.height.equalTo(UIConstants.ToolbarHeight)
-                    make.leading.trailing.equalTo(self.view)
+                    make.leading.trailing.equalTo(alertStackView)
                 }
 
                 updateViewConstraints()
