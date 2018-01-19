@@ -13,7 +13,8 @@ import Shared
  * mock out parts of the history API
  */
 class MockableHistory: BrowserHistory, SyncableHistory, ResettableSyncStorage {
-    func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError()}
+    func getFrecentHistory() -> FrecentHistory { fatalError() }
+    func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func addLocalVisit(_ visit: SiteVisit) -> Success { fatalError() }
     func clearHistory() -> Success { fatalError() }
     func removeHistoryForURL(_ url: String) -> Success { fatalError() }
@@ -23,8 +24,6 @@ class MockableHistory: BrowserHistory, SyncableHistory, ResettableSyncStorage {
     func removeFromPinnedTopSites(_ site: Site) -> Success { fatalError() }
     func addPinnedTopSite(_ site: Site) -> Success { fatalError() }
     func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
-    func getSitesByFrecencyWithHistoryLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
-    func getSitesByFrecencyWithHistoryLimit(_ limit: Int, bookmarksLimit: Int = 0, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func setTopSitesNeedsInvalidation() { fatalError() }
     func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> { fatalError() }

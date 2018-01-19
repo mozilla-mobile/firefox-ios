@@ -50,7 +50,7 @@ class BrowserViewController: UIViewController {
     fileprivate var searchController: SearchViewController?
     fileprivate var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
-    fileprivate var searchLoader: SearchLoader!
+    fileprivate var searchLoader: SearchLoader?
     fileprivate let snackBars = UIView()
     fileprivate var findInPageBar: FindInPageBar?
     fileprivate let findInPageContainer = UIView()
@@ -773,7 +773,8 @@ class BrowserViewController: UIViewController {
         searchController!.searchDelegate = self
         searchController!.profile = self.profile
 
-        searchLoader.addListener(searchController!)
+        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+        searchLoader?.addListener(searchController!)
 
         addChildViewController(searchController!)
         view.addSubview(searchController!.view)
@@ -795,6 +796,7 @@ class BrowserViewController: UIViewController {
             searchController.removeFromParentViewController()
             self.searchController = nil
             homePanelController?.view?.isHidden = false
+            searchLoader = nil
         }
     }
 
@@ -1442,7 +1444,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
-        searchLoader.query = text
+        searchLoader?.query = text
 
         if text.isEmpty {
             hideSearchController()
@@ -1500,6 +1502,10 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
+        guard let profile = profile as? BrowserProfile else {
+            return
+        }
+        
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         } else {
