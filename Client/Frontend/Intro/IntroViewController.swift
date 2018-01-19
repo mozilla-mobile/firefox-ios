@@ -207,7 +207,7 @@ extension IntroViewController {
 extension IntroViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: NotificationDynamicFontChanged, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -215,12 +215,7 @@ extension IntroViewController {
         NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
 
-    func SELDynamicFontChanged(_ notification: Notification) {
-        guard notification.name == NotificationDynamicFontChanged else { return }
-        setupDynamicFonts()
-    }
-
-    func DynamicFontChanged(_ notification: Notification) {
+    func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == NotificationDynamicFontChanged else { return }
         setupDynamicFonts()
     }
@@ -257,8 +252,6 @@ extension IntroViewController: UIScrollViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
-
         let maximumHorizontalOffset = scrollView.frame.width
         let currentHorizontalOffset = scrollView.contentOffset.x
 
@@ -338,8 +331,7 @@ class CardView: UIView {
             button.setTitle(buttonText, for: .normal)
             addSubview(button)
             button.snp.makeConstraints { make in
-                make.bottom.equalTo(self)
-                make.centerX.equalTo(self)
+                make.bottom.centerX.equalTo(self)
             }
         }
     }
