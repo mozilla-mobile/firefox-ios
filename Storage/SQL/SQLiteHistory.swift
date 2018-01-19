@@ -74,6 +74,49 @@ func getLocalFrecencySQL() -> String {
     return "\(visitCountExpression) * max(2, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
+fileprivate func computeWordsWithFilter(_ filter: String) -> [String] {
+    // Split filter on whitespace.
+    let words = filter.components(separatedBy: .whitespaces)
+
+    // Remove substrings and duplicates.
+    // TODO: this can probably be improved.
+    return words.enumerated().filter({ (index: Int, word: String) in
+        if word.isEmpty {
+            return false
+        }
+
+        for i in words.indices where i != index {
+            if words[i].range(of: word) != nil && (words[i].count != word.count || i < index) {
+                return false
+            }
+        }
+
+        return true
+    }).map({ $0.1 })
+}
+
+/**
+ * Take input like "foo bar" and a template fragment and produce output like
+ *
+ *   ((x.y LIKE ?) OR (x.z LIKE ?)) AND ((x.y LIKE ?) OR (x.z LIKE ?))
+ *
+ * with args ["foo", "foo", "bar", "bar"].
+ */
+internal func computeWhereFragmentWithFilter(_ filter: String, perWordFragment: String, perWordArgs: (String) -> Args) -> (fragment: String, args: Args) {
+    precondition(!filter.isEmpty)
+
+    let words = computeWordsWithFilter(filter)
+    return computeWhereFragmentForWords(words, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
+}
+
+internal func computeWhereFragmentForWords(_ words: [String], perWordFragment: String, perWordArgs: (String) -> Args) -> (fragment: String, args: Args) {
+    assert(!words.isEmpty)
+
+    let fragment = Array(repeating: perWordFragment, count: words.count).joined(separator: " AND ")
+    let args = words.flatMap(perWordArgs)
+    return (fragment, args)
+}
+
 extension SDRow {
     func getTimestamp(_ column: String) -> Timestamp? {
         return (self[column] as? NSNumber)?.uint64Value
@@ -104,6 +147,211 @@ open class SQLiteHistory {
 }
 
 private let topSitesQuery = "SELECT \(TableCachedTopSites).*, \(TablePageMetadata).provider_name FROM \(TableCachedTopSites) LEFT OUTER JOIN \(TablePageMetadata) ON \(TableCachedTopSites).url = \(TablePageMetadata).site_url ORDER BY frecencies DESC LIMIT (?)"
+
+/**
+ * The init for this will perform the heaviest part of the frecency query
+ * and create a temporary table that can be queried quickly. Currently this accounts for
+ * >75% of the query time.
+ * The scope/lifetime of this object is important as the data is 'frozen' until a new instance is created.
+ */
+fileprivate struct SQLiteFrecentHistory : FrecentHistory {
+    private let db: BrowserDB
+    private let prefs: Prefs
+
+    init(db: BrowserDB, prefs: Prefs) {
+        self.db = db
+        self.prefs = prefs
+
+        let empty = "DELETE FROM \(TempTableAwesomebarBookmarks)"
+        let create =
+            "CREATE TEMP TABLE IF NOT EXISTS \(TempTableAwesomebarBookmarks) (" +
+                "guid TEXT, url TEXT, title TEXT, description TEXT, " +
+        "faviconID INT, visitDate DATE)"
+        let insert =
+            "INSERT INTO \(TempTableAwesomebarBookmarks) " +
+                "SELECT b.guid AS guid, b.url AS url, b.title AS title, " +
+                "b.description AS description, b.faviconID AS faviconID, " +
+                "h.visitDate AS visitDate " +
+                "FROM \(ViewAwesomebarBookmarks) b " +
+        "LEFT JOIN \(ViewHistoryVisits) h ON b.url = h.url"
+
+        let _ = db.transaction { connection in
+            try connection.executeChange(create)
+            try connection.executeChange(empty)
+            try connection.executeChange(insert)
+        }
+    }
+
+    func getSites(whereURLContains filter: String?, historyLimit limit: Int, bookmarksLimit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+        let factory = SQLiteHistory.basicHistoryColumnFactory
+
+        let params = FrecencyQueryParams.urlCompletion(bookmarksLimit: bookmarksLimit, whereURLContains: filter ?? "", groupClause: "GROUP BY historyID ")
+        let (query, args) = getFrecencyQuery(historyLimit: limit, params: params)
+
+        return db.runQuery(query, args: args, factory: factory)
+    }
+
+    func updateTopSitesCacheQuery() -> (String, Args?) {
+        let limit = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? TopSiteCacheSize)
+
+        let (whereData, groupBy) = topSiteClauses()
+        let params = FrecencyQueryParams.topSites(groupClause: groupBy, whereData: whereData)
+        let (frecencyQuery, args) = getFrecencyQuery(historyLimit: limit, params: params)
+
+        // We must project, because we get bookmarks in these results.
+        let insertQuery = [
+            "WITH siteFrecency AS (\(frecencyQuery))",
+            "INSERT INTO \(TableCachedTopSites)",
+            "SELECT historyID, url, title, guid, domain_id, domain,",
+            "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,",
+            "iconID, iconURL, iconDate, iconWidth, frecencies",
+            "FROM (SELECT * FROM",
+            "siteFrecency LEFT JOIN view_history_id_favicon ON",
+            "siteFrecency.historyID = view_history_id_favicon.id)"
+            ].joined(separator: " ")
+
+        // @TODO: remove the LEFT JOIN to fill in the icon columns, it is just there because the code has been doing this historically.
+        // Those favicon data columns are not used, and view_history_id_favicon appears to only contain null data.
+
+        return (insertQuery, args)
+    }
+
+    private func topSiteClauses() -> (String, String) {
+        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') AND (\(TableDomains).domain NOT LIKE 'google.%') "
+        let groupBy = "GROUP BY domain_id "
+        return (whereData, groupBy)
+    }
+
+
+    enum FrecencyQueryParams {
+        case urlCompletion(bookmarksLimit: Int, whereURLContains: String, groupClause: String)
+        case topSites(groupClause: String, whereData: String)
+    }
+
+    private func getFrecencyQuery(historyLimit: Int, params: FrecencyQueryParams) -> (String, Args?) {
+        let bookmarksLimit: Int
+        let groupClause: String
+        let whereData: String?
+        let urlFilter: String?
+
+        switch params {
+        case let .urlCompletion(bmLimit, filter, group):
+            bookmarksLimit = bmLimit
+            urlFilter = filter
+            groupClause = group
+            whereData = nil
+        case let .topSites(group, whereArg):
+            bookmarksLimit = 0
+            urlFilter = nil
+            whereData = whereArg
+            groupClause = group
+        }
+
+        let includeBookmarks = bookmarksLimit > 0
+        let localFrecencySQL = getLocalFrecencySQL()
+        let remoteFrecencySQL = getRemoteFrecencySQL()
+        let sixMonthsInMicroseconds: UInt64 = 15_724_800_000_000      // 182 * 1000 * 1000 * 60 * 60 * 24
+        let sixMonthsAgo = Date.nowMicroseconds() - sixMonthsInMicroseconds
+
+        let args: Args
+        let whereClause: String
+        let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
+
+        if let urlFilter = urlFilter?.trimmingCharacters(in: .whitespaces), !urlFilter.isEmpty {
+            let perWordFragment = "((url LIKE ?) OR (title LIKE ?))"
+            let perWordArgs: (String) -> Args = { ["%\($0)%", "%\($0)%"] }
+            let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(urlFilter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
+
+            // No deleted item has a URL, so there is no need to explicitly add that here.
+            whereClause = "WHERE (\(filterFragment))\(whereFragment)"
+
+            if includeBookmarks {
+                // We'll need them twice: once to filter history, and once to filter bookmarks.
+                args = filterArgs + filterArgs
+            } else {
+                args = filterArgs
+            }
+        } else {
+            whereClause = " WHERE (\(TableHistory).is_deleted = 0)\(whereFragment)"
+            args = []
+        }
+
+        // Innermost: grab history items and basic visit/domain metadata.
+        var ungroupedSQL =
+            "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS title, \(TableHistory).guid AS guid, domain_id, domain" +
+                ", COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate" +
+                ", COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate" +
+                ", COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount" +
+                ", COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount" +
+                " FROM \(TableHistory) " +
+                "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
+        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id "
+
+        if includeBookmarks {
+            ungroupedSQL.append("LEFT JOIN \(ViewAllBookmarks) on \(ViewAllBookmarks).url = \(TableHistory).url ")
+        }
+        ungroupedSQL.append(whereClause.replacingOccurrences(of: "url", with: "\(TableHistory).url").replacingOccurrences(of: "title", with: "\(TableHistory).title"))
+        if includeBookmarks {
+            ungroupedSQL.append(" AND \(ViewAllBookmarks).url IS NULL")
+        }
+        ungroupedSQL.append(" GROUP BY historyID")
+
+        // Next: limit to only those that have been visited at all within the last six months.
+        // (Don't do that in the innermost: we want to get the full count, even if some visits are older.)
+        // Discard all but the 1000 most frecent.
+        // Compute and return the frecency for all 1000 URLs.
+        let frecenciedSQL =
+            "SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency" +
+                " FROM (" + ungroupedSQL + ")" +
+                " WHERE (" +
+                "((localVisitCount > 0) OR (remoteVisitCount > 0)) AND " +                         // Eliminate dead rows from coalescing.
+                "((localVisitDate > \(sixMonthsAgo)) OR (remoteVisitDate > \(sixMonthsAgo)))" +    // Exclude really old items.
+                ") ORDER BY frecency DESC" +
+        " LIMIT 1000"                                 // Don't even look at a huge set. This avoids work.
+
+        // Next: merge by domain and select the URL with the max frecency of a domain, ordering by that sum frecency and reducing to a (typically much lower) limit.
+        // NOTE: When using GROUP BY we need to be explicit about which URL to use when grouping. By using "max(frecency)" the result row
+        //       for that domain will contain the projected URL corresponding to the history item with the max frecency, https://sqlite.org/lang_select.html#resultset
+        //       This is the behavior we want in order to ensure that the most popular URL for a domain is used for the top sites tile.
+        // TODO: make is_bookmarked here accurate by joining against ViewAllBookmarks.
+        // TODO: ensure that the same URL doesn't appear twice in the list, either from duplicate
+        //       bookmarks or from being in both bookmarks and history.
+        let historySQL = [
+            "SELECT historyID, url, title, guid, domain_id, domain,",
+            "max(localVisitDate) AS localVisitDate,",
+            "max(remoteVisitDate) AS remoteVisitDate,",
+            "sum(localVisitCount) AS localVisitCount,",
+            "sum(remoteVisitCount) AS remoteVisitCount,",
+            "max(frecency) AS maxFrecency,",
+            "sum(frecency) AS frecencies,",
+            "0 AS is_bookmarked",
+            "FROM (", frecenciedSQL, ") ",
+            groupClause,
+            "ORDER BY frecencies DESC",
+            "LIMIT \(historyLimit)",
+            ].joined(separator: " ")
+
+        let bookmarksSQL = [
+            "SELECT NULL AS historyID, url, title, guid, NULL AS domain_id, NULL AS domain,",
+            "visitDate AS localVisitDate, 0 AS remoteVisitDate, 0 AS localVisitCount,",
+            "0 AS remoteVisitCount,",
+            "visitDate AS frecencies,",  // Fake this for ordering purposes.
+            "0 as maxFrecency,", // Need this column for UNION
+            "1 AS is_bookmarked",
+            "FROM \(TempTableAwesomebarBookmarks)",
+            whereClause,                  // The columns match, so we can reuse this.
+            "GROUP BY url",
+            "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
+            ].joined(separator: " ")
+
+        if !includeBookmarks {
+            return (historySQL, args)
+        }
+
+        let allSQL = "SELECT * FROM (SELECT * FROM (\(historySQL)) UNION SELECT * FROM (\(bookmarksSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
+        return (allSQL, args)
+    }
+}
 
 extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(_ site: Site) -> Success {
@@ -274,18 +522,8 @@ extension SQLiteHistory: BrowserHistory {
          >>> { self.addLocalVisitForExistingSite(visit) }
     }
 
-    public func getSitesByFrecencyWithHistoryLimit(_ limit: Int, bookmarksLimit: Int = 0, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> {
-        return self.getFilteredSitesByFrecencyWithHistoryLimit(limit, bookmarksLimit: bookmarksLimit, whereURLContains: filter, includeIcon: true)
-    }
-
-    public func getSitesByFrecencyWithHistoryLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return self.getSitesByFrecencyWithHistoryLimit(limit, includeIcon: true)
-    }
-
-    public func getSitesByFrecencyWithHistoryLimit(_ limit: Int, includeIcon: Bool) -> Deferred<Maybe<Cursor<Site>>> {
-        // Exclude redirect domains. Bug 1194852.
-        let (whereData, groupBy) = self.topSiteClauses()
-        return self.getFilteredSitesByFrecencyWithHistoryLimit(limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData, includeIcon: includeIcon)
+    public func getFrecentHistory() -> FrecentHistory {
+        return SQLiteFrecentHistory(db: db, prefs: prefs)
     }
 
     public func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
@@ -304,25 +542,8 @@ extension SQLiteHistory: BrowserHistory {
         }
     }
 
-    fileprivate func updateTopSitesCacheQuery() -> (String, Args?) {
-        let limit = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? TopSiteCacheSize)
-
-        let (whereData, groupBy) = self.topSiteClauses()
-        let (query, args) = self.filteredSitesByFrecencyQueryWithHistoryLimit(limit, bookmarksLimit: 0, groupClause: groupBy, whereData: whereData)
-
-        // We must project, because we get bookmarks in these results.
-        let insertQuery = [
-            "INSERT INTO \(TableCachedTopSites)",
-            "SELECT historyID, url, title, guid, domain_id, domain,",
-            "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,",
-            "iconID, iconURL, iconDate, iconWidth, frecencies",
-            "FROM (", query, ")"
-            ].joined(separator: " ")
-        return (insertQuery, args)
-    }
-
     public func refreshTopSitesQuery() -> [(String, Args?)] {
-        return [clearTopSitesQuery, updateTopSitesCacheQuery()]
+        return [clearTopSitesQuery, getFrecentHistory().updateTopSitesCacheQuery()]
     }
 
     public func clearTopSitesCache() -> Success {
@@ -334,55 +555,6 @@ extension SQLiteHistory: BrowserHistory {
 
     public func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         return self.getFilteredSitesByVisitDateWithLimit(limit, whereURLContains: nil, includeIcon: true)
-    }
-
-    fileprivate func topSiteClauses() -> (String, String) {
-        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') AND (\(TableDomains).domain NOT LIKE 'google.%') "
-        let groupBy = "GROUP BY domain_id "
-        return (whereData, groupBy)
-    }
-
-    fileprivate func computeWordsWithFilter(_ filter: String) -> [String] {
-        // Split filter on whitespace.
-        let words = filter.components(separatedBy: .whitespaces)
-
-        // Remove substrings and duplicates.
-        // TODO: this can probably be improved.
-        return words.enumerated().filter({ (index: Int, word: String) in
-            if word.isEmpty {
-                return false
-            }
-
-            for i in words.indices where i != index {
-                if words[i].range(of: word) != nil && (words[i].count != word.count || i < index) {
-                    return false
-                }
-            }
-
-            return true
-        }).map({ $0.1 })
-    }
-
-    /**
-     * Take input like "foo bar" and a template fragment and produce output like
-     *
-     *   ((x.y LIKE ?) OR (x.z LIKE ?)) AND ((x.y LIKE ?) OR (x.z LIKE ?))
-     *
-     * with args ["foo", "foo", "bar", "bar"].
-     */
-    internal func computeWhereFragmentWithFilter(_ filter: String, perWordFragment: String, perWordArgs: (String) -> Args) -> (fragment: String, args: Args) {
-        precondition(!filter.isEmpty)
-
-        let words = computeWordsWithFilter(filter)
-        return self.computeWhereFragmentForWords(words, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
-    }
-
-    internal func computeWhereFragmentForWords(_ words: [String], perWordFragment: String, perWordArgs: (String) -> Args) -> (fragment: String, args: Args) {
-        assert(!words.isEmpty)
-
-        let fragment = Array(repeating: perWordFragment, count: words.count).joined(separator: " AND ")
-        let args = words.flatMap(perWordArgs)
-        return (fragment, args)
     }
 
     fileprivate func getFilteredSitesByVisitDateWithLimit(_ limit: Int,
@@ -426,179 +598,6 @@ extension SQLiteHistory: BrowserHistory {
         return db.runQuery(sql, args: args, factory: factory)
     }
 
-    fileprivate func getFilteredSitesByFrecencyWithHistoryLimit(_ limit: Int,
-                                                                bookmarksLimit: Int,
-                                                                whereURLContains filter: String? = nil,
-                                                                groupClause: String = "GROUP BY historyID ",
-                                                                whereData: String? = nil,
-                                                                includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
-        let factory: (SDRow) -> Site
-        if includeIcon {
-            factory = SQLiteHistory.iconHistoryColumnFactory
-        } else {
-            factory = SQLiteHistory.basicHistoryColumnFactory
-        }
-
-        let (query, args) = filteredSitesByFrecencyQueryWithHistoryLimit(
-            limit,
-            bookmarksLimit: bookmarksLimit,
-            whereURLContains: filter,
-            groupClause: groupClause,
-            whereData: whereData,
-            includeIcon: includeIcon
-        )
-
-        return db.runQuery(query, args: args, factory: factory)
-    }
-
-    fileprivate func filteredSitesByFrecencyQueryWithHistoryLimit(_ historyLimit: Int,
-                                                                  bookmarksLimit: Int,
-                                                                  whereURLContains filter: String? = nil,
-                                                                  groupClause: String = "GROUP BY historyID ",
-                                                                  whereData: String? = nil,
-                                                                  includeIcon: Bool = true) -> (String, Args?) {
-        let includeBookmarks = bookmarksLimit > 0
-        let localFrecencySQL = getLocalFrecencySQL()
-        let remoteFrecencySQL = getRemoteFrecencySQL()
-        let sixMonthsInMicroseconds: UInt64 = 15_724_800_000_000      // 182 * 1000 * 1000 * 60 * 60 * 24
-        let sixMonthsAgo = Date.nowMicroseconds() - sixMonthsInMicroseconds
-
-        let args: Args
-        let whereClause: String
-        let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
-
-        if let filter = filter?.trimmingCharacters(in: .whitespaces), !filter.isEmpty {
-            let perWordFragment = "((url LIKE ?) OR (title LIKE ?))"
-            let perWordArgs: (String) -> Args = { ["%\($0)%", "%\($0)%"] }
-            let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(filter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
-
-            // No deleted item has a URL, so there is no need to explicitly add that here.
-            whereClause = "WHERE (\(filterFragment))\(whereFragment)"
-
-            if includeBookmarks {
-                // We'll need them twice: once to filter history, and once to filter bookmarks.
-                args = filterArgs + filterArgs
-            } else {
-                args = filterArgs
-            }
-        } else {
-            whereClause = " WHERE (\(TableHistory).is_deleted = 0)\(whereFragment)"
-            args = []
-        }
-
-        // Innermost: grab history items and basic visit/domain metadata.
-        var ungroupedSQL =
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS title, \(TableHistory).guid AS guid, domain_id, domain" +
-        ", COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate" +
-        ", COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate" +
-        ", COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount" +
-        ", COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount" +
-        " FROM \(TableHistory) " +
-        "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
-        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id "
-
-        if includeBookmarks {
-            ungroupedSQL.append("LEFT JOIN \(ViewAllBookmarks) on \(ViewAllBookmarks).url = \(TableHistory).url ")
-        }
-        ungroupedSQL.append(whereClause.replacingOccurrences(of: "url", with: "\(TableHistory).url").replacingOccurrences(of: "title", with: "\(TableHistory).title"))
-        if includeBookmarks {
-            ungroupedSQL.append(" AND \(ViewAllBookmarks).url IS NULL")
-        }
-        ungroupedSQL.append(" GROUP BY historyID")
-
-        // Next: limit to only those that have been visited at all within the last six months.
-        // (Don't do that in the innermost: we want to get the full count, even if some visits are older.)
-        // Discard all but the 1000 most frecent.
-        // Compute and return the frecency for all 1000 URLs.
-        let frecenciedSQL =
-        "SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency" +
-        " FROM (" + ungroupedSQL + ")" +
-        " WHERE (" +
-        "((localVisitCount > 0) OR (remoteVisitCount > 0)) AND " +                         // Eliminate dead rows from coalescing.
-        "((localVisitDate > \(sixMonthsAgo)) OR (remoteVisitDate > \(sixMonthsAgo)))" +    // Exclude really old items.
-        ") ORDER BY frecency DESC" +
-        " LIMIT 1000"                                 // Don't even look at a huge set. This avoids work.
-
-        // Next: merge by domain and select the URL with the max frecency of a domain, ordering by that sum frecency and reducing to a (typically much lower) limit.
-        // NOTE: When using GROUP BY we need to be explicit about which URL to use when grouping. By using "max(frecency)" the result row
-        //       for that domain will contain the projected URL corresponding to the history item with the max frecency, https://sqlite.org/lang_select.html#resultset
-        //       This is the behavior we want in order to ensure that the most popular URL for a domain is used for the top sites tile.
-        // TODO: make is_bookmarked here accurate by joining against ViewAllBookmarks.
-        // TODO: ensure that the same URL doesn't appear twice in the list, either from duplicate
-        //       bookmarks or from being in both bookmarks and history.
-        let historySQL = [
-            "SELECT historyID, url, title, guid, domain_id, domain,",
-            "max(localVisitDate) AS localVisitDate,",
-            "max(remoteVisitDate) AS remoteVisitDate,",
-            "sum(localVisitCount) AS localVisitCount,",
-            "sum(remoteVisitCount) AS remoteVisitCount,",
-            "max(frecency),",
-            "sum(frecency) AS frecencies,",
-            "0 AS is_bookmarked",
-            "FROM (", frecenciedSQL, ") ",
-            groupClause,
-            "ORDER BY frecencies DESC",
-            "LIMIT \(historyLimit)",
-        ].joined(separator: " ")
-
-        if includeIcon {
-            // We select the history items then immediately join to get the largest icon.
-            // We do this so that we limit and filter *before* joining against icons.
-            let historyWithIconsSQL = [
-                "SELECT historyID, url, title, guid, domain_id, domain,",
-                "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,",
-                "iconID, iconURL, iconDate, iconWidth, frecencies, is_bookmarked",
-                "FROM (", historySQL, ") LEFT OUTER JOIN",
-                "view_history_id_favicon ON historyID = view_history_id_favicon.id",
-                "ORDER BY frecencies DESC",
-            ].joined(separator: " ")
-
-            if !includeBookmarks {
-                return (historyWithIconsSQL, args)
-            }
-
-            // Find bookmarks, too.
-            // This isn't required by the protocol we're implementing, but we're able to do
-            // it because we share storage with bookmarks.
-            // Note that this is part-duplicated below.
-            let bookmarksWithIconsSQL = [
-                "SELECT NULL AS historyID, url, title, guid, NULL AS domain_id, NULL AS domain,",
-                "visitDate AS localVisitDate, 0 AS remoteVisitDate, 0 AS localVisitCount,",
-                "0 AS remoteVisitCount,",
-                "iconID, iconURL, iconDate, iconWidth,",
-                "visitDate AS frecencies,",  // Fake this for ordering purposes.
-                "1 AS is_bookmarked",
-                "FROM", ViewAwesomebarBookmarksWithIcons,
-                whereClause,                  // The columns match, so we can reuse this.
-                "GROUP BY url",
-                "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
-            ].joined(separator: " ")
-
-            let sql =
-            "SELECT * FROM (SELECT * FROM (\(historyWithIconsSQL)) UNION SELECT * FROM (\(bookmarksWithIconsSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
-            return (sql, args)
-        }
-
-        if !includeBookmarks {
-            return (historySQL, args)
-        }
-
-        // Note that this is part-duplicated above.
-        let bookmarksSQL = [
-            "SELECT NULL AS historyID, url, title, guid, NULL AS domain_id, NULL AS domain,",
-            "visitDate AS localVisitDate, 0 AS remoteVisitDate, 0 AS localVisitCount,",
-            "0 AS remoteVisitCount,",
-            "visitDate AS frecencies,",  // Fake this for ordering purposes.
-            "1 AS is_bookmarked",
-            "FROM", ViewAwesomebarBookmarks,
-            whereClause,                  // The columns match, so we can reuse this.
-            "GROUP BY url",
-            "ORDER BY visitDate DESC LIMIT \(bookmarksLimit)",
-        ].joined(separator: " ")
-
-        let allSQL = "SELECT * FROM (SELECT * FROM (\(historySQL)) UNION SELECT * FROM (\(bookmarksSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
-        return (allSQL, args)
-    }
 }
 
 extension SQLiteHistory: Favicons {

@@ -46,7 +46,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
 
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                history.getSitesByFrecencyWithHistoryLimit(10, includeIcon: false).succeeded()
+                history.getFrecentHistory().getSites(whereURLContains: nil, historyLimit: 10, bookmarksLimit: 0).succeeded()
             }
             self.stopMeasuring()
         }

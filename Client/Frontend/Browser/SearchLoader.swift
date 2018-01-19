@@ -22,10 +22,13 @@ typealias SearchLoader = _SearchLoader<AnyObject, AnyObject>
 class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController> {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
+    fileprivate let frecentHistory: FrecentHistory
 
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile
         self.urlBar = urlBar
+        frecentHistory = profile.history.getFrecentHistory()
+
         super.init()
     }
 
@@ -46,7 +49,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             }
 
             if query.isEmpty {
-                self.load(Cursor(status: .success, msg: "Empty query"))
+                load(Cursor(status: .success, msg: "Empty query"))
                 return
             }
 
@@ -54,7 +57,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
             }
 
-            let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
+            let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
             currentDbQuery = deferred as? Cancellable
 
             deferred.uponQueue(.main) { result in
