@@ -784,6 +784,7 @@ class BrowserViewController: UIViewController {
             searchController.removeFromParentViewController()
             self.searchController = nil
             homePanelController?.view?.isHidden = false
+            searchLoader = nil
         }
     }
 
