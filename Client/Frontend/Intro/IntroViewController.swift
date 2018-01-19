@@ -16,11 +16,8 @@ struct IntroUX {
     static let SignInButtonColor = UIColor.Defaults.Blue40
     static let SignInButtonHeight = 60
     static let PageControlHeight = 40
-    static let HorizontalPadding = 20
     static let SignInButtonWidth = 290
-
     static let CardTextWidth = UIScreen.main.bounds.width <= 320 ? 240 : 280
-    static let CardTitleHeight = 50
     static let FadeDuration = 0.25
 }
 
@@ -66,6 +63,13 @@ class IntroViewController: UIViewController {
         return sc
     }()
 
+    var horizontalPadding: Int {
+        return self.view.frame.width <= 320 ? 20 : 50
+    }
+
+    var verticalPadding: CGFloat {
+        return self.view.frame.width <= 320 ? 10 : 38
+    }
 
     lazy fileprivate var imageViewContainer: UIStackView = {
         let sv = UIStackView()
@@ -94,6 +98,7 @@ class IntroViewController: UIViewController {
         }
         imageViewContainer.snp.makeConstraints { make in
             make.top.equalTo(self.view)
+            make.height.equalTo(self.view.snp.width)
         }
         startBrowsingButton.snp.makeConstraints { make in
             make.left.right.equalTo(self.view)
@@ -130,16 +135,14 @@ class IntroViewController: UIViewController {
             return nil
         }
         let imageView = UIImageView(image: image)
-        // If the image is bigger than the frame width of the view we'll need constraints. Otherwise the stackview will take care of the constraints
-        if image.size.width > view.frame.width {
-            imageView.snp.makeConstraints { make in
-                make.size.equalTo(self.view.frame.width)
-            }
+        imageViewContainer.addArrangedSubview(imageView)
+        imageView.snp.makeConstraints { make in
+            make.height.equalTo(imageViewContainer.snp.height)
+            make.width.equalTo(imageViewContainer.snp.height)
         }
 
-        imageViewContainer.addArrangedSubview(imageView)
 
-        let cardView = CardView()
+        let cardView = CardView(verticleSpacing: verticalPadding)
         cardView.configureWith(card: card)
         if let selector = card.buttonSelector {
             cardView.button.addTarget(self, action: selector, for: .touchUpInside)
@@ -150,9 +153,9 @@ class IntroViewController: UIViewController {
         }
         self.view.addSubview(cardView)
         cardView.snp.makeConstraints { make in
-            make.top.equalTo(self.imageViewContainer.snp.bottom).offset(IntroUX.HorizontalPadding)
+            make.top.equalTo(self.imageViewContainer.snp.bottom).offset(verticalPadding)
             make.bottom.equalTo(self.startBrowsingButton.snp.top)
-            make.left.right.equalTo(self.view).inset(IntroUX.HorizontalPadding)
+            make.left.right.equalTo(self.view).inset(horizontalPadding)
         }
         return cardView
     }
@@ -178,6 +181,7 @@ class IntroViewController: UIViewController {
         UIView.animate(withDuration: IntroUX.FadeDuration, animations: { _ in
             self.cardViews.forEach { $0.alpha = 0.0 }
             introView.alpha = 1.0
+            self.pageControl.currentPage = page
         }, completion: nil)
     }
 }
@@ -254,7 +258,6 @@ extension IntroViewController: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
-        pageControl.currentPage = page
 
         let maximumHorizontalOffset = scrollView.frame.width
         let currentHorizontalOffset = scrollView.contentOffset.x
@@ -271,7 +274,14 @@ extension IntroViewController: UIScrollViewDelegate {
 }
 
 // A cardView repersents the text for each page of the intro. It does not include the image.
-class CardView: UIStackView {
+class CardView: UIView {
+
+    lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        return stackView
+    }()
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -279,6 +289,7 @@ class CardView: UIStackView {
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         titleLabel.textAlignment = .center
+        titleLabel.setContentHuggingPriority(1000, for: .vertical)
         return titleLabel
     }()
 
@@ -289,6 +300,7 @@ class CardView: UIStackView {
         textLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         textLabel.textAlignment = .center
         textLabel.lineBreakMode = .byTruncatingTail
+        textLabel.setContentHuggingPriority(1000, for: .vertical)
         return textLabel
     }()
 
@@ -297,18 +309,25 @@ class CardView: UIStackView {
         button.backgroundColor = IntroUX.SignInButtonColor
         button.setTitle(Strings.SignInButtonTitle, for: [])
         button.setTitleColor(.white, for: [])
+        button.setContentHuggingPriority(1000, for: .vertical)
         button.clipsToBounds = true
         return button
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        axis = .vertical
-        distribution = .equalSpacing
-        alignment = .center
-        spacing = 10
-        addArrangedSubview(titleLabel)
-        addArrangedSubview(textLabel)
+    }
+
+    init(verticleSpacing: CGFloat) {
+        super.init(frame: .zero)
+        stackView.spacing = verticleSpacing
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(textLabel)
+        addSubview(stackView)
+        stackView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalTo(self)
+            make.bottom.lessThanOrEqualTo(self).offset(-IntroUX.PageControlHeight)
+        }
         alpha = 0
     }
 
@@ -316,15 +335,12 @@ class CardView: UIStackView {
         titleLabel.text = card.title
         textLabel.text = card.text
         if let buttonText = card.buttonText, card.buttonSelector != nil {
-            addArrangedSubview(button)
             button.setTitle(buttonText, for: .normal)
-        } else {
-            // We need a blank view to make sure the page controls dont get hidden by autolayout
-            let blankView = UIView()
-            blankView.snp.makeConstraints { make in
-                make.size.equalTo(IntroUX.PageControlHeight)
+            addSubview(button)
+            button.snp.makeConstraints { make in
+                make.bottom.equalTo(self)
+                make.centerX.equalTo(self)
             }
-            addArrangedSubview(blankView)
         }
     }
 
