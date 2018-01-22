@@ -204,7 +204,7 @@ fileprivate struct SQLiteFrecentHistory : FrecentHistory {
             "INSERT INTO \(TableCachedTopSites)",
             "SELECT historyID, url, title, guid, domain_id, domain,",
             "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,",
-            "iconID, iconURL, iconDate, iconWidth, frecencies",
+            "iconID, iconURL, iconDate, iconType, iconWidth, frecencies",
             "FROM (SELECT * FROM",
             "siteFrecency LEFT JOIN view_history_id_favicon ON",
             "siteFrecency.historyID = view_history_id_favicon.id)"
