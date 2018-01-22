@@ -1,3 +1,4 @@
+/* vim: set ts=2 sts=2 sw=2 et tw=80: */
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -5,14 +6,7 @@
 (function() {
 "use strict";
 
-if (!window.__firefox__) {
-  Object.defineProperty(window, '__firefox__', {
-    enumerable: false,
-    configurable: false,
-    writable: false,
-    value: {}
-  });
-}
+var metadataparser = require("page-metadata-parser/parser.js");
 
 function MetadataWrapper(metadataparser) {
   var dataURIRegex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
@@ -20,7 +14,7 @@ function MetadataWrapper(metadataparser) {
   function isDataURI(s) {
     return !!s.match(dataURIRegex);
   }
-                                                                                  
+
   function getDataUri(url, callback) {
     var image = new Image();
     image.onload = function() {
@@ -43,7 +37,7 @@ function MetadataWrapper(metadataparser) {
     window.__firefox__.pageMetadata = metadata;
     webkit.messageHandlers.metadataMessageHandler.postMessage(metadata);
   }
- 
+
   this.extractMetadata = function() {
     var metadata = metadataparser.getMetadata(window.document, document.URL);
     var imageURL = metadata["image"];
@@ -71,6 +65,7 @@ Object.defineProperty(window.__firefox__, 'metadata', {
   writable: false,
   value: Object.freeze(new MetadataWrapper(metadataparser))
 });
+
 metadataparser = undefined;
 
 })();

@@ -72,17 +72,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     override func makeWebView() -> WKWebView {
-        // Inject  our setup code after the page loads.
-        let source = getJS()
-        let userScript = WKUserScript(
-            source: source,
-            injectionTime: .atDocumentEnd,
-            forMainFrameOnly: true
-        )
-
         // Handle messages from the content server (via our user script).
         let contentController = WKUserContentController()
-        contentController.addUserScript(userScript)
         contentController.add(LeakAvoider(delegate: self), name: "accountsCommandHandler")
 
         let config = WKWebViewConfiguration()
@@ -228,11 +219,6 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         }).joined(separator: "&")
         
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
-    }
-
-    fileprivate func getJS() -> String {
-        let fileRoot = Bundle.main.path(forResource: "FxASignIn", ofType: "js")
-        return try! String(contentsOfFile: fileRoot!, encoding: .utf8)
     }
 
     override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

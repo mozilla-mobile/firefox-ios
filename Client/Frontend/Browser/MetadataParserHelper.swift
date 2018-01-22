@@ -21,9 +21,6 @@ class MetadataParserHelper: TabContentScript {
     required init(tab: Tab, profile: Profile) {
         self.tab = tab
         self.profile = profile
-
-        tab.injectUserScriptWith(fileName: "page-metadata-parser")
-        tab.injectUserScriptWith(fileName: "MetadataHelper")
     }
 
     func scriptMessageHandlerName() -> String? {

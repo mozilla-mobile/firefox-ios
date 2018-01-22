@@ -129,6 +129,7 @@ class Tab: NSObject {
     var parent: Tab?
 
     fileprivate var contentScriptManager = TabContentScriptManager()
+    private(set) var userScriptManager: UserScriptManager?
 
     fileprivate var configuration: WKWebViewConfiguration?
 
@@ -207,6 +208,7 @@ class Tab: NSObject {
 
             self.webView = webView
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
+            self.userScriptManager = UserScriptManager(tab: self)
             tabDelegate?.tab?(self, didCreateWebView: webView)
         }
     }

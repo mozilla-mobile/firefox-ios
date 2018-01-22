@@ -59,11 +59,6 @@ class FormPostHelper: TabContentScript {
 
     required init(tab: Tab) {
         self.tab = tab
-        if let path = Bundle.main.path(forResource: "FormPostHelper", ofType: "js"),
-            let source = try? String(contentsOfFile: path, encoding: .utf8) {
-            let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
-            tab.webView!.configuration.userContentController.addUserScript(userScript)
-        }
     }
     
     static func name() -> String {

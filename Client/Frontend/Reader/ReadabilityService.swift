@@ -16,7 +16,7 @@ enum ReadabilityOperationResult {
     case timeout
 }
 
-class ReadabilityOperation: Operation, WKNavigationDelegate, ReadabilityTabHelperDelegate {
+class ReadabilityOperation: Operation, WKNavigationDelegate {
     var url: URL
     var semaphore: DispatchSemaphore
     var result: ReadabilityOperationResult?
@@ -42,11 +42,6 @@ class ReadabilityOperation: Operation, WKNavigationDelegate, ReadabilityTabHelpe
             self.tab = Tab(configuration: configuration)
             self.tab.createWebview()
             self.tab.navigationDelegate = self
-
-            if let readabilityTabHelper = ReadabilityTabHelper(tab: self.tab) {
-                readabilityTabHelper.delegate = self
-                self.tab.addContentScript(readabilityTabHelper, name: ReadabilityTabHelper.name())
-            }
 
             // Load the page in the webview. This either fails with a navigation error, or we get a readability
             // callback. Or it takes too long, in which case the semaphore times out.
@@ -85,11 +80,6 @@ class ReadabilityOperation: Operation, WKNavigationDelegate, ReadabilityTabHelpe
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         result = ReadabilityOperationResult.error(error as NSError)
-        semaphore.signal()
-    }
-
-    func readabilityTabHelper(_ readabilityTabHelper: ReadabilityTabHelper, didFinishWithReadabilityResult readabilityResult: ReadabilityResult) {
-        result = ReadabilityOperationResult.success(readabilityResult)
         semaphore.signal()
     }
 }

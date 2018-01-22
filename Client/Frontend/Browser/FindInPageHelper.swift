@@ -21,11 +21,6 @@ class FindInPageHelper: TabContentScript {
 
     required init(tab: Tab) {
         self.tab = tab
-
-        if let path = Bundle.main.path(forResource: "FindInPage", ofType: "js"), let source = try? String(contentsOfFile: path, encoding: .utf8) {
-            let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
-            tab.webView!.configuration.userContentController.addUserScript(userScript)
-        }
     }
 
     func scriptMessageHandlerName() -> String? {

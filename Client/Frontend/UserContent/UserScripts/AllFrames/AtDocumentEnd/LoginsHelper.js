@@ -6,6 +6,12 @@
 (function() {
 "use strict";
 
+// Ensure this module only gets included once. This is
+// required for user scripts injected into all frames.
+if (window.__firefox__.includeOnce("LoginsHelper")) {
+  return;
+}
+
 var gEnabled = true;
 var gStoreWhenAutocompleteOff = true;
 var gAutofillForms = true;
@@ -117,7 +123,7 @@ var LoginManagerContent = {
     // fillForm() to try filling in a login without a username
     // to filter on (bug 471906).
     if (!acInputField.value)
-      return;      
+      return;
 
     log("onUsernameInput from", event.type);
 
@@ -544,14 +550,14 @@ var LoginManagerContent = {
 
         if (!disabledOrReadOnly && !userEnteredDifferentCase && userNameDiffers) {
           usernameField.value = selectedLogin.username;
-          dispatchKeyboardEvent(usernameField, 'keydown', KEYCODE_ARROW_DOWN);
-          dispatchKeyboardEvent(usernameField, 'keyup', KEYCODE_ARROW_DOWN);
+          dispatchKeyboardEvent(usernameField, "keydown", KEYCODE_ARROW_DOWN);
+          dispatchKeyboardEvent(usernameField, "keyup", KEYCODE_ARROW_DOWN);
         }
       }
       if (passwordField.value != selectedLogin.password) {
         passwordField.value = selectedLogin.password;
-        dispatchKeyboardEvent(passwordField, 'keydown', KEYCODE_ARROW_DOWN);
-        dispatchKeyboardEvent(passwordField, 'keyup', KEYCODE_ARROW_DOWN);
+        dispatchKeyboardEvent(passwordField, "keydown", KEYCODE_ARROW_DOWN);
+        dispatchKeyboardEvent(passwordField, "keyup", KEYCODE_ARROW_DOWN);
       }
       didFillForm = true;
     } else if (selectedLogin && !autofillForm) {
@@ -648,15 +654,6 @@ window.addEventListener("submit", function(event) {
   }
 });
 
-if (!window.__firefox__) {
-  Object.defineProperty(window, '__firefox__', {
-    enumerable: false,
-    configurable: false,
-    writable: false,
-    value: {}
-  });
-}
-
 function LoginInjector() {
   this.inject = function(msg) {
     try {
@@ -668,7 +665,7 @@ function LoginInjector() {
   };
 }
 
-Object.defineProperty(window.__firefox__, 'logins', {
+Object.defineProperty(window.__firefox__, "logins", {
   enumerable: false,
   configurable: false,
   writable: false,
@@ -679,13 +676,13 @@ function map(array, callback) {
   var T, A, k;
 
   if (array == null) {
-    throw new TypeError(' array is null or not defined');
+    throw new TypeError("Array is null or not defined");
   }
 
   var O = Object(array);
   var len = O.length >>> 0;
-  if (typeof callback !== 'function') {
-    throw new TypeError(callback + ' is not a function');
+  if (typeof callback !== "function") {
+    throw new TypeError(callback + " is not a function");
   }
   if (arguments.length > 1) {
     T = array;
@@ -703,9 +700,9 @@ function map(array, callback) {
   }
   return A;
 };
- 
+
 function dispatchKeyboardEvent(element, eventName, keyCode) {
-  var event = document.createEvent('KeyboardEvent');
+  var event = document.createEvent("KeyboardEvent");
   event.initKeyboardEvent(eventName, true, true, window, 0, 0, 0, 0, 0, keyCode);
   element.dispatchEvent(event);
 }

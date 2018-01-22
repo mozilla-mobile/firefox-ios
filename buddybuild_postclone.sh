@@ -9,6 +9,13 @@ function setup_virtualenv {
 }
 
 #
+# Install Node.js dependencies and build user scripts
+#
+
+npm install
+npm run build
+
+#
 # Add a badge for FirefoxBeta
 #
 
@@ -35,4 +42,3 @@ if [ "$BUDDYBUILD_SCHEME" = "Fennec_Enterprise" ] && [ "$BUDDYBUILD_PULL_REQUEST
   setup_virtualenv
   ./ios-l10n-scripts/import-locales-firefox.sh
 fi
-
