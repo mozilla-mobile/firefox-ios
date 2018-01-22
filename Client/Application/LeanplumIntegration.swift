@@ -88,6 +88,11 @@ class LeanPlumClient {
     private weak var profile: Profile?
     private var prefs: Prefs? { return profile?.prefs }
     private var enabled: Bool = true
+    
+    // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
+    // The primary result is having a feature flag controlled by Leanplum, and falling back
+    // to prompting with native push permissions.
+    private var useFxAPrePush: LPVar = LPVar.define("useFxAPrePush", with: false)
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
@@ -95,7 +100,7 @@ class LeanPlumClient {
         return UIApplication.isInPrivateMode
     }
     
-    private func isLPEnabled() -> Bool {
+    func isLPEnabled() -> Bool {
         return enabled && Leanplum.hasStarted()
     }
 
@@ -109,6 +114,7 @@ class LeanPlumClient {
 
     fileprivate func start() {
         guard let settings = getSettings(), supportedLocales.contains(Locale.current.identifier), !Leanplum.hasStarted() else {
+            enabled = false
             log.error("LeanplumIntegration - Could not be started")
             return
         }
@@ -131,12 +137,12 @@ class LeanPlumClient {
             LPAttributeKey.pocketInstalled: pocketInstalled(),
             LPAttributeKey.signedInSync: profile?.hasAccount() ?? false
         ]
-
+        
         self.setupCustomTemplates()
         
         Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
-
+            
             // We need to check if the app is a clean install to use for
             // preventing the What's New URL from appearing.
             if self.prefs?.intForKey(IntroViewControllerSeenProfileKey) == nil {
@@ -185,6 +191,10 @@ class LeanPlumClient {
         if enabled { start() }
         self.enabled = enabled
         Leanplum.setTestModeEnabled(!enabled)
+    }
+    
+    func isFxAPrePushEnabled() -> Bool {
+       return AppConstants.MOZ_FXA_LEANPLUM_AB_PUSH_TEST && useFxAPrePush.boolValue()
     }
 
     /*
@@ -250,6 +260,11 @@ class LeanPlumClient {
         ]
         
         let responder: LeanplumActionBlock = { (context) -> Bool in
+            // Before proceeding, double check that Leanplum FxA prepush config value has been enabled.
+            if !self.isFxAPrePushEnabled() {
+                return false
+            }
+            
             guard let context = context else {
                 return false
             }
