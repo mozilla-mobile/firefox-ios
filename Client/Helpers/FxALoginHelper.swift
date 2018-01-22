@@ -18,7 +18,7 @@ private let log = Logger.browserLogger
 private let verificationPollingInterval = DispatchTimeInterval.seconds(3)
 private let verificationMaxRetries = 100 // Poll every 3 seconds for 5 minutes.
 
-protocol FxAPushLoginDelegate : class {
+protocol FxAPushLoginDelegate: class {
     func accountLoginDidFail()
 
     func accountLoginDidSucceed(withFlags flags: FxALoginFlags)
@@ -150,7 +150,8 @@ class FxALoginHelper {
             account.updateProfile()
         }
         
-        if AppConstants.MOZ_ENABLE_LEANPLUM && AppConstants.MOZ_FXA_LEANPLUM_AB_PUSH_TEST {
+        let leanplum = LeanPlumClient.shared
+        if leanplum.isLPEnabled() && leanplum.isFxAPrePushEnabled() {
             // If Leanplum A/B push notification tests are enabled, defer to them for
             // displaying the pre-push permission dialog. If user dismisses it, we will still have
             // another chance to prompt them. Afterwards, Leanplum calls `apnsRegisterDidSucceed` or
