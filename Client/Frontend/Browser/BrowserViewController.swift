@@ -1444,13 +1444,12 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
-        searchLoader?.query = text
-
         if text.isEmpty {
             hideSearchController()
         } else {
             showSearchController()
-            searchController!.searchQuery = text
+            searchController?.searchQuery = text
+            searchLoader?.query = text
         }
     }
 
