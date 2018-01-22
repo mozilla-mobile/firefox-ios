@@ -67,7 +67,7 @@ fi
 which -s carthage
 if [[ $? != 0 ]] ; then
     # Install Carthage
-	echo "Installing Carthage"
+    echo "Installing Carthage"
     brew install carthage
 else
 	echo "Carthage already installed"
@@ -79,7 +79,7 @@ fi
 which -s node
 if [[ $? != 0 ]] ; then
     # Install Node
-	echo "Installing Node.js"
+    echo "Installing Node.js"
     brew install node
 else
 	echo "Node.js already installed"
