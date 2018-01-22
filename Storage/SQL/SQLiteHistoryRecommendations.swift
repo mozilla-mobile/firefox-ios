@@ -40,7 +40,7 @@ extension SQLiteHistory: HistoryRecommendations {
         ")"
 
     static let bookmarksQuery =
-        "SELECT historyID, url, siteTitle AS title, guid, is_bookmarked, iconID, iconURL, iconDate, iconWidth, \(TablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
+        "SELECT historyID, url, siteTitle AS title, guid, is_bookmarked, iconID, iconURL, iconType, iconDate, iconWidth, \(TablePageMetadata).title AS metadata_title, media_url, type, description, provider_name " +
             "FROM (\(bookmarkHighlights) ) " +
             "LEFT JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = historyID " +
             "LEFT OUTER JOIN \(TablePageMetadata) ON \(TablePageMetadata).cache_key = url " +
@@ -102,7 +102,7 @@ extension SQLiteHistory: HistoryRecommendations {
             "visitDate",
             "is_bookmarked"
         ]
-        let faviconsProjection = ["iconID", "iconURL", "iconDate", "iconWidth"]
+        let faviconsProjection = ["iconID", "iconURL", "iconType", "iconDate", "iconWidth"]
         let metadataProjections = [
             "\(TablePageMetadata).title AS metadata_title",
             "media_url",
