@@ -77,6 +77,7 @@ extension UnifiedTelemetry {
         case delete = "delete"
         case foreground = "foreground"
         case open = "open"
+        case scan = "scan"
         case tap = "tap"
         case view = "view"
     }
@@ -85,6 +86,8 @@ extension UnifiedTelemetry {
         case app = "app"
         case bookmark = "bookmark"
         case bookmarksPanel = "bookmarks-panel"
+        case qrCodeText = "qr-code-text"
+        case qrCodeURL = "qr-code-url"
         case readerModeCloseButton = "reader-mode-close-button"
         case readerModeOpenButton = "reader-mode-open-button"
         case readingListItem = "reading-list-item"

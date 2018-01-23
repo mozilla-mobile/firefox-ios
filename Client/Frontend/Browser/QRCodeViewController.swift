@@ -15,7 +15,8 @@ private struct QRCodeViewControllerUX {
 }
 
 protocol QRCodeViewControllerDelegate {
-    func scanSuccessOpenNewTabWithData(data: String)
+    func didScanQRCodeWithURL(_ url: URL)
+    func didScanQRCodeWithText(_ text: String)
 }
 
 class QRCodeViewController: UIViewController {
@@ -268,11 +269,16 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             self.captureSession.stopRunning()
             stopScanLineAnimation()
             self.dismiss(animated: true, completion: {
-                guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject, let qrCodeDelegate = self.qrCodeDelegate else {
+                guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject, let qrCodeDelegate = self.qrCodeDelegate, let text = metaData.stringValue else {
                         Sentry.shared.sendWithStacktrace(message: "Unable to scan QR code", tag: .general)
                         return
                 }
-                qrCodeDelegate.scanSuccessOpenNewTabWithData(data: metaData.stringValue)
+
+                if let url = URIFixup.getURL(text) {
+                    qrCodeDelegate.didScanQRCodeWithURL(url)
+                } else {
+                    qrCodeDelegate.didScanQRCodeWithText(text)
+                }
             })
         }
     }
