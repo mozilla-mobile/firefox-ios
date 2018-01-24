@@ -6,7 +6,7 @@ import MappaMundi
 import XCTest
 
 class BaseTestCase: XCTestCase {
-    var navigator: Navigator<FxUserState>!
+    var navigator: MMNavigator<FxUserState>!
     var app: XCUIApplication!
     var userState: FxUserState!
 
