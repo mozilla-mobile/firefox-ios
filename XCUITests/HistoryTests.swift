@@ -32,4 +32,20 @@ class HistoryTests: BaseTestCase {
         waitforExistence(app.tables.cells.staticTexts["Firefox Sync"])
         XCTAssertTrue(app.tables/*@START_MENU_TOKEN@*/.buttons["Sign in"]/*[[".cells.buttons[\"Sign in\"]",".buttons[\"Sign in\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.exists)
     }
+
+    func testClearHistoryFromSettings() {
+        // Browse to have an item in history list
+        navigator.openURL(webpage["url"]!)
+        navigator.goto(HomePanel_History)
+        waitforExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
+        XCTAssertTrue(app.tables.cells.staticTexts[webpage["label"]!].exists)
+
+        // Go to Clear Data
+        navigator.performAction(Action.AcceptClearPrivateData)
+
+        // Back on History panel view check that there is not any item
+        navigator.goto(HomePanel_History)
+        waitforExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
+        XCTAssertFalse(app.tables.cells.staticTexts[webpage["label"]!].exists)
+    }
 }
