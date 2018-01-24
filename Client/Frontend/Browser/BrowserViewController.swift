@@ -1175,9 +1175,16 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
 }
 
 extension BrowserViewController: QRCodeViewControllerDelegate {
-    func scanSuccessOpenNewTabWithData(data: String) {
-        self.openBlankNewTab(focusLocationField: false)
-        self.urlBar(self.urlBar, didSubmitText: data)
+    func didScanQRCodeWithURL(_ url: URL) {
+        openBlankNewTab(focusLocationField: false)
+        finishEditingAndSubmit(url, visitType: VisitType.typed)
+        UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
+    }
+
+    func didScanQRCodeWithText(_ text: String) {
+        openBlankNewTab(focusLocationField: false)
+        submitSearchText(text)
+        UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeText)
     }
 }
 
