@@ -87,6 +87,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.browserPerformAction(.pinToTopSitesOption)
         navigator.nowAt(BrowserTab)
         navigator.goto(NewTabScreen)
+        waitforExistence(app.collectionViews.cells["TopSitesCell"].cells["pdf995"])
         XCTAssertTrue(app.collectionViews.cells["TopSitesCell"].cells["pdf995"].exists)
 
         // Open pdf from pinned site

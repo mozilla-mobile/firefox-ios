@@ -108,13 +108,15 @@ class ActivityStreamTest: BaseTestCase {
         navigator.browserPerformAction(.pinToTopSitesOption)
         navigator.nowAt(BrowserTab)
         navigator.goto(HomePanelsScreen)
-        XCTAssertTrue(app.collectionViews.cells["mozilla"].exists)
+        waitforExistence(app.collectionViews.cells[newTopSite["topSiteLabel"]!])
+        XCTAssertTrue(app.collectionViews.cells[newTopSite["topSiteLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        XCTAssertTrue(app.collectionViews.cells["mozilla"].exists)
+        waitforExistence(app.collectionViews.cells[newTopSite["topSiteLabel"]!])
+        XCTAssertTrue(app.collectionViews.cells[newTopSite["topSiteLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
