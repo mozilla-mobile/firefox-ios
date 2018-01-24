@@ -19,3 +19,6 @@ if [[ "$USE_ROME_CARTHAGE" = "YES"  &&  "$BUDDYBUILD_SCHEME" != "Fennec_Enterpri
 else
  carthage bootstrap --platform ios
 fi
+echo "listing build dir in prebuild"
+echo $BUDDYBUILD_PRODUCT_DIR
+ls $BUDDYBUILD_PRODUCT_DIR

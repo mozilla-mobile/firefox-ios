@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+
+echo "listing build dir in postbuild"
+echo $BUDDYBUILD_PRODUCT_DIR
+ls $BUDDYBUILD_PRODUCT_DIR
+
 bash <(curl -s https://codecov.io/bash)
 
 test_runner="XCUITests-Runner"
