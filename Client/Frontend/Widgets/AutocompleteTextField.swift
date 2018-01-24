@@ -40,7 +40,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // the highlight is active and then the text field is updated accordingly
     // in touchesEnd() (eg. applyCompletion() is called or not)
     fileprivate var notifyTextChanged: (() -> Void)?
-    private var lastReplacement: String?
+
+    var wasDeleteTyped = false
 
     var highlightColor = AutocompleteTextFieldUX.HighlightColor
 
@@ -163,14 +164,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // Since the text has changed, remove the completion here, and textDidChange will fire the callback to
     // get the new autocompletion.
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        lastReplacement = string
+        wasDeleteTyped = string.isEmpty
         return true
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
         let text = self.text ?? ""
 
-        guard let suggestion = suggestion, isEditing && markedTextRange == nil else {
+        guard let suggestion = suggestion, !wasDeleteTyped && isEditing && markedTextRange == nil else {
             hideCursor = false
             return
         }
@@ -245,8 +246,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         removeCompletion()
 
         let isAtEnd = selectedTextRange?.start == endOfDocument
-        let isEmpty = lastReplacement?.isEmpty ?? true
-        if !isEmpty, isAtEnd, markedTextRange == nil {
+        if isAtEnd, markedTextRange == nil {
             notifyTextChanged?()
         } else {
             hideCursor = false
@@ -262,7 +262,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func deleteBackward() {
-        lastReplacement = nil
         hideCursor = false
         if isSelectionActive {
             removeCompletion()
