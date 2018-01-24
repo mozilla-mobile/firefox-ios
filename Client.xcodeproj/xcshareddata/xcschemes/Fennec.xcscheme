@@ -31,7 +31,7 @@
       shouldUseLaunchSchemeArgsEnv = "NO">
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E69DB07C1E97DEA9008A67E6"
@@ -41,7 +41,7 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FA436041ABB83B4008031D1"
@@ -56,7 +56,7 @@
             </SkippedTests>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F84B21D21A090F8100AAB793"
@@ -66,7 +66,7 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
@@ -76,7 +76,7 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FCAE2231ABB51F800877008"
@@ -86,7 +86,7 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "282731671ABC9BE700AA1954"
@@ -104,7 +104,7 @@
             </SkippedTests>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "28F9520519D0F9FB00DCE892"
@@ -122,6 +122,92 @@
                BlueprintName = "XCUITests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "ActivityStreamTest">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest">
+               </Test>
+               <Test
+                  Identifier = "BaseTestCase">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests">
+               </Test>
+               <Test
+                  Identifier = "BrowsingPDFTests">
+               </Test>
+               <Test
+                  Identifier = "ClipBoardTests">
+               </Test>
+               <Test
+                  Identifier = "CopiedLinksTests">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests">
+               </Test>
+               <Test
+                  Identifier = "HomePageSettingsTest">
+               </Test>
+               <Test
+                  Identifier = "HomePageSettingsUITests">
+               </Test>
+               <Test
+                  Identifier = "HomePageUITest">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest">
+               </Test>
+               <Test
+                  Identifier = "NewTabSettingsTest">
+               </Test>
+               <Test
+                  Identifier = "NightModeTests">
+               </Test>
+               <Test
+                  Identifier = "NoImageTests">
+               </Test>
+               <Test
+                  Identifier = "PhotonActionSheetTest">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest">
+               </Test>
+               <Test
+                  Identifier = "ReaderViewTest">
+               </Test>
+               <Test
+                  Identifier = "ScreenGraphTest">
+               </Test>
+               <Test
+                  Identifier = "SearchSettingsUITests">
+               </Test>
+               <Test
+                  Identifier = "SearchTests">
+               </Test>
+               <Test
+                  Identifier = "SettingsTest">
+               </Test>
+               <Test
+                  Identifier = "SiteLoadTest">
+               </Test>
+               <Test
+                  Identifier = "ThirdPartySearchTest">
+               </Test>
+               <Test
+                  Identifier = "ToolbarTests">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
