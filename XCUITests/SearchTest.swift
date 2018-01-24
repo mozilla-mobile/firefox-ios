@@ -5,7 +5,7 @@
 import XCTest
 
 private let LabelPrompt: String = "Turn on search suggestions?"
-private let SuggestedSite: String = "foobar2000"
+private let SuggestedSite: String = "foobar meaning"
 
 class SearchTests: BaseTestCase {
     var navigator: Navigator!
