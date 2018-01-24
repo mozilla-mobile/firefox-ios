@@ -53,6 +53,8 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 return
             }
 
+            Profiler.begin(bookendID: "url-autocomplete")
+
             if let currentDbQuery = currentDbQuery {
                 profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
             }
@@ -63,6 +65,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             deferred.uponQueue(.main) { result in
                 defer {
                     self.currentDbQuery = nil
+                    Profiler.end(bookendID: "url-autocomplete")
                 }
 
                 guard let deferred = deferred as? Cancellable, !deferred.cancelled else {
