@@ -16,3 +16,5 @@ github "google/EarlGrey" "1.12.1"
 github "jhugman/SwiftRouter" "7b446fd063846ce2961b7518bb2386ffcbcc94d8"
 github "rs/SDWebImage" "4.1.0"
 github "mozilla-mobile/telemetry-ios" "v1.0.10"
+github "mozilla-mobile/MappaMundi" "0b4f70e2feb941f4d56bd9e27e408d4300656a87"
+

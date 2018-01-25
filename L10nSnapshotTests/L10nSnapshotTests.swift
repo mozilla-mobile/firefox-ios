@@ -45,7 +45,8 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
 
     func test06PanelsEmptyState() {
         var i = 0
-        navigator.visitNodes(allHomePanels) { nodeName in
+        allHomePanels.forEach { nodeName in
+            navigator.goto(nodeName)
             snapshot("06PanelsEmptyState-\(i)-\(nodeName)")
             i += 1
         }
@@ -134,7 +135,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test13ReloadButtonContextMenu() {
-        navigator.toggleOn(userState.trackingProtectionSetting == FxUserState.TrackingProtectionSetting.alwaysOn.rawValue, withAction: Action.ToggleTrackingProtectionSettingAlwaysOn)
+        navigator.toggleOn(userState.trackingProtectionSetting == TrackingProtectionSetting.alwaysOn.rawValue, withAction: Action.ToggleTrackingProtectionSettingAlwaysOn)
         navigator.goto(BrowserTab)
 
         navigator.openURL(loremIpsumURL)
