@@ -388,6 +388,13 @@ class BrowserViewController: UIViewController {
         self.updateToolbarStateForTraitCollection(self.traitCollection)
 
         setupConstraints()
+
+        // Setup UIDropInteraction to handle dragging and dropping
+        // links into the view from other apps.
+        if #available(iOS 11, *) {
+            let dropInteraction = UIDropInteraction(delegate: self)
+            view.addInteraction(dropInteraction)
+        }
     }
 
     fileprivate func setupConstraints() {
@@ -788,7 +795,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func finishEditingAndSubmit(_ url: URL, visitType: VisitType) {
+    func finishEditingAndSubmit(_ url: URL, visitType: VisitType) {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
