@@ -2,12 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import MappaMundi
 import XCTest
 
 class L10nBaseSnapshotTests: XCTestCase {
 
     var app: XCUIApplication!
-    var navigator: Navigator<FxUserState>!
+    var navigator: MMNavigator<FxUserState>!
     var userState: FxUserState!
 
     var skipIntro: Bool {

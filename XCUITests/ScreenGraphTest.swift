@@ -2,10 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import MappaMundi
 import XCTest
 
 class ScreenGraphTest: XCTestCase {
-    var navigator: Navigator<TestUserState>!
+    var navigator: MMNavigator<TestUserState>!
     var app: XCUIApplication!
 
     override func setUp() {
@@ -129,7 +130,7 @@ extension ScreenGraphTest {
 
 
 private let defaultURL = "https://example.com"
-class TestUserState: UserState {
+class TestUserState: MMUserState {
     required init() {
         super.init()
         initialScreenState = FirstRun
@@ -152,8 +153,8 @@ fileprivate class TestActions {
     static let LoadURLByPasting = "LoadURLByPasting"
 }
 
-fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication) -> ScreenGraph<TestUserState> {
-    let map = ScreenGraph(for: test, with: TestUserState.self)
+fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<TestUserState> {
+    let map = MMScreenGraph(for: test, with: TestUserState.self)
 
     map.addScreenState(FirstRun) { screenState in
         screenState.noop(to: BrowserTab)
