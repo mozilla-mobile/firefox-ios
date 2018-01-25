@@ -102,7 +102,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
             !sessionRestored ||
             !firstTabLoaded ||
             isClipboardURLAlreadyDisplayed(copiedURL) ||
-            self.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
+            self.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
             return false
         }
         sessionStarted = false

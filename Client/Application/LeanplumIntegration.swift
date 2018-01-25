@@ -145,7 +145,7 @@ class LeanPlumClient {
             
             // We need to check if the app is a clean install to use for
             // preventing the What's New URL from appearing.
-            if self.prefs?.intForKey(IntroViewControllerSeenProfileKey) == nil {
+            if self.prefs?.intForKey(PrefsKeys.IntroSeen) == nil {
                 self.prefs?.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
                 self.track(event: .firstRun)
             } else if self.prefs?.boolForKey("SecondRun") == nil {

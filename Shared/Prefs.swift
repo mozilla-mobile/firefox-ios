@@ -15,6 +15,7 @@ public struct PrefsKeys {
     public static let HasFocusInstalled = "HasFocusInstalled"
     public static let HasPocketInstalled = "HasPocketInstalled"
     public static let AlwaysShowToolbar = "AlwaysShowToolbar"
+    public static let IntroSeen = "IntroViewControllerSeen"
 
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
