@@ -119,6 +119,14 @@ Object.defineProperty(window.__firefox__.NightMode, "setEnabled", {
     }
 
     invertedBackgroundImageElements = null;
+
+    // Workaround for Bug 1424243 where turning Night Mode *off*
+    // in some cases has no effect on the background color for
+    // web pages that do not specify a background color.
+    var computedBackgroundColor = getComputedStyle(document.documentElement)["background-color"];
+    if (computedBackgroundColor === "rgba(0, 0, 0, 0)") {
+      document.documentElement.style.backgroundColor = "#fff";
+    }
   }
 });
 
