@@ -15,13 +15,11 @@ class PhotonActionSheetTest: BaseTestCase {
         app.cells["Pin to Top Sites"].tap()
 
         // Verify that the site has been pinned
-
         // Open menu
         app.buttons["Menu"].tap()
 
         // Navigate to top sites
         app.cells["Top Sites"].tap()
-
         waitforExistence(app.cells["TopSite"].firstMatch)
 
         // Verify that the site is pinned to top
@@ -30,7 +28,11 @@ class PhotonActionSheetTest: BaseTestCase {
 
         // Remove pin
         cell.press(forDuration: 2)
-        app.cells["Remove"].tap()
+        app.cells["action_unpin"].tap()
+
+        // Check that it has been unpinned
+        cell.press(forDuration: 2)
+        waitforExistence(app.cells["action_pin"])
     }
 
     func testShareOptionIsShown() {
