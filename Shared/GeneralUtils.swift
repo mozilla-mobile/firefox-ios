@@ -6,6 +6,11 @@ import Foundation
 
 // Wraps NimbleDroid to ensure it is disabled in release
 public struct Profiler {
+    public enum Bookend {
+        case bvc_did_appear
+        case url_autocomplete
+    }
+
     public static func setup() {
         if AppConstants.BuildChannel != .release {
             NDScenario.setup()
@@ -18,15 +23,15 @@ public struct Profiler {
         }
     }
 
-    public static func begin(bookendID: String) {
+    public static func begin(bookend: Bookend) {
         if AppConstants.BuildChannel != .release {
-            NDScenario.begin(bookendID: bookendID)
+            NDScenario.begin(bookendID: "\(bookend)")
         }
     }
 
-    public static func end(bookendID: String) {
+    public static func end(bookend: Bookend) {
         if AppConstants.BuildChannel != .release {
-            NDScenario.end(bookendID: bookendID)
+            NDScenario.end(bookendID: "\(bookend)")
         }
     }
 }

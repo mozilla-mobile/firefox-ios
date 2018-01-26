@@ -570,7 +570,7 @@ class BrowserViewController: UIViewController {
         }
         showQueuedAlertIfAvailable()
 
-        Profiler.end(bookendID: "bvc-did-appear")
+        Profiler.end(bookend: .bvc_did_appear)
     }
 
     // THe logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in

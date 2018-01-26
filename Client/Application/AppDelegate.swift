@@ -298,7 +298,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
 
         Profiler.coldStartupEnd()
-        Profiler.begin(bookendID: "bvc-did-appear")
+        Profiler.begin(bookend: .bvc_did_appear)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
