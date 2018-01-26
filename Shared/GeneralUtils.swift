@@ -9,6 +9,7 @@ public struct Profiler {
     public enum Bookend {
         case bvc_did_appear
         case url_autocomplete
+        case load_trackingprotection_lists
     }
 
     public static func setup() {
