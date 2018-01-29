@@ -76,6 +76,14 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let contentController = WKUserContentController()
         contentController.add(LeakAvoider(delegate: self), name: "accountsCommandHandler")
 
+        // Inject our user script after the page loads.
+        if let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js") {
+            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
+                let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+                contentController.addUserScript(userScript)
+            }
+        }
+
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
 

@@ -408,13 +408,13 @@
 		D0C95DF6200EADD500E4E51C /* LoginsHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95DF5200EADD500E4E51C /* LoginsHelper.js */; };
 		D0C95DF8200EAE3000E4E51C /* NightModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95DF7200EAE3000E4E51C /* NightModeHelper.js */; };
 		D0C95DFA200EAE5E00E4E51C /* NoImageModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95DF9200EAE5E00E4E51C /* NoImageModeHelper.js */; };
-		D0C95DFC200EAF2900E4E51C /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95DFB200EAF2900E4E51C /* FxASignIn.js */; };
 		D0C95E04200FCA8900E4E51C /* ReaderMode.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95E03200FCA8800E4E51C /* ReaderMode.js */; };
 		D0C95E06200FCB5600E4E51C /* HistoryStateHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95E05200FCB5600E4E51C /* HistoryStateHelper.js */; };
 		D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */; };
 		D0C95E34200FDB3200E4E51C /* MetadataHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95E33200FDB3200E4E51C /* MetadataHelper.js */; };
 		D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */; };
 		D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95EF5201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift */; };
+		D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = D0E17FA7201F847600F1FCB5 /* FxASignIn.js */; };
 		D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */; };
 		D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */; };
 		D0FCF7F71FE45E5D004A7995 /* PrintHandler.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF7F61FE45E5D004A7995 /* PrintHandler.js */; };
@@ -1755,13 +1755,13 @@
 		D0C95DF5200EADD500E4E51C /* LoginsHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = LoginsHelper.js; sourceTree = "<group>"; };
 		D0C95DF7200EAE3000E4E51C /* NightModeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = NightModeHelper.js; sourceTree = "<group>"; };
 		D0C95DF9200EAE5E00E4E51C /* NoImageModeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = NoImageModeHelper.js; sourceTree = "<group>"; };
-		D0C95DFB200EAF2900E4E51C /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FxASignIn.js; sourceTree = "<group>"; };
 		D0C95E03200FCA8800E4E51C /* ReaderMode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ReaderMode.js; sourceTree = "<group>"; };
 		D0C95E05200FCB5600E4E51C /* HistoryStateHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = HistoryStateHelper.js; sourceTree = "<group>"; };
 		D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintHelper.swift; sourceTree = "<group>"; };
 		D0C95E33200FDB3200E4E51C /* MetadataHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MetadataHelper.js; sourceTree = "<group>"; };
 		D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataParserHelper.swift; sourceTree = "<group>"; };
 		D0C95EF5201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+UIDropInteractionDelegate.swift"; sourceTree = "<group>"; };
+		D0E17FA7201F847600F1FCB5 /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FxASignIn.js; sourceTree = "<group>"; };
 		D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPostHelper.swift; sourceTree = "<group>"; };
 		D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserScriptManager.swift; sourceTree = "<group>"; };
 		D0FCF7F61FE45E5D004A7995 /* PrintHandler.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = PrintHandler.js; sourceTree = "<group>"; };
@@ -3074,7 +3074,6 @@
 			children = (
 				D0FCF8091FE47B49004A7995 /* CustomSearchHandler.js */,
 				D0C95DF1200EAD3000E4E51C /* FindInPage.js */,
-				D0C95DFB200EAF2900E4E51C /* FxASignIn.js */,
 				D0C95E33200FDB3200E4E51C /* MetadataHelper.js */,
 			);
 			path = AtDocumentEnd;
@@ -3799,6 +3798,7 @@
 				0BA1E02F1B051A07007675AF /* NetError.css */,
 				D38A1EDF1CB458EC0080C842 /* CertError.html */,
 				0BA1E00D1B03FB0B007675AF /* NetError.html */,
+				D0E17FA7201F847600F1FCB5 /* FxASignIn.js */,
 				39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */,
 				D37524861C6E8B5A00A5F6C2 /* topdomains.txt */,
 				F84B21EF1A0910F600AAB793 /* Images.xcassets */,
@@ -5044,7 +5044,6 @@
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
 				E4B7B7781A793CF20022C5E0 /* FiraSans-Italic.ttf in Resources */,
-				D0C95DFC200EAF2900E4E51C /* FxASignIn.js in Resources */,
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
 				D0FCF7F71FE45E5D004A7995 /* PrintHandler.js in Resources */,
 				D0FCF8011FE47563004A7995 /* FormPostHandler.js in Resources */,
@@ -5052,6 +5051,7 @@
 				EB2A633F1F3B514B004EF8B0 /* disconnect-social.json in Resources */,
 				D0C95DF8200EAE3000E4E51C /* NightModeHelper.js in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
+				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
 				D0C95E04200FCA8900E4E51C /* ReaderMode.js in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,
