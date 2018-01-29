@@ -11,8 +11,8 @@ test_runner="XCUITests-Runner"
 # comment out the section where it upload the testrunner
 if [ "$BUDDYBUILD_SCHEME" = "Fennec" ]; then
 #  (cd $BUDDYBUILD_TEST_DIR/Build/Products/Fennec-iphonesimulator && zip -r $test_runner.zip $test_runner.app)
-  curl -F ipa=@$BUDDYBUILD_IPA_PATH  -u $NIMBLEDROID_API_KEY: https://nimbledroid.com/api/v2/ipas
+  curl -F ipa=@$BUDDYBUILD_IPA_PATH  -u $NIMBLEDROID_API_KEY: https://nimbledroid.com/api/v2/ipas \
+       -F test-identifiers='DomainAutocompleteTest/testAutocomplete'
 #      -F test_runner=@$BUDDYBUILD_TEST_DIR/Build/Products/Fennec-iphonesimulator/$test_runner.zip
-#      -F test_identifiers="XCUITests/DomainAutocompleteTest.testAutocomplete"
 fi
 
