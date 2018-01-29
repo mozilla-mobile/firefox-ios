@@ -208,6 +208,12 @@
                <Test
                   Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
                </Test>
+               <Test
+                  Identifier = "TopTabsTest/testSwitchBetweenTabsNoPrivatePrivateToastButton()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testSwitchBetweenTabsToastButton()">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

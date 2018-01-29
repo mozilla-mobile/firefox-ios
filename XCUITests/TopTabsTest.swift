@@ -100,6 +100,61 @@ class TopTabsTest: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: urlValueExample)
     }
 
+    // This test is disabled for iPad because the toast menu is not shown there
+    func testSwitchBetweenTabsToastButton() {
+        navigator.openURL(url)
+        waitUntilPageLoad()
+        app.webViews.links["Rust"].press(forDuration: 1)
+        waitforExistence(app.sheets.buttons["Open in New Tab"])
+        app.sheets.buttons["Open in New Tab"].press(forDuration: 1)
+        waitforExistence(app.buttons["Switch"])
+        app.buttons["Switch"].tap()
+
+        // Check that the tab has changed
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: "rust")
+        XCTAssertTrue(app.staticTexts["Rust language"].exists)
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numTab)
+
+
+        // Go to Private mode and do the same
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(url)
+        waitUntilPageLoad()
+        app.webViews.links["Rust"].press(forDuration: 1)
+        waitforExistence(app.sheets.buttons["Open in New Private Tab"])
+        app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
+        waitforExistence(app.buttons["Switch"])
+        app.buttons["Switch"].tap()
+
+        // Check that the tab has changed
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: "rust")
+        XCTAssertTrue(app.staticTexts["Rust language"].exists)
+        let numPrivTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numPrivTab)
+    }
+
+    // This test is disabled for iPad because the toast menu is not shown there
+    func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
+        navigator.openURL(url)
+        waitUntilPageLoad()
+
+        app.webViews.links["Rust"].press(forDuration: 1)
+        waitforExistence(app.sheets.buttons["Open in New Tab"])
+        app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
+        waitforExistence(app.buttons["Switch"])
+        app.buttons["Switch"].tap()
+
+        // Check that the tab has changed to the new open one and that the user is in private mode
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: "rust")
+        XCTAssertTrue(app.staticTexts["Rust language"].exists)
+        navigator.goto(TabTray)
+        XCTAssertTrue(app.buttons["TabTrayController.maskButton"].isEnabled)
+    }
+
     func testCloseOneTab() {
         navigator.openURL(url)
         waitUntilPageLoad()
