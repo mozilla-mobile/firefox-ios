@@ -123,6 +123,10 @@ class TopTabsViewController: UIViewController {
         tabManager.addDelegate(self)
         self.tabStore = self.tabsToDisplay
 
+        if #available(iOS 11.0, *) {
+            collectionView.dragDelegate = self
+        }
+
         let topTabFader = TopTabFader()
 
         view.addSubview(topTabFader)
@@ -318,7 +322,33 @@ extension TopTabsViewController: UICollectionViewDataSource {
         view.arrangeLine(kind)
         return view
     }
+}
 
+@available(iOS 11.0, *)
+extension TopTabsViewController: UICollectionViewDragDelegate {
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let tab = tabStore[indexPath.item]
+
+        // Get the tab's current URL. If it is `nil`, check the `sessionData` since
+        // it may be a tab that has not been restored yet.
+        var url = tab.url
+        if url == nil, let sessionData = tab.sessionData {
+            let urls = sessionData.urls
+            let index = sessionData.currentPage + urls.count - 1
+            if index < urls.count {
+                url = urls[index]
+            }
+        }
+
+        // Ensure we actually have a URL for the tab being dragged and that the URL is not local.
+        guard url != nil, !(url?.isLocal ?? true), let itemProvider = NSItemProvider(contentsOf: url) else {
+            return []
+        }
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = tab
+        return [dragItem]
+    }
 }
 
 extension TopTabsViewController: TabSelectionDelegate {
