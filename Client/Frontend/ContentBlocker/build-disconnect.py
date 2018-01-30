@@ -44,6 +44,18 @@ def generate_entity_list(path="shavar-prod-lists/disconnect-entitylist.json"):
         # Human-readable output.
         # print json.dumps(blocklist, indent=2)
 
+def add_entry_to_blocklist(blocklist, entities, name, property_, resources):
+    if property_ == "dnt":
+        return # we don't handle dnt entries yet
+    if name in entities:
+        props = entities[name]["properties"]
+    else:
+        prop = urlparse.urlparse(property_).netloc.split(".")
+        if prop[0] == "www":
+            prop.pop(0)
+        props = [".".join(prop)]
+    for res in resources:
+        blocklist.append(create_blocklist_entry(res, props))
 
 def generate_blacklists(blacklist="shavar-prod-lists/disconnect-blacklist.json", entitylist="shavar-prod-lists/disconnect-entitylist.json"):
     # Generating the categorical lists requires some manual tweaking to the
@@ -57,9 +69,6 @@ def generate_blacklists(blacklist="shavar-prod-lists/disconnect-blacklist.json",
     # First, massage the existing categorical data slightly
     with open(blacklist) as fp:
         categories = json.load(fp)["categories"]
-        # Remove what we know we don't care about
-#        del categories["Legacy Disconnect"]
-#        del categories["Legacy Content"]
         # Move the Twitter and Facebook entries into the Social category from
         # the Disconnect category
         disconnect = categories["Disconnect"]
@@ -97,15 +106,7 @@ def generate_blacklists(blacklist="shavar-prod-lists/disconnect-blacklist.json",
         for entity in categories[category]:
             for name, domains in entity.iteritems():
                 for property_, resources in domains.iteritems():
-                    if name in entities:
-                        props = entities[name]["properties"]
-                    else:
-                        prop = urlparse.urlparse(property_).netloc.split(".")
-                        if prop[0] == "www":
-                            prop.pop(0)
-                        props = [".".join(prop)]
-                    for res in resources:
-                        blocklist.append(create_blocklist_entry(res, props))
+                    add_entry_to_blocklist(blocklist, entities, name, property_, resources)
 
         print("{cat} blacklist has {count} entries."
               .format(cat=category, count=len(blocklist)))
