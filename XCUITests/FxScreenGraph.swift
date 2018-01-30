@@ -21,6 +21,8 @@ let PageOptionsMenu = "PageOptionsMenu"
 let FindInPage = "FindInPage"
 let SettingsScreen = "SettingsScreen"
 let SyncSettings = "SyncSettings"
+let FxASigninScreen = "FxASigninScreen"
+let FxCreateAccount = "FxCreateAccount"
 let HomePageSettings = "HomePageSettings"
 let PasscodeSettings = "PasscodeSettings"
 let PasscodeIntervalSettings = "PasscodeIntervalSettings"
@@ -151,6 +153,10 @@ class Action {
     static let CloseTab = "CloseTab"
     static let CloseTabFromPageOptions = "CloseTabFromPageOptions"
     static let CloseTabFromTabTrayLongPressMenu = "CloseTabFromTabTrayLongPressMenu"
+
+    static let FxATypeEmail = "FxATypeEmail"
+    static let FxATypePassword = "FxATypePassword"
+    static let FxATapOnSignInButton = "FxATapOnSignInButton"
 }
 
 private var isTablet: Bool {
@@ -428,6 +434,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let table = app.tables.element(boundBy: 0)
 
         screenState.tap(table.cells["Sync"], to: SyncSettings, if: "fxaUsername != nil")
+        screenState.tap(table.cells["SignInToSync"], to: FxASigninScreen, if: "fxaUsername == nil")
         screenState.tap(table.cells["Search"], to: SearchSettings)
         screenState.tap(table.cells["NewTab"], to: NewTabSettings)
         screenState.tap(table.cells["Homepage"], to: HomePageSettings)
@@ -449,6 +456,27 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(SyncSettings) { screenState in
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(FxASigninScreen) { screenState in
+        screenState.backAction = navigationControllerBackAction
+
+        screenState.gesture(forAction: Action.FxATypeEmail) { userState in
+            app.webViews.textFields["Email"].tap()
+            type(text: userState.fxaUsername!)
+        }
+        screenState.gesture(forAction: Action.FxATypePassword) { userState in
+            app.webViews.secureTextFields["Password"].tap()
+            type(text: userState.fxaPassword!)
+        }
+        screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
+            app.webViews.buttons["Sign in"].tap()
+        }
+        screenState.tap(app.webViews.links["Create an account"], to: FxCreateAccount)
+    }
+
+    map.addScreenState(FxCreateAccount) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 
@@ -501,21 +529,21 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["ChangePasscode"], to: ChangePasscodeSettings, if: "passcode != nil")
     }
 
-    func typePasscode(_ passCode: String) {
-        passCode.forEach { char in
+    func type(text: String) {
+        text.forEach { char in
             app.keys["\(char)"].tap()
         }
     }
 
     map.addScreenState(SetPasscodeScreen) { screenState in
         screenState.gesture(forAction: Action.SetPasscode, transitionTo: PasscodeSettings) { userState in
-            typePasscode(userState.newPasscode)
-            typePasscode(userState.newPasscode)
+            type(text: userState.newPasscode)
+            type(text: userState.newPasscode)
             userState.passcode = userState.newPasscode
         }
 
         screenState.gesture(forAction: Action.SetPasscodeTypeOnce) { userState in
-            typePasscode(userState.newPasscode)
+            type(text: userState.newPasscode)
         }
         screenState.backAction = navigationControllerBackAction
     }
@@ -523,12 +551,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(DisablePasscodeSettings) { screenState in
         screenState.gesture(forAction: Action.DisablePasscode, transitionTo: PasscodeSettings) { userState in
             if let passcode = userState.passcode {
-                typePasscode(passcode)
+                type(text: passcode)
             }
         }
 
         screenState.gesture(forAction: Action.DisablePasscodeTypeIncorrectPasscode) { userState in
-            typePasscode(userState.wrongPasscode)
+            type(text: userState.wrongPasscode)
         }
         screenState.backAction = navigationControllerBackAction
     }
@@ -536,7 +564,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(PasscodeIntervalSettings) { screenState in
         screenState.onEnter { userState in
             if let passcode = userState.passcode {
-                typePasscode(passcode)
+                type(text: passcode)
             }
         }
         screenState.backAction = navigationControllerBackAction
@@ -545,20 +573,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(ChangePasscodeSettings) { screenState in
         screenState.gesture(forAction: Action.ChangePasscode, transitionTo: PasscodeSettings) { userState in
             if let passcode = userState.passcode {
-                typePasscode(passcode)
-                typePasscode(userState.newPasscode)
-                typePasscode(userState.newPasscode)
+                type(text: passcode)
+                type(text: userState.newPasscode)
+                type(text: userState.newPasscode)
                 userState.passcode = userState.newPasscode
             }
         }
 
         screenState.gesture(forAction: Action.ConfirmPasscodeToChangePasscode) { userState in
             if let passcode = userState.passcode {
-                typePasscode(passcode)
+                type(text: passcode)
             }
         }
         screenState.gesture(forAction: Action.ChangePasscodeTypeOnce) { userState in
-            typePasscode(userState.newPasscode)
+            type(text: userState.newPasscode)
         }
         screenState.backAction = navigationControllerBackAction
     }
@@ -572,13 +600,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.dismissOnUse = true
 
         screenState.gesture(forAction: Action.LoginPasscodeTypeIncorrectOne) { userState in
-            typePasscode(userState.wrongPasscode)
+            type(text: userState.wrongPasscode)
         }
 
         // Gesture to get to the protected screen.
         screenState.gesture(forAction: Action.UnlockLoginsSettings, transitionTo: LoginsSettings) { userState in
             if let passcode = userState.passcode {
-                typePasscode(passcode)
+                type(text: passcode)
             }
         }
     }
