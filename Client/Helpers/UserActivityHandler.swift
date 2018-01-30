@@ -20,8 +20,9 @@ class UserActivityHandler {
         self.tabObservers = registerFor(
                                 .didLoseFocus,
                                 .didGainFocus,
-                                .didLoadPageMetadata,
-                                // .didLoadFavicon, // only useful when we fix Bug 1390200.
+                                .didChangeURL,
+                                // .didLoadMetadata // TODO: Bug 1390294
+                                // .didLoadFavicon, // TODO: Bug 1390294
                                 .didClose,
                                 queue: .main)
     }
@@ -44,9 +45,9 @@ extension UserActivityHandler: TabEventHandler {
         tab.userActivity?.resignCurrent()
     }
 
-    func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
-        guard let url = tab.canonicalURL else {
-            tabDidLoseFocus(tab)
+    func tab(_ tab: Tab, didChangeURL url: URL) {
+        guard url.isWebPage(includeDataURIs: false), !url.isLocal else {
+            tab.userActivity?.resignCurrent()
             tab.userActivity = nil
             return
         }
@@ -54,38 +55,10 @@ extension UserActivityHandler: TabEventHandler {
         tab.userActivity?.invalidate()
 
         let userActivity = NSUserActivity(activityType: browsingActivityType)
-        let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeHTML as String)
-
-        userActivity.title = metadata.title
         userActivity.webpageURL = url
-        userActivity.keywords = metadata.keywords
-        userActivity.isEligibleForSearch = false
-        userActivity.isEligibleForHandoff = true
-
-        attributeSet.contentURL = url
-        attributeSet.title = metadata.title
-        attributeSet.contentDescription = metadata.description
-
-        userActivity.contentAttributeSet = attributeSet
+        userActivity.becomeCurrent()
 
         tab.userActivity = userActivity
-
-        userActivity.becomeCurrent()
-    }
-
-    func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with data: Data?) {
-        guard let url = tab.canonicalURL,
-            let userActivity = tab.userActivity,
-            let attributeSet = userActivity.contentAttributeSet,
-            !tab.isPrivate else {
-                return
-        }
-
-        attributeSet.thumbnailData = data
-        let searchableItem = CSSearchableItem(uniqueIdentifier: url.absoluteString, domainIdentifier: "webpages", attributeSet: attributeSet)
-        searchableIndex.indexSearchableItems([searchableItem])
-
-        userActivity.needsSave = true
     }
 
     func tabDidClose(_ tab: Tab) {
