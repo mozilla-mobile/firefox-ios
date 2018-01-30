@@ -469,6 +469,7 @@ class Tab: NSObject {
         }
 
         self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
+        TabEvent.post(.didChangeURL(url), for: self)
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
