@@ -125,6 +125,7 @@ class TopTabsViewController: UIViewController {
 
         if #available(iOS 11.0, *) {
             collectionView.dragDelegate = self
+            collectionView.dropDelegate = self
         }
 
         let topTabFader = TopTabFader()
@@ -348,6 +349,31 @@ extension TopTabsViewController: UICollectionViewDragDelegate {
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = tab
         return [dragItem]
+    }
+}
+
+@available(iOS 11.0, *)
+extension TopTabsViewController: UICollectionViewDropDelegate {
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = tabStore.index(of: tab) else {
+            return
+        }
+
+        collectionView.performBatchUpdates({
+            self.tabManager.moveTab(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
+            self.tabStore = self.tabsToDisplay
+            collectionView.moveItem(at: IndexPath(item: sourceIndex, section: 0), to: destinationIndexPath)
+        })
+
+        coordinator.drop(dragItem, toItemAt: destinationIndexPath)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        guard let _ = session.localDragSession else {
+            return UICollectionViewDropProposal(operation: .forbidden)
+        }
+
+        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
 }
 
