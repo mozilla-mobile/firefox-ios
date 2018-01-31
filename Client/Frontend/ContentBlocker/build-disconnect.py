@@ -11,6 +11,9 @@ import urlparse
 
 categories = ("Advertising", "Analytics", "Social", "Content")
 
+def output_filename(category):
+    return "Lists/disconnect-{0}.json".format(category.lower())
+
 def url_filter(resource):
     return "^https?://([^/]+\\.)?" + resource.replace(".", "\\.")
 
@@ -112,19 +115,14 @@ def generate_blacklists(blacklist="shavar-prod-lists/disconnect-blacklist.json",
         print("{cat} blacklist has {count} entries."
               .format(cat=category, count=len(blocklist)))
 
-        with open("Lists/disconnect-{0}.json".format(category.lower()),
-                  "w") as fp:
+        with open(output_filename(category), "w") as fp:
             out = json.dumps(blocklist, indent=0,
                              separators=(',', ':')).replace('\n', '')
             fp.write(out)
 
-
-if __name__ == "__main__":
-    # generate_entity_list()
-    generate_blacklists()
-    # format as one action per-line, which is easier to read and diff
+def format_one_rule_per_line():
     for category in categories:
-        name = "Lists/disconnect-{0}.json".format(category.lower())
+        name = output_filename(category)
         file = open(name)
         line = file.read()
         file.close()
@@ -132,3 +130,10 @@ if __name__ == "__main__":
         with open(name, "w") as fp:
             fp.write(line)
 
+
+if __name__ == "__main__":
+    # generate_entity_list()
+    generate_blacklists()
+
+    # format as one action per-line, which is easier to read and diff
+    format_one_rule_per_line()
