@@ -9,6 +9,7 @@ from __future__ import print_function
 import json
 import urlparse
 
+categories = ("Advertising", "Analytics", "Social", "Content")
 
 def url_filter(resource):
     return "^https?://([^/]+\\.)?" + resource.replace(".", "\\.")
@@ -100,7 +101,7 @@ def generate_blacklists(blacklist="shavar-prod-lists/disconnect-blacklist.json",
                     goog[prop].sort()
             cat.sort()
 
-    for category in ("Advertising", "Analytics", "Social", "Content"):
+    for category in categories:
         blocklist = []
 
         for entity in categories[category]:
@@ -121,3 +122,13 @@ def generate_blacklists(blacklist="shavar-prod-lists/disconnect-blacklist.json",
 if __name__ == "__main__":
     # generate_entity_list()
     generate_blacklists()
+    # format as one action per-line, which is easier to read and diff
+    for category in categories:
+        name = "Lists/disconnect-{0}.json".format(category.lower())
+        file = open(name)
+        line = file.read()
+        file.close()
+        line = line.replace('{"action"', '\n{"action"')
+        with open(name, "w") as fp:
+            fp.write(line)
+
