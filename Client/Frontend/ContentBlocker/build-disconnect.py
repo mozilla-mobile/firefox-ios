@@ -8,8 +8,14 @@ from __future__ import print_function
 
 import json
 import urlparse
+import sys
 
 categories = ("Advertising", "Analytics", "Social", "Content")
+# Firefox iOS uses these 3 as a single 'basic' block list
+categories_firefox_basic = ("Advertising", "Analytics", "Social")
+
+def output_filename(category):
+    return "Lists/disconnect-{0}.json".format(category.lower())
 
 def url_filter(resource):
     return "^https?://([^/]+\\.)?" + resource.replace(".", "\\.")
@@ -112,19 +118,16 @@ def generate_blacklists(blacklist="shavar-prod-lists/disconnect-blacklist.json",
         print("{cat} blacklist has {count} entries."
               .format(cat=category, count=len(blocklist)))
 
-        with open("Lists/disconnect-{0}.json".format(category.lower()),
-                  "w") as fp:
+        with open(output_filename(category), "w") as fp:
             out = json.dumps(blocklist, indent=0,
                              separators=(',', ':')).replace('\n', '')
             fp.write(out)
 
 
-if __name__ == "__main__":
-    # generate_entity_list()
-    generate_blacklists()
-    # format as one action per-line, which is easier to read and diff
+# format as one action per-line, which is easier to read and diff
+def format_one_rule_per_line():
     for category in categories:
-        name = "Lists/disconnect-{0}.json".format(category.lower())
+        name =output_filename(category)
         file = open(name)
         line = file.read()
         file.close()
@@ -132,3 +135,22 @@ if __name__ == "__main__":
         with open(name, "w") as fp:
             fp.write(line)
 
+
+def concat_basic_lists():
+    contents = []
+    for category in categories_firefox_basic:
+        with open(output_filename(category)) as fp:
+            str = fp.read().strip('[').rstrip(']')
+            contents.append(str)
+    result = "[" + ",".join(contents) + "]"
+    with open(output_filename("basic"), "w") as fp:
+        fp.write(result)
+
+if __name__ == "__main__":
+    # generate_entity_list()
+    generate_blacklists()
+    format_one_rule_per_line()
+
+    if sys.argv[1] == 'firefox-format':
+        print("writing out basic list for Firefox iOS usage.")
+        concat_basic_lists()
