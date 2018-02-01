@@ -337,8 +337,11 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        showToolbars(animated: true)
-        webViewContainerToolbar?.isHidden = false
+        if toolbarState == .collapsed {
+            showToolbars(animated: true)
+            webViewContainerToolbar?.isHidden = false
+            return false
+        }
         return true
     }
 }
