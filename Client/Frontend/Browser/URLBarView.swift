@@ -618,6 +618,10 @@ extension URLBarView: AutocompleteTextFieldDelegate {
         delegate?.urlBar(self, didEnterText: "")
         return true
     }
+
+    func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField) {
+        leaveOverlayMode(didCancel: true)
+    }
 }
 
 // MARK: UIAppearance

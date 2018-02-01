@@ -14,6 +14,7 @@ protocol AutocompleteTextFieldDelegate: class {
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField)
+    func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField)
 }
 
 private struct AutocompleteTextFieldUX {
@@ -82,8 +83,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override var keyCommands: [UIKeyCommand]? {
         return [
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .init(rawValue: 0), action: #selector(self.handleKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .init(rawValue: 0), action: #selector(self.handleKeyCommand(sender:)))
+            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyInputEscape, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
         ]
     }
     
@@ -97,16 +99,15 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 selectedTextRange = textRange(from: beginningOfDocument, to: beginningOfDocument)
             } else if let range = selectedTextRange {
                 if range.start == beginningOfDocument {
-                    return
+                    break
                 }
                 
                 guard let cursorPosition = position(from: range.start, offset: -1) else {
-                    return
+                    break
                 }
                 
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
-            return
         case UIKeyInputRightArrow:
             if isSelectionActive {
                 applyCompletion()
@@ -115,18 +116,19 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
             } else if let range = selectedTextRange {
                 if range.end == endOfDocument {
-                    return
+                    break
                 }
                 
                 guard let cursorPosition = position(from: range.end, offset: 1) else {
-                    return
+                    break
                 }
 
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
-            return
+        case UIKeyInputEscape:
+            autocompleteDelegate?.autocompleteTextFieldDidCancel(self)
         default:
-            return
+            break
         }
     }
     
