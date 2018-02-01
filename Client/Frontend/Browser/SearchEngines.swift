@@ -176,7 +176,7 @@ class SearchEngines {
     /// Get all bundled (not custom) search engines, with the default search engine first,
     /// but the others in no particular order.
     class func getUnorderedBundledEnginesFor(locale: Locale) -> [OpenSearchEngine] {
-        let languageIdentifier = locale.identifier
+        let languageIdentifier = Locale.preferredLanguages.first!
         let region = locale.regionCode ?? "US"
         let parser = OpenSearchParser(pluginMode: true)
 
