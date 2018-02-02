@@ -15,6 +15,7 @@ protocol TabLocationViewDelegate {
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton)
     func tabLocationViewDidLongPressPageOptions(_ tabLocationVIew: TabLocationView)
+    func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
     
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
@@ -195,6 +196,14 @@ class TabLocationView: UIView {
             make.trailing.equalTo(separatorLine.snp.leading).offset(-9)
             make.size.equalTo(24)
         }
+
+        // Setup UIDragInteraction to handle dragging the location
+        // bar for dropping its URL into other apps.
+        if #available(iOS 11, *) {
+            let dragInteraction = UIDragInteraction(delegate: self)
+            dragInteraction.allowsSimultaneousRecognitionDuringLift = true
+            self.addInteraction(dragInteraction)
+        }
     }
 
     override var accessibilityElements: [Any]? {
@@ -281,8 +290,25 @@ extension TabLocationView: UIGestureRecognizerDelegate {
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        // If the longPressRecognizer is active, fail all other recognizers to avoid conflicts.
-        return gestureRecognizer == longPressRecognizer
+        // If the longPressRecognizer is active, fail the tap recognizer to avoid conflicts.
+        return gestureRecognizer == longPressRecognizer && otherGestureRecognizer == tapRecognizer
+    }
+}
+
+@available(iOS 11.0, *)
+extension TabLocationView: UIDragInteractionDelegate {
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        // Ensure we actually have a URL in the location bar and that the URL is not local.
+        guard let url = self.url, !url.isLocal, let itemProvider = NSItemProvider(contentsOf: url) else {
+            return []
+        }
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
+
+    func dragInteraction(_ interaction: UIDragInteraction, sessionWillBegin session: UIDragSession) {
+        delegate?.tabLocationViewDidBeginDragInteraction(self)
     }
 }
 

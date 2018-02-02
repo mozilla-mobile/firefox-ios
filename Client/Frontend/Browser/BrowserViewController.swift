@@ -1238,7 +1238,6 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: URLBarDelegate {
-    
     func showTabTray() {
         webViewContainerToolbar.isHidden = true
         updateFindInPageVisibility(visible: false)
@@ -1265,7 +1264,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
-        
         let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
             self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
         }
@@ -1482,6 +1480,10 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
         hideSearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+    }
+
+    func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
+        displayedPopoverController?.dismiss(animated: true)
     }
 }
 
