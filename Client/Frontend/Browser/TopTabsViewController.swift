@@ -342,8 +342,13 @@ extension TopTabsViewController: UICollectionViewDragDelegate {
         }
 
         // Ensure we actually have a URL for the tab being dragged and that the URL is not local.
+        // If not, just create an empty `NSItemProvider` so we can create a drag item with the
+        // `Tab` so that it can at still be re-ordered.
         guard url != nil, !(url?.isLocal ?? true), let itemProvider = NSItemProvider(contentsOf: url) else {
-            return []
+            let itemProvider = NSItemProvider()
+            let dragItem = UIDragItem(itemProvider: itemProvider)
+            dragItem.localObject = tab
+            return [dragItem]
         }
 
         let dragItem = UIDragItem(itemProvider: itemProvider)
