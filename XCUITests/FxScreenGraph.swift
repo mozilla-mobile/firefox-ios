@@ -41,6 +41,7 @@ let DisablePasscodeSettings = "DisablePasscodeSettings"
 let ChangePasscodeSettings = "ChangePasscodeSettings"
 let LockedLoginsSettings = "LockedLoginsSettings"
 let TabTrayLongPressMenu = "TabTrayLongPressMenu"
+let HistoryRecentlyClosed = "HistoryRecentlyClosed"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -402,11 +403,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(HomePanel_History) { screenState in
         screenState.press(app.tables["History List"].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
+        screenState.tap(app.cells["HistoryPanel.recentlyClosedCell"], to: HistoryRecentlyClosed)
         screenState.noop(to: HomePanelsScreen)
     }
 
     map.addScreenState(HomePanel_ReadingList) { screenState in
         screenState.noop(to: HomePanelsScreen)
+    }
+
+    map.addScreenState(HistoryRecentlyClosed) { screenState in
+        screenState.dismissOnUse = true
+        screenState.backAction = dismissContextMenuAction
     }
 
     map.addScreenState(HistoryPanelContextMenu) { screenState in
