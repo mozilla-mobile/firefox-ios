@@ -1517,11 +1517,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
         if #available(iOS 11, *) {
             if let helper = tab.contentBlocker as? ContentBlockerHelper {
-                let state = helper.userOverrideForTrackingProtection
-                if state != .disallowUserOverride {
-                    let title = state == .forceDisabled ? Strings.TrackingProtectionReloadWith : Strings.TrackingProtectionReloadWithout
+                let state = helper.perTabEnabledState
+                if state != .disabledInPrefs {
+                    let title = state == .forceDisabledPerTab ? Strings.TrackingProtectionReloadWith : Strings.TrackingProtectionReloadWithout
                     controller.addAction(UIAlertAction(title: title, style: .default, handler: {_ in
-                        helper.overridePrefsAndReloadTab(enableTrackingProtection: state == .forceDisabled)
+                        helper.overridePrefsAndReloadTab(enableTrackingProtection: state == .forceDisabledPerTab)
                     }))
                 }
             }

@@ -48,22 +48,26 @@ class ContentBlockerHelper {
         }
     }
 
-    enum TrackingProtectionUserOverride {
-        case disallowUserOverride // Option is not offered if tracking protection is off in prefs
-        case allowedButNotSet
-        case forceEnabled
-        case forceDisabled
+    enum TrackingProtectionPerTabEnabledState {
+        case disabledInPrefs
+        case enabledInPrefsAndNoPerTabOverride
+        case forceEnabledPerTab
+        case forceDisabledPerTab
+
+        func isEnabledOverall() -> Bool {
+            return self != .disabledInPrefs && self != .forceDisabledPerTab
+        }
     }
 
     fileprivate var prefOverrideTrackingProtectionEnabled: Bool?
-    var userOverrideForTrackingProtection: TrackingProtectionUserOverride {
+    var perTabEnabledState: TrackingProtectionPerTabEnabledState {
         if !trackingProtectionEnabledInSettings {
-            return .disallowUserOverride
+            return .disabledInPrefs
         }
         guard let enabled = prefOverrideTrackingProtectionEnabled else {
-            return .allowedButNotSet
+            return .enabledInPrefsAndNoPerTabOverride
         }
-        return enabled ? .forceEnabled : .forceDisabled
+        return enabled ? .forceEnabledPerTab : .forceDisabledPerTab
     }
 
     // Raw values are stored to prefs, be careful changing them.
@@ -222,12 +226,10 @@ class ContentBlockerHelper {
     fileprivate func addActiveRulesToTab() {
         removeTrackingProtectionFromTab()
 
-        if userOverrideForTrackingProtection == .forceDisabled {
-            // User can temporarily override the settings to turn TP on or off.
-            return
-        } else if !trackingProtectionEnabledInSettings {
+        if !perTabEnabledState.isEnabledOverall() {
             return
         }
+
         let rules = blocklistBasic + (blockingStrengthPref == .strict ? blocklistStrict : [])
         for name in rules {
             ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
