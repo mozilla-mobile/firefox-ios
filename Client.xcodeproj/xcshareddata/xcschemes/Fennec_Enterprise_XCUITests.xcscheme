@@ -179,6 +179,9 @@
                   Identifier = "BaseTestCase">
                </Test>
                <Test
+                  Identifier = "DragAndDropTests">
+               </Test>
+               <Test
                   Identifier = "HomePageUITest">
                </Test>
                <Test
