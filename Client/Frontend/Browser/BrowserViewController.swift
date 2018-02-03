@@ -388,6 +388,13 @@ class BrowserViewController: UIViewController {
         self.updateToolbarStateForTraitCollection(self.traitCollection)
 
         setupConstraints()
+
+        // Setup UIDropInteraction to handle dragging and dropping
+        // links into the view from other apps.
+        if #available(iOS 11, *) {
+            let dropInteraction = UIDropInteraction(delegate: self)
+            view.addInteraction(dropInteraction)
+        }
     }
 
     fileprivate func setupConstraints() {
@@ -489,7 +496,7 @@ class BrowserViewController: UIViewController {
         // not flash before we present. This change of alpha also participates in the animation when
         // the intro view is dismissed.
         if UIDevice.current.userInterfaceIdiom == .phone {
-            self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
+            self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
         }
 
         if !displayedRestoreTabsAlert && !cleanlyBackgrounded() && crashedLastLaunch() {
@@ -788,7 +795,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func finishEditingAndSubmit(_ url: URL, visitType: VisitType) {
+    func finishEditingAndSubmit(_ url: URL, visitType: VisitType) {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
@@ -1175,9 +1182,16 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
 }
 
 extension BrowserViewController: QRCodeViewControllerDelegate {
-    func scanSuccessOpenNewTabWithData(data: String) {
-        self.openBlankNewTab(focusLocationField: false)
-        self.urlBar(self.urlBar, didSubmitText: data)
+    func didScanQRCodeWithURL(_ url: URL) {
+        openBlankNewTab(focusLocationField: false)
+        finishEditingAndSubmit(url, visitType: VisitType.typed)
+        UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
+    }
+
+    func didScanQRCodeWithText(_ text: String) {
+        openBlankNewTab(focusLocationField: false)
+        submitSearchText(text)
+        UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeText)
     }
 }
 
@@ -1224,7 +1238,6 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: URLBarDelegate {
-    
     func showTabTray() {
         webViewContainerToolbar.isHidden = true
         updateFindInPageVisibility(visible: false)
@@ -1251,7 +1264,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
-        
         let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
             self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
         }
@@ -1468,6 +1480,10 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
         hideSearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+    }
+
+    func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
+        displayedPopoverController?.dismiss(animated: true)
     }
 }
 
@@ -2289,12 +2305,12 @@ extension BrowserViewController: IntroViewControllerDelegate {
             return true
         }
         
-        if force || profile.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
+        if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
             let introViewController = IntroViewController()
             introViewController.delegate = self
             // On iPad we present it modally in a controller
             if topTabsVisible {
-                introViewController.preferredContentSize = CGSize(width: IntroViewControllerUX.Width, height: IntroViewControllerUX.Height)
+                introViewController.preferredContentSize = CGSize(width: IntroUX.Width, height: IntroUX.Height)
                 introViewController.modalPresentationStyle = .formSheet
             }
             present(introViewController, animated: animated) {
@@ -2320,7 +2336,9 @@ extension BrowserViewController: IntroViewControllerDelegate {
     }
 
     func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool) {
-        self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
+        self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+        LeanPlumClient.shared.track(event: .dismissedOnboarding)
+
         introViewController.dismiss(animated: true) { finished in
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
                 _ = self.navigationController?.popToRootViewController(animated: true)

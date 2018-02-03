@@ -232,6 +232,7 @@ extension URL {
             // brackets for IPv6 hosts, whereas the latter escapes them.
             var components = URLComponents()
             components.scheme = self.scheme
+            components.port = self.port
             components.host = normalized
             components.path = "/"
             return components.url ?? self

@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import MappaMundi
 import XCTest
 
 let FirstRun = "OptionalFirstRun"
@@ -40,6 +41,7 @@ let DisablePasscodeSettings = "DisablePasscodeSettings"
 let ChangePasscodeSettings = "ChangePasscodeSettings"
 let LockedLoginsSettings = "LockedLoginsSettings"
 let TabTrayLongPressMenu = "TabTrayLongPressMenu"
+let HistoryRecentlyClosed = "HistoryRecentlyClosed"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -86,22 +88,12 @@ let HomePanel_TopSites = "HomePanel.TopSites.0"
 let HomePanel_Bookmarks = "HomePanel.Bookmarks.1"
 let HomePanel_History = "HomePanel.History.2"
 let HomePanel_ReadingList = "HomePanel.ReadingList.3"
-let P_HomePanel_TopSites = "P_HomePanel.TopSites.0"
-let P_HomePanel_Bookmarks = "P_HomePanel.Bookmarks.1"
-let P_HomePanel_History = "P_HomePanel.History.2"
-let P_HomePanel_ReadingList = "P_HomePanel.ReadingList.3"
 
 let allHomePanels = [
     HomePanel_Bookmarks,
     HomePanel_TopSites,
     HomePanel_History,
     HomePanel_ReadingList
-]
-let allPrivateHomePanels = [
-    P_HomePanel_Bookmarks,
-    P_HomePanel_TopSites,
-    P_HomePanel_History,
-    P_HomePanel_ReadingList
 ]
 
 class Action {
@@ -170,16 +162,12 @@ private var isTablet: Bool {
 }
 
 // Matches the available options in app settings for enabling Tracking Protection
-fileprivate enum TrackingProtectionSetting : Int { case alwaysOn; case privateOnly; case off }
+enum TrackingProtectionSetting : Int { case alwaysOn; case privateOnly; case off }
 
-class FxUserState: UserState {
+class FxUserState: MMUserState {
     required init() {
         super.init()
         initialScreenState = FirstRun
-    }
-
-    var isTablet: Bool {
-        return UIDevice.current.userInterfaceIdiom == .pad
     }
 
     var isPrivate = false
@@ -213,8 +201,8 @@ class FxUserState: UserState {
 
 fileprivate let defaultURL = "https://www.mozilla.org/en-US/book/"
 
-func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> ScreenGraph<FxUserState> {
-    let map = ScreenGraph(for: test, with: FxUserState.self)
+func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<FxUserState> {
+    let map = MMScreenGraph(for: test, with: FxUserState.self)
 
     let navigationControllerBackAction = {
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
@@ -415,11 +403,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
 
     map.addScreenState(HomePanel_History) { screenState in
         screenState.press(app.tables["History List"].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
+        screenState.tap(app.cells["HistoryPanel.recentlyClosedCell"], to: HistoryRecentlyClosed)
         screenState.noop(to: HomePanelsScreen)
     }
 
     map.addScreenState(HomePanel_ReadingList) { screenState in
         screenState.noop(to: HomePanelsScreen)
+    }
+
+    map.addScreenState(HistoryRecentlyClosed) { screenState in
+        screenState.dismissOnUse = true
+        screenState.backAction = dismissContextMenuAction
     }
 
     map.addScreenState(HistoryPanelContextMenu) { screenState in
@@ -676,7 +670,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         app.sheets.element(boundBy: 0).buttons.element(boundBy: lastIndex).tap()
     }
 
-    func makeURLBarAvailable(_ screenState: ScreenStateNode<FxUserState>) {
+    func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
 
         screenState.tap(app.textFields["url"], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
@@ -684,7 +678,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
         }
     }
 
-    func makeToolBarAvailable(_ screenState: ScreenStateNode<FxUserState>) {
+    func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
         if isTablet {
             screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
@@ -787,7 +781,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> Scree
     return map
 }
 
-extension Navigator where T == FxUserState {
+extension MMNavigator where T == FxUserState {
 
     func openURL(_ urlString: String, waitForLoading: Bool = true) {
         UIPasteboard.general.string = urlString
