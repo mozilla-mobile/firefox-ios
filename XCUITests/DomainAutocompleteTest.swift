@@ -8,7 +8,7 @@ let website = ["url": "www.mozilla.org", "value": "www.mozilla.org", "subDomain"
 
 class DomainAutocompleteTest: BaseTestCase {
     func testAutocomplete() {
-        navigator.openURL(urlString: website["url"]!)
+        navigator.openURL(website["url"]!)
 
         // Basic autocompletion cases
         navigator.goto(URLBarOpen)
@@ -27,7 +27,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Test that deleting characters works correctly with autocomplete
     func testAutocompleteDeletingChars() {
-        navigator.openURL(urlString: website["url"]!)
+        navigator.openURL(website["url"]!)
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
 
@@ -45,7 +45,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Delete the entire string and verify that the home panels are shown again.
     func testDeleteEntireString() {
-        navigator.openURL(urlString: website["url"]!)
+        navigator.openURL(website["url"]!)
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
         waitforExistence(app.buttons["Clear text"])
@@ -61,7 +61,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Ensure that the scheme is included in the autocompletion.
     func testEnsureSchemeIncludedAutocompletion() {
-        navigator.openURL(urlString: website["url"]!)
+        navigator.openURL(website["url"]!)
         waitUntilPageLoad()
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("https")
@@ -71,8 +71,8 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Non-matches.
     func testNoMatches() {
-        navigator.openURL(urlString: website["url"]!)
-        navigator.openURL(urlString: website["subDomain"]!)
+        navigator.openURL(website["url"]!)
+        navigator.openURL(website["subDomain"]!)
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("baz")
         let value = app.textFields["address"].value
@@ -136,7 +136,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Test mixed case autocompletion.
     func testMixedCaseAutocompletion() {
-        navigator.openURL(urlString: website1["url"]!)
+        navigator.openURL(website1["url"]!)
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("MoZ")
         waitForValueContains(app.textFields["address"], value: ".org")

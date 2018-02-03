@@ -39,7 +39,7 @@ class ClipBoardTests: BaseTestCase {
 
     // This test is disabled in release, but can still run on master
     func testClipboard() {
-        navigator.openURL(urlString: url)
+        navigator.openURL(url)
         waitUntilPageLoad()
         checkUrl()
         copyUrl()

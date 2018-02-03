@@ -71,18 +71,18 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         guard let url = navigationAction.request.url else {
-            decisionHandler(WKNavigationActionPolicy.cancel)
+            decisionHandler(.cancel)
             return
         }
 
         if url.scheme == "about" {
-            decisionHandler(WKNavigationActionPolicy.allow)
+            decisionHandler(.allow)
             return
         }
 
         if !navigationAction.isAllowed && navigationAction.navigationType != .backForward {
             log.warning("Denying unprivileged request: \(navigationAction.request)")
-            decisionHandler(WKNavigationActionPolicy.cancel)
+            decisionHandler(.cancel)
             return
         }
 
@@ -90,7 +90,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
             UIApplication.shared.open(url, options: [:])
-            decisionHandler(WKNavigationActionPolicy.cancel)
+            decisionHandler(.cancel)
             return
         }
 
@@ -100,12 +100,12 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if isAppleMapsURL(url) {
             UIApplication.shared.open(url, options: [:])
-            decisionHandler(WKNavigationActionPolicy.cancel)
+            decisionHandler(.cancel)
             return
         }
 
         if let tab = tabManager.selectedTab, isStoreURL(url) {
-            decisionHandler(WKNavigationActionPolicy.cancel)
+            decisionHandler(.cancel)
 
             let alreadyShowingSnackbarOnThisTab = tab.bars.count > 0
             if !alreadyShowingSnackbarOnThisTab {
@@ -124,7 +124,7 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             LeanPlumClient.shared.track(event: .openedMailtoLink)
-            decisionHandler(WKNavigationActionPolicy.cancel)
+            decisionHandler(.cancel)
             return
         }
 
@@ -137,7 +137,7 @@ extension BrowserViewController: WKNavigationDelegate {
             } else if navigationAction.navigationType == .backForward {
                 restoreSpoofedUserAgentIfRequired(webView, newRequest: navigationAction.request)
             }
-            decisionHandler(WKNavigationActionPolicy.allow)
+            decisionHandler(.allow)
             return
         }
 
@@ -146,12 +146,12 @@ extension BrowserViewController: WKNavigationDelegate {
             UIApplication.shared.open(url, options: [:]) { openedURL in
                 if !openedURL {
                     let alert = UIAlertController(title: Strings.UnableToOpenURLErrorTitle, message: Strings.UnableToOpenURLError, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: Strings.OKString, style: UIAlertActionStyle.default, handler: nil))
+                    alert.addAction(UIAlertAction(title: Strings.OKString, style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 }
             }
         }
-        decisionHandler(WKNavigationActionPolicy.cancel)
+        decisionHandler(.cancel)
     }
 
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
@@ -162,7 +162,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
            let trust = challenge.protectionSpace.serverTrust,
            let cert = SecTrustGetCertificateAtIndex(trust, 0), profile.certStore.containsCertificate(cert, forOrigin: origin) {
-            completionHandler(URLSession.AuthChallengeDisposition.useCredential, URLCredential(trust: trust))
+            completionHandler(.useCredential, URLCredential(trust: trust))
             return
         }
 
@@ -170,7 +170,7 @@ extension BrowserViewController: WKNavigationDelegate {
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest ||
               challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodNTLM,
               let tab = tabManager[webView] else {
-            completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
+            completionHandler(.performDefaultHandling, nil)
             return
         }
 
@@ -184,11 +184,11 @@ extension BrowserViewController: WKNavigationDelegate {
         tabManager.selectTab(tab)
 
         let loginsHelper = tab.getContentScript(name: LoginsHelper.name()) as? LoginsHelper
-        Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(DispatchQueue.main) { res in
+        Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(.main) { res in
             if let credentials = res.successValue {
                 completionHandler(.useCredential, credentials.credentials)
             } else {
-                completionHandler(URLSession.AuthChallengeDisposition.rejectProtectionSpace, nil)
+                completionHandler(.rejectProtectionSpace, nil)
             }
         }
     }

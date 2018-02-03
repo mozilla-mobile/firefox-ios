@@ -129,6 +129,7 @@ class Tab: NSObject {
     var parent: Tab?
 
     fileprivate var contentScriptManager = TabContentScriptManager()
+    private(set) var userScriptManager: UserScriptManager?
 
     fileprivate var configuration: WKWebViewConfiguration?
 
@@ -187,7 +188,7 @@ class Tab: NSObject {
             configuration!.preferences = WKPreferences()
             configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
             configuration!.allowsInlineMediaPlayback = true
-            let webView = TabWebView(frame: CGRect.zero, configuration: configuration!)
+            let webView = TabWebView(frame: .zero, configuration: configuration!)
             webView.delegate = self
             configuration = nil
 
@@ -207,6 +208,7 @@ class Tab: NSObject {
 
             self.webView = webView
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
+            self.userScriptManager = UserScriptManager(tab: self)
             tabDelegate?.tab?(self, didCreateWebView: webView)
         }
     }
@@ -296,20 +298,11 @@ class Tab: NSObject {
     }
 
     var currentInitialURL: URL? {
-        get {
-            let initalURL = self.webView?.backForwardList.currentItem?.initialURL
-            return initalURL
-        }
+        return self.webView?.backForwardList.currentItem?.initialURL
     }
 
     var displayFavicon: Favicon? {
-        var width = 0
-        var largest: Favicon?
-        for icon in favicons where icon.width! > width {
-            width = icon.width!
-            largest = icon
-        }
-        return largest
+        return favicons.max { $0.width! < $1.width! }
     }
 
     var canGoBack: Bool {
@@ -460,14 +453,7 @@ class Tab: NSObject {
     }
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
-        var tab = parent
-        while tab != nil {
-            if tab! == ancestor {
-                return true
-            }
-            tab = tab?.parent
-        }
-        return false
+        return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
     }
 
     func setNightMode(_ enabled: Bool) {

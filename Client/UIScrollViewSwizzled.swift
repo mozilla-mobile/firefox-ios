@@ -27,7 +27,14 @@ extension UIScrollView {
     func swizzle_setBounds(bounds: CGRect) {
         [bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height].forEach() { val in
             if val.isNaN || val.isInfinite {
-                Sentry.shared.send(message: "Bad scrollview bounds detected.")
+                Sentry.shared.send(message: "Bad scrollview bounds detected [infinite/nan].")
+                return
+            }
+        }
+
+        [bounds.size.width, bounds.size.height].forEach() { val in
+            if val < 0 {
+                Sentry.shared.send(message: "Bad scrollview bounds detected [negative size].")
                 return
             }
         }

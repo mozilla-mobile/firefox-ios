@@ -1,7 +1,0 @@
-bing
-duckduckgo
-google
-leo_ende_de
-pledarigrond
-wikipedia-rm
-yahoo-ch

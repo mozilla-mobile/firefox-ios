@@ -110,15 +110,15 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         let views: NSDictionary = ["dialog": shareDialogController.view]
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(16@751)-[dialog(<=380@1000)]-(16@751)-|",
-            options: NSLayoutFormatOptions(), metrics: nil, views: (views as? [String: AnyObject])!))
+            options: [], metrics: nil, views: (views as? [String: AnyObject])!))
         
-        let cx = NSLayoutConstraint(item: shareDialogController.view, attribute: NSLayoutAttribute.centerX,
-            relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0)
+        let cx = NSLayoutConstraint(item: shareDialogController.view, attribute: .centerX,
+            relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0)
         cx.priority = 1000 // TODO: Why does UILayoutPriorityRequired give a linker error? SDK Bug?
         view.addConstraint(cx)
         
-        view.addConstraint(NSLayoutConstraint(item: shareDialogController.view, attribute: NSLayoutAttribute.centerY,
-            relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: shareDialogController.view, attribute: .centerY,
+            relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0))
         
         // Fade the dialog in
         

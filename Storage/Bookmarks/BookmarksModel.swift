@@ -189,7 +189,7 @@ open class MemoryBookmarkFolder: BookmarkFolder, Sequence {
         get {
             if let path = Bundle.main.path(forResource: "bookmarkFolder", ofType: "png") {
                 let url = URL(fileURLWithPath: path)
-                return Favicon(url: url.absoluteString, date: Date(), type: IconType.local)
+                return Favicon(url: url.absoluteString, date: Date())
             }
             return nil
         }

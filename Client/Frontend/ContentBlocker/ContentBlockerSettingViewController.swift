@@ -25,7 +25,7 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
         button.contentHorizontalAlignment = .left
         // Top and left insets are needed to match the table row style.
         button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 0, right: 0)
-        button.addTarget(self, action: #selector(ContentBlockerSettingsTableView.moreInfoTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
         return button
     }
 

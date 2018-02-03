@@ -6,7 +6,7 @@ import Deferred
 import Shared
 import Sync
 
-// This is a cut down version of the Profile. 
+// This is a cut down version of the Profile.
 // This will only ever be used in the NotificationService extension.
 // It allows us to customize the SyncDelegate, and later the SyncManager.
 class ExtensionProfile: BrowserProfile {

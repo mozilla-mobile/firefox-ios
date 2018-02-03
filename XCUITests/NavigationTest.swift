@@ -270,11 +270,11 @@ class NavigationTest: BaseTestCase {
         let desktopViewElement = app.webViews.links.staticTexts["Mobile"]
 
         // Open first url and keep it in mobile view
-        navigator.openURL(urlString: urlGoogle)
+        navigator.openURL(urlGoogle)
         waitForValueContains(app.textFields["url"], value: urlGoogle)
         checkMobileView()
         // Open a second url and change it to desktop view
-        navigator.openURL(urlString: "www.linkedin.com")
+        navigator.openURL("www.linkedin.com")
         navigator.goto(PageOptionsMenu)
         waitforExistence(app.tables.cells["menu-RequestDesktopSite"].staticTexts[requestDesktopSiteLabel])
         app.tables.cells["menu-RequestDesktopSite"].tap()

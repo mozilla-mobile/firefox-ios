@@ -151,7 +151,7 @@ class SearchTests: BaseTestCase {
         changeSearchEngine(searchEngine: "Google")
         changeSearchEngine(searchEngine: "Twitter")
         changeSearchEngine(searchEngine: "Wikipedia")
-        changeSearchEngine(searchEngine: "Amazon.com")
+        // changeSearchEngine(searchEngine: "Amazon.com")
         changeSearchEngine(searchEngine: "Yahoo")
     }
 

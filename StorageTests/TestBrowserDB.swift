@@ -65,7 +65,7 @@ class TestBrowserDB: XCTestCase {
         let remaining = results[0]!
 
         // This one's title has been truncated to 4096 chars.
-        XCTAssertEqual(remaining.1.characters.count, 4096)
+        XCTAssertEqual(remaining.1.count, 4096)
         XCTAssertEqual(remaining.1.utf8.count, 4096)
         XCTAssertTrue(remaining.1.hasPrefix("abcdefghijkl"))
         XCTAssertEqual(remaining.0, "http://example.com/short")
@@ -90,7 +90,7 @@ class TestBrowserDB: XCTestCase {
 
         let center = NotificationCenter.default
         let listener = MockListener()
-        center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated(_:)), name: NotificationDatabaseWasRecreated, object: nil)
+        center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated), name: .DatabaseWasRecreated, object: nil)
         defer { center.removeObserver(listener) }
 
         // It'll still fail, but it moved our old DB.

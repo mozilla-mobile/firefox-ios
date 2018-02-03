@@ -1,0 +1,17 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Azerdict</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAB3VBMVEUAAAD86x776hf76hf76hf76hf76hf76hf87DL76hf87DL76hf76hf76hdXV1f87DL96xb/7hX+7BZTU1n/8hTSyVd+fGD/8xNraU9UVFhWVlfJv1//8BRVVVhPUFpTVFhlZFZQUV1ZWVxRUVn05SB7eWbTyWJdXV1eXltiYlloZlO9tUjr3S756Br/8BZnaG5fYGidmWGEgWFbW1vq3Ubt3iL35yD66h7/7xmUknOemmiRj2hYWmOwq2BgYF+Oil2/uFpYWVpWVlnXzVRsalPSyEb05jf46Cfm1yT/8CP76hq0sH13d3RubnJpanG0r2tmZmrHwGaGg2W1r2RnZ2S9tmLSyl5UVV53dVvOxlrOxVdzcldvblfSx03Nw0zFvEzaz0rQxUqdl0i5sELg1UG2rUDazz+wpzzs3zjl2Dju4DH15jDh1DDy4ij87CLu3yGLiXvZ0XiDgXSYlXOfm3GPjHHDvG+jn26Zlm15d23X0Gy9t2x+fWnn3GiWkWh0c2hra2ZpaWWrpmRqaWSoomJqaWDZ0F/JwF9+e11qaFrLw1a8s1TBuFGalVDh106rpE6XkUzWy0vJv0XFu0Xj10Pn2kHMwkHVyT7g1D2poDjn2THazC7/8if66Sb45xkFAQu1AAAADXRSTlMABtL5xWwbz8LAb2/zKa6xSQAAAxJJREFUaN7tmmVX21AYgANdiy3hRtjWLAnVVaiXtrj7cHeGO8zd3d3tt65lg8DO2uZtd884O3l+QJ5773tyn3wIQRAZ2hwNiQFNjjaDiKLLIrGRpYuuP5PESGYGoSWxoiUOkFg5QGhIrGgIEjOqQBWogsQCtAUJACRAwtzsp8U3HyMcjXAI0Gq1o1asCzqcgb45WkgigQuQ6wZP/UI0V5yu/BKyuBFCf02wYdVTu+BZyWd9ufh6uUTeS1oC4bZI/Q7P19kcDeUDLo5m0hYgJxUHXpR85560bMYOLA2By0AlQDQbuwMz840rgnxgQMG6LIi7k1q7YazscVh2gGYwRiVGHn7HxfehNrCArmGpZMhD8b5oRkABybTzlHLq/BGogAzdghikUQQVoLXqCklUbOhshV924Zap0k6JVbaRwstMCj1AtNA8WjZssJv4ZBr+OA0UyA7PUuPsTK/XaBYxCLbL47ZsttSUeiV9vJ3oTzFpJ5Ohuaaes+MOe+0fDqzjK2DICQ+sZGl6/tnVbuPe4fvuo/QFcqkjltBa30mfPBRTTxu8yckPrPhKeYPDFgxWWa/RJEAAObDWd9NFU89bEQkQwNj9ZbP/PrxUQXIBswOdiFSHTG/UF2zz4Gh8Rt7KCojAdcbI7qBPQKHZ+/Q7WEC/uqOnFMNWW4ACVGzjKQD66wJMUGKlYJgbQT1AJ+wUkIccSFAUhAqcFpjABBUY1kGCCRtUMA6Lfv4jCoZYCRPQ50UKAn/TA3zRPHeHIOu/twyOfqSmQlS6fPbS5xTuIrqpq/eQIspHOBIu2Go6pwiB3rfBUQX/XIAYZaQc/W+x6A8eizFYEJ/6JiG16Jf+jH5hDDYRUvukGx79iX5R+VXH+t3g6Jtg0S/DHX1pAXf0AwLmJjubcUd/BSSYtIF30AYa8qqBgsH7BVj0u/Sw51eFETD6fiPo+R8Y6FURrhxS/KqJ/QupRL/4wvARJTQEBjwopegL3GFFcGr0VcEeVMH/KNCQWDmI/7eHPBIrefh/PSF0GA2ZOiJKRm52Phayc6Pr/wHPrTIRNf30iwAAAABJRU5ErkJggg==</Image>
+<Url type="application/x-suggestions+json" method="GET" template="http://api.azerdict.com/english/autocomplete">
+    <Param name="action" value="opensearch" />
+    <Param name="query" value="{searchTerms}" />
+</Url>
+<Url type="text/html" method="GET" template="http://azerdict.com/english/" resultdomain="azerdict.com">
+  <Param name="word" value="{searchTerms}"/>
+</Url>
+<SearchForm>http://azerdict.com/</SearchForm>
+</SearchPlugin>

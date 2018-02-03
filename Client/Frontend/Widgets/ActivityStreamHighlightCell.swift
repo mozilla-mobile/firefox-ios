@@ -12,7 +12,7 @@ private struct ActivityStreamHighlightCellUX {
     static let CellSideOffset = 20
     static let TitleLabelOffset = 2
     static let CellTopBottomOffset = 12
-    static let SiteImageViewSize: CGSize = UIDevice.current.userInterfaceIdiom == .pad ? CGSize(width: 99, height: 120) : CGSize(width: 99, height: 90)
+    static let SiteImageViewSize = CGSize(width: 99, height: UIDevice.current.userInterfaceIdiom == .pad ? 120 : 90)
     static let StatusIconSize = 12
     static let FaviconSize = CGSize(width: 45, height: 45)
     static let DescriptionLabelColor = UIColor(rgb: 0x919191) // Not found in Photon colors
@@ -47,15 +47,15 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
-        descriptionLabel.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
+        descriptionLabel.setContentCompressionResistancePriority(1000, for: .vertical)
         return descriptionLabel
     }()
 
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.scaleAspectFit
+        siteImageView.contentMode = .scaleAspectFit
         siteImageView.clipsToBounds = true
-        siteImageView.contentMode = UIViewContentMode.center
+        siteImageView.contentMode = .center
         siteImageView.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
         siteImageView.layer.borderColor = ActivityStreamHighlightCellUX.BorderColor.cgColor
         siteImageView.layer.borderWidth = ActivityStreamHighlightCellUX.BorderWidth
@@ -65,7 +65,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var statusIcon: UIImageView = {
         let statusIcon = UIImageView()
-        statusIcon.contentMode = UIViewContentMode.scaleAspectFit
+        statusIcon.contentMode = .scaleAspectFit
         statusIcon.clipsToBounds = true
         statusIcon.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
         return statusIcon
@@ -162,7 +162,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         }
 
         self.domainLabel.text = site.tileURL.hostSLD
-        self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
+        self.titleLabel.text = site.title.isEmpty ? site.url : site.title
 
         if let bookmarked = site.bookmarked, bookmarked {
             self.descriptionLabel.text = Strings.HighlightBookmarkText

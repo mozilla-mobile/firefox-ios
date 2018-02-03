@@ -29,7 +29,7 @@ extension PhotonActionSheetProtocol {
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
             popoverVC.sourceRect = CGRect(x: view.frame.width/2, y: view.frame.size.height * 0.75, width: 1, height: 1)
-            popoverVC.permittedArrowDirections = UIPopoverArrowDirection.up
+            popoverVC.permittedArrowDirections = .up
             popoverVC.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
         }
         viewController.present(sheet, animated: true, completion: nil)
@@ -101,7 +101,7 @@ extension PhotonActionSheetProtocol {
 
             let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
             controller.popoverDelegate = vcDelegate
-            controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
+            controller.modalPresentationStyle = .formSheet
             vcDelegate.present(controller, animated: true, completion: nil)
         }
 
@@ -147,7 +147,7 @@ extension PhotonActionSheetProtocol {
             }
             QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
                                                                                 withUserData: userData,
-                                                                                toApplication: UIApplication.shared)
+                                                                                toApplication: .shared)
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
             success(Strings.AppMenuAddBookmarkConfirmMessage)
         }
@@ -206,13 +206,23 @@ extension PhotonActionSheetProtocol {
             presentShareMenu(url, tab, buttonView, .up)
         }
 
-        let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "action_remove") { action in
-            self.tabManager.removeTab(tab)
-        }
-
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
             UIPasteboard.general.url = tab.canonicalURL?.displayURL
             success(Strings.AppMenuCopyURLConfirmMessage)
+        }
+
+        var mainActions = [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, sendToDevice]
+
+        if let bvc = presentableVC as? BrowserViewController, bvc.topTabsVisible {
+            // If top tabs is visible (not just being on an iPad), then we should
+            // not show the "close tab" option.
+        } else {
+            // We do want to show Top Tabs when the user has this on a phone or
+            // in split view mode.
+            let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "action_remove") { action in
+                self.tabManager.removeTab(tab)
+            }
+            mainActions.append(closeTab)
         }
 
         var topActions: [PhotonActionSheetItem] = []
@@ -226,7 +236,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        return [topActions, [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, sendToDevice, closeTab], [share]]
+        return [topActions, mainActions, [share]]
     }
 
     func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {

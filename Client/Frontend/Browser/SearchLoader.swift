@@ -22,10 +22,13 @@ typealias SearchLoader = _SearchLoader<AnyObject, AnyObject>
 class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController> {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
+    fileprivate let frecentHistory: FrecentHistory
 
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile
         self.urlBar = urlBar
+        frecentHistory = profile.history.getFrecentHistory()
+
         super.init()
     }
 
@@ -46,7 +49,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             }
 
             if query.isEmpty {
-                self.load(Cursor(status: .success, msg: "Empty query"))
+                load(Cursor(status: .success, msg: "Empty query"))
                 return
             }
 
@@ -54,10 +57,10 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
             }
 
-            let deferred = self.profile.history.getSitesByFrecencyWithHistoryLimit(100, bookmarksLimit: 5, whereURLContains: query)
+            let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
             currentDbQuery = deferred as? Cancellable
 
-            deferred.uponQueue(DispatchQueue.main) { result in
+            deferred.uponQueue(.main) { result in
                 defer {
                     self.currentDbQuery = nil
                 }
@@ -94,15 +97,15 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         // Extract the pre-path substring from the URL. This should be more efficient than parsing via
         // NSURL since we need to only look at the beginning of the string.
         // Note that we won't match non-HTTP(S) URLs.
-        guard let match = URLBeforePathRegex.firstMatch(in: url, options: NSRegularExpression.MatchingOptions(), range: NSRange(location: 0, length: url.characters.count)) else {
+        guard let match = URLBeforePathRegex.firstMatch(in: url, options: [], range: NSRange(location: 0, length: url.characters.count)) else {
             return nil
         }
 
         // If the pre-path component (including the scheme) starts with the query, just use it as is.
         var prePathURL = (url as NSString).substring(with: match.rangeAt(0))
-        if prePathURL.startsWith(query) {
+        if prePathURL.hasPrefix(query) {
             // Trailing slashes in the autocompleteTextField cause issues with Swype keyboard. Bug 1194714
-            if prePathURL.endsWith("/") {
+            if prePathURL.hasSuffix("/") {
                 prePathURL.remove(at: prePathURL.index(before: prePathURL.endIndex))
             }
             return prePathURL
@@ -118,7 +121,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
 
     fileprivate func completionForDomain(_ domain: String) -> String? {
         let domainWithDotPrefix: String = ".\(domain)"
-        if let range = domainWithDotPrefix.range(of: ".\(query)", options: NSString.CompareOptions.caseInsensitive, range: nil, locale: nil) {
+        if let range = domainWithDotPrefix.range(of: ".\(query)", options: .caseInsensitive, range: nil, locale: nil) {
             // We don't actually want to match the top-level domain ("com", "org", etc.) by itself, so
             // so make sure the result includes at least one ".".
             let matchedDomain: String = domainWithDotPrefix.substring(from: domainWithDotPrefix.index(range.lowerBound, offsetBy: 1))

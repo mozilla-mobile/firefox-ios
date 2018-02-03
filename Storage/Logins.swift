@@ -240,7 +240,7 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
 
     public init(guid: String, hostname: String, username: String, password: String) {
         self.guid = guid
-        self.credentials = URLCredential(user: username, password: password, persistence: URLCredential.Persistence.none)
+        self.credentials = URLCredential(user: username, password: password, persistence: .none)
 
         // Break down the full url hostname into its scheme/protocol and host components
         let hostnameURL = hostname.asURL

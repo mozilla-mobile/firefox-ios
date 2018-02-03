@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Shared
 import SnapKit
 import UIKit
@@ -46,7 +45,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             self.url = profile.accountConfiguration.signInURL
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(FxAContentViewController.userDidVerify(_:)), name: NotificationFirefoxAccountVerified, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -73,24 +72,15 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     override func makeWebView() -> WKWebView {
-        // Inject  our setup code after the page loads.
-        let source = getJS()
-        let userScript = WKUserScript(
-            source: source,
-            injectionTime: WKUserScriptInjectionTime.atDocumentEnd,
-            forMainFrameOnly: true
-        )
-
         // Handle messages from the content server (via our user script).
         let contentController = WKUserContentController()
-        contentController.addUserScript(userScript)
         contentController.add(LeakAvoider(delegate: self), name: "accountsCommandHandler")
 
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
 
         let webView = WKWebView(
-            frame: CGRect(x: 0, y: 0, width: 1, height: 1),
+            frame: CGRect(width: 1, height: 1),
             configuration: config
         )
         webView.allowsLinkPreview = false
@@ -150,9 +140,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         guard let account = profile.getAccount() else {
             return
         }
-        // We can't verify against the actionNeeded of the account, 
+        // We can't verify against the actionNeeded of the account,
         // because of potential race conditions.
-        // However, we restrict visibility of this method, and make sure 
+        // However, we restrict visibility of this method, and make sure
         // we only Notify via the FxALoginStateMachine.
         let flags = FxALoginFlags(pushEnabled: account.pushRegistration != nil,
                                   verified: true)
@@ -229,11 +219,6 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         }).joined(separator: "&")
         
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
-    }
-
-    fileprivate func getJS() -> String {
-        let fileRoot = Bundle.main.path(forResource: "FxASignIn", ofType: "js")
-        return (try! NSString(contentsOfFile: fileRoot!, encoding: String.Encoding.utf8.rawValue)) as String
     }
 
     override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

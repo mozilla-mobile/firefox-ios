@@ -47,6 +47,7 @@ let ViewBookmarksLocalOnMirror = "view_bookmarksLocal_on_mirror"
 let ViewBookmarksLocalStructureOnMirror = "view_bookmarksLocalStructure_on_mirror"
 let ViewAllBookmarks = "view_all_bookmarks"
 let ViewAwesomebarBookmarks = "view_awesomebar_bookmarks"
+let TempTableAwesomebarBookmarks = "awesomebar_bookmarks_temp_table"
 let ViewAwesomebarBookmarksWithIcons = "view_awesomebar_bookmarks_with_favicons"
 
 let ViewHistoryVisits = "view_history_visits"

@@ -12,7 +12,7 @@ class PrivateModeButton: ToggleButton, Themeable {
         accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
         accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
         let maskImage = UIImage(named: "smallPrivateMask")?.withRenderingMode(.alwaysTemplate)
-        setImage(maskImage, for: UIControlState())
+        setImage(maskImage, for: [])
     }
     
     required init?(coder aDecoder: NSCoder) {

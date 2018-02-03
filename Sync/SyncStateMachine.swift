@@ -97,9 +97,9 @@ open class SyncStateMachine {
 
     let scratchpadPrefs: Prefs
 
-    /// Use this set of states to constrain the state machine to attempt the barest 
+    /// Use this set of states to constrain the state machine to attempt the barest
     /// minimum to get to Ready. This is suitable for extension uses. If it is not possible,
-    /// then no destructive or expensive actions are taken (e.g. total HTTP requests, 
+    /// then no destructive or expensive actions are taken (e.g. total HTTP requests,
     /// duration, records processed, database writes, fsyncs, blanking any local collections)
     public static let OptimisticStates = Set(SyncStateLabel.optimisticValues)
 
@@ -143,16 +143,16 @@ open class SyncStateMachine {
 
     open func toReady(_ authState: SyncAuthState) -> ReadyDeferred {
         let token = authState.token(Date.now(), canBeExpired: false)
-        return chainDeferred(token, f: { (token, kB) in
+        return chainDeferred(token, f: { (token, kSync) in
             log.debug("Got token from auth state.")
             if Logger.logPII {
                 log.debug("Server is \(token.api_endpoint).")
             }
-            let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB))
+            let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync))
             if prior == nil {
                 log.info("No persisted Sync state. Starting over.")
             }
-            var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs)
+            var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKSync(kSync), persistingTo: self.scratchpadPrefs)
 
             // Take the scratchpad and add the fxaDeviceId from the state, and hashedUID from the token
             let b = Scratchpad.Builder(p: scratchpad)
@@ -168,6 +168,10 @@ open class SyncStateMachine {
             if let enginesEnablements = authState.enginesEnablements,
                !enginesEnablements.isEmpty {
                 b.enginesEnablements = enginesEnablements
+            }
+
+            if let clientName = authState.clientName {
+                b.clientName = clientName
             }
 
             // Detect if we've changed anything in our client record from the last time we synced…
@@ -245,7 +249,7 @@ public enum SyncStateLabel: String {
     ]
 
     // This is the list of states needed to get to Ready, or failing.
-    // This is useful in circumstances where it is important to conserve time and/or battery, and failure 
+    // This is useful in circumstances where it is important to conserve time and/or battery, and failure
     // to timely sync is acceptable.
     static let optimisticValues: [SyncStateLabel] = [
         InitialWithLiveToken,

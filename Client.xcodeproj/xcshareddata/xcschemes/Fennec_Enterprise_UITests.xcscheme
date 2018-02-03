@@ -206,9 +206,6 @@
                   Identifier = "SearchTests">
                </Test>
                <Test
-                  Identifier = "SessionRestoreTests">
-               </Test>
-               <Test
                   Identifier = "SettingsTests">
                </Test>
                <Test

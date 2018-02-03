@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Shared
 import SnapKit
 import UIKit
@@ -26,7 +25,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             if isLoaded {
                 UIView.transition(from: interstitialView, to: webView,
                     duration: 0.5,
-                    options: UIViewAnimationOptions.transitionCrossDissolve,
+                    options: .transitionCrossDissolve,
                     completion: { finished in
                         self.interstitialView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
@@ -41,7 +40,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
                 interstitialErrorView.isHidden = false
                 UIView.transition(from: interstitialSpinnerView, to: interstitialErrorView,
                     duration: 0.5,
-                    options: UIViewAnimationOptions.transitionCrossDissolve,
+                    options: .transitionCrossDissolve,
                     completion: { finished in
                         self.interstitialSpinnerView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
@@ -63,7 +62,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             return
         }
         if timeout > 0 {
-            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SettingsContentViewController.SELdidTimeOut), userInfo: nil, repeats: false)
+            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SELdidTimeOut), userInfo: nil, repeats: false)
         } else {
             self.timer = nil
         }
@@ -110,7 +109,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     func makeWebView() -> WKWebView {
         let config = WKWebViewConfiguration()
         let webView = WKWebView(
-            frame: CGRect(x: 0, y: 0, width: 1, height: 1),
+            frame: CGRect(width: 1, height: 1),
             configuration: config
         )
         webView.allowsLinkPreview = false
@@ -124,14 +123,14 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         // Keeping the background constant prevents a pop of mismatched color.
         view.backgroundColor = interstitialBackgroundColor
 
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         view.addSubview(spinner)
 
         let error = UILabel()
         if let _ = settingsTitle {
             error.text = TODOPageLoadErrorString
             error.textColor = UIColor.red // Firefox Orange!
-            error.textAlignment = NSTextAlignment.center
+            error.textAlignment = .center
         }
         error.isHidden = true
         view.addSubview(error)
@@ -163,7 +162,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             completionHandler(.useCredential, WebServer.sharedInstance.credentials)
             return
         }
-        completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
+        completionHandler(.performDefaultHandling, nil)
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {

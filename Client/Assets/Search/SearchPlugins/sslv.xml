@@ -1,0 +1,14 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>SS.lv</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAA9lBMVEUbgSwbgiwAAAAbgSwbgSwbgSwbgSwbgSwbgSwbgSwbgSwbgSz///8OeiAMeR4WficZgCsQfCISfSQUfiYYgCn4+/g3kUeGvY/w9/FCmFGv07UtjT8miTjy+PNWomMdgy5wsXsvjkD8/vz6/PojhjRsr3g7k0opizrO5NLC3saayKNiqm8ghTL1+vbr9e3d7ODF38m42L2VxZ1/uYl8t4Zfp2w+lU7h7+PY6tu928Kr0bKRw5mLwJRapWZMnVrl8efV6dm+3cS01rporXNHmlYzj0IDdBbp8+rR5tXK486jzaqfyqcJeByDu4xcp2ZRoF+nz612tIGuaDd8AAAAC3RSTlPt7QC1BufSZ2Qbz/HVnJkAAASESURBVGje7Zr5U9pAFMcpWI9u9kxQEoEAcovcogh4IOCFWv//f6bZ3YQlBvpDp5mpnXydcfJe2PfJviM4zsbi8Z39xPeYq2/Oz58pGOB7Yn8nHo/FD36A0PTjIB7b2QUhancntg9C1X4sAUJVIvYdhCqnfUCoikWACPAVAN9AqPoW7eAfKHIEiAARIAJEgAjwCYAhpIxSBHXlY4j7IIIY+IS5iLw2lKHu4QCAoPRpvdNuT7v3hxQaMjws96za0501nqQhJCq+fewoXxQeks5zo8ENZR/bnwC68XqjuTqr5cRaWJ4mPd+DNbFXBP3wIZVKZXqQG/Ajw40+cuMbbW5fFg0fADfutHVdUWflJOXznUIFOOGOIxGTZsVdC7qRKhlutplvB0TvaD4NKWCDM7+vtAZIKgDOi4iPhtwgvda4RsgHgBMZo/38Mm0VnIsOBXDq5qb+Mrz5DYCQW25k8rKuqC+WvUE/4KfI/TlEENpm71GrUVxpcl+1ghCkxff6g5ZDQYBarF1TaV1xI3mo+wCsxr2XohkNhoz7MWZmgfvGC9GJFFWOJmwzAH0IQE/uB1yKUIBsAJzkllR2nkPSB6KQF+Wl7k6JATYDmLlWZTwXt64g8KfoWROyTIawOz7pB+FKHR2rEdgIMIo36qHhuViVgyBQZKl2KY2YSiZX5ioLEN4OALSj0o5G/LpgMj+A4JrmqVkv83C+Nr3tFyHZCkC91ZwQmeyWTfwAoFcetZWS9QYTu1UE7SJHyTYAm2lcdcQT2/RK4AcAVnzWlKppzAnmk6bUpWQLwGhciEUG8cYsFwQADK87Bc1Th4rkGqW1jd3DLQAALTFGeQzQq2jHsu4HSFFq1lcvvGsmX7Eka2Vc1yUh2wA5rwhsKEpGyGeAITwMFU9rmvcuwXIkYL53oanWCACUXUdYluAFgU8AkjaoTBSCRyLalIIKxdK3LFaF75y3CREBRflfvThEr8oHh++rD/oBMFczEZW7yIsJHjI27RaXErF4XaWA2VQHOJ/y7QCgsUz9YiRms4KDAK3w08QIQrQoiWDPkN5pF/0KdXxLfSh8WUpndy1rzty2sRZMZ4xB5jXP/ULs5I6CIED0Wb30Vro6cVuG8qip4fj+tCdbqZmmhyle7AZmbTEv/XJ5MJi9vRvEFsTOm6hFH20C+NWyDWcHfo0gGrspRkfSVUgWnNZ+ogC5UyQzxYKAkj9WakbdN4xS2zbQyK2FPj/zPQ2B58qsYhIAkMbHrab0ZEL+Vdhtrj3WS0MHTKT6Jo2B02tKmWMs+1NqjEAAAAgCk5fb1IlWyLSsU9mzGFVKVitzUkg2q11TfBnRUivzZFLemP0bRTAZQNbKmtEAQE4UMo7L5mBuq9c/htCeDwaHFYzctMJG3mDy4+lsr9vtjvq581mRADzPunq3SQDgMbDOmO7dVj4dK5+BV3SKeFs7vxgRpify//7x6ygCRIAIAEAEiAD/JODr/3v/6+8gAkSALwAI+9BA+Mce9kCo2gv/6En8IETC7kGcH//ZS8T+4vEfpcTeTjz+C4Nly9L0wwvnAAAAAElFTkSuQmCC</Image>
+<Url type="text/html" method="POST" template="https://www.ss.lv/lv/search_result/index.html">
+  <Param name="txt" value="{searchTerms}"/>
+  <Param name="from" value="firefox-plugin"/>
+</Url>
+<SearchForm>https://www.ss.lv</SearchForm>
+</SearchPlugin>

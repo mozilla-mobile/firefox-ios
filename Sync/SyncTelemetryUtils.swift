@@ -23,6 +23,7 @@ public enum SyncReason: String {
     case didLogin = "didLogin"
     case push = "push"
     case engineEnabled = "engineEnabled"
+    case clientNameChanged = "clientNameChanged"
 }
 
 public enum SyncPingReason: String {
@@ -52,7 +53,7 @@ extension SyncUploadStats: DictionaryRepresentable {
     func asDictionary() -> [String: Any] {
         return [
             "sent": sent,
-            "sentFailed": sentFailed
+            "failed": sentFailed
         ]
     }
 }
@@ -250,18 +251,17 @@ public struct SyncPing: SyncTelemetryPing {
                             why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
         // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for
         // our ping's identifiers
-        return account.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kB) in
+        return account.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kSync) in
             let scratchpadPrefs = prefs.branch("sync.scratchpad")
-            guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB)) else {
+            guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync)) else {
                 return deferMaybe(SyncPingError.failedToRestoreScratchpad)
             }
 
-            var ping: [String: Any] = [
-                "version": 1,
-                "why": why.rawValue,
-                "uid": token.hashedFxAUID,
-                "deviceID": (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
-            ]
+            var ping: [String: Any] = pingCommonData(
+                why: why,
+                hashedUID: token.hashedFxAUID,
+                hashedDeviceID: (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
+            )
 
             // TODO: We don't cache our sync pings so if it fails, it fails. Once we add
             // some kind of caching we'll want to make sure we don't dump the events if
@@ -277,6 +277,20 @@ public struct SyncPing: SyncTelemetryPing {
                 return deferMaybe(SyncPing(payload: JSON(ping)))
             }
         }
+    }
+
+    static func pingCommonData(why: SyncPingReason, hashedUID: String, hashedDeviceID: String) -> [String: Any] {
+         return [
+            "version": 1,
+            "why": why.rawValue,
+            "uid": hashedUID,
+            "deviceID": hashedDeviceID,
+            "os": [
+                "name": "iOS",
+                "version": UIDevice.current.systemVersion,
+                "locale": Locale.current.identifier
+            ]
+        ]
     }
 
     // Generates a single sync ping payload that is stored in the 'syncs' list in the sync ping.

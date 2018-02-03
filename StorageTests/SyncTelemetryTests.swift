@@ -114,5 +114,26 @@ extension SyncTelemetryTests {
         let uploadStats = synchronizer.statsSession.uploadStats
         XCTAssertEqual(uploadStats.sent, 1)
         XCTAssertEqual(uploadStats.sentFailed, 1)
+        
+        XCTAssertEqual(uploadStats.asDictionary()["failed"] as? Int, 1)
     }
+
+    func testCommonData() {
+        let data = SyncPing.pingCommonData(why: SyncPingReason.schedule, hashedUID: "fake-uid", hashedDeviceID: "fake-device-id")
+        XCTAssertEqual(data["version"] as? Int, 1)
+        XCTAssertEqual(data["why"] as? String, "schedule")
+        XCTAssertEqual(data["uid"] as? String, "fake-uid")
+        XCTAssertEqual(data["deviceID"] as? String, "fake-device-id")
+
+        guard let os = data["os"] as? [String: Any] else {
+            XCTFail("Ping common data should have os property.")
+            return
+        }
+
+        XCTAssertEqual(os["name"] as? String, "iOS")
+        // Just check they exist and have sane types.
+        XCTAssertTrue(os["version"] is String)
+        XCTAssertTrue(os["locale"] is String)
+    }
+
 }

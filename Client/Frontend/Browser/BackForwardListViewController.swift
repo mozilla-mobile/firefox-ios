@@ -126,7 +126,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         }
         let moveToIndexPath = IndexPath(row: index-2, section: 0)
         tableView.reloadRows(at: [moveToIndexPath], with: .none)
-        tableView.scrollToRow(at: moveToIndexPath, at: UITableViewScrollPosition.middle, animated: false)
+        tableView.scrollToRow(at: moveToIndexPath, at: .middle, animated: false)
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -192,7 +192,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
 
     func setupDismissTap() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(BackForwardListViewController.handleTap))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         tap.cancelsTouchesInView = false
         tap.delegate = self
         view.addGestureRecognizer(tap)

@@ -15,12 +15,12 @@ open class NSUserDefaultsPrefs: Prefs {
     }
 
     init(prefix: String, userDefaults: UserDefaults) {
-        self.prefixWithDot = prefix + (prefix.endsWith(".") ? "" : ".")
+        self.prefixWithDot = prefix + (prefix.hasSuffix(".") ? "" : ".")
         self.userDefaults = userDefaults
     }
 
     init(prefix: String) {
-        self.prefixWithDot = prefix + (prefix.endsWith(".") ? "" : ".")
+        self.prefixWithDot = prefix + (prefix.hasSuffix(".") ? "" : ".")
         self.userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
     }
 
@@ -129,7 +129,7 @@ open class NSUserDefaultsPrefs: Prefs {
         // TODO: userDefaults.removePersistentDomainForName() has no effect for app group suites.
         // iOS Bug? Iterate and remove each manually for now.
         for key in userDefaults.dictionaryRepresentation().keys {
-            if key.startsWith(prefixWithDot) {
+            if key.hasPrefix(prefixWithDot) {
                 userDefaults.removeObject(forKey: key)
             }
         }

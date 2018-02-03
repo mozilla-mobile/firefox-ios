@@ -47,7 +47,7 @@ class PasscodeInputView: UIView, UIKeyInput {
     }
 
     convenience init(passcodeSize: Int) {
-        self.init(frame: CGRect.zero, passcodeSize: passcodeSize)
+        self.init(frame: .zero, passcodeSize: passcodeSize)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,28 +64,28 @@ class PasscodeInputView: UIView, UIKeyInput {
     }
 
     @objc var hasText: Bool {
-        return inputtedCode.characters.count > 0
+        return !inputtedCode.isEmpty
     }
 
     @objc func insertText(_ text: String) {
-        guard inputtedCode.characters.count < passcodeSize else {
+        guard inputtedCode.count < passcodeSize else {
             return
         }
 
         inputtedCode += text
         setNeedsDisplay()
-        if inputtedCode.characters.count == passcodeSize {
+        if inputtedCode.count == passcodeSize {
             delegate?.passcodeInputView(self, didFinishEnteringCode: inputtedCode)
         }
     }
 
     // Required for implementing UIKeyInput
     @objc func deleteBackward() {
-        guard inputtedCode.characters.count > 0 else {
+        guard !inputtedCode.isEmpty else {
             return
         }
 
-        inputtedCode.remove(at: inputtedCode.characters.index(before: inputtedCode.endIndex))
+        inputtedCode.remove(at: inputtedCode.index(before: inputtedCode.endIndex))
         setNeedsDisplay()
     }
 
@@ -100,10 +100,10 @@ class PasscodeInputView: UIView, UIKeyInput {
 
         (0..<passcodeSize).forEach { index in
             let offset = floor(rect.width / CGFloat(passcodeSize))
-            var circleRect = CGRect(origin: CGPoint.zero, size: circleSize)
+            var circleRect = CGRect(size: circleSize)
             circleRect.center = CGPoint(x: (offset * CGFloat(index + 1))  - offset / 2, y: rect.height / 2)
 
-            if index < inputtedCode.characters.count {
+            if index < inputtedCode.count {
                 context.fillEllipse(in: circleRect)
             } else {
                 context.strokeEllipse(in: circleRect)
@@ -141,7 +141,7 @@ class PasscodePane: UIView {
 
     init(title: String? = nil, passcodeSize: Int = 4) {
         codeInputView = PasscodeInputView(passcodeSize: passcodeSize)
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
         titleLabel.text = title
@@ -166,8 +166,8 @@ class PasscodePane: UIView {
             make.size.equalTo(PasscodeUX.PasscodeFieldSize)
         }
         layoutIfNeeded()
-        NotificationCenter.default.addObserver(self, selector: #selector(PasscodePane.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(PasscodePane.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
     }
 
     func shakePasscode() {

@@ -27,7 +27,7 @@ class SearchSettingsTableViewController: UITableViewController {
     var tabManager: TabManager?
 
     fileprivate var isEditable: Bool {
-        // If the default engine is a custom one, make sure we have more than one since we can't edit the default. 
+        // If the default engine is a custom one, make sure we have more than one since we can't edit the default.
         // Otherwise, enable editing if we have at least one custom engine.
         let customEngineCount = model.orderedEngines.filter({$0.isCustomEngine}).count
         return model.defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
@@ -52,7 +52,7 @@ class SearchSettingsTableViewController: UITableViewController {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchDoneButton, style: .done, target: self, action: #selector(self.dismissAnimated))
         }
 
-        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 44))
+        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: 44))
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
 
@@ -60,7 +60,7 @@ class SearchSettingsTableViewController: UITableViewController {
         tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .plain, target: self,
-                                                                 action: #selector(SearchSettingsTableViewController.beginEditing))
+                                                                 action: #selector(beginEditing))
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -84,8 +84,8 @@ class SearchSettingsTableViewController: UITableViewController {
             switch indexPath.item {
             case ItemDefaultEngine:
                 engine = model.defaultEngine
-                cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
-                cell.editingAccessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+                cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
                 cell.accessibilityValue = engine.shortName
                 cell.textLabel?.text = engine.shortName
@@ -93,11 +93,11 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
             case ItemDefaultSuggestions:
-                cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
                 let toggle = UISwitch()
                 toggle.onTintColor = UIConstants.ControlTintColor
-                toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.didToggleSearchSuggestions(_:)), for: UIControlEvents.valueChanged)
+                toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
                 cell.selectionStyle = .none
@@ -111,14 +111,14 @@ class SearchSettingsTableViewController: UITableViewController {
             if index < model.orderedEngines.count {
                 engine = model.orderedEngines[index]
 
-                cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.showsReorderControl = true
 
                 let toggle = UISwitch()
                 toggle.onTintColor = UIConstants.ControlTintColor
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
-                toggle.addTarget(self, action: #selector(SearchSettingsTableViewController.didToggleEngine(_:)), for: UIControlEvents.valueChanged)
+                toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)
                 toggle.isOn = model.isEngineEnabled(engine)
 
                 cell.editingAccessoryView = toggle
@@ -130,8 +130,8 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.imageView?.layer.masksToBounds = true
                 cell.selectionStyle = .none
             } else {
-                cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
-                cell.editingAccessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+                cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = Strings.SettingsAddCustomEngineTitle
                 cell.accessibilityIdentifier = "customEngineViewButton"
                 cell.textLabel?.text = Strings.SettingsAddCustomEngine
@@ -139,7 +139,7 @@ class SearchSettingsTableViewController: UITableViewController {
         }
 
         // So that the seperator line goes all the way to the left edge.
-        cell.separatorInset = UIEdgeInsets.zero
+        cell.separatorInset = .zero
 
         return cell
     }
@@ -281,7 +281,7 @@ class SearchSettingsTableViewController: UITableViewController {
         }
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
         navigationItem.rightBarButtonItem?.action = editing ?
-            #selector(SearchSettingsTableViewController.finishEditing) : #selector(SearchSettingsTableViewController.beginEditing)
+            #selector(finishEditing) : #selector(beginEditing)
         tableView.reloadData()
     }
 }

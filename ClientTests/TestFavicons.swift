@@ -14,7 +14,7 @@ class TestFavicons: ProfileTest {
     fileprivate func addSite(_ favicons: Favicons, url: String, s: Bool = true) {
         let expectation = self.expectation(description: "Wait for history")
         let site = Site(url: url, title: "")
-        let icon = Favicon(url: url + "/icon.png", type: IconType.icon)
+        let icon = Favicon(url: url + "/icon.png")
         favicons.addFavicon(icon, forSite: site).upon {
             XCTAssertEqual($0.isSuccess, s, "Icon added \(url)")
             expectation.fulfill()
@@ -28,18 +28,18 @@ class TestFavicons: ProfileTest {
         let profile = MockProfile()
         // I want a site that also has an iOS app so I can get "apple-touch-icon-precomposed" icons as well
         let url = URL(string: "https://instagram.com")
-        FaviconFetcher.getForURL(url!, profile: profile).uponQueue(DispatchQueue.main) { result in
+        FaviconFetcher.getForURL(url!, profile: profile).uponQueue(.main) { result in
             guard let favicons = result.successValue, favicons.count > 0, let url = favicons.first?.url.asURL else {
                 XCTFail("Favicons were not found.")
                 return expectation.fulfill()
             }
-            XCTAssertGreaterThan(favicons.count, 1, "Instagram should have more than one Favicon.")
+            XCTAssertEqual(favicons.count, 1, "Instagram should have a Favicon.")
             SDWebImageManager.shared().loadImage(with: url, options: .retryFailed, progress: nil, completed: { (img, _, _, _, _, _) in
                 guard let image = img else {
                     XCTFail("Not a valid URL provided for a favicon.")
                     return expectation.fulfill()
                 }
-                XCTAssertNotEqual(image.size, CGSize(width: 0, height: 0))
+                XCTAssertNotEqual(image.size, .zero)
                 expectation.fulfill()
             })
 

@@ -587,12 +587,9 @@ class BookmarkFactory {
     fileprivate class func addIcon(_ bookmark: BookmarkNode, row: SDRow) {
         // TODO: share this logic with SQLiteHistory.
         if let faviconURL = row["iconURL"] as? String,
-           let date = row["iconDate"] as? Double,
-           let faviconType = row["iconType"] as? Int,
-           let type = IconType(rawValue: faviconType) {
+           let date = row["iconDate"] as? Double {
                 bookmark.favicon = Favicon(url: faviconURL,
-                                           date: Date(timeIntervalSince1970: date),
-                                           type: type)
+                                           date: Date(timeIntervalSince1970: date))
         }
     }
 

@@ -11,7 +11,6 @@
 //  Copyright © 2017 Felix Mau. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 open class GradientProgressBar: UIProgressView {
@@ -84,10 +83,10 @@ open class GradientProgressBar: UIProgressView {
     private func setupAlphaMaskLayer() {
         alphaMaskLayer.frame = bounds
         alphaMaskLayer.cornerRadius = 3
-        
-        alphaMaskLayer.anchorPoint = CGPoint(x: 0, y: 0)
-        alphaMaskLayer.position = CGPoint(x: 0, y: 0)
-        
+
+        alphaMaskLayer.anchorPoint = .zero
+        alphaMaskLayer.position = .zero
+
         alphaMaskLayer.backgroundColor = UIColor.white.cgColor
     }
     
@@ -98,7 +97,7 @@ open class GradientProgressBar: UIProgressView {
         gradientLayer.frame = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width * 2, height: bounds.size.height)
         gradientLayer.colors = gradientColors
         gradientLayer.locations = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.0]
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.startPoint = .zero
         gradientLayer.endPoint = CGPoint(x: 1, y: 0)
         gradientLayer.drawsAsynchronously = true
     }

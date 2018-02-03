@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import GCDWebServers
 @testable import Client
 import UIKit
@@ -12,7 +11,7 @@ import XCTest
 class SearchTests: XCTestCase {
     func testParsing() {
         let parser = OpenSearchParser(pluginMode: true)
-        let file = Bundle.main.path(forResource: "google", ofType: "xml", inDirectory: "SearchPlugins/en")
+        let file = Bundle.main.path(forResource: "google", ofType: "xml", inDirectory: "SearchPlugins/")
         let engine: OpenSearchEngine! = parser.parse(file!, engineID: "google")
         XCTAssertEqual(engine.shortName, "Google")
 
@@ -101,7 +100,7 @@ class SearchTests: XCTestCase {
 
     func testExtractingOfSearchTermsFromURL() {
         let parser = OpenSearchParser(pluginMode: true)
-        var file = Bundle.main.path(forResource: "google", ofType: "xml", inDirectory: "SearchPlugins/en")
+        var file = Bundle.main.path(forResource: "google", ofType: "xml", inDirectory: "SearchPlugins/")
         let googleEngine: OpenSearchEngine! = parser.parse(file!, engineID: "google")
 
         // create URL
@@ -118,7 +117,7 @@ class SearchTests: XCTestCase {
         XCTAssertNil(googleEngine.queryForSearchURL(invalidSearchURL))
 
         // check that it matches given a different configuration
-        file = Bundle.main.path(forResource: "duckduckgo", ofType: "xml", inDirectory: "SearchPlugins/en")
+        file = Bundle.main.path(forResource: "duckduckgo", ofType: "xml", inDirectory: "SearchPlugins/")
         let duckDuckGoEngine: OpenSearchEngine! = parser.parse(file!, engineID: "duckduckgo")
         XCTAssertEqual(searchTerm, duckDuckGoEngine.queryForSearchURL(duckDuckGoSearchURL))
 

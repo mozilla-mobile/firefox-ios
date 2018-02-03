@@ -153,22 +153,20 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertFalse(engines2.shouldShowSearchSuggestions)
     }
 
-    func testDirectoriesForLanguageIdentifier() {
-        XCTAssertEqual(
-            SearchEngines.directoriesForLanguageIdentifier("nl", basePath: "/tmp", fallbackIdentifier: "en"),
-            ["/tmp/nl", "/tmp/en"]
-        )
-        XCTAssertEqual(
-            SearchEngines.directoriesForLanguageIdentifier("en-US", basePath: "/tmp", fallbackIdentifier: "en"),
-            ["/tmp/en-US", "/tmp/en"]
-        )
-        XCTAssertEqual(
-            SearchEngines.directoriesForLanguageIdentifier("es-MX", basePath: "/tmp", fallbackIdentifier: "en"),
-            ["/tmp/es-MX", "/tmp/es", "/tmp/en"]
-        )
-        XCTAssertEqual(
-            SearchEngines.directoriesForLanguageIdentifier("zh-Hans-CN", basePath: "/tmp", fallbackIdentifier: "en"),
-            ["/tmp/zh-Hans-CN", "/tmp/zh-CN", "/tmp/zh", "/tmp/en"]
-        )
+    func testUnorderedSearchEngines() {
+        XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "zh-TW")).flatMap({$0.shortName}), ["Google", "Bing", "DuckDuckGo", "Wikipedia (zh)"])
+        XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-CA")).flatMap({$0.shortName}), ["Google", "Yahoo", "Bing", "Amazon.com", "DuckDuckGo", "Twitter", "Wikipedia"])
+        XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "de-DE")).flatMap({$0.shortName}), ["Google", "Yahoo", "Bing", "Amazon.de", "DuckDuckGo", "Qwant", "Twitter", "Wikipedia (de)"])
+        XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-US")).flatMap({$0.shortName}), ["Google", "Yahoo", "Bing", "Amazon.com", "DuckDuckGo", "Twitter", "Wikipedia"])
     }
+
+    func testGetOrderedEngines() {
+        // setup an existing search engine in the profile
+        let profile = MockProfile()
+        profile.prefs.setObject(["Google"], forKey: "search.orderedEngineNames")
+        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
+        XCTAssert(engines.orderedEngines.count > 1, "There should be more than one search engine")
+        XCTAssertEqual(engines.orderedEngines.first!.shortName, "Google", "Google should be the first search engine")
+    }
+
 }

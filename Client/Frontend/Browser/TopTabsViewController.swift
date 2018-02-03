@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Storage
 import WebKit
 
 struct TopTabsUX {
@@ -36,7 +37,6 @@ class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var isPrivate = false
-    let faviconNotification = NSNotification.Name(rawValue: FaviconManager.FaviconDidLoad)
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
@@ -51,21 +51,21 @@ class TopTabsViewController: UIViewController {
     
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: UIControlEvents.touchUpInside)
+        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
     
     fileprivate lazy var newTab: UIButton = {
         let newTab = UIButton.newTabButton()
-        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: UIControlEvents.touchUpInside)
+        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
         return newTab
     }()
     
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.light = true
-        privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: UIControlEvents.touchUpInside)
+        privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
         return privateModeButton
     }()
     
@@ -88,6 +88,8 @@ class TopTabsViewController: UIViewController {
     fileprivate var oldTabs: [Tab]? // The last state of the tabs before an animation
     fileprivate weak var oldSelectedTab: Tab? // Used to select the right tab when transitioning between private/normal tabs
 
+    private var tabObservers: TabObservers!
+
     init(tabManager: TabManager) {
         self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
@@ -96,11 +98,12 @@ class TopTabsViewController: UIViewController {
         [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(TopTabsViewController.reloadFavicons(_:)), name: faviconNotification, object: nil)
+        self.tabObservers = registerFor(.didLoadFavicon, queue: .main)
     }
     
     deinit {
         self.tabManager.removeDelegate(self)
+        unregister(tabObservers)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -210,16 +213,6 @@ class TopTabsViewController: UIViewController {
             tabManager.selectTab(tab)
         } else {
             tabManager.selectTab(tabs.last)
-        }
-    }
-
-    func reloadFavicons(_ notification: Notification) {
-        // Notifications might be called from a different thread. Make sure animations only happen on the main thread.
-        DispatchQueue.main.async {
-            if let tab = notification.object as? Tab, self.tabStore.index(of: tab) != nil {
-                self.needReloads.append(tab)
-                self.performTabUpdates()
-            }
         }
     }
     
@@ -333,6 +326,17 @@ extension TopTabsViewController: TabSelectionDelegate {
         let tab = tabStore[index]
         if tabsToDisplay.index(of: tab) != nil {
             tabManager.selectTab(tab)
+        }
+    }
+}
+
+extension TopTabsViewController: TabEventHandler {
+    func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
+        assertIsMainThread("Animations can only be performed from the main thread")
+
+        if self.tabStore.index(of: tab) != nil {
+            self.needReloads.append(tab)
+            self.performTabUpdates()
         }
     }
 }

@@ -116,11 +116,11 @@ class BackForwardTableViewCell: UITableViewCell {
         }
         
         context.saveGState()
-        context.setLineCap(CGLineCap.square)
+        context.setLineCap(.square)
         context.setStrokeColor(BackForwardViewCellUX.bgColor.cgColor)
         context.setLineWidth(1.0)
-        context.move(to: CGPoint(x: startPoint.x, y: startPoint.y))
-        context.addLine(to: CGPoint(x: endPoint.x, y: endPoint.y))
+        context.move(to: startPoint)
+        context.addLine(to: endPoint)
         context.strokePath()
         context.restoreGState()
     }

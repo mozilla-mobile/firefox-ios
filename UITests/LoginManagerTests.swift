@@ -55,9 +55,19 @@ class LoginManagerTests: KIFTestCase {
     }
     
     fileprivate func closeLoginManager() {
-        tester().tapView(withAccessibilityLabel: "Settings")
-        tester().tapView(withAccessibilityLabel: "Done")
-    }
+        EarlGrey.select(elementWithMatcher:grey_allOf([grey_accessibilityLabel("Settings"), grey_kindOfClass(NSClassFromString("UIButtonLabel")!)])).perform(grey_tap())
+
+        let DoneAppeared = GREYCondition(name: "Wait for the Done button", block: { () -> Bool in
+            var errorOrNil: NSError?
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
+                .assert(grey_notNil(), error: &errorOrNil)
+            let success = errorOrNil == nil
+            return success
+        })
+        let success = DoneAppeared?.wait(withTimeout: 10)
+        GREYAssertTrue(success!, reason: "Failed to see Done button")
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem")).perform(grey_tap())
+   }
     
     fileprivate func generateLogins() {
         let profile = (UIApplication.shared.delegate as! AppDelegate).profile!
@@ -69,7 +79,7 @@ class LoginManagerTests: KIFTestCase {
         let hostnames = generateStringListWithFormat("http://%@%d.com", numRange: numRange, prefixes: prefixes)
         let usernames = generateStringListWithFormat("%@%d@email.com", numRange: numRange, prefixes: prefixes)
         
-        (0..<(numRange.count * prefixes.characters.count)).forEach { index in
+        (0..<(numRange.count * prefixes.count)).forEach { index in
             let login = Login(guid: "\(index)", hostname: hostnames[index], username: usernames[index], password: passwords[index])
             login.formSubmitURL = hostnames[index]
             profile.logins.addLogin(login).value
@@ -94,7 +104,7 @@ class LoginManagerTests: KIFTestCase {
     }
     
     fileprivate func generateStringListWithFormat(_ format: String, numRange: CountableRange<Int>, prefixes: String) -> [String] {
-        return prefixes.characters.map { char in
+        return prefixes.map { char in
             
             return numRange.map { num in
                 return String(format: format, "\(char)", num)
@@ -120,8 +130,10 @@ class LoginManagerTests: KIFTestCase {
         // In simulator, the typing is too fast for the screen to be updated properly
         // pausing after 'password' (which all login password contains) to update the screen seems to make the test reliable
         tester().enterText(intoCurrentFirstResponder: "k10")
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         tester().waitForAnimationsToFinish()
         tester().enterText(intoCurrentFirstResponder: "@email.com")
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         tester().waitForAnimationsToFinish()
         list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
         tester().waitForView(withAccessibilityLabel: "k10@email.com")
@@ -135,8 +147,9 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
         tester().enterText(intoCurrentFirstResponder: "http://k10")
         tester().waitForAnimationsToFinish()
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         tester().enterText(intoCurrentFirstResponder: ".com")
-        tester().waitForAnimationsToFinish()
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
         tester().waitForView(withAccessibilityLabel: "k10@email.com")
         XCTAssertEqual(list.numberOfRows(inSection: 0), 1)
@@ -148,12 +161,13 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
         tester().enterText(intoCurrentFirstResponder: "password")
         tester().waitForAnimationsToFinish()
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         tester().enterText(intoCurrentFirstResponder: "d9")
+        tester().waitForAnimationsToFinish()
         list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
         tester().waitForView(withAccessibilityLabel: "d9@email.com")
+        tester().wait(forTimeInterval: 3)                     // Wait until the table is updated
         XCTAssertEqual(list.numberOfRows(inSection: 0), 1)
-
-        tester().wait(forTimeInterval: 2)
         tester().tapView(withAccessibilityLabel: "Clear Search")
         // Filter by something that doesn't match anything
         tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
@@ -180,8 +194,8 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "k0@email.com, http://k0.com")
         closeLoginManager()
     }
-    
-    
+
+
     func testDetailPasswordMenuOptions() {
         openLoginManager()
         
@@ -246,7 +260,7 @@ class LoginManagerTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
         waitForMatcher(name: "Open & Fill")
         
-        tester().wait(forTimeInterval: 5)
+        tester().wait(forTimeInterval: 10)
         tester().waitForViewWithAccessibilityValue("a0.com/")
     }
     
@@ -278,7 +292,7 @@ class LoginManagerTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
         waitForMatcher(name: "Open & Fill")
         
-        tester().wait(forTimeInterval: 2)
+        tester().wait(forTimeInterval: 10)
         tester().waitForViewWithAccessibilityValue("a0.com/")
     }
     
@@ -477,26 +491,26 @@ class LoginManagerTests: KIFTestCase {
     /*
      func testLoginListShowsNoResults() {
      openLoginManager()
-     
+
      tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
      let list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
      let oldLoginCount = countOfRowsInTableView(list)
-     
+
      // Find something that doesn't exist
      tester().tapView(withAccessibilityLabel: "Enter Search Mode")
      tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "")
      tester().enterText(intoCurrentFirstResponder: "asdfasdf")
-     
+
      // KIFTest has a bug where waitForViewWithAccessibilityLabel causes the lists to appear again on device,
      // so checking the number of rows instead
      XCTAssertEqual(oldLoginCount, 220)
      tester().waitForView(withAccessibilityLabel:"No logins found")
-     
+
      tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "")
-     
+
      // Erase search and make sure we see results instead
      tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-     
+
      closeLoginManager()
      }
      */
@@ -515,44 +529,44 @@ class LoginManagerTests: KIFTestCase {
     /*
      func testEditingDetailUsingReturnForNavigation() {
      openLoginManager()
-     
+
      tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
      tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-     
+
      tester().waitForView(withAccessibilityLabel: "password")
-     
+
      let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
-     
+
      tester().tapView(withAccessibilityLabel: "Edit")
-     
+
      // Check that we've selected the username field
      var firstResponder = UIApplication.shared.keyWindow?.firstResponder()
      let usernameCell = list.cellForRow(at: IndexPath(row: 1, section: 0)) as! LoginTableViewCell
      let usernameField = usernameCell.descriptionLabel
-     
+
      XCTAssertEqual(usernameField, firstResponder)
      tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedusername")
      tester().tapView(withAccessibilityLabel: "Next")
-     
+
      firstResponder = UIApplication.shared.keyWindow?.firstResponder()
      let passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
      let passwordField = passwordCell.descriptionLabel
-     
+
      // Check that we've navigated to the password field upon return and that the password is no longer displaying as dots
      XCTAssertEqual(passwordField, firstResponder)
      XCTAssertFalse(passwordField.isSecureTextEntry)
-     
+
      tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedpassword")
      tester().tapView(withAccessibilityLabel: "Done")
-     
+
      // Go back and find the changed login
      tester().tapView(withAccessibilityLabel: "Back")
      tester().tapView(withAccessibilityLabel: "Enter Search Mode")
      tester().enterText(intoCurrentFirstResponder: "changedusername")
-     
+
      let loginsList = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
      XCTAssertEqual(loginsList.numberOfRows(inSection: 0), 1)
-     
+
      closeLoginManager()
      }
      */

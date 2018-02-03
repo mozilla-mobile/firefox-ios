@@ -126,8 +126,8 @@ open class ServerInBackoffError: MaybeErrorType, SyncPingFailureFormattable {
 
     open var description: String {
         let formatter = DateFormatter()
-        formatter.dateStyle = DateFormatter.Style.short
-        formatter.timeStyle = DateFormatter.Style.medium
+        formatter.dateStyle = .short
+        formatter.timeStyle = .medium
         let s = formatter.string(from: Date.fromTimestamp(self.until))
         return "Server in backoff until \(s)."
     }
@@ -331,7 +331,7 @@ open class Sync15StorageClient {
         // the user root (like /1.5/1234567) and not an "empty collection" (like /1.5/1234567/); the storage
         // server treats the first like a DROP table and the latter like a DELETE *, and the former is more
         // efficient than the latter.
-        self.serverURI = URL(string: token.api_endpoint.endsWith("/")
+        self.serverURI = URL(string: token.api_endpoint.hasSuffix("/")
             ? token.api_endpoint.substring(to: token.api_endpoint.index(before: token.api_endpoint.endIndex))
             : token.api_endpoint)!
         self.authorizer = {

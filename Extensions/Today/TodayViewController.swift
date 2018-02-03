@@ -148,7 +148,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func widgetMarginInsets(forProposedMarginInsets defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
-        return UIEdgeInsets.zero
+        return .zero
     }
 
     func updateCopiedLink() {
@@ -192,7 +192,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
 extension UIButton {
     func setBackgroundColor(_ color: UIColor, forState state: UIControlState) {
-        let colorView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        let colorView = UIView(frame: CGRect(width: 1, height: 1))
         colorView.backgroundColor = color
 
         UIGraphicsBeginImageContext(colorView.bounds.size)
@@ -253,7 +253,7 @@ class ButtonWithSublabel: UIButton {
     }
 
     convenience init() {
-        self.init(frame: CGRect.zero)
+        self.init(frame: .zero)
     }
 
     override init(frame: CGRect) {

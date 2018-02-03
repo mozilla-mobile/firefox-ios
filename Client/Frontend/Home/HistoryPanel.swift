@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-
 import Shared
 import Storage
 import XCGLogger
@@ -22,7 +21,7 @@ private struct HistoryPanelUX {
 }
 
 private func getDate(_ dayOffset: Int) -> Date {
-    let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+    let calendar = Calendar(identifier: .gregorian)
     let nowComponents = (calendar as NSCalendar).components([.year, .month, .day], from: Date())
     let today = calendar.date(from: nowComponents)!
     return (calendar as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: dayOffset, to: today, options: [])!
@@ -32,11 +31,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     private var currentSyncedDevicesCount: Int?
 
-    var events = [NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged]
+    var events: [Notification.Name] = [.FirefoxAccountChanged, .PrivateDataClearedHistory, .DynamicFontChanged]
     var refreshControl: UIRefreshControl?
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(HistoryPanel.longPress(_:)))
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
@@ -56,7 +55,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Lifecycle
     init() {
         super.init(nibName: nil, bundle: nil)
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanel.notificationReceived(_:)), name: $0, object: nil) }
+        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -67,7 +66,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "History List"
-        updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
+        updateSyncedDevicesCount().uponQueue(.main) { result in
             self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
         }
     }
@@ -86,7 +85,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         if profile.hasSyncableAccount() {
             syncDetailText = " "
-            updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
+            updateSyncedDevicesCount().uponQueue(.main) { result in
                 self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
             }
         } else {
@@ -95,7 +94,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        guard longPressGestureRecognizer.state == UIGestureRecognizerState.began else { return }
+        guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
 
@@ -125,12 +124,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         reloadData()
 
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
+        case .FirefoxAccountChanged, .PrivateDataClearedHistory:
             if self.profile.hasSyncableAccount() {
                 resyncHistory()
             }
             break
-        case NotificationDynamicFontChanged:
+        case .DynamicFontChanged:
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
@@ -154,14 +153,14 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func resyncHistory() {
-        profile.syncManager.syncHistory().uponQueue(DispatchQueue.main) { result in
+        profile.syncManager.syncHistory().uponQueue(.main) { result in
             if result.isSuccess {
                 self.reloadData()
             } else {
                 self.endRefreshing()
             }
 
-            self.updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
+            self.updateSyncedDevicesCount().uponQueue(.main) { result in
                 self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
             }
         }
@@ -169,10 +168,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     // MARK: - Refreshing TableView
     func addRefreshControl() {
-        let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(HistoryPanel.refresh), for: UIControlEvents.valueChanged)
-        self.refreshControl = refresh
-        self.tableView.refreshControl = refresh
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.refreshControl = control
+        self.tableView.refreshControl = control
     }
 
     func removeRefreshControl() {
@@ -196,7 +195,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     override func reloadData() {
-        self.fetchData().uponQueue(DispatchQueue.main) { result in
+        self.fetchData().uponQueue(.main) { result in
             if let data = result.successValue {
                 self.setData(data)
                 self.tableView.reloadData()
@@ -229,7 +228,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
         welcomeLabel.text = Strings.HistoryPanelEmptyStateTitle
-        welcomeLabel.textAlignment = NSTextAlignment.center
+        welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = HistoryPanelUX.WelcomeScreenItemTextColor
         welcomeLabel.numberOfLines = 0
@@ -317,7 +316,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - TableView Delegate / DataSource
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        cell.accessoryType = UITableViewCellAccessoryType.none
+        cell.accessoryType = .none
 
         if indexPath.section == 0 {
             cell.imageView!.layer.borderWidth = 0
@@ -328,7 +327,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func configureRecentlyClosed(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        cell.accessoryType = .disclosureIndicator
         cell.textLabel!.text = Strings.RecentlyClosedTabsButtonTitle
         cell.detailTextLabel!.text = ""
         cell.imageView!.image = UIImage(named: "recently_closed")
@@ -343,11 +342,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func configureSyncedTabs(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        cell.accessoryType = .disclosureIndicator
         cell.textLabel!.text = Strings.SyncedTabsTableViewCellTitle
         cell.detailTextLabel!.text = self.syncDetailText
         cell.imageView!.image = UIImage(named: "synced_devices")
-        cell.imageView?.backgroundColor = UIColor.white
+        cell.imageView?.backgroundColor = .white
         cell.accessibilityIdentifier = "HistoryPanel.syncedDevicesCell"
         return cell
     }
@@ -462,7 +461,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             // Deferred instead of using callbacks.
             self.profile.history.removeHistoryForURL(site.url)
                 .upon { res in
-                    self.fetchData().uponQueue(DispatchQueue.main) { result in
+                    self.fetchData().uponQueue(.main) { result in
                         // If a section will be empty after removal, we must remove the section itself.
                         if let data = result.successValue {
 
@@ -513,17 +512,17 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
                             self.tableView.beginUpdates()
                             if sectionsToAdd.count > 0 {
-                                self.tableView.insertSections(sectionsToAdd as IndexSet, with: UITableViewRowAnimation.left)
+                                self.tableView.insertSections(sectionsToAdd as IndexSet, with: .left)
                             }
                             if sectionsToDelete.count > 0 {
-                                self.tableView.deleteSections(sectionsToDelete as IndexSet, with: UITableViewRowAnimation.right)
+                                self.tableView.deleteSections(sectionsToDelete as IndexSet, with: .right)
                             }
                             if !rowsToDelete.isEmpty {
-                                self.tableView.deleteRows(at: rowsToDelete, with: UITableViewRowAnimation.right)
+                                self.tableView.deleteRows(at: rowsToDelete, with: .right)
                             }
 
                             if !rowsToAdd.isEmpty {
-                                self.tableView.insertRows(at: rowsToAdd, with: UITableViewRowAnimation.right)
+                                self.tableView.insertRows(at: rowsToAdd, with: .right)
                             }
                             
                             self.tableView.endUpdates()
@@ -540,7 +539,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
         let title = NSLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
 
-        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: title, handler: { (action, indexPath) in
+        let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
         })
         return [delete]

@@ -19,7 +19,7 @@ private class KeyFetchError: MaybeErrorType {
 }
 
 class LiveStorageClientTests: LiveAccountTest {
-    func getKeys(kB: Data, token: TokenServerToken) -> Deferred<Maybe<Record<KeysPayload>>> {
+    func getKeys(kSync: Data, token: TokenServerToken) -> Deferred<Maybe<Record<KeysPayload>>> {
         let endpoint = token.api_endpoint
         XCTAssertTrue(endpoint.range(of: "services.mozilla.com") != nil, "We got a Sync server.")
 
@@ -32,7 +32,7 @@ class LiveStorageClientTests: LiveAccountTest {
             return request
         }
 
-        let keyBundle: KeyBundle = KeyBundle.fromKB(kB as Data)
+        let keyBundle: KeyBundle = KeyBundle.fromKSync(kSync)
         let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0.json })
         let encrypter = Keys(defaultBundle: keyBundle).encrypter("crypto", encoder: encoder)
 
@@ -62,7 +62,7 @@ class LiveStorageClientTests: LiveAccountTest {
 
         let keysPayload: Deferred<Maybe<Record<KeysPayload>>> = authState.bind { tokenResult in
             if let (token, forKey) = tokenResult.successValue {
-                return self.getKeys(kB: forKey, token: token)
+                return self.getKeys(kSync: forKey, token: token)
             }
             XCTAssertEqual(tokenResult.failureValue!.description, "")
             return Deferred(value: Maybe(failure: KeyFetchError()))
@@ -117,7 +117,7 @@ class LiveStorageClientTests: LiveAccountTest {
                 XCTAssertTrue(ready.collectionKeys.defaultBundle.encKey.count == 32)
                 XCTAssertTrue(ready.scratchpad.global != nil)
                 if let clients = ready.scratchpad.global?.value.engines["clients"] {
-                    XCTAssertTrue(clients.syncID.characters.count == 12)
+                    XCTAssertTrue(clients.syncID.count == 12)
                 }
             }
             XCTAssertTrue(result.isSuccess)

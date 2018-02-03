@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import Shared
 import SwiftKeychainWrapper
@@ -12,11 +11,11 @@ private let logger = Logger.browserLogger
 
 private func presentNavAsFormSheet(_ presented: UINavigationController, presenter: UINavigationController?, settings: AuthenticationSettingsViewController?) {
     presented.modalPresentationStyle = .formSheet
-    presenter?.present(presented, animated: true, completion: {
+    presenter?.present(presented, animated: true) {
         if let selectedRow = settings?.tableView.indexPathForSelectedRow {
             settings?.tableView.deselectRow(at: selectedRow, animated: false)
         }
-    })
+    }
 }
 
 class TurnPasscodeOnSetting: Setting {
@@ -196,7 +195,7 @@ class TouchIDSetting: Setting {
         let accessoryContainer = UIView(frame: control.frame)
         accessoryContainer.addSubview(control)
 
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(TouchIDSetting.switchTapped))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(switchTapped))
         accessoryContainer.addGestureRecognizer(gesture)
 
         cell.accessoryView = accessoryContainer
@@ -234,18 +233,15 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         updateTitleForTouchIDState()
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .PasscodeDidRemove, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .PasscodeDidCreate, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .UIApplicationDidBecomeActive, object: nil)
 
         tableView.accessibilityIdentifier = "AuthenticationManager.settingsTableView"
     }
 
     deinit {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func generateSettings() -> [SettingSection] {

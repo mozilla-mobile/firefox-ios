@@ -1,0 +1,13 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>DIEC2</ShortName>
+<InputEncoding>ISO-8859-1</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAe1BMVEX/AAAAAAD/CQn/AAD/AAD/AAD/AAD/AAD/Hh7/AAD/Hh7/Hh7/Hh7/AAD/////7u7/ERH/Hh7/m5v/hob/9vb/DAz/Kyv/6ur/19f/x8f/V1f/GBj/a2v/Pj7/8fH//Pz/ZWX/Ojr/6+v/2tr/y8v/kZH/fX3/dXX/S0skbqqmAAAADXRSTlPuAAbStWbnG/nPxW9s6wiaZQAAAOtJREFUaN7t2kkOwjAMBVCnbRoKpAO0Ze7AfP8TIiUsLFXdQL0A/b+J9KX4HcAmpQIdxSSQONKBUqRMYsWSGEVBaAUTBrS0otE0t6KJaObeKp88lRscU+HeezZ5bm4wvYF1OnlWAD4B2oylTF0aVjXDKvNVyat2FLjkLJ3/WbOq99OerCrOrnrwn9dRYGtZ9h44sKr2QM+qauOqzrLsvgVOQ+AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAQWBLJrbnEF3V/vMv8ZUBu5S5+NCB/9rCwotHypyfKCAqhUf78h0Tizn9eQ9P7dVgF1toAAAAASUVORK5CYII=</Image>
+<Url type="text/html" method="GET" template="https://mdlc.iec.cat/results.asp">
+  <Param name="txtEntrada" value="{searchTerms}"/>
+  <Param name="operEntrada" value="0"/>
+</Url>
+<SearchForm>https://mdlc.iec.cat</SearchForm>
+</SearchPlugin>

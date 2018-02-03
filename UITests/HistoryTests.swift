@@ -101,7 +101,7 @@ class HistoryTests: KIFTestCase {
             return success
         }).wait(withTimeout: 5)
         GREYAssertTrue(historyRemoved, reason: "Failed to remove history")
-        
+
        EarlGrey.select(elementWithMatcher:grey_accessibilityID("goBack")).perform(grey_tap())
     }
     
@@ -114,7 +114,7 @@ class HistoryTests: KIFTestCase {
         }
         let urlToDelete = "\(webRoot!)/numberedPage.html?page=\(102)"
         let oldestUrl = "\(webRoot!)/numberedPage.html?page=\(101)"
-        
+
         EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("History"))
             .perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Page 102")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.left, 0.4, 0.4))
@@ -138,7 +138,7 @@ class HistoryTests: KIFTestCase {
             return success
         }).wait(withTimeout: 5)
         GREYAssertTrue(historyRemoved, reason: "Failed to remove history")
-        
+
         EarlGrey.select(elementWithMatcher:grey_accessibilityID("goBack")).perform(grey_tap())
     }
     

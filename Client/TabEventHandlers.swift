@@ -8,6 +8,7 @@ class TabEventHandlers {
     static let `default` = TabEventHandlers()
 
     let handlers: [TabEventHandler] = [
+        FaviconHandler(),
         UserActivityHandler()
     ]
 }

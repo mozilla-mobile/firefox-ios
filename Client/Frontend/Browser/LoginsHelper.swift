@@ -29,11 +29,6 @@ class LoginsHelper: TabContentScript {
     required init(tab: Tab, profile: Profile) {
         self.tab = tab
         self.profile = profile
-
-        if let path = Bundle.main.path(forResource: "LoginsHelper", ofType: "js"), let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
-            tab.webView!.configuration.userContentController.addUserScript(userScript)
-        }
     }
 
     func scriptMessageHandlerName() -> String? {
@@ -47,7 +42,7 @@ class LoginsHelper: TabContentScript {
         // Check to see that we're in the foreground before trying to check the logins. We want to
         // make sure we don't try accessing the logins database while we're backgrounded to avoid
         // the system from terminating our app due to background disk access.
-        // 
+        //
         // See https://bugzilla.mozilla.org/show_bug.cgi?id=1307822 for details.
         guard UIApplication.shared.applicationState == .active && !profile.isShutdown else {
             return 
@@ -81,12 +76,12 @@ class LoginsHelper: TabContentScript {
         for (index, key) in keys.enumerated() {
             let replace = replacements[index]
             let range = string.range(of: key,
-                options: NSString.CompareOptions.literal,
+                options: .literal,
                 range: nil,
                 locale: nil)!
             string.replaceSubrange(range, with: replace)
-            let nsRange = NSRange(location: string.characters.distance(from: string.startIndex, to: range.lowerBound),
-                                  length: replace.characters.count)
+            let nsRange = NSRange(location: string.distance(from: string.startIndex, to: range.lowerBound),
+                                  length: replace.count)
             ranges.append(nsRange)
         }
 
@@ -117,7 +112,7 @@ class LoginsHelper: TabContentScript {
 
         profile.logins
                .getLoginsForProtectionSpace(login.protectionSpace, withUsername: login.username)
-               .uponQueue(DispatchQueue.main) { res in
+               .uponQueue(.main) { res in
             if let data = res.successValue {
                 log.debug("Found \(data.count) logins.")
                 for saved in data {
@@ -205,7 +200,7 @@ class LoginsHelper: TabContentScript {
     }
 
     fileprivate func requestLogins(_ login: LoginData, requestId: String) {
-        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(DispatchQueue.main) { res in
+        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(.main) { res in
             var jsonObj = [String: Any]()
             if let cursor = res.successValue {
                 log.debug("Found \(cursor.count) logins.")

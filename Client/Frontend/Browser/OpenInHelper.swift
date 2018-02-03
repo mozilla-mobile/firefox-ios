@@ -57,7 +57,7 @@ class ShareFileHelper: NSObject, OpenInHelper {
         let alertController = UIAlertController(
             title: Strings.OpenInDownloadHelperAlertTitle,
             message: Strings.OpenInDownloadHelperAlertMessage,
-            preferredStyle: UIAlertControllerStyle.alert)
+            preferredStyle: .alert)
         alertController.addAction( UIAlertAction(title: Strings.OpenInDownloadHelperAlertCancel, style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .default) { (action) in
             let objectsToShare = [self.url]
@@ -94,7 +94,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
             let alertController = UIAlertController(
                 title: Strings.UnableToAddPassErrorTitle,
                 message: Strings.UnableToAddPassErrorMessage,
-                preferredStyle: UIAlertControllerStyle.alert)
+                preferredStyle: .alert)
             alertController.addAction(
                 UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .cancel) { (action) in
                     // Do nothing.
@@ -156,7 +156,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     func getOpenInView() -> OpenInView {
         let overlayView = OpenInView()
 
-        overlayView.openInButton.addTarget(self, action: #selector(OpenPdfInHelper.open), for: .touchUpInside)
+        overlayView.openInButton.addTarget(self, action: #selector(open), for: .touchUpInside)
         return overlayView
     }
 
@@ -213,8 +213,8 @@ class OpenInView: UIView {
 
     init() {
         super.init(frame: .zero)
-        openInButton.setTitleColor(OpenInViewUX.TextColor, for: UIControlState.normal)
-        openInButton.setTitle(OpenInViewUX.OpenInString, for: UIControlState.normal)
+        openInButton.setTitleColor(OpenInViewUX.TextColor, for: .normal)
+        openInButton.setTitle(OpenInViewUX.OpenInString, for: .normal)
         openInButton.titleLabel?.font = OpenInViewUX.TextFont
         openInButton.sizeToFit()
         self.addSubview(openInButton)

@@ -19,11 +19,7 @@ struct ButtonToastUX {
 private class HighlightableButton: UIButton {
     override var isHighlighted: Bool {
         didSet {
-            if isHighlighted {
-                self.backgroundColor = UIColor.white
-            } else {
-                self.backgroundColor = UIColor.clear
-            }
+            self.backgroundColor = isHighlighted ? .white : .clear
         }
     }
 }
@@ -39,13 +35,13 @@ class ButtonToast: UIView {
     }()
     fileprivate var animationConstraint: Constraint?
     fileprivate lazy var gestureRecognizer: UITapGestureRecognizer = {
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.handleTap(_:)))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.cancelsTouchesInView = false
         return gestureRecognizer
     }()
     
     init(labelText: String, descriptionText: String? = nil, buttonText: String, completion:@escaping (_ buttonPressed: Bool) -> Void) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         completionHandler = completion
         
         self.clipsToBounds = true
@@ -77,7 +73,7 @@ class ButtonToast: UIView {
         button.layer.cornerRadius = ButtonToastUX.ToastButtonBorderRadius
         button.layer.borderWidth = ButtonToastUX.ToastButtonBorderWidth
         button.layer.borderColor = UIColor.white.cgColor
-        button.setTitle(buttonText, for: UIControlState())
+        button.setTitle(buttonText, for: [])
         button.setTitleColor(self.toast.backgroundColor, for: .highlighted)
         button.titleLabel?.font = SimpleToastUX.ToastFont
         button.titleLabel?.numberOfLines = 1
@@ -85,7 +81,7 @@ class ButtonToast: UIView {
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.titleLabel?.minimumScaleFactor = 0.1
 
-        let recognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.buttonPressed(_:)))
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(buttonPressed))
         button.addGestureRecognizer(recognizer)
         toast.addSubview(button)
         var descriptionLabel: UILabel?

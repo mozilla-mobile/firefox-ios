@@ -31,18 +31,18 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
 
         super.init()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SELUIPasteboardChanged), name: NSNotification.Name.UIPasteboardChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELAppWillEnterForegroundNotification), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: NotificationDidRestoreSession, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELUIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELAppWillEnterForegroundNotification), name: .UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: .DidRestoreSession, object: nil)
     }
     
     @objc private func SELUIPasteboardChanged() {
         // UIPasteboardChanged gets triggered when calling UIPasteboard.general.
-         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIPasteboardChanged, object: nil)
+         NotificationCenter.default.removeObserver(self, name: .UIPasteboardChanged, object: nil)
 
         UIPasteboard.general.asyncURL().uponQueue(.main) { res in
             defer {
-                NotificationCenter.default.addObserver(self, selector: #selector(self.SELUIPasteboardChanged), name: NSNotification.Name.UIPasteboardChanged, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.SELUIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
             }
 
             guard let copiedURL: URL? = res.successValue,
@@ -77,7 +77,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
                 firstTabLoaded = true
             }
 
-            NotificationCenter.default.removeObserver(self, name: NotificationDidRestoreSession, object: nil)
+            NotificationCenter.default.removeObserver(self, name: .DidRestoreSession, object: nil)
 
             sessionRestored = true
             checkIfShouldDisplayBar()
@@ -88,7 +88,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         // Ugly hack to ensure we wait until we're finished restoring the session on the first tab
         // before checking if we should display the clipboard bar.
         guard sessionRestored,
-            !url.absoluteString.startsWith("\(WebServer.sharedInstance.base)/about/sessionrestore?history=") else {
+            !url.absoluteString.hasPrefix("\(WebServer.sharedInstance.base)/about/sessionrestore?history=") else {
             return
         }
 

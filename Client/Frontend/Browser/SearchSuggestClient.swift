@@ -11,9 +11,9 @@ let SearchSuggestClientErrorInvalidEngine = 0
 let SearchSuggestClientErrorInvalidResponse = 1
 
 /*
- * Clients of SearchSuggestionClient should retain the object during the 
+ * Clients of SearchSuggestionClient should retain the object during the
  * lifetime of the search suggestion query, as requests are canceled during destruction.
- * 
+ *
  * Query callbacks that must run even if they are cancelled should wrap their contents in `withExtendendLifetime`.
  */
 class SearchSuggestClient {

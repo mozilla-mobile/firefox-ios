@@ -116,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         do {
             // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
         } catch _ {
             print("Error: Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
         }
@@ -150,14 +150,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.window!.rootViewController = rootViewController
 
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
+        NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
                 profile.readingList?.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
             }
         }
 
-        NotificationCenter.default.addObserver(forName: NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
+        NotificationCenter.default.addObserver(forName: .FirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
             profile.flushAccount()
         }
 
@@ -220,7 +220,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
             let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
             controller.popoverDelegate = self.browserViewController
-            controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
+            controller.modalPresentationStyle = .formSheet
 
             rootNav.present(controller, animated: true, completion: nil)
 
@@ -491,7 +491,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         })
 
         if profile.hasSyncableAccount() {
-            profile.syncManager.syncEverything(why: .backgrounded).uponQueue(DispatchQueue.main) { _ in
+            profile.syncManager.syncEverything(why: .backgrounded).uponQueue(.main) { _ in
                 self.shutdownProfileWhenNotActive(application)
                 application.endBackgroundTask(taskId)
             }
@@ -503,7 +503,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     fileprivate func shutdownProfileWhenNotActive(_ application: UIApplication) {
         // Only shutdown the profile if we are not in the foreground
-        guard application.applicationState != UIApplicationState.active else {
+        guard application.applicationState != .active else {
             return
         }
 
@@ -512,7 +512,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // The reason we need to call this method here instead of `applicationDidBecomeActive`
-        // is that this method is only invoked whenever the application is entering the foreground where as 
+        // is that this method is only invoked whenever the application is entering the foreground where as
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
     }
@@ -652,7 +652,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
                 let userData = [QuickActions.TabURLKey: alertURL,
                     QuickActions.TabTitleKey: title]
-                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: UIApplication.shared)
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
         }
     }
 
@@ -660,7 +660,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if let alertURL = notification.request.content.userInfo[TabSendURLKey] as? String,
             let title = notification.request.content.userInfo[TabSendTitleKey] as? String {
             if let urlToOpen = URL(string: alertURL) {
-                NotificationCenter.default.post(name: NSNotification.Name.FSReadingListAddReadingListItem, object: self, userInfo: ["URL": urlToOpen, "Title": title])
+                NotificationCenter.default.post(name: .FSReadingListAddReadingListItem, object: self, userInfo: ["URL": urlToOpen, "Title": title])
             }
         }
     }
@@ -675,13 +675,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 // MARK: - Root View Controller Animations
 extension AppDelegate: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-            if operation == UINavigationControllerOperation.push {
-                return BrowserToTrayAnimator()
-            } else if operation == UINavigationControllerOperation.pop {
-                return TrayToBrowserAnimator()
-            } else {
-                return nil
-            }
+        switch operation {
+        case .push:
+            return BrowserToTrayAnimator()
+        case .pop:
+            return TrayToBrowserAnimator()
+        default:
+            return nil
+        }
     }
 }
 
@@ -758,7 +759,7 @@ extension AppDelegate {
             return completionHandler(.noData)
         }
 
-        // NotificationService will have decrypted the push message, and done some syncing 
+        // NotificationService will have decrypted the push message, and done some syncing
         // activity. If the `client` collection was synced, and there are `displayURI` commands (i.e. sent tabs)
         // NotificationService will have collected them for us in the userInfo.
         if let serializedTabs = userInfo["sentTabs"] as? [[String: String]] {
@@ -776,7 +777,7 @@ extension AppDelegate {
                 self.receivedURLs = receivedURLs
                 
                 // If we're in the foreground, load the queued tabs now.
-                if application.applicationState == UIApplicationState.active {
+                if application.applicationState == .active {
                     DispatchQueue.main.async {
                         self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
                         self.receivedURLs = nil
@@ -791,7 +792,7 @@ extension AppDelegate {
         //
         // The only thing left to do now is to perform actions that can only be performed
         // while the app is foregrounded.
-        // 
+        //
         // Use the push message handler to re-parse the message,
         // this time with a BrowserProfile and processing the return
         // differently than in NotificationService.

@@ -87,9 +87,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         startBrowsingButton = UIButton()
         startBrowsingButton.backgroundColor = UIColor.clear
-        startBrowsingButton.setTitle(IntroViewControllerUX.StartBrowsingButtonTitle, for: UIControlState())
-        startBrowsingButton.setTitleColor(IntroViewControllerUX.StartBrowsingButtonColor, for: UIControlState())
-        startBrowsingButton.addTarget(self, action: #selector(IntroViewController.SELstartBrowsing), for: UIControlEvents.touchUpInside)
+        startBrowsingButton.setTitle(IntroViewControllerUX.StartBrowsingButtonTitle, for: [])
+        startBrowsingButton.setTitleColor(IntroViewControllerUX.StartBrowsingButtonColor, for: [])
+        startBrowsingButton.addTarget(self, action: #selector(SELstartBrowsing), for: .touchUpInside)
         startBrowsingButton.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
 
         view.addSubview(startBrowsingButton)
@@ -130,7 +130,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         pageControl.currentPageIndicatorTintColor = UIColor.black
         pageControl.numberOfPages = IntroViewControllerUX.NumberOfCards
         pageControl.accessibilityIdentifier = "IntroViewController.pageControl"
-        pageControl.addTarget(self, action: #selector(IntroViewController.changePage), for: UIControlEvents.valueChanged)
+        pageControl.addTarget(self, action: #selector(changePage), for: .valueChanged)
 
         view.addSubview(pageControl)
         pageControl.snp.makeConstraints { (make) -> Void in
@@ -145,7 +145,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             titleLabel.numberOfLines = 2
             titleLabel.adjustsFontSizeToFitWidth = true
             titleLabel.minimumScaleFactor = IntroViewControllerUX.MinimumFontScale
-            titleLabel.textAlignment = NSTextAlignment.center
+            titleLabel.textAlignment = .center
             titleLabel.text = title
             titleLabels.append(titleLabel)
             introView.addSubview(titleLabel)
@@ -178,10 +178,10 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         // Sync card, with sign in to sync button.
         signInButton = UIButton()
         signInButton.backgroundColor = IntroViewControllerUX.SignInButtonColor
-        signInButton.setTitle(IntroViewControllerUX.SignInButtonTitle, for: UIControlState())
-        signInButton.setTitleColor(UIColor.white, for: UIControlState())
+        signInButton.setTitle(IntroViewControllerUX.SignInButtonTitle, for: [])
+        signInButton.setTitleColor(UIColor.white, for: [])
         signInButton.clipsToBounds = true
-        signInButton.addTarget(self, action: #selector(IntroViewController.SELlogin), for: UIControlEvents.touchUpInside)
+        signInButton.addTarget(self, action: #selector(SELlogin), for: .touchUpInside)
         signInButton.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(IntroViewControllerUX.SignInButtonHeight)
         }
@@ -228,16 +228,16 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged(_:)), name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: .DynamicFontChanged, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 
     func SELDynamicFontChanged(_ notification: Notification) {
-        guard notification.name == NotificationDynamicFontChanged else { return }
+        guard notification.name == .DynamicFontChanged else { return }
         setupDynamicFonts()
     }
 
@@ -252,10 +252,10 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         for i in 0..<IntroViewControllerUX.NumberOfCards {
             if let imageView = slideContainer.subviews[i] as? UIImageView {
                 imageView.frame = CGRect(x: CGFloat(i)*scaledWidthOfSlide, y: 0, width: scaledWidthOfSlide, height: scaledHeightOfSlide)
-                imageView.contentMode = UIViewContentMode.scaleAspectFit
+                imageView.contentMode = .scaleAspectFit
             }
         }
-        slideContainer.frame = CGRect(x: 0, y: 0, width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)
+        slideContainer.frame = CGRect(width: scaledWidthOfSlide * CGFloat(IntroViewControllerUX.NumberOfCards), height: scaledHeightOfSlide)
         scrollView.contentSize = CGSize(width: slideContainer.frame.width, height: slideContainer.frame.height)
     }
 
