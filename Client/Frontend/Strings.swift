@@ -70,7 +70,7 @@ extension Strings {
 
 //  PhotonActionSheet Strings
 extension Strings {
-    public static let CancelButtonTitle = NSLocalizedString("PhotonMenu.cancel", value: "Cancel", comment: "Button for closing the menu action sheet")
+    public static let CloseButtonTitle = NSLocalizedString("PhotonMenu.close", value: "Close", comment: "Button for closing the menu action sheet")
 
 }
 
@@ -446,6 +446,7 @@ extension Strings {
     public static let AppMenuRemoveBookmarkConfirmMessage = NSLocalizedString("Menu.RemoveBookmark.Confirm", value: "Bookmark Removed", comment: "Toast displayed to the user after a bookmark has been removed.")
     public static let AppMenuAddToReadingListConfirmMessage = NSLocalizedString("Menu.AddToReadingList.Confirm", value: "Added To Reading List", comment: "Toast displayed to the user after adding the item to their reading list.")
     public static let SendToDeviceTitle = NSLocalizedString("Send to Device", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to send the current tab to another device")
+    public static let AppMenuToolsTitleString = NSLocalizedString("Menu.ToolsAction.Title", value: "Tools", comment: "Label for the button, displayed in the menu, used to navigate to the tools sub-menu")
 }
 
 // Snackbar shown when tapping app store link

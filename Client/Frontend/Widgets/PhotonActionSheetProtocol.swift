@@ -20,8 +20,8 @@ extension PhotonActionSheetProtocol {
     typealias IsPrivateTab = Bool
     typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
     
-    func presentSheetWith(actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, supressPopover: Bool = false) {
-        let sheet = PhotonActionSheet(actions: actions)
+    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, supressPopover: Bool = false) {
+        let sheet = PhotonActionSheet(title: title, actions: actions)
         sheet.modalPresentationStyle =  (UIDevice.current.userInterfaceIdiom == .pad && !supressPopover) ? .popover : .overCurrentContext
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
         
@@ -113,6 +113,7 @@ extension PhotonActionSheetProtocol {
     
     func getTabActions(tab: Tab, buttonView: UIView,
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
+                       presentToolsMenu: @escaping ([[PhotonActionSheetItem]]) -> Void,
                        findInPage:  @escaping () -> Void,
                        presentableVC: PresentableVC,
                        isBookmarked: Bool,
@@ -211,32 +212,24 @@ extension PhotonActionSheetProtocol {
             success(Strings.AppMenuCopyURLConfirmMessage)
         }
 
-        var mainActions = [copyURL, findInPageAction, toggleDesktopSite, pinToTopSites, sendToDevice]
+        var mainActions = [share]
 
-        if let bvc = presentableVC as? BrowserViewController, bvc.topTabsVisible {
-            // If top tabs is visible (not just being on an iPad), then we should
-            // not show the "close tab" option.
-        } else {
-            // We do want to show Top Tabs when the user has this on a phone or
-            // in split view mode.
-            let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "action_remove") { action in
-                self.tabManager.removeTab(tab)
-            }
-            mainActions.append(closeTab)
+        let toolsAction = PhotonActionSheetItem(title: Strings.AppMenuToolsTitleString, iconString: "menu-Tools", accessory: .Disclosure) { _ in
+            presentToolsMenu([[findInPageAction, toggleDesktopSite, pinToTopSites]])
         }
-
-        var topActions: [PhotonActionSheetItem] = []
 
         // Disable bookmarking and reading list if the URL is too long.
         if !tab.urlIsTooLong {
-            topActions.append(isBookmarked ? removeBookmark : bookmarkPage)
+            mainActions.append(isBookmarked ? removeBookmark : bookmarkPage)
 
             if tab.readerModeAvailableOrActive {
-                topActions.append(addReadingList)
+                mainActions.append(addReadingList)
             }
         }
 
-        return [topActions, mainActions, [share]]
+        mainActions.append(contentsOf: [sendToDevice, copyURL])
+
+        return [mainActions, [toolsAction]]
     }
 
     func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {

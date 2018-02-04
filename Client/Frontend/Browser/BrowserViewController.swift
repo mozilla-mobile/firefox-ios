@@ -1267,6 +1267,10 @@ extension BrowserViewController: URLBarDelegate {
         let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
             self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
         }
+
+        let toolsMenuPresenter: ([[PhotonActionSheetItem]]) -> Void = { toolsActions in
+            self.presentSheetWith(title: Strings.AppMenuToolsTitleString, actions: toolsActions, on: self, from: button)
+        }
         
         let findInPageAction = {
             self.updateFindInPageVisibility(visible: true)
@@ -1281,8 +1285,8 @@ extension BrowserViewController: URLBarDelegate {
         fetchBookmarkStatus(for: urlString).uponQueue(.main) {
             let isBookmarked = $0.successValue ?? false
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
-                                                 findInPage: findInPageAction, presentableVC: self, isBookmarked: isBookmarked,
-                                                 success: successCallback)
+                                                 presentToolsMenu: toolsMenuPresenter, findInPage: findInPageAction, presentableVC: self,
+                                                 isBookmarked: isBookmarked, success: successCallback)
             self.presentSheetWith(actions: pageActions, on: self, from: button)
         }
     }
