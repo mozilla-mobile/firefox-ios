@@ -32,6 +32,26 @@ module.exports = {
     filename: "[name].js",
     path: path.resolve(__dirname, "Client/Assets")
   },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules\/(?!(readability|page-metadata-parser)\/).*/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              ["env", {
+                targets: {
+                  iOS: "10.3"
+                }
+              }]
+            ]
+          }
+        }
+      }
+    ]
+  },
   plugins: [
     new UglifyJsPlugin()
   ]
