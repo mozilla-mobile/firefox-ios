@@ -840,6 +840,15 @@ extension TabManager: WKNavigationDelegate {
         if #available(iOS 11, *) {
             let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
             tab?.noImageMode = isNoImageMode
+
+            if let tpHelper = tab?.contentBlocker as? ContentBlockerHelper,
+                tpHelper.perTabEnabledState.isEnabledOverall() {
+                tab?.injectUserScriptWith(fileName: "trackingprotection-preload", injectionTime: .atDocumentStart, mainFrameOnly: false)
+                tab?.injectUserScriptWith(fileName: "trackingprotection-postload", injectionTime: .atDocumentEnd, mainFrameOnly: false)
+                if tab?.getContentScript(name: ContentBlockerHelper.name()) == nil {
+                    tab?.addContentScript(tpHelper, name: ContentBlockerHelper.name())
+                }
+            }
         }
     }
 

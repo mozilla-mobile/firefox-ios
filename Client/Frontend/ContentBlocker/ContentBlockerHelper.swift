@@ -47,6 +47,8 @@ class ContentBlockerHelper: NSObject {
             ContentBlockerHelper.whitelistedDomains = ContentBlockerHelper.whitelistedDomains.filter { $0 != domain }
         }
 
+        BlockListChecker.shared.whitelistedDomains = ContentBlockerHelper.whitelistedDomains
+
         removeAllRulesInStore {
             self.compileListsNotInStore {
                 NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
@@ -164,7 +166,7 @@ class ContentBlockerHelper: NSObject {
         self.tab = tab
         self.profile = profile
         super.init()
-        
+
         if AppConstants.IsRunningTest {
             ContentBlockerHelper.testInstance = self
         }
@@ -435,6 +437,7 @@ extension ContentBlockerHelper : TabContentScript  {
     }
 
     func scriptMessageHandlerName() -> String? {
+        // The JS is used verbatim from Focus, so use their handler name.
         return "focusTrackingProtection"
     }
 
