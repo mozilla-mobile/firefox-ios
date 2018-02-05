@@ -36,10 +36,17 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
+        exclude: /node_modules\/(?!(readability|page-metadata-parser)\/).*/,
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["es2015"]
+            presets: [
+              ["env", {
+                targets: {
+                  iOS: "10.3"
+                }
+              }]
+            ]
           }
         }
       }
