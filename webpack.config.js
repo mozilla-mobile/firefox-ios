@@ -32,6 +32,19 @@ module.exports = {
     filename: "[name].js",
     path: path.resolve(__dirname, "Client/Assets")
   },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["es2015"]
+          }
+        }
+      }
+    ]
+  },
   plugins: [
     new UglifyJsPlugin()
   ]
