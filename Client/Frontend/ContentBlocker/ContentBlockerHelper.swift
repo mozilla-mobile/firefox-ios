@@ -6,13 +6,28 @@ import WebKit
 import Shared
 import Deferred
 
+enum BlockList: String {
+    case advertising = "disconnect-advertising"
+    case analytics = "disconnect-analytics"
+    case content = "disconnect-content"
+    case social = "disconnect-social"
+
+    var fileName: String { return self.rawValue }
+
+    static var all: [BlockList] { return [.advertising, .analytics, .content, .social] }
+    static var basic: [BlockList] { return [.advertising, .analytics, .social] }
+    static var strict: [BlockList] { return [.content] }
+
+    static func forStrictMode(isOn: Bool) -> [BlockList] {
+        return BlockList.basic + (isOn ? BlockList.strict : [])
+    }
+}
 
 @available(iOS 11.0, *)
-class ContentBlockerHelper {
+class ContentBlockerHelper: NSObject {
     static let PrefKeyEnabledState = "prefkey.trackingprotection.enabled"
     static let PrefKeyStrength = "prefkey.trackingprotection.strength"
-    fileprivate let blocklistBasic = ["disconnect-advertising", "disconnect-analytics", "disconnect-social"]
-    fileprivate let blocklistStrict = ["disconnect-content"]
+
     fileprivate let ruleStore: WKContentRuleListStore
     fileprivate weak var tab: Tab?
     fileprivate weak var profile: Profile?
@@ -22,6 +37,8 @@ class ContentBlockerHelper {
 
     // Only set and used in UI test
     static weak var testInstance: ContentBlockerHelper?
+
+    var stats = TrackingInformation.init()
 
     func whitelist(enable: Bool, forDomain domain: String, completion: (() -> Void)?) {
         if enable {
@@ -138,10 +155,6 @@ class ContentBlockerHelper {
         NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
     }
 
-    class func name() -> String {
-        return "ContentBlockerHelper"
-    }
-
     private static var heavyInitHasRunOnce = false
 
     private var whitelistFile: URL? {
@@ -162,7 +175,8 @@ class ContentBlockerHelper {
         self.ruleStore = WKContentRuleListStore.default()
         self.tab = tab
         self.profile = profile
-
+        super.init()
+        
         if AppConstants.IsRunningTest {
             ContentBlockerHelper.testInstance = self
         }
@@ -239,8 +253,9 @@ class ContentBlockerHelper {
             return
         }
 
-        let rules = blocklistBasic + (blockingStrengthPref == .strict ? blocklistStrict : [])
-        for name in rules {
+        let rules = BlockList.forStrictMode(isOn: blockingStrengthPref == .strict)
+        for list in rules {
+            let name = list.fileName
             ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
                 guard let rule = rule else {
                     let msg = "lookUpContentRuleList for \(name):  \(error?.localizedDescription ?? "empty rules")"
@@ -313,9 +328,9 @@ extension ContentBlockerHelper {
     }
 
     fileprivate func dateOfMostRecentBlockerFile() -> Timestamp {
-        let blocklists = blocklistBasic + blocklistStrict
-        return blocklists.reduce(Timestamp(0)) { result, filename in
-            guard let path = Bundle.main.path(forResource: filename, ofType: "json") else { return result }
+        let blocklists = BlockList.all
+        return blocklists.reduce(Timestamp(0)) { result, list in
+            guard let path = Bundle.main.path(forResource: list.fileName, ofType: "json") else { return result }
             let date = lastModifiedSince1970(forFileAtPath: path) ?? 0
             return date > result ? date : result
         }
@@ -365,7 +380,7 @@ extension ContentBlockerHelper {
                 return
             }
 
-            let blocklists = self.blocklistBasic + self.blocklistStrict
+            let blocklists = BlockList.all.map { $0.fileName }
             for contentRuleIdentifier in available {
                 if !blocklists.contains(where: { $0 == contentRuleIdentifier }) {
                     noMatchingIdentifierFoundForRule = true
@@ -388,7 +403,7 @@ extension ContentBlockerHelper {
     }
 
     fileprivate func compileListsNotInStore(completion: @escaping () -> Void) {
-        let blocklists = blocklistBasic + blocklistStrict
+        let blocklists = BlockList.all.map { $0.fileName}
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
             ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in
@@ -420,4 +435,31 @@ extension ContentBlockerHelper {
         let list = "'*" + ContentBlockerHelper.whitelistedDomains.joined(separator: "','*") + "'"
         return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'unless-domain': [\(list)] }".replacingOccurrences(of: "'", with: "\"")
     }
+}
+
+@available(iOS 11, *)
+extension ContentBlockerHelper : TabContentScript  {
+    class func name() -> String {
+        return "TrackingProtectionStats"
+    }
+
+    func scriptMessageHandlerName() -> String? {
+        return "focusTrackingProtection"
+    }
+
+    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+
+        guard let body = message.body as? [String: String], let urlString = body["url"] else {
+            return
+        }
+
+        guard var components = URLComponents(string: urlString) else { return }
+        components.scheme = "http"
+        guard let url = components.url else { return }
+
+        if let listItem = BlockListChecker.shared.isBlocked(url: url, isStrictMode: blockingStrengthPref == .strict) {
+            stats = stats.create(byAddingListItem: listItem)
+        }
+    }
+
 }
