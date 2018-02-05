@@ -744,6 +744,9 @@
 		E6F965421B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F965411B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift */; };
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
 		EB2A63341F3B49A7004EF8B0 /* ContentBlockerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2A63251F3B49A7004EF8B0 /* ContentBlockerHelper.swift */; };
+		EB54A86E2028CDDA00018880 /* trackingprotection-postload.js in Resources */ = {isa = PBXBuildFile; fileRef = EB54A86B2028CDDA00018880 /* trackingprotection-postload.js */; };
+		EB54A86F2028CDDA00018880 /* trackingprotection-preload.js in Resources */ = {isa = PBXBuildFile; fileRef = EB54A86C2028CDDA00018880 /* trackingprotection-preload.js */; };
+		EB54A8702028CDDA00018880 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB54A86D2028CDDA00018880 /* TrackingProtectionPageStats.swift */; };
 		EB54A8762028CE4000018880 /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8722028CE4000018880 /* disconnect-advertising.json */; };
 		EB54A8772028CE4000018880 /* disconnect-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8732028CE4000018880 /* disconnect-analytics.json */; };
 		EB54A8782028CE4000018880 /* disconnect-content.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8742028CE4000018880 /* disconnect-content.json */; };
@@ -2071,6 +2074,9 @@
 		E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FirefoxBeta.xcconfig; path = Configuration/FirefoxBeta.xcconfig; sourceTree = "<group>"; };
 		E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageMetadata.swift; sourceTree = "<group>"; };
 		EB2A63251F3B49A7004EF8B0 /* ContentBlockerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlockerHelper.swift; sourceTree = "<group>"; };
+		EB54A86B2028CDDA00018880 /* trackingprotection-postload.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "trackingprotection-postload.js"; sourceTree = "<group>"; };
+		EB54A86C2028CDDA00018880 /* trackingprotection-preload.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "trackingprotection-preload.js"; sourceTree = "<group>"; };
+		EB54A86D2028CDDA00018880 /* TrackingProtectionPageStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionPageStats.swift; sourceTree = "<group>"; };
 		EB54A8722028CE4000018880 /* disconnect-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-advertising.json"; sourceTree = "<group>"; };
 		EB54A8732028CE4000018880 /* disconnect-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-analytics.json"; sourceTree = "<group>"; };
 		EB54A8742028CE4000018880 /* disconnect-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-content.json"; sourceTree = "<group>"; };
@@ -5051,6 +5057,7 @@
 				2F44FB2C1A9D5D8500FD20CC /* Home.xcassets in Resources */,
 				EB54A8762028CE4000018880 /* disconnect-advertising.json in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
+				EB54A86F2028CDDA00018880 /* trackingprotection-preload.js in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
 				D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
@@ -5063,6 +5070,7 @@
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
 				E4B7B7781A793CF20022C5E0 /* FiraSans-Italic.ttf in Resources */,
+				EB54A86E2028CDDA00018880 /* trackingprotection-postload.js in Resources */,
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
 				D0FCF7F71FE45E5D004A7995 /* PrintHandler.js in Resources */,
 				D0FCF8011FE47563004A7995 /* FormPostHandler.js in Resources */,
@@ -5768,6 +5776,7 @@
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
 				D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */,
 				E65075511E37F6D1006961AC /* NSURLExtensionsMailTo.swift in Sources */,
+				EB54A8702028CDDA00018880 /* TrackingProtectionPageStats.swift in Sources */,
 				D83822001FC7961D00303C12 /* DispatchQueueExtensions.swift in Sources */,
 				D03F8EB22004014E003C2224 /* FaviconHandler.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
