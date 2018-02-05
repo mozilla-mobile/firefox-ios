@@ -7,7 +7,7 @@ import XCTest
 let PDF_website = ["url": "http://www.pdf995.com/samples/pdf.pdf", "pdfValue": "www.pdf995.com/samples", "urlValue": "www.pdf995.com/", "bookmarkLabel": "http://www.pdf995.com/samples/pdf.pdf", "longUrlValue": "http://www.pdf995.com/"]
 
 class BrowsingPDFTests: BaseTestCase {
-    func testOpenPDFViwer() {
+    func testOpenPDFViewer() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
@@ -16,8 +16,15 @@ class BrowsingPDFTests: BaseTestCase {
         let element = app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
         element.swipeUp()
         waitforExistence(app.staticTexts["2 of 5"])
-        element.swipeDown()
+
+        var i = 0
+        repeat {
+            element.swipeDown()
+            i = i+1
+        } while (app.staticTexts["1 of 5"].exists == false && i < 10)
+
         waitforExistence(app.staticTexts["1 of 5"])
+        XCTAssertTrue(app.staticTexts["1 of 5"].exists)
     }
 
     func testOpenLinkFromPDF() {
