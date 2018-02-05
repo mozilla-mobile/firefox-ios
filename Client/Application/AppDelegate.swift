@@ -11,7 +11,6 @@ import SDWebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
 import SyncTelemetry
-import SwiftRouter
 import Sync
 import CoreSpotlight
 import UserNotifications
@@ -39,8 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var launchOptions: [AnyHashable: Any]?
 
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-
-    var openInFirefoxParams: LaunchParams?
 
     var receivedURLs: [URL]?
     var unifiedTelemetry: UnifiedTelemetry?
@@ -173,87 +170,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
-
-        setUpDeepLinks(application: application)
+        
+        if let url = launchOptions?[UIApplicationLaunchOptionsKey.url] as? URL, let path = NavigationPath(url: url) {
+            NavigationPath.handle(nav: path, with: self.browserViewController)
+        }
 
         log.info("startApplication end")
         return true
-    }
-
-    func setUpDeepLinks(application: UIApplication) {
-        let router = Router.shared
-        let rootNav = rootViewController as! UINavigationController
-
-        router.map("homepanel/:page", handler: { (params: [String: String]?) -> (Bool) in
-            guard let page = params?["page"] else {
-                return false
-            }
-
-            assert(Thread.isMainThread, "Opening homepanels requires being invoked on the main thread")
-
-            switch page {
-                case "bookmarks":
-                    self.browserViewController.openURLInNewTab(HomePanelType.bookmarks.localhostURL, isPrivileged: true)
-                case "history":
-                    self.browserViewController.openURLInNewTab(HomePanelType.history.localhostURL, isPrivileged: true)
-                case "new-private-tab":
-                    self.browserViewController.openBlankNewTab(focusLocationField: false, isPrivate: true)
-            default:
-                break
-            }
-
-            return true
-        })
-
-        // Route to general settings page like this: "...settings/general"
-        router.map("settings/:page", handler: { (params: [String: String]?) -> (Bool) in
-            guard let page = params?["page"] else {
-                return false
-            }
-
-            assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
-
-            let settingsTableViewController = AppSettingsTableViewController()
-            settingsTableViewController.profile = self.profile
-            settingsTableViewController.tabManager = self.tabManager
-            settingsTableViewController.settingsDelegate = self.browserViewController
-
-            let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
-            controller.popoverDelegate = self.browserViewController
-            controller.modalPresentationStyle = .formSheet
-
-            rootNav.present(controller, animated: true, completion: nil)
-
-            switch page {
-                case "newtab":
-                    let viewController = NewTabChoiceViewController(prefs: self.getProfile(application).prefs)
-                    controller.pushViewController(viewController, animated: true)
-                case "homepage":
-                    let viewController = HomePageSettingsViewController()
-                    viewController.profile = self.getProfile(application)
-                    viewController.tabManager = self.tabManager
-                    controller.pushViewController(viewController, animated: true)
-                case "mailto":
-                    let viewController = OpenWithSettingsViewController(prefs: self.getProfile(application).prefs)
-                    controller.pushViewController(viewController, animated: true)
-                case "search":
-                    let viewController = SearchSettingsTableViewController()
-                    viewController.model = self.getProfile(application).searchEngines
-                    viewController.profile = self.getProfile(application)
-                    controller.pushViewController(viewController, animated: true)
-                case "clear-private-data":
-                    let viewController = ClearPrivateDataTableViewController()
-                    viewController.profile = self.getProfile(application)
-                    viewController.tabManager = self.tabManager
-                    controller.pushViewController(viewController, animated: true)
-                case "fxa":
-                    self.browserViewController.presentSignInViewController()
-            default:
-                break
-            }
-
-            return true
-        })
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -293,7 +216,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
         UNUserNotificationCenter.current().delegate = self
-        self.registerNotificationCategories()
+        SentTabAction.registerActions()
 
         #if BUDDYBUILD
             print("Setting up BuddyBuild SDK")
@@ -319,92 +242,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return shouldPerformAdditionalDelegateHandling
     }
 
-    func registerNotificationCategories() {
-        let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue, title: Strings.SentTabViewActionTitle, options: .foreground)
-        let bookmarkAction = UNNotificationAction(identifier: SentTabAction.bookmark.rawValue, title: Strings.SentTabBookmarkActionTitle, options: .authenticationRequired)
-        let readingListAction = UNNotificationAction(identifier: SentTabAction.readingList.rawValue, title: Strings.SentTabAddToReadingListActionTitle, options: .authenticationRequired)
-
-        // Register ourselves to handle the notification category set by NotificationService for APNS notifications
-        let sentTabCategory = UNNotificationCategory(identifier: "org.mozilla.ios.SentTab.placeholder", actions: [viewAction, bookmarkAction, readingListAction], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))
-        UNUserNotificationCenter.current().setNotificationCategories([sentTabCategory])
-    }
-
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+        guard let routerpath = NavigationPath(url: url) else {
             return false
         }
-
-        guard let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
-                let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
-            // Something very strange has happened; org.mozilla.Client should be the zeroeth URL type.
-            log.error("Custom URL schemes not available for validating")
-            return false
-        }
-
-        guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
-            log.warning("Cannot handle \(components.scheme ?? "nil") URL scheme")
-            return false
-        }
-
-        guard let host = url.host else {
-            log.warning("Cannot handle nil URL host")
-            return false
-        }
-
-        let query = url.getQuery()
-
-        switch host {
-        case "open-url":
-            let url = query["url"]?.unescape() ?? ""
-            let isPrivate = NSString(string: query["private"] ?? "false").boolValue
-
-            let params = LaunchParams(url: URL(string: url), isPrivate: isPrivate)
-
-            if application.applicationState == .active {
-                // If we are active then we can ask the BVC to open the new tab right away.
-                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-                launchFromURL(params)
-            } else {
-                openInFirefoxParams = params
-            }
-            return true
-        case "deep-link":
-            guard let url = query["url"], Bundle.main.bundleIdentifier == sourceApplication else {
-                break
-            }
-            Router.shared.routeURL(url)
-            return true
-        case "fxa-signin":
-            if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
-                // FxA form filling requires a `signin` query param and host = fxa-signin
-                // Ex. firefox://fxa-signin?signin=<token>&someQuery=<data>...
-                guard query["signin"] != nil else {
-                    break
-                }
-                let fxaParams: FxALaunchParams
-                fxaParams = FxALaunchParams(query: query)
-                launchFxAFromURL(fxaParams)
-                return true
-            }
-            break
-        default: ()
-        }
-        return false
-    }
-
-    func launchFxAFromURL(_ params: FxALaunchParams) {
-        self.browserViewController.presentSignInViewController(params)
-    }
-
-    func launchFromURL(_ params: LaunchParams) {
-        let isPrivate = params.isPrivate ?? false
-        if let newURL = params.url {
-            self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
-        } else {
-            self.browserViewController.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-        }
-
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension" as AnyObject])
+        NavigationPath.handle(nav: routerpath, with: self.browserViewController)
+        return true
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
@@ -446,15 +289,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             // when we try and open them
             quickActions.handleShortCutItem(shortcut, withBrowserViewController: browserViewController)
             quickActions.launchedShortcutItem = nil
-        }
-
-        // Check if we have a URL from an external app or extension waiting to launch,
-        // then launch it on the main thread.
-        if let params = openInFirefoxParams {
-            openInFirefoxParams = nil
-            DispatchQueue.main.async {
-                self.launchFromURL(params)
-            }
         }
 
         UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
@@ -637,7 +471,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     fileprivate func viewURLInNewTab(_ notification: UNNotification) {
-        if let alertURL = notification.request.content.userInfo[TabSendURLKey] as? String {
+        if let alertURL = notification.request.content.userInfo[SentTabAction.TabSendURLKey] as? String {
             if let urlToOpen = URL(string: alertURL) {
                 browserViewController.openURLInNewTab(urlToOpen, isPrivileged: true)
             }
@@ -645,8 +479,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     fileprivate func addBookmark(_ notification: UNNotification) {
-        if let alertURL = notification.request.content.userInfo[TabSendURLKey] as? String,
-            let title = notification.request.content.userInfo[TabSendTitleKey] as? String {
+        if let alertURL = notification.request.content.userInfo[SentTabAction.TabSendURLKey] as? String,
+            let title = notification.request.content.userInfo[SentTabAction.TabSendTitleKey] as? String {
             let tabState = TabState(isPrivate: false, desktopSite: false, url: URL(string: alertURL), title: title, favicon: nil)
                 browserViewController.addBookmark(tabState)
 
@@ -657,8 +491,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     fileprivate func addToReadingList(_ notification: UNNotification) {
-        if let alertURL = notification.request.content.userInfo[TabSendURLKey] as? String,
-            let title = notification.request.content.userInfo[TabSendTitleKey] as? String {
+        if let alertURL = notification.request.content.userInfo[SentTabAction.TabSendURLKey] as? String,
+            let title = notification.request.content.userInfo[SentTabAction.TabSendTitleKey] as? String {
             if let urlToOpen = URL(string: alertURL) {
                 NotificationCenter.default.post(name: .FSReadingListAddReadingListItem, object: self, userInfo: ["URL": urlToOpen, "Title": title])
             }
@@ -819,15 +653,6 @@ extension AppDelegate {
     }
 }
 
-struct FxALaunchParams {
-    var query: [String: String]
-}
-
-struct LaunchParams {
-    let url: URL?
-    let isPrivate: Bool?
-}
-
 extension UIApplication {
     var syncDelegate: SyncDelegate {
         return AppSyncDelegate(app: self)
@@ -870,14 +695,14 @@ class AppSyncDelegate: SyncDelegate {
                     }
                     notificationContent.title = title
                     notificationContent.body = url.absoluteDisplayExternalString
-                    notificationContent.userInfo = [TabSendURLKey: url.absoluteString, TabSendTitleKey: title]
+                    notificationContent.userInfo = [SentTabAction.TabSendURLKey: url.absoluteString, SentTabAction.TabSendTitleKey: title]
                     notificationContent.categoryIdentifier = "org.mozilla.ios.SentTab.placeholder"
 
                     // `timeInterval` must be greater than zero
                     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
 
                     // The identifier for each notification request must be unique in order to be created
-                    let requestIdentifier = "\(TabSendCategory).\(url.absoluteString)"
+                    let requestIdentifier = "\(SentTabAction.TabSendCategory).\(url.absoluteString)"
                     let request = UNNotificationRequest(identifier: requestIdentifier, content: notificationContent, trigger: trigger)
 
                     UNUserNotificationCenter.current().add(request) { error in
@@ -888,5 +713,33 @@ class AppSyncDelegate: SyncDelegate {
                 }
             }
         }
+    }
+}
+
+/**
+ * This exists because the Sync code is extension-safe, and thus doesn't get
+ * direct access to UIApplication.sharedApplication, which it would need to
+ * display a notification.
+ * This will also likely be the extension point for wipes, resets, and
+ * getting access to data sources during a sync.
+ */
+
+enum SentTabAction: String {
+    case view = "TabSendViewAction"
+    case bookmark = "TabSendBookmarkAction"
+    case readingList = "TabSendReadingListAction"
+
+    static let TabSendURLKey = "TabSendURL"
+    static let TabSendTitleKey = "TabSendTitle"
+    static let TabSendCategory = "TabSendCategory"
+
+    static func registerActions() {
+        let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue, title: Strings.SentTabViewActionTitle, options: .foreground)
+        let bookmarkAction = UNNotificationAction(identifier: SentTabAction.bookmark.rawValue, title: Strings.SentTabBookmarkActionTitle, options: .authenticationRequired)
+        let readingListAction = UNNotificationAction(identifier: SentTabAction.readingList.rawValue, title: Strings.SentTabAddToReadingListActionTitle, options: .authenticationRequired)
+
+        // Register ourselves to handle the notification category set by NotificationService for APNS notifications
+        let sentTabCategory = UNNotificationCategory(identifier: "org.mozilla.ios.SentTab.placeholder", actions: [viewAction, bookmarkAction, readingListAction], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))
+        UNUserNotificationCenter.current().setNotificationCategories([sentTabCategory])
     }
 }
