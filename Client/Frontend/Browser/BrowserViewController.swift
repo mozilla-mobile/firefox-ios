@@ -2344,7 +2344,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
     func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool) {
         self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        LeanPlumClient.shared.track(event: .dismissedOnboarding)
 
         introViewController.dismiss(animated: true) { finished in
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
