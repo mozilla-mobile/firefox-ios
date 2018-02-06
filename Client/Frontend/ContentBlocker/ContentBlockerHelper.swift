@@ -38,7 +38,7 @@ class ContentBlockerHelper: NSObject {
     // Only set and used in UI test
     static weak var testInstance: ContentBlockerHelper?
 
-    fileprivate(set) var stats = TrackingInformation.init()
+    fileprivate(set) var stats = TrackingInformation()
 
     func whitelist(enable: Bool, forDomain domain: String, completion: (() -> Void)?) {
         if enable {
@@ -425,7 +425,7 @@ extension ContentBlockerHelper {
 }
 
 @available(iOS 11, *)
-extension ContentBlockerHelper : TabContentScript  {
+extension ContentBlockerHelper : TabContentScript {
     class func name() -> String {
         return "TrackingProtectionStats"
     }

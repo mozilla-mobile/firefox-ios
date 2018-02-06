@@ -164,7 +164,7 @@ fileprivate class BlockLists {
 
     func urlIsInList(_ url: URL) -> BlockList? {
         let resourceString = url.absoluteString
-        let resourceRange = NSMakeRange(0, resourceString.count)
+        let resourceRange = NSRange(location: 0, length: resourceString.count)
 
         domainSearch: for rule in blockRules {
             // First, test the top-level filters to see if this URL might be blocked.
