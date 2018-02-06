@@ -18,6 +18,7 @@ let BrowserTab = "BrowserTab"
 let PrivateBrowserTab = "PrivateBrowserTab"
 let BrowserTabMenu = "BrowserTabMenu"
 let PageOptionsMenu = "PageOptionsMenu"
+let ToolsMenu = "ToolsMenu"
 let FindInPage = "FindInPage"
 let SettingsScreen = "SettingsScreen"
 let SyncSettings = "SyncSettings"
@@ -219,7 +220,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             // There is no Cancel option in iPad.
             app/*@START_MENU_TOKEN@*/.otherElements["PopoverDismissRegion"]/*[[".otherElements[\"dismiss popup\"]",".otherElements[\"PopoverDismissRegion\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         } else {
-            app.buttons["PhotonMenu.cancel"].tap()
+            app.buttons["PhotonMenu.close"].tap()
         }
     }
 
@@ -775,9 +776,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     // make sure after the menu action, navigator.nowAt() is used to set the current state
     map.addScreenState(PageOptionsMenu) {screenState in
-        screenState.tap(app.tables["Context Menu"].cells["menu-FindInPage"], to: FindInPage)
+        screenState.tap(app.tables["Context Menu"].cells["menu-Tools"], to: ToolsMenu)
         screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
         screenState.tap(app.tables["Context Menu"].cells["action_remove"], forAction: Action.CloseTabFromPageOptions, Action.CloseTab, transitionTo: HomePanelsScreen, if: "tablet != true")
+        screenState.backAction = cancelBackAction
+        screenState.dismissOnUse = true
+    }
+
+    map.addScreenState(ToolsMenu) { screenState in
+        screenState.tap(app.tables.cells["menu-FindInPage"], to: FindInPage)
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
     }
@@ -851,13 +858,17 @@ extension MMNavigator where T == FxUserState {
     }
 
     func browserPerformAction(_ view: BrowserPerformAction) {
-        let PageMenuOptions = [.toggleBookmarkOption, .addReadingListOption, .copyURLOption, .findInPageOption, .toggleDesktopOption, .pinToTopSitesOption, .sendToDeviceOption, BrowserPerformAction.shareOption]
-        let BrowserMenuOptions = [.openTopSitesOption, .openBookMarksOption, .openHistoryOption, .openReadingListOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
+        let PageMenuOptions = [.shareOption, .toggleBookmarkOption, .addReadingListOption, .findInPageOption, .sendToDeviceOption, BrowserPerformAction.copyURLOption]
+        let ToolsMenuOptions = [.findInPageOption, .toggleDesktopOption, BrowserPerformAction.pinToTopSitesOption]
+        let BrowserMenuOptions = [.openTopSitesOption, .openBookMarksOption, .openReadingListOption, .openHistoryOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
 
         let app = XCUIApplication()
 
         if PageMenuOptions.contains(view) {
             self.goto(PageOptionsMenu)
+            app.tables["Context Menu"].cells[view.rawValue].tap()
+        } else if ToolsMenuOptions.contains(view) {
+            self.goto(ToolsMenu)
             app.tables["Context Menu"].cells[view.rawValue].tap()
         } else if BrowserMenuOptions.contains(view) {
             self.goto(BrowserTabMenu)
