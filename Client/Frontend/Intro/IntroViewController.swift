@@ -86,7 +86,7 @@ class IntroViewController: UIViewController {
             syncViaLP()
         }
 
-        assert(cards.count > 0, "Intro is empty. At least 1 card is required")
+        assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
         view.backgroundColor = UIColor.white
 
         // Add Views
@@ -119,15 +119,11 @@ class IntroViewController: UIViewController {
             make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroUX.PagerCenterOffsetFromScrollViewBottom)
         }
 
-        cardViews = cards.flatMap { addIntro(card: $0) }
-        pageControl.numberOfPages = cardViews.count
+        createSlides()
         pageControl.addTarget(self, action: #selector(changePage), for: .valueChanged)
-
-        if let firstCard = cardViews.first {
-            setActive(firstCard, forPage: 0)
-        }
-        setupDynamicFonts()
     }
+
+
 
     func syncViaLP() {
         LeanPlumClient.shared.introScreenVars?.onValueChanged({
@@ -147,17 +143,35 @@ class IntroViewController: UIViewController {
                     return card
                 }
             }
-            if newCards.count != 0 {
+            // We need at least 2 cards
+            if newCards.count > 1 {
                 self.cards = newCards
-                for (card, cardView) in zip(self.cards, self.cardViews) {
-                    cardView.configureWith(card: card)
-                }
+                /*
+                 Note: This wipes the slides and recreates them. If the user is already swiping by the time LP syncs this will probably confuse the user.
+                 I'm deciding to leave this and let the LP team decide what to do after they get some time to play with this
+                */
+                self.createSlides()
+                self.viewDidLayoutSubviews()
             }
         })
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        scrollView.contentSize = imageViewContainer.frame.size
+    }
+
+    func createSlides() {
+        // Wipe any existing slides
+        imageViewContainer.subviews.forEach { $0.removeFromSuperview() }
+        cardViews.forEach { $0.removeFromSuperview() }
+        cardViews = cards.flatMap { addIntro(card: $0) }
+        pageControl.numberOfPages = cardViews.count
+        setupDynamicFonts()
+        if let firstCard = cardViews.first {
+            setActive(firstCard, forPage: 0)
+        }
+        imageViewContainer.layoutSubviews()
         scrollView.contentSize = imageViewContainer.frame.size
     }
 
@@ -171,7 +185,6 @@ class IntroViewController: UIViewController {
             make.height.equalTo(imageViewContainer.snp.height)
             make.width.equalTo(imageViewContainer.snp.height)
         }
-
 
         let cardView = CardView(verticleSpacing: verticalPadding)
         cardView.configureWith(card: card)
@@ -194,7 +207,6 @@ class IntroViewController: UIViewController {
     func startBrowsing() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
         LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
-
     }
 
     func login() {
