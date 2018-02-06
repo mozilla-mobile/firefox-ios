@@ -82,7 +82,11 @@ class IntroViewController: UIViewController {
     fileprivate var imagesBackgroundView = UIView()
 
     override func viewDidLoad() {
-        assert(cards.count > 0, "Intro is empty. At least 1 card is required")
+        if AppConstants.MOZ_LP_INTRO {
+            syncViaLP()
+        }
+
+        assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
         view.backgroundColor = UIColor.white
 
         // Add Views
@@ -115,18 +119,59 @@ class IntroViewController: UIViewController {
             make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroUX.PagerCenterOffsetFromScrollViewBottom)
         }
 
-        cardViews = cards.flatMap { addIntro(card: $0) }
-        pageControl.numberOfPages = cardViews.count
+        createSlides()
         pageControl.addTarget(self, action: #selector(changePage), for: .valueChanged)
+    }
 
-        if let firstCard = cardViews.first {
-            setActive(firstCard, forPage: 0)
-        }
-        setupDynamicFonts()
+
+
+    func syncViaLP() {
+        LeanPlumClient.shared.introScreenVars?.onValueChanged({
+            guard let newIntro = LeanPlumClient.shared.introScreenVars?.object(forKey: nil) as? [[String: Any]] else {
+                return
+            }
+            let decoder = JSONDecoder()
+            let newCards = newIntro.flatMap { (obj) -> IntroCard? in
+                guard let object = try? JSONSerialization.data(withJSONObject: obj, options: []) else {
+                    return nil
+                }
+                let card = try? decoder.decode(IntroCard.self, from: object)
+                // Make sure the selector actually goes somewhere. Otherwise dont show that slide
+                if let selectorString = card?.buttonSelector {
+                    return self.responds(to: NSSelectorFromString(selectorString)) ? card : nil
+                } else {
+                    return card
+                }
+            }
+            // We need at least 2 cards
+            if newCards.count > 1 {
+                self.cards = newCards
+                /*
+                 Note: This wipes the slides and recreates them. If the user is already swiping by the time LP syncs this will probably confuse the user.
+                 I'm deciding to leave this and let the LP team decide what to do after they get some time to play with this
+                */
+                self.createSlides()
+                self.viewDidLayoutSubviews()
+            }
+        })
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        scrollView.contentSize = imageViewContainer.frame.size
+    }
+
+    func createSlides() {
+        // Wipe any existing slides
+        imageViewContainer.subviews.forEach { $0.removeFromSuperview() }
+        cardViews.forEach { $0.removeFromSuperview() }
+        cardViews = cards.flatMap { addIntro(card: $0) }
+        pageControl.numberOfPages = cardViews.count
+        setupDynamicFonts()
+        if let firstCard = cardViews.first {
+            setActive(firstCard, forPage: 0)
+        }
+        imageViewContainer.layoutSubviews()
         scrollView.contentSize = imageViewContainer.frame.size
     }
 
@@ -141,11 +186,10 @@ class IntroViewController: UIViewController {
             make.width.equalTo(imageViewContainer.snp.height)
         }
 
-
         let cardView = CardView(verticleSpacing: verticalPadding)
         cardView.configureWith(card: card)
-        if let selector = card.buttonSelector {
-            cardView.button.addTarget(self, action: selector, for: .touchUpInside)
+        if let selectorString = card.buttonSelector, self.responds(to: NSSelectorFromString(selectorString)) {
+            cardView.button.addTarget(self, action: NSSelectorFromString(selectorString), for: .touchUpInside)
             cardView.button.snp.makeConstraints { make in
                 make.width.equalTo(IntroUX.CardTextWidth)
                 make.height.equalTo(IntroUX.SignInButtonHeight)
@@ -162,10 +206,12 @@ class IntroViewController: UIViewController {
 
     func startBrowsing() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
+        LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
     }
 
     func login() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: true)
+        LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
     }
 
     func changePage() {
@@ -349,14 +395,14 @@ class CardView: UIView {
     }
 }
 
-struct IntroCard {
+struct IntroCard: Codable {
     let title: String
     let text: String
     let buttonText: String?
-    let buttonSelector: Selector?
+    let buttonSelector: String? // Selector is a string that is synthisized into a Selector via NSSelectorFromString (for LeanPlum's sake)
     let imageName: String
 
-    init(title: String, text: String, imageName: String, buttonText: String? = nil, buttonSelector: Selector? = nil) {
+    init(title: String, text: String, imageName: String, buttonText: String? = nil, buttonSelector: String? = nil) {
         self.title = title
         self.text = text
         self.imageName = imageName
@@ -369,8 +415,14 @@ struct IntroCard {
         let search = IntroCard(title: Strings.CardTitleSearch, text: Strings.CardTextSearch, imageName: "tour-Search")
         let privateBrowsing = IntroCard(title: Strings.CardTitlePrivate, text: Strings.CardTextPrivate, imageName: "tour-Private")
         let mailTo = IntroCard(title: Strings.CardTitleMail, text: Strings.CardTextMail, imageName: "tour-Mail")
-        let sync = IntroCard(title: Strings.CardTitleSync, text: Strings.CardTextSync, imageName: "tour-Sync", buttonText: Strings.SignInButtonTitle, buttonSelector: #selector(IntroViewController.login))
+        let sync = IntroCard(title: Strings.CardTitleSync, text: Strings.CardTextSync, imageName: "tour-Sync", buttonText: Strings.SignInButtonTitle, buttonSelector: #selector(IntroViewController.login).description)
         return [welcome, search, privateBrowsing, mailTo, sync]
+    }
+
+    /* Codable doesnt allow quick conversion to a dictonary */
+    func asDictonary() -> [String: Any]? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
 }
 
