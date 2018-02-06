@@ -830,9 +830,7 @@ extension TabManager {
 extension TabManager: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-    }
 
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         let tab = self[webView]
         let isNightMode = NightModeAccessors.isNightMode(self.prefs)
         tab?.setNightMode(isNightMode)

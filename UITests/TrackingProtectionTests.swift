@@ -96,7 +96,6 @@ class TrackingProtectionTests: KIFTestCase {
     }
     
     func testNormalTrackingProtection() {
-        
         openTPSetting()
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
         closeTPSetting()
