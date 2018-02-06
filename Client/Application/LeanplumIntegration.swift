@@ -38,6 +38,7 @@ enum LPEvent: String {
     case secondRun = "E_Second_Run"
     case openedApp = "E_Opened_App"
     case dismissedOnboarding = "E_Dismissed_Onboarding"
+    case dismissedOnboardingShowLogin = "E_Dismissed_Onboarding_Showed_Login"
     case openedLogins = "Opened Login Manager"
     case openedBookmark = "E_Opened_Bookmark"
     case openedNewTab = "E_Opened_New_Tab"
@@ -93,6 +94,7 @@ class LeanPlumClient {
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.
     private var useFxAPrePush: LPVar = LPVar.define("useFxAPrePush", with: false)
+    var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().flatMap({ $0.asDictonary() }))
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.

@@ -170,6 +170,19 @@ public struct AppConstants {
             return false
         #endif
     }()
+
+    ///  Toggle configuring Intro slides via LP
+    public static let MOZ_LP_INTRO: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+            return true
+        #elseif MOZ_CHANNEL_BETA
+            return true
+        #elseif MOZ_CHANNEL_FENNEC
+            return true
+        #else
+            return true
+        #endif
+    }()
     
     ///  Toggle the feature that shows updated FxA preferences cell
     public static let MOZ_SHOW_FXA_AVATAR: Bool = {
