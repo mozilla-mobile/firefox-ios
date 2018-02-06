@@ -204,7 +204,7 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         }
 
         screenState.backAction = {
-            app.buttons["PhotonMenu.cancel"].tap()
+            app.buttons["PhotonMenu.close"].tap()
         }
     }
 
