@@ -11,7 +11,7 @@ private struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
     static let Padding: CGFloat = 10
     static let SectionVerticalPadding: CGFloat = 13
-    static let HeaderHeight: CGFloat = 80
+    static let SiteHeaderHeight: CGFloat = 80
     static let TitleHeaderHeight: CGFloat = 33
     static let RowHeight: CGFloat = 44
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Defaults.Grey70
@@ -21,7 +21,7 @@ private struct PhotonActionSheetUX {
     static let CornerRadius: CGFloat = 10
     static let SiteImageViewSize = 52
     static let IconSize = CGSize(width: 24, height: 24)
-    static let HeaderName  = "PhotonActionSheetHeaderView"
+    static let SiteHeaderName  = "PhotonActionSheetSiteHeaderView"
     static let TitleHeaderName = "PhotonActionSheetTitleHeaderView"
     static let CellName = "PhotonActionSheetCell"
     static let CloseButtonHeight: CGFloat  = 56
@@ -129,7 +129,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.sectionFooterHeight = 0
         tableView.keyboardDismissMode = .onDrag
         tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
-        tableView.register(PhotonActionSheetHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.HeaderName)
+        tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
         tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
         tableView.isScrollEnabled = true
@@ -216,7 +216,14 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     fileprivate func actionSheetHeight() -> CGFloat {
         let count = actions.reduce(0) { $1.count + $0 }
-        let headerHeight = (style == .centered) ? PhotonActionSheetUX.HeaderHeight : (self.title != nil) ? PhotonActionSheetUX.TitleHeaderHeight : 0
+
+        var headerHeight: CGFloat = 0
+        if style == .centered {
+            headerHeight = PhotonActionSheetUX.SiteHeaderHeight
+        } else if self.title != nil {
+            headerHeight = PhotonActionSheetUX.TitleHeaderHeight
+        }
+
         let separatorHeight = actions.count > 1 ? (actions.count - 1) * Int(PhotonActionSheetUX.SectionVerticalPadding) : 0
         return CGFloat(separatorHeight) + headerHeight + ( PhotonActionSheetUX.TablePadding * 2)  + CGFloat(count) * PhotonActionSheetUX.RowHeight
     }
@@ -288,7 +295,14 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         if section > 0 {
             return PhotonActionSheetUX.SectionVerticalPadding
         }
-        return self.site != nil ? PhotonActionSheetUX.HeaderHeight : (self.title != nil) ? PhotonActionSheetUX.TitleHeaderHeight : 0
+
+        if self.site != nil {
+            return PhotonActionSheetUX.SiteHeaderHeight
+        } else if self.title != nil {
+            return PhotonActionSheetUX.TitleHeaderHeight
+        }
+
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -305,19 +319,20 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         if section > 0 {
             return tableView.dequeueReusableHeaderFooterView(withIdentifier: "SeparatorSectionHeader")
         }
-        guard let site = site else {
-            guard let title = title else {
-                return nil
-            }
+
+        if let site = site {
+            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.SiteHeaderName) as! PhotonActionSheetSiteHeaderView
+            header.tintColor = self.tintColor
+            header.configure(with: site)
+            return header
+        } else if let title = title {
             let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
             header.tintColor = self.tintColor
-            header.configureWithTitle(title)
+            header.configure(with: title)
             return header
         }
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.HeaderName) as! PhotonActionSheetHeaderView
-        header.tintColor = self.tintColor
-        header.configureWithSite(site)
-        return header
+
+        return nil
     }
 }
 
@@ -364,12 +379,16 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureWithTitle(_ title: String) {
+    func configure(with title: String) {
         self.titleLabel.text = title
+    }
+
+    override func prepareForReuse() {
+        self.titleLabel.text = nil
     }
 }
 
-private class PhotonActionSheetHeaderView: UITableViewHeaderFooterView {
+private class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
     static let Padding: CGFloat = 12
     static let VerticalPadding: CGFloat = 2
 
@@ -408,20 +427,20 @@ private class PhotonActionSheetHeaderView: UITableViewHeaderFooterView {
         
         siteImageView.snp.remakeConstraints { make in
             make.centerY.equalTo(contentView)
-            make.leading.equalTo(contentView).offset(PhotonActionSheetHeaderView.Padding)
+            make.leading.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
             make.size.equalTo(PhotonActionSheetUX.SiteImageViewSize)
         }
         
         let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
-        stackView.spacing = PhotonActionSheetHeaderView.VerticalPadding
+        stackView.spacing = PhotonActionSheetSiteHeaderView.VerticalPadding
         stackView.alignment = .leading
         stackView.axis = .vertical
         
         contentView.addSubview(stackView)
         
         stackView.snp.makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(PhotonActionSheetHeaderView.Padding)
-            make.trailing.equalTo(contentView).inset(PhotonActionSheetHeaderView.Padding)
+            make.leading.equalTo(siteImageView.snp.trailing).offset(PhotonActionSheetSiteHeaderView.Padding)
+            make.trailing.equalTo(contentView).inset(PhotonActionSheetSiteHeaderView.Padding)
             make.centerY.equalTo(siteImageView.snp.centerY)
         }
         
@@ -436,7 +455,7 @@ private class PhotonActionSheetHeaderView: UITableViewHeaderFooterView {
         self.siteImageView.backgroundColor = UIColor.clear
     }
     
-    func configureWithSite(_ site: Site) {
+    func configure(with site: Site) {
         self.siteImageView.setFavicon(forSite: site) { (color, url) in
             self.siteImageView.backgroundColor = color
             self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheetUX.IconSize)
@@ -528,6 +547,7 @@ private class PhotonActionSheetCell: UITableViewCell {
     
     override func prepareForReuse() {
         self.statusIcon.image = nil
+        disclosureIndicator.removeFromSuperview()
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -561,7 +581,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureCell(_ label: String, imageString: String, accessory: PhotonActionSheetCellAccessoryType) {
+    func configureCell(_ label: String, imageString: String, accessory: PhotonActionSheetCellAccessoryType = .None) {
         titleLabel.text = label
         titleLabel.textColor = self.tintColor
         accessibilityIdentifier = imageString

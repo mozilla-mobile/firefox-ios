@@ -830,13 +830,17 @@ extension MMNavigator where T == FxUserState {
     }
 
     func browserPerformAction(_ view: BrowserPerformAction) {
-        let PageMenuOptions = [.toggleBookmarkOption, .addReadingListOption, .copyURLOption, .findInPageOption, .toggleDesktopOption, .pinToTopSitesOption, .sendToDeviceOption, BrowserPerformAction.shareOption]
-        let BrowserMenuOptions = [.openTopSitesOption, .openBookMarksOption, .openHistoryOption, .openReadingListOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
+        let PageMenuOptions = [.shareOption, .toggleBookmarkOption, .addReadingListOption, .findInPageOption, .sendToDeviceOption, BrowserPerformAction.copyURLOption]
+        let ToolsMenuOptions = [.findInPageOption, .toggleDesktopOption, BrowserPerformAction.pinToTopSitesOption]
+        let BrowserMenuOptions = [.openTopSitesOption, .openBookMarksOption, .openReadingListOption, .openHistoryOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
 
         let app = XCUIApplication()
 
         if PageMenuOptions.contains(view) {
             self.goto(PageOptionsMenu)
+            app.tables["Context Menu"].cells[view.rawValue].tap()
+        } else if ToolsMenuOptions.contains(view) {
+            self.goto(ToolsMenu)
             app.tables["Context Menu"].cells[view.rawValue].tap()
         } else if BrowserMenuOptions.contains(view) {
             self.goto(BrowserTabMenu)

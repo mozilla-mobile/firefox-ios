@@ -113,7 +113,6 @@ extension PhotonActionSheetProtocol {
     
     func getTabActions(tab: Tab, buttonView: UIView,
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
-                       presentToolsMenu: @escaping ([[PhotonActionSheetItem]]) -> Void,
                        findInPage:  @escaping () -> Void,
                        presentableVC: PresentableVC,
                        isBookmarked: Bool,
@@ -215,7 +214,7 @@ extension PhotonActionSheetProtocol {
         var mainActions = [share]
 
         let toolsAction = PhotonActionSheetItem(title: Strings.AppMenuToolsTitleString, iconString: "menu-Tools", accessory: .Disclosure) { _ in
-            presentToolsMenu([[findInPageAction, toggleDesktopSite, pinToTopSites]])
+            self.presentSheetWith(title: Strings.AppMenuToolsTitleString, actions: [[findInPageAction, toggleDesktopSite, pinToTopSites]], on: presentableVC, from: buttonView)
         }
 
         // Disable bookmarking and reading list if the URL is too long.
