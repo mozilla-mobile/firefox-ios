@@ -841,8 +841,7 @@ extension TabManager: WKNavigationDelegate {
             let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
             tab?.noImageMode = isNoImageMode
 
-            if let tpHelper = tab?.contentBlocker as? ContentBlockerHelper,
-                tpHelper.perTabEnabledState.isEnabledOverall() {
+            if let tpHelper = tab?.contentBlocker as? ContentBlockerHelper, tpHelper.isEnabledForTab {
                 tab?.injectUserScriptWith(fileName: "trackingprotection-preload", injectionTime: .atDocumentStart, mainFrameOnly: false)
                 tab?.injectUserScriptWith(fileName: "trackingprotection-postload", injectionTime: .atDocumentEnd, mainFrameOnly: false)
                 if tab?.getContentScript(name: ContentBlockerHelper.name()) == nil {
