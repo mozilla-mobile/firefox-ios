@@ -114,6 +114,34 @@ class TrackingProtectionTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
         closeTPSetting()
     }
+
+    func testWhitelist() {
+        let expectation = self.expectation(description: "whitelisted")
+        if #available(iOS 11.0, *) {
+            ContentBlockerHelper.testInstance!.whitelist(enable: true, forDomain: "ymail.com", completion: { expectation.fulfill() })
+        }
+        waitForExpectations(timeout: 10, handler: nil)
+
+        openTPSetting()
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Always On")).perform(grey_tap())
+        closeTPSetting()
+
+        // The image from ymail.com would normally be blocked, but in this case it is whitelisted
+        checkTrackingProtection(isBlocking: false)
+
+        let expectation2 = self.expectation(description: "whitelist removed")
+        if #available(iOS 11.0, *) {
+            ContentBlockerHelper.testInstance!.whitelist(enable: false, forDomain: "ymail.com", completion: { expectation2.fulfill() })
+        }
+        waitForExpectations(timeout: 10, handler: nil)
+
+        checkTrackingProtection(isBlocking: true)
+
+        openTPSetting()
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
+        closeTPSetting()
+
+    }
     
     func testPrivateTabPageTrackingProtection() {
         if BrowserUtils.iPad() {
