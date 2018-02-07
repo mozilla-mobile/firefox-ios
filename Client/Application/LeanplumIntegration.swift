@@ -56,6 +56,7 @@ enum LPEvent: String {
     case signsInFxa = "E_User_Signed_In_To_FxA"
     case useReaderView = "E_User_Used_Reader_View"
     case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
+    case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
 }
 
 struct LPAttributeKey {
@@ -121,6 +122,11 @@ class LeanPlumClient {
             return
         }
         profile.remoteClientsAndTabs.getClients() >>== { clients in
+            let oldCount = self.prefs?.intForKey("FxaDevicesCount") ?? 0
+            if clients.count > oldCount {
+                self.track(event: .fxaSyncedNewDevice)
+            }
+            self.prefs?.setInt(Int32(clients.count), forKey: "FxaDevicesCount")
             Leanplum.setUserAttributes([LPAttributeKey.fxaDeviceCount : clients.count])
         }
     }
