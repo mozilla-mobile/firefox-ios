@@ -39,14 +39,14 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
 @available(iOS 11.0, *)
 class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
     let prefs: Prefs
-    let EnabledStates = ContentBlockerHelper.EnabledState.allOptions
+    let EnabledStates = ContentBlockerHelper.PrefEnabledState.allOptions
     let BlockingStrengths = ContentBlockerHelper.BlockingStrength.allOptions
-    var currentEnabledState: ContentBlockerHelper.EnabledState
+    var currentEnabledState: ContentBlockerHelper.PrefEnabledState
     var currentBlockingStrength: ContentBlockerHelper.BlockingStrength
 
     init(prefs: Prefs) {
         self.prefs = prefs
-        currentEnabledState = ContentBlockerHelper.EnabledState(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) ?? "") ?? .onInPrivateBrowsing
+        currentEnabledState = ContentBlockerHelper.PrefEnabledState(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) ?? "") ?? .onInPrivateBrowsing
         currentBlockingStrength = ContentBlockerHelper.BlockingStrength(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength) ?? "") ?? .basic
         
         super.init(style: .grouped)
@@ -61,7 +61,7 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
 
     override func generateSettings() -> [SettingSection] {
         let enabledSetting: [CheckmarkSetting] = EnabledStates.map { option in
-            let id = ContentBlockerHelper.EnabledState.accessibilityId(for: option)
+            let id = ContentBlockerHelper.PrefEnabledState.accessibilityId(for: option)
             return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: nil, accessibilityIdentifier: id, isEnabled: {
                 return option == self.currentEnabledState
             }, onChanged: {
