@@ -205,6 +205,9 @@
                <Test
                   Identifier = "SiteLoadTest">
                </Test>
+               <Test
+                  Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
