@@ -513,6 +513,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.textAlignment = .natural
         return titleLabel
     }()
     
