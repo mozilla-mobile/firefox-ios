@@ -37,14 +37,12 @@ class ContentBlockerHelper {
             }
         }
 
-        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let fileURL = dir.appendingPathComponent("whitelist")
-            do {
-                let list = ContentBlockerHelper.whitelistedDomains.joined(separator: "\n")
-                try list.write(to: fileURL, atomically: true, encoding: .utf8)
-            } catch {
-                Sentry.shared.send(message: "Failed to save whitelist file")
-            }
+        guard let fileURL = whitelistFile else { return }
+        let list = ContentBlockerHelper.whitelistedDomains.joined(separator: "\n")
+        do {
+            try list.write(to: fileURL, atomically: true, encoding: .utf8)
+        } catch {
+            Sentry.shared.send(message: "Failed to save whitelist file")
         }
     }
 
@@ -146,6 +144,20 @@ class ContentBlockerHelper {
 
     private static var heavyInitHasRunOnce = false
 
+    private var whitelistFile: URL? {
+        guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            Sentry.shared.send(message: "Failed to get doc dir for whitelist file.")
+            return nil
+        }
+        return dir.appendingPathComponent("whitelist")
+    }
+
+    private func readWhitelistFile() -> String? {
+        guard let fileURL = whitelistFile else { return nil }
+        let text = try? String(contentsOf: fileURL, encoding: .utf8)
+        return text
+    }
+
     init(tab: Tab, profile: Profile) {
         self.ruleStore = WKContentRuleListStore.default()
         self.tab = tab
@@ -161,12 +173,9 @@ class ContentBlockerHelper {
         ContentBlockerHelper.heavyInitHasRunOnce = true
 
         // Read the whitelist at startup
-        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let fileURL = dir.appendingPathComponent("whitelist")
-            let text = try? String(contentsOf: fileURL, encoding: .utf8)
-            if let text = text, !text.isEmpty {
-                ContentBlockerHelper.whitelistedDomains = text.components(separatedBy: .newlines)
-            }
+        let text = readWhitelistFile()
+        if let text = text, !text.isEmpty {
+            ContentBlockerHelper.whitelistedDomains = text.components(separatedBy: .newlines)
         }
 
         removeOldListsByDateFromStore() {
