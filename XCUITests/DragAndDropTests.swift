@@ -80,14 +80,17 @@ class DragAndDropTests: BaseTestCase {
 
     func testDragAndDropHomeTab() {
         // Home tab is open and then a new website
-        navigator.openNewURL(urlString: firstWebsite["url"]!)
+        navigator.openNewURL(urlString: secondWebsite["url"]!)
         waitUntilPageLoad()
-        checkTabsOrder(dragAndDropTab: false, firstTab: homeTab["tabName"]!, secondTab: firstWebsite["tabName"]!)
+        waitforExistence(app.collectionViews.cells.element(boundBy: 1))
+        checkTabsOrder(dragAndDropTab: false, firstTab: homeTab["tabName"]!, secondTab: secondWebsite["tabName"]!)
 
         // Drag and drop home tab from the second position to the first one
-        dragAndDrop(dragElement: app.collectionViews.cells["home"], dropOnElement: app.collectionViews.cells[firstWebsite["tabName"]!])
+        dragAndDrop(dragElement: app.collectionViews.cells["home"], dropOnElement: app.collectionViews.cells[secondWebsite["tabName"]!])
 
-        checkTabsOrder(dragAndDropTab: true, firstTab: firstWebsite["tabName"]! , secondTab: homeTab["tabName"]!)
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]! , secondTab: homeTab["tabName"]!)
+        // Check that focus is kept on last website open
+        XCTAssertEqual(app.textFields["url"].value! as? String, "mobile.twitter.com/", "The tab has not been dropped correctly")
     }
 
     func testRearrangeTabsPrivateMode() {
@@ -106,8 +109,10 @@ class DragAndDropTests: BaseTestCase {
     func testDragAddressBarIntoSearchBox() {
         navigator.openURL("developer.mozilla.org/en-US/search")
         waitUntilPageLoad()
-        XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].placeholderValue as? String, "Search the docs")
+        // Check the text in the search field before dragging and dropping the url text field
+        XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].placeholderValue, "Search the docs")
         dragAndDrop(dragElement: app.textFields["url"], dropOnElement: app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!])
+        // Verify that the text in the search field is the same as the text in the url text field
         XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].value as? String, websiteWithSearchField["url"]!)
     }
 }
