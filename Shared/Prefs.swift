@@ -14,6 +14,7 @@ public struct PrefsKeys {
     public static let KeyMailToOption = "MailToOption"
     public static let HasFocusInstalled = "HasFocusInstalled"
     public static let HasPocketInstalled = "HasPocketInstalled"
+    public static let AlwaysShowToolbar = "AlwaysShowToolbar"
 
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
