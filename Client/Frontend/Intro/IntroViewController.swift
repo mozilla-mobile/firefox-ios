@@ -123,8 +123,6 @@ class IntroViewController: UIViewController {
         pageControl.addTarget(self, action: #selector(changePage), for: .valueChanged)
     }
 
-
-
     func syncViaLP() {
         let startTime = Date.now()
         LeanPlumClient.shared.introScreenVars?.onValueChanged({ [weak self] in
