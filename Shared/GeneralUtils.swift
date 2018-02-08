@@ -10,6 +10,7 @@ public struct Profiler {
         case bvc_did_appear
         case url_autocomplete
         //  case load_trackingprotection_lists -> Can't use: NimbleDroid is iOS 10 only
+        case intro_did_appear
     }
 
     public static func setup() {
