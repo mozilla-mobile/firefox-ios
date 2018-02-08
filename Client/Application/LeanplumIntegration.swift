@@ -11,6 +11,7 @@ private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
 private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
 private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+private let FxaDevicesCountPrefKey = "FxaDevicesCount"
 
 // FxA Custom Leanplum message template for A/B testing push notifications.
 private struct LPMessage {
@@ -56,6 +57,7 @@ enum LPEvent: String {
     case signsInFxa = "E_User_Signed_In_To_FxA"
     case useReaderView = "E_User_Used_Reader_View"
     case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
+    case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
 }
 
 struct LPAttributeKey {
@@ -65,6 +67,8 @@ struct LPAttributeKey {
     static let mailtoIsDefault = "Mailto Is Default"
     static let pocketInstalled = "Pocket Installed"
     static let telemetryOptIn = "Telemetry Opt In"
+    static let fxaAccountVerified = "FxA account is verified"
+    static let fxaDeviceCount = "Number of devices in FxA account"
 }
 
 struct MozillaAppSchemes {
@@ -114,6 +118,20 @@ class LeanPlumClient {
         self.profile = profile
     }
 
+    func recordSyncedClients(with profile: Profile?) {
+        guard let profile = profile as? BrowserProfile else {
+            return
+        }
+        profile.remoteClientsAndTabs.getClients() >>== { clients in
+            let oldCount = self.prefs?.intForKey(FxaDevicesCountPrefKey) ?? 0
+            if clients.count > oldCount {
+                self.track(event: .fxaSyncedNewDevice)
+            }
+            self.prefs?.setInt(Int32(clients.count), forKey: FxaDevicesCountPrefKey)
+            Leanplum.setUserAttributes([LPAttributeKey.fxaDeviceCount: clients.count])
+        }
+    }
+
     fileprivate func start() {
         guard let settings = getSettings(), supportedLocales.contains(Locale.current.identifier), !Leanplum.hasStarted() else {
             enabled = false
@@ -137,7 +155,8 @@ class LeanPlumClient {
             LPAttributeKey.focusInstalled: focusInstalled(),
             LPAttributeKey.klarInstalled: klarInstalled(),
             LPAttributeKey.pocketInstalled: pocketInstalled(),
-            LPAttributeKey.signedInSync: profile?.hasAccount() ?? false
+            LPAttributeKey.signedInSync: profile?.hasAccount() ?? false,
+            LPAttributeKey.fxaAccountVerified: profile?.hasSyncableAccount() ?? false
         ]
         
         self.setupCustomTemplates()
@@ -157,6 +176,7 @@ class LeanPlumClient {
 
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
+            self.recordSyncedClients(with: self.profile)
         })
     }
 
