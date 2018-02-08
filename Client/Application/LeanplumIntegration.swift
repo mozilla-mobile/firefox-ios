@@ -127,7 +127,7 @@ class LeanPlumClient {
                 self.track(event: .fxaSyncedNewDevice)
             }
             self.prefs?.setInt(Int32(clients.count), forKey: "FxaDevicesCount")
-            Leanplum.setUserAttributes([LPAttributeKey.fxaDeviceCounts: clients.count])
+            Leanplum.setUserAttributes([LPAttributeKey.fxaDeviceCount: clients.count])
         }
     }
 
