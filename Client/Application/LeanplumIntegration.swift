@@ -11,6 +11,7 @@ private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
 private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
 private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+private let FxaDevicesCountPrefKey = "FxaDevicesCount"
 
 // FxA Custom Leanplum message template for A/B testing push notifications.
 private struct LPMessage {
@@ -117,16 +118,16 @@ class LeanPlumClient {
         self.profile = profile
     }
 
-    func syncedClients(with profile: Profile?) {
+    func recordSyncedClients(with profile: Profile?) {
         guard let profile = profile as? BrowserProfile else {
             return
         }
         profile.remoteClientsAndTabs.getClients() >>== { clients in
-            let oldCount = self.prefs?.intForKey("FxaDevicesCount") ?? 0
+            let oldCount = self.prefs?.intForKey(FxaDevicesCountPrefKey) ?? 0
             if clients.count > oldCount {
                 self.track(event: .fxaSyncedNewDevice)
             }
-            self.prefs?.setInt(Int32(clients.count), forKey: "FxaDevicesCount")
+            self.prefs?.setInt(Int32(clients.count), forKey: FxaDevicesCountPrefKey)
             Leanplum.setUserAttributes([LPAttributeKey.fxaDeviceCount: clients.count])
         }
     }
