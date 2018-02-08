@@ -176,7 +176,7 @@ class LeanPlumClient {
 
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
-            self.syncedClients(with: self.profile)
+            self.recordSyncedClients(with: self.profile)
         })
     }
 
