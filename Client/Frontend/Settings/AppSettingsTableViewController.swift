@@ -74,6 +74,15 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ]
         }
 
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            generalSettings += [
+                BoolSetting(prefs: prefs, prefKey: PrefsKeys.AlwaysShowToolbar, defaultValue: false, titleText: Strings.SettingsAlwaysShowToolbar, settingDidChange: { _ in
+                    let appDelegate = UIApplication.shared.delegate as? AppDelegate
+                    appDelegate?.browserViewController.scrollController.updateAlwaysShowToolbarsSetting(prefs: prefs)
+                })
+            ]
+        }
+
         var accountSectionTitle: NSAttributedString?
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
             accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
