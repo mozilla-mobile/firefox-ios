@@ -170,10 +170,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
-        
-        if let url = launchOptions?[UIApplicationLaunchOptionsKey.url] as? URL, let path = NavigationPath(url: url) {
-            NavigationPath.handle(nav: path, with: self.browserViewController)
-        }
 
         log.info("startApplication end")
         return true
@@ -246,7 +242,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         guard let routerpath = NavigationPath(url: url) else {
             return false
         }
-        NavigationPath.handle(nav: routerpath, with: self.browserViewController)
+        DispatchQueue.main.async {
+            NavigationPath.handle(nav: routerpath, with: self.browserViewController)
+        }
         return true
     }
 
