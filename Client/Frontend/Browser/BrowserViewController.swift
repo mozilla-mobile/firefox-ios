@@ -1366,33 +1366,38 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
-        let longPressAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-        for action in locationActionsForURLBar(urlBar) {
-            longPressAlertController.addAction(action.alertAction(style: .default))
+        let actions = self.getLongPressLocationBarActions(with: urlBar)
+        let tp = PhotonActionSheetItem(title: "Tracking Protection", text: "Tracking protection blocks online trackers that collect your private browsing data across multiple sites.", iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
         }
+        self.presentSheetWith(actions: [actions, [tp]], on: self, from: urlBar)
 
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: { (alert: UIAlertAction) -> Void in
-        })
-        longPressAlertController.addAction(cancelAction)
-
-        let setupPopover = { [unowned self] in
-            if let popoverPresentationController = longPressAlertController.popoverPresentationController {
-                popoverPresentationController.sourceView = urlBar
-                popoverPresentationController.sourceRect = urlBar.frame
-                popoverPresentationController.permittedArrowDirections = .any
-                popoverPresentationController.delegate = self
-            }
-        }
-
-        setupPopover()
-
-        if longPressAlertController.popoverPresentationController != nil {
-            displayedPopoverController = longPressAlertController
-            updateDisplayedPopoverProperties = setupPopover
-        }
-
-        self.present(longPressAlertController, animated: true, completion: nil)
+//        let longPressAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+//
+//        for action in locationActionsForURLBar(urlBar) {
+//            longPressAlertController.addAction(action.alertAction(style: .default))
+//        }
+//
+//        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: { (alert: UIAlertAction) -> Void in
+//        })
+//        longPressAlertController.addAction(cancelAction)
+//
+//        let setupPopover = { [unowned self] in
+//            if let popoverPresentationController = longPressAlertController.popoverPresentationController {
+//                popoverPresentationController.sourceView = urlBar
+//                popoverPresentationController.sourceRect = urlBar.frame
+//                popoverPresentationController.permittedArrowDirections = .any
+//                popoverPresentationController.delegate = self
+//            }
+//        }
+//
+//        setupPopover()
+//
+//        if longPressAlertController.popoverPresentationController != nil {
+//            displayedPopoverController = longPressAlertController
+//            updateDisplayedPopoverProperties = setupPopover
+//        }
+//
+//        self.present(longPressAlertController, animated: true, completion: nil)
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
@@ -1405,6 +1410,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarLocationAccessibilityActions(_ urlBar: URLBarView) -> [UIAccessibilityCustomAction]? {
+        // PhotonActionSheeetProtocol.longPressActions.flatMap()
         return locationActionsForURLBar(urlBar).map { $0.accessibilityCustomAction }
     }
 
