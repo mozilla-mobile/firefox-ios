@@ -31,7 +31,7 @@ class LoginManagerTests: KIFTestCase {
         // Wait until the dialog shows up
         let menuAppeared = GREYCondition(name: "Wait the Settings dialog to appear", block: { () -> Bool in
             var errorOrNil: NSError?
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins")).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Search")).assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil
             return success
         })
@@ -50,6 +50,12 @@ class LoginManagerTests: KIFTestCase {
         
         let success = menuAppeared?.wait(withTimeout: 20)
         GREYAssertTrue(success!, reason: "Failed to display settings dialog")
+        if BrowserUtils.iPad() {
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins"))
+                .using(searchAction: grey_scrollInDirection(.down, 200),
+                       onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
+                .assert(grey_notNil())
+        }
         
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins")).perform(grey_tap())
     }
@@ -280,6 +286,13 @@ class LoginManagerTests: KIFTestCase {
             EarlGrey.select(elementWithMatcher: settings_button).perform(grey_tap())
         } else {
             EarlGrey.select(elementWithMatcher: grey_text("Settings")).perform(grey_tap())
+        }
+
+        if BrowserUtils.iPad() {
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins"))
+                .using(searchAction: grey_scrollInDirection(.down, 200),
+                       onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
+                .assert(grey_notNil())
         }
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins")).perform(grey_tap())
         

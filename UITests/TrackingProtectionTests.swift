@@ -63,12 +63,14 @@ class TrackingProtectionTests: KIFTestCase {
         // Check tracking protection is enabled on private tabs only in Settings
         let menuAppeared = GREYCondition(name: "Wait for the Settings dialog to appear") {
             var errorOrNil: NSError?
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins")).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Search")).assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil
             return success
         }
+
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_text("Settings")).perform(grey_tap())
+
         let success = menuAppeared?.wait(withTimeout: 20)
         GREYAssertTrue(success!, reason: "Failed to display settings dialog")
         
