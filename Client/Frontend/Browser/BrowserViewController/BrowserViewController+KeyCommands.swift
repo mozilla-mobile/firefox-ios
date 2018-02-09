@@ -78,6 +78,10 @@ extension BrowserViewController {
         }
     }
 
+    @objc private func gotoTabTray() {
+        showTabTray()
+    }
+
     override var keyCommands: [UIKeyCommand]? {
         return [
             UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(reloadTabKeyCommand), discoverabilityTitle: Strings.ReloadPageTitle),
@@ -95,6 +99,8 @@ extension BrowserViewController {
             UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand), discoverabilityTitle: Strings.ShowNextTabTitle),
             UIKeyCommand(input: "\t", modifierFlags: [.control, .shift], action: #selector(previousTabKeyCommand), discoverabilityTitle: Strings.ShowPreviousTabTitle),
             UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand), discoverabilityTitle: Strings.ShowPreviousTabTitle),
+            UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(gotoTabTray)), // Safari on macOS
+            UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(gotoTabTray), discoverabilityTitle: Strings.ShowTabTrayFromTabKeyCodeTitle)
         ]
     }
 }
