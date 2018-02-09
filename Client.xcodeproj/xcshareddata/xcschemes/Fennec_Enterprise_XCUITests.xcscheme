@@ -206,6 +206,15 @@
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
+                  Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingLandscape()">
+               </Test>
+               <Test
+                  Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingPortrait()">
+               </Test>
+               <Test
+                  Identifier = "ToolbarTests/testShowToolbarWhenScrollingDefaultOption()">
+               </Test>
+               <Test
                   Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
                </Test>
             </SkippedTests>
