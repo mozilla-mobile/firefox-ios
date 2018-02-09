@@ -56,6 +56,8 @@ enum LPEvent: String {
     case signsInFxa = "E_User_Signed_In_To_FxA"
     case useReaderView = "E_User_Used_Reader_View"
     case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
+    case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
+    case onboardingTestLoadedTooSlow = "E_Onboarding_Was_Swiped_Before_AB_Test_Could_Start"
 }
 
 struct LPAttributeKey {
