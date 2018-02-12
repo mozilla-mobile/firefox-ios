@@ -152,6 +152,8 @@ class Action {
     static let ToggleTrackingProtectionSettingPrivateOnly = "ToggleTrackingProtectionSettingPrivateOnly"
     static let ToggleTrackingProtectionSettingOff = "ToggleTrackingProtectionSettingOff"
 
+    static let ToggleShowToolbarWhenScrolling = "ToggleShowToolbarWhenScrolling"
+
     static let CloseTab = "CloseTab"
     static let CloseTabFromPageOptions = "CloseTabFromPageOptions"
     static let CloseTabFromTabTrayLongPressMenu = "CloseTabFromTabTrayLongPressMenu"
@@ -456,6 +458,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["TrackingProtection"], to: TrackingProtectionSettings)
         screenState.tap(table.cells["ShowTour"], to: ShowTourInSettings)
 
+        screenState.gesture(forAction: Action.ToggleShowToolbarWhenScrolling, if: "tablet == true") { UserState in
+            app.cells.switches["AlwaysShowToolbar"].tap()
+            app.buttons["Done"].tap()
+        }
         screenState.backAction = navigationControllerBackAction
     }
 
