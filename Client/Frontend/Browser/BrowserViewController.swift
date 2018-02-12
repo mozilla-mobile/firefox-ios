@@ -549,6 +549,8 @@ class BrowserViewController: UIViewController {
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
 
+        scrollController.updateAlwaysShowToolbarsSetting(prefs: profile.prefs)
+
         super.viewDidAppear(animated)
 
         if shouldShowWhatsNewTab() {
@@ -981,11 +983,16 @@ class BrowserViewController: UIViewController {
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false) {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
+        let freshTab = tabManager.selectedTab
         
         if focusLocationField {
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
                 // Without a delay, the text field fails to become first responder
-                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+                // Check that the newly created tab is still selected.
+                // This let's the user spam the Cmd+T button without lots of responder changes.
+                if freshTab == self.tabManager.selectedTab {
+                    self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+                }
             }
         }
     }
@@ -1517,11 +1524,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
         if #available(iOS 11, *) {
             if let helper = tab.contentBlocker as? ContentBlockerHelper {
-                let state = helper.userOverrideForTrackingProtection
-                if state != .disallowUserOverride {
-                    let title = state == .forceDisabled ? Strings.TrackingProtectionReloadWith : Strings.TrackingProtectionReloadWithout
+                let state = helper.perTabEnabledState
+                if state != .disabledInPrefs {
+                    let title = state == .forceDisabledPerTab ? Strings.TrackingProtectionReloadWith : Strings.TrackingProtectionReloadWithout
                     controller.addAction(UIAlertAction(title: title, style: .default, handler: {_ in
-                        helper.overridePrefsAndReloadTab(enableTrackingProtection: state == .forceDisabled)
+                        helper.overridePrefsAndReloadTab(enableTrackingProtection: state == .forceDisabledPerTab)
                     }))
                 }
             }

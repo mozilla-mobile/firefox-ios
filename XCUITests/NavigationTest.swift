@@ -201,13 +201,15 @@ class NavigationTest: BaseTestCase {
     }
 
     private func checkMobileSite() {
-        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(ToolsMenu)
         waitforExistence(app.tables.cells["menu-RequestDesktopSite"].staticTexts[requestDesktopSiteLabel])
         navigator.goto(BrowserTab)
     }
     
     private func checkDesktopSite() {
-        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(ToolsMenu)
         waitforExistence(app.tables.cells["menu-RequestDesktopSite"].staticTexts[requestMobileSiteLabel])
         navigator.goto(BrowserTab)
     }

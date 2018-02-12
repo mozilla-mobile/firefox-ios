@@ -159,6 +159,8 @@ class Action {
     static let FxATypeEmail = "FxATypeEmail"
     static let FxATypePassword = "FxATypePassword"
     static let FxATapOnSignInButton = "FxATapOnSignInButton"
+
+    static let PinToTopSitesPAM = "PinToTopSitesPAM"
 }
 
 private var isTablet: Bool {
@@ -785,6 +787,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(ToolsMenu) { screenState in
         screenState.tap(app.tables.cells["menu-FindInPage"], to: FindInPage)
+        screenState.tap(app.tables.cells["action_pin"], forAction: Action.PinToTopSitesPAM)
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
     }

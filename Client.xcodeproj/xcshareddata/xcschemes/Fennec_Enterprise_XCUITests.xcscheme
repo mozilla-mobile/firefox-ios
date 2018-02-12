@@ -179,6 +179,9 @@
                   Identifier = "BaseTestCase">
                </Test>
                <Test
+                  Identifier = "DragAndDropTests">
+               </Test>
+               <Test
                   Identifier = "HomePageUITest">
                </Test>
                <Test
@@ -204,6 +207,9 @@
                </Test>
                <Test
                   Identifier = "SiteLoadTest">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
                </Test>
             </SkippedTests>
          </TestableReference>
