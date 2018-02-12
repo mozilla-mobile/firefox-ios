@@ -37,6 +37,7 @@ class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var isPrivate = false
+    fileprivate var isDragging = false
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
@@ -263,7 +264,7 @@ extension TopTabsViewController: Themeable {
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: TopTabCell) {
         // Trying to remove tabs while animating can lead to crashes as indexes change. If updates are happening don't allow tabs to be removed.
-        guard let index = collectionView.indexPath(for: cell)?.item else {
+        guard !isDragging, let index = collectionView.indexPath(for: cell)?.item else {
             return
         }
         let tab = tabStore[index]
@@ -355,6 +356,20 @@ extension TopTabsViewController: UICollectionViewDragDelegate {
         dragItem.localObject = tab
         return [dragItem]
     }
+
+    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
+        isDragging = true
+        privateModeButton.isEnabled = false
+        newTab.isEnabled = false
+        tabsButton.isEnabled = false
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
+        isDragging = false
+        privateModeButton.isEnabled = true
+        newTab.isEnabled = true
+        tabsButton.isEnabled = true
+    }
 }
 
 @available(iOS 11.0, *)
@@ -363,6 +378,9 @@ extension TopTabsViewController: UICollectionViewDropDelegate {
         guard let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = tabStore.index(of: tab) else {
             return
         }
+
+        // Reload data in case new tabs were somehow opened prior to the drop.
+        reloadData()
 
         collectionView.performBatchUpdates({
             self.tabManager.moveTab(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
@@ -541,7 +559,7 @@ extension TopTabsViewController: TabManagerDelegate {
     }
 
     func performTabUpdates() {
-        guard !isUpdating else {
+        guard !isDragging, !isUpdating else {
             return
         }
 
