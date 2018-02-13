@@ -26,8 +26,11 @@ function MetadataWrapper(metadataparser) {
         var dataURI = canvas.toDataURL();
         callback(dataURI);
       } catch (exception) {
-        callback(false);
+        callback();
       }
+    };
+    image.onerror = function() {
+      callback();
     };
 
     image.src = url;
