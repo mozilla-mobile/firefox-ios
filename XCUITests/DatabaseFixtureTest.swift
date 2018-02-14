@@ -12,8 +12,10 @@ class DatabaseFixtureTest: BaseTestCase {
         restart(app, args: [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, arg])
 
         // app will now start with prepopulated database
-
+        navigator.nowAt(HomePanelsScreen)
+        waitforExistence(app.collectionViews.cells["TopSitesCell"])
         navigator.browserPerformAction(.openBookMarksOption)
+        waitforExistence(app.tables["Bookmarks List"])
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
     }

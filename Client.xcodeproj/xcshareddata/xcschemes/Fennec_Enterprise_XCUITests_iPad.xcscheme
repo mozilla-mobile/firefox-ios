@@ -176,43 +176,103 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "ActivityStreamTest">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest">
+               </Test>
+               <Test
+                  Identifier = "BaseTestCase">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests">
+               </Test>
+               <Test
+                  Identifier = "BrowsingPDFTests">
+               </Test>
+               <Test
+                  Identifier = "ClipBoardTests">
+               </Test>
+               <Test
+                  Identifier = "CopiedLinksTests">
+               </Test>
+               <Test
+                  Identifier = "DomainAutocompleteTest">
+               </Test>
+               <Test
+                  Identifier = "DragAndDropTests">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests">
+               </Test>
+               <Test
+                  Identifier = "FxScreenGraphTests">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests">
+               </Test>
+               <Test
+                  Identifier = "HomePageSettingsTest">
+               </Test>
+               <Test
+                  Identifier = "HomePageSettingsUITests">
+               </Test>
+               <Test
                   Identifier = "HomePageUITest">
                </Test>
                <Test
-                  Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
+                  Identifier = "MailAppSettingsTests">
                </Test>
                <Test
-                  Identifier = "NavigationTest/testReloadPreservesMobileOrDesktopSite()">
+                  Identifier = "NavigationTest">
                </Test>
                <Test
-                  Identifier = "NavigationTest/testScrollsToTopWithMultipleTabs()">
+                  Identifier = "NewTabSettingsTest">
                </Test>
                <Test
-                  Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
+                  Identifier = "NightModeTests">
                </Test>
                <Test
-                  Identifier = "SearchTests/testDismissPromptPresence()">
+                  Identifier = "NoImageTests">
+               </Test>
+               <Test
+                  Identifier = "PhotonActionSheetTest">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest">
+               </Test>
+               <Test
+                  Identifier = "ReaderViewTest">
+               </Test>
+               <Test
+                  Identifier = "ScreenGraphTest">
+               </Test>
+               <Test
+                  Identifier = "SearchSettingsUITests">
+               </Test>
+               <Test
+                  Identifier = "SearchTests">
+               </Test>
+               <Test
+                  Identifier = "SettingsTest">
                </Test>
                <Test
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testAddPrivateTabByLongPressTabsButton()">
+                  Identifier = "SyncUITests">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testAddTabByLongPressTabsButton()">
+                  Identifier = "ThirdPartySearchTest">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testCloseTabFromLongPressTabsButton()">
+                  Identifier = "ToolbarTests">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
+                  Identifier = "TopTabsTest">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testSwitchBetweenTabsNoPrivatePrivateToastButton()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTest/testSwitchBetweenTabsToastButton()">
+                  Identifier = "TrackingProtectionTests">
                </Test>
             </SkippedTests>
          </TestableReference>
