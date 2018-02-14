@@ -549,8 +549,6 @@ class BrowserViewController: UIViewController {
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
 
-        scrollController.updateAlwaysShowToolbarsSetting(prefs: profile.prefs)
-
         super.viewDidAppear(animated)
 
         if shouldShowWhatsNewTab() {
