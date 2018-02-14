@@ -499,6 +499,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         titleLabel.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
         titleLabel.minimumScaleFactor = 0.75 // Scale the font if we run out of space
         titleLabel.textColor = PhotonActionSheetCellUX.LabelColor
+        titleLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -507,10 +508,10 @@ private class PhotonActionSheetCell: UITableViewCell {
 
     lazy var subtitleLabel: UILabel = {
         let textLabel = UILabel()
-        textLabel.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
+        textLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
+        textLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
         textLabel.minimumScaleFactor = 0.75 // Scale the font if we run out of space
         textLabel.textColor = PhotonActionSheetCellUX.LabelColor
-        textLabel.textAlignment = .left
         textLabel.numberOfLines = 3
         textLabel.adjustsFontSizeToFitWidth = true
         return textLabel
@@ -582,8 +583,8 @@ private class PhotonActionSheetCell: UITableViewCell {
         stackView.snp.makeConstraints { make in
             make.leading.equalTo(statusIcon.snp.trailing).offset(PhotonActionSheetCell.Padding)
             make.trailing.equalTo(disclosureIndicator.snp.leading).offset(-PhotonActionSheetCell.Padding)
-            make.centerY.equalTo(contentView.snp.centerY)
-            make.top.equalTo(contentView.snp.top).offset(PhotonActionSheetCell.IconSize/2)
+            make.bottom.equalTo(contentView.snp.bottom).offset(-(PhotonActionSheetCell.Padding/2))
+            make.top.equalTo(contentView.snp.top).offset((PhotonActionSheetCell.Padding/2))
         }
 
         disclosureIndicator.snp.makeConstraints { make in
