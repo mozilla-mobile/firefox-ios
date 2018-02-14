@@ -38,7 +38,7 @@ class ContentBlockerHelper: NSObject {
     // Only set and used in UI test
     static weak var testInstance: ContentBlockerHelper?
 
-    var stats = TrackingInformation.init()
+    fileprivate(set) var stats = TrackingInformation()
 
     func whitelist(enable: Bool, forDomain domain: String, completion: (() -> Void)?) {
         if enable {
@@ -46,6 +46,8 @@ class ContentBlockerHelper: NSObject {
         } else {
             ContentBlockerHelper.whitelistedDomains = ContentBlockerHelper.whitelistedDomains.filter { $0 != domain }
         }
+
+        BlockListChecker.shared.whitelistedDomains = ContentBlockerHelper.whitelistedDomains
 
         removeAllRulesInStore {
             self.compileListsNotInStore {
@@ -63,30 +65,16 @@ class ContentBlockerHelper: NSObject {
         }
     }
 
-    enum TrackingProtectionPerTabEnabledState {
-        case disabledInPrefs
-        case enabledInPrefsAndNoPerTabOverride
+    enum PerTabOverrideEnabledState {
+        case notSet
         case forceEnabledPerTab
         case forceDisabledPerTab
-
-        func isEnabledOverall() -> Bool {
-            return self != .disabledInPrefs && self != .forceDisabledPerTab
-        }
     }
 
-    fileprivate var prefOverrideTrackingProtectionEnabled: Bool?
-    var perTabEnabledState: TrackingProtectionPerTabEnabledState {
-        if !trackingProtectionEnabledInSettings {
-            return .disabledInPrefs
-        }
-        guard let enabled = prefOverrideTrackingProtectionEnabled else {
-            return .enabledInPrefsAndNoPerTabOverride
-        }
-        return enabled ? .forceEnabledPerTab : .forceDisabledPerTab
-    }
+    private(set) var perTabOverrideEnabledState: PerTabOverrideEnabledState = .notSet
 
     // Raw values are stored to prefs, be careful changing them.
-    enum EnabledState: String {
+    enum PrefEnabledState: String {
         case on
         case onInPrivateBrowsing
         case off
@@ -102,7 +90,7 @@ class ContentBlockerHelper: NSObject {
             }
         }
 
-        static func accessibilityId(for state: EnabledState) -> String {
+        static func accessibilityId(for state: PrefEnabledState) -> String {
             switch state {
             case .on:
                 return "Settings.TrackingProtectionOption.OnLabel"
@@ -113,7 +101,7 @@ class ContentBlockerHelper: NSObject {
             }
         }
 
-        static let allOptions: [EnabledState] = [.on, .onInPrivateBrowsing, .off]
+        static let allOptions: [PrefEnabledState] = [.on, .onInPrivateBrowsing, .off]
     }
 
     // Raw values are stored to prefs, be careful changing them.
@@ -176,7 +164,7 @@ class ContentBlockerHelper: NSObject {
         self.tab = tab
         self.profile = profile
         super.init()
-        
+
         if AppConstants.IsRunningTest {
             ContentBlockerHelper.testInstance = self
         }
@@ -220,7 +208,7 @@ class ContentBlockerHelper: NSObject {
     }
 
     func overridePrefsAndReloadTab(enableTrackingProtection: Bool) {
-        prefOverrideTrackingProtectionEnabled = enableTrackingProtection
+        perTabOverrideEnabledState = enableTrackingProtection ? .forceEnabledPerTab : .forceDisabledPerTab
         updateTab()
         tab?.reload()
     }
@@ -230,26 +218,34 @@ class ContentBlockerHelper: NSObject {
         return BlockingStrength(rawValue: pref) ?? .basic
     }
 
-    fileprivate var enabledStatePref: EnabledState {
+    var prefEnabledState: PrefEnabledState {
         let pref = profile?.prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) ?? ""
-        return EnabledState(rawValue: pref) ?? .onInPrivateBrowsing
+        return PrefEnabledState(rawValue: pref) ?? .onInPrivateBrowsing
     }
 
-    fileprivate var trackingProtectionEnabledInSettings: Bool {
-        switch enabledStatePref {
+    // Considers both the prefs state, and the per-tab override state.
+    var isEnabledForTab: Bool {
+        var prefEnabled: Bool
+        switch prefEnabledState {
         case .off:
             return false
         case .on:
-            return true
+            prefEnabled = true
         case .onInPrivateBrowsing:
-            return tab?.isPrivate ?? false
+            prefEnabled = tab?.isPrivate ?? false
         }
+
+        if perTabOverrideEnabledState != .notSet {
+            return perTabOverrideEnabledState == .forceEnabledPerTab
+        }
+
+        return prefEnabled
     }
 
     fileprivate func addActiveRulesToTab() {
         removeTrackingProtectionFromTab()
 
-        if !perTabEnabledState.isEnabledOverall() {
+        guard isEnabledForTab else {
             return
         }
 
@@ -438,18 +434,18 @@ extension ContentBlockerHelper {
 }
 
 @available(iOS 11, *)
-extension ContentBlockerHelper : TabContentScript  {
+extension ContentBlockerHelper : TabContentScript {
     class func name() -> String {
         return "TrackingProtectionStats"
     }
 
     func scriptMessageHandlerName() -> String? {
+        // The JS is used verbatim from Focus, so use their handler name.
         return "focusTrackingProtection"
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-
-        guard let body = message.body as? [String: String], let urlString = body["url"] else {
+        guard isEnabledForTab, let body = message.body as? [String: String], let urlString = body["url"] else {
             return
         }
 

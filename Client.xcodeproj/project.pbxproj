@@ -394,9 +394,7 @@
 		D02816C21ECA5E2A00240CAA /* HistoryStateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */; };
 		D02818611EF056C800240CAA /* SentryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02818601EF056C800240CAA /* SentryIntegration.swift */; };
 		D03F8EB22004014E003C2224 /* FaviconHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03F8EB12004014E003C2224 /* FaviconHandler.swift */; };
-		D03F8F21200EABB0003C2224 /* __firefox__.js in Resources */ = {isa = PBXBuildFile; fileRef = D03F8F20200EABB0003C2224 /* __firefox__.js */; };
 		D03F8F23200EAC1F003C2224 /* AllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = D03F8F22200EAC1E003C2224 /* AllFramesAtDocumentStart.js */; };
-		D03F8F25200EACD8003C2224 /* ContextMenu.js in Resources */ = {isa = PBXBuildFile; fileRef = D03F8F24200EACD8003C2224 /* ContextMenu.js */; };
 		D09A0CD81FAA23F6009A0273 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		D09A0CD91FAA2413009A0273 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		D09A0CDA1FAA24C2009A0273 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
@@ -405,25 +403,15 @@
 		D09A0CDD1FAA24D0009A0273 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		D09A0D301FAB8AF3009A0273 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E46175F21EBB73A10021AE8A /* Sentry.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D0B29EE01F460BDF00C7CEFC /* LoginsSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B29EDF1F460BDF00C7CEFC /* LoginsSchema.swift */; };
-		D0C95DF2200EAD3000E4E51C /* FindInPage.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95DF1200EAD3000E4E51C /* FindInPage.js */; };
-		D0C95DF6200EADD500E4E51C /* LoginsHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95DF5200EADD500E4E51C /* LoginsHelper.js */; };
-		D0C95DF8200EAE3000E4E51C /* NightModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95DF7200EAE3000E4E51C /* NightModeHelper.js */; };
-		D0C95DFA200EAE5E00E4E51C /* NoImageModeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95DF9200EAE5E00E4E51C /* NoImageModeHelper.js */; };
-		D0C95E04200FCA8900E4E51C /* ReaderMode.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95E03200FCA8800E4E51C /* ReaderMode.js */; };
-		D0C95E06200FCB5600E4E51C /* HistoryStateHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95E05200FCB5600E4E51C /* HistoryStateHelper.js */; };
 		D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */; };
-		D0C95E34200FDB3200E4E51C /* MetadataHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D0C95E33200FDB3200E4E51C /* MetadataHelper.js */; };
 		D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */; };
 		D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95EF5201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift */; };
 		D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = D0E17FA7201F847600F1FCB5 /* FxASignIn.js */; };
 		D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */; };
 		D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */; };
-		D0FCF7F71FE45E5D004A7995 /* PrintHandler.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF7F61FE45E5D004A7995 /* PrintHandler.js */; };
-		D0FCF8011FE47563004A7995 /* FormPostHandler.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8001FE47563004A7995 /* FormPostHandler.js */; };
 		D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */; };
 		D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8041FE4772D004A7995 /* MainFrameAtDocumentEnd.js */; };
 		D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8051FE4772D004A7995 /* MainFrameAtDocumentStart.js */; };
-		D0FCF80A1FE47B49004A7995 /* CustomSearchHandler.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8091FE47B49004A7995 /* CustomSearchHandler.js */; };
 		D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D301AAED1A3A55B70078DD1D /* TabTrayController.swift */; };
 		D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D30684F01C84F12A002D8D82 /* SearchPlugins */; };
 		D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
@@ -747,8 +735,6 @@
 		E6F965421B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F965411B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift */; };
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
 		EB2A63341F3B49A7004EF8B0 /* ContentBlockerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2A63251F3B49A7004EF8B0 /* ContentBlockerHelper.swift */; };
-		EB54A86E2028CDDA00018880 /* trackingprotection-postload.js in Resources */ = {isa = PBXBuildFile; fileRef = EB54A86B2028CDDA00018880 /* trackingprotection-postload.js */; };
-		EB54A86F2028CDDA00018880 /* trackingprotection-preload.js in Resources */ = {isa = PBXBuildFile; fileRef = EB54A86C2028CDDA00018880 /* trackingprotection-preload.js */; };
 		EB54A8702028CDDA00018880 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB54A86D2028CDDA00018880 /* TrackingProtectionPageStats.swift */; };
 		EB54A8762028CE4000018880 /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8722028CE4000018880 /* disconnect-advertising.json */; };
 		EB54A8772028CE4000018880 /* disconnect-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = EB54A8732028CE4000018880 /* disconnect-analytics.json */; };
@@ -2080,8 +2066,6 @@
 		E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FirefoxBeta.xcconfig; path = Configuration/FirefoxBeta.xcconfig; sourceTree = "<group>"; };
 		E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageMetadata.swift; sourceTree = "<group>"; };
 		EB2A63251F3B49A7004EF8B0 /* ContentBlockerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBlockerHelper.swift; sourceTree = "<group>"; };
-		EB54A86B2028CDDA00018880 /* trackingprotection-postload.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "trackingprotection-postload.js"; sourceTree = "<group>"; };
-		EB54A86C2028CDDA00018880 /* trackingprotection-preload.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "trackingprotection-preload.js"; sourceTree = "<group>"; };
 		EB54A86D2028CDDA00018880 /* TrackingProtectionPageStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionPageStats.swift; sourceTree = "<group>"; };
 		EB54A8722028CE4000018880 /* disconnect-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-advertising.json"; sourceTree = "<group>"; };
 		EB54A8732028CE4000018880 /* disconnect-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-analytics.json"; sourceTree = "<group>"; };
@@ -3646,8 +3630,6 @@
 		EB54A86A2028CDDA00018880 /* PageStats */ = {
 			isa = PBXGroup;
 			children = (
-				EB54A86B2028CDDA00018880 /* trackingprotection-postload.js */,
-				EB54A86C2028CDDA00018880 /* trackingprotection-preload.js */,
 				EB54A86D2028CDDA00018880 /* TrackingProtectionPageStats.swift */,
 			);
 			path = PageStats;
@@ -5038,57 +5020,43 @@
 			files = (
 				D38A1EE01CB458EC0080C842 /* CertError.html in Resources */,
 				0BA1E0301B051A07007675AF /* NetError.css in Resources */,
-				D03F8F21200EABB0003C2224 /* __firefox__.js in Resources */,
 				3BC659491E5BA4AE006D560F /* TopSites in Resources */,
 				EB54A8772028CE4000018880 /* disconnect-analytics.json in Resources */,
 				E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */,
 				F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */,
 				F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */,
-				D0C95DFA200EAE5E00E4E51C /* NoImageModeHelper.js in Resources */,
 				7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */,
 				E49943F71AE69EDD00BF9DE4 /* Intro.xcassets in Resources */,
 				3BC659591E5BA505006D560F /* top_sites.json in Resources */,
 				E4B7B7631A793CF20022C5E0 /* CharisSILI.ttf in Resources */,
 				EB54A8782028CE4000018880 /* disconnect-content.json in Resources */,
 				E4CD9F541A71506400318571 /* Reader.html in Resources */,
-				D03F8F25200EACD8003C2224 /* ContextMenu.js in Resources */,
 				7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */,
 				E69922171B94E3EF007C480D /* Licenses.html in Resources */,
 				E4CD9F5B1A71506C00318571 /* Reader.css in Resources */,
-				D0C95E06200FCB5600E4E51C /* HistoryStateHelper.js in Resources */,
 				D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */,
 				E4B7B7611A793CF20022C5E0 /* CharisSILB.ttf in Resources */,
 				D37524871C6E8B5A00A5F6C2 /* topdomains.txt in Resources */,
 				E4B7B7621A793CF20022C5E0 /* CharisSILBI.ttf in Resources */,
 				7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */,
-				D0C95DF2200EAD3000E4E51C /* FindInPage.js in Resources */,
 				E4B7B7861A793CF20022C5E0 /* FiraSans-UltraLight.ttf in Resources */,
 				2F44FB2C1A9D5D8500FD20CC /* Home.xcassets in Resources */,
 				EB54A8762028CE4000018880 /* disconnect-advertising.json in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
-				EB54A86F2028CDDA00018880 /* trackingprotection-preload.js in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
 				D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
-				D0FCF80A1FE47B49004A7995 /* CustomSearchHandler.js in Resources */,
 				74821FFE1DB6D3AC00EEEA72 /* MailSchemes.plist in Resources */,
-				D0C95DF6200EADD500E4E51C /* LoginsHelper.js in Resources */,
 				FA9294011D6584A200AC8D33 /* QRCode.xcassets in Resources */,
-				D0C95E34200FDB3200E4E51C /* MetadataHelper.js in Resources */,
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
 				E4B7B7781A793CF20022C5E0 /* FiraSans-Italic.ttf in Resources */,
-				EB54A86E2028CDDA00018880 /* trackingprotection-postload.js in Resources */,
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
-				D0FCF7F71FE45E5D004A7995 /* PrintHandler.js in Resources */,
-				D0FCF8011FE47563004A7995 /* FormPostHandler.js in Resources */,
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
-				D0C95DF8200EAE3000E4E51C /* NightModeHelper.js in Resources */,
 				EB54A8792028CE4000018880 /* disconnect-social.json in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
 				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
-				D0C95E04200FCA8900E4E51C /* ReaderMode.js in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,
 				D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */,
