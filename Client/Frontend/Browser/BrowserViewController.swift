@@ -345,14 +345,14 @@ class BrowserViewController: UIViewController {
         view.addSubview(header)
 
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
-        pasteGoAction = AccessibleAction(name: NSLocalizedString("Paste & Go", comment: "Paste the URL into the location bar and visit"), handler: { () -> Bool in
+        pasteGoAction = AccessibleAction(name: Strings.PasteAndGoTitle, handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.general.string {
                 self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
                 return true
             }
             return false
         })
-        pasteAction = AccessibleAction(name: NSLocalizedString("Paste", comment: "Paste the URL into the location bar"), handler: { () -> Bool in
+        pasteAction = AccessibleAction(name: Strings.PasteTitle, handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.general.string {
                 // Enter overlay mode and make the search controller appear.
                 self.urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
@@ -361,7 +361,7 @@ class BrowserViewController: UIViewController {
             }
             return false
         })
-        copyAddressAction = AccessibleAction(name: NSLocalizedString("Copy Address", comment: "Copy the URL from the location bar"), handler: { () -> Bool in
+        copyAddressAction = AccessibleAction(name: Strings.CopyAddressTitle, handler: { () -> Bool in
             if let url = self.urlBar.currentURL {
                 UIPasteboard.general.url = url as URL
             }
@@ -1367,6 +1367,8 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
         let actions = self.getLongPressLocationBarActions(with: urlBar)
+
+        // This is just here until the menu gets hooked up
         let tp = PhotonActionSheetItem(title: "Tracking Protection", text: "Tracking protection blocks online trackers that collect your private browsing data across multiple sites.", iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
         }
         self.presentSheetWith(actions: [actions, [tp]], on: self, from: urlBar)

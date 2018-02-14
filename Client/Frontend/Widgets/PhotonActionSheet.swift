@@ -146,7 +146,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
                 make.height.equalTo(PhotonActionSheetUX.CloseButtonHeight)
                 if #available(iOS 11, *) {
                     let bottomPad: CGFloat
-                    if let window = UIApplication.shared.keyWindow, window.safeAreaInsets.bottom != 0  {
+                    if let window = UIApplication.shared.keyWindow, window.safeAreaInsets.bottom != 0 {
                         // for iPhone X and similar
                         bottomPad = 0
                     } else {

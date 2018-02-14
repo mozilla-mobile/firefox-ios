@@ -241,17 +241,17 @@ extension PhotonActionSheetProtocol {
     }
 
     func getLongPressLocationBarActions(with urlBar: URLBarView) -> [PhotonActionSheetItem] {
-        let pasteGoAction = PhotonActionSheetItem(title: "Paste and Go", iconString: "menu-PasteAndGo") { action in
+        let pasteGoAction = PhotonActionSheetItem(title: Strings.PasteAndGoTitle, iconString: "menu-PasteAndGo") { action in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
             }
         }
-        let pasteAction = PhotonActionSheetItem(title: "Paste", iconString: "menu-Paste") { action in
+        let pasteAction = PhotonActionSheetItem(title: Strings.PasteTitle, iconString: "menu-Paste") { action in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
             }
         }
-        let copyAddressAction = PhotonActionSheetItem(title: "Copy Address", iconString: "menu-Copy-Link") { action in
+        let copyAddressAction = PhotonActionSheetItem(title: Strings.CopyAddressTitle, iconString: "menu-Copy-Link") { action in
             if let url = urlBar.currentURL {
                 UIPasteboard.general.url = url as URL
             }
