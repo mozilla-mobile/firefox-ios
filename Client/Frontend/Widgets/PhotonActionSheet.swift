@@ -61,8 +61,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     }()
     var tableView = UITableView(frame: .zero, style: .grouped)
     private var tintColor = UIColor.Defaults.Grey80
-    private var outerScrollView = UIScrollView()
-    
+
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(dismiss))
@@ -123,28 +122,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
-        
+
         view.accessibilityIdentifier = "Action Sheet"
-        tableView.bounces = false
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.keyboardDismissMode = .onDrag
-        tableView.sectionFooterHeight = 0
-        tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
-        tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
-        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
-        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 50.0
-        tableView.isScrollEnabled = true
-        tableView.showsVerticalScrollIndicator = false
-        tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
-        tableView.separatorStyle = .none
-        tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.accessibilityIdentifier = "Context Menu"
-        let footer = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.TablePadding))
-        tableView.tableFooterView = footer
-        tableView.tableHeaderView = footer.clone()
 
         // In a popover the popover provides the blur background
         // Not using a background color allows the view to style correctly with the popover arrow
@@ -158,7 +137,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
 
         let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
-        let height = actionSheetHeight()
 
         if self.showCloseButton {
             self.view.addSubview(closeButton)
@@ -187,10 +165,9 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             tableView.snp.makeConstraints { make in
                 make.edges.equalTo(self.view)
             }
-            self.preferredContentSize = CGSize(width: self.tableView.contentSize.width, height: self.tableView.contentSize.height - 22)
             return
         }
-        
+
         tableView.snp.makeConstraints { make in
             make.centerX.equalTo(self.view.snp.centerX)
             switch style {
@@ -200,19 +177,43 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
                 make.centerY.equalTo(self.view.snp.centerY)
             }
             make.width.equalTo(width)
-//
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        tableView.bounces = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.keyboardDismissMode = .onDrag
+        tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
+        tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
+        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
+        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
+        tableView.estimatedRowHeight = 40
+        tableView.isScrollEnabled = true
+        tableView.showsVerticalScrollIndicator = false
+        tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
+        tableView.separatorStyle = .none
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+        tableView.accessibilityIdentifier = "Context Menu"
+        let footer = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.Padding))
+        tableView.tableHeaderView = footer
+        tableView.tableFooterView = footer.clone()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        var maxHeight = self.view.frame.height - (self.showCloseButton ? PhotonActionSheetUX.CloseButtonHeight : 0)
+        tableView.snp.makeConstraints { make in
+            // The height of the menu should be no more than 80 percent of the screen
+            make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.8))
+        }
         if self.isModalInPopover {
             self.preferredContentSize = self.tableView.contentSize
         }
-        tableView.snp.makeConstraints { make in
-            make.height.equalTo(self.tableView.contentSize.height)
-        }
-
     }
     
     private func applyBackgroundBlur() {
@@ -228,20 +229,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    fileprivate func actionSheetHeight() -> CGFloat {
-        let count = actions.reduce(0) { $1.count + $0 }
-
-        var headerHeight: CGFloat = 0
-        if style == .centered {
-            headerHeight = PhotonActionSheetUX.SiteHeaderHeight
-        } else if self.title != nil {
-            headerHeight = PhotonActionSheetUX.TitleHeaderHeight
-        }
-
-        let separatorHeight = actions.count > 1 ? (actions.count - 1) * Int(PhotonActionSheetUX.SectionVerticalPadding) : 0
-        return CGFloat(separatorHeight) + headerHeight + ( PhotonActionSheetUX.TablePadding * 2)  + CGFloat(count) * PhotonActionSheetUX.RowHeight
-    }
-    
     func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -249,10 +236,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     deinit {
         tableView.dataSource = nil
         tableView.delegate = nil
-    }
-    
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -292,25 +275,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
         return false
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return PhotonActionSheetUX.RowHeight
-//    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // If we have multiple sections show a separator for each one except the first.
-        if section > 0 {
-            return PhotonActionSheetUX.SectionVerticalPadding
-        }
-
-        if self.site != nil {
-            return PhotonActionSheetUX.SiteHeaderHeight
-        } else if self.title != nil {
-            return PhotonActionSheetUX.TitleHeaderHeight
-        }
-
-        return 0
-    }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
@@ -339,7 +303,21 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             return header
         }
 
-        return nil
+        // A header height of at least 1 is required to make sure the default header size isnt used when laying out with AutoLayout
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
+        view?.snp.makeConstraints { make in
+            make.height.equalTo(1)
+        }
+        return view
+    }
+
+    // A footer height of at least 1 is required to make sure the default footer size isnt used when laying out with AutoLayout
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
+        view?.snp.makeConstraints { make in
+            make.height.equalTo(1)
+        }
+        return view
     }
 }
 
@@ -433,6 +411,7 @@ private class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         contentView.addSubview(siteImageView)
         
         siteImageView.snp.remakeConstraints { make in
+            make.top.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
             make.centerY.equalTo(contentView)
             make.leading.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
             make.size.equalTo(PhotonActionSheetUX.SiteImageViewSize)
@@ -450,7 +429,6 @@ private class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
             make.trailing.equalTo(contentView).inset(PhotonActionSheetSiteHeaderView.Padding)
             make.centerY.equalTo(siteImageView.snp.centerY)
         }
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -514,6 +492,7 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
 private class PhotonActionSheetCell: UITableViewCell {
     static let Padding: CGFloat = 12
     static let VerticalPadding: CGFloat = 2
+    static let IconSize = 16
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -589,14 +568,8 @@ private class PhotonActionSheetCell: UITableViewCell {
         
         statusIcon.snp.makeConstraints { make in
             make.size.equalTo(PhotonActionSheetCellUX.StatusIconSize)
-            make.leading.equalTo(contentView).offset(16)
+            make.leading.equalTo(contentView).offset(PhotonActionSheetCell.IconSize)
             make.centerY.equalTo(contentView)
-        }
-
-        disclosureIndicator.snp.makeConstraints { make in
-            make.size.equalTo(16)
-            make.centerY.equalTo(contentView)
-            make.trailing.equalTo(contentView).inset(16)
         }
 
         let stackView = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
@@ -608,16 +581,22 @@ private class PhotonActionSheetCell: UITableViewCell {
 
         stackView.snp.makeConstraints { make in
             make.leading.equalTo(statusIcon.snp.trailing).offset(PhotonActionSheetCell.Padding)
-            make.trailing.equalTo(disclosureIndicator.snp.leading).inset(PhotonActionSheetSiteHeaderView.Padding)
+            make.trailing.equalTo(disclosureIndicator.snp.leading).offset(-PhotonActionSheetCell.Padding)
             make.centerY.equalTo(contentView.snp.centerY)
-            make.top.equalTo(contentView.snp.top).offset(8)
+            make.top.equalTo(contentView.snp.top).offset(PhotonActionSheetCell.IconSize/2)
+        }
+
+        disclosureIndicator.snp.makeConstraints { make in
+            make.size.equalTo(PhotonActionSheetCell.IconSize)
+            make.centerY.equalTo(contentView)
+            make.trailing.equalTo(contentView).inset(PhotonActionSheetCell.IconSize)
+            make.leading.equalTo(stackView.snp.trailing)
         }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
     func configure(with action: PhotonActionSheetItem) {
         titleLabel.text = action.title
@@ -636,4 +615,3 @@ private class PhotonActionSheetCell: UITableViewCell {
         }
     }
 }
-
