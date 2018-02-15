@@ -14,7 +14,6 @@ public struct PrefsKeys {
     public static let KeyMailToOption = "MailToOption"
     public static let HasFocusInstalled = "HasFocusInstalled"
     public static let HasPocketInstalled = "HasPocketInstalled"
-    public static let AlwaysShowToolbar = "AlwaysShowToolbar"
     public static let IntroSeen = "IntroViewControllerSeen"
 
     //Activity Stream
