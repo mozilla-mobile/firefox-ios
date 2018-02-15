@@ -202,7 +202,8 @@ class SearchEngines {
 
     /// Get all known search engines, possibly as ordered by the user.
     fileprivate func getOrderedEngines() -> [OpenSearchEngine] {
-        let unorderedEngines = customEngines + SearchEngines.getUnorderedBundledEnginesFor(locale: Locale.current)
+        let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
+        let unorderedEngines = customEngines + SearchEngines.getUnorderedBundledEnginesFor(locale: locale)
 
         // might not work to change the default.
         guard let orderedEngineNames = prefs.stringArrayForKey(OrderedEngineNames) else {

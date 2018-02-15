@@ -157,21 +157,19 @@ class HistoryTests: BaseTestCase {
         navigator.goto(BrowserTab)
         // It is necessary to open two sites so that when one is closed private mode is not closed
         navigator.openNewURL(urlString: "mozilla.org")
-        if iPad() {
-            navigator.goto(BrowserTab)
-            navigator.goto(TabTray)
-            waitforExistence(app.collectionViews.cells[webpage["label"]!])
-            // 'x' button to close the tab is not visible, so closing by swiping the tab
-            app.collectionViews.cells[webpage["label"]!].swipeRight()
-        } else {
-            navigator.performAction(Action.CloseTabFromPageOptions)
-        }
-        navigator.goto(BrowserTabMenu)
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        waitforExistence(app.collectionViews.cells[webpage["label"]!])
+        // 'x' button to close the tab is not visible, so closing by swiping the tab
+        app.collectionViews.cells[webpage["label"]!].swipeRight()
+
+        navigator.goto(HomePanelsScreen)
         navigator.goto(HistoryRecentlyClosed)
         waitforNoExistence(app.tables["Recently Closed Tabs List"])
 
         // Now verify that on regular mode the recently closed list is empty too
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.goto(HomePanelsScreen)
         navigator.goto(HistoryRecentlyClosed)
         waitforNoExistence(app.tables["Recently Closed Tabs List"])
     }

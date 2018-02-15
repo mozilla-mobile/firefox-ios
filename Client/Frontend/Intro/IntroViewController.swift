@@ -123,10 +123,9 @@ class IntroViewController: UIViewController {
         pageControl.addTarget(self, action: #selector(changePage), for: .valueChanged)
     }
 
-
-
     func syncViaLP() {
-        LeanPlumClient.shared.introScreenVars?.onValueChanged({
+        let startTime = Date.now()
+        LeanPlumClient.shared.introScreenVars?.onValueChanged({ [weak self] in
             guard let newIntro = LeanPlumClient.shared.introScreenVars?.object(forKey: nil) as? [[String: Any]] else {
                 return
             }
@@ -137,22 +136,29 @@ class IntroViewController: UIViewController {
                 }
                 let card = try? decoder.decode(IntroCard.self, from: object)
                 // Make sure the selector actually goes somewhere. Otherwise dont show that slide
-                if let selectorString = card?.buttonSelector {
-                    return self.responds(to: NSSelectorFromString(selectorString)) ? card : nil
+                if let selectorString = card?.buttonSelector, let wself = self {
+                    return wself.responds(to: NSSelectorFromString(selectorString)) ? card : nil
                 } else {
                     return card
                 }
             }
-            // We need at least 2 cards
-            if newCards.count > 1 {
-                self.cards = newCards
-                /*
-                 Note: This wipes the slides and recreates them. If the user is already swiping by the time LP syncs this will probably confuse the user.
-                 I'm deciding to leave this and let the LP team decide what to do after they get some time to play with this
-                */
-                self.createSlides()
-                self.viewDidLayoutSubviews()
+
+            guard newCards != IntroCard.defaultCards(), newCards.count > 1 else {
+                return
             }
+
+            // We need to still be on the first page otherwise the content will change underneath the user's finger
+            // We also need to let LP know this happened so we can track when a A/B test was not run
+            guard self?.pageControl.currentPage == 0 else {
+                let totalTime = Date.now() - startTime
+                LeanPlumClient.shared.track(event: .onboardingTestLoadedTooSlow, withParameters: ["Total time": "\(totalTime) ms" as AnyObject])
+                return
+            }
+
+            self?.cards = newCards
+            self?.createSlides()
+            self?.viewDidLayoutSubviews()
+
         })
     }
 
@@ -162,6 +168,10 @@ class IntroViewController: UIViewController {
     }
 
     func createSlides() {
+        // Make sure the scrollView has been setup before setting up the slides
+        guard scrollView.superview != nil else {
+            return
+        }
         // Wipe any existing slides
         imageViewContainer.subviews.forEach { $0.removeFromSuperview() }
         cardViews.forEach { $0.removeFromSuperview() }
@@ -424,6 +434,13 @@ struct IntroCard: Codable {
         guard let data = try? JSONEncoder().encode(self) else { return nil }
         return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
+}
+
+extension IntroCard: Equatable {}
+
+func == (lhs: IntroCard, rhs: IntroCard) -> Bool {
+    return lhs.buttonText == rhs.buttonText && lhs.buttonSelector == rhs.buttonSelector
+        && lhs.imageName == rhs.imageName && lhs.text == rhs.text && lhs.title == rhs.title
 }
 
 extension UIColor {

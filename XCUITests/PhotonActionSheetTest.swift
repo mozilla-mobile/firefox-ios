@@ -8,19 +8,11 @@ class PhotonActionSheetTest: BaseTestCase {
     func testPinToTop() {
         navigator.openURL("http://example.com")
         waitUntilPageLoad()
-        // Open Action Sheet
-        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        // Open Page Action Menu Sheet and Pin the site
+        navigator.performAction(Action.PinToTopSitesPAM)
 
-        // Pin the site
-        app.cells["Pin to Top Sites"].tap()
-
-        // Verify that the site has been pinned
-        // Open menu
-        app.buttons["Menu"].tap()
-
-        // Navigate to top sites
-        app.cells["Top Sites"].tap()
-        waitforExistence(app.cells["TopSite"].firstMatch)
+        // Navigate to topsites to verify that the site has been pinned
+        navigator.goto(NewTabScreen)
 
         // Verify that the site is pinned to top
         let cell = app.cells["TopSite"].firstMatch

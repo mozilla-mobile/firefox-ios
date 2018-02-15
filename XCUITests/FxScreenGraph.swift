@@ -152,6 +152,8 @@ class Action {
     static let ToggleTrackingProtectionSettingPrivateOnly = "ToggleTrackingProtectionSettingPrivateOnly"
     static let ToggleTrackingProtectionSettingOff = "ToggleTrackingProtectionSettingOff"
 
+    static let ToggleShowToolbarWhenScrolling = "ToggleShowToolbarWhenScrolling"
+
     static let CloseTab = "CloseTab"
     static let CloseTabFromPageOptions = "CloseTabFromPageOptions"
     static let CloseTabFromTabTrayLongPressMenu = "CloseTabFromTabTrayLongPressMenu"
@@ -159,6 +161,8 @@ class Action {
     static let FxATypeEmail = "FxATypeEmail"
     static let FxATypePassword = "FxATypePassword"
     static let FxATapOnSignInButton = "FxATapOnSignInButton"
+
+    static let PinToTopSitesPAM = "PinToTopSitesPAM"
 }
 
 private var isTablet: Bool {
@@ -454,6 +458,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["TrackingProtection"], to: TrackingProtectionSettings)
         screenState.tap(table.cells["ShowTour"], to: ShowTourInSettings)
 
+        screenState.gesture(forAction: Action.ToggleShowToolbarWhenScrolling, if: "tablet == true") { UserState in
+            app.cells.switches["AlwaysShowToolbar"].tap()
+            app.buttons["Done"].tap()
+        }
         screenState.backAction = navigationControllerBackAction
     }
 
@@ -785,6 +793,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(ToolsMenu) { screenState in
         screenState.tap(app.tables.cells["menu-FindInPage"], to: FindInPage)
+        screenState.tap(app.tables.cells["action_pin"], forAction: Action.PinToTopSitesPAM)
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
     }

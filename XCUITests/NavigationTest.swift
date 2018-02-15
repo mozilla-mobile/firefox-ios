@@ -5,7 +5,7 @@
 import XCTest
 
 let website_1 = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
-let website_2 = ["url": "www.example.com", "label": "Example", "value": "example"]
+let website_2 = ["url": "www.example.com", "label": "Example", "value": "example", "link": "More information...", "moreLinkLongPressUrl": "http://www.iana.org/domains/example", "moreLinkLongPressInfo": "iana"]
 
 let urlAddons = "addons.mozilla.org"
 let urlGoogle = "www.google.com"
@@ -201,13 +201,15 @@ class NavigationTest: BaseTestCase {
     }
 
     private func checkMobileSite() {
-        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(ToolsMenu)
         waitforExistence(app.tables.cells["menu-RequestDesktopSite"].staticTexts[requestDesktopSiteLabel])
         navigator.goto(BrowserTab)
     }
     
     private func checkDesktopSite() {
-        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        navigator.nowAt(BrowserTab)
+        navigator.goto(ToolsMenu)
         waitforExistence(app.tables.cells["menu-RequestDesktopSite"].staticTexts[requestMobileSiteLabel])
         navigator.goto(BrowserTab)
     }
@@ -293,4 +295,83 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue (desktopViewElement.exists, "Desktop view is not available after coming from another site in mobile view")
      }
      */
+    func testLongPressLinkOptions() {
+        navigator.openURL(website_2["url"]!)
+        app.webViews.links[website_2["link"]!].press(forDuration: 2)
+        waitforExistence(app.sheets[website_2["moreLinkLongPressUrl"]!])
+        XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Share Link"].exists, "The option is not shown")
+    }
+    func testLongPressLinkOptionsPrivateMode() {
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(website_2["url"]!)
+        app.webViews.links[website_2["link"]!].press(forDuration: 2)
+        waitforExistence(app.sheets[website_2["moreLinkLongPressUrl"]!])
+        XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Share Link"].exists, "The option is not shown")
+
+    }
+    // Only testing Share and Copy Link, the other two options are already covered in other tests
+    func testCopyLink() {
+        longPressLinkOptions(optionSelected: "Copy Link")
+        navigator.goto(NewTabScreen)
+        app.textFields["url"].press(forDuration: 2)
+
+        waitforExistence(app.buttons["Paste"])
+        app.buttons["Paste"].tap()
+        app.buttons["Go"].tap()
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
+    }
+
+    func testCopyLinkPrivateMode() {
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        longPressLinkOptions(optionSelected: "Copy Link")
+        navigator.goto(NewTabScreen)
+        app.textFields["url"].press(forDuration: 2)
+
+        waitforExistence(app.buttons["Paste"])
+        app.buttons["Paste"].tap()
+        app.buttons["Go"].tap()
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
+    }
+
+    private func longPressLinkOptions(optionSelected: String) {
+        navigator.openURL(website_2["url"]!)
+        waitUntilPageLoad()
+        app.webViews.links[website_2["link"]!].press(forDuration: 2)
+        app.buttons[optionSelected].tap()
+    }
+
+    func testShareLink() {
+        longPressLinkOptions(optionSelected: "Share Link")
+        waitforExistence(app.collectionViews.buttons["Copy"])
+        XCTAssertTrue(app.collectionViews.buttons["Copy"].exists, "The share menu is not shown")
+    }
+
+    func testShareLinkPrivateMode() {
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        longPressLinkOptions(optionSelected: "Share Link")
+        waitforExistence(app.collectionViews.buttons["Copy"])
+        XCTAssertTrue(app.collectionViews.buttons["Copy"].exists, "The share menu is not shown")
+    }
+
+    func testCancelLongPressLinkMenu() {
+        navigator.openURL(website_2["url"]!)
+        app.webViews.links[website_2["link"]!].press(forDuration: 2)
+        if iPad() {
+            // For iPad there is no Cancel, so we tap to dismiss the menu
+            app/*@START_MENU_TOKEN@*/.otherElements["PopoverDismissRegion"]/*[[".otherElements[\"dismiss popup\"]",".otherElements[\"PopoverDismissRegion\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        } else {
+            app.buttons["Cancel"].tap()
+        }
+
+        waitforNoExistence(app.sheets[website_2["moreLinkLongPressInfo"]!])
+        XCTAssertEqual(app.textFields["url"].value! as? String, "www.example.com/", "After canceling the menu user is in a different website")
+    }
  }
