@@ -30,6 +30,7 @@ class TestAppDelegate: AppDelegate {
                 let profileDir = "\(appRootDir())/profile.testProfile"
                 try? FileManager.default.createDirectory(atPath: profileDir, withIntermediateDirectories: false, attributes: nil)
                 let output = URL(fileURLWithPath: "\(profileDir)/browser.db")
+                try? FileManager.default.removeItem(at: output)
                 try! FileManager.default.copyItem(at: input, to: output)
             }
         }
