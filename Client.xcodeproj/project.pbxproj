@@ -139,6 +139,7 @@
 		2C31A8471E8D447F00DAC646 /* HomePageSettingsUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */; };
 		2C3406C81E719F00000FD889 /* SettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3406C71E719F00000FD889 /* SettingsTest.swift */; };
 		2C4A07DC20246EAD0083E320 /* DragAndDropTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4A07DB20246EAD0083E320 /* DragAndDropTests.swift */; };
+		2C4B6BF320349EB800A009C2 /* FirstRunTourTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4B6BF220349EB800A009C2 /* FirstRunTourTests.swift */; };
 		2C8C07771E7800EA00DC1237 /* FindInPageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C07761E7800EA00DC1237 /* FindInPageTest.swift */; };
 		2C97EC711E72C80E0092EC18 /* TopTabsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C97EC701E72C80E0092EC18 /* TopTabsTest.swift */; };
 		2CA16FDE1E5F089100332277 /* SearchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA16FDD1E5F089100332277 /* SearchTest.swift */; };
@@ -1519,6 +1520,7 @@
 		2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageSettingsUITest.swift; sourceTree = "<group>"; };
 		2C3406C71E719F00000FD889 /* SettingsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTest.swift; sourceTree = "<group>"; };
 		2C4A07DB20246EAD0083E320 /* DragAndDropTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragAndDropTests.swift; sourceTree = "<group>"; };
+		2C4B6BF220349EB800A009C2 /* FirstRunTourTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstRunTourTests.swift; sourceTree = "<group>"; };
 		2C8C07761E7800EA00DC1237 /* FindInPageTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageTest.swift; sourceTree = "<group>"; };
 		2C97EC701E72C80E0092EC18 /* TopTabsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTabsTest.swift; sourceTree = "<group>"; };
 		2CA16FDD1E5F089100332277 /* SearchTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTest.swift; sourceTree = "<group>"; };
@@ -2912,6 +2914,7 @@
 				2C28F96B201B2D4C00ABA8A5 /* MailAppSettingsTests.swift */,
 				2CEDADA120207EC400223A89 /* SyncFAUITests.swift */,
 				2C4A07DB20246EAD0083E320 /* DragAndDropTests.swift */,
+				2C4B6BF220349EB800A009C2 /* FirstRunTourTests.swift */,
 			);
 			path = XCUITests;
 			sourceTree = "<group>";
@@ -5476,6 +5479,7 @@
 				3BFE4B501D34673D00DDF53F /* ThirdPartySearchTest.swift in Sources */,
 				2CF9D9AA20067FA10083DF2A /* BrowsingPDFTests.swift in Sources */,
 				0BC9C9C41F26F54D000E8AB5 /* SiteLoadTest.swift in Sources */,
+				2C4B6BF320349EB800A009C2 /* FirstRunTourTests.swift in Sources */,
 				2C4A07DC20246EAD0083E320 /* DragAndDropTests.swift in Sources */,
 				2C2A5EF41E68469500F02659 /* PrivateBrowsingTest.swift in Sources */,
 				3D71C89E1F5703A1008D8646 /* CopiedLinksTests.swift in Sources */,
