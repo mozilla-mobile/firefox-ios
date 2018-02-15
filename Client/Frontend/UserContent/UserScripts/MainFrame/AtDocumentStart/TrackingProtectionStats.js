@@ -31,8 +31,9 @@
     }
   })
 
+  const messageHandler = window.webkit.messageHandlers.trackingProtectionStats;
+
   function onLoadNativeCallback() {
-    var messageHandler = window.webkit.messageHandlers.focusTrackingProtection;
     var sendMessage = function(url) { messageHandler.postMessage({ url: url }) };
 
     // Send back the sources of every script and image in the dom back to the host applicaiton
@@ -46,6 +47,7 @@
   let mutationObserver = null;
 
   function injectStatsTracking(enabled) {
+    // This enable/disable section is a change from the original Focus iOS  version
     if (enabled) {
       if (originalOpen != null) {
         return;
@@ -54,7 +56,7 @@
     } else {
       window.removeEventListener("load", onLoadNativeCallback, false);
 
-      if (originalOpen != null) { // if one is set, then all the enable code has run
+      if (originalOpen) { // if one is set, then all the enable code has run
         XMLHttpRequest.prototype.open = originalOpen;
         XMLHttpRequest.prototype.send = originalSend;
         Image.prototype.src = originalImageSrc;
@@ -65,13 +67,11 @@
       return;
     }
 
-    var messageHandler = window.webkit.messageHandlers.focusTrackingProtection
-
     // -------------------------------------------------
     // Send ajax requests URLs to the host application
     // -------------------------------------------------
     var xhrProto = XMLHttpRequest.prototype;
-    if (originalOpen == null) {
+    if (!originalOpen) {
       originalOpen = xhrProto.open;
       originalSend = xhrProto.send;
     }
@@ -91,7 +91,7 @@
     // -------------------------------------------------
     // Detect when new sources get set on Image and send them to the host application
     // -------------------------------------------------
-    if (originalImageSrc == null) {
+    if (!originalImageSrc) {
       originalImageSrc = Object.getOwnPropertyDescriptor(Image.prototype, 'src');
     }
     delete Image.prototype.src;

@@ -440,8 +440,7 @@ extension ContentBlockerHelper : TabContentScript {
     }
 
     func scriptMessageHandlerName() -> String? {
-        // The JS is used verbatim from Focus, so use their handler name.
-        return "focusTrackingProtection"
+        return "trackingProtectionStats"
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {

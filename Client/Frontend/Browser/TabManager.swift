@@ -829,7 +829,7 @@ extension TabManager {
 
 extension TabManager: WKNavigationDelegate {
 
-    // Note the main frame JSContext is not available yet.
+    // Note the main frame JSContext (i.e. document, window) is not available yet.
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
     }
