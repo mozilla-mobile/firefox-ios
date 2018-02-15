@@ -828,18 +828,26 @@ extension TabManager {
 }
 
 extension TabManager: WKNavigationDelegate {
+
+    // Note the main frame JSContext (i.e. document, window) is not available yet.
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
     }
 
+    // The main frame JSContext is available, and DOM parsing has begun.
+    // Do not excute JS at this point that requires running prior to DOM parsing.
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        let tab = self[webView]
+        guard let tab = self[webView] else { return }
         let isNightMode = NightModeAccessors.isNightMode(self.prefs)
-        tab?.setNightMode(isNightMode)
+        tab.setNightMode(isNightMode)
 
         if #available(iOS 11, *) {
             let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
-            tab?.noImageMode = isNoImageMode
+            tab.noImageMode = isNoImageMode
+
+            if let tpHelper = tab.contentBlocker as? ContentBlockerHelper, !tpHelper.isEnabledForTab {
+                webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.securityToken))", completionHandler: nil)
+            }
         }
     }
 

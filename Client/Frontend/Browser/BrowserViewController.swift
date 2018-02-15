@@ -1522,11 +1522,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
         if #available(iOS 11, *) {
             if let helper = tab.contentBlocker as? ContentBlockerHelper {
-                let state = helper.perTabEnabledState
-                if state != .disabledInPrefs {
-                    let title = state == .forceDisabledPerTab ? Strings.TrackingProtectionReloadWith : Strings.TrackingProtectionReloadWithout
+                if helper.prefEnabledState != .off {
+                    let perTabOverride = helper.perTabOverrideEnabledState
+                    let title = perTabOverride == .forceDisabledPerTab ? Strings.TrackingProtectionReloadWith : Strings.TrackingProtectionReloadWithout
                     controller.addAction(UIAlertAction(title: title, style: .default, handler: {_ in
-                        helper.overridePrefsAndReloadTab(enableTrackingProtection: state == .forceDisabledPerTab)
+                        helper.overridePrefsAndReloadTab(enableTrackingProtection: perTabOverride == .forceDisabledPerTab)
                     }))
                 }
             }
@@ -1653,9 +1653,12 @@ extension BrowserViewController: TabDelegate {
         let historyStateHelper = HistoryStateHelper(tab: tab)
         historyStateHelper.delegate = self
         tab.addContentScript(historyStateHelper, name: HistoryStateHelper.name())
-        
+
         if #available(iOS 11, *) {
-            (tab.contentBlocker as? ContentBlockerHelper)?.setupForWebView()
+            if let blocker = tab.contentBlocker as? ContentBlockerHelper {
+                blocker.setupForWebView()
+                tab.addContentScript(blocker, name: ContentBlockerHelper.name())
+            }
         }
 
         let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
