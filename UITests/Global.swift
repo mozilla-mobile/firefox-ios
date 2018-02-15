@@ -503,7 +503,9 @@ class SimplePageServer {
                     }
 
                     window.onload = function(e) {
-                        testImage('\(imageURL)');
+                        // Disabling TP stats reporting using JS execution on the wkwebview happens async;
+                        // setTimeout(1 sec) is plenty of delay to ensure the JS has executed.
+                        setTimeout(() => { testImage('\(imageURL)'); }, 1000);
                     }
                 </script></head>
             <body>TEST IMAGE BLOCKING</body></html>
