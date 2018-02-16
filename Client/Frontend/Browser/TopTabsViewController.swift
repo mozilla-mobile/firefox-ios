@@ -328,6 +328,9 @@ extension TopTabsViewController: UICollectionViewDataSource {
 @available(iOS 11.0, *)
 extension TopTabsViewController: UICollectionViewDragDelegate {
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        // We need to store the earliest oldTabs. So if one already exists use that.
+        self.oldTabs = self.oldTabs ?? tabStore
+
         let tab = tabStore[indexPath.item]
 
         // Get the tab's current URL. If it is `nil`, check the `sessionData` since
@@ -364,12 +367,8 @@ extension TopTabsViewController: UICollectionViewDropDelegate {
             return
         }
 
-        collectionView.performBatchUpdates({
-            self.tabManager.moveTab(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
-            self.tabStore = self.tabsToDisplay
-            collectionView.moveItem(at: IndexPath(item: sourceIndex, section: 0), to: destinationIndexPath)
-        })
-
+        self.tabManager.moveTab(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
+        self.performTabUpdates()
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
     }
 
@@ -404,26 +403,49 @@ extension TopTabsViewController: TabEventHandler {
 
 // Collection Diff (animations)
 extension TopTabsViewController {
+    struct TopTabMoveChange: Hashable {
+        let from: IndexPath
+        let to: IndexPath
+
+        var hashValue: Int {
+            return from.hashValue + to.hashValue
+        }
+
+        // Consider equality when from/to are equal as well as swapped. This is because
+        // moving a tab from index 2 to index 1 will result in TWO changes: 2 -> 1 and 1 -> 2
+        // We only need to keep *one* of those two changes when dealing with a move.
+        static func ==(lhs: TopTabsViewController.TopTabMoveChange, rhs: TopTabsViewController.TopTabMoveChange) -> Bool {
+            return (lhs.from == rhs.from && lhs.to == rhs.to) || (lhs.from == rhs.to && lhs.to == rhs.from)
+        }
+    }
 
     struct TopTabChangeSet {
         let reloads: Set<IndexPath>
         let inserts: Set<IndexPath>
         let deletes: Set<IndexPath>
+        let moves: Set<TopTabMoveChange>
 
-        init(reloadArr: [IndexPath], insertArr: [IndexPath], deleteArr: [IndexPath]) {
+        init(reloadArr: [IndexPath], insertArr: [IndexPath], deleteArr: [IndexPath], moveArr: [TopTabMoveChange]) {
             reloads = Set(reloadArr)
             inserts = Set(insertArr)
             deletes = Set(deleteArr)
+            moves = Set(moveArr)
         }
 
-        var all: [Set<IndexPath>] {
-            return [inserts, reloads, deletes]
+        var isEmpty: Bool {
+            return reloads.isEmpty && inserts.isEmpty && deletes.isEmpty && moves.isEmpty
         }
-
     }
 
     // create a TopTabChangeSet which is a snapshot of updates to perfrom on a collectionView
     func calculateDiffWith(_ oldTabs: [Tab], to newTabs: [Tab], and reloadTabs: [Tab?]) -> TopTabChangeSet {
+        let moves: [TopTabMoveChange] = newTabs.enumerated().flatMap { newIndex, tab in
+            if let oldIndex = oldTabs.index(of: tab), oldIndex != newIndex {
+                return TopTabMoveChange(from: IndexPath(row: oldIndex, section: 0), to: IndexPath(row: newIndex, section: 0))
+            }
+            return nil
+        }
+
         let inserts: [IndexPath] = newTabs.enumerated().flatMap { index, tab in
             if oldTabs.index(of: tab) == nil {
                 return IndexPath(row: index, section: 0)
@@ -446,7 +468,7 @@ extension TopTabsViewController {
             return IndexPath(row: newTabs.index(of: tab)!, section: 0)
             }.filter { return inserts.index(of: $0) == nil && deletes.index(of: $0) == nil }
 
-        return TopTabChangeSet(reloadArr: reloads, insertArr: inserts, deleteArr: deletes)
+        return TopTabChangeSet(reloadArr: reloads, insertArr: inserts, deleteArr: deletes, moveArr: moves)
     }
 
     func updateTabsFrom(_ oldTabs: [Tab]?, to newTabs: [Tab], on completion: (() -> Void)? = nil) {
@@ -460,7 +482,7 @@ extension TopTabsViewController {
         flushPendingChanges()
 
         // If there are no changes. We have nothing to do
-        if update.all.every({ $0.isEmpty }) {
+        if update.isEmpty {
             completion?()
             return
         }
@@ -471,16 +493,17 @@ extension TopTabsViewController {
             self.collectionView.deleteItems(at: Array(update.deletes))
             self.collectionView.insertItems(at: Array(update.inserts))
             self.collectionView.reloadItems(at: Array(update.reloads))
+
+            for move in update.moves {
+                self.collectionView.moveItem(at: move.from, to: move.to)
+            }
         }
 
         //Lets lock any other updates from happening.
         self.isUpdating = true
         self.pendingUpdatesToTabs = newTabs // This var helps other mutations that might happen while updating.
 
-        // The actual update
-        UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
-            self.collectionView.performBatchUpdates(updateBlock)
-        }) { (_) in
+        let onComplete: () -> Void = {
             self.isUpdating = false
             self.pendingUpdatesToTabs = []
             // Sometimes there might be a pending reload. Lets do that.
@@ -495,6 +518,19 @@ extension TopTabsViewController {
                     self.scrollToCurrentTab()
                 }
             })
+        }
+
+        // The actual update. Only animate the changes if no tabs have moved
+        // as a result of drag-and-drop.
+        if update.moves.count == 0 {
+            UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
+                self.collectionView.performBatchUpdates(updateBlock)
+            }) { (_) in
+                onComplete()
+            }
+        } else {
+            self.collectionView.performBatchUpdates(updateBlock)
+            onComplete()
         }
     }
 
