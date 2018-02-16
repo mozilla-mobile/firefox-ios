@@ -173,7 +173,7 @@ extension Strings {
 extension Strings {
     // Settings strings
     public static let FxAFirefoxAccount = NSLocalizedString("FxA.FirefoxAccount", value: "Firefox Account", comment: "Settings section title for Firefox Account")
-    public static let FxASignInToSync = NSLocalizedString("FxA.SignInToSync", value: "Sign in to Sync", comment: "Button label to sign into Sync")
+    public static let FxASignInToSync = NSLocalizedString("FxA.SignIntoSync", value: "Sign in to Sync", comment: "Button label to sign into Sync")
     public static let FxATakeYourWebWithYou = NSLocalizedString("FxA.TakeYourWebWithYou", value: "Take Your Web With You", comment: "Call to action for sign into sync button")
     public static let FxASyncUsageDetails = NSLocalizedString("FxA.SyncExplain", value: "Get your tabs, bookmarks, and passwords from your other devices.", comment: "Label explaining what sync does")
     public static let FxAAccountVerificationRequired = NSLocalizedString("FxA.AccountVerificationRequired", value: "Account Verification Required", comment: "Label stating your account is not verified")
