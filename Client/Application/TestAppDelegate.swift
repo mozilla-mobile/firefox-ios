@@ -17,6 +17,24 @@ class TestAppDelegate: AppDelegate {
 
         var profile: BrowserProfile
         let launchArguments = ProcessInfo.processInfo.arguments
+
+        launchArguments.forEach { arg in
+            if arg.starts(with: LaunchArguments.LoadDatabasePrefix) {
+                if launchArguments.contains(LaunchArguments.ClearProfile) {
+                    fatalError("Clearing profile and loading a test database is not a supported combination.")
+                }
+
+                // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
+                let filename = arg.replacingOccurrences(of: LaunchArguments.LoadDatabasePrefix, with: "")
+                let input = URL(fileURLWithPath: Bundle(for: TestAppDelegate.self).path(forResource: filename, ofType: nil, inDirectory: "test-fixtures")!)
+                let profileDir = "\(appRootDir())/profile.testProfile"
+                try? FileManager.default.createDirectory(atPath: profileDir, withIntermediateDirectories: false, attributes: nil)
+                let output = URL(fileURLWithPath: "\(profileDir)/browser.db")
+                try? FileManager.default.removeItem(at: output)
+                try! FileManager.default.copyItem(at: input, to: output)
+            }
+        }
+
         if launchArguments.contains(LaunchArguments.ClearProfile) {
             // Use a clean profile for each test session.
             log.debug("Deleting all files in 'Documents' directory to clear the profile")
@@ -68,13 +86,7 @@ class TestAppDelegate: AppDelegate {
         }
 
         // Clear the documents directory
-        var rootPath: String = ""
-        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
-        if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
-            rootPath = url.path
-        } else {
-            rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
-        }
+        let rootPath = appRootDir()
         let manager = FileManager.default
         let documents = URL(fileURLWithPath: rootPath)
         let docContents = try! manager.contentsOfDirectory(atPath: rootPath)
@@ -93,4 +105,14 @@ class TestAppDelegate: AppDelegate {
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
+    func appRootDir() -> String {
+        var rootPath = ""
+        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
+        if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
+            rootPath = url.path
+        } else {
+            rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+        }
+        return rootPath
+    }
 }

@@ -89,7 +89,6 @@ extension Strings {
     public static let SettingsSearchEditButton = NSLocalizedString("Settings.Search.Edit.Button", value: "Edit", comment: "Button displayed at the top of the search settings.")
     public static let UseTouchID = NSLocalizedString("Use Touch ID", tableName: "AuthenticationManager", comment: "List section title for when to use Touch ID")
     public static let UseFaceID = NSLocalizedString("Use Face ID", tableName: "AuthenticationManager", comment: "List section title for when to use Face ID")
-    public static let SettingsAlwaysShowToolbar = NSLocalizedString("Settings.General.AlwaysShowToolbar", value: "Always Show Toolbars When Scrolling", comment: "iPad-only settings on/off option to never hide the toolbars when scrolling a web page.")
 }
 
 // Error pages.

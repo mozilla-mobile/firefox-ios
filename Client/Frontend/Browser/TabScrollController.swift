@@ -4,7 +4,6 @@
 
 import UIKit
 import SnapKit
-import Shared
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
@@ -43,14 +42,6 @@ class TabScrollingController: NSObject {
     weak var snackBars: UIView?
     weak var webViewContainerToolbar: UIView?
 
-    // Option to disable the hiding, and making this class a big no-op.
-    fileprivate var alwaysShowToolbars = false
-
-    func updateAlwaysShowToolbarsSetting(prefs: Prefs) {
-        if UIDevice.current.userInterfaceIdiom == .pad, let alwaysShow = prefs.boolForKey(PrefsKeys.AlwaysShowToolbar) {
-            alwaysShowToolbars = alwaysShow
-        }
-    }
     var footerBottomConstraint: Constraint?
     var headerTopConstraint: Constraint?
     var toolbarsShowing: Bool { return headerTopOffset == 0 }
@@ -104,7 +95,7 @@ class TabScrollingController: NSObject {
         toolbarState = .visible
         let durationRatio = abs(headerTopOffset / topScrollHeight)
         let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * durationRatio)
-        animateToolbarsWithOffsets(
+        self.animateToolbarsWithOffsets(
             animated,
             duration: actualDuration,
             headerOffset: 0,
@@ -114,15 +105,14 @@ class TabScrollingController: NSObject {
     }
 
     func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
-        if alwaysShowToolbars || toolbarState == .collapsed {
+        if toolbarState == .collapsed {
             completion?(true)
             return
         }
-
         toolbarState = .collapsed
         let durationRatio = abs((topScrollHeight + headerTopOffset) / topScrollHeight)
         let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * durationRatio)
-        animateToolbarsWithOffsets(
+        self.animateToolbarsWithOffsets(
             animated,
             duration: actualDuration,
             headerOffset: -topScrollHeight,
@@ -132,12 +122,10 @@ class TabScrollingController: NSObject {
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        if alwaysShowToolbars || keyPath != "contentSize" {
-            return
-        }
-
-        if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
-            showToolbars(animated: true, completion: nil)
+        if keyPath == "contentSize" {
+            if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
+                showToolbars(animated: true, completion: nil)
+            }
         }
     }
 
@@ -180,7 +168,7 @@ private extension TabScrollingController {
     }
 
     @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
-        if alwaysShowToolbars || tabIsLoading() {
+        if tabIsLoading() {
             return
         }
 

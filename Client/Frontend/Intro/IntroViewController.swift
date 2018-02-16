@@ -168,6 +168,10 @@ class IntroViewController: UIViewController {
     }
 
     func createSlides() {
+        // Make sure the scrollView has been setup before setting up the slides
+        guard scrollView.superview != nil else {
+            return
+        }
         // Wipe any existing slides
         imageViewContainer.subviews.forEach { $0.removeFromSuperview() }
         cardViews.forEach { $0.removeFromSuperview() }

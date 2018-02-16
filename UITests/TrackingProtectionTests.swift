@@ -25,8 +25,17 @@ class TrackingProtectionTests: KIFTestCase {
     }
 
     private func checkTrackingProtection(isBlocking: Bool) {
-        let url = "\(webRoot!)/tracking-protection-test.html"
-        TrackingProtectionTests.checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
+        if #available(iOS 11.0, *) {
+            let statsBefore = ContentBlockerHelper.testInstance!.stats
+            let url = "\(webRoot!)/tracking-protection-test.html"
+            TrackingProtectionTests.checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
+            let statsAfter = ContentBlockerHelper.testInstance!.stats
+            if isBlocking {
+               GREYAssertTrue(statsBefore.socialCount < statsAfter.socialCount, reason: "Stats should increment")
+            } else {
+                GREYAssertTrue(statsBefore.socialCount == statsAfter.socialCount, reason: "Stats should not increment")
+            }
+        }
     }
 
     public static func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
@@ -89,7 +98,6 @@ class TrackingProtectionTests: KIFTestCase {
     }
     
     func testNormalTrackingProtection() {
-        
         openTPSetting()
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
         closeTPSetting()
