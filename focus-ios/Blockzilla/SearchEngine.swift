@@ -57,6 +57,10 @@ class SearchEngine: NSObject, NSCoding {
         aCoder.encode(suggestionsTemplate, forKey: "suggestionsTemplate")
     }
     
+    func getNameOrCustom() -> String {
+        return isCustom ? "custom" : name
+    }
+    
     private static func generateImage(name: String) -> UIImage {
         let faviconLetter = name.uppercased()[name.startIndex]
         
