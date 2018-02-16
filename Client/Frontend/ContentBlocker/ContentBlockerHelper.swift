@@ -82,11 +82,11 @@ class ContentBlockerHelper: NSObject {
         var settingTitle: String {
             switch self {
             case .on:
-                return Strings.TrackingProtectionOptionAlwaysOn
+                return Strings.TrackingProtectionOptionOnInNormalBrowsing
             case .onInPrivateBrowsing:
                 return Strings.TrackingProtectionOptionOnInPrivateBrowsing
             case .off:
-                return Strings.TrackingProtectionOptionAlwaysOff
+                return ""
             }
         }
 
