@@ -8,7 +8,7 @@ public protocol AccessibilityActionsSource: class {
     func accessibilityCustomActionsForView(_ view: UIView) -> [UIAccessibilityCustomAction]?
 }
 
-open class AccessibleAction {
+open class AccessibleAction: NSObject {
     open let name: String
     open let handler: () -> Bool
 
