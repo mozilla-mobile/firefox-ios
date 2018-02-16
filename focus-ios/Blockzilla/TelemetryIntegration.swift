@@ -48,4 +48,5 @@ class TelemetryEventObject {
     public static let trackingProtectionToggle = "tracking_protection_toggle"
     public static let websiteLink = "website_link"
     public static let autofill = "autofill"
+    public static let trackerStatsShareButton = "tracker_stats_share_button"
 }

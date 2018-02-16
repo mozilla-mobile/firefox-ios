@@ -68,6 +68,9 @@ class BrowserViewController: UIViewController {
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
+    
+    private let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
+    private let userDefaultsShareTrackerStatsKey = "shareTrackerStats"
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -244,6 +247,13 @@ class BrowserViewController: UIViewController {
             homeView.removeFromSuperview()
         }
         self.homeView = homeView
+        
+        if shouldShowTrackerStatsShareButton() {
+            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+            homeView.showTrackerStatsShareButton(text: String(format: UIConstants.strings.shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
+        } else {
+            homeView.hideTrackerStatsShareButton()
+        }
     }
 
     private func createURLBar() {
@@ -470,6 +480,40 @@ class BrowserViewController: UIViewController {
             UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
         ]
     }
+    
+    func shouldShowTrackerStatsShareButton() -> Bool {
+        let shouldShowTrackerStatsToUser = UserDefaults.standard.object(forKey: userDefaultsShareTrackerStatsKey) as! Bool?
+        
+        if shouldShowTrackerStatsToUser == nil {
+            // User has not been put into a bucket for determining if it should be shown
+            // 10% chance they get put into the group that sees the share button
+            // arc4random_uniform(10) returns an integer 0 through 9 (inclusive)
+            if arc4random_uniform(10) == 0 {
+                UserDefaults.standard.set(true, forKey: userDefaultsShareTrackerStatsKey)
+
+            } else {
+                UserDefaults.standard.set(false, forKey: userDefaultsShareTrackerStatsKey)
+                return false
+            }
+        }
+        
+        if shouldShowTrackerStatsToUser == false ||
+            getNumberOfLifetimeTrackersBlocked() < 100 ||
+            NSLocale.current.identifier != "en_US" ||
+            AppInfo.isKlar {
+            return false
+        }
+        
+        return true
+    }
+    
+    private func getNumberOfLifetimeTrackersBlocked() -> Int {
+        return UserDefaults.standard.integer(forKey: userDefaultsTrackersBlockedKey)
+    }
+    
+    private func setNumberOfLifetimeTrackersBlocked(numberOfTrackers: Int) {
+        UserDefaults.standard.set(numberOfTrackers, forKey: userDefaultsTrackersBlockedKey)
+    }
 }
 
 extension BrowserViewController: URLBarDelegate {
@@ -587,6 +631,17 @@ extension BrowserViewController: BrowserToolsetDelegate {
 extension BrowserViewController: HomeViewDelegate {
     func homeViewDidPressSettings(homeView: HomeView) {
         showSettings()
+    }
+    
+    func shareTrackerStatsButtonTapped() {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
+        
+        let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+        let appStoreUrl = URL(string:String(format: "https://mzl.la/2GZBav0"))
+        let text = String(format: UIConstants.strings.shareTrackerStatsText, AppInfo.productName, String(numberOfTrackersBlocked))
+        let shareController = UIActivityViewController(activityItems: [text, appStoreUrl], applicationActivities: nil)
+        present(shareController, animated: true)
+        urlBar?.shouldPresent = false
     }
 }
 
@@ -747,6 +802,13 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, stateDidChange state: BrowserState) {}
 
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus) {
+        // Calculate the number of trackers blocked and add that to lifetime total
+        if case .on(let info) = trackingStatus,
+           case .on(let oldInfo) = trackingProtectionStatus {
+            let differenceSinceLastUpdate = max(0, info.total - oldInfo.total)
+            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
+            setNumberOfLifetimeTrackersBlocked(numberOfTrackers: numberOfTrackersBlocked + differenceSinceLastUpdate)
+        }
         trackingProtectionStatus = trackingStatus
     }
 
