@@ -111,7 +111,8 @@ class DragAndDropTests: BaseTestCase {
         waitUntilPageLoad()
         // Check the text in the search field before dragging and dropping the url text field
         XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].placeholderValue, "Search the docs")
-        dragAndDrop(dragElement: app.textFields["url"], dropOnElement: app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!])
+        // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
+        app.textFields["url"].press(forDuration: 1, thenDragTo: app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!])
         // Verify that the text in the search field is the same as the text in the url text field
         XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].value as? String, websiteWithSearchField["url"]!)
     }

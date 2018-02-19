@@ -58,8 +58,8 @@ class HomePageSettingsUITests: BaseTestCase {
         // Go to a website and copy the url
         navigator.openURL(websiteUrl1)
         app.textFields["url"].press(forDuration: 5)
-        app.buttons["Copy Address"].tap()
-
+        waitforExistence(app.tables["Context Menu"])
+        app.tables["Context Menu"].cells["menu-Copy-Link"].tap()
         // Go to HomePage settings and paste it using the option Used Copied Link
         navigator.goto(HomePageSettings)
         XCTAssertTrue(app.cells["Use Copied Link"].isEnabled)
