@@ -99,7 +99,7 @@ class TrackingProtectionTests: KIFTestCase {
     
     func testNormalTrackingProtection() {
         openTPSetting()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing")).perform(grey_tap())
         closeTPSetting()
 
         if BrowserUtils.iPad() {
@@ -115,13 +115,13 @@ class TrackingProtectionTests: KIFTestCase {
         checkTrackingProtection(isBlocking: false)
 
         openTPSetting()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Always On")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Normal Browsing")).perform(grey_tap())
         closeTPSetting()
 
         // Now with the TP enabled, the image should be blocked
         checkTrackingProtection(isBlocking: true)
         openTPSetting()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing")).perform(grey_tap())
         closeTPSetting()
     }
 
@@ -133,7 +133,7 @@ class TrackingProtectionTests: KIFTestCase {
         waitForExpectations(timeout: 10, handler: nil)
 
         openTPSetting()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Always On")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Normal Browsing")).perform(grey_tap())
         closeTPSetting()
 
         // The image from ymail.com would normally be blocked, but in this case it is whitelisted
@@ -148,7 +148,7 @@ class TrackingProtectionTests: KIFTestCase {
         checkTrackingProtection(isBlocking: true)
 
         openTPSetting()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing Mode Only")).perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Browsing")).perform(grey_tap())
         closeTPSetting()
 
     }
