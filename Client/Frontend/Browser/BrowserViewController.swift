@@ -1366,20 +1366,19 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
-        let actions = self.getLongPressLocationBarActions(with: urlBar)
-
-        // This is just here until the menu gets hooked up
-        let tp = PhotonActionSheetItem(title: "Tracking Protection", text: "Tracking protection blocks online trackers that collect your private browsing data across multiple sites.", iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
+        let urlActions = self.getLongPressLocationBarActions(with: urlBar)
+        if #available(iOS 11.0, *), let tab = self.tabManager.selectedTab {
+            let tp = self.getTrackingStatsMenuActions(for: tab, presentingOn: urlBar)
+            self.presentSheetWith(actions: [urlActions, tp], on: self, from: urlBar)
+        } else {
+            self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
         }
-        self.presentSheetWith(actions: [actions, [tp]], on: self, from: urlBar)
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
-        if let selectedTab = tabManager.selectedTab {
+        if let selectedTab = tabManager.selectedTab, homePanelController == nil {
             // Only scroll to top if we are not showing the home view controller
-            if homePanelController == nil {
-                selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
-            }
+            selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
     }
 
@@ -1501,13 +1500,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
         if #available(iOS 11, *) {
             if let helper = tab.contentBlocker as? ContentBlockerHelper {
-                if helper.prefEnabledState != .off {
-                    let perTabOverride = helper.perTabOverrideEnabledState
-                    let title = perTabOverride == .forceDisabledPerTab ? Strings.TrackingProtectionReloadWith : Strings.TrackingProtectionReloadWithout
-                    controller.addAction(UIAlertAction(title: title, style: .default, handler: {_ in
-                        helper.overridePrefsAndReloadTab(enableTrackingProtection: perTabOverride == .forceDisabledPerTab)
-                    }))
-                }
+                let title = helper.isEnabled ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
+                controller.addAction(UIAlertAction(title: title, style: .default, handler: { _ in
+                    helper.isUserEnabled = !helper.isEnabled
+                }))
             }
         }
         controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
