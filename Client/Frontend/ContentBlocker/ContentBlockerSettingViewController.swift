@@ -39,15 +39,12 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
 @available(iOS 11.0, *)
 class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
     let prefs: Prefs
-    let EnabledStates = ContentBlockerHelper.PrefEnabledState.allOptions
-    let BlockingStrengths = ContentBlockerHelper.BlockingStrength.allOptions
-    var currentEnabledState: ContentBlockerHelper.PrefEnabledState
     var currentBlockingStrength: ContentBlockerHelper.BlockingStrength
 
     init(prefs: Prefs) {
         self.prefs = prefs
-        currentEnabledState = ContentBlockerHelper.PrefEnabledState(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) ?? "") ?? .onInPrivateBrowsing
-        currentBlockingStrength = ContentBlockerHelper.BlockingStrength(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength) ?? "") ?? .basic
+
+        currentBlockingStrength = prefs.stringForKey(TPDefaults.PrefKeyStrength).flatMap({ContentBlockerHelper.BlockingStrength(rawValue: $0)}) ?? .basic
         
         super.init(style: .grouped)
 
@@ -60,42 +57,35 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
     }
 
     override func generateSettings() -> [SettingSection] {
-        let enabledSetting: [CheckmarkSetting] = EnabledStates.map { option in
-            let id = ContentBlockerHelper.PrefEnabledState.accessibilityId(for: option)
-            return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: nil, accessibilityIdentifier: id, isEnabled: {
-                return option == self.currentEnabledState
-            }, onChanged: {
-                self.currentEnabledState = option
-                self.prefs.setString(self.currentEnabledState.rawValue, forKey: ContentBlockerHelper.PrefKeyEnabledState)
-                self.tableView.reloadData()
-                ContentBlockerHelper.prefsChanged()
+        let normalBrowsing = BoolSetting(prefs: profile.prefs, prefKey: TPDefaults.PrefKeyNormalBrowsingEnabled, defaultValue: TPDefaults.TPNormalBrowsingDefault, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInNormalBrowsing))
+        let privateBrowsing = BoolSetting(prefs: profile.prefs, prefKey: TPDefaults.PrefKeyPrivateBrowsingEnabled, defaultValue: TPDefaults.TPPrivateBrowsingDefault, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInPrivateBrowsing))
 
-                LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Enabled option": option.rawValue as AnyObject])
-                UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockerHelper.PrefKeyEnabledState, extras: ["to": option.rawValue])
-            })
-        }
 
-        let strengthSetting: [CheckmarkSetting] = BlockingStrengths.map { option in
+
+        let strengthSetting: [CheckmarkSetting] = ContentBlockerHelper.BlockingStrength.allOptions.map { option in
             let id = ContentBlockerHelper.BlockingStrength.accessibilityId(for: option)
             return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: NSAttributedString(string: option.subtitle), accessibilityIdentifier: id, isEnabled: {
                 return option == self.currentBlockingStrength
             }, onChanged: {
                 self.currentBlockingStrength = option
-                self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockerHelper.PrefKeyStrength)
+                self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: TPDefaults.PrefKeyStrength)
                 self.tableView.reloadData()
-                ContentBlockerHelper.prefsChanged()
-
                 LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue as AnyObject])
-                UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockerHelper.PrefKeyStrength, extras: ["to": option.rawValue])
+                UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: TPDefaults.PrefKeyStrength, extras: ["to": option.rawValue])
             })
         }
 
-        let firstSection = SettingSection(title: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffHeader), footerTitle: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffFooter), children: enabledSetting)
+        let firstSection = SettingSection(title: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffHeader), footerTitle: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffFooter), children: [normalBrowsing, privateBrowsing])
 
         // The bottom of the block lists section has a More Info button, implemented as a custom footer view,
         // SettingSection needs footerTitle set to create a footer, which we then override the view for.
         let blockListsTitle = Strings.TrackingProtectionOptionBlockListsTitle
         let secondSection = SettingSection(title: NSAttributedString(string: blockListsTitle), footerTitle: NSAttributedString(string: "placeholder replaced with UIButton"), children: strengthSetting)
         return [firstSection, secondSection]
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        ContentBlockerHelper.prefsChanged()
     }
 }
