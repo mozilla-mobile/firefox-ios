@@ -25,11 +25,12 @@ private struct LPMessage {
     static let ArgAcceptButtonText = "Accept button.Text"
     static let ArgCancelButtonText = "Cancel button.Text"
     static let ArgCancelButtonTextColor = "Cancel button.Text color"
-    // These defaults are overridden though Leanplum webUI
-    static let DefaultAskToAskTitle = NSLocalizedString("Firefox Sync Requires Push", comment: "Default push to ask title")
-    static let DefaultAskToAskMessage = NSLocalizedString("Firefox will stay in sync faster with Push Notifications enabled.", comment: "Default push to ask message")
-    static let DefaultOkButtonText = NSLocalizedString("Enable Push", comment: "Default push alert ok button text")
-    static let DefaultLaterButtonText = NSLocalizedString("Don't Enable", comment: "Default push alert cancel button text")
+
+    // These defaults are not localized and will be overridden through Leanplum
+    static let DefaultAskToAskTitle = "Firefox Sync Requires Push"
+    static let DefaultAskToAskMessage = "Firefox will stay in sync faster with Push Notifications enabled."
+    static let DefaultOkButtonText = "Enable Push"
+    static let DefaultLaterButtonText = "Don’t Enable"
 }
 
 private let log = Logger.browserLogger
