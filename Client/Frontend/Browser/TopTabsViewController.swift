@@ -37,6 +37,7 @@ class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var isPrivate = false
+    fileprivate var isDragging = false
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
@@ -327,6 +328,18 @@ extension TopTabsViewController: UICollectionViewDataSource {
 
 @available(iOS 11.0, *)
 extension TopTabsViewController: UICollectionViewDragDelegate {
+    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
+        isDragging = true
+        privateModeButton.isUserInteractionEnabled = false
+        tabsButton.isUserInteractionEnabled = false
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
+        isDragging = false
+        privateModeButton.isUserInteractionEnabled = true
+        tabsButton.isUserInteractionEnabled = true
+    }
+
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         // We need to store the earliest oldTabs. So if one already exists use that.
         self.oldTabs = self.oldTabs ?? tabStore
@@ -367,9 +380,11 @@ extension TopTabsViewController: UICollectionViewDropDelegate {
             return
         }
 
+        coordinator.drop(dragItem, toItemAt: destinationIndexPath)
+        isDragging = false
+
         self.tabManager.moveTab(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
         self.performTabUpdates()
-        coordinator.drop(dragItem, toItemAt: destinationIndexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -458,9 +473,6 @@ extension TopTabsViewController {
                 return TopTabMoveChange(from: IndexPath(row: oldIndex, section: 0), to: IndexPath(row: newIndex, section: 0))
             }
             return nil
-        }.filter {
-            return inserts.index(of: $0.from) == nil && inserts.index(of: $0.to) == nil &&
-                deletes.index(of: $0.from) == nil && deletes.index(of: $0.to) == nil
         }
 
         // Create based on what is visibile but filter out tabs we are about to insert/delete.
@@ -476,7 +488,7 @@ extension TopTabsViewController {
 
     func updateTabsFrom(_ oldTabs: [Tab]?, to newTabs: [Tab], on completion: (() -> Void)? = nil) {
         assertIsMainThread("Updates can only be performed from the main thread")
-        guard let oldTabs = oldTabs, !self.isUpdating, !self.pendingReloadData else {
+        guard let oldTabs = oldTabs, !self.isUpdating, !self.pendingReloadData, !self.isDragging else {
             return
         }
 
@@ -493,12 +505,16 @@ extension TopTabsViewController {
         // The actual update block. We update the dataStore right before we do the UI updates.
         let updateBlock = {
             self.tabStore = newTabs
-            self.collectionView.deleteItems(at: Array(update.deletes))
-            self.collectionView.insertItems(at: Array(update.inserts))
-            self.collectionView.reloadItems(at: Array(update.reloads))
 
-            for move in update.moves {
-                self.collectionView.moveItem(at: move.from, to: move.to)
+            // Only consider moves if no other operations are pending.
+            if update.deletes.count == 0, update.inserts.count == 0, update.reloads.count == 0 {
+                for move in update.moves {
+                    self.collectionView.moveItem(at: move.from, to: move.to)
+                }
+            } else {
+                self.collectionView.deleteItems(at: Array(update.deletes))
+                self.collectionView.insertItems(at: Array(update.inserts))
+                self.collectionView.reloadItems(at: Array(update.reloads))
             }
         }
 
