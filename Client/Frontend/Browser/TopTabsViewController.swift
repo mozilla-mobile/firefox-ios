@@ -439,13 +439,6 @@ extension TopTabsViewController {
 
     // create a TopTabChangeSet which is a snapshot of updates to perfrom on a collectionView
     func calculateDiffWith(_ oldTabs: [Tab], to newTabs: [Tab], and reloadTabs: [Tab?]) -> TopTabChangeSet {
-        let moves: [TopTabMoveChange] = newTabs.enumerated().flatMap { newIndex, tab in
-            if let oldIndex = oldTabs.index(of: tab), oldIndex != newIndex {
-                return TopTabMoveChange(from: IndexPath(row: oldIndex, section: 0), to: IndexPath(row: newIndex, section: 0))
-            }
-            return nil
-        }
-
         let inserts: [IndexPath] = newTabs.enumerated().flatMap { index, tab in
             if oldTabs.index(of: tab) == nil {
                 return IndexPath(row: index, section: 0)
@@ -460,13 +453,23 @@ extension TopTabsViewController {
             return nil
         }
 
+        let moves: [TopTabMoveChange] = newTabs.enumerated().flatMap { newIndex, tab in
+            if let oldIndex = oldTabs.index(of: tab), oldIndex != newIndex {
+                return TopTabMoveChange(from: IndexPath(row: oldIndex, section: 0), to: IndexPath(row: newIndex, section: 0))
+            }
+            return nil
+        }.filter {
+            return inserts.index(of: $0.from) == nil && inserts.index(of: $0.to) == nil &&
+                deletes.index(of: $0.from) == nil && deletes.index(of: $0.to) == nil
+        }
+
         // Create based on what is visibile but filter out tabs we are about to insert/delete.
         let reloads: [IndexPath] = reloadTabs.flatMap { tab in
             guard let tab = tab, newTabs.index(of: tab) != nil else {
                 return nil
             }
             return IndexPath(row: newTabs.index(of: tab)!, section: 0)
-            }.filter { return inserts.index(of: $0) == nil && deletes.index(of: $0) == nil }
+        }.filter { return inserts.index(of: $0) == nil && deletes.index(of: $0) == nil }
 
         return TopTabChangeSet(reloadArr: reloads, insertArr: inserts, deleteArr: deletes, moveArr: moves)
     }
