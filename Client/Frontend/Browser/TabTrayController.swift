@@ -555,6 +555,19 @@ extension TabTrayController: PresentingModalViewControllerDelegate {
 
 extension TabTrayController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
+        // Redraw the cells representing the selected (and recently unselected) tabs.
+        let tabs = tabDataSource.tabs
+        let updated = [ selected, previous ]
+            .flatMap { $0 }
+            .flatMap { tabs.index(of: $0) }
+            .map { IndexPath(item: $0, section: 0) }
+
+        assertIsMainThread("Changing selected tab is on main thread")
+        collectionView.reloadItems(at: updated)
+
+        if !updated.isEmpty {
+            collectionView.scrollToItem(at: updated[0], at: [.centeredHorizontally, .centeredVertically], animated: true)
+        }
     }
 
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
@@ -990,6 +1003,74 @@ extension TabTrayController: UIAdaptivePresentationControllerDelegate, UIPopover
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
+    }
+}
+
+extension TabTrayController {
+    override var keyCommands: [UIKeyCommand]? {
+        let toggleText = privateMode ? Strings.SwitchToNonPBMKeyCodeTitle: Strings.SwitchToPBMKeyCodeTitle
+        return [
+            UIKeyCommand(input: "`", modifierFlags: .command, action: #selector(didTogglePrivateModeKeyCommand), discoverabilityTitle: toggleText),
+            UIKeyCommand(input: "w", modifierFlags: .command, action: #selector(didCloseTabKeyCommand)),
+            UIKeyCommand(input: "\u{8}", modifierFlags: [], action: #selector(didCloseTabKeyCommand), discoverabilityTitle: Strings.CloseTabFromTabTrayKeyCodeTitle),
+            UIKeyCommand(input: "w", modifierFlags: [.command, .shift], action: #selector(didCloseAllTabsKeyCommand), discoverabilityTitle: Strings.CloseAllTabsFromTabTrayKeyCodeTitle),
+            UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(didEnterTabKeyCommand), discoverabilityTitle: Strings.OpenSelectedTabFromTabTrayKeyCodeTitle),
+            UIKeyCommand(input: "t", modifierFlags: .command, action: #selector(didOpenNewTabKeyCommand), discoverabilityTitle: Strings.OpenNewTabFromTabTrayKeyCodeTitle),
+            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
+        ]
+    }
+
+    func didTogglePrivateModeKeyCommand() {
+        didTogglePrivateMode()
+    }
+
+    func didCloseTabKeyCommand() {
+        if let tab = tabManager.selectedTab {
+            tabManager.removeTab(tab)
+        }
+    }
+
+    func didCloseAllTabsKeyCommand() {
+        closeTabsForCurrentTray()
+    }
+
+    func didEnterTabKeyCommand() {
+        _ = self.navigationController?.popViewController(animated: true)
+    }
+
+    func didOpenNewTabKeyCommand() {
+        openNewTab()
+    }
+
+    func didChangeSelectedTabKeyCommand(sender: UIKeyCommand) {
+        let step: Int
+        switch sender.input {
+        case UIKeyInputLeftArrow:
+            step = -1
+        case UIKeyInputRightArrow:
+            step = 1
+        case UIKeyInputUpArrow:
+            step = -tabLayoutDelegate.numberOfColumns
+        case UIKeyInputDownArrow:
+            step = tabLayoutDelegate.numberOfColumns
+        default:
+            step = 0
+        }
+
+        let tabs = tabDataSource.tabs
+        let currentIndex: Int
+        if let selected = tabManager.selectedTab {
+            currentIndex = tabs.index(of: selected) ?? 0
+        } else {
+            currentIndex = 0
+        }
+
+        let nextIndex = max(0, min(currentIndex + step, tabs.count - 1))
+        let nextTab = tabs[nextIndex]
+        tabManager.selectTab(nextTab)
     }
 }
 
