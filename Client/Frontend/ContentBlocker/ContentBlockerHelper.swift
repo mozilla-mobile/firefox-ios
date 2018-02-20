@@ -23,147 +23,63 @@ enum BlockList: String {
     }
 }
 
-@available(iOS 11.0, *)
-class ContentBlockerHelper: NSObject {
-    static let PrefKeyEnabledState = "prefkey.trackingprotection.enabled"
+struct TPDefaults {
     static let PrefKeyStrength = "prefkey.trackingprotection.strength"
+    static let PrefKeyNormalBrowsingEnabled = "prefkey.trackingprotection.normalbrowsing"
+    static let PrefKeyPrivateBrowsingEnabled = "prefkey.trackingprotection.privatebrowsing"
+    static let TPNormalBrowsingDefault = false
+    static let TPPrivateBrowsingDefault = true
+}
 
-    fileprivate let ruleStore: WKContentRuleListStore
+struct NoImageModeDefaults {
+    static let Script = "[{'trigger':{'url-filter':'.*','resource-type':['image']},'action':{'type':'block'}}]"
+    static let ScriptName = "images"
+}
+
+@available(iOS 11.0, *)
+class ContentBlockerHelper {
+
+    fileprivate let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
     fileprivate weak var tab: Tab?
-    fileprivate weak var profile: Profile?
+    fileprivate var userPrefs: Prefs?
+    fileprivate(set) var stats = TrackingInformation()
+
+    var isUserEnabled: Bool? {
+        didSet {
+            updateTab()
+            tab?.reload()
+        }
+    }
+    var isEnabled: Bool {
+        if let enabled = isUserEnabled {
+            return enabled
+        }
+        guard let tab = tab else { return false }
+        return tab.isPrivate ? isEnabledInPrivateBrowsing : isEnabledInNormalBrowsing
+    }
+
+    fileprivate var isEnabledInNormalBrowsing: Bool {
+        return userPrefs?.boolForKey(TPDefaults.PrefKeyNormalBrowsingEnabled) ?? TPDefaults.TPNormalBrowsingDefault
+    }
+
+    fileprivate var isEnabledInPrivateBrowsing: Bool {
+        return userPrefs?.boolForKey(TPDefaults.PrefKeyPrivateBrowsingEnabled) ?? TPDefaults.TPPrivateBrowsingDefault
+    }
+
+    fileprivate var blockingStrengthPref: BlockingStrength {
+        return userPrefs?.stringForKey(TPDefaults.PrefKeyStrength).flatMap(BlockingStrength.init) ?? .basic
+    }
 
     static fileprivate var blockImagesRule: WKContentRuleList?
     static fileprivate var whitelistedDomains = [String]()
+    static private var heavyInitHasRunOnce = false
 
     // Only set and used in UI test
     static weak var testInstance: ContentBlockerHelper?
 
-    fileprivate(set) var stats = TrackingInformation()
-
-    func whitelist(enable: Bool, forDomain domain: String, completion: (() -> Void)?) {
-        if enable {
-            ContentBlockerHelper.whitelistedDomains.append(domain)
-        } else {
-            ContentBlockerHelper.whitelistedDomains = ContentBlockerHelper.whitelistedDomains.filter { $0 != domain }
-        }
-
-        BlockListChecker.shared.whitelistedDomains = ContentBlockerHelper.whitelistedDomains
-
-        removeAllRulesInStore {
-            self.compileListsNotInStore {
-                NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
-                completion?()
-            }
-        }
-
-        guard let fileURL = whitelistFile else { return }
-        let list = ContentBlockerHelper.whitelistedDomains.joined(separator: "\n")
-        do {
-            try list.write(to: fileURL, atomically: true, encoding: .utf8)
-        } catch {
-            Sentry.shared.send(message: "Failed to save whitelist file")
-        }
-    }
-
-    enum PerTabOverrideEnabledState {
-        case notSet
-        case forceEnabledPerTab
-        case forceDisabledPerTab
-    }
-
-    private(set) var perTabOverrideEnabledState: PerTabOverrideEnabledState = .notSet
-
-    // Raw values are stored to prefs, be careful changing them.
-    enum PrefEnabledState: String {
-        case on
-        case onInPrivateBrowsing
-        case off
-
-        var settingTitle: String {
-            switch self {
-            case .on:
-                return Strings.TrackingProtectionOptionOnInNormalBrowsing
-            case .onInPrivateBrowsing:
-                return Strings.TrackingProtectionOptionOnInPrivateBrowsing
-            case .off:
-                return ""
-            }
-        }
-
-        static func accessibilityId(for state: PrefEnabledState) -> String {
-            switch state {
-            case .on:
-                return "Settings.TrackingProtectionOption.OnLabel"
-            case .onInPrivateBrowsing:
-                return "Settings.TrackingProtectionOption.OnInPrivateBrowsingLabel"
-            case .off:
-                return "Settings.TrackingProtectionOption.OffLabel"
-            }
-        }
-
-        static let allOptions: [PrefEnabledState] = [.on, .onInPrivateBrowsing, .off]
-    }
-
-    // Raw values are stored to prefs, be careful changing them.
-    enum BlockingStrength: String {
-        case basic
-        case strict
-
-        var settingTitle: String {
-            switch self {
-            case .basic:
-                return Strings.TrackingProtectionOptionBlockListTypeBasic
-            case .strict:
-                return Strings.TrackingProtectionOptionBlockListTypeStrict
-            }
-        }
-
-        var subtitle: String {
-            switch self {
-            case .basic:
-                return Strings.TrackingProtectionOptionBlockListTypeBasicDescription
-            case .strict:
-                return Strings.TrackingProtectionOptionBlockListTypeStrictDescription
-            }
-        }
-
-        static func accessibilityId(for strength: BlockingStrength) -> String {
-            switch strength {
-            case .basic:
-                return "Settings.TrackingProtectionOption.BlockListBasic"
-            case .strict:
-                return "Settings.TrackingProtectionOption.BlockListStrict"
-            }
-        }
-
-        static let allOptions: [BlockingStrength] = [.basic, .strict]
-    }
-
-    static func prefsChanged() {
-        NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
-    }
-
-    private static var heavyInitHasRunOnce = false
-
-    private var whitelistFile: URL? {
-        guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            Sentry.shared.send(message: "Failed to get doc dir for whitelist file.")
-            return nil
-        }
-        return dir.appendingPathComponent("whitelist")
-    }
-
-    private func readWhitelistFile() -> String? {
-        guard let fileURL = whitelistFile else { return nil }
-        let text = try? String(contentsOf: fileURL, encoding: .utf8)
-        return text
-    }
-
     init(tab: Tab, profile: Profile) {
-        self.ruleStore = WKContentRuleListStore.default()
         self.tab = tab
-        self.profile = profile
-        super.init()
+        self.userPrefs = profile.prefs
 
         if AppConstants.IsRunningTest {
             ContentBlockerHelper.testInstance = self
@@ -172,7 +88,9 @@ class ContentBlockerHelper: NSObject {
         if ContentBlockerHelper.heavyInitHasRunOnce {
             return
         }
+
         ContentBlockerHelper.heavyInitHasRunOnce = true
+        migrateLegacyUserPrefs()
 
         // Read the whitelist at startup
         let text = readWhitelistFile()
@@ -186,9 +104,8 @@ class ContentBlockerHelper: NSObject {
             }
         }
 
-        let blockImages = "[{'trigger':{'url-filter':'.*','resource-type':['image']},'action':{'type':'block'}}]".replacingOccurrences(of: "'", with: "\"")
-        ruleStore.compileContentRuleList(forIdentifier: "images", encodedContentRuleList: blockImages) {
-            rule, error in
+        let blockImages = NoImageModeDefaults.Script.escapeJSON()
+        ruleStore.compileContentRuleList(forIdentifier: NoImageModeDefaults.ScriptName, encodedContentRuleList: blockImages) { rule, error in
             assert(rule != nil && error == nil)
             ContentBlockerHelper.blockImagesRule = rule
         }
@@ -199,6 +116,10 @@ class ContentBlockerHelper: NSObject {
         addActiveRulesToTab()
     }
 
+    static func prefsChanged() {
+        NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
+    }
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -207,45 +128,26 @@ class ContentBlockerHelper: NSObject {
         addActiveRulesToTab()
     }
 
-    func overridePrefsAndReloadTab(enableTrackingProtection: Bool) {
-        perTabOverrideEnabledState = enableTrackingProtection ? .forceEnabledPerTab : .forceDisabledPerTab
-        updateTab()
-        tab?.reload()
-    }
-
-    fileprivate var blockingStrengthPref: BlockingStrength {
-        let pref = profile?.prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength) ?? ""
-        return BlockingStrength(rawValue: pref) ?? .basic
-    }
-
-    var prefEnabledState: PrefEnabledState {
-        let pref = profile?.prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) ?? ""
-        return PrefEnabledState(rawValue: pref) ?? .onInPrivateBrowsing
-    }
-
-    // Considers both the prefs state, and the per-tab override state.
-    var isEnabledForTab: Bool {
-        var prefEnabled: Bool
-        switch prefEnabledState {
-        case .off:
-            return false
-        case .on:
-            prefEnabled = true
-        case .onInPrivateBrowsing:
-            prefEnabled = tab?.isPrivate ?? false
+    // If a user had set a pref for Tracking Protection outside of the previous defaults then make sure to honor those settings
+    fileprivate func migrateLegacyUserPrefs() {
+        // If a user had set PrefEnabledState to ON this means that TP was on in normal browsing
+        // if a user had set PrefEnabledState to OFF this means that TP was off in both normal and private browsing
+        if let legacyPref = userPrefs?.stringForKey("prefkey.trackingprotection.enabled")  {
+            if legacyPref == "on" {
+                userPrefs?.setBool(true, forKey: TPDefaults.PrefKeyNormalBrowsingEnabled)
+            } else if legacyPref == "off" {
+                userPrefs?.setBool(false, forKey: TPDefaults.PrefKeyNormalBrowsingEnabled)
+                userPrefs?.setBool(false, forKey: TPDefaults.PrefKeyPrivateBrowsingEnabled)
+            }
+            // We only need to do this once. We can wipe the old pref
+            userPrefs?.removeObjectForKey("prefkey.trackingprotection.enabled")
         }
-
-        if perTabOverrideEnabledState != .notSet {
-            return perTabOverrideEnabledState == .forceEnabledPerTab
-        }
-
-        return prefEnabled
     }
 
     fileprivate func addActiveRulesToTab() {
-        removeTrackingProtectionFromTab()
+        removeTrackingProtection()
 
-        guard isEnabledForTab else {
+        guard isEnabled else {
             return
         }
 
@@ -263,7 +165,7 @@ class ContentBlockerHelper: NSObject {
         }
     }
 
-    func removeTrackingProtectionFromTab() {
+    fileprivate func removeTrackingProtection() {
         guard let tab = tab else { return }
         tab.webView?.configuration.userContentController.removeAllContentRuleLists()
 
@@ -287,9 +189,10 @@ class ContentBlockerHelper: NSObject {
 
         // Async required here to ensure remove() call is processed.
         DispatchQueue.main.async() {
-            self.tab?.webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))", completionHandler: nil)
+            self.tab?.webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))")
         }
     }
+
 }
 
 // MARK: Private initialization code
@@ -355,13 +258,13 @@ extension ContentBlockerHelper {
     // remove all the content blockers and reload them.
     fileprivate func removeOldListsByDateFromStore(completion: @escaping () -> Void) {
         let fileDate = self.dateOfMostRecentBlockerFile()
-        let prefsNewestDate = profile?.prefs.longForKey("blocker-file-date") ?? 0
+        let prefsNewestDate = userPrefs?.longForKey("blocker-file-date") ?? 0
         if prefsNewestDate < 1 || fileDate <= prefsNewestDate {
             completion()
             return
         }
 
-        profile?.prefs.setTimestamp(fileDate, forKey: "blocker-file-date")
+        userPrefs?.setTimestamp(fileDate, forKey: "blocker-file-date")
         self.removeAllRulesInStore() {
             completion()
         }
@@ -385,12 +288,12 @@ extension ContentBlockerHelper {
             }
 
             let fileDate = self.dateOfMostRecentBlockerFile()
-            let prefsNewestDate = self.profile?.prefs.timestampForKey("blocker-file-date") ?? 0
+            let prefsNewestDate = self.userPrefs?.timestampForKey("blocker-file-date") ?? 0
             if prefsNewestDate > 0 && fileDate <= prefsNewestDate && !noMatchingIdentifierFoundForRule {
                 completion()
                 return
             }
-            self.profile?.prefs.setTimestamp(fileDate, forKey: "blocker-file-date")
+            self.userPrefs?.setTimestamp(fileDate, forKey: "blocker-file-date")
 
             self.removeAllRulesInStore {
                 completion()
@@ -423,14 +326,73 @@ extension ContentBlockerHelper {
         }
     }
 
-    func whitelistJSON() -> String {
+}
+
+// MARK: Whitelisting support
+@available(iOS 11.0, *)
+extension ContentBlockerHelper {
+
+    static func whitelistFileURL() -> URL? {
+        guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            Sentry.shared.send(message: "Failed to get doc dir for whitelist file.")
+            return nil
+        }
+        return dir.appendingPathComponent("whitelist")
+    }
+
+    fileprivate func whitelistJSON() -> String {
         if ContentBlockerHelper.whitelistedDomains.isEmpty {
             return ""
         }
         // Note that * is added to the front of domains, so foo.com becomes *foo.com
         let list = "'*" + ContentBlockerHelper.whitelistedDomains.joined(separator: "','*") + "'"
-        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'unless-domain': [\(list)] }".replacingOccurrences(of: "'", with: "\"")
+        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'unless-domain': [\(list)] }".escapeJSON()
     }
+
+    func whitelist(enable: Bool, forDomain domain: String, completion: (() -> Void)? = nil) {
+        if enable {
+            ContentBlockerHelper.whitelistedDomains.append(domain)
+        } else {
+            ContentBlockerHelper.whitelistedDomains = ContentBlockerHelper.whitelistedDomains.filter { $0 != domain }
+        }
+
+        BlockListChecker.shared.whitelistedDomains = ContentBlockerHelper.whitelistedDomains
+
+        removeAllRulesInStore {
+            self.compileListsNotInStore {
+                NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
+                completion?()
+            }
+        }
+
+        guard let fileURL = ContentBlockerHelper.whitelistFileURL() else { return }
+        let list = ContentBlockerHelper.whitelistedDomains.joined(separator: "\n")
+        do {
+            try list.write(to: fileURL, atomically: true, encoding: .utf8)
+        } catch {
+            Sentry.shared.send(message: "Failed to save whitelist file")
+        }
+    }
+
+    func isURLWhitelisted(url: URL) -> Bool {
+        // TODO: Not done
+        return false
+    }
+
+    fileprivate func readWhitelistFile() -> String? {
+        guard let fileURL = ContentBlockerHelper.whitelistFileURL() else { return nil }
+        let text = try? String(contentsOf: fileURL, encoding: .utf8)
+        return text
+    }
+
+}
+
+@available(iOS 11.0, *)
+enum BlockingStrength: String {
+    case basic
+    case strict
+
+    static let allOptions: [BlockingStrength] = [.basic, .strict]
 }
 
 @available(iOS 11, *)
@@ -444,7 +406,7 @@ extension ContentBlockerHelper : TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard isEnabledForTab, let body = message.body as? [String: String], let urlString = body["url"] else {
+        guard isEnabled, let body = message.body as? [String: String], let urlString = body["url"] else {
             return
         }
 

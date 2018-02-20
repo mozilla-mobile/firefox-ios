@@ -37,14 +37,44 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
 }
 
 @available(iOS 11.0, *)
+extension BlockingStrength {
+    var settingTitle: String {
+        switch self {
+        case .basic:
+            return Strings.TrackingProtectionOptionBlockListTypeBasic
+        case .strict:
+            return Strings.TrackingProtectionOptionBlockListTypeStrict
+        }
+    }
+
+    var subtitle: String {
+        switch self {
+        case .basic:
+            return Strings.TrackingProtectionOptionBlockListTypeBasicDescription
+        case .strict:
+            return Strings.TrackingProtectionOptionBlockListTypeStrictDescription
+        }
+    }
+
+    static func accessibilityId(for strength: BlockingStrength) -> String {
+        switch strength {
+        case .basic:
+            return "Settings.TrackingProtectionOption.BlockListBasic"
+        case .strict:
+            return "Settings.TrackingProtectionOption.BlockListStrict"
+        }
+    }
+}
+
+@available(iOS 11.0, *)
 class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
     let prefs: Prefs
-    var currentBlockingStrength: ContentBlockerHelper.BlockingStrength
+    var currentBlockingStrength: BlockingStrength
 
     init(prefs: Prefs) {
         self.prefs = prefs
 
-        currentBlockingStrength = prefs.stringForKey(TPDefaults.PrefKeyStrength).flatMap({ContentBlockerHelper.BlockingStrength(rawValue: $0)}) ?? .basic
+        currentBlockingStrength = prefs.stringForKey(TPDefaults.PrefKeyStrength).flatMap({BlockingStrength(rawValue: $0)}) ?? .basic
         
         super.init(style: .grouped)
 
@@ -62,8 +92,8 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
 
 
 
-        let strengthSetting: [CheckmarkSetting] = ContentBlockerHelper.BlockingStrength.allOptions.map { option in
-            let id = ContentBlockerHelper.BlockingStrength.accessibilityId(for: option)
+        let strengthSetting: [CheckmarkSetting] = BlockingStrength.allOptions.map { option in
+            let id = BlockingStrength.accessibilityId(for: option)
             return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: NSAttributedString(string: option.subtitle), accessibilityIdentifier: id, isEnabled: {
                 return option == self.currentBlockingStrength
             }, onChanged: {
