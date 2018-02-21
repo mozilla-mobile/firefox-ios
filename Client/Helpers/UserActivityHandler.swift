@@ -46,7 +46,7 @@ extension UserActivityHandler: TabEventHandler {
     }
 
     func tab(_ tab: Tab, didChangeURL url: URL) {
-        guard url.isWebPage(includeDataURIs: false), !url.isLocal else {
+        guard url.isWebPage(includeDataURIs: false), !url.isLocal, !tab.isPrivate else {
             tab.userActivity?.resignCurrent()
             tab.userActivity = nil
             return
