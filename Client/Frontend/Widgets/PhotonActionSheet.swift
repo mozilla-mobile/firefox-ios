@@ -10,12 +10,8 @@ import Shared
 private struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
     static let Padding: CGFloat = 10
-    static let SectionVerticalPadding: CGFloat = 13
-    static let SiteHeaderHeight: CGFloat = 80
-    static let TitleHeaderHeight: CGFloat = 33
-    static let RowHeight: CGFloat = 44
-    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Defaults.Grey70
-    static let PlaceholderImage = UIImage(named: "defaultTopSiteIcon")
+    static let HeaderFooterHeight: CGFloat = 20
+    static let RowHeight: CGFloat = 50
     static let BorderWidth: CGFloat = 0.5
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let CornerRadius: CGFloat = 10
@@ -184,9 +180,9 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
-        tableView.estimatedRowHeight = 50
-        tableView.estimatedSectionFooterHeight = 20
-        tableView.estimatedSectionHeaderHeight = 20
+        tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
+        tableView.estimatedSectionFooterHeight = PhotonActionSheetUX.HeaderFooterHeight
+        tableView.estimatedSectionHeaderHeight = PhotonActionSheetUX.HeaderFooterHeight
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
         tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
@@ -315,6 +311,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 }
 
 private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
+    static let Padding: CGFloat = 12
+
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
@@ -337,7 +335,7 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         contentView.addSubview(titleLabel)
 
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).offset(12)
+            make.leading.equalTo(contentView).offset(PhotonActionSheetTitleHeaderView.Padding)
             make.trailing.equalTo(contentView)
             make.top.equalTo(contentView).offset(PhotonActionSheetUX.TablePadding)
         }
@@ -453,17 +451,10 @@ private struct PhotonActionSheetCellUX {
     static let CornerRadius: CGFloat = 3
 }
 
-public enum PhotonActionSheetCellAccessoryType {
-    case Disclosure
-    case Switch
-    case Text
-    case None
-}
-
 private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
-    
+
     let separatorLineView = UIView()
-    
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
@@ -476,10 +467,17 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
             make.height.equalTo(0.5)
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+public enum PhotonActionSheetCellAccessoryType {
+    case Disclosure
+    case Switch
+    case Text
+    case None
 }
 
 private class PhotonActionSheetCell: UITableViewCell {
@@ -618,7 +616,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         case .Disclosure:
             stackView.addArrangedSubview(disclosureIndicator)
         default:
-            break // Do nothing
+            break // Do nothing. The rest are not supported yet.
         }
     }
 }
