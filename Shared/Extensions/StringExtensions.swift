@@ -14,6 +14,12 @@ public extension String {
         return self.addingPercentEncoding(withAllowedCharacters: allowedEscapes)
     }
 
+    // Only escapes single quotes in JSON. This is used by TP json lists.
+    // If you make changes to this make sure TP list parsing doesnt break
+    func escapeJSON() -> String {
+        return self.replacingOccurrences(of: "'", with: "\"")
+    }
+
     func unescape() -> String? {
         return self.removingPercentEncoding
     }

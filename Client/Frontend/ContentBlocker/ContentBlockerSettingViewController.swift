@@ -90,8 +90,6 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
         let normalBrowsing = BoolSetting(prefs: profile.prefs, prefKey: TPDefaults.PrefKeyNormalBrowsingEnabled, defaultValue: TPDefaults.TPNormalBrowsingDefault, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInNormalBrowsing))
         let privateBrowsing = BoolSetting(prefs: profile.prefs, prefKey: TPDefaults.PrefKeyPrivateBrowsingEnabled, defaultValue: TPDefaults.TPPrivateBrowsingDefault, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInPrivateBrowsing))
 
-
-
         let strengthSetting: [CheckmarkSetting] = BlockingStrength.allOptions.map { option in
             let id = BlockingStrength.accessibilityId(for: option)
             return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: NSAttributedString(string: option.subtitle), accessibilityIdentifier: id, isEnabled: {

@@ -546,7 +546,6 @@ private class PhotonActionSheetCell: UITableViewCell {
         return stackView
     }()
 
-
     override var isSelected: Bool {
         didSet {
             self.selectedOverlay.isHidden = !isSelected

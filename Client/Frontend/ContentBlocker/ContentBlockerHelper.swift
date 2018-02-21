@@ -132,7 +132,7 @@ class ContentBlockerHelper {
     fileprivate func migrateLegacyUserPrefs() {
         // If a user had set PrefEnabledState to ON this means that TP was on in normal browsing
         // if a user had set PrefEnabledState to OFF this means that TP was off in both normal and private browsing
-        if let legacyPref = userPrefs?.stringForKey("prefkey.trackingprotection.enabled")  {
+        if let legacyPref = userPrefs?.stringForKey("prefkey.trackingprotection.enabled") {
             if legacyPref == "on" {
                 userPrefs?.setBool(true, forKey: TPDefaults.PrefKeyNormalBrowsingEnabled)
             } else if legacyPref == "off" {
