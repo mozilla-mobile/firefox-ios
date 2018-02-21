@@ -43,6 +43,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var bookmarkFolder: BookmarkFolder?
     var refreshControl: UIRefreshControl?
 
+    fileprivate var displayedActionSheet: PhotonActionSheet?
+
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
@@ -69,10 +71,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
 
-        self.tableView.accessibilityIdentifier = "Bookmarks List"
-        
-        self.refreshControl = UIRefreshControl()
-        self.tableView.addSubview(refreshControl!)
+        tableView.accessibilityIdentifier = "Bookmarks List"
+
+        if #available(iOS 11.0, *) {
+            tableView.dragDelegate = self
+        }
+
+        refreshControl = UIRefreshControl()
+        tableView.addSubview(refreshControl!)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -444,6 +450,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 extension BookmarksPanel: HomePanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
+        displayedActionSheet = contextMenu
         self.present(contextMenu, animated: true, completion: nil)
     }
 
@@ -476,6 +483,22 @@ extension BookmarksPanel: HomePanelContextMenu {
     }
 }
 
+@available(iOS 11.0, *)
+extension BookmarksPanel: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let bookmark = source?.current[indexPath.row] as? BookmarkItem, let url = URL(string: bookmark.url), let itemProvider = NSItemProvider(contentsOf: url) else {
+            return []
+        }
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
+
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
+        displayedActionSheet?.dismiss(animated: true)
+    }
+}
+
 private protocol BookmarkFolderTableViewHeaderDelegate {
     func didSelectHeader()
 }
@@ -487,7 +510,6 @@ extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
 }
 
 class BookmarkFolderTableViewCell: TwoLineTableViewCell {
-
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = BookmarksPanelUX.BookmarkFolderBGColor
