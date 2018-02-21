@@ -181,6 +181,8 @@ class ReadingListPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     var profile: Profile!
 
+    fileprivate var displayedActionSheet: PhotonActionSheet?
+
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
@@ -214,6 +216,10 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
+
+        if #available(iOS 11.0, *) {
+            tableView.dragDelegate = self
+        }
 
         view.backgroundColor = UIConstants.PanelBackgroundColor
 
@@ -435,6 +441,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
 extension ReadingListPanel: HomePanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
+        displayedActionSheet = contextMenu
         self.present(contextMenu, animated: true, completion: nil)
     }
 
@@ -452,5 +459,21 @@ extension ReadingListPanel: HomePanelContextMenu {
 
         actions.append(removeAction)
         return actions
+    }
+}
+
+@available(iOS 11.0, *)
+extension ReadingListPanel: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let record = records?[indexPath.row], let url = URL(string: record.url), let itemProvider = NSItemProvider(contentsOf: url) else {
+            return []
+        }
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
+
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
+        displayedActionSheet?.dismiss(animated: true)
     }
 }

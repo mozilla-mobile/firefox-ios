@@ -34,11 +34,13 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     var events: [Notification.Name] = [.FirefoxAccountChanged, .PrivateDataClearedHistory, .DynamicFontChanged]
     var refreshControl: UIRefreshControl?
 
+    fileprivate var displayedActionSheet: PhotonActionSheet?
+
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
-
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
+
     private let QueryLimit = 100
     private let NumSections = 5
     private let Today = getDate(0)
@@ -66,6 +68,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "History List"
+
+        if #available(iOS 11.0, *) {
+            tableView.dragDelegate = self
+        }
+
         updateSyncedDevicesCount().uponQueue(.main) { result in
             self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
         }
@@ -549,7 +556,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 extension HistoryPanel: HomePanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
-        self.present(contextMenu, animated: true, completion: nil)
+        displayedActionSheet = contextMenu
+        present(contextMenu, animated: true, completion: nil)
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
@@ -569,5 +577,21 @@ extension HistoryPanel: HomePanelContextMenu {
         actions.append(pinTopSite)
         actions.append(removeAction)
         return actions
+    }
+}
+
+@available(iOS 11.0, *)
+extension HistoryPanel: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let site = siteForIndexPath(indexPath), let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url) else {
+            return []
+        }
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
+
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
+        displayedActionSheet?.dismiss(animated: true)
     }
 }
