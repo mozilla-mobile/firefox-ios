@@ -904,8 +904,6 @@ class BrowserViewController: UIViewController {
         guard let url = webView.url, url.isWebPage(), !url.isLocal else {
             return
         }
-        webView.evaluateJavaScript("__firefox__.metadata && __firefox__.metadata.extractMetadata()", completionHandler: nil)
-
         if #available(iOS 11, *) {
             if NoImageModeHelper.isActivated(profile.prefs) {
                 webView.evaluateJavaScript("__firefox__.NoImageMode.setEnabled(true)", completionHandler: nil)
@@ -1128,6 +1126,8 @@ class BrowserViewController: UIViewController {
 
             // Re-run additional scripts in webView to extract updated favicons and metadata.
             runScriptsOnWebView(webView)
+
+            TabEvent.post(.didChangeURL(url), for: tab)
         }
         
         if tab === tabManager.selectedTab {
@@ -1639,9 +1639,6 @@ extension BrowserViewController: TabDelegate {
                 tab.addContentScript(blocker, name: ContentBlockerHelper.name())
             }
         }
-
-        let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
-        tab.addContentScript(metadataHelper, name: MetadataParserHelper.name())
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
