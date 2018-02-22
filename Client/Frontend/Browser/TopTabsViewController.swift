@@ -330,14 +330,10 @@ extension TopTabsViewController: UICollectionViewDataSource {
 extension TopTabsViewController: UICollectionViewDragDelegate {
     func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
         isDragging = true
-        privateModeButton.isUserInteractionEnabled = false
-        tabsButton.isUserInteractionEnabled = false
     }
 
     func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
         isDragging = false
-        privateModeButton.isUserInteractionEnabled = true
-        tabsButton.isUserInteractionEnabled = true
     }
 
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
@@ -388,8 +384,15 @@ extension TopTabsViewController: UICollectionViewDropDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        guard let _ = session.localDragSession else {
+        guard let localDragSession = session.localDragSession, let item = localDragSession.items.first, let tab = item.localObject as? Tab else {
             return UICollectionViewDropProposal(operation: .forbidden)
+        }
+
+        // If the `isDragging` is not `true` by the time we get here, we've had other
+        // add/remove operations happen while the drag was going on. We must return a
+        // `.cancel` operation continuously until `isDragging` can be reset.
+        guard tabStore.index(of: tab) != nil, isDragging else {
+            return UICollectionViewDropProposal(operation: .cancel)
         }
 
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
@@ -520,6 +523,7 @@ extension TopTabsViewController {
 
         //Lets lock any other updates from happening.
         self.isUpdating = true
+        self.isDragging = false
         self.pendingUpdatesToTabs = newTabs // This var helps other mutations that might happen while updating.
 
         let onComplete: () -> Void = {
@@ -567,6 +571,7 @@ extension TopTabsViewController {
         }
 
         isUpdating = true
+        isDragging = false
         self.tabStore = self.tabsToDisplay
         self.newTab.isUserInteractionEnabled = false
         self.flushPendingChanges()
