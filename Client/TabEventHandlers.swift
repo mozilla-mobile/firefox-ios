@@ -3,12 +3,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 class TabEventHandlers {
-    static let `default` = TabEventHandlers()
-
-    let handlers: [TabEventHandler] = [
-        FaviconHandler(),
-        UserActivityHandler()
-    ]
+    static func create(with prefs: Prefs) -> [TabEventHandler] {
+        return [
+            FaviconHandler(),
+            UserActivityHandler(),
+            MetadataParserHelper(),
+            MediaImageLoader(prefs),
+        ]
+    }
 }

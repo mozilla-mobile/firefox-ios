@@ -39,7 +39,7 @@ class WeakTabManagerDelegate {
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager: NSObject {
     fileprivate var delegates = [WeakTabManagerDelegate]()
-    fileprivate var tabEventHandlers = TabEventHandlers.default.handlers
+    fileprivate let tabEventHandlers: [TabEventHandler]
     weak var stateDelegate: TabManagerStateDelegate?
 
     func addDelegate(_ delegate: TabManagerDelegate) {
@@ -103,6 +103,7 @@ class TabManager: NSObject {
         self.prefs = prefs
         self.navDelegate = TabManagerNavDelegate()
         self.imageStore = imageStore
+        self.tabEventHandlers = TabEventHandlers.create(with: prefs)
         super.init()
 
         addNavigationDelegate(self)
