@@ -583,6 +583,8 @@ class ForceCrashSetting: HiddenSetting {
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
 
+     override var accessibilityIdentifier: String? { return "FxVersion" }
+
     init(settings: SettingsTableViewController) {
         self.settings = settings
         super.init(title: nil)
@@ -928,6 +930,8 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
     var prefs: Prefs { return settings.profile.prefs }
 
     var prefKey: String = "useStageSyncService"
+
+    override var accessibilityIdentifier: String? { return "DebugStageSync" }
 
     override var hidden: Bool {
         if !ShowDebugSettings {

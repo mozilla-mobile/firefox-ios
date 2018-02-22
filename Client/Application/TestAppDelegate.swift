@@ -53,6 +53,10 @@ class TestAppDelegate: AppDelegate {
             profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         }
 
+        if launchArguments.contains(LaunchArguments.StageServer) {
+            profile.prefs.setInt(1, forKey: PrefsKeys.UseStageServer)
+        }
+
         self.profile = profile
         return profile
     }
