@@ -552,8 +552,9 @@ extension TopTabsViewController {
                 onComplete()
             }
         } else {
-            self.collectionView.performBatchUpdates(updateBlock)
-            onComplete()
+            self.collectionView.performBatchUpdates(updateBlock) { _ in
+                onComplete()
+            }
         }
     }
 
