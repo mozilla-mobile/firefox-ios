@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import SDWebImage
 import Shared
 import Storage
 import XCGLogger
@@ -56,7 +57,48 @@ class MetadataParserHelper: TabEventHandler {
     }
 }
 
+class MediaImageLoader: TabEventHandler {
+    private var tabObservers: TabObservers!
+    private let prefs: Prefs
 
+    init(_ prefs: Prefs) {
+        self.prefs = prefs
+        self.tabObservers = registerFor(
+            .didLoadPageMetadata,
+            queue: .main)
+    }
 
+    deinit {
+        unregister(tabObservers)
+    }
+
+    func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
+        let cacheImages = !NoImageModeHelper.isActivated(prefs)
+        if let urlString = metadata.mediaURL,
+            let mediaURL = URL(string: urlString), cacheImages {
+            prepareCache(mediaURL)
+        }
+    }
+
+    fileprivate func prepareCache(_ url: URL) {
+        let manager = SDWebImageManager.shared()
+        manager.cachedImageExists(for: url) { exists in
+            if !exists {
+                self.downloadAndCache(fromURL: url)
+            }
+        }
+    }
+
+    fileprivate func downloadAndCache(fromURL webUrl: URL) {
+        let manager = SDWebImageManager.shared()
+        manager.loadImage(with: webUrl, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+            if let image = image {
+                self.cache(image: image, forURL: webUrl)
+            }
+        }
+    }
+
+    fileprivate func cache(image: UIImage, forURL url: URL) {
+        SDWebImageManager.shared().saveImage(toCache: image, for: url)
     }
 }
