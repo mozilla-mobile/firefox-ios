@@ -9,6 +9,7 @@ class TabEventHandlers {
 
     let handlers: [TabEventHandler] = [
         FaviconHandler(),
-        UserActivityHandler()
+        UserActivityHandler(),
+        MetadataParserHelper(),
     ]
 }

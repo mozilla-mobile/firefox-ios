@@ -10,43 +10,53 @@ import WebKit
 
 private let log = Logger.browserLogger
 
-class MetadataParserHelper: TabContentScript {
-    private weak var tab: Tab?
-    private let profile: Profile
+class MetadataParserHelper: TabEventHandler {
+    private var tabObservers: TabObservers!
 
-    class func name() -> String {
-        return "MetadataParserHelper"
+    init() {
+        self.tabObservers = registerFor(
+            .didChangeURL,
+            queue: .main)
     }
 
-    required init(tab: Tab, profile: Profile) {
-        self.tab = tab
-        self.profile = profile
+    deinit {
+        unregister(tabObservers)
     }
 
-    func scriptMessageHandlerName() -> String? {
-        return "metadataMessageHandler"
-    }
-
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func tab(_ tab: Tab, didChangeURL url: URL) {
         // Get the metadata out of the page-metadata-parser, and into a type safe struct as soon
         // as possible.
-        guard let dict = message.body as? [String: Any],
-            let tab = self.tab,
-            let pageURL = tab.url?.displayURL,
-            let pageMetadata = PageMetadata.fromDictionary(dict) else {
-                log.debug("Page contains no metadata!")
-                return
+        guard let webView = tab.webView,
+            let url = webView.url, url.isWebPage(includeDataURIs: false), !url.isLocal else {
+            return
         }
 
-        let userInfo: [String: Any] = [
-            "isPrivate": self.tab?.isPrivate ?? true,
-            "pageMetadata": pageMetadata,
-            "tabURL": pageURL
-        ]
+        webView.evaluateJavaScript("__firefox__.metadata && __firefox__.metadata.getMetadata()") { (result, error) in
+            guard error == nil else {
+                return
+            }
 
-        tab.pageMetadata = pageMetadata
+            guard let dict = result as? [String: Any],
+                let pageURL = tab.url?.displayURL,
+                let pageMetadata = PageMetadata.fromDictionary(dict) else {
+                    log.debug("Page contains no metadata!")
+                    return
+            }
 
-        TabEvent.post(.didLoadPageMetadata(pageMetadata), for: tab)
-        NotificationCenter.default.post(name: .OnPageMetadataFetched, object: nil, userInfo: userInfo)
+            tab.pageMetadata = pageMetadata
+            TabEvent.post(.didLoadPageMetadata(pageMetadata), for: tab)
+
+            let userInfo: [String: Any] = [
+                "isPrivate": tab.isPrivate,
+                "pageMetadata": pageMetadata,
+                "tabURL": pageURL
+            ]
+            NotificationCenter.default.post(name: .OnPageMetadataFetched, object: nil, userInfo: userInfo)
+        }
+    }
+}
+
+
+
     }
 }
