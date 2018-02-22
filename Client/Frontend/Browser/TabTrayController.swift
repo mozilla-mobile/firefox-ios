@@ -278,6 +278,14 @@ class TabTrayController: UIViewController {
         return delegate
     }()
 
+    var numberOfColumns: Int {
+        return tabLayoutDelegate.numberOfColumns
+    }
+
+    var tabs: [Tab] {
+        return tabDataSource.tabs
+    }
+
     init(tabManager: TabManager, profile: Profile) {
         self.tabManager = tabManager
         self.profile = profile
@@ -416,7 +424,6 @@ class TabTrayController: UIViewController {
 
     func didClickAddTab() {
         openNewTab()
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray" as AnyObject])
     }
 
     func didTapLearnMore() {
@@ -492,8 +499,13 @@ class TabTrayController: UIViewController {
             didTogglePrivateMode()
         }
     }
-    
-    fileprivate func openNewTab(_ request: URLRequest? = nil) {
+
+    func openNewTab() {
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray" as AnyObject])
+        openNewTab(nil)
+    }
+
+    fileprivate func openNewTab(_ request: URLRequest?) {
         toolbar.isUserInteractionEnabled = false
 
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
@@ -515,7 +527,7 @@ class TabTrayController: UIViewController {
         })
     }
 
-    fileprivate func closeTabsForCurrentTray() {
+    func closeTabsForCurrentTray() {
         tabManager.removeTabsWithUndoToast(tabsToDisplay)
         self.collectionView.reloadData()
     }
@@ -555,6 +567,19 @@ extension TabTrayController: PresentingModalViewControllerDelegate {
 
 extension TabTrayController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
+        // Redraw the cells representing the selected (and recently unselected) tabs.
+        let tabs = tabDataSource.tabs
+        let updated = [ selected, previous ]
+            .flatMap { $0 }
+            .flatMap { tabs.index(of: $0) }
+            .map { IndexPath(item: $0, section: 0) }
+
+        assertIsMainThread("Changing selected tab is on main thread")
+        collectionView.reloadItems(at: updated)
+
+        if !updated.isEmpty {
+            collectionView.scrollToItem(at: updated[0], at: [.centeredHorizontally, .centeredVertically], animated: true)
+        }
     }
 
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
