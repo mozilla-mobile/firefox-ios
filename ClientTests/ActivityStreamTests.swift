@@ -161,8 +161,7 @@ extension ActivityStreamTests {
                                          title: "Mozilla",
                                          description: "Web",
                                          type: nil,
-                                         providerName: nil,
-                                         mediaDataURI: nil)
+                                         providerName: nil)
         let badSite = Site(url: "http://mozilla.org", title: "Mozilla")
         profile.recommendations = MockRecommender(highlights: [goodSite, badSite])
 
@@ -192,8 +191,7 @@ extension ActivityStreamTests {
                                          title: "Mozilla",
                                          description: "Web",
                                          type: nil,
-                                         providerName: nil,
-                                         mediaDataURI: nil)
+                                         providerName: nil)
         let badSite = Site(url: "http://mozilla.org", title: "Mozilla")
         profile.history = MockTopSitesHistory(sites: [goodSite, badSite])
 
