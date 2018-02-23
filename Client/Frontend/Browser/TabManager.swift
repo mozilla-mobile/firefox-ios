@@ -286,19 +286,24 @@ class TabManager: NSObject {
     
     func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
         assert(Thread.isMainThread)
-        
+
         let currentTabs = privateMode ? privateTabs : normalTabs
+
+        guard visibleFromIndex < currentTabs.count, visibleToIndex < currentTabs.count else {
+            return
+        }
+
         let fromIndex = tabs.index(of: currentTabs[visibleFromIndex]) ?? tabs.count - 1
         let toIndex = tabs.index(of: currentTabs[visibleToIndex]) ?? tabs.count - 1
-        
+
         let previouslySelectedTab = selectedTab
-        
+
         tabs.insert(tabs.remove(at: fromIndex), at: toIndex)
-        
+
         if let previouslySelectedTab = previouslySelectedTab, let previousSelectedIndex = tabs.index(of: previouslySelectedTab) {
             _selectedIndex = previousSelectedIndex
         }
-        
+
         storeChanges()
     }
 
