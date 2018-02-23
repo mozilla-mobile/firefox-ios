@@ -851,7 +851,7 @@ extension TabManager: WKNavigationDelegate {
             let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
             tab.noImageMode = isNoImageMode
 
-            if let tpHelper = tab.contentBlocker as? ContentBlockerHelper, !tpHelper.isEnabledForTab {
+            if let tpHelper = tab.contentBlocker as? ContentBlockerHelper, !tpHelper.isEnabled {
                 webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.securityToken))", completionHandler: nil)
             }
         }
