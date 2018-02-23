@@ -37,17 +37,44 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
 }
 
 @available(iOS 11.0, *)
+extension BlockingStrength {
+    var settingTitle: String {
+        switch self {
+        case .basic:
+            return Strings.TrackingProtectionOptionBlockListTypeBasic
+        case .strict:
+            return Strings.TrackingProtectionOptionBlockListTypeStrict
+        }
+    }
+
+    var subtitle: String {
+        switch self {
+        case .basic:
+            return Strings.TrackingProtectionOptionBlockListTypeBasicDescription
+        case .strict:
+            return Strings.TrackingProtectionOptionBlockListTypeStrictDescription
+        }
+    }
+
+    static func accessibilityId(for strength: BlockingStrength) -> String {
+        switch strength {
+        case .basic:
+            return "Settings.TrackingProtectionOption.BlockListBasic"
+        case .strict:
+            return "Settings.TrackingProtectionOption.BlockListStrict"
+        }
+    }
+}
+
+@available(iOS 11.0, *)
 class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
     let prefs: Prefs
-    let EnabledStates = ContentBlockerHelper.PrefEnabledState.allOptions
-    let BlockingStrengths = ContentBlockerHelper.BlockingStrength.allOptions
-    var currentEnabledState: ContentBlockerHelper.PrefEnabledState
-    var currentBlockingStrength: ContentBlockerHelper.BlockingStrength
+    var currentBlockingStrength: BlockingStrength
 
     init(prefs: Prefs) {
         self.prefs = prefs
-        currentEnabledState = ContentBlockerHelper.PrefEnabledState(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyEnabledState) ?? "") ?? .onInPrivateBrowsing
-        currentBlockingStrength = ContentBlockerHelper.BlockingStrength(rawValue: prefs.stringForKey(ContentBlockerHelper.PrefKeyStrength) ?? "") ?? .basic
+
+        currentBlockingStrength = prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) ?? .basic
         
         super.init(style: .grouped)
 
@@ -60,37 +87,28 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
     }
 
     override func generateSettings() -> [SettingSection] {
-        let enabledSetting: [CheckmarkSetting] = EnabledStates.map { option in
-            let id = ContentBlockerHelper.PrefEnabledState.accessibilityId(for: option)
-            return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: nil, accessibilityIdentifier: id, isEnabled: {
-                return option == self.currentEnabledState
-            }, onChanged: {
-                self.currentEnabledState = option
-                self.prefs.setString(self.currentEnabledState.rawValue, forKey: ContentBlockerHelper.PrefKeyEnabledState)
-                self.tableView.reloadData()
-                ContentBlockerHelper.prefsChanged()
-
-                LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Enabled option": option.rawValue as AnyObject])
-                UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockerHelper.PrefKeyEnabledState, extras: ["to": option.rawValue])
-            })
+        let normalBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInNormalBrowsing)) { _ in
+            ContentBlockerHelper.prefsChanged()
+        }
+        let privateBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.PrivateBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInPrivateBrowsing))  { _ in
+            ContentBlockerHelper.prefsChanged()
         }
 
-        let strengthSetting: [CheckmarkSetting] = BlockingStrengths.map { option in
-            let id = ContentBlockerHelper.BlockingStrength.accessibilityId(for: option)
+        let strengthSetting: [CheckmarkSetting] = BlockingStrength.allOptions.map { option in
+            let id = BlockingStrength.accessibilityId(for: option)
             return CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), subtitle: NSAttributedString(string: option.subtitle), accessibilityIdentifier: id, isEnabled: {
                 return option == self.currentBlockingStrength
             }, onChanged: {
                 self.currentBlockingStrength = option
-                self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockerHelper.PrefKeyStrength)
-                self.tableView.reloadData()
+                self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
                 ContentBlockerHelper.prefsChanged()
-
+                self.tableView.reloadData()
                 LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue as AnyObject])
-                UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockerHelper.PrefKeyStrength, extras: ["to": option.rawValue])
+                UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockingConfig.Prefs.StrengthKey, extras: ["to": option.rawValue])
             })
         }
 
-        let firstSection = SettingSection(title: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffHeader), footerTitle: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffFooter), children: enabledSetting)
+        let firstSection = SettingSection(title: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffHeader), footerTitle: NSAttributedString(string: Strings.TrackingProtectionOptionOnOffFooter), children: [normalBrowsing, privateBrowsing])
 
         // The bottom of the block lists section has a More Info button, implemented as a custom footer view,
         // SettingSection needs footerTitle set to create a footer, which we then override the view for.

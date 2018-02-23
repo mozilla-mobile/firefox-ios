@@ -258,5 +258,96 @@ extension PhotonActionSheetProtocol {
             return [copyAddressAction]
         }
     }
-}
 
+    @available(iOS 11.0, *)
+    private func menuActionsForNotBlocking() -> [PhotonActionSheetItem] {
+        return [PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPNoBlockingDescription, iconString: "menu-TrackingProtection")]
+    }
+
+    @available(iOS 11.0, *)
+    private func menuActionsForTrackingProtectionDisabled(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
+        let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlocking, iconString: "menu-TrackingProtection") { _ in
+            // TODO: Enable Tracking protection for the current browsing mode
+        }
+
+        let moreInfo = PhotonActionSheetItem(title: Strings.TPBlockingMoreInfo, iconString: "menu-Info") { _ in
+            let url = SupportUtils.URLForTopic("tracking-protection-ios")!
+            tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
+        }
+
+        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDisabledDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .None) { _ in
+          //  guard let bvc = self as? PresentableVC else { return }
+          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[moreInfo], [enableTP]], on: bvc, from: urlBar)
+        }
+        return [tpBlocking]
+    }
+
+    @available(iOS 11.0, *)
+    private func menuActionsForTrackingProtectionEnabled(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
+        guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
+            return []
+        }
+
+        let stats = blocker.stats
+        let totalCount = PhotonActionSheetItem(title: Strings.TrackingProtectionTotalBlocked, accessory: .Text, accessoryText: "\(stats.total)", bold: true)
+        let adCount = PhotonActionSheetItem(title: Strings.TrackingProtectionAdsBlocked, accessory: .Text, accessoryText: "\(stats.adCount)")
+        let analyticsCount = PhotonActionSheetItem(title: Strings.TrackingProtectionAnalyticsBlocked, accessory: .Text, accessoryText: "\(stats.analyticCount)")
+        let socialCount = PhotonActionSheetItem(title: Strings.TrackingProtectionSocialBlocked, accessory: .Text, accessoryText: "\(stats.socialCount)")
+        let contentCount = PhotonActionSheetItem(title: Strings.TrackingProtectionContentBlocked, accessory: .Text, accessoryText: "\(stats.contentCount)")
+        let statList = [totalCount, adCount, analyticsCount, socialCount, contentCount]
+
+        let addToWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionDisableTitle, iconString: "menu-TrackingProtection-Off") { _ in
+            if let domain = currentURL.baseDomain, !domain.isEmpty {
+                blocker.whitelist(enable: true, forDomain: domain)
+            }
+        }
+        // when tracking protection is on and content was blocked
+        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .None) { _ in
+         // guard let bvc = self as? PresentableVC else { return }
+          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [statList, [addToWhitelist]], on: bvc, from: urlBar)
+        }
+        return [tpBlocking]
+    }
+
+    @available(iOS 11.0, *)
+    private func menuActionsForWhitelistedSite(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
+        guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
+            return []
+        }
+
+        let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionWhiteListRemove, iconString: "menu-TrackingProtection") { _ in
+            if let domain = currentURL.baseDomain, !domain.isEmpty {
+                blocker.whitelist(enable: false, forDomain: domain)
+            }
+        }
+
+        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .None) { _ in
+          //  guard let bvc = self as? PresentableVC else { return }
+          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[removeFromWhitelist]], on: bvc, from: urlBar)
+        }
+        return [tpBlocking]
+    }
+
+    @available(iOS 11.0, *)
+    func getTrackingMenu(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
+        guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
+            return []
+        }
+
+        if blocker.stats.total == 0, blocker.isEnabled, !blocker.isURLWhitelisted(url: currentURL) {
+            // When ad blocking is enabled but no content was blocked on the page
+            return menuActionsForNotBlocking()
+        } else if !blocker.isEnabled {
+            // when tracking protection is disabled
+            return menuActionsForTrackingProtectionDisabled(for: tab, presentingOn: urlBar)
+        } else if blocker.stats.total > 0 {
+            // When tracking protection is enabled and content is blocked on the page
+            return menuActionsForTrackingProtectionEnabled(for: tab, presentingOn: urlBar)
+        } else if blocker.isEnabled, blocker.isURLWhitelisted(url: currentURL) {
+            // When tracking protection is enabled but the site is in the whitelist
+            return menuActionsForWhitelistedSite(for: tab, presentingOn: urlBar)
+        }
+
+        return []
+    }
+}
