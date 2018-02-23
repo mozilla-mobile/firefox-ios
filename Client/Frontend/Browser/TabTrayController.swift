@@ -569,6 +569,12 @@ extension TabTrayController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         // Redraw the cells representing the selected (and recently unselected) tabs.
         let tabs = tabDataSource.tabs
+
+        // Only redraw if there is more than one tab in the tray.
+        guard tabs.count > 1 else {
+            return
+        }
+
         let updated = [ selected, previous ]
             .flatMap { $0 }
             .flatMap { tabs.index(of: $0) }
