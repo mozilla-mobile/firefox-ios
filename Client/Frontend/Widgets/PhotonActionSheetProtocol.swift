@@ -213,10 +213,6 @@ extension PhotonActionSheetProtocol {
 
         var mainActions = [share]
 
-        let toolsAction = PhotonActionSheetItem(title: Strings.AppMenuToolsTitleString, iconString: "menu-Tools", accessory: .Disclosure) { _ in
-            self.presentSheetWith(title: Strings.AppMenuToolsTitleString, actions: [[findInPageAction, toggleDesktopSite, pinToTopSites]], on: presentableVC, from: buttonView)
-        }
-
         // Disable bookmarking and reading list if the URL is too long.
         if !tab.urlIsTooLong {
             mainActions.append(isBookmarked ? removeBookmark : bookmarkPage)
@@ -228,7 +224,7 @@ extension PhotonActionSheetProtocol {
 
         mainActions.append(contentsOf: [sendToDevice, copyURL])
 
-        return [mainActions, [toolsAction]]
+        return [mainActions, [findInPageAction, toggleDesktopSite, pinToTopSites]]
     }
 
     func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
