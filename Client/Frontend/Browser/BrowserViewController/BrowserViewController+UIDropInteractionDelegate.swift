@@ -8,9 +8,8 @@ import Storage
 @available(iOS 11.0, *)
 extension BrowserViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        // Prevent in-app drags from being handled. This blocks dragged
-        // tab from being dropped within the app.
-        if session.localDragSession != nil {
+        // Prevent tabs from being dragged and dropped into the address bar.
+        if let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab {
             return false
         }
 
