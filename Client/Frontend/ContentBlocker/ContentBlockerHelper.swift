@@ -31,7 +31,7 @@ struct ContentBlockingConfig {
     }
 
     struct Defaults {
-        static let NormalBrowsing = false
+        static let NormalBrowsing = true
         static let PrivateBrowsing = true
     }
 }
@@ -381,7 +381,10 @@ extension ContentBlockerHelper {
 
     func isURLWhitelisted(url: URL) -> Bool {
         // TODO: Not done
-        return false
+        guard let domain = url.baseDomain, !domain.isEmpty else {
+            return false
+        }
+        return ContentBlockerHelper.whitelistedDomains.contains(domain)
     }
 
     fileprivate func readWhitelistFile() -> String? {
