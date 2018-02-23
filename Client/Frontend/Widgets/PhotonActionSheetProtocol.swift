@@ -279,9 +279,9 @@ extension PhotonActionSheetProtocol {
             tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
         }
 
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDisabledDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
-            guard let bvc = self as? PresentableVC else { return }
-            self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[moreInfo], [enableTP]], on: bvc, from: urlBar)
+        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDisabledDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .None) { _ in
+          //  guard let bvc = self as? PresentableVC else { return }
+          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[moreInfo], [enableTP]], on: bvc, from: urlBar)
         }
         return [tpBlocking]
     }
@@ -306,9 +306,9 @@ extension PhotonActionSheetProtocol {
             }
         }
         // when tracking protection is on and content was blocked
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .Disclosure) { _ in
-            guard let bvc = self as? PresentableVC else { return }
-            self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [statList, [addToWhitelist]], on: bvc, from: urlBar)
+        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .None) { _ in
+         // guard let bvc = self as? PresentableVC else { return }
+          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [statList, [addToWhitelist]], on: bvc, from: urlBar)
         }
         return [tpBlocking]
     }
@@ -325,9 +325,9 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
-            guard let bvc = self as? PresentableVC else { return }
-            self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[removeFromWhitelist]], on: bvc, from: urlBar)
+        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .None) { _ in
+          //  guard let bvc = self as? PresentableVC else { return }
+          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[removeFromWhitelist]], on: bvc, from: urlBar)
         }
         return [tpBlocking]
     }
