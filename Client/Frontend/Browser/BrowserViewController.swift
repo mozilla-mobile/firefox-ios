@@ -1368,8 +1368,8 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
         let urlActions = self.getLongPressLocationBarActions(with: urlBar)
         if #available(iOS 11.0, *), let tab = self.tabManager.selectedTab {
-            let tp = self.getTrackingStatsMenuActions(for: tab, presentingOn: urlBar)
-            self.presentSheetWith(actions: [urlActions, tp], on: self, from: urlBar)
+            let trackingProtectionMenu = self.getTrackingMenu(for: tab, presentingOn: urlBar)
+            self.presentSheetWith(actions: [urlActions, trackingProtectionMenu], on: self, from: urlBar)
         } else {
             self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
         }
@@ -1500,10 +1500,15 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
         if #available(iOS 11, *) {
             if let helper = tab.contentBlocker as? ContentBlockerHelper {
-                let title = helper.isEnabled ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
-                controller.addAction(UIAlertAction(title: title, style: .default, handler: { _ in
+                let title: String
+                if helper.isEnabled {
+                    title = Strings.TrackingProtectionReloadWithout
+                } else {
+                    title = Strings.TrackingProtectionReloadWith
+                }
+                controller.addAction(UIAlertAction(title: title, style: .default) { _ in
                     helper.isUserEnabled = !helper.isEnabled
-                }))
+                })
             }
         }
         controller.popoverPresentationController?.sourceView = toolbar ?? urlBar

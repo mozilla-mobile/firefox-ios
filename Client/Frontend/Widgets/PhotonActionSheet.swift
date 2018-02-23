@@ -590,7 +590,7 @@ private class PhotonActionSheetCell: UITableViewCell {
     func configure(with action: PhotonActionSheetItem) {
         titleLabel.text = action.title
         titleLabel.textColor = self.tintColor
-        titleLabel.textColor = action.handler == nil ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
+        titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
         subtitleLabel.text = action.text
         subtitleLabel.textColor = self.tintColor
         disclosureLabel.text = action.accessoryText

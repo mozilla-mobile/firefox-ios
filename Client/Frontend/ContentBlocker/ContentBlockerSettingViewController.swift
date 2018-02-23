@@ -74,7 +74,7 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
     init(prefs: Prefs) {
         self.prefs = prefs
 
-        currentBlockingStrength = prefs.stringForKey(TPDefaults.PrefKeyStrength).flatMap({BlockingStrength(rawValue: $0)}) ?? .basic
+        currentBlockingStrength = prefs.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap({BlockingStrength(rawValue: $0)}) ?? .basic
         
         super.init(style: .grouped)
 
@@ -87,8 +87,12 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
     }
 
     override func generateSettings() -> [SettingSection] {
-        let normalBrowsing = BoolSetting(prefs: profile.prefs, prefKey: TPDefaults.PrefKeyNormalBrowsingEnabled, defaultValue: TPDefaults.TPNormalBrowsingDefault, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInNormalBrowsing))
-        let privateBrowsing = BoolSetting(prefs: profile.prefs, prefKey: TPDefaults.PrefKeyPrivateBrowsingEnabled, defaultValue: TPDefaults.TPPrivateBrowsingDefault, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInPrivateBrowsing))
+        let normalBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInNormalBrowsing)) { _ in
+            ContentBlockerHelper.prefsChanged()
+        }
+        let privateBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.PrivateBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInPrivateBrowsing))  { _ in
+            ContentBlockerHelper.prefsChanged()
+        }
 
         let strengthSetting: [CheckmarkSetting] = BlockingStrength.allOptions.map { option in
             let id = BlockingStrength.accessibilityId(for: option)
@@ -96,10 +100,11 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
                 return option == self.currentBlockingStrength
             }, onChanged: {
                 self.currentBlockingStrength = option
-                self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: TPDefaults.PrefKeyStrength)
+                self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
+                ContentBlockerHelper.prefsChanged()
                 self.tableView.reloadData()
                 LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue as AnyObject])
-                UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: TPDefaults.PrefKeyStrength, extras: ["to": option.rawValue])
+                UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockingConfig.Prefs.StrengthKey, extras: ["to": option.rawValue])
             })
         }
 
@@ -110,10 +115,5 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
         let blockListsTitle = Strings.TrackingProtectionOptionBlockListsTitle
         let secondSection = SettingSection(title: NSAttributedString(string: blockListsTitle), footerTitle: NSAttributedString(string: "placeholder replaced with UIButton"), children: strengthSetting)
         return [firstSection, secondSection]
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        ContentBlockerHelper.prefsChanged()
     }
 }

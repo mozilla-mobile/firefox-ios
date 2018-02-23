@@ -23,16 +23,21 @@ enum BlockList: String {
     }
 }
 
-struct TPDefaults {
-    static let PrefKeyStrength = "prefkey.trackingprotection.strength"
-    static let PrefKeyNormalBrowsingEnabled = "prefkey.trackingprotection.normalbrowsing"
-    static let PrefKeyPrivateBrowsingEnabled = "prefkey.trackingprotection.privatebrowsing"
-    static let TPNormalBrowsingDefault = false
-    static let TPPrivateBrowsingDefault = true
+struct ContentBlockingConfig {
+    struct Prefs {
+        static let StrengthKey = "prefkey.trackingprotection.strength"
+        static let NormalBrowsingEnabledKey = "prefkey.trackingprotection.normalbrowsing"
+        static let PrivateBrowsingEnabledKey = "prefkey.trackingprotection.privatebrowsing"
+    }
+
+    struct Defaults {
+        static let NormalBrowsing = false
+        static let PrivateBrowsing = true
+    }
 }
 
 struct NoImageModeDefaults {
-    static let Script = "[{'trigger':{'url-filter':'.*','resource-type':['image']},'action':{'type':'block'}}]"
+    static let Script = "[{'trigger':{'url-filter':'.*','resource-type':['image']},'action':{'type':'block'}}]".replacingOccurrences(of: "'", with: "\"")
     static let ScriptName = "images"
 }
 
@@ -59,15 +64,15 @@ class ContentBlockerHelper {
     }
 
     fileprivate var isEnabledInNormalBrowsing: Bool {
-        return userPrefs?.boolForKey(TPDefaults.PrefKeyNormalBrowsingEnabled) ?? TPDefaults.TPNormalBrowsingDefault
+        return userPrefs?.boolForKey(ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
     }
 
     fileprivate var isEnabledInPrivateBrowsing: Bool {
-        return userPrefs?.boolForKey(TPDefaults.PrefKeyPrivateBrowsingEnabled) ?? TPDefaults.TPPrivateBrowsingDefault
+        return userPrefs?.boolForKey(ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey) ?? ContentBlockingConfig.Defaults.PrivateBrowsing
     }
 
     fileprivate var blockingStrengthPref: BlockingStrength {
-        return userPrefs?.stringForKey(TPDefaults.PrefKeyStrength).flatMap(BlockingStrength.init) ?? .basic
+        return userPrefs?.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap(BlockingStrength.init) ?? .basic
     }
 
     static fileprivate var blockImagesRule: WKContentRuleList?
@@ -104,7 +109,7 @@ class ContentBlockerHelper {
             }
         }
 
-        let blockImages = NoImageModeDefaults.Script.escapeJSON()
+        let blockImages = NoImageModeDefaults.Script
         ruleStore.compileContentRuleList(forIdentifier: NoImageModeDefaults.ScriptName, encodedContentRuleList: blockImages) { rule, error in
             assert(rule != nil && error == nil)
             ContentBlockerHelper.blockImagesRule = rule
@@ -134,10 +139,10 @@ class ContentBlockerHelper {
         // if a user had set PrefEnabledState to OFF this means that TP was off in both normal and private browsing
         if let legacyPref = userPrefs?.stringForKey("prefkey.trackingprotection.enabled") {
             if legacyPref == "on" {
-                userPrefs?.setBool(true, forKey: TPDefaults.PrefKeyNormalBrowsingEnabled)
+                userPrefs?.setBool(true, forKey: ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey)
             } else if legacyPref == "off" {
-                userPrefs?.setBool(false, forKey: TPDefaults.PrefKeyNormalBrowsingEnabled)
-                userPrefs?.setBool(false, forKey: TPDefaults.PrefKeyPrivateBrowsingEnabled)
+                userPrefs?.setBool(false, forKey: ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey)
+                userPrefs?.setBool(false, forKey: ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey)
             }
             // We only need to do this once. We can wipe the old pref
             userPrefs?.removeObjectForKey("prefkey.trackingprotection.enabled")
@@ -346,7 +351,7 @@ extension ContentBlockerHelper {
         }
         // Note that * is added to the front of domains, so foo.com becomes *foo.com
         let list = "'*" + ContentBlockerHelper.whitelistedDomains.joined(separator: "','*") + "'"
-        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'unless-domain': [\(list)] }".escapeJSON()
+        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'unless-domain': [\(list)] }".replacingOccurrences(of: "'", with: "\"")
     }
 
     func whitelist(enable: Bool, forDomain domain: String, completion: (() -> Void)? = nil) {
