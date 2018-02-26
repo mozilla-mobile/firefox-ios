@@ -39,7 +39,7 @@ class WeakTabManagerDelegate {
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager: NSObject {
     fileprivate var delegates = [WeakTabManagerDelegate]()
-    fileprivate var tabEventHandlers = TabEventHandlers.default.handlers
+    fileprivate let tabEventHandlers: [TabEventHandler]
     weak var stateDelegate: TabManagerStateDelegate?
 
     func addDelegate(_ delegate: TabManagerDelegate) {
@@ -103,6 +103,7 @@ class TabManager: NSObject {
         self.prefs = prefs
         self.navDelegate = TabManagerNavDelegate()
         self.imageStore = imageStore
+        self.tabEventHandlers = TabEventHandlers.create(with: prefs)
         super.init()
 
         addNavigationDelegate(self)
@@ -285,19 +286,24 @@ class TabManager: NSObject {
     
     func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
         assert(Thread.isMainThread)
-        
+
         let currentTabs = privateMode ? privateTabs : normalTabs
+
+        guard visibleFromIndex < currentTabs.count, visibleToIndex < currentTabs.count else {
+            return
+        }
+
         let fromIndex = tabs.index(of: currentTabs[visibleFromIndex]) ?? tabs.count - 1
         let toIndex = tabs.index(of: currentTabs[visibleToIndex]) ?? tabs.count - 1
-        
+
         let previouslySelectedTab = selectedTab
-        
+
         tabs.insert(tabs.remove(at: fromIndex), at: toIndex)
-        
+
         if let previouslySelectedTab = previouslySelectedTab, let previousSelectedIndex = tabs.index(of: previouslySelectedTab) {
             _selectedIndex = previousSelectedIndex
         }
-        
+
         storeChanges()
     }
 
@@ -845,7 +851,7 @@ extension TabManager: WKNavigationDelegate {
             let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
             tab.noImageMode = isNoImageMode
 
-            if let tpHelper = tab.contentBlocker as? ContentBlockerHelper, !tpHelper.isEnabledForTab {
+            if let tpHelper = tab.contentBlocker as? ContentBlockerHelper, !tpHelper.isEnabled {
                 webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.securityToken))", completionHandler: nil)
             }
         }

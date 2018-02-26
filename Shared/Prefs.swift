@@ -31,6 +31,7 @@ public struct PrefsKeys {
     public static let KeyCustomSyncOauth = "customSyncOauthServer"
     public static let KeyCustomSyncAuth = "customSyncAuthServer"
     public static let KeyCustomSyncWeb = "customSyncWebServer"
+    public static let UseStageServer = "useStageSyncService"
     
 }
 

@@ -345,14 +345,14 @@ class BrowserViewController: UIViewController {
         view.addSubview(header)
 
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
-        pasteGoAction = AccessibleAction(name: NSLocalizedString("Paste & Go", comment: "Paste the URL into the location bar and visit"), handler: { () -> Bool in
+        pasteGoAction = AccessibleAction(name: Strings.PasteAndGoTitle, handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.general.string {
                 self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
                 return true
             }
             return false
         })
-        pasteAction = AccessibleAction(name: NSLocalizedString("Paste", comment: "Paste the URL into the location bar"), handler: { () -> Bool in
+        pasteAction = AccessibleAction(name: Strings.PasteTitle, handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.general.string {
                 // Enter overlay mode and make the search controller appear.
                 self.urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
@@ -361,7 +361,7 @@ class BrowserViewController: UIViewController {
             }
             return false
         })
-        copyAddressAction = AccessibleAction(name: NSLocalizedString("Copy Address", comment: "Copy the URL from the location bar"), handler: { () -> Bool in
+        copyAddressAction = AccessibleAction(name: Strings.CopyAddressTitle, handler: { () -> Bool in
             if let url = self.urlBar.currentURL {
                 UIPasteboard.general.url = url as URL
             }
@@ -904,8 +904,6 @@ class BrowserViewController: UIViewController {
         guard let url = webView.url, url.isWebPage(), !url.isLocal else {
             return
         }
-        webView.evaluateJavaScript("__firefox__.metadata && __firefox__.metadata.extractMetadata()", completionHandler: nil)
-
         if #available(iOS 11, *) {
             if NoImageModeHelper.isActivated(profile.prefs) {
                 webView.evaluateJavaScript("__firefox__.NoImageMode.setEnabled(true)", completionHandler: nil)
@@ -1128,6 +1126,8 @@ class BrowserViewController: UIViewController {
 
             // Re-run additional scripts in webView to extract updated favicons and metadata.
             runScriptsOnWebView(webView)
+
+            TabEvent.post(.didChangeURL(url), for: tab)
         }
         
         if tab === tabManager.selectedTab {
@@ -1366,41 +1366,19 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
-        let longPressAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-        for action in locationActionsForURLBar(urlBar) {
-            longPressAlertController.addAction(action.alertAction(style: .default))
+        let urlActions = self.getLongPressLocationBarActions(with: urlBar)
+        if #available(iOS 11.0, *), let tab = self.tabManager.selectedTab {
+            let trackingProtectionMenu = self.getTrackingMenu(for: tab, presentingOn: urlBar)
+            self.presentSheetWith(actions: [urlActions, trackingProtectionMenu], on: self, from: urlBar)
+        } else {
+            self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
         }
-
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: { (alert: UIAlertAction) -> Void in
-        })
-        longPressAlertController.addAction(cancelAction)
-
-        let setupPopover = { [unowned self] in
-            if let popoverPresentationController = longPressAlertController.popoverPresentationController {
-                popoverPresentationController.sourceView = urlBar
-                popoverPresentationController.sourceRect = urlBar.frame
-                popoverPresentationController.permittedArrowDirections = .any
-                popoverPresentationController.delegate = self
-            }
-        }
-
-        setupPopover()
-
-        if longPressAlertController.popoverPresentationController != nil {
-            displayedPopoverController = longPressAlertController
-            updateDisplayedPopoverProperties = setupPopover
-        }
-
-        self.present(longPressAlertController, animated: true, completion: nil)
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
-        if let selectedTab = tabManager.selectedTab {
+        if let selectedTab = tabManager.selectedTab, homePanelController == nil {
             // Only scroll to top if we are not showing the home view controller
-            if homePanelController == nil {
-                selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
-            }
+            selectedTab.webView?.scrollView.setContentOffset(CGPoint.zero, animated: true)
         }
     }
 
@@ -1522,13 +1500,15 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
         if #available(iOS 11, *) {
             if let helper = tab.contentBlocker as? ContentBlockerHelper {
-                if helper.prefEnabledState != .off {
-                    let perTabOverride = helper.perTabOverrideEnabledState
-                    let title = perTabOverride == .forceDisabledPerTab ? Strings.TrackingProtectionReloadWith : Strings.TrackingProtectionReloadWithout
-                    controller.addAction(UIAlertAction(title: title, style: .default, handler: {_ in
-                        helper.overridePrefsAndReloadTab(enableTrackingProtection: perTabOverride == .forceDisabledPerTab)
-                    }))
+                let title: String
+                if helper.isEnabled {
+                    title = Strings.TrackingProtectionReloadWithout
+                } else {
+                    title = Strings.TrackingProtectionReloadWith
                 }
+                controller.addAction(UIAlertAction(title: title, style: .default) { _ in
+                    helper.isUserEnabled = !helper.isEnabled
+                })
             }
         }
         controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
@@ -1660,9 +1640,6 @@ extension BrowserViewController: TabDelegate {
                 tab.addContentScript(blocker, name: ContentBlockerHelper.name())
             }
         }
-
-        let metadataHelper = MetadataParserHelper(tab: tab, profile: profile)
-        tab.addContentScript(metadataHelper, name: MetadataParserHelper.name())
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {

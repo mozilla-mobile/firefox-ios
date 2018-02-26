@@ -222,13 +222,13 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         // add metadata for 2 of the sites
         let metadata = SQLiteMetadata(db: db)
         let pageA = PageMetadata(id: nil, siteURL: siteA.url, mediaURL: "http://image.com",
-                                title: siteA.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+                                title: siteA.title, description: "Test Description", type: nil, providerName: nil)
         metadata.storeMetadata(pageA, forPageURL: siteA.url.asURL!, expireAt: Date.now() + 3000).succeeded()
         let pageB = PageMetadata(id: nil, siteURL: siteB.url, mediaURL: "http://image.com",
-                                 title: siteB.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+                                 title: siteB.title, description: "Test Description", type: nil, providerName: nil)
         metadata.storeMetadata(pageB, forPageURL: siteB.url.asURL!, expireAt: Date.now() + 3000).succeeded()
         let pageC = PageMetadata(id: nil, siteURL: siteC.url, mediaURL: "http://image.com",
-                                 title: siteC.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+                                 title: siteC.title, description: "Test Description", type: nil, providerName: nil)
         metadata.storeMetadata(pageC, forPageURL: siteC.url.asURL!, expireAt: Date.now() + 3000).succeeded()
 
         history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
@@ -326,7 +326,7 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         addVisitForSite(bookmarkSite, intoHistory: history, from: .local, atTime: modifiedTime)
         addVisitForSite(bookmarkSite, intoHistory: history, from: .remote, atTime: modifiedTime)
         let pageA = PageMetadata(id: nil, siteURL: bookmarkSite.url, mediaURL: "http://image.com",
-                                 title: bookmarkSite.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+                                 title: bookmarkSite.title, description: "Test Description", type: nil, providerName: nil)
         metadata.storeMetadata(pageA, forPageURL: bookmarkSite.url.asURL!, expireAt: Date.now() + 3000).succeeded()
         bookmarks.local.addToMobileBookmarks(URL(string:"http://bookmark-\(i)/")!, title: "\(i) Bookmark", favicon: nil).succeeded()
     }

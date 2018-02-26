@@ -181,7 +181,7 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.gesture(forAction: TestActions.LoadURLByPasting, TestActions.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
             app.textFields["url"].press(forDuration: 1.0)
-            app.sheets.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+            app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
         }
     }
 

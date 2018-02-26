@@ -222,7 +222,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     let cancelBackAction = {
         if isTablet {
             // There is no Cancel option in iPad.
-            app/*@START_MENU_TOKEN@*/.otherElements["PopoverDismissRegion"]/*[[".otherElements[\"dismiss popup\"]",".otherElements[\"PopoverDismissRegion\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.otherElements["PopoverDismissRegion"].tap()
         } else {
             app.buttons["PhotonMenu.close"].tap()
         }
@@ -303,22 +303,26 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(URLBarLongPressMenu) { screenState in
-        let menu = app.sheets.element(boundBy: 0)
+        let menu = app.tables["Context Menu"].firstMatch
         screenState.onEnterWaitFor(element: menu)
 
         screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.buttons.element(boundBy: 0).tap()
+            menu.cells["menu-PasteAndGo"].firstMatch.tap()
         }
 
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.buttons.element(boundBy: 1).tap()
+            menu.cells["menu-Paste"].firstMatch.tap()
         }
 
         screenState.backAction = {
-            let buttons = menu.buttons
-            buttons.element(boundBy: buttons.count - 1).tap()
+            if isTablet {
+                // There is no Cancel option in iPad.
+                app.otherElements["PopoverDismissRegion"].tap()
+            } else {
+                app.buttons["PhotonMenu.close"].tap()
+            }
         }
 
         screenState.dismissOnUse = true

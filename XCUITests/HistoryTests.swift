@@ -32,7 +32,7 @@ class HistoryTests: BaseTestCase {
         navigator.goto(HomePanel_History)
         app.tables.cells["HistoryPanel.syncedDevicesCell"].tap()
         waitforExistence(app.tables.cells.staticTexts["Firefox Sync"])
-        XCTAssertTrue(app.tables/*@START_MENU_TOKEN@*/.buttons["Sign in"]/*[[".cells.buttons[\"Sign in\"]",".buttons[\"Sign in\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.exists)
+        XCTAssertTrue(app.tables.buttons["Sign in to Sync"].exists, "Sing in button does not appear")
     }
 
     func testClearHistoryFromSettings() {

@@ -10,12 +10,8 @@ import Shared
 private struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
     static let Padding: CGFloat = 10
-    static let SectionVerticalPadding: CGFloat = 13
-    static let SiteHeaderHeight: CGFloat = 80
-    static let TitleHeaderHeight: CGFloat = 33
-    static let RowHeight: CGFloat = 44
-    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Defaults.Grey70
-    static let PlaceholderImage = UIImage(named: "defaultTopSiteIcon")
+    static let HeaderFooterHeight: CGFloat = 20
+    static let RowHeight: CGFloat = 50
     static let BorderWidth: CGFloat = 0.5
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let CornerRadius: CGFloat = 10
@@ -30,17 +26,23 @@ private struct PhotonActionSheetUX {
 
 public struct PhotonActionSheetItem {
     public fileprivate(set) var title: String
-    public fileprivate(set) var iconString: String
+    public fileprivate(set) var text: String?
+    public fileprivate(set) var iconString: String?
     public fileprivate(set) var isEnabled: Bool // Used by toggles like nightmode to switch tint color
     public fileprivate(set) var accessory: PhotonActionSheetCellAccessoryType
+    public fileprivate(set) var accessoryText: String?
+    public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
     
-    init(title: String, iconString: String, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, handler: ((PhotonActionSheetItem) -> Void)?) {
+    init(title: String, text: String? = nil, iconString: String? = nil, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
         self.isEnabled = isEnabled
         self.accessory = accessory
         self.handler = handler
+        self.text = text
+        self.accessoryText = accessoryText
+        self.bold = bold ?? false
     }
 }
 
@@ -54,13 +56,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     private var site: Site?
     private let style: PresentationStyle
+    private var tintColor = UIColor.Defaults.Grey80
     private lazy var showCloseButton: Bool = {
         return self.style == .bottom && self.modalPresentationStyle != .popover
     }()
     var tableView = UITableView(frame: .zero, style: .grouped)
-    private var tintColor = UIColor.Defaults.Grey80
-    private var outerScrollView = UIScrollView()
-    
+
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(dismiss))
@@ -81,6 +82,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         button.accessibilityIdentifier = "PhotonMenu.close"
         return button
     }()
+
+    var photonTransitionDelegate: UIViewControllerTransitioningDelegate? {
+        didSet {
+            self.transitioningDelegate = photonTransitionDelegate
+        }
+    }
     
     init(site: Site, actions: [PhotonActionSheetItem]) {
         self.site = site
@@ -106,12 +113,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         fatalError("init(coder:) has not been implemented")
     }
     
-    var photonTransitionDelegate: UIViewControllerTransitioningDelegate? {
-        didSet {
-            self.transitioningDelegate = photonTransitionDelegate
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -119,28 +120,10 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             applyBackgroundBlur()
             self.tintColor = UIConstants.SystemBlueColor
         }
+        
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
-        
         view.accessibilityIdentifier = "Action Sheet"
-        tableView.bounces = false
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.sectionFooterHeight = 0
-        tableView.keyboardDismissMode = .onDrag
-        tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
-        tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
-        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
-        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
-        tableView.isScrollEnabled = true
-        tableView.showsVerticalScrollIndicator = false
-        tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
-        tableView.separatorStyle = .none
-        tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.accessibilityIdentifier = "Context Menu"
-        let footer = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.TablePadding))
-        tableView.tableFooterView = footer
-        tableView.tableHeaderView = footer.clone()
 
         // In a popover the popover provides the blur background
         // Not using a background color allows the view to style correctly with the popover arrow
@@ -154,53 +137,75 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
 
         let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
-        let height = actionSheetHeight()
-        
-        if self.modalPresentationStyle == .popover {
-            self.preferredContentSize = CGSize(width: width, height: height)
-        }
-        
+
         if self.showCloseButton {
             self.view.addSubview(closeButton)
             closeButton.snp.makeConstraints { make in
                 make.centerX.equalTo(self.view.snp.centerX)
                 make.width.equalTo(width)
                 make.height.equalTo(PhotonActionSheetUX.CloseButtonHeight)
-                if #available(iOS 11, *) {
-                    let bottomPad: CGFloat
-                    if let window = UIApplication.shared.keyWindow, window.safeAreaInsets.bottom != 0  {
-                        // for iPhone X and similar
-                        bottomPad = 0
-                    } else {
-                        bottomPad = PhotonActionSheetUX.Padding
-                    }
-                    make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-bottomPad)
-                } else {
-                    make.bottom.equalTo(self.view.snp.bottom).offset(-PhotonActionSheetUX.Padding)
-                }
+                make.bottom.equalTo(self.view.safeArea.bottom).inset(PhotonActionSheetUX.Padding)
             }
         }
         
         if style == .bottom && self.modalPresentationStyle == .popover {
             // We are showing the menu in a popOver
             self.actions = actions.map({ $0.reversed() }).reversed()
-            tableView.frame = CGRect(size: self.preferredContentSize)
-            return
-        }
-        
-        tableView.snp.makeConstraints { make in
-            make.centerX.equalTo(self.view.snp.centerX)
-            switch style {
-            case .bottom:
-                make.bottom.equalTo(closeButton.snp.top).offset(-PhotonActionSheetUX.Padding)
-            case .centered:
-                make.centerY.equalTo(self.view.snp.centerY)
+            tableView.snp.makeConstraints { make in
+                make.edges.equalTo(self.view)
             }
-            make.width.equalTo(width)
-            make.height.equalTo(min(height, view.bounds.height - PhotonActionSheetUX.CloseButtonHeight - (PhotonActionSheetUX.Padding * 6)))
+        } else {
+            tableView.snp.makeConstraints { make in
+                make.centerX.equalTo(self.view.snp.centerX)
+                switch style {
+                case .bottom:
+                    make.bottom.equalTo(closeButton.snp.top).offset(-PhotonActionSheetUX.Padding)
+                case .centered:
+                    make.centerY.equalTo(self.view.snp.centerY)
+                }
+                make.width.equalTo(width)
+            }
         }
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        tableView.bounces = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.keyboardDismissMode = .onDrag
+        tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
+        tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.SiteHeaderName)
+        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
+        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
+        tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
+        tableView.estimatedSectionFooterHeight = PhotonActionSheetUX.HeaderFooterHeight
+        tableView.estimatedSectionHeaderHeight = PhotonActionSheetUX.HeaderFooterHeight
+        tableView.isScrollEnabled = true
+        tableView.showsVerticalScrollIndicator = false
+        tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
+        tableView.separatorStyle = .none
+        tableView.cellLayoutMarginsFollowReadableWidth = false
+        tableView.accessibilityIdentifier = "Context Menu"
+        let footer = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.Padding))
+        tableView.tableHeaderView = footer
+        tableView.tableFooterView = footer.clone()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let maxHeight = self.view.frame.height - (self.showCloseButton ? PhotonActionSheetUX.CloseButtonHeight : 0)
+        tableView.snp.makeConstraints { make in
+            // The height of the menu should be no more than 80 percent of the screen
+            make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.8))
+        }
+        if style == .bottom && self.modalPresentationStyle == .popover {
+            self.preferredContentSize = self.tableView.contentSize
+        }
+    }
+
     private func applyBackgroundBlur() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         if let screenshot = appDelegate.window?.screenshot() {
@@ -214,24 +219,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    fileprivate func actionSheetHeight() -> CGFloat {
-        let count = actions.reduce(0) { $1.count + $0 }
-
-        var headerHeight: CGFloat = 0
-        if style == .centered {
-            headerHeight = PhotonActionSheetUX.SiteHeaderHeight
-        } else if self.title != nil {
-            headerHeight = PhotonActionSheetUX.TitleHeaderHeight
-        }
-
-        let separatorHeight = actions.count > 1 ? (actions.count - 1) * Int(PhotonActionSheetUX.SectionVerticalPadding) : 0
-        return CGFloat(separatorHeight) + headerHeight + ( PhotonActionSheetUX.TablePadding * 2)  + CGFloat(count) * PhotonActionSheetUX.RowHeight
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
     func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -239,13 +226,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     deinit {
         tableView.dataSource = nil
         tableView.delegate = nil
-    }
-    
-    override func updateViewConstraints() {
-        if !self.showCloseButton {
-            tableView.frame = CGRect(size: self.preferredContentSize)
-        }
-        super.updateViewConstraints()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -285,32 +265,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
         return false
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return PhotonActionSheetUX.RowHeight
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // If we have multiple sections show a separator for each one except the first.
-        if section > 0 {
-            return PhotonActionSheetUX.SectionVerticalPadding
-        }
 
-        if self.site != nil {
-            return PhotonActionSheetUX.SiteHeaderHeight
-        } else if self.title != nil {
-            return PhotonActionSheetUX.TitleHeaderHeight
-        }
-
-        return 0
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
         let action = actions[indexPath.section][indexPath.row]
-        cell.accessibilityIdentifier = action.iconString
         cell.tintColor = action.isEnabled ? UIConstants.SystemBlueColor : self.tintColor
-        cell.configureCell(action.title, imageString: action.iconString, accessory: action.accessory)
+        cell.configure(with: action)
         return cell
     }
     
@@ -332,15 +292,30 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             return header
         }
 
-        return nil
+        // A header height of at least 1 is required to make sure the default header size isnt used when laying out with AutoLayout
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
+        view?.snp.makeConstraints { make in
+            make.height.equalTo(1)
+        }
+        return view
+    }
+
+    // A footer height of at least 1 is required to make sure the default footer size isnt used when laying out with AutoLayout
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
+        view?.snp.makeConstraints { make in
+            make.height.equalTo(1)
+        }
+        return view
     }
 }
 
 private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
+    static let Padding: CGFloat = 12
+
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
         titleLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.lightGray
         return titleLabel
@@ -360,7 +335,7 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         contentView.addSubview(titleLabel)
 
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).offset(16)
+            make.leading.equalTo(contentView).offset(PhotonActionSheetTitleHeaderView.Padding)
             make.trailing.equalTo(contentView)
             make.top.equalTo(contentView).offset(PhotonActionSheetUX.TablePadding)
         }
@@ -426,6 +401,7 @@ private class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         contentView.addSubview(siteImageView)
         
         siteImageView.snp.remakeConstraints { make in
+            make.top.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
             make.centerY.equalTo(contentView)
             make.leading.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
             make.size.equalTo(PhotonActionSheetUX.SiteImageViewSize)
@@ -443,7 +419,6 @@ private class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
             make.trailing.equalTo(contentView).inset(PhotonActionSheetSiteHeaderView.Padding)
             make.centerY.equalTo(siteImageView.snp.centerY)
         }
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -476,16 +451,10 @@ private struct PhotonActionSheetCellUX {
     static let CornerRadius: CGFloat = 3
 }
 
-public enum PhotonActionSheetCellAccessoryType {
-    case Disclosure
-    case Switch
-    case None
-}
-
 private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
-    
+
     let separatorLineView = UIView()
-    
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
@@ -498,30 +467,58 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
             make.height.equalTo(0.5)
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
+public enum PhotonActionSheetCellAccessoryType {
+    case Disclosure
+    case Switch
+    case Text
+    case None
+}
+
 private class PhotonActionSheetCell: UITableViewCell {
+    static let Padding: CGFloat = 12
+    static let VerticalPadding: CGFloat = 2
+    static let IconSize = 16
+
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
-        titleLabel.minimumScaleFactor = 0.75 // Scale the font if we run out of space
+        titleLabel.minimumScaleFactor = 0.8 // Scale the font if we run out of space
         titleLabel.textColor = PhotonActionSheetCellUX.LabelColor
-        titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 1
+        titleLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
+        titleLabel.numberOfLines = 4
         titleLabel.adjustsFontSizeToFitWidth = true
         return titleLabel
     }()
+
+    lazy var subtitleLabel: UILabel = {
+        let textLabel = UILabel()
+        textLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
+        textLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
+        textLabel.minimumScaleFactor = 0.75 // Scale the font if we run out of space
+        textLabel.textColor = PhotonActionSheetCellUX.LabelColor
+        textLabel.numberOfLines = 3
+        textLabel.adjustsFontSizeToFitWidth = true
+        return textLabel
+    }()
     
     lazy var statusIcon: UIImageView = {
-        let siteImageView = UIImageView()
-        siteImageView.contentMode = .scaleAspectFit
-        siteImageView.clipsToBounds = true
-        siteImageView.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
-        return siteImageView
+        let statusIcon = UIImageView()
+        statusIcon.contentMode = .scaleAspectFit
+        statusIcon.clipsToBounds = true
+        statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
+        statusIcon.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
+        return statusIcon
+    }()
+
+    lazy var disclosureLabel: UILabel = {
+        let label = UILabel()
+        return label
     }()
     
     lazy var selectedOverlay: UIView = {
@@ -534,11 +531,19 @@ private class PhotonActionSheetCell: UITableViewCell {
     lazy var disclosureIndicator: UIImageView = {
         let disclosureIndicator = UIImageView(image: UIImage(named: "menu-Disclosure"))
         disclosureIndicator.contentMode = .scaleAspectFit
-        disclosureIndicator.clipsToBounds = true
         disclosureIndicator.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
+        disclosureIndicator.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
         return disclosureIndicator
     }()
-    
+
+    lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = PhotonActionSheetCell.Padding
+        stackView.alignment = .center
+        stackView.axis = .horizontal
+        return stackView
+    }()
+
     override var isSelected: Bool {
         didSet {
             self.selectedOverlay.isHidden = !isSelected
@@ -554,53 +559,64 @@ private class PhotonActionSheetCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         isAccessibilityElement = true
-        
         contentView.addSubview(selectedOverlay)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(statusIcon)
         backgroundColor = .clear
         
         selectedOverlay.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(statusIcon.snp.trailing).offset(16)
-            make.trailing.equalTo(contentView)
-            make.centerY.equalTo(contentView)
-        }
-        
-        statusIcon.snp.makeConstraints { make in
-            make.size.equalTo(PhotonActionSheetCellUX.StatusIconSize)
-            make.leading.equalTo(contentView).offset(16)
-            make.centerY.equalTo(contentView)
+
+        // Setup our StackViews
+        let textStackView = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
+        textStackView.spacing = PhotonActionSheetCell.VerticalPadding
+        textStackView.setContentHuggingPriority(UILayoutPriorityDefaultLow, for: .horizontal)
+        textStackView.alignment = .leading
+        textStackView.axis = .vertical
+
+        stackView.addArrangedSubview(statusIcon)
+        stackView.addArrangedSubview(textStackView)
+        contentView.addSubview(stackView)
+
+        let padding = PhotonActionSheetCell.Padding
+        stackView.snp.makeConstraints { make in
+            make.edges.equalTo(contentView).inset(UIEdgeInsets(top: padding/2, left: padding, bottom: padding/2, right: padding))
         }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func configureCell(_ label: String, imageString: String, accessory: PhotonActionSheetCellAccessoryType = .None) {
-        titleLabel.text = label
+
+    func configure(with action: PhotonActionSheetItem) {
+        titleLabel.text = action.title
         titleLabel.textColor = self.tintColor
-        accessibilityIdentifier = imageString
-        accessibilityLabel = label
-        if let image = UIImage(named: imageString)?.withRenderingMode(.alwaysTemplate) {
+        titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
+        subtitleLabel.text = action.text
+        subtitleLabel.textColor = self.tintColor
+        disclosureLabel.text = action.accessoryText
+        titleLabel.font  = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
+        disclosureLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
+        disclosureLabel.textColor = titleLabel.textColor
+        accessibilityIdentifier = action.iconString
+        accessibilityLabel = action.title
+        selectionStyle = action.handler != nil ? .default : .none
+        if let iconName = action.iconString, let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate) {
             statusIcon.image = image
             statusIcon.tintColor = self.tintColor
+            if statusIcon.superview == nil {
+                stackView.insertArrangedSubview(statusIcon, at: 0)
+            }
+        } else {
+            statusIcon.removeFromSuperview()
         }
 
-        switch accessory {
+        switch action.accessory {
+        case .Text:
+            stackView.addArrangedSubview(disclosureLabel)
         case .Disclosure:
-            contentView.addSubview(disclosureIndicator)
-            disclosureIndicator.snp.makeConstraints { make in
-                make.size.equalTo(16)
-                make.centerY.equalTo(contentView)
-                make.trailing.equalTo(contentView).inset(16)
-            }
-        default: return
+            stackView.addArrangedSubview(disclosureIndicator)
+        default:
+            break // Do nothing. The rest are not supported yet.
         }
     }
 }
-
