@@ -493,6 +493,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         titleLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
         titleLabel.numberOfLines = 4
         titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.textAlignment = .natural
         return titleLabel
     }()
 
