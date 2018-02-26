@@ -81,15 +81,13 @@ extension PhotonActionSheetProtocol {
         var noImageMode: PhotonActionSheetItem? = nil
         if #available(iOS 11, *) {
             let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-            let noImageText = noImageEnabled ? Strings.AppMenuNoImageModeDisable : Strings.AppMenuNoImageModeEnable
-            noImageMode = PhotonActionSheetItem(title: noImageText, iconString: "menu-NoImageMode", isEnabled: noImageEnabled) { action in
+            noImageMode = PhotonActionSheetItem(title: Strings.AppMenuNoImageMode, iconString: "menu-NoImageMode", isEnabled: noImageEnabled, accessory: .Switch) { action in
                 NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
             }
         }
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
-        let nightModeText = nightModeEnabled ? Strings.AppMenuNightModeDisable : Strings.AppMenuNightModeEnable
-        let nightMode = PhotonActionSheetItem(title: nightModeText, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { action in
+        let nightMode = PhotonActionSheetItem(title: Strings.AppMenuNightMode, iconString: "menu-NightMode", isEnabled: nightModeEnabled, accessory: .Switch) { action in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
         }
 

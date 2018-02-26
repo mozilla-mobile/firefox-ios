@@ -258,6 +258,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             self.dismiss(nil)
             return
         }
+
         self.dismiss(nil)
         return handler(action)
     }
@@ -269,7 +270,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
         let action = actions[indexPath.section][indexPath.row]
-        cell.tintColor = action.isEnabled ? UIConstants.SystemBlueColor : self.tintColor
+        cell.tintColor = self.tintColor
         cell.configure(with: action)
         return cell
     }
@@ -520,6 +521,12 @@ private class PhotonActionSheetCell: UITableViewCell {
         let label = UILabel()
         return label
     }()
+
+    lazy var toggleSwitch: UIImageView = {
+        let toggle = UIImageView(image: UIImage(named: "menu-Toggle-Off"))
+        toggle.contentMode = .scaleAspectFit
+        return toggle
+    }()
     
     lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
@@ -553,6 +560,8 @@ private class PhotonActionSheetCell: UITableViewCell {
     override func prepareForReuse() {
         self.statusIcon.image = nil
         disclosureIndicator.removeFromSuperview()
+        disclosureLabel.removeFromSuperview()
+        toggleSwitch.removeFromSuperview()
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -593,10 +602,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
         subtitleLabel.text = action.text
         subtitleLabel.textColor = self.tintColor
-        disclosureLabel.text = action.accessoryText
         titleLabel.font  = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
-        disclosureLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
-        disclosureLabel.textColor = titleLabel.textColor
         accessibilityIdentifier = action.iconString
         accessibilityLabel = action.title
         selectionStyle = action.handler != nil ? .default : .none
@@ -612,9 +618,16 @@ private class PhotonActionSheetCell: UITableViewCell {
 
         switch action.accessory {
         case .Text:
+            disclosureLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
+            disclosureLabel.text = action.accessoryText
+            disclosureLabel.textColor = titleLabel.textColor
             stackView.addArrangedSubview(disclosureLabel)
         case .Disclosure:
             stackView.addArrangedSubview(disclosureIndicator)
+        case .Switch:
+            let image = action.isEnabled ? UIImage(named: "menu-Toggle-On") : UIImage(named: "menu-Toggle-Off")
+            toggleSwitch.image = image
+            stackView.addArrangedSubview(toggleSwitch)
         default:
             break // Do nothing. The rest are not supported yet.
         }
