@@ -9,26 +9,26 @@ import Shared
 extension BrowserViewController {
 
     @objc private func reloadTabKeyCommand() {
-        if homePanelController == nil {
-            tabManager.selectedTab?.reload()
+        if let tab = tabManager.selectedTab, homePanelController == nil {
+            tab.reload()
         }
     }
 
     @objc private func goBackKeyCommand() {
-        if tabManager.selectedTab?.canGoBack == true && homePanelController == nil {
-            tabManager.selectedTab?.goBack()
+        if let tab = tabManager.selectedTab, tab.canGoBack, homePanelController == nil {
+            tab.goBack()
         }
     }
 
     @objc private func goForwardKeyCommand() {
-        if tabManager.selectedTab?.canGoForward == true && homePanelController == nil {
-            tabManager.selectedTab?.goForward()
+        if let tab = tabManager.selectedTab, tab.canGoForward {
+            tab.goForward()
         }
     }
 
     @objc private func findOnPageKeyCommand() {
-        if homePanelController == nil {
-            tab( (tabManager.selectedTab)!, didSelectFindInPageForSelection: "")
+        if let tab = tabManager.selectedTab, homePanelController == nil {
+            self.tab(tab, didSelectFindInPageForSelection: "")
         }
     }
 
