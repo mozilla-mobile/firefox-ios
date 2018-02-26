@@ -103,7 +103,6 @@ class ContentBlockerHelper {
             return
         }
 
-        ContentBlockerHelper.heavyInitHasRunOnce = true
         migrateLegacyUserPrefs()
 
         // Read the whitelist at startup
@@ -113,7 +112,10 @@ class ContentBlockerHelper {
 
         removeOldListsByDateFromStore() {
             self.removeOldListsByNameFromStore() {
-                self.compileListsNotInStore(completion: {})
+                self.compileListsNotInStore{
+                    ContentBlockerHelper.heavyInitHasRunOnce = true
+                    self.addActiveRulesToTab()
+                }
             }
         }
 
@@ -158,6 +160,10 @@ class ContentBlockerHelper {
     }
 
     private func addActiveRulesToTab() {
+        if !ContentBlockerHelper.heavyInitHasRunOnce {
+            return
+        }
+
         removeTrackingProtection()
 
         guard isEnabled else {
