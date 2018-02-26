@@ -7,7 +7,7 @@
 
 import Shared
 
-struct TrackingInformation {
+struct TPPageStats {
     let adCount: Int
     let analyticCount: Int
     let contentCount: Int
@@ -29,52 +29,43 @@ struct TrackingInformation {
         self.socialCount = socialCount
     }
 
-    func create(byAddingListItem listItem: BlockList) -> TrackingInformation {
+    func create(byAddingListItem listItem: BlocklistName) -> TPPageStats {
         switch listItem {
-        case .advertising: return TrackingInformation(adCount: adCount + 1, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount)
-        case .analytics: return TrackingInformation(adCount: adCount, analyticCount: analyticCount + 1, contentCount: contentCount, socialCount: socialCount)
-        case .content: return TrackingInformation(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount + 1, socialCount: socialCount)
-        case .social: return TrackingInformation(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount + 1)
+        case .advertising: return TPPageStats(adCount: adCount + 1, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount)
+        case .analytics: return TPPageStats(adCount: adCount, analyticCount: analyticCount + 1, contentCount: contentCount, socialCount: socialCount)
+        case .content: return TPPageStats(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount + 1, socialCount: socialCount)
+        case .social: return TPPageStats(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount + 1)
         }
     }
 }
 
 @available(iOS 11, *)
-class BlockListChecker {
-    static let shared = BlockListChecker()
-    var whitelistedDomains: [String] {
-        didSet {
-            whitelistNeedsUpdate = true
-        }
+class TPStatsBlocklistChecker {
+    static let shared = TPStatsBlocklistChecker()
+
+    private var blockLists = TPStatsBlocklists()
+
+    func updateWhitelistedDomains(_ domains: [String]) {
+        blockLists.updateWhitelistedDomains(domains)
     }
 
-    private var whitelistNeedsUpdate = true
-    private var blockLists = BlockLists()
-    private init() {
-        whitelistedDomains = []
-    }
-
-    func isBlocked(url: URL, isStrictMode: Bool) -> BlockList? {
-        if whitelistNeedsUpdate {
-            whitelistNeedsUpdate = false
-            blockLists.updateWhitelistedDomains(whitelistedDomains)
-        }
-        let enabledLists = BlockList.forStrictMode(isOn: isStrictMode)
+    func isBlocked(url: URL, isStrictMode: Bool) -> BlocklistName? {
+        let enabledLists = BlocklistName.forStrictMode(isOn: isStrictMode)
         return blockLists.urlIsInList(url).flatMap { return enabledLists.contains($0) ? $0 : nil }
     }
 
 }
 
 @available(iOS 11, *)
-fileprivate class BlockLists {
+fileprivate class TPStatsBlocklists {
     class Rule {
         let regex: NSRegularExpression
         let loadType: LoadType
         let resourceType: ResourceType
         let domainExceptions: [NSRegularExpression]?
-        let list: BlockList
+        let list: BlocklistName
 
-        init(regex: NSRegularExpression, loadType: LoadType, resourceType: ResourceType, domainExceptions: [NSRegularExpression]?, list: BlockList) {
+        init(regex: NSRegularExpression, loadType: LoadType, resourceType: ResourceType, domainExceptions: [NSRegularExpression]?, list: BlocklistName) {
             self.regex = regex
             self.loadType = loadType
             self.resourceType = resourceType
@@ -83,7 +74,8 @@ fileprivate class BlockLists {
         }
     }
 
-    fileprivate var blockRules = [Rule]()
+    private var blockRules = [Rule]()
+    private var whitelisted = [NSRegularExpression]()
 
     enum LoadType {
         case all
@@ -99,25 +91,23 @@ fileprivate class BlockLists {
         whitelisted = domains.flatMap { wildcardDomainToRegex(domain: "*" + $0) }
     }
 
-    private var whitelisted = [NSRegularExpression]()
-
     init() {
-        for blockList in BlockList.all {
+        for blockList in BlocklistName.all {
             let list: [[String: AnyObject]]
             do {
-                guard let path = Bundle.main.path(forResource: blockList.fileName, ofType: "json") else {
-                    assertionFailure("BlockLists: bad file path.")
+                guard let path = Bundle.main.path(forResource: blockList.filename, ofType: "json") else {
+                    assertionFailure("Blocklists: bad file path.")
                     return
                 }
 
                 let json = try Data(contentsOf: URL(fileURLWithPath: path))
                 guard let data = try JSONSerialization.jsonObject(with: json, options: []) as? [[String: AnyObject]] else {
-                    assertionFailure("BlockLists: bad JSON cast.")
+                    assertionFailure("Blocklists: bad JSON cast.")
                     return
                 }
                 list = data
             } catch {
-                assertionFailure("BlockLists: \(error.localizedDescription)")
+                assertionFailure("Blocklists: \(error.localizedDescription)")
                 return
             }
 
@@ -125,7 +115,7 @@ fileprivate class BlockLists {
                 guard let trigger = rule["trigger"] as? [String: AnyObject],
                     let filter = trigger["url-filter"] as? String,
                     let filterRegex = try? NSRegularExpression(pattern: filter, options: []) else {
-                        assertionFailure("BlockLists error: Rule has unexpected format.")
+                        assertionFailure("Blocklists error: Rule has unexpected format.")
                         continue
                 }
 
@@ -157,12 +147,12 @@ fileprivate class BlockLists {
         do {
             return try NSRegularExpression(pattern: regex, options: [])
         } catch {
-            assertionFailure("BlockLists: \(error.localizedDescription)")
+            assertionFailure("Blocklists: \(error.localizedDescription)")
             return nil
         }
     }
 
-    func urlIsInList(_ url: URL) -> BlockList? {
+    func urlIsInList(_ url: URL) -> BlocklistName? {
         let resourceString = url.absoluteString
         let resourceRange = NSRange(location: 0, length: resourceString.count)
 
