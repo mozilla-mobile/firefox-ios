@@ -554,7 +554,27 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return self.getFilteredSitesByVisitDateWithLimit(limit, whereURLContains: nil, includeIcon: true)
+        let sql = [
+            "SELECT",
+                "historyID, url, title, guid, domain_id, domain,",
+                "CASE is_local WHEN 1 THEN date ELSE 0 END AS localVisitDate,",
+                "CASE is_local WHEN 0 THEN date ELSE 0 END AS remoteVisitDate,",
+                "iconID, iconURL, iconDate, iconType, iconWidth",
+            "FROM (",
+                "SELECT",
+                    "\(TableHistory).id AS historyID, \(TableHistory).url, title, guid, domain_id, is_local, iconID, iconURL, iconDate, iconType, iconWidth, MAX(date) AS date",
+                "FROM \(TableHistory)",
+                "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id",
+                "LEFT OUTER JOIN \(ViewHistoryIDsWithWidestFavicons) ON \(ViewHistoryIDsWithWidestFavicons).id = \(TableHistory).id",
+                "GROUP BY historyID, url, title, guid, domain_id, is_local, iconID, iconURL, iconDate, iconType, iconWidth",
+                "HAVING is_deleted = 0",
+                "ORDER BY MAX(date) DESC",
+                "LIMIT \(limit)",
+            ") h INNER JOIN \(TableDomains) ON \(TableDomains).id = h.domain_id"
+            ].joined(separator: " ")
+
+        let factory = SQLiteHistory.iconHistoryColumnFactory
+        return db.runQuery(sql, args: nil, factory: factory)
     }
 
     fileprivate func getFilteredSitesByVisitDateWithLimit(_ limit: Int,
@@ -597,7 +617,6 @@ extension SQLiteHistory: BrowserHistory {
         let factory = includeIcon ? SQLiteHistory.iconHistoryColumnFactory : SQLiteHistory.basicHistoryColumnFactory
         return db.runQuery(sql, args: args, factory: factory)
     }
-
 }
 
 extension SQLiteHistory: Favicons {
