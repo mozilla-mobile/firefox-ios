@@ -88,6 +88,10 @@ fileprivate class TPStatsBlocklists {
     }
 
     func updateWhitelistedDomains(_ domains: [String]) {
+        if domains.isEmpty {
+            whitelisted.removeAll()
+            return
+        }
         whitelisted = domains.flatMap { wildcardDomainToRegex(domain: "*" + $0) }
     }
 
@@ -160,9 +164,19 @@ fileprivate class TPStatsBlocklists {
             // First, test the top-level filters to see if this URL might be blocked.
             if rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil {
                 // Check the domain exceptions. If a domain exception matches, this filter does not apply.
-                for domainRegex in (rule.domainExceptions ?? []) + whitelisted {
+                for domainRegex in (rule.domainExceptions ?? []) {
                     if domainRegex.firstMatch(in: resourceString, options: [], range: resourceRange) != nil {
                         continue domainSearch
+                    }
+                }
+
+                // Check the whitelist.
+                if let baseDomain = url.baseDomain {
+                    let range = NSRange(location: 0, length: baseDomain.count)
+                    for ignoreDomain in whitelisted {
+                        if ignoreDomain.firstMatch(in: baseDomain , options: [], range: range) != nil {
+                            return nil
+                        }
                     }
                 }
 

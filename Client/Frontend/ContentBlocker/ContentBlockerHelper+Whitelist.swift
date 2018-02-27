@@ -24,7 +24,7 @@ extension ContentBlockerHelper {
         }
         // Note that * is added to the front of domains, so foo.com becomes *foo.com
         let list = "'*" + ContentBlockerHelper.whitelistedDomains.joined(separator: "','*") + "'"
-        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'unless-domain': [\(list)] }".replacingOccurrences(of: "'", with: "\"")
+        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'unless-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
     }
 
     func whitelist(enable: Bool, url: URL, completion: (() -> Void)? = nil) {
@@ -35,6 +35,10 @@ extension ContentBlockerHelper {
             ContentBlockerHelper.whitelistedDomains.remove(domain)
         }
 
+        updateWhitelist(completion: completion)
+    }
+
+    private func updateWhitelist(completion: (() -> Void)?) {
         TPStatsBlocklistChecker.shared.updateWhitelistedDomains(Array(ContentBlockerHelper.whitelistedDomains))
 
         removeAllRulesInStore {
@@ -45,6 +49,11 @@ extension ContentBlockerHelper {
         }
 
         guard let fileURL = ContentBlockerHelper.whitelistFileURL() else { return }
+        if ContentBlockerHelper.whitelistedDomains.isEmpty {
+            try? FileManager.default.removeItem(at: fileURL)
+            return
+        }
+
         let list = ContentBlockerHelper.whitelistedDomains.joined(separator: "\n")
         do {
             try list.write(to: fileURL, atomically: true, encoding: .utf8)
@@ -68,5 +77,10 @@ extension ContentBlockerHelper {
         }
 
         return nil
+    }
+
+    func clearWhitelist(completion: (() -> Void)? = nil) {
+        ContentBlockerHelper.whitelistedDomains = Set<String>()
+        updateWhitelist(completion: completion)
     }
 }
