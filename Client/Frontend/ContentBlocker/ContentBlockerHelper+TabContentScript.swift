@@ -16,6 +16,10 @@ extension ContentBlockerHelper : TabContentScript {
         return "trackingProtectionStats"
     }
 
+    func clearPageStats() {
+        stats = TPPageStats()
+    }
+
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard isEnabled, let body = message.body as? [String: String], let urlString = body["url"] else {
             return
