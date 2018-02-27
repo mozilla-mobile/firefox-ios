@@ -27,14 +27,15 @@ extension ContentBlockerHelper {
         return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'unless-domain': [\(list)] }".replacingOccurrences(of: "'", with: "\"")
     }
 
-    func whitelist(enable: Bool, forDomain domain: String, completion: (() -> Void)? = nil) {
+    func whitelist(enable: Bool, url: URL, completion: (() -> Void)? = nil) {
+        guard let domain = url.baseDomain else { return }
         if enable {
-            ContentBlockerHelper.whitelistedDomains.append(domain)
+            ContentBlockerHelper.whitelistedDomains.insert(domain)
         } else {
-            ContentBlockerHelper.whitelistedDomains = ContentBlockerHelper.whitelistedDomains.filter { $0 != domain }
+            ContentBlockerHelper.whitelistedDomains.remove(domain)
         }
 
-        TPStatsBlocklistChecker.shared.updateWhitelistedDomains(ContentBlockerHelper.whitelistedDomains)
+        TPStatsBlocklistChecker.shared.updateWhitelistedDomains(Array(ContentBlockerHelper.whitelistedDomains))
 
         removeAllRulesInStore {
             self.compileListsNotInStore {
@@ -53,7 +54,6 @@ extension ContentBlockerHelper {
     }
 
     func isURLWhitelisted(url: URL) -> Bool {
-        // TODO: Not done
         guard let domain = url.baseDomain, !domain.isEmpty else {
             return false
         }

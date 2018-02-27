@@ -297,14 +297,12 @@ extension PhotonActionSheetProtocol {
         let statList = [totalCount, adCount, analyticsCount, socialCount, contentCount]
 
         let addToWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionDisableTitle, iconString: "menu-TrackingProtection-Off") { _ in
-            if let domain = currentURL.baseDomain, !domain.isEmpty {
-                blocker.whitelist(enable: true, forDomain: domain)
-            }
+                blocker.whitelist(enable: true, url: currentURL)
         }
         // when tracking protection is on and content was blocked
         let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .None) { _ in
-         // guard let bvc = self as? PresentableVC else { return }
-          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [statList, [addToWhitelist]], on: bvc, from: urlBar)
+          guard let bvc = self as? PresentableVC else { return }
+            self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [statList, [addToWhitelist]], on: bvc, from: urlBar)
         }
         return [tpBlocking]
     }
@@ -316,14 +314,12 @@ extension PhotonActionSheetProtocol {
         }
 
         let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionWhiteListRemove, iconString: "menu-TrackingProtection") { _ in
-            if let domain = currentURL.baseDomain, !domain.isEmpty {
-                blocker.whitelist(enable: false, forDomain: domain)
-            }
+            blocker.whitelist(enable: false, url: currentURL)
         }
 
         let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .None) { _ in
-          //  guard let bvc = self as? PresentableVC else { return }
-          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[removeFromWhitelist]], on: bvc, from: urlBar)
+            guard let bvc = self as? PresentableVC else { return }
+            self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[removeFromWhitelist]], on: bvc, from: urlBar)
         }
         return [tpBlocking]
     }

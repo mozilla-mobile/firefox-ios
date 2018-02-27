@@ -53,7 +53,7 @@ enum BlockingStrength: String {
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
     var stats = TPPageStats()
-    static var whitelistedDomains = [String]()
+    static var whitelistedDomains = Set<String>()
 
     let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
     private weak var tab: Tab?
@@ -107,7 +107,8 @@ class ContentBlockerHelper {
 
         // Read the whitelist at startup
         if let list = readWhitelistFile() {
-            ContentBlockerHelper.whitelistedDomains = list
+            // Convert array to a Set()
+            ContentBlockerHelper.whitelistedDomains = Set(list.map { $0 })
         }
 
         removeOldListsByDateFromStore() {

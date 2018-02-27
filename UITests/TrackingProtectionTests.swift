@@ -128,7 +128,7 @@ class TrackingProtectionTests: KIFTestCase {
     func testWhitelist() {
         let expectation = self.expectation(description: "whitelisted")
         if #available(iOS 11.0, *) {
-            ContentBlockerHelper.testInstance!.whitelist(enable: true, forDomain: "ymail.com", completion: { expectation.fulfill() })
+            ContentBlockerHelper.testInstance!.whitelist(enable: true, url: URL(string: "http://ymail.com")!, completion: { expectation.fulfill() })
         }
         waitForExpectations(timeout: 10, handler: nil)
 
@@ -141,7 +141,7 @@ class TrackingProtectionTests: KIFTestCase {
 
         let expectation2 = self.expectation(description: "whitelist removed")
         if #available(iOS 11.0, *) {
-            ContentBlockerHelper.testInstance!.whitelist(enable: false, forDomain: "ymail.com", completion: { expectation2.fulfill() })
+            ContentBlockerHelper.testInstance!.whitelist(enable: false,  url: URL(string: "http://ymail.com")!, completion: { expectation2.fulfill() })
         }
         waitForExpectations(timeout: 10, handler: nil)
 
