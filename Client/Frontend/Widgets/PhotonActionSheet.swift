@@ -626,6 +626,8 @@ private class PhotonActionSheetCell: UITableViewCell {
             stackView.addArrangedSubview(disclosureIndicator)
         case .Switch:
             let image = action.isEnabled ? UIImage(named: "menu-Toggle-On") : UIImage(named: "menu-Toggle-Off")
+            toggleSwitch.isAccessibilityElement = true
+            toggleSwitch.accessibilityIdentifier = action.isEnabled ? "enabled" : "disabled"
             toggleSwitch.image = image
             stackView.addArrangedSubview(toggleSwitch)
         default:
