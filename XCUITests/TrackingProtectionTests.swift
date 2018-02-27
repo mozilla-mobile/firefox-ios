@@ -6,43 +6,41 @@ import XCTest
 
 class TrackingProtectionTests: BaseTestCase {
     // This test is to change the tracking protection to block known blockers
+
     func testTrackingProtection() {
-        navigator.goto(SettingsScreen)
-        let appSettingsTableView = app.tables["AppSettingsTableViewController.tableView"]
-        //Scroll the table view until Tracking Proection cell is visible
-        while !app.staticTexts["Tracking Protection"].exists {
-            appSettingsTableView.swipeUp()
-        }
-        appSettingsTableView.staticTexts["Tracking Protection"].tap()
+        navigator.goto(TrackingProtectionSettings)
 
-        //Check TP is enabled by default
-        XCTAssertTrue(app.tables.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
-        XCTAssertTrue(app.tables.switches["prefkey.trackingprotection.privatebrowsing"].isEnabled)
+        // Make sure TP is enabled by default
+        XCTAssertTrue(app.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
+        XCTAssertTrue(app.switches["prefkey.trackingprotection.privatebrowsing"].isEnabled)
 
-        //Select "Normal Browsing"
-        app.tables.switches["prefkey.trackingprotection.normalbrowsing"].tap()
-        XCTAssertTrue(app.tables.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
+        // Turn off TP in normal Browsing
+        app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
 
-        app.navigationBars["Tracking Protection"].buttons["Settings"].tap()
+        navigator.goto(BrowserTabMenu)
 
-        waitforExistence(app.navigationBars["Settings"].buttons["Done"])
-        app.navigationBars["Settings"]/*@START_MENU_TOKEN@*/.buttons["Done"]/*[[".buttons[\"Done\"]",".buttons[\"AppSettingsTableViewController.navigationItem.leftBarButtonItem\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
+        // Make sure its actually off
+        XCTAssertTrue(app.cells["Tracking Protection"].images["disabled"].exists)
 
-        app/*@START_MENU_TOKEN@*/.buttons["TabToolbar.menuButton"]/*[[".buttons[\"Menu\"]",".buttons[\"TabToolbar.menuButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        let settingsmenuitemCell = app.tables.cells["Settings"]
-        settingsmenuitemCell.tap()
+        // Switch to Private Browsing
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.goto(NewTabScreen)
+        navigator.goto(BrowserTabMenu)
 
-        let appSettingsTableView1 = app.tables["AppSettingsTableViewController.tableView"]
-        //Scroll the table view until Tracking Proection cell is visible
-        while !app.staticTexts["Tracking Protection"].exists {
-            appSettingsTableView1.swipeUp()
-        }
+        XCTAssertTrue(app.cells["Tracking Protection"].images["enabled"].exists, "Tracking Protection should be switch on in PBM")
 
-        appSettingsTableView1.staticTexts["Tracking Protection"].tap()
-        waitforExistence(app.tables.switches["prefkey.trackingprotection.normalbrowsing"])
+        // Turn off PBM
+        app.cells["Tracking Protection"].tap()
+        navigator.nowAt(BrowserTab)
 
-        //Check "Always On" is selected and other items are not selected
-        XCTAssertTrue(app.tables.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
-        XCTAssertTrue(app.tables.switches["prefkey.trackingprotection.privatebrowsing"].isEnabled)
+        navigator.toggleOn(!userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.goto(NewTabScreen)
+        navigator.goto(TrackingProtectionSettings)
+
+        // Make sure TP is off in both browsing modes.
+        XCTAssertEqual(app.switches["prefkey.trackingprotection.normalbrowsing"].value as! String, "0")
+        XCTAssertEqual(app.switches["prefkey.trackingprotection.privatebrowsing"].value as! String, "0")
     }
+
 }
+
