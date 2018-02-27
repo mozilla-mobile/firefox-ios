@@ -86,7 +86,7 @@ class ContentBlockerHelper {
     }
 
     static private var blockImagesRule: WKContentRuleList?
-    static private var heavyInitHasRunOnce = false
+    static var heavyInitHasRunOnce = false
 
     // Only set and used in UI test
     static weak var testInstance: ContentBlockerHelper?
@@ -333,7 +333,13 @@ extension ContentBlockerHelper {
                 self.loadJsonFromBundle(forResource: filename) { jsonString in
                     var str = jsonString
                     str.insert(contentsOf: self.whitelistAsJSON(), at: str.index(str.endIndex, offsetBy: -1))
-                    self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { _, _ in
+                    self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
+                        if let error = error {
+                            Sentry.shared.send(message: "Content blocker error", tag: .general, description: error.localizedDescription)
+                            assert(false)
+                        }
+                        assert(rule != nil)
+
                         result.fill()
                     }
                 }
