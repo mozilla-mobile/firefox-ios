@@ -392,8 +392,6 @@
 		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
 		CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */; };
 		CEFC984B1EC0DCF5008A3E48 /* TestBookmarksRepairRequestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFC983B1EC0DC60008A3E48 /* TestBookmarksRepairRequestor.swift */; };
-		D000662220472891009BA6F6 /* __firefox__.js in Resources */ = {isa = PBXBuildFile; fileRef = D000661320472890009BA6F6 /* __firefox__.js */; };
-		D0006624204728A8009BA6F6 /* TrackingProtectionStats.js in Resources */ = {isa = PBXBuildFile; fileRef = D0006623204728A8009BA6F6 /* TrackingProtectionStats.js */; };
 		D0131B4D1F3CF7D8000CDE86 /* SQLiteFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0131B4C1F3CF7D8000CDE86 /* SQLiteFavicons.swift */; };
 		D018F93E1F44A71A0098F8CA /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = D018F93D1F44A7190098F8CA /* Schema.swift */; };
 		D02816C21ECA5E2A00240CAA /* HistoryStateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */; };
@@ -5047,7 +5045,6 @@
 				E49943F71AE69EDD00BF9DE4 /* Intro.xcassets in Resources */,
 				3BC659591E5BA505006D560F /* top_sites.json in Resources */,
 				E4B7B7631A793CF20022C5E0 /* CharisSILI.ttf in Resources */,
-				D0006624204728A8009BA6F6 /* TrackingProtectionStats.js in Resources */,
 				EB54A8782028CE4000018880 /* disconnect-content.json in Resources */,
 				E4CD9F541A71506400318571 /* Reader.html in Resources */,
 				7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */,
@@ -5057,7 +5054,6 @@
 				E4B7B7611A793CF20022C5E0 /* CharisSILB.ttf in Resources */,
 				D37524871C6E8B5A00A5F6C2 /* topdomains.txt in Resources */,
 				E4B7B7621A793CF20022C5E0 /* CharisSILBI.ttf in Resources */,
-				D000662220472891009BA6F6 /* __firefox__.js in Resources */,
 				7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */,
 				E4B7B7861A793CF20022C5E0 /* FiraSans-UltraLight.ttf in Resources */,
 				2F44FB2C1A9D5D8500FD20CC /* Home.xcassets in Resources */,
