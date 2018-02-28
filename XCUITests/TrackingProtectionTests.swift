@@ -15,14 +15,13 @@ class TrackingProtectionTests: BaseTestCase {
         }
         appSettingsTableView.staticTexts["Tracking Protection"].tap()
 
-        //Check "Private Browsing" is selected and other items are not selected
-        XCTAssertFalse(app.tables.cells["Settings.TrackingProtectionOption.OnLabel"].isSelected)
-        XCTAssertTrue(app.tables.cells["Settings.TrackingProtectionOption.OnInPrivateBrowsingLabel"].isSelected)
-        //XCTAssertFalse(app.tables.cells["Never"].isSelected)
+        //Check TP is enabled by default
+        XCTAssertTrue(app.tables.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
+        XCTAssertTrue(app.tables.switches["prefkey.trackingprotection.privatebrowsing"].isEnabled)
 
         //Select "Normal Browsing"
-        app.tables.cells["Settings.TrackingProtectionOption.OnLabel"].tap()
-        XCTAssertTrue(app.tables.cells["Settings.TrackingProtectionOption.OnLabel"].isSelected)
+        app.tables.switches["prefkey.trackingprotection.normalbrowsing"].tap()
+        XCTAssertTrue(app.tables.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
 
         app.navigationBars["Tracking Protection"].buttons["Settings"].tap()
 
@@ -40,11 +39,10 @@ class TrackingProtectionTests: BaseTestCase {
         }
 
         appSettingsTableView1.staticTexts["Tracking Protection"].tap()
-        waitforExistence(app.tables.cells["Settings.TrackingProtectionOption.OnLabel"])
+        waitforExistence(app.tables.switches["prefkey.trackingprotection.normalbrowsing"])
 
         //Check "Always On" is selected and other items are not selected
-        XCTAssertTrue(app.tables.cells["Settings.TrackingProtectionOption.OnLabel"].isSelected)
-        XCTAssertFalse(app.tables.cells["Settings.TrackingProtectionOption.OnInPrivateBrowsingLabel"].isSelected)
-        //XCTAssertFalse(app.tables.cells["Never"].isSelected)
+        XCTAssertTrue(app.tables.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
+        XCTAssertTrue(app.tables.switches["prefkey.trackingprotection.privatebrowsing"].isEnabled)
     }
 }
