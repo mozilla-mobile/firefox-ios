@@ -82,13 +82,13 @@ extension BrowserViewController {
     }
 
     override var keyCommands: [UIKeyCommand]? {
-        let arrows = [
+        let overidesTextEditing = [
             UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
             UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand)),
             UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .command, action: #selector(goBackKeyCommand)),
             UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .command, action: #selector(goForwardKeyCommand)),
         ]
-        let others = [
+        let tabNavigation = [
             UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(reloadTabKeyCommand), discoverabilityTitle: Strings.ReloadPageTitle),
             UIKeyCommand(input: "[", modifierFlags: .command, action: #selector(goBackKeyCommand), discoverabilityTitle: Strings.BackTitle),
             UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(goForwardKeyCommand), discoverabilityTitle: Strings.ForwardTitle),
@@ -109,10 +109,12 @@ extension BrowserViewController {
             UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(gotoTabTray), discoverabilityTitle: Strings.ShowTabTrayFromTabKeyCodeTitle)
         ]
 
-        if urlBar.inOverlayMode {
-            return others
+        let isEditingText = tabManager.selectedTab?.isEditing ?? false
+
+        if isEditingText || urlBar.inOverlayMode {
+            return tabNavigation
         } else {
-            return others + arrows
+            return tabNavigation + overidesTextEditing
         }
     }
 }
