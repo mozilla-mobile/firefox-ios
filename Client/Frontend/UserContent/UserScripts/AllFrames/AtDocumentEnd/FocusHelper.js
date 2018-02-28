@@ -4,20 +4,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 (function() {
  "use strict";
- const focusHandler = (event) => {
-  const elementType = event.target.nodeName;
-  if (elementType === "INPUT" || elementType === "TEXTAREA") {
-    const eventType = "focus";
-    webkit.messageHandlers.focusHelper.postMessage({ eventType, elementType });
-  }
- };
-
- const blurHandler = (event) => {
-  const elementType = event.target.nodeName;
-  if (elementType === "INPUT" || elementType === "TEXTAREA") {
-    const eventType = "blur";
-    webkit.messageHandlers.focusHelper.postMessage({ eventType, elementType });
-  }
+ const createFormElementEventHandler = (eventType) => {
+  return (event) => {
+    const elementType = event.target.nodeName;
+    if (elementType === "INPUT" || elementType === "TEXTAREA" || event.target.isContentEditable) {
+      webkit.messageHandlers.focusHelper.postMessage({ eventType, elementType });
+    }
+  };
  };
 
  const options = {
@@ -26,6 +19,7 @@
  };
 
  const body = window.document.body;
- body.addEventListener("focus", focusHandler, options);
- body.addEventListener("blur", blurHandler, options);
+ ["focus", "blur"].forEach((eventType) => {
+  body.addEventListener(eventType, createFormElementEventHandler(eventType), options);
+ });
 })();
