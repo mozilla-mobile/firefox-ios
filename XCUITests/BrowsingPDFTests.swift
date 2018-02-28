@@ -91,8 +91,7 @@ class BrowsingPDFTests: BaseTestCase {
     func testPinPDFtoTopSites() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
-        navigator.browserPerformAction(.pinToTopSitesOption)
-        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.PinToTopSitesPAM)
         navigator.goto(NewTabScreen)
         waitforExistence(app.collectionViews.cells["TopSitesCell"].cells["pdf995"])
         XCTAssertTrue(app.collectionViews.cells["TopSitesCell"].cells["pdf995"].exists)
