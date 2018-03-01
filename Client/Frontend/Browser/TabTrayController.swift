@@ -573,6 +573,8 @@ extension TabTrayController: PresentingModalViewControllerDelegate {
 
 extension TabTrayController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
+        tabDataSource.isDragging = false
+
         // Redraw the cells representing the selected (and recently unselected) tabs.
         let tabs = tabDataSource.tabs
 
@@ -587,17 +589,21 @@ extension TabTrayController: TabManagerDelegate {
             .map { IndexPath(item: $0, section: 0) }
 
         assertIsMainThread("Changing selected tab is on main thread")
-        collectionView.reloadItems(at: updated)
+        collectionView?.performBatchUpdates({ _ in
+            self.collectionView.reloadItems(at: updated)
 
-        if !updated.isEmpty {
-            collectionView.scrollToItem(at: updated[0], at: [.centeredHorizontally, .centeredVertically], animated: true)
-        }
+            if !updated.isEmpty {
+                self.collectionView.scrollToItem(at: updated[0], at: [.centeredHorizontally, .centeredVertically], animated: true)
+            }
+        })
     }
 
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
+        tabDataSource.isDragging = false
     }
 
     func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {
+        tabDataSource.isDragging = false
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab) {
@@ -852,7 +858,7 @@ extension TabManagerDataSource: UICollectionViewDragDelegate {
 @available(iOS 11.0, *)
 extension TabManagerDataSource: UICollectionViewDropDelegate {
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = tabs.index(of: tab) else {
+        guard isDragging, let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = tabs.index(of: tab) else {
             return
         }
 
@@ -870,10 +876,10 @@ extension TabManagerDataSource: UICollectionViewDropDelegate {
             return UICollectionViewDropProposal(operation: .forbidden)
         }
 
-        // If the `isDragging` is not `true` by the time we get here, we've had other
-        // add/remove operations happen while the drag was going on. We must return a
+        // If the tab doesn't exist by the time we get here, we must return a
         // `.cancel` operation continuously until `isDragging` can be reset.
-        guard tabs.index(of: tab) != nil, isDragging else {
+        guard isDragging, tabs.index(of: tab) != nil else {
+            isDragging = false
             return UICollectionViewDropProposal(operation: .cancel)
         }
 
