@@ -7,7 +7,7 @@ import Shared
 import Deferred
 
 @available(iOS 11, *)
-extension ContentBlockerHelper : TabContentScript {
+extension ContentBlockerHelper: TabContentScript {
     class func name() -> String {
         return "TrackingProtectionStats"
     }
