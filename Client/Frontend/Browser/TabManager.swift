@@ -838,6 +838,11 @@ extension TabManager: WKNavigationDelegate {
     // Note the main frame JSContext (i.e. document, window) is not available yet.
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+
+        if #available(iOS 11, *) {
+            guard let tab = self[webView], let blocker = tab.contentBlocker as? ContentBlockerHelper else { return }
+            blocker.clearPageStats()
+        }
     }
 
     // The main frame JSContext is available, and DOM parsing has begun.

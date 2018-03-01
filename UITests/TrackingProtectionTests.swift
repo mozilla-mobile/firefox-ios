@@ -7,6 +7,37 @@ import Storage
 import EarlGrey
 @testable import Client
 
+func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
+    EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
+    EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+    EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+
+    let dialogAppeared = GREYCondition(name: "Wait for JS dialog") {
+        var errorOrNil: NSError?
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))
+            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
+            .assert(grey_notNil(), error: &errorOrNil)
+        let success = errorOrNil == nil
+        return success
+    }
+    let success = dialogAppeared?.wait(withTimeout: 10)
+    GREYAssertTrue(success!, reason: "Failed to display JS dialog")
+
+    if shouldBlockImage {
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("image not loaded."))
+            .assert(grey_notNil())
+    } else {
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("image loaded."))
+            .assert(grey_notNil())
+    }
+
+    EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))
+        .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
+        .assert(grey_enabled())
+        .perform((grey_tap()))
+}
+
+@available(iOS 11.0, *)
 class TrackingProtectionTests: KIFTestCase {
     
     private var webRoot: String!
@@ -16,56 +47,31 @@ class TrackingProtectionTests: KIFTestCase {
         webRoot = SimplePageServer.start()
         BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-        BrowserUtils.resetToAboutHome()
-        BrowserUtils.clearPrivateData()
+
+        // Check TP is ready manually as NSPredicate-based expectation on a primitive type doesn't work.
+        let setup = self.expectation(description: "setup")
+        func checkIsSetup() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                if ContentBlockerHelper.heavyInitHasRunOnce {
+                    setup.fulfill()
+                    return
+                }
+                checkIsSetup()
+            }
+        }
+        checkIsSetup()
+        wait(for: [setup], timeout: 5)
     }
 
     private func checkTrackingProtection(isBlocking: Bool) {
-        if #available(iOS 11.0, *) {
-            let statsBefore = ContentBlockerHelper.testInstance!.stats
             let url = "\(webRoot!)/tracking-protection-test.html"
-            TrackingProtectionTests.checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
+            checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
             let statsAfter = ContentBlockerHelper.testInstance!.stats
             if isBlocking {
-               GREYAssertTrue(statsBefore.socialCount < statsAfter.socialCount, reason: "Stats should increment")
+               GREYAssertTrue(statsAfter.socialCount > 0, reason: "Stats should increment")
             } else {
-                GREYAssertTrue(statsBefore.socialCount == statsAfter.socialCount, reason: "Stats should not increment")
+                GREYAssertTrue(statsAfter.socialCount == 0, reason: "Stats should not increment")
             }
-        }
-    }
-
-    public static func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
-        
-        let dialogAppeared = GREYCondition(name: "Wait for JS dialog") {
-            var errorOrNil: NSError?
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))
-                .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
-                .assert(grey_notNil(), error: &errorOrNil)
-            let success = errorOrNil == nil
-            return success
-        }
-        let success = dialogAppeared?.wait(withTimeout: 10)
-        GREYAssertTrue(success!, reason: "Failed to display JS dialog")
-        
-        if shouldBlockImage {
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("image not loaded."))
-                .assert(grey_notNil())
-        } else {
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("image loaded."))
-            .assert(grey_notNil())
-        }
-        
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
-            .assert(grey_enabled())
-            .perform((grey_tap()))
     }
     
     func openTPSetting() {
@@ -126,31 +132,30 @@ class TrackingProtectionTests: KIFTestCase {
     }
 
     func testWhitelist() {
-        let expectation = self.expectation(description: "whitelisted")
-        if #available(iOS 11.0, *) {
-            ContentBlockerHelper.testInstance!.whitelist(enable: true, forDomain: "ymail.com", completion: { expectation.fulfill() })
-        }
-        waitForExpectations(timeout: 10, handler: nil)
-
-        openTPSetting()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(true))
-        closeTPSetting()
-
-        // The image from ymail.com would normally be blocked, but in this case it is whitelisted
-        checkTrackingProtection(isBlocking: false)
-
-        let expectation2 = self.expectation(description: "whitelist removed")
-        if #available(iOS 11.0, *) {
-            ContentBlockerHelper.testInstance!.whitelist(enable: false, forDomain: "ymail.com", completion: { expectation2.fulfill() })
+        let clear = self.expectation(description: "clearing")
+        ContentBlockerHelper.testInstance!.clearWhitelist() {
+            clear.fulfill()
         }
         waitForExpectations(timeout: 10, handler: nil)
 
         checkTrackingProtection(isBlocking: true)
 
-        openTPSetting()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(false))
-        closeTPSetting()
+        let expectation = self.expectation(description: "whitelisted")
+        ContentBlockerHelper.testInstance!.whitelist(enable: true, url: URL(string: "http://ymail.com")!) {
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 10, handler: nil)
 
+        // The image from ymail.com would normally be blocked, but in this case it is whitelisted
+        checkTrackingProtection(isBlocking: false)
+
+        let expectation2 = self.expectation(description: "whitelist removed")
+        ContentBlockerHelper.testInstance!.whitelist(enable: false,  url: URL(string: "http://ymail.com")!) {
+            expectation2.fulfill()
+        }
+        waitForExpectations(timeout: 10, handler: nil)
+
+        checkTrackingProtection(isBlocking: true)
     }
     
     func testPrivateTabPageTrackingProtection() {
