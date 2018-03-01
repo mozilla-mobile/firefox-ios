@@ -24,7 +24,7 @@ class NoImageModeTests: KIFTestCase {
 
     private func checkHiding(isOn: Bool) {
         let url = "\(webRoot!)/hide-images-test.html"
-        TrackingProtectionTests.checkIfImageLoaded(url: url, shouldBlockImage: isOn)
+        checkIfImageLoaded(url: url, shouldBlockImage: isOn)
         BrowserUtils.resetToAboutHome()
     }
 
