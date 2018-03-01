@@ -4229,6 +4229,7 @@
 				7BEB64431C7345600092C02E /* Sources */,
 				7BEB64461C7345600092C02E /* Frameworks */,
 				7BEB64471C7345600092C02E /* Resources */,
+				E4A69F612048AFEA00D9017B /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -5136,6 +5137,21 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 			);
 			name = "Copy Carthage Dependencies";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		E4A69F612048AFEA00D9017B /* Copy Carthage Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/MappaMundi.framework",
+			);
+			name = "Copy Carthage Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
