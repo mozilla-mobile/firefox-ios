@@ -86,6 +86,7 @@ extension BrowserViewController {
             return
         }
 
+        searchController.becomeFirstResponder()
         searchController.handleKeyCommands(sender: sender)
     }
 
@@ -93,7 +94,6 @@ extension BrowserViewController {
     override var keyCommands: [UIKeyCommand]? {
         let overlayCommands = [
             UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(awesomeBarItemKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: [], action: #selector(awesomeBarItemKeyCommand(sender:))),
         ]
         let overidesTextEditing = [
             UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),

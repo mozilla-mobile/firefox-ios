@@ -469,6 +469,14 @@ extension SearchViewController {
         tableView.selectRow(at: next, animated: true, scrollPosition: .middle)
     }
 
+    override var keyCommands: [UIKeyCommand]? {
+        let overlayCommands = [
+            UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(handleKeyCommands(sender:))),
+            UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: [], action: #selector(handleKeyCommands(sender:))),
+            UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(didSelectTableCellKeyCommand)),
+        ]
+        return overlayCommands
+    }
     
 }
 
