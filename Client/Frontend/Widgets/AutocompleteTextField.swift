@@ -247,8 +247,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         removeCompletion()
 
         let isAtEnd = selectedTextRange?.start == endOfDocument
-        let isEmpty = lastReplacement?.isEmpty ?? true
-        if !isEmpty, isAtEnd, markedTextRange == nil {
+        let isKeyboardReplacingText = lastReplacement != nil
+        if isKeyboardReplacingText, isAtEnd, markedTextRange == nil {
             notifyTextChanged?()
         } else {
             hideCursor = false
@@ -264,7 +264,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func deleteBackward() {
-        lastReplacement = nil
+        lastReplacement = ""
         hideCursor = false
         if isSelectionActive {
             removeCompletion()
