@@ -46,6 +46,8 @@ protocol SearchViewControllerDelegate: class {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
     func searchViewController(_ searchViewController: SearchViewController, didLongPressSuggestion suggestion: String)
     func presentSearchSettingsController()
+    func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
+    func searchViewControllerDidFinishHighlighting(_ searchViewController: SearchViewController)
 }
 
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
@@ -420,6 +422,17 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
         return SearchListSection.Count
     }
+
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        guard let section = SearchListSection.init(rawValue: indexPath.section) else {
+            return
+        }
+
+        if section == .bookmarksAndHistory,
+            let suggestion = data[indexPath.item] {
+            searchDelegate?.searchViewController(self, didHighlightText: suggestion.url, search: false)
+        }
+    }
 }
 
 extension SearchViewController {
@@ -429,9 +442,10 @@ extension SearchViewController {
     }
 
     func handleKeyCommands(sender: UIKeyCommand) {
+        let initialSection = SearchListSection.bookmarksAndHistory.rawValue
         guard let current = tableView.indexPathForSelectedRow else {
             if sender.input == UIKeyInputDownArrow {
-                tableView.selectRow(at: IndexPath(item: 0, section: 0), animated: true, scrollPosition: .top)
+                tableView.selectRow(at: IndexPath(item: 0, section: initialSection), animated: false, scrollPosition: .top)
             }
             return
         }
@@ -443,9 +457,9 @@ extension SearchViewController {
             // we're going down, we should check if we've reached the first item in this section.
             if (current.item == 0) {
                 // We have, so check if we can decrement the section.
-                if current.section == 0 {
+                if current.section == initialSection {
                     // We've reached the first item in the first section.
-                    //
+                    searchDelegate?.searchViewControllerDidFinishHighlighting(self)
                 } else {
                     nextSection -= 1
                     nextItem = tableView(tableView, numberOfRowsInSection: nextSection) - 1
@@ -466,7 +480,16 @@ extension SearchViewController {
             }
         }
         let next = IndexPath(item: nextItem, section: nextSection)
-        tableView.selectRow(at: next, animated: true, scrollPosition: .middle)
+        self.tableView(tableView, didHighlightRowAt: next)
+        tableView.selectRow(at: next, animated: false, scrollPosition: .middle)
+    }
+
+    func didSelectTableCellKeyCommand() {
+        guard let current = tableView.indexPathForSelectedRow else {
+            return
+        }
+
+        tableView(tableView, didSelectRowAtIndexPath: current)
     }
 
     override var keyCommands: [UIKeyCommand]? {
