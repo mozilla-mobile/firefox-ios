@@ -9,7 +9,8 @@ const isButton = (element) => {
     return false;
   }
 
-  return (element.type == "BUTTON" || element.type == "SUBMIT");
+  const type = element.type.toUpperCase();
+  return (type == "BUTTON" || type == "SUBMIT" || type == "FILE");
 };
 
 const handler = (event) => {
