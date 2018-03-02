@@ -60,7 +60,7 @@ class TabManager: NSObject {
 
     fileprivate(set) var tabs = [Tab]()
     fileprivate var _selectedIndex = -1
-    fileprivate let navDelegate: TabManagerNavDelegate
+    fileprivate var navDelegate: TabManagerNavDelegate!
     fileprivate(set) var isRestoring = false
 
     // A WKWebViewConfiguration used for normal tabs
@@ -101,10 +101,11 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
 
         self.prefs = prefs
-        self.navDelegate = TabManagerNavDelegate()
         self.imageStore = imageStore
         self.tabEventHandlers = TabEventHandlers.create(with: prefs)
         super.init()
+
+        self.navDelegate = TabManagerNavDelegate(self)
 
         addNavigationDelegate(self)
 
@@ -915,6 +916,12 @@ extension TabManager {
 class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     fileprivate var delegates = WeakList<WKNavigationDelegate>()
 
+    private weak var tabManager: TabManager!
+
+    init(_ tabManager: TabManager) {
+        self.tabManager = tabManager
+    }
+
     func insert(_ delegate: WKNavigationDelegate) {
         delegates.insert(delegate)
     }
@@ -986,8 +993,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
             }
 
             if #available(iOS 11, *), res == .allow,
-                let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-                let tab = appDelegate.browserViewController.tabManager[webView],
+                let tab = tabManager[webView],
                 let contentBlocker = tab.contentBlocker as? ContentBlockerHelper
             {
                 contentBlocker.pageLoad(navigationAction: navigationAction)
@@ -1008,8 +1014,8 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
             })
         }
 
-        if res == .allow, let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            let tab = appDelegate.browserViewController.tabManager[webView]
+        if res == .allow {
+            let tab = tabManager[webView]
             tab?.mimeType = navigationResponse.response.mimeType
         }
 
