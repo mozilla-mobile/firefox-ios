@@ -1640,6 +1640,8 @@ extension BrowserViewController: TabDelegate {
                 tab.addContentScript(blocker, name: ContentBlockerHelper.name())
             }
         }
+
+        tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
