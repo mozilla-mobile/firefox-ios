@@ -86,9 +86,9 @@ extension PhotonActionSheetProtocol {
                 NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
             }
 
-            let trackingProtectionEnabled = ContentBlockerHelper.isActivated(self.profile.prefs, tabManager: self.tabManager)
+            let trackingProtectionEnabled = ContentBlockerHelper.isTrackingProtectionActive(tabManager: self.tabManager)
             let trackingProtection = PhotonActionSheetItem(title: Strings.TPMenuTitle, iconString: "menu-TrackingProtection", isEnabled: trackingProtectionEnabled, accessory: .Switch) { action in
-                ContentBlockerHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
+                ContentBlockerHelper.toggleTrackingProtectionMode(for: self.profile.prefs, tabManager: self.tabManager)
             }
             items.append(contentsOf: [trackingProtection, noImageMode])
         }
