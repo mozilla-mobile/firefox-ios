@@ -422,6 +422,56 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 }
 
+extension SearchViewController {
+
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
+    func handleKeyCommands(sender: UIKeyCommand) {
+        guard let current = tableView.indexPathForSelectedRow else {
+            if sender.input == UIKeyInputDownArrow {
+                tableView.selectRow(at: IndexPath(item: 0, section: 0), animated: true, scrollPosition: .top)
+            }
+            return
+        }
+
+        let currentSectionItemsCount = tableView(tableView, numberOfRowsInSection: current.section)
+        var nextSection = current.section
+        var nextItem = current.item
+        if sender.input == UIKeyInputUpArrow {
+            // we're going down, we should check if we've reached the first item in this section.
+            if (current.item == 0) {
+                // We have, so check if we can decrement the section.
+                if current.section == 0 {
+                    // We've reached the first item in the first section.
+                    //
+                } else {
+                    nextSection -= 1
+                    nextItem = tableView(tableView, numberOfRowsInSection: nextSection) - 1
+                }
+            } else {
+                nextItem -= 1
+            }
+        } else if sender.input == UIKeyInputDownArrow {
+            if current.item == currentSectionItemsCount - 1 {
+                if current.section == tableView.numberOfSections - 1 {
+                    return
+                } else {
+                    nextSection += 1
+                    nextItem = 0
+                }
+            } else {
+                nextItem += 1
+            }
+        }
+        let next = IndexPath(item: nextItem, section: nextSection)
+        tableView.selectRow(at: next, animated: true, scrollPosition: .middle)
+    }
+
+    
+}
+
 extension SearchViewController: SuggestionCellDelegate {
     fileprivate func suggestionCell(_ suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String) {
         // Assume that only the default search engine can provide search suggestions.

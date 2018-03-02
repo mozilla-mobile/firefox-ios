@@ -81,7 +81,20 @@ extension BrowserViewController {
         showTabTray()
     }
 
+    @objc private func awesomeBarItemKeyCommand(sender: UIKeyCommand) {
+        guard let searchController = self.searchController else {
+            return
+        }
+
+        searchController.handleKeyCommands(sender: sender)
+    }
+
+
     override var keyCommands: [UIKeyCommand]? {
+        let overlayCommands = [
+            UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(awesomeBarItemKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: [], action: #selector(awesomeBarItemKeyCommand(sender:))),
+        ]
         let overidesTextEditing = [
             UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
             UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand)),
@@ -111,7 +124,9 @@ extension BrowserViewController {
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
 
-        if isEditingText || urlBar.inOverlayMode {
+        if urlBar.inOverlayMode {
+            return tabNavigation + overlayCommands
+        } else if isEditingText {
             return tabNavigation
         } else {
             return tabNavigation + overidesTextEditing
