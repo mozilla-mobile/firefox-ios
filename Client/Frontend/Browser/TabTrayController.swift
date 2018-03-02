@@ -1066,14 +1066,14 @@ class TrayToolbar: UIView {
 
         addTabButton.snp.makeConstraints { make in
             make.top.equalTo(self)
-            make.right.equalTo(self).offset(-sideOffset)
+            make.trailing.equalTo(self).offset(-sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
 
         addSubview(maskButton)
         maskButton.snp.makeConstraints { make in
             make.top.equalTo(self)
-            make.left.equalTo(self).offset(sideOffset)
+            make.leading.equalTo(self).offset(sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
 
