@@ -63,15 +63,23 @@ class TrackingProtectionTests: KIFTestCase {
         wait(for: [setup], timeout: 5)
     }
 
+    var currentTPStats: TPPageStats?
+    @objc private func onTPPageStatsChanged(notification: NSNotification) {
+        let tab = notification.object as! Tab
+        let cb = tab.contentBlocker as! ContentBlockerHelper
+        currentTPStats = cb.stats
+    }
+
     private func checkTrackingProtection(isBlocking: Bool) {
-            let url = "\(webRoot!)/tracking-protection-test.html"
-            checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
-            let statsAfter = ContentBlockerHelper.testInstance!.stats
-            if isBlocking {
-               GREYAssertTrue(statsAfter.socialCount > 0, reason: "Stats should increment")
-            } else {
-                GREYAssertTrue(statsAfter.socialCount == 0, reason: "Stats should not increment")
-            }
+        NotificationCenter.default.addObserver(self, selector: #selector(onTPPageStatsChanged), name: .TPPageStatsChanged, object: nil)
+        let url = "\(webRoot!)/tracking-protection-test.html"
+        checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
+        let statsAfter = currentTPStats!
+        if isBlocking {
+           GREYAssertTrue(statsAfter.socialCount > 0, reason: "Stats should increment")
+        } else {
+            GREYAssertTrue(statsAfter.socialCount == 0, reason: "Stats should not increment")
+        }
     }
     
     func openTPSetting() {
@@ -132,14 +140,15 @@ class TrackingProtectionTests: KIFTestCase {
     }
 
     func testWhitelist() {
-        ContentBlockerHelper.testInstance!.clearWhitelist()
+        ContentBlockerHelper.clearWhitelist()
         checkTrackingProtection(isBlocking: true)
 
-        ContentBlockerHelper.testInstance!.whitelist(enable: true, url: URL(string: "http://ymail.com")!)
+        let url = URL(string: "http://127.0.0.1")!
+        ContentBlockerHelper.whitelist(enable: true, url: url)
         // The image from ymail.com would normally be blocked, but in this case it is whitelisted
         checkTrackingProtection(isBlocking: false)
 
-        ContentBlockerHelper.testInstance!.whitelist(enable: false,  url: URL(string: "http://ymail.com")!)
+        ContentBlockerHelper.whitelist(enable: false,  url: url)
         checkTrackingProtection(isBlocking: true)
     }
     

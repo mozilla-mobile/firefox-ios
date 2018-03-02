@@ -54,11 +54,15 @@ enum BlockingStrength: String {
 
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
-    var stats = TPPageStats()
+    var stats = TPPageStats() {
+        didSet {
+            NotificationCenter.default.post(name: .TPPageStatsChanged, object: tab)
+        }
+    }
     static var whitelistedDomains = Set<String>()
 
     let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
-    private weak var tab: Tab?
+    weak var tab: Tab?
     private(set) var userPrefs: Prefs?
 
     var isUserEnabled: Bool? {
@@ -91,16 +95,9 @@ class ContentBlockerHelper {
     static private var blockImagesRule: WKContentRuleList?
     static var heavyInitHasRunOnce = false
 
-    // Only set and used in UI test
-    static weak var testInstance: ContentBlockerHelper?
-
     init(tab: Tab, profile: Profile) {
         self.tab = tab
         self.userPrefs = profile.prefs
-
-        if AppConstants.IsRunningTest {
-            ContentBlockerHelper.testInstance = self
-        }
 
         if ContentBlockerHelper.heavyInitHasRunOnce {
             return

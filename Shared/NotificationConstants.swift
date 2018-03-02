@@ -50,4 +50,6 @@ extension Notification.Name {
     public static let FaviconDidLoad = Notification.Name("FaviconDidLoad")
 
     public static let ReachabilityStatusChanged = Notification.Name("ReachabilityStatusChanged")
+
+    public static let TPPageStatsChanged = Notification.Name("TPPageStatsChanged")
 }

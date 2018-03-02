@@ -297,7 +297,7 @@ extension PhotonActionSheetProtocol {
         let statList = [totalCount, adCount, analyticsCount, socialCount, contentCount]
 
         let addToWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionDisableTitle, iconString: "menu-TrackingProtection-Off") { _ in
-                blocker.whitelist(enable: true, url: currentURL)
+                ContentBlockerHelper.whitelist(enable: true, url: currentURL)
         }
         // when tracking protection is on and content was blocked
         let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .None) { _ in
@@ -309,12 +309,12 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     private func menuActionsForWhitelistedSite(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
+        guard let currentURL = tab.url else {
             return []
         }
 
         let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionWhiteListRemove, iconString: "menu-TrackingProtection") { _ in
-            blocker.whitelist(enable: false, url: currentURL)
+            ContentBlockerHelper.whitelist(enable: false, url: currentURL)
         }
 
         let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .None) { _ in
