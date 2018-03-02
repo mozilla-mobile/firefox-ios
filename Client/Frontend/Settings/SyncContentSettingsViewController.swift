@@ -101,7 +101,7 @@ class DeviceNameSetting: StringSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        textField.textAlignment = .left
+        textField.textAlignment = .natural
     }
 
     func settingIsValid(value: String?) -> Bool {
