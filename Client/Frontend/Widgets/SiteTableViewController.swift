@@ -35,7 +35,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         titleLabel.textColor = SiteTableViewControllerUX.HeaderTextColor
-        titleLabel.textAlignment = .left
 
         addSubview(topBorder)
         addSubview(bottomBorder)
