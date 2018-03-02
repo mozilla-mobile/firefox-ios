@@ -985,6 +985,14 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
                 })
             }
 
+            if #available(iOS 11, *), res == .allow,
+                let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+                let tab = appDelegate.browserViewController.tabManager[webView],
+                let contentBlocker = tab.contentBlocker as? ContentBlockerHelper
+            {
+                contentBlocker.pageLoad(navigationAction: navigationAction)
+            }
+
             decisionHandler(res)
     }
 

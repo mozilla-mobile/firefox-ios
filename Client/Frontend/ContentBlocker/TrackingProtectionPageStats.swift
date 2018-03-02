@@ -45,10 +45,6 @@ class TPStatsBlocklistChecker {
 
     private var blockLists = TPStatsBlocklists()
 
-    func updateWhitelistedDomains(_ domains: [String]) {
-        blockLists.updateWhitelistedDomains(domains)
-    }
-
     func isBlocked(url: URL, isStrictMode: Bool) -> BlocklistName? {
         let enabledLists = BlocklistName.forStrictMode(isOn: isStrictMode)
         return blockLists.urlIsInList(url).flatMap { return enabledLists.contains($0) ? $0 : nil }
@@ -75,7 +71,6 @@ fileprivate class TPStatsBlocklists {
     }
 
     private var blockRules = [Rule]()
-    private var whitelisted = [NSRegularExpression]()
 
     enum LoadType {
         case all
@@ -85,14 +80,6 @@ fileprivate class TPStatsBlocklists {
     enum ResourceType {
         case all
         case font
-    }
-
-    func updateWhitelistedDomains(_ domains: [String]) {
-        if domains.isEmpty {
-            whitelisted.removeAll()
-            return
-        }
-        whitelisted = domains.flatMap { wildcardDomainToRegex(domain: "*" + $0) }
     }
 
     init() {
@@ -167,16 +154,6 @@ fileprivate class TPStatsBlocklists {
                 for domainRegex in (rule.domainExceptions ?? []) {
                     if domainRegex.firstMatch(in: resourceString, options: [], range: resourceRange) != nil {
                         continue domainSearch
-                    }
-                }
-
-                // Check the whitelist.
-                if let baseDomain = url.baseDomain {
-                    let range = NSRange(location: 0, length: baseDomain.count)
-                    for ignoreDomain in whitelisted {
-                        if ignoreDomain.firstMatch(in: baseDomain , options: [], range: range) != nil {
-                            return nil
-                        }
                     }
                 }
 

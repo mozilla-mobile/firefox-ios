@@ -330,7 +330,7 @@ extension PhotonActionSheetProtocol {
             return []
         }
 
-        if blocker.stats.total == 0, blocker.isEnabled, !blocker.isURLWhitelisted(url: currentURL) {
+        if blocker.stats.total == 0, blocker.isEnabled, !ContentBlockerHelper.isWhitelisted(url: currentURL) {
             // When ad blocking is enabled but no content was blocked on the page
             return menuActionsForNotBlocking()
         } else if !blocker.isEnabled {
@@ -339,7 +339,7 @@ extension PhotonActionSheetProtocol {
         } else if blocker.stats.total > 0 {
             // When tracking protection is enabled and content is blocked on the page
             return menuActionsForTrackingProtectionEnabled(for: tab, presentingOn: urlBar)
-        } else if blocker.isEnabled, blocker.isURLWhitelisted(url: currentURL) {
+        } else if blocker.isEnabled, ContentBlockerHelper.isWhitelisted(url: currentURL) {
             // When tracking protection is enabled but the site is in the whitelist
             return menuActionsForWhitelistedSite(for: tab, presentingOn: urlBar)
         }

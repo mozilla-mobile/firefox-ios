@@ -6,6 +6,10 @@ import WebKit
 import Shared
 import Deferred
 
+extension Notification.Name {
+    fileprivate static let ContentBlockerPrefsChanged = Notification.Name("ContentBlockerPrefsChanged")
+}
+
 enum BlocklistName: String {
     case advertising = "disconnect-advertising"
     case analytics = "disconnect-analytics"
@@ -41,14 +45,12 @@ struct NoImageModeDefaults {
     static let ScriptName = "images"
 }
 
-
 enum BlockingStrength: String {
     case basic
     case strict
 
     static let allOptions: [BlockingStrength] = [.basic, .strict]
 }
-
 
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
@@ -65,6 +67,7 @@ class ContentBlockerHelper {
             tab?.reload()
         }
     }
+
     var isEnabled: Bool {
         if let enabled = isUserEnabled {
             return enabled
@@ -113,9 +116,9 @@ class ContentBlockerHelper {
 
         removeOldListsByDateFromStore() {
             self.removeOldListsByNameFromStore() {
-                self.compileListsNotInStore{
+                self.compileListsNotInStore {
                     ContentBlockerHelper.heavyInitHasRunOnce = true
-                    self.addActiveRulesToTab()
+                    self.setupTabTrackingProtection(forUrl: self.tab?.webView?.url)
                 }
             }
         }
@@ -128,12 +131,13 @@ class ContentBlockerHelper {
     }
 
     func setupForWebView() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTab), name: .ContentBlockerUpdateNeeded, object: nil)
-        addActiveRulesToTab()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTab), name: .ContentBlockerPrefsChanged, object: nil)
+        setupTabTrackingProtection(forUrl: tab?.webView?.url)
     }
 
-    static func prefsChanged() {
-        NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
+    class func prefsChanged() {
+        // This class func needs to notify all the active instances of ContentBlockerHelper to update.
+        NotificationCenter.default.post(name: .ContentBlockerPrefsChanged, object: nil)
     }
 
     deinit {
@@ -141,7 +145,7 @@ class ContentBlockerHelper {
     }
 
     @objc func updateTab() {
-        addActiveRulesToTab()
+        setupTabTrackingProtection(forUrl: tab?.webView?.url)
     }
 
     // If a user had set a pref for Tracking Protection outside of the previous defaults then make sure to honor those settings
@@ -160,14 +164,23 @@ class ContentBlockerHelper {
         }
     }
 
-    private func addActiveRulesToTab() {
+    private var isTPInstalledForTab = false
+
+    // Function to install or remove TP for a tab, if a main doc URL is available on the tab, it can be checked for whitelisting.
+    func setupTabTrackingProtection(forUrl url: URL?) {
         if !ContentBlockerHelper.heavyInitHasRunOnce {
             return
         }
 
+        let isInstalling = isEnabled && (url != nil && !ContentBlockerHelper.isWhitelisted(url: url!))
+        if isInstalling == isTPInstalledForTab {
+            return
+        }
+        isTPInstalledForTab = isInstalling
+
         removeTrackingProtection()
 
-        guard isEnabled else {
+        if !isInstalling {
             return
         }
 
@@ -330,10 +343,8 @@ extension ContentBlockerHelper {
                     result.fill()
                     return
                 }
-                self.loadJsonFromBundle(forResource: filename) { jsonString in
-                    var str = jsonString
-                    str.insert(contentsOf: self.whitelistAsJSON(), at: str.index(str.endIndex, offsetBy: -1))
-                    self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
+                self.loadJsonFromBundle(forResource: filename) { json in
+                    self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: json) { rule, error in
                         if let error = error {
                             Sentry.shared.send(message: "Content blocker error", tag: .general, description: error.localizedDescription)
                             assert(false)
@@ -352,4 +363,3 @@ extension ContentBlockerHelper {
         }
     }
 }
-

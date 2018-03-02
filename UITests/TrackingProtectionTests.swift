@@ -132,29 +132,14 @@ class TrackingProtectionTests: KIFTestCase {
     }
 
     func testWhitelist() {
-        let clear = self.expectation(description: "clearing")
-        ContentBlockerHelper.testInstance!.clearWhitelist() {
-            clear.fulfill()
-        }
-        waitForExpectations(timeout: 10, handler: nil)
-
+        ContentBlockerHelper.testInstance!.clearWhitelist()
         checkTrackingProtection(isBlocking: true)
 
-        let expectation = self.expectation(description: "whitelisted")
-        ContentBlockerHelper.testInstance!.whitelist(enable: true, url: URL(string: "http://ymail.com")!) {
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 10, handler: nil)
-
+        ContentBlockerHelper.testInstance!.whitelist(enable: true, url: URL(string: "http://ymail.com")!)
         // The image from ymail.com would normally be blocked, but in this case it is whitelisted
         checkTrackingProtection(isBlocking: false)
 
-        let expectation2 = self.expectation(description: "whitelist removed")
-        ContentBlockerHelper.testInstance!.whitelist(enable: false,  url: URL(string: "http://ymail.com")!) {
-            expectation2.fulfill()
-        }
-        waitForExpectations(timeout: 10, handler: nil)
-
+        ContentBlockerHelper.testInstance!.whitelist(enable: false,  url: URL(string: "http://ymail.com")!)
         checkTrackingProtection(isBlocking: true)
     }
     

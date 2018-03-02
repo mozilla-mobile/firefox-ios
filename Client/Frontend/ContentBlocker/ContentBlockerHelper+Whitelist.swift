@@ -17,17 +17,15 @@ extension ContentBlockerHelper {
         return dir.appendingPathComponent("whitelist")
     }
 
-    // Get the whitelist domain array as a JSON fragment that can be inserted at the end of a blocklist.
-    func whitelistAsJSON() -> String {
-        if ContentBlockerHelper.whitelistedDomains.isEmpty {
-            return ""
+    func pageLoad(navigationAction: WKNavigationAction) {
+        guard let url = navigationAction.request.mainDocumentURL else {
+            return
         }
-        // Note that * is added to the front of domains, so foo.com becomes *foo.com
-        let list = "'*" + ContentBlockerHelper.whitelistedDomains.joined(separator: "','*") + "'"
-        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'unless-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
+        
+        setupTabTrackingProtection(forUrl: url)
     }
 
-    func whitelist(enable: Bool, url: URL, completion: (() -> Void)? = nil) {
+    func whitelist(enable: Bool, url: URL) {
         guard let domain = url.baseDomain else { return }
         if enable {
             ContentBlockerHelper.whitelistedDomains.insert(domain)
@@ -35,19 +33,10 @@ extension ContentBlockerHelper {
             ContentBlockerHelper.whitelistedDomains.remove(domain)
         }
 
-        updateWhitelist(completion: completion)
+        updateWhitelist()
     }
 
-    private func updateWhitelist(completion: (() -> Void)?) {
-        TPStatsBlocklistChecker.shared.updateWhitelistedDomains(Array(ContentBlockerHelper.whitelistedDomains))
-
-        removeAllRulesInStore {
-            self.compileListsNotInStore {
-                NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
-                completion?()
-            }
-        }
-
+    private func updateWhitelist() {
         guard let fileURL = ContentBlockerHelper.whitelistFileURL() else { return }
         if ContentBlockerHelper.whitelistedDomains.isEmpty {
             try? FileManager.default.removeItem(at: fileURL)
@@ -62,7 +51,7 @@ extension ContentBlockerHelper {
         }
     }
 
-    func isURLWhitelisted(url: URL) -> Bool {
+    static func isWhitelisted(url: URL) -> Bool {
         guard let domain = url.baseDomain, !domain.isEmpty else {
             return false
         }
@@ -79,8 +68,8 @@ extension ContentBlockerHelper {
         return nil
     }
 
-    func clearWhitelist(completion: (() -> Void)? = nil) {
+    func clearWhitelist() {
         ContentBlockerHelper.whitelistedDomains = Set<String>()
-        updateWhitelist(completion: completion)
+        updateWhitelist()
     }
 }
