@@ -132,13 +132,7 @@ class BrowserViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
-        displayedPopoverController?.dismiss(animated: true) {
-            self.displayedPopoverController = nil
-        }
-        
-        if let _ = self.presentedViewController as? PhotonActionSheet {
-            self.presentedViewController?.dismiss(animated: true, completion: nil)
-        }
+        dismissVisibleMenus()
 
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.updateMinimumZoom()
@@ -259,6 +253,13 @@ class BrowserViewController: UIViewController {
                 self.setNeedsStatusBarAppearanceUpdate()
             }
             }, completion: nil)
+    }
+
+    func dismissVisibleMenus() {
+        displayedPopoverController?.dismiss(animated: true)
+        if let _ = self.presentedViewController as? PhotonActionSheet {
+            self.presentedViewController?.dismiss(animated: true, completion: nil)
+        }
     }
 
     func SELappDidEnterBackgroundNotification() {
@@ -1466,7 +1467,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
-        displayedPopoverController?.dismiss(animated: true)
+        dismissVisibleMenus()
     }
 }
 
