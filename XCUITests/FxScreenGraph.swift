@@ -148,9 +148,8 @@ class Action {
     static let AcceptClearPrivateData = "AcceptClearPrivateData"
 
     static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
-    static let ToggleTrackingProtectionSettingAlwaysOn = "ToggleTrackingProtectionSettingAlwaysOn"
-    static let ToggleTrackingProtectionSettingPrivateOnly = "ToggleTrackingProtectionSettingPrivateOnly"
-    static let ToggleTrackingProtectionSettingOff = "ToggleTrackingProtectionSettingOff"
+    static let ToggleTrackingProtectionSettingOnNormalMode = "ToggleTrackingProtectionSettingAlwaysOn"
+    static let ToggleTrackingProtectionSettingOnPrivateMode = "ToggleTrackingProtectionSettingPrivateOnly"
 
     static let ToggleShowToolbarWhenScrolling = "ToggleShowToolbarWhenScrolling"
 
@@ -171,9 +170,6 @@ private var isTablet: Bool {
     // than avoiding the duplication of one line of code.
     return UIDevice.current.userInterfaceIdiom == .pad
 }
-
-// Matches the available options in app settings for enabling Tracking Protection
-enum TrackingProtectionSetting : Int { case alwaysOn; case privateOnly; case off }
 
 class FxUserState: MMUserState {
     required init() {
@@ -205,9 +201,8 @@ class FxUserState: MMUserState {
     var numTabs: Int = 0
 
     var trackingProtectionPerTabEnabled = true // TP can be shut off on a per-tab basis
-    var trackingProtectionSetting = TrackingProtectionSetting.privateOnly.rawValue // NSPredicate doesn't work with enum
-    // Construct an NSPredicate with this condition to use it.
-    static let trackingProtectionIsOnCondition = "trackingProtectionSetting == \(TrackingProtectionSetting.alwaysOn.rawValue) || (trackingProtectionSetting == \(TrackingProtectionSetting.privateOnly.rawValue) && isPrivate == YES)"
+    var trackingProtectionSettingOnNormalMode = true
+    var trackingProtectionSettingOnPrivateMode = true
 }
 
 fileprivate let defaultURL = "https://www.mozilla.org/en-US/book/"
@@ -661,16 +656,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(TrackingProtectionSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
 
-        screenState.tap(app.cells["Settings.TrackingProtectionOption.OnLabel"], forAction: Action.ToggleTrackingProtectionSettingAlwaysOn) { userState in
-            userState.trackingProtectionSetting = TrackingProtectionSetting.alwaysOn.rawValue
+        screenState.tap(app.toggles["Normal Browsing Mode"], forAction: Action.ToggleTrackingProtectionSettingOnNormalMode) { userState in
+            userState.trackingProtectionSettingOnNormalMode = !userState.trackingProtectionSettingOnNormalMode
         }
 
-        screenState.tap(app.cells["Settings.TrackingProtectionOption.OnInPrivateBrowsingLabel"], forAction: Action.ToggleTrackingProtectionSettingPrivateOnly) { userState in
-            userState.trackingProtectionSetting = TrackingProtectionSetting.privateOnly.rawValue
-        }
-
-        screenState.tap(app.cells["Settings.TrackingProtectionOption.OffLabel"], forAction: Action.ToggleTrackingProtectionSettingOff) { userState in
-            userState.trackingProtectionSetting = TrackingProtectionSetting.off.rawValue
+        screenState.tap(app.toggles["Private Browsing Mode"], forAction: Action.ToggleTrackingProtectionSettingOnPrivateMode) { userState in
+            userState.trackingProtectionSettingOnPrivateMode = !userState.trackingProtectionSettingOnPrivateMode
         }
     }
 
@@ -771,7 +762,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         let trackingProtectionButton = app.sheets.element(boundBy: 0).buttons.element(boundBy: 1)
 
-        screenState.tap(trackingProtectionButton, forAction: Action.ToggleTrackingProtectionPerTabEnabled, if: FxUserState.trackingProtectionIsOnCondition) { userState in
+        screenState.tap(trackingProtectionButton, forAction: Action.ToggleTrackingProtectionPerTabEnabled) { userState in
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
     }

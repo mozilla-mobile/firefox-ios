@@ -353,3 +353,25 @@ extension ContentBlockerHelper {
     }
 }
 
+// MARK: Static methods to check if Tracking Protection is enabled in the user's prefs
+@available(iOS 11.0, *)
+extension ContentBlockerHelper {
+
+    static func setTrackingProtectionMode(_ enabled: Bool, for prefs: Prefs, with tabManager: TabManager) {
+        guard let isPrivate = tabManager.selectedTab?.isPrivate else { return }
+        let key = isPrivate ? ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey : ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey
+        prefs.setBool(enabled, forKey: key)
+        ContentBlockerHelper.prefsChanged()
+    }
+
+    static func isTrackingProtectionActive(tabManager: TabManager) -> Bool {
+        guard let blocker = tabManager.selectedTab?.contentBlocker as? ContentBlockerHelper else { return false }
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        return isPrivate ? blocker.isEnabledInPrivateBrowsing : blocker.isEnabledInNormalBrowsing
+    }
+
+    static func toggleTrackingProtectionMode(for prefs: Prefs, tabManager: TabManager) {
+        let isEnabled = ContentBlockerHelper.isTrackingProtectionActive(tabManager: tabManager)
+        setTrackingProtectionMode(!isEnabled, for: prefs, with: tabManager)
+    }
+}
