@@ -41,6 +41,4 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertEqual(app.switches["prefkey.trackingprotection.normalbrowsing"].value as! String, "0")
         XCTAssertEqual(app.switches["prefkey.trackingprotection.privatebrowsing"].value as! String, "0")
     }
-
 }
-
