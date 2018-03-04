@@ -322,6 +322,7 @@ class URLBarView: UIView {
         locationTextField.autocapitalizationType = .none
         locationTextField.returnKeyType = .go
         locationTextField.clearButtonMode = .whileEditing
+        locationTextField.textAlignment = .left
         locationTextField.font = UIConstants.DefaultChromeFont
         locationTextField.accessibilityIdentifier = "address"
         locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
