@@ -227,7 +227,7 @@ class TabLocationView: UIView, TabEventHandler {
         case .Blocking:
             self.trackingProtectionView.image = UIImage.templateImageNamed("tracking-protection")
             self.trackingProtectionView.isHidden = false
-        case .Disabled, .NotBlocking:
+        case .Disabled, .NoBlockedURLs:
             self.trackingProtectionView.isHidden = true
         case .Whitelisted:
             self.trackingProtectionView.image = UIImage.templateImageNamed("tracking-protection-off")

@@ -335,7 +335,7 @@ extension PhotonActionSheetProtocol {
         }
 
         switch blocker.status {
-        case .NotBlocking:
+        case .NoBlockedURLs:
             return menuActionsForNotBlocking()
         case .Blocking:
             return menuActionsForTrackingProtectionEnabled(for: tab, presentingOn: urlBar)
