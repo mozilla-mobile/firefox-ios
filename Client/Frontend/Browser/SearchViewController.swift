@@ -71,6 +71,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     static var userAgent: String?
 
+    var isCellHighlighted: Bool {
+        return tableView.indexPathForSelectedRow != nil
+    }
+
     init(isPrivate: Bool) {
         self.isPrivate = isPrivate
         super.init(nibName: nil, bundle: nil)

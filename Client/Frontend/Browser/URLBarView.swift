@@ -335,6 +335,10 @@ class URLBarView: UIView {
         locationTextField.applyTheme(currentTheme)
     }
 
+    override func becomeFirstResponder() -> Bool {
+        return self.locationTextField?.becomeFirstResponder() ?? false
+    }
+
     func removeLocationTextField() {
         locationTextField?.removeFromSuperview()
         locationTextField = nil

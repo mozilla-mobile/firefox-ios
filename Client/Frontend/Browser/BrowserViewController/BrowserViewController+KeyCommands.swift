@@ -90,7 +90,6 @@ extension BrowserViewController {
         searchController.handleKeyCommands(sender: sender)
     }
 
-
     override var keyCommands: [UIKeyCommand]? {
         let overlayCommands = [
             UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(awesomeBarItemKeyCommand(sender:))),
@@ -124,12 +123,11 @@ extension BrowserViewController {
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
 
-        if urlBar.inOverlayMode {
+        if urlBar.inOverlayMode && searchController?.isCellHighlighted != true {
             return tabNavigation + overlayCommands
-        } else if isEditingText {
-            return tabNavigation
-        } else {
+        } else if !isEditingText {
             return tabNavigation + overidesTextEditing
         }
+        return tabNavigation
     }
 }
