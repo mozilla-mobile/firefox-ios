@@ -209,8 +209,8 @@ class TabManager: NSObject {
 
     //Called by other classes to signal that they are entering/exiting private mode
     //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    func willSwitchTabMode() {
-        if shouldClearPrivateTabs() && (selectedTab?.isPrivate ?? false) {
+    func willSwitchTabMode(force: Bool = false) {
+        if shouldClearPrivateTabs() && ((selectedTab?.isPrivate ?? false) || force)  {
             removeAllPrivateTabs()
         }
     }
