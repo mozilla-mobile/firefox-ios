@@ -105,7 +105,7 @@ class SiteTableViewCell: TwoLineTableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        twoLineHelper.layoutSubviews()
+        twoLineHelper.layoutSubviews(accessoryWidth: self.contentView.frame.origin.x)
     }
 
     required init?(coder aDecoder: NSCoder) {
