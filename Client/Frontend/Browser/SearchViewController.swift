@@ -459,7 +459,9 @@ extension SearchViewController {
                 // We have, so check if we can decrement the section.
                 if current.section == initialSection {
                     // We've reached the first item in the first section.
+                    searchDelegate?.searchViewController(self, didHighlightText: searchQuery, search: true)
                     searchDelegate?.searchViewControllerDidFinishHighlighting(self)
+                    return
                 } else {
                     nextSection -= 1
                     nextItem = tableView(tableView, numberOfRowsInSection: nextSection) - 1

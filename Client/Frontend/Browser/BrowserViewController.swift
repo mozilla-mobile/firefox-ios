@@ -1753,6 +1753,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func searchViewControllerDidFinishHighlighting(_ searchViewController: SearchViewController) {
+        searchViewController.resignFirstResponder()
     }
 }
 
