@@ -417,6 +417,4 @@ private class DisplayTextField: UITextField {
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.insetBy(dx: TabLocationViewUX.Spacing, dy: 0)
     }
-
-
 }

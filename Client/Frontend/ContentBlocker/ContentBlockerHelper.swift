@@ -26,7 +26,7 @@ enum BlocklistName: String {
 @available(iOS 11.0, *)
 enum BlockerStatus: String {
     case Disabled
-    case NotBlocking // When TP is enabled but nothing is being blocked
+    case NoBlockedURLs // When TP is enabled but nothing is being blocked
     case Whitelisted
     case Blocking
 }
@@ -60,7 +60,6 @@ enum BlockingStrength: String {
 
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
-    var stats = TPPageStats()
     static var whitelistedDomains = Set<String>()
 
     let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
@@ -87,11 +86,20 @@ class ContentBlockerHelper {
         }
         if stats.total == 0 {
             guard let url = tab?.url else {
-                return .NotBlocking
+                return .NoBlockedURLs
             }
-            return isURLWhitelisted(url: url) ? .Whitelisted : .NotBlocking
+            return isURLWhitelisted(url: url) ? .Whitelisted : .NoBlockedURLs
         } else {
             return .Blocking
+        }
+    }
+
+    var stats: TPPageStats = TPPageStats() {
+        didSet {
+            guard let tab = self.tab else { return }
+            if (stats.total == 0 && oldValue.total != 0) || stats.total == 1 {
+                TabEvent.post(.didChangeContentBlocking, for: tab)
+            }
         }
     }
 

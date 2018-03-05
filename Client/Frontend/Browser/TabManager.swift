@@ -864,9 +864,6 @@ extension TabManager: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         hideNetworkActivitySpinner()
-        if let tab = self[webView] {
-            TabEvent.post(.didChangeContentBlocking, for: tab)
-        }
         // only store changes if this is not an error page
         // as we current handle tab restore as error page redirects then this ensures that we don't
         // call storeChanges unnecessarily on startup
