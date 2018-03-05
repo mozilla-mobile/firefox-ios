@@ -19,7 +19,7 @@ struct TabTrayControllerUX {
     static let ToolbarButtonOffset = CGFloat(10.0)
     static let CloseButtonSize = CGFloat(18.0)
     static let CloseButtonMargin = CGFloat(6.0)
-    static let CloseButtonEdgeInset = CGFloat(10)
+    static let CloseButtonEdgeInset = CGFloat(4)
 
     static let NumberOfColumnsThin = 1
     static let NumberOfColumnsWide = 3
@@ -87,13 +87,14 @@ class TabCell: UICollectionViewCell {
         self.favicon.layer.masksToBounds = true
 
         self.titleText = UILabel()
-        self.titleText.textAlignment = .left
         self.titleText.isUserInteractionEnabled = false
         self.titleText.numberOfLines = 1
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
 
         self.closeButton = UIButton()
         self.closeButton.setImage(UIImage.templateImageNamed("nav-stop"), for: [])
+        self.closeButton.imageView?.contentMode = .scaleAspectFit
+        self.closeButton.contentMode = .center
         self.closeButton.tintColor = UIColor.lightGray
         self.closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
 
@@ -155,37 +156,32 @@ class TabCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let w = frame.width
-        let h = frame.height
-        backgroundHolder.frame = CGRect(x: margin,
-            y: margin,
-            width: w,
-            height: h)
+        backgroundHolder.frame = CGRect(x: margin, y: margin, width: frame.width, height: frame.height)
         screenshotView.frame = CGRect(size: backgroundHolder.frame.size)
 
-        title.frame = CGRect(x: 0,
-            y: 0,
-            width: backgroundHolder.frame.width,
-            height: TabTrayControllerUX.TextBoxHeight)
-
-        favicon.frame = CGRect(x: 6,
-            y: (TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.FaviconSize)/2,
-            width: TabTrayControllerUX.FaviconSize,
-            height: TabTrayControllerUX.FaviconSize)
-
-        let titleTextLeft = favicon.frame.origin.x + favicon.frame.width + 6
-        titleText.frame = CGRect(x: titleTextLeft,
-            y: 0,
-            width: title.frame.width - titleTextLeft - margin  - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin * 2,
-            height: title.frame.height)
-
-        closeButton.snp.makeConstraints { make in
-            make.size.equalTo(title.snp.height)
-            make.trailing.centerY.equalTo(title)
+        title.snp.makeConstraints { (make) in
+            make.top.left.right.equalTo(backgroundHolder)
+            make.height.equalTo(TabTrayControllerUX.TextBoxHeight)
         }
 
-        let top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
-        titleText.frame.origin = CGPoint(x: titleText.frame.origin.x, y: max(0, top))
+        favicon.snp.makeConstraints { make in
+            make.leading.equalTo(title.contentView).offset(6)
+            make.top.equalTo((TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.FaviconSize) / 2)
+            make.size.equalTo(TabTrayControllerUX.FaviconSize)
+        }
+
+        titleText.snp.makeConstraints { (make) in
+            make.leading.equalTo(favicon.snp.trailing).offset(6)
+            make.trailing.equalTo(closeButton.snp.leading).offset(-6)
+            make.centerY.equalTo(title.contentView)
+        }
+
+        closeButton.snp.makeConstraints { make in
+            make.trailing.equalTo(title.contentView).offset(-6)
+            make.top.equalTo((TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.FaviconSize) / 2)
+            make.size.equalTo(TabTrayControllerUX.FaviconSize)
+        }
+
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
