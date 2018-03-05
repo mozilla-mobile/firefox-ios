@@ -446,7 +446,6 @@ class TabTrayController: UIViewController {
             fromView = emptyPrivateTabsView
         }
 
-        // when toggling PBM 
         tabManager.willSwitchTabMode(force: privateMode)
         privateMode = !privateMode
         // If we are exiting private mode and we have the close private tabs option selected, make sure
