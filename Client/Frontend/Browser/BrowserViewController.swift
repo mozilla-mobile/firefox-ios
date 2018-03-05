@@ -1890,8 +1890,8 @@ extension BrowserViewController: TabManagerDelegate {
     }
 }
 
-/// List of schemes that are allowed to open a popup window
-private let SchemesAllowedToOpenPopups = ["http", "https", "javascript", "data"]
+/// List of schemes that are allowed to be opened in new tabs.
+private let SchemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "data", "about"]
 
 extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
@@ -1920,11 +1920,31 @@ extension BrowserViewController: WKUIDelegate {
         // If the page we just opened has a bad scheme, we return nil here so that JavaScript does not
         // get a reference to it which it can return from window.open() - this will end up as a
         // CFErrorHTTPBadURL being presented.
-        guard let scheme = (navigationAction.request as NSURLRequest).url?.scheme?.lowercased(), SchemesAllowedToOpenPopups.contains(scheme) else {
-            return nil
+        if #available(iOS 11, *) {
+            guard canRequestBeOpenedAsPopup(request) else {
+                return nil
+            }
+        } else {
+            // Workaround for iOS 10 where `window.open()` for "about:blank"
+            // creates a request with an empty URL (no scheme).
+            if request.url?.absoluteString == "" {
+                return newTab.webView
+            }
+
+            guard canRequestBeOpenedAsPopup(request) else {
+                return nil
+            }
         }
 
         return newTab.webView
+    }
+
+    fileprivate func canRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
+        guard let scheme = request.url?.scheme?.lowercased(), SchemesAllowedToBeOpenedAsPopups.contains(scheme) else {
+            return false
+        }
+        
+        return true
     }
 
     fileprivate func canDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
