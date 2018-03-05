@@ -224,7 +224,7 @@ private class TwoLineCellHelper {
         if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
             imageView.frame = CGRect(x: TwoLineCellUX.BorderViewMargin, y: (height - TwoLineCellUX.ImageSize) / 2, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize)
         } else {
-            imageView.frame = CGRect(x: container.frame.width - TwoLineCellUX.ImageSize - TwoLineCellUX.BorderViewMargin, y: (height - TwoLineCellUX.ImageSize) / 2, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize)
+            imageView.frame = CGRect(x: container.frame.width - TwoLineCellUX.ImageSize - TwoLineCellUX.BorderViewMargin - textRightInset, y: (height - TwoLineCellUX.ImageSize) / 2, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize)
 
             textLabel.frame = textLabel.frame.offsetBy(dx: -(TwoLineCellUX.ImageSize + TwoLineCellUX.BorderViewMargin), dy: 0)
             detailTextLabel.frame = detailTextLabel.frame.offsetBy(dx: -(TwoLineCellUX.ImageSize + TwoLineCellUX.BorderViewMargin), dy: 0)
