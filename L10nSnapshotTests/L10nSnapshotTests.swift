@@ -135,7 +135,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test13ReloadButtonContextMenu() {
-        navigator.toggleOn(userState.trackingProtectionSetting == TrackingProtectionSetting.alwaysOn.rawValue, withAction: Action.ToggleTrackingProtectionSettingAlwaysOn)
+        navigator.toggleOn(userState.trackingProtectionSettingOnNormalMode == true, withAction: Action.ToggleTrackingProtectionSettingOnNormalMode)
         navigator.goto(BrowserTab)
 
         navigator.openURL(loremIpsumURL)
