@@ -229,13 +229,13 @@ class URLBarView: UIView {
         }
 
         forwardButton.snp.makeConstraints { make in
-            make.left.equalTo(self.backButton.snp.right)
+            make.leading.equalTo(self.backButton.snp.trailing)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
         stopReloadButton.snp.makeConstraints { make in
-            make.left.equalTo(self.forwardButton.snp.right)
+            make.leading.equalTo(self.forwardButton.snp.trailing)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
