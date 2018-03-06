@@ -107,18 +107,18 @@ class LoginListViewController: SensitiveViewController {
 
         searchView.snp.makeConstraints { make in
             make.top.equalTo(self.topLayoutGuide.snp.bottom)
-            make.left.right.equalTo(self.view)
+            make.leading.trailing.equalTo(self.view)
             make.height.equalTo(LoginListUX.SearchHeight)
         }
 
         tableView.snp.makeConstraints { make in
             make.top.equalTo(searchView.snp.bottom)
-            make.left.right.equalTo(self.view)
+            make.leading.trailing.equalTo(self.view)
             make.bottom.equalTo(self.selectionButton.snp.top)
         }
 
         selectionButton.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(self.view)
+            make.leading.trailing.bottom.equalTo(self.view)
             make.top.equalTo(self.tableView.snp.bottom)
             make.bottom.equalTo(self.view)
             selectionButtonHeightConstraint = make.height.equalTo(0).constraint

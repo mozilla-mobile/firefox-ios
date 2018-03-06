@@ -78,20 +78,26 @@ extension PhotonActionSheetProtocol {
     typealias PageOptionsVC = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
     
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
-        var noImageMode: PhotonActionSheetItem? = nil
+        var items: [PhotonActionSheetItem] = []
+
         if #available(iOS 11, *) {
             let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-            let noImageText = noImageEnabled ? Strings.AppMenuNoImageModeDisable : Strings.AppMenuNoImageModeEnable
-            noImageMode = PhotonActionSheetItem(title: noImageText, iconString: "menu-NoImageMode", isEnabled: noImageEnabled) { action in
+            let noImageMode = PhotonActionSheetItem(title: Strings.AppMenuNoImageMode, iconString: "menu-NoImageMode", isEnabled: noImageEnabled, accessory: .Switch) { action in
                 NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
             }
+
+            let trackingProtectionEnabled = ContentBlockerHelper.isTrackingProtectionActive(tabManager: self.tabManager)
+            let trackingProtection = PhotonActionSheetItem(title: Strings.TPMenuTitle, iconString: "menu-TrackingProtection", isEnabled: trackingProtectionEnabled, accessory: .Switch) { action in
+                ContentBlockerHelper.toggleTrackingProtectionMode(for: self.profile.prefs, tabManager: self.tabManager)
+            }
+            items.append(contentsOf: [trackingProtection, noImageMode])
         }
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
-        let nightModeText = nightModeEnabled ? Strings.AppMenuNightModeDisable : Strings.AppMenuNightModeEnable
-        let nightMode = PhotonActionSheetItem(title: nightModeText, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { action in
+        let nightMode = PhotonActionSheetItem(title: Strings.AppMenuNightMode, iconString: "menu-NightMode", isEnabled: nightModeEnabled, accessory: .Switch) { action in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
         }
+        items.append(nightMode)
 
         let openSettings = PhotonActionSheetItem(title: Strings.AppMenuSettingsTitleString, iconString: "menu-Settings") { action in
             let settingsTableViewController = AppSettingsTableViewController()
@@ -104,11 +110,9 @@ extension PhotonActionSheetProtocol {
             controller.modalPresentationStyle = .formSheet
             vcDelegate.present(controller, animated: true, completion: nil)
         }
+        items.append(openSettings)
 
-        if let noImageMode = noImageMode {
-            return [noImageMode, nightMode, openSettings]
-        }
-        return [nightMode, openSettings]
+        return items
     }
     
     func getTabActions(tab: Tab, buttonView: UIView,
@@ -326,24 +330,19 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     func getTrackingMenu(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
+        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else {
             return []
         }
 
-        if blocker.stats.total == 0, blocker.isEnabled, !ContentBlockerHelper.isWhitelisted(url: currentURL) {
-            // When ad blocking is enabled but no content was blocked on the page
+        switch blocker.status {
+        case .NoBlockedURLs:
             return menuActionsForNotBlocking()
-        } else if !blocker.isEnabled {
-            // when tracking protection is disabled
-            return menuActionsForTrackingProtectionDisabled(for: tab, presentingOn: urlBar)
-        } else if blocker.stats.total > 0 {
-            // When tracking protection is enabled and content is blocked on the page
+        case .Blocking:
             return menuActionsForTrackingProtectionEnabled(for: tab, presentingOn: urlBar)
-        } else if blocker.isEnabled, ContentBlockerHelper.isWhitelisted(url: currentURL) {
-            // When tracking protection is enabled but the site is in the whitelist
+        case .Disabled:
+            return  menuActionsForTrackingProtectionDisabled(for: tab, presentingOn: urlBar)
+        case .Whitelisted:
             return menuActionsForWhitelistedSite(for: tab, presentingOn: urlBar)
         }
-
-        return []
-    }
+    } 
 }

@@ -23,6 +23,14 @@ enum BlocklistName: String {
     }
 }
 
+@available(iOS 11.0, *)
+enum BlockerStatus: String {
+    case Disabled
+    case NoBlockedURLs // When TP is enabled but nothing is being blocked
+    case Whitelisted
+    case Blocking
+}
+
 struct ContentBlockingConfig {
     struct Prefs {
         static let StrengthKey = "prefkey.trackingprotection.strength"
@@ -50,12 +58,6 @@ enum BlockingStrength: String {
 
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
-    var stats = TPPageStats() {
-        didSet {
-            NotificationCenter.default.post(name: .TPPageStatsChanged, object: tab)
-        }
-    }
-
     static var whitelistedDomains = WhitelistedDomains()
 
     static let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
@@ -77,7 +79,30 @@ class ContentBlockerHelper {
         return tab.isPrivate ? isEnabledInPrivateBrowsing : isEnabledInNormalBrowsing
     }
 
-    var isEnabledInNormalBrowsing: Bool {
+    var status: BlockerStatus {
+        guard isEnabled else {
+            return .Disabled
+        }
+        if stats.total == 0 {
+            guard let url = tab?.url else {
+                return .NoBlockedURLs
+            }
+            return isURLWhitelisted(url: url) ? .Whitelisted : .NoBlockedURLs
+        } else {
+            return .Blocking
+        }
+    }
+
+    var stats: TPPageStats = TPPageStats() {
+        didSet {
+            guard let tab = self.tab else { return }
+            if (stats.total == 0 && oldValue.total != 0) || stats.total == 1 {
+                TabEvent.post(.didChangeContentBlocking, for: tab)
+            }
+        }
+    }
+
+    fileprivate var isEnabledInNormalBrowsing: Bool {
         return userPrefs?.boolForKey(ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
     }
 
@@ -354,3 +379,27 @@ extension ContentBlockerHelper {
         }
     }
 }
+
+// MARK: Static methods to check if Tracking Protection is enabled in the user's prefs
+@available(iOS 11.0, *)
+extension ContentBlockerHelper {
+
+    static func setTrackingProtectionMode(_ enabled: Bool, for prefs: Prefs, with tabManager: TabManager) {
+        guard let isPrivate = tabManager.selectedTab?.isPrivate else { return }
+        let key = isPrivate ? ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey : ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey
+        prefs.setBool(enabled, forKey: key)
+        ContentBlockerHelper.prefsChanged()
+    }
+
+    static func isTrackingProtectionActive(tabManager: TabManager) -> Bool {
+        guard let blocker = tabManager.selectedTab?.contentBlocker as? ContentBlockerHelper else { return false }
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        return isPrivate ? blocker.isEnabledInPrivateBrowsing : blocker.isEnabledInNormalBrowsing
+    }
+
+    static func toggleTrackingProtectionMode(for prefs: Prefs, tabManager: TabManager) {
+        let isEnabled = ContentBlockerHelper.isTrackingProtectionActive(tabManager: tabManager)
+        setTrackingProtectionMode(!isEnabled, for: prefs, with: tabManager)
+    }
+}
+

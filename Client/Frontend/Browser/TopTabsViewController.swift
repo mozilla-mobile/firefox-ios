@@ -136,7 +136,14 @@ class TopTabsViewController: UIViewController {
         view.addSubview(tabsButton)
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
-        
+
+        // Setup UIDropInteraction to handle dragging and dropping
+        // links onto the "New Tab" button.
+        if #available(iOS 11, *) {
+            let dropInteraction = UIDropInteraction(delegate: self)
+            newTab.addInteraction(dropInteraction)
+        }
+
         newTab.snp.makeConstraints { make in
             make.centerY.equalTo(view)
             make.trailing.equalTo(tabsButton.snp.leading).offset(-10)
@@ -242,6 +249,32 @@ class TopTabsViewController: UIViewController {
                     collectionView.scrollRectToVisible(padFrame, animated: false)
                 }
             }
+        }
+    }
+}
+
+@available(iOS 11.0, *)
+extension TopTabsViewController: UIDropInteractionDelegate {
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        // Prevent tabs from being dragged and dropped onto the "New Tab" button.
+        if let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab {
+            return false
+        }
+
+        return session.canLoadObjects(ofClass: URL.self)
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        _ = session.loadObjects(ofClass: URL.self) { urls in
+            guard let url = urls.first else {
+                return
+            }
+
+            self.tabManager.addTab(URLRequest(url: url), isPrivate: self.isPrivate)
         }
     }
 }
