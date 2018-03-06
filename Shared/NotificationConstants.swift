@@ -51,7 +51,5 @@ extension Notification.Name {
 
     public static let ReachabilityStatusChanged = Notification.Name("ReachabilityStatusChanged")
 
-    public static let TPPageStatsChanged = Notification.Name("TPPageStatsChanged")
-
     public static let ContentBlockerTabSetupRequired = Notification.Name("ContentBlockerTabSetupRequired")
 }

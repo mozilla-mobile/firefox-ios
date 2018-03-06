@@ -87,7 +87,7 @@ class ContentBlockerHelper {
             guard let url = tab?.url else {
                 return .NoBlockedURLs
             }
-            return isURLWhitelisted(url: url) ? .Whitelisted : .NoBlockedURLs
+            return ContentBlockerHelper.isWhitelisted(url: url) ? .Whitelisted : .NoBlockedURLs
         } else {
             return .Blocking
         }
@@ -358,7 +358,6 @@ extension ContentBlockerHelper {
                 }
                 loadJsonFromBundle(forResource: filename) { jsonString in
                     var str = jsonString
-                    print(whitelistAsJSON())
                     str.insert(contentsOf: whitelistAsJSON(), at: str.index(str.endIndex, offsetBy: -1))
                     ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
                         if let error = error {

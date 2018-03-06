@@ -24,8 +24,8 @@ extension ContentBlockerHelper: TabContentScript {
         guard isEnabled,
             let body = message.body as? [String: String],
             let urlString = body["url"],
-            let parentDomain = tab?.webView?.url,
-            !ContentBlockerHelper.isWhitelisted(url: parentDomain) else {
+            let mainDocumentUrl = tab?.webView?.url,
+            !ContentBlockerHelper.isWhitelisted(url: mainDocumentUrl) else {
             return
         }
 

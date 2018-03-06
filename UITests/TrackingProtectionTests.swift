@@ -38,12 +38,17 @@ func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
 }
 
 @available(iOS 11.0, *)
-class TrackingProtectionTests: KIFTestCase {
+class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     
     private var webRoot: String!
-        
+    private var tabObservers: TabObservers!
+    var stats = TPPageStats()
+
     override func setUp() {
         super.setUp()
+
+        self.tabObservers = registerFor(.didChangeContentBlocking, queue: .main)
+
         // IP addresses can't be used for whitelisted domains
         SimplePageServer.useLocalhostInsteadOfIP = true
         webRoot = SimplePageServer.start()
@@ -69,22 +74,18 @@ class TrackingProtectionTests: KIFTestCase {
         waitForExpectations(timeout: 2, handler: nil)
     }
 
-    var currentTPStats: TPPageStats?
-    @objc private func onTPPageStatsChanged(notification: NSNotification) {
-        let tab = notification.object as! Tab
-        let cb = tab.contentBlocker as! ContentBlockerHelper
-        currentTPStats = cb.stats
+    func tabDidChangeContentBlockerStatus(_ tab: Tab) {
+        stats = (tab.contentBlocker as! ContentBlockerHelper).stats
     }
 
     private func checkTrackingProtection(isBlocking: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(onTPPageStatsChanged), name: .TPPageStatsChanged, object: nil)
         let url = "\(webRoot!)/tracking-protection-test.html"
         checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
-        let statsAfter = currentTPStats!
+
         if isBlocking {
-           GREYAssertTrue(statsAfter.socialCount > 0, reason: "Stats should increment")
+           GREYAssertTrue(stats.socialCount > 0, reason: "Stats should increment")
         } else {
-            GREYAssertTrue(statsAfter.socialCount == 0, reason: "Stats should not increment")
+            GREYAssertTrue(stats.socialCount == 0, reason: "Stats should not increment")
         }
     }
     

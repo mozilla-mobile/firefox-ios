@@ -127,7 +127,7 @@ fileprivate class TPStatsBlocklists {
                         continue
                 }
 
-                let domainExceptionsRegex: [NSRegularExpression]? = (trigger["unless-domain"] as? [String])?.flatMap { domain in
+                let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.flatMap { domain in
                         return wildcardContentBlockerDomainToRegex(domain: domain)
                     }
 

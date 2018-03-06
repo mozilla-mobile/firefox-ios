@@ -11,7 +11,7 @@ class WhitelistedDomains {
     private(set) var domainRegex = [NSRegularExpression]()
 
     func load(_ list: [String]) {
-        domainSet = Set(list.map { $0 })
+        domainSet = Set(list)
         updateRegex()
     }
 
