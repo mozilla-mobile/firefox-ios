@@ -3,7 +3,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-(function() {
 "use strict";
 
 const DEBUG = false;
@@ -11,9 +10,9 @@ const DEBUG = false;
 var readabilityResult = null;
 var currentStyle = null;
 
-var readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
+const readerModeURL = /^http:\/\/localhost:\d+\/reader-mode\/page/;
 
-var BLOCK_IMAGES_SELECTOR =
+const BLOCK_IMAGES_SELECTOR =
   ".content p > img:only-child, " +
   ".content p > a:only-child > img:only-child, " +
   ".content .wp-caption img, " +
@@ -194,5 +193,3 @@ window.addEventListener("pageshow", function(event) {
     webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderPageEvent", Value: "PageShow"});
   }
 });
-
-})();
