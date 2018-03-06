@@ -1636,7 +1636,7 @@ extension BrowserViewController: TabDelegate {
 
         if #available(iOS 11, *) {
             if let blocker = tab.contentBlocker as? ContentBlockerHelper {
-                blocker.setupForWebView()
+                blocker.setupTabTrackingProtection()
                 tab.addContentScript(blocker, name: ContentBlockerHelper.name())
             }
         }

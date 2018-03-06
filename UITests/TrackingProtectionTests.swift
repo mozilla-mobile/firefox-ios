@@ -44,6 +44,8 @@ class TrackingProtectionTests: KIFTestCase {
         
     override func setUp() {
         super.setUp()
+        // IP addresses can't be used for whitelisted domains
+        SimplePageServer.useLocalhostInsteadOfIP = true
         webRoot = SimplePageServer.start()
         BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
@@ -61,6 +63,10 @@ class TrackingProtectionTests: KIFTestCase {
         }
         checkIsSetup()
         wait(for: [setup], timeout: 5)
+
+        let clear = self.expectation(description: "clearing")
+        ContentBlockerHelper.clearWhitelist() { clear.fulfill() }
+        waitForExpectations(timeout: 2, handler: nil)
     }
 
     var currentTPStats: TPPageStats?
@@ -140,15 +146,33 @@ class TrackingProtectionTests: KIFTestCase {
     }
 
     func testWhitelist() {
-        ContentBlockerHelper.clearWhitelist()
+        let url = URL(string: "http://localhost")!
+
+        let clear = self.expectation(description: "clearing")
+        ContentBlockerHelper.clearWhitelist() { clear.fulfill() }
+        waitForExpectations(timeout: 10, handler: nil)
         checkTrackingProtection(isBlocking: true)
 
-        let url = URL(string: "http://127.0.0.1")!
-        ContentBlockerHelper.whitelist(enable: true, url: url)
+        let expWhitelist = self.expectation(description: "whitelisted")
+        ContentBlockerHelper.whitelist(enable: true, url: url) { expWhitelist.fulfill() }
+        waitForExpectations(timeout: 10, handler: nil)
         // The image from ymail.com would normally be blocked, but in this case it is whitelisted
         checkTrackingProtection(isBlocking: false)
 
-        ContentBlockerHelper.whitelist(enable: false,  url: url)
+        let expRemove = self.expectation(description: "whitelist removed")
+        ContentBlockerHelper.whitelist(enable: false,  url: url) { expRemove.fulfill() }
+        waitForExpectations(timeout: 10, handler: nil)
+        checkTrackingProtection(isBlocking: true)
+
+        let expWhitelistAgain = self.expectation(description: "whitelisted")
+        ContentBlockerHelper.whitelist(enable: true, url: url) { expWhitelistAgain.fulfill() }
+        waitForExpectations(timeout: 10, handler: nil)
+        // The image from ymail.com would normally be blocked, but in this case it is whitelisted
+        checkTrackingProtection(isBlocking: false)
+
+        let clear1 = self.expectation(description: "clearing")
+        ContentBlockerHelper.clearWhitelist() { clear1.fulfill() }
+        waitForExpectations(timeout: 10, handler: nil)
         checkTrackingProtection(isBlocking: true)
     }
     

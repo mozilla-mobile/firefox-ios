@@ -419,6 +419,8 @@ class SimplePageServer {
         return try! String(contentsOfFile: pageDataPath, encoding: .utf8)
     }
 
+    static var useLocalhostInsteadOfIP = false
+
     class func start() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
@@ -530,7 +532,8 @@ class SimplePageServer {
 
         // We use 127.0.0.1 explicitly here, rather than localhost, in order to avoid our
         // history exclusion code (Bug 1188626).
-        let webRoot = "http://127.0.0.1:\(webServer.port)"
+
+        let webRoot = "http://\(useLocalhostInsteadOfIP ? "localhost" : "127.0.0.1"):\(webServer.port)"
         return webRoot
     }
 }

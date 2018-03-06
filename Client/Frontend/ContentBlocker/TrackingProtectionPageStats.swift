@@ -52,6 +52,23 @@ class TPStatsBlocklistChecker {
 
 }
 
+
+// The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
+func wildcardContentBlockerDomainToRegex(domain: String) -> NSRegularExpression? {
+    // Convert the domain exceptions into regular expressions.
+    var regex = domain + "$"
+    if regex.first == "*" {
+        regex = "." + regex
+    }
+    regex = regex.replacingOccurrences(of: ".", with: "\\.")
+    do {
+        return try NSRegularExpression(pattern: regex, options: [])
+    } catch {
+        assertionFailure("Blocklists: \(error.localizedDescription)")
+        return nil
+    }
+}
+
 @available(iOS 11, *)
 fileprivate class TPStatsBlocklists {
     class Rule {
@@ -111,7 +128,7 @@ fileprivate class TPStatsBlocklists {
                 }
 
                 let domainExceptionsRegex: [NSRegularExpression]? = (trigger["unless-domain"] as? [String])?.flatMap { domain in
-                        return wildcardDomainToRegex(domain: domain)
+                        return wildcardContentBlockerDomainToRegex(domain: domain)
                     }
 
                 // Only "third-party" is supported; other types are not used in our block lists.
@@ -127,21 +144,7 @@ fileprivate class TPStatsBlocklists {
         }
     }
 
-    // The 'unless-domain' rules use wildcard expressions, convert this to regex.
-    private func wildcardDomainToRegex(domain: String) -> NSRegularExpression? {
-        // Convert the domain exceptions into regular expressions.
-        var regex = domain + "$"
-        if regex.first == "*" {
-            regex = "." + regex
-        }
-        regex = regex.replacingOccurrences(of: ".", with: "\\.")
-        do {
-            return try NSRegularExpression(pattern: regex, options: [])
-        } catch {
-            assertionFailure("Blocklists: \(error.localizedDescription)")
-            return nil
-        }
-    }
+
 
     func urlIsInList(_ url: URL) -> BlocklistName? {
         let resourceString = url.absoluteString
@@ -154,6 +157,17 @@ fileprivate class TPStatsBlocklists {
                 for domainRegex in (rule.domainExceptions ?? []) {
                     if domainRegex.firstMatch(in: resourceString, options: [], range: resourceRange) != nil {
                         continue domainSearch
+                    }
+                }
+
+                // Check the whitelist.
+                let whitelist = ContentBlockerHelper.whitelistedDomains
+                if let baseDomain = url.baseDomain, !whitelist.domainRegex.isEmpty {
+                    let range = NSRange(location: 0, length: baseDomain.count)
+                    for ignoreDomain in whitelist.domainRegex {
+                        if ignoreDomain.firstMatch(in: baseDomain , options: [], range: range) != nil {
+                            return nil
+                        }
                     }
                 }
 

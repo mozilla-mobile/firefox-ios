@@ -6,6 +6,35 @@ import WebKit
 import Shared
 import Deferred
 
+class WhitelistedDomains {
+    private(set) var domainSet = Set<String>()
+    private(set) var domainRegex = [NSRegularExpression]()
+
+    func load(_ list: [String]) {
+        domainSet = Set(list.map { $0 })
+        updateRegex()
+    }
+
+    func clear() {
+        domainSet = Set<String>()
+        domainRegex = [NSRegularExpression]()
+    }
+
+    func add(_ domain: String) {
+        domainSet.insert(domain)
+        updateRegex()
+    }
+
+    func delete(_ domain: String) {
+        domainSet.remove(domain)
+        updateRegex()
+    }
+
+    private func updateRegex() {
+        domainRegex = domainSet.flatMap { wildcardContentBlockerDomainToRegex(domain: "*" + $0) }
+    }
+}
+
 @available(iOS 11.0, *)
 extension ContentBlockerHelper {
 
@@ -17,41 +46,56 @@ extension ContentBlockerHelper {
         return dir.appendingPathComponent("whitelist")
     }
 
-    func pageLoad(navigationAction: WKNavigationAction) {
-        guard let url = navigationAction.request.mainDocumentURL else {
-            return
+
+    // Get the whitelist domain array as a JSON fragment that can be inserted at the end of a blocklist.
+    static func whitelistAsJSON() -> String {
+        if ContentBlockerHelper.whitelistedDomains.domainSet.isEmpty {
+            return ""
         }
-        
-        setupTabTrackingProtection(forUrl: url)
+        // Note that * is added to the front of domains, so foo.com becomes *foo.com
+        let list = "'*" + ContentBlockerHelper.whitelistedDomains.domainSet.joined(separator: "','*") + "'"
+        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
     }
 
-    static func whitelist(enable: Bool, url: URL) {
+    static func whitelist(enable: Bool, url: URL, completion: (() -> Void)?) {
         guard let domain = whitelistableDomain(fromUrl: url) else { return }
 
         if enable {
-            whitelistedDomains.insert(domain)
+            whitelistedDomains.add(domain)
         } else {
-            whitelistedDomains.remove(domain)
+            whitelistedDomains.delete(domain)
         }
 
-        updateWhitelist()
+        updateWhitelist(completion: completion)
     }
 
-    private static func updateWhitelist() {
-        guard let fileURL = whitelistFileURL() else { return }
-        if whitelistedDomains.isEmpty {
+    static func clearWhitelist(completion: (() -> Void)?) {
+        whitelistedDomains.clear()
+        updateWhitelist(completion: completion)
+    }
+    
+    private static func updateWhitelist(completion: (() -> Void)?) {
+        removeAllRulesInStore {
+            compileListsNotInStore {
+                completion?()
+                NotificationCenter.default.post(name: .ContentBlockerTabSetupRequired, object: nil)
+
+            }
+        }
+
+        guard let fileURL = ContentBlockerHelper.whitelistFileURL() else { return }
+        if ContentBlockerHelper.whitelistedDomains.domainSet.isEmpty {
             try? FileManager.default.removeItem(at: fileURL)
             return
         }
 
-        let list = whitelistedDomains.joined(separator: "\n")
+        let list = ContentBlockerHelper.whitelistedDomains.domainSet.joined(separator: "\n")
         do {
             try list.write(to: fileURL, atomically: true, encoding: .utf8)
         } catch {
             Sentry.shared.send(message: "Failed to save whitelist file")
         }
     }
-
     // Ensure domains used for whitelisting are standardized by using this function.
     static func whitelistableDomain(fromUrl url: URL) -> String? {
         guard let domain = url.host, !domain.isEmpty else {
@@ -64,7 +108,7 @@ extension ContentBlockerHelper {
         guard let domain = whitelistableDomain(fromUrl: url) else {
             return false
         }
-        return whitelistedDomains.contains(domain)
+        return whitelistedDomains.domainSet.contains(domain)
     }
 
     func readWhitelistFile() -> [String]? {
@@ -75,10 +119,5 @@ extension ContentBlockerHelper {
         }
 
         return nil
-    }
-
-    static func clearWhitelist() {
-        whitelistedDomains = Set<String>()
-        updateWhitelist()
     }
 }
