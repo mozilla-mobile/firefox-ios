@@ -2005,8 +2005,8 @@ extension BrowserViewController: WKUIDelegate {
 
     fileprivate func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
         if error.code == WKError.webContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
-            print("WebContent process has crashed. Trying to reloadFromOrigin to restart it.")
-            webView.reloadFromOrigin()
+            print("WebContent process has crashed. Trying to reload to restart it.")
+            webView.reload()
             return true
         }
 
