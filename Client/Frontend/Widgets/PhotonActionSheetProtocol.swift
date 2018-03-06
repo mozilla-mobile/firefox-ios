@@ -330,24 +330,19 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     func getTrackingMenu(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
+        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else {
             return []
         }
 
-        if blocker.stats.total == 0, blocker.isEnabled, !blocker.isURLWhitelisted(url: currentURL) {
-            // When ad blocking is enabled but no content was blocked on the page
+        switch blocker.status {
+        case .NoBlockedURLs:
             return menuActionsForNotBlocking()
-        } else if !blocker.isEnabled {
-            // when tracking protection is disabled
-            return menuActionsForTrackingProtectionDisabled(for: tab, presentingOn: urlBar)
-        } else if blocker.stats.total > 0 {
-            // When tracking protection is enabled and content is blocked on the page
+        case .Blocking:
             return menuActionsForTrackingProtectionEnabled(for: tab, presentingOn: urlBar)
-        } else if blocker.isEnabled, blocker.isURLWhitelisted(url: currentURL) {
-            // When tracking protection is enabled but the site is in the whitelist
+        case .Disabled:
+            return  menuActionsForTrackingProtectionDisabled(for: tab, presentingOn: urlBar)
+        case .Whitelisted:
             return menuActionsForWhitelistedSite(for: tab, presentingOn: urlBar)
         }
-
-        return []
     }
 }

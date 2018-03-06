@@ -23,6 +23,14 @@ enum BlocklistName: String {
     }
 }
 
+@available(iOS 11.0, *)
+enum BlockerStatus: String {
+    case Disabled
+    case NoBlockedURLs // When TP is enabled but nothing is being blocked
+    case Whitelisted
+    case Blocking
+}
+
 struct ContentBlockingConfig {
     struct Prefs {
         static let StrengthKey = "prefkey.trackingprotection.strength"
@@ -52,7 +60,6 @@ enum BlockingStrength: String {
 
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
-    var stats = TPPageStats()
     static var whitelistedDomains = Set<String>()
 
     let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
@@ -73,7 +80,30 @@ class ContentBlockerHelper {
         return tab.isPrivate ? isEnabledInPrivateBrowsing : isEnabledInNormalBrowsing
     }
 
-    var isEnabledInNormalBrowsing: Bool {
+    var status: BlockerStatus {
+        guard isEnabled else {
+            return .Disabled
+        }
+        if stats.total == 0 {
+            guard let url = tab?.url else {
+                return .NoBlockedURLs
+            }
+            return isURLWhitelisted(url: url) ? .Whitelisted : .NoBlockedURLs
+        } else {
+            return .Blocking
+        }
+    }
+
+    var stats: TPPageStats = TPPageStats() {
+        didSet {
+            guard let tab = self.tab else { return }
+            if (stats.total == 0 && oldValue.total != 0) || stats.total == 1 {
+                TabEvent.post(.didChangeContentBlocking, for: tab)
+            }
+        }
+    }
+
+    fileprivate var isEnabledInNormalBrowsing: Bool {
         return userPrefs?.boolForKey(ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
     }
 
