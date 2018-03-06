@@ -1891,7 +1891,7 @@ extension BrowserViewController: TabManagerDelegate {
 }
 
 /// List of schemes that are allowed to be opened in new tabs.
-private let SchemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "data", "about"]
+private let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "data", "about"]
 
 extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
@@ -1921,7 +1921,7 @@ extension BrowserViewController: WKUIDelegate {
         // get a reference to it which it can return from window.open() - this will end up as a
         // CFErrorHTTPBadURL being presented.
         if #available(iOS 11, *) {
-            guard canRequestBeOpenedAsPopup(request) else {
+            guard shouldRequestBeOpenedAsPopup(request) else {
                 return nil
             }
         } else {
@@ -1931,7 +1931,7 @@ extension BrowserViewController: WKUIDelegate {
                 return newTab.webView
             }
 
-            guard canRequestBeOpenedAsPopup(request) else {
+            guard shouldRequestBeOpenedAsPopup(request) else {
                 return nil
             }
         }
@@ -1939,22 +1939,22 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
-    fileprivate func canRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
-        guard let scheme = request.url?.scheme?.lowercased(), SchemesAllowedToBeOpenedAsPopups.contains(scheme) else {
+    fileprivate func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
+        guard let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) else {
             return false
         }
         
         return true
     }
 
-    fileprivate func canDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+    fileprivate func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
         return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)) && (self.presentedViewController == nil)
     }
 
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
-        if canDisplayJSAlertForWebView(webView) {
+        if shouldDisplayJSAlertForWebView(webView) {
             present(messageAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(messageAlert)
@@ -1967,7 +1967,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func webView(_ webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (Bool) -> Void) {
         let confirmAlert = ConfirmPanelAlert(message: message, frame: frame, completionHandler: completionHandler)
-        if canDisplayJSAlertForWebView(webView) {
+        if shouldDisplayJSAlertForWebView(webView) {
             present(confirmAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(confirmAlert)
@@ -1978,7 +1978,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void) {
         let textInputAlert = TextInputAlert(message: prompt, frame: frame, completionHandler: completionHandler, defaultText: defaultText)
-        if canDisplayJSAlertForWebView(webView) {
+        if shouldDisplayJSAlertForWebView(webView) {
             present(textInputAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)

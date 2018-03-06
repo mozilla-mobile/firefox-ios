@@ -3,13 +3,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-(function() {
 "use strict";
 
-var originalOpen = window.open;
+const originalOpen = window.open;
 
 window.open = function() {
-  var openedWindow = originalOpen.apply(window, arguments);
+  let openedWindow = originalOpen.apply(window, arguments);
   if (openedWindow) {
     // If we get a `Window` from the native `window.open()`, return a `Proxy` of it
     // so we can monitor property changes to address issues with "about:blank" tabs.
@@ -33,7 +32,7 @@ window.open = function() {
         // ```
         //
         // For more info, see Bug 1420267: https://bugzilla.mozilla.org/show_bug.cgi?id=1420267
-        var originalSetter = Object.getOwnPropertyDescriptor(target, key).set;
+        let originalSetter = Object.getOwnPropertyDescriptor(target, key).set;
         if (["location", "opener"].indexOf(key) > -1) {
           setTimeout(function() {
             if (target[key] !== value) {
@@ -58,5 +57,3 @@ window.open = function() {
 
   return openedWindow;
 };
-
-})();
