@@ -147,3 +147,20 @@ class CookiesClearable: Clearable {
         return succeed()
     }
 }
+
+@available(iOS 11, *)
+class TrackingProtectionClearable: Clearable {
+    //@TODO: re-using string because we are too late in cycle to change strings
+    var label: String {
+        return Strings.SettingsTrackingProtectionSectionName
+    }
+
+    func clear() -> Success {
+        let result = Success()
+        ContentBlockerHelper.clearWhitelist() {
+            result.fill(Maybe(success: ()))
+        }
+        return result
+    }
+}
+
