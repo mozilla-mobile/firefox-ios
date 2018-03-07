@@ -52,7 +52,6 @@ class TPStatsBlocklistChecker {
 
 }
 
-
 // The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
 func wildcardContentBlockerDomainToRegex(domain: String) -> NSRegularExpression? {
     // Convert the domain exceptions into regular expressions.
@@ -143,8 +142,6 @@ fileprivate class TPStatsBlocklists {
             }
         }
     }
-
-
 
     func urlIsInList(_ url: URL) -> BlocklistName? {
         let resourceString = url.absoluteString

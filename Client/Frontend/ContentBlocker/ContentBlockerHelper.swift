@@ -145,8 +145,7 @@ class ContentBlockerHelper {
 
         // Read the whitelist at startup
         if let list = readWhitelistFile() {
-            // Convert array to a Set()
-            ContentBlockerHelper.whitelistedDomains.load(list)
+            ContentBlockerHelper.whitelistedDomains.domainSet = Set(list)
         }
 
         ContentBlockerHelper.removeOldListsByDateFromStore(prefs: prefs) {

@@ -7,32 +7,13 @@ import Shared
 import Deferred
 
 class WhitelistedDomains {
-    private(set) var domainSet = Set<String>()
+    var domainSet = Set<String>() {
+        didSet {
+            domainRegex = domainSet.flatMap { wildcardContentBlockerDomainToRegex(domain: "*" + $0) }
+        }
+    }
+
     private(set) var domainRegex = [NSRegularExpression]()
-
-    func load(_ list: [String]) {
-        domainSet = Set(list)
-        updateRegex()
-    }
-
-    func clear() {
-        domainSet = Set<String>()
-        domainRegex = [NSRegularExpression]()
-    }
-
-    func add(_ domain: String) {
-        domainSet.insert(domain)
-        updateRegex()
-    }
-
-    func delete(_ domain: String) {
-        domainSet.remove(domain)
-        updateRegex()
-    }
-
-    private func updateRegex() {
-        domainRegex = domainSet.flatMap { wildcardContentBlockerDomainToRegex(domain: "*" + $0) }
-    }
 }
 
 @available(iOS 11.0, *)
@@ -45,7 +26,6 @@ extension ContentBlockerHelper {
         }
         return dir.appendingPathComponent("whitelist")
     }
-
 
     // Get the whitelist domain array as a JSON fragment that can be inserted at the end of a blocklist.
     static func whitelistAsJSON() -> String {
@@ -61,16 +41,16 @@ extension ContentBlockerHelper {
         guard let domain = whitelistableDomain(fromUrl: url) else { return }
 
         if enable {
-            whitelistedDomains.add(domain)
+            whitelistedDomains.domainSet.insert(domain)
         } else {
-            whitelistedDomains.delete(domain)
+            whitelistedDomains.domainSet.remove(domain)
         }
 
         updateWhitelist(completion: completion)
     }
 
     static func clearWhitelist(completion: (() -> Void)?) {
-        whitelistedDomains.clear()
+        whitelistedDomains.domainSet = Set<String>()
         updateWhitelist(completion: completion)
     }
     
