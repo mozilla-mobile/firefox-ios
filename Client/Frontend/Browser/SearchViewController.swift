@@ -455,9 +455,10 @@ extension SearchViewController {
         }
 
         let currentSectionItemsCount = tableView(tableView, numberOfRowsInSection: current.section)
-        var nextSection = current.section
-        var nextItem = current.item
-        if sender.input == UIKeyInputUpArrow {
+        let nextSection: Int
+        let nextItem: Int
+        switch sender.input {
+        case UIKeyInputUpArrow:
             // we're going down, we should check if we've reached the first item in this section.
             if (current.item == 0) {
                 // We have, so check if we can decrement the section.
@@ -466,23 +467,29 @@ extension SearchViewController {
                     searchDelegate?.searchViewController(self, didFinalizeText: searchQuery)
                     return
                 } else {
-                    nextSection -= 1
+                    nextSection = current.section - 1
                     nextItem = tableView(tableView, numberOfRowsInSection: nextSection) - 1
                 }
             } else {
-                nextItem -= 1
+                nextSection = current.section
+                nextItem = current.item - 1
             }
-        } else if sender.input == UIKeyInputDownArrow {
+        case UIKeyInputDownArrow:
             if current.item == currentSectionItemsCount - 1 {
                 if current.section == tableView.numberOfSections - 1 {
+                    // We've reached the last item in the last section
                     return
                 } else {
-                    nextSection += 1
+                    // We can go to the next section.
+                    nextSection = current.section + 1
                     nextItem = 0
                 }
             } else {
-                nextItem += 1
+                nextSection = current.section
+                nextItem = current.item + 1
             }
+        default:
+            return
         }
         let next = IndexPath(item: nextItem, section: nextSection)
         self.tableView(tableView, didHighlightRowAt: next)
