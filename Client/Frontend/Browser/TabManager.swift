@@ -209,9 +209,9 @@ class TabManager: NSObject {
 
     //Called by other classes to signal that they are entering/exiting private mode
     //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    //The force flag is used to make sure that when exiting PBM without selecting a private tab we still remove tabs
-    func willSwitchTabMode(force: Bool = false) {
-        if shouldClearPrivateTabs() && ((selectedTab?.isPrivate ?? false) || force)  {
+    //we only want to remove all private tabs when leaving PBM and not when entering.
+    func willSwitchTabMode(leavingPBM: Bool) {
+        if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()
         }
     }
