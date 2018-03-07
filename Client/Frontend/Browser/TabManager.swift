@@ -458,6 +458,7 @@ class TabManager: NSObject {
         }
         tabs.forEach { tab in
             if tab.isPrivate {
+                tab.webView?.removeFromSuperview()
                 removeAllBrowsingDataForTab(tab)
             }
         }
