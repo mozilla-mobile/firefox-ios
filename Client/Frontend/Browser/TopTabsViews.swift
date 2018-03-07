@@ -25,6 +25,7 @@ class TopTabsHeaderFooter: UICollectionReusableView {
     let line = UIView()
     override init(frame: CGRect) {
         super.init(frame: frame)
+        line.semanticContentAttribute = .forceLeftToRight
         addSubview(line)
         line.backgroundColor = TopTabsSeparatorUX.Color
     }
@@ -103,6 +104,7 @@ class TopTabCell: UICollectionViewCell {
         titleText.numberOfLines = 1
         titleText.lineBreakMode = .byCharWrapping
         titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
+        titleText.semanticContentAttribute = .forceLeftToRight
         return titleText
     }()
     
@@ -110,6 +112,7 @@ class TopTabCell: UICollectionViewCell {
         let favicon = UIImageView()
         favicon.layer.cornerRadius = 2.0
         favicon.layer.masksToBounds = true
+        favicon.semanticContentAttribute = .forceLeftToRight
         return favicon
     }()
     
@@ -121,6 +124,7 @@ class TopTabCell: UICollectionViewCell {
         closeButton.layer.shadowOpacity = 0.8
         closeButton.layer.masksToBounds = false
         closeButton.layer.shadowOffset = CGSize(width: -TopTabsUX.TabTitlePadding, height: 0)
+        closeButton.semanticContentAttribute = .forceLeftToRight
         return closeButton
     }()
 
@@ -128,6 +132,7 @@ class TopTabCell: UICollectionViewCell {
         let line = UIView()
         line.backgroundColor = UIColor.Defaults.Blue60
         line.isHidden = true
+        line.semanticContentAttribute = .forceLeftToRight
         return line
     }()
 

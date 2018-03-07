@@ -47,11 +47,13 @@ class TopTabsViewController: UIViewController {
         collectionView.bounces = false
         collectionView.clipsToBounds = false
         collectionView.accessibilityIdentifier = "Top Tabs View"
+        collectionView.semanticContentAttribute = .forceLeftToRight
         return collectionView
     }()
     
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
+        tabsButton.semanticContentAttribute = .forceLeftToRight
         tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
@@ -59,12 +61,14 @@ class TopTabsViewController: UIViewController {
     
     fileprivate lazy var newTab: UIButton = {
         let newTab = UIButton.newTabButton()
+        newTab.semanticContentAttribute = .forceLeftToRight
         newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
         return newTab
     }()
     
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
+        privateModeButton.semanticContentAttribute = .forceLeftToRight
         privateModeButton.light = true
         privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
         return privateModeButton
@@ -130,6 +134,7 @@ class TopTabsViewController: UIViewController {
         }
 
         let topTabFader = TopTabFader()
+        topTabFader.semanticContentAttribute = .forceLeftToRight
 
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
