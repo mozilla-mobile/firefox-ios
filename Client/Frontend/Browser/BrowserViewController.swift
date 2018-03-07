@@ -1752,9 +1752,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         self.urlBar.setLocation(text, search: search)
     }
 
-    func searchViewControllerDidFinishHighlighting(_ searchViewController: SearchViewController) {
-        let text = searchViewController.searchQuery
-        self.urlBar.setLocation(text, search: false)
+    func searchViewController(_ searchViewController: SearchViewController, didFinalizeText text: String) {
         self.urlBar.enterOverlayMode(text, pasted: true, search: true)
     }
 }

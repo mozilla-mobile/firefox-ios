@@ -47,7 +47,7 @@ protocol SearchViewControllerDelegate: class {
     func searchViewController(_ searchViewController: SearchViewController, didLongPressSuggestion suggestion: String)
     func presentSearchSettingsController()
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
-    func searchViewControllerDidFinishHighlighting(_ searchViewController: SearchViewController)
+    func searchViewController(_ searchViewController: SearchViewController, didFinalizeText text: String)
 }
 
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
@@ -463,7 +463,7 @@ extension SearchViewController {
                 // We have, so check if we can decrement the section.
                 if current.section == initialSection {
                     // We've reached the first item in the first section.
-                    searchDelegate?.searchViewControllerDidFinishHighlighting(self)
+                    searchDelegate?.searchViewController(self, didFinalizeText: searchQuery)
                     return
                 } else {
                     nextSection -= 1
