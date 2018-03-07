@@ -3,38 +3,33 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-(function() {
 "use strict";
 
 // Ensure this module only gets included once. This is
 // required for user scripts injected into all frames.
-if (window.__firefox__.includeOnce("ContextMenu")) {
-  return;
-}
+window.__firefox__.includeOnce("ContextMenu", function() {
+  window.addEventListener("touchstart", function(evt) {
+    var target = evt.target;
 
-window.addEventListener("touchstart", function(evt) {
-  var target = evt.target;
+    var targetLink = target.closest("a");
+    var targetImage = target.closest("img");
 
-  var targetLink = target.closest("a");
-  var targetImage = target.closest("img");
+    if (!targetLink && !targetImage) {
+      return;
+    }
 
-  if (!targetLink && !targetImage) {
-    return;
-  }
+    var data = {};
 
-  var data = {};
+    if (targetLink) {
+      data.link = targetLink.href;
+    }
 
-  if (targetLink) {
-    data.link = targetLink.href;
-  }
+    if (targetImage) {
+      data.image = targetImage.src;
+    }
 
-  if (targetImage) {
-    data.image = targetImage.src;
-  }
-
-  if (data.link || data.image) {
-    webkit.messageHandlers.contextMenuMessageHandler.postMessage(data);
-  }
-}, true);
-
-})();
+    if (data.link || data.image) {
+      webkit.messageHandlers.contextMenuMessageHandler.postMessage(data);
+    }
+  }, true);
+});
