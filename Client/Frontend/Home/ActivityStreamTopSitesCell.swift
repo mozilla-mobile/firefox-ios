@@ -485,7 +485,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         var frame = CGRect.zero
         if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
-            frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(horizontalItemsCount - columnPosition) * (itemSize.width + insets.left) + insets.left
+            frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
         } else {
             // For RTL all we have to do is invert the colum
             frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(horizontalItemsCount - 1 - columnPosition) * (itemSize.width + insets.left) + insets.left
