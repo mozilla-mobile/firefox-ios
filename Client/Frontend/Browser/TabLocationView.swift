@@ -194,7 +194,7 @@ class TabLocationView: UIView, TabEventHandler {
         addSubview(contentView)
 
         contentView.snp.makeConstraints { make in
-            make.edges.equalTo(self).inset(UIEdgeInsetsMake(0, 0, 0, 0))
+            make.edges.equalTo(self)
         }
 
         lockImageView.snp.makeConstraints { make in
