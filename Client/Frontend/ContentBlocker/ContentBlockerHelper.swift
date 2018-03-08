@@ -144,7 +144,7 @@ class ContentBlockerHelper {
         }
 
         // Read the whitelist at startup
-        if let list = readWhitelistFile() {
+        if let list = ContentBlockerHelper.readWhitelistFile() {
             ContentBlockerHelper.whitelistedDomains.domainSet = Set(list)
         }
 
