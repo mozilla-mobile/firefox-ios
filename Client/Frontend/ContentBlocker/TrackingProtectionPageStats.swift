@@ -43,13 +43,26 @@ struct TPPageStats {
 class TPStatsBlocklistChecker {
     static let shared = TPStatsBlocklistChecker()
 
-    private var blockLists = TPStatsBlocklists()
+    private var blockLists: TPStatsBlocklists?
 
     func isBlocked(url: URL, isStrictMode: Bool) -> BlocklistName? {
+        guard let blockLists = blockLists else {
+            // TP Stats init isn't complete yet
+            return nil
+        }
         let enabledLists = BlocklistName.forStrictMode(isOn: isStrictMode)
         return blockLists.urlIsInList(url).flatMap { return enabledLists.contains($0) ? $0 : nil }
     }
 
+    func startup() {
+        DispatchQueue.global().async {
+            let parser = TPStatsBlocklists()
+            parser.load()
+            DispatchQueue.main.async {
+                self.blockLists = parser
+            }
+        }
+    }
 }
 
 // The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
@@ -105,7 +118,7 @@ fileprivate class TPStatsBlocklists {
         case font
     }
 
-    init() {
+    func load() {
         for blockList in BlocklistName.all {
             let list: [[String: AnyObject]]
             do {
