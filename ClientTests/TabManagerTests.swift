@@ -237,7 +237,7 @@ class TabManagerTests: XCTestCase {
 
         manager.selectTab(manager.addTab(isPrivate: true))
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be one new private tab")
-        manager.willSwitchTabMode()
+        manager.willSwitchTabMode(leavingPBM: true)
         XCTAssertEqual(manager.privateTabs.count, 0, "After willSwitchTabMode there should be no more private tabs")
 
         manager.selectTab(manager.addTab(isPrivate: true))
@@ -355,7 +355,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.privateTabs.count, 1, "There should only be one private tab")
 
         // switch to normal mode. Which should delete the private tabs
-        manager.willSwitchTabMode()
+        manager.willSwitchTabMode(leavingPBM: true)
 
         //make sure tabs are cleared properly and indexes are reset
         XCTAssertEqual(manager.privateTabs.count, 0, "Private tab should have been deleted")

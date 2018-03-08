@@ -51,6 +51,7 @@ class TabLocationView: UIView, TabEventHandler {
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
+            trackingProtectionView.isHidden = (url == nil)
             setNeedsUpdateConstraints()
         }
     }
@@ -177,18 +178,23 @@ class TabLocationView: UIView, TabEventHandler {
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(SELlongPressLocation))
         tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(SELtapLocation))
 
+        let spaceView = UIView()
+        spaceView.snp.makeConstraints { make in
+            make.width.equalTo(TabLocationViewUX.Spacing)
+        }
         // The lock and TP icons have custom spacing.
         // TODO: Once we cut ios10 support we can use UIstackview.setCustomSpacing
-        let iconStack = UIStackView(arrangedSubviews: [lockImageView, trackingProtectionView])
+        let iconStack = UIStackView(arrangedSubviews: [spaceView, lockImageView, trackingProtectionView])
         iconStack.spacing = TabLocationViewUX.Spacing / 2
 
         let subviews = [iconStack, urlTextField, readerModeButton, separatorLine, pageOptionsButton]
         contentView = UIStackView(arrangedSubviews: subviews)
+        contentView.distribution = .fill
         contentView.alignment = .center
         addSubview(contentView)
 
         contentView.snp.makeConstraints { make in
-            make.edges.equalTo(self).inset(UIEdgeInsetsMake(0, TabLocationViewUX.Spacing, 0, 0))
+            make.edges.equalTo(self)
         }
 
         lockImageView.snp.makeConstraints { make in

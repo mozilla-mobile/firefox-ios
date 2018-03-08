@@ -3,11 +3,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-(function() {
 "use strict";
 
-var nativeHistoryPushState = window.history.pushState;
-var nativeHistoryReplaceState = window.history.replaceState;
+const nativeHistoryPushState = window.history.pushState;
+const nativeHistoryReplaceState = window.history.replaceState;
 
 // We need to catch calls to `history.pushState()` in order to
 // notify the BrowserViewController so that history can be
@@ -36,5 +35,3 @@ window.history.replaceState = function(state, title, url) {
     url: url
   });
 };
-
-})();

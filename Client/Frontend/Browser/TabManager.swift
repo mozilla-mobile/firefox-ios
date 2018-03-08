@@ -209,8 +209,9 @@ class TabManager: NSObject {
 
     //Called by other classes to signal that they are entering/exiting private mode
     //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    func willSwitchTabMode() {
-        if shouldClearPrivateTabs() && (selectedTab?.isPrivate ?? false) {
+    //we only want to remove all private tabs when leaving PBM and not when entering.
+    func willSwitchTabMode(leavingPBM: Bool) {
+        if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()
         }
     }
@@ -458,6 +459,7 @@ class TabManager: NSObject {
         }
         tabs.forEach { tab in
             if tab.isPrivate {
+                tab.webView?.removeFromSuperview()
                 removeAllBrowsingDataForTab(tab)
             }
         }
