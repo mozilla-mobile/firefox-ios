@@ -54,6 +54,11 @@ class TPStatsBlocklistChecker {
 
 // The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
 func wildcardContentBlockerDomainToRegex(domain: String) -> NSRegularExpression? {
+    struct Memo { static var domains =  [String: NSRegularExpression]() }
+    if let memoized = Memo.domains[domain] {
+        return memoized
+    }
+
     // Convert the domain exceptions into regular expressions.
     var regex = domain + "$"
     if regex.first == "*" {
@@ -61,7 +66,9 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> NSRegularExpression?
     }
     regex = regex.replacingOccurrences(of: ".", with: "\\.")
     do {
-        return try NSRegularExpression(pattern: regex, options: [])
+        let result = try NSRegularExpression(pattern: regex, options: [])
+        Memo.domains[domain] = result
+        return result
     } catch {
         assertionFailure("Blocklists: \(error.localizedDescription)")
         return nil
