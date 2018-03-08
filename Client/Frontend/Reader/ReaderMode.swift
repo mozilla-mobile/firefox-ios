@@ -12,6 +12,7 @@ let ReaderModeProfileKeyStyle = "readermode.style"
 enum ReaderModeMessageType: String {
     case stateChange = "ReaderModeStateChange"
     case pageEvent = "ReaderPageEvent"
+    case contentParsed = "ReaderContentParsed"
 }
 
 enum ReaderPageEvent: String {
@@ -209,6 +210,7 @@ struct ReadabilityResult {
 protocol ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
     func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
+    func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab)
 }
 
 let ReaderModeNamespace = "window.__firefox__.reader"
@@ -249,20 +251,29 @@ class ReaderMode: TabContentScript {
         delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab)
     }
 
+    fileprivate func handleReaderContentParsed(_ readabilityResult: ReadabilityResult) {
+        guard let tab = tab else {
+            return
+        }
+        delegate?.readerMode(self, didParseReadabilityResult: readabilityResult, forTab: tab)
+    }
+
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let msg = message.body as? Dictionary<String, String> {
-            if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
+        if let msg = message.body as? Dictionary<String, Any> {
+            if let messageType = ReaderModeMessageType(rawValue: msg["Type"] as? String ?? "") {
                 switch messageType {
                     case .pageEvent:
-                        if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] ?? "Invalid") {
+                        if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] as? String ?? "Invalid") {
                             handleReaderPageEvent(readerPageEvent)
                         }
-                        break
                     case .stateChange:
-                        if let readerModeState = ReaderModeState(rawValue: msg["Value"] ?? "Invalid") {
+                        if let readerModeState = ReaderModeState(rawValue: msg["Value"] as? String ?? "Invalid") {
                             handleReaderModeStateChange(readerModeState)
                         }
-                        break
+                    case .contentParsed:
+                        if let readabilityResult = ReadabilityResult(object: msg["Value"] as AnyObject?) {
+                            handleReaderContentParsed(readabilityResult)
+                        }
                 }
             }
         }
