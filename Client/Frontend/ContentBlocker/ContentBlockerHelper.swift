@@ -148,6 +148,8 @@ class ContentBlockerHelper {
             ContentBlockerHelper.whitelistedDomains.domainSet = Set(list)
         }
 
+        TPStatsBlocklistChecker.shared.startup()
+
         ContentBlockerHelper.removeOldListsByDateFromStore(prefs: prefs) {
             ContentBlockerHelper.removeOldListsByNameFromStore(prefs: prefs) {
                 ContentBlockerHelper.compileListsNotInStore {
