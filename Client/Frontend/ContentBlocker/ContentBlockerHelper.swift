@@ -132,7 +132,7 @@ class ContentBlockerHelper {
 
     private func performHeavyOneTimeInit(_ prefs: Prefs) {
         struct RunOnce { static var hasRun = false }
-        if RunOnce.hasRun { return }
+        guard !RunOnce.hasRun else { return }
         RunOnce.hasRun = true
 
         migrateLegacyUserPrefs()

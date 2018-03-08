@@ -6,7 +6,7 @@ import WebKit
 import Shared
 import Deferred
 
-class WhitelistedDomains {
+struct WhitelistedDomains {
     var domainSet = Set<String>() {
         didSet {
             domainRegex = domainSet.flatMap { wildcardContentBlockerDomainToRegex(domain: "*" + $0) }
