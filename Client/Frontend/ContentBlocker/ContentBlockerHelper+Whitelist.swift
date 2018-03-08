@@ -91,8 +91,8 @@ extension ContentBlockerHelper {
         return whitelistedDomains.domainSet.contains(domain)
     }
 
-    func readWhitelistFile() -> [String]? {
-        guard let fileURL = ContentBlockerHelper.whitelistFileURL() else { return nil }
+    static func readWhitelistFile() -> [String]? {
+        guard let fileURL = whitelistFileURL() else { return nil }
         let text = try? String(contentsOf: fileURL, encoding: .utf8)
         if let text = text, !text.isEmpty {
             return text.components(separatedBy: .newlines)

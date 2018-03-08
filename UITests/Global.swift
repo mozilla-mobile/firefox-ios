@@ -220,8 +220,9 @@ class BrowserUtils {
         case Cache = "Cache"
         case OfflineData = "Offline Website Data"
         case Cookies = "Cookies"
+        case TrackingProtection = "Tracking Protection"
     }
-    internal static let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
+    internal static let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies, Clearable.TrackingProtection])
 
     class func resetToAboutHome() {
         var error: NSError?
@@ -353,8 +354,6 @@ class BrowserUtils {
     }
 
     class func clearPrivateData(_ clearables: Set<Clearable>? = AllClearables, swipe: Bool? = false) {
-        let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
-
         openClearPrivateDataDialog(swipe!)
 
         // Disable all items that we don't want to clear.

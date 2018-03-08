@@ -24,12 +24,16 @@ class ClearPrivateDataTableViewController: UITableViewController {
     fileprivate typealias DefaultCheckedState = Bool
 
     fileprivate lazy var clearables: [(clearable: Clearable, checked: DefaultCheckedState)] = {
-        return [
+        var items: [(clearable: Clearable, checked: DefaultCheckedState)] = [
             (HistoryClearable(profile: self.profile), true),
             (CacheClearable(tabManager: self.tabManager), true),
             (CookiesClearable(tabManager: self.tabManager), true),
-            (SiteDataClearable(tabManager: self.tabManager), true),
+            (SiteDataClearable(tabManager: self.tabManager), true)
         ]
+        if #available(iOS 11, *) {
+            items.append((TrackingProtectionClearable(), true))
+        }
+        return items
     }()
 
     fileprivate lazy var toggles: [Bool] = {
