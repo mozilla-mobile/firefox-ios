@@ -1114,7 +1114,7 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        if let url = webView.url, !url.isErrorPageURL && !url.isAboutHomeURL {
+        if let url = webView.url, !url.isErrorPageURL, !url.isAboutHomeURL {
             tab.lastExecutedTime = Date.now()
 
             postLocationChangeNotificationForTab(tab, navigation: navigation)
@@ -2073,6 +2073,9 @@ extension BrowserViewController: ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
         self.showReaderModeBar(animated: true)
         tab.showContent(true)
+    }
+
+    func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
     }
 }
 
