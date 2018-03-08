@@ -38,14 +38,15 @@ open class PanelDataObservers {
 
 class ActivityStreamDataObserver: DataObserver {
     let profile: Profile
+    let invalidationTime: UInt64
     weak var delegate: DataObserverDelegate?
-    private var invalidationTime = OneMinuteInMilliseconds * 15
 
     fileprivate let events: [Notification.Name] = [.FirefoxAccountChanged, .ProfileDidFinishSyncing, .PrivateDataClearedHistory]
 
     init(profile: Profile) {
         self.profile = profile
         self.profile.history.setTopSitesCacheSize(ActivityStreamTopSiteCacheSize)
+        self.invalidationTime = OneMinuteInMilliseconds * 15
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(self.notificationReceived), name: $0, object: nil) }
     }
 
@@ -61,7 +62,7 @@ class ActivityStreamDataObserver: DataObserver {
 
         // Highlights are cached for 15 mins
         let userEnabledHighlights = profile.prefs.boolForKey(PrefsKeys.ASRecentHighlightsVisible) ?? true
-        let lastInvalidationTime = profile.prefs.unsignedLongForKey(PrefsKeys.ASLastInvalidation) ?? 0
+        let lastInvalidationTime = UInt64(profile.prefs.unsignedLongForKey(PrefsKeys.ASLastInvalidation) ?? 0)
         let shouldInvalidateHighlights = (highlights || (Date.now() - lastInvalidationTime > invalidationTime)) && userEnabledHighlights
         
         // KeyTopSitesCacheIsValid is false when we want to invalidate. Thats why this logic is so backwards
