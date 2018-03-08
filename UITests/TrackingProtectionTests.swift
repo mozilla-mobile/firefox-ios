@@ -38,12 +38,19 @@ func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
 }
 
 @available(iOS 11.0, *)
-class TrackingProtectionTests: KIFTestCase {
+class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     
     private var webRoot: String!
-        
+    private var tabObservers: TabObservers!
+    var stats = TPPageStats()
+
     override func setUp() {
         super.setUp()
+
+        self.tabObservers = registerFor(.didChangeContentBlocking, queue: .main)
+
+        // IP addresses can't be used for whitelisted domains
+        SimplePageServer.useLocalhostInsteadOfIP = true
         webRoot = SimplePageServer.start()
         BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
@@ -61,17 +68,25 @@ class TrackingProtectionTests: KIFTestCase {
         }
         checkIsSetup()
         wait(for: [setup], timeout: 5)
+
+        let clear = self.expectation(description: "clearing")
+        ContentBlockerHelper.clearWhitelist() { clear.fulfill() }
+        waitForExpectations(timeout: 2, handler: nil)
+    }
+
+    func tabDidChangeContentBlockerStatus(_ tab: Tab) {
+        stats = (tab.contentBlocker as! ContentBlockerHelper).stats
     }
 
     private func checkTrackingProtection(isBlocking: Bool) {
-            let url = "\(webRoot!)/tracking-protection-test.html"
-            checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
-            let statsAfter = ContentBlockerHelper.testInstance!.stats
-            if isBlocking {
-               GREYAssertTrue(statsAfter.socialCount > 0, reason: "Stats should increment")
-            } else {
-                GREYAssertTrue(statsAfter.socialCount == 0, reason: "Stats should not increment")
-            }
+        let url = "\(webRoot!)/tracking-protection-test.html"
+        checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
+
+        if isBlocking {
+           GREYAssertTrue(stats.socialCount > 0, reason: "Stats should increment")
+        } else {
+            GREYAssertTrue(stats.socialCount == 0, reason: "Stats should not increment")
+        }
     }
     
     func openTPSetting() {
@@ -132,29 +147,33 @@ class TrackingProtectionTests: KIFTestCase {
     }
 
     func testWhitelist() {
-        let clear = self.expectation(description: "clearing")
-        ContentBlockerHelper.testInstance!.clearWhitelist() {
-            clear.fulfill()
-        }
-        waitForExpectations(timeout: 10, handler: nil)
+        let url = URL(string: "http://localhost")!
 
+        let clear = self.expectation(description: "clearing")
+        ContentBlockerHelper.clearWhitelist() { clear.fulfill() }
+        waitForExpectations(timeout: 10, handler: nil)
         checkTrackingProtection(isBlocking: true)
 
-        let expectation = self.expectation(description: "whitelisted")
-        ContentBlockerHelper.testInstance!.whitelist(enable: true, url: URL(string: "http://ymail.com")!) {
-            expectation.fulfill()
-        }
+        let expWhitelist = self.expectation(description: "whitelisted")
+        ContentBlockerHelper.whitelist(enable: true, url: url) { expWhitelist.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
-
         // The image from ymail.com would normally be blocked, but in this case it is whitelisted
         checkTrackingProtection(isBlocking: false)
 
-        let expectation2 = self.expectation(description: "whitelist removed")
-        ContentBlockerHelper.testInstance!.whitelist(enable: false,  url: URL(string: "http://ymail.com")!) {
-            expectation2.fulfill()
-        }
+        let expRemove = self.expectation(description: "whitelist removed")
+        ContentBlockerHelper.whitelist(enable: false,  url: url) { expRemove.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
+        checkTrackingProtection(isBlocking: true)
 
+        let expWhitelistAgain = self.expectation(description: "whitelisted")
+        ContentBlockerHelper.whitelist(enable: true, url: url) { expWhitelistAgain.fulfill() }
+        waitForExpectations(timeout: 10, handler: nil)
+        // The image from ymail.com would normally be blocked, but in this case it is whitelisted
+        checkTrackingProtection(isBlocking: false)
+
+        let clear1 = self.expectation(description: "clearing")
+        ContentBlockerHelper.clearWhitelist() { clear1.fulfill() }
+        waitForExpectations(timeout: 10, handler: nil)
         checkTrackingProtection(isBlocking: true)
     }
     

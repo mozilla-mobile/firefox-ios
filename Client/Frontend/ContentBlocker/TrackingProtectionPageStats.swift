@@ -45,15 +45,27 @@ class TPStatsBlocklistChecker {
 
     private var blockLists = TPStatsBlocklists()
 
-    func updateWhitelistedDomains(_ domains: [String]) {
-        blockLists.updateWhitelistedDomains(domains)
-    }
-
     func isBlocked(url: URL, isStrictMode: Bool) -> BlocklistName? {
         let enabledLists = BlocklistName.forStrictMode(isOn: isStrictMode)
         return blockLists.urlIsInList(url).flatMap { return enabledLists.contains($0) ? $0 : nil }
     }
 
+}
+
+// The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
+func wildcardContentBlockerDomainToRegex(domain: String) -> NSRegularExpression? {
+    // Convert the domain exceptions into regular expressions.
+    var regex = domain + "$"
+    if regex.first == "*" {
+        regex = "." + regex
+    }
+    regex = regex.replacingOccurrences(of: ".", with: "\\.")
+    do {
+        return try NSRegularExpression(pattern: regex, options: [])
+    } catch {
+        assertionFailure("Blocklists: \(error.localizedDescription)")
+        return nil
+    }
 }
 
 @available(iOS 11, *)
@@ -75,7 +87,6 @@ fileprivate class TPStatsBlocklists {
     }
 
     private var blockRules = [Rule]()
-    private var whitelisted = [NSRegularExpression]()
 
     enum LoadType {
         case all
@@ -85,14 +96,6 @@ fileprivate class TPStatsBlocklists {
     enum ResourceType {
         case all
         case font
-    }
-
-    func updateWhitelistedDomains(_ domains: [String]) {
-        if domains.isEmpty {
-            whitelisted.removeAll()
-            return
-        }
-        whitelisted = domains.flatMap { wildcardDomainToRegex(domain: "*" + $0) }
     }
 
     init() {
@@ -123,8 +126,8 @@ fileprivate class TPStatsBlocklists {
                         continue
                 }
 
-                let domainExceptionsRegex: [NSRegularExpression]? = (trigger["unless-domain"] as? [String])?.flatMap { domain in
-                        return wildcardDomainToRegex(domain: domain)
+                let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.flatMap { domain in
+                        return wildcardContentBlockerDomainToRegex(domain: domain)
                     }
 
                 // Only "third-party" is supported; other types are not used in our block lists.
@@ -137,22 +140,6 @@ fileprivate class TPStatsBlocklists {
 
                 blockRules.append(Rule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList))
             }
-        }
-    }
-
-    // The 'unless-domain' rules use wildcard expressions, convert this to regex.
-    private func wildcardDomainToRegex(domain: String) -> NSRegularExpression? {
-        // Convert the domain exceptions into regular expressions.
-        var regex = domain + "$"
-        if regex.first == "*" {
-            regex = "." + regex
-        }
-        regex = regex.replacingOccurrences(of: ".", with: "\\.")
-        do {
-            return try NSRegularExpression(pattern: regex, options: [])
-        } catch {
-            assertionFailure("Blocklists: \(error.localizedDescription)")
-            return nil
         }
     }
 
@@ -171,9 +158,10 @@ fileprivate class TPStatsBlocklists {
                 }
 
                 // Check the whitelist.
-                if let baseDomain = url.baseDomain {
+                let whitelist = ContentBlockerHelper.whitelistedDomains
+                if let baseDomain = url.baseDomain, !whitelist.domainRegex.isEmpty {
                     let range = NSRange(location: 0, length: baseDomain.count)
-                    for ignoreDomain in whitelisted {
+                    for ignoreDomain in whitelist.domainRegex {
                         if ignoreDomain.firstMatch(in: baseDomain , options: [], range: range) != nil {
                             return nil
                         }

@@ -21,7 +21,11 @@ extension ContentBlockerHelper: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard isEnabled, let body = message.body as? [String: String], let urlString = body["url"] else {
+        guard isEnabled,
+            let body = message.body as? [String: String],
+            let urlString = body["url"],
+            let mainDocumentUrl = tab?.webView?.url,
+            !ContentBlockerHelper.isWhitelisted(url: mainDocumentUrl) else {
             return
         }
 
