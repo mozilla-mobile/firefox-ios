@@ -49,7 +49,6 @@ struct NoImageModeDefaults {
     static let ScriptName = "images"
 }
 
-
 enum BlockingStrength: String {
     case basic
     case strict
@@ -57,21 +56,21 @@ enum BlockingStrength: String {
     static let allOptions: [BlockingStrength] = [.basic, .strict]
 }
 
-
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
-    static var whitelistedDomains = Set<String>()
+    static var whitelistedDomains = WhitelistedDomains()
 
-    let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
-    private weak var tab: Tab?
+    static let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
+    weak var tab: Tab?
     private(set) var userPrefs: Prefs?
 
     var isUserEnabled: Bool? {
         didSet {
-            updateTab()
+            setupTabTrackingProtection()
             tab?.reload()
         }
     }
+
     var isEnabled: Bool {
         if let enabled = isUserEnabled {
             return enabled
@@ -88,7 +87,7 @@ class ContentBlockerHelper {
             guard let url = tab?.url else {
                 return .NoBlockedURLs
             }
-            return isURLWhitelisted(url: url) ? .Whitelisted : .NoBlockedURLs
+            return ContentBlockerHelper.isWhitelisted(url: url) ? .Whitelisted : .NoBlockedURLs
         } else {
             return .Blocking
         }
@@ -118,60 +117,54 @@ class ContentBlockerHelper {
     static private var blockImagesRule: WKContentRuleList?
     static var heavyInitHasRunOnce = false
 
-    // Only set and used in UI test
-    static weak var testInstance: ContentBlockerHelper?
-
     init(tab: Tab, profile: Profile) {
         self.tab = tab
         self.userPrefs = profile.prefs
 
-        if AppConstants.IsRunningTest {
-            ContentBlockerHelper.testInstance = self
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(setupTabTrackingProtection), name: .ContentBlockerTabSetupRequired, object: nil)
 
-        if ContentBlockerHelper.heavyInitHasRunOnce {
+        guard let prefs = userPrefs, !ContentBlockerHelper.heavyInitHasRunOnce else {
             return
         }
 
+        performHeavyOneTimeInit(prefs)
+    }
+
+    private func performHeavyOneTimeInit(_ prefs: Prefs) {
+        struct RunOnce { static var hasRun = false }
+        guard !RunOnce.hasRun else { return }
+        RunOnce.hasRun = true
+
         migrateLegacyUserPrefs()
 
-        // Read the whitelist at startup
-        if let list = readWhitelistFile() {
-            // Convert array to a Set()
-            ContentBlockerHelper.whitelistedDomains = Set(list.map { $0 })
-        }
-
-        removeOldListsByDateFromStore() {
-            self.removeOldListsByNameFromStore() {
-                self.compileListsNotInStore{
-                    ContentBlockerHelper.heavyInitHasRunOnce = true
-                    self.addActiveRulesToTab()
-                }
-            }
-        }
-
         let blockImages = NoImageModeDefaults.Script
-        ruleStore.compileContentRuleList(forIdentifier: NoImageModeDefaults.ScriptName, encodedContentRuleList: blockImages) { rule, error in
+        ContentBlockerHelper.ruleStore.compileContentRuleList(forIdentifier: NoImageModeDefaults.ScriptName, encodedContentRuleList: blockImages) { rule, error in
             assert(rule != nil && error == nil)
             ContentBlockerHelper.blockImagesRule = rule
         }
+
+        // Read the whitelist at startup
+        if let list = readWhitelistFile() {
+            ContentBlockerHelper.whitelistedDomains.domainSet = Set(list)
+        }
+
+        ContentBlockerHelper.removeOldListsByDateFromStore(prefs: prefs) {
+            ContentBlockerHelper.removeOldListsByNameFromStore(prefs: prefs) {
+                ContentBlockerHelper.compileListsNotInStore {
+                    ContentBlockerHelper.heavyInitHasRunOnce = true
+                    NotificationCenter.default.post(name: .ContentBlockerTabSetupRequired, object: nil)
+                }
+            }
+        }
     }
 
-    func setupForWebView() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTab), name: .ContentBlockerUpdateNeeded, object: nil)
-        addActiveRulesToTab()
-    }
-
-    static func prefsChanged() {
-        NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
+    class func prefsChanged() {
+        // This class func needs to notify all the active instances of ContentBlockerHelper to update.
+        NotificationCenter.default.post(name: .ContentBlockerTabSetupRequired, object: nil)
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
-    }
-
-    @objc func updateTab() {
-        addActiveRulesToTab()
     }
 
     // If a user had set a pref for Tracking Protection outside of the previous defaults then make sure to honor those settings
@@ -190,21 +183,22 @@ class ContentBlockerHelper {
         }
     }
 
-    private func addActiveRulesToTab() {
+    // Function to install or remove TP for a tab
+    @objc func setupTabTrackingProtection() {
         if !ContentBlockerHelper.heavyInitHasRunOnce {
             return
         }
 
         removeTrackingProtection()
 
-        guard isEnabled else {
+        if !isEnabled {
             return
         }
 
         let rules = BlocklistName.forStrictMode(isOn: blockingStrengthPref == .strict)
         for list in rules {
             let name = list.filename
-            ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
+            ContentBlockerHelper.ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
                 guard let rule = rule else {
                     let msg = "lookUpContentRuleList for \(name):  \(error?.localizedDescription ?? "empty rules")"
                     Sentry.shared.send(message: "Content blocker error", tag: .general, description: msg)
@@ -252,10 +246,11 @@ class ContentBlockerHelper {
 // ruleStore.
 @available(iOS 11, *)
 extension ContentBlockerHelper {
-    private func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
+    private static func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
         DispatchQueue.global().async {
             guard let path = Bundle.main.path(forResource: file, ofType: "json"),
                 let source = try? String(contentsOfFile: path, encoding: .utf8) else {
+                    assert(false)
                     return
             }
 
@@ -265,7 +260,7 @@ extension ContentBlockerHelper {
         }
     }
 
-    private func lastModifiedSince1970(forFileAtPath path: String) -> Timestamp? {
+    private static func lastModifiedSince1970(forFileAtPath path: String) -> Timestamp? {
         do {
             let url = URL(fileURLWithPath: path)
             let attr = try FileManager.default.attributesOfItem(atPath: url.path)
@@ -276,7 +271,7 @@ extension ContentBlockerHelper {
         }
     }
 
-    private func dateOfMostRecentBlockerFile() -> Timestamp {
+    private static func dateOfMostRecentBlockerFile() -> Timestamp {
         let blocklists = BlocklistName.all
         return blocklists.reduce(Timestamp(0)) { result, list in
             guard let path = Bundle.main.path(forResource: list.filename, ofType: "json") else { return result }
@@ -285,15 +280,15 @@ extension ContentBlockerHelper {
         }
     }
 
-    func removeAllRulesInStore(completion: @escaping () -> Void) {
-        ruleStore.getAvailableContentRuleListIdentifiers { available in
+    static func removeAllRulesInStore(completion: @escaping () -> Void) {
+        ContentBlockerHelper.ruleStore.getAvailableContentRuleListIdentifiers { available in
             guard let available = available else {
                 completion()
                 return
             }
             let deferreds: [Deferred<Void>] = available.map { filename in
                 let result = Deferred<Void>()
-                self.ruleStore.removeContentRuleList(forIdentifier: filename) { _ in
+                ContentBlockerHelper.ruleStore.removeContentRuleList(forIdentifier: filename) { _ in
                    result.fill()
                 }
                 return result
@@ -306,24 +301,24 @@ extension ContentBlockerHelper {
 
     // If any blocker files are newer than the date saved in prefs,
     // remove all the content blockers and reload them.
-    func removeOldListsByDateFromStore(completion: @escaping () -> Void) {
-        let fileDate = self.dateOfMostRecentBlockerFile()
-        let prefsNewestDate = userPrefs?.longForKey("blocker-file-date") ?? 0
+    static func removeOldListsByDateFromStore(prefs: Prefs, completion: @escaping () -> Void) {
+        let fileDate = dateOfMostRecentBlockerFile()
+        let prefsNewestDate = prefs.longForKey("blocker-file-date") ?? 0
         if prefsNewestDate < 1 || fileDate <= prefsNewestDate {
             completion()
             return
         }
 
-        userPrefs?.setTimestamp(fileDate, forKey: "blocker-file-date")
-        self.removeAllRulesInStore() {
+        prefs.setTimestamp(fileDate, forKey: "blocker-file-date")
+        removeAllRulesInStore() {
             completion()
         }
     }
 
-    func removeOldListsByNameFromStore(completion: @escaping () -> Void) {
+    static func removeOldListsByNameFromStore(prefs: Prefs, completion: @escaping () -> Void) {
         var noMatchingIdentifierFoundForRule = false
 
-        ruleStore.getAvailableContentRuleListIdentifiers { available in
+        ContentBlockerHelper.ruleStore.getAvailableContentRuleListIdentifiers { available in
             guard let available = available else {
                 completion()
                 return
@@ -337,13 +332,13 @@ extension ContentBlockerHelper {
                 }
             }
 
-            let fileDate = self.dateOfMostRecentBlockerFile()
-            let prefsNewestDate = self.userPrefs?.timestampForKey("blocker-file-date") ?? 0
+            let fileDate = dateOfMostRecentBlockerFile()
+            let prefsNewestDate = prefs.timestampForKey("blocker-file-date") ?? 0
             if prefsNewestDate > 0 && fileDate <= prefsNewestDate && !noMatchingIdentifierFoundForRule {
                 completion()
                 return
             }
-            self.userPrefs?.setTimestamp(fileDate, forKey: "blocker-file-date")
+            prefs.setTimestamp(fileDate, forKey: "blocker-file-date")
 
             self.removeAllRulesInStore {
                 completion()
@@ -351,7 +346,7 @@ extension ContentBlockerHelper {
         }
     }
 
-    func compileListsNotInStore(completion: @escaping () -> Void) {
+    static func compileListsNotInStore(completion: @escaping () -> Void) {
         let blocklists = BlocklistName.all.map { $0.filename }
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
@@ -360,10 +355,10 @@ extension ContentBlockerHelper {
                     result.fill()
                     return
                 }
-                self.loadJsonFromBundle(forResource: filename) { jsonString in
+                loadJsonFromBundle(forResource: filename) { jsonString in
                     var str = jsonString
-                    str.insert(contentsOf: self.whitelistAsJSON(), at: str.index(str.endIndex, offsetBy: -1))
-                    self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
+                    str.insert(contentsOf: whitelistAsJSON(), at: str.index(str.endIndex, offsetBy: -1))
+                    ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
                         if let error = error {
                             Sentry.shared.send(message: "Content blocker error", tag: .general, description: error.localizedDescription)
                             assert(false)
@@ -405,3 +400,4 @@ extension ContentBlockerHelper {
         setTrackingProtectionMode(!isEnabled, for: prefs, with: tabManager)
     }
 }
+

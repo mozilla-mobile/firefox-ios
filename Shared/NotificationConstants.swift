@@ -30,13 +30,11 @@ extension Notification.Name {
     // Fired when a the page metadata extraction script has completed and is being passed back to the native client
     public static let OnPageMetadataFetched = Notification.Name("OnPageMetadataFetched")
 
-
     public static let ProfileDidStartSyncing = Notification.Name("ProfileDidStartSyncing")
     public static let ProfileDidFinishSyncing = Notification.Name("ProfileDidFinishSyncing")
 
     public static let DatabaseWasRecreated = Notification.Name("DatabaseWasRecreated")
 
-    public static let ContentBlockerUpdateNeeded = Notification.Name("ContentBlockerUpdateNeeded")
     public static let PasscodeDidChange = Notification.Name("PasscodeDidChange")
 
     public static let PasscodeDidCreate = Notification.Name("PasscodeDidCreate")
@@ -52,4 +50,6 @@ extension Notification.Name {
     public static let FaviconDidLoad = Notification.Name("FaviconDidLoad")
 
     public static let ReachabilityStatusChanged = Notification.Name("ReachabilityStatusChanged")
+
+    public static let ContentBlockerTabSetupRequired = Notification.Name("ContentBlockerTabSetupRequired")
 }
