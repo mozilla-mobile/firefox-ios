@@ -431,6 +431,7 @@ extension ActivityStreamPanel {
         topSiteCell.delegate = self.topSitesManager
         topSiteCell.setNeedsLayout()
         topSiteCell.collectionView.reloadData()
+        topSiteCell.moveToInitialPage()
         return cell
     }
 
