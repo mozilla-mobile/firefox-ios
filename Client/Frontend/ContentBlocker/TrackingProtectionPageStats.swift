@@ -120,6 +120,9 @@ fileprivate class TPStatsBlocklists {
     }
 
     func load() {
+        // All rules have this prefix on the domain to match.
+        let standardPrefix = "^https?://([^/]+\\.)?"
+        
         for blockList in BlocklistName.all {
             let list: [[String: AnyObject]]
             do {
@@ -147,8 +150,6 @@ fileprivate class TPStatsBlocklists {
                         continue
                 }
 
-                // All rules have this prefix on the domain to match.
-                let standardPrefix = "^https?://([^/]+\\.)?"
                 guard let loc = filter.range(of: standardPrefix) else {
                     assert(false, "url-filter code needs updating for new list format")
                     return
