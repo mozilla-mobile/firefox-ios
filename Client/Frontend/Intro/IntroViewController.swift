@@ -184,6 +184,10 @@ class IntroViewController: UIViewController {
         }
         imageViewContainer.layoutSubviews()
         scrollView.contentSize = imageViewContainer.frame.size
+        // This should never happen but just in case make sure there is a way out
+        if cardViews.count == 1 {
+            startBrowsingButton.isHidden = false
+        }
     }
 
     func addIntro(card: IntroCard) -> CardView? {
