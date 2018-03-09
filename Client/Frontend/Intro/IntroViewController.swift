@@ -39,6 +39,7 @@ class IntroViewController: UIViewController {
         button.setTitleColor(IntroUX.StartBrowsingButtonColor, for: UIControlState())
         button.addTarget(self, action: #selector(IntroViewController.startBrowsing), for: UIControlEvents.touchUpInside)
         button.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
+        button.isHidden = true
         return button
     }()
 
@@ -304,6 +305,9 @@ extension IntroViewController: UIScrollViewDelegate {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         if let cardView = cardViews[safe: page] {
             setActive(cardView, forPage: page)
+        }
+        if page != 0 {
+            startBrowsingButton.isHidden = false
         }
     }
 
