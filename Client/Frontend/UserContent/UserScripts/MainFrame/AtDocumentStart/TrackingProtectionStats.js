@@ -36,13 +36,21 @@ function install() {
   })
 
   function sendMessage(url) {
-    webkit.messageHandlers.trackingProtectionStats.postMessage({ url: url });
+    if (url) {
+      webkit.messageHandlers.trackingProtectionStats.postMessage({ url: url });
+    }
   }
 
   function onLoadNativeCallback() {
     // Send back the sources of every script and image in the DOM back to the host application.
     [].slice.apply(document.scripts).forEach(function(el) { sendMessage(el.src); });
-    [].slice.apply(document.images).forEach(function(el) { sendMessage(el.src); });
+    [].slice.apply(document.images).forEach(function(el) {
+      // If the image's natural width is zero, then it has not loaded so we
+      // can assume that it may have been blocked.
+      if (el.naturalWidth === 0) {
+        sendMessage(el.src);
+      }
+    });
   }
 
   let originalOpen = null;
@@ -86,7 +94,16 @@ function install() {
     };
 
     xhrProto.send = function(body) {
-      sendMessage(this._url);
+      // Only attach the `error` event listener once for this
+      // `XMLHttpRequest` instance.
+      if (!this._tpErrorHandler) {
+        // If this `XMLHttpRequest` instance fails to load, we
+        // can assume it has been blocked.
+        this._tpErrorHandler = function() {
+          sendMessage(this._url);
+        };
+        this.addEventListener("error", this._tpErrorHandler);
+      }
       return originalSend.apply(this, arguments);
     };
 
@@ -102,7 +119,17 @@ function install() {
         return originalImageSrc.get.call(this);
       },
       set: function(value) {
-        sendMessage(value);
+        // Only attach the `error` event listener once for this
+        // Image instance.
+        if (!this._tpErrorHandler) {
+          // If this `Image` instance fails to load, we can assume
+          // it has been blocked.
+          this._tpErrorHandler = function() {
+            sendMessage(this.src);
+          };
+          this.addEventListener("error", this._tpErrorHandler);
+        }
+
         originalImageSrc.set.call(this, value);
       }
     });
@@ -114,8 +141,13 @@ function install() {
     mutationObserver = new MutationObserver(function(mutations) {
       mutations.forEach(function(mutation) {
         mutation.addedNodes.forEach(function(node) {
-          if (node.tagName === "SCRIPT") {
-            sendMessage(node.src);
+          // Only consider `<script src="*">` elements.
+          if (node.tagName === "SCRIPT" && node.src) {
+            // If the `<script>`  fails to load, we can assume
+            // it has been blocked.
+            node.addEventListener("error", function() {
+              sendMessage(node.src);
+            });
           }
         });
       });
