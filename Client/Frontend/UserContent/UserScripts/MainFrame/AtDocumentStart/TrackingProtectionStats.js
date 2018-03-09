@@ -36,7 +36,9 @@ function install() {
   })
 
   function sendMessage(url) {
-    webkit.messageHandlers.trackingProtectionStats.postMessage({ url: url });
+    if (url) {
+      webkit.messageHandlers.trackingProtectionStats.postMessage({ url: url });
+    }
   }
 
   function onLoadNativeCallback() {
