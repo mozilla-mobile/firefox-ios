@@ -271,7 +271,8 @@ extension PhotonActionSheetProtocol {
     @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
         let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlocking, iconString: "menu-TrackingProtection") { _ in
-            // TODO: Enable Tracking protection for the current browsing mode
+            ContentBlockerHelper.toggleTrackingProtectionMode(for: self.profile.prefs, tabManager: self.tabManager)
+            tab.reload()
         }
 
         let moreInfo = PhotonActionSheetItem(title: Strings.TPBlockingMoreInfo, iconString: "menu-Info") { _ in
@@ -279,9 +280,9 @@ extension PhotonActionSheetProtocol {
             tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
         }
 
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDisabledDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .None) { _ in
-          //  guard let bvc = self as? PresentableVC else { return }
-          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[moreInfo], [enableTP]], on: bvc, from: urlBar)
+        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDisabledDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
+            guard let bvc = self as? PresentableVC else { return }
+            self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[moreInfo], [enableTP]], on: bvc, from: urlBar)
         }
         return [tpBlocking]
     }
@@ -301,10 +302,12 @@ extension PhotonActionSheetProtocol {
         let statList = [totalCount, adCount, analyticsCount, socialCount, contentCount]
 
         let addToWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionDisableTitle, iconString: "menu-TrackingProtection-Off") { _ in
-            ContentBlockerHelper.whitelist(enable: true, url: currentURL, completion: nil)
+            ContentBlockerHelper.whitelist(enable: true, url: currentURL) { _ in
+                tab.reload()
+            }
         }
         // when tracking protection is on and content was blocked
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .None) { _ in
+        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
           guard let bvc = self as? PresentableVC else { return }
             self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [statList, [addToWhitelist]], on: bvc, from: urlBar)
         }
@@ -318,10 +321,12 @@ extension PhotonActionSheetProtocol {
         }
 
         let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionWhiteListRemove, iconString: "menu-TrackingProtection") { _ in
-            ContentBlockerHelper.whitelist(enable: false, url: currentURL, completion: nil)
+            ContentBlockerHelper.whitelist(enable: false, url: currentURL) { _ in
+                tab.reload()
+            }
         }
 
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .None) { _ in
+        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .Disclosure) { _ in
             guard let bvc = self as? PresentableVC else { return }
             self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[removeFromWhitelist]], on: bvc, from: urlBar)
         }
