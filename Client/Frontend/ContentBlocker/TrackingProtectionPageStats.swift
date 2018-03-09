@@ -46,10 +46,11 @@ class TPStatsBlocklistChecker {
     private var blockLists: TPStatsBlocklists?
 
     func isBlocked(url: URL, isStrictMode: Bool) -> BlocklistName? {
-        guard let blockLists = blockLists else {
+        guard let blockLists = blockLists, let host = url.host, !host.isEmpty else {
             // TP Stats init isn't complete yet
             return nil
         }
+
         let enabledLists = BlocklistName.forStrictMode(isOn: isStrictMode)
         return blockLists.urlIsInList(url).flatMap { return enabledLists.contains($0) ? $0 : nil }
     }
@@ -106,7 +107,7 @@ fileprivate class TPStatsBlocklists {
         }
     }
 
-    private var blockRules = [Rule]()
+    private var blockRules = [String: [Rule]]()
 
     enum LoadType {
         case all
@@ -119,6 +120,9 @@ fileprivate class TPStatsBlocklists {
     }
 
     func load() {
+        // All rules have this prefix on the domain to match.
+        let standardPrefix = "^https?://([^/]+\\.)?"
+        
         for blockList in BlocklistName.all {
             let list: [[String: AnyObject]]
             do {
@@ -146,9 +150,29 @@ fileprivate class TPStatsBlocklists {
                         continue
                 }
 
-                let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.flatMap { domain in
-                        return wildcardContentBlockerDomainToRegex(domain: domain)
+                guard let loc = filter.range(of: standardPrefix) else {
+                    assert(false, "url-filter code needs updating for new list format")
+                    return
+                }
+                let baseDomain = filter.substring(from: loc.upperBound).replacingOccurrences(of: "\\.", with: ".")
+                assert(!baseDomain.isEmpty)
+                if blockRules[baseDomain] == nil {
+                    blockRules[baseDomain] = [Rule]()
+                }
+
+                guard var ruleList = blockRules[baseDomain] else {
+                    return
+                }
+
+                if AppConstants.BuildChannel != .release {
+                    ["*", "?", "+"].forEach { x in
+                        assert(!baseDomain.contains(x), "No wildcards allowed in baseDomain")
                     }
+                }
+
+                let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.flatMap { domain in
+                    return wildcardContentBlockerDomainToRegex(domain: domain)
+                }
 
                 // Only "third-party" is supported; other types are not used in our block lists.
                 let loadTypes = trigger["load-type"] as? [String] ?? []
@@ -158,7 +182,7 @@ fileprivate class TPStatsBlocklists {
                 let resourceTypes = trigger["resource-type"] as? [String] ?? []
                 let resourceType = resourceTypes.contains("font") ? ResourceType.font : .all
 
-                blockRules.append(Rule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList))
+                ruleList.append(Rule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList))
             }
         }
     }
@@ -166,6 +190,10 @@ fileprivate class TPStatsBlocklists {
     func urlIsInList(_ url: URL) -> BlocklistName? {
         let resourceString = url.absoluteString
         let resourceRange = NSRange(location: 0, length: resourceString.count)
+
+        guard let baseDomain = url.baseDomain, let blockRules = blockRules[baseDomain] else {
+            return nil
+        }
 
         domainSearch: for rule in blockRules {
             // First, test the top-level filters to see if this URL might be blocked.
