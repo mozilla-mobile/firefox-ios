@@ -418,7 +418,8 @@ class TabManager: NSObject {
             if tabIndex == viableTabs.count {
                 tabIndex -= 1
             }
-            if let currentTab = viableTabs[safe: tabIndex], tabIndex < viableTabs.count && !viableTabs.isEmpty {
+
+            if let currentTab = viableTabs[safe: tabIndex] {
                 _selectedIndex = tabs.index(of: currentTab) ?? -1
             } else {
                 _selectedIndex = -1
