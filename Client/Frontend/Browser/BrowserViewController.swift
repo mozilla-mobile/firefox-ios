@@ -1485,36 +1485,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard let tab = tabManager.selectedTab, tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
+        guard let tab = tabManager.selectedTab else {
             return
         }
-
-        let toggleActionTitle: String
-        if tab.desktopSite {
-            toggleActionTitle = NSLocalizedString("Request Mobile Site", comment: "Action Sheet Button for Requesting the Mobile Site")
-        } else {
-            toggleActionTitle = NSLocalizedString("Request Desktop Site", comment: "Action Sheet Button for Requesting the Desktop Site")
+        let urlActions = self.getRefreshLongPressMenu(for: tab)
+        guard !urlActions.isEmpty else {
+            return
         }
-
-        let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: toggleActionTitle, style: .default, handler: { _ in tab.toggleDesktopSite() }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
-        if #available(iOS 11, *) {
-            if let helper = tab.contentBlocker as? ContentBlockerHelper {
-                let title: String
-                if helper.isEnabled {
-                    title = Strings.TrackingProtectionReloadWithout
-                } else {
-                    title = Strings.TrackingProtectionReloadWith
-                }
-                controller.addAction(UIAlertAction(title: title, style: .default) { _ in
-                    helper.isUserEnabled = !helper.isEnabled
-                })
-            }
-        }
-        controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
-        controller.popoverPresentationController?.sourceRect = button.frame
-        present(controller, animated: true, completion: nil)
+        self.presentSheetWith(actions: [urlActions], on: self, from: button)
     }
 
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
