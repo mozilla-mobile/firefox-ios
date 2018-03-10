@@ -389,6 +389,8 @@ class CardView: UIView {
             button.snp.makeConstraints { make in
                 make.bottom.centerX.equalTo(self)
             }
+            // When there is a button reduce the spacing to make more room for text
+            stackView.spacing = stackView.spacing / 2
         }
     }
 
