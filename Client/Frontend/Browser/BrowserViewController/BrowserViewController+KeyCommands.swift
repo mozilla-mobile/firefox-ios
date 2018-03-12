@@ -77,11 +77,29 @@ extension BrowserViewController {
         }
     }
 
+    @objc private func tabKeyNavigationKeyCommand(sender: UIKeyCommand) {
+        guard let webView = tabManager.selectedTab?.webView else {
+            return
+        }
+        print("TabKey press")
+        let methodName = sender.modifierFlags.rawValue == 0 ? "nextElement" : "previousElement"
+        webView.evaluateJavaScript("window.__firefox__.focusHelper.\(methodName)()") { (res, err) in
+            print("Result from webview: \(res ??? "none")")
+            print("WebView KeyCommands: \(webView.keyCommands ??? "none")")
+        }
+    }
+
     @objc private func gotoTabTray() {
         showTabTray()
     }
 
     override var keyCommands: [UIKeyCommand]? {
+
+        let tabKeyNavigation = [
+            UIKeyCommand(input: "1", modifierFlags: .command, action: #selector(tabKeyNavigationKeyCommand(sender:))),
+            UIKeyCommand(input: "\t", modifierFlags: [], action: #selector(tabKeyNavigationKeyCommand(sender:))),
+            UIKeyCommand(input: "\t", modifierFlags: .shift, action: #selector(tabKeyNavigationKeyCommand(sender:))),
+        ]
         let overidesTextEditing = [
             UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
             UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand)),
@@ -112,9 +130,9 @@ extension BrowserViewController {
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
 
         if isEditingText || urlBar.inOverlayMode {
-            return tabNavigation
+            return tabNavigation + tabKeyNavigation
         } else {
-            return tabNavigation + overidesTextEditing
+            return tabNavigation + overidesTextEditing + tabKeyNavigation
         }
     }
 }
