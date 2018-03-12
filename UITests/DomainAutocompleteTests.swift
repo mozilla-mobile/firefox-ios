@@ -22,13 +22,18 @@ class DomainAutocompleteTests: KIFTestCase {
 
         // Multiple subdomains.
         tester().enterText(intoCurrentFirstResponder: "f")
+        tester().waitForAnimationsToFinish()
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "f", completion: "oo.bar.baz.org")
         tester().clearTextFromFirstResponder()
+        tester().waitForAnimationsToFinish()
         tester().enterText(intoCurrentFirstResponder: "b")
+        tester().waitForAnimationsToFinish()
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "b", completion: "ar.baz.org")
         tester().enterText(intoCurrentFirstResponder: "a")
+        tester().waitForAnimationsToFinish()
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ba", completion: "r.baz.org")
         tester().enterText(intoCurrentFirstResponder: "z")
+        tester().waitForAnimationsToFinish()
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "baz", completion: ".org")
     }
 
