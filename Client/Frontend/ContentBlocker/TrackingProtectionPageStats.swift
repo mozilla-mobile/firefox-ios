@@ -163,21 +163,11 @@ fileprivate class TPStatsBlocklists {
                 }
                 let baseDomain = filter.substring(from: loc.upperBound).replacingOccurrences(of: "\\.", with: ".")
                 assert(!baseDomain.isEmpty)
-                if blockRules[baseDomain] == nil {
-                    blockRules[baseDomain] = [Rule]()
-                }
 
-                var ruleList: [Rule]
-                if let array = blockRules[baseDomain] {
-                    ruleList = array
-                } else {
-                    ruleList = [Rule]()
-                }
-
-                if AppConstants.BuildChannel != .release {
-                    ["*", "?", "+"].forEach { x in
-                        assert(!baseDomain.contains(x), "No wildcards allowed in baseDomain")
-                    }
+                // Sanity check for the lists.
+                ["*", "?", "+"].forEach { x in
+                    // This will only happen on debug
+                    assert(!baseDomain.contains(x), "No wildcards allowed in baseDomain")
                 }
 
                 let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.flatMap { domain in
@@ -192,8 +182,8 @@ fileprivate class TPStatsBlocklists {
                 let resourceTypes = trigger["resource-type"] as? [String] ?? []
                 let resourceType = resourceTypes.contains("font") ? ResourceType.font : .all
 
-                ruleList.append(Rule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList))
-                blockRules[baseDomain] = ruleList
+                let rule = Rule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList)
+                blockRules[baseDomain] = (blockRules[baseDomain] ?? []) + [rule]
             }
         }
     }
