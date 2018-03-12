@@ -449,7 +449,6 @@ extension SearchViewController {
             return
         }
 
-        let currentSectionItemsCount = tableView(tableView, numberOfRowsInSection: current.section)
         let nextSection: Int
         let nextItem: Int
         switch sender.input {
@@ -459,7 +458,7 @@ extension SearchViewController {
                 // We have, so check if we can decrement the section.
                 if current.section == initialSection {
                     // We've reached the first item in the first section.
-                    searchDelegate?.searchViewController(self, didFinalizeText: searchQuery)
+                    searchDelegate?.searchViewController(self, didHighlightText: searchQuery, search: false)
                     return
                 } else {
                     nextSection = current.section - 1
@@ -470,6 +469,7 @@ extension SearchViewController {
                 nextItem = current.item - 1
             }
         case UIKeyInputDownArrow:
+            let currentSectionItemsCount = tableView(tableView, numberOfRowsInSection: current.section)
             if current.item == currentSectionItemsCount - 1 {
                 if current.section == tableView.numberOfSections - 1 {
                     // We've reached the last item in the last section
