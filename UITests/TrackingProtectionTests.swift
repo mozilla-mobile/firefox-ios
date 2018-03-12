@@ -43,6 +43,8 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     private var webRoot: String!
     private var tabObservers: TabObservers!
     var stats = TPPageStats()
+    var statsIncrement: XCTestExpectation?
+    var statsZero: XCTestExpectation?
 
     override func setUp() {
         super.setUp()
@@ -76,17 +78,32 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
     func tabDidChangeContentBlockerStatus(_ tab: Tab) {
         stats = (tab.contentBlocker as! ContentBlockerHelper).stats
+
+        if (stats.total == 0) {
+            statsZero?.fulfill()
+        } else {
+            statsIncrement?.fulfill()
+        }
     }
 
-    private func checkTrackingProtection(isBlocking: Bool) {
+    private func checkTrackingProtection(isBlocking: Bool, isTPDisabled: Bool = false) {
+        if !isTPDisabled {
+            if isBlocking {
+                statsIncrement = expectation(description: "stats increment")
+            } else {
+                statsZero = expectation(description: "stats zero")
+            }
+        }
+
         let url = "\(webRoot!)/tracking-protection-test.html"
         checkIfImageLoaded(url: url, shouldBlockImage: isBlocking)
 
-        if isBlocking {
-           GREYAssertTrue(stats.socialCount > 0, reason: "Stats should increment")
-        } else {
-            GREYAssertTrue(stats.socialCount == 0, reason: "Stats should not increment")
+        if !isTPDisabled {
+            waitForExpectations(timeout: 2, handler: nil)
         }
+
+        statsIncrement = nil
+        statsZero = nil
     }
     
     func openTPSetting() {
@@ -133,7 +150,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabTrayController.addTabButton"))
             .perform(grey_tap())
 
-        checkTrackingProtection(isBlocking: false)
+        checkTrackingProtection(isBlocking: false, isTPDisabled: true)
 
         openTPSetting()
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(true))
@@ -178,6 +195,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     }
     
     func testPrivateTabPageTrackingProtection() {
+
         if BrowserUtils.iPad() {
             EarlGrey.select(elementWithMatcher:
                 grey_accessibilityID("TopTabsViewController.tabsButton"))
