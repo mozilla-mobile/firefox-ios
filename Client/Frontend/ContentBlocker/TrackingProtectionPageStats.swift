@@ -49,7 +49,7 @@ class TPStatsBlocklistChecker {
     func isBlocked(url: URL, isStrictMode: Bool) -> Deferred<BlocklistName?> {
         let deferred = Deferred<BlocklistName?>()
 
-        guard let blockLists = blockLists, !url.host?.isEmpty else {
+        guard let blockLists = blockLists, let host = url.host, !host.isEmpty else {
             // TP Stats init isn't complete yet
             deferred.fill(nil)
             return deferred
