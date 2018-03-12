@@ -6,6 +6,7 @@
 // The preload and postload js files are unmodified from Focus.
 
 import Shared
+import Deferred
 
 struct TPPageStats {
     let adCount: Int
@@ -45,14 +46,20 @@ class TPStatsBlocklistChecker {
 
     private var blockLists: TPStatsBlocklists?
 
-    func isBlocked(url: URL, isStrictMode: Bool) -> BlocklistName? {
+    func isBlocked(url: URL, isStrictMode: Bool) -> Deferred<BlocklistName?> {
+        let deferred = Deferred<BlocklistName?>()
+
         guard let blockLists = blockLists, let host = url.host, !host.isEmpty else {
             // TP Stats init isn't complete yet
-            return nil
+            deferred.fill(nil)
+            return deferred
         }
 
-        let enabledLists = BlocklistName.forStrictMode(isOn: isStrictMode)
-        return blockLists.urlIsInList(url).flatMap { return enabledLists.contains($0) ? $0 : nil }
+        DispatchQueue.global().async {
+            let enabledLists = BlocklistName.forStrictMode(isOn: isStrictMode)
+            deferred.fill(blockLists.urlIsInList(url).flatMap { return enabledLists.contains($0) ? $0 : nil })
+        }
+        return deferred
     }
 
     func startup() {
