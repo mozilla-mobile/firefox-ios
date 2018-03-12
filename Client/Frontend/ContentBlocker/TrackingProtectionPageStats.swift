@@ -160,8 +160,11 @@ fileprivate class TPStatsBlocklists {
                     blockRules[baseDomain] = [Rule]()
                 }
 
-                guard var ruleList = blockRules[baseDomain] else {
-                    return
+                var ruleList: [Rule]
+                if let array = blockRules[baseDomain] {
+                    ruleList = array
+                } else {
+                    ruleList = [Rule]()
                 }
 
                 if AppConstants.BuildChannel != .release {
@@ -183,6 +186,7 @@ fileprivate class TPStatsBlocklists {
                 let resourceType = resourceTypes.contains("font") ? ResourceType.font : .all
 
                 ruleList.append(Rule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList))
+                blockRules[baseDomain] = ruleList
             }
         }
     }
@@ -191,11 +195,11 @@ fileprivate class TPStatsBlocklists {
         let resourceString = url.absoluteString
         let resourceRange = NSRange(location: 0, length: resourceString.count)
 
-        guard let baseDomain = url.baseDomain, let blockRules = blockRules[baseDomain] else {
+        guard let baseDomain = url.baseDomain, let rules = blockRules[baseDomain] else {
             return nil
         }
 
-        domainSearch: for rule in blockRules {
+        domainSearch: for rule in rules {
             // First, test the top-level filters to see if this URL might be blocked.
             if rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil {
                 // Check the domain exceptions. If a domain exception matches, this filter does not apply.
