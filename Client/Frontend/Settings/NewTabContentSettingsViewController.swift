@@ -51,5 +51,10 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
 
         return [firstSection, secondSection]
     }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
+    }
 }
 
