@@ -254,6 +254,24 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.privateTabs.count, 1, "If the flag is false then private tabs should still exist")
     }
 
+    func testTogglePBMDelete() {
+        let profile = TabManagerMockProfile()
+        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+        profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
+
+        let tab = manager.addTab()
+        manager.selectTab(tab)
+        manager.selectTab(manager.addTab())
+        manager.selectTab(manager.addTab(isPrivate: true))
+
+        manager.willSwitchTabMode(leavingPBM: false)
+        XCTAssertEqual(manager.privateTabs.count, 1, "There should be 1 private tab")
+        manager.willSwitchTabMode(leavingPBM: true)
+        XCTAssertEqual(manager.privateTabs.count, 0, "There should be 0 private tab")
+        manager.removeTab(tab)
+        XCTAssertEqual(manager.normalTabs.count, 1, "There should be 1 normal tab")
+    }
+
     func testDeleteNonSelectedTab() {
         let profile = TabManagerMockProfile()
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)
