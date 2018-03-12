@@ -440,11 +440,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 }
 
 extension SearchViewController {
-
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
-
     func handleKeyCommands(sender: UIKeyCommand) {
         let initialSection = SearchListSection.bookmarksAndHistory.rawValue
         guard let current = tableView.indexPathForSelectedRow else {
@@ -495,24 +490,6 @@ extension SearchViewController {
         self.tableView(tableView, didHighlightRowAt: next)
         tableView.selectRow(at: next, animated: false, scrollPosition: .middle)
     }
-
-    func didSelectTableCellKeyCommand() {
-        guard let current = tableView.indexPathForSelectedRow else {
-            return
-        }
-
-        tableView(tableView, didSelectRowAtIndexPath: current)
-    }
-
-    override var keyCommands: [UIKeyCommand]? {
-        let overlayCommands = [
-            UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(handleKeyCommands(sender:))),
-            UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: [], action: #selector(handleKeyCommands(sender:))),
-            UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(didSelectTableCellKeyCommand)),
-        ]
-        return overlayCommands
-    }
-    
 }
 
 extension SearchViewController: SuggestionCellDelegate {

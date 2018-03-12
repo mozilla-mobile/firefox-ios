@@ -81,18 +81,18 @@ extension BrowserViewController {
         showTabTray()
     }
 
-    @objc private func initiateLocationSelectionKeyCommand(sender: UIKeyCommand) {
+    @objc private func moveURLCompletionKeyCommand(sender: UIKeyCommand) {
         guard let searchController = self.searchController else {
             return
         }
 
-        searchController.becomeFirstResponder()
         searchController.handleKeyCommands(sender: sender)
     }
 
     override var keyCommands: [UIKeyCommand]? {
-        let overlayCommands = [
-            UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(initiateLocationSelectionKeyCommand(sender:))),
+        let searchLocationCommands = [
+            UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
         ]
         let overidesTextEditing = [
             UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
@@ -124,7 +124,7 @@ extension BrowserViewController {
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
 
         if urlBar.inOverlayMode {
-            return tabNavigation + overlayCommands
+            return tabNavigation + searchLocationCommands
         } else if !isEditingText {
             return tabNavigation + overidesTextEditing
         }
