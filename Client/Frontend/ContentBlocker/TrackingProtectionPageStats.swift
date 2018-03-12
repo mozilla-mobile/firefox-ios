@@ -46,7 +46,6 @@ class TPStatsBlocklistChecker {
 
     private var blockLists: TPStatsBlocklists?
 
-
     func isBlocked(url: URL, isStrictMode: Bool) -> Deferred<BlocklistName?> {
         let deferred = Deferred<BlocklistName?>()
 
