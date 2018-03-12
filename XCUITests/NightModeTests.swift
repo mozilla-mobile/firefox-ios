@@ -4,27 +4,24 @@
 
 import XCTest
 class NightModeTests: BaseTestCase {
-    private func nightModeOff() {
-        navigator.goto(BrowserTabMenu)
-        app.tables.cells["Disable Night Mode"].tap()
-        navigator.nowAt(BrowserTab)
-    }
 
-    private func nightModeOn() {
+    private func nightModeOnOff() {
         navigator.goto(BrowserTabMenu)
-        app.tables.cells["Enable Night Mode"].tap()
+        app.tables.cells["menu-NightMode"].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func checkNightModeOn() {
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells["Disable Night Mode"])
+        waitforExistence(app.tables.cells["menu-NightMode"])
+        XCTAssertTrue(app.tables.cells.images["enabled"].exists)
         navigator.goto(BrowserTab)
     }
 
     private func checkNightModeOff() {
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells["Enable Night Mode"])
+        waitforExistence(app.tables.cells["menu-NightMode"])
+        XCTAssertTrue(app.tables.cells.images["disabled"].exists)
         navigator.goto(BrowserTab)
     }
 
@@ -35,13 +32,13 @@ class NightModeTests: BaseTestCase {
         navigator.openNewURL(urlString: url1)
 
         //turn on the night mode
-        nightModeOn()
+        nightModeOnOff()
 
         //checking night mode on or off
         checkNightModeOn()
 
         //turn off the night mode
-        nightModeOff()
+        nightModeOnOff()
 
         //checking night mode on or off
         checkNightModeOff()
