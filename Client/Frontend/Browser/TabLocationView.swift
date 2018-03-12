@@ -94,8 +94,6 @@ class TabLocationView: UIView, TabEventHandler {
     lazy var urlTextField: UITextField = {
         let urlTextField = DisplayTextField()
 
-        self.longPressRecognizer.delegate = self
-        urlTextField.addGestureRecognizer(self.longPressRecognizer)
         self.tapRecognizer.delegate = self
         urlTextField.addGestureRecognizer(self.tapRecognizer)
 
@@ -177,6 +175,8 @@ class TabLocationView: UIView, TabEventHandler {
 
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(SELlongPressLocation))
         tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(SELtapLocation))
+        longPressRecognizer.delegate = self
+        addGestureRecognizer(self.longPressRecognizer)
 
         let spaceView = UIView()
         spaceView.snp.makeConstraints { make in
@@ -301,7 +301,8 @@ class TabLocationView: UIView, TabEventHandler {
 
 extension TabLocationView: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        // When long pressing a button make sure the textfield's long press gesture is not triggered
+        return !(otherGestureRecognizer.view is UIButton)
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
