@@ -443,8 +443,11 @@ extension SearchViewController {
     func handleKeyCommands(sender: UIKeyCommand) {
         let initialSection = SearchListSection.bookmarksAndHistory.rawValue
         guard let current = tableView.indexPathForSelectedRow else {
-            if sender.input == UIKeyInputDownArrow {
-                tableView.selectRow(at: IndexPath(item: 0, section: initialSection), animated: false, scrollPosition: .top)
+            let count = tableView(tableView, numberOfRowsInSection: initialSection)
+            if sender.input == UIKeyInputDownArrow, count > 0 {
+                let next = IndexPath(item: 0, section: initialSection)
+                self.tableView(tableView, didHighlightRowAt: next)
+                tableView.selectRow(at: next, animated: false, scrollPosition: .top)
             }
             return
         }
@@ -484,6 +487,9 @@ extension SearchViewController {
                 nextItem = current.item + 1
             }
         default:
+            return
+        }
+        guard nextItem >= 0 else {
             return
         }
         let next = IndexPath(item: nextItem, section: nextSection)
