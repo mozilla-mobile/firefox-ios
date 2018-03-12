@@ -243,6 +243,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         super.setMarkedText(markedText, selectedRange: selectedRange)
     }
 
+    func setTextWithoutSearching(_ text: String) {
+        super.text = text
+        hideCursor = autocompleteTextLabel != nil
+        removeCompletion()
+    }
+
     func textDidChange(_ textField: UITextField) {
         hideCursor = autocompleteTextLabel != nil
         removeCompletion()

@@ -383,10 +383,16 @@ class URLBarView: UIView {
     }
 
     func setLocation(_ location: String?, search: Bool) {
-        locationTextField?.text = location
-        if search, let location = location, !location.isEmpty {
+        guard let text = location, !text.isEmpty else {
+            locationTextField?.text = location
+            return
+        }
+        if search {
+            locationTextField?.text = text
             // Not notifying when empty agrees with AutocompleteTextField.textDidChange.
-            delegate?.urlBar(self, didEnterText: location)
+            delegate?.urlBar(self, didEnterText: text)
+        } else {
+            locationTextField?.setTextWithoutSearching(text)
         }
     }
 
