@@ -163,18 +163,11 @@ fileprivate class TPStatsBlocklists {
                 }
                 let baseDomain = filter.substring(from: loc.upperBound).replacingOccurrences(of: "\\.", with: ".")
                 assert(!baseDomain.isEmpty)
-                if blockRules[baseDomain] == nil {
-                    blockRules[baseDomain] = [Rule]()
-                }
 
-                guard var ruleList = blockRules[baseDomain] else {
-                    return
-                }
-
-                if AppConstants.BuildChannel != .release {
-                    ["*", "?", "+"].forEach { x in
-                        assert(!baseDomain.contains(x), "No wildcards allowed in baseDomain")
-                    }
+                // Sanity check for the lists.
+                ["*", "?", "+"].forEach { x in
+                    // This will only happen on debug
+                    assert(!baseDomain.contains(x), "No wildcards allowed in baseDomain")
                 }
 
                 let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.flatMap { domain in
@@ -189,7 +182,8 @@ fileprivate class TPStatsBlocklists {
                 let resourceTypes = trigger["resource-type"] as? [String] ?? []
                 let resourceType = resourceTypes.contains("font") ? ResourceType.font : .all
 
-                ruleList.append(Rule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList))
+                let rule = Rule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList)
+                blockRules[baseDomain] = (blockRules[baseDomain] ?? []) + [rule]
             }
         }
     }
@@ -198,11 +192,11 @@ fileprivate class TPStatsBlocklists {
         let resourceString = url.absoluteString
         let resourceRange = NSRange(location: 0, length: resourceString.count)
 
-        guard let baseDomain = url.baseDomain, let blockRules = blockRules[baseDomain] else {
+        guard let baseDomain = url.baseDomain, let rules = blockRules[baseDomain] else {
             return nil
         }
 
-        domainSearch: for rule in blockRules {
+        domainSearch: for rule in rules {
             // First, test the top-level filters to see if this URL might be blocked.
             if rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil {
                 // Check the domain exceptions. If a domain exception matches, this filter does not apply.
