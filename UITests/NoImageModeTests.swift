@@ -35,16 +35,13 @@ class NoImageModeTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
                                                        grey_accessibilityLabel("Hide Images")]))
             .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: GREYMatchers.matcher(forText:"Hide Images")).assert(grey_enabled())
 
         checkHiding(isOn: true)
 
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
-                                                       grey_accessibilityLabel("Show Images")]))
+                                                       grey_accessibilityLabel("Hide Images")]))
         .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: GREYMatchers.matcher(forText:"Show Images")).assert(grey_enabled())
     }
-
 }
 
