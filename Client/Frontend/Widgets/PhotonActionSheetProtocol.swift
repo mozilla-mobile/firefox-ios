@@ -349,5 +349,27 @@ extension PhotonActionSheetProtocol {
         case .Whitelisted:
             return menuActionsForWhitelistedSite(for: tab, presentingOn: urlBar)
         }
-    } 
+    }
+
+    func getRefreshLongPressMenu(for tab: Tab) -> [PhotonActionSheetItem] {
+        guard tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
+            return []
+        }
+
+        let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
+        let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
+            tab.toggleDesktopSite()
+        }
+
+        if #available(iOS 11, *), let helper = tab.contentBlocker as? ContentBlockerHelper {
+            let title = helper.isEnabled ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
+            let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
+            let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { action in
+                helper.isUserEnabled = !helper.isEnabled
+            }
+            return [toggleDesktopSite, toggleTP]
+        } else {
+            return [toggleDesktopSite]
+        }
+    }
 }
