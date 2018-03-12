@@ -318,6 +318,8 @@ extension TabLocationView: UIDragInteractionDelegate {
             return []
         }
 
+        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .locationBar)
+
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
     }

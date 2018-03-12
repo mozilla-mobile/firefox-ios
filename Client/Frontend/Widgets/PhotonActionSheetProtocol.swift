@@ -302,13 +302,15 @@ extension PhotonActionSheetProtocol {
         let statList = [totalCount, adCount, analyticsCount, socialCount, contentCount]
 
         let addToWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionDisableTitle, iconString: "menu-TrackingProtection-Off") { _ in
+            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
             ContentBlockerHelper.whitelist(enable: true, url: currentURL) { _ in
                 tab.reload()
             }
         }
         // when tracking protection is on and content was blocked
         let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
-          guard let bvc = self as? PresentableVC else { return }
+            guard let bvc = self as? PresentableVC else { return }
+            UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .trackingProtectionStatistics)
             self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [statList, [addToWhitelist]], on: bvc, from: urlBar)
         }
         return [tpBlocking]

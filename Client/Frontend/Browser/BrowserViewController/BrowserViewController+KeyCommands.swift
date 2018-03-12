@@ -8,43 +8,53 @@ import Shared
 extension BrowserViewController {
 
     @objc private func reloadTabKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "reload"])
         if let tab = tabManager.selectedTab, homePanelController == nil {
             tab.reload()
         }
     }
 
     @objc private func goBackKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "go-back"])
         if let tab = tabManager.selectedTab, tab.canGoBack, homePanelController == nil {
             tab.goBack()
         }
     }
 
     @objc private func goForwardKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "go-forward"])
         if let tab = tabManager.selectedTab, tab.canGoForward {
             tab.goForward()
         }
     }
 
-    @objc private func findOnPageKeyCommand() {
+    @objc private func findInPageKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "find-in-page"])
         if let tab = tabManager.selectedTab, homePanelController == nil {
             self.tab(tab, didSelectFindInPageForSelection: "")
         }
     }
 
     @objc private func selectLocationBarKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "select-location-bar"])
         scrollController.showToolbars(animated: true)
         urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
     }
 
     @objc private func newTabKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: false)
     }
 
     @objc private func newPrivateTabKeyCommand() {
+        // NOTE: We cannot and should not distinguish between "new-tab" and "new-private-tab"
+        // when recording telemetry for key commands.
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: true)
     }
 
     @objc private func closeTabKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-tab"])
         guard let currentTab = tabManager.selectedTab else {
             return
         }
@@ -52,6 +62,7 @@ extension BrowserViewController {
     }
 
     @objc private func nextTabKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "next-tab"])
         guard let currentTab = tabManager.selectedTab else {
             return
         }
@@ -65,6 +76,7 @@ extension BrowserViewController {
     }
 
     @objc private func previousTabKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "previous-tab"])
         guard let currentTab = tabManager.selectedTab else {
             return
         }
@@ -77,7 +89,8 @@ extension BrowserViewController {
         }
     }
 
-    @objc private func gotoTabTray() {
+    @objc private func showTabTrayKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "show-tab-tray"])
         showTabTray()
     }
 
@@ -93,7 +106,7 @@ extension BrowserViewController {
             UIKeyCommand(input: "[", modifierFlags: .command, action: #selector(goBackKeyCommand), discoverabilityTitle: Strings.BackTitle),
             UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(goForwardKeyCommand), discoverabilityTitle: Strings.ForwardTitle),
 
-            UIKeyCommand(input: "f", modifierFlags: .command, action: #selector(findOnPageKeyCommand), discoverabilityTitle: Strings.FindTitle),
+            UIKeyCommand(input: "f", modifierFlags: .command, action: #selector(findInPageKeyCommand), discoverabilityTitle: Strings.FindTitle),
             UIKeyCommand(input: "l", modifierFlags: .command, action: #selector(selectLocationBarKeyCommand), discoverabilityTitle: Strings.SelectLocationBarTitle),
             UIKeyCommand(input: "t", modifierFlags: .command, action: #selector(newTabKeyCommand), discoverabilityTitle: Strings.NewTabTitle),
             UIKeyCommand(input: "p", modifierFlags: [.command, .shift], action: #selector(newPrivateTabKeyCommand), discoverabilityTitle: Strings.NewPrivateTabTitle),
@@ -105,8 +118,8 @@ extension BrowserViewController {
             UIKeyCommand(input: "]", modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
             UIKeyCommand(input: "[", modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand)),
 
-            UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(gotoTabTray)), // Safari on macOS
-            UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(gotoTabTray), discoverabilityTitle: Strings.ShowTabTrayFromTabKeyCodeTitle)
+            UIKeyCommand(input: "\\", modifierFlags: [.command, .shift], action: #selector(showTabTrayKeyCommand)), // Safari on macOS
+            UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(showTabTrayKeyCommand), discoverabilityTitle: Strings.ShowTabTrayFromTabKeyCodeTitle)
         ]
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
