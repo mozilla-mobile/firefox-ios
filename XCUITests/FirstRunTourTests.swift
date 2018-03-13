@@ -14,7 +14,7 @@ class FirstRunTourTests: BaseTestCase {
         // Check that the first's tour screen is shown as well as all the elements in there
         waitforExistence(app.scrollViews["IntroViewController.scrollView"])
         waitforExistence(app.staticTexts["Thanks for choosing Firefox!"])
-        XCTAssertTrue(app.buttons["IntroViewController.startBrowsingButton"].exists)
+        XCTAssertFalse(app.buttons["IntroViewController.startBrowsingButton"].exists)
         XCTAssertTrue(app.images["tour-Welcome"].exists)
         XCTAssertTrue(app.pageIndicators["IntroViewController.pageControl"].exists)
         XCTAssertEqual(app.pageIndicators["IntroViewController.pageControl"].value as? String, "page 1 of 5")
@@ -63,11 +63,6 @@ class FirstRunTourTests: BaseTestCase {
         waitforExistence(topSites)
     }
 
-   func testStartBrowsingFromFirstScreen() {
-        navigator.goto(FirstRun)
-        tapStartBrowsingButton()
-    }
-
     func testStartBrowsingFromSecondScreen() {
         navigator.goto(FirstRun)
         goToNextScreen(swipe: 1)
@@ -93,6 +88,7 @@ class FirstRunTourTests: BaseTestCase {
     }
 
     func testShowTourFromSettings() {
+        goToNextScreen(swipe: 1)
         tapStartBrowsingButton()
         navigator.goto(ShowTourInSettings)
         waitforExistence(app.scrollViews["IntroViewController.scrollView"])
