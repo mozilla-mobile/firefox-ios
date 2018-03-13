@@ -47,7 +47,6 @@ protocol SearchViewControllerDelegate: class {
     func searchViewController(_ searchViewController: SearchViewController, didLongPressSuggestion suggestion: String)
     func presentSearchSettingsController()
     func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool)
-    func searchViewController(_ searchViewController: SearchViewController, didFinalizeText text: String)
 }
 
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
@@ -70,10 +69,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate let suggestionCell = SuggestionCell(style: .default, reuseIdentifier: nil)
 
     static var userAgent: String?
-
-    var isCellHighlighted: Bool {
-        return tableView.indexPathForSelectedRow != nil
-    }
 
     init(isPrivate: Bool) {
         self.isPrivate = isPrivate
