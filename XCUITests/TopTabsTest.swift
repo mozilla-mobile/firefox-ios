@@ -63,7 +63,14 @@ class TopTabsTest: BaseTestCase {
         // Open tab tray to check that both tabs are there
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         waitforExistence(app.collectionViews.cells["Example Domain"])
-        waitforExistence(app.collectionViews.cells["IANA — IANA-managed Reserved Domains"])
+        if !app.collectionViews.cells["IANA — IANA-managed Reserved Domains"].exists {
+            navigator.goto(TabTray)
+            app.collectionViews.cells["Example Domain"].tap()
+            waitUntilPageLoad()
+            navigator.nowAt(BrowserTab)
+            navigator.goto(TabTray)
+            waitforExistence(app.collectionViews.cells["IANA — IANA-managed Reserved Domains"])
+        }
     }
 
     // This test only runs for iPhone see bug 1409750
