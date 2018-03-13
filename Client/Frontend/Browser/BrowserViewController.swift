@@ -1295,7 +1295,12 @@ extension BrowserViewController: URLBarDelegate {
     
     func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
         guard let tab = tabManager.selectedTab else { return }
-        guard let url = tab.canonicalURL?.displayURL else { return }
+        guard let url = tab.canonicalURL?.displayURL, self.presentedViewController == nil else {
+            return
+        }
+
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         presentActivityViewController(url, tab: tab, sourceView: button, sourceRect: button.bounds, arrowDirection: .up)
     }
     
@@ -1368,6 +1373,8 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
         let urlActions = self.getLongPressLocationBarActions(with: urlBar)
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         if #available(iOS 11.0, *), let tab = self.tabManager.selectedTab {
             let trackingProtectionMenu = self.getTrackingMenu(for: tab, presentingOn: urlBar)
             self.presentSheetWith(actions: [urlActions, trackingProtectionMenu], on: self, from: urlBar)
@@ -1477,6 +1484,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         showBackForwardList()
     }
 
@@ -1492,6 +1501,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         guard !urlActions.isEmpty else {
             return
         }
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         self.presentSheetWith(actions: [urlActions], on: self, from: button)
     }
 
@@ -1504,6 +1515,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         showBackForwardList()
     }
 
@@ -1524,6 +1537,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
     
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        guard self.presentedViewController == nil else {
+            return
+        }
         let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
             self.tabManager.addTabAndSelect(isPrivate: false)
@@ -1539,6 +1555,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
         controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
         controller.popoverPresentationController?.sourceRect = button.frame
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         present(controller, animated: true, completion: nil)
     }
 
