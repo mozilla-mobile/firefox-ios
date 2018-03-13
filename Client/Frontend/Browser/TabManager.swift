@@ -842,8 +842,7 @@ extension TabManager: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-        if #available(iOS 11, *) {
-            guard let tab = self[webView], let blocker = tab.contentBlocker as? ContentBlockerHelper else { return }
+        if #available(iOS 11, *), let tab = self[webView], let blocker = tab.contentBlocker as? ContentBlockerHelper {
             blocker.clearPageStats()
         }
     }
