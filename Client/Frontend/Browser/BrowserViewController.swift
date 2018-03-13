@@ -1492,7 +1492,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         guard !urlActions.isEmpty else {
             return
         }
-        self.presentSheetWith(actions: [urlActions], on: self, from: button)
+        let shouldSupress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: [urlActions], on: self, from: button, supressPopover: shouldSupress)
+
     }
 
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
