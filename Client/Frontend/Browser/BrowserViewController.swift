@@ -47,7 +47,7 @@ class BrowserViewController: UIViewController {
     let webViewContainerToolbar = UIView()
     var statusBarOverlay: UIView!
     fileprivate(set) var toolbar: TabToolbar?
-    fileprivate var searchController: SearchViewController?
+    var searchController: SearchViewController?
     fileprivate var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
     fileprivate var searchLoader: SearchLoader?
@@ -1503,7 +1503,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        self.presentSheetWith(actions: [urlActions], on: self, from: button)
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
     }
 
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1528,8 +1529,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         actions.append(getHomePanelActions())
         actions.append(getOtherPanelActions(vcDelegate: self))
         // force a modal if the menu is being displayed in compact split screen
-        let shouldSupress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: actions, on: self, from: button, supressPopover: shouldSupress)
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1742,6 +1743,10 @@ extension BrowserViewController: SearchViewControllerDelegate {
         let navController = ModalSettingsNavigationController(rootViewController: settingsNavigationController)
 
         self.present(navController, animated: true, completion: nil)
+    }
+
+    func searchViewController(_ searchViewController: SearchViewController, didHighlightText text: String, search: Bool) {
+        self.urlBar.setLocation(text, search: search)
     }
 }
 

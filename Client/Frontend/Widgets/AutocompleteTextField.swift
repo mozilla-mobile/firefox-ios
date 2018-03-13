@@ -88,7 +88,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             UIKeyCommand(input: UIKeyInputEscape, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
         ]
     }
-    
+
     func handleKeyCommand(sender: UIKeyCommand) {
         switch sender.input {
         case UIKeyInputLeftArrow:
@@ -241,6 +241,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         // entered (e.g., a partial composition from a Japanese keyboard).
         removeCompletion()
         super.setMarkedText(markedText, selectedRange: selectedRange)
+    }
+
+    func setTextWithoutSearching(_ text: String) {
+        super.text = text
+        hideCursor = autocompleteTextLabel != nil
+        removeCompletion()
     }
 
     func textDidChange(_ textField: UITextField) {
