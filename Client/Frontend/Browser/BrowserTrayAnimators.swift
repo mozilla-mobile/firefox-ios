@@ -195,6 +195,7 @@ private extension BrowserToTrayAnimator {
                 toggleWebViewVisibility(true, usingTabManager: bvc.tabManager)
                 bvc.homePanelController?.view.isHidden = false
 
+                resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
                 bvc.urlBar.isTransitioning = false
                 transitionContext.completeTransition(true)
             })
