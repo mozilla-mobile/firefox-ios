@@ -124,19 +124,17 @@ class ClearPrivateDataTableViewController: UITableViewController {
                     return pair.clearable.clear()
                 }
                 .allSucceed()
-                .upon { result in
+                .uponQueue(.main) { result in
                     assert(result.isSuccess, "Private data cleared successfully")
 
                     LeanPlumClient.shared.track(event: .clearPrivateData)
 
                     self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
 
-                    DispatchQueue.main.async {
-                        // Disable the Clear Private Data button after it's clicked.
-                        self.clearButtonEnabled = false
-                        self.tableView.deselectRow(at: indexPath, animated: true)
-                    }
-            }
+                    // Disable the Clear Private Data button after it's clicked.
+                    self.clearButtonEnabled = false
+                    self.tableView.deselectRow(at: indexPath, animated: true)
+                }
         }
 
         // We have been asked to clear history and we have an account.
