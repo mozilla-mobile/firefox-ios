@@ -1,4 +1,6 @@
 af
+an
+ar
 ast
 az
 bg
@@ -20,11 +22,14 @@ es-AR
 es-CL
 es-MX
 eu
+fa
 fr
 ga-IE
 gd
 gl
+he
 hi-IN
+hr
 hsb
 hu
 hy-AM
@@ -33,6 +38,7 @@ id
 is
 it
 ja
+ka
 kab
 kk
 km
@@ -48,6 +54,7 @@ nb-NO
 ne-NP
 nl
 nn-NO
+oc
 or
 pa-IN
 pl
@@ -68,6 +75,7 @@ th
 tl
 tr
 uk
+ur
 uz
 zh-CN
 zh-TW
