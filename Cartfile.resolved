@@ -14,6 +14,6 @@ github "SwiftyJSON/SwiftyJSON" "3.1.4"
 github "farhanpatel/JSONSchema.swift" "1c052b83baa8c497e12cde6a8afca0f54574612f"
 github "google/EarlGrey" "1.12.1"
 github "rs/SDWebImage" "4.1.0"
-github "mozilla-mobile/telemetry-ios" "v1.0.10"
+github "mozilla-mobile/telemetry-ios" "v1.0.11"
 github "mozilla-mobile/MappaMundi" "0b4f70e2feb941f4d56bd9e27e408d4300656a87"
 

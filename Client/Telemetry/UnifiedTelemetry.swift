@@ -20,6 +20,7 @@ class UnifiedTelemetry {
         let sendUsageData = profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
         telemetryConfig.isCollectionEnabled = sendUsageData
         telemetryConfig.isUploadEnabled = sendUsageData
+        telemetryConfig.scheduleUpload = .foregrounded
 
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.blockPopups", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.saveLogins", withDefaultValue: true)
