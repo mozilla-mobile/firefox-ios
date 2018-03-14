@@ -845,6 +845,8 @@ extension TabManagerDataSource: UICollectionViewDragDelegate {
             itemProvider = NSItemProvider()
         }
 
+        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .tab, value: .tabTray)
+
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = tab
         return [dragItem]
@@ -857,6 +859,8 @@ extension TabManagerDataSource: UICollectionViewDropDelegate {
         guard isDragging, let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = tabs.index(of: tab) else {
             return
         }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .drop, object: .tab, value: .tabTray)
 
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
         isDragging = false

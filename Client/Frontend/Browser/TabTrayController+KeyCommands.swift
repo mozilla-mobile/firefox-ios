@@ -25,28 +25,34 @@ extension TabTrayController {
     }
 
     func didTogglePrivateModeKeyCommand() {
+        // NOTE: We cannot and should not capture telemetry here.
         didTogglePrivateMode()
     }
 
     func didCloseTabKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-tab"])
         if let tab = tabManager.selectedTab {
             tabManager.removeTab(tab)
         }
     }
 
     func didCloseAllTabsKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-all-tabs"])
         closeTabsForCurrentTray()
     }
 
     func didEnterTabKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "enter-tab"])
         _ = self.navigationController?.popViewController(animated: true)
     }
 
     func didOpenNewTabKeyCommand() {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
         openNewTab()
     }
 
     func didChangeSelectedTabKeyCommand(sender: UIKeyCommand) {
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "select-tab"])
         let step: Int
         switch sender.input {
         case UIKeyInputLeftArrow:

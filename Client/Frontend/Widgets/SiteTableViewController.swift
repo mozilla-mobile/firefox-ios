@@ -169,6 +169,8 @@ extension SiteTableViewController: UITableViewDragDelegate {
             return []
         }
 
+        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
+
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
     }

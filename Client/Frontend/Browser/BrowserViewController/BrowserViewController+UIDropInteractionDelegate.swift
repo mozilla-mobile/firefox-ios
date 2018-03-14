@@ -21,6 +21,8 @@ extension BrowserViewController: UIDropInteractionDelegate {
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        UnifiedTelemetry.recordEvent(category: .action, method: .drop, object: .url, value: .browser)
+
         _ = session.loadObjects(ofClass: URL.self) { urls in
             guard let url = urls.first else {
                 return
