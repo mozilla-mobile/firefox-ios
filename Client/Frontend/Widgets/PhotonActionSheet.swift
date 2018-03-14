@@ -28,7 +28,7 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var title: String
     public fileprivate(set) var text: String?
     public fileprivate(set) var iconString: String?
-    public fileprivate(set) var isEnabled: Bool // Used by toggles like nightmode to switch tint color
+    public var isEnabled: Bool // Used by toggles like nightmode to switch tint color
     public fileprivate(set) var accessory: PhotonActionSheetCellAccessoryType
     public fileprivate(set) var accessoryText: String?
     public fileprivate(set) var bold: Bool = false
@@ -253,13 +253,24 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let action = actions[indexPath.section][indexPath.row]
+        var action = actions[indexPath.section][indexPath.row]
         guard let handler = action.handler else {
             self.dismiss(nil)
             return
         }
+        
+        // Switches can be toggled on/off without dismissing the menu
+        if action.accessory == .Switch {
+            let generator = UIImpactFeedbackGenerator(style: .medium)
+            generator.impactOccurred()
+            action.isEnabled = !action.isEnabled
+            actions[indexPath.section][indexPath.row] = action
+            self.tableView.deselectRow(at: indexPath, animated: true)
+            self.tableView.reloadData()
+        } else {
+            self.dismiss(nil)
+        }
 
-        self.dismiss(nil)
         return handler(action)
     }
     
@@ -318,7 +329,7 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         titleLabel.numberOfLines = 1
-        titleLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.lightGray
+        titleLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.gray
         return titleLabel
     }()
 
@@ -482,7 +493,8 @@ public enum PhotonActionSheetCellAccessoryType {
 }
 
 private class PhotonActionSheetCell: UITableViewCell {
-    static let Padding: CGFloat = 12
+    static let Padding: CGFloat = 16
+    static let HorizontalPadding: CGFloat = 10
     static let VerticalPadding: CGFloat = 2
     static let IconSize = 16
 
@@ -587,8 +599,9 @@ private class PhotonActionSheetCell: UITableViewCell {
         contentView.addSubview(stackView)
 
         let padding = PhotonActionSheetCell.Padding
+        let topPadding = PhotonActionSheetCell.HorizontalPadding
         stackView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView).inset(UIEdgeInsets(top: padding/2, left: padding, bottom: padding/2, right: padding))
+            make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding, left: padding, bottom: topPadding, right: padding))
         }
     }
     
