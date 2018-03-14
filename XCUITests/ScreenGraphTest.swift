@@ -44,6 +44,7 @@ extension ScreenGraphTest {
         // Switch night mode on, by toggling.
         navigator.performAction(TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
+        navigator.back()
         XCTAssertEqual(navigator.screenState, BrowserTab)
 
         // Nothing should happen here, because night mode is already on.
@@ -54,6 +55,7 @@ extension ScreenGraphTest {
         // Switch night mode off.
         navigator.toggleOff(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
         XCTAssertFalse(navigator.userState.nightMode)
+        navigator.back()
         XCTAssertEqual(navigator.screenState, BrowserTab)
     }
 
@@ -199,7 +201,7 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.onEnterWaitFor(element: app.tables["Context Menu"])
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
-        screenState.tap(app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode) { userState in
+        screenState.tap(app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
         }
 

@@ -119,6 +119,7 @@ class Action {
 
     static let ToggleRequestDesktopSite = "ToggleRequestDesktopSite"
     static let ToggleNightMode = "ToggleNightMode"
+    static let ToggleTrackingProtection = "ToggleTrackingProtection"
     static let ToggleNoImageMode = "ToggleNoImageMode"
 
     static let Bookmark = "Bookmark"
@@ -799,12 +800,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.cells["menu-panel-History"], to: HomePanel_History)
         screenState.tap(app.tables.cells["menu-panel-ReadingList"], to: HomePanel_ReadingList)
 
-        screenState.tap(app.tables.cells["menu-NoImageMode"], forAction: Action.ToggleNoImageMode) { userState in
+        screenState.tap(app.tables.cells["menu-NoImageMode"], forAction: Action.ToggleNoImageMode, transitionTo: BrowserTabMenu) { userState in
             userState.noImageMode = !userState.noImageMode
         }
-
-        screenState.tap(app.tables.cells["menu-NightMode"], forAction: Action.ToggleNightMode) { userState in
+    
+        screenState.tap(app.tables.cells["menu-NightMode"], forAction: Action.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
+        }
+        
+        screenState.tap(app.tables.cells["menu-TrackingProtection"], forAction: Action.ToggleTrackingProtection, transitionTo: BrowserTabMenu) { userState in
+            if userState.isPrivate {
+                userState.trackingProtectionSettingOnPrivateMode = !userState.trackingProtectionSettingOnPrivateMode
+            } else {
+                userState.trackingProtectionSettingOnNormalMode = !userState.trackingProtectionSettingOnNormalMode
+            }
         }
 
         screenState.dismissOnUse = true
