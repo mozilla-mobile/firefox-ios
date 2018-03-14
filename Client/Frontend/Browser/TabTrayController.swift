@@ -17,7 +17,7 @@ struct TabTrayControllerUX {
     static let Margin = CGFloat(15)
     static let ToolbarBarTintColor = UIColor.black
     static let ToolbarButtonOffset = CGFloat(10.0)
-    static let CloseButtonSize = CGFloat(18.0)
+    static let CloseButtonSize = CGFloat(24.0)
     static let CloseButtonMargin = CGFloat(6.0)
     static let CloseButtonEdgeInset = CGFloat(4)
 
@@ -177,9 +177,9 @@ class TabCell: UICollectionViewCell {
         }
 
         closeButton.snp.makeConstraints { make in
+            make.width.height.equalTo(TabTrayControllerUX.CloseButtonSize)
             make.trailing.equalTo(title.contentView).offset(-6)
-            make.top.equalTo((TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.FaviconSize) / 2)
-            make.size.equalTo(TabTrayControllerUX.FaviconSize)
+            make.centerY.equalTo(title.contentView)
         }
 
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
