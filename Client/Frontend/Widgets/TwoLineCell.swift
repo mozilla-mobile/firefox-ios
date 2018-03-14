@@ -224,10 +224,10 @@ private class TwoLineCellHelper {
         if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
             imageView.frame = CGRect(x: TwoLineCellUX.BorderViewMargin, y: (height - TwoLineCellUX.ImageSize) / 2, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize)
         } else {
-            imageView.frame = CGRect(x: container.frame.width - TwoLineCellUX.ImageSize - TwoLineCellUX.BorderViewMargin - textRightInset, y: (height - TwoLineCellUX.ImageSize) / 2, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize)
+            imageView.frame = CGRect(x: container.frame.width - TwoLineCellUX.ImageSize - TwoLineCellUX.BorderViewMargin, y: (height - TwoLineCellUX.ImageSize) / 2, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize)
 
-            textLabel.frame = textLabel.frame.offsetBy(dx: -(TwoLineCellUX.ImageSize + TwoLineCellUX.BorderViewMargin), dy: 0)
-            detailTextLabel.frame = detailTextLabel.frame.offsetBy(dx: -(TwoLineCellUX.ImageSize + TwoLineCellUX.BorderViewMargin), dy: 0)
+            textLabel.frame = textLabel.frame.offsetBy(dx: -(TwoLineCellUX.ImageSize + TwoLineCellUX.BorderViewMargin - textRightInset), dy: 0)
+            detailTextLabel.frame = detailTextLabel.frame.offsetBy(dx: -(TwoLineCellUX.ImageSize + TwoLineCellUX.BorderViewMargin - textRightInset), dy: 0)
 
             // If the cell has an accessory, shift them all to the left even more. Only required on RTL.
             if accessoryWidth != 0 {
