@@ -17,9 +17,9 @@ struct TabTrayControllerUX {
     static let Margin = CGFloat(15)
     static let ToolbarBarTintColor = UIColor.black
     static let ToolbarButtonOffset = CGFloat(10.0)
-    static let CloseButtonSize = CGFloat(18.0)
+    static let CloseButtonSize = CGFloat(32)
     static let CloseButtonMargin = CGFloat(6.0)
-    static let CloseButtonEdgeInset = CGFloat(4)
+    static let CloseButtonEdgeInset = CGFloat(7)
 
     static let NumberOfColumnsThin = 1
     static let NumberOfColumnsWide = 3
@@ -92,7 +92,7 @@ class TabCell: UICollectionViewCell {
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
 
         self.closeButton = UIButton()
-        self.closeButton.setImage(UIImage.templateImageNamed("nav-stop"), for: [])
+        self.closeButton.setImage(UIImage.templateImageNamed("tab_close"), for: [])
         self.closeButton.imageView?.contentMode = .scaleAspectFit
         self.closeButton.contentMode = .center
         self.closeButton.tintColor = UIColor.lightGray
@@ -177,9 +177,8 @@ class TabCell: UICollectionViewCell {
         }
 
         closeButton.snp.makeConstraints { make in
-            make.trailing.equalTo(title.contentView).offset(-6)
-            make.top.equalTo((TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.FaviconSize) / 2)
-            make.size.equalTo(TabTrayControllerUX.FaviconSize)
+            make.size.equalTo(TabTrayControllerUX.CloseButtonSize)
+            make.centerY.trailing.equalTo(title.contentView)
         }
 
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
