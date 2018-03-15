@@ -45,6 +45,7 @@ let ChangePasscodeSettings = "ChangePasscodeSettings"
 let LockedLoginsSettings = "LockedLoginsSettings"
 let TabTrayLongPressMenu = "TabTrayLongPressMenu"
 let HistoryRecentlyClosed = "HistoryRecentlyClosed"
+let TrackingProtectionContextMenuDetails = "TrackingProtectionContextMenuDetails"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -107,6 +108,10 @@ class Action {
     static let SetURL = "SetURL"
     static let SetURLByTyping = "SetURLByTyping"
     static let SetURLByPasting = "SetURLByPasting"
+
+    static let TrackingProtectionContextMenu = "TrackingProtectionContextMenu"
+    static let EnableTrackingProtectionperSite = "EnableTrackingProtectionperSite"
+    static let DisableTrackingProtectionperSite = "DisableTrackingProtectionperSite"
 
     static let ReloadURL = "ReloadURL"
 
@@ -312,6 +317,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             menu.cells["menu-Paste"].firstMatch.tap()
         }
 
+        // Different possition for iphone and ipad
+        screenState.gesture(forAction: Action.TrackingProtectionContextMenu, transitionTo: TrackingProtectionContextMenuDetails) { userState in
+            if isTablet {
+                app.tables["Context Menu"].cells.element(boundBy: 0).tap()
+            } else {
+                app.tables["Context Menu"].cells.element(boundBy: 3).tap()
+            }
+        }
+
         screenState.backAction = {
             if isTablet {
                 // There is no Cancel option in iPad.
@@ -320,8 +334,27 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 app.buttons["PhotonMenu.close"].tap()
             }
         }
-
         screenState.dismissOnUse = true
+    }
+
+    map.addScreenState(TrackingProtectionContextMenuDetails) { screenState in
+        screenState.gesture(forAction: Action.EnableTrackingProtectionperSite) { userState in
+                app.tables.cells["menu-TrackingProtection"].tap()
+                userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
+            }
+        screenState.gesture(forAction: Action.DisableTrackingProtectionperSite) { userState in
+            app.tables.cells["menu-TrackingProtection-Off"].tap()
+            userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
+        }
+
+        screenState.backAction = {
+            if isTablet {
+                // There is no Cancel option in iPad.
+                app.otherElements["PopoverDismissRegion"].tap()
+            } else {
+                app.buttons["PhotonMenu.close"].tap()
+            }
+        }
     }
 
     // URLBarOpen is dismissOnUse, which ScreenGraph interprets as "now we've done this action, then go back to the one before it"
