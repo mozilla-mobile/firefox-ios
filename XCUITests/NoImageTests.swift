@@ -8,28 +8,15 @@ let NoImageButtonIdentifier = "menu-NoImageMode"
 let ContextMenuIdentifier = "Context Menu"
 
 class NoImageTests: BaseTestCase {
-    private func showImages() {
-        navigator.goto(BrowserTabMenu)
-        app.tables[ContextMenuIdentifier].cells[NoImageButtonIdentifier].tap()
-        navigator.nowAt(BrowserTab)
-    }
-
-    private func hideImages() {
-        navigator.goto(BrowserTabMenu)
-        app.tables.cells[NoImageButtonIdentifier].tap()
-        navigator.nowAt(BrowserTab)
-    }
 
     private func checkShowImages() {
-        navigator.goto(BrowserTabMenu)
         waitforExistence(app.tables.cells[NoImageButtonIdentifier])
-        navigator.goto(BrowserTab)
+        XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["enabled"].exists)
     }
 
     private func checkHideImages() {
-        navigator.goto(BrowserTabMenu)
         waitforExistence(app.tables.cells[NoImageButtonIdentifier])
-        navigator.goto(BrowserTab)
+        XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["disabled"].exists)
     }
 
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
@@ -39,11 +26,11 @@ class NoImageTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Select hide images, and check the UI is updated
-        hideImages()
+        navigator.performAction(Action.ToggleNoImageMode)
         checkShowImages()
 
         // Select show images, and check the UI is updated
-        showImages()
+        navigator.performAction(Action.ToggleNoImageMode)
         checkHideImages()
     }
 }
