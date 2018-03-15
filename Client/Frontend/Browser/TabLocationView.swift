@@ -51,7 +51,9 @@ class TabLocationView: UIView, TabEventHandler {
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
-            trackingProtectionView.isHidden = (url == nil)
+            if url == nil {
+                trackingProtectionView.isHidden = true
+            }
             setNeedsUpdateConstraints()
         }
     }

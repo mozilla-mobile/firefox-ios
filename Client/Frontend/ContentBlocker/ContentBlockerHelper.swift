@@ -67,7 +67,9 @@ class ContentBlockerHelper {
     var isUserEnabled: Bool? {
         didSet {
             setupTabTrackingProtection()
-            tab?.reload()
+            guard let tab = tab else { return }
+            TabEvent.post(.didChangeContentBlocking, for: tab)
+            tab.reload()
         }
     }
 
@@ -96,7 +98,7 @@ class ContentBlockerHelper {
     var stats: TPPageStats = TPPageStats() {
         didSet {
             guard let tab = self.tab else { return }
-            if (stats.total == 0 && oldValue.total != 0) || stats.total == 1 {
+            if stats.total <= 1 {
                 TabEvent.post(.didChangeContentBlocking, for: tab)
             }
         }
