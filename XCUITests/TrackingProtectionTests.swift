@@ -30,8 +30,7 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertTrue(app.cells["Tracking Protection"].images["enabled"].exists, "Tracking Protection should be switch on in PBM")
 
         // Turn off PBM
-        app.cells["Tracking Protection"].tap()
-        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.ToggleTrackingProtection)
 
         navigator.toggleOn(!userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(NewTabScreen)
