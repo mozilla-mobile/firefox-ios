@@ -55,9 +55,12 @@ class TPStatsBlocklistChecker {
             return deferred
         }
 
+        // Make a copy on the main thread
+        let whitelistRegex = ContentBlockerHelper.whitelistedDomains.domainRegex
+
         DispatchQueue.global().async {
             let enabledLists = BlocklistName.forStrictMode(isOn: isStrictMode)
-            deferred.fill(blockLists.urlIsInList(url).flatMap { return enabledLists.contains($0) ? $0 : nil })
+            deferred.fill(blockLists.urlIsInList(url, whitelistedDomains: whitelistRegex).flatMap { return enabledLists.contains($0) ? $0 : nil })
         }
         return deferred
     }
@@ -188,7 +191,7 @@ fileprivate class TPStatsBlocklists {
         }
     }
 
-    func urlIsInList(_ url: URL) -> BlocklistName? {
+    func urlIsInList(_ url: URL, whitelistedDomains: [NSRegularExpression]) -> BlocklistName? {
         let resourceString = url.absoluteString
         let resourceRange = NSRange(location: 0, length: resourceString.count)
 
@@ -207,11 +210,10 @@ fileprivate class TPStatsBlocklists {
                 }
 
                 // Check the whitelist.
-                let whitelist = ContentBlockerHelper.whitelistedDomains
-                if let baseDomain = url.baseDomain, !whitelist.domainRegex.isEmpty {
+                if let baseDomain = url.baseDomain, !whitelistedDomains.isEmpty {
                     let range = NSRange(location: 0, length: baseDomain.count)
-                    for ignoreDomain in whitelist.domainRegex {
-                        if ignoreDomain.firstMatch(in: baseDomain , options: [], range: range) != nil {
+                    for ignoreDomain in whitelistedDomains {
+                        if ignoreDomain.firstMatch(in: baseDomain, options: [], range: range) != nil {
                             return nil
                         }
                     }
