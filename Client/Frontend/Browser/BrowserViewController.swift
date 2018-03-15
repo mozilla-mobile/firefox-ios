@@ -2732,6 +2732,7 @@ extension BrowserViewController: TabTrayDelegate {
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
     func tabTrayDidDismiss(_ tabTray: TabTrayController) {
+        topTabsViewController?.reloadData()
         resetBrowserChrome()
     }
 

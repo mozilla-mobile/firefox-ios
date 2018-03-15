@@ -607,7 +607,7 @@ extension TopTabsViewController {
         needReloads.removeAll()
     }
 
-    fileprivate func reloadData() {
+    func reloadData() {
         assertIsMainThread("reloadData must only be called from main thread")
 
         if self.isUpdating || self.collectionView.frame == CGRect.zero {
