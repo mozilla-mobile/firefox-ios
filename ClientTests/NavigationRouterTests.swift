@@ -18,7 +18,7 @@ class NavigationRouterTests: XCTestCase {
     }
     
     func testOpenURLScheme() {
-        let url = "http://google.com?a=1&b=2".escape()!
+        let url = "http://google.com?a=1&b=2&c=foo%20bar".escape()!
         let appURL = "\(appScheme)://open-url?url=\(url)"
         let navItem = NavigationPath(url: URL(string: appURL)!)!
         XCTAssertEqual(navItem, NavigationPath.url(webURL: URL(string: url.unescape()!)!, isPrivate: false))
