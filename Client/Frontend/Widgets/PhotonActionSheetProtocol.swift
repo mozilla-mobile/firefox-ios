@@ -269,7 +269,7 @@ extension PhotonActionSheetProtocol {
     }
 
     @available(iOS 11.0, *)
-    private func menuActionsForTrackingProtectionDisabled(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
+    private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
         let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlocking, iconString: "menu-TrackingProtection") { _ in
             // When TP is off for the tab tapping enable in this menu should turn it back on for the Tab.
             if let blocker = tab.contentBlocker as? ContentBlockerHelper, blocker.isUserEnabled == false {
@@ -284,16 +284,11 @@ extension PhotonActionSheetProtocol {
             let url = SupportUtils.URLForTopic("tracking-protection-ios")!
             tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
         }
-
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDisabledDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
-            guard let bvc = self as? PresentableVC else { return }
-            self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[moreInfo], [enableTP]], on: bvc, from: urlBar)
-        }
-        return [tpBlocking]
+        return [[moreInfo], [enableTP]]
     }
 
     @available(iOS 11.0, *)
-    private func menuActionsForTrackingProtectionEnabled(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
+    private func menuActionsForTrackingProtectionEnabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
         guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
             return []
         }
@@ -312,17 +307,11 @@ extension PhotonActionSheetProtocol {
                 tab.reload()
             }
         }
-        // when tracking protection is on and content was blocked
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
-            guard let bvc = self as? PresentableVC else { return }
-            UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .trackingProtectionStatistics)
-            self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [statList, [addToWhitelist]], on: bvc, from: urlBar)
-        }
-        return [tpBlocking]
+        return [statList, [addToWhitelist]]
     }
 
     @available(iOS 11.0, *)
-    private func menuActionsForWhitelistedSite(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
+    private func menuActionsForWhitelistedSite(for tab: Tab) -> [[PhotonActionSheetItem]] {
         guard let currentURL = tab.url else {
             return []
         }
@@ -332,12 +321,7 @@ extension PhotonActionSheetProtocol {
                 tab.reload()
             }
         }
-
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .Disclosure) { _ in
-            guard let bvc = self as? PresentableVC else { return }
-            self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[removeFromWhitelist]], on: bvc, from: urlBar)
-        }
-        return [tpBlocking]
+        return [[removeFromWhitelist]]
     }
 
     @available(iOS 11.0, *)
@@ -350,11 +334,44 @@ extension PhotonActionSheetProtocol {
         case .NoBlockedURLs:
             return menuActionsForNotBlocking()
         case .Blocking:
-            return menuActionsForTrackingProtectionEnabled(for: tab, presentingOn: urlBar)
+            let actions = menuActionsForTrackingProtectionEnabled(for: tab)
+            let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
+                guard let bvc = self as? PresentableVC else { return }
+                UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .trackingProtectionStatistics)
+                self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: actions, on: bvc, from: urlBar)
+            }
+            return [tpBlocking]
         case .Disabled:
-            return  menuActionsForTrackingProtectionDisabled(for: tab, presentingOn: urlBar)
+            let actions = menuActionsForTrackingProtectionDisabled(for: tab)
+            let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDisabledDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
+                guard let bvc = self as? PresentableVC else { return }
+                self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: actions, on: bvc, from: urlBar)
+            }
+            return  [tpBlocking]
         case .Whitelisted:
-            return menuActionsForWhitelistedSite(for: tab, presentingOn: urlBar)
+            let actions = self.menuActionsForWhitelistedSite(for: tab)
+            let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .Disclosure) { _ in
+                guard let bvc = self as? PresentableVC else { return }
+                self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: actions, on: bvc, from: urlBar)
+            }
+            return [tpBlocking]
+        }
+    }
+
+    @available(iOS 11.0, *)
+    func getTrackingSubMenu(for tab: Tab) -> [[PhotonActionSheetItem]] {
+        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else {
+            return []
+        }
+        switch blocker.status {
+        case .NoBlockedURLs:
+            return []
+        case .Blocking:
+            return menuActionsForTrackingProtectionEnabled(for: tab)
+        case .Disabled:
+            return menuActionsForTrackingProtectionDisabled(for: tab)
+        case .Whitelisted:
+            return menuActionsForWhitelistedSite(for: tab)
         }
     }
 
