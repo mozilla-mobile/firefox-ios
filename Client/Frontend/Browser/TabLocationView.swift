@@ -205,10 +205,12 @@ class TabLocationView: UIView, TabEventHandler {
         }
 
         lockImageView.snp.makeConstraints { make in
-            make.size.equalTo(TabLocationViewUX.StatusIconSize)
+            make.width.equalTo(TabLocationViewUX.StatusIconSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
         trackingProtectionButton.snp.makeConstraints { make in
-            make.size.equalTo(TabLocationViewUX.TPIconSize)
+            make.width.equalTo(TabLocationViewUX.TPIconSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
 
         pageOptionsButton.snp.makeConstraints { make in
