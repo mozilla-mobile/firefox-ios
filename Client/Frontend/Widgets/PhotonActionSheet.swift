@@ -615,6 +615,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
         subtitleLabel.text = action.text
         subtitleLabel.textColor = self.tintColor
+        subtitleLabel.isHidden = action.text == nil
         titleLabel.font  = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
         accessibilityIdentifier = action.iconString
         accessibilityLabel = action.title
