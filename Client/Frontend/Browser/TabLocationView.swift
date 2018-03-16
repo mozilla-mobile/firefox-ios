@@ -13,6 +13,7 @@ protocol TabLocationViewDelegate {
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
+    func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton)
     func tabLocationViewDidLongPressPageOptions(_ tabLocationVIew: TabLocationView)
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
@@ -27,6 +28,7 @@ private struct TabLocationViewUX {
     static let BaseURLFontColor = UIColor.gray
     static let Spacing: CGFloat = 8
     static let StatusIconSize: CGFloat = 18
+    static let TPIconSize: CGFloat = 24
     static let ButtonSize: CGFloat = 44
     static let URLBarPadding = 4
 }
@@ -52,7 +54,7 @@ class TabLocationView: UIView, TabEventHandler {
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
             if url == nil {
-                trackingProtectionView.isHidden = true
+                trackingProtectionButton.isHidden = true
             }
             setNeedsUpdateConstraints()
         }
@@ -124,12 +126,14 @@ class TabLocationView: UIView, TabEventHandler {
         return lockImageView
     }()
 
-    fileprivate lazy var trackingProtectionView: UIImageView = {
-        let trackingProtectionView = UIImageView(image: UIImage.templateImageNamed("tracking-protection"))
-        trackingProtectionView.tintColor = .gray
-        trackingProtectionView.isHidden = true
-        trackingProtectionView.contentMode = .center
-        return trackingProtectionView
+    lazy var trackingProtectionButton: UIButton = {
+        let trackingProtectionButton = UIButton()
+        trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
+        trackingProtectionButton.addTarget(self, action: #selector(SELDidPressTPShieldButton(_:)), for: .touchUpInside)
+        trackingProtectionButton.tintColor = .gray
+        trackingProtectionButton.imageView?.contentMode = .scaleAspectFill
+        trackingProtectionButton.isHidden = true
+        return trackingProtectionButton
     }()
 
     fileprivate lazy var readerModeButton: ReaderModeButton = {
@@ -187,7 +191,7 @@ class TabLocationView: UIView, TabEventHandler {
         }
         // The lock and TP icons have custom spacing.
         // TODO: Once we cut ios10 support we can use UIstackview.setCustomSpacing
-        let iconStack = UIStackView(arrangedSubviews: [spaceView, lockImageView, trackingProtectionView])
+        let iconStack = UIStackView(arrangedSubviews: [spaceView, lockImageView, trackingProtectionButton])
         iconStack.spacing = TabLocationViewUX.Spacing / 2
 
         let subviews = [iconStack, urlTextField, readerModeButton, separatorLine, pageOptionsButton]
@@ -201,10 +205,12 @@ class TabLocationView: UIView, TabEventHandler {
         }
 
         lockImageView.snp.makeConstraints { make in
-            make.size.equalTo(TabLocationViewUX.StatusIconSize)
+            make.width.equalTo(TabLocationViewUX.StatusIconSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
-        trackingProtectionView.snp.makeConstraints { make in
-            make.size.equalTo(TabLocationViewUX.StatusIconSize)
+        trackingProtectionButton.snp.makeConstraints { make in
+            make.width.equalTo(TabLocationViewUX.TPIconSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
 
         pageOptionsButton.snp.makeConstraints { make in
@@ -234,13 +240,13 @@ class TabLocationView: UIView, TabEventHandler {
         guard #available(iOS 11.0, *), let blocker = tab.contentBlocker as? ContentBlockerHelper else { return }
         switch blocker.status {
         case .Blocking:
-            self.trackingProtectionView.image = UIImage.templateImageNamed("tracking-protection")
-            self.trackingProtectionView.isHidden = false
+            self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
+            self.trackingProtectionButton.isHidden = false
         case .Disabled, .NoBlockedURLs:
-            self.trackingProtectionView.isHidden = true
+            self.trackingProtectionButton.isHidden = true
         case .Whitelisted:
-            self.trackingProtectionView.image = UIImage.templateImageNamed("tracking-protection-off")
-            self.trackingProtectionView.isHidden = false
+            self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
+            self.trackingProtectionButton.isHidden = false
         }
     }
 
@@ -283,6 +289,10 @@ class TabLocationView: UIView, TabEventHandler {
 
     func SELtapLocation(_ recognizer: UITapGestureRecognizer) {
         delegate?.tabLocationViewDidTapLocation(self)
+    }
+
+    func SELDidPressTPShieldButton(_ button: UIButton) {
+        delegate?.tabLocationViewDidTapShield(self)
     }
 
     func SELreaderModeCustomAction() -> Bool {
