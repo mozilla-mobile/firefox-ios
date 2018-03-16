@@ -197,6 +197,12 @@
                   Identifier = "BaseTestCase">
                </Test>
                <Test
+                  Identifier = "DatabaseFixtureTest/testLoadAllSites()">
+               </Test>
+               <Test
+                  Identifier = "DatabaseFixtureTest/testLoadNumberOfSites()">
+               </Test>
+               <Test
                   Identifier = "DragAndDropTests">
                </Test>
                <Test

@@ -5,7 +5,10 @@
 import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
+
     let fixtures = ["testOneBookmark": "testDatabaseFixture-browser.db", "testHistoryDatabaseFixture": "testHistoryDatabase4000-browser.db"]
+
+    let url = top5000SitesList()
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
@@ -30,5 +33,22 @@ class DatabaseFixtureTest: BaseTestCase {
         let loaded = NSPredicate(format: "count == 102")
         expectation(for: loaded, evaluatedWith: app.tables["History List"].cells, handler: nil)
         waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    // This two tests should be disabled. They are only meant to generate the browserDB or check how all web sites are presented
+    func testLoadAllSites() {
+        for index in url.top5000SitesList.indices {
+            navigator.openURL(url.top5000SitesList[index])
+        }
+    }
+
+    func testLoadNumberOfSites() {
+        // For example to navigate to the 100 first top sites. This can be changed as per needs
+        let n = 2
+        let urlSlice = url.top5000SitesList.prefix(n)
+
+        for index in urlSlice.indices {
+            navigator.openURL(urlSlice[index])
+        }
     }
 }

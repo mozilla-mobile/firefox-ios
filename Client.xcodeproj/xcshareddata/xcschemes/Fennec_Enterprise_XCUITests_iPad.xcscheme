@@ -194,6 +194,12 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "DatabaseFixtureTest/testLoadAllSites()">
+               </Test>
+               <Test
+                  Identifier = "DatabaseFixtureTest/testLoadNumberOfSites()">
+               </Test>
+               <Test
                   Identifier = "HomePageUITest">
                </Test>
                <Test
