@@ -96,9 +96,6 @@ class TabLocationView: UIView, TabEventHandler {
     lazy var urlTextField: UITextField = {
         let urlTextField = DisplayTextField()
 
-        self.tapRecognizer.delegate = self
-        urlTextField.addGestureRecognizer(self.tapRecognizer)
-
         // Prevent the field from compressing the toolbar buttons on the 4S in landscape.
         urlTextField.setContentCompressionResistancePriority(250, for: .horizontal)
         urlTextField.attributedPlaceholder = self.placeholder
@@ -176,9 +173,13 @@ class TabLocationView: UIView, TabEventHandler {
         self.tabObservers = registerFor(.didChangeContentBlocking, queue: .main)
 
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(SELlongPressLocation))
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(SELtapLocation))
         longPressRecognizer.delegate = self
-        addGestureRecognizer(self.longPressRecognizer)
+
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(SELtapLocation))
+        tapRecognizer.delegate = self
+
+        addGestureRecognizer(longPressRecognizer)
+        addGestureRecognizer(tapRecognizer)
 
         let spaceView = UIView()
         spaceView.snp.makeConstraints { make in
