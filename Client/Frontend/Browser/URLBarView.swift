@@ -138,7 +138,7 @@ class URLBarView: UIView {
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
         button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        button.setContentCompressionResistancePriority(1000, for: .horizontal)
+        button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         return button
     }()
 
