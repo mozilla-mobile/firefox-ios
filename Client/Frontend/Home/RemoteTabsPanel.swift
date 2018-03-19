@@ -187,6 +187,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
             image?.accessibilityLabel = NSLocalizedString("mobile device", comment: "Accessibility label for Mobile Device image in remote tabs list")
         }
         view.imageView.image = image
+        view.imageView.contentMode = .center
 
         view.mergeAccessibilityLabels()
         return view
