@@ -31,11 +31,11 @@ class PasscodeInputView: UIView, UIKeyInput {
     fileprivate var inputtedCode: String = ""
 
     fileprivate var blankDigitString: NSAttributedString {
-        return NSAttributedString(string: "\(blankCharacter)", attributes: [NSFontAttributeName: digitFont])
+        return NSAttributedString(string: "\(blankCharacter)", attributes: [NSAttributedStringKey.font: digitFont])
     }
 
     fileprivate var filledDigitString: NSAttributedString {
-        return NSAttributedString(string: "\(filledCharacter)", attributes: [NSFontAttributeName: digitFont])
+        return NSAttributedString(string: "\(filledCharacter)", attributes: [NSAttributedStringKey.font: digitFont])
     }
 
     @objc var keyboardType: UIKeyboardType = .numberPad

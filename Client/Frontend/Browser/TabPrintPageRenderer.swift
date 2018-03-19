@@ -12,7 +12,7 @@ private struct PrintedPageUX {
 
 class TabPrintPageRenderer: UIPrintPageRenderer {
     fileprivate weak var tab: Tab?
-    let textAttributes = [NSFontAttributeName: PrintedPageUX.PageTextFont]
+    let textAttributes = [NSAttributedStringKey.font: PrintedPageUX.PageTextFont]
     let dateString: String
 
     required init(tab: Tab) {
