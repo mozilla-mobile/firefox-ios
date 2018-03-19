@@ -137,7 +137,7 @@ class URLBarView: UIView {
         button.accessibilityIdentifier = "urlBar-scanQRCode"
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
-        button.setContentHuggingPriority(1000, for: .horizontal)
+        button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         button.setContentCompressionResistancePriority(1000, for: .horizontal)
         return button
     }()

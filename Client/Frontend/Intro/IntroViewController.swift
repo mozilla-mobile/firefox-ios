@@ -346,7 +346,7 @@ class CardView: UIView {
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         titleLabel.textAlignment = .center
-        titleLabel.setContentHuggingPriority(1000, for: .vertical)
+        titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return titleLabel
     }()
 
@@ -357,7 +357,7 @@ class CardView: UIView {
         textLabel.minimumScaleFactor = IntroUX.MinimumFontScale
         textLabel.textAlignment = .center
         textLabel.lineBreakMode = .byTruncatingTail
-        textLabel.setContentHuggingPriority(1000, for: .vertical)
+        textLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return textLabel
     }()
 
@@ -366,7 +366,7 @@ class CardView: UIView {
         button.backgroundColor = IntroUX.SignInButtonColor
         button.setTitle(Strings.SignInButtonTitle, for: [])
         button.setTitleColor(.white, for: [])
-        button.setContentHuggingPriority(1000, for: .vertical)
+        button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         button.clipsToBounds = true
         return button
     }()
