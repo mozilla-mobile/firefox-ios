@@ -70,7 +70,7 @@ class SyncCommandsTests: XCTestCase {
             "command": "displayURI",
             "args": [shareItem.url, "abcdefghijkl", shareItem.title ?? ""]
         ]
-        XCTAssertEqual(JSON(object: jsonObj).stringValue(), syncCommand.value)
+        XCTAssertEqual(JSON(jsonObj).stringValue(), syncCommand.value)
     }
 
     func testInsertWithNoURLOrTitle() {

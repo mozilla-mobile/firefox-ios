@@ -67,7 +67,7 @@ open class FxADeviceRegistration: NSObject, NSCoding {
     }
 
     open func toJSON() -> JSON {
-        return JSON(object: [
+        return JSON([
             "id": id,
             "version": version,
             "lastRegistered": lastRegistered,

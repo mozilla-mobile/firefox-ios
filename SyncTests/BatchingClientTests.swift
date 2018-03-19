@@ -19,7 +19,7 @@ private func massivify<T>(_ record: Record<T>) -> JSON? {
 }
 
 private func basicSerializer<T>(record: Record<T>) -> String {
-    return JSON(object: [
+    return JSON([
         "id": record.id,
         "payload": record.payload.json.dictionaryObject as Any
         ]).stringValue()!

@@ -21,7 +21,7 @@ class StorageClientTests: XCTestCase {
     func testPartialJSON() {
         let body = "0"
         let o: Any? = try! JSONSerialization.jsonObject(with: body.data(using: .utf8)!, options: .allowFragments)
-        XCTAssertTrue(JSON(object: o!).isInt())
+        XCTAssertTrue(JSON(o!).isInt())
     }
 
     func testPOSTResult() {
