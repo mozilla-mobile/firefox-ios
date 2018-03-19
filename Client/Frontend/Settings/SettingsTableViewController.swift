@@ -709,7 +709,7 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
     lazy var titleLabel: UILabel = {
         var headerLabel = UILabel()
         headerLabel.textColor = SettingsUX.TableViewHeaderTextColor
-        headerLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightRegular)
+        headerLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
         headerLabel.numberOfLines = 0
         return headerLabel
     }()
