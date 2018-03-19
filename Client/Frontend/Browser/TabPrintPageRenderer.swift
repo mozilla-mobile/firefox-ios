@@ -58,7 +58,7 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
     }
 
     func drawTextAtPoint(_ text: String, rect: CGRect, onLeft: Bool) {
-        let size = text.size(attributes: textAttributes)
+        let size = text.size(withAttributes: textAttributes)
         let x, y: CGFloat
         if onLeft {
             x = rect.minX
