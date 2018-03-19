@@ -421,7 +421,7 @@ extension SQLiteHistory: BrowserHistory {
             self.favicons.getCleanupFaviconsQuery()
             ])
             // We've probably deleted a lot of stuff. Vacuum now to recover the space.
-            >>> effect(self.db.vacuum)
+            >>> effect({ self.db.vacuum() })
     }
 
     func recordVisitedSite(_ site: Site) -> Success {
