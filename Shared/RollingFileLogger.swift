@@ -8,7 +8,7 @@ import XCGLogger
 //// A rolling file logger that saves to a different log file based on given timestamp.
 open class RollingFileLogger: XCGLogger {
 
-    fileprivate static let TwoMBsInBytes: Int64 = 2 * 100000
+    public static let TwoMBsInBytes: Int64 = 2 * 100000
     fileprivate let sizeLimit: Int64
     fileprivate let logDirectoryPath: String?
 
