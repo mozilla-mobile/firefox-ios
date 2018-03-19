@@ -70,10 +70,10 @@ class SnackBar: UIView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         // These are requried to make sure that the image is _never_ smaller or larger than its actual size
-        imageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
-        imageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
-        imageView.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .horizontal)
-        imageView.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .vertical)
+        imageView.setContentHuggingPriority(UILayoutPriority.required, for: .horizontal)
+        imageView.setContentHuggingPriority(UILayoutPriority.required, for: .vertical)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority.required, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
         return imageView
     }()
 
@@ -81,7 +81,7 @@ class SnackBar: UIView {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         label.lineBreakMode = .byWordWrapping
-        label.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .horizontal)
+        label.setContentCompressionResistancePriority(UILayoutPriority.required, for: .horizontal)
         label.backgroundColor = nil
         label.numberOfLines = 0
         label.textColor = SettingsUX.TableViewRowTextColor
