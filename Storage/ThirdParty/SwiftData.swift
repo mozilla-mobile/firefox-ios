@@ -1233,7 +1233,7 @@ open class SDRow: Sequence {
             return nil
         case SQLITE_INTEGER:
             //Everyone expects this to be an Int. On Ints larger than 2^31 this will lose information.
-            ret = Int(truncatingBitPattern: sqlite3_column_int64(statement.pointer, i))
+            ret = Int(truncatingIfNeeded: sqlite3_column_int64(statement.pointer, i))
         case SQLITE_TEXT:
             if let text = sqlite3_column_text(statement.pointer, i) {
                 return String(cString: text)

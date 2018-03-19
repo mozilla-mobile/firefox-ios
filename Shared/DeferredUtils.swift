@@ -135,6 +135,15 @@ public func effect<T, U>(_ f: @escaping (T) -> U) -> (T) -> Deferred<Maybe<T>> {
         return deferMaybe(t)
     }
 }
+// Prevents "Cannot convert call result type '(_) -> Deferred<Maybe<_>>' to expected type '() -> Deferred<Maybe<Void>>"
+// SE-0029 introduced this behavour
+// https://github.com/apple/swift-evolution/blob/master/proposals/0029-remove-implicit-tuple-splat.md
+public func effect(_ f: @escaping () -> ()) -> (() -> Success) {
+    return {
+        f()
+        return succeed()
+    }
+}
 
 /**
  * Return a single Deferred that represents the sequential chaining of
