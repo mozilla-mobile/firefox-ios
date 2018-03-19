@@ -495,7 +495,7 @@ class URLBarView: UIView {
             removeLocationTextField()
         }
 
-        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: { _ in
+        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: {
             self.transitionToOverlay(cancel)
             self.setNeedsUpdateConstraints()
             self.layoutIfNeeded()

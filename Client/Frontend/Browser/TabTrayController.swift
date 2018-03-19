@@ -590,7 +590,7 @@ extension TabTrayController: TabManagerDelegate {
             .map { IndexPath(item: $0, section: 0) }
 
         assertIsMainThread("Changing selected tab is on main thread")
-        collectionView?.performBatchUpdates({ _ in
+        collectionView?.performBatchUpdates({
             self.collectionView.reloadItems(at: updated)
 
             if !updated.isEmpty {
@@ -615,7 +615,7 @@ extension TabTrayController: TabManagerDelegate {
         }
 
         tabDataSource.addTab(tab)
-        self.collectionView?.performBatchUpdates({ _ in
+        self.collectionView?.performBatchUpdates({
             self.collectionView.insertItems(at: [IndexPath(item: index, section: 0)])
         }, completion: { finished in
             if finished {
