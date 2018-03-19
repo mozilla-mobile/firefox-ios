@@ -82,7 +82,7 @@ class SyncNowSetting: WithAccountSetting {
                 string: Strings.FxANoInternetConnection,
                 attributes: [
                     NSAttributedStringKey.foregroundColor: UIColor.red,
-                    NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultMediumFont
+                    NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultMediumFont
                 ]
             )
         }
@@ -91,12 +91,12 @@ class SyncNowSetting: WithAccountSetting {
             string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
             attributes: [
                 NSAttributedStringKey.foregroundColor: self.enabled ? SettingsUX.TableViewRowSyncTextColor : UIColor.gray,
-                NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont
+                NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFont
             ]
         )
     }
 
-    fileprivate let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor, NSFontAttributeName: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFont.Weight.regular)])
+    fileprivate let syncingTitle = NSAttributedString(string: Strings.SyncingMessageWithEllipsis, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor, NSAttributedStringKey.font: UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultStandardFontSize, weight: UIFont.Weight.regular)])
 
     func startRotateSyncIcon() {
         DispatchQueue.main.async {
@@ -139,9 +139,9 @@ class SyncNowSetting: WithAccountSetting {
         switch syncStatus {
         case .bad(let message):
             guard let message = message else { return syncNowTitle }
-            return NSAttributedString(string: message, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowErrorTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+            return NSAttributedString(string: message, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowErrorTextColor, NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .warning(let message):
-            return  NSAttributedString(string: message, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowWarningTextColor, NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFont])
+            return  NSAttributedString(string: message, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowWarningTextColor, NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFont])
         case .inProgress:
             return syncingTitle
         default:
@@ -156,7 +156,7 @@ class SyncNowSetting: WithAccountSetting {
 
         let formattedLabel = timestampFormatter.string(from: Date.fromTimestamp(timestamp))
         let attributedString = NSMutableAttributedString(string: formattedLabel)
-        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.gray, NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)]
+        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.gray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)]
         let range = NSRange(location: 0, length: attributedString.length)
         attributedString.setAttributes(attributes, range: range)
         return attributedString
@@ -338,14 +338,14 @@ class AccountStatusSetting: WithAccountSetting {
         if let account = profile.getAccount() {
             
             if let displayName = account.fxaProfile?.displayName {
-                return NSAttributedString(string: displayName, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor])
+                return NSAttributedString(string: displayName, attributes: [NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor])
             }
             
             if let email = account.fxaProfile?.email {
-                return NSAttributedString(string: email, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor])
+                return NSAttributedString(string: email, attributes: [NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor])
             }
             
-            return NSAttributedString(string: account.email, attributes: [NSFontAttributeName: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor])
+            return NSAttributedString(string: account.email, attributes: [NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowSyncTextColor])
         }
         return nil
     }
