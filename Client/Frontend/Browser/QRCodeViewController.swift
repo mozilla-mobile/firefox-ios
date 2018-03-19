@@ -24,12 +24,12 @@ class QRCodeViewController: UIViewController {
 
     fileprivate lazy var captureSession: AVCaptureSession = {
         let session = AVCaptureSession()
-        session.sessionPreset = AVCaptureSessionPresetHigh
+        session.sessionPreset = AVCaptureSession.Preset.high
         return session
     }()
 
     private lazy var captureDevice: AVCaptureDevice? = {
-        return AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        return AVCaptureDevice.default(for: AVMediaType.video)
     }()
 
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
@@ -88,7 +88,7 @@ class QRCodeViewController: UIViewController {
             self.navigationItem.rightBarButtonItem?.isEnabled = false
         }
 
-        let getAuthorizationStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        let getAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
         if getAuthorizationStatus != .denied {
             setupCamera()
         } else {
@@ -182,7 +182,7 @@ class QRCodeViewController: UIViewController {
         if isLightOn {
             do {
                 try captureDevice.lockForConfiguration()
-                captureDevice.torchMode = AVCaptureTorchMode.off
+                captureDevice.torchMode = AVCaptureDevice.TorchMode.off
                 captureDevice.unlockForConfiguration()
                 navigationItem.rightBarButtonItem?.image = UIImage(named: "qrcode-light")
                 navigationItem.rightBarButtonItem?.tintColor = UIColor.white
@@ -192,7 +192,7 @@ class QRCodeViewController: UIViewController {
         } else {
             do {
                 try captureDevice.lockForConfiguration()
-                captureDevice.torchMode = AVCaptureTorchMode.on
+                captureDevice.torchMode = AVCaptureDevice.TorchMode.on
                 captureDevice.unlockForConfiguration()
                 navigationItem.rightBarButtonItem?.image = UIImage(named: "qrcode-isLighting")
                 navigationItem.rightBarButtonItem?.tintColor = QRCodeViewControllerUX.isLightingNavigationItemColor
@@ -219,7 +219,7 @@ class QRCodeViewController: UIViewController {
         if captureSession.canAddOutput(output) {
             captureSession.addOutput(output)
             output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-            output.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
+            output.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
         }
         if let videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession) {
             videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
