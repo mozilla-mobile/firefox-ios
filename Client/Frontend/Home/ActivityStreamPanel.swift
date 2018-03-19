@@ -1034,7 +1034,7 @@ class ASHeaderView: UICollectionReusableView {
             make.bottom.equalTo(self)
             self.rightConstraint = make.trailing.equalTo(self).inset(-titleInsets).constraint
         }
-        moreButton.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .horizontal)
+        moreButton.setContentCompressionResistancePriority(UILayoutPriority.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
             self.leftConstraint = make.leading.equalTo(self).inset(titleInsets).constraint
             make.trailing.equalTo(moreButton.snp.leading).inset(-ASHeaderViewUX.TitleTopInset)
