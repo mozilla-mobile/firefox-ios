@@ -145,6 +145,13 @@ class ThirdPartySearchTest: BaseTestCase {
 
         // Ensure that correct search is done
         let url = app.textFields["url"].value as! String
+        if (!url.hasSuffix("&btnI")) {
+            app.buttons["Back"].tap()
+            app.textFields["url"].tap()
+            app.typeText("strange charm")
+            app.scrollViews.otherElements.buttons["Feeling Lucky search"].tap()
+            XCTAssert(url.hasSuffix("&btnI"), "The URL should indicate that the search was performed using IFL")
+        }
         XCTAssert(url.hasSuffix("&btnI"), "The URL should indicate that the search was performed using IFL")
     }
 
