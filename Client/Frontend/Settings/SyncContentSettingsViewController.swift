@@ -16,7 +16,7 @@ class ManageSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: Strings.FxAManageAccount, attributes: [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: Strings.FxAManageAccount, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -39,7 +39,7 @@ class DisconnectSetting: Setting {
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.SettingsDisconnectSyncButton, attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
+        return NSAttributedString(string: Strings.SettingsDisconnectSyncButton, attributes: [NSAttributedStringKey.foregroundColor: UIConstants.DestructiveRed])
     }
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
