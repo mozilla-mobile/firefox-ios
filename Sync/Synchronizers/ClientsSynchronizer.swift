@@ -163,7 +163,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         let guid = self.scratchpad.clientGUID
         let formfactor = formFactorString()
         
-        let json = JSON(object: [
+        let json = JSON([
             "id": guid,
             "fxaDeviceId": self.scratchpad.fxaDeviceId,
             "version": AppInfo.appVersion,

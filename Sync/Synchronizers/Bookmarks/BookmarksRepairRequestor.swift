@@ -88,7 +88,7 @@ struct RepairRequest {
                 ]
             ]
         ]
-        return SyncCommand(value: JSON(object: jsonObj).stringValue()!)
+        return SyncCommand(value: JSON(jsonObj).stringValue()!)
     }
 }
 

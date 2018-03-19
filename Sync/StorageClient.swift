@@ -611,7 +611,7 @@ open class Sync15StorageClient {
             return Deferred(value: Maybe(failure: MalformedMetaGlobalError()))
         }
 
-        let record: JSON = JSON(object: ["payload": payload.json.stringValue() ?? JSON.null as Any, "id": "global"])
+        let record: JSON = JSON(["payload": payload.json.stringValue() ?? JSON.null as Any, "id": "global"])
         return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
     }
 
