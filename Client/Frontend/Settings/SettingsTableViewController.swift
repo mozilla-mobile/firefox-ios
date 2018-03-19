@@ -515,6 +515,7 @@ class SettingsTableViewController: UITableViewController {
 
         settings = generateSettings()
 
+        // Because these are added in viewWillAppear, unhook in viewDidDisappear for symmetry.
         NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELfirefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
@@ -529,7 +530,11 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self)    }
+
+        [Notification.Name.ProfileDidStartSyncing, Notification.Name.ProfileDidFinishSyncing, Notification.Name.FirefoxAccountChanged].forEach { name in
+            NotificationCenter.default.removeObserver(self, name: name, object: nil)
+        }
+    }
 
     // Override to provide settings in subclasses
     func generateSettings() -> [SettingSection] {
