@@ -136,7 +136,7 @@ public struct UIConstants {
     static let DefaultChromeSize: CGFloat = 16
     static let DefaultChromeSmallSize: CGFloat = 11
     static let PasscodeEntryFontSize: CGFloat = 36
-    static let DefaultChromeFont: UIFont = UIFont.systemFont(ofSize: DefaultChromeSize, weight: UIFontWeightRegular)
+    static let DefaultChromeFont: UIFont = UIFont.systemFont(ofSize: DefaultChromeSize, weight: UIFont.Weight.regular)
     static let DefaultChromeSmallFontBold = UIFont.boldSystemFont(ofSize: DefaultChromeSmallSize)
     static let PasscodeEntryFont = UIFont.systemFont(ofSize: PasscodeEntryFontSize, weight: UIFontWeightBold)
 
