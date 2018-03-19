@@ -12,7 +12,7 @@ let websiteWithSearchField = ["url": "https://developer.mozilla.org/en-US/search
 class DragAndDropTests: BaseTestCase {
 
     override func tearDown() {
-        XCUIDevice.shared().orientation = UIDeviceOrientation.portrait
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         super.tearDown()
     }
 
@@ -54,7 +54,7 @@ class DragAndDropTests: BaseTestCase {
 
     func testRearrangeTabsLandscape() {
         // Set the device in landscape mode
-        XCUIDevice.shared().orientation = UIDeviceOrientation.landscapeLeft
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
 

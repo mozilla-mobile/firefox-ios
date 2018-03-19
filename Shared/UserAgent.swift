@@ -87,7 +87,7 @@ open class UserAgent {
             return userAgent     // Fall back to Safari's.
         }
 
-        let webKitVersion = (userAgent as NSString).substring(with: match!.rangeAt(1))
+        let webKitVersion = (userAgent as NSString).substring(with: match!.range(at: 1))
 
         // Insert "FxiOS/<version>" before the Mobile/ section.
         let mobileRange = (userAgent as NSString).range(of: "Mobile/")

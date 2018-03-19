@@ -94,7 +94,7 @@ open class AsyncReducer<T, U> {
                 return
             }
 
-            let combineItem = deferDispatchAsync(dispatchQueue) { _ in
+            let combineItem = deferDispatchAsync(dispatchQueue) { 
                 return self.combine(accumulator, item)
             }
 
