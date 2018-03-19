@@ -240,10 +240,6 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         tableView.accessibilityIdentifier = "AuthenticationManager.settingsTableView"
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     override func generateSettings() -> [SettingSection] {
         if let _ = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() {
             return passcodeEnabledSettings()
