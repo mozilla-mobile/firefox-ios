@@ -9,7 +9,7 @@ import XCTest
 class NSMutableAttributedStringExtensionsTests: XCTestCase {
     fileprivate func checkCharacterAtPosition(_ position: Int, isColored color: UIColor, inString string: NSAttributedString) -> Bool {
         let attributes = string.attributes(at: position, effectiveRange: nil)
-        if let foregroundColor = attributes[NSForegroundColorAttributeName] as? UIColor {
+        if let foregroundColor = attributes[NSAttributedStringKey.foregroundColor] as? UIColor {
             if foregroundColor == color {
                 return true
             }

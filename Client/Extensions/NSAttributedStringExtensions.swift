@@ -7,7 +7,7 @@ import Foundation
 // MARK: - Common UITableView text styling
 extension NSAttributedString {
     static func tableRowTitle(_ string: String, enabled: Bool) -> NSAttributedString {
-        let color = enabled ? [NSForegroundColorAttributeName: SettingsUX.TableViewRowTextColor] : [NSForegroundColorAttributeName: SettingsUX.TableViewDisabledRowTextColor]
+        let color = enabled ? [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor] : [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewDisabledRowTextColor]
         return NSAttributedString(string: string, attributes: color)
     }
 }
