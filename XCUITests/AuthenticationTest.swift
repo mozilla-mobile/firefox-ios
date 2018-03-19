@@ -37,7 +37,7 @@ class AuthenticationTest: BaseTestCase {
         waitforExistence(app.tables["Login List"])
 
         //send app to background, and re-enter
-        XCUIDevice.shared().press(.home)
+        XCUIDevice.shared.press(.home)
         app.activate()
         let contentView = app.navigationBars["Client.FxAContentView"]
         if contentView.exists {
@@ -55,7 +55,7 @@ class AuthenticationTest: BaseTestCase {
         waitforExistence(app.tables["Login List"])
 
         // Send app to background, and re-enter
-        XCUIDevice.shared().press(.home)
+        XCUIDevice.shared.press(.home)
         app.activate()
         let contentView = app.navigationBars["Client.FxAContentView"]
         if contentView.exists {

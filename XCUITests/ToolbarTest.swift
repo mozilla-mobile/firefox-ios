@@ -12,11 +12,11 @@ let PDFWebsite = ["url": "http://www.pdf995.com/samples/pdf.pdf"]
 class ToolbarTests: BaseTestCase {
     override func setUp() {
         super.setUp()
-        XCUIDevice.shared().orientation = UIDeviceOrientation.landscapeLeft
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
     }
 
     override func tearDown() {
-        XCUIDevice.shared().orientation = UIDeviceOrientation.portrait
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         super.tearDown()
     }
 
@@ -96,7 +96,7 @@ class ToolbarTests: BaseTestCase {
     }
 
     func testShowDoNotShowToolbarWhenScrollingPortrait() {
-        XCUIDevice.shared().orientation = UIDeviceOrientation.portrait
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         // The toolbar should dissapear when scrolling up
         navigator.openURL(PDFWebsite["url"]!)
         waitUntilPageLoad()

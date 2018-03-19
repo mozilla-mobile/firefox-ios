@@ -6,7 +6,7 @@ import UIKit
 
 extension NSMutableAttributedString {
     public func colorSubstring(_ substring: String, withColor color: UIColor) {
-        self.attributeSubstring(substring, forAttribute: NSForegroundColorAttributeName, withValue: color)
+        self.attributeSubstring(substring, forAttribute: NSAttributedStringKey.foregroundColor.rawValue, withValue: color)
     }
 
     public func pitchSubstring(_ substring: String, withPitch pitch: Double) {
@@ -17,6 +17,6 @@ extension NSMutableAttributedString {
     private func attributeSubstring(_ substring: String, forAttribute attribute: String, withValue value: AnyObject) {
         let nsString = self.string as NSString
         let range = nsString.range(of: substring)
-        self.addAttribute(attribute, value: value, range: range)
+        self.addAttribute(NSAttributedStringKey(rawValue: attribute), value: value, range: range)
     }
 }

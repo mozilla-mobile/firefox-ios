@@ -24,7 +24,7 @@ class ReaderViewTest: BaseTestCase {
     private func checkReadingListNumberOfItems(items: Int) {
         waitforExistence(app.tables["ReadingTable"])
         let list = app.tables["ReadingTable"].cells.count
-        XCTAssertEqual(list, UInt(items), "The number of items in the reading table is not correct")
+        XCTAssertEqual(list, items, "The number of items in the reading table is not correct")
     }
 
     func testAddToReadingList() {
