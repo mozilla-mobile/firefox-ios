@@ -239,7 +239,7 @@ class IntroViewController: UIViewController {
             return
         }
 
-        UIView.animate(withDuration: IntroUX.FadeDuration, animations: { _ in
+        UIView.animate(withDuration: IntroUX.FadeDuration, animations: {
             self.cardViews.forEach { $0.alpha = 0.0 }
             introView.alpha = 1.0
             self.pageControl.currentPage = page

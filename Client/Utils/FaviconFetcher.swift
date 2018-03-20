@@ -71,7 +71,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
         var oldIcons: [Favicon] = oldIcons
 
-        queue.async { _ in
+        queue.async {
             self.parseHTMLForFavicons(url).bind({ (result: Maybe<[Favicon]>) -> Deferred<[Maybe<Favicon>]> in
                 var deferreds = [Deferred<Maybe<Favicon>>]()
                 if let icons = result.successValue {
