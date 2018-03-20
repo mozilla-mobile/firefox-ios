@@ -24,7 +24,7 @@ extension TabTrayController {
         ]
     }
 
-    func didTogglePrivateModeKeyCommand() {
+    @objc func didTogglePrivateModeKeyCommand() {
         // NOTE: We cannot and should not capture telemetry here.
         didTogglePrivateMode()
     }
@@ -54,7 +54,8 @@ extension TabTrayController {
     func didChangeSelectedTabKeyCommand(sender: UIKeyCommand) {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "select-tab"])
         let step: Int
-        switch sender.input {
+        guard let input = sender.input else { return }
+        switch input {
         case UIKeyInputLeftArrow:
             step = -1
         case UIKeyInputRightArrow:
