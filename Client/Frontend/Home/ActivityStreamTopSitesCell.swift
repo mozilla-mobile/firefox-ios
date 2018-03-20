@@ -19,7 +19,7 @@ private struct TopSiteCellUX {
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
     static let PinIconSize: CGFloat = 12
-    static let PinColor = UIColor.Defaults.Grey60
+    static let PinColor = UIColor.Photon.Grey60
 }
 
 /*

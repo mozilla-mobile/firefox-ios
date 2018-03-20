@@ -56,7 +56,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     
     private var site: Site?
     private let style: PresentationStyle
-    private var tintColor = UIColor.Defaults.Grey80
+    private var tintColor = UIColor.Photon.Grey80
     private lazy var showCloseButton: Bool = {
         return self.style == .bottom && self.modalPresentationStyle != .popover
     }()
