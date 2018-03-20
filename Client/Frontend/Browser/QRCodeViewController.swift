@@ -221,13 +221,13 @@ class QRCodeViewController: UIViewController {
             output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             output.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
         }
-        if let videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession) {
-            videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-            videoPreviewLayer.frame = UIScreen.main.bounds
-            view.layer.addSublayer(videoPreviewLayer)
-            self.videoPreviewLayer = videoPreviewLayer
-            captureSession.startRunning()
-        }
+        let videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        videoPreviewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        videoPreviewLayer.frame = UIScreen.main.bounds
+        view.layer.addSublayer(videoPreviewLayer)
+        self.videoPreviewLayer = videoPreviewLayer
+        captureSession.startRunning()
+
     }
 
     override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
@@ -243,15 +243,15 @@ class QRCodeViewController: UIViewController {
         videoPreviewLayer.frame = UIScreen.main.bounds
         switch toInterfaceOrientation {
         case .portrait:
-            videoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientation.portrait
+            videoPreviewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
         case .landscapeLeft:
-            videoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
+            videoPreviewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
         case .landscapeRight:
-            videoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
+            videoPreviewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.landscapeRight
         case .portraitUpsideDown:
-            videoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
+            videoPreviewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
         default:
-            videoPreviewLayer.connection.videoOrientation = AVCaptureVideoOrientation.portrait
+            videoPreviewLayer.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
         }
     }
 }
