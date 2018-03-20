@@ -1114,23 +1114,25 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        if let url = webView.url, !url.isErrorPageURL, !url.isAboutHomeURL {
-            tab.lastExecutedTime = Date.now()
+        if let url = webView.url {
+            if !url.isErrorPageURL, !url.isAboutHomeURL {
+                tab.lastExecutedTime = Date.now()
 
-            postLocationChangeNotificationForTab(tab, navigation: navigation)
-            
-            // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
-            // because that event wil not always fire due to unreliable page caching. This will either let us know that
-            // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
-            // ignore the result because we are being called back asynchronous when the readermode status changes.
-            webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
+                postLocationChangeNotificationForTab(tab, navigation: navigation)
 
-            // Re-run additional scripts in webView to extract updated favicons and metadata.
-            runScriptsOnWebView(webView)
+                // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
+                // because that event wil not always fire due to unreliable page caching. This will either let us know that
+                // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
+                // ignore the result because we are being called back asynchronous when the readermode status changes.
+                webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
+
+                // Re-run additional scripts in webView to extract updated favicons and metadata.
+                runScriptsOnWebView(webView)
+            }
 
             TabEvent.post(.didChangeURL(url), for: tab)
         }
-        
+
         if tab === tabManager.selectedTab {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
@@ -1148,7 +1150,6 @@ class BrowserViewController: UIViewController {
                     webView.removeFromSuperview()
                 }
             }
-
         }
         
         // Remember whether or not a desktop site was requested
