@@ -293,7 +293,7 @@ extension ContentBlockerHelper {
             let deferreds: [Deferred<Void>] = available.map { filename in
                 let result = Deferred<Void>()
                 ContentBlockerHelper.ruleStore.removeContentRuleList(forIdentifier: filename) { _ in
-                   result.fill()
+                    result.fill(())
                 }
                 return result
             }
@@ -356,7 +356,7 @@ extension ContentBlockerHelper {
             let result = Deferred<Void>()
             ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in
                 if contentRuleList != nil {
-                    result.fill()
+                    result.fill(())
                     return
                 }
                 loadJsonFromBundle(forResource: filename) { jsonString in
@@ -369,7 +369,7 @@ extension ContentBlockerHelper {
                         }
                         assert(rule != nil)
 
-                        result.fill()
+                        result.fill(())
                     }
                 }
             }
