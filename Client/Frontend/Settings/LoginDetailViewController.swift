@@ -75,7 +75,7 @@ class LoginDetailViewController: SensitiveViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
 
         tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
@@ -290,7 +290,7 @@ extension LoginDetailViewController {
         }
     }
 
-    func SELonProfileDidFinishSyncing() {
+    func onProfileDidFinishSyncing() {
         // Reload details after syncing.
         profile.logins.getLoginDataForGUID(login.guid).uponQueue(.main) { result in
             if let syncedLogin = result.successValue {
@@ -299,18 +299,18 @@ extension LoginDetailViewController {
         }
     }
 
-    func SELedit() {
+    func edit() {
         editingInfo = true
 
         let cell = tableView.cellForRow(at: InfoItem.usernameItem.indexPath) as! LoginTableViewCell
         cell.descriptionLabel.becomeFirstResponder()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SELdoneEditing))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
     }
 
-    func SELdoneEditing() {
+    func doneEditing() {
         editingInfo = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(SELedit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
         
         defer {
             // Required to get UI to reload with changed state

@@ -76,7 +76,7 @@ class ReaderModeStyleViewController: UIViewController {
             FontTypeButton(fontType: ReaderModeFontType.serif)
         ]
 
-        setupButtons(fontTypeButtons, inRow: fontTypeRow, action: #selector(SELchangeFontType))
+        setupButtons(fontTypeButtons, inRow: fontTypeRow, action: #selector(changeFontType))
 
         // Font size row
 
@@ -104,7 +104,7 @@ class ReaderModeStyleViewController: UIViewController {
             FontSizeButton(fontSizeAction: FontSizeAction.bigger)
         ]
 
-        setupButtons(fontSizeButtons, inRow: fontSizeRow, action: #selector(SELchangeFontSize))
+        setupButtons(fontSizeButtons, inRow: fontSizeRow, action: #selector(changeFontSize))
 
         // Theme row
 
@@ -123,7 +123,7 @@ class ReaderModeStyleViewController: UIViewController {
             ThemeButton(theme: ReaderModeTheme.sepia)
         ]
 
-        setupButtons(themeButtons, inRow: themeRow, action: #selector(SELchangeTheme))
+        setupButtons(themeButtons, inRow: themeRow, action: #selector(changeTheme))
 
         // Brightness row
 
@@ -141,7 +141,7 @@ class ReaderModeStyleViewController: UIViewController {
         brightnessRow.addSubview(slider)
         slider.accessibilityLabel = NSLocalizedString("Brightness", comment: "Accessibility label for brightness adjustment slider in Reader Mode display settings")
         slider.tintColor = ReaderModeStyleViewControllerUX.BrightnessSliderTintColor
-        slider.addTarget(self, action: #selector(SELchangeBrightness), for: .valueChanged)
+        slider.addTarget(self, action: #selector(changeBrightness), for: .valueChanged)
 
         slider.snp.makeConstraints { make in
             make.center.equalTo(brightnessRow)
@@ -188,7 +188,7 @@ class ReaderModeStyleViewController: UIViewController {
         }
     }
 
-    func SELchangeFontType(_ button: FontTypeButton) {
+    func changeFontType(_ button: FontTypeButton) {
         selectFontType(button.fontType)
         delegate?.readerModeStyleViewController(self, didConfigureStyle: readerModeStyle)
     }
@@ -204,7 +204,7 @@ class ReaderModeStyleViewController: UIViewController {
         fontSizeLabel.fontType = fontType
     }
 
-    func SELchangeFontSize(_ button: FontSizeButton) {
+    func changeFontSize(_ button: FontSizeButton) {
         switch button.fontSizeAction {
         case .smaller:
             readerModeStyle.fontSize = readerModeStyle.fontSize.smaller()
@@ -232,7 +232,7 @@ class ReaderModeStyleViewController: UIViewController {
         }
     }
 
-    func SELchangeTheme(_ button: ThemeButton) {
+    func changeTheme(_ button: ThemeButton) {
         selectTheme(button.theme)
         delegate?.readerModeStyleViewController(self, didConfigureStyle: readerModeStyle)
     }
@@ -241,7 +241,7 @@ class ReaderModeStyleViewController: UIViewController {
         readerModeStyle.theme = theme
     }
 
-    func SELchangeBrightness(_ slider: UISlider) {
+    func changeBrightness(_ slider: UISlider) {
         UIScreen.main.brightness = CGFloat(slider.value)
     }
 }

@@ -7,7 +7,7 @@ import UIKit
 class SettingsNavigationController: UINavigationController {
     var popoverDelegate: PresentingModalViewControllerDelegate?
 
-    func SELdone() {
+    func done() {
         if let delegate = popoverDelegate {
             delegate.dismissPresentedModalViewController(self, animated: true)
         } else {

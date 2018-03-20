@@ -382,12 +382,12 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
-        signInButton.addTarget(self, action: #selector(SELsignIn), for: .touchUpInside)
+        signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         contentView.addSubview(signInButton)
 
         createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), for: [])
         createAnAccountButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
-        createAnAccountButton.addTarget(self, action: #selector(SELcreateAnAccount), for: .touchUpInside)
+        createAnAccountButton.addTarget(self, action: #selector(createAnAccount), for: .touchUpInside)
         contentView.addSubview(createAnAccountButton)
 
         imageView.snp.makeConstraints { (make) -> Void in
@@ -415,13 +415,13 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc fileprivate func SELsignIn() {
+    @objc fileprivate func signIn() {
         if let homePanel = self.homePanel {
             homePanel.homePanelDelegate?.homePanelDidRequestToSignIn(homePanel)
         }
     }
 
-    @objc fileprivate func SELcreateAnAccount() {
+    @objc fileprivate func createAnAccount() {
         if let homePanel = self.homePanel {
             homePanel.homePanelDelegate?.homePanelDidRequestToCreateAccount(homePanel)
         }

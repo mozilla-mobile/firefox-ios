@@ -129,7 +129,7 @@ class TabLocationView: UIView, TabEventHandler {
     lazy var trackingProtectionButton: UIButton = {
         let trackingProtectionButton = UIButton()
         trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
-        trackingProtectionButton.addTarget(self, action: #selector(SELDidPressTPShieldButton(_:)), for: .touchUpInside)
+        trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
         trackingProtectionButton.tintColor = .gray
         trackingProtectionButton.imageView?.contentMode = .scaleAspectFill
         trackingProtectionButton.isHidden = true
@@ -138,28 +138,28 @@ class TabLocationView: UIView, TabEventHandler {
 
     fileprivate lazy var readerModeButton: ReaderModeButton = {
         let readerModeButton = ReaderModeButton(frame: .zero)
-        readerModeButton.addTarget(self, action: #selector(SELtapReaderModeButton), for: .touchUpInside)
-        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(SELlongPressReaderModeButton)))
+        readerModeButton.addTarget(self, action: #selector(tapReaderModeButton), for: .touchUpInside)
+        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressReaderModeButton)))
         readerModeButton.isAccessibilityElement = true
         readerModeButton.isHidden = true
         readerModeButton.imageView?.contentMode = .scaleAspectFit
         readerModeButton.contentHorizontalAlignment = .left
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
         readerModeButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
-        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(SELreaderModeCustomAction))]
+        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(readerModeCustomAction))]
         return readerModeButton
     }()
     
     lazy var pageOptionsButton: ToolbarButton = {
         let pageOptionsButton = ToolbarButton(frame: .zero)
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
-        pageOptionsButton.addTarget(self, action: #selector(SELDidPressPageOptionsButton), for: .touchUpInside)
+        pageOptionsButton.addTarget(self, action: #selector(didPressPageOptionsButton), for: .touchUpInside)
         pageOptionsButton.isAccessibilityElement = true
         pageOptionsButton.isHidden = true
         pageOptionsButton.imageView?.contentMode = .left
         pageOptionsButton.accessibilityLabel = NSLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
         pageOptionsButton.accessibilityIdentifier = "TabLocationView.pageOptionsButton"
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(SELDidLongPressPageOptionsButton))
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressPageOptionsButton))
         pageOptionsButton.addGestureRecognizer(longPressGesture)
         return pageOptionsButton
     }()
@@ -176,10 +176,10 @@ class TabLocationView: UIView, TabEventHandler {
 
         self.tabObservers = registerFor(.didChangeContentBlocking, queue: .main)
 
-        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(SELlongPressLocation))
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
         longPressRecognizer.delegate = self
 
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(SELtapLocation))
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapLocation))
         tapRecognizer.delegate = self
 
         addGestureRecognizer(longPressRecognizer)
@@ -263,39 +263,39 @@ class TabLocationView: UIView, TabEventHandler {
         }
     }
 
-    func SELtapReaderModeButton() {
+    func tapReaderModeButton() {
         delegate?.tabLocationViewDidTapReaderMode(self)
     }
 
-    func SELlongPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
+    func longPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressReaderMode(self)
         }
     }
     
-    func SELDidPressPageOptionsButton(_ button: UIButton) {
+    func didPressPageOptionsButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapPageOptions(self, from: button)
     }
     
-    func SELDidLongPressPageOptionsButton(_ recognizer: UILongPressGestureRecognizer) {
+    func didLongPressPageOptionsButton(_ recognizer: UILongPressGestureRecognizer) {
         delegate?.tabLocationViewDidLongPressPageOptions(self)
     }
 
-    func SELlongPressLocation(_ recognizer: UITapGestureRecognizer) {
+    func longPressLocation(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressLocation(self)
         }
     }
 
-    func SELtapLocation(_ recognizer: UITapGestureRecognizer) {
+    func tapLocation(_ recognizer: UITapGestureRecognizer) {
         delegate?.tabLocationViewDidTapLocation(self)
     }
 
-    func SELDidPressTPShieldButton(_ button: UIButton) {
+    func didPressTPShieldButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapShield(self)
     }
 
-    func SELreaderModeCustomAction() -> Bool {
+    func readerModeCustomAction() -> Bool {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
 
