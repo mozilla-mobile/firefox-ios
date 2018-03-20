@@ -90,7 +90,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func handleKeyCommand(sender: UIKeyCommand) {
-        switch sender.input {
+        guard let input = sender.input else {
+            return
+        }
+        switch input {
         case UIKeyInputLeftArrow:
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-left-arrow"])
             if isSelectionActive {

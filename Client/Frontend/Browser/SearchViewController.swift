@@ -449,7 +449,8 @@ extension SearchViewController {
 
         let nextSection: Int
         let nextItem: Int
-        switch sender.input {
+        guard let input = sender.input else { return }
+        switch input {
         case UIKeyInputUpArrow:
             // we're going down, we should check if we've reached the first item in this section.
             if (current.item == 0) {

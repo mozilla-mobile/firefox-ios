@@ -105,7 +105,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         }
 
         // If the pre-path component (including the scheme) starts with the query, just use it as is.
-        var prePathURL = (url as NSString).substring(with: match.rangeAt(0))
+        var prePathURL = (url as NSString).substring(with: match.range(at: 0))
         if prePathURL.hasPrefix(query) {
             // Trailing slashes in the autocompleteTextField cause issues with Swype keyboard. Bug 1194714
             if prePathURL.hasSuffix("/") {
@@ -118,7 +118,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         // To simplify the search, prepend a ".", and search the string for ".query".
         // For example, for http://en.m.wikipedia.org, domainWithDotPrefix will be ".en.m.wikipedia.org".
         // This allows us to use the "." as a separator, so we can match "en", "m", "wikipedia", and "org",
-        let domain = (url as NSString).substring(with: match.rangeAt(1))
+        let domain = (url as NSString).substring(with: match.range(at: 1))
         return completionForDomain(domain)
     }
 
