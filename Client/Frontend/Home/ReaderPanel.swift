@@ -469,6 +469,7 @@ extension ReadingListPanel: UITableViewDragDelegate {
         UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .url, value: .readingListPanel)
 
         let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = site
         return [dragItem]
     }
 
