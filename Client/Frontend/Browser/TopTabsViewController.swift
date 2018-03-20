@@ -103,7 +103,7 @@ class TopTabsViewController: UIViewController {
         [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
-        self.tabObservers = registerFor(.didLoadFavicon, queue: .main)
+        self.tabObservers = registerFor(.didLoadFavicon, .didChangeURL, queue: .main)
     }
     
     deinit {
@@ -325,7 +325,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
         tabCell.titleText.text = tab.displayTitle
         
         if tab.displayTitle.isEmpty {
-            if tab.webView?.url?.baseDomain?.contains("localhost") ?? true {
+            if tab.webView?.url?.isLocalUtility ?? true {
                 tabCell.titleText.text = Strings.AppMenuNewTabTitleString
             } else {
                 tabCell.titleText.text = tab.webView?.url?.absoluteDisplayString
@@ -454,11 +454,20 @@ extension TopTabsViewController: TabSelectionDelegate {
 
 extension TopTabsViewController: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
-        assertIsMainThread("Animations can only be performed from the main thread")
+        assertIsMainThread("UICollectionView changes can only be performed from the main thread")
 
-        if self.tabStore.index(of: tab) != nil {
-            self.needReloads.append(tab)
-            self.performTabUpdates()
+        if tabStore.index(of: tab) != nil {
+            needReloads.append(tab)
+            performTabUpdates()
+        }
+    }
+
+    func tab(_ tab: Tab, didChangeURL url: URL) {
+        assertIsMainThread("UICollectionView changes can only be performed from the main thread")
+
+        if tabStore.index(of: tab) != nil {
+            needReloads.append(tab)
+            performTabUpdates()
         }
     }
 }
