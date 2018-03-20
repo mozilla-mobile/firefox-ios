@@ -454,20 +454,20 @@ extension TopTabsViewController: TabSelectionDelegate {
 
 extension TopTabsViewController: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
-        assertIsMainThread("Animations can only be performed from the main thread")
+        assertIsMainThread("UICollectionView changes can only be performed from the main thread")
 
-        if self.tabStore.index(of: tab) != nil {
-            self.needReloads.append(tab)
-            self.performTabUpdates()
+        if tabStore.index(of: tab) != nil {
+            needReloads.append(tab)
+            performTabUpdates()
         }
     }
 
     func tab(_ tab: Tab, didChangeURL url: URL) {
-        assertIsMainThread("Animations can only be performed from the main thread")
+        assertIsMainThread("UICollectionView changes can only be performed from the main thread")
 
-        if self.tabStore.index(of: tab) != nil {
-            self.needReloads.append(tab)
-            self.performTabUpdates()
+        if tabStore.index(of: tab) != nil {
+            needReloads.append(tab)
+            performTabUpdates()
         }
     }
 }
