@@ -163,7 +163,7 @@ class ReadingListTableViewCell: UITableViewCell {
             if !unread {
                 // mimic light gray visual dimming by "dimming" the speech by reducing pitch
                 let lowerPitchString = NSMutableAttributedString(string: string as String)
-                lowerPitchString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(value: ReadingListTableViewCellUX.ReadAccessibilitySpeechPitch as Float), range: NSRange(location: 0, length: lowerPitchString.length))
+                lowerPitchString.addAttribute(NSAttributedStringKey(rawValue: UIAccessibilitySpeechAttributePitch), value: NSNumber(value: ReadingListTableViewCellUX.ReadAccessibilitySpeechPitch as Float), range: NSRange(location: 0, length: lowerPitchString.length))
                 label = NSAttributedString(attributedString: lowerPitchString)
             } else {
                 label = string as AnyObject
