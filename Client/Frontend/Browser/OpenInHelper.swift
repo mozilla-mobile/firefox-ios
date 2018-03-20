@@ -118,7 +118,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     fileprivate var docController: UIDocumentInteractionController?
     fileprivate var openInURL: URL?
 
-    lazy var openInView: UIView? = getOpenInView(self)()
+    lazy var openInView: UIView? = getOpenInView()
 
     lazy var documentDirectory: URL = {
         return URL(string: NSTemporaryDirectory())!.appendingPathComponent("pdfs")
