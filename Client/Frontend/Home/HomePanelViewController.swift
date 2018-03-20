@@ -244,7 +244,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         // Calling this before makes sure that only the highlightline animates and not the homepanels
         self.view.setNeedsUpdateConstraints()
         self.view.layoutIfNeeded()
-        UIView.animate(withDuration: HomePanelViewControllerUX.ButtonSelectionAnimationDuration, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: { _ in
+        UIView.animate(withDuration: HomePanelViewControllerUX.ButtonSelectionAnimationDuration, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: {
             self.highlightLine.snp.remakeConstraints { make in
                 make.leading.equalTo(button.snp.leading)
                 make.trailing.equalTo(button.snp.trailing)
