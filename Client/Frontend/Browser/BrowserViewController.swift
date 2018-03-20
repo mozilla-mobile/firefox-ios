@@ -2744,6 +2744,10 @@ extension BrowserViewController: TabTrayDelegate {
         resetBrowserChrome()
     }
 
+    func tabTrayDidAddTab(_ tabTray: TabTrayController, tab: Tab) {
+        topTabsViewController?.reloadData()
+    }
+
     func tabTrayDidAddBookmark(_ tab: Tab) {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
         self.addBookmark(tab.tabState)

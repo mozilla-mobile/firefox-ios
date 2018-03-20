@@ -224,6 +224,7 @@ struct PrivateModeStrings {
 
 protocol TabTrayDelegate: class {
     func tabTrayDidDismiss(_ tabTray: TabTrayController)
+    func tabTrayDidAddTab(_ tabTray: TabTrayController, tab: Tab)
     func tabTrayDidAddBookmark(_ tab: Tab)
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
     func tabTrayRequestsPresentationOf(_ viewController: UIViewController)
@@ -511,8 +512,9 @@ class TabTrayController: UIViewController {
 
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
+        var tab: Tab?
         self.collectionView.performBatchUpdates({ _ in
-            _ = self.tabManager.addTab(request, isPrivate: self.privateMode)
+            tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
         }, completion: { finished in
             // The addTab delegate method will pop to the BVC no need to do anything here.
             self.toolbar.isUserInteractionEnabled = true
@@ -524,6 +526,10 @@ class TabTrayController: UIViewController {
                         }
                     }
                 }
+            }
+
+            if let tab = tab {
+                self.delegate?.tabTrayDidAddTab(self, tab: tab)
             }
         })
     }
