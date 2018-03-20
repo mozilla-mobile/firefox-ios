@@ -16,7 +16,7 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
         // TODO: Get a dedicated string for this.
         let title = NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "Re-using more info label from 'anonymous usage data' item for showing a 'More Info' link on the Tracking Protection settings screen.")
 
-        var attributes = [String: AnyObject]()
+        var attributes = [NSAttributedStringKey: AnyObject]()
         attributes[NSAttributedStringKey.font] = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         attributes[NSAttributedStringKey.foregroundColor] = UIConstants.HighlightBlue
 
