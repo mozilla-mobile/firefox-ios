@@ -126,7 +126,7 @@ class URLBarView: UIView {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
-        cancelButton.addTarget(self, action: #selector(SELdidClickCancel), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
     }()
@@ -144,7 +144,7 @@ class URLBarView: UIView {
 
     fileprivate lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(SELtappedScrollToTopArea), for: .touchUpInside)
+        button.addTarget(self, action: #selector(tappedScrollToTopArea), for: .touchUpInside)
         return button
     }()
 
@@ -504,15 +504,15 @@ class URLBarView: UIView {
         })
     }
 
-    func SELdidClickAddTab() {
+    func didClickAddTab() {
         delegate?.urlBarDidPressTabs(self)
     }
 
-    func SELdidClickCancel() {
+    func didClickCancel() {
         leaveOverlayMode(didCancel: true)
     }
 
-    func SELtappedScrollToTopArea() {
+    func tappedScrollToTopArea() {
         delegate?.urlBarDidPressScrollToTop(self)
     }
 }

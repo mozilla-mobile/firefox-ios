@@ -62,7 +62,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             return
         }
         if timeout > 0 {
-            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SELdidTimeOut), userInfo: nil, repeats: false)
+            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(didTimeOut), userInfo: nil, repeats: false)
         } else {
             self.timer = nil
         }
@@ -151,7 +151,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         return (view, spinner, error)
     }
 
-    func SELdidTimeOut() {
+    func didTimeOut() {
         self.timer = nil
         self.isError = true
     }
@@ -166,11 +166,11 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        SELdidTimeOut()
+        didTimeOut()
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        SELdidTimeOut()
+        didTimeOut()
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

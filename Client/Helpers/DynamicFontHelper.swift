@@ -30,7 +30,7 @@ class DynamicFontHelper: NSObject {
      * Starts monitoring the ContentSizeCategory chantes
      */
     func startObserving() {
-        NotificationCenter.default.addObserver(self, selector: #selector(SELcontentSizeCategoryDidChange), name: .UIContentSizeCategoryDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: .UIContentSizeCategoryDidChange, object: nil)
     }
 
     deinit {
@@ -185,7 +185,7 @@ class DynamicFontHelper: NSObject {
         defaultSmallFontSize = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .caption2).pointSize
     }
 
-    func SELcontentSizeCategoryDidChange(_ notification: Notification) {
+    func contentSizeCategoryDidChange(_ notification: Notification) {
         refreshFonts()
         let notification = Notification(name: .DynamicFontChanged, object: nil)
         NotificationCenter.default.post(notification)

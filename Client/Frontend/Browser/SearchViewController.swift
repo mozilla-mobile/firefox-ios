@@ -123,10 +123,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         suggestionCell.delegate = self
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SELDynamicFontChanged), name: .DynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
     }
 
-    func SELDynamicFontChanged(_ notification: Notification) {
+    func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
 
         reloadData()
@@ -204,7 +204,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchButton.setImage(UIImage(named: "quickSearch"), for: [])
         searchButton.imageView?.contentMode = .center
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-        searchButton.addTarget(self, action: #selector(SELdidClickSearchButton), for: .touchUpInside)
+        searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
         searchButton.accessibilityLabel = String(format: NSLocalizedString("Search Settings", tableName: "Search", comment: "Label for search settings button."))
 
         searchButton.imageView?.snp.makeConstraints { make in
@@ -228,7 +228,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             engineButton.setImage(engine.image, for: [])
             engineButton.imageView?.contentMode = .scaleAspectFit
             engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-            engineButton.addTarget(self, action: #selector(SELdidSelectEngine), for: .touchUpInside)
+            engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
             engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
 
             engineButton.imageView?.snp.makeConstraints { make in
@@ -251,7 +251,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
-    func SELdidSelectEngine(_ sender: UIButton) {
+    func didSelectEngine(_ sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
         guard let index = searchEngineScrollViewContent.subviews.index(of: sender) else {
@@ -271,7 +271,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchDelegate?.searchViewController(self, didSelectURL: url)
     }
 
-    func SELdidClickSearchButton() {
+    func didClickSearchButton() {
         self.searchDelegate?.presentSearchSettingsController()  
     }
 
@@ -577,8 +577,8 @@ fileprivate class SuggestionCell: UITableViewCell {
             for suggestion in suggestions {
                 let button = SuggestionButton()
                 button.setTitle(suggestion, for: [])
-                button.addTarget(self, action: #selector(SELdidSelectSuggestion), for: .touchUpInside)
-                button.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(SELdidLongPressSuggestion)))
+                button.addTarget(self, action: #selector(didSelectSuggestion), for: .touchUpInside)
+                button.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(didLongPressSuggestion)))
 
                 // If this is the first image, add the search icon.
                 if container.subviews.isEmpty {
@@ -599,12 +599,12 @@ fileprivate class SuggestionCell: UITableViewCell {
     }
 
     @objc
-    func SELdidSelectSuggestion(_ sender: UIButton) {
+    func didSelectSuggestion(_ sender: UIButton) {
         delegate?.suggestionCell(self, didSelectSuggestion: sender.titleLabel!.text!)
     }
 
     @objc
-    func SELdidLongPressSuggestion(_ recognizer: UILongPressGestureRecognizer) {
+    func didLongPressSuggestion(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             if let button = recognizer.view as! UIButton? {
                 delegate?.suggestionCell(self, didLongPressSuggestion: button.titleLabel!.text!)

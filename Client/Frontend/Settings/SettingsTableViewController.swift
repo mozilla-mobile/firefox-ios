@@ -452,7 +452,7 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
             // Reload the data to reflect the new Account immediately.
             settings.tableView.reloadData()
             // And start advancing the Account state in the background as well.
-            settings.SELrefresh()
+            settings.refresh()
         }
     }
 
@@ -514,18 +514,16 @@ class SettingsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
 
         settings = generateSettings()
-
-        // Because these are added in viewWillAppear, unhook in viewDidDisappear for symmetry.
-        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELfirefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(firefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
 
         tableView.reloadData()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        SELrefresh()
+        refresh()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -541,13 +539,13 @@ class SettingsTableViewController: UITableViewController {
         return []
     }
 
-    @objc fileprivate func SELsyncDidChangeState() {
+    @objc fileprivate func syncDidChangeState() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
 
-    @objc fileprivate func SELrefresh() {
+    @objc fileprivate func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
         if let account = self.profile.getAccount() {
             account.advance().upon { state in
@@ -560,7 +558,7 @@ class SettingsTableViewController: UITableViewController {
         }
     }
 
-    @objc func SELfirefoxAccountDidChange() {
+    @objc func firefoxAccountDidChange() {
         self.tableView.reloadData()
     }
 

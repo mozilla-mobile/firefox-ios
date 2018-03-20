@@ -31,18 +31,18 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
 
         super.init()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SELUIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELAppWillEnterForegroundNotification), name: .UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SELDidRestoreSession), name: .DidRestoreSession, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(UIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForegroundNotification), name: .UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didRestoreSession), name: .DidRestoreSession, object: nil)
     }
     
-    @objc private func SELUIPasteboardChanged() {
+    @objc private func UIPasteboardChanged() {
         // UIPasteboardChanged gets triggered when calling UIPasteboard.general.
          NotificationCenter.default.removeObserver(self, name: .UIPasteboardChanged, object: nil)
 
         UIPasteboard.general.asyncURL().uponQueue(.main) { res in
             defer {
-                NotificationCenter.default.addObserver(self, selector: #selector(self.SELUIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.UIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
             }
 
             guard let copiedURL: URL? = res.successValue,
@@ -53,7 +53,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         }
     }
 
-    @objc private func SELAppWillEnterForegroundNotification() {
+    @objc private func appWillEnterForegroundNotification() {
         sessionStarted = true
         checkIfShouldDisplayBar()
     }
@@ -68,7 +68,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         firstTab.observeURLChanges(delegate: self)
     }
 
-    @objc private func SELDidRestoreSession() {
+    @objc private func didRestoreSession() {
         DispatchQueue.main.sync {
             if let tabManager = self.tabManager,
                 let firstTab = tabManager.selectedTab {
