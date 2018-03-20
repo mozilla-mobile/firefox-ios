@@ -138,6 +138,7 @@
 		2C31A7A91E8BFB2200DAC646 /* ReaderViewUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31A7A81E8BFB2200DAC646 /* ReaderViewUITest.swift */; };
 		2C31A8471E8D447F00DAC646 /* HomePageSettingsUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */; };
 		2C3406C81E719F00000FD889 /* SettingsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3406C71E719F00000FD889 /* SettingsTest.swift */; };
+		2C49854E206173C800893DAE /* photon-colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C49854D206173C800893DAE /* photon-colors.swift */; };
 		2C4A07DC20246EAD0083E320 /* DragAndDropTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4A07DB20246EAD0083E320 /* DragAndDropTests.swift */; };
 		2C4B6BF320349EB800A009C2 /* FirstRunTourTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4B6BF220349EB800A009C2 /* FirstRunTourTests.swift */; };
 		2C8C07771E7800EA00DC1237 /* FindInPageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C07761E7800EA00DC1237 /* FindInPageTest.swift */; };
@@ -1514,6 +1515,7 @@
 		2C31A7A81E8BFB2200DAC646 /* ReaderViewUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderViewUITest.swift; sourceTree = "<group>"; };
 		2C31A8461E8D447F00DAC646 /* HomePageSettingsUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageSettingsUITest.swift; sourceTree = "<group>"; };
 		2C3406C71E719F00000FD889 /* SettingsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTest.swift; sourceTree = "<group>"; };
+		2C49854D206173C800893DAE /* photon-colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "photon-colors.swift"; sourceTree = "<group>"; };
 		2C4A07DB20246EAD0083E320 /* DragAndDropTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragAndDropTests.swift; sourceTree = "<group>"; };
 		2C4B6BF220349EB800A009C2 /* FirstRunTourTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstRunTourTests.swift; sourceTree = "<group>"; };
 		2C8C07761E7800EA00DC1237 /* FindInPageTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageTest.swift; sourceTree = "<group>"; };
@@ -3864,6 +3866,7 @@
 				D3972BF01C22412B00035B87 /* Share */,
 				D0FCF7EE1FE44E15004A7995 /* UserContent */,
 				D38A1BEB1A9FA2CA00F6A386 /* Widgets */,
+				2C49854D206173C800893DAE /* photon-colors.swift */,
 			);
 			path = Frontend;
 			sourceTree = "<group>";
@@ -5759,6 +5762,7 @@
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
 				742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */,
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
+				2C49854E206173C800893DAE /* photon-colors.swift in Sources */,
 				E689C7301E0C7617008BAADB /* NSAttributedStringExtensions.swift in Sources */,
 				D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */,
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,

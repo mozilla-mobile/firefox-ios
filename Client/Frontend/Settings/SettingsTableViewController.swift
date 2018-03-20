@@ -8,8 +8,8 @@ import UIKit
 
 struct SettingsUX {
     static let TableViewHeaderBackgroundColor = UIConstants.AppBackgroundColor
-    static let TableViewHeaderTextColor = UIColor.Defaults.Grey50
-    static let TableViewRowTextColor = UIColor.Defaults.Grey90
+    static let TableViewHeaderTextColor = UIColor.Photon.Grey50
+    static let TableViewRowTextColor = UIColor.Photon.Grey90
     static let TableViewDisabledRowTextColor = UIColor.lightGray
     static let TableViewSeparatorColor = UIColor(rgb: 0xD1D1D4)
     static let TableViewHeaderFooterHeight = CGFloat(44)
