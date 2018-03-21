@@ -50,7 +50,6 @@ groupon.com
 macys.com
 washingtonpost.com
 outbrain.com
-microsoftonline.com
 xfinity.com
 usps.com
 hulu.com
@@ -120,7 +119,6 @@ wunderground.com
 instructure.com
 people.com
 stackexchange.com
-drudgereport.com
 fidelity.com
 southwest.com
 deviantart.com
@@ -193,7 +191,6 @@ mashable.com
 hp.com
 gamefaqs.com
 delta.com
-breitbart.com
 coupons.com
 eonline.com
 surveymonkey.com
@@ -386,7 +383,6 @@ bodybuilding.com
 edmunds.com
 nhl.com
 zergnet.com
-terraclicks.com
 techcrunch.com
 regnok.com
 pogo.com
