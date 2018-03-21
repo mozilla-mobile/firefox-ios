@@ -1248,9 +1248,9 @@ extension BrowserViewController: URLBarDelegate {
     func showTabTray() {
         webViewContainerToolbar.isHidden = true
         updateFindInPageVisibility(visible: false)
-        
-        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-        
+
+        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
+
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
         }
