@@ -344,10 +344,11 @@ class TabTrayController: UIViewController {
             privateMode = true
         }
 
+        // XXX: Bug 1447726 - Temporarily disable 3DT in tabs tray
         // register for previewing delegate to enable peek and pop if force touch feature available
-        if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: view)
-        }
+        // if traitCollection.forceTouchCapability == .available {
+        //     registerForPreviewing(with: self, sourceView: view)
+        // }
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
