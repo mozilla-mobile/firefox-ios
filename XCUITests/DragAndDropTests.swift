@@ -66,6 +66,49 @@ class DragAndDropTests: BaseTestCase {
         XCTAssertEqual(app.textFields["url"].value! as? String, "mobile.twitter.com/", "The tab has not been dropped correctly")
     }
 
+    func testRearrangeTabsTabTray() {
+        openTwoWebsites()
+        navigator.goto(TabTray)
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
+        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite["tabName"]!], dropOnElement: app.collectionViews.cells[secondWebsite["tabName"]!])
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]!, secondTab: firstWebsite["tabName"]!)
+    }
+
+    func testRearrangeMoreThan3TabsTabTray() {
+        // Arranging more than 3 to check that it works moving tabs between lines
+        let thirdWebsite = ["url": "wikipedia.com", "tabName": "Wikipedia"]
+
+        // Open three websites and home tab
+        openTwoWebsites()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openNewURL(urlString: "wikipedia.com")
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+
+        let fourthWebsitePosition = app.collectionViews.cells.element(boundBy: 3).label
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
+        XCTAssertEqual(fourthWebsitePosition, thirdWebsite["tabName"]!, "last tab before is not correct")
+
+        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite["tabName"]!], dropOnElement: app.collectionViews.cells[thirdWebsite["tabName"]!])
+
+        let thirdWebsitePosition = app.collectionViews.cells.element(boundBy: 2).label
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]! , secondTab: homeTab["tabName"]!)
+        XCTAssertEqual(thirdWebsitePosition, thirdWebsite["tabName"]!, "last tab after is not correct")
+    }
+
+    func testRearrangeTabsTabTrayLandscape() {
+        // Set the device in landscape mode
+        XCUIDevice.shared().orientation = UIDeviceOrientation.landscapeLeft
+        openTwoWebsites()
+        navigator.goto(TabTray)
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
+
+        // Rearrange the tabs via drag home tab and drop it on twitter tab
+        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite["tabName"]!], dropOnElement: app.collectionViews.cells[secondWebsite["tabName"]!])
+
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]!, secondTab: firstWebsite["tabName"]!)
+    }
+
     func testDragDropToInvalidArea() {
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
@@ -93,6 +136,18 @@ class DragAndDropTests: BaseTestCase {
         XCTAssertEqual(app.textFields["url"].value! as? String, "mobile.twitter.com/", "The tab has not been dropped correctly")
     }
 
+    func testDragAndDropHomeTabTabsTray() {
+        navigator.openNewURL(urlString: secondWebsite["url"]!)
+        waitUntilPageLoad()
+        navigator.goto(TabTray)
+        checkTabsOrder(dragAndDropTab: false, firstTab: homeTab["tabName"]!, secondTab: secondWebsite["tabName"]!)
+
+        // Drag and drop home tab from the first position to the second
+        dragAndDrop(dragElement: app.collectionViews.cells["home"], dropOnElement: app.collectionViews.cells[secondWebsite["tabName"]!])
+
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]! , secondTab: homeTab["tabName"]!)
+    }
+
     func testRearrangeTabsPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         openTwoWebsites()
@@ -105,6 +160,17 @@ class DragAndDropTests: BaseTestCase {
         XCTAssertEqual(app.textFields["url"].value! as? String, "mobile.twitter.com/", "The tab has not been dropped correctly")
     }
 
+    func testRearrangeTabsPrivateModeTabTray() {
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        openTwoWebsites()
+        navigator.goto(TabTray)
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
+        // Drag first tab on the second one
+        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite["tabName"]!], dropOnElement: app.collectionViews.cells[secondWebsite["tabName"]!])
+
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]!, secondTab: firstWebsite["tabName"]!)
+    }
+
     // This test drags the address bar and since it is not possible to drop it on another app, lets do it in a search box
     func testDragAddressBarIntoSearchBox() {
         navigator.openURL("developer.mozilla.org/en-US/search")
@@ -115,5 +181,19 @@ class DragAndDropTests: BaseTestCase {
         app.textFields["url"].press(forDuration: 1, thenDragTo: app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!])
         // Verify that the text in the search field is the same as the text in the url text field
         XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].value as? String, websiteWithSearchField["url"]!)
+    }
+
+    func testRearrangeTabsTabTrayIsKeptinTopTabs() {
+        openTwoWebsites()
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
+        navigator.goto(TabTray)
+
+        // Drag first tab on the second one
+        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite["tabName"]!], dropOnElement: app.collectionViews.cells[secondWebsite["tabName"]!])
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]!, secondTab: firstWebsite["tabName"]!)
+
+        // Leave Tab Tray and check order in Top Tabs
+        app.collectionViews.cells[firstWebsite["tabName"]!].tap()
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]!, secondTab: firstWebsite["tabName"]!)
     }
 }
