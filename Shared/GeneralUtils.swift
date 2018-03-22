@@ -13,6 +13,7 @@ public struct Profiler {
         //  case load_trackingprotection_lists -> Can't use: NimbleDroid is iOS 10 only
         case intro_did_appear
         case history_panel_fetch
+        case load_url
     }
 
     public static func setup() {
