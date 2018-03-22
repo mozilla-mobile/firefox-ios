@@ -5,12 +5,14 @@
 import Foundation
 
 // Wraps NimbleDroid to ensure it is disabled in release
+// Use underscores between words, as these constants are stringified for reporting.
 public struct Profiler {
     public enum Bookend {
         case bvc_did_appear
         case url_autocomplete
         //  case load_trackingprotection_lists -> Can't use: NimbleDroid is iOS 10 only
         case intro_did_appear
+        case history_panel_fetch
     }
 
     public static func setup() {

@@ -195,11 +195,13 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     override func reloadData() {
+        Profiler.begin(bookend: .history_panel_fetch)
         self.fetchData().uponQueue(.main) { result in
             if let data = result.successValue {
                 self.setData(data)
                 self.tableView.reloadData()
                 self.updateEmptyPanelState()
+                Profiler.end(bookend: .history_panel_fetch)
             }
             self.endRefreshing()
         }
