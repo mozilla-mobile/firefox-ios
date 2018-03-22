@@ -61,7 +61,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         return self.style == .bottom && self.modalPresentationStyle != .popover
     }()
     var tableView = UITableView(frame: .zero, style: .grouped)
-    private var heightConstraint: Constraint?
 
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
@@ -197,26 +196,14 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        let maxHeight = self.view.frame.height - (self.showCloseButton ? PhotonActionSheetUX.CloseButtonHeight : 0)
+        tableView.snp.makeConstraints { make in
+            // The height of the menu should be no more than 80 percent of the screen
+            make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.8))
+        }
         if style == .bottom && self.modalPresentationStyle == .popover {
             self.preferredContentSize = self.tableView.contentSize
         }
-
-
-        let maxHeight = self.view.frame.height - (self.showCloseButton ? PhotonActionSheetUX.CloseButtonHeight : 0)
-        self.heightConstraint?.deactivate()
-        self.tableView.snp.makeConstraints { make in
-            // The height of the menu should be no more than 80 percent of the screen
-            self.heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.8)).constraint
-        }
-
-        // Bug 1447629: the height of popup is tableView.contentSize.height, for which the correct size
-        // is not set until viewDidAppear(). We can force the tableView to calculate its final height by calling
-        // these layoutIfNeeded funcs (both needed). Then, viewDidLayoutSubviews() will be called again
-        // (importantly, this is *before* viewDidAppear) and the correct height constraint can be set.
-        // BTW, this workaround requires these lines to come after the above makeConstraints.
-        tableView.layoutIfNeeded()
-        view.layoutIfNeeded()
     }
 
     private func applyBackgroundBlur() {
