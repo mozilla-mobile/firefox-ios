@@ -4,9 +4,8 @@ import XCTest
 class FirstRunTourTests: BaseTestCase {
 
     override func setUp() {
-        app = XCUIApplication()
-        restart(app, args: [LaunchArguments.ClearProfile])
-        navigator = createScreenGraph(for: self, with: app).navigator()
+        launchArguments = [LaunchArguments.ClearProfile]
+        super.setUp()
     }
 
     func testFirstRunTour() {

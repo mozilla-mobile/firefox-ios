@@ -5,25 +5,24 @@
 import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
-    func testDatabaseFixture() {
-        let file = "testDatabaseFixture-browser.db"
-        let arg = LaunchArguments.LoadDatabasePrefix + file
-        app.terminate()
-        restart(app, args: [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, arg])
+    let fixtures = ["testOneBookmark": "testDatabaseFixture-browser.db", "testHistoryDatabaseFixture": "testHistoryDatabase4000-browser.db"]
 
-        // app will now start with prepopulated database
+    override func setUp() {
+        // Test name looks like: "[Class testFunc]", parse out the function name
+        let parts = name!.replacingOccurrences(of: "]", with: "").split(separator: " ")
+        let key = String(parts[1])
+        // for the current test name, add the db fixture used
+        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.LoadDatabasePrefix + fixtures[key]!]
+        super.setUp()
+    }
+
+    func testOneBookmark() {
         navigator.browserPerformAction(.openBookMarksOption)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
     }
 
     func testHistoryDatabaseFixture() {
-        let file = "testHistoryDatabase4000-browser.db"
-        let arg = LaunchArguments.LoadDatabasePrefix + file
-        app.terminate()
-        restart(app, args: [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, arg])
-
-        // app will now start with prepopulated database
         navigator.goto(HomePanel_History)
         //History list has two cells that are for recently closed and synced devices that should not count as history items
         let historyList = app.tables["History List"].cells.count-2
