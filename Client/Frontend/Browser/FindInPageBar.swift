@@ -29,8 +29,8 @@ class FindInPageBar: UIView {
 
     var currentResult = 0 {
         didSet {
-            if totalResults > 1000 {
-                matchCountView.text = "\(currentResult)/1000+"
+            if totalResults > 500 {
+                matchCountView.text = "\(currentResult)/500+"
             } else {
                 matchCountView.text = "\(currentResult)/\(totalResults)"
             }
@@ -39,8 +39,8 @@ class FindInPageBar: UIView {
 
     var totalResults = 0 {
         didSet {
-            if totalResults > 1000 {
-                matchCountView.text = "\(currentResult)/1000+"
+            if totalResults > 500 {
+                matchCountView.text = "\(currentResult)/500+"
             } else {
                 matchCountView.text = "\(currentResult)/\(totalResults)"
             }

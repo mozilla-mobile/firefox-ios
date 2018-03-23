@@ -5,7 +5,7 @@
 
 "use strict";
 
-const MAXIMUM_HIGHLIGHT_COUNT = 1000;
+const MAXIMUM_HIGHLIGHT_COUNT = 500;
 const SCROLL_OFFSET_Y = 40;
 
 const HIGHLIGHT_CLASS_NAME = "__firefox__find-highlight";
