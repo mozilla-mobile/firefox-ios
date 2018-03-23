@@ -7,21 +7,32 @@ import XCTest
 
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
-    var app: XCUIApplication!
+    let app =  XCUIApplication()
     var userState: FxUserState!
 
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-        app = XCUIApplication()
-        app.terminate()
-        restart(app, args: [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew])
+    // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
+    // or, use restart() to re-launch with custom args.
+    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew]
+
+    func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
         userState = navigator.userState
     }
 
+    func setUpApp() {
+        app.launchArguments = [LaunchArguments.Test] + launchArguments
+        app.launch()
+    }
+
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+        setUpApp()
+        setUpScreenGraph()
+    }
+
     override func tearDown() {
-        XCUIApplication().terminate()
+        app.terminate()
         super.tearDown()
     }
 
@@ -116,3 +127,4 @@ extension XCUIElement {
         }
     }
 }
+
