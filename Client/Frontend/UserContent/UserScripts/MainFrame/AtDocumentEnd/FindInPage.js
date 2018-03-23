@@ -162,40 +162,16 @@ function removeHighlight(highlight) {
 function asyncTextNodeWalker(iterator, callback) {
   let operation = new Operation();
   let walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-  let timeout = setTimeout(function() {
-    let node;
-    while ((node = walker.nextNode())) {
-      if (operation.cancelled) {
-        return;
-      }
 
-      iterator(node);
+  chunkedLoop(function() { return walker.nextNode(); }, function(node) {
+    if (operation.cancelled) {
+      return false;
     }
 
+    iterator(node);
+  }, 100).then(function() {
     operation.complete();
-  }, 100);
-
-  // function next() {
-  //   timeout = setTimeout(function() {
-  //     if (operation.cancelled) {
-  //       return;
-  //     }
-  //
-  //     let node = walker.nextNode();
-  //     if (node) {
-  //       iterator(node);
-  //       next();
-  //     } else {
-  //       operation.complete();
-  //     }
-  //   }, 0);
-  // }
-  //
-  // next();
-
-  operation.oncancelled = function() {
-    clearTimeout(timeout);
-  }
+  });
 
   return operation;
 }
@@ -263,6 +239,27 @@ function getMatchingNodeReplacements(regExp, callback) {
   };
 
   return operation;
+}
+
+function chunkedLoop(condition, iterator, chunkSize) {
+  return new Promise(function(resolve, reject) {
+    setTimeout(doChunk);
+
+    function doChunk() {
+      let argument;
+      for (let i = 0; i < chunkSize; i++) {
+        argument = condition();
+        if (!argument || iterator(argument) === false) {
+          resolve();
+          return;
+        }
+
+        iterator(argument);
+      }
+
+      setTimeout(doChunk);
+    }
+  });
 }
 
 function scrollToElement(element) {
