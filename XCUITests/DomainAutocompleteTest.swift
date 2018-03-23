@@ -158,4 +158,39 @@ class DomainAutocompleteTest: BaseTestCase {
         // No autocompletion, just what user typed
         XCTAssertEqual(value3 as? String, "    moz ", "Wrong autocompletion")
     }
+
+    func testDeletingCharsUpdateTheResults() {
+        let url1 = ["url" : "git.com", "label" : "GIT.com"]
+        let url2 = ["url" : "github.com", "label" : "The world's leading software development platform · GitHub"]
+
+        navigator.openURL(url1["url"]!)
+        waitUntilPageLoad()
+        navigator.openURL(url2["url"]!)
+        waitUntilPageLoad()
+        navigator.goto(URLBarOpen)
+        app.typeText("gith")
+
+        waitforExistence(app.tables["SiteTable"].staticTexts[url2["label"]!])
+        // There should be only one matching entry
+        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
+        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
+
+        // Remove 2 chars ("th")  to have two coincidences with git
+        app.typeText("\u{0008}")
+        app.typeText("\u{0008}")
+
+        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
+        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
+
+        // Remove All chars so that there is not any matches
+        let charsAddressBar: String = (app.textFields["address"].value! as? String)!
+
+        for _ in 1...charsAddressBar.count {
+            app.typeText("\u{0008}")
+        }
+
+        waitforNoExistence(app.tables["SiteTable"].staticTexts[url2["label"]!])
+        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
+        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
+    }
 }
