@@ -217,6 +217,10 @@ open class MockProfile: Profile {
         return deferMaybe([])
     }
 
+    public func getCachedClients() -> Deferred<Maybe<[RemoteClient]>> {
+        return deferMaybe([])
+    }
+
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return deferMaybe([])
     }
