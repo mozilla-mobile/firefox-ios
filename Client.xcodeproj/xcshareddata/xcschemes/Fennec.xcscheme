@@ -154,9 +154,6 @@
                   Identifier = "CopiedLinksTests">
                </Test>
                <Test
-                  Identifier = "FindInPageTests">
-               </Test>
-               <Test
                   Identifier = "HistoryTests">
                </Test>
                <Test
