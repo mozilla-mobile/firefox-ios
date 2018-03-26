@@ -219,17 +219,17 @@ class IntroViewController: UIViewController {
         return cardView
     }
 
-    func startBrowsing() {
+    @objc func startBrowsing() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
         LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
     }
 
-    func login() {
+    @objc func login() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: true)
         LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
     }
 
-    func changePage() {
+    @objc func changePage() {
         let swipeCoordinate = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
         scrollView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: true)
     }
@@ -276,7 +276,7 @@ extension IntroViewController {
         NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
     }
 
-    func dynamicFontChanged(_ notification: Notification) {
+    @objc func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
         setupDynamicFonts()
     }

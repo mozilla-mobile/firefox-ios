@@ -151,7 +151,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         return (view, spinner, error)
     }
 
-    func didTimeOut() {
+    @objc func didTimeOut() {
         self.timer = nil
         self.isError = true
     }

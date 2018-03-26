@@ -231,7 +231,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
         }
     }
 
-    func notificationReceived(_ notification: Notification) {
+    @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged:
             refreshReadingList()

@@ -188,7 +188,7 @@ class ReaderModeStyleViewController: UIViewController {
         }
     }
 
-    func changeFontType(_ button: FontTypeButton) {
+    @objc func changeFontType(_ button: FontTypeButton) {
         selectFontType(button.fontType)
         delegate?.readerModeStyleViewController(self, didConfigureStyle: readerModeStyle)
     }
@@ -204,7 +204,7 @@ class ReaderModeStyleViewController: UIViewController {
         fontSizeLabel.fontType = fontType
     }
 
-    func changeFontSize(_ button: FontSizeButton) {
+    @objc func changeFontSize(_ button: FontSizeButton) {
         switch button.fontSizeAction {
         case .smaller:
             readerModeStyle.fontSize = readerModeStyle.fontSize.smaller()
@@ -232,7 +232,7 @@ class ReaderModeStyleViewController: UIViewController {
         }
     }
 
-    func changeTheme(_ button: ThemeButton) {
+    @objc func changeTheme(_ button: ThemeButton) {
         selectTheme(button.theme)
         delegate?.readerModeStyleViewController(self, didConfigureStyle: readerModeStyle)
     }
@@ -241,7 +241,7 @@ class ReaderModeStyleViewController: UIViewController {
         readerModeStyle.theme = theme
     }
 
-    func changeBrightness(_ slider: UISlider) {
+    @objc func changeBrightness(_ slider: UISlider) {
         UIScreen.main.brightness = CGFloat(slider.value)
     }
 }

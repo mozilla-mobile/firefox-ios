@@ -30,7 +30,7 @@ class BasePasscodeViewController: UIViewController {
         automaticallyAdjustsScrollViewInsets = false
     }
 
-    func dismissAnimated() {
+    @objc func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
     }
 }

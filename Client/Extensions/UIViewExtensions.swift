@@ -49,7 +49,7 @@ extension UIView {
     /*
      * Performs a deep copy of the view. Does not copy constraints.
      */
-    func clone() -> UIView {
+    @objc func clone() -> UIView {
         let data = NSKeyedArchiver.archivedData(withRootObject: self)
         return NSKeyedUnarchiver.unarchiveObject(with: data) as! UIView
     }

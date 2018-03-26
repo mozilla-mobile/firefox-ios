@@ -159,7 +159,7 @@ class CustomSearchViewController: SettingsTableViewController {
         return settings
     }
 
-    func addCustomSearchEngine(_ nav: UINavigationController?) {
+    @objc func addCustomSearchEngine(_ nav: UINavigationController?) {
         self.view.endEditing(true)
         navigationItem.rightBarButtonItem?.isEnabled = false
         if let url = self.urlString {

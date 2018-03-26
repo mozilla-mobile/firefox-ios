@@ -35,7 +35,7 @@ protocol TabToolbarDelegate: class {
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
-@objc
+@objcMembers
 open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
 

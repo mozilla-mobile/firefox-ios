@@ -199,7 +199,7 @@ class TopTabCell: UICollectionViewCell {
         self.layer.shadowOpacity = 0
     }
     
-    func closeTab() {
+    @objc func closeTab() {
         delegate?.tabCellDidClose(self)
     }
 

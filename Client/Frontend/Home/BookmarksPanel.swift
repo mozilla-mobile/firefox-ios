@@ -108,7 +108,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    func notificationReceived(_ notification: Notification) {
+    @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged:
             self.reloadData()

@@ -261,17 +261,17 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func appDidEnterBackgroundNotification() {
+    @objc func appDidEnterBackgroundNotification() {
         displayedPopoverController?.dismiss(animated: false) {
             self.displayedPopoverController = nil
         }
     }
 
-    func tappedTopArea() {
+    @objc func tappedTopArea() {
         scrollController.showToolbars(animated: true)
     }
 
-    func appWillResignActiveNotification() {
+   @objc  func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
             self.displayedPopoverController = nil
@@ -291,7 +291,7 @@ class BrowserViewController: UIViewController {
         presentedViewController?.view.alpha = 0
     }
 
-    func appDidBecomeActiveNotification() {
+    @objc func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: {
@@ -2225,7 +2225,7 @@ extension BrowserViewController {
         }
     }
 
-    func dynamicFontChanged(_ notification: Notification) {
+    @objc func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
 
         var readerModeStyle = DefaultReaderModeStyle
@@ -2380,7 +2380,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         self.present(settingsNavigationController, animated: true, completion: nil)
     }
 
-    func dismissSignInViewController() {
+    @objc func dismissSignInViewController() {
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -2543,7 +2543,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 }
 
 extension BrowserViewController {
-    func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
         if error == nil {
             LeanPlumClient.shared.track(event: .saveImage)
         }
@@ -2624,7 +2624,7 @@ extension BrowserViewController {
         }
     }
 
-    func addCustomSearchEngineForFocusedElement() {
+    @objc func addCustomSearchEngineForFocusedElement() {
         guard let webView = tabManager.selectedTab?.webView else {
             return
         }

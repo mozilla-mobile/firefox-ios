@@ -141,7 +141,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         self.topSitesManager.currentTraits = self.traitCollection
     }
 
-    func reload(notification: Notification) {
+    @objc func reload(notification: Notification) {
         reloadAll()
     }
 }

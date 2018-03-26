@@ -50,7 +50,7 @@ class ReaderModeBarView: UIView {
     var settingsButton: UIButton!
     var listStatusButton: UIButton!
 
-    dynamic var buttonTintColor: UIColor = UIColor.clear {
+    @objc dynamic var buttonTintColor: UIColor = UIColor.clear {
         didSet {
             readStatusButton.tintColor = self.buttonTintColor
             settingsButton.tintColor = self.buttonTintColor
@@ -109,16 +109,16 @@ class ReaderModeBarView: UIView {
         return button
     }
 
-    func tappedReadStatusButton(_ sender: UIButton!) {
+    @objc func tappedReadStatusButton(_ sender: UIButton!) {
         UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readingListItem, value: unread ? .markAsRead : .markAsUnread, extras: [ "from": "reader-mode-toolbar" ])
         delegate?.readerModeBar(self, didSelectButton: unread ? .markAsRead : .markAsUnread)
     }
 
-    func tappedSettingsButton(_ sender: UIButton!) {
+    @objc func tappedSettingsButton(_ sender: UIButton!) {
         delegate?.readerModeBar(self, didSelectButton: .settings)
     }
 
-    func tappedListStatusButton(_ sender: UIButton!) {
+    @objc func tappedListStatusButton(_ sender: UIButton!) {
         UnifiedTelemetry.recordEvent(category: .action, method: added ? .delete : .add, object: .readingListItem, value: .readerModeToolbar)
         delegate?.readerModeBar(self, didSelectButton: added ? .removeFromReadingList : .addToReadingList)
     }

@@ -213,7 +213,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
+    @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         self.dismiss(animated: true, completion: nil)
     }
     

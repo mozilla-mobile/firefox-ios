@@ -85,7 +85,7 @@ class InstructionsViewController: UIViewController {
                 showMeText: NSLocalizedString("Please open Firefox, go to Settings and sign in to continue.", tableName: "SendTo", comment: "See http://mzl.la/1ISlXnU"))
     }
 
-    func close() {
+    @objc func close() {
         delegate?.instructionsViewControllerDidClose(self)
     }
 
