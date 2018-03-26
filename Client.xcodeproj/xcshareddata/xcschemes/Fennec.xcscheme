@@ -133,9 +133,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "ActivityStreamTest">
-               </Test>
-               <Test
                   Identifier = "AuthenticationTest">
                </Test>
                <Test
@@ -143,9 +140,6 @@
                </Test>
                <Test
                   Identifier = "BookmarkingTests">
-               </Test>
-               <Test
-                  Identifier = "BrowsingPDFTests">
                </Test>
                <Test
                   Identifier = "ClipBoardTests">
