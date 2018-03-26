@@ -213,6 +213,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         UNUserNotificationCenter.current().delegate = self
         SentTabAction.registerActions()
+        UIScrollView.doBadSwizzleStuff()
 
         #if BUDDYBUILD
             print("Setting up BuddyBuild SDK")
