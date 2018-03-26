@@ -7,12 +7,12 @@ import Foundation
 
 import XCTest
 
-class ReadingListClientRecordTestCase: XCTestCase {
+class ReadingListItemTestCase: XCTestCase {
 
     func testInitWithRow() {
         let now = ReadingListNow()
         let row: [String: Any] = [
-            "client_id": Int64(1234),
+            "client_id": 1234,
             "client_last_modified": now,
             "id": "5DB5597A-8E60-454D-B1F5-51810C2A5FFE",
             "last_modified": now,
@@ -24,7 +24,7 @@ class ReadingListClientRecordTestCase: XCTestCase {
             "favorite": true
         ]
 
-        let record = ReadingListClientRecord(row: row)
+        let record = ReadingListItem(row: row)
         XCTAssert(record != nil)
 
         if let record = record {
@@ -47,7 +47,7 @@ class ReadingListClientRecordTestCase: XCTestCase {
     func testInitWithRowWithoutServerMeta() {
         let now = ReadingListNow()
         let row: [String:Any] = [
-            "client_id": Int64(1234),
+            "client_id": 1234,
             "client_last_modified": now,
             "url": "http://localhost/article/1",
             "title": "Article 1",
@@ -57,7 +57,7 @@ class ReadingListClientRecordTestCase: XCTestCase {
             "favorite": true
         ]
 
-        let record = ReadingListClientRecord(row: row)
+        let record = ReadingListItem(row: row)
         XCTAssert(record != nil)
 
         if let record = record {
@@ -77,12 +77,12 @@ class ReadingListClientRecordTestCase: XCTestCase {
 
     func testInitWithEmptyRow() {
         let row = NSDictionary()
-        let record = ReadingListClientRecord(row: row as! [String : Any])
+        let record = ReadingListItem(row: row as! [String : Any])
         XCTAssert(record == nil)
     }
 
 //    func testInit() {
-//        let record = ReadingListClientRecord(url: "http://localhost/some/article", title: "Some Article", addedBy: "Stefan's iPad Mini")
+//        let record = ReadingListItem(url: "http://localhost/some/article", title: "Some Article", addedBy: "Stefan's iPad Mini")
 //        XCTAssertNil(record.clientMetadata.id)
 //        XCTAssert(record.clientMetadata.lastModified != 0)
 //        XCTAssert(record.serverMetadata == nil)
@@ -97,7 +97,7 @@ class ReadingListClientRecordTestCase: XCTestCase {
     func testJSON() {
         let now = ReadingListNow()
         let row: [String:Any] = [
-            "client_id": Int64(1234),
+            "client_id": 1234,
             "client_last_modified": now,
             "id": "5DB5597A-8E60-454D-B1F5-51810C2A5FFE",
             "last_modified": now,
@@ -109,7 +109,7 @@ class ReadingListClientRecordTestCase: XCTestCase {
             "favorite": true
         ]
 
-        let record = ReadingListClientRecord(row: row)
+        let record = ReadingListItem(row: row)
         XCTAssert(record != nil)
 
         if let record = record {

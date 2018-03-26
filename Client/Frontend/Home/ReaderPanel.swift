@@ -5,7 +5,6 @@
 import UIKit
 import SnapKit
 import Storage
-import ReadingList
 import Shared
 import XCGLogger
 
@@ -187,7 +186,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
 
-    fileprivate var records: [ReadingListClientRecord]?
+    fileprivate var records: [ReadingListItem]?
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -221,14 +220,13 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
         view.backgroundColor = UIConstants.PanelBackgroundColor
 
-        if let result = profile.readingList?.getAvailableRecords(), result.isSuccess {
-            records = result.successValue
+        if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
+            records = newRecords
 
             // If no records have been added yet, we display the empty state
             if records?.count == 0 {
                 tableView.isScrollEnabled = false
                 view.addSubview(emptyStateOverlayView)
-
             }
         }
     }
@@ -254,8 +252,9 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     func refreshReadingList() {
         let prevNumberOfRecords = records?.count
-        if let result = profile.readingList?.getAvailableRecords(), result.isSuccess {
-            records = result.successValue
+
+        if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
+            records = newRecords
 
             if records?.count == 0 {
                 tableView.isScrollEnabled = false
@@ -400,7 +399,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
         tableView.deselectRow(at: indexPath, animated: false)
         if let record = records?[indexPath.row], let url = URL(string: record.url), let encodedURL = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
             // Mark the item as read
-            profile.readingList?.updateRecord(record, unread: false)
+            profile.readingList.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.bookmark
             homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType)
@@ -411,7 +410,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
             UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
-            if let result = profile.readingList?.deleteRecord(record), result.isSuccess {
+            if profile.readingList.deleteRecord(record).value.isSuccess {
                 records?.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
                 // reshow empty state if no records left
@@ -425,12 +424,9 @@ class ReadingListPanel: UITableViewController, HomePanel {
     fileprivate func toggleItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
             UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readingListItem, value: !record.unread ? .markAsUnread : .markAsRead, extras: [ "from": "reading-list-panel" ])
-            if let result = profile.readingList?.updateRecord(record, unread: !record.unread), result.isSuccess {
-                // TODO This is a bit odd because the success value of the update is an optional optional Record
-                if let successValue = result.successValue, let updatedRecord = successValue {
-                    records?[indexPath.row] = updatedRecord
-                    tableView.reloadRows(at: [indexPath], with: .automatic)
-                }
+            if let updatedRecord = profile.readingList.updateRecord(record, unread: !record.unread).value.successValue {
+                records?[indexPath.row] = updatedRecord
+                tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         }
     }

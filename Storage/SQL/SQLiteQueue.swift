@@ -7,7 +7,7 @@ import Shared
 import XCGLogger
 import Deferred
 
-private let log = Logger.syncLogger
+private let log = Logger.storageLogger
 
 open class SQLiteQueue: TabQueue {
     let db: BrowserDB

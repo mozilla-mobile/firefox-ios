@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-private let log = Logger.syncLogger
+private let log = Logger.storageLogger
 
 public protocol PerhapsNoOp {
     var isNoOp: Bool { get }

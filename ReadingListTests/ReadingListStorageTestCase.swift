@@ -169,7 +169,7 @@ class ReadingListStorageTestCase: XCTestCase {
 
     // Helpers that croak if the storage call was not successful
 
-    func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
+    func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListItem> {
         let result = storage.createRecordWithURL(url, title: title, addedBy: addedBy)
         XCTAssertTrue(result.isSuccess)
         return result
@@ -181,13 +181,13 @@ class ReadingListStorageTestCase: XCTestCase {
         return result
     }
 
-    func getAllRecords() -> Maybe<[ReadingListClientRecord]> {
+    func getAllRecords() -> Maybe<[ReadingListItem]> {
         let result = storage.getAllRecords()
         XCTAssertTrue(result.isSuccess)
         return result
     }
 
-    func updateRecord(_ record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
+    func updateRecord(_ record: ReadingListItem, unread: Bool) -> Maybe<ReadingListItem?> {
         let result = storage.updateRecord(record, unread: unread)
         XCTAssertTrue(result.isSuccess)
         return result

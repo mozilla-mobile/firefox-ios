@@ -6,7 +6,7 @@ import Deferred
 import Foundation
 import Shared
 
-private let log = Logger.syncLogger
+private let log = Logger.storageLogger
 
 private class CachedSource {
     // We track not just mappings between values and non-nil items, but also whether we've tried

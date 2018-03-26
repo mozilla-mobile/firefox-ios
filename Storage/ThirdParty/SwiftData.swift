@@ -38,7 +38,7 @@ import Shared
 import XCGLogger
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
-private let log = Logger.syncLogger
+private let log = Logger.storageLogger
 
 public class DBOperationCancelled : MaybeErrorType {
     public var description: String {
@@ -1253,13 +1253,13 @@ open class SDRow: Sequence {
     }
 
     // Accessor getting column 'key' in the row
-    subscript(key: Int) -> Any? {
+    public subscript(key: Int) -> Any? {
         return getValue(key)
     }
 
     // Accessor getting a named column in the row. This (currently) depends on
     // the columns array passed into this Row to find the correct index.
-    subscript(key: String) -> Any? {
+    public subscript(key: String) -> Any? {
         get {
             if let index = columnNames.index(of: key) {
                 return getValue(index)

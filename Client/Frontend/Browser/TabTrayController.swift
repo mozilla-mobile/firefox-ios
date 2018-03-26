@@ -5,7 +5,6 @@
 import UIKit
 import SnapKit
 import Storage
-import ReadingList
 import Shared
 
 struct TabTrayControllerUX {
@@ -226,7 +225,7 @@ protocol TabTrayDelegate: class {
     func tabTrayDidDismiss(_ tabTray: TabTrayController)
     func tabTrayDidAddTab(_ tabTray: TabTrayController, tab: Tab)
     func tabTrayDidAddBookmark(_ tab: Tab)
-    func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
+    func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabTrayRequestsPresentationOf(_ viewController: UIViewController)
 }
 
@@ -1043,7 +1042,7 @@ extension TabTrayController: TabPeekDelegate {
         delegate?.tabTrayDidAddBookmark(tab)
     }
 
-    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord? {
+    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
         return delegate?.tabTrayDidAddToReadingList(tab)
     }
 

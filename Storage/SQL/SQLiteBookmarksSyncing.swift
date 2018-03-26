@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-private let log = Logger.syncLogger
+private let log = Logger.storageLogger
 
 extension SQLiteBookmarks: LocalItemSource {
     public func getLocalItemWithGUID(_ guid: GUID) -> Deferred<Maybe<BookmarkMirrorItem>> {

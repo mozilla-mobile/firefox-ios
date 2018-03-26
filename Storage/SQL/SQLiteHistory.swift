@@ -7,7 +7,7 @@ import Shared
 import XCGLogger
 import Deferred
 
-private let log = Logger.syncLogger
+private let log = Logger.storageLogger
 public let TopSiteCacheSize: Int32 = 16
 
 class NoSuchRecordError: MaybeErrorType {

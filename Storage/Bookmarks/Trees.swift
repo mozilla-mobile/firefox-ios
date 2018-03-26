@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-private let log = Logger.syncLogger
+private let log = Logger.storageLogger
 
 // MARK: - Defining a tree structure for syncability.
 public enum BookmarkTreeNode: Comparable {

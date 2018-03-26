@@ -8,7 +8,7 @@ import Shared
 import Deferred
 import XCGLogger
 
-private var log = Logger.syncLogger
+private var log = Logger.storageLogger
 
 enum SyncStatus: Int {
     // Ordinarily not needed; synced items are removed from the overlay. But they start here when cloned.
