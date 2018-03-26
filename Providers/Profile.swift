@@ -682,7 +682,7 @@ open class BrowserProfile: Profile {
                     return
                 }
 
-                guard let validations = (notification.object as? Box<[String: Bool]>)?.value else {
+                guard let validations = notification.object as? [String: Bool] else {
                     log.warning("Notification didn't have validations.")
                     return
                 }

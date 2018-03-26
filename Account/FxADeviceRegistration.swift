@@ -131,7 +131,7 @@ open class FxADeviceRegistrator {
         return registration.bind { result in
             switch result {
             case .success(let registration):
-                account.deviceRegistration = registration.value
+                account.deviceRegistration = registration
                 return deferMaybe(registrationResult)
             case .failure(let error):
                 log.error("Device registration failed: \(error.description)")
