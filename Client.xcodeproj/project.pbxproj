@@ -479,6 +479,19 @@
 		D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */; };
 		D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */; };
 		D83822001FC7961D00303C12 /* DispatchQueueExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueExtensions.swift */; };
+		D84535662069BB2F003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D84535672069BB33003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D84535682069BB33003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D84535692069BB34003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D845356A2069BB34003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D845356B2069BB36003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D845356C2069BB37003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D845356D2069BB38003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D845356E2069BB39003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D845356F2069BB39003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D84535702069BB3A003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D84535712069BB3C003F8D69 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */; };
+		D84535732069BB63003F8D69 /* Mocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84535722069BB63003F8D69 /* Mocking.swift */; };
 		D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */; };
 		D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FDA9E1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift */; };
 		D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88FDAAE1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift */; };
@@ -672,7 +685,6 @@
 		E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660BE051BB0666D009AC090 /* InnerStrokedView.swift */; };
 		E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E663D5771BB341C4001EF30E /* ToggleButton.swift */; };
 		E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */; };
-		E67035EE1E538B500037AB83 /* Mocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67035ED1E538B500037AB83 /* Mocking.swift */; };
 		E67422C51CFF2D39009E8373 /* youtube.ico in Resources */ = {isa = PBXBuildFile; fileRef = E67422C41CFF2D39009E8373 /* youtube.ico */; };
 		E677F0451D9423FB00ECF1FB /* SQLiteMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */; };
 		E677F0541D94247300ECF1FB /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0531D94247300ECF1FB /* Metadata.swift */; };
@@ -724,13 +736,6 @@
 		E6ECF2381C974E0F00B0DC93 /* KIF.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D30EBB6A1C75503800105AE9 /* KIF.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EDE82C1D5244AF007A0732 /* BatchingClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EDE81D1D524475007A0732 /* BatchingClientTests.swift */; };
 		E6F368291D7F594F008CDD67 /* SQLiteHistoryRecommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F368281D7F594F008CDD67 /* SQLiteHistoryRecommendations.swift */; };
-		E6F6D6A31E9E6B2A0012072B /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F6D6A11E9E6AF90012072B /* DeferredTestUtils.swift */; };
-		E6F6D6A41E9E6B2B0012072B /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F6D6A11E9E6AF90012072B /* DeferredTestUtils.swift */; };
-		E6F6D6A51E9E6B2B0012072B /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F6D6A11E9E6AF90012072B /* DeferredTestUtils.swift */; };
-		E6F6D6A61E9E6B2C0012072B /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F6D6A11E9E6AF90012072B /* DeferredTestUtils.swift */; };
-		E6F6D6A71E9E6B2D0012072B /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F6D6A11E9E6AF90012072B /* DeferredTestUtils.swift */; };
-		E6F6D6AA1E9E6B300012072B /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F6D6A11E9E6AF90012072B /* DeferredTestUtils.swift */; };
-		E6F6D6AB1E9E6B330012072B /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F6D6A11E9E6AF90012072B /* DeferredTestUtils.swift */; };
 		E6F965121B2F1CF20034B023 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
 		E6F965421B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F965411B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift */; };
@@ -1837,6 +1842,8 @@
 		D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabContentSettingsViewController.swift; sourceTree = "<group>"; };
 		D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSearchPrefsTests.swift; sourceTree = "<group>"; };
 		D83821FF1FC7961D00303C12 /* DispatchQueueExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueExtensions.swift; sourceTree = "<group>"; };
+		D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeferredTestUtils.swift; sourceTree = "<group>"; };
+		D84535722069BB63003F8D69 /* Mocking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Mocking.swift; path = SyncTests/Mocking.swift; sourceTree = "<group>"; };
 		D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
 		D88FDA9E1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetProtocol.swift; sourceTree = "<group>"; };
 		D88FDAAE1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetAnimator.swift; sourceTree = "<group>"; };
@@ -2014,7 +2021,6 @@
 		E663D5771BB341C4001EF30E /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		E66C5B461BDA81050051AA93 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
-		E67035ED1E538B500037AB83 /* Mocking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mocking.swift; sourceTree = "<group>"; };
 		E67422C41CFF2D39009E8373 /* youtube.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = youtube.ico; sourceTree = "<group>"; };
 		E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteMetadata.swift; sourceTree = "<group>"; };
 		E677F0531D94247300ECF1FB /* Metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
@@ -2063,7 +2069,6 @@
 		E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = scrollablePage.html; sourceTree = "<group>"; };
 		E6EDE81D1D524475007A0732 /* BatchingClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BatchingClientTests.swift; path = SyncTests/BatchingClientTests.swift; sourceTree = "<group>"; };
 		E6F368281D7F594F008CDD67 /* SQLiteHistoryRecommendations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteHistoryRecommendations.swift; sourceTree = "<group>"; };
-		E6F6D6A11E9E6AF90012072B /* DeferredTestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeferredTestUtils.swift; sourceTree = "<group>"; };
 		E6F738741EB7A8D300B50143 /* FennecApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FennecApplication.entitlements; sourceTree = "<group>"; };
 		E6F738751EB7A97100B50143 /* FirefoxBetaApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FirefoxBetaApplication.entitlements; sourceTree = "<group>"; };
 		E6F738761EB7A97500B50143 /* FirefoxApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FirefoxApplication.entitlements; sourceTree = "<group>"; };
@@ -2503,6 +2508,7 @@
 				CE339ED61F2507A1009BE0E6 /* TestBookmarksSynchronizer.swift */,
 				28D980221C47149000277055 /* TestBookmarkTreeMerging.swift */,
 				E6D7C31C1CF4E68D00E746BA /* TestBookmarkModel.swift */,
+				D84535722069BB63003F8D69 /* Mocking.swift */,
 				CEFC983B1EC0DC60008A3E48 /* TestBookmarksRepairRequestor.swift */,
 				28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */,
 				28C077971A3B064000834FE5 /* CryptoTests.swift */,
@@ -2512,7 +2518,6 @@
 				2F3724C41ABF3C01007607FA /* LiveStorageClientTests.swift */,
 				2F67C5251BB0CB4E00E7B73A /* MetaGlobalTests.swift */,
 				2F8C76561BC32F3C00D5E4E0 /* MockSyncServerTests.swift */,
-				E67035ED1E538B500037AB83 /* Mocking.swift */,
 				28C0779D1A3B066000834FE5 /* RecordTests.swift */,
 				50027345B49B967409DDA348 /* StateTests.swift */,
 				E6EDE81D1D524475007A0732 /* BatchingClientTests.swift */,
@@ -3588,14 +3593,6 @@
 			path = Telemetry;
 			sourceTree = "<group>";
 		};
-		E6F6D6921E9E6AC20012072B /* TestUtils */ = {
-			isa = PBXGroup;
-			children = (
-				E6F6D6A11E9E6AF90012072B /* DeferredTestUtils.swift */,
-			);
-			name = TestUtils;
-			sourceTree = "<group>";
-		};
 		E6F9650D1B2F1CF20034B023 /* SharedTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -3619,6 +3616,7 @@
 		E6F9650E1B2F1CF20034B023 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D84535652069BB2F003F8D69 /* DeferredTestUtils.swift */,
 				E6F9650F1B2F1CF20034B023 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -3673,7 +3671,6 @@
 				2FCAE22A1ABB51F800877008 /* StorageTests */,
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28C077911A3B05C200834FE5 /* SyncTests */,
-				E6F6D6921E9E6AC20012072B /* TestUtils */,
 				E69DB0761E97DEA9008A67E6 /* SyncTelemetry */,
 				E69DB0831E97DEAA008A67E6 /* SyncTelemetryTests */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
@@ -5251,13 +5248,12 @@
 				2F3724C61ABF3C01007607FA /* LiveStorageClientTests.swift in Sources */,
 				E6EDE82C1D5244AF007A0732 /* BatchingClientTests.swift in Sources */,
 				E42736071EA858CF009C428E /* TabsPayloadTests.swift in Sources */,
-				E6F6D6A51E9E6B2B0012072B /* DeferredTestUtils.swift in Sources */,
 				28D980231C47149000277055 /* TestBookmarkTreeMerging.swift in Sources */,
 				CE339EE61F2507C0009BE0E6 /* TestBookmarksSynchronizer.swift in Sources */,
-				E67035EE1E538B500037AB83 /* Mocking.swift in Sources */,
 				289A4C141C4EB90600A460E3 /* StorageTestUtils.swift in Sources */,
 				28532CC11C473977000072D9 /* MockFiles.swift in Sources */,
 				E6D7C32B1CF4E86C00E746BA /* TestBookmarkModel.swift in Sources */,
+				D845356A2069BB34003F8D69 /* DeferredTestUtils.swift in Sources */,
 				CEFC984B1EC0DCF5008A3E48 /* TestBookmarksRepairRequestor.swift in Sources */,
 				2F8C76571BC32F3C00D5E4E0 /* MockSyncServerTests.swift in Sources */,
 				28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */,
@@ -5352,7 +5348,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6F6D6A41E9E6B2B0012072B /* DeferredTestUtils.swift in Sources */,
+				D84535692069BB34003F8D69 /* DeferredTestUtils.swift in Sources */,
 				2FA4363E1ABB8448008031D1 /* FxAClient10Tests.swift in Sources */,
 				2FDBCF9B1AC0ADB500AFF7F0 /* SyncAuthStateTests.swift in Sources */,
 				2FA436421ABB8448008031D1 /* TokenServerClientTests.swift in Sources */,
@@ -5425,9 +5421,9 @@
 			files = (
 				28D158AD1AFD90E500F9C065 /* TestSQLiteBookmarks.swift in Sources */,
 				C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */,
+				D84535682069BB33003F8D69 /* DeferredTestUtils.swift in Sources */,
 				E63F71881DB7FBE200A995C9 /* TestSQLiteMetadata.swift in Sources */,
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
-				E6F6D6A31E9E6B2A0012072B /* DeferredTestUtils.swift in Sources */,
 				E6BE53CD1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift in Sources */,
 				289A4C131C4EB90600A460E3 /* StorageTestUtils.swift in Sources */,
 				D37DE2C71CA356D800A5EC69 /* CertTests.swift in Sources */,
@@ -5466,7 +5462,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6F6D6AA1E9E6B300012072B /* DeferredTestUtils.swift in Sources */,
+				D845356F2069BB39003F8D69 /* DeferredTestUtils.swift in Sources */,
 				3B43E3D31D95C48D00BBA9DB /* StoragePerfTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5495,6 +5491,7 @@
 				3BF4B8E91D38497A00493393 /* BaseTestCase.swift in Sources */,
 				3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */,
 				2CB1A65A1FDEA8B60084E96D /* NewTabSettings.swift in Sources */,
+				D845356E2069BB39003F8D69 /* DeferredTestUtils.swift in Sources */,
 				0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */,
 				2C28F96C201B2D4C00ABA8A5 /* MailAppSettingsTests.swift in Sources */,
 				2C97EC711E72C80E0092EC18 /* TopTabsTest.swift in Sources */,
@@ -5523,6 +5520,7 @@
 				7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */,
 				E40AFC541DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift in Sources */,
 				E40AFC6C1DD128DA00DA5651 /* L10nIntroSnapshotTests.swift in Sources */,
+				D845356D2069BB38003F8D69 /* DeferredTestUtils.swift in Sources */,
 				E40AFC651DD0F25500DA5651 /* L10nBaseSnapshotTests.swift in Sources */,
 				391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */,
 				E402000A1E6493C800B45AFF /* LaunchArguments.swift in Sources */,
@@ -5534,6 +5532,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BEB64511C7345990092C02E /* MarketingUITests.swift in Sources */,
+				D845356C2069BB37003F8D69 /* DeferredTestUtils.swift in Sources */,
 				7BEB64521C7345990092C02E /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5543,6 +5542,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B5A93221B1EB4C8004F47A2 /* ReadingListTest.swift in Sources */,
+				D84535712069BB3C003F8D69 /* DeferredTestUtils.swift in Sources */,
 				D38F03701C06387900175932 /* AuthenticationTests.swift in Sources */,
 				28C8B7851C852535006D8318 /* BookmarksPanelTests.swift in Sources */,
 				C8611CB01F71AEBA00C3DE7D /* NoImageModeTests.swift in Sources */,
@@ -5612,7 +5612,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4D567A51ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift in Sources */,
-				E6F6D6A61E9E6B2C0012072B /* DeferredTestUtils.swift in Sources */,
+				D845356B2069BB36003F8D69 /* DeferredTestUtils.swift in Sources */,
 				E4D5679F1ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5631,6 +5631,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D84535702069BB3A003F8D69 /* DeferredTestUtils.swift in Sources */,
 				E610B0191EDC68FC00DC9372 /* EventTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5639,10 +5640,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6F6D6A71E9E6B2D0012072B /* DeferredTestUtils.swift in Sources */,
+				D84535662069BB2F003F8D69 /* DeferredTestUtils.swift in Sources */,
 				28532BEB1C472015000072D9 /* UtilsTests.swift in Sources */,
 				28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */,
 				E61453BE1B750A1700C3F9D7 /* RollingFileLoggerTests.swift in Sources */,
+				D84535732069BB63003F8D69 /* Mocking.swift in Sources */,
 				3BB54B311E68EB2B0021DAC4 /* AuthenticationKeychainInfoTests.swift in Sources */,
 				39E65D271CA5B92000C63CE3 /* AsyncReducerTests.swift in Sources */,
 				E4E7EB6D1C4AED5E0094275D /* SupportUtilsTests.swift in Sources */,
@@ -5861,7 +5863,6 @@
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
-				E6F6D6AB1E9E6B330012072B /* DeferredTestUtils.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */,
 				2F44FA1B1A9D426A00FD20CC /* TestHashExtensions.swift in Sources */,
 				3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */,
@@ -5878,6 +5879,7 @@
 				7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */,
 				39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */,
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
+				D84535672069BB33003F8D69 /* DeferredTestUtils.swift in Sources */,
 				2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				D8EFFA261FF702A8001D3A09 /* NavigationRouterTests.swift in Sources */,
