@@ -33,7 +33,7 @@ public extension String {
             let index1 = self.index(self.startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
             let index2 = self.index(self.endIndex, offsetBy: maxLength / -2)
 
-            return self.substring(to: index1) + "…\u{2060}" + self.substring(from: index2)
+            return String(self[..<index1]) + "…\u{2060}" + String(self[index2...])
         }
         return self
     }
