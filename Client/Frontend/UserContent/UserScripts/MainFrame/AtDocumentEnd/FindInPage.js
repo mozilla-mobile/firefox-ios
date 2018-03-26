@@ -40,7 +40,6 @@ var styleElement = document.createElement("style");
 styleElement.innerHTML = HIGHLIGHT_CSS;
 
 function find(query) {
-  console.log("find()", arguments);
   let escapedQuery = query.trim().replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
   if (escapedQuery !== lastEscapedQuery) {
     if (lastFindOperation) {
@@ -79,7 +78,6 @@ function find(query) {
 }
 
 function findNext() {
-  console.log("findNext()", arguments);
   if (lastHighlights) {
     activeHighlightIndex = (activeHighlightIndex + lastHighlights.length + 1) % lastHighlights.length;
     updateActiveHighlight();
@@ -87,7 +85,6 @@ function findNext() {
 }
 
 function findPrevious() {
-  console.log("findPrevious()", arguments);
   if (lastHighlights) {
     activeHighlightIndex = (activeHighlightIndex + lastHighlights.length - 1) % lastHighlights.length;
     updateActiveHighlight();
@@ -95,7 +92,6 @@ function findPrevious() {
 }
 
 function findDone() {
-  console.log("findDone()", arguments);
   styleElement.remove();
   clear();
 
@@ -180,7 +176,6 @@ function getMatchingNodeReplacements(regExp, callback) {
   let replacements = [];
   let highlights = [];
   let isMaximumHighlightCount = false;
-  let walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
 
   let operation = asyncTextNodeWalker(function(originalNode) {
     let originalTextContent = originalNode.textContent;
@@ -253,8 +248,6 @@ function chunkedLoop(condition, iterator, chunkSize) {
           resolve();
           return;
         }
-
-        iterator(argument);
       }
 
       setTimeout(doChunk);
