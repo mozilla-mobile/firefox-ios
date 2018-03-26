@@ -196,4 +196,71 @@ class DragAndDropTests: BaseTestCase {
         app.collectionViews.cells[firstWebsite["tabName"]!].tap()
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]!, secondTab: firstWebsite["tabName"]!)
     }
+
+    func testDragAndDropHistoryEntry() {
+        // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
+        openTwoWebsites()
+        navigator.goto(HomePanel_History)
+        waitforExistence(app.tables["History List"])
+
+        let firstEntryOnList = app.tables["History List"].cells.element(boundBy: 2).staticTexts[secondWebsite["tabName"]!]
+        let secondEntryOnList = app.tables["History List"].cells.element(boundBy: 3).staticTexts[firstWebsite["tabName"]!]
+
+        XCTAssertTrue(firstEntryOnList.exists, "first entry after is not correct")
+        XCTAssertTrue(secondEntryOnList.exists, "second entry after is not correct")
+
+        // Drag and Drop the element and check that the position of the two elements does not change
+        app.tables["History List"].cells.staticTexts[firstWebsite["tabName"]!].press(forDuration: 1, thenDragTo: app.tables["History List"].cells.staticTexts[secondWebsite["tabName"]!])
+
+        XCTAssertTrue(firstEntryOnList.exists, "first entry after is not correct")
+        XCTAssertTrue(secondEntryOnList.exists, "second entry after is not correct")
+    }
+
+    func testDragAndDropBookmarkEntry() {
+        navigator.openURL(firstWebsite["url"]!)
+        navigator.performAction(Action.BookmarkThreeDots)
+
+        navigator.openURL(secondWebsite["url"]!)
+        navigator.performAction(Action.BookmarkThreeDots)
+
+        navigator.goto(HomePanel_Bookmarks)
+        waitforExistence(app.tables["Bookmarks List"])
+
+        let firstEntryOnList = app.tables["Bookmarks List"].cells.element(boundBy: 0).staticTexts[firstWebsite["tabName"]!]
+        let secondEntryOnList = app.tables["Bookmarks List"].cells.element(boundBy: 1).staticTexts[secondWebsite["tabName"]!]
+
+        XCTAssertTrue(firstEntryOnList.exists, "first entry after is not correct")
+        XCTAssertTrue(secondEntryOnList.exists, "second entry after is not correct")
+
+        // Drag and Drop the element and check that the position of the two elements does not change
+        app.tables["Bookmarks List"].cells.staticTexts[firstWebsite["tabName"]!].press(forDuration: 1, thenDragTo: app.tables["Bookmarks List"].cells.staticTexts[secondWebsite["tabName"]!])
+
+        XCTAssertTrue(firstEntryOnList.exists, "first entry after is not correct")
+        XCTAssertTrue(secondEntryOnList.exists, "second entry after is not correct")
+    }
+
+    func testTryDragAndDropHistoryToURLBar() {
+        openTwoWebsites()
+        navigator.goto(HomePanel_History)
+        waitforExistence(app.tables["History List"].cells.staticTexts[firstWebsite["tabName"]!])
+
+        app.tables["History List"].cells.staticTexts[firstWebsite["tabName"]!].press(forDuration: 1, thenDragTo: app.textFields["url"])
+
+        // It is not allowed to drop the entry on the url field
+        let urlBarValue = app.textFields["url"].value as? String
+        XCTAssertEqual(urlBarValue, "Search or enter address")
+    }
+
+    func testTryDragAndDropBookmarkyToURLBar() {
+        navigator.openURL(firstWebsite["url"]!)
+        navigator.performAction(Action.BookmarkThreeDots)
+        navigator.goto(HomePanel_Bookmarks)
+        waitforExistence(app.tables["Bookmarks List"])
+
+        app.tables["Bookmarks List"].cells.staticTexts[firstWebsite["tabName"]!].press(forDuration: 1, thenDragTo: app.textFields["url"])
+
+        // It is not allowed to drop the entry on the url field
+        let urlBarValue = app.textFields["url"].value as? String
+        XCTAssertEqual(urlBarValue, "Search or enter address")
+    }
 }
