@@ -35,10 +35,10 @@ private func loadEntriesFromDisk() -> TLDEntryMap? {
             let key: String
             if entry.isWild {
                 // Trim off the '*.' part of the line
-                key = line.substring(from: line.index(line.startIndex, offsetBy: 2))
+                key = String(line[line.index(line.startIndex, offsetBy: 2)...])
             } else if entry.isException {
                 // Trim off the '!' part of the line
-                key = line.substring(from: line.index(line.startIndex, offsetBy: 1))
+                key = String(line[line.index(line.startIndex, offsetBy: 1)...])
             } else {
                 key = line
             }
