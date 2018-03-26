@@ -33,7 +33,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
     }
 
     func setCustomAccountPrefs(_ data: Data, url: URL) {
-        guard let settings = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String:Any],
+        guard let settings = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String: Any],
                 let customSyncToken = settings["sync_tokenserver_base_url"] as? String,
                 let customSyncProfile = settings["profile_server_base_url"] as? String,
                 let customSyncOauth = settings["oauth_server_base_url"] as? String,

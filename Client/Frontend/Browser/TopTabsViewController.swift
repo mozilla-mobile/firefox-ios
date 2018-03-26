@@ -399,7 +399,7 @@ extension TopTabsViewController: UICollectionViewDragDelegate {
         var itemProvider: NSItemProvider
         if url != nil, !(url?.isLocal ?? true) {
             itemProvider = NSItemProvider(contentsOf: url) ?? NSItemProvider()
-        }  else {
+        } else {
             itemProvider = NSItemProvider()
         }
 

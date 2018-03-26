@@ -154,7 +154,7 @@ private let topSitesQuery = "SELECT \(TableCachedTopSites).*, \(TablePageMetadat
  * >75% of the query time.
  * The scope/lifetime of this object is important as the data is 'frozen' until a new instance is created.
  */
-fileprivate struct SQLiteFrecentHistory : FrecentHistory {
+fileprivate struct SQLiteFrecentHistory: FrecentHistory {
     private let db: BrowserDB
     private let prefs: Prefs
 
@@ -175,7 +175,7 @@ fileprivate struct SQLiteFrecentHistory : FrecentHistory {
                 "FROM \(ViewAwesomebarBookmarks) b " +
         "LEFT JOIN \(ViewHistoryVisits) h ON b.url = h.url"
 
-        let _ = db.transaction { connection in
+        _ = db.transaction { connection in
             try connection.executeChange(create)
             try connection.executeChange(empty)
             try connection.executeChange(insert)
@@ -221,7 +221,6 @@ fileprivate struct SQLiteFrecentHistory : FrecentHistory {
         let groupBy = "GROUP BY domain_id "
         return (whereData, groupBy)
     }
-
 
     enum FrecencyQueryParams {
         case urlCompletion(bookmarksLimit: Int, whereURLContains: String, groupClause: String)

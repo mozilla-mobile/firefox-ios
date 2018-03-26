@@ -59,7 +59,7 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
     public var deviceID: String? {
         return account.deviceRegistration?.id
     }
-    public var enginesEnablements: [String : Bool]?
+    public var enginesEnablements: [String: Bool]?
     public var clientName: String?
 
     init(account: FirefoxAccount, cache: KeychainCache<SyncAuthStateCache>) {

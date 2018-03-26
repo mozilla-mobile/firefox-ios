@@ -20,7 +20,7 @@ class PasscodeEntryViewController: BasePasscodeViewController {
     
     override init() {
         let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
-        passcodePane = PasscodePane(title:nil, passcodeSize:authInfo?.passcode?.count ?? 6)
+        passcodePane = PasscodePane(title: nil, passcodeSize: authInfo?.passcode?.count ?? 6)
 
         super.init()
     }

@@ -18,7 +18,7 @@ extension CGRect {
 }
 
 extension Data {
-    public var isGIF : Bool {
+    public var isGIF: Bool {
         return [0x47, 0x49, 0x46].elementsEqual(prefix(3))
     }
 }
