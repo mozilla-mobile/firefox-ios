@@ -14,6 +14,7 @@ public struct Profiler {
         case intro_did_appear
         case history_panel_fetch
         case load_url
+        case find_in_page
     }
 
     public static func setup() {
