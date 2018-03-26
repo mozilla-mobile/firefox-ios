@@ -10,21 +10,22 @@ import Shared
 private let swizzling: (UIScrollView.Type) -> Void = { obj in
     let originalSelector = #selector(setter: UIView.bounds)
     let swizzledSelector = #selector(obj.swizzle_setBounds(bounds:))
-    let originalMethod = class_getInstanceMethod(obj, originalSelector)
-    let swizzledMethod = class_getInstanceMethod(obj, swizzledSelector)
+    guard let originalMethod = class_getInstanceMethod(obj, originalSelector), let swizzledMethod = class_getInstanceMethod(obj, swizzledSelector) else { return }
     method_exchangeImplementations(originalMethod, swizzledMethod)
 }
 
+private var hasSwizzled = false
+
 extension UIScrollView {
-    open override class func initialize() {
-        // make sure this isn't a subclass
-        guard self == UIScrollView.self else {
-            return
-        }
+
+    final public class func doBadSwizzleStuff() {
+        guard !hasSwizzled else { return }
+
+        hasSwizzled = true
         swizzling(self)
     }
 
-    func swizzle_setBounds(bounds: CGRect) {
+    @objc func swizzle_setBounds(bounds: CGRect) {
         let validSize = [bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height].every({ !$0.isNaN })
         let validBounds = [bounds.size.width, bounds.size.height].every({ $0 >= 0 })
 
