@@ -57,6 +57,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     private var site: Site?
     private let style: PresentationStyle
     private var tintColor = UIColor.Photon.Grey80
+    private var heightConstraint: Constraint?
     private lazy var showCloseButton: Bool = {
         return self.style == .bottom && self.modalPresentationStyle != .popover
     }()
@@ -182,7 +183,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
         tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
         tableView.estimatedSectionFooterHeight = PhotonActionSheetUX.HeaderFooterHeight
-        tableView.estimatedSectionHeaderHeight = PhotonActionSheetUX.HeaderFooterHeight
+        // When the menu style is centered the header is much bigger than default. Set a larger estimated height to make sure autolayout sizes the view correctly
+        tableView.estimatedSectionHeaderHeight = (style == .centered) ? PhotonActionSheetUX.RowHeight : PhotonActionSheetUX.HeaderFooterHeight
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
         tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
@@ -198,8 +200,9 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         super.viewDidLayoutSubviews()
         let maxHeight = self.view.frame.height - (self.showCloseButton ? PhotonActionSheetUX.CloseButtonHeight : 0)
         tableView.snp.makeConstraints { make in
+            heightConstraint?.deactivate()
             // The height of the menu should be no more than 80 percent of the screen
-            make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.8))
+            heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.8)).constraint
         }
         if style == .bottom && self.modalPresentationStyle == .popover {
             self.preferredContentSize = self.tableView.contentSize
