@@ -159,15 +159,21 @@ function asyncTextNodeWalker(iterator, callback) {
   let operation = new Operation();
   let walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
 
-  chunkedLoop(function() { return walker.nextNode(); }, function(node) {
-    if (operation.cancelled) {
-      return false;
-    }
+  let timeout = setTimeout(function() {
+    chunkedLoop(function() { return walker.nextNode(); }, function(node) {
+      if (operation.cancelled) {
+        return false;
+      }
 
-    iterator(node);
-  }, 100).then(function() {
-    operation.complete();
-  });
+      iterator(node);
+    }, 100).then(function() {
+      operation.complete();
+    });
+  }, 50);
+
+  operation.oncancelled = function() {
+    clearTimeout(timeout);
+  };
 
   return operation;
 }
@@ -238,7 +244,7 @@ function getMatchingNodeReplacements(regExp, callback) {
 
 function chunkedLoop(condition, iterator, chunkSize) {
   return new Promise(function(resolve, reject) {
-    setTimeout(doChunk);
+    setTimeout(doChunk, 0);
 
     function doChunk() {
       let argument;
@@ -250,7 +256,7 @@ function chunkedLoop(condition, iterator, chunkSize) {
         }
       }
 
-      setTimeout(doChunk);
+      setTimeout(doChunk, 0);
     }
   });
 }
