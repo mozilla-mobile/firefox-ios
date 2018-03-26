@@ -12,7 +12,7 @@ struct FormPostData {
     let requestBody: Data
     
     init?(messageBody: Any) {
-        guard let messageBodyDict = messageBody as? [String : String],
+        guard let messageBodyDict = messageBody as? [String: String],
             let actionString = messageBodyDict["action"],
             let method = messageBodyDict["method"],
             let target = messageBodyDict["target"],
@@ -43,7 +43,7 @@ struct FormPostData {
         return false
     }
 
-    func urlRequestWithHeaders(_ headers: [String : String]?) -> URLRequest {
+    func urlRequestWithHeaders(_ headers: [String: String]?) -> URLRequest {
         var urlRequest = URLRequest(url: action)
         urlRequest.httpMethod = method
         urlRequest.allHTTPHeaderFields = headers ?? [:]

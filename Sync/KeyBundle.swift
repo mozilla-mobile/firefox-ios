@@ -224,7 +224,6 @@ open class KeyBundle: Hashable {
     }
 }
 
-
 open class Keys: Equatable {
     let valid: Bool
     let defaultBundle: KeyBundle
@@ -307,5 +306,4 @@ public struct RecordEncrypter<T: CleartextPayloadJSON> {
         self.factory = factory
     }
 }
-
 

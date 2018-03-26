@@ -423,7 +423,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        guard let section = SearchListSection.init(rawValue: indexPath.section) else {
+        guard let section = SearchListSection(rawValue: indexPath.section) else {
             return
         }
 
@@ -453,7 +453,7 @@ extension SearchViewController {
         switch input {
         case UIKeyInputUpArrow:
             // we're going down, we should check if we've reached the first item in this section.
-            if (current.item == 0) {
+            if current.item == 0 {
                 // We have, so check if we can decrement the section.
                 if current.section == initialSection {
                     // We've reached the first item in the first section.
