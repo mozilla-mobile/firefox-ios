@@ -49,14 +49,14 @@ protocol URLBarDelegate: class {
 
 class URLBarView: UIView {
     // Additional UIAppearance-configurable properties
-    dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
+    @objc dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
         didSet {
             if !inOverlayMode {
                 locationContainer.layer.borderColor = locationBorderColor.cgColor
             }
         }
     }
-    dynamic var locationActiveBorderColor: UIColor = URLBarViewUX.TextFieldActiveBorderColor {
+    @objc dynamic var locationActiveBorderColor: UIColor = URLBarViewUX.TextFieldActiveBorderColor {
         didSet {
             if inOverlayMode {
                 locationContainer.layer.borderColor = locationActiveBorderColor.cgColor
@@ -305,7 +305,7 @@ class URLBarView: UIView {
 
     }
     
-    func showQRScanner() {
+    @objc func showQRScanner() {
         self.delegate?.urlBarDidPressQRButton(self)
     }
 
@@ -508,11 +508,11 @@ class URLBarView: UIView {
         delegate?.urlBarDidPressTabs(self)
     }
 
-    func didClickCancel() {
+    @objc func didClickCancel() {
         leaveOverlayMode(didCancel: true)
     }
 
-    func tappedScrollToTopArea() {
+    @objc func tappedScrollToTopArea() {
         delegate?.urlBarDidPressScrollToTop(self)
     }
 }
@@ -648,12 +648,12 @@ extension URLBarView: AutocompleteTextFieldDelegate {
 // MARK: UIAppearance
 extension URLBarView {
 
-    dynamic var cancelTintColor: UIColor? {
+    @objc dynamic var cancelTintColor: UIColor? {
         get { return cancelButton.tintColor }
         set { return cancelButton.tintColor = newValue }
     }
     
-    dynamic var showQRButtonTintColor: UIColor? {
+    @objc dynamic var showQRButtonTintColor: UIColor? {
         get { return showQRScannerButton.tintColor }
         set { return showQRScannerButton.tintColor = newValue }
     }
@@ -717,7 +717,7 @@ class TabLocationContainerView: UIView {
 
 class ToolbarTextField: AutocompleteTextField {
 
-    dynamic var clearButtonTintColor: UIColor? {
+    @objc dynamic var clearButtonTintColor: UIColor? {
         didSet {
             // Clear previous tinted image that's cache and ask for a relayout
             tintedClearImage = nil

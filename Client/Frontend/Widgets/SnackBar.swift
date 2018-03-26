@@ -46,7 +46,7 @@ class SnackButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func onClick() {
+    @objc func onClick() {
         callback?(bar)
     }
 

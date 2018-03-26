@@ -89,7 +89,7 @@ class RemoteTabsPanel: UIViewController, HomePanel {
         tableViewController.didMove(toParentViewController: self)
     }
 
-    func notificationReceived(_ notification: Notification) {
+    @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
             DispatchQueue.main.async {

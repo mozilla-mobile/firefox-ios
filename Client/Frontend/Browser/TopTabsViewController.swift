@@ -196,11 +196,11 @@ class TopTabsViewController: UIViewController {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
     
-    func tabsTrayTapped() {
+    @objc func tabsTrayTapped() {
         delegate?.topTabsDidPressTabs()
     }
     
-    func newTabTapped() {
+    @objc func newTabTapped() {
         if pendingReloadData {
             return
         }
@@ -208,7 +208,7 @@ class TopTabsViewController: UIViewController {
         LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Add tab button in the URL Bar on iPad" as AnyObject])
     }
 
-    func togglePrivateModeTapped() {
+    @objc func togglePrivateModeTapped() {
         if isUpdating || pendingReloadData {
             return
         }

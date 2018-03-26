@@ -147,7 +147,7 @@ class QRCodeViewController: UIViewController {
         }
     }
 
-    func startScanLineAnimation() {
+    @objc func startScanLineAnimation() {
         if !isAnimationing {
             return
         }
@@ -170,11 +170,11 @@ class QRCodeViewController: UIViewController {
         isAnimationing = false
     }
 
-    func goBack() {
+    @objc func goBack() {
         self.dismiss(animated: true, completion: nil)
     }
 
-    func openLight() {
+    @objc func openLight() {
         guard let captureDevice = self.captureDevice else {
             return
         }

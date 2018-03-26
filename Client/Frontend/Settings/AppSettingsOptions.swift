@@ -104,7 +104,7 @@ class SyncNowSetting: WithAccountSetting {
         }
     }
     
-    func stopRotateSyncIcon() {
+    @objc func stopRotateSyncIcon() {
         DispatchQueue.main.async {
             self.imageView.layer.removeAllAnimations()
         }
@@ -294,8 +294,8 @@ class AccountStatusSetting: WithAccountSetting {
         super.init(settings: settings)
         NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .FirefoxAccountProfileChanged, object: nil)
     }
-    
-    func updateAccount(notification: Notification) {
+
+    @objc func updateAccount(notification: Notification) {
         DispatchQueue.main.async {
             self.settings.tableView.reloadData()
         }

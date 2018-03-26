@@ -124,7 +124,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
     }
 
-    func dismissKeyboard(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func dismissKeyboard(_ gestureRecognizer: UITapGestureRecognizer) {
         view.window?.rootViewController?.view.endEditing(true)
     }
 
@@ -201,7 +201,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         panel.didMove(toParentViewController: self)
     }
 
-    func tappedButton(_ sender: UIButton!) {
+    @objc func tappedButton(_ sender: UIButton!) {
         for (index, button) in buttons.enumerated() where button == sender {
             selectedPanel = HomePanelType(rawValue: index)
             delegate?.homePanelViewController(self, didSelectPanel: index)

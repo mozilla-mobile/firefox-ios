@@ -329,7 +329,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 }
 
 extension AuthenticationSettingsViewController {
-    func refreshSettings(_ notification: Notification) {
+    @objc func refreshSettings(_ notification: Notification) {
         updateTitleForTouchIDState()
         settings = generateSettings()
         tableView.reloadData()

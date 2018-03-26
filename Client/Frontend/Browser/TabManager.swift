@@ -572,7 +572,7 @@ class TabManager: NSObject {
         preserveTabs()
     }
 
-    func prefsDidChange() {
+    @objc func prefsDidChange() {
         DispatchQueue.main.async {
             let allowPopups = !(self.prefs.boolForKey("blockPopups") ?? true)
             // Each tab may have its own configuration, so we should tell each of them in turn.

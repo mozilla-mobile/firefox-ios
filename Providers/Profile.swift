@@ -670,7 +670,7 @@ open class BrowserProfile: Profile {
             center.addObserver(self, selector: #selector(onBookmarkBufferValidated), name: .BookmarkBufferValidated, object: nil)
         }
 
-        func onBookmarkBufferValidated(notification: NSNotification) {
+        @objc func onBookmarkBufferValidated(notification: NSNotification) {
             #if MOZ_TARGET_CLIENT
                 // We don't send this ad hoc telemetry on the release channel.
                 guard AppConstants.BuildChannel != AppBuildChannel.release else {

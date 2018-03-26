@@ -89,7 +89,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         ]
     }
 
-    func handleKeyCommand(sender: UIKeyCommand) {
+    @objc func handleKeyCommand(sender: UIKeyCommand) {
         guard let input = sender.input else {
             return
         }
@@ -255,7 +255,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         removeCompletion()
     }
 
-    func textDidChange(_ textField: UITextField) {
+   @objc func textDidChange(_ textField: UITextField) {
         hideCursor = autocompleteTextLabel != nil
         removeCompletion()
 

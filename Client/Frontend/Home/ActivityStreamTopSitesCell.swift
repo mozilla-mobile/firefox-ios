@@ -283,7 +283,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
         }
     }
 
-    func handlePageTap(_ gesture: UITapGestureRecognizer) {
+    @objc func handlePageTap(_ gesture: UITapGestureRecognizer) {
         guard pageControl.pageCount > 1 else {
             return
         }

@@ -198,7 +198,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         view.addGestureRecognizer(tap)
     }
     
-    func handleTap() {
+    @objc func handleTap() {
         dismiss(animated: true, completion: nil)
     }
     

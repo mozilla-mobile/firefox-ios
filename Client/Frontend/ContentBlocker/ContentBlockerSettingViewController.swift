@@ -35,7 +35,7 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
         return footer
     }
 
-    func moreInfoTapped() {
+    @objc func moreInfoTapped() {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("tracking-protection-ios")
         navigationController?.pushViewController(viewController, animated: true)

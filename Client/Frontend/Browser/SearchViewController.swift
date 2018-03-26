@@ -126,7 +126,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
     }
 
-    func dynamicFontChanged(_ notification: Notification) {
+    @objc func dynamicFontChanged(_ notification: Notification) {
         guard notification.name == .DynamicFontChanged else { return }
 
         reloadData()
@@ -251,7 +251,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
-    func didSelectEngine(_ sender: UIButton) {
+    @objc func didSelectEngine(_ sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
         guard let index = searchEngineScrollViewContent.subviews.index(of: sender) else {
@@ -271,7 +271,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchDelegate?.searchViewController(self, didSelectURL: url)
     }
 
-    func didClickSearchButton() {
+    @objc func didClickSearchButton() {
         self.searchDelegate?.presentSearchSettingsController()  
     }
 

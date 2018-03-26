@@ -174,20 +174,20 @@ class SearchInputView: UIView {
 // MARK: - Selectors
 extension SearchInputView {
 
-    func tappedSearch() {
+    @objc func tappedSearch() {
         isEditing = true
         inputField.becomeFirstResponder()
         delegate?.searchInputViewBeganEditing(self)
     }
 
-    func tappedClose() {
+    @objc func tappedClose() {
         isEditing = false
         delegate?.searchInputViewFinishedEditing(self)
         inputField.text = nil
         inputField.resignFirstResponder()
     }
 
-    func inputTextDidChange(_ textField: UITextField) {
+    @objc func inputTextDidChange(_ textField: UITextField) {
         delegate?.searchInputView(self, didChangeTextTo: textField.text ?? "")
     }
 }

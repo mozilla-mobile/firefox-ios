@@ -193,11 +193,11 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
 
     // UITabBarItem Actions that map to our delegate methods
 
-    func cancel() {
+    @objc func cancel() {
         delegate?.shareControllerDidCancel(self)
     }
 
-    func add() {
+    @objc func add() {
         delegate?.shareController(self, didShareItem: item, toDestinations: NSSet(set: selectedShareDestinations))
     }
 

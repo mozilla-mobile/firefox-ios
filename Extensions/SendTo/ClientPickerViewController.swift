@@ -1,3 +1,4 @@
+
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -242,7 +243,7 @@ class ClientPickerViewController: UITableViewController {
         }
     }
 
-    func refresh() {
+    @objc func refresh() {
         DispatchQueue.main.async {
             if let refreshControl = self.refreshControl {
                 refreshControl.beginRefreshing()
@@ -253,11 +254,11 @@ class ClientPickerViewController: UITableViewController {
         reloadClients()
     }
 
-    func cancel() {
+    @objc func cancel() {
         clientPickerDelegate?.clientPickerViewControllerDidCancel(self)
     }
 
-    func send() {
+    @objc func send() {
         var clients = [RemoteClient]()
         for indexPath in selectedClients {
             clients.append(self.clients[(indexPath as AnyObject).row])

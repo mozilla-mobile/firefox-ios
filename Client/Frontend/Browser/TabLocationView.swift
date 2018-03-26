@@ -40,7 +40,7 @@ class TabLocationView: UIView, TabEventHandler {
     private var contentView: UIStackView!
     private var tabObservers: TabObservers!
 
-    dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
+    @objc dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
         didSet { updateTextWithURL() }
     }
 
@@ -263,39 +263,39 @@ class TabLocationView: UIView, TabEventHandler {
         }
     }
 
-    func tapReaderModeButton() {
+    @objc func tapReaderModeButton() {
         delegate?.tabLocationViewDidTapReaderMode(self)
     }
 
-    func longPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
+    @objc func longPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressReaderMode(self)
         }
     }
     
-    func didPressPageOptionsButton(_ button: UIButton) {
+    @objc func didPressPageOptionsButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapPageOptions(self, from: button)
     }
     
-    func didLongPressPageOptionsButton(_ recognizer: UILongPressGestureRecognizer) {
+    @objc func didLongPressPageOptionsButton(_ recognizer: UILongPressGestureRecognizer) {
         delegate?.tabLocationViewDidLongPressPageOptions(self)
     }
 
-    func longPressLocation(_ recognizer: UITapGestureRecognizer) {
+    @objc func longPressLocation(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressLocation(self)
         }
     }
 
-    func tapLocation(_ recognizer: UITapGestureRecognizer) {
+    @objc func tapLocation(_ recognizer: UITapGestureRecognizer) {
         delegate?.tabLocationViewDidTapLocation(self)
     }
 
-    func didPressTPShieldButton(_ button: UIButton) {
+    @objc func didPressTPShieldButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapShield(self)
     }
 
-    func readerModeCustomAction() -> Bool {
+    @objc func readerModeCustomAction() -> Bool {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
 
