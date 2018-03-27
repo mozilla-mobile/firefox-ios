@@ -131,28 +131,20 @@ class ThirdPartySearchTest: BaseTestCase {
         app.tables.cells["customEngineViewButton"].tap()
 
         app.textViews["customEngineTitle"].tap()
-        app.typeText("Feeling Lucky")
+        app.typeText("Ask")
         app.textViews["customEngineUrl"].tap()
-        app.typeText("http://www.google.com/search?q=%s&btnI")
-
+        app.typeText("http://www.ask.com/web?q=%s")
         app.navigationBars.buttons["customEngineSaveButton"].tap()
 
         // Perform a search using a custom search engine
         navigator.goto(HomePanelsScreen)
         app.textFields["url"].tap()
         app.typeText("strange charm")
-        app.scrollViews.otherElements.buttons["Feeling Lucky search"].tap()
+        app.scrollViews.otherElements.buttons["Ask search"].tap()
 
         // Ensure that correct search is done
         let url = app.textFields["url"].value as! String
-        if (!url.hasSuffix("&btnI")) {
-            app.buttons["Back"].tap()
-            app.textFields["url"].tap()
-            app.typeText("strange charm")
-            app.scrollViews.otherElements.buttons["Feeling Lucky search"].tap()
-            XCTAssert(url.hasSuffix("&btnI"), "The URL should indicate that the search was performed using IFL")
-        }
-        XCTAssert(url.hasSuffix("&btnI"), "The URL should indicate that the search was performed using IFL")
+        XCTAssert(url.hasPrefix("www.ask.com"), "The URL should indicate that the search was performed using ask")
     }
 
     func testCustomEngineFromIncorrectTemplate() {
