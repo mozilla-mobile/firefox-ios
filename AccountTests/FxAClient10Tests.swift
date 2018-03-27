@@ -113,7 +113,7 @@ class FxAClient10Tests: LiveAccountTest {
                 case let .failure(error):
                     return Deferred(value: .failure(error))
                 case let .success(loginResponse):
-                    return client.keys(loginResponse.value.keyFetchToken)
+                    return client.keys(loginResponse.keyFetchToken)
                 }
             }
             keys.upon { result in
@@ -141,7 +141,7 @@ class FxAClient10Tests: LiveAccountTest {
                     return Deferred(value: .failure(error))
                 case let .success(loginResponse):
                     let keyPair = RSAKeyPair.generate(withModulusSize: 1024)!
-                    return client.sign(loginResponse.value.sessionToken, publicKey: keyPair.publicKey)
+                    return client.sign(loginResponse.sessionToken, publicKey: keyPair.publicKey)
                 }
             }
             sign.upon { result in

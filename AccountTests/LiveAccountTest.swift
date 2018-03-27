@@ -83,7 +83,7 @@ open class LiveAccountTest: XCTestCase {
                     expectation.fulfill()
                     return Deferred(value: .failure(error))
                 case let .success(loginResponse):
-                    return client.sign(loginResponse.value.sessionToken, publicKey: keyPair.publicKey)
+                    return client.sign(loginResponse.sessionToken, publicKey: keyPair.publicKey)
                 }
             }
             sign.upon { result in
