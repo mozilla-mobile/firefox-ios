@@ -21,8 +21,9 @@ extension PhotonActionSheetProtocol {
     typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
     
     func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, suppressPopover: Bool = false) {
-        let sheet = PhotonActionSheet(title: title, actions: actions)
-        sheet.modalPresentationStyle =  (UIDevice.current.userInterfaceIdiom == .pad && !suppressPopover) ? .popover : .overCurrentContext
+        let style: UIModalPresentationStyle = (UIDevice.current.userInterfaceIdiom == .pad && !suppressPopover) ? .popover : .overCurrentContext
+        let sheet = PhotonActionSheet(title: title, actions: actions, style: style)
+        sheet.modalPresentationStyle = style
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
         
         if let popoverVC = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {

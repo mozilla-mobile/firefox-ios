@@ -48,7 +48,8 @@ public struct PhotonActionSheetItem {
 
 private enum PresentationStyle {
     case centered // used in the home panels
-    case bottom // used to display the menu
+    case bottom // used to display the menu on phone sized devices
+    case popover // when displayed on the iPad
 }
 
 class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
@@ -58,9 +59,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     private let style: PresentationStyle
     private var tintColor = UIColor.Photon.Grey80
     private var heightConstraint: Constraint?
-    private lazy var showCloseButton: Bool = {
-        return self.style == .bottom && self.modalPresentationStyle != .popover
-    }()
     var tableView = UITableView(frame: .zero, style: .grouped)
 
     lazy var tapRecognizer: UITapGestureRecognizer = {
@@ -97,17 +95,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         super.init(nibName: nil, bundle: nil)
     }
 
-    init(title: String?, actions: [[PhotonActionSheetItem]]) {
+    init(title: String? = nil, actions: [[PhotonActionSheetItem]], style presentationStyle: UIModalPresentationStyle) {
         self.actions = actions
-        self.style = .bottom
+        self.style = presentationStyle == .popover ? .popover : .bottom
         super.init(nibName: nil, bundle: nil)
         self.title = title
-    }
-    
-    init(actions: [[PhotonActionSheetItem]]) {
-        self.actions = actions
-        self.style = .bottom
-        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -139,7 +131,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
         let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
 
-        if self.showCloseButton {
+        if style == .bottom {
             self.view.addSubview(closeButton)
             closeButton.snp.makeConstraints { make in
                 make.centerX.equalTo(self.view.snp.centerX)
@@ -149,8 +141,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             }
         }
         
-        if style == .bottom && self.modalPresentationStyle == .popover {
-            // We are showing the menu in a popOver
+        if style == .popover {
             self.actions = actions.map({ $0.reversed() }).reversed()
             tableView.snp.makeConstraints { make in
                 make.edges.equalTo(self.view)
@@ -159,7 +150,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             tableView.snp.makeConstraints { make in
                 make.centerX.equalTo(self.view.snp.centerX)
                 switch style {
-                case .bottom:
+                case .bottom, .popover:
                     make.bottom.equalTo(closeButton.snp.top).offset(-PhotonActionSheetUX.Padding)
                 case .centered:
                     make.centerY.equalTo(self.view.snp.centerY)
@@ -198,13 +189,13 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let maxHeight = self.view.frame.height - (self.showCloseButton ? PhotonActionSheetUX.CloseButtonHeight : 0)
+        let maxHeight = self.view.frame.height - (style == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0)
         tableView.snp.makeConstraints { make in
             heightConstraint?.deactivate()
             // The height of the menu should be no more than 80 percent of the screen
             heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.8)).constraint
         }
-        if style == .bottom && self.modalPresentationStyle == .popover {
+        if style == .popover {
             self.preferredContentSize = self.tableView.contentSize
         }
     }
