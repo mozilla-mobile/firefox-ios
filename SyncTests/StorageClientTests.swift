@@ -101,7 +101,7 @@ class StorageClientTests: XCTestCase {
 
         let storageClient = Sync15StorageClient(serverURI: "http://example.com/".asURL!, authorizer: identity, workQueue: DispatchQueue.main, resultQueue: DispatchQueue.main, backoff: MockBackoffStorage())
         let collectionClient = storageClient.clientForCollection("foo", encrypter: RecordEncrypter<CleartextPayloadJSON>(serializer: massivify, factory: { CleartextPayloadJSON($0) }))
-        let result = synchronizer.uploadRecords([rA], lastTimestamp: Date.now(), storageClient: collectionClient, onUpload: { _ in deferMaybe(Date.now()) })
+        let result = synchronizer.uploadRecords([rA], lastTimestamp: Date.now(), storageClient: collectionClient, onUpload: { _,_  in deferMaybe(Date.now()) })
 
         XCTAssertTrue(result.value.failureValue is RecordTooLargeError)
     }

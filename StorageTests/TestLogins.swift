@@ -346,7 +346,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
         populateTestLogins()
 
         // Measure time to find one entry amongst the 1000 of them
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
                 self.logins.searchLoginsWithQuery("username500").succeeded()
             }
@@ -360,7 +360,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
         populateTestLogins()
 
         // Measure time to find all matching results
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
                 self.logins.searchLoginsWithQuery("username").succeeded()
             }
@@ -374,7 +374,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
         populateTestLogins()
 
         // Measure time to find all matching results
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
                 self.logins.getAllLogins().succeeded()
             }
