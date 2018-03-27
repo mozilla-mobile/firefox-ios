@@ -52,8 +52,8 @@ class UnifiedTelemetry {
            settings["defaultSearchEngine"] = searchEngines.defaultEngine.engineID ?? "custom"
 
            if let windowBounds = UIApplication.shared.keyWindow?.bounds {
-               settings["windowWidth"] = windowBounds.width
-               settings["windowHeight"] = windowBounds.height
+            settings["windowWidth"] = String(describing: windowBounds.width)
+            settings["windowHeight"] = String(describing: windowBounds.height)
            }
 
            outputDict["settings"] = settings
