@@ -56,7 +56,7 @@
 			<string>org.mozilla.Client</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>http</string>
+				<string>http, https</string>
 			</array>
 		</dict>
 	</array>
