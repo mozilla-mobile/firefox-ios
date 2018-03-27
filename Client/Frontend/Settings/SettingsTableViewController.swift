@@ -763,16 +763,20 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
     }
 
     fileprivate func remakeTitleAlignmentConstraints() {
-        switch titleAlignment {
-        case .top:
-            titleLabel.snp.remakeConstraints { make in
+        titleLabel.snp.remakeConstraints { make in
+            if #available(iOS 11, *) {
+                make.left.equalTo(self.safeAreaLayoutGuide.snp.leftMargin).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+                make.right.equalTo(self.safeAreaLayoutGuide.snp.rightMargin).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+            } else {
                 make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+            }
+
+            switch titleAlignment {
+            case .top:
                 make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
                 make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
-            }
-        case .bottom:
-            titleLabel.snp.remakeConstraints { make in
-                make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
+
+            case .bottom:
                 make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
                 make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
             }
