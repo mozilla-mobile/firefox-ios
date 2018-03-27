@@ -7,6 +7,7 @@
 
 const MAXIMUM_HIGHLIGHT_COUNT = 500;
 const SCROLL_OFFSET_Y = 40;
+const SCROLL_DURATION = 100;
 
 const HIGHLIGHT_CLASS_NAME = "__firefox__find-highlight";
 const HIGHLIGHT_CLASS_NAME_ACTIVE = "__firefox__find-highlight-active";
@@ -20,11 +21,11 @@ const HIGHLIGHT_CSS =
   background-color: ${HIGHLIGHT_COLOR};
   border-radius: 1px;
   box-shadow: 0 0 0 2px ${HIGHLIGHT_COLOR};
-  transition: all 100ms ease;
+  transition: all ${SCROLL_DURATION}ms ease ${SCROLL_DURATION}ms;
 }
 .${HIGHLIGHT_CLASS_NAME}.${HIGHLIGHT_CLASS_NAME_ACTIVE} {
   background-color: ${HIGHLIGHT_COLOR_ACTIVE};
-  box-shadow: 0 0 0 3px ${HIGHLIGHT_COLOR_ACTIVE},0 1px 3px 3px rgba(0,0,0,.75);
+  box-shadow: 0 0 0 4px ${HIGHLIGHT_COLOR_ACTIVE},0 1px 3px 3px rgba(0,0,0,.75);
 }`;
 
 var lastEscapedQuery = "";
@@ -137,7 +138,7 @@ function updateActiveHighlight() {
   let activeHighlight = lastHighlights[activeHighlightIndex];
   if (activeHighlight) {
     activeHighlight.className = HIGHLIGHT_CLASS_NAME + " " + HIGHLIGHT_CLASS_NAME_ACTIVE;
-    scrollToElement(activeHighlight);
+    scrollToElement(activeHighlight, SCROLL_DURATION);
 
     webkit.messageHandlers.findInPageHandler.postMessage({ currentResult: activeHighlightIndex + 1 });
   }
@@ -155,7 +156,7 @@ function removeHighlight(highlight) {
   }
 }
 
-function asyncTextNodeWalker(iterator, callback) {
+function asyncTextNodeWalker(iterator) {
   let operation = new Operation();
   let walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
 
@@ -166,6 +167,7 @@ function asyncTextNodeWalker(iterator, callback) {
       }
 
       iterator(node);
+      return true;
     }, 100).then(function() {
       operation.complete();
     });
@@ -261,11 +263,39 @@ function chunkedLoop(condition, iterator, chunkSize) {
   });
 }
 
-function scrollToElement(element) {
+function scrollToElement(element, duration) {
   let rect = element.getBoundingClientRect();
-  let x = clamp(rect.left + window.scrollX - window.innerWidth / 2, 0, document.body.scrollWidth);
-  let y = clamp(SCROLL_OFFSET_Y + rect.top + window.scrollY - window.innerHeight / 2, 0, document.body.scrollHeight);
-  window.scrollTo(x, y);
+
+  let targetX = clamp(rect.left + window.scrollX - window.innerWidth / 2, 0, document.body.scrollWidth);
+  let targetY = clamp(SCROLL_OFFSET_Y + rect.top + window.scrollY - window.innerHeight / 2, 0, document.body.scrollHeight);
+
+  let startX = window.scrollX;
+  let startY = window.scrollY;
+
+  let deltaX = targetX - startX;
+  let deltaY = targetY - startY;
+
+  let startTimestamp;
+
+  function step(timestamp) {
+    if (!startTimestamp) {
+      startTimestamp = timestamp;
+    }
+
+    let time = timestamp - startTimestamp;
+    let percent = Math.min(time / duration, 1);
+
+    let x = startX + deltaX * percent;
+    let y = startY + deltaY * percent;
+
+    window.scrollTo(x, y);
+
+    if (time < duration) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
 }
 
 function clamp(value, min, max) {
