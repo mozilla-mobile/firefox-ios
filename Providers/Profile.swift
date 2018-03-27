@@ -141,6 +141,7 @@ protocol Profile: class {
     func flushAccount()
 
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
+    func getCachedClients()-> Deferred<Maybe<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
@@ -416,6 +417,10 @@ open class BrowserProfile: Profile {
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
         return self.syncManager.syncClients()
            >>> { self.remoteClientsAndTabs.getClients() }
+    }
+
+    public func getCachedClients()-> Deferred<Maybe<[RemoteClient]>> {
+        return self.remoteClientsAndTabs.getClients()
     }
 
     public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {

@@ -30,13 +30,19 @@ private struct ClientPickerViewControllerUX {
 /// This viewcontroller does not implement any specific business logic that needs to happen with the selected clients.
 /// That is up to it's delegate, who can listen for cancellation and success events.
 
+enum LoadingState {
+    case LoadingFromCache
+    case LoadingFromServer
+    case Loaded
+}
+
 class ClientPickerViewController: UITableViewController {
     var profile: Profile?
     var profileNeedsShutdown = true
 
     var clientPickerDelegate: ClientPickerViewControllerDelegate?
 
-    var reloading = true
+    var loadState = LoadingState.LoadingFromCache
     var clients: [RemoteClient] = []
     var selectedClients = NSMutableSet()
 
@@ -65,12 +71,7 @@ class ClientPickerViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let refreshControl = refreshControl {
-            refreshControl.beginRefreshing()
-            let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
-            self.tableView.contentOffset = CGPoint(x: 0, y: height)
-        }
-        reloadClients()
+        loadCachedClients()
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -107,7 +108,7 @@ class ClientPickerViewController: UITableViewController {
                 cell = clientCell
             }
         } else {
-            if reloading == false {
+            if self.loadState == .Loaded {
                 cell = tableView.dequeueReusableCell(withIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier, for: indexPath) as! ClientPickerNoClientsTableViewCell
             } else {
                 cell = UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
@@ -149,59 +150,106 @@ class ClientPickerViewController: UITableViewController {
         }
     }
 
-    fileprivate func reloadClients() {
+    fileprivate func ensureOpenProfile() -> Profile {
         // If we were not given a profile, open the default profile. This happens in case we are called from an app
         // extension. That also means that we need to shut down the profile, otherwise the app extension will be
         // terminated when it goes into the background.
-
-        if self.profile == nil {
-            self.profile = BrowserProfile(localName: "profile")
-            self.profileNeedsShutdown = true
+        if let profile = self.profile {
+            // Re-open the profile if it was shutdown. This happens when we run from an app extension, where we must
+            // make sure that the profile is only open for brief moments of time.
+            if profile.isShutdown {
+                profile.reopen()
+            }
+            return profile
         }
 
-        guard let profile = self.profile else {
-            return
-        }
+        let profile = BrowserProfile(localName: "profile")
+        self.profile = profile
+        self.profileNeedsShutdown = true
+        return profile
+    }
 
-        // Re-open the profile it was shutdown. This happens when we run from an app extension, where we must
-        // make sure that the profile is only open for brief moments of time.
+    // Load cached clients from the profile, triggering a sync to fetch newer data.
+    fileprivate func loadCachedClients() {
+        let profile = self.ensureOpenProfile()
+        self.loadState = .LoadingFromCache
 
-        if profile.isShutdown {
-            profile.reopen()
-        }
-
-        reloading = true
-        profile.getClients().upon({ result in
+        // Load and display the cached clients.
+        // Don't shut down the profile here: we immediately call `reloadClients`.
+        profile.getCachedClients().upon({ result in
             withExtendedLifetime(profile) {
-                // If we are running from an app extension then make sure we shut down the profile as soon as we are
-                // done with it.
-
-                if self.profileNeedsShutdown {
-                    profile.shutdown()
-                }
-
-                self.reloading = false
-                guard let c = result.successValue else {
-                    return
-                }
-
-                self.clients = c
-                DispatchQueue.main.async {
-                    if self.clients.count == 0 {
-                        self.navigationItem.rightBarButtonItem = nil
-                    } else {
-                        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Send", tableName: "SendTo", comment: "Navigation bar button to Send the current page to a device"), style: .done, target: self, action: #selector(self.send))
-                        self.navigationItem.rightBarButtonItem?.isEnabled = false
+                if let c = result.successValue {
+                    self.updateClients(clients: c, endRefreshing: false)
+                    if c.isEmpty {
+                        // Show refresh. If we have cached clients, we'll update them silently.
+                        self.refresh()
+                        return
                     }
-                    self.selectedClients.removeAllObjects()
-                    self.tableView.reloadData()
-                    self.refreshControl?.endRefreshing()
                 }
+
+                self.reloadClients()
             }
         })
     }
 
+    fileprivate func reloadClients() {
+        let profile = self.ensureOpenProfile()
+        self.loadState = .LoadingFromServer
+
+        profile.getClients().upon({ result in
+            withExtendedLifetime(profile) {
+                self.loadState = .Loaded
+
+                // If we are running from an app extension then make sure we shut down the profile as soon as we are
+                // done with it.
+                if self.profileNeedsShutdown {
+                    profile.shutdown()
+                }
+
+                self.loadState = .Loaded
+                guard let c = result.successValue else {
+                    return
+                }
+
+                self.updateClients(clients: c, endRefreshing: true)
+            }
+        })
+    }
+
+    fileprivate func updateClients(clients: [RemoteClient], endRefreshing: Bool) {
+        guard self.clients != clients else {
+            if endRefreshing {
+                DispatchQueue.main.async {
+                    self.refreshControl?.endRefreshing()
+                }
+            }
+            return
+        }
+
+        self.clients = clients
+        DispatchQueue.main.async {
+            if self.clients.count == 0 {
+                self.navigationItem.rightBarButtonItem = nil
+            } else {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Send", tableName: "SendTo", comment: "Navigation bar button to Send the current page to a device"), style: .done, target: self, action: #selector(self.send))
+                self.navigationItem.rightBarButtonItem?.isEnabled = false
+            }
+            self.selectedClients.removeAllObjects()
+            self.tableView.reloadData()
+            if endRefreshing {
+                self.refreshControl?.endRefreshing()
+            }
+        }
+    }
+
     func refresh() {
+        DispatchQueue.main.async {
+            if let refreshControl = self.refreshControl {
+                refreshControl.beginRefreshing()
+                let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
+                self.tableView.contentOffset = CGPoint(x: 0, y: height)
+            }
+        }
         reloadClients()
     }
 
