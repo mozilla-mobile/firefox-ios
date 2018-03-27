@@ -29,13 +29,21 @@ class FindInPageBar: UIView {
 
     var currentResult = 0 {
         didSet {
-            matchCountView.text = "\(currentResult)/\(totalResults)"
+            if totalResults > 500 {
+                matchCountView.text = "\(currentResult)/500+"
+            } else {
+                matchCountView.text = "\(currentResult)/\(totalResults)"
+            }
         }
     }
 
     var totalResults = 0 {
         didSet {
-            matchCountView.text = "\(currentResult)/\(totalResults)"
+            if totalResults > 500 {
+                matchCountView.text = "\(currentResult)/500+"
+            } else {
+                matchCountView.text = "\(currentResult)/\(totalResults)"
+            }
             previousButton.isEnabled = totalResults > 1
             nextButton.isEnabled = previousButton.isEnabled
         }
