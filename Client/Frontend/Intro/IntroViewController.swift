@@ -11,9 +11,9 @@ struct IntroUX {
     static let Height = 667
     static let MinimumFontScale: CGFloat = 0.5
     static let PagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 20 : 30
-    static let StartBrowsingButtonColor = UIColor.Defaults.Blue40
+    static let StartBrowsingButtonColor = UIColor.Photon.Blue40
     static let StartBrowsingButtonHeight = 56
-    static let SignInButtonColor = UIColor.Defaults.Blue40
+    static let SignInButtonColor = UIColor.Photon.Blue40
     static let SignInButtonHeight = 60
     static let PageControlHeight = 40
     static let SignInButtonWidth = 290
