@@ -22,7 +22,7 @@ extension UIColor {
             alpha: 1)
     }
 
-    public convenience init(rgba: Int) {
+    public convenience init(rgba: UInt32) {
         self.init(
             red: CGFloat((rgba & 0xFF000000) >> 24) / 255.0,
             green: CGFloat((rgba & 0x00FF0000) >> 16)  / 255.0,
