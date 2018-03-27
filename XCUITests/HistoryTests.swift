@@ -163,7 +163,8 @@ class HistoryTests: BaseTestCase {
         // 'x' button to close the tab is not visible, so closing by swiping the tab
         app.collectionViews.cells[webpage["label"]!].swipeRight()
 
-        navigator.goto(HomePanelsScreen)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(HistoryRecentlyClosed)
         waitforNoExistence(app.tables["Recently Closed Tabs List"])
 
