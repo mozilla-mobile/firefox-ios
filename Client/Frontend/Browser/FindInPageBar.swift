@@ -58,7 +58,6 @@ class FindInPageBar: UIView {
         }
 
         set {
-            Profiler.begin(bookend: .find_in_page)
             searchText.text = newValue
             didTextChange(searchText)
         }
@@ -168,6 +167,7 @@ class FindInPageBar: UIView {
     }
 
     @objc fileprivate func didTextChange(_ sender: UITextField) {
+        Profiler.begin(bookend: .find_in_page)
         matchCountView.isHidden = searchText.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
         delegate?.findInPage(self, didTextChange: searchText.text ?? "")
     }
