@@ -80,4 +80,10 @@ public extension String {
         newString.insert("\n", at: newString.index(newString.startIndex, offsetBy: closest.element))
         return newString
     }
+
+    public static func contentsOfFileWithResourceName(_ name: String, ofType type: String, fromBundle bundle: Bundle, encoding: String.Encoding, error: NSErrorPointer) -> String? {
+        return bundle.path(forResource: name, ofType: type).flatMap {
+            try? String(contentsOfFile: $0, encoding: encoding)
+        }
+    }
 }
