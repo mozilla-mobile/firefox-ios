@@ -77,11 +77,11 @@ open class DisplayURICommand: Command {
             return succeed()
         }
 
-        guard let getClientWithId = synchronizer.localClients?.getClientWithId(sender) else {
+        guard let sender = synchronizer.localClients?.getClient(guid: sender) else {
             return display()
         }
 
-        return getClientWithId >>== { client in
+        return sender >>== { client in
             return display(client?.name)
         }
     }

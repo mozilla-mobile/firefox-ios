@@ -39,8 +39,6 @@ public protocol RemoteClientsAndTabs: SyncCommands {
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getClient(guid: GUID) -> Deferred<Maybe<RemoteClient?>>
     func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>>
-    @available(*, deprecated, message: "use getClient(guid:) instead")
-    func getClientWithId(_ clientID: GUID) -> Deferred<Maybe<RemoteClient?>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
     func getTabsForClientWithGUID(_ guid: GUID?) -> Deferred<Maybe<[RemoteTab]>>
     func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<Int>>

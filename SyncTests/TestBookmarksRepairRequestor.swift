@@ -463,10 +463,6 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferMaybe(self.clientsAndTabs.map { $0.client })
     }
 
-    open func getClientWithId(_ clientID: GUID) -> Deferred<Maybe<RemoteClient?>> {
-        return self.getClient(guid: clientID)
-    }
-
     open func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
         return deferMaybe(self.clientsAndTabs.find { clientAndTabs in
             return clientAndTabs.client.fxaDeviceId == fxaDeviceId
