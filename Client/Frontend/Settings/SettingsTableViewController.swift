@@ -728,11 +728,14 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        backgroundView = UIView()
+        backgroundView!.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
         addSubview(topBorder)
         addSubview(bottomBorder)
+    }
 
+    override func layoutSubviews() {
         setupInitialConstraints()
     }
 
@@ -749,6 +752,12 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
         topBorder.snp.makeConstraints { make in
             make.top.left.right.equalTo(self)
             make.height.equalTo(0.5)
+        }
+
+        backgroundView?.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalToSuperview()
+            make.center.equalToSuperview()
         }
 
         remakeTitleAlignmentConstraints()
@@ -777,6 +786,11 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
                 make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
             }
         }
+        
+        titleLabel.snp.remakeConstraints({ make in
+            make.left.equalTo(self.safeArea.left)
+            make.right.equalTo(self.safeArea.right)
+        })
     }
 }
 
