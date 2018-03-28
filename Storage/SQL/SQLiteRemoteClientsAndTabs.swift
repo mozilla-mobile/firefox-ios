@@ -181,10 +181,6 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return self.db.runQuery("SELECT * FROM \(TableClients) WHERE fxaDeviceId = ?", args: [fxaDeviceId], factory: factory) >>== { deferMaybe($0[0]) }
     }
 
-    open func getClientWithId(_ clientID: GUID) -> Deferred<Maybe<RemoteClient?>> {
-        return self.getClient(guid: clientID)
-    }
-
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
         return db.withConnection { connection -> [RemoteClient] in
             let cursor = connection.executeQuery("SELECT * FROM \(TableClients) WHERE EXISTS (SELECT 1 FROM \(TableRemoteDevices) rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)

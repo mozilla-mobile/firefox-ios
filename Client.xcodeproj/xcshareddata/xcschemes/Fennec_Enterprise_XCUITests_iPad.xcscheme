@@ -218,9 +218,6 @@
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
-                  Identifier = "ThirdPartySearchTest/testCustomEngineFromCorrectTemplate()">
-               </Test>
-               <Test
                   Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingLandscape()">
                </Test>
                <Test

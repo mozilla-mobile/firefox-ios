@@ -16,7 +16,7 @@ class BackForwardTableViewCell: UITableViewCell {
         static let borderBold = 5
         static let IconSize = 23
         static let fontSize: CGFloat = 12.0
-        static let textColor = UIColor.Defaults.Grey80
+        static let textColor = UIColor.Photon.Grey80
     }
     
     lazy var faviconView: UIImageView = {

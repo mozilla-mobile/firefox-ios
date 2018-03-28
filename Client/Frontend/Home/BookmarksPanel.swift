@@ -26,7 +26,7 @@ private struct BookmarksPanelUX {
     static let BookmarkFolderChevronSize: CGFloat = 20
     static let BookmarkFolderChevronLineWidth: CGFloat = 2.0
     static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
-    static let BookmarkFolderBGColor = UIColor.Defaults.Grey10.withAlphaComponent(0.3)
+    static let BookmarkFolderBGColor = UIColor.Photon.Grey10.withAlphaComponent(0.3)
     static let WelcomeScreenPadding: CGFloat = 15
     static let WelcomeScreenItemTextColor = UIColor.gray
     static let WelcomeScreenItemWidth = 170
