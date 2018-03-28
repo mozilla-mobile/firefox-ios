@@ -331,8 +331,9 @@ open class Sync15StorageClient {
         // the user root (like /1.5/1234567) and not an "empty collection" (like /1.5/1234567/); the storage
         // server treats the first like a DROP table and the latter like a DELETE *, and the former is more
         // efficient than the latter.
+
         self.serverURI = URL(string: token.api_endpoint.hasSuffix("/")
-            ? token.api_endpoint.substring(to: token.api_endpoint.index(before: token.api_endpoint.endIndex))
+            ? String(token.api_endpoint[..<token.api_endpoint.index(before: token.api_endpoint.endIndex)])
             : token.api_endpoint)!
         self.authorizer = {
             (r: URLRequest) -> URLRequest in

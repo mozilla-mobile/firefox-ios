@@ -43,7 +43,7 @@ extension String {
         guard let endpoint = self.index(self.endIndex, offsetBy: toDrop, limitedBy: self.startIndex) else {
             return ""
         }
-        return self.substring(to: endpoint)
+        return String(self[..<endpoint])
     }
 }
 

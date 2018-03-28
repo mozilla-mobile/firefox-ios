@@ -92,7 +92,7 @@ class OpenSearchEngine: NSObject, NSCoding {
     fileprivate func isSearchURLForEngine(_ url: URL?) -> Bool {
         guard let urlHost = url?.hostSLD,
             let queryEndIndex = searchTemplate.range(of: "?")?.lowerBound,
-            let templateURL = URL(string: searchTemplate.substring(to: queryEndIndex)) else { return false }
+            let templateURL = URL(string: String(searchTemplate[..<queryEndIndex])) else { return false }
         return urlHost == templateURL.hostSLD
     }
 
