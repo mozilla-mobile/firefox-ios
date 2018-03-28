@@ -13,6 +13,16 @@ class FindInPageTests: BaseTestCase {
         XCTAssertTrue(app.textFields[""].exists)
     }
 
+    func testFindInLargeDoc() {
+        userState.url = "http://localhost:6571/find-in-page-test.html"
+        openFindInPageFromMenu()
+
+        // Enter some text to start finding
+        app.textFields[""].typeText("Book")
+        waitforExistence(app.staticTexts["1/500+"])
+        XCTAssertTrue(app.staticTexts["1/500+"].exists)
+    }
+
     func testFindFromMenu() {
 
         openFindInPageFromMenu()
