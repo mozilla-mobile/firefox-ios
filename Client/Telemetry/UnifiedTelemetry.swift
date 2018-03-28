@@ -46,14 +46,14 @@ class UnifiedTelemetry {
 
        Telemetry.default.beforeSerializePing(pingType: MobileEventPingBuilder.PingType) { (inputDict) -> [String : Any?] in
            var outputDict = inputDict
-           var settings: [String : Any?] = inputDict["settings"] as? [String : Any?] ?? [:]
+           var settings: [String : String?] = inputDict["settings"] as? [String : String?] ?? [:]
 
            let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
            settings["defaultSearchEngine"] = searchEngines.defaultEngine.engineID ?? "custom"
 
            if let windowBounds = UIApplication.shared.keyWindow?.bounds {
-            settings["windowWidth"] = String(describing: windowBounds.width)
-            settings["windowHeight"] = String(describing: windowBounds.height)
+               settings["windowWidth"] = String(describing: windowBounds.width)
+               settings["windowHeight"] = String(describing: windowBounds.height)
            }
 
            outputDict["settings"] = settings
