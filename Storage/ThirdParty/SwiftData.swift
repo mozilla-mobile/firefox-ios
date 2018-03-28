@@ -412,6 +412,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return pragma("user_version", factory: IntFactory) ?? 0
     }
 
+    open var cipherVersion: String? {
+        return pragma("cipher_version", factory: StringFactory)
+    }
+
     fileprivate var sqliteDB: OpaquePointer?
     fileprivate let filename: String
     fileprivate let schema: Schema
@@ -932,6 +936,9 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         let status = sqlite3_open_v2(filename.cString(using: .utf8)!, &sqliteDB, flags, nil)
         if status != SQLITE_OK {
             return createErr("During: Opening Database with Flags", status: Int(status))
+        }
+        guard let _ = self.cipherVersion else {
+            return createErr("Expected SQLCipher, got SQLite", status: Int(-1))
         }
         return nil
     }
