@@ -2,29 +2,30 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-@testable import ReadingList
 import Foundation
 import Shared
+@testable import Storage
+import Deferred
 
 import XCTest
 
-class ReadingListStorageTestCase: XCTestCase {
-    var storage: ReadingListStorage!
+class TestSQLiteReadingList: XCTestCase {
+    let files = MockFiles()
+    var db: BrowserDB!
+    var readingList: SQLiteReadingList!
 
     override func setUp() {
-        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-        if FileManager.default.fileExists(atPath: "\(path)/ReadingList.db") {
-            do {
-                try FileManager.default.removeItem(atPath: "\(path)/ReadingList.db")
-            } catch _ {
-                XCTFail("Cannot remove old \(path)/ReadingList.db")
-            }
-        }
-        storage = ReadingListSQLStorage(path: "\(path)/ReadingList.db")
+        super.setUp()
+        self.db = BrowserDB(filename: "ReadingListTest.db", schema: ReadingListSchema(), files: self.files)
+        self.readingList = SQLiteReadingList(db: db)
+    }
+
+    override func tearDown() {
+        super.tearDown()
     }
 
     func testCreateRecord() {
-        let result = storage.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
+        let result = readingList.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone").value
         switch result {
         case .failure(let error):
             XCTFail(error.description)
@@ -39,7 +40,7 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testGetRecordWithURL() {
-        let result1 = storage.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
+        let result1 = readingList.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone").value
         switch result1 {
         case .failure(let error):
             XCTFail(error.description)
@@ -47,32 +48,12 @@ class ReadingListStorageTestCase: XCTestCase {
             break
         }
 
-        let result2 = storage.getRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
+        let result2 = readingList.getRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance").value
         switch result2 {
         case .failure(let error):
             XCTFail(error.description)
         case .success( _):
             XCTAssert(result1.successValue == result2.successValue!)
-        }
-    }
-
-    func testGetUnreadRecords() {
-        // Create 3 records, mark the 2nd as read.
-        let _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
-        if let record = createResult2.successValue {
-            let _ = updateRecord(record, unread: false)
-        }
-
-        // Get all unread records, make sure we only get the first and last
-        let getUnreadResult = storage.getUnreadRecords()
-        if let records = getUnreadResult.successValue {
-            XCTAssertEqual(2, records.count)
-            for record in records {
-                XCTAssert(record.title == "Test 1" || record.title == "Test 3")
-                XCTAssertEqual(record.unread, true)
-            }
         }
     }
 
@@ -84,7 +65,7 @@ class ReadingListStorageTestCase: XCTestCase {
             let _ = updateRecord(record, unread: false)
         }
 
-        let getAllResult = storage.getAllRecords()
+        let getAllResult = readingList.getAvailableRecords().value
         if let records = getAllResult.successValue {
             XCTAssertEqual(3, records.count)
         }
@@ -102,7 +83,7 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testDeleteRecord() {
-        let result1 = storage.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone")
+        let result1 = readingList.createRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance", title: "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma", addedBy: "Stefan's iPhone").value
         switch result1 {
         case .failure(let error):
             XCTFail(error.description)
@@ -110,7 +91,7 @@ class ReadingListStorageTestCase: XCTestCase {
             break
         }
 
-        let result2 = storage.deleteRecord(result1.successValue!)
+        let result2 = readingList.deleteRecord(result1.successValue!).value
         switch result2 {
         case .failure(let error):
             XCTFail(error.description)
@@ -118,12 +99,12 @@ class ReadingListStorageTestCase: XCTestCase {
             break
         }
 
-        let result3 = storage.getRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
+        let result3 = readingList.getRecordWithURL("http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance").value
         switch result3 {
-        case .failure(let error):
-            XCTFail(error.description)
-        case .success(let result):
-            XCTAssert(result.value == nil)
+        case .failure:
+            break
+        case .success:
+            XCTFail("ReadingListItem should have been deleted")
         }
     }
 
@@ -132,9 +113,9 @@ class ReadingListStorageTestCase: XCTestCase {
         let _ = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
         let _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
 
-        let getAllResult1 = storage.getAllRecords()
+        let getAllResult1 = readingList.getAvailableRecords().value
         if let records = getAllResult1.successValue {
-            XCTAssertEqual(3, records.count)
+            XCTAssertNotEqual(0, records.count)
         }
 
         let _ = deleteAllRecords()
@@ -156,7 +137,7 @@ class ReadingListStorageTestCase: XCTestCase {
             XCTAssertEqual(record.favorite, false)
 
             let result = updateRecord(record, unread: false)
-            if let record = result.successValue! {
+            if let record = result.successValue {
                 XCTAssertEqual(record.url, "http://www.anandtech.com/show/9117/analyzing-intel-core-m-performance")
                 XCTAssertEqual(record.title, "Analyzing Intel Core M Performance: How 5Y10 can beat 5Y71 & the OEMs' Dilemma")
                 XCTAssertEqual(record.addedBy, "Stefan's iPhone")
@@ -170,25 +151,25 @@ class ReadingListStorageTestCase: XCTestCase {
     // Helpers that croak if the storage call was not successful
 
     func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Maybe<ReadingListItem> {
-        let result = storage.createRecordWithURL(url, title: title, addedBy: addedBy)
+        let result = readingList.createRecordWithURL(url, title: title, addedBy: addedBy).value
         XCTAssertTrue(result.isSuccess)
         return result
     }
 
     func deleteAllRecords() -> Maybe<Void> {
-        let result = storage.deleteAllRecords()
+        let result = readingList.deleteAllRecords().value
         XCTAssertTrue(result.isSuccess)
         return result
     }
 
     func getAllRecords() -> Maybe<[ReadingListItem]> {
-        let result = storage.getAllRecords()
+        let result = readingList.getAvailableRecords().value
         XCTAssertTrue(result.isSuccess)
         return result
     }
 
-    func updateRecord(_ record: ReadingListItem, unread: Bool) -> Maybe<ReadingListItem?> {
-        let result = storage.updateRecord(record, unread: unread)
+    func updateRecord(_ record: ReadingListItem, unread: Bool) -> Maybe<ReadingListItem> {
+        let result = readingList.updateRecord(record, unread: unread).value
         XCTAssertTrue(result.isSuccess)
         return result
     }
