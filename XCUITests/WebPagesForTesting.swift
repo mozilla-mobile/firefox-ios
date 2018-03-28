@@ -12,7 +12,7 @@ func registerHandlersForTestMethods(server: GCDWebServer) {
 
         let node = "<span>  And the beast shall come forth surrounded by a roiling cloud of vengeance. The house of the unbelievers shall be razed and they shall be scorched to the earth. Their tags shall blink until the end of days. from The Book of Mozilla, 12:10 And the beast shall be made legion. Its numbers shall be increased a thousand thousand fold. The din of a million keyboards like unto a great storm shall cover the earth, and the followers of Mammon shall tremble. from The Book of Mozilla, 3:31 (Red Letter Edition) </span>"
 
-        let repeatCount = 1000
+        let repeatCount = 10000
         let textNodes = [String](repeating: node, count: repeatCount).reduce("", +)
         return GCDWebServerDataResponse(html: "<html><body>\(textNodes)</body></html>")
     }
