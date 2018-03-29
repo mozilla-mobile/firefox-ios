@@ -37,7 +37,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
         let tabsJSON = JSON([
             "id": guid,
             "clientName": self.scratchpad.clientName,
-            "tabs": tabs.flatMap { $0.toDictionary() }
+            "tabs": tabs.compactMap { $0.toDictionary() }
         ])
         if Logger.logPII {
             log.verbose("Sending tabs JSON \(tabsJSON.stringValue() ?? "nil")")

@@ -66,7 +66,7 @@ public extension String {
     public func stringSplitWithNewline() -> String {
         let mid = self.count / 2
 
-        let arr: [Int] = self.indices.flatMap {
+        let arr: [Int] = self.indices.compactMap {
             if self[$0] == " " {
                 return self.distance(from: startIndex, to: $0)
             }

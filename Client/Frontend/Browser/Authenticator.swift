@@ -68,7 +68,7 @@ class Authenticator {
                     (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`) && !login.hasMalformedHostname
                 })?.credentials
 
-                let malformedGUIDs: [GUID] = logins.flatMap { login in
+                let malformedGUIDs: [GUID] = logins.compactMap { login in
                     if login.hasMalformedHostname {
                         return login.guid
                     }

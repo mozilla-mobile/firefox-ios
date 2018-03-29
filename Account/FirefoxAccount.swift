@@ -87,7 +87,7 @@ open class FirefoxAccount {
             let unwrapkB = data["unwrapBKey"].string?.hexDecodedData else {
                 return nil
         }
-        let declinedEngines = data["declinedSyncEngines"].array?.flatMap { $0.string }
+        let declinedEngines = data["declinedSyncEngines"].array?.compactMap { $0.string }
         let deviceName = DeviceInfo.defaultClientName()
 
         let verified = data["verified"].bool ?? false

@@ -150,7 +150,7 @@ public extension Sequence {
 
     func zip<S: Sequence>(_ elems: S) -> [(Self.Iterator.Element, S.Iterator.Element)] {
         var rights = elems.makeIterator()
-        return self.flatMap { lhs in
+        return self.compactMap { lhs in
             guard let rhs = rights.next() else {
                 return nil
             }
@@ -176,7 +176,7 @@ public func optDictionaryEqual<K, V: Equatable>(_ lhs: [K: V]?, rhs: [K: V]?) ->
  * Return members of `a` that aren't nil, changing the type of the sequence accordingly.
  */
 public func optFilter<T>(_ a: [T?]) -> [T] {
-    return a.flatMap { $0 }
+    return a.compactMap { $0 }
 }
 
 /**
@@ -217,7 +217,7 @@ public func findOneValue<K, V>(_ map: [K: V], f: (V) -> Bool) -> V? {
  * It's usually convenient for this to accept an optional.
  */
 public func jsonsToStrings(_ arr: [JSON]?) -> [String]? {
-    return arr?.flatMap { $0.stringValue }
+    return arr?.compactMap { $0.stringValue }
 }
 
 // Encapsulate a callback in a way that we can use it with NSTimer.

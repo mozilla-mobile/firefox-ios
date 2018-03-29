@@ -438,7 +438,7 @@ open class BrowserProfile: Profile {
         }
         
         func notifyClients() {
-            let deviceIDs = clients.flatMap { $0.fxaDeviceId }
+            let deviceIDs = clients.compactMap { $0.fxaDeviceId }
             guard let account = self.getAccount() else {
                 return
             }
@@ -1108,8 +1108,8 @@ open class BrowserProfile: Profile {
             if let enginesEnablements = self.engineEnablementChangesForAccount(account: account, profile: profile),
                !enginesEnablements.isEmpty {
                 authState?.enginesEnablements = enginesEnablements
-                log.debug("engines to enable: \(enginesEnablements.flatMap { $0.value ? $0.key : nil })")
-                log.debug("engines to disable: \(enginesEnablements.flatMap { !$0.value ? $0.key : nil })")
+                log.debug("engines to enable: \(enginesEnablements.compactMap { $0.value ? $0.key : nil })")
+                log.debug("engines to disable: \(enginesEnablements.compactMap { !$0.value ? $0.key : nil })")
             }
 
             authState?.clientName = account.deviceName
@@ -1177,7 +1177,7 @@ open class BrowserProfile: Profile {
             // By this time, `engineIdentifiers` may have duplicates in. We won't try and dedupe here
             // because `syncSeveral` will do that for us.
 
-            let synchronizers: [(EngineIdentifier, SyncFunction)] = engineIdentifiers.flatMap {
+            let synchronizers: [(EngineIdentifier, SyncFunction)] = engineIdentifiers.compactMap {
                 switch $0 {
                 case "clients": return ("clients", self.syncClientsWithDelegate)
                 case "tabs": return ("tabs", self.syncTabsWithDelegate)

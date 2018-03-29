@@ -267,7 +267,7 @@ public struct SyncPing: SyncTelemetryPing {
             // some kind of caching we'll want to make sure we don't dump the events if
             // the ping has failed.
             let pickledEvents = prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
-            let events = pickledEvents.flatMap(Event.unpickle).map { $0.toArray() }
+            let events = pickledEvents.compactMap(Event.unpickle).map { $0.toArray() }
             ping["events"] = events
             prefs.setObject(nil, forKey: PrefKeySyncEvents)
 
@@ -341,7 +341,7 @@ public struct SyncPing: SyncTelemetryPing {
             return device
         }
 
-        return storage.getClients() >>== { deferMaybe($0.flatMap(dictionaryFrom)) }
+        return storage.getClients() >>== { deferMaybe($0.compactMap(dictionaryFrom)) }
     }
 
     private static func enginePingDataFrom(engineResults: EngineResults) -> [[String: Any]] {

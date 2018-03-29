@@ -811,7 +811,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
                 return Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
             }
 
-            let records = arr.flatMap(recordify)
+            let records = arr.compactMap(recordify)
             let response = StorageResponse(value: records, response: response.response!)
             deferred.fill(Maybe(success: response))
         })

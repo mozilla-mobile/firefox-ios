@@ -2059,7 +2059,9 @@ extension BrowserViewController: WKUIDelegate {
             return decisionHandler(WKNavigationResponsePolicy.allow)
         }
 
-        openInHelper.openInView = openInHelper.openInView ?? navigationToolbar.menuButton
+        if openInHelper.openInView == nil {
+            openInHelper.openInView = navigationToolbar.menuButton
+        }
         openInHelper.open()
         decisionHandler(WKNavigationResponsePolicy.cancel)
     }

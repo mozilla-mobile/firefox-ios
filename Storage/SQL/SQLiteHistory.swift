@@ -974,7 +974,7 @@ extension SQLiteHistory: SyncableHistory {
             return visits
         } >>== { visits in
             // Join up the places map we received as input with our visits map.
-            let placesAndVisits: [(Place, [Visit])] = places.flatMap { id, place in
+            let placesAndVisits: [(Place, [Visit])] = places.compactMap { id, place in
                 guard let visitsList = visits[id], !visitsList.isEmpty else {
                     return nil
                 }
@@ -994,7 +994,7 @@ extension SQLiteHistory: SyncableHistory {
         }
 
         log.debug("Wiping \(guids.count) deleted GUIDs.")
-        return self.db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap(markAsDeletedStatementForGUIDs))
+        return self.db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).compactMap(markAsDeletedStatementForGUIDs))
     }
 
     fileprivate func markAsDeletedStatementForGUIDs(_ guids: ArraySlice<String>) -> (String, Args?) {
@@ -1014,7 +1014,7 @@ extension SQLiteHistory: SyncableHistory {
         }
 
         log.debug("Marking \(guids.count) GUIDs as synchronized. Returning timestamp \(modified).")
-        return self.db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).flatMap { chunk in
+        return self.db.run(chunk(guids, by: BrowserDB.MaxVariableNumber).compactMap { chunk in
             return markAsSynchronizedStatementForGUIDs(chunk, modified: modified)
         }) >>> always(modified)
     }
