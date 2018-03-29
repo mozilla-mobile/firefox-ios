@@ -44,7 +44,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
         history.clearHistory().succeeded()
         populateHistoryForFrecencyCalculations(history, siteCount: count)
 
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
                 history.getFrecentHistory().getSites(whereURLContains: nil, historyLimit: 10, bookmarksLimit: 0).succeeded()
             }
@@ -66,7 +66,7 @@ class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
         populateHistoryForFrecencyCalculations(history, siteCount: count)
 
         history.setTopSitesNeedsInvalidation()
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
             history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
             self.stopMeasuring()
         }
