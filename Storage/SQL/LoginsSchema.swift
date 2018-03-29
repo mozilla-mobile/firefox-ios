@@ -49,41 +49,51 @@ open class LoginsSchema: Schema {
     }
     
     let indexIsOverriddenHostname =
-    "CREATE INDEX IF NOT EXISTS \(IndexLoginsOverrideHostname) ON \(TableLoginsMirror) (is_overridden, hostname)"
+        "CREATE INDEX IF NOT EXISTS \(IndexLoginsOverrideHostname) ON \(TableLoginsMirror) (is_overridden, hostname)"
     
     let indexIsDeletedHostname =
-    "CREATE INDEX IF NOT EXISTS \(IndexLoginsDeletedHostname) ON \(TableLoginsLocal) (is_deleted, hostname)"
+        "CREATE INDEX IF NOT EXISTS \(IndexLoginsDeletedHostname) ON \(TableLoginsLocal) (is_deleted, hostname)"
     
     public func create(_ db: SQLiteDBConnection) -> Bool {
-        let common =
-            "id INTEGER PRIMARY KEY AUTOINCREMENT" +
-                ", hostname TEXT NOT NULL" +
-                ", httpRealm TEXT" +
-                ", formSubmitURL TEXT" +
-                ", usernameField TEXT" +
-                ", passwordField TEXT" +
-                ", timesUsed INTEGER NOT NULL DEFAULT 0" +
-                ", timeCreated INTEGER NOT NULL" +
-                ", timeLastUsed INTEGER" +
-                ", timePasswordChanged INTEGER NOT NULL" +
-                ", username TEXT" +
-        ", password TEXT NOT NULL"
-        
-        let mirror = "CREATE TABLE IF NOT EXISTS \(TableLoginsMirror) (" +
-            common +
-            ", guid TEXT NOT NULL UNIQUE" +
-            ", server_modified INTEGER NOT NULL" +              // Integer milliseconds.
-            ", is_overridden TINYINT NOT NULL DEFAULT 0" +
-        ")"
-        
-        let local = "CREATE TABLE IF NOT EXISTS \(TableLoginsLocal) (" +
-            common +
-            ", guid TEXT NOT NULL UNIQUE " +                  // Typically overlaps one in the mirror unless locally new.
-            ", local_modified INTEGER" +                      // Can be null. Client clock. In extremis only.
-            ", is_deleted TINYINT NOT NULL DEFAULT 0" +       // Boolean. Locally deleted.
-            ", sync_status TINYINT " +                        // SyncStatus enum. Set when changed or created.
-            "NOT NULL DEFAULT \(SyncStatus.synced.rawValue)" +
-        ")"
+        let common = """
+              id INTEGER PRIMARY KEY AUTOINCREMENT
+            , hostname TEXT NOT NULL
+            , httpRealm TEXT
+            , formSubmitURL TEXT
+            , usernameField TEXT
+            , passwordField TEXT
+            , timesUsed INTEGER NOT NULL DEFAULT 0
+            , timeCreated INTEGER NOT NULL
+            , timeLastUsed INTEGER
+            , timePasswordChanged INTEGER NOT NULL
+            , username TEXT
+            , password TEXT NOT NULL
+            """
+
+        let mirror = """
+            CREATE TABLE IF NOT EXISTS \(TableLoginsMirror) (
+                \(common)
+                , guid TEXT NOT NULL UNIQUE
+                -- Integer milliseconds.
+                , server_modified INTEGER NOT NULL
+                , is_overridden TINYINT NOT NULL DEFAULT 0
+            )
+            """
+
+        let local = """
+            CREATE TABLE IF NOT EXISTS \(TableLoginsLocal) (
+                \(common)
+                -- Typically overlaps one in the mirror unless locally new.
+                , guid TEXT NOT NULL UNIQUE
+                -- Can be null. Client clock. In extremis only.
+                , local_modified INTEGER
+                -- Boolean. Locally deleted.
+                , is_deleted TINYINT NOT NULL DEFAULT 0
+                -- SyncStatus enum. Set when changed or created.
+                , sync_status TINYINT NOT NULL DEFAULT \(SyncStatus.synced.rawValue)
+            )
+            """
+
         return self.run(db, queries: [mirror, local, indexIsOverriddenHostname, indexIsDeletedHostname])
     }
     

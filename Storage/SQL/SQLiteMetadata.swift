@@ -39,10 +39,11 @@ extension SQLiteMetadata: Metadata {
                           metadata.type, metadata.description, metadata.providerName,
                           expireAt]
 
-        let insert =
-        "INSERT OR REPLACE INTO \(TablePageMetadata)" +
-        "(cache_key, site_url, media_url, title, type, description, provider_name, expired_at) " +
-        "VALUES ( \(selectUniqueCacheKey), ?, ?, ?, ?, ?, ?, ?)"
+        let insert = """
+            INSERT OR REPLACE INTO \(TablePageMetadata) (
+                cache_key, site_url, media_url, title, type, description, provider_name, expired_at
+            ) VALUES (\(selectUniqueCacheKey), ?, ?, ?, ?, ?, ?, ?)
+            """
 
         return self.db.run(insert, withArgs: args)
     }

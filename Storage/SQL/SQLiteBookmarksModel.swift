@@ -182,11 +182,12 @@ open class SQLiteBookmarksModelFactory: BookmarksModelFactory {
             BookmarkRoots.UnfiledFolderGUID,
         ]
 
-        let sql =
-        "SELECT 1 FROM \(self.direction.structureTable) WHERE parent IN (?, ?, ?)" +
-        " UNION ALL " +
-        "SELECT 1 FROM \(TableBookmarksMirrorStructure) WHERE parent IN (?, ?, ?)" +
-        " LIMIT 1"
+        let sql = """
+            SELECT 1 FROM \(self.direction.structureTable) WHERE parent IN (?, ?, ?)
+            UNION ALL
+            SELECT 1 FROM \(TableBookmarksMirrorStructure) WHERE parent IN (?, ?, ?)
+            LIMIT 1
+            """
 
         return self.bookmarks.db.queryReturnsResults(sql, args: parents)
     }
@@ -264,10 +265,16 @@ private func isEditableExpression(_ direction: Direction) -> String {
         return "0"
     }
 
-    return "SELECT exists( " +
-           "   SELECT exists(SELECT 1 FROM \(TableBookmarksBuffer)) AS hasBuffer, exists(SELECT 1 FROM \(TableBookmarksMirror)) AS hasMirror " +
-           "   WHERE hasBuffer IS 0 OR hasMirror IS 0" +
-           ")"
+    let sql = """
+        SELECT EXISTS(
+            SELECT
+                EXISTS(SELECT 1 FROM \(TableBookmarksBuffer)) AS hasBuffer,
+                EXISTS(SELECT 1 FROM \(TableBookmarksMirror)) AS hasMirror
+            WHERE hasBuffer IS 0 OR hasMirror IS 0
+        )
+        """
+
+    return sql
 }
 
 extension SQLiteBookmarks {
@@ -276,24 +283,25 @@ extension SQLiteBookmarks {
 
         let args: Args = guids
         let varlist = BrowserDB.varlist(args.count)
-        let values =
-        "SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableExpression(direction))) AS isEditable " +
-        "FROM \(direction.valueView) WHERE guid IN \(varlist) AND NOT is_deleted"
+        let values = """
+            SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableExpression(direction))) AS isEditable
+            FROM \(direction.valueView)
+            WHERE guid IN \(varlist) AND NOT is_deleted
+            """
 
-        let withIcon = [
-            "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type,",
-            "       bookmarks.date_added AS date_added,",
-            "       bookmarks.is_deleted AS is_deleted,",
-            "       bookmarks.parentid AS parentid, bookmarks.parentName AS parentName,",
-            "       bookmarks.feedUri AS feedUri, bookmarks.pos AS pos, title AS title,",
-            "       bookmarks.bmkUri AS bmkUri, bookmarks.siteUri AS siteUri,",
-            "       bookmarks.folderName AS folderName,",
-            "       bookmarks.isEditable AS isEditable,",
-            "       favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType",
-            "FROM (", values, ") AS bookmarks",
-            "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id",
-            "ORDER BY title ASC",
-            ].joined(separator: " ")
+        let withIcon = """
+            SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type,
+                   bookmarks.date_added AS date_added,
+                   bookmarks.is_deleted AS is_deleted,
+                   bookmarks.parentid AS parentid, bookmarks.parentName AS parentName,
+                   bookmarks.feedUri AS feedUri, bookmarks.pos AS pos, title AS title,
+                   bookmarks.bmkUri AS bmkUri, bookmarks.siteUri AS siteUri,
+                   bookmarks.folderName AS folderName,
+                   bookmarks.isEditable AS isEditable,
+                   favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType
+            FROM (\(values)) AS bookmarks LEFT OUTER JOIN favicons ON
+                bookmarks.faviconID = favicons.id
+            """
 
         let sql = (includeIcon ? withIcon : values) + " ORDER BY title ASC"
         return self.db.runQuery(sql, args: args, factory: BookmarkFactory.factory)
@@ -313,12 +321,10 @@ extension SQLiteBookmarks {
         let structureView = direction.structureView
 
         let structure =
-        "SELECT parent, child AS guid, idx FROM \(structureView) " +
-        "WHERE parent = ?"
+            "SELECT parent, child AS guid, idx FROM \(structureView) WHERE parent = ?"
 
         let values =
-        "SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableExpression(direction))) AS isEditable " +
-        "FROM \(valueView)"
+            "SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, pos, title, bmkUri, siteUri, folderName, faviconID, (\(isEditableExpression(direction))) AS isEditable FROM \(valueView)"
 
         // We exclude queries and dynamic containers, because we can't
         // usefully display them.
@@ -336,32 +342,31 @@ extension SQLiteBookmarks {
             exclusion = typeFilter
         }
 
-        let fleshed =
-        "SELECT vals.id AS id, vals.guid AS guid, vals.type AS type, vals.date_added AS date_added, vals.is_deleted AS is_deleted, " +
-        "       vals.parentid AS parentid, vals.parentName AS parentName, vals.feedUri AS feedUri, " +
-        "       vals.siteUri AS siteUri," +
-        "       vals.pos AS pos, vals.title AS title, vals.bmkUri AS bmkUri, vals.folderName AS folderName, " +
-        "       vals.faviconID AS faviconID, " +
-        "       vals.isEditable AS isEditable, " +
-        "       structure.idx AS idx, " +
-        "       structure.parent AS _parent " +
-        "FROM (\(structure)) AS structure JOIN (\(values)) AS vals " +
-        "ON vals.guid = structure.guid " +
-        "WHERE " + exclusion
+        let fleshed = """
+            SELECT vals.id AS id, vals.guid AS guid, vals.type AS type, vals.date_added AS date_added,
+                vals.is_deleted AS is_deleted, vals.parentid AS parentid, vals.parentName AS parentName,
+                vals.feedUri AS feedUri, vals.siteUri AS siteUri, vals.pos AS pos, vals.title AS title,
+                vals.bmkUri AS bmkUri, vals.folderName AS folderName, vals.faviconID AS faviconID,
+                vals.isEditable AS isEditable, structure.idx AS idx, structure.parent AS _parent
+            FROM (\(structure)) AS structure JOIN (\(values)) AS vals ON
+                vals.guid = structure.guid
+            WHERE \(exclusion)
+            """
 
-        let withIcon =
-        "SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type, " +
-        "       bookmarks.date_added AS date_added, " +
-        "       bookmarks.is_deleted AS is_deleted, " +
-        "       bookmarks.parentid AS parentid, bookmarks.parentName AS parentName, " +
-        "       bookmarks.feedUri AS feedUri, bookmarks.siteUri AS siteUri, " +
-        "       bookmarks.pos AS pos, title AS title, " +
-        "       bookmarks.bmkUri AS bmkUri, bookmarks.folderName AS folderName, " +
-        "       bookmarks.idx AS idx, bookmarks._parent AS _parent, " +
-        "       bookmarks.isEditable AS isEditable, " +
-        "       favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
-        "FROM (\(fleshed)) AS bookmarks " +
-        "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
+        let withIcon = """
+            SELECT bookmarks.id AS id, bookmarks.guid AS guid, bookmarks.type AS type,
+                bookmarks.date_added AS date_added,
+                bookmarks.is_deleted AS is_deleted,
+                bookmarks.parentid AS parentid, bookmarks.parentName AS parentName,
+                bookmarks.feedUri AS feedUri, bookmarks.siteUri AS siteUri,
+                bookmarks.pos AS pos, title AS title,
+                bookmarks.bmkUri AS bmkUri, bookmarks.folderName AS folderName,
+                bookmarks.idx AS idx, bookmarks._parent AS _parent,
+                bookmarks.isEditable AS isEditable,
+                favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType
+            FROM (\(fleshed)) AS bookmarks LEFT OUTER JOIN favicons ON
+                bookmarks.faviconID = favicons.id
+            """
 
         let sql = (includeIcon ? withIcon : fleshed) + " ORDER BY idx ASC"
         return self.db.runQuery(sql, args: args, factory: factory)
@@ -411,8 +416,7 @@ extension SQLiteBookmarks {
 
         // TODO: Yes, this can be done in one go.
         let getParentsSQL =
-        "SELECT DISTINCT parent FROM \(ViewBookmarksLocalStructureOnMirror) " +
-        "WHERE child IN \(BrowserDB.varlist(guids.count)) AND is_overridden = 0"
+            "SELECT DISTINCT parent FROM \(ViewBookmarksLocalStructureOnMirror) WHERE child IN \(BrowserDB.varlist(guids.count)) AND is_overridden = 0"
         let getParentsArgs: Args = guids
 
         return self.db.runQuery(getParentsSQL, args: getParentsArgs, factory: { $0[0] as! GUID })
@@ -442,9 +446,7 @@ extension SQLiteBookmarks {
 
         let topArgs: Args = guids
         let topVarlist = BrowserDB.varlist(topArgs.count)
-        let query =
-        "SELECT child FROM \(ViewBookmarksLocalStructureOnMirror) " +
-        "WHERE parent IN \(topVarlist)"
+        let query = "SELECT child FROM \(ViewBookmarksLocalStructureOnMirror) WHERE parent IN \(topVarlist)"
 
         // We're deleting whole folders, so we don't need to worry about indices.
         return self.db.runQuery(query, args: topArgs, factory: { $0[0] as! GUID })
@@ -476,11 +478,11 @@ extension SQLiteBookmarks {
 
                         // Remove each child from structure. We use the top list to save effort.
                         let deleteStructure =
-                        "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(topVarlist)"
+                            "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(topVarlist)"
 
                         // If a bookmark is New, delete it outright.
                         let deleteNew =
-                        "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(childVarlist) AND sync_status = \(SyncStatus.new.rawValue)"
+                            "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(childVarlist) AND sync_status = \(SyncStatus.new.rawValue)"
 
                         // If a bookmark is Changed, mark it as deleted and bump its modified time.
                         let markChanged = self.getMarkDeletedSQLWithWhereFragment("guid IN \(childVarlist)")
@@ -495,24 +497,25 @@ extension SQLiteBookmarks {
     }
 
     fileprivate func getMarkDeletedSQLWithWhereFragment(_ whereFragment: String) -> String {
-        let sql =
-        "UPDATE \(TableBookmarksLocal) SET" +
-        "  date_added = NULL" +
-        ", is_deleted = 1" +
-        ", local_modified = \(Date.now())" +
-        ", bmkUri = NULL" +
-        ", feedUri = NULL" +
-        ", siteUri = NULL" +
-        ", pos = NULL" +
-        ", title = NULL" +
-        ", tags = NULL" +
-        ", keyword = NULL" +
-        ", description = NULL" +
-        ", parentid = NULL" +
-        ", parentName = NULL" +
-        ", folderName = NULL" +
-        ", queryId = NULL" +
-        " WHERE \(whereFragment) AND sync_status = \(SyncStatus.changed.rawValue)"
+        let sql = """
+            UPDATE \(TableBookmarksLocal) SET
+                date_added = NULL,
+                is_deleted = 1,
+                local_modified = \(Date.now()),
+                bmkUri = NULL,
+                feedUri = NULL,
+                siteUri = NULL,
+                pos = NULL,
+                title = NULL,
+                tags = NULL,
+                keyword = NULL,
+                description = NULL,
+                parentid = NULL,
+                parentName = NULL,
+                folderName = NULL,
+                queryId = NULL
+            WHERE \(whereFragment) AND sync_status = \(SyncStatus.changed.rawValue)
+            """
 
         return sql
     }
@@ -527,11 +530,11 @@ extension SQLiteBookmarks {
 
         // Fix up the indices of subsequent siblings.
         let updateIndices =
-        "UPDATE \(TableBookmarksLocalStructure) SET idx = (idx - 1) WHERE idx > (\(previousIndexSubquery))"
+            "UPDATE \(TableBookmarksLocalStructure) SET idx = (idx - 1) WHERE idx > (\(previousIndexSubquery))"
 
         // If the bookmark is New, delete it outright.
         let deleteNew =
-        "DELETE FROM \(TableBookmarksLocal) WHERE guid = ? AND sync_status = \(SyncStatus.new.rawValue)"
+            "DELETE FROM \(TableBookmarksLocal) WHERE guid = ? AND sync_status = \(SyncStatus.new.rawValue)"
 
         // If the bookmark is Changed, mark it as deleted and bump its modified time.
         let markChanged = self.getMarkDeletedSQLWithWhereFragment("guid = ?")
@@ -540,8 +543,7 @@ extension SQLiteBookmarks {
         // TODO: bump the parent's modified time, because the child list changed?
 
         // Now delete from structure.
-        let deleteStructure =
-        "DELETE FROM \(TableBookmarksLocalStructure) WHERE child = ?"
+        let deleteStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE child = ?"
 
         return self.db.run([
             (updateIndices, args),
@@ -553,9 +555,7 @@ extension SQLiteBookmarks {
 
     fileprivate func markBufferBookmarkAsDeleted(_ guid: GUID) -> Success {
         let insertInPendingDeletions =
-        "INSERT OR IGNORE INTO \(TablePendingBookmarksDeletions) " +
-        "(id) " +
-        "VALUES (?)"
+            "INSERT OR IGNORE INTO \(TablePendingBookmarksDeletions) (id) VALUES (?)"
         let args: Args = [guid]
         return self.db.run(insertInPendingDeletions, withArgs: args)
     }
@@ -749,20 +749,28 @@ class BookmarkFactory {
 
 extension SQLiteBookmarks: SearchableBookmarks {
     public func bookmarksByURL(_ url: URL) -> Deferred<Maybe<Cursor<BookmarkItem>>> {
-        let inner =
-        "SELECT id, type, date_added, guid, bmkUri, title, faviconID FROM \(TableBookmarksLocal) " +
-        "WHERE " +
-        "type = \(BookmarkNodeType.bookmark.rawValue) AND is_deleted IS NOT 1 AND bmkUri = ? " +
-        "UNION ALL " +
-        "SELECT id, type, date_added, guid, bmkUri, title, faviconID FROM \(TableBookmarksMirror) " +
-        "WHERE " +
-        "type = \(BookmarkNodeType.bookmark.rawValue) AND is_overridden IS NOT 1 AND is_deleted IS NOT 1 AND bmkUri = ? "
+        let inner = """
+            SELECT id, type, date_added, guid, bmkUri, title, faviconID
+            FROM \(TableBookmarksLocal)
+            WHERE
+                type = \(BookmarkNodeType.bookmark.rawValue) AND
+                is_deleted IS NOT 1 AND
+                bmkUri = ?
+            UNION ALL
+            SELECT id, type, date_added, guid, bmkUri, title, faviconID
+            FROM \(TableBookmarksMirror)
+            WHERE
+                type = \(BookmarkNodeType.bookmark.rawValue) AND
+                is_overridden IS NOT 1 AND
+                is_deleted IS NOT 1 AND
+                bmkUri = ?
+            """
 
-        let sql =
-        "SELECT bookmarks.id AS id, bookmarks.type AS type, bookmarks.date_added AS date_added, guid, bookmarks.bmkUri AS bmkUri, title, " +
-        "favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
-        "FROM (\(inner)) AS bookmarks " +
-        "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
+        let sql = """
+            SELECT bookmarks.id AS id, bookmarks.type AS type, bookmarks.date_added AS date_added, guid, bookmarks.bmkUri AS bmkUri, title, favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType
+            FROM (\(inner)) AS bookmarks LEFT OUTER JOIN favicons ON
+                bookmarks.faviconID = favicons.id
+            """
 
         let u = url.absoluteString
         let args: Args = [u, u]
@@ -781,12 +789,7 @@ extension SQLiteBookmarks {
             BookmarkRoots.UnfiledFolderGUID,
             BookmarkRoots.MobileFolderGUID,
         ]
-        let sql = [
-            "SELECT",
-            "not exists(SELECT 1 FROM \(TableBookmarksMirror))",
-            "AND",
-            "exists(SELECT 1 FROM \(TableBookmarksBufferStructure) WHERE parent IN (?, ?, ?, ?))",
-            ].joined(separator: " ")
+        let sql = "SELECT NOT EXISTS(SELECT 1 FROM \(TableBookmarksMirror)) AND EXISTS(SELECT 1 FROM \(TableBookmarksBufferStructure) WHERE parent IN (?, ?, ?, ?))"
         return self.db.runQuery(sql, args: parents, factory: { $0[0] as! Int == 1 })
             >>== { row in
                 guard row.status == .success,

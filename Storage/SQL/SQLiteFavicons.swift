@@ -38,14 +38,18 @@ open class SQLiteFavicons {
     }
     
     public func getCleanupFaviconsQuery() -> (sql: String, args: Args?) {
-        return (sql: "DELETE FROM \(TableFavicons) " +
-            "WHERE \(TableFavicons).id NOT IN (" +
-            "SELECT faviconID FROM \(TableFaviconSites) " +
-            "UNION ALL " +
-            "SELECT faviconID FROM \(TableBookmarksLocal) WHERE faviconID IS NOT NULL " +
-            "UNION ALL " +
-            "SELECT faviconID FROM \(TableBookmarksMirror) WHERE faviconID IS NOT NULL" +
-            ")", args: nil)
+        let sql = """
+            DELETE FROM \(TableFavicons)
+            WHERE \(TableFavicons).id NOT IN (
+                SELECT faviconID FROM \(TableFaviconSites)
+                UNION ALL
+                SELECT faviconID FROM \(TableBookmarksLocal) WHERE faviconID IS NOT NULL
+                UNION ALL
+                SELECT faviconID FROM \(TableBookmarksMirror) WHERE faviconID IS NOT NULL
+            )
+            """
+
+        return (sql: sql, args: nil)
     }
     
     public func insertOrUpdateFavicon(_ favicon: Favicon) -> Deferred<Maybe<Int>> {

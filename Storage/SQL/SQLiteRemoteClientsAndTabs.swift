@@ -345,9 +345,12 @@ extension SQLiteRemoteClientsAndTabs: RemoteDevices {
             let now = Date.now()
 
             for device in remoteDevices {
-                let sql =
-                    "INSERT INTO \(TableRemoteDevices) (guid, name, type, is_current_device, date_created, date_modified, last_access_time) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)"
+                let sql = """
+                    INSERT INTO \(TableRemoteDevices) (
+                        guid, name, type, is_current_device, date_created, date_modified, last_access_time
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                    """
+
                 let args: Args = [device.id, device.name, device.type, device.isCurrentDevice, now, now, device.lastAccessTime]
                 try conn.executeChange(sql, withArgs: args)
             }

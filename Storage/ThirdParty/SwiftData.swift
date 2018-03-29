@@ -1015,7 +1015,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 Sentry.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
 
-            let message = "Error code: \(error.code), \(error) for SQL \(String(sqlStr.prefix(500)))."
+            let message = "Error code: \(error.code), \(error) for SQL \(sqlStr)."
             Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: message)
 
             throw error
@@ -1068,7 +1068,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
                 Sentry.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
-            Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(String(sqlStr.prefix(500))).")
+            Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(sqlStr).")
 
             return Cursor<T>(err: error)
         }
