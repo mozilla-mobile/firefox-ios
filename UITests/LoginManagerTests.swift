@@ -426,6 +426,7 @@ class LoginManagerTests: KIFTestCase {
         openLoginManager()
         
         var list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
+        tester().waitForAnimationsToFinish()
         let oldLoginCount = countOfRowsInTableView(list)
         
         tester().tapView(withAccessibilityLabel: "Edit")
