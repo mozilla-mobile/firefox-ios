@@ -7,7 +7,7 @@ import XCGLogger
 import Deferred
 import Shared
 
-private let log = Logger.storageLogger
+private let log = Logger.syncLogger
 
 public typealias Args = [Any?]
 

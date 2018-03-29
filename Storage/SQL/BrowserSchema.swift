@@ -122,7 +122,7 @@ private let AllIndices: [String] = [
 
 private let AllTablesIndicesAndViews: [String] = AllViews + AllIndices + AllTables
 
-private let log = Logger.storageLogger
+private let log = Logger.syncLogger
 
 /**
  * The monolithic class that manages the inter-related history etc. tables.

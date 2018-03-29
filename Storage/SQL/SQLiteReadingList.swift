@@ -7,7 +7,7 @@ import Shared
 import XCGLogger
 import Deferred
 
-private let log = Logger.storageLogger
+private let log = Logger.syncLogger
 
 class ReadingListStorageError: MaybeErrorType {
     var message: String
@@ -22,7 +22,7 @@ class ReadingListStorageError: MaybeErrorType {
 open class SQLiteReadingList {
     let db: BrowserDB
 
-    let allColumns = ["client_id", "client_last_modified", "id", "last_modified", "url", "title", "added_by", "archived", "favorite", "unread"]
+    let allColumns = ["client_id", "client_last_modified", "id", "last_modified", "url", "title", "added_by", "archived", "favorite", "unread"].joined(separator: ",")
 
     required public init(db: BrowserDB) {
         self.db = db
@@ -31,8 +31,7 @@ open class SQLiteReadingList {
 
 extension SQLiteReadingList: ReadingList {
     public func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>> {
-        let columns = allColumns.joined(separator: ",")
-        let sql = "SELECT \(columns) FROM \(TableReadingListItems) ORDER BY client_last_modified DESC"
+        let sql = "SELECT \(allColumns) FROM \(TableReadingListItems) ORDER BY client_last_modified DESC"
         return db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
             return deferMaybe(cursor.asArray())
         }
@@ -61,8 +60,7 @@ extension SQLiteReadingList: ReadingList {
                 throw ReadingListStorageError("Unable to insert ReadingListItem")
             }
 
-            let columns = self.allColumns.joined(separator: ",")
-            let querySQL = "SELECT \(columns) FROM \(TableReadingListItems) WHERE client_id = ? LIMIT 1"
+            let querySQL = "SELECT \(self.allColumns) FROM \(TableReadingListItems) WHERE client_id = ? LIMIT 1"
             let queryArgs: Args = [connection.lastInsertedRowID]
             
             let cursor = connection.executeQuery(querySQL, factory: SQLiteReadingList.ReadingListItemFactory, withArgs: queryArgs)
@@ -77,8 +75,7 @@ extension SQLiteReadingList: ReadingList {
     }
     
     public func getRecordWithURL(_ url: String) -> Deferred<Maybe<ReadingListItem>> {
-        let columns = allColumns.joined(separator: ",")
-        let sql = "SELECT \(columns) FROM \(TableReadingListItems) WHERE url = ? LIMIT 1"
+        let sql = "SELECT \(allColumns) FROM \(TableReadingListItems) WHERE url = ? LIMIT 1"
         let args: Args = [url]
         return db.runQuery(sql, args: args, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
             let items = cursor.asArray()
@@ -97,8 +94,7 @@ extension SQLiteReadingList: ReadingList {
 
             try connection.executeChange(updateSQL, withArgs: updateArgs)
 
-            let columns = self.allColumns.joined(separator: ",")
-            let querySQL = "SELECT \(columns) FROM \(TableReadingListItems) WHERE client_id = ? LIMIT 1"
+            let querySQL = "SELECT \(self.allColumns) FROM \(TableReadingListItems) WHERE client_id = ? LIMIT 1"
             let queryArgs: Args = [record.id]
             
             let cursor = connection.executeQuery(querySQL, factory: SQLiteReadingList.ReadingListItemFactory, withArgs: queryArgs)

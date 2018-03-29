@@ -16,7 +16,7 @@ private let AllTables: [String] = [
     TableLoginsLocal
 ]
 
-private let log = Logger.storageLogger
+private let log = Logger.syncLogger
 
 open class LoginsSchema: Schema {
     static let DefaultVersion = 3

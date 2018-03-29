@@ -14,8 +14,6 @@ public extension Logger {
     /// Logger used for recording happenings with Sync, Accounts, Providers, Storage, and Profiles
     static let syncLogger = RollingFileLogger(filenameRoot: "sync", logDirectoryPath: Logger.logFileDirectoryPath())
 
-    static let storageLogger = RollingFileLogger(filenameRoot: "storage", logDirectoryPath: Logger.logFileDirectoryPath())
-
     /// Logger used for recording frontend/browser happenings
     static let browserLogger = RollingFileLogger(filenameRoot: "browser", logDirectoryPath: Logger.logFileDirectoryPath())
 
@@ -87,7 +85,6 @@ public extension Logger {
         // Grab all sync log files
         do {
             filenamesAndURLs += try syncLogger.logFilenamesAndURLs()
-            filenamesAndURLs += try storageLogger.logFilenamesAndURLs()
             filenamesAndURLs += try corruptLogger.logFilenamesAndURLs()
             filenamesAndURLs += try browserLogger.logFilenamesAndURLs()
         } catch _ {

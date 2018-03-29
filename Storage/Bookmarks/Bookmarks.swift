@@ -7,7 +7,7 @@ import Shared
 import Deferred
 import SwiftyJSON
 
-private let log = Logger.storageLogger
+private let log = Logger.syncLogger
 
 public protocol SearchableBookmarks: class {
     func bookmarksByURL(_ url: URL) -> Deferred<Maybe<Cursor<BookmarkItem>>>

@@ -12,7 +12,7 @@ private let AllTables: [String] = [
     TableReadingListItems
 ]
 
-private let log = Logger.storageLogger
+private let log = Logger.syncLogger
 
 open class ReadingListSchema: Schema {
     static let DefaultVersion = 1
@@ -22,18 +22,20 @@ open class ReadingListSchema: Schema {
 
     public init() {}
 
-    let itemsTableCreate = "CREATE TABLE IF NOT EXISTS \(TableReadingListItems) (" +
-        "client_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-        "client_last_modified INTEGER NOT NULL, " +
-        "id TEXT, " +
-        "last_modified INTEGER, " +
-        "url TEXT NOT NULL UNIQUE, " +
-        "title TEXT NOT NULL, " +
-        "added_by TEXT NOT NULL, " +
-        "archived INTEGER NOT NULL DEFAULT (0), " +
-        "favorite INTEGER NOT NULL DEFAULT (0), " +
-        "unread INTEGER NOT NULL DEFAULT (1)" +
-    ")"
+    let itemsTableCreate = """
+        CREATE TABLE IF NOT EXISTS \(TableReadingListItems) (
+            client_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            client_last_modified INTEGER NOT NULL,
+            id TEXT,
+            last_modified INTEGER,
+            url TEXT NOT NULL UNIQUE,
+            title TEXT NOT NULL,
+            added_by TEXT NOT NULL,
+            archived INTEGER NOT NULL DEFAULT (0),
+            favorite INTEGER NOT NULL DEFAULT (0),
+            unread INTEGER NOT NULL DEFAULT (1)
+        )
+        """
 
     public func create(_ db: SQLiteDBConnection) -> Bool {
         return self.run(db, queries: [itemsTableCreate])
