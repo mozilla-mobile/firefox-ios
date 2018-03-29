@@ -24,8 +24,11 @@ class DatabaseFixtureTest: BaseTestCase {
 
     func testHistoryDatabaseFixture() {
         navigator.goto(HomePanel_History)
+        // Small delay to avoid intermittent failures
+        // Ideally, we would wait for the table to become populated, not sure how to do that.
+        sleep(1)
         //History list has two cells that are for recently closed and synced devices that should not count as history items
-        let historyList = app.tables["History List"].cells.count-2
+        let historyList = app.tables["History List"].cells.count - 2
         XCTAssertEqual(historyList, 100, "There should be an entry in the bookmarks list")
     }
 }
