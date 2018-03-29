@@ -21,11 +21,6 @@ import Deferred
     import SyncTelemetry
 #endif
 
-// Import these dependencies for ALL targets *EXCEPT* `NotificationService`.
-#if !MOZ_TARGET_NOTIFICATIONSERVICE
-    import ReadingList
-#endif
-
 private let log = Logger.syncLogger
 
 public let ProfileRemoteTabsSyncDelay: TimeInterval = 0.1
@@ -114,7 +109,7 @@ protocol Profile: class {
     var panelDataObservers: PanelDataObservers { get }
 
     #if !MOZ_TARGET_NOTIFICATIONSERVICE
-        var readingList: ReadingListService? { get }
+        var readingList: ReadingList { get }
     #endif
 
     var isShutdown: Bool { get }
@@ -176,6 +171,7 @@ open class BrowserProfile: Profile {
 
     let db: BrowserDB
     let loginsDB: BrowserDB
+    let readingListDB: BrowserDB
     var syncManager: SyncManager!
 
     private static var loginsKey: String? {
@@ -232,6 +228,7 @@ open class BrowserProfile: Profile {
         // Set up our database handles.
         self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, schema: LoginsSchema(), files: files)
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        self.readingListDB = BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
 
         // This has to happen prior to the databases being opened, because opening them can trigger
         // events to which the SyncManager listens.
@@ -392,11 +389,9 @@ open class BrowserProfile: Profile {
         return self.makePrefs()
     }()
 
-    #if !MOZ_TARGET_NOTIFICATIONSERVICE
-        lazy var readingList: ReadingListService? = {
-            return ReadingListService(profileStoragePath: self.files.rootPath as String)
-        }()
-    #endif
+    lazy var readingList: ReadingList = {
+        return SQLiteReadingList(db: self.readingListDB)
+    }()
 
     lazy var remoteClientsAndTabs: RemoteClientsAndTabs & ResettableSyncStorage & AccountRemovalDelegate & RemoteDevices = {
         return SQLiteRemoteClientsAndTabs(db: self.db)

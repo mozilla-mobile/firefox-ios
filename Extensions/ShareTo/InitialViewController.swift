@@ -64,7 +64,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
             let profile = BrowserProfile(localName: "profile")
 
             if destinations.contains(ShareDestinationReadingList) {
-                profile.readingList?.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.current.name)
+                profile.readingList.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.current.name)
             }
 
             if destinations.contains(ShareDestinationBookmarks) {

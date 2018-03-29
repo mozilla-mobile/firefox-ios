@@ -412,6 +412,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         return pragma("user_version", factory: IntFactory) ?? 0
     }
 
+    open var cipherVersion: String? {
+        return pragma("cipher_version", factory: StringFactory)
+    }
+
     fileprivate var sqliteDB: OpaquePointer?
     fileprivate let filename: String
     fileprivate let schema: Schema
@@ -933,6 +937,9 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         if status != SQLITE_OK {
             return createErr("During: Opening Database with Flags", status: Int(status))
         }
+        guard let _ = self.cipherVersion else {
+            return createErr("Expected SQLCipher, got SQLite", status: Int(-1))
+        }
         return nil
     }
 
@@ -1246,13 +1253,13 @@ open class SDRow: Sequence {
     }
 
     // Accessor getting column 'key' in the row
-    subscript(key: Int) -> Any? {
+    public subscript(key: Int) -> Any? {
         return getValue(key)
     }
 
     // Accessor getting a named column in the row. This (currently) depends on
     // the columns array passed into this Row to find the correct index.
-    subscript(key: String) -> Any? {
+    public subscript(key: String) -> Any? {
         get {
             if let index = columnNames.index(of: key) {
                 return getValue(index)

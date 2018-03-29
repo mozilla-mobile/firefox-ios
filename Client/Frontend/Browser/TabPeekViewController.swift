@@ -5,12 +5,11 @@
 import UIKit
 import Shared
 import Storage
-import ReadingList
 import WebKit
 
 protocol TabPeekDelegate: class {
     func tabPeekDidAddBookmark(_ tab: Tab)
-    @discardableResult func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
+    @discardableResult func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController)
     func tabPeekDidCloseTab(_ tab: Tab)
 }
@@ -161,7 +160,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             self.clientPicker = UINavigationController(rootViewController: clientPickerController)
         }
 
-        let result = browserProfile.readingList?.getRecordWithURL(displayURL).successValue!
+        let result = browserProfile.readingList.getRecordWithURL(displayURL).value.successValue
 
         self.isInReadingList = !(result?.url.isEmpty ?? true)
         self.ignoreURL = isIgnoredURL(displayURL)
