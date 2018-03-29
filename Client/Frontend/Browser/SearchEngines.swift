@@ -196,7 +196,7 @@ class SearchEngines {
 
         return engineNames.map({ (name: $0, path: pluginDirectory.appendingPathComponent("\($0).xml").path) })
             .filter({ FileManager.default.fileExists(atPath: $0.path) })
-            .flatMap({ parser.parse($0.path, engineID: $0.name) })
+            .compactMap({ parser.parse($0.path, engineID: $0.name) })
             .sorted { e, _ in e.shortName == defaultEngineName }
     }
 

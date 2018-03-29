@@ -101,7 +101,7 @@ public class BookmarksMirrorer {
             log.warning("Invalid records: \(invalid.map { $0.id }.joined(separator: ", ")).")
         }
 
-        let mirrorItems = retrieved.flatMap { record -> BookmarkMirrorItem? in
+        let mirrorItems = retrieved.compactMap { record -> BookmarkMirrorItem? in
             guard record.payload.isValid() else {
                 return nil
             }

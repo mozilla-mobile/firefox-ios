@@ -679,24 +679,21 @@ class SendFeedbackSetting: Setting {
 
 class SendAnonymousUsageDataSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
+        let statusText = NSMutableAttributedString()
+        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor]))
+        statusText.append(NSAttributedString(string: " "))
+        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]))
+
         super.init(
             prefs: prefs, prefKey: AppConstants.PrefSendUsageData, defaultValue: true,
             attributedTitleText: NSAttributedString(string: Strings.SendUsageSettingTitle),
-            attributedStatusText: createStatusText(),
+            attributedStatusText: statusText,
             settingDidChange: {
                 AdjustIntegration.setEnabled($0)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.telemetryOptIn: $0])
                 LeanPlumClient.shared.set(enabled: $0)
             }
         )
-    }
-
-    private func createStatusText() -> NSAttributedString {
-        let statusText = NSMutableAttributedString()
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor]))
-        statusText.append(NSAttributedString(string: " "))
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]))
-        return statusText
     }
 
     override var url: URL? {

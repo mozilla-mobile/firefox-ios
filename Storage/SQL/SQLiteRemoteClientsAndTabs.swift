@@ -43,7 +43,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             let urlStrings = decoded as? [String] else {
                 return []
         }
-        return optFilter(urlStrings.flatMap { URL(string: $0) }) 
+        return optFilter(urlStrings.compactMap { URL(string: $0) }) 
     }
 
     class func convertHistoryToString(_ history: [URL]) -> String? {

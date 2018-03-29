@@ -161,7 +161,7 @@ extension SyncDataDisplay {
 
         // Add the tabs we've found to userInfo, so that the AppDelegate
         // doesn't have to do it again.
-        let serializedTabs = sentTabs.flatMap { t -> NSDictionary? in
+        let serializedTabs = sentTabs.compactMap { t -> NSDictionary? in
             return [
                 "title": t.title,
                 "url": t.url.absoluteString,
@@ -215,7 +215,7 @@ extension SyncDataDisplay {
             title = Strings.SentTab_NoTabArrivingNotification_title
             body = Strings.SentTab_NoTabArrivingNotification_body
         } else {
-            let deviceNames = Set(tabs.flatMap { $0["deviceName"] as? String })
+            let deviceNames = Set(tabs.compactMap { $0["deviceName"] as? String })
             if let deviceName = deviceNames.first, deviceNames.count == 1 {
                 title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
             } else {

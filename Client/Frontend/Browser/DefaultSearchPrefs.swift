@@ -25,7 +25,7 @@ class DefaultSearchPrefs {
         locales = json["locales"]
         regionOverrides = json["regionOverrides"]
         // These are the fallback defaults
-        guard let searchList = json["default"]["visibleDefaultEngines"].array?.flatMap({ $0.string }),
+        guard let searchList = json["default"]["visibleDefaultEngines"].array?.compactMap({ $0.string }),
             let engine = json["default"]["searchDefault"].string else {
                 assertionFailure("Defaults are not set up correctly in List.json")
                 return nil
@@ -39,9 +39,9 @@ class DefaultSearchPrefs {
      Each langauge in the locales list has a default list of engines and then a region override list.
      */
     open func visibleDefaultEngines(for possibileLocales: [String], and region: String) -> [String] {
-        let engineList = possibileLocales.flatMap({ locales[$0].dictionary }).flatMap({ (localDict) -> [JSON]? in
+        let engineList = possibileLocales.compactMap({ locales[$0].dictionary }).compactMap({ (localDict) -> [JSON]? in
             return localDict[region]?["visibleDefaultEngines"].array ?? localDict["default"]?["visibleDefaultEngines"].array
-        }).last?.flatMap({ $0.string })
+        }).last?.compactMap({ $0.string })
 
         // If the engineList is empty then go ahead and use the default
         var usersEngineList = engineList ?? defaultSearchList
@@ -59,7 +59,7 @@ class DefaultSearchPrefs {
      Create a list of these and return the last one. The globalDefault acts as the fallback in case the list is empty.
      */
     open func searchDefault(for possibileLocales: [String], and region: String) -> String {
-        return possibileLocales.flatMap({ locales[$0].dictionary }).reduce(globalDefaultEngine) { (defaultEngine, localeJSON) -> String in
+        return possibileLocales.compactMap({ locales[$0].dictionary }).reduce(globalDefaultEngine) { (defaultEngine, localeJSON) -> String in
             return localeJSON[region]?["searchDefault"].string ?? defaultEngine
         }
     }

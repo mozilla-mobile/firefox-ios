@@ -325,7 +325,7 @@ private func deleteStructureForGUIDs(_ guids: [GUID], fromTable table: String, c
     for chunk in chunks {
         let delStructure = "DELETE FROM \(table) WHERE parent IN \(BrowserDB.varlist(chunk.count))"
 
-        let args: Args = chunk.flatMap { $0 }
+        let args: Args = chunk.compactMap { $0 }
         try connection.executeChange(delStructure, withArgs: args)
     }
 }
@@ -458,7 +458,7 @@ open class SQLiteBookmarkBufferStorage: BookmarkBufferStorage {
             for chunk in chunks {
                 let delPendingDeletions = "DELETE FROM \(TablePendingBookmarksDeletions) WHERE id IN \(BrowserDB.varlist(chunk.count))"
 
-                let args: Args = chunk.flatMap { $0 }
+                let args: Args = chunk.compactMap { $0 }
                 try conn.executeChange(delPendingDeletions, withArgs: args)
             }
         }
@@ -779,7 +779,7 @@ public enum BufferInconsistency {
 
     private func getConcernedIDs(colNames: [String]) -> ((SDRow) -> [String]) {
         return { (row: SDRow) in
-             colNames.flatMap({ row[$0] as? String})
+             colNames.compactMap({ row[$0] as? String})
         }
     }
 

@@ -62,7 +62,7 @@ open class RollingFileLogger: XCGLogger {
         }
 
         let files = try FileManager.default.contentsOfDirectoryAtPath(logPath, withFilenamePrefix: root)
-        return files.flatMap { filename in
+        return files.compactMap { filename in
             if let url = URL(string: "\(logPath)/\(filename)") {
                 return (filename, url)
             }

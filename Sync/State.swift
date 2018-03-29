@@ -496,7 +496,7 @@ open class Scratchpad {
         }()
 
         if let localCommands: [String] = prefs.stringArrayForKey(PrefLocalCommands) {
-            b.localCommands = Set(localCommands.flatMap({LocalCommand.fromJSON(JSON(parseJSON: $0))}))
+            b.localCommands = Set(localCommands.compactMap({LocalCommand.fromJSON(JSON(parseJSON: $0))}))
         }
 
         if let engineConfigurationString = prefs.stringForKey(PrefEngineConfiguration) {

@@ -256,7 +256,7 @@ open class FxAClient10 {
                 return nil
         }
 
-        let devices = jsonDevices.flatMap { (jsonDevice) -> FxADevice? in
+        let devices = jsonDevices.compactMap { (jsonDevice) -> FxADevice? in
             return FxADevice.fromJSON(jsonDevice)
         }
 

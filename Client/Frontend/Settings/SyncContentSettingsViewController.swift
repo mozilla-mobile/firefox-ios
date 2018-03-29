@@ -96,7 +96,9 @@ class DeviceNameSetting: StringSetting {
     }
 
     init(settings: SettingsTableViewController) {
-        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: self.settingIsValid)
+        let settingsIsValid: (String?) -> Bool = { !($0?.isEmpty ?? true) }
+        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: settingsIsValid)
+
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -104,9 +106,6 @@ class DeviceNameSetting: StringSetting {
         textField.textAlignment = .natural
     }
 
-    func settingIsValid(value: String?) -> Bool {
-        return !(value?.isEmpty ?? true)
-    }
 }
 
 class SyncContentSettingsViewController: SettingsTableViewController {

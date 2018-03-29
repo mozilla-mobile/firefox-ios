@@ -225,7 +225,7 @@ class ThreeWayTreeMerger {
         }
 
         // Return the first candidate that's a value match.
-        guard let localItem = (guids.flatMap { items[$0] }.find { $0.sameAs(remoteValue) }) else {
+        guard let localItem = (guids.compactMap { items[$0] }.find { $0.sameAs(remoteValue) }) else {
             log.debug("Didn't find a local value match for new remote record \(remote.recordGUID).")
             return nil
         }
@@ -240,7 +240,7 @@ class ThreeWayTreeMerger {
             preconditionFailure("Expected children.")
         }
 
-        let out: [MergedTreeNode] = try mirrorChildren.flatMap { child in
+        let out: [MergedTreeNode] = try mirrorChildren.compactMap { child in
             // TODO: handle deletions. That might change the below from 'Unchanged'
             // to 'New'.
             let childGUID = child.recordGUID
