@@ -237,7 +237,7 @@ class TabManagerTests: XCTestCase {
 
         manager.selectTab(manager.addTab(isPrivate: true))
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be one new private tab")
-        manager.willSwitchTabMode()
+        manager.willSwitchTabMode(leavingPBM: true)
         XCTAssertEqual(manager.privateTabs.count, 0, "After willSwitchTabMode there should be no more private tabs")
 
         manager.selectTab(manager.addTab(isPrivate: true))
@@ -252,6 +252,24 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(tab)
         XCTAssertEqual(manager.selectedTab?.isPrivate, false, "The selected tab should not be private")
         XCTAssertEqual(manager.privateTabs.count, 1, "If the flag is false then private tabs should still exist")
+    }
+
+    func testTogglePBMDelete() {
+        let profile = TabManagerMockProfile()
+        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+        profile.prefs.setBool(true, forKey: "settings.closePrivateTabs")
+
+        let tab = manager.addTab()
+        manager.selectTab(tab)
+        manager.selectTab(manager.addTab())
+        manager.selectTab(manager.addTab(isPrivate: true))
+
+        manager.willSwitchTabMode(leavingPBM: false)
+        XCTAssertEqual(manager.privateTabs.count, 1, "There should be 1 private tab")
+        manager.willSwitchTabMode(leavingPBM: true)
+        XCTAssertEqual(manager.privateTabs.count, 0, "There should be 0 private tab")
+        manager.removeTab(tab)
+        XCTAssertEqual(manager.normalTabs.count, 1, "There should be 1 normal tab")
     }
 
     func testDeleteNonSelectedTab() {
@@ -355,7 +373,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(manager.privateTabs.count, 1, "There should only be one private tab")
 
         // switch to normal mode. Which should delete the private tabs
-        manager.willSwitchTabMode()
+        manager.willSwitchTabMode(leavingPBM: true)
 
         //make sure tabs are cleared properly and indexes are reset
         XCTAssertEqual(manager.privateTabs.count, 0, "Private tab should have been deleted")

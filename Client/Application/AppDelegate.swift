@@ -150,7 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
-                profile.readingList?.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
+                profile.readingList.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
             }
         }
 
@@ -234,6 +234,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             // This will block "performActionForShortcutItem:completionHandler" from being called.
             shouldPerformAdditionalDelegateHandling = false
         }
+
+        // Force the ToolbarTextField in LTR mode - without this change the UITextField's clear
+        // button will be in the incorrect position and overlap with the input text. Not clear if
+        // that is an iOS bug or not.
+        AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
         return shouldPerformAdditionalDelegateHandling
     }
@@ -365,6 +370,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         AboutHomeHandler.register(server)
         AboutLicenseHandler.register(server)
         SessionRestoreHandler.register(server)
+
+        if AppConstants.IsRunningTest {
+            registerHandlersForTestMethods(server: server.server)
+        }
 
         // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task
         // catching and handling the error seemed to fix things, but we're not sure why.

@@ -92,11 +92,8 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
         collectionView?.addGestureRecognizer(longPressRecognizer)
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(didChangeFontSize),
-                                               name: .DynamicFontChanged,
-                                               object: nil)
-        
+        let refreshEvents: [Notification.Name] = [.DynamicFontChanged, .HomePanelPrefsChanged]
+        refreshEvents.forEach { NotificationCenter.default.addObserver(self, selector: #selector(reload), name: $0, object: nil) }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -144,8 +141,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         self.topSitesManager.currentTraits = self.traitCollection
     }
 
-    func didChangeFontSize(notification: Notification) {
-        // Don't need to invalidate the data for a font change. Just reload the UI.
+    func reload(notification: Notification) {
         reloadAll()
     }
 }
@@ -431,6 +427,7 @@ extension ActivityStreamPanel {
         topSiteCell.delegate = self.topSitesManager
         topSiteCell.setNeedsLayout()
         topSiteCell.collectionView.reloadData()
+        topSiteCell.moveToInitialPage()
         return cell
     }
 

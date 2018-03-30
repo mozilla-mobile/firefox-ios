@@ -20,9 +20,10 @@ extension PhotonActionSheetProtocol {
     typealias IsPrivateTab = Bool
     typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
     
-    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, supressPopover: Bool = false) {
-        let sheet = PhotonActionSheet(title: title, actions: actions)
-        sheet.modalPresentationStyle =  (UIDevice.current.userInterfaceIdiom == .pad && !supressPopover) ? .popover : .overCurrentContext
+    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, suppressPopover: Bool = false) {
+        let style: UIModalPresentationStyle = (UIDevice.current.userInterfaceIdiom == .pad && !suppressPopover) ? .popover : .overCurrentContext
+        let sheet = PhotonActionSheet(title: title, actions: actions, style: style)
+        sheet.modalPresentationStyle = style
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
         
         if let popoverVC = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {
@@ -78,20 +79,26 @@ extension PhotonActionSheetProtocol {
     typealias PageOptionsVC = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
     
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
-        var noImageMode: PhotonActionSheetItem? = nil
+        var items: [PhotonActionSheetItem] = []
+
         if #available(iOS 11, *) {
             let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-            let noImageText = noImageEnabled ? Strings.AppMenuNoImageModeDisable : Strings.AppMenuNoImageModeEnable
-            noImageMode = PhotonActionSheetItem(title: noImageText, iconString: "menu-NoImageMode", isEnabled: noImageEnabled) { action in
+            let noImageMode = PhotonActionSheetItem(title: Strings.AppMenuNoImageMode, iconString: "menu-NoImageMode", isEnabled: noImageEnabled, accessory: .Switch) { action in
                 NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
             }
+
+            let trackingProtectionEnabled = ContentBlockerHelper.isTrackingProtectionActive(tabManager: self.tabManager)
+            let trackingProtection = PhotonActionSheetItem(title: Strings.TPMenuTitle, iconString: "menu-TrackingProtection", isEnabled: trackingProtectionEnabled, accessory: .Switch) { action in
+                ContentBlockerHelper.toggleTrackingProtectionMode(for: self.profile.prefs, tabManager: self.tabManager)
+            }
+            items.append(contentsOf: [trackingProtection, noImageMode])
         }
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
-        let nightModeText = nightModeEnabled ? Strings.AppMenuNightModeDisable : Strings.AppMenuNightModeEnable
-        let nightMode = PhotonActionSheetItem(title: nightModeText, iconString: "menu-NightMode", isEnabled: nightModeEnabled) { action in
+        let nightMode = PhotonActionSheetItem(title: Strings.AppMenuNightMode, iconString: "menu-NightMode", isEnabled: nightModeEnabled, accessory: .Switch) { action in
             NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
         }
+        items.append(nightMode)
 
         let openSettings = PhotonActionSheetItem(title: Strings.AppMenuSettingsTitleString, iconString: "menu-Settings") { action in
             let settingsTableViewController = AppSettingsTableViewController()
@@ -104,11 +111,9 @@ extension PhotonActionSheetProtocol {
             controller.modalPresentationStyle = .formSheet
             vcDelegate.present(controller, animated: true, completion: nil)
         }
+        items.append(openSettings)
 
-        if let noImageMode = noImageMode {
-            return [noImageMode, nightMode, openSettings]
-        }
-        return [nightMode, openSettings]
+        return items
     }
     
     func getTabActions(tab: Tab, buttonView: UIView,
@@ -126,7 +131,7 @@ extension PhotonActionSheetProtocol {
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
             guard let url = tab.url?.displayURL else { return }
 
-            self.profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
+            self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
             success(Strings.AppMenuAddToReadingListConfirmMessage)
         }
@@ -265,25 +270,26 @@ extension PhotonActionSheetProtocol {
     }
 
     @available(iOS 11.0, *)
-    private func menuActionsForTrackingProtectionDisabled(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
+    private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
         let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlocking, iconString: "menu-TrackingProtection") { _ in
-            // TODO: Enable Tracking protection for the current browsing mode
+            // When TP is off for the tab tapping enable in this menu should turn it back on for the Tab.
+            if let blocker = tab.contentBlocker as? ContentBlockerHelper, blocker.isUserEnabled == false {
+                blocker.isUserEnabled = true
+            } else {
+                ContentBlockerHelper.toggleTrackingProtectionMode(for: self.profile.prefs, tabManager: self.tabManager)
+            }
+            tab.reload()
         }
 
         let moreInfo = PhotonActionSheetItem(title: Strings.TPBlockingMoreInfo, iconString: "menu-Info") { _ in
             let url = SupportUtils.URLForTopic("tracking-protection-ios")!
             tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
         }
-
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDisabledDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .None) { _ in
-          //  guard let bvc = self as? PresentableVC else { return }
-          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[moreInfo], [enableTP]], on: bvc, from: urlBar)
-        }
-        return [tpBlocking]
+        return [[moreInfo], [enableTP]]
     }
 
     @available(iOS 11.0, *)
-    private func menuActionsForTrackingProtectionEnabled(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
+    private func menuActionsForTrackingProtectionEnabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
         guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
             return []
         }
@@ -297,57 +303,98 @@ extension PhotonActionSheetProtocol {
         let statList = [totalCount, adCount, analyticsCount, socialCount, contentCount]
 
         let addToWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionDisableTitle, iconString: "menu-TrackingProtection-Off") { _ in
-            if let domain = currentURL.baseDomain, !domain.isEmpty {
-                blocker.whitelist(enable: true, forDomain: domain)
+            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
+            ContentBlockerHelper.whitelist(enable: true, url: currentURL) { _ in
+                tab.reload()
             }
         }
-        // when tracking protection is on and content was blocked
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .None) { _ in
-         // guard let bvc = self as? PresentableVC else { return }
-          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [statList, [addToWhitelist]], on: bvc, from: urlBar)
-        }
-        return [tpBlocking]
+        return [statList, [addToWhitelist]]
     }
 
     @available(iOS 11.0, *)
-    private func menuActionsForWhitelistedSite(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
+    private func menuActionsForWhitelistedSite(for tab: Tab) -> [[PhotonActionSheetItem]] {
+        guard let currentURL = tab.url else {
             return []
         }
 
         let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionWhiteListRemove, iconString: "menu-TrackingProtection") { _ in
-            if let domain = currentURL.baseDomain, !domain.isEmpty {
-                blocker.whitelist(enable: false, forDomain: domain)
+            ContentBlockerHelper.whitelist(enable: false, url: currentURL) { _ in
+                tab.reload()
             }
         }
-
-        let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .None) { _ in
-          //  guard let bvc = self as? PresentableVC else { return }
-          //  self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: [[removeFromWhitelist]], on: bvc, from: urlBar)
-        }
-        return [tpBlocking]
+        return [[removeFromWhitelist]]
     }
 
     @available(iOS 11.0, *)
     func getTrackingMenu(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
+        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else {
             return []
         }
 
-        if blocker.stats.total == 0, blocker.isEnabled, !blocker.isURLWhitelisted(url: currentURL) {
-            // When ad blocking is enabled but no content was blocked on the page
+        switch blocker.status {
+        case .NoBlockedURLs:
             return menuActionsForNotBlocking()
-        } else if !blocker.isEnabled {
-            // when tracking protection is disabled
-            return menuActionsForTrackingProtectionDisabled(for: tab, presentingOn: urlBar)
-        } else if blocker.stats.total > 0 {
-            // When tracking protection is enabled and content is blocked on the page
-            return menuActionsForTrackingProtectionEnabled(for: tab, presentingOn: urlBar)
-        } else if blocker.isEnabled, blocker.isURLWhitelisted(url: currentURL) {
-            // When tracking protection is enabled but the site is in the whitelist
-            return menuActionsForWhitelistedSite(for: tab, presentingOn: urlBar)
+        case .Blocking:
+            let actions = menuActionsForTrackingProtectionEnabled(for: tab)
+            let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
+                guard let bvc = self as? PresentableVC else { return }
+                UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .trackingProtectionStatistics)
+                self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: actions, on: bvc, from: urlBar)
+            }
+            return [tpBlocking]
+        case .Disabled:
+            let actions = menuActionsForTrackingProtectionDisabled(for: tab)
+            let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TPBlockingDisabledDescription, iconString: "menu-TrackingProtection", isEnabled: false, accessory: .Disclosure) { _ in
+                guard let bvc = self as? PresentableVC else { return }
+                self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: actions, on: bvc, from: urlBar)
+            }
+            return  [tpBlocking]
+        case .Whitelisted:
+            let actions = self.menuActionsForWhitelistedSite(for: tab)
+            let tpBlocking = PhotonActionSheetItem(title: Strings.SettingsTrackingProtectionSectionName, text: Strings.TrackingProtectionWhiteListOn, iconString: "menu-TrackingProtection-Off", isEnabled: false, accessory: .Disclosure) { _ in
+                guard let bvc = self as? PresentableVC else { return }
+                self.presentSheetWith(title: Strings.SettingsTrackingProtectionSectionName, actions: actions, on: bvc, from: urlBar)
+            }
+            return [tpBlocking]
+        }
+    }
+
+    @available(iOS 11.0, *)
+    func getTrackingSubMenu(for tab: Tab) -> [[PhotonActionSheetItem]] {
+        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else {
+            return []
+        }
+        switch blocker.status {
+        case .NoBlockedURLs:
+            return []
+        case .Blocking:
+            return menuActionsForTrackingProtectionEnabled(for: tab)
+        case .Disabled:
+            return menuActionsForTrackingProtectionDisabled(for: tab)
+        case .Whitelisted:
+            return menuActionsForWhitelistedSite(for: tab)
+        }
+    }
+
+    func getRefreshLongPressMenu(for tab: Tab) -> [PhotonActionSheetItem] {
+        guard tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
+            return []
         }
 
-        return []
+        let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
+        let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
+            tab.toggleDesktopSite()
+        }
+
+        if #available(iOS 11, *), let helper = tab.contentBlocker as? ContentBlockerHelper {
+            let title = helper.isEnabled ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
+            let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
+            let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { action in
+                helper.isUserEnabled = !helper.isEnabled
+            }
+            return [toggleDesktopSite, toggleTP]
+        } else {
+            return [toggleDesktopSite]
+        }
     }
 }

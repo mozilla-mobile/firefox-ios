@@ -3,282 +3,352 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-(function() {
 "use strict";
 
-var DEBUG_ENABLED = false;
-var MATCH_HIGHLIGHT_ACTIVE = "#f19750";
-var MATCH_HIGHLIGHT_INACTIVE = "#ffde49";
-var SCROLL_INTERVAL_INCREMENT = 5;
-var SCROLL_INTERVAL_DURATION = 400;
-var SCROLL_OFFSET = 60;
+const MAXIMUM_HIGHLIGHT_COUNT = 500;
+const SCROLL_OFFSET_Y = 40;
+const SCROLL_DURATION = 100;
 
-var activeHighlightSpan = null;
-var lastSearch;
-var scrollInterval;
-var activeIndex = 0;
-var highlightSpans = [];
+const HIGHLIGHT_CLASS_NAME = "__firefox__find-highlight";
+const HIGHLIGHT_CLASS_NAME_ACTIVE = "__firefox__find-highlight-active";
 
-function debug(str) {
-  if (DEBUG_ENABLED) {
-    console.log("FindInPage: " + str);
-  }
+const HIGHLIGHT_COLOR = "#ffde49";
+const HIGHLIGHT_COLOR_ACTIVE = "#f19750";
+
+const HIGHLIGHT_CSS =
+`.${HIGHLIGHT_CLASS_NAME} {
+  color: #000;
+  background-color: ${HIGHLIGHT_COLOR};
+  border-radius: 1px;
+  box-shadow: 0 0 0 2px ${HIGHLIGHT_COLOR};
+  transition: all ${SCROLL_DURATION}ms ease ${SCROLL_DURATION}ms;
 }
+.${HIGHLIGHT_CLASS_NAME}.${HIGHLIGHT_CLASS_NAME_ACTIVE} {
+  background-color: ${HIGHLIGHT_COLOR_ACTIVE};
+  box-shadow: 0 0 0 4px ${HIGHLIGHT_COLOR_ACTIVE},0 1px 3px 3px rgba(0,0,0,.75);
+}`;
 
-function isElementVisible(elem) {
-  return getComputedStyle(elem).visibility !== "hidden";
-}
+var lastEscapedQuery = "";
+var lastFindOperation = null;
+var lastReplacements = null;
+var lastHighlights = null;
+var activeHighlightIndex = -1;
 
-function isRectInViewport(rect) {
-  var left = rect.left + document.body.scrollLeft;
-  var right = rect.right + document.body.scrollLeft;
-  var top = rect.top + document.body.scrollTop;
-  var bottom = rect.bottom + document.body.scrollTop;
+var highlightSpan = document.createElement("span");
+highlightSpan.className = HIGHLIGHT_CLASS_NAME;
 
-  return rect.width > 0 &&
-         rect.height > 0 &&
-         right >= 0 &&
-         bottom >= 0 &&
-         left <= document.body.scrollWidth &&
-         top <= document.body.scrollHeight;
-}
+var styleElement = document.createElement("style");
+styleElement.innerHTML = HIGHLIGHT_CSS;
 
-function findMatches(text) {
-  // For case-insensitive matching.
-  var lowerText = text.toLocaleLowerCase();
-  var upperText = text.toLocaleUpperCase();
-
-  var matches = [];
-  var range = document.createRange();
-  var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-  var textLength = text.length;
-  var node;
-  while (node = walker.nextNode()) {
-    var textContent = node.textContent;
-    findString: for (var i = 0; i < textContent.length - textLength + 1; ++i) {
-      for (var j = 0; j < textLength; ++j) {
-        var nextChar = textContent[i + j];
-        if (lowerText[j] !== nextChar && upperText[j] !== nextChar) {
-          continue findString;
-        }
-      }
-
-      // This node is a TextNode, not an Element. Its parent is the nearest Element.
-      var element = node.parentNode;
-
-      // Find the rect of just the text for this match.
-      range.setStart(node, i);
-      range.setEnd(node, i + textLength);
-      var textRect = range.getBoundingClientRect();
-
-      // We have a match, but we need to make sure it's visible. The condition
-      // below checks the following cases:
-      // * If this element or any of its parents has style visibility hidden.
-      //   The visibility style is inherited, so we need to check only this
-      //   element and not all of its ancestors.
-      // * If the highlight will be outside of the page's bounds. We determine
-      //   this by comparing the bounds of the text rect.
-      // * If the element style display is set to none. display:none collapses
-      //   the element's space, so this will again be detected by looking at
-      //   the text's rect: if the element is collapsed, the width and height
-      //   will be zero.
-      if (isElementVisible(element) && isRectInViewport(textRect)) {
-        matches.push({ node: node, index: i });
-
-        // Resume searching after this match to prevent overlapping results.
-        i += textLength- 1;
-      }
+function find(query) {
+  let escapedQuery = query.trim().replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+  if (escapedQuery !== lastEscapedQuery) {
+    if (lastFindOperation) {
+      lastFindOperation.cancel();
     }
+
+    clear();
+
+    lastEscapedQuery = escapedQuery;
   }
 
-  return matches;
-}
-
-function flattenNode(node) {
-  var parent = node.parentNode;
-  if (!parent) {
+  if (!escapedQuery) {
     return;
   }
 
-  while (node.firstChild) {
-    parent.insertBefore(node.firstChild, node);
-  }
+  let queryRegExp = new RegExp("(" + escapedQuery + ")", "gi");
 
-  node.remove();
-  parent.normalize();
-}
+  lastFindOperation = getMatchingNodeReplacements(queryRegExp, function(replacements, highlights) {
+    let replacement;
+    for (let i = 0, length = replacements.length; i < length; i++) {
+      replacement = replacements[i];
 
-function clearHighlights() {
-  if (highlightSpans.length > 0) {
-    for (var span of highlightSpans) {
-      flattenNode(span);
+      replacement.originalNode.replaceWith(replacement.replacementFragment);
     }
-    highlightSpans = [];
-  }
 
-  activeHighlightSpan = null;
+    lastFindOperation = null;
+    lastReplacements = replacements;
+    lastHighlights = highlights;
+    activeHighlightIndex = -1;
+
+    let totalResults = highlights.length;
+    webkit.messageHandlers.findInPageHandler.postMessage({ totalResults: totalResults });
+
+    findNext();
+  });
 }
 
-function highlightAllMatches(text) {
-  debug("Searching: " + text);
+function findNext() {
+  if (lastHighlights) {
+    activeHighlightIndex = (activeHighlightIndex + lastHighlights.length + 1) % lastHighlights.length;
+    updateActiveHighlight();
+  }
+}
 
-  clearHighlights();
+function findPrevious() {
+  if (lastHighlights) {
+    activeHighlightIndex = (activeHighlightIndex + lastHighlights.length - 1) % lastHighlights.length;
+    updateActiveHighlight();
+  }
+}
 
-  if (!text.trim()) {
-    webkit.messageHandlers.findInPageHandler.postMessage({ totalResults: 0 });
+function findDone() {
+  styleElement.remove();
+  clear();
+
+  lastEscapedQuery = "";
+}
+
+function clear() {
+  if (!lastHighlights) {
     return;
   }
 
-  var range = document.createRange();
-  var matches = findMatches(text);
-  var highlightTemplate = document.createElement("span");
-  highlightTemplate.style.backgroundColor = MATCH_HIGHLIGHT_INACTIVE;
+  let replacements = lastReplacements;
+  let highlights = lastHighlights;
 
-  // If there are multiple matches in the same node, inserting a highlight span before other matches
-  // in that node will invalidate other matches since the node itself changes. By iterating through
-  // results in reverse, we highlight matches last in the node first so earlier matches are unaffected.
-  for (var i = matches.length - 1; i >= 0; --i) {
-    var match = matches[i];
-    var highlight = highlightTemplate.cloneNode();
+  let highlight;
+  for (let i = 0, length = highlights.length; i < length; i++) {
+    highlight = highlights[i];
 
-    range.setStart(match.node, match.index);
-    range.setEnd(match.node, match.index + text.length);
-    range.surroundContents(highlight);
-    highlightSpans.unshift(highlight);
+    removeHighlight(highlight);
   }
 
-  debug(matches.length + " highlighted rects created!");
-  webkit.messageHandlers.findInPageHandler.postMessage({ totalResults: matches.length });
-}
+  lastReplacements = null;
+  lastHighlights = null;
+  activeHighlightIndex = -1;
 
-function getIDForRect(rect) {
-  return rect.top + "," + rect.bottom + "," + rect.left + "," + rect.right;
+  webkit.messageHandlers.findInPageHandler.postMessage({ currentResult: 0, totalResults: 0 });
 }
 
 function updateActiveHighlight() {
-  // Reset the color of the previous highlight.
-  if (activeHighlightSpan) {
-    activeHighlightSpan.style.backgroundColor = MATCH_HIGHLIGHT_INACTIVE;
+  if (!styleElement.parentNode) {
+    document.body.appendChild(styleElement);
   }
 
-  if (!highlightSpans.length) {
+  let lastActiveHighlight = document.querySelector("." + HIGHLIGHT_CLASS_NAME_ACTIVE);
+  if (lastActiveHighlight) {
+    lastActiveHighlight.className = HIGHLIGHT_CLASS_NAME;
+  }
+
+  if (!lastHighlights) {
     return;
   }
 
-  activeHighlightSpan = highlightSpans[activeIndex];
-  activeHighlightSpan.style.backgroundColor = MATCH_HIGHLIGHT_ACTIVE;
+  let activeHighlight = lastHighlights[activeHighlightIndex];
+  if (activeHighlight) {
+    activeHighlight.className = HIGHLIGHT_CLASS_NAME + " " + HIGHLIGHT_CLASS_NAME_ACTIVE;
+    scrollToElement(activeHighlight, SCROLL_DURATION);
 
-  // Find the position of the element centered on the screen, then scroll to it.
-  var rect = activeHighlightSpan.getBoundingClientRect();
-  var top = SCROLL_OFFSET + rect.top + scrollY - window.innerHeight / 2;
-  var left = rect.left + scrollX - window.innerWidth / 2;
-  left = clamp(left, 0, document.body.scrollWidth);
-  top = clamp(top, 0, document.body.scrollHeight);
-  scrollToSelection(left, top, SCROLL_INTERVAL_DURATION);
-  debug("Scrolled to: " + left + ", " + top);
+    webkit.messageHandlers.findInPageHandler.postMessage({ currentResult: activeHighlightIndex + 1 });
+  }
 }
 
-function scrollToSelection(left, top, duration) {
-  var time = 0;
-  var startX = scrollX;
-  var startY = scrollY;
-  clearInterval(scrollInterval);
-  scrollInterval = setInterval(function() {
-    var xStep = easeOutCubic(time, startX, left - startX, duration);
-    var yStep = easeOutCubic(time, startY, top - startY, duration);
-    window.scrollTo(xStep, yStep);
-    time += SCROLL_INTERVAL_INCREMENT;
-    if (time >= duration) {
-      clearInterval(scrollInterval);
-    }
-  }, SCROLL_INTERVAL_INCREMENT);
-}
-
-function easeOutCubic(currentTime, startValue, changeInValue, duration) {
-  return changeInValue * (Math.pow(currentTime / duration - 1, 3) + 1) + startValue;
-}
-
-function clamp(number, min, max) {
-  return Math.max(min, Math.min(number, max));
-}
-
-function updateSearch(text) {
-  if (lastSearch == text) {
-    // The text is the same, so we're either finding either the next or previous result.
-    var totalResults = highlightSpans.length;
-    activeIndex = (activeIndex + totalResults) % totalResults;
-  } else {
-    // Store the current active rect to decide which new match should be active.
-    var activeHighlightRect = null;
-    if (activeHighlightSpan) {
-      activeHighlightRect = activeHighlightSpan.getBoundingClientRect();
+function removeHighlight(highlight) {
+  let parent = highlight.parentNode;
+  if (parent) {
+    while (highlight.firstChild) {
+      parent.insertBefore(highlight.firstChild, highlight);
     }
 
-    // The search text changed, so scan the page for new results.
-    highlightAllMatches(text);
+    highlight.remove();
+    parent.normalize();
+  }
+}
 
-    // If we found a match at or after the last match, use that position
-    // instead of starting again from the top.
-    activeIndex = 0;
-    if (activeHighlightRect) {
-      for (var i = 0; i < highlightSpans.length; i++) {
-        var highlight = highlightSpans[i];
-        var highlightRect = highlight.getBoundingClientRect();
-        if ((highlightRect.top == activeHighlightRect.top && highlightRect.left >= activeHighlightRect.left) ||
-            (highlightRect.top > activeHighlightRect.top)) {
-          activeIndex = i;
-          break;
-        }
+function asyncTextNodeWalker(iterator) {
+  let operation = new Operation();
+  let walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+
+  let timeout = setTimeout(function() {
+    chunkedLoop(function() { return walker.nextNode(); }, function(node) {
+      if (operation.cancelled) {
+        return false;
+      }
+
+      iterator(node);
+      return true;
+    }, 100).then(function() {
+      operation.complete();
+    });
+  }, 50);
+
+  operation.oncancelled = function() {
+    clearTimeout(timeout);
+  };
+
+  return operation;
+}
+
+function getMatchingNodeReplacements(regExp, callback) {
+  let replacements = [];
+  let highlights = [];
+  let isMaximumHighlightCount = false;
+
+  let operation = asyncTextNodeWalker(function(originalNode) {
+    let originalTextContent = originalNode.textContent;
+    let lastIndex = 0;
+    let replacementFragment = document.createDocumentFragment();
+    let hasReplacement = false;
+    let match;
+
+    while ((match = regExp.exec(originalTextContent))) {
+      let matchTextContent = match[0];
+
+      // Add any text before this match.
+      if (match.index > 0) {
+        let leadingSubstring = originalTextContent.substring(lastIndex, match.index);
+        replacementFragment.appendChild(document.createTextNode(leadingSubstring));
+      }
+
+      // Add element for this match.
+      let element = highlightSpan.cloneNode(false);
+      element.textContent = matchTextContent;
+      replacementFragment.appendChild(element);
+      highlights.push(element);
+
+      lastIndex = regExp.lastIndex;
+      hasReplacement = true;
+
+      if (highlights.length > MAXIMUM_HIGHLIGHT_COUNT) {
+        isMaximumHighlightCount = true;
+        break;
       }
     }
 
-    lastSearch = text;
+    if (hasReplacement) {
+      // Add any text after the matches.
+      if (lastIndex < originalTextContent.length) {
+        let trailingSubstring = originalTextContent.substring(lastIndex, originalTextContent.length);
+        replacementFragment.appendChild(document.createTextNode(trailingSubstring));
+      }
+
+      replacements.push({
+        originalNode: originalNode,
+        replacementFragment: replacementFragment
+      });
+    }
+
+    if (isMaximumHighlightCount) {
+      operation.cancel();
+      callback(replacements, highlights);
+    }
+  });
+
+  // Callback for if/when the text node loop completes (should
+  // happen unless the maximum highlight count is reached).
+  operation.oncompleted = function() {
+    callback(replacements, highlights);
+  };
+
+  return operation;
+}
+
+function chunkedLoop(condition, iterator, chunkSize) {
+  return new Promise(function(resolve, reject) {
+    setTimeout(doChunk, 0);
+
+    function doChunk() {
+      let argument;
+      for (let i = 0; i < chunkSize; i++) {
+        argument = condition();
+        if (!argument || iterator(argument) === false) {
+          resolve();
+          return;
+        }
+      }
+
+      setTimeout(doChunk, 0);
+    }
+  });
+}
+
+function scrollToElement(element, duration) {
+  let rect = element.getBoundingClientRect();
+
+  let targetX = clamp(rect.left + window.scrollX - window.innerWidth / 2, 0, document.body.scrollWidth);
+  let targetY = clamp(SCROLL_OFFSET_Y + rect.top + window.scrollY - window.innerHeight / 2, 0, document.body.scrollHeight);
+
+  let startX = window.scrollX;
+  let startY = window.scrollY;
+
+  let deltaX = targetX - startX;
+  let deltaY = targetY - startY;
+
+  let startTimestamp;
+
+  function step(timestamp) {
+    if (!startTimestamp) {
+      startTimestamp = timestamp;
+    }
+
+    let time = timestamp - startTimestamp;
+    let percent = Math.min(time / duration, 1);
+
+    let x = startX + deltaX * percent;
+    let y = startY + deltaY * percent;
+
+    window.scrollTo(x, y);
+
+    if (time < duration) {
+      requestAnimationFrame(step);
+    }
   }
 
-  // Update the UI with the current match index.
-  var currentResult = highlightSpans.length ? activeIndex + 1 : 0;
-  webkit.messageHandlers.findInPageHandler.postMessage({ currentResult: currentResult });
-
-  updateActiveHighlight();
+  requestAnimationFrame(step);
 }
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(value, max));
+}
+
+function Operation() {
+  this.cancelled = false;
+  this.completed = false;
+}
+
+Operation.prototype.constructor = Operation;
+
+Operation.prototype.cancel = function() {
+  this.cancelled = true;
+
+  if (typeof this.oncancelled === "function") {
+    this.oncancelled();
+  }
+};
+
+Operation.prototype.complete = function() {
+  this.completed = true;
+
+  if (typeof this.oncompleted === "function") {
+    this.oncompleted();
+  }
+};
 
 Object.defineProperty(window.__firefox__, "find", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: function(text) {
-    updateSearch(text);
-  }
+  value: find
 });
 
 Object.defineProperty(window.__firefox__, "findNext", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: function(text) {
-    activeIndex++;
-    updateSearch(text);
-  }
+  value: findNext
 });
 
 Object.defineProperty(window.__firefox__, "findPrevious", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: function(text) {
-    activeIndex--;
-    updateSearch(text);
-  }
+  value: findPrevious
 });
 
 Object.defineProperty(window.__firefox__, "findDone", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: function() {
-    clearHighlights();
-    lastSearch = null;
-  }
+  value: findDone
 });
-
-})();

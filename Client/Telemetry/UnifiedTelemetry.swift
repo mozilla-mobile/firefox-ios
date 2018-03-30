@@ -20,6 +20,7 @@ class UnifiedTelemetry {
         let sendUsageData = profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
         telemetryConfig.isCollectionEnabled = sendUsageData
         telemetryConfig.isUploadEnabled = sendUsageData
+        telemetryConfig.scheduleUpload = .foregrounded
 
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.blockPopups", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.saveLogins", withDefaultValue: true)
@@ -28,7 +29,8 @@ class UnifiedTelemetry {
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASPocketStoriesVisible", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASBookmarkHighlightsVisible", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.ASRecentHighlightsVisible", withDefaultValue: true)
-        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.strength", withDefaultValue: "basic")
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.normalbrowsing", withDefaultValue: true)
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.privatebrowsing", withDefaultValue: true)
 
         let prefs = profile.prefs
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
@@ -44,10 +46,15 @@ class UnifiedTelemetry {
 
        Telemetry.default.beforeSerializePing(pingType: MobileEventPingBuilder.PingType) { (inputDict) -> [String : Any?] in
            var outputDict = inputDict
-           var settings: [String : Any?] = inputDict["settings"] as? [String : Any?] ?? [:]
+           var settings: [String : String?] = inputDict["settings"] as? [String : String?] ?? [:]
 
            let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
            settings["defaultSearchEngine"] = searchEngines.defaultEngine.engineID ?? "custom"
+
+           if let windowBounds = UIApplication.shared.keyWindow?.bounds {
+               settings["windowWidth"] = String(describing: windowBounds.width)
+               settings["windowHeight"] = String(describing: windowBounds.height)
+           }
 
            outputDict["settings"] = settings
            return outputDict
@@ -74,8 +81,11 @@ extension UnifiedTelemetry {
         case background = "background"
         case change = "change"
         case delete = "delete"
+        case drag = "drag"
+        case drop = "drop"
         case foreground = "foreground"
         case open = "open"
+        case press = "press"
         case scan = "scan"
         case tap = "tap"
         case view = "view"
@@ -85,12 +95,18 @@ extension UnifiedTelemetry {
         case app = "app"
         case bookmark = "bookmark"
         case bookmarksPanel = "bookmarks-panel"
+        case keyCommand = "key-command"
+        case locationBar = "location-bar"
         case qrCodeText = "qr-code-text"
         case qrCodeURL = "qr-code-url"
         case readerModeCloseButton = "reader-mode-close-button"
         case readerModeOpenButton = "reader-mode-open-button"
         case readingListItem = "reading-list-item"
         case setting = "setting"
+        case tab = "tab"
+        case trackingProtectionStatistics = "tracking-protection-statistics"
+        case trackingProtectionWhitelist = "tracking-protection-whitelist"
+        case url = "url"
     }
 
     public enum EventValue: String {
@@ -98,6 +114,8 @@ extension UnifiedTelemetry {
         case appMenu = "app-menu"
         case awesomebarResults = "awesomebar-results"
         case bookmarksPanel = "bookmarks-panel"
+        case browser = "browser"
+        case homePanel = "home-panel"
         case homePanelTabButton = "home-panel-tab-button"
         case markAsRead = "mark-as-read"
         case markAsUnread = "mark-as-unread"
@@ -106,6 +124,8 @@ extension UnifiedTelemetry {
         case readingListPanel = "reading-list-panel"
         case shareExtension = "share-extension"
         case shareMenu = "share-menu"
+        case tabTray = "tab-tray"
+        case topTabs = "top-tabs"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String : Any?]? = nil) {

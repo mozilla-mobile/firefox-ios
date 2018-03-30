@@ -45,6 +45,7 @@ let ChangePasscodeSettings = "ChangePasscodeSettings"
 let LockedLoginsSettings = "LockedLoginsSettings"
 let TabTrayLongPressMenu = "TabTrayLongPressMenu"
 let HistoryRecentlyClosed = "HistoryRecentlyClosed"
+let TrackingProtectionContextMenuDetails = "TrackingProtectionContextMenuDetails"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -108,6 +109,10 @@ class Action {
     static let SetURLByTyping = "SetURLByTyping"
     static let SetURLByPasting = "SetURLByPasting"
 
+    static let TrackingProtectionContextMenu = "TrackingProtectionContextMenu"
+    static let EnableTrackingProtectionperSite = "EnableTrackingProtectionperSite"
+    static let DisableTrackingProtectionperSite = "DisableTrackingProtectionperSite"
+
     static let ReloadURL = "ReloadURL"
 
     static let OpenNewTabFromTabTray = "OpenNewTabFromTabTray"
@@ -119,6 +124,7 @@ class Action {
 
     static let ToggleRequestDesktopSite = "ToggleRequestDesktopSite"
     static let ToggleNightMode = "ToggleNightMode"
+    static let ToggleTrackingProtection = "ToggleTrackingProtection"
     static let ToggleNoImageMode = "ToggleNoImageMode"
 
     static let Bookmark = "Bookmark"
@@ -148,9 +154,8 @@ class Action {
     static let AcceptClearPrivateData = "AcceptClearPrivateData"
 
     static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
-    static let ToggleTrackingProtectionSettingAlwaysOn = "ToggleTrackingProtectionSettingAlwaysOn"
-    static let ToggleTrackingProtectionSettingPrivateOnly = "ToggleTrackingProtectionSettingPrivateOnly"
-    static let ToggleTrackingProtectionSettingOff = "ToggleTrackingProtectionSettingOff"
+    static let ToggleTrackingProtectionSettingOnNormalMode = "ToggleTrackingProtectionSettingAlwaysOn"
+    static let ToggleTrackingProtectionSettingOnPrivateMode = "ToggleTrackingProtectionSettingPrivateOnly"
 
     static let ToggleShowToolbarWhenScrolling = "ToggleShowToolbarWhenScrolling"
 
@@ -171,9 +176,6 @@ private var isTablet: Bool {
     // than avoiding the duplication of one line of code.
     return UIDevice.current.userInterfaceIdiom == .pad
 }
-
-// Matches the available options in app settings for enabling Tracking Protection
-enum TrackingProtectionSetting : Int { case alwaysOn; case privateOnly; case off }
 
 class FxUserState: MMUserState {
     required init() {
@@ -205,9 +207,8 @@ class FxUserState: MMUserState {
     var numTabs: Int = 0
 
     var trackingProtectionPerTabEnabled = true // TP can be shut off on a per-tab basis
-    var trackingProtectionSetting = TrackingProtectionSetting.privateOnly.rawValue // NSPredicate doesn't work with enum
-    // Construct an NSPredicate with this condition to use it.
-    static let trackingProtectionIsOnCondition = "trackingProtectionSetting == \(TrackingProtectionSetting.alwaysOn.rawValue) || (trackingProtectionSetting == \(TrackingProtectionSetting.privateOnly.rawValue) && isPrivate == YES)"
+    var trackingProtectionSettingOnNormalMode = true
+    var trackingProtectionSettingOnPrivateMode = true
 }
 
 fileprivate let defaultURL = "https://www.mozilla.org/en-US/book/"
@@ -316,6 +317,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             menu.cells["menu-Paste"].firstMatch.tap()
         }
 
+        // Different possition for iphone and ipad
+        screenState.gesture(forAction: Action.TrackingProtectionContextMenu, transitionTo: TrackingProtectionContextMenuDetails) { userState in
+            if isTablet {
+                app.tables["Context Menu"].cells.element(boundBy: 0).tap()
+            } else {
+                app.tables["Context Menu"].cells.element(boundBy: 3).tap()
+            }
+        }
+
         screenState.backAction = {
             if isTablet {
                 // There is no Cancel option in iPad.
@@ -324,8 +334,27 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 app.buttons["PhotonMenu.close"].tap()
             }
         }
-
         screenState.dismissOnUse = true
+    }
+
+    map.addScreenState(TrackingProtectionContextMenuDetails) { screenState in
+        screenState.gesture(forAction: Action.EnableTrackingProtectionperSite) { userState in
+                app.tables.cells["menu-TrackingProtection"].tap()
+                userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
+            }
+        screenState.gesture(forAction: Action.DisableTrackingProtectionperSite) { userState in
+            app.tables.cells["menu-TrackingProtection-Off"].tap()
+            userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
+        }
+
+        screenState.backAction = {
+            if isTablet {
+                // There is no Cancel option in iPad.
+                app.otherElements["PopoverDismissRegion"].tap()
+            } else {
+                app.buttons["PhotonMenu.close"].tap()
+            }
+        }
     }
 
     // URLBarOpen is dismissOnUse, which ScreenGraph interprets as "now we've done this action, then go back to the one before it"
@@ -661,16 +690,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(TrackingProtectionSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
 
-        screenState.tap(app.cells["Settings.TrackingProtectionOption.OnLabel"], forAction: Action.ToggleTrackingProtectionSettingAlwaysOn) { userState in
-            userState.trackingProtectionSetting = TrackingProtectionSetting.alwaysOn.rawValue
+        screenState.tap(app.toggles["Normal Browsing Mode"], forAction: Action.ToggleTrackingProtectionSettingOnNormalMode) { userState in
+            userState.trackingProtectionSettingOnNormalMode = !userState.trackingProtectionSettingOnNormalMode
         }
 
-        screenState.tap(app.cells["Settings.TrackingProtectionOption.OnInPrivateBrowsingLabel"], forAction: Action.ToggleTrackingProtectionSettingPrivateOnly) { userState in
-            userState.trackingProtectionSetting = TrackingProtectionSetting.privateOnly.rawValue
-        }
-
-        screenState.tap(app.cells["Settings.TrackingProtectionOption.OffLabel"], forAction: Action.ToggleTrackingProtectionSettingOff) { userState in
-            userState.trackingProtectionSetting = TrackingProtectionSetting.off.rawValue
+        screenState.tap(app.toggles["Private Browsing Mode"], forAction: Action.ToggleTrackingProtectionSettingOnPrivateMode) { userState in
+            userState.trackingProtectionSettingOnPrivateMode = !userState.trackingProtectionSettingOnPrivateMode
         }
     }
 
@@ -761,17 +786,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(ReloadLongPressMenu) { screenState in
-        screenState.backAction = lastButtonIsCancel
+        screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
 
-        let rdsButton = app.sheets.element(boundBy: 0).buttons.element(boundBy: 0)
+        let rdsButton = app.tables["Context Menu"].cells.element(boundBy: 0)
         screenState.tap(rdsButton, forAction: Action.ToggleRequestDesktopSite) { userState in
             userState.requestDesktopSite = !userState.requestDesktopSite
         }
 
-        let trackingProtectionButton = app.sheets.element(boundBy: 0).buttons.element(boundBy: 1)
+        let trackingProtectionButton = app.tables["Context Menu"].cells.element(boundBy: 1)
 
-        screenState.tap(trackingProtectionButton, forAction: Action.ToggleTrackingProtectionPerTabEnabled, if: FxUserState.trackingProtectionIsOnCondition) { userState in
+        screenState.tap(trackingProtectionButton, forAction: Action.ToggleTrackingProtectionPerTabEnabled) { userState in
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
     }
@@ -788,15 +813,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     // make sure after the menu action, navigator.nowAt() is used to set the current state
     map.addScreenState(PageOptionsMenu) {screenState in
-        screenState.tap(app.tables["Context Menu"].cells["menu-Tools"], to: ToolsMenu)
+        screenState.tap(app.tables["Context Menu"].cells["menu-FindInPage"], to: FindInPage)
         screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
         screenState.tap(app.tables["Context Menu"].cells["action_remove"], forAction: Action.CloseTabFromPageOptions, Action.CloseTab, transitionTo: HomePanelsScreen, if: "tablet != true")
-        screenState.backAction = cancelBackAction
-        screenState.dismissOnUse = true
-    }
-
-    map.addScreenState(ToolsMenu) { screenState in
-        screenState.tap(app.tables.cells["menu-FindInPage"], to: FindInPage)
         screenState.tap(app.tables.cells["action_pin"], forAction: Action.PinToTopSitesPAM)
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
@@ -814,12 +833,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.cells["menu-panel-History"], to: HomePanel_History)
         screenState.tap(app.tables.cells["menu-panel-ReadingList"], to: HomePanel_ReadingList)
 
-        screenState.tap(app.tables.cells["menu-NoImageMode"], forAction: Action.ToggleNoImageMode) { userState in
+        screenState.tap(app.tables.cells["menu-NoImageMode"], forAction: Action.ToggleNoImageMode, transitionTo: BrowserTabMenu) { userState in
             userState.noImageMode = !userState.noImageMode
         }
-
-        screenState.tap(app.tables.cells["menu-NightMode"], forAction: Action.ToggleNightMode) { userState in
+    
+        screenState.tap(app.tables.cells["menu-NightMode"], forAction: Action.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
+        }
+        
+        screenState.tap(app.tables.cells["menu-TrackingProtection"], forAction: Action.ToggleTrackingProtection, transitionTo: BrowserTabMenu) { userState in
+            if userState.isPrivate {
+                userState.trackingProtectionSettingOnPrivateMode = !userState.trackingProtectionSettingOnPrivateMode
+            } else {
+                userState.trackingProtectionSettingOnNormalMode = !userState.trackingProtectionSettingOnNormalMode
+            }
         }
 
         screenState.dismissOnUse = true
@@ -871,17 +898,13 @@ extension MMNavigator where T == FxUserState {
     }
 
     func browserPerformAction(_ view: BrowserPerformAction) {
-        let PageMenuOptions = [.shareOption, .toggleBookmarkOption, .addReadingListOption, .findInPageOption, .sendToDeviceOption, BrowserPerformAction.copyURLOption]
-        let ToolsMenuOptions = [.findInPageOption, .toggleDesktopOption, BrowserPerformAction.pinToTopSitesOption]
+        let PageMenuOptions = [.shareOption, .toggleBookmarkOption, .addReadingListOption, .findInPageOption, .sendToDeviceOption, .toggleDesktopOption, BrowserPerformAction.copyURLOption]
         let BrowserMenuOptions = [.openTopSitesOption, .openBookMarksOption, .openReadingListOption, .openHistoryOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
 
         let app = XCUIApplication()
 
         if PageMenuOptions.contains(view) {
             self.goto(PageOptionsMenu)
-            app.tables["Context Menu"].cells[view.rawValue].tap()
-        } else if ToolsMenuOptions.contains(view) {
-            self.goto(ToolsMenu)
             app.tables["Context Menu"].cells[view.rawValue].tap()
         } else if BrowserMenuOptions.contains(view) {
             self.goto(BrowserTabMenu)

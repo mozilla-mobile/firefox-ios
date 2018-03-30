@@ -8,8 +8,8 @@ import UIKit
 
 struct SettingsUX {
     static let TableViewHeaderBackgroundColor = UIConstants.AppBackgroundColor
-    static let TableViewHeaderTextColor = UIColor.Defaults.Grey50
-    static let TableViewRowTextColor = UIColor.Defaults.Grey90
+    static let TableViewHeaderTextColor = UIColor.Photon.Grey50
+    static let TableViewRowTextColor = UIColor.Photon.Grey90
     static let TableViewDisabledRowTextColor = UIColor.lightGray
     static let TableViewSeparatorColor = UIColor(rgb: 0xD1D1D4)
     static let TableViewHeaderFooterHeight = CGFloat(44)
@@ -515,6 +515,7 @@ class SettingsTableViewController: UITableViewController {
 
         settings = generateSettings()
 
+        // Because these are added in viewWillAppear, unhook in viewDidDisappear for symmetry.
         NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELsyncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SELfirefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
@@ -529,7 +530,11 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self)    }
+
+        [Notification.Name.ProfileDidStartSyncing, Notification.Name.ProfileDidFinishSyncing, Notification.Name.FirefoxAccountChanged].forEach { name in
+            NotificationCenter.default.removeObserver(self, name: name, object: nil)
+        }
+    }
 
     // Override to provide settings in subclasses
     func generateSettings() -> [SettingSection] {

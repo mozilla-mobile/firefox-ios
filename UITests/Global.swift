@@ -220,8 +220,9 @@ class BrowserUtils {
         case Cache = "Cache"
         case OfflineData = "Offline Website Data"
         case Cookies = "Cookies"
+        case TrackingProtection = "Tracking Protection"
     }
-    internal static let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
+    internal static let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies, Clearable.TrackingProtection])
 
     class func resetToAboutHome() {
         var error: NSError?
@@ -353,8 +354,6 @@ class BrowserUtils {
     }
 
     class func clearPrivateData(_ clearables: Set<Clearable>? = AllClearables, swipe: Bool? = false) {
-        let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
-
         openClearPrivateDataDialog(swipe!)
 
         // Disable all items that we don't want to clear.
@@ -418,6 +417,8 @@ class SimplePageServer {
         let pageDataPath = Bundle(for: self).path(forResource: name, ofType: ext)!
         return try! String(contentsOfFile: pageDataPath, encoding: .utf8)
     }
+
+    static var useLocalhostInsteadOfIP = false
 
     class func start() -> String {
         let webServer: GCDWebServer = GCDWebServer()
@@ -530,7 +531,8 @@ class SimplePageServer {
 
         // We use 127.0.0.1 explicitly here, rather than localhost, in order to avoid our
         // history exclusion code (Bug 1188626).
-        let webRoot = "http://127.0.0.1:\(webServer.port)"
+
+        let webRoot = "http://\(useLocalhostInsteadOfIP ? "localhost" : "127.0.0.1"):\(webServer.port)"
         return webRoot
     }
 }

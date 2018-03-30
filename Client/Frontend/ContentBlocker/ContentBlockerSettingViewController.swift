@@ -22,11 +22,17 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
 
         let button = UIButton()
         button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
-        button.contentHorizontalAlignment = .left
-        // Top and left insets are needed to match the table row style.
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
-        return button
+
+        let footer = UIView()
+        footer.addSubview(button)
+        button.snp.makeConstraints { (make) in
+            make.top.equalTo(footer).offset(8)
+            make.bottom.equalTo(footer).offset(8)
+            make.leading.equalTo(footer).offset(16)
+        }
+
+        return footer
     }
 
     func moreInfoTapped() {

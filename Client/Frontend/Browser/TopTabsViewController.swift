@@ -47,11 +47,13 @@ class TopTabsViewController: UIViewController {
         collectionView.bounces = false
         collectionView.clipsToBounds = false
         collectionView.accessibilityIdentifier = "Top Tabs View"
+        collectionView.semanticContentAttribute = .forceLeftToRight
         return collectionView
     }()
     
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
+        tabsButton.semanticContentAttribute = .forceLeftToRight
         tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
@@ -59,12 +61,14 @@ class TopTabsViewController: UIViewController {
     
     fileprivate lazy var newTab: UIButton = {
         let newTab = UIButton.newTabButton()
+        newTab.semanticContentAttribute = .forceLeftToRight
         newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
         return newTab
     }()
     
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
+        privateModeButton.semanticContentAttribute = .forceLeftToRight
         privateModeButton.light = true
         privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
         return privateModeButton
@@ -99,7 +103,7 @@ class TopTabsViewController: UIViewController {
         [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
-        self.tabObservers = registerFor(.didLoadFavicon, queue: .main)
+        self.tabObservers = registerFor(.didLoadFavicon, .didChangeURL, queue: .main)
     }
     
     deinit {
@@ -130,13 +134,21 @@ class TopTabsViewController: UIViewController {
         }
 
         let topTabFader = TopTabFader()
+        topTabFader.semanticContentAttribute = .forceLeftToRight
 
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
         view.addSubview(tabsButton)
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
-        
+
+        // Setup UIDropInteraction to handle dragging and dropping
+        // links onto the "New Tab" button.
+        if #available(iOS 11, *) {
+            let dropInteraction = UIDropInteraction(delegate: self)
+            newTab.addInteraction(dropInteraction)
+        }
+
         newTab.snp.makeConstraints { make in
             make.centerY.equalTo(view)
             make.trailing.equalTo(tabsButton.snp.leading).offset(-10)
@@ -161,7 +173,7 @@ class TopTabsViewController: UIViewController {
             make.edges.equalTo(topTabFader)
         }
 
-        view.backgroundColor = UIColor.Defaults.Grey80
+        view.backgroundColor = UIColor.Photon.Grey80
         tabsButton.applyTheme(.Normal)
         if let currentTab = tabManager.selectedTab {
             applyTheme(currentTab.isPrivate ? .Private : .Normal)
@@ -246,17 +258,45 @@ class TopTabsViewController: UIViewController {
     }
 }
 
+@available(iOS 11.0, *)
+extension TopTabsViewController: UIDropInteractionDelegate {
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        // Prevent tabs from being dragged and dropped onto the "New Tab" button.
+        if let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab {
+            return false
+        }
+
+        return session.canLoadObjects(ofClass: URL.self)
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        UnifiedTelemetry.recordEvent(category: .action, method: .drop, object: .url, value: .topTabs)
+
+        _ = session.loadObjects(ofClass: URL.self) { urls in
+            guard let url = urls.first else {
+                return
+            }
+
+            self.tabManager.addTab(URLRequest(url: url), isPrivate: self.isPrivate)
+        }
+    }
+}
+
 extension TopTabsViewController: Themeable {
     func applyTheme(_ theme: Theme) {
         tabsButton.applyTheme(theme)
-        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Defaults.Grey80
-        tabsButton.textColor = UIColor.Defaults.Grey40
+        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Photon.Grey80
+        tabsButton.textColor = UIColor.Photon.Grey40
 
         isPrivate = (theme == Theme.Private)
         privateModeButton.applyTheme(theme)
         privateModeButton.tintColor = UIColor.TopTabs.PrivateModeTint.colorFor(theme)
         privateModeButton.imageView?.tintColor = privateModeButton.tintColor
-        newTab.tintColor = UIColor.Defaults.Grey40
+        newTab.tintColor = UIColor.Photon.Grey40
         collectionView.backgroundColor = view.backgroundColor
     }
 }
@@ -285,7 +325,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
         tabCell.titleText.text = tab.displayTitle
         
         if tab.displayTitle.isEmpty {
-            if tab.webView?.url?.baseDomain?.contains("localhost") ?? true {
+            if tab.webView?.url?.isLocalUtility ?? true {
                 tabCell.titleText.text = Strings.AppMenuNewTabTitleString
             } else {
                 tabCell.titleText.text = tab.webView?.url?.absoluteDisplayString
@@ -363,6 +403,8 @@ extension TopTabsViewController: UICollectionViewDragDelegate {
             itemProvider = NSItemProvider()
         }
 
+        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .tab, value: .topTabs)
+
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = tab
         return [dragItem]
@@ -375,6 +417,8 @@ extension TopTabsViewController: UICollectionViewDropDelegate {
         guard let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = tabStore.index(of: tab) else {
             return
         }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .drop, object: .tab, value: .topTabs)
 
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
         isDragging = false
@@ -410,11 +454,20 @@ extension TopTabsViewController: TabSelectionDelegate {
 
 extension TopTabsViewController: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
-        assertIsMainThread("Animations can only be performed from the main thread")
+        assertIsMainThread("UICollectionView changes can only be performed from the main thread")
 
-        if self.tabStore.index(of: tab) != nil {
-            self.needReloads.append(tab)
-            self.performTabUpdates()
+        if tabStore.index(of: tab) != nil {
+            needReloads.append(tab)
+            performTabUpdates()
+        }
+    }
+
+    func tab(_ tab: Tab, didChangeURL url: URL) {
+        assertIsMainThread("UICollectionView changes can only be performed from the main thread")
+
+        if tabStore.index(of: tab) != nil {
+            needReloads.append(tab)
+            performTabUpdates()
         }
     }
 }
@@ -563,7 +616,7 @@ extension TopTabsViewController {
         needReloads.removeAll()
     }
 
-    fileprivate func reloadData() {
+    func reloadData() {
         assertIsMainThread("reloadData must only be called from main thread")
 
         if self.isUpdating || self.collectionView.frame == CGRect.zero {

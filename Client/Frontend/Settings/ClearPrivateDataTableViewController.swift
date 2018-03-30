@@ -23,17 +23,27 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
     fileprivate typealias DefaultCheckedState = Bool
 
+    // TODO: The next person to add a new clearable in the UI here needs to
+    // refactor how we store the saved values. We currently save an array of
+    // `Bool`s which is highly insufficient.
+    // Bug 1445687 -- https://bugzilla.mozilla.org/show_bug.cgi?id=1445687
     fileprivate lazy var clearables: [(clearable: Clearable, checked: DefaultCheckedState)] = {
-        return [
+        var items: [(clearable: Clearable, checked: DefaultCheckedState)] = [
             (HistoryClearable(profile: self.profile), true),
             (CacheClearable(tabManager: self.tabManager), true),
             (CookiesClearable(tabManager: self.tabManager), true),
-            (SiteDataClearable(tabManager: self.tabManager), true),
+            (SiteDataClearable(tabManager: self.tabManager), true)
         ]
+        if #available(iOS 11, *) {
+            items.append((TrackingProtectionClearable(), true))
+        }
+        return items
     }()
 
     fileprivate lazy var toggles: [Bool] = {
-        if let savedToggles = self.profile.prefs.arrayForKey(TogglesPrefKey) as? [Bool] {
+        // If the number of saved toggles doesn't match the number of clearables, just reset
+        // and return the default values for the clearables.
+        if let savedToggles = self.profile.prefs.arrayForKey(TogglesPrefKey) as? [Bool], savedToggles.count == self.clearables.count {
             return savedToggles
         }
 
@@ -120,19 +130,17 @@ class ClearPrivateDataTableViewController: UITableViewController {
                     return pair.clearable.clear()
                 }
                 .allSucceed()
-                .upon { result in
+                .uponQueue(.main) { result in
                     assert(result.isSuccess, "Private data cleared successfully")
 
                     LeanPlumClient.shared.track(event: .clearPrivateData)
 
                     self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
 
-                    DispatchQueue.main.async {
-                        // Disable the Clear Private Data button after it's clicked.
-                        self.clearButtonEnabled = false
-                        self.tableView.deselectRow(at: indexPath, animated: true)
-                    }
-            }
+                    // Disable the Clear Private Data button after it's clicked.
+                    self.clearButtonEnabled = false
+                    self.tableView.deselectRow(at: indexPath, animated: true)
+                }
         }
 
         // We have been asked to clear history and we have an account.

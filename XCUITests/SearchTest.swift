@@ -152,7 +152,6 @@ class SearchTests: BaseTestCase {
         changeSearchEngine(searchEngine: "Twitter")
         changeSearchEngine(searchEngine: "Wikipedia")
         // changeSearchEngine(searchEngine: "Amazon.com")
-        changeSearchEngine(searchEngine: "Yahoo")
     }
 
     func testDefaultSearchEngine() {

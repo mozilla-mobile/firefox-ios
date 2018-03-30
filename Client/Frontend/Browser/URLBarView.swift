@@ -36,6 +36,7 @@ protocol URLBarDelegate: class {
     func urlBarDidLongPressLocation(_ urlBar: URLBarView)
     func urlBarDidPressQRButton(_ urlBar: URLBarView)
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton)
+    func urlBarDidTapShield(_ urlBar: URLBarView, from button: UIButton)
     func urlBarLocationAccessibilityActions(_ urlBar: URLBarView) -> [UIAccessibilityCustomAction]?
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView)
     func urlBar(_ urlBar: URLBarView, didEnterText text: String)
@@ -229,13 +230,13 @@ class URLBarView: UIView {
         }
 
         forwardButton.snp.makeConstraints { make in
-            make.left.equalTo(self.backButton.snp.right)
+            make.leading.equalTo(self.backButton.snp.trailing)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
         stopReloadButton.snp.makeConstraints { make in
-            make.left.equalTo(self.forwardButton.snp.right)
+            make.leading.equalTo(self.forwardButton.snp.trailing)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
@@ -322,6 +323,7 @@ class URLBarView: UIView {
         locationTextField.autocapitalizationType = .none
         locationTextField.returnKeyType = .go
         locationTextField.clearButtonMode = .whileEditing
+        locationTextField.textAlignment = .left
         locationTextField.font = UIConstants.DefaultChromeFont
         locationTextField.accessibilityIdentifier = "address"
         locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
@@ -332,6 +334,10 @@ class URLBarView: UIView {
         }
         
         locationTextField.applyTheme(currentTheme)
+    }
+
+    override func becomeFirstResponder() -> Bool {
+        return self.locationTextField?.becomeFirstResponder() ?? false
     }
 
     func removeLocationTextField() {
@@ -378,10 +384,16 @@ class URLBarView: UIView {
     }
 
     func setLocation(_ location: String?, search: Bool) {
-        locationTextField?.text = location
-        if search, let location = location, !location.isEmpty {
+        guard let text = location, !text.isEmpty else {
+            locationTextField?.text = location
+            return
+        }
+        if search {
+            locationTextField?.text = text
             // Not notifying when empty agrees with AutocompleteTextField.textDidChange.
-            delegate?.urlBar(self, didEnterText: location)
+            delegate?.urlBar(self, didEnterText: text)
+        } else {
+            locationTextField?.setTextWithoutSearching(text)
         }
     }
 
@@ -597,6 +609,10 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidBeginDragInteraction(self)
+    }
+
+    func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView) {
+        delegate?.urlBarDidTapShield(self, from: tabLocationView.trackingProtectionButton)
     }
 }
 

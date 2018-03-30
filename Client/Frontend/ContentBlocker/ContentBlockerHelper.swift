@@ -6,21 +6,29 @@ import WebKit
 import Shared
 import Deferred
 
-enum BlockList: String {
+enum BlocklistName: String {
     case advertising = "disconnect-advertising"
     case analytics = "disconnect-analytics"
     case content = "disconnect-content"
     case social = "disconnect-social"
 
-    var fileName: String { return self.rawValue }
+    var filename: String { return self.rawValue }
 
-    static var all: [BlockList] { return [.advertising, .analytics, .content, .social] }
-    static var basic: [BlockList] { return [.advertising, .analytics, .social] }
-    static var strict: [BlockList] { return [.content] }
+    static var all: [BlocklistName] { return [.advertising, .analytics, .content, .social] }
+    static var basic: [BlocklistName] { return [.advertising, .analytics, .social] }
+    static var strict: [BlocklistName] { return [.content] }
 
-    static func forStrictMode(isOn: Bool) -> [BlockList] {
-        return BlockList.basic + (isOn ? BlockList.strict : [])
+    static func forStrictMode(isOn: Bool) -> [BlocklistName] {
+        return BlocklistName.basic + (isOn ? BlocklistName.strict : [])
     }
+}
+
+@available(iOS 11.0, *)
+enum BlockerStatus: String {
+    case Disabled
+    case NoBlockedURLs // When TP is enabled but nothing is being blocked
+    case Whitelisted
+    case Blocking
 }
 
 struct ContentBlockingConfig {
@@ -41,20 +49,30 @@ struct NoImageModeDefaults {
     static let ScriptName = "images"
 }
 
+enum BlockingStrength: String {
+    case basic
+    case strict
+
+    static let allOptions: [BlockingStrength] = [.basic, .strict]
+}
+
 @available(iOS 11.0, *)
 class ContentBlockerHelper {
+    static var whitelistedDomains = WhitelistedDomains()
 
-    fileprivate let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
-    fileprivate weak var tab: Tab?
-    fileprivate var userPrefs: Prefs?
-    fileprivate(set) var stats = TrackingInformation()
+    static let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
+    weak var tab: Tab?
+    private(set) var userPrefs: Prefs?
 
     var isUserEnabled: Bool? {
         didSet {
-            updateTab()
-            tab?.reload()
+            setupTabTrackingProtection()
+            guard let tab = tab else { return }
+            TabEvent.post(.didChangeContentBlocking, for: tab)
+            tab.reload()
         }
     }
+
     var isEnabled: Bool {
         if let enabled = isUserEnabled {
             return enabled
@@ -63,78 +81,98 @@ class ContentBlockerHelper {
         return tab.isPrivate ? isEnabledInPrivateBrowsing : isEnabledInNormalBrowsing
     }
 
+    var status: BlockerStatus {
+        guard isEnabled else {
+            return .Disabled
+        }
+        if stats.total == 0 {
+            guard let url = tab?.url else {
+                return .NoBlockedURLs
+            }
+            return ContentBlockerHelper.isWhitelisted(url: url) ? .Whitelisted : .NoBlockedURLs
+        } else {
+            return .Blocking
+        }
+    }
+
+    var stats: TPPageStats = TPPageStats() {
+        didSet {
+            guard let tab = self.tab else { return }
+            if stats.total <= 1 {
+                TabEvent.post(.didChangeContentBlocking, for: tab)
+            }
+        }
+    }
+
     fileprivate var isEnabledInNormalBrowsing: Bool {
         return userPrefs?.boolForKey(ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
     }
 
-    fileprivate var isEnabledInPrivateBrowsing: Bool {
+    var isEnabledInPrivateBrowsing: Bool {
         return userPrefs?.boolForKey(ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey) ?? ContentBlockingConfig.Defaults.PrivateBrowsing
     }
 
-    fileprivate var blockingStrengthPref: BlockingStrength {
+    var blockingStrengthPref: BlockingStrength {
         return userPrefs?.stringForKey(ContentBlockingConfig.Prefs.StrengthKey).flatMap(BlockingStrength.init) ?? .basic
     }
 
-    static fileprivate var blockImagesRule: WKContentRuleList?
-    static fileprivate var whitelistedDomains = [String]()
-    static private var heavyInitHasRunOnce = false
-
-    // Only set and used in UI test
-    static weak var testInstance: ContentBlockerHelper?
+    static private var blockImagesRule: WKContentRuleList?
+    static var heavyInitHasRunOnce = false
 
     init(tab: Tab, profile: Profile) {
         self.tab = tab
         self.userPrefs = profile.prefs
 
-        if AppConstants.IsRunningTest {
-            ContentBlockerHelper.testInstance = self
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(setupTabTrackingProtection), name: .ContentBlockerTabSetupRequired, object: nil)
 
-        if ContentBlockerHelper.heavyInitHasRunOnce {
+        guard let prefs = userPrefs, !ContentBlockerHelper.heavyInitHasRunOnce else {
             return
         }
 
-        ContentBlockerHelper.heavyInitHasRunOnce = true
+        performHeavyOneTimeInit(prefs)
+    }
+
+    private func performHeavyOneTimeInit(_ prefs: Prefs) {
+        struct RunOnce { static var hasRun = false }
+        guard !RunOnce.hasRun else { return }
+        RunOnce.hasRun = true
+
         migrateLegacyUserPrefs()
 
-        // Read the whitelist at startup
-        let text = readWhitelistFile()
-        if let text = text, !text.isEmpty {
-            ContentBlockerHelper.whitelistedDomains = text.components(separatedBy: .newlines)
-        }
-
-        removeOldListsByDateFromStore() {
-            self.removeOldListsByNameFromStore() {
-                self.compileListsNotInStore(completion: {})
-            }
-        }
-
         let blockImages = NoImageModeDefaults.Script
-        ruleStore.compileContentRuleList(forIdentifier: NoImageModeDefaults.ScriptName, encodedContentRuleList: blockImages) { rule, error in
+        ContentBlockerHelper.ruleStore.compileContentRuleList(forIdentifier: NoImageModeDefaults.ScriptName, encodedContentRuleList: blockImages) { rule, error in
             assert(rule != nil && error == nil)
             ContentBlockerHelper.blockImagesRule = rule
         }
+
+        // Read the whitelist at startup
+        if let list = ContentBlockerHelper.readWhitelistFile() {
+            ContentBlockerHelper.whitelistedDomains.domainSet = Set(list)
+        }
+
+        TPStatsBlocklistChecker.shared.startup()
+
+        ContentBlockerHelper.removeOldListsByDateFromStore(prefs: prefs) {
+            ContentBlockerHelper.removeOldListsByNameFromStore(prefs: prefs) {
+                ContentBlockerHelper.compileListsNotInStore {
+                    ContentBlockerHelper.heavyInitHasRunOnce = true
+                    NotificationCenter.default.post(name: .ContentBlockerTabSetupRequired, object: nil)
+                }
+            }
+        }
     }
 
-    func setupForWebView() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTab), name: .ContentBlockerUpdateNeeded, object: nil)
-        addActiveRulesToTab()
-    }
-
-    static func prefsChanged() {
-        NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
+    class func prefsChanged() {
+        // This class func needs to notify all the active instances of ContentBlockerHelper to update.
+        NotificationCenter.default.post(name: .ContentBlockerTabSetupRequired, object: nil)
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 
-    @objc func updateTab() {
-        addActiveRulesToTab()
-    }
-
     // If a user had set a pref for Tracking Protection outside of the previous defaults then make sure to honor those settings
-    fileprivate func migrateLegacyUserPrefs() {
+    private func migrateLegacyUserPrefs() {
         // If a user had set PrefEnabledState to ON this means that TP was on in normal browsing
         // if a user had set PrefEnabledState to OFF this means that TP was off in both normal and private browsing
         if let legacyPref = userPrefs?.stringForKey("prefkey.trackingprotection.enabled") {
@@ -149,17 +187,22 @@ class ContentBlockerHelper {
         }
     }
 
-    fileprivate func addActiveRulesToTab() {
-        removeTrackingProtection()
-
-        guard isEnabled else {
+    // Function to install or remove TP for a tab
+    @objc func setupTabTrackingProtection() {
+        if !ContentBlockerHelper.heavyInitHasRunOnce {
             return
         }
 
-        let rules = BlockList.forStrictMode(isOn: blockingStrengthPref == .strict)
+        removeTrackingProtection()
+
+        if !isEnabled {
+            return
+        }
+
+        let rules = BlocklistName.forStrictMode(isOn: blockingStrengthPref == .strict)
         for list in rules {
-            let name = list.fileName
-            ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
+            let name = list.filename
+            ContentBlockerHelper.ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
                 guard let rule = rule else {
                     let msg = "lookUpContentRuleList for \(name):  \(error?.localizedDescription ?? "empty rules")"
                     Sentry.shared.send(message: "Content blocker error", tag: .general, description: msg)
@@ -170,7 +213,7 @@ class ContentBlockerHelper {
         }
     }
 
-    fileprivate func removeTrackingProtection() {
+    private func removeTrackingProtection() {
         guard let tab = tab else { return }
         tab.webView?.configuration.userContentController.removeAllContentRuleLists()
 
@@ -179,7 +222,7 @@ class ContentBlockerHelper {
         }
     }
 
-    fileprivate func addToTab(contentRuleList: WKContentRuleList) {
+    private func addToTab(contentRuleList: WKContentRuleList) {
         tab?.webView?.configuration.userContentController.add(contentRuleList)
     }
 
@@ -200,17 +243,18 @@ class ContentBlockerHelper {
 
 }
 
-// MARK: Private initialization code
+// MARK: Initialization code
 // The rule store can compile JSON rule files into a private format which is cached on disk.
 // On app boot, we need to check if the ruleStore's data is out-of-date, or if the names of the rule files
 // no longer match. Finally, any JSON rule files that aren't in the ruleStore need to be compiled and stored in the
 // ruleStore.
 @available(iOS 11, *)
 extension ContentBlockerHelper {
-    fileprivate func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
+    private static func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
         DispatchQueue.global().async {
             guard let path = Bundle.main.path(forResource: file, ofType: "json"),
                 let source = try? String(contentsOfFile: path, encoding: .utf8) else {
+                    assert(false)
                     return
             }
 
@@ -220,7 +264,7 @@ extension ContentBlockerHelper {
         }
     }
 
-    fileprivate func lastModifiedSince1970(forFileAtPath path: String) -> Timestamp? {
+    private static func lastModifiedSince1970(forFileAtPath path: String) -> Timestamp? {
         do {
             let url = URL(fileURLWithPath: path)
             let attr = try FileManager.default.attributesOfItem(atPath: url.path)
@@ -231,24 +275,24 @@ extension ContentBlockerHelper {
         }
     }
 
-    fileprivate func dateOfMostRecentBlockerFile() -> Timestamp {
-        let blocklists = BlockList.all
+    private static func dateOfMostRecentBlockerFile() -> Timestamp {
+        let blocklists = BlocklistName.all
         return blocklists.reduce(Timestamp(0)) { result, list in
-            guard let path = Bundle.main.path(forResource: list.fileName, ofType: "json") else { return result }
+            guard let path = Bundle.main.path(forResource: list.filename, ofType: "json") else { return result }
             let date = lastModifiedSince1970(forFileAtPath: path) ?? 0
             return date > result ? date : result
         }
     }
 
-    fileprivate func removeAllRulesInStore(completion: @escaping () -> Void) {
-        ruleStore.getAvailableContentRuleListIdentifiers { available in
+    static func removeAllRulesInStore(completion: @escaping () -> Void) {
+        ContentBlockerHelper.ruleStore.getAvailableContentRuleListIdentifiers { available in
             guard let available = available else {
                 completion()
                 return
             }
             let deferreds: [Deferred<Void>] = available.map { filename in
                 let result = Deferred<Void>()
-                self.ruleStore.removeContentRuleList(forIdentifier: filename) { _ in
+                ContentBlockerHelper.ruleStore.removeContentRuleList(forIdentifier: filename) { _ in
                    result.fill()
                 }
                 return result
@@ -261,30 +305,30 @@ extension ContentBlockerHelper {
 
     // If any blocker files are newer than the date saved in prefs,
     // remove all the content blockers and reload them.
-    fileprivate func removeOldListsByDateFromStore(completion: @escaping () -> Void) {
-        let fileDate = self.dateOfMostRecentBlockerFile()
-        let prefsNewestDate = userPrefs?.longForKey("blocker-file-date") ?? 0
+    static func removeOldListsByDateFromStore(prefs: Prefs, completion: @escaping () -> Void) {
+        let fileDate = dateOfMostRecentBlockerFile()
+        let prefsNewestDate = prefs.longForKey("blocker-file-date") ?? 0
         if prefsNewestDate < 1 || fileDate <= prefsNewestDate {
             completion()
             return
         }
 
-        userPrefs?.setTimestamp(fileDate, forKey: "blocker-file-date")
-        self.removeAllRulesInStore() {
+        prefs.setTimestamp(fileDate, forKey: "blocker-file-date")
+        removeAllRulesInStore() {
             completion()
         }
     }
 
-    fileprivate func removeOldListsByNameFromStore(completion: @escaping () -> Void) {
+    static func removeOldListsByNameFromStore(prefs: Prefs, completion: @escaping () -> Void) {
         var noMatchingIdentifierFoundForRule = false
 
-        ruleStore.getAvailableContentRuleListIdentifiers { available in
+        ContentBlockerHelper.ruleStore.getAvailableContentRuleListIdentifiers { available in
             guard let available = available else {
                 completion()
                 return
             }
 
-            let blocklists = BlockList.all.map { $0.fileName }
+            let blocklists = BlocklistName.all.map { $0.filename }
             for contentRuleIdentifier in available {
                 if !blocklists.contains(where: { $0 == contentRuleIdentifier }) {
                     noMatchingIdentifierFoundForRule = true
@@ -292,13 +336,13 @@ extension ContentBlockerHelper {
                 }
             }
 
-            let fileDate = self.dateOfMostRecentBlockerFile()
-            let prefsNewestDate = self.userPrefs?.timestampForKey("blocker-file-date") ?? 0
+            let fileDate = dateOfMostRecentBlockerFile()
+            let prefsNewestDate = prefs.timestampForKey("blocker-file-date") ?? 0
             if prefsNewestDate > 0 && fileDate <= prefsNewestDate && !noMatchingIdentifierFoundForRule {
                 completion()
                 return
             }
-            self.userPrefs?.setTimestamp(fileDate, forKey: "blocker-file-date")
+            prefs.setTimestamp(fileDate, forKey: "blocker-file-date")
 
             self.removeAllRulesInStore {
                 completion()
@@ -306,8 +350,8 @@ extension ContentBlockerHelper {
         }
     }
 
-    fileprivate func compileListsNotInStore(completion: @escaping () -> Void) {
-        let blocklists = BlockList.all.map { $0.fileName}
+    static func compileListsNotInStore(completion: @escaping () -> Void) {
+        let blocklists = BlocklistName.all.map { $0.filename }
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
             ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in
@@ -315,10 +359,16 @@ extension ContentBlockerHelper {
                     result.fill()
                     return
                 }
-                self.loadJsonFromBundle(forResource: filename) { jsonString in
+                loadJsonFromBundle(forResource: filename) { jsonString in
                     var str = jsonString
-                    str.insert(contentsOf: self.whitelistJSON(), at: str.index(str.endIndex, offsetBy: -1) )
-                    self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { _, _ in
+                    str.insert(contentsOf: whitelistAsJSON(), at: str.index(str.endIndex, offsetBy: -1))
+                    ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
+                        if let error = error {
+                            Sentry.shared.send(message: "Content blocker error", tag: .general, description: error.localizedDescription)
+                            assert(false)
+                        }
+                        assert(rule != nil)
+
                         result.fill()
                     }
                 }
@@ -330,101 +380,28 @@ extension ContentBlockerHelper {
             completion()
         }
     }
-
 }
 
-// MARK: Whitelisting support
+// MARK: Static methods to check if Tracking Protection is enabled in the user's prefs
 @available(iOS 11.0, *)
 extension ContentBlockerHelper {
 
-    static func whitelistFileURL() -> URL? {
-        guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            Sentry.shared.send(message: "Failed to get doc dir for whitelist file.")
-            return nil
-        }
-        return dir.appendingPathComponent("whitelist")
+    static func setTrackingProtectionMode(_ enabled: Bool, for prefs: Prefs, with tabManager: TabManager) {
+        guard let isPrivate = tabManager.selectedTab?.isPrivate else { return }
+        let key = isPrivate ? ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey : ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey
+        prefs.setBool(enabled, forKey: key)
+        ContentBlockerHelper.prefsChanged()
     }
 
-    fileprivate func whitelistJSON() -> String {
-        if ContentBlockerHelper.whitelistedDomains.isEmpty {
-            return ""
-        }
-        // Note that * is added to the front of domains, so foo.com becomes *foo.com
-        let list = "'*" + ContentBlockerHelper.whitelistedDomains.joined(separator: "','*") + "'"
-        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'unless-domain': [\(list)] }".replacingOccurrences(of: "'", with: "\"")
+    static func isTrackingProtectionActive(tabManager: TabManager) -> Bool {
+        guard let blocker = tabManager.selectedTab?.contentBlocker as? ContentBlockerHelper else { return false }
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        return isPrivate ? blocker.isEnabledInPrivateBrowsing : blocker.isEnabledInNormalBrowsing
     }
 
-    func whitelist(enable: Bool, forDomain domain: String, completion: (() -> Void)? = nil) {
-        if enable {
-            ContentBlockerHelper.whitelistedDomains.append(domain)
-        } else {
-            ContentBlockerHelper.whitelistedDomains = ContentBlockerHelper.whitelistedDomains.filter { $0 != domain }
-        }
-
-        BlockListChecker.shared.whitelistedDomains = ContentBlockerHelper.whitelistedDomains
-
-        removeAllRulesInStore {
-            self.compileListsNotInStore {
-                NotificationCenter.default.post(name: .ContentBlockerUpdateNeeded, object: nil)
-                completion?()
-            }
-        }
-
-        guard let fileURL = ContentBlockerHelper.whitelistFileURL() else { return }
-        let list = ContentBlockerHelper.whitelistedDomains.joined(separator: "\n")
-        do {
-            try list.write(to: fileURL, atomically: true, encoding: .utf8)
-        } catch {
-            Sentry.shared.send(message: "Failed to save whitelist file")
-        }
+    static func toggleTrackingProtectionMode(for prefs: Prefs, tabManager: TabManager) {
+        let isEnabled = ContentBlockerHelper.isTrackingProtectionActive(tabManager: tabManager)
+        setTrackingProtectionMode(!isEnabled, for: prefs, with: tabManager)
     }
-
-    func isURLWhitelisted(url: URL) -> Bool {
-        // TODO: Not done
-        guard let domain = url.baseDomain, !domain.isEmpty else {
-            return false
-        }
-        return ContentBlockerHelper.whitelistedDomains.contains(domain)
-    }
-
-    fileprivate func readWhitelistFile() -> String? {
-        guard let fileURL = ContentBlockerHelper.whitelistFileURL() else { return nil }
-        let text = try? String(contentsOf: fileURL, encoding: .utf8)
-        return text
-    }
-
 }
 
-@available(iOS 11.0, *)
-enum BlockingStrength: String {
-    case basic
-    case strict
-
-    static let allOptions: [BlockingStrength] = [.basic, .strict]
-}
-
-@available(iOS 11, *)
-extension ContentBlockerHelper : TabContentScript {
-    class func name() -> String {
-        return "TrackingProtectionStats"
-    }
-
-    func scriptMessageHandlerName() -> String? {
-        return "trackingProtectionStats"
-    }
-
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard isEnabled, let body = message.body as? [String: String], let urlString = body["url"] else {
-            return
-        }
-
-        guard var components = URLComponents(string: urlString) else { return }
-        components.scheme = "http"
-        guard let url = components.url else { return }
-
-        if let listItem = BlockListChecker.shared.isBlocked(url: url, isStrictMode: blockingStrengthPref == .strict) {
-            stats = stats.create(byAddingListItem: listItem)
-        }
-    }
-
-}

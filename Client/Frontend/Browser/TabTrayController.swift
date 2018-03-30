@@ -5,7 +5,6 @@
 import UIKit
 import SnapKit
 import Storage
-import ReadingList
 import Shared
 
 struct TabTrayControllerUX {
@@ -17,9 +16,9 @@ struct TabTrayControllerUX {
     static let Margin = CGFloat(15)
     static let ToolbarBarTintColor = UIColor.black
     static let ToolbarButtonOffset = CGFloat(10.0)
-    static let CloseButtonSize = CGFloat(18.0)
+    static let CloseButtonSize = CGFloat(32)
     static let CloseButtonMargin = CGFloat(6.0)
-    static let CloseButtonEdgeInset = CGFloat(10)
+    static let CloseButtonEdgeInset = CGFloat(7)
 
     static let NumberOfColumnsThin = 1
     static let NumberOfColumnsWide = 3
@@ -87,13 +86,14 @@ class TabCell: UICollectionViewCell {
         self.favicon.layer.masksToBounds = true
 
         self.titleText = UILabel()
-        self.titleText.textAlignment = .left
         self.titleText.isUserInteractionEnabled = false
         self.titleText.numberOfLines = 1
         self.titleText.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
 
         self.closeButton = UIButton()
-        self.closeButton.setImage(UIImage.templateImageNamed("nav-stop"), for: [])
+        self.closeButton.setImage(UIImage.templateImageNamed("tab_close"), for: [])
+        self.closeButton.imageView?.contentMode = .scaleAspectFit
+        self.closeButton.contentMode = .center
         self.closeButton.tintColor = UIColor.lightGray
         self.closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
 
@@ -155,37 +155,31 @@ class TabCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let w = frame.width
-        let h = frame.height
-        backgroundHolder.frame = CGRect(x: margin,
-            y: margin,
-            width: w,
-            height: h)
+        backgroundHolder.frame = CGRect(x: margin, y: margin, width: frame.width, height: frame.height)
         screenshotView.frame = CGRect(size: backgroundHolder.frame.size)
 
-        title.frame = CGRect(x: 0,
-            y: 0,
-            width: backgroundHolder.frame.width,
-            height: TabTrayControllerUX.TextBoxHeight)
-
-        favicon.frame = CGRect(x: 6,
-            y: (TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.FaviconSize)/2,
-            width: TabTrayControllerUX.FaviconSize,
-            height: TabTrayControllerUX.FaviconSize)
-
-        let titleTextLeft = favicon.frame.origin.x + favicon.frame.width + 6
-        titleText.frame = CGRect(x: titleTextLeft,
-            y: 0,
-            width: title.frame.width - titleTextLeft - margin  - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin * 2,
-            height: title.frame.height)
-
-        closeButton.snp.makeConstraints { make in
-            make.size.equalTo(title.snp.height)
-            make.trailing.centerY.equalTo(title)
+        title.snp.makeConstraints { (make) in
+            make.top.left.right.equalTo(backgroundHolder)
+            make.height.equalTo(TabTrayControllerUX.TextBoxHeight)
         }
 
-        let top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
-        titleText.frame.origin = CGPoint(x: titleText.frame.origin.x, y: max(0, top))
+        favicon.snp.makeConstraints { make in
+            make.leading.equalTo(title.contentView).offset(6)
+            make.top.equalTo((TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.FaviconSize) / 2)
+            make.size.equalTo(TabTrayControllerUX.FaviconSize)
+        }
+
+        titleText.snp.makeConstraints { (make) in
+            make.leading.equalTo(favicon.snp.trailing).offset(6)
+            make.trailing.equalTo(closeButton.snp.leading).offset(-6)
+            make.centerY.equalTo(title.contentView)
+        }
+
+        closeButton.snp.makeConstraints { make in
+            make.size.equalTo(TabTrayControllerUX.CloseButtonSize)
+            make.centerY.trailing.equalTo(title.contentView)
+        }
+
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.BorderWidth * 2), height: layer.frame.height + (TabCell.BorderWidth * 2))
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: TabTrayControllerUX.CornerRadius+TabCell.BorderWidth).cgPath
     }
@@ -229,8 +223,9 @@ struct PrivateModeStrings {
 
 protocol TabTrayDelegate: class {
     func tabTrayDidDismiss(_ tabTray: TabTrayController)
+    func tabTrayDidAddTab(_ tabTray: TabTrayController, tab: Tab)
     func tabTrayDidAddBookmark(_ tab: Tab)
-    func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
+    func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabTrayRequestsPresentationOf(_ viewController: UIViewController)
 }
 
@@ -327,6 +322,12 @@ class TabTrayController: UIViewController {
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
+        if #available(iOS 11.0, *) {
+            collectionView.dragInteractionEnabled = true
+            collectionView.dragDelegate = tabDataSource
+            collectionView.dropDelegate = tabDataSource
+        }
+
         view.addSubview(collectionView)
         view.addSubview(toolbar)
 
@@ -342,10 +343,11 @@ class TabTrayController: UIViewController {
             privateMode = true
         }
 
+        // XXX: Bug 1447726 - Temporarily disable 3DT in tabs tray
         // register for previewing delegate to enable peek and pop if force touch feature available
-        if traitCollection.forceTouchCapability == .available {
-            registerForPreviewing(with: self, sourceView: view)
-        }
+        // if traitCollection.forceTouchCapability == .available {
+        //     registerForPreviewing(with: self, sourceView: view)
+        // }
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
@@ -446,7 +448,7 @@ class TabTrayController: UIViewController {
             fromView = emptyPrivateTabsView
         }
 
-        tabManager.willSwitchTabMode()
+        tabManager.willSwitchTabMode(leavingPBM: privateMode)
         privateMode = !privateMode
         // If we are exiting private mode and we have the close private tabs option selected, make sure
         // we clear out all of the private tabs
@@ -510,8 +512,9 @@ class TabTrayController: UIViewController {
 
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
+        var tab: Tab?
         self.collectionView.performBatchUpdates({ _ in
-            _ = self.tabManager.addTab(request, isPrivate: self.privateMode)
+            tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
         }, completion: { finished in
             // The addTab delegate method will pop to the BVC no need to do anything here.
             self.toolbar.isUserInteractionEnabled = true
@@ -523,6 +526,10 @@ class TabTrayController: UIViewController {
                         }
                     }
                 }
+            }
+
+            if let tab = tab {
+                self.delegate?.tabTrayDidAddTab(self, tab: tab)
             }
         })
     }
@@ -567,6 +574,8 @@ extension TabTrayController: PresentingModalViewControllerDelegate {
 
 extension TabTrayController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
+        tabDataSource.isDragging = false
+
         // Redraw the cells representing the selected (and recently unselected) tabs.
         let tabs = tabDataSource.tabs
 
@@ -581,17 +590,21 @@ extension TabTrayController: TabManagerDelegate {
             .map { IndexPath(item: $0, section: 0) }
 
         assertIsMainThread("Changing selected tab is on main thread")
-        collectionView.reloadItems(at: updated)
+        collectionView?.performBatchUpdates({ _ in
+            self.collectionView.reloadItems(at: updated)
 
-        if !updated.isEmpty {
-            collectionView.scrollToItem(at: updated[0], at: [.centeredHorizontally, .centeredVertically], animated: true)
-        }
+            if !updated.isEmpty {
+                self.collectionView.scrollToItem(at: updated[0], at: [.centeredHorizontally, .centeredVertically], animated: true)
+            }
+        })
     }
 
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
+        tabDataSource.isDragging = false
     }
 
     func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {
+        tabDataSource.isDragging = false
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab) {
@@ -726,6 +739,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     unowned var cellDelegate: TabCellDelegate & SwipeAnimatorDelegate
     fileprivate var tabs: [Tab]
     fileprivate var tabManager: TabManager
+    fileprivate var isDragging = false
 
     init(tabs: [Tab], cellDelegate: TabCellDelegate & SwipeAnimatorDelegate, tabManager: TabManager) {
         self.cellDelegate = cellDelegate
@@ -799,12 +813,82 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tabs.count
     }
-    
-    @objc fileprivate func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let fromIndex = sourceIndexPath.item
-        let toIndex = destinationIndexPath.item
-        tabs.insert(tabs.remove(at: fromIndex), at: toIndex < fromIndex ? toIndex : toIndex - 1)
-        tabManager.moveTab(isPrivate: tabs[fromIndex].isPrivate, fromIndex: fromIndex, toIndex: toIndex)
+}
+
+
+@available(iOS 11.0, *)
+extension TabManagerDataSource: UICollectionViewDragDelegate {
+    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
+        isDragging = true
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
+        isDragging = false
+    }
+
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let tab = tabs[indexPath.item]
+
+        // Get the tab's current URL. If it is `nil`, check the `sessionData` since
+        // it may be a tab that has not been restored yet.
+        var url = tab.url
+        if url == nil, let sessionData = tab.sessionData {
+            let urls = sessionData.urls
+            let index = sessionData.currentPage + urls.count - 1
+            if index < urls.count {
+                url = urls[index]
+            }
+        }
+
+        // Ensure we actually have a URL for the tab being dragged and that the URL is not local.
+        // If not, just create an empty `NSItemProvider` so we can create a drag item with the
+        // `Tab` so that it can at still be re-ordered.
+        var itemProvider: NSItemProvider
+        if url != nil, !(url?.isLocal ?? true) {
+            itemProvider = NSItemProvider(contentsOf: url) ?? NSItemProvider()
+        }  else {
+            itemProvider = NSItemProvider()
+        }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .tab, value: .tabTray)
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = tab
+        return [dragItem]
+    }
+}
+
+@available(iOS 11.0, *)
+extension TabManagerDataSource: UICollectionViewDropDelegate {
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        guard isDragging, let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = tabs.index(of: tab) else {
+            return
+        }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .drop, object: .tab, value: .tabTray)
+
+        coordinator.drop(dragItem, toItemAt: destinationIndexPath)
+        isDragging = false
+
+        let destinationIndex = destinationIndexPath.item
+        tabManager.moveTab(isPrivate: tab.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndex)
+        tabs.insert(tabs.remove(at: sourceIndex), at: destinationIndex)
+        collectionView.moveItem(at: IndexPath(item: sourceIndex, section: 0), to: destinationIndexPath)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        guard let localDragSession = session.localDragSession, let item = localDragSession.items.first, let tab = item.localObject as? Tab else {
+            return UICollectionViewDropProposal(operation: .forbidden)
+        }
+
+        // If the tab doesn't exist by the time we get here, we must return a
+        // `.cancel` operation continuously until `isDragging` can be reset.
+        guard isDragging, tabs.index(of: tab) != nil else {
+            isDragging = false
+            return UICollectionViewDropProposal(operation: .cancel)
+        }
+
+        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
 }
 
@@ -958,7 +1042,7 @@ extension TabTrayController: TabPeekDelegate {
         delegate?.tabTrayDidAddBookmark(tab)
     }
 
-    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord? {
+    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
         return delegate?.tabTrayDidAddToReadingList(tab)
     }
 
@@ -1066,14 +1150,14 @@ class TrayToolbar: UIView {
 
         addTabButton.snp.makeConstraints { make in
             make.top.equalTo(self)
-            make.right.equalTo(self).offset(-sideOffset)
+            make.trailing.equalTo(self).offset(-sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
 
         addSubview(maskButton)
         maskButton.snp.makeConstraints { make in
             make.top.equalTo(self)
-            make.left.equalTo(self).offset(sideOffset)
+            make.leading.equalTo(self).offset(sideOffset)
             make.size.equalTo(toolbarButtonSize)
         }
 

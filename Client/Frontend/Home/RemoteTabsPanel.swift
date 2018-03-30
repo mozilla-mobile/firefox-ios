@@ -15,7 +15,7 @@ private let log = Logger.browserLogger
 private struct RemoteTabsPanelUX {
     static let HeaderHeight = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
     static let RowHeight = SiteTableViewControllerUX.RowHeight
-    static let HeaderBackgroundColor = UIColor.Defaults.Grey10
+    static let HeaderBackgroundColor = UIColor.Photon.Grey10
 
     static let EmptyStateTitleTextColor = UIColor.darkGray
 
@@ -187,6 +187,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
             image?.accessibilityLabel = NSLocalizedString("mobile device", comment: "Accessibility label for Mobile Device image in remote tabs list")
         }
         view.imageView.image = image
+        view.imageView.contentMode = .center
 
         view.mergeAccessibilityLabels()
         return view

@@ -16,7 +16,7 @@ enum ReadabilityOperationResult {
     case timeout
 }
 
-class ReadabilityOperation: Operation, WKNavigationDelegate {
+class ReadabilityOperation: Operation {
     var url: URL
     var semaphore: DispatchSemaphore
     var result: ReadabilityOperationResult?
@@ -43,11 +43,16 @@ class ReadabilityOperation: Operation, WKNavigationDelegate {
             self.tab.createWebview()
             self.tab.navigationDelegate = self
 
-            // Load the page in the webview. This either fails with a navigation error, or we get a readability
-            // callback. Or it takes too long, in which case the semaphore times out.
+            let readerMode = ReaderMode(tab: self.tab)
+            readerMode.delegate = self
+            self.tab.addContentScript(readerMode, name: ReaderMode.name())
+
+            // Load the page in the webview. This either fails with a navigation error, or we
+            // get a readability callback. Or it takes too long, in which case the semaphore
+            // times out. The script on the page will retry every 500ms for 10 seconds.
             self.tab.loadRequest(URLRequest(url: self.url))
         })
-        let timeout = DispatchTime.now() + Double(Int64(Double(16) * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        let timeout = DispatchTime.now() + .seconds(10)
         if semaphore.wait(timeout: timeout) == .timedOut {
             result = ReadabilityOperationResult.timeout
         }
@@ -72,7 +77,9 @@ class ReadabilityOperation: Operation, WKNavigationDelegate {
             }
         }
     }
+}
 
+extension ReadabilityOperation: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         result = ReadabilityOperationResult.error(error as NSError)
         semaphore.signal()
@@ -80,6 +87,27 @@ class ReadabilityOperation: Operation, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         result = ReadabilityOperationResult.error(error as NSError)
+        semaphore.signal()
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()")
+    }
+}
+
+extension ReadabilityOperation: ReaderModeDelegate {
+    func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
+    }
+
+    func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
+    }
+
+    func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
+        guard tab == self.tab else {
+            return
+        }
+
+        result = ReadabilityOperationResult.success(readabilityResult)
         semaphore.signal()
     }
 }

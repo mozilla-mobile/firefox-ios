@@ -74,7 +74,6 @@ class LoginTableViewCell: UITableViewCell {
         let label = UITextField()
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
-        label.textAlignment = .left
         label.backgroundColor = UIColor.white
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
@@ -93,7 +92,6 @@ class LoginTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
-        label.textAlignment = .left
         label.backgroundColor = UIColor.white
         label.numberOfLines = 1
         return label
@@ -234,38 +232,38 @@ class LoginTableViewCell: UITableViewCell {
         case .iconAndBothLabels:
             iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(LoginTableViewCellUX.IconImageSize)
             }
 
             labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp.right).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(iconImageView.snp.trailing).offset(LoginTableViewCellUX.HorizontalMargin)
             }
 
             highlightedLabel.snp.remakeConstraints { make in
-                make.left.top.equalTo(labelContainer)
+                make.leading.top.equalTo(labelContainer)
                 make.bottom.equalTo(descriptionLabel.snp.top)
                 make.width.equalTo(labelContainer)
             }
 
             descriptionLabel.snp.remakeConstraints { make in
-                make.left.bottom.equalTo(labelContainer)
+                make.leading.bottom.equalTo(labelContainer)
                 make.top.equalTo(highlightedLabel.snp.bottom)
                 make.width.equalTo(labelContainer)
             }
         case .iconAndDescriptionLabel:
             iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(LoginTableViewCellUX.IconImageSize)
             }
 
             labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp.right).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(iconImageView.snp.trailing).offset(LoginTableViewCellUX.HorizontalMargin)
             }
 
             highlightedLabel.snp.remakeConstraints { make in
@@ -273,7 +271,7 @@ class LoginTableViewCell: UITableViewCell {
             }
 
             descriptionLabel.snp.remakeConstraints { make in
-                make.top.left.bottom.equalTo(labelContainer)
+                make.top.leading.bottom.equalTo(labelContainer)
                 make.width.equalTo(labelContainer)
             }
         case .noIconAndBothLabels:
@@ -283,24 +281,24 @@ class LoginTableViewCell: UITableViewCell {
 
             iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(0)
             }
 
             labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp.right).offset(editingOffset)
+                make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(iconImageView.snp.trailing).offset(editingOffset)
             }
 
             highlightedLabel.snp.remakeConstraints { make in
-                make.left.top.equalTo(labelContainer)
+                make.leading.top.equalTo(labelContainer)
                 make.bottom.equalTo(descriptionLabel.snp.top)
                 make.width.equalTo(labelContainer)
             }
 
             descriptionLabel.snp.remakeConstraints { make in
-                make.left.bottom.equalTo(labelContainer)
+                make.leading.bottom.equalTo(labelContainer)
                 make.top.equalTo(highlightedLabel.snp.bottom)
                 make.width.equalTo(labelContainer)
             }

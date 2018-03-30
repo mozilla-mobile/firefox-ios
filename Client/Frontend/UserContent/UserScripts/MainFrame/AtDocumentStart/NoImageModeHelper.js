@@ -3,7 +3,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-(function() {
 "use strict";
 
 Object.defineProperty(window.__firefox__, "NoImageMode", {
@@ -13,7 +12,7 @@ Object.defineProperty(window.__firefox__, "NoImageMode", {
   value: { enabled: false }
 });
 
-var className = "__firefox__NoImageMode";
+const className = "__firefox__NoImageMode";
 
 function initializeStyleSheet () {
   var noImageCSS = "*{background-image:none !important;}img,iframe{visibility:hidden !important;}";
@@ -81,5 +80,3 @@ Object.defineProperty(window.__firefox__.NoImageMode, "setEnabled", {
 window.addEventListener("DOMContentLoaded", function (event) {
   window.__firefox__.NoImageMode.setEnabled(window.__firefox__.NoImageMode.enabled);
 });
-
-})();

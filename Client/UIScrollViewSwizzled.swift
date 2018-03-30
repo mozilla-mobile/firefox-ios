@@ -25,20 +25,13 @@ extension UIScrollView {
     }
 
     func swizzle_setBounds(bounds: CGRect) {
-        [bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height].forEach() { val in
-            if val.isNaN || val.isInfinite {
-                Sentry.shared.send(message: "Bad scrollview bounds detected [infinite/nan].")
-                return
-            }
-        }
+        let validSize = [bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height].every({ !$0.isNaN })
+        let validBounds = [bounds.size.width, bounds.size.height].every({ $0 >= 0 })
 
-        [bounds.size.width, bounds.size.height].forEach() { val in
-            if val < 0 {
-                Sentry.shared.send(message: "Bad scrollview bounds detected [negative size].")
-                return
-            }
+        guard validBounds && validSize && !bounds.isInfinite else {
+            Sentry.shared.send(message: "Bad scrollview bounds detected [negative size].")
+            return
         }
-
         self.swizzle_setBounds(bounds: bounds)
     }
 }

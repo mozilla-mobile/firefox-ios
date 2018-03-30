@@ -7,6 +7,7 @@ import WebKit
 import UIKit
 import EarlGrey
 import GCDWebServers
+@testable import Client
 
 class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
@@ -212,6 +213,21 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         cookie = (items[0], items[1], items[2])
         return cookie
     }
+
+    @available(iOS 11, *)
+    func testClearsTrackingProtectionWhitelist() {
+        let wait = expectation(description: "wait for file write")
+        ContentBlockerHelper.whitelist(enable: true, url: URL(string: "http://www.mozilla.com")!) {
+            wait.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.TrackingProtection], swipe: false)
+
+        let data = ContentBlockerHelper.readWhitelistFile()
+        XCTAssert(data == nil || data!.isEmpty)
+    }
+
 }
 
 /// Server that keeps track of requests.

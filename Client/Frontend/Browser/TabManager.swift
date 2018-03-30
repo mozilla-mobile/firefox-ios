@@ -209,8 +209,9 @@ class TabManager: NSObject {
 
     //Called by other classes to signal that they are entering/exiting private mode
     //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    func willSwitchTabMode() {
-        if shouldClearPrivateTabs() && (selectedTab?.isPrivate ?? false) {
+    //we only want to remove all private tabs when leaving PBM and not when entering.
+    func willSwitchTabMode(leavingPBM: Bool) {
+        if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()
         }
     }
@@ -417,8 +418,9 @@ class TabManager: NSObject {
             if tabIndex == viableTabs.count {
                 tabIndex -= 1
             }
-            if tabIndex < viableTabs.count && !viableTabs.isEmpty {
-                _selectedIndex = tabs.index(of: viableTabs[tabIndex]) ?? -1
+
+            if let currentTab = viableTabs[safe: tabIndex] {
+                _selectedIndex = tabs.index(of: currentTab) ?? -1
             } else {
                 _selectedIndex = -1
             }
@@ -458,6 +460,7 @@ class TabManager: NSObject {
         }
         tabs.forEach { tab in
             if tab.isPrivate {
+                tab.webView?.removeFromSuperview()
                 removeAllBrowsingDataForTab(tab)
             }
         }
@@ -838,6 +841,10 @@ extension TabManager: WKNavigationDelegate {
     // Note the main frame JSContext (i.e. document, window) is not available yet.
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+
+        if #available(iOS 11, *), let tab = self[webView], let blocker = tab.contentBlocker as? ContentBlockerHelper {
+            blocker.clearPageStats()
+        }
     }
 
     // The main frame JSContext is available, and DOM parsing has begun.

@@ -19,7 +19,7 @@ private struct TopSiteCellUX {
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
     static let PinIconSize: CGFloat = 12
-    static let PinColor = UIColor.Defaults.Grey60
+    static let PinColor = UIColor.Photon.Grey60
 }
 
 /*
@@ -293,8 +293,25 @@ class ASHorizontalScrollCell: UICollectionViewCell {
         } else {
             pageControl.progress = CGFloat(pageControl.currentPage - 1)
         }
-        let swipeCoordinate = CGFloat(pageControl.currentPage) * self.collectionView.frame.size.width
-        self.collectionView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: true)
+
+        moveToPage(pageControl.currentPage, animated: true)
+    }
+
+    func moveToPage(_ pageNumber: Int, animated: Bool = false) {
+        if (pageNumber < 0 || pageNumber >= pageControl.pageCount) {
+            return
+        }
+        pageControl.progress = CGFloat(pageNumber)
+        let swipeCoordinate = CGFloat(pageNumber) * self.collectionView.frame.size.width
+        self.collectionView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: animated)
+    }
+
+    func moveToInitialPage() {
+        if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
+            moveToPage(pageControl.pageCount-1)
+        } else {
+            moveToPage(0)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -455,11 +472,24 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
         let columnPosition = row % horizontalItemsCount
         let rowPosition = (row / horizontalItemsCount) % verticalItemsCount
-        let itemPage = Int(floor(Double(row)/Double(itemsPerPage)))
+
+        let itemPage: Int
+        if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
+            itemPage = Int(floor(Double(row)/Double(itemsPerPage)))
+        } else {
+            // For RTL we invert the page position
+            let pageCount = Int(ceil(Double(cellCount)/Double(itemsPerPage)))
+            itemPage = pageCount - Int(floor(Double(row)/Double(itemsPerPage))) - 1
+        }
 
         let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         var frame = CGRect.zero
-        frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
+        if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
+            frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
+        } else {
+            // For RTL all we have to do is invert the colum
+            frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(horizontalItemsCount - 1 - columnPosition) * (itemSize.width + insets.left) + insets.left
+        }
         frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top) + insets.top
         frame.size = itemSize
         attr.frame = frame

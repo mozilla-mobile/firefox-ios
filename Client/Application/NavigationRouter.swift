@@ -82,7 +82,7 @@ enum NavigationPath {
         } else if urlString.starts(with: "\(scheme)://fxa-signin"), components.valueForQuery("signin") != nil {
             self = .fxa(params: FxALaunchParams(query: url.getQuery()))
         } else if urlString.starts(with: "\(scheme)://open-url") {
-            let url = components.valueForQuery("url")?.unescape()?.asURL
+            let url = components.valueForQuery("url")?.asURL
             let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? false
             self = .url(webURL: url, isPrivate: isPrivate)
         } else {

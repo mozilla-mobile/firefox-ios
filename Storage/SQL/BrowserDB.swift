@@ -173,7 +173,7 @@ open class BrowserDB {
         db.reopenIfClosed()
     }
 
-    func run(_ sql: String, withArgs args: Args? = nil) -> Success {
+    public func run(_ sql: String, withArgs args: Args? = nil) -> Success {
         return run([(sql, args)])
     }
 
@@ -198,7 +198,7 @@ open class BrowserDB {
         }
     }
 
-    func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
+    public func runQuery<T>(_ sql: String, args: Args?, factory: @escaping (SDRow) -> T) -> Deferred<Maybe<Cursor<T>>> {
         return withConnection { connection -> Cursor<T> in
             connection.executeQuery(sql, factory: factory, withArgs: args)
         }

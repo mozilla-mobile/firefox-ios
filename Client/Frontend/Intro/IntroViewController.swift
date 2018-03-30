@@ -11,9 +11,9 @@ struct IntroUX {
     static let Height = 667
     static let MinimumFontScale: CGFloat = 0.5
     static let PagerCenterOffsetFromScrollViewBottom = UIScreen.main.bounds.width <= 320 ? 20 : 30
-    static let StartBrowsingButtonColor = UIColor.Defaults.Blue40
+    static let StartBrowsingButtonColor = UIColor.Photon.Blue40
     static let StartBrowsingButtonHeight = 56
-    static let SignInButtonColor = UIColor.Defaults.Blue40
+    static let SignInButtonColor = UIColor.Photon.Blue40
     static let SignInButtonHeight = 60
     static let PageControlHeight = 40
     static let SignInButtonWidth = 290
@@ -39,6 +39,7 @@ class IntroViewController: UIViewController {
         button.setTitleColor(IntroUX.StartBrowsingButtonColor, for: UIControlState())
         button.addTarget(self, action: #selector(IntroViewController.startBrowsing), for: UIControlEvents.touchUpInside)
         button.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
+        button.isHidden = true
         return button
     }()
 
@@ -183,6 +184,10 @@ class IntroViewController: UIViewController {
         }
         imageViewContainer.layoutSubviews()
         scrollView.contentSize = imageViewContainer.frame.size
+        // This should never happen but just in case make sure there is a way out
+        if cardViews.count == 1 {
+            startBrowsingButton.isHidden = false
+        }
     }
 
     func addIntro(card: IntroCard) -> CardView? {
@@ -305,6 +310,9 @@ extension IntroViewController: UIScrollViewDelegate {
         if let cardView = cardViews[safe: page] {
             setActive(cardView, forPage: page)
         }
+        if page != 0 {
+            startBrowsingButton.isHidden = false
+        }
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -389,6 +397,8 @@ class CardView: UIView {
             button.snp.makeConstraints { make in
                 make.bottom.centerX.equalTo(self)
             }
+            // When there is a button reduce the spacing to make more room for text
+            stackView.spacing = stackView.spacing / 2
         }
     }
 

@@ -5,6 +5,10 @@
 
 #import "Shared-Bridging-Header.h"
 #import <Foundation/Foundation.h>
-#import "ThirdParty/sqlcipher/sqlite3.h"
+
+// We do not need to import SQLCipher explicitly here; we put ThirdParty/sqlcipher at the front of our
+// search path instead.
+//#import "ThirdParty/sqlcipher/sqlite3.h"
+#import "sqlite3.h"
 
 #endif

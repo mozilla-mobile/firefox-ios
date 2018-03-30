@@ -2,9 +2,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-(function() {
-  "use strict";
+"use strict";
 
+if (webkit.messageHandlers.trackingProtectionStats) {
+  install();
+}
+
+function install() {
   Object.defineProperty(window.__firefox__, "TrackingProtectionStats", {
     enumerable: false,
     configurable: false,
@@ -20,7 +24,7 @@
       if (securityToken !== SECURITY_TOKEN) {
         return;
       }
-    
+
       if (enabled === window.__firefox__.TrackingProtectionStats.enabled) {
         return;
       }
@@ -31,25 +35,33 @@
     }
   })
 
-  const messageHandler = window.webkit.messageHandlers.trackingProtectionStats;
+  function sendMessage(url) {
+    if (url) {
+      webkit.messageHandlers.trackingProtectionStats.postMessage({ url: url });
+    }
+  }
 
   function onLoadNativeCallback() {
-    var sendMessage = function(url) { messageHandler.postMessage({ url: url }) };
-
-    // Send back the sources of every script and image in the dom back to the host applicaiton
-    Array.prototype.map.call(document.scripts, function(t) { return t.src }).forEach(sendMessage);
-    Array.prototype.map.call(document.images, function(t) { return t.src }).forEach(sendMessage);
+    // Send back the sources of every script and image in the DOM back to the host application.
+    [].slice.apply(document.scripts).forEach(function(el) { sendMessage(el.src); });
+    [].slice.apply(document.images).forEach(function(el) {
+      // If the image's natural width is zero, then it has not loaded so we
+      // can assume that it may have been blocked.
+      if (el.naturalWidth === 0) {
+        sendMessage(el.src);
+      }
+    });
   }
 
   let originalOpen = null;
   let originalSend = null;
-  let originalImageSrc = null;  
+  let originalImageSrc = null;
   let mutationObserver = null;
 
   function injectStatsTracking(enabled) {
-    // This enable/disable section is a change from the original Focus iOS  version
+    // This enable/disable section is a change from the original Focus iOS version.
     if (enabled) {
-      if (originalOpen != null) {
+      if (originalOpen) {
         return;
       }
       window.addEventListener("load", onLoadNativeCallback, false);
@@ -82,42 +94,60 @@
     };
 
     xhrProto.send = function(body) {
-      messageHandler.postMessage({
-        url: this._url
-      })
-      return originalSend.apply(this, arguments)
+      // Only attach the `error` event listener once for this
+      // `XMLHttpRequest` instance.
+      if (!this._tpErrorHandler) {
+        // If this `XMLHttpRequest` instance fails to load, we
+        // can assume it has been blocked.
+        this._tpErrorHandler = function() {
+          sendMessage(this._url);
+        };
+        this.addEventListener("error", this._tpErrorHandler);
+      }
+      return originalSend.apply(this, arguments);
     };
 
     // -------------------------------------------------
     // Detect when new sources get set on Image and send them to the host application
     // -------------------------------------------------
     if (!originalImageSrc) {
-      originalImageSrc = Object.getOwnPropertyDescriptor(Image.prototype, 'src');
+      originalImageSrc = Object.getOwnPropertyDescriptor(Image.prototype, "src");
     }
     delete Image.prototype.src;
-    Object.defineProperty(Image.prototype, 'src', {
+    Object.defineProperty(Image.prototype, "src", {
       get: function() {
         return originalImageSrc.get.call(this);
       },
       set: function(value) {
-        messageHandler.postMessage({
-          url: value
-        })
+        // Only attach the `error` event listener once for this
+        // Image instance.
+        if (!this._tpErrorHandler) {
+          // If this `Image` instance fails to load, we can assume
+          // it has been blocked.
+          this._tpErrorHandler = function() {
+            sendMessage(this.src);
+          };
+          this.addEventListener("error", this._tpErrorHandler);
+        }
+
         originalImageSrc.set.call(this, value);
       }
     });
 
     // -------------------------------------------------
-    // Listen to when new <script> elements get added to the dom
+    // Listen to when new <script> elements get added to the DOM
     // and send the source to the host application
     // -------------------------------------------------
     mutationObserver = new MutationObserver(function(mutations) {
       mutations.forEach(function(mutation) {
         mutation.addedNodes.forEach(function(node) {
-          if (node.tagName === 'SCRIPT') {
-            messageHandler.postMessage({
-              url: node.src
-            })
+          // Only consider `<script src="*">` elements.
+          if (node.tagName === "SCRIPT" && node.src) {
+            // If the `<script>`  fails to load, we can assume
+            // it has been blocked.
+            node.addEventListener("error", function() {
+              sendMessage(node.src);
+            });
           }
         });
       });
@@ -133,4 +163,4 @@
   // from native, and we don't want to miss events
   window.__firefox__.TrackingProtectionStats.enabled = true;
   injectStatsTracking(true);
-})();
+}

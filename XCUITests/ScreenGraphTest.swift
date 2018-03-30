@@ -44,6 +44,7 @@ extension ScreenGraphTest {
         // Switch night mode on, by toggling.
         navigator.performAction(TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
+        navigator.back()
         XCTAssertEqual(navigator.screenState, BrowserTab)
 
         // Nothing should happen here, because night mode is already on.
@@ -54,6 +55,7 @@ extension ScreenGraphTest {
         // Switch night mode off.
         navigator.toggleOff(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
         XCTAssertFalse(navigator.userState.nightMode)
+        navigator.back()
         XCTAssertEqual(navigator.screenState, BrowserTab)
     }
 
@@ -153,6 +155,13 @@ fileprivate class TestActions {
     static let LoadURLByPasting = "LoadURLByPasting"
 }
 
+private var isTablet: Bool {
+    // There is more value in a variable having the same name,
+    // so it can be used in both predicates and in code
+    // than avoiding the duplication of one line of code.
+    return UIDevice.current.userInterfaceIdiom == .pad
+}
+
 fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<TestUserState> {
     let map = MMScreenGraph(for: test, with: TestUserState.self)
 
@@ -199,12 +208,17 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.onEnterWaitFor(element: app.tables["Context Menu"])
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
-        screenState.tap(app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode) { userState in
+        screenState.tap(app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
         }
 
         screenState.backAction = {
-            app.buttons["PhotonMenu.close"].tap()
+            if isTablet {
+                // There is no Cancel option in iPad.
+                app.otherElements["PopoverDismissRegion"].tap()
+            } else {
+                app.buttons["PhotonMenu.close"].tap()
+            }
         }
     }
 
