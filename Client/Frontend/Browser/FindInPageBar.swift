@@ -110,7 +110,8 @@ class FindInPageBar: UIView {
         addSubview(topBorder)
 
         searchText.snp.makeConstraints { make in
-            make.leading.top.bottom.equalTo(self).inset(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0))
+            make.leading.equalTo(self.safeArea.leading).inset(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0))
+            make.top.bottom.equalTo(self)
         }
         searchText.setContentHuggingPriority(UILayoutPriorityDefaultLow, for: .horizontal)
         searchText.setContentCompressionResistancePriority(UILayoutPriorityDefaultLow, for: .horizontal)
@@ -138,6 +139,7 @@ class FindInPageBar: UIView {
             make.leading.equalTo(nextButton.snp.trailing)
             make.size.equalTo(self.snp.height)
             make.trailing.centerY.equalTo(self)
+            make.right.equalTo(self.safeArea.right)
         }
 
         topBorder.snp.makeConstraints { make in
