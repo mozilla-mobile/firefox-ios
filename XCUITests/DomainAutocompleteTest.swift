@@ -160,7 +160,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
 
     func testDeletingCharsUpdateTheResults() {
-        let url1 = ["url" : "git.com", "label" : "GIT.com"]
+        let url1 = ["url" : "git.es", "label" : "git.es - Dominio premium en venta"]
         let url2 = ["url" : "github.com", "label" : "The world's leading software development platform · GitHub"]
 
         navigator.openURL(url1["url"]!)
