@@ -130,7 +130,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let homePanelDelegate = homePanelDelegate,
               let recentlyClosedTabsPanel = recentlyClosedTabsPanel else {
             log.warning("No site or no URL when selecting row.")
@@ -145,7 +145,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     }
 
     // Functions that deal with showing header rows.
-    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
