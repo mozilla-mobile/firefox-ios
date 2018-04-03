@@ -327,7 +327,7 @@ class TestSQLiteLogins: XCTestCase {
     func removeAllLogins() -> Success {
         log.debug("Remove All")
         // Because we don't want to just mark them as deleted.
-        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>> { self.db.run("DELETE FROM \(TableLoginsLocal)") }
+        return self.db.run("DELETE FROM loginsM") >>> { self.db.run("DELETE FROM loginsL") }
     }
 }
 
@@ -398,7 +398,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
     func removeAllLogins() -> Success {
         log.debug("Remove All")
         // Because we don't want to just mark them as deleted.
-        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>> { self.db.run("DELETE FROM \(TableLoginsLocal)") }
+        return self.db.run("DELETE FROM loginsM") >>> { self.db.run("DELETE FROM loginsL") }
     }
 }
 
@@ -421,7 +421,7 @@ class TestSyncableLogins: XCTestCase {
     func removeAllLogins() -> Success {
         log.debug("Remove All")
         // Because we don't want to just mark them as deleted.
-        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>> { self.db.run("DELETE FROM \(TableLoginsLocal)") }
+        return self.db.run("DELETE FROM loginsM") >>> { self.db.run("DELETE FROM loginsL") }
     }
 
     func testDiffers() {

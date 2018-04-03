@@ -56,15 +56,15 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func wipeClients() -> Success {
-        return db.run("DELETE FROM \(TableClients)")
+        return db.run("DELETE FROM clients")
     }
 
     open func wipeRemoteTabs() -> Success {
-        return db.run("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL")
+        return db.run("DELETE FROM tabs WHERE client_guid IS NOT NULL")
     }
 
     open func wipeTabs() -> Success {
-        return db.run("DELETE FROM \(TableTabs)")
+        return db.run("DELETE FROM tabs")
     }
 
     open func insertOrUpdateTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
@@ -72,7 +72,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func insertOrUpdateTabsForClientGUID(_ clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
-        let deleteQuery = "DELETE FROM \(TableTabs) WHERE client_guid IS ?"
+        let deleteQuery = "DELETE FROM tabs WHERE client_guid IS ?"
         let deleteArgs: Args = [clientGUID]
 
         return db.transaction { connection -> Int in
@@ -94,7 +94,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
-                try connection.executeChange("INSERT INTO \(TableTabs) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", withArgs: args)
+                try connection.executeChange("INSERT INTO tabs (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", withArgs: args)
                 
                 if connection.lastInsertedRowID == lastInsertedRowID {
                     log.debug("Unable to INSERT RemoteTab!")
@@ -126,7 +126,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     client.guid
                 ]
                 
-                try connection.executeChange("UPDATE \(TableClients) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, version = ?, fxaDeviceId = ? WHERE guid = ?", withArgs: args)
+                try connection.executeChange("UPDATE clients SET name = ?, modified = ?, type = ?, formfactor = ?, os = ?, version = ?, fxaDeviceId = ? WHERE guid = ?", withArgs: args)
                 
                 if connection.numberOfRowsModified == 0 {
                     let args: Args = [
@@ -142,7 +142,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     
                     let lastInsertedRowID = connection.lastInsertedRowID
                     
-                    try connection.executeChange("INSERT INTO \(TableClients) (guid, name, modified, type, formfactor, os, version, fxaDeviceId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", withArgs: args)
+                    try connection.executeChange("INSERT INTO clients (guid, name, modified, type, formfactor, os, version, fxaDeviceId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", withArgs: args)
                     
                     if connection.lastInsertedRowID == lastInsertedRowID {
                         log.debug("INSERT did not change last inserted row ID.")
@@ -161,8 +161,8 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func deleteClient(guid: GUID) -> Success {
-        let deleteTabsQuery = "DELETE FROM \(TableTabs) WHERE client_guid = ?"
-        let deleteClientQuery = "DELETE FROM \(TableClients) WHERE guid = ?"
+        let deleteTabsQuery = "DELETE FROM tabs WHERE client_guid = ?"
+        let deleteClientQuery = "DELETE FROM clients WHERE guid = ?"
         let deleteArgs: Args = [guid]
 
         return db.transaction { connection -> Void in
@@ -173,17 +173,17 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func getClient(guid: GUID) -> Deferred<Maybe<RemoteClient?>> {
         let factory = SQLiteRemoteClientsAndTabs.remoteClientFactory
-        return self.db.runQuery("SELECT * FROM \(TableClients) WHERE guid = ?", args: [guid], factory: factory) >>== { deferMaybe($0[0]) }
+        return self.db.runQuery("SELECT * FROM clients WHERE guid = ?", args: [guid], factory: factory) >>== { deferMaybe($0[0]) }
     }
 
     open func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
         let factory = SQLiteRemoteClientsAndTabs.remoteClientFactory
-        return self.db.runQuery("SELECT * FROM \(TableClients) WHERE fxaDeviceId = ?", args: [fxaDeviceId], factory: factory) >>== { deferMaybe($0[0]) }
+        return self.db.runQuery("SELECT * FROM clients WHERE fxaDeviceId = ?", args: [fxaDeviceId], factory: factory) >>== { deferMaybe($0[0]) }
     }
 
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
         return db.withConnection { connection -> [RemoteClient] in
-            let cursor = connection.executeQuery("SELECT * FROM \(TableClients) WHERE EXISTS (SELECT 1 FROM \(TableRemoteDevices) rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
+            let cursor = connection.executeQuery("SELECT * FROM clients WHERE EXISTS (SELECT 1 FROM remote_devices rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
             defer {
                 cursor.close()
             }
@@ -193,7 +193,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func getClientGUIDs() -> Deferred<Maybe<Set<GUID>>> {
-        let c = db.runQuery("SELECT guid FROM \(TableClients) WHERE guid IS NOT NULL", args: nil, factory: { $0["guid"] as! String })
+        let c = db.runQuery("SELECT guid FROM clients WHERE guid IS NOT NULL", args: nil, factory: { $0["guid"] as! String })
         return c >>== { cursor in
             let guids = Set<GUID>(cursor.asArray())
             return deferMaybe(guids)
@@ -204,10 +204,10 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let tabsSQL: String
         let clientArgs: Args?
         if let _ = guid {
-            tabsSQL = "SELECT * FROM \(TableTabs) WHERE client_guid = ?"
+            tabsSQL = "SELECT * FROM tabs WHERE client_guid = ?"
             clientArgs = [guid]
         } else {
-            tabsSQL = "SELECT * FROM \(TableTabs) WHERE client_guid IS NULL"
+            tabsSQL = "SELECT * FROM tabs WHERE client_guid IS NULL"
             clientArgs = nil
         }
 
@@ -221,8 +221,8 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return db.withConnection { conn -> ([RemoteClient], [RemoteTab]) in
-            let clientsCursor = conn.executeQuery("SELECT * FROM \(TableClients) WHERE EXISTS (SELECT 1 FROM \(TableRemoteDevices) rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
-            let tabsCursor = conn.executeQuery("SELECT * FROM \(TableTabs) WHERE client_guid IS NOT NULL ORDER BY client_guid DESC, last_used DESC", factory: SQLiteRemoteClientsAndTabs.remoteTabFactory)
+            let clientsCursor = conn.executeQuery("SELECT * FROM clients WHERE EXISTS (SELECT 1 FROM remote_devices rd WHERE rd.guid = fxaDeviceId) ORDER BY modified DESC", factory: SQLiteRemoteClientsAndTabs.remoteClientFactory)
+            let tabsCursor = conn.executeQuery("SELECT * FROM tabs WHERE client_guid IS NOT NULL ORDER BY client_guid DESC, last_used DESC", factory: SQLiteRemoteClientsAndTabs.remoteTabFactory)
 
             defer {
                 clientsCursor.close()
@@ -258,11 +258,11 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     open func deleteCommands() -> Success {
-        return db.run("DELETE FROM \(TableSyncCommands)")
+        return db.run("DELETE FROM commands")
     }
 
     open func deleteCommands(_ clientGUID: GUID) -> Success {
-        return db.run("DELETE FROM \(TableSyncCommands) WHERE client_guid = ?", withArgs: [clientGUID] as Args)
+        return db.run("DELETE FROM commands WHERE client_guid = ?", withArgs: [clientGUID] as Args)
     }
 
     open func insertCommand(_ command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>> {
@@ -277,7 +277,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             for command in commands {
                 for client in clients {
                     do {
-                        if let commandID = try self.insert(connection, sql: "INSERT INTO \(TableSyncCommands) (client_guid, value) VALUES (?, ?)", args: [client.guid, command.value] as Args) {
+                        if let commandID = try self.insert(connection, sql: "INSERT INTO commands (client_guid, value) VALUES (?, ?)", args: [client.guid, command.value] as Args) {
                             log.verbose("Inserted command: \(commandID)")
                             numberOfInserts += 1
                         } else {
@@ -296,7 +296,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>> {
         return db.withConnection { connection -> [GUID: [SyncCommand]] in
-            let cursor = connection.executeQuery("SELECT * FROM \(TableSyncCommands)", factory: { row -> SyncCommand in
+            let cursor = connection.executeQuery("SELECT * FROM commands", factory: { row -> SyncCommand in
                 SyncCommand(
                     id: row["command_id"] as? Int,
                     value: row["value"] as! String,
@@ -340,13 +340,13 @@ extension SQLiteRemoteClientsAndTabs: RemoteDevices {
         let remoteDevices = remoteDevices.filter { $0.id != nil && $0.type != nil && !$0.isCurrentDevice }
 
         return db.transaction { conn -> Void in
-            try conn.executeChange("DELETE FROM \(TableRemoteDevices)")
+            try conn.executeChange("DELETE FROM remote_devices")
 
             let now = Date.now()
 
             for device in remoteDevices {
                 let sql = """
-                    INSERT INTO \(TableRemoteDevices) (
+                    INSERT INTO remote_devices (
                         guid, name, type, is_current_device, date_created, date_modified, last_access_time
                     ) VALUES (?, ?, ?, ?, ?, ?, ?)
                     """
@@ -366,8 +366,8 @@ extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
 
     public func clear() -> Success {
         return db.transaction { conn -> Void in
-            try conn.executeChange("DELETE FROM \(TableTabs) WHERE client_guid IS NOT NULL")
-            try conn.executeChange("DELETE FROM \(TableClients)")
+            try conn.executeChange("DELETE FROM tabs WHERE client_guid IS NOT NULL")
+            try conn.executeChange("DELETE FROM clients")
         }
     }
 }

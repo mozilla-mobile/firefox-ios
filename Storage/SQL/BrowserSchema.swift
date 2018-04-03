@@ -221,18 +221,18 @@ open class BrowserSchema: Schema {
         // via titleForSpecialGUID, if necessary.
 
         let local =
-        "INSERT INTO \(TableBookmarksLocal) (id, guid, type, date_added, parentid, title, parentName, sync_status, local_modified) VALUES " +
-        Array(repeating: "(?, ?, ?, ?, ?, '', '', ?, ?)", count: BookmarkRoots.RootChildren.count + 1).joined(separator: ", ")
+            "INSERT INTO bookmarksLocal (id, guid, type, date_added, parentid, title, parentName, sync_status, local_modified) VALUES " +
+            Array(repeating: "(?, ?, ?, ?, ?, '', '', ?, ?)", count: BookmarkRoots.RootChildren.count + 1).joined(separator: ", ")
 
         let structure =
-        "INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) VALUES " +
-        Array(repeating: "(?, ?, ?)", count: BookmarkRoots.RootChildren.count).joined(separator: ", ")
+            "INSERT INTO bookmarksLocalStructure (parent, child, idx) VALUES " +
+            Array(repeating: "(?, ?, ?)", count: BookmarkRoots.RootChildren.count).joined(separator: ", ")
 
         return self.run(db, queries: [(local, localArgs), (structure, structureArgs)])
     }
 
     let topSitesTableCreate = """
-        CREATE TABLE IF NOT EXISTS \(TableCachedTopSites) (
+        CREATE TABLE IF NOT EXISTS cached_top_sites (
             historyID INTEGER,
             url TEXT NOT NULL,
             title TEXT NOT NULL,
@@ -253,7 +253,7 @@ open class BrowserSchema: Schema {
         """
 
     let pinnedTopSitesTableCreate = """
-        CREATE TABLE IF NOT EXISTS \(TablePinnedTopSites) (
+        CREATE TABLE IF NOT EXISTS pinned_top_sites (
             historyID INTEGER,
             url TEXT NOT NULL UNIQUE,
             title TEXT,
@@ -264,7 +264,7 @@ open class BrowserSchema: Schema {
         """
 
     let domainsTableCreate = """
-        CREATE TABLE IF NOT EXISTS \(TableDomains) (
+        CREATE TABLE IF NOT EXISTS domains (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             domain TEXT NOT NULL UNIQUE,
             showOnTopSites TINYINT NOT NULL DEFAULT 1
@@ -272,14 +272,14 @@ open class BrowserSchema: Schema {
         """
 
     let queueTableCreate = """
-        CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (
+        CREATE TABLE IF NOT EXISTS queue (
             url TEXT NOT NULL UNIQUE,
             title TEXT
         )
         """
 
     let syncCommandsTableCreate = """
-        CREATE TABLE IF NOT EXISTS \(TableSyncCommands) (
+        CREATE TABLE IF NOT EXISTS commands (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             client_guid TEXT NOT NULL,
             value TEXT NOT NULL
@@ -287,7 +287,7 @@ open class BrowserSchema: Schema {
         """
 
     let clientsTableCreate = """
-        CREATE TABLE IF NOT EXISTS \(TableClients) (
+        CREATE TABLE IF NOT EXISTS clients (
             guid TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             modified INTEGER NOT NULL,
@@ -300,7 +300,7 @@ open class BrowserSchema: Schema {
         """
 
     let tabsTableCreate = """
-        CREATE TABLE IF NOT EXISTS \(TableTabs) (
+        CREATE TABLE IF NOT EXISTS tabs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             client_guid TEXT REFERENCES clients(guid) ON DELETE CASCADE,
             url TEXT NOT NULL,
@@ -311,7 +311,7 @@ open class BrowserSchema: Schema {
         """
 
     let activityStreamBlocklistCreate = """
-        CREATE TABLE IF NOT EXISTS \(TableActivityStreamBlocklist) (
+        CREATE TABLE IF NOT EXISTS activity_stream_blocklist (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             url TEXT NOT NULL UNIQUE,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -319,7 +319,7 @@ open class BrowserSchema: Schema {
         """
 
     let pageMetadataCreate = """
-        CREATE TABLE IF NOT EXISTS \(TablePageMetadata) (
+        CREATE TABLE IF NOT EXISTS page_metadata (
             id INTEGER PRIMARY KEY,
             cache_key LONGVARCHAR UNIQUE,
             site_url TEXT,
@@ -334,7 +334,7 @@ open class BrowserSchema: Schema {
         """
 
     let highlightsCreate = """
-        CREATE TABLE IF NOT EXISTS \(TableHighlights) (
+        CREATE TABLE IF NOT EXISTS highlights (
             historyID INTEGER PRIMARY KEY,
             cache_key LONGVARCHAR,
             url TEXT,
@@ -347,12 +347,12 @@ open class BrowserSchema: Schema {
         """
 
     let indexPageMetadataCacheKeyCreate =
-        "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageMetadataCacheKey) ON page_metadata (cache_key)"
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_page_metadata_cache_key_uniqueindex ON page_metadata (cache_key)"
 
     let indexPageMetadataSiteURLCreate =
-        "CREATE UNIQUE INDEX IF NOT EXISTS \(IndexPageMetadataSiteURL) ON page_metadata (site_url)"
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_page_metadata_site_url_uniqueindex ON page_metadata (site_url)"
 
-    let iconColumns = ", faviconID INTEGER REFERENCES \(TableFavicons)(id) ON DELETE SET NULL"
+    let iconColumns = ", faviconID INTEGER REFERENCES favicons(id) ON DELETE SET NULL"
     let mirrorColumns = ", is_overridden TINYINT NOT NULL DEFAULT 0"
 
     let serverColumns = """
@@ -428,7 +428,7 @@ open class BrowserSchema: Schema {
     }
 
     fileprivate let bufferBookmarksView = """
-        CREATE VIEW \(ViewBookmarksBufferOnMirror) AS
+        CREATE VIEW view_bookmarksBuffer_on_mirror AS
         SELECT
             -1 AS id,
             mirror.guid AS guid,
@@ -449,7 +449,7 @@ open class BrowserSchema: Schema {
             0 AS is_overridden
         -- LEFT EXCLUDING JOIN to get mirror records that aren't in the buffer.
         -- We don't have an is_overridden flag to help us here.
-        FROM \(TableBookmarksMirror) mirror LEFT JOIN \(TableBookmarksBuffer) buffer ON
+        FROM bookmarksMirror mirror LEFT JOIN bookmarksBuffer buffer ON
             mirror.guid = buffer.guid
         WHERE buffer.guid IS NULL
         UNION ALL
@@ -471,12 +471,12 @@ open class BrowserSchema: Schema {
             folderName,
             NULL AS faviconID,
             1 AS is_overridden
-        FROM \(TableBookmarksBuffer)
+        FROM bookmarksBuffer
         WHERE is_deleted IS 0
         """
 
     fileprivate let bufferBookmarksWithDeletionsView = """
-        CREATE VIEW \(ViewBookmarksBufferWithDeletionsOnMirror) AS
+        CREATE VIEW view_bookmarksBuffer_with_deletions_on_mirror AS
         SELECT
             -1 AS id,
             mirror.guid AS guid,
@@ -497,7 +497,7 @@ open class BrowserSchema: Schema {
             0 AS is_overridden
         -- LEFT EXCLUDING JOIN to get mirror records that aren't in the buffer.
         -- We don't have an is_overridden flag to help us here.
-        FROM \(TableBookmarksMirror) mirror LEFT JOIN \(TableBookmarksBuffer) buffer ON
+        FROM bookmarksMirror mirror LEFT JOIN bookmarksBuffer buffer ON
             mirror.guid = buffer.guid
         WHERE buffer.guid IS NULL
         UNION ALL
@@ -519,45 +519,45 @@ open class BrowserSchema: Schema {
             folderName,
             NULL AS faviconID,
             1 AS is_overridden
-        FROM \(TableBookmarksBuffer)
+        FROM bookmarksBuffer
         WHERE
             is_deleted IS 0 AND
-            NOT EXISTS (SELECT 1 FROM \(TablePendingBookmarksDeletions) deletions WHERE deletions.id = guid)
+            NOT EXISTS (SELECT 1 FROM pending_deletions deletions WHERE deletions.id = guid)
         """
 
     // TODO: phrase this without the subselect…
     fileprivate let bufferBookmarksStructureView = """
-        CREATE VIEW \(ViewBookmarksBufferStructureOnMirror) AS
+        CREATE VIEW view_bookmarksBufferStructure_on_mirror AS
         -- We don't need to exclude deleted parents, because we drop those from the structure
         -- table when we see them.
-        SELECT parent, child, idx, 1 AS is_overridden FROM \(TableBookmarksBufferStructure)
+        SELECT parent, child, idx, 1 AS is_overridden FROM bookmarksBufferStructure
         UNION ALL
         -- Exclude anything from the mirror that's present in the buffer (dynamic is_overridden).
         SELECT parent, child, idx, 0 AS is_overridden
-        FROM \(TableBookmarksMirrorStructure) LEFT JOIN \(TableBookmarksBuffer) ON
+        FROM bookmarksMirrorStructure LEFT JOIN bookmarksBuffer ON
             parent = guid
         WHERE guid IS NULL
         """
 
     fileprivate let localBookmarksView = """
-        CREATE VIEW \(ViewBookmarksLocalOnMirror) AS
+        CREATE VIEW view_bookmarksLocal_on_mirror AS
         SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, NULL AS local_modified, server_modified, 0 AS is_overridden
-        FROM \(TableBookmarksMirror) WHERE is_overridden IS NOT 1
+        FROM bookmarksMirror WHERE is_overridden IS NOT 1
         UNION ALL
         SELECT -1 AS id, guid, type, date_added, is_deleted, parentid, parentName, feedUri, siteUri, pos, title, description, bmkUri, folderName, faviconID, local_modified, NULL AS server_modified, 1 AS is_overridden
-        FROM \(TableBookmarksLocal) WHERE is_deleted IS NOT 1
+        FROM bookmarksLocal WHERE is_deleted IS NOT 1
         """
 
     // TODO: phrase this without the subselect…
     fileprivate let localBookmarksStructureView = """
-        CREATE VIEW \(ViewBookmarksLocalStructureOnMirror) AS
+        CREATE VIEW view_bookmarksLocalStructure_on_mirror AS
         SELECT parent, child, idx, 1 AS is_overridden
-        FROM \(TableBookmarksLocalStructure)
-        WHERE ((SELECT is_deleted FROM \(TableBookmarksLocal) WHERE guid = parent) IS NOT 1)
+        FROM bookmarksLocalStructure
+        WHERE ((SELECT is_deleted FROM bookmarksLocal WHERE guid = parent) IS NOT 1)
         UNION ALL
         SELECT parent, child, idx, 0 AS is_overridden
-        FROM \(TableBookmarksMirrorStructure)
-        WHERE ((SELECT is_overridden FROM \(TableBookmarksMirror) WHERE guid = parent) IS NOT 1)
+        FROM bookmarksMirrorStructure
+        WHERE ((SELECT is_overridden FROM bookmarksMirror WHERE guid = parent) IS NOT 1)
         """
 
     // This view exists only to allow for text searching of URLs and titles in the awesomebar.
@@ -565,35 +565,35 @@ open class BrowserSchema: Schema {
     // Usually this will be indistinguishable from a more sophisticated approach, and it's way
     // easier.
     fileprivate let allBookmarksView = """
-        CREATE VIEW \(ViewAllBookmarks) AS
+        CREATE VIEW view_all_bookmarks AS
         SELECT guid, bmkUri AS url, title, description, faviconID
-        FROM \(TableBookmarksMirror)
+        FROM bookmarksMirror
         WHERE
             type = \(BookmarkNodeType.bookmark.rawValue) AND
             is_overridden IS 0 AND
             is_deleted IS 0
         UNION ALL
         SELECT guid, bmkUri AS url, title, description, faviconID
-        FROM \(TableBookmarksLocal)
+        FROM bookmarksLocal
         WHERE
             type = \(BookmarkNodeType.bookmark.rawValue) AND
             is_deleted IS 0
         UNION ALL
         SELECT guid, bmkUri AS url, title, description, -1 AS faviconID
-        FROM \(TableBookmarksBuffer) bb
+        FROM bookmarksBuffer bb
         WHERE
             bb.type = \(BookmarkNodeType.bookmark.rawValue) AND
             bb.is_deleted IS 0 AND
             -- Exclude pending bookmark deletions.
-            NOT EXISTS (SELECT 1 FROM \(TablePendingBookmarksDeletions) AS pd WHERE pd.id = bb.guid)
+            NOT EXISTS (SELECT 1 FROM pending_deletions AS pd WHERE pd.id = bb.guid)
         """
 
     // This exists only to allow upgrade from old versions. We have view dependencies, so
     // we can't simply skip creating ViewAllBookmarks. Here's a stub.
     fileprivate let oldAllBookmarksView = """
-        CREATE VIEW \(ViewAllBookmarks) AS
+        CREATE VIEW view_all_bookmarks AS
         SELECT guid, bmkUri AS url, title, description, faviconID
-        FROM \(TableBookmarksMirror)
+        FROM bookmarksMirror
         WHERE
             type = \(BookmarkNodeType.bookmark.rawValue) AND
             is_overridden IS 0 AND
@@ -602,34 +602,34 @@ open class BrowserSchema: Schema {
 
     // This smushes together remote and local visits. So it goes.
     fileprivate let historyVisitsView = """
-        CREATE VIEW \(ViewHistoryVisits) AS
-        SELECT h.url AS url, MAX(v.date) AS visitDate, h.domain_id AS domain_id
-        FROM \(TableHistory) h JOIN \(TableVisits) v ON v.siteID = h.id
+        CREATE VIEW view_history_visits AS
+        SELECT h.url AS url, max(v.date) AS visitDate, h.domain_id AS domain_id
+        FROM history h JOIN visits v ON v.siteID = h.id
         GROUP BY h.id
         """
 
     // Join all bookmarks against history to find the most recent visit.
     // visits.
     fileprivate let awesomebarBookmarksView = """
-        CREATE VIEW \(ViewAwesomebarBookmarks) AS
+        CREATE VIEW view_awesomebar_bookmarks AS
         SELECT b.guid AS guid, b.url AS url, b.title AS title, b.description AS description, b.faviconID AS faviconID, h.visitDate AS visitDate
-        FROM \(ViewAllBookmarks) b LEFT JOIN \(ViewHistoryVisits) h ON b.url = h.url
+        FROM view_all_bookmarks b LEFT JOIN view_history_visits h ON b.url = h.url
         """
 
     fileprivate let awesomebarBookmarksWithIconsView = """
-        CREATE VIEW \(ViewAwesomebarBookmarksWithIcons) AS
+        CREATE VIEW view_awesomebar_bookmarks_with_favicons AS
         SELECT b.guid AS guid, b.url AS url, b.title AS title, b.description AS description, b.visitDate AS visitDate, f.id AS iconID, f.url AS iconURL, f.date AS iconDate, f.type AS iconType, f.width AS iconWidth
-        FROM \(ViewAwesomebarBookmarks) b LEFT JOIN \(TableFavicons) f ON f.id = b.faviconID
+        FROM view_awesomebar_bookmarks b LEFT JOIN favicons f ON f.id = b.faviconID
         """
 
     fileprivate let pendingBookmarksDeletions = """
-        CREATE TABLE IF NOT EXISTS \(TablePendingBookmarksDeletions) (
-            id TEXT PRIMARY KEY REFERENCES \(TableBookmarksBuffer)(guid) ON DELETE CASCADE
+        CREATE TABLE IF NOT EXISTS pending_deletions (
+            id TEXT PRIMARY KEY REFERENCES bookmarksBuffer(guid) ON DELETE CASCADE
         )
         """
 
     fileprivate let remoteDevices = """
-        CREATE TABLE IF NOT EXISTS \(TableRemoteDevices) (
+        CREATE TABLE IF NOT EXISTS remote_devices (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             guid TEXT UNIQUE NOT NULL,
             name TEXT NOT NULL,
@@ -644,7 +644,7 @@ open class BrowserSchema: Schema {
 
     public func create(_ db: SQLiteDBConnection) -> Bool {
         let favicons = """
-            CREATE TABLE IF NOT EXISTS \(TableFavicons) (
+            CREATE TABLE IF NOT EXISTS favicons (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 url TEXT NOT NULL UNIQUE,
                 width INTEGER,
@@ -655,7 +655,7 @@ open class BrowserSchema: Schema {
             """
 
         let history = """
-            CREATE TABLE IF NOT EXISTS \(TableHistory) (
+            CREATE TABLE IF NOT EXISTS history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 -- Not null, but the value might be replaced by the server's.
                 guid TEXT NOT NULL UNIQUE,
@@ -670,7 +670,7 @@ open class BrowserSchema: Schema {
                 is_deleted TINYINT NOT NULL,
                 -- Boolean. Set when changed or visits added.
                 should_upload TINYINT NOT NULL,
-                domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE,
+                domain_id INTEGER REFERENCES domains(id) ON DELETE CASCADE,
                 CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)
             )
             """
@@ -681,9 +681,9 @@ open class BrowserSchema: Schema {
         // If we ever want to support logic like not bothering to sync if we added
         // and then rapidly removed a visit, then we need an 'is_new' flag on each visit.
         let visits = """
-            CREATE TABLE IF NOT EXISTS \(TableVisits) (
+            CREATE TABLE IF NOT EXISTS visits (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                siteID INTEGER NOT NULL REFERENCES \(TableHistory)(id) ON DELETE CASCADE,
+                siteID INTEGER NOT NULL REFERENCES history(id) ON DELETE CASCADE,
                 -- Microseconds since epoch.
                 date REAL NOT NULL,
                 type INTEGER NOT NULL,
@@ -697,56 +697,56 @@ open class BrowserSchema: Schema {
         if self.supportsPartialIndices {
             // There's no point tracking rows that are not flagged for upload.
             indexShouldUpload = """
-                CREATE INDEX IF NOT EXISTS \(IndexHistoryShouldUpload)
-                ON \(TableHistory) (should_upload) WHERE should_upload = 1
+                CREATE INDEX IF NOT EXISTS idx_history_should_upload
+                ON history (should_upload) WHERE should_upload = 1
                 """
         } else {
             indexShouldUpload = """
-                CREATE INDEX IF NOT EXISTS \(IndexHistoryShouldUpload)
-                ON \(TableHistory) (should_upload)
+                CREATE INDEX IF NOT EXISTS idx_history_should_upload
+                ON history (should_upload)
                 """
         }
 
         let indexSiteIDDate = """
-            CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate)
-            ON \(TableVisits) (siteID, is_local, date)
+            CREATE INDEX IF NOT EXISTS idx_visits_siteID_is_local_date
+            ON visits (siteID, is_local, date)
             """
 
         let faviconSites = """
-            CREATE TABLE IF NOT EXISTS \(TableFaviconSites) (
+            CREATE TABLE IF NOT EXISTS favicon_sites (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                siteID INTEGER NOT NULL REFERENCES \(TableHistory)(id) ON DELETE CASCADE,
-                faviconID INTEGER NOT NULL REFERENCES \(TableFavicons)(id) ON DELETE CASCADE,
+                siteID INTEGER NOT NULL REFERENCES history(id) ON DELETE CASCADE,
+                faviconID INTEGER NOT NULL REFERENCES favicons(id) ON DELETE CASCADE,
                 UNIQUE (siteID, faviconID)
             )
             """
 
         let widestFavicons = """
-            CREATE VIEW IF NOT EXISTS \(ViewWidestFaviconsForSites) AS
+            CREATE VIEW IF NOT EXISTS view_favicons_widest AS
             SELECT
-                \(TableFaviconSites).siteID AS siteID,
-                \(TableFavicons).id AS iconID,
-                \(TableFavicons).url AS iconURL,
-                \(TableFavicons).date AS iconDate,
-                \(TableFavicons).type AS iconType,
-                MAX(\(TableFavicons).width) AS iconWidth
-            FROM \(TableFaviconSites), \(TableFavicons)
-            WHERE \(TableFaviconSites).faviconID = \(TableFavicons).id
+                favicon_sites.siteID AS siteID,
+                favicons.id AS iconID,
+                favicons.url AS iconURL,
+                favicons.date AS iconDate,
+                favicons.type AS iconType,
+                max(favicons.width) AS iconWidth
+            FROM favicon_sites, favicons
+            WHERE favicon_sites.faviconID = favicons.id
             GROUP BY siteID
             """
 
         let historyIDsWithIcon = """
-            CREATE VIEW IF NOT EXISTS \(ViewHistoryIDsWithWidestFavicons) AS
-            SELECT \(TableHistory).id AS id, iconID, iconURL, iconDate, iconType, iconWidth
-            FROM \(TableHistory) LEFT OUTER JOIN \(ViewWidestFaviconsForSites) ON
-                history.id = \(ViewWidestFaviconsForSites).siteID
+            CREATE VIEW IF NOT EXISTS view_history_id_favicon AS
+            SELECT history.id AS id, iconID, iconURL, iconDate, iconType, iconWidth
+            FROM history LEFT OUTER JOIN view_favicons_widest ON
+                history.id = view_favicons_widest.siteID
             """
 
         let iconForURL = """
-            CREATE VIEW IF NOT EXISTS \(ViewIconForURL) AS
+            CREATE VIEW IF NOT EXISTS view_icon_for_url AS
             SELECT history.url AS url, icons.iconID AS iconID
-            FROM \(TableHistory), \(ViewWidestFaviconsForSites) AS icons
-            WHERE \(TableHistory).id = icons.siteID
+            FROM history, view_favicons_widest AS icons
+            WHERE history.id = icons.siteID
             """
 
         // Locally we track faviconID.
@@ -760,20 +760,20 @@ open class BrowserSchema: Schema {
         let bookmarksMirrorStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)
 
         let indexLocalStructureParentIdx = """
-            CREATE INDEX IF NOT EXISTS \(IndexBookmarksLocalStructureParentIdx)
-            ON \(TableBookmarksLocalStructure) (parent, idx)
+            CREATE INDEX IF NOT EXISTS idx_bookmarksLocalStructure_parent_idx
+            ON bookmarksLocalStructure (parent, idx)
             """
         let indexBufferStructureParentIdx = """
-            CREATE INDEX IF NOT EXISTS \(IndexBookmarksBufferStructureParentIdx)
-            ON \(TableBookmarksBufferStructure) (parent, idx)
+            CREATE INDEX IF NOT EXISTS idx_bookmarksBufferStructure_parent_idx
+            ON bookmarksBufferStructure (parent, idx)
             """
         let indexMirrorStructureParentIdx = """
-            CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureParentIdx)
-            ON \(TableBookmarksMirrorStructure) (parent, idx)
+            CREATE INDEX IF NOT EXISTS idx_bookmarksMirrorStructure_parent_idx
+            ON bookmarksMirrorStructure (parent, idx)
             """
         let indexMirrorStructureChild = """
-            CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureChild)
-            ON \(TableBookmarksMirrorStructure) (child)
+            CREATE INDEX IF NOT EXISTS idx_bookmarksMirrorStructure_child
+            ON bookmarksMirrorStructure (child)
             """
 
         let queries: [String] = [
@@ -886,15 +886,15 @@ open class BrowserSchema: Schema {
 
         if from < 6 && to >= 6 {
             if !self.run(db, queries: [
-                "DROP INDEX IF EXISTS \(IndexVisitsSiteIDDate)",
-                "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) ON \(TableVisits) (siteID, is_local, date)",
+                "DROP INDEX IF EXISTS idx_visits_siteID_date",
+                "CREATE INDEX IF NOT EXISTS idx_visits_siteID_is_local_date ON visits (siteID, is_local, date)",
                 self.domainsTableCreate,
-                "ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE",
+                "ALTER TABLE history ADD COLUMN domain_id INTEGER REFERENCES domains(id) ON DELETE CASCADE",
             ]) {
                 return false
             }
 
-            let urls = db.executeQuery("SELECT DISTINCT url FROM \(TableHistory) WHERE url IS NOT NULL",
+            let urls = db.executeQuery("SELECT DISTINCT url FROM history WHERE url IS NOT NULL",
                                        factory: { $0["url"] as! String })
             if !fillDomainNamesFromCursor(urls, db: db) {
                 return false
@@ -918,8 +918,8 @@ open class BrowserSchema: Schema {
             }
 
             let indexStructureParentIdx = """
-                CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureParentIdx)
-                ON \(TableBookmarksMirrorStructure) (parent, idx)
+                CREATE INDEX IF NOT EXISTS idx_bookmarksMirrorStructure_parent_idx
+                ON bookmarksMirrorStructure (parent, idx)
                 """
 
             if !self.run(db, sql: indexStructureParentIdx) {
@@ -940,16 +940,16 @@ open class BrowserSchema: Schema {
             let bookmarksMirrorStructure = getBookmarksStructureTableCreationStringForTable(TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)
 
             let indexLocalStructureParentIdx = """
-                CREATE INDEX IF NOT EXISTS \(IndexBookmarksLocalStructureParentIdx)
-                ON \(TableBookmarksLocalStructure) (parent, idx)
+                CREATE INDEX IF NOT EXISTS idx_bookmarksLocalStructure_parent_idx
+                ON bookmarksLocalStructure (parent, idx)
                 """
             let indexBufferStructureParentIdx = """
-                CREATE INDEX IF NOT EXISTS \(IndexBookmarksBufferStructureParentIdx)
-                ON \(TableBookmarksBufferStructure) (parent, idx)
+                CREATE INDEX IF NOT EXISTS idx_bookmarksBufferStructure_parent_idx
+                ON bookmarksBufferStructure (parent, idx)
                 """
             let indexMirrorStructureParentIdx = """
-                CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureParentIdx)
-                ON \(TableBookmarksMirrorStructure) (parent, idx)
+                CREATE INDEX IF NOT EXISTS idx_bookmarksMirrorStructure_parent_idx
+                ON bookmarksMirrorStructure (parent, idx)
                 """
 
             let prep = [
@@ -958,8 +958,8 @@ open class BrowserSchema: Schema {
 
                 // Rename the old mirror tables to buffer.
                 // The v11 one is the same shape as the current buffer table.
-                "ALTER TABLE \(TableBookmarksMirror) RENAME TO \(TableBookmarksBuffer)",
-                "ALTER TABLE \(TableBookmarksMirrorStructure) RENAME TO \(TableBookmarksBufferStructure)",
+                "ALTER TABLE bookmarksMirror RENAME TO bookmarksBuffer",
+                "ALTER TABLE bookmarksMirrorStructure RENAME TO bookmarksBufferStructure",
 
                 // Create the new mirror and local tables.
                 bookmarksLocal,
@@ -978,9 +978,9 @@ open class BrowserSchema: Schema {
             // We also don't migrate the 'id' column; we'll generate new ones that won't conflict with our roots.
             let migrateArgs: Args = [BookmarkRoots.MobileFolderGUID]
             let migrateLocal = """
-                INSERT INTO \(TableBookmarksLocal) (guid, type, bmkUri, title, faviconID, local_modified, sync_status, parentid, parentName)
+                INSERT INTO bookmarksLocal (guid, type, bmkUri, title, faviconID, local_modified, sync_status, parentid, parentName)
                 SELECT guid, type, url AS bmkUri, title, faviconID, \(modified) AS local_modified, \(status) AS sync_status, ?, ''
-                FROM \(_TableBookmarks) WHERE type IS \(BookmarkNodeType.bookmark.rawValue)
+                FROM bookmarks WHERE type IS \(BookmarkNodeType.bookmark.rawValue)
                 """
 
             // Create structure for our migrated bookmarks.
@@ -990,13 +990,13 @@ open class BrowserSchema: Schema {
             let temporaryTable = """
                 CREATE TEMPORARY TABLE children AS
                 SELECT guid
-                FROM \(_TableBookmarks)
+                FROM bookmarks
                 WHERE type IS \(BookmarkNodeType.bookmark.rawValue)
                 ORDER BY id ASC
                 """
 
             let createStructure = """
-                INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx)
+                INSERT INTO bookmarksLocalStructure (parent, child, idx)
                 SELECT ? AS parent, guid AS child, (rowid - 1) AS idx FROM children
                 """
 
@@ -1009,7 +1009,7 @@ open class BrowserSchema: Schema {
                 ("DROP TABLE children", nil),
 
                 // Drop the old bookmarks table.
-                ("DROP TABLE \(_TableBookmarks)", nil),
+                ("DROP TABLE bookmarks", nil),
 
                 // Create indices for each structure table.
                 (indexBufferStructureParentIdx, nil),
@@ -1028,8 +1028,8 @@ open class BrowserSchema: Schema {
         // Add views for the overlays.
         if from < 14 && to >= 14 {
             let indexMirrorStructureChild = """
-                CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureChild)
-                ON \(TableBookmarksMirrorStructure) (child)
+                CREATE INDEX IF NOT EXISTS idx_bookmarksMirrorStructure_child
+                ON bookmarksMirrorStructure (child)
                 """
 
             if !self.run(db, queries: [
@@ -1043,8 +1043,8 @@ open class BrowserSchema: Schema {
         if from == 14 && to >= 15 {
             // We screwed up some of the views. Recreate them.
             if !self.run(db, queries: [
-                "DROP VIEW IF EXISTS \(ViewBookmarksBufferStructureOnMirror)",
-                "DROP VIEW IF EXISTS \(ViewBookmarksLocalStructureOnMirror)",
+                "DROP VIEW IF EXISTS view_bookmarksBufferStructure_on_mirror",
+                "DROP VIEW IF EXISTS view_bookmarksLocalStructure_on_mirror",
                 self.bufferBookmarksStructureView,
                 self.localBookmarksStructureView]) {
                 return false
@@ -1065,7 +1065,7 @@ open class BrowserSchema: Schema {
         // if from < 17 && to >= 17 {
         //     if !self.run(db, queries: [
         //         // Adds the local_modified, server_modified times to the local bookmarks view
-        //         "DROP VIEW IF EXISTS \(ViewBookmarksLocalOnMirror)",
+        //         "DROP VIEW IF EXISTS view_bookmarksLocal_on_mirror",
         //         self.localBookmarksView]) {
         //         return false
         //     }
@@ -1091,7 +1091,7 @@ open class BrowserSchema: Schema {
         // That view is re-created later
         // if from < 20 && to >= 20 {
         //     if !self.run(db, queries: [
-        //         "DROP VIEW IF EXISTS \(ViewBookmarksBufferOnMirror)",
+        //         "DROP VIEW IF EXISTS view_bookmarksBuffer_on_mirror",
         //         self.bufferBookmarksView]) {
         //         return false
         //     }
@@ -1099,7 +1099,7 @@ open class BrowserSchema: Schema {
 
         if from < 21 && to >= 21 {
             if !self.run(db, queries: [
-                "DROP VIEW IF EXISTS \(ViewHistoryVisits)",
+                "DROP VIEW IF EXISTS view_history_visits",
                 self.historyVisitsView,
                 indexPageMetadataSiteURLCreate]) {
                 return false
@@ -1111,7 +1111,7 @@ open class BrowserSchema: Schema {
         // re-created at v27 anyway.
         // if from < 22 && to >= 22 {
         //     if !self.run(db, queries: [
-        //         "DROP TABLE IF EXISTS \(TablePageMetadata)",
+        //         "DROP TABLE IF EXISTS page_metadata",
         //         pageMetadataCreate,
         //         indexPageMetadataCacheKeyCreate,
         //         indexPageMetadataSiteURLCreate]) {
@@ -1129,7 +1129,7 @@ open class BrowserSchema: Schema {
         // if from < 24 && to >= 24 {
         //     if !self.run(db, queries: [
         //         // We can safely drop the highlights cache table since it gets cleared on every invalidate anyways.
-        //         "DROP TABLE IF EXISTS \(TableHighlights)",
+        //         "DROP TABLE IF EXISTS highlights",
         //         highlightsCreate
         //     ]) {
         //         return false
@@ -1150,7 +1150,7 @@ open class BrowserSchema: Schema {
         if from < 26 && to >= 26 {
             if !self.run(db, queries: [
                 // The old pin table was never released so we can safely drop
-                "DROP TABLE IF EXISTS \(TablePinnedTopSites)",
+                "DROP TABLE IF EXISTS pinned_top_sites",
                 pinnedTopSitesTableCreate
                 ]) {
                 return false
@@ -1159,8 +1159,8 @@ open class BrowserSchema: Schema {
 
         if from < 27 && to >= 27 {
             if !self.run(db, queries: [
-                "DROP TABLE IF EXISTS \(TablePageMetadata)",
-                "DROP TABLE IF EXISTS \(TableHighlights)",
+                "DROP TABLE IF EXISTS page_metadata",
+                "DROP TABLE IF EXISTS highlights",
                 pageMetadataCreate,
                 indexPageMetadataCacheKeyCreate,
                 indexPageMetadataSiteURLCreate,
@@ -1190,7 +1190,7 @@ open class BrowserSchema: Schema {
             // We changed this view as a follow-up to the above in order to exclude buffer
             // deletions from the bookmarked set.
             if !self.run(db, queries: [
-                "DROP VIEW IF EXISTS \(ViewAllBookmarks)",
+                "DROP VIEW IF EXISTS view_all_bookmarks",
                 allBookmarksView
             ]) {
                 return false
@@ -1216,14 +1216,14 @@ open class BrowserSchema: Schema {
             // If upgrading from < 12 these tables are created with that column already present.
             if from > 12 {
                 queries.append(contentsOf: [
-                    "ALTER TABLE \(TableBookmarksLocal) ADD date_added INTEGER",
-                    "ALTER TABLE \(TableBookmarksMirror) ADD date_added INTEGER",
-                    "ALTER TABLE \(TableBookmarksBuffer) ADD date_added INTEGER"
+                    "ALTER TABLE bookmarksLocal ADD date_added INTEGER",
+                    "ALTER TABLE bookmarksMirror ADD date_added INTEGER",
+                    "ALTER TABLE bookmarksBuffer ADD date_added INTEGER"
                 ])
             }
             queries.append(contentsOf: [
-                "UPDATE \(TableBookmarksLocal) SET date_added = local_modified",
-                "UPDATE \(TableBookmarksMirror) SET date_added = server_modified"
+                "UPDATE bookmarksLocal SET date_added = local_modified",
+                "UPDATE bookmarksMirror SET date_added = server_modified"
             ])
             if !self.run(db, queries: queries) {
                 return false
@@ -1232,9 +1232,9 @@ open class BrowserSchema: Schema {
 
         if from < 33 && to >= 33 {
             if !self.run(db, queries: [
-                "DROP VIEW IF EXISTS \(ViewBookmarksBufferOnMirror)",
-                "DROP VIEW IF EXISTS \(ViewBookmarksBufferWithDeletionsOnMirror)",
-                "DROP VIEW IF EXISTS \(ViewBookmarksLocalOnMirror)",
+                "DROP VIEW IF EXISTS view_bookmarksBuffer_on_mirror",
+                "DROP VIEW IF EXISTS view_bookmarksBuffer_with_deletions_on_mirror",
+                "DROP VIEW IF EXISTS view_bookmarksLocal_on_mirror",
                 self.bufferBookmarksView,
                 self.bufferBookmarksWithDeletionsView,
                 self.localBookmarksView
@@ -1252,10 +1252,10 @@ open class BrowserSchema: Schema {
             // migrations predictable.
             // We don't need to worry about description: we never wrote it.
             if !self.run(db, queries: [
-                "DELETE FROM \(TableHistory) WHERE is_deleted = 0 AND length(url) > 65536",
-                "DELETE FROM \(TablePageMetadata) WHERE length(site_url) > 65536",
-                "DELETE FROM \(TableBookmarksLocal) WHERE is_deleted = 0 AND length(bmkUri) > 65536",
-                "UPDATE \(TableBookmarksLocal) SET title = substr(title, 1, 4096) WHERE is_deleted = 0 AND length(title) > 4096",
+                "DELETE FROM history WHERE is_deleted = 0 AND length(url) > 65536",
+                "DELETE FROM page_metadata WHERE length(site_url) > 65536",
+                "DELETE FROM bookmarksLocal WHERE is_deleted = 0 AND length(bmkUri) > 65536",
+                "UPDATE bookmarksLocal SET title = substr(title, 1, 4096) WHERE is_deleted = 0 AND length(title) > 4096",
                 ]) {
                 return false
             }
@@ -1274,7 +1274,7 @@ open class BrowserSchema: Schema {
 
         // Query for the existence of the `tableList` table to determine if we are
         // migrating from an older DB version or if this is just a brand new DB.
-        let sqliteMasterCursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+        let sqliteMasterCursor = db.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
 
         let tableListTableExists = sqliteMasterCursor[0] == 1
         sqliteMasterCursor.close()
@@ -1335,7 +1335,7 @@ open class BrowserSchema: Schema {
     fileprivate func migrateClientsTableFromSchemaTableIfNeeded(_ db: SQLiteDBConnection) -> SchemaUpgradeResult {
         // Query for the existence of the `clients` table to determine if we are
         // migrating from an older DB version or if this is just a brand new DB.
-        let sqliteMasterCursor = db.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
+        let sqliteMasterCursor = db.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'clients'", factory: IntFactory, withArgs: [] as Args)
         
         let clientsTableExists = sqliteMasterCursor[0] == 1
         sqliteMasterCursor.close()
@@ -1345,7 +1345,7 @@ open class BrowserSchema: Schema {
         }
         
         // Check if intermediate migrations are necessary for the 'clients' table.
-        let previousVersionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = '\(TableClients)'", factory: IntFactory, withArgs: [] as Args)
+        let previousVersionCursor = db.executeQueryUnsafe("SELECT version FROM tableList WHERE name = 'clients'", factory: IntFactory, withArgs: [] as Args)
         
         let previousClientsTableVersion = previousVersionCursor[0] ?? 0
         previousVersionCursor.close()
@@ -1354,27 +1354,27 @@ open class BrowserSchema: Schema {
             return .skipped
         }
         
-        log.info("Migrating '\(TableClients)' table from version \(previousClientsTableVersion).")
+        log.info("Migrating 'clients' table from version \(previousClientsTableVersion).")
         
         if previousClientsTableVersion < 2 {
-            let sql = "ALTER TABLE \(TableClients) ADD COLUMN version TEXT"
+            let sql = "ALTER TABLE clients ADD COLUMN version TEXT"
             do {
                 try db.executeChange(sql)
             } catch let err as NSError {
-                log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
-                let extra = ["table": "\(TableClients)", "errorDescription": "\(err.localizedDescription)", "sql": "\(sql)"]
+                log.error("Error altering clients table: \(err.localizedDescription); SQL was \(sql)")
+                let extra = ["table": "clients", "errorDescription": "\(err.localizedDescription)", "sql": "\(sql)"]
                 Sentry.shared.sendWithStacktrace(message: "Error altering table", tag: SentryTag.browserDB, severity: .error, extra: extra)
                 return .failure
             }
         }
         
         if previousClientsTableVersion < 3 {
-            let sql = "ALTER TABLE \(TableClients) ADD COLUMN fxaDeviceId TEXT"
+            let sql = "ALTER TABLE clients ADD COLUMN fxaDeviceId TEXT"
             do {
                 try db.executeChange(sql)
             } catch let err as NSError {
-                log.error("Error altering \(TableClients) table: \(err.localizedDescription); SQL was \(sql)")
-                let extra = ["table": "\(TableClients)", "errorDescription": "\(err.localizedDescription)", "sql": "\(sql)"]
+                log.error("Error altering clients table: \(err.localizedDescription); SQL was \(sql)")
+                let extra = ["table": "clients", "errorDescription": "\(err.localizedDescription)", "sql": "\(sql)"]
                 Sentry.shared.sendWithStacktrace(message: "Error altering table", tag: SentryTag.browserDB, severity: .error, extra: extra)
                 return .failure
             }
@@ -1409,8 +1409,9 @@ open class BrowserSchema: Schema {
         // Now insert these into the temporary table. Chunk by an even number, for obvious reasons.
         let chunks = chunk(pairs, by: BrowserDB.MaxVariableNumber - (BrowserDB.MaxVariableNumber % 2))
         for chunk in chunks {
-            let ins = "INSERT INTO \(tmpTable) (url, domain) VALUES " +
-                      Array<String>(repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
+            let ins =
+                "INSERT INTO \(tmpTable) (url, domain) VALUES " +
+                Array<String>(repeating: "(?, ?)", count: chunk.count / 2).joined(separator: ", ")
             if !self.run(db, sql: ins, args: Array(chunk)) {
                 log.error("Couldn't insert domains into temporary table. Aborting migration.")
                 return false
@@ -1418,13 +1419,13 @@ open class BrowserSchema: Schema {
         }
 
         // Now make those into domains.
-        let domains = "INSERT OR IGNORE INTO \(TableDomains) (domain) SELECT DISTINCT domain FROM \(tmpTable)"
+        let domains = "INSERT OR IGNORE INTO domains (domain) SELECT DISTINCT domain FROM \(tmpTable)"
 
         // … and fill that temporary column.
-        let domainIDs = "UPDATE \(tmpTable) SET domain_id = (SELECT id FROM \(TableDomains) WHERE \(TableDomains).domain = \(tmpTable).domain)"
+        let domainIDs = "UPDATE \(tmpTable) SET domain_id = (SELECT id FROM domains WHERE domains.domain = \(tmpTable).domain)"
 
         // Update the history table from the temporary table.
-        let updateHistory = "UPDATE \(TableHistory) SET domain_id = (SELECT domain_id FROM \(tmpTable) WHERE \(tmpTable).url = \(TableHistory).url)"
+        let updateHistory = "UPDATE history SET domain_id = (SELECT domain_id FROM \(tmpTable) WHERE \(tmpTable).url = history.url)"
 
         // Clean up.
         let dropTemp = "DROP TABLE \(tmpTable)"

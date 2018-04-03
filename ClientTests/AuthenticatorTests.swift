@@ -105,13 +105,16 @@ class AuthenticatorTests: XCTestCase {
 
     fileprivate func rawQueryForAllLogins() -> Deferred<Maybe<Cursor<String>>> {
         let projection = MainLoginColumns
-        let sql =
-        "SELECT \(projection) FROM " +
-            "\(TableLoginsLocal) WHERE is_deleted = 0 " +
-            "UNION ALL " +
-            "SELECT \(projection) FROM " +
-            "\(TableLoginsMirror) WHERE is_overridden = 0 " +
-        "ORDER BY hostname ASC"
+        let sql = """
+            SELECT \(projection)
+            FROM loginsL
+            WHERE is_deleted = 0
+            UNION ALL
+            SELECT \(projection)
+            FROM loginsM
+            WHERE is_overridden = 0
+            ORDER BY hostname ASC
+            """
         return db.runQuery(sql, args: nil, factory: hostnameFactory)
     }
 

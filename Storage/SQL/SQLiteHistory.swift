@@ -71,7 +71,7 @@ func getLocalFrecencySQL() -> String {
     let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
     let ageDays = "((\(now) - localVisitDate) / \(microsecondsPerDay))"
 
-    return "\(visitCountExpression) * MAX(2, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
+    return "\(visitCountExpression) * max(2, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
 fileprivate func computeWordsWithFilter(_ filter: String) -> [String] {
@@ -137,7 +137,7 @@ open class SQLiteHistory {
     let db: BrowserDB
     let favicons: SQLiteFavicons
     let prefs: Prefs
-    let clearTopSitesQuery: (String, Args?) = ("DELETE FROM \(TableCachedTopSites)", nil)
+    let clearTopSitesQuery: (String, Args?) = ("DELETE FROM cached_top_sites", nil)
 
     required public init(db: BrowserDB, prefs: Prefs) {
         self.db = db
@@ -146,7 +146,7 @@ open class SQLiteHistory {
     }
 }
 
-private let topSitesQuery = "SELECT \(TableCachedTopSites).*, \(TablePageMetadata).provider_name FROM \(TableCachedTopSites) LEFT OUTER JOIN \(TablePageMetadata) ON \(TableCachedTopSites).url = \(TablePageMetadata).site_url ORDER BY frecencies DESC LIMIT (?)"
+private let topSitesQuery = "SELECT cached_top_sites.*, page_metadata.provider_name FROM cached_top_sites LEFT OUTER JOIN page_metadata ON cached_top_sites.url = page_metadata.site_url ORDER BY frecencies DESC LIMIT (?)"
 
 /**
  * The init for this will perform the heaviest part of the frecency query
@@ -176,7 +176,7 @@ fileprivate struct SQLiteFrecentHistory : FrecentHistory {
                 b.guid AS guid, b.url AS url, b.title AS title,
                 b.description AS description, b.faviconID AS faviconID,
                 h.visitDate AS visitDate
-            FROM \(ViewAwesomebarBookmarks) b LEFT JOIN \(ViewHistoryVisits) h ON
+            FROM view_awesomebar_bookmarks b LEFT JOIN view_history_visits h ON
                 b.url = h.url
             """
 
@@ -206,7 +206,7 @@ fileprivate struct SQLiteFrecentHistory : FrecentHistory {
         // We must project, because we get bookmarks in these results.
         let insertQuery = """
             WITH siteFrecency AS (\(frecencyQuery))
-            INSERT INTO \(TableCachedTopSites)
+            INSERT INTO cached_top_sites
             SELECT
                 historyID, url, title, guid, domain_id, domain,
                 localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,
@@ -225,7 +225,7 @@ fileprivate struct SQLiteFrecentHistory : FrecentHistory {
     }
 
     private func topSiteClauses() -> (String, String) {
-        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') AND (\(TableDomains).domain NOT LIKE 'google.%') "
+        let whereData = "(domains.showOnTopSites IS 1) AND (domains.domain NOT LIKE 'r.%') AND (domains.domain NOT LIKE 'google.%') "
         let groupBy = "GROUP BY domain_id "
         return (whereData, groupBy)
     }
@@ -280,33 +280,33 @@ fileprivate struct SQLiteFrecentHistory : FrecentHistory {
                 args = filterArgs
             }
         } else {
-            whereClause = " WHERE (\(TableHistory).is_deleted = 0)\(whereFragment)"
+            whereClause = " WHERE (history.is_deleted = 0)\(whereFragment)"
             args = []
         }
 
         // Innermost: grab history items and basic visit/domain metadata.
         var ungroupedSQL = """
-            SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url,
-                \(TableHistory).title AS title, \(TableHistory).guid AS guid, domain_id, domain,
-                COALESCE(MAX(CASE \(TableVisits).is_local WHEN 1 THEN \(TableVisits).date ELSE 0 END), 0) AS localVisitDate,
-                COALESCE(MAX(CASE \(TableVisits).is_local WHEN 0 THEN \(TableVisits).date ELSE 0 END), 0) AS remoteVisitDate,
-                COALESCE(SUM(\(TableVisits).is_local), 0) AS localVisitCount,
-                COALESCE(SUM(CASE \(TableVisits).is_local WHEN 1 THEN 0 ELSE 1 END), 0) AS remoteVisitCount
-            FROM \(TableHistory)
-                INNER JOIN \(TableDomains) ON
-                    \(TableDomains).id = \(TableHistory).domain_id
-                INNER JOIN \(TableVisits) ON
-                    \(TableVisits).siteID = \(TableHistory).id
+            SELECT history.id AS historyID, history.url AS url,
+                history.title AS title, history.guid AS guid, domain_id, domain,
+                coalesce(max(CASE visits.is_local WHEN 1 THEN visits.date ELSE 0 END), 0) AS localVisitDate,
+                coalesce(max(CASE visits.is_local WHEN 0 THEN visits.date ELSE 0 END), 0) AS remoteVisitDate,
+                coalesce(sum(visits.is_local), 0) AS localVisitCount,
+                coalesce(sum(CASE visits.is_local WHEN 1 THEN 0 ELSE 1 END), 0) AS remoteVisitCount
+            FROM history
+                INNER JOIN domains ON
+                    domains.id = history.domain_id
+                INNER JOIN visits ON
+                    visits.siteID = history.id
             """
 
         if includeBookmarks {
-            ungroupedSQL.append(" LEFT JOIN \(ViewAllBookmarks) ON \(ViewAllBookmarks).url = \(TableHistory).url")
+            ungroupedSQL.append(" LEFT JOIN view_all_bookmarks ON view_all_bookmarks.url = history.url")
         }
 
-        ungroupedSQL.append(" " + whereClause.replacingOccurrences(of: "url", with: "\(TableHistory).url").replacingOccurrences(of: "title", with: "\(TableHistory).title"))
+        ungroupedSQL.append(" " + whereClause.replacingOccurrences(of: "url", with: "history.url").replacingOccurrences(of: "title", with: "history.title"))
 
         if includeBookmarks {
-            ungroupedSQL.append(" AND \(ViewAllBookmarks).url IS NULL")
+            ungroupedSQL.append(" AND view_all_bookmarks.url IS NULL")
         }
 
         ungroupedSQL.append(" GROUP BY historyID")
@@ -338,12 +338,12 @@ fileprivate struct SQLiteFrecentHistory : FrecentHistory {
         //       bookmarks or from being in both bookmarks and history.
         let historySQL = """
             SELECT historyID, url, title, guid, domain_id, domain,
-                MAX(localVisitDate) AS localVisitDate,
-                MAX(remoteVisitDate) AS remoteVisitDate,
-                SUM(localVisitCount) AS localVisitCount,
-                SUM(remoteVisitCount) AS remoteVisitCount,
-                MAX(frecency) AS maxFrecency,
-                SUM(frecency) AS frecencies,
+                max(localVisitDate) AS localVisitDate,
+                max(remoteVisitDate) AS remoteVisitDate,
+                sum(localVisitCount) AS localVisitCount,
+                sum(remoteVisitCount) AS remoteVisitCount,
+                max(frecency) AS maxFrecency,
+                sum(frecency) AS frecencies,
                 0 AS is_bookmarked
             FROM (\(frecenciedSQL))
             \(groupClause)
@@ -390,15 +390,15 @@ extension SQLiteHistory: BrowserHistory {
         }
 
         //do a fuzzy delete so dupes can be removed
-        let query: (String, Args?) = ("DELETE FROM \(TablePinnedTopSites) where domain = ?", [host])
+        let query: (String, Args?) = ("DELETE FROM pinned_top_sites where domain = ?", [host])
         return db.run([query]) >>== {
-            return self.db.run([("UPDATE \(TableDomains) set showOnTopSites = 1 WHERE domain = ?", [host])])
+            return self.db.run([("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
         }
     }
 
     public func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
         let sql = """
-            SELECT * FROM \(TablePinnedTopSites) LEFT OUTER JOIN view_history_id_favicon ON
+            SELECT * FROM pinned_top_sites LEFT OUTER JOIN view_history_id_favicon ON
                 historyID = view_history_id_favicon.id
             ORDER BY pinDate DESC
             """
@@ -416,20 +416,20 @@ extension SQLiteHistory: BrowserHistory {
         // Prevent the pinned site from being used in topsite calculations
         // We dont have to worry about this when removing a pin because the assumption is that a user probably doesnt want it being recommended as a topsite either
         return self.removeHostFromTopSites(host) >>== {
-            return self.db.run([("INSERT OR REPLACE INTO \(TablePinnedTopSites)(url, pinDate, title, historyID, guid, domain) VALUES \(arglist)", args)])
+            return self.db.run([("INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, historyID, guid, domain) VALUES \(arglist)", args)])
         }
     }
 
     public func removeHostFromTopSites(_ host: String) -> Success {
-        return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
+        return db.run([("UPDATE domains SET showOnTopSites = 0 WHERE domain = ?", [host])])
     }
 
     public func removeHistoryForURL(_ url: String) -> Success {
         let visitArgs: Args = [url]
-        let deleteVisits = "DELETE FROM \(TableVisits) WHERE siteID = (SELECT id FROM \(TableHistory) WHERE url = ?)"
+        let deleteVisits = "DELETE FROM visits WHERE siteID = (SELECT id FROM history WHERE url = ?)"
 
         let markArgs: Args = [Date.nowNumber(), url]
-        let markDeleted = "UPDATE \(TableHistory) SET url = NULL, is_deleted = 1, should_upload = 1, local_modified = ? WHERE url = ?"
+        let markDeleted = "UPDATE history SET url = NULL, is_deleted = 1, should_upload = 1, local_modified = ? WHERE url = ?"
         //return db.run([(sql: String, args: Args?)])
         let command = [(sql: deleteVisits, args: visitArgs), (sql: markDeleted, args: markArgs), self.favicons.getCleanupFaviconsQuery()] as [(sql: String, args: Args?)]
         return db.run(command)
@@ -440,10 +440,10 @@ extension SQLiteHistory: BrowserHistory {
     // Bug 1162778.
     public func clearHistory() -> Success {
         return self.db.run([
-            ("DELETE FROM \(TableVisits)", nil),
-            ("DELETE FROM \(TableHistory)", nil),
-            ("DELETE FROM \(TableDomains)", nil),
-            ("DELETE FROM \(TablePageMetadata)", nil),
+            ("DELETE FROM visits", nil),
+            ("DELETE FROM history", nil),
+            ("DELETE FROM domains", nil),
+            ("DELETE FROM page_metadata", nil),
             self.favicons.getCleanupFaviconsQuery()
             ])
             // We've probably deleted a lot of stuff. Vacuum now to recover the space.
@@ -486,7 +486,7 @@ extension SQLiteHistory: BrowserHistory {
             return 0
         }
 
-        let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
+        let update = "UPDATE history SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM domains where domain = ?) WHERE url = ?"
         let updateArgs: Args? = [site.title, time, host, site.url]
         if Logger.logPII {
             log.debug("Setting title to \(site.title) for URL \(site.url)")
@@ -503,17 +503,17 @@ extension SQLiteHistory: BrowserHistory {
     fileprivate func insertSite(_ site: Site, atTime time: Timestamp, withConnection conn: SQLiteDBConnection) -> Int {
         if let host = (site.url as String).asURL?.normalizedHost {
             do {
-                try conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host])
+                try conn.executeChange("INSERT OR IGNORE INTO domains (domain) VALUES (?)", withArgs: [host])
             } catch let error as NSError {
                 log.warning("Domain insertion failed with \(error.localizedDescription)")
                 return 0
             }
 
             let insert = """
-                INSERT INTO \(TableHistory) (
+                INSERT INTO history (
                     guid, url, title, local_modified, is_deleted, should_upload, domain_id
                 )
-                SELECT ?, ?, ?, ?, 0, 1, id FROM \(TableDomains) WHERE domain = ?
+                SELECT ?, ?, ?, ?, 0, 1, id FROM domains WHERE domain = ?
                 """
 
             let insertArgs: Args? = [site.guid ?? Bytes.generateGUID(), site.url, site.title, time, host]
@@ -539,10 +539,10 @@ extension SQLiteHistory: BrowserHistory {
             // INSERT OR IGNORE because we *might* have a clock error that causes a timestamp
             // collision with an existing visit, and it would really suck to error out for that reason.
             let insert = """
-                INSERT OR IGNORE INTO \(TableVisits) (
+                INSERT OR IGNORE INTO visits (
                     siteID, date, type, is_local
                 ) VALUES (
-                    (SELECT id FROM \(TableHistory) WHERE url = ?), ?, ?, 1
+                    (SELECT id FROM history WHERE url = ?), ?, ?, 1
                 )
                 """
 
@@ -599,7 +599,7 @@ extension SQLiteHistory: BrowserHistory {
         let args: Args?
         let whereClause: String
         if let filter = filter?.trimmingCharacters(in: .whitespaces), !filter.isEmpty {
-            let perWordFragment = "((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?))"
+            let perWordFragment = "((history.url LIKE ?) OR (history.title LIKE ?))"
             let perWordArgs: (String) -> Args = { ["%\($0)%", "%\($0)%"] }
             let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(filter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
 
@@ -607,7 +607,7 @@ extension SQLiteHistory: BrowserHistory {
             whereClause = "WHERE (\(filterFragment))"
             args = filterArgs
         } else {
-            whereClause = "WHERE (\(TableHistory).is_deleted = 0)"
+            whereClause = "WHERE (history.is_deleted = 0)"
             args = []
         }
 
@@ -617,9 +617,9 @@ extension SQLiteHistory: BrowserHistory {
         let sql = """
             SELECT
                 history.id AS historyID, history.url, title, guid, domain_id, domain,
-                COALESCE(MAX(CASE visits.is_local WHEN 1 THEN visits.date ELSE 0 END), 0) AS localVisitDate,
-                COALESCE(MAX(CASE visits.is_local WHEN 0 THEN visits.date ELSE 0 END), 0) AS remoteVisitDate,
-                COALESCE(COUNT(visits.is_local), 0) AS visitCount
+                coalesce(max(CASE visits.is_local WHEN 1 THEN visits.date ELSE 0 END), 0) AS localVisitDate,
+                coalesce(max(CASE visits.is_local WHEN 0 THEN visits.date ELSE 0 END), 0) AS remoteVisitDate,
+                coalesce(count(visits.is_local), 0) AS visitCount
                 \(includeIconSelect)
             FROM history
                 INNER JOIN domains ON domains.id = history.domain_id
@@ -627,8 +627,8 @@ extension SQLiteHistory: BrowserHistory {
                 \(includeIconFrom)
             \(whereClause)
             GROUP BY historyID
-            HAVING COUNT(visits.is_local) > 0
-            ORDER BY MAX(localVisitDate, remoteVisitDate) DESC
+            HAVING count(visits.is_local) > 0
+            ORDER BY max(localVisitDate, remoteVisitDate) DESC
             LIMIT \(limit)
             """
 
@@ -643,8 +643,8 @@ extension SQLiteHistory: Favicons {
     func getFaviconsForURL(_ url: String) -> Deferred<Maybe<Cursor<Favicon?>>> {
         let sql = """
             SELECT iconID AS id, iconURL AS url, iconDate AS date, iconType AS type, iconWidth AS width
-            FROM \(ViewWidestFaviconsForSites), \(TableHistory)
-            WHERE \(TableHistory).id = siteID AND \(TableHistory).url = ?
+            FROM view_favicons_widest, history
+            WHERE history.id = siteID AND history.url = ?
             """
 
         let args: Args = [url]
@@ -654,13 +654,13 @@ extension SQLiteHistory: Favicons {
     func getFaviconsForBookmarkedURL(_ url: String) -> Deferred<Maybe<Cursor<Favicon?>>> {
         let sql = """
             SELECT
-                \(TableFavicons).id AS id,
-                \(TableFavicons).url AS url,
-                \(TableFavicons).date AS date,
-                \(TableFavicons).type AS type,
-                \(TableFavicons).width AS width
-            FROM \(TableFavicons), \(ViewBookmarksLocalOnMirror) AS bm
-            WHERE bm.faviconID = \(TableFavicons).id AND bm.bmkUri IS ?
+                favicons.id AS id,
+                favicons.url AS url,
+                favicons.date AS date,
+                favicons.type AS type,
+                favicons.width AS width
+            FROM favicons, view_bookmarksLocal_on_mirror AS bm
+            WHERE bm.faviconID = favicons.id AND bm.bmkUri IS ?
             """
 
         let args: Args = [url]
@@ -670,9 +670,9 @@ extension SQLiteHistory: Favicons {
     public func getSitesForURLs(_ urls: [String]) -> Deferred<Maybe<Cursor<Site?>>> {
         let inExpression = urls.joined(separator: "\",\"")
         let sql = """
-            SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, iconID, iconURL, iconDate, iconType, iconWidth
-            FROM \(ViewWidestFaviconsForSites), \(TableHistory)
-            WHERE \(TableHistory).id = siteID AND \(TableHistory).url IN (\"\(inExpression)\")
+            SELECT history.id AS historyID, history.url AS url, title, guid, iconID, iconURL, iconDate, iconType, iconWidth
+            FROM view_favicons_widest, history
+            WHERE history.id = siteID AND history.url IN (\"\(inExpression)\")
             """
 
         let args: Args = []
@@ -681,8 +681,8 @@ extension SQLiteHistory: Favicons {
 
     public func clearAllFavicons() -> Success {
         return db.transaction { conn -> Void in
-            try conn.executeChange("DELETE FROM \(TableFaviconSites)")
-            try conn.executeChange("DELETE FROM \(TableFavicons)")
+            try conn.executeChange("DELETE FROM favicon_sites")
+            try conn.executeChange("DELETE FROM favicons")
         }
     }
 
@@ -712,8 +712,8 @@ extension SQLiteHistory: Favicons {
                 if let id = id {
                     icon.id = id
 
-                    try? conn.executeChange("UPDATE \(TableBookmarksLocal) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-                    try? conn.executeChange("UPDATE \(TableBookmarksMirror) SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    try? conn.executeChange("UPDATE bookmarksLocal SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                    try? conn.executeChange("UPDATE bookmarksMirror SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
 
                     return id
                 }
@@ -724,9 +724,9 @@ extension SQLiteHistory: Favicons {
             }
         }
 
-        let siteSubselect = "(SELECT id FROM \(TableHistory) WHERE url = ?)"
-        let iconSubselect = "(SELECT id FROM \(TableFavicons) WHERE url = ?)"
-        let insertOrIgnore = "INSERT OR IGNORE INTO \(TableFaviconSites)(siteID, faviconID) VALUES "
+        let siteSubselect = "(SELECT id FROM history WHERE url = ?)"
+        let iconSubselect = "(SELECT id FROM favicons WHERE url = ?)"
+        let insertOrIgnore = "INSERT OR IGNORE INTO favicon_sites (siteID, faviconID) VALUES "
         if let iconID = icon.id {
             // Easy!
             if let siteID = site.id {
@@ -765,13 +765,13 @@ extension SQLiteHistory: SyncableHistory {
         let args: Args = [guid, url, guid]
 
         // The additional IS NOT is to ensure that we don't do a write for no reason.
-        return db.run("UPDATE \(TableHistory) SET guid = ? WHERE url = ? AND guid IS NOT ?", withArgs: args)
+        return db.run("UPDATE history SET guid = ? WHERE url = ? AND guid IS NOT ?", withArgs: args)
     }
 
     public func deleteByGUID(_ guid: GUID, deletedAt: Timestamp) -> Success {
         let args: Args = [guid]
         // This relies on ON DELETE CASCADE to remove visits.
-        return db.run("DELETE FROM \(TableHistory) WHERE guid = ?", withArgs: args)
+        return db.run("DELETE FROM history WHERE guid = ?", withArgs: args)
     }
 
     // Fails on non-existence.
@@ -817,7 +817,7 @@ extension SQLiteHistory: SyncableHistory {
     }
 
     fileprivate func metadataForGUID(_ guid: GUID) -> Deferred<Maybe<HistoryMetadata?>> {
-        let select = "SELECT id, server_modified, local_modified, is_deleted, should_upload, title FROM \(TableHistory) WHERE guid = ?"
+        let select = "SELECT id, server_modified, local_modified, is_deleted, should_upload, title FROM history WHERE guid = ?"
         let args: Args = [guid]
         let factory = { (row: SDRow) -> HistoryMetadata in
             return HistoryMetadata(
@@ -872,7 +872,7 @@ extension SQLiteHistory: SyncableHistory {
                         log.debug("Local changes overriding remote.")
 
                         // Update server modified time only. (Though it'll be overwritten again after a successful upload.)
-                        let update = "UPDATE \(TableHistory) SET server_modified = ? WHERE id = ?"
+                        let update = "UPDATE history SET server_modified = ? WHERE id = ?"
                         let args: Args = [serverModified, metadata.id]
                         return self.db.run(update, withArgs: args) >>> always(place.guid)
                     }
@@ -883,7 +883,7 @@ extension SQLiteHistory: SyncableHistory {
 
                 // The record didn't change locally. Update it.
                 log.verbose("Updating local history item for guid \(place.guid).")
-                let update = "UPDATE \(TableHistory) SET title = ?, server_modified = ?, is_deleted = 0 WHERE id = ?"
+                let update = "UPDATE history SET title = ?, server_modified = ?, is_deleted = 0 WHERE id = ?"
                 let args: Args = [place.title, serverModified, metadata.id]
                 return self.db.run(update, withArgs: args) >>> always(place.guid)
             }
@@ -895,11 +895,11 @@ extension SQLiteHistory: SyncableHistory {
                     log.debug("Inserting: \(place.url).")
                 }
 
-                let insertDomain = "INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)"
+                let insertDomain = "INSERT OR IGNORE INTO domains (domain) VALUES (?)"
                 let insertHistory = """
-                    INSERT INTO \(TableHistory) (
+                    INSERT INTO history (
                         guid, url, title, server_modified, is_deleted, should_upload, domain_id
-                    ) SELECT ?, ?, ?, ?, 0, 0, id FROM \(TableDomains) where domain = ?
+                    ) SELECT ?, ?, ?, ?, 0, 0, id FROM domains WHERE domain = ?
                     """
 
                 return self.db.run([
@@ -913,7 +913,7 @@ extension SQLiteHistory: SyncableHistory {
                 }
 
                 let insertHistory = """
-                    INSERT INTO \(TableHistory) (
+                    INSERT INTO history (
                         guid, url, title, server_modified, is_deleted, should_upload, domain_id
                     ) VALUES (?, ?, ?, ?, 0, 0, NULL)
                     """
@@ -931,7 +931,7 @@ extension SQLiteHistory: SyncableHistory {
 
     public func getDeletedHistoryToUpload() -> Deferred<Maybe<[GUID]>> {
         // Use the partial index on should_upload to make this nice and quick.
-        let sql = "SELECT guid FROM \(TableHistory) WHERE \(TableHistory).should_upload = 1 AND \(TableHistory).is_deleted = 1"
+        let sql = "SELECT guid FROM history WHERE history.should_upload = 1 AND history.is_deleted = 1"
         let f: (SDRow) -> String = { $0["guid"] as! String }
 
         return self.db.runQuery(sql, args: nil, factory: f) >>== { deferMaybe($0.asArray()) }
@@ -946,7 +946,7 @@ extension SQLiteHistory: SyncableHistory {
     private func getModifiedHistory(limit: Int) -> Deferred<Maybe<[Int: Place]>> {
         let sql = """
             SELECT id, guid, url, title
-            FROM \(TableHistory)
+            FROM history
             WHERE should_upload = 1 AND NOT is_deleted = 1
             ORDER BY id
             LIMIT ?
@@ -984,7 +984,7 @@ extension SQLiteHistory: SyncableHistory {
 
         let sql = """
             SELECT siteID, date AS visitDate, type AS visitType
-            FROM \(TableVisits)
+            FROM visits
             WHERE siteID IN (\(historyIDs.map(String.init).joined(separator: ",")))
             ORDER BY siteID DESC, date DESC
             """
@@ -1059,7 +1059,7 @@ extension SQLiteHistory: SyncableHistory {
         // in case a coding error leaves records with is_deleted=1 but not flagged for
         // upload -- this will catch those and throw them away.
         let inClause = BrowserDB.varlist(guids.count)
-        let sql = "DELETE FROM \(TableHistory) WHERE is_deleted = 1 AND guid IN \(inClause)"
+        let sql = "DELETE FROM history WHERE is_deleted = 1 AND guid IN \(inClause)"
 
         let args: Args = guids.map { $0 }
         return (sql, args)
@@ -1079,7 +1079,7 @@ extension SQLiteHistory: SyncableHistory {
     fileprivate func markAsSynchronizedStatementForGUIDs(_ guids: ArraySlice<String>, modified: Timestamp) -> (String, Args?) {
         let inClause = BrowserDB.varlist(guids.count)
         let sql = """
-            UPDATE \(TableHistory) SET
+            UPDATE history SET
                 should_upload = 0,
                 server_modified = \(modified)
             WHERE guid IN \(inClause)
@@ -1106,7 +1106,7 @@ extension SQLiteHistory {
     // without syncing, the presence of matching rows directly indicates that a deletion
     // would be synced to the server.
     public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
-        return self.db.queryReturnsResults("SELECT 1 FROM \(TableHistory) WHERE server_modified IS NOT NULL LIMIT 1")
+        return self.db.queryReturnsResults("SELECT 1 FROM history WHERE server_modified IS NOT NULL LIMIT 1")
     }
 }
 
@@ -1114,7 +1114,7 @@ extension SQLiteHistory: ResettableSyncStorage {
     // We don't drop deletions when we reset -- we might need to upload a deleted item
     // that never made it to the server.
     public func resetClient() -> Success {
-        let flag = "UPDATE \(TableHistory) SET should_upload = 1, server_modified = NULL"
+        let flag = "UPDATE history SET should_upload = 1, server_modified = NULL"
         return self.db.run(flag)
     }
 }
@@ -1122,7 +1122,7 @@ extension SQLiteHistory: ResettableSyncStorage {
 extension SQLiteHistory: AccountRemovalDelegate {
     public func onRemovedAccount() -> Success {
         log.info("Clearing history metadata and deleted items after account removal.")
-        let discard = "DELETE FROM \(TableHistory) WHERE is_deleted = 1"
+        let discard = "DELETE FROM history WHERE is_deleted = 1"
         return self.db.run(discard) >>> self.resetClient
     }
 }

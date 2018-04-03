@@ -49,10 +49,10 @@ open class LoginsSchema: Schema {
     }
     
     let indexIsOverriddenHostname =
-        "CREATE INDEX IF NOT EXISTS \(IndexLoginsOverrideHostname) ON \(TableLoginsMirror) (is_overridden, hostname)"
+        "CREATE INDEX IF NOT EXISTS idx_loginsM_is_overridden_hostname ON loginsM (is_overridden, hostname)"
     
     let indexIsDeletedHostname =
-        "CREATE INDEX IF NOT EXISTS \(IndexLoginsDeletedHostname) ON \(TableLoginsLocal) (is_deleted, hostname)"
+        "CREATE INDEX IF NOT EXISTS idx_loginsL_is_deleted_hostname ON loginsL (is_deleted, hostname)"
     
     public func create(_ db: SQLiteDBConnection) -> Bool {
         let common = """
@@ -71,7 +71,7 @@ open class LoginsSchema: Schema {
             """
 
         let mirror = """
-            CREATE TABLE IF NOT EXISTS \(TableLoginsMirror) (
+            CREATE TABLE IF NOT EXISTS loginsM (
                 \(common)
                 , guid TEXT NOT NULL UNIQUE
                 -- Integer milliseconds.
@@ -81,7 +81,7 @@ open class LoginsSchema: Schema {
             """
 
         let local = """
-            CREATE TABLE IF NOT EXISTS \(TableLoginsLocal) (
+            CREATE TABLE IF NOT EXISTS loginsL (
                 \(common)
                 -- Typically overlaps one in the mirror unless locally new.
                 , guid TEXT NOT NULL UNIQUE

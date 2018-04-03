@@ -185,7 +185,7 @@ open class SQLiteBookmarksModelFactory: BookmarksModelFactory {
         let sql = """
             SELECT 1 FROM \(self.direction.structureTable) WHERE parent IN (?, ?, ?)
             UNION ALL
-            SELECT 1 FROM \(TableBookmarksMirrorStructure) WHERE parent IN (?, ?, ?)
+            SELECT 1 FROM bookmarksMirrorStructure WHERE parent IN (?, ?, ?)
             LIMIT 1
             """
 
@@ -268,8 +268,8 @@ private func isEditableExpression(_ direction: Direction) -> String {
     let sql = """
         SELECT EXISTS(
             SELECT
-                EXISTS(SELECT 1 FROM \(TableBookmarksBuffer)) AS hasBuffer,
-                EXISTS(SELECT 1 FROM \(TableBookmarksMirror)) AS hasMirror
+                EXISTS(SELECT 1 FROM bookmarksBuffer) AS hasBuffer,
+                EXISTS(SELECT 1 FROM bookmarksMirror) AS hasMirror
             WHERE hasBuffer IS 0 OR hasMirror IS 0
         )
         """
@@ -376,7 +376,7 @@ extension SQLiteBookmarks {
     func clearBookmarks() -> Success {
         log.warning("CALLING clearBookmarks -- this should only be used from tests.")
         return self.db.run([
-            ("DELETE FROM \(TableBookmarksLocal) WHERE parentid IS NOT ?", [BookmarkRoots.RootGUID]),
+            ("DELETE FROM bookmarksLocal WHERE parentid IS NOT ?", [BookmarkRoots.RootGUID]),
             self.favicons.getCleanupFaviconsQuery()
         ])
     }
@@ -403,7 +403,7 @@ extension SQLiteBookmarks {
     }
 
     fileprivate func nonDeletedGUIDsForURL(_ url: String) -> Deferred<Maybe<([GUID])>> {
-        let sql = "SELECT DISTINCT guid FROM \(ViewBookmarksLocalOnMirror) WHERE bmkUri = ? AND is_deleted = 0"
+        let sql = "SELECT DISTINCT guid FROM view_bookmarksLocal_on_mirror WHERE bmkUri = ? AND is_deleted = 0"
         let args: Args = [url]
 
         return self.db.runQuery(sql, args: args, factory: { $0[0] as! GUID }) >>== { guids in
@@ -416,7 +416,7 @@ extension SQLiteBookmarks {
 
         // TODO: Yes, this can be done in one go.
         let getParentsSQL =
-            "SELECT DISTINCT parent FROM \(ViewBookmarksLocalStructureOnMirror) WHERE child IN \(BrowserDB.varlist(guids.count)) AND is_overridden = 0"
+            "SELECT DISTINCT parent FROM view_bookmarksLocalStructure_on_mirror WHERE child IN \(BrowserDB.varlist(guids.count)) AND is_overridden = 0"
         let getParentsArgs: Args = guids
 
         return self.db.runQuery(getParentsSQL, args: getParentsArgs, factory: { $0[0] as! GUID })
@@ -446,7 +446,7 @@ extension SQLiteBookmarks {
 
         let topArgs: Args = guids
         let topVarlist = BrowserDB.varlist(topArgs.count)
-        let query = "SELECT child FROM \(ViewBookmarksLocalStructureOnMirror) WHERE parent IN \(topVarlist)"
+        let query = "SELECT child FROM view_bookmarksLocalStructure_on_mirror WHERE parent IN \(topVarlist)"
 
         // We're deleting whole folders, so we don't need to worry about indices.
         return self.db.runQuery(query, args: topArgs, factory: { $0[0] as! GUID })
@@ -478,11 +478,11 @@ extension SQLiteBookmarks {
 
                         // Remove each child from structure. We use the top list to save effort.
                         let deleteStructure =
-                            "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent IN \(topVarlist)"
+                            "DELETE FROM bookmarksLocalStructure WHERE parent IN \(topVarlist)"
 
                         // If a bookmark is New, delete it outright.
                         let deleteNew =
-                            "DELETE FROM \(TableBookmarksLocal) WHERE guid IN \(childVarlist) AND sync_status = \(SyncStatus.new.rawValue)"
+                            "DELETE FROM bookmarksLocal WHERE guid IN \(childVarlist) AND sync_status = \(SyncStatus.new.rawValue)"
 
                         // If a bookmark is Changed, mark it as deleted and bump its modified time.
                         let markChanged = self.getMarkDeletedSQLWithWhereFragment("guid IN \(childVarlist)")
@@ -498,7 +498,7 @@ extension SQLiteBookmarks {
 
     fileprivate func getMarkDeletedSQLWithWhereFragment(_ whereFragment: String) -> String {
         let sql = """
-            UPDATE \(TableBookmarksLocal) SET
+            UPDATE bookmarksLocal SET
                 date_added = NULL,
                 is_deleted = 1,
                 local_modified = \(Date.now()),
@@ -526,15 +526,15 @@ extension SQLiteBookmarks {
         let args: Args = [guid]
 
         // Find the index we're currently occupying.
-        let previousIndexSubquery = "SELECT idx FROM \(TableBookmarksLocalStructure) WHERE child = ?"
+        let previousIndexSubquery = "SELECT idx FROM bookmarksLocalStructure WHERE child = ?"
 
         // Fix up the indices of subsequent siblings.
         let updateIndices =
-            "UPDATE \(TableBookmarksLocalStructure) SET idx = (idx - 1) WHERE idx > (\(previousIndexSubquery))"
+            "UPDATE bookmarksLocalStructure SET idx = (idx - 1) WHERE idx > (\(previousIndexSubquery))"
 
         // If the bookmark is New, delete it outright.
         let deleteNew =
-            "DELETE FROM \(TableBookmarksLocal) WHERE guid = ? AND sync_status = \(SyncStatus.new.rawValue)"
+            "DELETE FROM bookmarksLocal WHERE guid = ? AND sync_status = \(SyncStatus.new.rawValue)"
 
         // If the bookmark is Changed, mark it as deleted and bump its modified time.
         let markChanged = self.getMarkDeletedSQLWithWhereFragment("guid = ?")
@@ -543,7 +543,7 @@ extension SQLiteBookmarks {
         // TODO: bump the parent's modified time, because the child list changed?
 
         // Now delete from structure.
-        let deleteStructure = "DELETE FROM \(TableBookmarksLocalStructure) WHERE child = ?"
+        let deleteStructure = "DELETE FROM bookmarksLocalStructure WHERE child = ?"
 
         return self.db.run([
             (updateIndices, args),
@@ -555,7 +555,7 @@ extension SQLiteBookmarks {
 
     fileprivate func markBufferBookmarkAsDeleted(_ guid: GUID) -> Success {
         let insertInPendingDeletions =
-            "INSERT OR IGNORE INTO \(TablePendingBookmarksDeletions) (id) VALUES (?)"
+            "INSERT OR IGNORE INTO pending_deletions (id) VALUES (?)"
         let args: Args = [guid]
         return self.db.run(insertInPendingDeletions, withArgs: args)
     }
@@ -751,14 +751,14 @@ extension SQLiteBookmarks: SearchableBookmarks {
     public func bookmarksByURL(_ url: URL) -> Deferred<Maybe<Cursor<BookmarkItem>>> {
         let inner = """
             SELECT id, type, date_added, guid, bmkUri, title, faviconID
-            FROM \(TableBookmarksLocal)
+            FROM bookmarksLocal
             WHERE
                 type = \(BookmarkNodeType.bookmark.rawValue) AND
                 is_deleted IS NOT 1 AND
                 bmkUri = ?
             UNION ALL
             SELECT id, type, date_added, guid, bmkUri, title, faviconID
-            FROM \(TableBookmarksMirror)
+            FROM bookmarksMirror
             WHERE
                 type = \(BookmarkNodeType.bookmark.rawValue) AND
                 is_overridden IS NOT 1 AND
@@ -789,7 +789,7 @@ extension SQLiteBookmarks {
             BookmarkRoots.UnfiledFolderGUID,
             BookmarkRoots.MobileFolderGUID,
         ]
-        let sql = "SELECT NOT EXISTS(SELECT 1 FROM \(TableBookmarksMirror)) AND EXISTS(SELECT 1 FROM \(TableBookmarksBufferStructure) WHERE parent IN (?, ?, ?, ?))"
+        let sql = "SELECT NOT EXISTS(SELECT 1 FROM bookmarksMirror) AND EXISTS(SELECT 1 FROM bookmarksBufferStructure WHERE parent IN (?, ?, ?, ?))"
         return self.db.runQuery(sql, args: parents, factory: { $0[0] as! Int == 1 })
             >>== { row in
                 guard row.status == .success,

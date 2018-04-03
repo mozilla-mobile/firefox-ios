@@ -41,7 +41,7 @@ open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
                 WHERE bmkUri = ? AND is_deleted IS NOT 1
                 UNION ALL
                 SELECT id
-                FROM \(TableBookmarksMirror)
+                FROM bookmarksMirror
                 WHERE bmkUri = ? AND is_deleted IS NOT 1 AND is_overridden IS NOT 1
                 LIMIT 1
             )
@@ -52,7 +52,7 @@ open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
     }
 
     open func getURLForKeywordSearch(_ keyword: String) -> Deferred<Maybe<String>> {
-        let sql = "SELECT bmkUri FROM \(ViewBookmarksBufferOnMirror) WHERE keyword = ?"
+        let sql = "SELECT bmkUri FROM view_bookmarksBuffer_on_mirror WHERE keyword = ?"
         let args: Args = [keyword]
 
         return self.db.runQuery(sql, args: args, factory: { $0["bmkUri"] as! String })

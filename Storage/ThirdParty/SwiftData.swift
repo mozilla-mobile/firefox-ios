@@ -772,7 +772,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 if connection.version == 0 {
                     // Query for the existence of the `tableList` table to determine if we are
                     // migrating from an older DB version.
-                    let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+                    let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
                     
                     let tableListTableExists = sqliteMasterCursor[0] == 1
                     sqliteMasterCursor.close()
@@ -1015,7 +1015,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 Sentry.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
 
-            let message = "Error code: \(error.code), \(error) for SQL \(sqlStr)."
+            let message = "Error code: \(error.code), \(error) for SQL \(String(sqlStr.prefix(500)))."
             Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: message)
 
             throw error
@@ -1068,7 +1068,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
                 Sentry.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
-            Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(sqlStr).")
+            Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(String(sqlStr.prefix(500))).")
 
             return Cursor<T>(err: error)
         }

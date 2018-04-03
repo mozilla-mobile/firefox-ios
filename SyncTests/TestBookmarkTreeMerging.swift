@@ -413,7 +413,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         // Make local changes.
         bookmarks.local.modelFactory.value.successValue!.removeByGUID("folderDDDDDD").succeeded()
         bookmarks.local.insertBookmark("http://example.com/e".asURL!, title: "E", favicon: nil, intoFolder: "folderBBBBBB", withTitle: "B").succeeded()
-        let insertedGUID = bookmarks.local.db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) WHERE title IS 'E'")[0]
+        let insertedGUID = bookmarks.local.db.getGUIDs("SELECT guid FROM bookmarksLocal WHERE title IS 'E'")[0]
 
         let edges = bookmarks.treesForEdges().value.successValue!
 
@@ -662,8 +662,8 @@ class TestBookmarkTreeMerging: FailFastTestCase {
 
         bookmarks.buffer.applyRecords(records).succeeded()
 
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", int: 3)
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBufferStructure)", int: 2)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBuffer", int: 3)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBufferStructure", int: 2)
 
         let storageMerger = ThreeWayBookmarksStorageMerger(buffer: bookmarks, storage: bookmarks)
         let merger = storageMerger.getMerger().value.successValue!
@@ -791,15 +791,15 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         bookmarks.buffer.applyRecords(records).succeeded()
         bookmarks.buffer.validate().succeeded()                // It's valid! Rooted in mobile_______.
 
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", int: 4)
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBufferStructure)", int: 3)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBuffer", int: 4)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBufferStructure", int: 3)
 
         // Add one matching empty folder locally.
         // Add one by GUID, too. This is the most complex possible case.
-        bookmarks.local.db.run("INSERT INTO \(TableBookmarksLocal) (guid, type, date_added, title, parentid, parentName, sync_status, local_modified) VALUES ('emptyempty02', \(BookmarkNodeType.folder.rawValue), \(now), 'Empty', '\(BookmarkRoots.MobileFolderGUID)', 'Mobile Bookmarks', \(SyncStatus.changed.rawValue), \(Date.now()))").succeeded()
-        bookmarks.local.db.run("INSERT INTO \(TableBookmarksLocal) (guid, type, date_added, title, parentid, parentName, sync_status, local_modified) VALUES ('emptyemptyL0', \(BookmarkNodeType.folder.rawValue), \(now), 'Empty', '\(BookmarkRoots.MobileFolderGUID)', 'Mobile Bookmarks', \(SyncStatus.new.rawValue), \(Date.now()))").succeeded()
-        bookmarks.local.db.run("INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) VALUES ('\(BookmarkRoots.MobileFolderGUID)', 'emptyempty02', 0)").succeeded()
-        bookmarks.local.db.run("INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) VALUES ('\(BookmarkRoots.MobileFolderGUID)', 'emptyemptyL0', 1)").succeeded()
+        bookmarks.local.db.run("INSERT INTO bookmarksLocal (guid, type, date_added, title, parentid, parentName, sync_status, local_modified) VALUES ('emptyempty02', \(BookmarkNodeType.folder.rawValue), \(now), 'Empty', '\(BookmarkRoots.MobileFolderGUID)', 'Mobile Bookmarks', \(SyncStatus.changed.rawValue), \(Date.now()))").succeeded()
+        bookmarks.local.db.run("INSERT INTO bookmarksLocal (guid, type, date_added, title, parentid, parentName, sync_status, local_modified) VALUES ('emptyemptyL0', \(BookmarkNodeType.folder.rawValue), \(now), 'Empty', '\(BookmarkRoots.MobileFolderGUID)', 'Mobile Bookmarks', \(SyncStatus.new.rawValue), \(Date.now()))").succeeded()
+        bookmarks.local.db.run("INSERT INTO bookmarksLocalStructure (parent, child, idx) VALUES ('\(BookmarkRoots.MobileFolderGUID)', 'emptyempty02', 0)").succeeded()
+        bookmarks.local.db.run("INSERT INTO bookmarksLocalStructure (parent, child, idx) VALUES ('\(BookmarkRoots.MobileFolderGUID)', 'emptyemptyL0', 1)").succeeded()
 
         let uploader = MockUploader()
         let storer = uploader.getStorer()
@@ -859,14 +859,14 @@ class TestBookmarkTreeMerging: FailFastTestCase {
             return
         }
 
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", int: 0)
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBufferStructure)", int: 0)
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksLocal)", int: 5)
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksLocalStructure)", int: 4)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBuffer", int: 0)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBufferStructure", int: 0)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksLocal", int: 5)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksLocalStructure", int: 4)
 
-        bookmarks.local.db.run("INSERT INTO \(TableFavicons) (id, url, width, height, type, date) VALUES (11, 'http://example.org/favicon.ico', 16, 16, 0, \(Date.now()))").succeeded()
-        bookmarks.local.db.run("INSERT INTO \(TableBookmarksLocal) (guid, type, date_added, title, parentid, parentName, sync_status, bmkUri, faviconID) VALUES ('somebookmark', \(BookmarkNodeType.bookmark.rawValue), \(Date.now()), 'Some Bookmark', '\(BookmarkRoots.MobileFolderGUID)', 'Mobile Bookmarks', \(SyncStatus.new.rawValue), 'http://example.org/', 11)").succeeded()
-        bookmarks.local.db.run("INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) VALUES ('\(BookmarkRoots.MobileFolderGUID)', 'somebookmark', 0)").succeeded()
+        bookmarks.local.db.run("INSERT INTO favicons (id, url, width, height, type, date) VALUES (11, 'http://example.org/favicon.ico', 16, 16, 0, \(Date.now()))").succeeded()
+        bookmarks.local.db.run("INSERT INTO bookmarksLocal (guid, type, date_added, title, parentid, parentName, sync_status, bmkUri, faviconID) VALUES ('somebookmark', \(BookmarkNodeType.bookmark.rawValue), \(Date.now()), 'Some Bookmark', '\(BookmarkRoots.MobileFolderGUID)', 'Mobile Bookmarks', \(SyncStatus.new.rawValue), 'http://example.org/', 11)").succeeded()
+        bookmarks.local.db.run("INSERT INTO bookmarksLocalStructure (parent, child, idx) VALUES ('\(BookmarkRoots.MobileFolderGUID)', 'somebookmark', 0)").succeeded()
 
         let uploader = MockUploader()
         let storer = uploader.getStorer()
@@ -903,7 +903,7 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         XCTAssertEqual("Some Bookmark", bm.payload["title"].string)
 
         // New record still has its icon ID in the local DB.
-        bookmarks.local.db.assertQueryReturns("SELECT faviconID FROM \(TableBookmarksMirror) WHERE bmkUri = 'http://example.org/'", int: 11)
+        bookmarks.local.db.assertQueryReturns("SELECT faviconID FROM bookmarksMirror WHERE bmkUri = 'http://example.org/'", int: 11)
     }
 
     func testRemoteValueOnlyChange() {
@@ -924,8 +924,8 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         bookmarks.buffer.applyRecords(records).succeeded()
         bookmarks.buffer.validate().succeeded()                // It's valid! Rooted in mobile_______.
 
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", int: 3)
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBufferStructure)", int: 2)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBuffer", int: 3)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBufferStructure", int: 2)
 
         let uploader = MockUploader()
         let storer = uploader.getStorer()
@@ -957,8 +957,8 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         bookmarks.buffer.applyRecords(changed).succeeded()
         bookmarks.buffer.validate().succeeded()                // It's valid! One record.
 
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", int: 1)
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBufferStructure)", int: 0)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBuffer", int: 1)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBufferStructure", int: 0)
 
         let uu = MockUploader()
         let ss = uu.getStorer()
@@ -971,8 +971,8 @@ class TestBookmarkTreeMerging: FailFastTestCase {
         XCTAssertEqual(updatedFolder.title, "New Title")
 
         // The buffer is empty.
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBuffer)", int: 0)
-        bookmarks.buffer.db.assertQueryReturns("SELECT COUNT(*) FROM \(TableBookmarksBufferStructure)", int: 0)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBuffer", int: 0)
+        bookmarks.buffer.db.assertQueryReturns("SELECT count(*) FROM bookmarksBufferStructure", int: 0)
     }
 
     func testMergeDateAdded() {
@@ -1008,9 +1008,9 @@ class TestBookmarkTreeMerging: FailFastTestCase {
 
         // Make local changes.
         bookmarks.local.insertBookmark("http://example.com/f".asURL!, title: "F", favicon: nil, intoFolder: "folderAAAAAA", withTitle: "A").succeeded()
-        let insertedGUID = bookmarks.local.db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) WHERE title IS 'F'")[0]
+        let insertedGUID = bookmarks.local.db.getGUIDs("SELECT guid FROM bookmarksLocal WHERE title IS 'F'")[0]
         bookmarks.local.insertBookmark("http://example.com/g".asURL!, title: "G", favicon: nil, intoFolder: "folderAAAAAA", withTitle: "A").succeeded()
-        let insertedGUID2 = bookmarks.local.db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) WHERE title IS 'G'")[0]
+        let insertedGUID2 = bookmarks.local.db.getGUIDs("SELECT guid FROM bookmarksLocal WHERE title IS 'G'")[0]
 
         // Set up the buffer.
         let bufferDate = Date.now() - 100000
@@ -1082,19 +1082,23 @@ private extension MergedSQLiteBookmarks {
 
         // … and add the root relationships that will be missing (we don't do those for the buffer,
         // so we need to manually add them and move them across).
-        self.buffer.db.run([
-            "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES",
-            "('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.MenuFolderGUID)', 0),",
-            "('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.ToolbarFolderGUID)', 1),",
-            "('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.UnfiledFolderGUID)', 2),",
-            "('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.MobileFolderGUID)', 3)",
-        ].joined(separator: " ")).succeeded()
+        let sql = """
+            INSERT INTO bookmarksBufferStructure
+                (parent, child, idx)
+            VALUES
+                ('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.MenuFolderGUID)', 0),
+                ('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.ToolbarFolderGUID)', 1),
+                ('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.UnfiledFolderGUID)', 2),
+                ('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.MobileFolderGUID)', 3)
+            """
+
+        self.buffer.db.run(sql).succeeded()
 
         // Move it all to the mirror.
         self.local.db.moveBufferToMirrorForTesting()
     }
 
     func wipeLocal() {
-        self.local.db.run(["DELETE FROM \(TableBookmarksLocalStructure)", "DELETE FROM \(TableBookmarksLocal)"]).succeeded()
+        self.local.db.run(["DELETE FROM bookmarksLocalStructure", "DELETE FROM bookmarksLocal"]).succeeded()
     }
 }
