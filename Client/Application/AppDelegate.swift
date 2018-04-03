@@ -531,7 +531,7 @@ extension AppDelegate: UINavigationControllerDelegate {
 extension AppDelegate: TabManagerStateDelegate {
     func tabManagerWillStoreTabs(_ tabs: [Tab]) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.flatMap( Tab.toTab )
+        let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toTab )
 
         // Don't insert into the DB immediately. We tend to contend with more important
         // work like querying for top sites.
@@ -606,7 +606,7 @@ extension AppDelegate {
         // NotificationService will have collected them for us in the userInfo.
         if let serializedTabs = userInfo["sentTabs"] as? [[String: String]] {
             // Let's go ahead and open those.
-            let receivedURLs = serializedTabs.flatMap { item -> URL? in
+            let receivedURLs = serializedTabs.compactMap { item -> URL? in
                 guard let tabURL = item["url"] else {
                     return nil
                 }

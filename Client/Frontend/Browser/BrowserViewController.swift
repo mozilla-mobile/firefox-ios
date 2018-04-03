@@ -457,7 +457,7 @@ class BrowserViewController: UIViewController {
             if cursor.count > 0 {
 
                 // Filter out any tabs received by a push notification to prevent dupes.
-                let urls = cursor.flatMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
+                let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
                 if !urls.isEmpty {
                     DispatchQueue.main.async {
                         self.tabManager.addTabsForURLs(urls, zombie: false)

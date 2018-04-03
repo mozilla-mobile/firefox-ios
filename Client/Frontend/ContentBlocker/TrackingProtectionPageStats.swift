@@ -173,7 +173,7 @@ fileprivate class TPStatsBlocklists {
                     assert(!baseDomain.contains(x), "No wildcards allowed in baseDomain")
                 }
 
-                let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.flatMap { domain in
+                let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.compactMap { domain in
                     return wildcardContentBlockerDomainToRegex(domain: domain)
                 }
 
