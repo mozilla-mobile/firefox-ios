@@ -91,14 +91,14 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     
     func loadSitesFromProfile() {
         let sql = profile.favicons as! SQLiteHistory
-        let urls = listData.flatMap {$0.url.isLocal ? $0.url.getQuery()["url"]?.unescape() : $0.url.absoluteString}
+        let urls = listData.compactMap {$0.url.isLocal ? $0.url.getQuery()["url"]?.unescape() : $0.url.absoluteString}
 
         sql.getSitesForURLs(urls).uponQueue(.main) { result in
             guard let results = result.successValue else {
                 return
             }
             // Add all results into the sites dictionary
-            results.flatMap({$0}).forEach({site in
+            results.compactMap({$0}).forEach({site in
                 if let url = site?.url {
                     self.sites[url] = site
                 }
@@ -108,7 +108,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
 
     func homeAndNormalPagesOnly(_ bfList: WKBackForwardList) {
-        let items = bfList.forwardList.reversed() + [bfList.currentItem].flatMap({$0}) + bfList.backList.reversed()
+        let items = bfList.forwardList.reversed() + [bfList.currentItem].compactMap({$0}) + bfList.backList.reversed()
         
         //error url's are OK as they are used to populate history on session restore.
         listData = items.filter({return !($0.url.isLocal && ($0.url.originalURLFromErrorURL?.isLocal ?? true)) || $0.url.isAboutHomeURL})

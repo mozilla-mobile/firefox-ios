@@ -131,7 +131,7 @@ class IntroViewController: UIViewController {
                 return
             }
             let decoder = JSONDecoder()
-            let newCards = newIntro.flatMap { (obj) -> IntroCard? in
+            let newCards = newIntro.compactMap { (obj) -> IntroCard? in
                 guard let object = try? JSONSerialization.data(withJSONObject: obj, options: []) else {
                     return nil
                 }
@@ -176,7 +176,7 @@ class IntroViewController: UIViewController {
         // Wipe any existing slides
         imageViewContainer.subviews.forEach { $0.removeFromSuperview() }
         cardViews.forEach { $0.removeFromSuperview() }
-        cardViews = cards.flatMap { addIntro(card: $0) }
+        cardViews = cards.compactMap { addIntro(card: $0) }
         pageControl.numberOfPages = cardViews.count
         setupDynamicFonts()
         if let firstCard = cardViews.first {

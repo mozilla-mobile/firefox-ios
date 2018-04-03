@@ -28,7 +28,7 @@ struct PocketStory {
     let dedupeURL: URL
 
     static func parseJSON(list: Array<[String: Any]>) -> [PocketStory] {
-        return list.flatMap({ (storyDict) -> PocketStory? in
+        return list.compactMap({ (storyDict) -> PocketStory? in
             guard let urlS = storyDict["url"] as? String, let domain = storyDict["domain"] as? String,
                 let dedupe_URL = storyDict["dedupe_url"] as? String,
                 let imageURLS = storyDict["image_src"] as? String,

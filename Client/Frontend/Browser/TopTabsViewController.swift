@@ -510,21 +510,21 @@ extension TopTabsViewController {
 
     // create a TopTabChangeSet which is a snapshot of updates to perfrom on a collectionView
     func calculateDiffWith(_ oldTabs: [Tab], to newTabs: [Tab], and reloadTabs: [Tab?]) -> TopTabChangeSet {
-        let inserts: [IndexPath] = newTabs.enumerated().flatMap { index, tab in
+        let inserts: [IndexPath] = newTabs.enumerated().compactMap { index, tab in
             if oldTabs.index(of: tab) == nil {
                 return IndexPath(row: index, section: 0)
             }
             return nil
         }
 
-        let deletes: [IndexPath] = oldTabs.enumerated().flatMap { index, tab in
+        let deletes: [IndexPath] = oldTabs.enumerated().compactMap { index, tab in
             if newTabs.index(of: tab) == nil {
                 return IndexPath(row: index, section: 0)
             }
             return nil
         }
 
-        let moves: [TopTabMoveChange] = newTabs.enumerated().flatMap { newIndex, tab in
+        let moves: [TopTabMoveChange] = newTabs.enumerated().compactMap { newIndex, tab in
             if let oldIndex = oldTabs.index(of: tab), oldIndex != newIndex {
                 return TopTabMoveChange(from: IndexPath(row: oldIndex, section: 0), to: IndexPath(row: newIndex, section: 0))
             }
@@ -532,7 +532,7 @@ extension TopTabsViewController {
         }
 
         // Create based on what is visibile but filter out tabs we are about to insert/delete.
-        let reloads: [IndexPath] = reloadTabs.flatMap { tab in
+        let reloads: [IndexPath] = reloadTabs.compactMap { tab in
             guard let tab = tab, newTabs.index(of: tab) != nil else {
                 return nil
             }

@@ -9,7 +9,7 @@ import Deferred
 struct WhitelistedDomains {
     var domainSet = Set<String>() {
         didSet {
-            domainRegex = domainSet.flatMap { wildcardContentBlockerDomainToRegex(domain: "*" + $0) }
+            domainRegex = domainSet.compactMap { wildcardContentBlockerDomainToRegex(domain: "*" + $0) }
         }
     }
 

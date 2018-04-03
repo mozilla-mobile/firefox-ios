@@ -122,7 +122,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             let toggles = self.toggles
             self.clearables
                 .enumerated()
-                .flatMap { (i, pair) in
+                .compactMap { (i, pair) in
                     guard toggles[i] else {
                         return nil
                     }

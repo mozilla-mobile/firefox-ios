@@ -585,8 +585,8 @@ extension TabTrayController: TabManagerDelegate {
         }
 
         let updated = [ selected, previous ]
-            .flatMap { $0 }
-            .flatMap { tabs.index(of: $0) }
+            .compactMap { $0 }
+            .compactMap { tabs.index(of: $0) }
             .map { IndexPath(item: $0, section: 0) }
 
         assertIsMainThread("Changing selected tab is on main thread")

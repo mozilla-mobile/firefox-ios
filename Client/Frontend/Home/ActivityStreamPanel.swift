@@ -455,14 +455,14 @@ extension ActivityStreamPanel {
 // MARK: - Data Management
 extension ActivityStreamPanel: DataObserverDelegate {
     fileprivate func reportMissingData(sites: [Site], source: ASPingSource) {
-        let missingImagePings: [[String: Any]] = sites.flatMap { site in
+        let missingImagePings: [[String: Any]] = sites.compactMap { site in
             if site.metadata?.mediaURL == nil {
                 return self.telemetry.pingFor(badState: .MissingMetadataImage, source: source)
             }
             return nil
         }
 
-        let missingFaviconPings: [[String: Any]] = sites.flatMap { site in
+        let missingFaviconPings: [[String: Any]] = sites.compactMap { site in
             if site.icon == nil {
                 return self.telemetry.pingFor(badState: .MissingFavicon, source: source)
             }
