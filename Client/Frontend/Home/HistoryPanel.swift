@@ -368,7 +368,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return cell
     }
 
-    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         var count = 1
         for category in self.categories where category.rows > 0 {
             count += 1
@@ -376,7 +376,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return count
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             self.tableView.deselectRow(at: indexPath, animated: true)
             return indexPath.row == 0 ? self.showRecentlyClosed() : self.showSyncedTabs()
@@ -449,7 +449,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return self.categories[uiSectionToCategory(section)].rows
     }
 
-    func tableView(_ tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
@@ -533,7 +533,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    func tableView(_ tableView: UITableView, editActionsForRowAtIndexPath indexPath: IndexPath) -> [AnyObject]? {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         if indexPath.section == 0 {
             return []
         }

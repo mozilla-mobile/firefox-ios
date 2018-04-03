@@ -255,7 +255,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    func tableView(_ tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? BookmarkFolderTableViewCell {
             cell.textLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
         }
@@ -320,7 +320,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return super.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath)
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         guard let source = source else {
             return
@@ -359,7 +359,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    func tableView(_ tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
@@ -384,7 +384,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return editingStyleforRow(atIndexPath: indexPath)
     }
 
-    func tableView(_ tableView: UITableView, editActionsForRowAtIndexPath indexPath: IndexPath) -> [AnyObject]? {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let editingStyle = editingStyleforRow(atIndexPath: indexPath)
         guard let source = self.source, editingStyle == .delete else {
             return nil
