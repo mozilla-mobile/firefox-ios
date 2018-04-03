@@ -5,7 +5,7 @@
 import Foundation
 
 class top5000SitesList {
-    let top5000SitesList = ["google.com",
+    static let top5000 = ["google.com",
                             "youtube.com",
                             "facebook.com",
                             "baidu.com",
