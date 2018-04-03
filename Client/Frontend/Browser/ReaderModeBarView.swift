@@ -64,7 +64,7 @@ class ReaderModeBarView: UIView {
         readStatusButton = createButton(.markAsRead, action: #selector(SELtappedReadStatusButton))
         readStatusButton.accessibilityIdentifier = "ReaderModeBarView.readStatusButton"
         readStatusButton.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(self)
+            make.left.equalTo(self.safeArea.left)
             make.height.centerY.equalTo(self)
             make.width.equalTo(80)
         }
@@ -79,7 +79,7 @@ class ReaderModeBarView: UIView {
         listStatusButton = createButton(.addToReadingList, action: #selector(SELtappedListStatusButton))
         listStatusButton.accessibilityIdentifier = "ReaderModeBarView.listStatusButton"
         listStatusButton.snp.makeConstraints { (make) -> Void in
-            make.right.equalTo(self)
+            make.right.equalTo(self.safeArea.right)
             make.height.centerY.equalTo(self)
             make.width.equalTo(80)
         }
