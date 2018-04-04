@@ -7,7 +7,7 @@
 #import "FSReadingList.h"
 #import "Try.h"
 
-#import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
+#import "ThirdParty/UIImageViewAligned/UIImageViewAligned.h"
 #import "ThirdParty/Apple/UIImage+ImageEffects.h"
 
 #import <BuddyBuildSDK/BuddyBuildSDK.h>
