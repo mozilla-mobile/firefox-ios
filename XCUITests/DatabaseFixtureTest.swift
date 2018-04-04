@@ -5,7 +5,7 @@
 import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
-    let fixtures = ["testOneBookmark": "testDatabaseFixture-browser.db", "testHistoryDatabaseFixture": "testHistoryDatabase4000-browser.db"]
+    let fixtures = ["testOneBookmark": "testDatabaseFixture-browser.db", "testBookmarksDatabaseFixture": "testBookmarksDatabase1000-browser.db", "testHistoryDatabaseFixture": "testHistoryDatabase4000-browser.db"]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
@@ -20,6 +20,17 @@ class DatabaseFixtureTest: BaseTestCase {
         navigator.browserPerformAction(.openBookMarksOption)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
+    }
+
+    func testBookmarksDatabaseFixture() {
+        navigator.goto(HomePanel_Bookmarks)
+
+        let loaded = NSPredicate(format: "count == 1013")
+        expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
+
+        let bookmarksList = app.tables["Bookmarks List"].cells.count
+        XCTAssertEqual(bookmarksList, 1013, "There should be an entry in the bookmarks list")
     }
 
     func testHistoryDatabaseFixture() {
