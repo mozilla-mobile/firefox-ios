@@ -105,7 +105,7 @@ class SearchEngineManagerTests: XCTestCase {
     }
 }
 
-class MockUserDefaults: UserDefaults {
+fileprivate class MockUserDefaults: UserDefaults {
     var setCalls = 0
     var valueCalls = 0
     

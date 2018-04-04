@@ -124,6 +124,7 @@
 		D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */; };
 		D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */; };
 		D5F72FB31FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */; };
+		D831FEE2205247A400EAE19A /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */; };
 		D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */; };
 		D8E0155F1FCF409F00CA3B9F /* SearchEngineManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0155E1FCF409F00CA3B9F /* SearchEngineManagerTests.swift */; };
 		D8E0156E1FD9E40F00CA3B9F /* DomainCompletionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0156D1FD9E40F00CA3B9F /* DomainCompletionTests.swift */; };
@@ -487,6 +488,7 @@
 		D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCustomDomainViewController.swift; sourceTree = "<group>"; };
 		D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteSettingViewController.swift; sourceTree = "<group>"; };
 		D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionSummaryViewController.swift; sourceTree = "<group>"; };
+		D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerTests.swift; sourceTree = "<group>"; };
 		D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSearchEngineViewController.swift; sourceTree = "<group>"; };
 		D8E0155C1FCF409F00CA3B9F /* ClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E0155E1FCF409F00CA3B9F /* SearchEngineManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineManagerTests.swift; sourceTree = "<group>"; };
@@ -997,6 +999,7 @@
 			children = (
 				D8E0155E1FCF409F00CA3B9F /* SearchEngineManagerTests.swift */,
 				D8E015601FCF409F00CA3B9F /* Info.plist */,
+				D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */,
 				D8E0156D1FD9E40F00CA3B9F /* DomainCompletionTests.swift */,
 			);
 			path = ClientTests;
@@ -1497,6 +1500,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D831FEE2205247A400EAE19A /* BrowserViewControllerTests.swift in Sources */,
 				D8E0155F1FCF409F00CA3B9F /* SearchEngineManagerTests.swift in Sources */,
 				D8E0156E1FD9E40F00CA3B9F /* DomainCompletionTests.swift in Sources */,
 			);
