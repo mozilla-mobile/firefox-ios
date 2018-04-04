@@ -31,26 +31,26 @@ open class SQLiteReadingList {
 
 extension SQLiteReadingList: ReadingList {
     public func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>> {
-        let sql = "SELECT \(allColumns) FROM \(TableReadingListItems) ORDER BY client_last_modified DESC"
+        let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
         return db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
             return deferMaybe(cursor.asArray())
         }
     }
     
     public func deleteRecord(_ record: ReadingListItem) -> Success {
-        let sql = "DELETE FROM \(TableReadingListItems) WHERE client_id = ?"
+        let sql = "DELETE FROM items WHERE client_id = ?"
         let args: Args = [record.id]
         return db.run(sql, withArgs: args)
     }
     
     public func deleteAllRecords() -> Success {
-        let sql = "DELETE FROM \(TableReadingListItems)"
+        let sql = "DELETE FROM items"
         return db.run(sql)
     }
     
     public func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Deferred<Maybe<ReadingListItem>> {
         return db.transaction { connection -> ReadingListItem in
-            let insertSQL = "INSERT OR REPLACE INTO \(TableReadingListItems) (client_last_modified, url, title, added_by) VALUES (?, ?, ?, ?)"
+            let insertSQL = "INSERT OR REPLACE INTO items (client_last_modified, url, title, added_by) VALUES (?, ?, ?, ?)"
             let insertArgs: Args = [ReadingListNow(), url, title, addedBy]
             let lastInsertedRowID = connection.lastInsertedRowID
 
@@ -60,7 +60,7 @@ extension SQLiteReadingList: ReadingList {
                 throw ReadingListStorageError("Unable to insert ReadingListItem")
             }
 
-            let querySQL = "SELECT \(self.allColumns) FROM \(TableReadingListItems) WHERE client_id = ? LIMIT 1"
+            let querySQL = "SELECT \(self.allColumns) FROM items WHERE client_id = ? LIMIT 1"
             let queryArgs: Args = [connection.lastInsertedRowID]
             
             let cursor = connection.executeQuery(querySQL, factory: SQLiteReadingList.ReadingListItemFactory, withArgs: queryArgs)
@@ -75,7 +75,7 @@ extension SQLiteReadingList: ReadingList {
     }
     
     public func getRecordWithURL(_ url: String) -> Deferred<Maybe<ReadingListItem>> {
-        let sql = "SELECT \(allColumns) FROM \(TableReadingListItems) WHERE url = ? LIMIT 1"
+        let sql = "SELECT \(allColumns) FROM items WHERE url = ? LIMIT 1"
         let args: Args = [url]
         return db.runQuery(sql, args: args, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in
             let items = cursor.asArray()
@@ -89,12 +89,12 @@ extension SQLiteReadingList: ReadingList {
     
     public func updateRecord(_ record: ReadingListItem, unread: Bool) -> Deferred<Maybe<ReadingListItem>> {
         return db.transaction { connection -> ReadingListItem in
-            let updateSQL = "UPDATE \(TableReadingListItems) SET unread = ? WHERE client_id = ?"
+            let updateSQL = "UPDATE items SET unread = ? WHERE client_id = ?"
             let updateArgs: Args = [unread, record.id]
 
             try connection.executeChange(updateSQL, withArgs: updateArgs)
 
-            let querySQL = "SELECT \(self.allColumns) FROM \(TableReadingListItems) WHERE client_id = ? LIMIT 1"
+            let querySQL = "SELECT \(self.allColumns) FROM items WHERE client_id = ? LIMIT 1"
             let queryArgs: Args = [record.id]
             
             let cursor = connection.executeQuery(querySQL, factory: SQLiteReadingList.ReadingListItemFactory, withArgs: queryArgs)

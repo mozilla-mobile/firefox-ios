@@ -6,11 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-let TableReadingListItems = "items"
-
-private let AllTables: [String] = [
-    TableReadingListItems
-]
+private let AllTables: [String] = ["items"]
 
 private let log = Logger.syncLogger
 
@@ -23,7 +19,7 @@ open class ReadingListSchema: Schema {
     public init() {}
 
     let itemsTableCreate = """
-        CREATE TABLE IF NOT EXISTS \(TableReadingListItems) (
+        CREATE TABLE IF NOT EXISTS items (
             client_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             client_last_modified INTEGER NOT NULL,
             id TEXT,

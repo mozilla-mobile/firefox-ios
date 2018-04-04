@@ -167,11 +167,11 @@ class TestBookmarkModel: FailFastTestCase {
 
 private extension MergedSQLiteBookmarks {
     func isMirrorEmpty() -> Deferred<Maybe<Bool>> {
-        return self.local.db.queryReturnsNoResults("SELECT 1 FROM \(TableBookmarksMirror)")
+        return self.local.db.queryReturnsNoResults("SELECT 1 FROM bookmarksMirror")
     }
 
     func wipeLocal() {
-        self.local.db.run(["DELETE FROM \(TableBookmarksLocalStructure)", "DELETE FROM \(TableBookmarksLocal)"]).succeeded()
+        self.local.db.run(["DELETE FROM bookmarksLocalStructure", "DELETE FROM bookmarksLocal"]).succeeded()
     }
 
     func populateMirrorViaBuffer(items: [BookmarkMirrorItem], atDate mirrorDate: Timestamp) {
@@ -179,13 +179,17 @@ private extension MergedSQLiteBookmarks {
 
         // … and add the root relationships that will be missing (we don't do those for the buffer,
         // so we need to manually add them and move them across).
-        self.buffer.db.run([
-            "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES",
-            "('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.MenuFolderGUID)', 0),",
-            "('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.ToolbarFolderGUID)', 1),",
-            "('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.UnfiledFolderGUID)', 2),",
-            "('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.MobileFolderGUID)', 3)",
-        ].joined(separator: " ")).succeeded()
+        let sql = """
+            INSERT INTO bookmarksBufferStructure
+                (parent, child, idx)
+            VALUES
+                ('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.MenuFolderGUID)', 0),
+                ('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.ToolbarFolderGUID)', 1),
+                ('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.UnfiledFolderGUID)', 2),
+                ('\(BookmarkRoots.RootGUID)', '\(BookmarkRoots.MobileFolderGUID)', 3)
+            """
+
+        self.buffer.db.run(sql).succeeded()
 
         // Move it all to the mirror.
         self.local.db.moveBufferToMirrorForTesting()

@@ -81,7 +81,7 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(3, $0.successValue!)
 
             let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+                let select = "SELECT count(*) FROM commands"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
             
@@ -104,7 +104,7 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(3, $0.successValue!)
 
             let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+                let select = "SELECT count(*) FROM commands"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
 
@@ -127,7 +127,7 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(12, $0.successValue!)
 
             let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+                let select = "SELECT count(*) FROM commands"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
 
@@ -180,7 +180,7 @@ class SyncCommandsTests: XCTestCase {
             a.fulfill()
 
             let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
+                let select = "SELECT count(*) FROM commands WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
 
@@ -192,7 +192,7 @@ class SyncCommandsTests: XCTestCase {
 
             client = self.clients[1]
             let commandCursor2Deferred = self.db.withConnection { connection -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
+                let select = "SELECT count(*) FROM commands WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
             

@@ -772,7 +772,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 if connection.version == 0 {
                     // Query for the existence of the `tableList` table to determine if we are
                     // migrating from an older DB version.
-                    let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT COUNT(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
+                    let sqliteMasterCursor = connection.executeQueryUnsafe("SELECT count(*) AS number FROM sqlite_master WHERE type = 'table' AND name = 'tableList'", factory: IntFactory, withArgs: [] as Args)
                     
                     let tableListTableExists = sqliteMasterCursor[0] == 1
                     sqliteMasterCursor.close()
