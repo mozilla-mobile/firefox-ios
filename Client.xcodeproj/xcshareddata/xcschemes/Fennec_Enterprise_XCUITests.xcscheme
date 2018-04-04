@@ -197,6 +197,9 @@
                   Identifier = "BaseTestCase">
                </Test>
                <Test
+                  Identifier = "CreateDBTest">
+               </Test>
+               <Test
                   Identifier = "DatabaseFixtureTest/testLoadAllSites()">
                </Test>
                <Test
