@@ -42,7 +42,9 @@ styleElement.innerHTML = HIGHLIGHT_CSS;
 
 function find(query) {
   let escapedQuery = query.trim().replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
-  if (escapedQuery !== lastEscapedQuery) {
+  if (escapedQuery === lastEscapedQuery) {
+    return;
+  } else {
     if (lastFindOperation) {
       lastFindOperation.cancel();
     }
@@ -186,6 +188,10 @@ function getMatchingNodeReplacements(regExp, callback) {
   let isMaximumHighlightCount = false;
 
   let operation = asyncTextNodeWalker(function(originalNode) {
+    if (!isTextNodeVisible(originalNode)) {
+      return;
+    }
+
     let originalTextContent = originalNode.textContent;
     let lastIndex = 0;
     let replacementFragment = document.createDocumentFragment();
@@ -296,6 +302,11 @@ function scrollToElement(element, duration) {
   }
 
   requestAnimationFrame(step);
+}
+
+function isTextNodeVisible(textNode) {
+  let element = textNode.parentElement;
+  return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
 }
 
 function clamp(value, min, max) {
