@@ -2199,7 +2199,7 @@
 				D8C75DF2207584C300BB8AD0 /* UIImageViewAligned.m */,
 			);
 			name = UIImageViewAligned;
-			path = ThirdParty/UIImageViewAligned/UIImageViewAligned;
+			path = ThirdParty/UIImageViewAligned;
 			sourceTree = "<group>";
 		};
 		0B742CC71B32491400EE9264 /* Products */ = {
