@@ -6,10 +6,13 @@ import XCTest
 
 class FindInPageTests: BaseTestCase {
     private func openFindInPageFromMenu() {
+        navigator.goto(BrowserTab)
+        waitUntilPageLoad()
+        waitforExistence(app.buttons["TabLocationView.pageOptionsButton"])
         navigator.goto(FindInPage)
 
-        waitforExistence(app.buttons["Next in-page result"])
-        waitforExistence(app.buttons["Previous in-page result"])
+        waitforExistence(app.buttons["FindInPage.find_next"])
+        waitforExistence(app.buttons["FindInPage.find_previous"])
         XCTAssertTrue(app.textFields[""].exists)
     }
 
@@ -19,12 +22,10 @@ class FindInPageTests: BaseTestCase {
 
         // Enter some text to start finding
         app.textFields[""].typeText("Book")
-        waitforExistence(app.staticTexts["1/500+"])
-        XCTAssertTrue(app.staticTexts["1/500+"].exists)
+        XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
     }
 
     func testFindFromMenu() {
-
         openFindInPageFromMenu()
 
         // Enter some text to start finding
@@ -34,7 +35,7 @@ class FindInPageTests: BaseTestCase {
         waitforExistence(app.staticTexts["1/6"])
         XCTAssertTrue(app.staticTexts["1/6"].exists)
 
-        let nextInPageResultButton = app.buttons["Next in-page result"]
+        let nextInPageResultButton = app.buttons["FindInPage.find_next"]
         nextInPageResultButton.tap()
         waitforExistence(app.staticTexts["2/6"])
         XCTAssertTrue(app.staticTexts["2/6"].exists)
@@ -43,7 +44,7 @@ class FindInPageTests: BaseTestCase {
         waitforExistence(app.staticTexts["3/6"])
         XCTAssertTrue(app.staticTexts["3/6"].exists)
 
-        let previousInPageResultButton = app.buttons["Previous in-page result"]
+        let previousInPageResultButton = app.buttons["FindInPage.find_previous"]
         previousInPageResultButton.tap()
 
         waitforExistence(app.staticTexts["2/6"])
@@ -93,8 +94,8 @@ class FindInPageTests: BaseTestCase {
         waitforExistence(app.collectionViews.cells["The Book of Mozilla"])
         app.collectionViews.cells["The Book of Mozilla"].tap()
         XCTAssertFalse(app.textFields[""].exists)
-        XCTAssertFalse(app.buttons["Next in-page result"].exists)
-        XCTAssertFalse(app.buttons["Previous in-page result"].exists)
+        XCTAssertFalse(app.buttons["FindInPage.find_next"].exists)
+        XCTAssertFalse(app.buttons["FindInPage.find_previous"].exists)
     }
 
     func testFindFromSelection() {
@@ -114,7 +115,7 @@ class FindInPageTests: BaseTestCase {
         app.menuItems["Find in Page"].tap()
         waitforExistence(app.textFields[textToFind])
         XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")
-        XCTAssertTrue(app.buttons["Previous in-page result"].exists, "Find previus button exists")
-        XCTAssertTrue(app.buttons["Next in-page result"].exists, "Find next button exists")
+        XCTAssertTrue(app.buttons["FindInPage.find_previous"].exists, "Find previous button exists")
+        XCTAssertTrue(app.buttons["FindInPage.find_next"].exists, "Find next button exists")
     }
 }
