@@ -1427,8 +1427,8 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
-        let possibleKeyword = trimmedText.substring(to: possibleKeywordQuerySeparatorSpace)
-        let possibleQuery = trimmedText.substring(from: trimmedText.index(after: possibleKeywordQuerySeparatorSpace))
+        let possibleKeyword = String(trimmedText[..<possibleKeywordQuerySeparatorSpace])
+        let possibleQuery = String(trimmedText[trimmedText.index(after: possibleKeywordQuerySeparatorSpace)])
 
         profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(.main) { result in
             if var urlString = result.successValue,
@@ -1535,6 +1535,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         var actions: [[PhotonActionSheetItem]] = []
 
+
+        if let syncAction = syncMenuButton(showFxA: presentSignInViewController) {
+            actions.append(syncAction)
+        }
         actions.append(getHomePanelActions())
         actions.append(getOtherPanelActions(vcDelegate: self))
         // force a modal if the menu is being displayed in compact split screen

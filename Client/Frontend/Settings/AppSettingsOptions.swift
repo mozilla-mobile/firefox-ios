@@ -358,13 +358,13 @@ class AccountStatusSetting: WithAccountSetting {
             case .none:
                 return nil
             case .needsVerification:
-                string = NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view")
+                string = Strings.FxAAccountVerifyEmail
                 break
             case .needsPassword:
-                string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
+                string = Strings.FxAAccountVerifyPassword
                 break
             case .needsUpgrade:
-                string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
+                string = Strings.FxAAccountUpgradeFirefox
                 break
             }
             
