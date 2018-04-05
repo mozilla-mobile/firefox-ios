@@ -116,7 +116,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false)
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
 
-        let historyListShown = GREYCondition(name: "Wait for history to appear", block: { _ in
+        let historyListShown = GREYCondition(name: "Wait for history to appear", block: {
             var errorOrNil: NSError?
             EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
                 .assert(grey_notNil(), error: &errorOrNil)

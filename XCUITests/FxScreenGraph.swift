@@ -177,6 +177,7 @@ private var isTablet: Bool {
     return UIDevice.current.userInterfaceIdiom == .pad
 }
 
+@objcMembers
 class FxUserState: MMUserState {
     required init() {
         super.init()
@@ -947,8 +948,8 @@ extension XCUIElement {
 
         func firstInvisibleCell(_ start: UInt) -> UInt {
             let cells = self.cells
-            for i in start ..< cells.count {
-                let cell = cells.element(boundBy: i)
+            for i in start ..< UInt(cells.count) {
+                let cell = cells.element(boundBy: Int(i))
                 // if the cell's bottom is beyond the table's bottom
                 // i.e. if the cell isn't completely visible.
                 if self.frame.maxY <= cell.frame.maxY  {
@@ -964,13 +965,14 @@ extension XCUIElement {
 
         while true {
             eachScreen(screenNum)
-            let firstCell = self.cells.element(boundBy: cellNum)
+
+            let firstCell = self.cells.element(boundBy: Int(cellNum))
             cellNum = firstInvisibleCell(cellNum)
             if cellNum == UInt.min {
                 return
             }
 
-            let lastCell = self.cells.element(boundBy: cellNum)
+            let lastCell = self.cells.element(boundBy: Int(cellNum))
             let bottom: XCUICoordinate
             // If the cell is a little bit on the table.
             // We shouldn't drag from too close to the edge of the screen,

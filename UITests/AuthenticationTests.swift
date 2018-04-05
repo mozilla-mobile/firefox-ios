@@ -85,7 +85,7 @@ class AuthenticationTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText("\(webRoot!)/auth.html?logout=1"))
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         // Wait until the dialog shows up
-		let dialogAppeared = GREYCondition(name: "Wait the login dialog to appear", block: { _ in
+		let dialogAppeared = GREYCondition(name: "Wait the login dialog to appear", block: {
 			var errorOrNil: NSError?
 			let matcher = grey_allOf([grey_accessibilityLabel("Cancel"),
 			                                 grey_sufficientlyVisible()])

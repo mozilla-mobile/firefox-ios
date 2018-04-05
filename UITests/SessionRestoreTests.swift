@@ -49,7 +49,7 @@ class SessionRestoreTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Back"))
             .perform(grey_tap())
-        let wentBack = GREYCondition(name: "Check browser went back", block: { _ in
+        let wentBack = GREYCondition(name: "Check browser went back", block: {
             var errorOrNil: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel("Top sites"),
                                               grey_sufficientlyVisible()])
