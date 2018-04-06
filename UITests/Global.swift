@@ -253,7 +253,7 @@ class BrowserUtils {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("TabTrayController.removeTabsButton")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: closeAllBtn).perform(grey_tap())
 
-        let topsiteAppeared = GREYCondition(name: "Wait for the topsite view", block: { _ in
+        let topsiteAppeared = GREYCondition(name: "Wait for the topsite view", block: {
             var errorOrNil: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel("Show Tabs"),
                                       grey_sufficientlyVisible()])
@@ -361,7 +361,7 @@ class BrowserUtils {
         for clearable in AllClearables {
             let switchControl = grey_allOf([grey_accessibilityLabel(clearable.rawValue),
                                             grey_kindOfClass(UISwitch.self)])
-            let clearablePresent = GREYCondition(name: "Wait for URL field", block: { _ in
+            let clearablePresent = GREYCondition(name: "Wait for URL field", block: {
                 var errorOrNil: NSError?
                 EarlGrey.select(elementWithMatcher: switchControl)
                     .assert(grey_notNil(), error: &errorOrNil)

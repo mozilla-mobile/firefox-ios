@@ -55,7 +55,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         let urlWithUserInfo = "\(hostWithUsername)/numberedPage.html?page=1"
         let url = "\(webRoot!)/numberedPage.html?page=1"
 
-        let urlFieldAppeared = GREYCondition(name: "Wait for URL field", block: { _ in
+        let urlFieldAppeared = GREYCondition(name: "Wait for URL field", block: {
             var errorOrNil: NSError?
             EarlGrey.select(elementWithMatcher: grey_accessibilityID("url"))
                 .assert(grey_notNil(), error: &errorOrNil)

@@ -98,7 +98,7 @@ class DragAndDropTests: BaseTestCase {
 
     func testRearrangeTabsTabTrayLandscape() {
         // Set the device in landscape mode
-        XCUIDevice.shared().orientation = UIDeviceOrientation.landscapeLeft
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)

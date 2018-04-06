@@ -25,7 +25,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     }
     
     func waitForReadingList() {
-        let readingList = GREYCondition(name: "wait until Reading List Add btn appears", block: { _ in
+        let readingList = GREYCondition(name: "wait until Reading List Add btn appears", block: {
             var errorOrNil: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel("Add to Reading List"),
                                               grey_sufficientlyVisible()])
@@ -39,7 +39,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     }
     
     func waitForEmptyReadingList() {
-        let readable = GREYCondition(name: "Check readable list is empty", block: { _ in
+        let readable = GREYCondition(name: "Check readable list is empty", block: {
             var error: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel("Save pages to your Reading List by tapping the book plus icon in the Reader View controls."),
                                               grey_sufficientlyVisible()])

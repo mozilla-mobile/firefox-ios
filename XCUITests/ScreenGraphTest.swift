@@ -132,6 +132,8 @@ extension ScreenGraphTest {
 
 
 private let defaultURL = "https://example.com"
+
+@objcMembers
 class TestUserState: MMUserState {
     required init() {
         super.init()

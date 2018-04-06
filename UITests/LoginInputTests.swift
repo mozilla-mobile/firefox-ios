@@ -39,7 +39,7 @@ class LoginInputTests: KIFTestCase {
             failedReason = "Dialog still displayed"
         }
         
-        let saveLoginDialog = GREYCondition(name: "Check login dialog appears", block: { _ in
+        let saveLoginDialog = GREYCondition(name: "Check login dialog appears", block: {
             var errorOrNil: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel(text),
                                               grey_sufficientlyVisible()])
