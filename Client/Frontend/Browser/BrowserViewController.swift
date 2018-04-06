@@ -1535,7 +1535,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         var actions: [[PhotonActionSheetItem]] = []
 
-
         if let syncAction = syncMenuButton(showFxA: presentSignInViewController) {
             actions.append(syncAction)
         }
