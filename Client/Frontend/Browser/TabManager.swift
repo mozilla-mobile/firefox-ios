@@ -6,6 +6,9 @@ import Foundation
 import WebKit
 import Storage
 import Shared
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 protocol TabManagerDelegate: class {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?)
@@ -671,11 +674,41 @@ class SavedTab: NSObject, NSCoding {
 extension TabManager {
 
     static fileprivate func tabsStateArchivePath() -> String {
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        return URL(fileURLWithPath: documentsPath).appendingPathComponent("tabsState.archive").path
+        guard let profilePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path else {
+            let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            return URL(fileURLWithPath: documentsPath).appendingPathComponent("tabsState.archive").path
+        }
+
+        return URL(fileURLWithPath: profilePath).appendingPathComponent("tabsState.archive").path
+    }
+
+    static fileprivate func migrateTabsStateArchive() {
+        guard let oldPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("tabsState.archive").path, FileManager.default.fileExists(atPath: oldPath) else {
+            return
+        }
+
+        log.info("Migrating tabsState.archive from ~/Documents to shared container")
+
+        guard let profilePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path else {
+            log.error("Unable to get profile path in shared container to move tabsState.archive")
+            return
+        }
+
+        let newPath = URL(fileURLWithPath: profilePath).appendingPathComponent("tabsState.archive").path
+
+        do {
+            try FileManager.default.createDirectory(atPath: profilePath, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.moveItem(atPath: oldPath, toPath: newPath)
+
+            log.info("Migrated tabsState.archive to shared container successfully")
+        } catch let error as NSError {
+            log.error("Unable to move tabsState.archive to shared container: \(error.localizedDescription)")
+        }
     }
 
     static func tabArchiveData() -> Data? {
+        migrateTabsStateArchive()
+
         let tabStateArchivePath = tabsStateArchivePath()
         if FileManager.default.fileExists(atPath: tabStateArchivePath) {
             return (try? Data(contentsOf: URL(fileURLWithPath: tabStateArchivePath)))
