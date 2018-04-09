@@ -190,6 +190,9 @@ extension Strings {
     // Surface error strings
     public static let FxAAccountVerificationRequiredSurface = NSLocalizedString("FxA.AccountVerificationRequiredSurface", value: "You need to verify %@. Check your email for the verification link from Firefox.", comment: "Message explaining that user needs to check email for Firefox Account verfication link.")
     public static let FxAResendEmail = NSLocalizedString("FxA.ResendEmail", value: "Resend Email", comment: "Button label to resend email")
+    public static let FxAAccountVerifyEmail = NSLocalizedString("Verify your email address", comment: "Text message in the settings table view")
+    public static let FxAAccountVerifyPassword = NSLocalizedString("Enter your password to connect", comment: "Text message in the settings table view")
+    public static let FxAAccountUpgradeFirefox = NSLocalizedString("Upgrade Firefox to connect", comment: "Text message in the settings table view")
 }
 
 //Hotkey Titles

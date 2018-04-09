@@ -397,4 +397,41 @@ extension PhotonActionSheetProtocol {
             return [toggleDesktopSite]
         }
     }
+
+    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?) -> ()) -> [PhotonActionSheetItem]? {
+        let accountStatus = profile.getAccount()?.actionNeeded
+
+        func title() -> String? {
+            guard let status = accountStatus else { return Strings.FxASignInToSync }
+            switch status {
+            case .none:
+                return nil
+            case .needsVerification:
+                return Strings.FxAAccountVerifyEmail
+            case .needsPassword:
+                return Strings.FxAAccountVerifyPassword
+            case .needsUpgrade:
+                return Strings.FxAAccountUpgradeFirefox
+            }
+        }
+
+        func imageName() -> String? {
+            guard let status = accountStatus else { return "menu-sync" }
+            switch status {
+            case .none:
+                return nil
+            case .needsVerification, .needsPassword, .needsUpgrade:
+                return "menu-warning"
+            }
+        }
+
+        let action: ((PhotonActionSheetItem) -> Void) = { action in
+            showFxA(nil)
+        }
+
+        guard let title = title(), let iconString = imageName() else { return nil }
+
+        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, handler: action)
+        return [syncOption]
+    }
 }
