@@ -3,243 +3,303 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import SnapKit
 import Shared
 import Storage
+import Deferred
 
-struct ShareDestination {
-    let code: String
-    let name: String
-    let image: String
+protocol ShareControllerDelegate: class {
+    func finish(afterDelay: TimeInterval)
+    func getValidExtensionContext() -> NSExtensionContext?
+    func getShareItem() -> Deferred<ShareItem?>
 }
 
-// TODO: See if we can do this with an Enum instead. Previous attempts failed because for example NSSet does not take (string) enum values.
-let ShareDestinationBookmarks: String = "Bookmarks"
-let ShareDestinationReadingList: String = "ReadingList"
+class ShareViewController: UIViewController {
+    private var shareItem: ShareItem?
+    private var separators = [UIView]()
+    private var actionRows = [UIView]()
+    private var actions = [UIGestureRecognizer: (() -> Void)]()
+    private var stackView: UIStackView!
+    private var sendToDevice: SendToDevice?
+    weak var delegate: ShareControllerDelegate?
 
-let ShareDestinations = [
-    ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your reading list"), image: "AddToReadingList"),
-    ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your bookmarks"), image: "AddToBookmarks")
-]
+    override var extensionContext: NSExtensionContext? {
+        get {
+            return delegate?.getValidExtensionContext()
+        }
+    }
 
-protocol ShareControllerDelegate {
-    func shareControllerDidCancel(_ shareController: ShareDialogController)
-    func shareController(_ shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet)
-}
+    private func makeSeparator() -> UIView {
+        let view = UIView()
+        view.backgroundColor = UX.separatorColor
+        separators.append(view)
+        return view
+    }
 
-private struct ShareDialogControllerUX {
-    static let CornerRadius: CGFloat = 4                                                            // Corner radius of the dialog
-    static let PhotonBlue50 = UIColor(rgb: 0x0a84ff)
-    static let NavigationBarTintColor = PhotonBlue50                                                // Tint color changes the text color in the navigation bar
-    static let NavigationBarCancelButtonFont = UIFont.systemFont(ofSize: UIFont.buttonFontSize)     // System default
-    static let NavigationBarAddButtonFont = UIFont.boldSystemFont(ofSize: UIFont.buttonFontSize)    // System default
-    static let NavigationBarIconSize = 40                                                           // Width and height of the icon
-    static let NavigationBarBottomPadding = 12
+    private func layoutSeparators() {
+        separators.forEach {
+            $0.snp.makeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.height.equalTo(1)
+            }
+        }
+    }
 
-    static let ItemTitleFontMedium = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
-    static let ItemTitleFont = UIFont.systemFont(ofSize: 15)
-    static let ItemTitleMaxNumberOfLines = 2
-    static let ItemTitleLeftPadding = 44
-    static let ItemTitleRightPadding = 44
-    static let ItemTitleBottomPadding = 12
+    private func makePageInfoRow() -> (row: UIView, pageTitleLabel: UILabel, urlLabel: UILabel) {
+        let row = UIView()
+        let pageTitleLabel = UILabel()
+        let urlLabel = UILabel()
 
-    static let ItemLinkFont = UIFont.systemFont(ofSize: 12)
-    static let ItemLinkMaxNumberOfLines = 3
-    static let ItemLinkLeftPadding = 44
-    static let ItemLinkRightPadding = 44
-    static let ItemLinkBottomPadding = 14
+        [pageTitleLabel, urlLabel].forEach { label in
+            row.addSubview(label)
+            label.allowsDefaultTighteningForTruncation = true
+            label.lineBreakMode = .byTruncatingMiddle
+            label.font = UX.baseFont
+        }
 
-    static let DividerColor = UIColor.lightGray                                              // Divider between the item and the table with destinations
-    static let DividerHeight = 0.5
+        pageTitleLabel.font = UIFont.boldSystemFont(ofSize: UX.baseFont.pointSize)
+        pageTitleLabel.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(UX.rowInset)
+            make.left.equalToSuperview().inset(UX.pageInfoRowLeftInset)
+            make.bottom.equalTo(row.snp.centerY)
+        }
 
-    static let TableRowHeight: CGFloat = 44                                                         // System default
-    static let TableRowFont = UIFont.systemFont(ofSize: 14)
-    static let TableRowFontMinScale: CGFloat = 0.8
-    static let TableRowTintColor = UIColor(red: 0.427, green: 0.800, blue: 0.102, alpha: 1.0)           // Green tint for the checkmark
-    static let TableRowTextColor = UIColor(rgb: 0x555555)
+        urlLabel.snp.makeConstraints {
+            make in
+            make.right.equalToSuperview().inset(UX.rowInset)
+            make.left.equalToSuperview().inset(UX.pageInfoRowLeftInset)
+            make.top.equalTo(pageTitleLabel.snp.bottom).offset(4)
+        }
 
-    static let TableHeight = 88                                                                     // Height of 2 standard 44px cells
-}
+        return (row, pageTitleLabel, urlLabel)
+    }
 
-class ShareDialogController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    var delegate: ShareControllerDelegate!
-    var item: ShareItem!
-    var initialShareDestinations: NSSet = NSSet(object: ShareDestinationBookmarks)
+    private func makeActionRow(label: String, imageName: String, action: @escaping (() -> Void), hasNavigation: Bool) -> UIView {
+        let row = UIView()
+        let icon = UIImageView(image: UIImage(named: imageName))
+        icon.contentMode = .scaleAspectFit
 
-    var selectedShareDestinations: NSMutableSet = NSMutableSet()
-    var navBar: UINavigationBar!
-    var navItem: UINavigationItem!
+        let title = UILabel()
+        title.font = UX.baseFont
+
+        title.text = label
+        [icon, title].forEach { row.addSubview($0) }
+
+        icon.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(UX.rowInset)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(34)
+        }
+
+        title.snp.makeConstraints { make in
+            make.right.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.left.equalTo(icon.snp.right).offset(UX.actionRowSpacingBetweenIconAndTitle)
+        }
+
+        if hasNavigation {
+            let navButton = UIImageView(image: UIImage(named: "menu-Disclosure"))
+            navButton.contentMode = .scaleAspectFit
+            row.addSubview(navButton)
+            navButton.snp.makeConstraints { make in
+                make.right.equalToSuperview().inset(UX.rowInset)
+                make.centerY.equalToSuperview()
+                make.width.height.equalTo(14)
+            }
+        }
+
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(handleRowTapGesture))
+        row.addGestureRecognizer(gesture)
+        // map the gesture to the action func that will be called when the gesture is performed
+        actions[gesture] = action
+
+        actionRows.append(row)
+        return row
+    }
+
+    @objc fileprivate func handleRowTapGesture(sender: UITapGestureRecognizer) {
+        if let action = actions[sender] {
+            actions.removeAll() // actions can only be called once
+            action()
+        }
+    }
+
+    fileprivate func animateToActionDoneView(withTitle title: String = "") {
+        navigationItem.leftBarButtonItem = nil
+
+        navigationController?.view.snp.updateConstraints {
+            make in
+            make.height.equalTo(UX.viewHeightForDoneState)
+        }
+
+        UIView.animate(withDuration: 0.2, animations: {
+            self.actionRows.forEach { $0.removeFromSuperview() }
+            self.separators.forEach { $0.removeFromSuperview() }
+            self.navigationController?.view.superview?.layoutIfNeeded()
+        }, completion: { _ in
+            self.showActionDoneView(withTitle: title)
+        })
+    }
+
+    @objc func finish(afterDelay: TimeInterval = UX.durationToShowDoneDialog) {
+        delegate?.finish(afterDelay: afterDelay)
+    }
+
+    private func showActionDoneView(withTitle title: String) {
+        let blue = UIView()
+        blue.backgroundColor = UX.doneLabelBackgroundColor
+        self.stackView.addArrangedSubview(blue)
+        blue.snp.makeConstraints { make in
+            make.height.equalTo(UX.pageInfoRowHeight)
+        }
+
+        let label = UILabel()
+        label.text = title
+
+        let checkmark = UILabel()
+        checkmark.text = "✓"
+        checkmark.font = UIFont.boldSystemFont(ofSize: 18)
+
+        [label, checkmark].forEach {
+            blue.addSubview($0)
+            $0.textColor = .white
+        }
+
+        label.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.left.equalToSuperview().inset(UX.pageInfoRowLeftInset)
+            make.right.equalTo(checkmark.snp.left)
+        }
+
+        checkmark.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.right.equalToSuperview().inset(UX.rowInset)
+            make.width.equalTo(20)
+        }
+    }
+
+    private func setupNavBar() {
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.setValue(true, forKey: "hidesShadow") // hide separator line
+        navigationItem.titleView = UIImageView(image: UIImage(named: "Icon-Small"))
+        navigationItem.titleView?.contentMode = .scaleAspectFit
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SendToCancelButton, style: .plain, target: self, action: #selector(finish))
+    }
+
+    private func setupStackView() {
+        stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        stackView.spacing = 4
+        view.addSubview(stackView)
+        stackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        selectedShareDestinations = NSMutableSet(set: initialShareDestinations)
+        view.backgroundColor = .white
 
-        self.view.backgroundColor = UIColor.white
-        self.view.layer.cornerRadius = ShareDialogControllerUX.CornerRadius
-        self.view.clipsToBounds = true
+        setupNavBar()
+        setupStackView()
 
-        // Setup the NavigationBar
+        let (currentPageInfoRow, pageTitleLabel, urlLabel) = makePageInfoRow()
 
-        navBar = UINavigationBar()
-        navBar.translatesAutoresizingMaskIntoConstraints = false
-        navBar.tintColor = ShareDialogControllerUX.NavigationBarTintColor
-        navBar.isTranslucent = false
-        self.view.addSubview(navBar)
+        let trailing = UIView()
 
-        // Setup the NavigationItem
-
-        navItem = UINavigationItem()
-        navItem.leftBarButtonItem = UIBarButtonItem(
-            title: Strings.ShareToCancelButton,
-            style: .plain,
-            target: self,
-            action: #selector(cancel)
-        )
-        navItem.leftBarButtonItem?.setTitleTextAttributes([NSAttributedStringKey.font: ShareDialogControllerUX.NavigationBarCancelButtonFont], for: [])
-        navItem.leftBarButtonItem?.accessibilityIdentifier = "ShareDialogController.navigationItem.leftBarButtonItem"
-
-        navItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Add", tableName: "ShareTo", comment: "Add button in the share dialog"), style: .done, target: self, action: #selector(add))
-        navItem.rightBarButtonItem?.setTitleTextAttributes([NSAttributedStringKey.font: ShareDialogControllerUX.NavigationBarAddButtonFont], for: [])
-
-        let logo = UIImageView(image: UIImage(named: "Icon-Small"))
-        logo.contentMode = .scaleAspectFit // TODO Can go away if icon is provided in correct size
-        navItem.titleView = logo
-
-        navBar.pushItem(navItem, animated: false)
-
-        // Setup the title view
-
-        let titleView = UILabel()
-        titleView.translatesAutoresizingMaskIntoConstraints = false
-        titleView.numberOfLines = ShareDialogControllerUX.ItemTitleMaxNumberOfLines
-        titleView.lineBreakMode = .byTruncatingTail
-        titleView.text = item.title
-        titleView.font = ShareDialogControllerUX.ItemTitleFontMedium
-        view.addSubview(titleView)
-
-        // Setup the link view
-
-        let linkView = UILabel()
-        linkView.translatesAutoresizingMaskIntoConstraints = false
-        linkView.numberOfLines = ShareDialogControllerUX.ItemLinkMaxNumberOfLines
-        linkView.lineBreakMode = .byTruncatingTail
-        linkView.text = item.url
-        linkView.font = ShareDialogControllerUX.ItemLinkFont
-        view.addSubview(linkView)
-
-        // Setup the icon
-
-        let iconView = UIImageView()
-        iconView.translatesAutoresizingMaskIntoConstraints = false
-        iconView.image = UIImage(named: "defaultFavicon")
-        view.addSubview(iconView)
-
-        // Setup the divider
-
-        let dividerView = UIView()
-        dividerView.translatesAutoresizingMaskIntoConstraints = false
-        dividerView.backgroundColor = ShareDialogControllerUX.DividerColor
-        view.addSubview(dividerView)
-
-        // Setup the table with destinations
-
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.separatorInset = .zero
-        tableView.layoutMargins = .zero
-        tableView.isUserInteractionEnabled = true
-        tableView.delegate = self
-        tableView.allowsSelection = true
-        tableView.dataSource = self
-        tableView.isScrollEnabled = false
-        view.addSubview(tableView)
-
-        // Setup constraints
-
-        let views = [
-            "nav": navBar,
-            "title": titleView,
-            "link": linkView,
-            "icon": iconView,
-            "divider": dividerView,
-            "table": tableView
+        let rows = [
+            currentPageInfoRow,
+            makeSeparator(),
+            makeActionRow(label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: actionLoadInBackground, hasNavigation: false),
+            makeActionRow(label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: actionBookmarkThisPage, hasNavigation: false),
+            makeActionRow(label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: actionAddToReadingList, hasNavigation: false),
+            makeSeparator(),
+            makeActionRow(label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: actionSendToDevice, hasNavigation: true),
+            trailing
         ]
 
-        // TODO See Bug 1102516 - Use Snappy to define share extension layout constraints
-
-        let constraints = [
-            "H:|[nav]|",
-            "V:|[nav]",
-
-            "H:|-\(ShareDialogControllerUX.ItemTitleLeftPadding)-[title]-\(ShareDialogControllerUX.ItemTitleRightPadding)-|",
-            "V:[nav]-\(ShareDialogControllerUX.NavigationBarBottomPadding)-[title]",
-
-            "H:|-\(ShareDialogControllerUX.ItemLinkLeftPadding)-[link]-\(ShareDialogControllerUX.ItemLinkLeftPadding)-|",
-            "V:[title]-\(ShareDialogControllerUX.ItemTitleBottomPadding)-[link]",
-
-            "H:|[divider]|",
-            "V:[divider(\(ShareDialogControllerUX.DividerHeight))]",
-            "V:[link]-\(ShareDialogControllerUX.ItemLinkBottomPadding)-[divider]",
-
-            "H:|[table]|",
-            "V:[divider][table]",
-            "V:[table(\(ShareDialogControllerUX.TableHeight))]|"
-        ]
-
-        for constraint in constraints {
-            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: constraint, options: [], metrics: nil, views: views))
+        rows.forEach {
+            stackView.addArrangedSubview($0)
         }
-    }
 
-    // UITabBarItem Actions that map to our delegate methods
-
-    @objc func cancel() {
-        delegate?.shareControllerDidCancel(self)
-    }
-
-    @objc func add() {
-        delegate?.shareController(self, didShareItem: item, toDestinations: NSSet(set: selectedShareDestinations))
-    }
-
-    // UITableView Delegate and DataSource
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ShareDestinations.count
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return ShareDialogControllerUX.TableRowHeight
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGray : ShareDialogControllerUX.TableRowTextColor
-        cell.textLabel?.font = ShareDialogControllerUX.TableRowFont
-        cell.accessoryType = selectedShareDestinations.contains(ShareDestinations[indexPath.row].code) ? .checkmark : .none
-        cell.tintColor = ShareDialogControllerUX.TableRowTintColor
-        cell.layoutMargins = .zero
-        cell.textLabel?.text = ShareDestinations[indexPath.row].name
-        cell.textLabel?.adjustsFontSizeToFitWidth = true
-        cell.textLabel?.minimumScaleFactor = ShareDialogControllerUX.TableRowFontMinScale
-        cell.imageView?.image = UIImage(named: ShareDestinations[indexPath.row].image)
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
-
-        let code = ShareDestinations[indexPath.row].code
-        if selectedShareDestinations.contains(code) {
-            selectedShareDestinations.remove(code)
-        } else {
-            selectedShareDestinations.add(code)
+        trailing.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(1)
         }
-        tableView.reloadRows(at: [indexPath], with: .automatic)
 
-        navItem.rightBarButtonItem?.isEnabled = (selectedShareDestinations.count != 0)
+        layoutSeparators()
+
+        actionRows.forEach {
+            $0.snp.makeConstraints { make in
+                make.height.equalTo(UX.actionRowHeight)
+            }
+        }
+
+        currentPageInfoRow.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(UX.pageInfoRowHeight)
+        }
+
+        delegate?.getShareItem().uponQueue(.main) { shareItem in
+            guard let shareItem = shareItem, shareItem.isShareable else {
+                let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .default) { _ in self.finish(afterDelay: 0) })
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+
+            self.shareItem = shareItem
+            urlLabel.text = shareItem.url
+            pageTitleLabel.text = shareItem.title
+       }
+    }
+}
+
+extension ShareViewController {
+    func actionLoadInBackground() {
+        animateToActionDoneView(withTitle: Strings.ShareLoadInBackgroundDone)
+
+        if let shareItem = shareItem {
+            let profile = BrowserProfile(localName: "profile")
+            profile.queue.addToQueue(shareItem).uponQueue(.main) { _ in
+                profile.shutdown()
+            }
+        }
+
+        finish()
+    }
+
+    func actionBookmarkThisPage() {
+        animateToActionDoneView(withTitle: Strings.ShareBookmarkThisPageDone)
+
+        if let shareItem = shareItem {
+            let profile = BrowserProfile(localName: "profile")
+            _ = profile.bookmarks.shareItem(shareItem).value // Blocks until database has settled
+            profile.shutdown()
+        }
+
+        finish()
+    }
+
+    func actionAddToReadingList() {
+        animateToActionDoneView(withTitle: Strings.ShareAddToReadingListDone)
+
+        if let shareItem = shareItem {
+            let profile = BrowserProfile(localName: "profile")
+            profile.readingList.createRecordWithURL(shareItem.url, title: shareItem.title ?? "", addedBy: UIDevice.current.name)
+            profile.shutdown()
+        }
+
+        finish()
+    }
+
+    func actionSendToDevice() {
+        sendToDevice = SendToDevice()
+        guard let sendToDevice = sendToDevice else { return }
+        sendToDevice.sharedItem = shareItem
+        sendToDevice.delegate = delegate
+        let vc = sendToDevice.initialViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
