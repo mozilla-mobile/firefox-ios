@@ -55,9 +55,40 @@ class FindInPageTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["1/6"].exists)
 
         // Tapping on close dismisses the search bar
-        //app.buttons["Done"].tap()
         navigator.goto(BrowserTab)
         waitforNoExistence(app.textFields["Book"])
+    }
+
+    func testFindInPageTwoWordsSearch() {
+        openFindInPageFromMenu()
+        // Enter some text to start finding
+        app.textFields[""].typeText("The Book of")
+
+        // Once there are matches, test previous/next buttons
+        waitforExistence(app.staticTexts["1/6"])
+        XCTAssertTrue(app.staticTexts["1/6"].exists)
+    }
+
+    func testFindInPageTwoWordsSearchLargeDoc() {
+        userState.url = "http://localhost:6571/find-in-page-test.html"
+        openFindInPageFromMenu()
+        // Enter some text to start finding
+        app.textFields[""].typeText("The Book of")
+
+        // Once there are matches, test previous/next buttons
+        waitforExistence(app.staticTexts["1/500+"])
+        XCTAssertTrue(app.staticTexts["1/500+"].exists)
+    }
+
+    func testFindInPageResultsPageShowHideContent() {
+        userState.url = "lorem2.com"
+        openFindInPageFromMenu()
+        // Enter some text to start finding
+        app.textFields[""].typeText("lorem")
+
+        // There should be matches
+        waitforExistence(app.staticTexts["1/3"])
+        XCTAssertTrue(app.staticTexts["1/3"].exists)
     }
 
     func testQueryWithNoMatches() {
