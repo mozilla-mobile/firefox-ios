@@ -48,8 +48,8 @@ class ConnectSetting: WithoutAccountSetting {
         super.onConfigureCell(cell)
         
         if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            let image = UIImage(named: "FxA-Default")
-            cell.imageView?.image = image?.createScaled(CGSize(width: 30, height: 30))
+            cell.imageView?.image = UIImage.templateImageNamed("FxA-Default")
+            cell.imageView?.tintColor = .lightGray
             cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.size.width)! / 2
             cell.imageView?.layer.masksToBounds = true
         }
