@@ -208,7 +208,7 @@ class ShareViewController: UIViewController {
 
         let (currentPageInfoRow, pageTitleLabel, urlLabel) = makePageInfoRow()
 
-        let trailing = UIView()
+        let trailingSpace = UIView()
 
         let rows = [
             currentPageInfoRow,
@@ -218,14 +218,15 @@ class ShareViewController: UIViewController {
             makeActionRow(label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: actionAddToReadingList, hasNavigation: false),
             makeSeparator(),
             makeActionRow(label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: actionSendToDevice, hasNavigation: true),
-            trailing
+            trailingSpace
         ]
 
         rows.forEach {
             stackView.addArrangedSubview($0)
         }
 
-        trailing.snp.makeConstraints { make in
+        // Without some growable space at the bottom there are constraint errors because the UIView space doesn't subdivide equally, and none of the rows are growable
+        trailingSpace.snp.makeConstraints { make in
             make.height.greaterThanOrEqualTo(1)
         }
 
