@@ -44,15 +44,15 @@ function find(query) {
   let escapedQuery = query.trim().replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
   if (escapedQuery === lastEscapedQuery) {
     return;
-  } else {
-    if (lastFindOperation) {
-      lastFindOperation.cancel();
-    }
-
-    clear();
-
-    lastEscapedQuery = escapedQuery;
   }
+
+  if (lastFindOperation) {
+    lastFindOperation.cancel();
+  }
+
+  clear();
+
+  lastEscapedQuery = escapedQuery;
 
   if (!escapedQuery) {
     return;
@@ -332,7 +332,9 @@ Operation.prototype.complete = function() {
   this.completed = true;
 
   if (typeof this.oncompleted === "function") {
-    this.oncompleted();
+    if (!this.cancelled) {
+      this.oncompleted();
+    }
   }
 };
 
