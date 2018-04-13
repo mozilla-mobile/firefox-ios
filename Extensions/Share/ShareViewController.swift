@@ -47,64 +47,66 @@ class ShareViewController: UIViewController {
 
     private func makePageInfoRow() -> (row: UIView, pageTitleLabel: UILabel, urlLabel: UILabel) {
         let row = UIView()
+
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = UX.pageInfoLineSpacing
+
+        row.addSubview(stackView)
+        stackView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.left.right.equalToSuperview().inset(UX.pageInfoRowLeftInset)
+        }
+
         let pageTitleLabel = UILabel()
         let urlLabel = UILabel()
-
         [pageTitleLabel, urlLabel].forEach { label in
-            row.addSubview(label)
+            stackView.addArrangedSubview(label)
             label.allowsDefaultTighteningForTruncation = true
             label.lineBreakMode = .byTruncatingMiddle
             label.font = UX.baseFont
         }
 
         pageTitleLabel.font = UIFont.boldSystemFont(ofSize: UX.baseFont.pointSize)
-        pageTitleLabel.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(UX.rowInset)
-            make.left.equalToSuperview().inset(UX.pageInfoRowLeftInset)
-            make.bottom.equalTo(row.snp.centerY)
-        }
-
-        urlLabel.snp.makeConstraints {
-            make in
-            make.right.equalToSuperview().inset(UX.rowInset)
-            make.left.equalToSuperview().inset(UX.pageInfoRowLeftInset)
-            make.top.equalTo(pageTitleLabel.snp.bottom).offset(4)
-        }
 
         return (row, pageTitleLabel, urlLabel)
     }
 
     private func makeActionRow(label: String, imageName: String, action: Selector, hasNavigation: Bool) -> UIView {
         let row = UIView()
+
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = UX.actionRowSpacingBetweenIconAndTitle
+        row.addSubview(stackView)
+
+        stackView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.left.right.equalToSuperview().inset(UX.pageInfoRowLeftInset)
+        }
+
         let icon = UIImageView(image: UIImage(named: imageName))
         icon.contentMode = .scaleAspectFit
 
         let title = UILabel()
         title.font = UX.baseFont
+        title.numberOfLines = 2
+        title.adjustsFontSizeToFitWidth = true
+        title.allowsDefaultTighteningForTruncation = true
 
         title.text = label
-        [icon, title].forEach { row.addSubview($0) }
+        [icon, title].forEach { stackView.addArrangedSubview($0) }
 
         icon.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(UX.rowInset)
-            make.centerY.equalToSuperview()
-            make.width.equalTo(34)
-        }
-
-        title.snp.makeConstraints { make in
-            make.right.equalToSuperview()
-            make.centerY.equalToSuperview()
-            make.left.equalTo(icon.snp.right).offset(UX.actionRowSpacingBetweenIconAndTitle)
+            make.size.equalTo(UX.actionRowIconSize)
         }
 
         if hasNavigation {
             let navButton = UIImageView(image: UIImage(named: "menu-Disclosure"))
             navButton.contentMode = .scaleAspectFit
-            row.addSubview(navButton)
+            stackView.addArrangedSubview(navButton)
             navButton.snp.makeConstraints { make in
-                make.right.equalToSuperview().inset(UX.rowInset)
-                make.centerY.equalToSuperview()
-                make.width.height.equalTo(14)
+                make.size.equalTo(14)
             }
         }
 
@@ -223,7 +225,7 @@ class ShareViewController: UIViewController {
 
         actionRows.forEach {
             $0.snp.makeConstraints { make in
-                make.height.equalTo(UX.actionRowHeight)
+                make.height.greaterThanOrEqualTo(UX.actionRowHeight)
             }
         }
 
