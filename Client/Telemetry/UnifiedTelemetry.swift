@@ -9,13 +9,37 @@ import Telemetry
 // 'Unified Telemetry' is the name for Mozilla's telemetry system
 //
 class UnifiedTelemetry {
+    private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
+        guard let oldPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(pathComponent).path, FileManager.default.fileExists(atPath: oldPath) else {
+            return
+        }
+
+        print("Migrating \(pathComponent) from ~/Documents to \(destinationSearchPath)")
+        guard let newPath = try? FileManager.default.url(for: destinationSearchPath, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(pathComponent).path else {
+            print("Unable to get destination path \(destinationSearchPath) to move \(pathComponent)")
+            return
+        }
+
+        do {
+            try FileManager.default.moveItem(atPath: oldPath, toPath: newPath)
+
+            print("Migrated \(pathComponent) to \(destinationSearchPath) successfully")
+        } catch let error as NSError {
+            print("Unable to move \(pathComponent) to \(destinationSearchPath): \(error.localizedDescription)")
+        }
+    }
+
     init(profile: Profile) {
+        migratePathComponentInDocumentsDirectory("MozTelemetry-Default-core", to: .cachesDirectory)
+        migratePathComponentInDocumentsDirectory("MozTelemetry-Default-mobile-event", to: .cachesDirectory)
+        migratePathComponentInDocumentsDirectory("eventArray-MozTelemetry-Default-mobile-event.json", to: .cachesDirectory)
+
         NotificationCenter.default.addObserver(self, selector: #selector(uploadError), name: Telemetry.notificationReportError, object: nil)
 
         let telemetryConfig = Telemetry.default.configuration
         telemetryConfig.appName = "Fennec"
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
-        telemetryConfig.dataDirectory = .documentDirectory
+        telemetryConfig.dataDirectory = .cachesDirectory
         telemetryConfig.updateChannel = AppConstants.BuildChannel.rawValue
         let sendUsageData = profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
         telemetryConfig.isCollectionEnabled = sendUsageData
