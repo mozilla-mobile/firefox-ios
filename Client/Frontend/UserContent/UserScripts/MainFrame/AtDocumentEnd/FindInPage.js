@@ -41,7 +41,11 @@ var styleElement = document.createElement("style");
 styleElement.innerHTML = HIGHLIGHT_CSS;
 
 function find(query) {
-  let escapedQuery = query.trim().replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+  let trimmedQuery = query.trim();
+
+  // If the trimmed query is empty, use it instead of the escaped
+  // query to prevent searching for nothing but whitepsace.
+  let escapedQuery = !trimmedQuery ? trimmedQuery : query.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
   if (escapedQuery === lastEscapedQuery) {
     return;
   }
@@ -55,6 +59,7 @@ function find(query) {
   lastEscapedQuery = escapedQuery;
 
   if (!escapedQuery) {
+    webkit.messageHandlers.findInPageHandler.postMessage({ currentResult: 0, totalResults: 0 });
     return;
   }
 
@@ -119,8 +124,6 @@ function clear() {
   lastReplacements = null;
   lastHighlights = null;
   activeHighlightIndex = -1;
-
-  webkit.messageHandlers.findInPageHandler.postMessage({ currentResult: 0, totalResults: 0 });
 }
 
 function updateActiveHighlight() {
@@ -143,6 +146,8 @@ function updateActiveHighlight() {
     scrollToElement(activeHighlight, SCROLL_DURATION);
 
     webkit.messageHandlers.findInPageHandler.postMessage({ currentResult: activeHighlightIndex + 1 });
+  } else {
+    webkit.messageHandlers.findInPageHandler.postMessage({ currentResult: 0 });
   }
 }
 
