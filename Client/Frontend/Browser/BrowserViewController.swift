@@ -1908,8 +1908,8 @@ extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard let parentTab = tabManager[webView] else { return nil }
 
-        if !navigationAction.isAllowed {
-            print("Denying unprivileged request: \(navigationAction.request)")
+        guard navigationAction.isAllowed, shouldRequestBeOpenedAsPopup(navigationAction.request) else {
+            print("Denying popup from request: \(navigationAction.request)")
             return nil
         }
 
@@ -1917,45 +1917,25 @@ extension BrowserViewController: WKUIDelegate {
             screenshotHelper.takeScreenshot(currentTab)
         }
 
-        let request: URLRequest
-        if let formPostHelper = parentTab.getContentScript(name: "FormPostHelper") as? FormPostHelper {
-            request = formPostHelper.urlRequestForNavigationAction(navigationAction)
-        } else {
-            request = navigationAction.request
-        }
-
-        // If the page uses window.open() or target="_blank", open the page in a new tab.
-        let newTab = tabManager.addTab(request, configuration: configuration, afterTab: parentTab, isPrivate: parentTab.isPrivate)
-        tabManager.selectTab(newTab)
-
-        // If the page we just opened has a bad scheme, we return nil here so that JavaScript does not
-        // get a reference to it which it can return from window.open() - this will end up as a
-        // CFErrorHTTPBadURL being presented.
-        if #available(iOS 11, *) {
-            guard shouldRequestBeOpenedAsPopup(request) else {
-                return nil
-            }
-        } else {
-            // Workaround for iOS 10 where `window.open()` for "about:blank"
-            // creates a request with an empty URL (no scheme).
-            if request.url?.absoluteString == "" {
-                return newTab.webView
-            }
-
-            guard shouldRequestBeOpenedAsPopup(request) else {
-                return nil
-            }
-        }
+        // If the page uses `window.open()` or `[target="_blank"]`, open the page in a new tab.
+        // IMPORTANT!!: WebKit will perform the `URLRequest` automatically!! Attempting to do
+        // the request here manually leads to incorrect results!!
+        let newTab = tabManager.addPopupForParentTab(parentTab, configuration: configuration)
 
         return newTab.webView
     }
 
     fileprivate func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
-        guard let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) else {
-            return false
+        // Treat `window.open("")` the same as `window.open("about:blank")`.
+        if request.url?.absoluteString.isEmpty ?? false {
+            return true
         }
-        
-        return true
+
+        if let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) {
+            return true
+        }
+
+        return false
     }
 
     fileprivate func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
