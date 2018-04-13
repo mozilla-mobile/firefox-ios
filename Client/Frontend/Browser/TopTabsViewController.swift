@@ -118,7 +118,7 @@ class TopTabsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if self.tabsToDisplay != self.tabStore {
-            self.reloadData()
+            performTabUpdates()
         }
     }
 
@@ -655,7 +655,7 @@ extension TopTabsViewController: TabManagerDelegate {
     }
 
     func performTabUpdates() {
-        guard !isUpdating else {
+        guard !isUpdating, view.window != nil else {
             return
         }
 
