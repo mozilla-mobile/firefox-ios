@@ -1825,7 +1825,7 @@
 		F84B22221A09122500AAB793 /* HomePanelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePanelViewController.swift; sourceTree = "<group>"; };
 		F84B22261A09127C00AAB793 /* Home.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Home.xcassets; sourceTree = "<group>"; };
 		F84B22431A09165600AAB793 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F84B22491A0920C600AAB793 /* Share.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Share.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F84B22491A0920C600AAB793 /* ShareTo.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; name = ShareTo.appex; path = ShareTo.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8708D251A0970990051AB07 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F8708D261A0970990051AB07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F8708D291A0970990051AB07 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -3937,9 +3937,9 @@
 			productReference = F84B21D31A090F8100AAB793 /* ClientTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F84B22481A0920C600AAB793 /* Share */ = {
+		F84B22481A0920C600AAB793 /* ShareTo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F84B22551A0920C600AAB793 /* Build configuration list for PBXNativeTarget "Share" */;
+			buildConfigurationList = F84B22551A0920C600AAB793 /* Build configuration list for PBXNativeTarget "ShareTo" */;
 			buildPhases = (
 				F84B22451A0920C600AAB793 /* Sources */,
 				F84B22461A0920C600AAB793 /* Frameworks */,
@@ -3953,8 +3953,8 @@
 				2F9A72321ABB856100F9F05D /* PBXTargetDependency */,
 				D09A0CF31FAA2C81009A0273 /* PBXTargetDependency */,
 			);
-			name = Share;
-			productName = ShareFirefox;
+			name = ShareTo;
+			productName = ShareToFirefox;
 			productReference = F84B22491A0920C600AAB793 /* Share.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
@@ -4144,7 +4144,7 @@
 			targets = (
 				F84B21BD1A090F8100AAB793 /* Client */,
 				397848DA1ED86605004C0C0B /* NotificationService */,
-				F84B22481A0920C600AAB793 /* Share */,
+				F84B22481A0920C600AAB793 /* ShareTo */,
 				390527491C874D35007E0BB7 /* Today */,
 				288A2D851AB8B3260023ABC3 /* Shared */,
 				2FCAE2191ABB51F800877008 /* Storage */,
@@ -5434,7 +5434,7 @@
 		};
 		F84B22521A0920C600AAB793 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F84B22481A0920C600AAB793 /* Share */;
+			target = F84B22481A0920C600AAB793 /* ShareTo */;
 			targetProxy = F84B22511A0920C600AAB793 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -8406,7 +8406,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		F84B22551A0920C600AAB793 /* Build configuration list for PBXNativeTarget "Share" */ = {
+		F84B22551A0920C600AAB793 /* Build configuration list for PBXNativeTarget "ShareTo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F84B22561A0920C600AAB793 /* Fennec */,
