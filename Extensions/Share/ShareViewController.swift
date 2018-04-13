@@ -18,7 +18,7 @@ class ShareViewController: UIViewController {
     private var shareItem: ShareItem?
     private var separators = [UIView]()
     private var actionRows = [UIView]()
-    private var actions = [UIGestureRecognizer: (() -> Void)]()
+
     private var stackView: UIStackView!
     private var sendToDevice: SendToDevice?
     weak var delegate: ShareControllerDelegate?
@@ -74,7 +74,7 @@ class ShareViewController: UIViewController {
         return (row, pageTitleLabel, urlLabel)
     }
 
-    private func makeActionRow(label: String, imageName: String, action: @escaping (() -> Void), hasNavigation: Bool) -> UIView {
+    private func makeActionRow(label: String, imageName: String, action: Selector, hasNavigation: Bool) -> UIView {
         let row = UIView()
         let icon = UIImageView(image: UIImage(named: imageName))
         icon.contentMode = .scaleAspectFit
@@ -108,20 +108,11 @@ class ShareViewController: UIViewController {
             }
         }
 
-        let gesture = UITapGestureRecognizer(target: self, action:  #selector(handleRowTapGesture))
+        let gesture = UITapGestureRecognizer(target: self, action: action)
         row.addGestureRecognizer(gesture)
-        // map the gesture to the action func that will be called when the gesture is performed
-        actions[gesture] = action
 
         actionRows.append(row)
         return row
-    }
-
-    @objc fileprivate func handleRowTapGesture(sender: UITapGestureRecognizer) {
-        if let action = actions[sender] {
-            actions.removeAll() // actions can only be called once
-            action()
-        }
     }
 
     fileprivate func animateToActionDoneView(withTitle title: String = "") {
@@ -189,8 +180,6 @@ class ShareViewController: UIViewController {
     private func setupStackView() {
         stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.distribution = .fill
-        stackView.alignment = .fill
         stackView.spacing = 4
         view.addSubview(stackView)
         stackView.snp.makeConstraints { make in
@@ -213,11 +202,11 @@ class ShareViewController: UIViewController {
         let rows = [
             currentPageInfoRow,
             makeSeparator(),
-            makeActionRow(label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: actionLoadInBackground, hasNavigation: false),
-            makeActionRow(label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: actionBookmarkThisPage, hasNavigation: false),
-            makeActionRow(label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: actionAddToReadingList, hasNavigation: false),
+            makeActionRow(label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false),
+            makeActionRow(label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false),
+            makeActionRow(label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false),
             makeSeparator(),
-            makeActionRow(label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: actionSendToDevice, hasNavigation: true),
+            makeActionRow(label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true),
             trailingSpace
         ]
 
@@ -253,12 +242,14 @@ class ShareViewController: UIViewController {
             self.shareItem = shareItem
             urlLabel.text = shareItem.url
             pageTitleLabel.text = shareItem.title
-       }
+        }
     }
 }
 
 extension ShareViewController {
-    func actionLoadInBackground() {
+    @objc func actionLoadInBackground(gesture: UIGestureRecognizer) {
+        // To avoid re-rentry deom double tap, each action function disables the gesture
+        gesture.isEnabled = false
         animateToActionDoneView(withTitle: Strings.ShareLoadInBackgroundDone)
 
         if let shareItem = shareItem {
@@ -271,7 +262,8 @@ extension ShareViewController {
         finish()
     }
 
-    func actionBookmarkThisPage() {
+    @objc func actionBookmarkThisPage(gesture: UIGestureRecognizer) {
+        gesture.isEnabled = false
         animateToActionDoneView(withTitle: Strings.ShareBookmarkThisPageDone)
 
         if let shareItem = shareItem {
@@ -283,7 +275,8 @@ extension ShareViewController {
         finish()
     }
 
-    func actionAddToReadingList() {
+    @objc func actionAddToReadingList(gesture: UIGestureRecognizer) {
+        gesture.isEnabled = false
         animateToActionDoneView(withTitle: Strings.ShareAddToReadingListDone)
 
         if let shareItem = shareItem {
@@ -295,7 +288,8 @@ extension ShareViewController {
         finish()
     }
 
-    func actionSendToDevice() {
+    @objc func actionSendToDevice(gesture: UIGestureRecognizer) {
+        gesture.isEnabled = false
         sendToDevice = SendToDevice()
         guard let sendToDevice = sendToDevice else { return }
         sendToDevice.sharedItem = shareItem
@@ -304,3 +298,4 @@ extension ShareViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
 }
+

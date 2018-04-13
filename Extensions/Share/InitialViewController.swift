@@ -80,7 +80,7 @@ extension InitialViewController: ShareControllerDelegate {
                 deferred.fill(item)
             } else {
                 deferred.fill(nil)
-                self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+                self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
             }
         })
 
