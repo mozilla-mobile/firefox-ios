@@ -164,7 +164,7 @@ class FindInPageBar: UIView {
     }
 
     @objc fileprivate func SELdidTextChange(_ sender: UITextField) {
-        matchCountView.isHidden = searchText.text?.isEmpty ?? true
+        matchCountView.isHidden = searchText.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
         delegate?.findInPage(self, didTextChange: searchText.text ?? "")
     }
 
