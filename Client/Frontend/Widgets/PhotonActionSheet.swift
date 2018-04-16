@@ -624,7 +624,14 @@ private class PhotonActionSheetCell: UITableViewCell {
                     self.statusIcon.image = img.createScaled(CGSize(width: 30, height: 30))
                 }
             }
-            statusIcon.tintColor = self.tintColor
+            // When the iconURL is not nil we are most likely showing a profile picture.
+            // In that case we do not need a tint color. And make sure the image is sized correctly
+            // This is for the sync profile button in the menu
+            if action.iconURL == nil {
+                statusIcon.tintColor = self.tintColor
+            } else {
+                self.statusIcon.image = self.statusIcon.image?.createScaled(CGSize(width: 30, height: 30))
+            }
             if statusIcon.superview == nil {
                 stackView.insertArrangedSubview(statusIcon, at: 0)
             }

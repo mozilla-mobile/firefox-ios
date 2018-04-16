@@ -431,7 +431,11 @@ extension PhotonActionSheetProtocol {
         }
 
         guard let title = title(), let iconString = imageName() else { return nil }
-        let iconURL = (iconString == "placeholder-avatar") ? account?.fxaProfile?.avatar.url : nil
+        // .none is also a case on the swift enum "Optional" so the value needs to be unwrapped before we check
+        var iconURL: URL? = nil
+        if let actionNeeded = account?.actionNeeded {
+            iconURL = (actionNeeded == .none) ? account?.fxaProfile?.avatar.url : nil
+        }
         let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, handler: action)
         return [syncOption]
     }
