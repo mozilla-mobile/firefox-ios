@@ -39,7 +39,7 @@ class ShareViewController: UIViewController {
     private func layoutSeparators() {
         separators.forEach {
             $0.snp.makeConstraints { make in
-                make.left.right.equalToSuperview()
+                make.leading.trailing.equalToSuperview()
                 make.height.equalTo(1)
             }
         }
@@ -55,7 +55,7 @@ class ShareViewController: UIViewController {
         row.addSubview(stackView)
         stackView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.left.right.equalToSuperview().inset(UX.pageInfoRowLeftInset)
+            make.leading.trailing.equalToSuperview().inset(UX.pageInfoRowLeftInset)
         }
 
         let pageTitleLabel = UILabel()
@@ -82,7 +82,7 @@ class ShareViewController: UIViewController {
 
         stackView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.left.right.equalToSuperview().inset(UX.pageInfoRowLeftInset)
+            make.leading.trailing.equalToSuperview().inset(UX.pageInfoRowLeftInset)
         }
 
         let icon = UIImageView(image: UIImage(named: imageName))
@@ -125,7 +125,7 @@ class ShareViewController: UIViewController {
             make.height.equalTo(UX.viewHeightForDoneState)
         }
 
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: UX.doneDialogAnimationDuration, animations: {
             self.actionRows.forEach { $0.removeFromSuperview() }
             self.separators.forEach { $0.removeFromSuperview() }
             self.navigationController?.view.superview?.layoutIfNeeded()
@@ -148,10 +148,11 @@ class ShareViewController: UIViewController {
 
         let label = UILabel()
         label.text = title
+        label.font = UX.doneLabelFont
 
         let checkmark = UILabel()
         checkmark.text = "✓"
-        checkmark.font = UIFont.boldSystemFont(ofSize: 18)
+        checkmark.font = UIFont.boldSystemFont(ofSize: 22)
 
         [label, checkmark].forEach {
             blue.addSubview($0)
@@ -160,13 +161,13 @@ class ShareViewController: UIViewController {
 
         label.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.left.equalToSuperview().inset(UX.pageInfoRowLeftInset)
-            make.right.equalTo(checkmark.snp.left)
+            make.leading.equalToSuperview().inset(UX.pageInfoRowLeftInset)
+            make.trailing.equalTo(checkmark.snp.leading)
         }
 
         checkmark.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.right.equalToSuperview().inset(UX.rowInset)
+            make.trailing.equalToSuperview().inset(UX.rowInset)
             make.width.equalTo(20)
         }
     }

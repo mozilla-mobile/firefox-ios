@@ -5,7 +5,8 @@
 import UIKit
 
 struct UX {
-    static let durationToShowDoneDialog: TimeInterval = 0.8
+    static let doneDialogAnimationDuration: TimeInterval = 0.2
+    static let durationToShowDoneDialog: TimeInterval = UX.doneDialogAnimationDuration + 0.8
     static let alphaForFullscreenOverlay: CGFloat = 0.3
     static let dialogCornerRadius: CGFloat = 8
     static let topViewHeight = 320
@@ -19,6 +20,7 @@ struct UX {
     static let pageInfoRowLeftInset = UX.rowInset + 6
     static let pageInfoLineSpacing: CGFloat = 2
     static let doneLabelBackgroundColor = UIColor(red: 76 / 255.0, green: 158 / 255.0, blue: 1.0, alpha: 1.0)
+    static let doneLabelFont = UIFont.boldSystemFont(ofSize: 17)
     static let separatorColor = UIColor(white: CGFloat(205.0/255.0), alpha: 1.0)
     static let baseFont = UIFont.systemFont(ofSize: 15)
 }
