@@ -28,15 +28,18 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var title: String
     public fileprivate(set) var text: String?
     public fileprivate(set) var iconString: String?
+    public fileprivate(set) var iconURL: URL?
+
     public var isEnabled: Bool // Used by toggles like nightmode to switch tint color
     public fileprivate(set) var accessory: PhotonActionSheetCellAccessoryType
     public fileprivate(set) var accessoryText: String?
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
     
-    init(title: String, text: String? = nil, iconString: String? = nil, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
+        self.iconURL = iconURL
         self.isEnabled = isEnabled
         self.accessory = accessory
         self.handler = handler
@@ -614,8 +617,13 @@ private class PhotonActionSheetCell: UITableViewCell {
         accessibilityIdentifier = action.iconString
         accessibilityLabel = action.title
         selectionStyle = action.handler != nil ? .default : .none
+
         if let iconName = action.iconString, let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate) {
-            statusIcon.image = image
+            statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: []) { (img, err, _, _) in
+                if let img = img {
+                    self.statusIcon.image = img.createScaled(CGSize(width: 30, height: 30))
+                }
+            }
             statusIcon.tintColor = self.tintColor
             if statusIcon.superview == nil {
                 stackView.insertArrangedSubview(statusIcon, at: 0)
