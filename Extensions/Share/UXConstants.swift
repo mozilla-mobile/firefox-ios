@@ -23,4 +23,5 @@ struct UX {
     static let doneLabelFont = UIFont.boldSystemFont(ofSize: 17)
     static let separatorColor = UIColor(white: CGFloat(205.0/255.0), alpha: 1.0)
     static let baseFont = UIFont.systemFont(ofSize: 15)
+    static let actionRowTextAndIconColor = UIColor.Photon.Grey80
 }

@@ -85,15 +85,16 @@ class ShareViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(UX.pageInfoRowLeftInset)
         }
 
-        let icon = UIImageView(image: UIImage(named: imageName))
+        let icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
         icon.contentMode = .scaleAspectFit
+        icon.tintColor = UX.actionRowTextAndIconColor
 
         let title = UILabel()
         title.font = UX.baseFont
         title.numberOfLines = 2
         title.adjustsFontSizeToFitWidth = true
         title.allowsDefaultTighteningForTruncation = true
-
+        title.textColor = UX.actionRowTextAndIconColor
         title.text = label
         [icon, title].forEach { stackView.addArrangedSubview($0) }
 
@@ -102,8 +103,9 @@ class ShareViewController: UIViewController {
         }
 
         if hasNavigation {
-            let navButton = UIImageView(image: UIImage(named: "menu-Disclosure"))
+            let navButton = UIImageView(image: UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate))
             navButton.contentMode = .scaleAspectFit
+            navButton.tintColor = UX.actionRowTextAndIconColor
             stackView.addArrangedSubview(navButton)
             navButton.snp.makeConstraints { make in
                 make.size.equalTo(14)
@@ -120,8 +122,7 @@ class ShareViewController: UIViewController {
     fileprivate func animateToActionDoneView(withTitle title: String = "") {
         navigationItem.leftBarButtonItem = nil
 
-        navigationController?.view.snp.updateConstraints {
-            make in
+        navigationController?.view.snp.updateConstraints { make in
             make.height.equalTo(UX.viewHeightForDoneState)
         }
 
