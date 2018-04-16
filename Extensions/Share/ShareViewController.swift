@@ -8,6 +8,29 @@ import Shared
 import Storage
 import Deferred
 
+extension UIStackView {
+    func addBackground(color: UIColor) {
+        let subView = UIView(frame: bounds)
+        subView.backgroundColor = color
+        subView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        insertSubview(subView, at: 0)
+    }
+
+    func rightLeftEdges(inset: CGFloat) {
+        layoutMargins = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+        isLayoutMarginsRelativeArrangement = true
+    }
+}
+
+extension UILabel {
+    // Ensures labels can span a second line and will compress to fit text
+    func handleLongLabels() {
+        numberOfLines = 2
+        adjustsFontSizeToFitWidth = true
+        allowsDefaultTighteningForTruncation = true
+    }
+}
+
 protocol ShareControllerDelegate: class {
     func finish(afterDelay: TimeInterval)
     func getValidExtensionContext() -> NSExtensionContext?
@@ -16,11 +39,11 @@ protocol ShareControllerDelegate: class {
 
 class ShareViewController: UIViewController {
     private var shareItem: ShareItem?
-    private var separators = [UIView]()
-    private var actionRows = [UIView]()
-
+    private var viewsShownDuringDoneAnimation = [UIView]()
     private var stackView: UIStackView!
     private var sendToDevice: SendToDevice?
+    private var actionDoneRow: (row: UIStackView, label: UILabel)!
+
     weak var delegate: ShareControllerDelegate?
 
     override var extensionContext: NSExtensionContext? {
@@ -29,39 +52,37 @@ class ShareViewController: UIViewController {
         }
     }
 
-    private func makeSeparator() -> UIView {
+    private func makeSeparator(addTo parent: UIStackView) {
         let view = UIView()
         view.backgroundColor = UX.separatorColor
-        separators.append(view)
-        return view
-    }
-
-    private func layoutSeparators() {
-        separators.forEach {
-            $0.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(1)
-            }
+        parent.addArrangedSubview(view)
+        view.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(1)
         }
     }
 
-    private func makePageInfoRow() -> (row: UIView, pageTitleLabel: UILabel, urlLabel: UILabel) {
-        let row = UIView()
-
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = UX.pageInfoLineSpacing
-
-        row.addSubview(stackView)
-        stackView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(UX.pageInfoRowLeftInset)
+    private func makePageInfoRow(addTo parent: UIStackView) -> (row: UIStackView, pageTitleLabel: UILabel, urlLabel: UILabel)
+    {
+        let row = UIStackView()
+        row.axis = .horizontal
+        row.alignment = .center
+        row.rightLeftEdges(inset: UX.rowInset)
+        parent.addArrangedSubview(row)
+        row.snp.makeConstraints { make in
+            make.height.equalTo(UX.pageInfoRowHeight)
         }
+
+        let verticalStackView = UIStackView()
+        verticalStackView.axis = .vertical
+        verticalStackView.spacing = UX.pageInfoLineSpacing
+
+        row.addArrangedSubview(verticalStackView)
 
         let pageTitleLabel = UILabel()
         let urlLabel = UILabel()
         [pageTitleLabel, urlLabel].forEach { label in
-            stackView.addArrangedSubview(label)
+            verticalStackView.addArrangedSubview(label)
             label.allowsDefaultTighteningForTruncation = true
             label.lineBreakMode = .byTruncatingMiddle
             label.font = UX.baseFont
@@ -72,17 +93,15 @@ class ShareViewController: UIViewController {
         return (row, pageTitleLabel, urlLabel)
     }
 
-    private func makeActionRow(label: String, imageName: String, action: Selector, hasNavigation: Bool) -> UIView {
-        let row = UIView()
+    private func makeActionRow(addTo parent: UIStackView, label: String, imageName: String, action: Selector, hasNavigation: Bool) {
 
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = UX.actionRowSpacingBetweenIconAndTitle
-        row.addSubview(stackView)
-
-        stackView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(UX.pageInfoRowLeftInset)
+        let row = UIStackView()
+        row.axis = .horizontal
+        row.spacing = UX.actionRowSpacingBetweenIconAndTitle
+        row.rightLeftEdges(inset: UX.rowInset)
+        parent.addArrangedSubview(row)
+        row.snp.makeConstraints { make in
+            make.height.equalTo(UX.actionRowHeight)
         }
 
         let icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
@@ -91,32 +110,29 @@ class ShareViewController: UIViewController {
 
         let title = UILabel()
         title.font = UX.baseFont
-        title.numberOfLines = 2
-        title.adjustsFontSizeToFitWidth = true
-        title.allowsDefaultTighteningForTruncation = true
+        title.handleLongLabels()
         title.textColor = UX.actionRowTextAndIconColor
         title.text = label
-        [icon, title].forEach { stackView.addArrangedSubview($0) }
+        [icon, title].forEach { row.addArrangedSubview($0) }
 
         icon.snp.makeConstraints { make in
-            make.size.equalTo(UX.actionRowIconSize)
+            make.width.equalTo(UX.actionRowIconSize)
         }
 
         if hasNavigation {
             let navButton = UIImageView(image: UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate))
             navButton.contentMode = .scaleAspectFit
             navButton.tintColor = UX.actionRowTextAndIconColor
-            stackView.addArrangedSubview(navButton)
+            row.addArrangedSubview(navButton)
             navButton.snp.makeConstraints { make in
-                make.size.equalTo(14)
+                make.width.equalTo(14)
             }
         }
 
         let gesture = UITapGestureRecognizer(target: self, action: action)
         row.addGestureRecognizer(gesture)
 
-        actionRows.append(row)
-        return row
+
     }
 
     fileprivate func animateToActionDoneView(withTitle title: String = "") {
@@ -126,12 +142,18 @@ class ShareViewController: UIViewController {
             make.height.equalTo(UX.viewHeightForDoneState)
         }
 
+        actionDoneRow.label.text = title
+
         UIView.animate(withDuration: UX.doneDialogAnimationDuration, animations: {
-            self.actionRows.forEach { $0.removeFromSuperview() }
-            self.separators.forEach { $0.removeFromSuperview() }
+            self.actionDoneRow.row.isHidden = false
+            self.stackView.arrangedSubviews.forEach { view in
+                if !self.viewsShownDuringDoneAnimation.contains(view) {
+                    view.removeFromSuperview()
+                }
+            }
+
             self.navigationController?.view.superview?.layoutIfNeeded()
         }, completion: { _ in
-            self.showActionDoneView(withTitle: title)
         })
     }
 
@@ -139,38 +161,35 @@ class ShareViewController: UIViewController {
         delegate?.finish(afterDelay: afterDelay)
     }
 
-    private func showActionDoneView(withTitle title: String) {
-        let blue = UIView()
-        blue.backgroundColor = UX.doneLabelBackgroundColor
-        self.stackView.addArrangedSubview(blue)
-        blue.snp.makeConstraints { make in
+    private func makeActionDoneRow(addTo parent: UIStackView) -> (row: UIStackView, label: UILabel) {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.addBackground(color: UX.doneLabelBackgroundColor)
+        stackView.rightLeftEdges(inset: UX.rowInset)
+        parent.addArrangedSubview(stackView)
+
+        stackView.snp.makeConstraints { make in
             make.height.equalTo(UX.pageInfoRowHeight)
         }
 
         let label = UILabel()
-        label.text = title
         label.font = UX.doneLabelFont
+        label.handleLongLabels()
 
         let checkmark = UILabel()
         checkmark.text = "✓"
         checkmark.font = UIFont.boldSystemFont(ofSize: 22)
 
         [label, checkmark].forEach {
-            blue.addSubview($0)
+            stackView.addArrangedSubview($0)
             $0.textColor = .white
         }
 
-        label.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.equalToSuperview().inset(UX.pageInfoRowLeftInset)
-            make.trailing.equalTo(checkmark.snp.leading)
-        }
-
         checkmark.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.trailing.equalToSuperview().inset(UX.rowInset)
             make.width.equalTo(20)
         }
+
+        return (stackView, label)
     }
 
     private func setupNavBar() {
@@ -199,41 +218,29 @@ class ShareViewController: UIViewController {
         setupNavBar()
         setupStackView()
 
-        let (currentPageInfoRow, pageTitleLabel, urlLabel) = makePageInfoRow()
+        let pageInfoRow = makePageInfoRow(addTo: stackView)
+        makeSeparator(addTo: stackView)
+        makeActionRow(addTo: stackView, label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
+        makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
+        makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
+        makeSeparator(addTo: stackView)
+        makeActionRow(addTo: stackView, label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
 
-        let trailingSpace = UIView()
-
-        let rows = [
-            currentPageInfoRow,
-            makeSeparator(),
-            makeActionRow(label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false),
-            makeActionRow(label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false),
-            makeActionRow(label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false),
-            makeSeparator(),
-            makeActionRow(label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true),
-            trailingSpace
-        ]
-
-        rows.forEach {
-            stackView.addArrangedSubview($0)
+        let footerSpaceRow = UIView()
+        stackView.addArrangedSubview(footerSpaceRow)
+        // Without some growable space at the bottom there are constraint errors because the UIView space doesn't subdivide equally, and none of the rows are growable.
+        // Also, during the animation to the done state, without this space, the page info label moves down slightly.
+        footerSpaceRow.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(0)
         }
 
-        // Without some growable space at the bottom there are constraint errors because the UIView space doesn't subdivide equally, and none of the rows are growable
-        trailingSpace.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(1)
-        }
+        actionDoneRow = makeActionDoneRow(addTo: stackView)
+        // Fully constructing and pre-adding as a subview ensures that only the show operation will animate during the UIView.animate(),
+        // and other animatable properties will not unexpectedly animate because they are modified in the same event loop as the animation.
+        actionDoneRow.row.isHidden = true
 
-        layoutSeparators()
-
-        actionRows.forEach {
-            $0.snp.makeConstraints { make in
-                make.height.greaterThanOrEqualTo(UX.actionRowHeight)
-            }
-        }
-
-        currentPageInfoRow.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(UX.pageInfoRowHeight)
-        }
+        // All other views are hidden for the done animation.
+        viewsShownDuringDoneAnimation += [pageInfoRow.row, footerSpaceRow, actionDoneRow.row]
 
         delegate?.getShareItem().uponQueue(.main) { shareItem in
             guard let shareItem = shareItem, shareItem.isShareable else {
@@ -244,8 +251,8 @@ class ShareViewController: UIViewController {
             }
 
             self.shareItem = shareItem
-            urlLabel.text = shareItem.url
-            pageTitleLabel.text = shareItem.title
+            pageInfoRow.urlLabel.text = shareItem.url
+            pageInfoRow.pageTitleLabel.text = shareItem.title
         }
     }
 }

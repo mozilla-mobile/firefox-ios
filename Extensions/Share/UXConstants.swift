@@ -11,12 +11,12 @@ struct UX {
     static let dialogCornerRadius: CGFloat = 8
     static let topViewHeight = 320
     static let topViewWidth = 345
-    static let viewHeightForDoneState = 200
+    static let viewHeightForDoneState = 170
     static let pageInfoRowHeight = 64
     static let actionRowHeight = 44
     static let actionRowSpacingBetweenIconAndTitle: CGFloat = 16
     static let actionRowIconSize = 24
-    static let rowInset = 10
+    static let rowInset: CGFloat = 16
     static let pageInfoRowLeftInset = UX.rowInset + 6
     static let pageInfoLineSpacing: CGFloat = 2
     static let doneLabelBackgroundColor = UIColor(red: 76 / 255.0, green: 158 / 255.0, blue: 1.0, alpha: 1.0)
