@@ -399,8 +399,6 @@ extension PhotonActionSheetProtocol {
     }
 
     func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?) -> ()) -> [PhotonActionSheetItem]? {
-        // change updateprofile to return a callback which can be used to load the menu after the profile data is synced
-        // allow the menu to load and listen for changes to the profile.
         profile.getAccount()?.updateProfile()
         let account = profile.getAccount()
 
