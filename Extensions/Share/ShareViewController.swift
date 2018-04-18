@@ -52,6 +52,52 @@ class ShareViewController: UIViewController {
         }
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.backgroundColor = .white
+
+        setupNavBar()
+        setupStackView()
+
+        let pageInfoRow = makePageInfoRow(addTo: stackView)
+        makeSeparator(addTo: stackView)
+        makeActionRow(addTo: stackView, label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
+        makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
+        makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
+        makeSeparator(addTo: stackView)
+        makeActionRow(addTo: stackView, label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
+
+        let footerSpaceRow = UIView()
+        stackView.addArrangedSubview(footerSpaceRow)
+        // Without some growable space at the bottom there are constraint errors because the UIView space doesn't subdivide equally, and none of the rows are growable.
+        // Also, during the animation to the done state, without this space, the page info label moves down slightly.
+        footerSpaceRow.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(0)
+        }
+
+        actionDoneRow = makeActionDoneRow(addTo: stackView)
+        // Fully constructing and pre-adding as a subview ensures that only the show operation will animate during the UIView.animate(),
+        // and other animatable properties will not unexpectedly animate because they are modified in the same event loop as the animation.
+        actionDoneRow.row.isHidden = true
+
+        // All other views are hidden for the done animation.
+        viewsShownDuringDoneAnimation += [pageInfoRow.row, footerSpaceRow, actionDoneRow.row]
+
+        delegate?.getShareItem().uponQueue(.main) { shareItem in
+            guard let shareItem = shareItem, shareItem.isShareable else {
+                let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .default) { _ in self.finish(afterDelay: 0) })
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+
+            self.shareItem = shareItem
+            pageInfoRow.urlLabel.text = shareItem.url
+            pageInfoRow.pageTitleLabel.text = shareItem.title
+        }
+    }
+
     private func makeSeparator(addTo parent: UIStackView) {
         let view = UIView()
         view.backgroundColor = UX.separatorColor
@@ -62,8 +108,7 @@ class ShareViewController: UIViewController {
         }
     }
 
-    private func makePageInfoRow(addTo parent: UIStackView) -> (row: UIStackView, pageTitleLabel: UILabel, urlLabel: UILabel)
-    {
+    private func makePageInfoRow(addTo parent: UIStackView) -> (row: UIStackView, pageTitleLabel: UILabel, urlLabel: UILabel) {
         let row = UIStackView()
         row.axis = .horizontal
         row.alignment = .center
@@ -131,8 +176,6 @@ class ShareViewController: UIViewController {
 
         let gesture = UITapGestureRecognizer(target: self, action: action)
         row.addGestureRecognizer(gesture)
-
-
     }
 
     fileprivate func animateToActionDoneView(withTitle title: String = "") {
@@ -144,17 +187,14 @@ class ShareViewController: UIViewController {
 
         actionDoneRow.label.text = title
 
-        UIView.animate(withDuration: UX.doneDialogAnimationDuration, animations: {
+        UIView.animate(withDuration: UX.doneDialogAnimationDuration) {
             self.actionDoneRow.row.isHidden = false
-            self.stackView.arrangedSubviews.forEach { view in
-                if !self.viewsShownDuringDoneAnimation.contains(view) {
-                    view.removeFromSuperview()
-                }
-            }
+            self.stackView.arrangedSubviews
+                .filter { !self.viewsShownDuringDoneAnimation.contains($0) }
+                .forEach { $0.removeFromSuperview() }
 
             self.navigationController?.view.superview?.layoutIfNeeded()
-        }, completion: { _ in
-        })
+        }
     }
 
     @objc func finish(afterDelay: TimeInterval = UX.durationToShowDoneDialog) {
@@ -207,52 +247,6 @@ class ShareViewController: UIViewController {
         view.addSubview(stackView)
         stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = .white
-
-        setupNavBar()
-        setupStackView()
-
-        let pageInfoRow = makePageInfoRow(addTo: stackView)
-        makeSeparator(addTo: stackView)
-        makeActionRow(addTo: stackView, label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
-        makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
-        makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
-        makeSeparator(addTo: stackView)
-        makeActionRow(addTo: stackView, label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
-
-        let footerSpaceRow = UIView()
-        stackView.addArrangedSubview(footerSpaceRow)
-        // Without some growable space at the bottom there are constraint errors because the UIView space doesn't subdivide equally, and none of the rows are growable.
-        // Also, during the animation to the done state, without this space, the page info label moves down slightly.
-        footerSpaceRow.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(0)
-        }
-
-        actionDoneRow = makeActionDoneRow(addTo: stackView)
-        // Fully constructing and pre-adding as a subview ensures that only the show operation will animate during the UIView.animate(),
-        // and other animatable properties will not unexpectedly animate because they are modified in the same event loop as the animation.
-        actionDoneRow.row.isHidden = true
-
-        // All other views are hidden for the done animation.
-        viewsShownDuringDoneAnimation += [pageInfoRow.row, footerSpaceRow, actionDoneRow.row]
-
-        delegate?.getShareItem().uponQueue(.main) { shareItem in
-            guard let shareItem = shareItem, shareItem.isShareable else {
-                let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .default) { _ in self.finish(afterDelay: 0) })
-                self.present(alert, animated: true, completion: nil)
-                return
-            }
-
-            self.shareItem = shareItem
-            pageInfoRow.urlLabel.text = shareItem.url
-            pageInfoRow.pageTitleLabel.text = shareItem.title
         }
     }
 }
