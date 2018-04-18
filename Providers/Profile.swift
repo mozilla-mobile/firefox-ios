@@ -490,6 +490,7 @@ open class BrowserProfile: Profile {
             if let configuration = account?.configuration as? CustomFirefoxAccountConfiguration {
                 account?.configuration = CustomFirefoxAccountConfiguration(prefs: self.prefs)
             }
+            account?.updateProfile()
             
             return account
         }

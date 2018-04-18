@@ -399,13 +399,14 @@ extension PhotonActionSheetProtocol {
     }
 
     func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?) -> ()) -> [PhotonActionSheetItem]? {
-        let accountStatus = profile.getAccount()?.actionNeeded
+        profile.getAccount()?.updateProfile()
+        let account = profile.getAccount()
 
         func title() -> String? {
-            guard let status = accountStatus else { return Strings.FxASignInToSync }
+            guard let status = account?.actionNeeded else { return Strings.FxASignInToSync }
             switch status {
             case .none:
-                return nil
+                return account?.fxaProfile?.displayName ?? account?.fxaProfile?.email
             case .needsVerification:
                 return Strings.FxAAccountVerifyEmail
             case .needsPassword:
@@ -416,10 +417,10 @@ extension PhotonActionSheetProtocol {
         }
 
         func imageName() -> String? {
-            guard let status = accountStatus else { return "menu-sync" }
+            guard let status = account?.actionNeeded else { return "menu-sync" }
             switch status {
             case .none:
-                return nil
+                return "placeholder-avatar"
             case .needsVerification, .needsPassword, .needsUpgrade:
                 return "menu-warning"
             }
@@ -430,8 +431,12 @@ extension PhotonActionSheetProtocol {
         }
 
         guard let title = title(), let iconString = imageName() else { return nil }
-
-        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, handler: action)
+        // .none is also a case on the swift enum "Optional" so the value needs to be unwrapped before we check
+        var iconURL: URL? = nil
+        if let actionNeeded = account?.actionNeeded {
+            iconURL = (actionNeeded == .none) ? account?.fxaProfile?.avatar.url : nil
+        }
+        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, handler: action)
         return [syncOption]
     }
 }
