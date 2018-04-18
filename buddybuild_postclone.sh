@@ -32,7 +32,7 @@ fi
 # requests.
 #
 
-git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
+git clone -b v11.x-l10n https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
 
 if [ "$BUDDYBUILD_SCHEME" = "Firefox" ]; then
   setup_virtualenv
