@@ -3491,12 +3491,12 @@
 				E40A18F61EDC73D5006B7F28 /* Entitlements */,
 				397848DC1ED86605004C0C0B /* NotificationService */,
 				3905274D1C874D35007E0BB7 /* Today */,
-				F8708D241A0970990051AB07 /* Share */,
+				F8708D241A0970990051AB07 /* ShareTo */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		F8708D241A0970990051AB07 /* Share */ = {
+		F8708D241A0970990051AB07 /* ShareTo */ = {
 			isa = PBXGroup;
 			children = (
 				F8708D251A0970990051AB07 /* Images.xcassets */,
@@ -3506,7 +3506,7 @@
 				EB940747208134AF00702E05 /* UXConstants.swift */,
 				F8708D291A0970990051AB07 /* ShareViewController.swift */,
 			);
-			path = Share;
+			path = ShareTo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
