@@ -10,7 +10,6 @@ digraph FxiOSCarthage {
   "Client" -> "XCGLogger"
   "Client" -> "Fuzi"
   "Client" -> "Onyx"
-  "Client" -> "readability"
   "ShareTo" -> "Alamofire"
   "ShareTo" -> "SDWebImage"
   "ShareTo" -> "Fuzi"

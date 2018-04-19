@@ -56,7 +56,7 @@ function checkReadability() {
     // Serialize and then parse the document instead.
     var docStr = new XMLSerializer().serializeToString(document);
     var doc = new DOMParser().parseFromString(docStr, "text/html");
-    var readability = new Readability(uri, doc);
+    var readability = new Readability(uri, doc, { debug: DEBUG });
     readabilityResult = readability.parse();
 
     debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
