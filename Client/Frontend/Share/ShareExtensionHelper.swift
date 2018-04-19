@@ -110,6 +110,7 @@ private extension ShareExtensionHelper {
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
             || (activityType == "in.sinew.Walletx.WalletxExt")
             || (activityType == "com.8bit.bitwarden.find-login-action-extension")
+            || (activityType == "me.mssun.passforios.find-login-action-extension")
 
     }
 
