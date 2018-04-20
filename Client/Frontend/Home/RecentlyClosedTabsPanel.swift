@@ -13,7 +13,7 @@ private let log = Logger.browserLogger
 
 private struct RecentlyClosedPanelUX {
     static let IconSize = CGSize(width: 23, height: 23)
-    static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
+    static let IconBorderColor = UIColor.Photon.Grey30
     static let IconBorderWidth: CGFloat = 0.5
 }
 

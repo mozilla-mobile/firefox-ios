@@ -9,7 +9,7 @@ private struct SearchInputViewUX {
 
     static let horizontalSpacing: CGFloat = 16
     static let titleFont: UIFont = UIFont.systemFont(ofSize: 16)
-    static let titleColor: UIColor = UIColor.lightGray
+    static let titleColor: UIColor = UIColor.Photon.Grey40
     static let inputColor: UIColor = UIConstants.HighlightBlue
     static let borderColor: UIColor = UIConstants.SeparatorColor
     static let borderLineWidth: CGFloat = 0.5
@@ -78,7 +78,7 @@ class SearchInputView: UIView {
 
     fileprivate lazy var overlay: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.Photon.White100
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedSearch)))
 
         view.isAccessibilityElement = true
@@ -107,7 +107,7 @@ class SearchInputView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = UIColor.white
+        backgroundColor = UIColor.Photon.White100
         isUserInteractionEnabled = true
 
         addSubview(inputField)

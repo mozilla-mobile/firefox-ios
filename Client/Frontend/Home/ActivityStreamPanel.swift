@@ -953,7 +953,7 @@ struct ActivityStreamTracker {
 
 // MARK: - Section Header View
 private struct ASHeaderViewUX {
-    static let SeperatorColor =  UIColor(rgb: 0xedecea) //Color not found in Photon
+    static let SeperatorColor =  UIColor.Photon.Grey20
     static let TextFont = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
     static let SeperatorHeight = 1
     static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASPanelUX.MinimumInsets : ASPanelUX.MinimumInsets
@@ -986,7 +986,7 @@ class ASHeaderView: UICollectionReusableView {
     lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = self.title
-        titleLabel.textColor = UIColor.gray
+        titleLabel.textColor = UIColor.Photon.Grey50
         titleLabel.font = ASHeaderViewUX.TextFont
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1

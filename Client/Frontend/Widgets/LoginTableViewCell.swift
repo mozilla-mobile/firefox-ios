@@ -74,7 +74,7 @@ class LoginTableViewCell: UITableViewCell {
         let label = UITextField()
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
-        label.backgroundColor = UIColor.white
+        label.backgroundColor = UIColor.Photon.White100
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
         label.autocorrectionType = .no
@@ -92,14 +92,14 @@ class LoginTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
-        label.backgroundColor = UIColor.white
+        label.backgroundColor = UIColor.Photon.White100
         label.numberOfLines = 1
         return label
     }()
 
     fileprivate lazy var iconImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = UIColor.white
+        imageView.backgroundColor = UIColor.Photon.White100
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -180,8 +180,8 @@ class LoginTableViewCell: UITableViewCell {
         indentationWidth = 0
         selectionStyle = .none
 
-        contentView.backgroundColor = UIColor.white
-        labelContainer.backgroundColor = UIColor.white
+        contentView.backgroundColor = UIColor.Photon.White100
+        labelContainer.backgroundColor = UIColor.Photon.White100
 
         labelContainer.addSubview(highlightedLabel)
         labelContainer.addSubview(descriptionLabel)

@@ -195,7 +195,7 @@ private struct ASHorizontalScrollCellUX {
     static let TopSiteEmptyCellIdentifier = "TopSiteItemEmptyCell"
 
     static let TopSiteItemSize = CGSize(width: 75, height: 75)
-    static let BackgroundColor = UIColor.white
+    static let BackgroundColor = UIColor.Photon.White100
     static let PageControlRadius: CGFloat = 3
     static let PageControlSize = CGSize(width: 30, height: 15)
     static let PageControlOffset: CGFloat = 12
@@ -220,7 +220,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
 
     lazy fileprivate var pageControl: FilledPageControl = {
         let pageControl = FilledPageControl()
-        pageControl.tintColor = UIColor.gray
+        pageControl.tintColor = UIColor.Photon.Grey50
         pageControl.indicatorRadius = ASHorizontalScrollCellUX.PageControlRadius
         pageControl.isUserInteractionEnabled = true
         pageControl.isAccessibilityElement = true

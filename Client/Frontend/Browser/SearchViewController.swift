@@ -14,7 +14,7 @@ private enum SearchListSection: Int {
 }
 
 private struct SearchViewControllerUX {
-    static let SearchEngineScrollViewBackgroundColor = UIColor.white.withAlphaComponent(0.8).cgColor
+    static let SearchEngineScrollViewBackgroundColor = UIColor.Photon.White100.withAlphaComponent(0.8).cgColor
     static let SearchEngineScrollViewBorderColor = UIColor.black.withAlphaComponent(0.2).cgColor
 
     // TODO: This should use ToolbarHeight in BVC. Fix this when we create a shared theming file.
@@ -27,7 +27,7 @@ private struct SearchViewControllerUX {
     static let SearchImageHeight: Float = 44
     static let SearchImageWidth: Float = 24
 
-    static let SuggestionBackgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
+    static let SuggestionBackgroundColor = UIColor.Photon.White100
     static let SuggestionBorderColor = UIConstants.HighlightBlue
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
@@ -687,7 +687,7 @@ fileprivate class SuggestionButton: InsetButton {
         super.init(frame: frame)
 
         setTitleColor(UIConstants.HighlightBlue, for: [])
-        setTitleColor(UIColor.white, for: .highlighted)
+        setTitleColor(UIColor.Photon.White100, for: .highlighted)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         backgroundColor = SearchViewControllerUX.SuggestionBackgroundColor
         layer.borderColor = SearchViewControllerUX.SuggestionBorderColor.cgColor

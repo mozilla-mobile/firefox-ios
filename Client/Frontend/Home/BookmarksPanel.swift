@@ -25,14 +25,14 @@ private struct BookmarksPanelUX {
     static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
     static let BookmarkFolderChevronSize: CGFloat = 20
     static let BookmarkFolderChevronLineWidth: CGFloat = 2.0
-    static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
+    static let BookmarkFolderTextColor = UIColor.Photon.Grey50
     static let BookmarkFolderBGColor = UIColor.Photon.Grey10.withAlphaComponent(0.3)
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemTextColor = UIColor.gray
+    static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 170
     static let SeparatorRowHeight: CGFloat = 0.5
     static let IconSize: CGFloat = 23
-    static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
+    static let IconBorderColor = UIColor.Photon.Grey30
     static let IconBorderWidth: CGFloat = 0.5
 }
 
@@ -131,7 +131,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.white
+        overlayView.backgroundColor = UIColor.Photon.White100
 
         let logoImageView = UIImageView(image: UIImage(named: "emptyBookmarks"))
         overlayView.addSubview(logoImageView)

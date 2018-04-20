@@ -25,7 +25,7 @@ protocol TabLocationViewDelegate {
 
 private struct TabLocationViewUX {
     static let HostFontColor = UIColor.black
-    static let BaseURLFontColor = UIColor.gray
+    static let BaseURLFontColor = UIColor.Photon.Grey50
     static let Spacing: CGFloat = 8
     static let StatusIconSize: CGFloat = 18
     static let TPIconSize: CGFloat = 24
@@ -92,7 +92,7 @@ class TabLocationView: UIView, TabEventHandler {
 
     lazy var placeholder: NSAttributedString = {
         let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
-        return NSAttributedString(string: placeholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        return NSAttributedString(string: placeholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.Photon.Grey40])
     }()
 
     lazy var urlTextField: UITextField = {
@@ -119,7 +119,7 @@ class TabLocationView: UIView, TabEventHandler {
 
     fileprivate lazy var lockImageView: UIImageView = {
         let lockImageView = UIImageView(image: UIImage.templateImageNamed("lock_verified"))
-        lockImageView.tintColor = UIColor.Defaults.LockGreen
+        lockImageView.tintColor = UIColor.Photon.Green50
         lockImageView.isAccessibilityElement = true
         lockImageView.contentMode = .center
         lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")

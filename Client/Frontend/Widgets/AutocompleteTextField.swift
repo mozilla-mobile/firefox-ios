@@ -18,7 +18,7 @@ protocol AutocompleteTextFieldDelegate: class {
 }
 
 private struct AutocompleteTextFieldUX {
-       static let HighlightColor = UIColor(rgb: 0xccdded)
+       static let HighlightColor = UIColor.Defaults.iOSHighlightBlue
 }
 
 class AutocompleteTextField: UITextField, UITextFieldDelegate {

@@ -280,7 +280,7 @@ class LeanPlumClient {
             LPActionArg(named: LPMessage.ArgAcceptButtonText, with: LPMessage.DefaultOkButtonText),
             LPActionArg(named: LPMessage.ArgCancelAction, withAction: nil),
             LPActionArg(named: LPMessage.ArgCancelButtonText, with: LPMessage.DefaultLaterButtonText),
-            LPActionArg(named: LPMessage.ArgCancelButtonTextColor, with: UIColor.gray)
+            LPActionArg(named: LPMessage.ArgCancelButtonTextColor, with: UIColor.Photon.Grey50)
         ]
         
         let responder: LeanplumActionBlock = { (context) -> Bool in

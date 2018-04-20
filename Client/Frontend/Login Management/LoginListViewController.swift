@@ -13,10 +13,10 @@ private struct LoginListUX {
     static let RowHeight: CGFloat = 58
     static let SearchHeight: CGFloat = 58
     static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
-    static let selectionButtonTextColor = UIColor.white
+    static let selectionButtonTextColor = UIColor.Photon.White100
     static let selectionButtonBackground = UIConstants.HighlightBlue
     static let NoResultsFont: UIFont = UIFont.systemFont(ofSize: 16)
-    static let NoResultsTextColor: UIColor = UIColor.lightGray
+    static let NoResultsTextColor: UIColor = UIColor.Photon.Grey40
 }
 
 private extension UITableView {
@@ -90,7 +90,7 @@ class LoginListViewController: SensitiveViewController {
         notificationCenter.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
-        self.view.backgroundColor = UIColor.white
+        self.view.backgroundColor = UIColor.Photon.White100
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
 
         self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen.")
@@ -157,7 +157,7 @@ class LoginListViewController: SensitiveViewController {
         if loginSelectionController.selectedCount > 0 {
             if navigationItem.rightBarButtonItem == nil {
                 navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .plain, target: self, action: #selector(tappedDelete))
-                navigationItem.rightBarButtonItem?.tintColor = UIColor.red
+                navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.Red50
             }
         } else {
             navigationItem.rightBarButtonItem = nil
@@ -616,7 +616,7 @@ fileprivate class LoadingLoginsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(indicator)
-        backgroundColor = UIColor.white
+        backgroundColor = UIColor.Photon.White100
         indicator.startAnimating()
     }
 

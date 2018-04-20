@@ -52,7 +52,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
     fileprivate var clearButtonEnabled = true {
         didSet {
-            clearButton?.textLabel?.textColor = clearButtonEnabled ? UIConstants.DestructiveRed : UIColor.lightGray
+            clearButton?.textLabel?.textColor = clearButtonEnabled ? UIConstants.DestructiveRed : UIColor.Photon.Grey40
         }
     }
 

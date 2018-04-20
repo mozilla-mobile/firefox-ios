@@ -16,10 +16,10 @@ protocol ClientPickerViewControllerDelegate {
 private struct ClientPickerViewControllerUX {
     static let TableHeaderRowHeight = CGFloat(50)
     static let TableHeaderTextFont = UIFont.systemFont(ofSize: 16)
-    static let TableHeaderTextColor = UIColor.gray
+    static let TableHeaderTextColor = UIColor.Photon.Grey50
     static let TableHeaderTextPaddingLeft = CGFloat(20)
 
-    static let DeviceRowTintColor = UIColor(red: 0.427, green: 0.800, blue: 0.102, alpha: 1.0)
+    static let DeviceRowTintColor = UIColor.Photon.Green60
     static let DeviceRowHeight = CGFloat(50)
     static let DeviceRowTextFont = UIFont.systemFont(ofSize: 16)
     static let DeviceRowTextPaddingLeft = CGFloat(72)

@@ -13,10 +13,10 @@ private typealias CategoryNumber = Int
 private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
 
 private struct HistoryPanelUX {
-    static let WelcomeScreenItemTextColor = UIColor.gray
+    static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 170
     static let IconSize = 23
-    static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
+    static let IconBorderColor = UIColor.Photon.Grey30
     static let IconBorderWidth: CGFloat = 0.5
 }
 
@@ -223,7 +223,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     private func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.white
+        overlayView.backgroundColor = UIColor.Photon.White100
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
@@ -331,7 +331,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.textLabel!.text = Strings.RecentlyClosedTabsButtonTitle
         cell.detailTextLabel!.text = ""
         cell.imageView!.image = UIImage(named: "recently_closed")
-        cell.imageView?.backgroundColor = UIColor.white
+        cell.imageView?.backgroundColor = UIColor.Photon.White100
         if !hasRecentlyClosed {
             cell.textLabel?.alpha = 0.5
             cell.imageView!.alpha = 0.5

@@ -7,9 +7,9 @@ import SnapKit
 
 private struct ErrorToastDefaultUX {
     static let cornerRadius: CGFloat = 40
-    static let fillColor = UIColor(red: 186/255, green: 32/255, blue: 36/255, alpha: 1)
+    static let fillColor = UIColor.Photon.Red70
     static let margins = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
-    static let textColor = UIColor.white
+    static let textColor = UIColor.Photon.White100
 }
 
 class ErrorToast: UIView {

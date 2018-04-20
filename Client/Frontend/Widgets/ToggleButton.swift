@@ -5,8 +5,7 @@
 import UIKit
 
 private struct UX {
-    static let TopColor = UIColor(red: 179 / 255, green: 83 / 255, blue: 253 / 255, alpha: 1)
-    static let BottomColor = UIColor(red: 146 / 255, green: 16 / 255, blue: 253, alpha: 1)
+    static let BackgroundColor = UIColor.Photon.Purple60
 
     // The amount of pixels the toggle button will expand over the normal size. This results in the larger -> contract animation.
     static let ExpandDelta: CGFloat = 5
@@ -83,7 +82,7 @@ class ToggleButton: UIButton {
     lazy fileprivate var backgroundView: UIView = {
         let view = UIView()
         view.isUserInteractionEnabled = false
-        view.layer.addSublayer(self.gradientLayer)
+        view.layer.addSublayer(self.backgroundLayer)
         return view
     }()
 
@@ -92,11 +91,11 @@ class ToggleButton: UIButton {
         return circle
     }()
 
-    lazy fileprivate var gradientLayer: CAGradientLayer = {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [UX.TopColor.cgColor, UX.BottomColor.cgColor]
-        gradientLayer.mask = self.maskShapeLayer
-        return gradientLayer
+    lazy fileprivate var backgroundLayer: CALayer = {
+        let backgroundLayer = CALayer()
+        backgroundLayer.backgroundColor = UX.BackgroundColor.cgColor
+        backgroundLayer.mask = self.maskShapeLayer
+        return backgroundLayer
     }()
 
     override init(frame: CGRect) {
@@ -112,9 +111,9 @@ class ToggleButton: UIButton {
 
         // Make the gradient larger than normal to allow the mask transition to show when it blows up
         // a little larger than the resting size
-        gradientLayer.bounds = backgroundView.frame.insetBy(dx: -UX.ExpandDelta, dy: -UX.ExpandDelta)
+        backgroundLayer.bounds = backgroundView.frame.insetBy(dx: -UX.ExpandDelta, dy: -UX.ExpandDelta)
         maskShapeLayer.bounds = backgroundView.frame
-        gradientLayer.position = CGPoint(x: zeroFrame.midX, y: zeroFrame.midY)
+        backgroundLayer.position = CGPoint(x: zeroFrame.midX, y: zeroFrame.midY)
         maskShapeLayer.position = CGPoint(x: zeroFrame.midX, y: zeroFrame.midY)
 
         updateMaskPathForSelectedState(isSelected)

@@ -6,31 +6,32 @@ import UIKit
 import Shared
 
 private struct ReaderModeStyleViewControllerUX {
+    // TODO Erica can't find this to visually test
     static let RowHeight = 50
 
     static let Width = 270
     static let Height = 4 * RowHeight
 
-    static let FontTypeRowBackground = UIColor(rgb: 0xfbfbfb)
+    static let FontTypeRowBackground = UIColor.Photon.Grey10
 
-    static let FontTypeTitleSelectedColor = UIColor(rgb: 0x333333)
-    static let FontTypeTitleNormalColor = UIColor.lightGray // TODO THis needs to be 44% of 0x333333
+    static let FontTypeTitleSelectedColor = UIColor.Photon.Grey70
+    static let FontTypeTitleNormalColor = UIColor.Photon.Grey40
 
-    static let FontSizeRowBackground = UIColor(rgb: 0xf4f4f4)
-    static let FontSizeLabelColor = UIColor(rgb: 0x333333)
-    static let FontSizeButtonTextColorEnabled = UIColor(rgb: 0x333333)
-    static let FontSizeButtonTextColorDisabled = UIColor.lightGray // TODO THis needs to be 44% of 0x333333
+    static let FontSizeRowBackground = UIColor.Photon.Grey20
+    static let FontSizeLabelColor = UIColor.Photon.Grey70
+    static let FontSizeButtonTextColorEnabled = UIColor.Photon.Grey70
+    static let FontSizeButtonTextColorDisabled = UIColor.Photon.Grey40
 
-    static let ThemeRowBackgroundColor = UIColor.white
-    static let ThemeTitleColorLight = UIColor(rgb: 0x333333)
-    static let ThemeTitleColorDark = UIColor.white
-    static let ThemeTitleColorSepia = UIColor(rgb: 0x333333)
-    static let ThemeBackgroundColorLight = UIColor.white
-    static let ThemeBackgroundColorDark = UIColor(rgb: 0x333333)
-    static let ThemeBackgroundColorSepia = UIColor(rgb: 0xF0E6DC)
+    static let ThemeRowBackgroundColor = UIColor.Photon.White100
+    static let ThemeTitleColorLight = UIColor.Photon.Grey70
+    static let ThemeTitleColorDark = UIColor.Photon.White100
+    static let ThemeTitleColorSepia = UIColor.Photon.Grey70
+    static let ThemeBackgroundColorLight = UIColor.Photon.White100
+    static let ThemeBackgroundColorDark = UIColor.Photon.Grey70
+    static let ThemeBackgroundColorSepia = UIColor.Defaults.LightBeige
 
-    static let BrightnessRowBackground = UIColor(rgb: 0xf4f4f4)
-    static let BrightnessSliderTintColor = UIColor(rgb: 0xe66000)
+    static let BrightnessRowBackground = UIColor.Photon.Grey20
+    static let BrightnessSliderTintColor = UIColor.Photon.Orange60
     static let BrightnessSliderWidth = 140
     static let BrightnessIconOffset = 10
 }

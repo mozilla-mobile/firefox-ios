@@ -7,7 +7,7 @@ import Shared
 import Storage
 
 private struct ActivityStreamHighlightCellUX {
-    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x353535)
+    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey70
     static let BorderWidth: CGFloat = 0.5
     static let CellSideOffset = 20
     static let TitleLabelOffset = 2
@@ -15,10 +15,10 @@ private struct ActivityStreamHighlightCellUX {
     static let SiteImageViewSize = CGSize(width: 99, height: UIDevice.current.userInterfaceIdiom == .pad ? 120 : 90)
     static let StatusIconSize = 12
     static let FaviconSize = CGSize(width: 45, height: 45)
-    static let DescriptionLabelColor = UIColor(rgb: 0x919191) // Not found in Photon colors
+    static let DescriptionLabelColor = UIColor.Photon.Grey50
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
-    static let BorderColor = UIColor(white: 0, alpha: 0.1)
+    static let BorderColor = UIColor.Photon.Grey30
 }
 
 class ActivityStreamHighlightCell: UICollectionViewCell {
@@ -205,7 +205,7 @@ class HighlightIntroCell: UICollectionViewCell {
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
-        label.textColor = UIColor.darkGray
+        label.textColor = UIColor.Photon.Grey60
         label.numberOfLines = 0
         return label
     }()

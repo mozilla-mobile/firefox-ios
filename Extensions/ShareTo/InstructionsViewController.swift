@@ -8,8 +8,8 @@ import SnapKit
 private struct InstructionsViewControllerUX {
     static let TopPadding = CGFloat(20)
     static let TextFont = UIFont.systemFont(ofSize: UIFont.labelFontSize)
-    static let TextColor = UIColor(rgb: 0x555555)
-    static let LinkColor = UIColor.blue
+    static let TextColor = UIColor.Photon.Grey60
+    static let LinkColor = UIColor.Photon.Blue60
 }
 
 protocol InstructionsViewControllerDelegate: class {
@@ -75,7 +75,7 @@ class InstructionsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         edgesForExtendedLayout = []
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.Photon.White100
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", tableName: "SendTo", comment: "Close button in top navigation bar"), style: .done, target: self, action: #selector(close))
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "InstructionsViewController.navigationItem.leftBarButtonItem"

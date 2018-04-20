@@ -19,9 +19,9 @@ struct UX {
     static let rowInset: CGFloat = 16
     static let pageInfoRowLeftInset = UX.rowInset + 6
     static let pageInfoLineSpacing: CGFloat = 2
-    static let doneLabelBackgroundColor = UIColor(red: 76 / 255.0, green: 158 / 255.0, blue: 1.0, alpha: 1.0)
+    static let doneLabelBackgroundColor = UIColor.Photon.Blue40
     static let doneLabelFont = UIFont.boldSystemFont(ofSize: 17)
-    static let separatorColor = UIColor(white: CGFloat(205.0/255.0), alpha: 1.0)
+    static let separatorColor = UIColor.Photon.Grey30
     static let baseFont = UIFont.systemFont(ofSize: 15)
     static let actionRowTextAndIconColor = UIColor.Photon.Grey80
 }
