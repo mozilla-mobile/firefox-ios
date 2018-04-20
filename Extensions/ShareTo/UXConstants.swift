@@ -9,7 +9,7 @@ struct UX {
     static let durationToShowDoneDialog: TimeInterval = UX.doneDialogAnimationDuration + 0.8
     static let alphaForFullscreenOverlay: CGFloat = 0.3
     static let dialogCornerRadius: CGFloat = 8
-    static let topViewHeight = 320
+    static let topViewHeight = 364
     static let topViewWidth = 345
     static let viewHeightForDoneState = 170
     static let pageInfoRowHeight = 64
