@@ -15,3 +15,5 @@ rome list --missing --platform ios | awk '{print $1}' | xargs carthage update --
 # upload what is missing
 rome list --missing --platform ios | awk '{print $1}' | xargs rome upload --platform ios
 
+# Fuzi doesn't work with Rome, so it is ignored and built
+carthage update --platform ios Fuzi 

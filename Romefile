@@ -3,6 +3,7 @@
 
 [IgnoreMap]
   xcconfigs = xcconfigs
+  Fuzi = Fuzi
 
 [RepositoryMap]
   telemetry-ios = Telemetry
