@@ -108,6 +108,13 @@ class BrowserViewController: UIViewController {
     var topTabsViewController: TopTabsViewController?
     let topTabsContainer = UIView()
 
+    // Keep track of allowed `URLRequest`s from `webView(_:decidePolicyFor:decisionHandler:)` so
+    // that we can obtain the originating `URLRequest` when a `URLResponse` is received. This will
+    // allow us to re-trigger the `URLRequest` if the user requests a file to be downloaded.
+    var pendingRequests = [String : URLRequest]()
+
+    let downloadQueue = DownloadQueue()
+
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
@@ -153,6 +160,7 @@ class BrowserViewController: UIViewController {
         screenshotHelper = ScreenshotHelper(controller: self)
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
+        downloadQueue.delegate = self
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -2024,29 +2032,6 @@ extension BrowserViewController: WKUIDelegate {
         }
 
         return false
-    }
-
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-        let helperForURL = OpenIn.helperForResponse(navigationResponse.response)
-        if navigationResponse.canShowMIMEType {
-            if let openInHelper = helperForURL {
-                addViewForOpenInHelper(openInHelper)
-            }
-            decisionHandler(WKNavigationResponsePolicy.allow)
-            return
-        }
-
-        guard var openInHelper = helperForURL else {
-            let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
-            ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.url!, inWebView: webView)
-            return decisionHandler(WKNavigationResponsePolicy.allow)
-        }
-
-        if openInHelper.openInView == nil {
-            openInHelper.openInView = navigationToolbar.menuButton
-        }
-        openInHelper.open()
-        decisionHandler(WKNavigationResponsePolicy.cancel)
     }
 
     func webViewDidClose(_ webView: WKWebView) {

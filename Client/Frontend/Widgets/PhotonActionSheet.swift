@@ -25,10 +25,16 @@ private struct PhotonActionSheetUX {
 }
 
 public struct PhotonActionSheetItem {
+    public enum IconAlignment {
+        case left
+        case right
+    }
+
     public fileprivate(set) var title: String
     public fileprivate(set) var text: String?
     public fileprivate(set) var iconString: String?
     public fileprivate(set) var iconURL: URL?
+    public fileprivate(set) var iconAlignment: IconAlignment
 
     public var isEnabled: Bool // Used by toggles like nightmode to switch tint color
     public fileprivate(set) var accessory: PhotonActionSheetCellAccessoryType
@@ -36,10 +42,11 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
     
-    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
         self.iconURL = iconURL
+        self.iconAlignment = iconAlignment
         self.isEnabled = isEnabled
         self.accessory = accessory
         self.handler = handler
@@ -91,18 +98,20 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    init(site: Site, actions: [PhotonActionSheetItem]) {
+    init(site: Site, actions: [PhotonActionSheetItem], closeButtonTitle: String = Strings.CloseButtonTitle) {
         self.site = site
         self.actions = [actions]
         self.style = .centered
         super.init(nibName: nil, bundle: nil)
+        self.closeButton.setTitle(closeButtonTitle, for: .normal)
     }
 
-    init(title: String? = nil, actions: [[PhotonActionSheetItem]], style presentationStyle: UIModalPresentationStyle) {
+    init(title: String? = nil, actions: [[PhotonActionSheetItem]], closeButtonTitle: String = Strings.CloseButtonTitle, style presentationStyle: UIModalPresentationStyle) {
         self.actions = actions
         self.style = presentationStyle == .popover ? .popover : .bottom
         super.init(nibName: nil, bundle: nil)
         self.title = title
+        self.closeButton.setTitle(closeButtonTitle, for: .normal)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -633,7 +642,16 @@ private class PhotonActionSheetCell: UITableViewCell {
                 self.statusIcon.image = self.statusIcon.image?.createScaled(CGSize(width: 30, height: 30))
             }
             if statusIcon.superview == nil {
-                stackView.insertArrangedSubview(statusIcon, at: 0)
+                if action.iconAlignment == .right {
+                    stackView.addArrangedSubview(statusIcon)
+                } else {
+                    stackView.insertArrangedSubview(statusIcon, at: 0)
+                }
+            } else {
+                if action.iconAlignment == .right {
+                    statusIcon.removeFromSuperview()
+                    stackView.addArrangedSubview(statusIcon)
+                }
             }
         } else {
             statusIcon.removeFromSuperview()

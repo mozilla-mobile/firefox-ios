@@ -27,49 +27,58 @@ enum MimeType: String {
 }
 
 protocol OpenInHelper {
-    init?(response: URLResponse)
+    init?(request: URLRequest?, response: URLResponse)
     var openInView: UIView? { get set }
     func open()
 }
 
 struct OpenIn {
-    static let helpers: [OpenInHelper.Type] = [OpenPdfInHelper.self, OpenPassBookHelper.self, ShareFileHelper.self]
+    static let helpers: [OpenInHelper.Type] = [OpenPdfInHelper.self, OpenPassBookHelper.self, DownloadHelper.self]
     
-    static func helperForResponse(_ response: URLResponse) -> OpenInHelper? {
-        return helpers.compactMap { $0.init(response: response) }.first
+    static func helperForRequest(_ request: URLRequest?, response: URLResponse) -> OpenInHelper? {
+        return helpers.compactMap { $0.init(request: request, response: response) }.first
     }
 }
 
-class ShareFileHelper: NSObject, OpenInHelper {
+class DownloadHelper: NSObject, OpenInHelper {
     var openInView: UIView?
 
-    fileprivate var url: URL
-    var pathExtension: String?
+    fileprivate let request: URLRequest
+    fileprivate let preflightResponse: URLResponse
 
-    required init?(response: URLResponse) {
-        guard let MIMEType = response.mimeType, !(MIMEType == MimeType.PASS.rawValue || MIMEType == MimeType.PDF.rawValue),
-            let responseURL = response.url else { return nil }
-        url = (responseURL as NSURL) as URL
-        super.init()
+    required init?(request: URLRequest?, response: URLResponse) {
+        guard let request = request, let mimeType = response.mimeType, !(mimeType == MimeType.PASS.rawValue || mimeType == MimeType.PDF.rawValue) else {
+            return nil
+        }
+
+        self.request = request
+        self.preflightResponse = response
     }
 
     func open() {
-        let alertController = UIAlertController(
-            title: Strings.OpenInDownloadHelperAlertTitle,
-            message: Strings.OpenInDownloadHelperAlertMessage,
-            preferredStyle: .alert)
-        alertController.addAction( UIAlertAction(title: Strings.OpenInDownloadHelperAlertCancel, style: .cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .default) { (action) in
-            let objectsToShare = [self.url]
-            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-            if let sourceView = self.openInView, let popoverController = activityVC.popoverPresentationController {
-                popoverController.sourceView = sourceView
-                popoverController.sourceRect = CGRect(origin: CGPoint(x: sourceView.bounds.midX, y: sourceView.bounds.maxY), size: .zero)
-                popoverController.permittedArrowDirections = .up
-            }
-            UIApplication.shared.keyWindow?.rootViewController?.present(activityVC, animated: true, completion: nil)
-        })
-        UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true, completion: nil)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let browserViewController = appDelegate.browserViewController, let host = request.url?.host else {
+            return
+        }
+
+        let download = Download(preflightResponse: preflightResponse, request: request)
+
+        let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
+
+        let filenameItem: PhotonActionSheetItem
+        if let expectedSize = expectedSize {
+            let expectedSizeAndHost = "\(expectedSize) — \(host)"
+            filenameItem = PhotonActionSheetItem(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
+        } else {
+            filenameItem = PhotonActionSheetItem(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
+        }
+
+        let downloadFileItem = PhotonActionSheetItem(title: Strings.OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _ in
+            browserViewController.downloadQueue.enqueueDownload(download)
+        }
+
+        let actions = [[filenameItem], [downloadFileItem]]
+
+        browserViewController.presentSheetWith(actions: actions, on: browserViewController, from: browserViewController.urlBar, closeButtonTitle: Strings.CancelString, suppressPopover: true)
     }
 }
 
@@ -78,7 +87,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
 
     fileprivate var url: URL
 
-    required init?(response: URLResponse) {
+    required init?(request: URLRequest?, response: URLResponse) {
         guard let MIMEType = response.mimeType, MIMEType == MimeType.PASS.rawValue && PKAddPassesViewController.canAddPasses(),
             let responseURL = response.url else { return nil }
         url = responseURL
@@ -126,7 +135,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
 
     fileprivate var filepath: URL?
 
-    required init?(response: URLResponse) {
+    required init?(request: URLRequest?, response: URLResponse) {
         guard let MIMEType = response.mimeType, MIMEType == MimeType.PDF.rawValue && UIApplication.shared.canOpenURL(URL(string: "itms-books:")!),
             let responseURL = response.url else { return nil }
         url = responseURL
