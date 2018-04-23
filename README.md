@@ -8,13 +8,13 @@ This branch (master)
 
 This branch is for mainline development that will ship in *v11.0*.
 
-This branch only works with Xcode 9.2 and supports iOS 10, and 11.
+This branch only works with Xcode 9.3 and supports iOS 10, and 11.
 
-This branch is written in Swift 3.2.
+This branch is written in Swift 4
 
 Please make sure you aim your pull requests in the right direction.
 
-For bug fixes and features for the upcoming v8.0 release, please see the *v8.x* branch.
+For bug fixes and features for the upcoming v12.0 release, please see the *v12.x* branch. (Which may not exist yet)
 
 Getting involved
 ----------------
@@ -35,7 +35,7 @@ https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScroll
 Building the code
 -----------------
 
-> __As of Sept. 16, 2016, this project requires Xcode 8.__
+> __As of April 2018, this project requires Xcode 9.3.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install Carthage
