@@ -427,7 +427,7 @@ extension PhotonActionSheetProtocol {
         }
 
         let action: ((PhotonActionSheetItem) -> Void) = { action in
-            let fxaParams = FxALaunchParams(query: ["entrypoint": "ios-browsermenu"])
+            let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
             showFxA(fxaParams)
         }
 

@@ -1715,12 +1715,12 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     }
 
     func homePanelViewControllerDidRequestToCreateAccount(_ homePanelViewController: HomePanelViewController) {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "ios-homepanel"])
+        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
         presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
     }
 
     func homePanelViewControllerDidRequestToSignIn(_ homePanelViewController: HomePanelViewController) {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "ios-homepanel"])
+        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
         presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
     }
 
@@ -2341,7 +2341,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             }
             
             if requestToLogin {
-                let fxaParams = FxALaunchParams(query: ["entrypoint": "ios-onboarding"])
+                let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
                 self.presentSignInViewController(fxaParams)
             }
         }
