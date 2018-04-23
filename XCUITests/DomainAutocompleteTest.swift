@@ -161,7 +161,7 @@ class DomainAutocompleteTest: BaseTestCase {
 
     func testDeletingCharsUpdateTheResults() {
         let url1 = ["url" : "git.es", "label" : "git.es - Dominio premium en venta"]
-        let url2 = ["url" : "github.com", "label" : "The world's leading software development platform · GitHub"]
+        let url2 = ["url" : "github.com", "label" : "The world’s leading software development platform · GitHub"]
 
         navigator.openURL(url1["url"]!)
         waitUntilPageLoad()
@@ -170,7 +170,7 @@ class DomainAutocompleteTest: BaseTestCase {
         navigator.goto(URLBarOpen)
         app.typeText("gith")
 
-        waitforExistence(app.tables["SiteTable"].staticTexts[url2["label"]!])
+        waitforExistence(app.tables["SiteTable"].cells.staticTexts[url2["label"]!])
         // There should be only one matching entry
         XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
         XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
