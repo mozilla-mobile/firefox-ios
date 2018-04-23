@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 chruby 2.3.1
-bundle install  
-bundle exec danger --fail-on-errors=false  
+bundle install
+bundle exec danger --fail-on-errors=false
 
 #
 # Add our Adjust keys to the build depending on the scheme. We use the sandbox for beta so
@@ -17,14 +17,6 @@ elif [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
   echo "Setting Adjust environment to PRODUCTION for $BUDDYBUILD_SCHEME"
   /usr/libexec/PlistBuddy -c "Set AdjustAppToken $ADJUST_KEY_PRODUCTION" "Client/Info.plist"
   /usr/libexec/PlistBuddy -c "Set AdjustEnvironment production" "Client/Info.plist"
-fi
-
-#
-# Enable File Sharing on all builds except release
-#
-
-if [ "$BUDDYBUILD_SCHEME" != "Firefox" ]; then
-  /usr/libexec/PlistBuddy -c "Add UIFileSharingEnabled bool true" "Client/Info.plist"
 fi
 
 #
@@ -62,4 +54,3 @@ fi
 #
 
 agvtool new-version -all "$BUDDYBUILD_BUILD_NUMBER"
-
