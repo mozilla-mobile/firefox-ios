@@ -8,7 +8,7 @@ class FindInPageTests: BaseTestCase {
     private func openFindInPageFromMenu() {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
-        waitforExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        navigator.goto(PageOptionsMenu)
         navigator.goto(FindInPage)
 
         waitforExistence(app.buttons["FindInPage.find_next"])
@@ -72,12 +72,10 @@ class FindInPageTests: BaseTestCase {
     func testFindInPageTwoWordsSearchLargeDoc() {
         userState.url = "http://localhost:6571/find-in-page-test.html"
         openFindInPageFromMenu()
+
         // Enter some text to start finding
         app.textFields[""].typeText("The Book of")
-
-        // Once there are matches, test previous/next buttons
-        waitforExistence(app.staticTexts["1/500+"])
-        XCTAssertTrue(app.staticTexts["1/500+"].exists)
+        XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
     }
 
     func testFindInPageResultsPageShowHideContent() {
