@@ -12,6 +12,8 @@ let urlExample = "example.com"
 let urlLabelExample = "Example Domain"
 let urlValueExample = "example"
 
+let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
+
 class TopTabsTest: BaseTestCase {
     func testAddTabFromSettings() {
         navigator.createNewTab()
@@ -109,9 +111,10 @@ class TopTabsTest: BaseTestCase {
 
     // This test is disabled for iPad because the toast menu is not shown there
     func testSwitchBetweenTabsToastButton() {
-        navigator.openURL(url)
+        navigator.openURL(toastUrl["url"]!)
         waitUntilPageLoad()
-        app.webViews.links["Rust"].press(forDuration: 1)
+
+        app.webViews.links.staticTexts[toastUrl["link"]!].press(forDuration: 1)
         waitforExistence(app.sheets.buttons["Open in New Tab"])
         app.sheets.buttons["Open in New Tab"].press(forDuration: 1)
         waitforExistence(app.buttons["Switch"])
@@ -119,17 +122,17 @@ class TopTabsTest: BaseTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "rust")
-        XCTAssertTrue(app.staticTexts["Rust language"].exists)
+        waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
+        XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
 
 
         // Go to Private mode and do the same
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(url)
+        navigator.openURL(toastUrl["url"]!)
         waitUntilPageLoad()
-        app.webViews.links["Rust"].press(forDuration: 1)
+        app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
         waitforExistence(app.sheets.buttons["Open in New Private Tab"])
         app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
         waitforExistence(app.buttons["Switch"])
@@ -137,8 +140,8 @@ class TopTabsTest: BaseTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "rust")
-        XCTAssertTrue(app.staticTexts["Rust language"].exists)
+        waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
+        XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
         let numPrivTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numPrivTab)
     }
