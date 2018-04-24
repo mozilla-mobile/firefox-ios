@@ -49,6 +49,7 @@ class PhotonActionSheetTest: BaseTestCase {
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
 
+    // Test disabled due to new implementation Bug 1449708 - new share sheet
     func testSendToDeviceFromShareOption() {
         // Open and Wait to see the Share options sheet
         navigator.browserPerformAction(.shareOption)
