@@ -1555,10 +1555,20 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
-            self.tabManager.addTabAndSelect(isPrivate: false)
+            if NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
+                self.openBlankNewTab(focusLocationField: true, isPrivate: false)
+            }
+            else{
+                self.openBlankNewTab(focusLocationField: false, isPrivate: false)
+            }
         }))
         controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
-            self.tabManager.addTabAndSelect(isPrivate: true)
+            if NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
+                self.openBlankNewTab(focusLocationField: true, isPrivate: true)
+            }
+            else{
+                self.openBlankNewTab(focusLocationField: false, isPrivate: true)
+            }
         }))
         controller.addAction(UIAlertAction(title: Strings.CloseTabTitle, style: .destructive, handler: { _ in
             if let tab = self.tabManager.selectedTab {
