@@ -13,7 +13,7 @@ class BrowsingPDFTests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
 
         // Swipe Up and Down
-        let element = app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
+        let element = app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element
         element.swipeUp()
         waitforExistence(app.staticTexts["2 of 5"])
 
