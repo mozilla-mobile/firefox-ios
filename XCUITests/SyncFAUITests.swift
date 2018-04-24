@@ -7,6 +7,26 @@ import XCTest
 class SyncUITests: BaseTestCase {
     func testUIFromSettings () {
         navigator.goto(FxASigninScreen)
+        verifyFxASigninScreen()
+    }
+
+    func testSyncUIFromBrowserTabMenu() {
+        // Check menu available from HomeScreenPanel
+        navigator.goto(BrowserTabMenu)
+        waitforExistence(app.tables["Context Menu"].cells["menu-sync"])
+        navigator.goto(FxASigninScreen)
+        verifyFxASigninScreen()
+
+        // Check menu available from a website
+        navigator.openURL("mozilla.org")
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        waitforExistence(app.tables["Context Menu"].cells["menu-sync"])
+        navigator.goto(FxASigninScreen)
+        verifyFxASigninScreen()
+    }
+
+    private func verifyFxASigninScreen() {
         waitforExistence(app.webViews.staticTexts["Sign in"])
         XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
