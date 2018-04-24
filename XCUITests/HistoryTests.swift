@@ -38,6 +38,8 @@ class HistoryTests: BaseTestCase {
     func testClearHistoryFromSettings() {
         // Browse to have an item in history list
         navigator.openURL(webpage["url"]!)
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_History)
         waitforExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
         XCTAssertTrue(app.tables.cells.staticTexts[webpage["label"]!].exists)
@@ -165,13 +167,15 @@ class HistoryTests: BaseTestCase {
 
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(HistoryRecentlyClosed)
+        navigator.goto(HomePanel_History)
+        XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitforNoExistence(app.tables["Recently Closed Tabs List"])
 
         // Now verify that on regular mode the recently closed list is empty too
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(HomePanelsScreen)
-        navigator.goto(HistoryRecentlyClosed)
+        navigator.goto(HomePanel_History)
+        XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitforNoExistence(app.tables["Recently Closed Tabs List"])
     }
 }
