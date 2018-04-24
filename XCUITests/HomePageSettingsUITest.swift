@@ -66,9 +66,14 @@ class HomePageSettingsUITests: BaseTestCase {
         app.cells["Use Copied Link"].tap()
 
         // Check that the webpage has been correclty copied into the correct field
-        let value = app.textFields["HomePageSettingTextField"].value
-        XCTAssertEqual(value as? String, "https://\(websiteUrl1)/en-US/",
-                       "The webpage typed does not match with the one saved")
+        let value = app.textFields["HomePageSettingTextField"].value as! String
+
+        if ((value == "https://\(websiteUrl1)/en-US/")) {
+            XCTAssertEqual(value, "https://\(websiteUrl1)/en-US/",
+                "The webpage typed does not match with the one saved")
+        } else {
+            XCTAssertTrue(value.contains("https://\(websiteUrl1)/en-US/?v="), "The webpage typed does not match with the one saved")
+        }
     }
 
     func testDisabledClipboard() {
