@@ -12,14 +12,16 @@ private let log = Logger.syncLogger
 
 private let StorageVersionCurrent = 5
 
-// Names of collections for which a synchronizer is implemented locally.
-private let LocalEngines: [String] = [
+// Names of collections that can be enabled/disabled locally.
+public let TogglableEngines: [String] = [
     "bookmarks",
-    "clients",
     "history",
-    "passwords",
     "tabs",
+    "passwords"
 ]
+
+// Names of collections for which a synchronizer is implemented locally.
+private let LocalEngines: [String] = TogglableEngines + ["clients"]
 
 // Names of collections which will appear in a default meta/global produced locally.
 // Map collection name to engine version.  See http://docs.services.mozilla.com/sync/objectformats.html.
@@ -40,22 +42,40 @@ private let DefaultEngines: [String: Int] = [
 // meta/global produced locally.
 private let DefaultDeclined: [String] = [String]()
 
-// public for testing.
-public func createMetaGlobalWithEngineConfiguration(_ engineConfiguration: EngineConfiguration) -> MetaGlobal {
+public func computeNewEngines(_ engineConfiguration: EngineConfiguration, enginesEnablements: [String: Bool]?) -> (engines: [String: EngineMeta], declined: [String]) {
+    var enabled: Set<String> = Set(engineConfiguration.enabled)
+    var declined: Set<String> = Set(engineConfiguration.declined)
     var engines: [String: EngineMeta] = [:]
-    for engine in engineConfiguration.enabled {
+
+    if let enginesEnablements = enginesEnablements {
+        let enabledLocally = Set(enginesEnablements.filter { $0.value }.map { $0.key })
+        let declinedLocally = Set(enginesEnablements.filter { !$0.value }.map { $0.key })
+        enabled.subtract(declinedLocally)
+        declined.subtract(enabledLocally)
+        enabled.formUnion(enabledLocally)
+        declined.formUnion(declinedLocally)
+    }
+
+    for engine in enabled {
         // We take this device's version, or, if we don't know the correct version, 0.  Another client should recognize
         // the engine, see an old version, wipe and start again.
         // TODO: this client does not yet do this wipe-and-update itself!
         let version = DefaultEngines[engine] ?? 0
         engines[engine] = EngineMeta(version: version, syncID: Bytes.generateGUID())
     }
-    return MetaGlobal(syncID: Bytes.generateGUID(), storageVersion: StorageVersionCurrent, engines: engines, declined: engineConfiguration.declined)
+
+    return (engines: engines, declined: Array(declined))
 }
 
-public func createMetaGlobal() -> MetaGlobal {
+// public for testing.
+public func createMetaGlobalWithEngineConfiguration(_ engineConfiguration: EngineConfiguration, enginesEnablements: [String: Bool]?) -> MetaGlobal {
+    let (engines, declined) = computeNewEngines(engineConfiguration, enginesEnablements: enginesEnablements)
+    return MetaGlobal(syncID: Bytes.generateGUID(), storageVersion: StorageVersionCurrent, engines: engines, declined: declined)
+}
+
+public func createMetaGlobal(enginesEnablements: [String: Bool]?) -> MetaGlobal {
     let engineConfiguration = EngineConfiguration(enabled: Array(DefaultEngines.keys), declined: DefaultDeclined)
-    return createMetaGlobalWithEngineConfiguration(engineConfiguration)
+    return createMetaGlobalWithEngineConfiguration(engineConfiguration, enginesEnablements: enginesEnablements)
 }
 
 public typealias TokenSource = () -> Deferred<Maybe<TokenServerToken>>
@@ -73,10 +93,22 @@ open class SyncStateMachine {
     var stateLabelsSeen = [SyncStateLabel: Bool]()
     var stateLabelSequence = [SyncStateLabel]()
 
+    let stateLabelsAllowed: Set<SyncStateLabel>
+
     let scratchpadPrefs: Prefs
 
-    public init(prefs: Prefs) {
+    /// Use this set of states to constrain the state machine to attempt the barest
+    /// minimum to get to Ready. This is suitable for extension uses. If it is not possible,
+    /// then no destructive or expensive actions are taken (e.g. total HTTP requests,
+    /// duration, records processed, database writes, fsyncs, blanking any local collections)
+    public static let OptimisticStates = Set(SyncStateLabel.optimisticValues)
+
+    /// The default set of states that the state machine is allowed to use.
+    public static let AllStates = Set(SyncStateLabel.allValues)
+
+    public init(prefs: Prefs, allowingStates labels: Set<SyncStateLabel> = SyncStateMachine.AllStates) {
         self.scratchpadPrefs = prefs.branch("scratchpad")
+        self.stateLabelsAllowed = labels
     }
 
     open class func clearStateFromPrefs(_ prefs: Prefs) {
@@ -102,21 +134,55 @@ open class SyncStateMachine {
             return deferMaybe(StateMachineCycleError())
         }
 
+        guard stateLabelsAllowed.contains(state.label) else {
+            return deferMaybe(DisallowedStateError(state.label, allowedStates: stateLabelsAllowed))
+        }
+
         return state.advance() >>== self.advanceFromState
     }
 
     open func toReady(_ authState: SyncAuthState) -> ReadyDeferred {
         let token = authState.token(Date.now(), canBeExpired: false)
-        return chainDeferred(token, f: { (token, kB) in
+        return chainDeferred(token, f: { (token, kSync) in
             log.debug("Got token from auth state.")
             if Logger.logPII {
                 log.debug("Server is \(token.api_endpoint).")
             }
-            let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB))
+            let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync))
             if prior == nil {
                 log.info("No persisted Sync state. Starting over.")
             }
-            let scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs)
+            var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKSync(kSync), persistingTo: self.scratchpadPrefs)
+
+            // Take the scratchpad and add the fxaDeviceId from the state, and hashedUID from the token
+            let b = Scratchpad.Builder(p: scratchpad)
+            if let deviceID = authState.deviceID {
+                b.fxaDeviceId = deviceID
+            } else {
+                // Either deviceRegistration hasn't occurred yet (our bug) or
+                // FxA has given us an UnknownDevice error.
+                log.warning("Device registration has not taken place before sync.")
+            }
+            b.hashedUID = token.hashedFxAUID
+
+            if let enginesEnablements = authState.enginesEnablements,
+               !enginesEnablements.isEmpty {
+                b.enginesEnablements = enginesEnablements
+            }
+
+            if let clientName = authState.clientName {
+                b.clientName = clientName
+            }
+
+            // Detect if we've changed anything in our client record from the last time we synced…
+            let ourClientUnchanged = (b.fxaDeviceId == scratchpad.fxaDeviceId)
+
+            // …and if so, trigger a reset of clients.
+            if !ourClientUnchanged {
+                b.localCommands.insert(LocalCommand.resetEngine(engine: "clients"))
+            }
+
+            scratchpad = b.build()
 
             log.info("Advancing to InitialWithLiveToken.")
             let state = InitialWithLiveToken(scratchpad: scratchpad, token: token)
@@ -139,6 +205,7 @@ public enum SyncStateLabel: String {
     case InitialWithLiveTokenAndInfo = "initialWithLiveTokenAndInfo"
     case ResolveMetaGlobalVersion = "resolveMetaGlobalVersion"
     case ResolveMetaGlobalContent = "resolveMetaGlobalContent"
+    case NeedsFreshMetaGlobal = "needsFreshMetaGlobal"
     case NewMetaGlobal = "newMetaGlobal"
     case HasMetaGlobal = "hasMetaGlobal"
     case NeedsFreshCryptoKeys = "needsFreshCryptoKeys"
@@ -160,6 +227,7 @@ public enum SyncStateLabel: String {
         InitialWithExpiredTokenAndInfo,
         InitialWithLiveToken,
         InitialWithLiveTokenAndInfo,
+        NeedsFreshMetaGlobal,
         ResolveMetaGlobalVersion,
         ResolveMetaGlobalContent,
         NewMetaGlobal,
@@ -178,6 +246,17 @@ public enum SyncStateLabel: String {
         SyncIDChanged,
         RemoteUpgradeRequired,
         ClientUpgradeRequired,
+    ]
+
+    // This is the list of states needed to get to Ready, or failing.
+    // This is useful in circumstances where it is important to conserve time and/or battery, and failure
+    // to timely sync is acceptable.
+    static let optimisticValues: [SyncStateLabel] = [
+        InitialWithLiveToken,
+        InitialWithLiveTokenAndInfo,
+        HasMetaGlobal,
+        HasFreshCryptoKeys,
+        Ready,
     ]
 }
 
@@ -233,8 +312,8 @@ open class BaseSyncState: SyncState {
         log.info("Inited \(self.label.rawValue)")
     }
 
-    open func synchronizer<T: Synchronizer>(_ synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs) -> T {
-        return T(scratchpad: self.scratchpad, delegate: delegate, basePrefs: prefs)
+    open func synchronizer<T: Synchronizer>(_ synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs, why: SyncReason) -> T {
+        return T(scratchpad: self.scratchpad, delegate: delegate, basePrefs: prefs, why: why)
     }
 
     // This isn't a convenience initializer 'cos subclasses can't call convenience initializers.
@@ -271,7 +350,13 @@ open class BaseSyncStateWithInfo: BaseSyncState {
 /*
  * Error types.
  */
-public protocol SyncError: MaybeErrorType {}
+public protocol SyncError: MaybeErrorType, SyncPingFailureFormattable {}
+
+extension SyncError {
+    public var failureReasonName: SyncPingFailureReasonName {
+        return .unexpectedError
+    }
+}
 
 open class UnknownError: SyncError {
     open var description: String {
@@ -324,6 +409,20 @@ open class InvalidKeysError: SyncError {
 
     open var description: String {
         return "Downloaded crypto/keys, but couldn't parse them."
+    }
+}
+
+open class DisallowedStateError: SyncError {
+    let state: SyncStateLabel
+    let allowedStates: Set<SyncStateLabel>
+
+    public init(_ state: SyncStateLabel, allowedStates: Set<SyncStateLabel>) {
+        self.state = state
+        self.allowedStates = allowedStates
+    }
+
+    open var description: String {
+        return "Sync state machine reached \(String(describing: state)) state, which is disallowed. Legal states are: \(String(describing: allowedStates))"
     }
 }
 
@@ -396,17 +495,20 @@ open class ServerConfigurationRequiredError: RecoverableSyncState {
 
     open func advance() -> Deferred<Maybe<SyncState>> {
         let client = self.previousState.client!
-        let s = self.previousState.scratchpad.evolve()
+        let oldScratchpad = self.previousState.scratchpad
+        let enginesEnablements = oldScratchpad.enginesEnablements
+        let s = oldScratchpad.evolve()
                 .setGlobal(nil)
                 .addLocalCommandsFromKeys(nil)
                 .setKeys(nil)
+                .clearEnginesEnablements()
                 .build().checkpoint()
         // Upload a new meta/global ...
         let metaGlobal: MetaGlobal
         if let oldEngineConfiguration = s.engineConfiguration {
-            metaGlobal = createMetaGlobalWithEngineConfiguration(oldEngineConfiguration)
+            metaGlobal = createMetaGlobalWithEngineConfiguration(oldEngineConfiguration, enginesEnablements: enginesEnablements)
         } else {
-            metaGlobal = createMetaGlobal()
+            metaGlobal = createMetaGlobal(enginesEnablements: s.enginesEnablements)
         }
         return client.uploadMetaGlobal(metaGlobal, ifUnmodifiedSince: nil)
             // ... and a new crypto/keys.
@@ -676,12 +778,32 @@ open class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
                 // Drop our cached value and fall through; we'll try to fetch, fail, and
                 // go through the usual failure flow.
                 log.warning("Local meta/global fetched at \(global.timestamp) found, but no meta collection on server. Dropping cached meta/global.")
+                // If we bail because we've been overly optimistic, then we nil out the current (broken)
+                // meta/global. Next time around, we end up in the "No cached meta/global found" branch.
                 self.scratchpad = self.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
             }
         } else {
             log.debug("No cached meta/global found. Fetching fresh meta/global.")
         }
 
+        return deferMaybe(NeedsFreshMetaGlobal.fromState(self))
+    }
+}
+
+/*
+ * We've reached NeedsFreshMetaGlobal somehow, but we haven't yet done anything about it
+ * (e.g. fetch a new one with GET /storage/meta/global ).
+ *
+ * If we don't want to hit the network (e.g. from an extension), we should stop if we get to this state.
+ */
+open class NeedsFreshMetaGlobal: BaseSyncStateWithInfo {
+    open override var label: SyncStateLabel { return SyncStateLabel.NeedsFreshMetaGlobal }
+
+    class func fromState(_ state: BaseSyncStateWithInfo) -> NeedsFreshMetaGlobal {
+        return NeedsFreshMetaGlobal(client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
+    }
+
+    override open func advance() -> Deferred<Maybe<SyncState>> {
         // Fetch.
         return self.client.getMetaGlobal().bind { result in
             if let resp = result.successValue {
@@ -716,6 +838,17 @@ open class HasMetaGlobal: BaseSyncStateWithInfo {
     }
 
     override open func advance() -> Deferred<Maybe<SyncState>> {
+        // Check if we have enabled/disabled some engines.
+        if let enginesEnablements = self.scratchpad.enginesEnablements,
+           let oldMetaGlobal = self.scratchpad.global {
+            let (engines, declined) = computeNewEngines(oldMetaGlobal.value.engineConfiguration(), enginesEnablements: enginesEnablements)
+            let newMetaGlobal = MetaGlobal(syncID: oldMetaGlobal.value.syncID, storageVersion: oldMetaGlobal.value.storageVersion, engines: engines, declined: declined)
+            return self.client.uploadMetaGlobal(newMetaGlobal, ifUnmodifiedSince: oldMetaGlobal.timestamp) >>> {
+                self.scratchpad = self.scratchpad.evolve().clearEnginesEnablements().build().checkpoint()
+                return deferMaybe(NeedsFreshMetaGlobal.fromState(self))
+            }
+        }
+
         // Check if crypto/keys is fresh in the cache already.
         if let keys = self.scratchpad.keys, keys.value.valid {
             if let cryptoModified = self.info.modified("crypto") {
@@ -817,6 +950,14 @@ public protocol EngineStateChanges {
 open class Ready: BaseSyncStateWithInfo {
     open override var label: SyncStateLabel { return SyncStateLabel.Ready }
     let collectionKeys: Keys
+
+    public var hashedFxADeviceID: String {
+        return (scratchpad.fxaDeviceId + token.hashedFxAUID).sha256.hexEncodedString
+    }
+
+    public var engineConfiguration: EngineConfiguration? {
+        return scratchpad.engineConfiguration
+    }
 
     public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys) {
         self.collectionKeys = keys

@@ -6,15 +6,13 @@ import Foundation
 import SwiftKeychainWrapper
 import Shared
 
-let NotificationPasscodeDidRemove   = "NotificationPasscodeDidRemove"
-
 /// Displayed to the user when removing a passcode.
 class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputViewDelegate {
     override init() {
         super.init()
         self.title = AuthenticationStrings.turnOffPasscode
         self.panes = [
-            PasscodePane(title: AuthenticationStrings.enterPasscode),
+            PasscodePane(title: AuthenticationStrings.enterPasscode, passcodeSize: authenticationInfo?.passcode?.count ?? 6),
         ]
     }
     
@@ -50,7 +48,6 @@ class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
 
     fileprivate func removePasscode() {
         KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(nil)
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.post(name: Notification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
+        NotificationCenter.default.post(name: .PasscodeDidRemove, object: nil)
     }
 }

@@ -4,14 +4,13 @@
 
 import Foundation
 import Shared
-import WebImage
+import SDWebImage
 import Storage
 
-struct TopSiteCellUX {
+private struct TopSiteCellUX {
     static let TitleHeight: CGFloat = 20
-    static let TitleBackgroundColor = UIColor(colorLiteralRed: 1, green: 1, blue: 1, alpha: 0.7)
     static let TitleTextColor = UIColor.black
-    static let TitleFont = DynamicFontHelper.defaultHelper.DefaultSmallFont
+    static let TitleFont = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CellCornerRadius: CGFloat = 4
     static let TitleOffset: CGFloat = 5
@@ -19,6 +18,8 @@ struct TopSiteCellUX {
     static let IconSizePercent: CGFloat = 0.8
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
     static let BorderWidth: CGFloat = 0.5
+    static let PinIconSize: CGFloat = 12
+    static let PinColor = UIColor.Photon.Grey60
 }
 
 /*
@@ -31,6 +32,13 @@ class TopSiteItemCell: UICollectionViewCell {
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
+        return imageView
+    }()
+
+    lazy var pinImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage.templateImageNamed("pin_small")
+        imageView.tintColor = TopSiteCellUX.PinColor
         return imageView
     }()
 
@@ -103,12 +111,17 @@ class TopSiteItemCell: UICollectionViewCell {
             make.top.left.right.equalTo(self)
             make.bottom.equalTo(self).inset(TopSiteCellUX.TitleHeight)
         }
-
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         titleBorder.frame = CGRect(x: 0, y: frame.height - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, width: frame.width, height: TopSiteCellUX.BorderWidth)
+
+        imageView.snp.remakeConstraints { make in
+            make.size.equalTo(floor(self.frame.width * TopSiteCellUX.IconSizePercent))
+            make.centerX.equalTo(self)
+            make.centerY.equalTo(self).inset(-TopSiteCellUX.TitleHeight/2)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -121,8 +134,12 @@ class TopSiteItemCell: UICollectionViewCell {
         imageView.image = nil
         imageView.backgroundColor = UIColor.clear
         faviconBG.backgroundColor = UIColor.clear
+        pinImageView.removeFromSuperview()
         imageView.sd_cancelCurrentImageLoad()
         titleLabel.text = ""
+        titleLabel.snp.updateConstraints { make in
+            make.left.equalTo(self).offset(TopSiteCellUX.TitleOffset)
+        }
     }
 
     func configureWithTopSiteItem(_ site: Site) {
@@ -133,22 +150,27 @@ class TopSiteItemCell: UICollectionViewCell {
         } else {
             titleLabel.text = site.tileURL.hostSLD
         }
-        accessibilityLabel = titleLabel.text
-        if let suggestedSite = site as? SuggestedSite {
-            let img = UIImage(named: suggestedSite.faviconImagePath!)
-            imageView.image = img
-            // This is a temporary hack to make amazon/wikipedia have white backrounds instead of their default blacks
-            // Once we remove the old TopSitesPanel we can change the values of amazon/wikipedia to be white instead of black.
-            self.faviconBG.backgroundColor = suggestedSite.backgroundColor.isBlackOrWhite ? UIColor.white : suggestedSite.backgroundColor
-            imageView.backgroundColor = self.faviconBG.backgroundColor
-        } else {
-            imageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url) in
-                if let url = url, url == self?.url {
-                    self?.faviconBG.backgroundColor = color
-                    self?.imageView.backgroundColor = color
-                }
-            })
+
+        // If its a pinned site add a bullet point to the front
+        if let _ = site as? PinnedSite {
+            contentView.addSubview(pinImageView)
+            pinImageView.snp.makeConstraints { make in
+                make.right.equalTo(self.titleLabel.snp.left)
+                make.size.equalTo(TopSiteCellUX.PinIconSize)
+                make.centerY.equalTo(self.titleLabel.snp.centerY)
+            }
+            titleLabel.snp.updateConstraints { make in
+                make.left.equalTo(self).offset(TopSiteCellUX.PinIconSize)
+            }
         }
+
+        accessibilityLabel = titleLabel.text
+        imageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url) in
+            if let url = url, url == self?.url {
+                self?.faviconBG.backgroundColor = color
+                self?.imageView.backgroundColor = color
+            }
+        })
     }
 
 }
@@ -168,7 +190,7 @@ class EmptyTopsiteDecorationCell: UICollectionReusableView {
     }
 }
 
-struct ASHorizontalScrollCellUX {
+private struct ASHorizontalScrollCellUX {
     static let TopSiteCellIdentifier = "TopSiteItemCell"
     static let TopSiteEmptyCellIdentifier = "TopSiteItemEmptyCell"
 
@@ -188,7 +210,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
     lazy var collectionView: UICollectionView = {
         let layout  = HorizontalFlowLayout()
         layout.itemSize = ASHorizontalScrollCellUX.TopSiteItemSize
-        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(TopSiteItemCell.self, forCellWithReuseIdentifier: ASHorizontalScrollCellUX.TopSiteCellIdentifier)
         collectionView.backgroundColor = UIColor.clear
         collectionView.showsHorizontalScrollIndicator = false
@@ -209,7 +231,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
     }()
 
     lazy fileprivate var pageControlPress: UITapGestureRecognizer = {
-        let press = UITapGestureRecognizer(target: self, action: #selector(ASHorizontalScrollCell.handlePageTap(_:)))
+        let press = UITapGestureRecognizer(target: self, action: #selector(handlePageTap))
    //     press.delegate = self
         return press
     }()
@@ -261,7 +283,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
         }
     }
 
-    func handlePageTap(_ gesture: UITapGestureRecognizer) {
+    @objc func handlePageTap(_ gesture: UITapGestureRecognizer) {
         guard pageControl.pageCount > 1 else {
             return
         }
@@ -271,8 +293,25 @@ class ASHorizontalScrollCell: UICollectionViewCell {
         } else {
             pageControl.progress = CGFloat(pageControl.currentPage - 1)
         }
-        let swipeCoordinate = CGFloat(pageControl.currentPage) * self.collectionView.frame.size.width
-        self.collectionView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: true)
+
+        moveToPage(pageControl.currentPage, animated: true)
+    }
+
+    func moveToPage(_ pageNumber: Int, animated: Bool = false) {
+        if pageNumber < 0 || pageNumber >= pageControl.pageCount {
+            return
+        }
+        pageControl.progress = CGFloat(pageNumber)
+        let swipeCoordinate = CGFloat(pageNumber) * self.collectionView.frame.size.width
+        self.collectionView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: animated)
+    }
+
+    func moveToInitialPage() {
+        if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
+            moveToPage(pageControl.pageCount-1)
+        } else {
+            moveToPage(0)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -295,13 +334,15 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     private var insets = UIEdgeInsets(equalInset: ASHorizontalScrollCellUX.MinimumInsets)
     private var sectionInsets: CGFloat = 0
     var itemSize = CGSize.zero
+    var cachedAttributes: [UICollectionViewLayoutAttributes]?
 
     override func prepare() {
         super.prepare()
         if boundsSize != self.collectionView?.frame.size {
-            self.collectionView?.setContentOffset(CGPoint.zero, animated: false)
+            self.collectionView?.setContentOffset(.zero, animated: false)
         }
-        boundsSize = self.collectionView?.frame.size ?? CGSize.zero
+        boundsSize = self.collectionView?.frame.size ?? .zero
+        cachedAttributes = nil
         register(EmptyTopsiteDecorationCell.self, forDecorationViewOfKind: ASHorizontalScrollCellUX.TopSiteEmptyCellIdentifier)
     }
 
@@ -315,7 +356,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let width = size.width
         let height = size.height
         guard width != 0 else {
-            return (size: CGSize.zero, cellSize: self.itemSize, cellInsets: self.insets)
+            return (size: .zero, cellSize: self.itemSize, cellInsets: self.insets)
         }
 
         let horizontalItemsCount = maxHorizontalItemsCount(width: width)
@@ -378,12 +419,16 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let decorationAttr =  UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, with: indexPath)
         let cellAttr = self.computeLayoutAttributesForCellAtIndexPath(indexPath)
         decorationAttr.frame = cellAttr.frame
+
         decorationAttr.frame.size.height -= TopSiteCellUX.TitleHeight
         decorationAttr.zIndex = -1
         return decorationAttr
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        if cachedAttributes != nil {
+            return cachedAttributes
+        }
         var allAttributes = [UICollectionViewLayoutAttributes]()
         for i in 0 ..< cellCount {
             let indexPath = IndexPath(row: i, section: 0)
@@ -396,11 +441,12 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         var numberOfCells = cellCount
         while numberOfCells % horizontalItemsCount != 0 {
             //we need some empty cells dawg.
+
             let attr = self.layoutAttributesForDecorationView(ofKind: ASHorizontalScrollCellUX.TopSiteEmptyCellIdentifier, at: IndexPath(item: numberOfCells, section: 0))
             allAttributes.append(attr!)
             numberOfCells += 1
         }
-
+        cachedAttributes = allAttributes
         return allAttributes
     }
 
@@ -409,9 +455,10 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     }
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        // Sometimes when the topsiteCell isnt on the screen the newbounds that it tries to layout in is very tiny
-        // Resulting in incorrect layouts. So only layout when the width is greater than 320.
-        return newBounds.width >= 320
+        cachedAttributes = nil
+        // Sometimes when the topsiteCell isnt on the screen the newbounds that it tries to layout in is 0
+        // Resulting in incorrect layouts. Only layout when a valid width is given
+        return newBounds.width > 0
     }
 
     func computeLayoutAttributesForCellAtIndexPath(_ indexPath: IndexPath) -> UICollectionViewLayoutAttributes {
@@ -425,11 +472,24 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
         let columnPosition = row % horizontalItemsCount
         let rowPosition = (row / horizontalItemsCount) % verticalItemsCount
-        let itemPage = Int(floor(Double(row)/Double(itemsPerPage)))
+
+        let itemPage: Int
+        if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
+            itemPage = Int(floor(Double(row)/Double(itemsPerPage)))
+        } else {
+            // For RTL we invert the page position
+            let pageCount = Int(ceil(Double(cellCount)/Double(itemsPerPage)))
+            itemPage = pageCount - Int(floor(Double(row)/Double(itemsPerPage))) - 1
+        }
 
         let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         var frame = CGRect.zero
-        frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
+        if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
+            frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
+        } else {
+            // For RTL all we have to do is invert the colum
+            frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(horizontalItemsCount - 1 - columnPosition) * (itemSize.width + insets.left) + insets.left
+        }
         frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top) + insets.top
         frame.size = itemSize
         attr.frame = frame
@@ -441,8 +501,8 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 /*
     Defines the number of items to show in topsites for different size classes.
 */
-struct ASTopSiteSourceUX {
-    static let verticalItemsForTraitSizes = [UIUserInterfaceSizeClass.compact: 1, UIUserInterfaceSizeClass.regular: 2, UIUserInterfaceSizeClass.unspecified: 0]
+private struct ASTopSiteSourceUX {
+    static let verticalItemsForTraitSizes: [UIUserInterfaceSizeClass: Int] = [.compact: 1, .regular: 2, .unspecified: 0]
     static let maxNumberOfPages = 2
     static let CellIdentifier = "TopSiteItemCell"
 }
@@ -453,7 +513,7 @@ protocol ASHorizontalLayoutDelegate {
 }
 
 /*
- This Delegate/DataSource is used to manage the ASHorizontalScrollCell's UICollectionView. 
+ This Delegate/DataSource is used to manage the ASHorizontalScrollCell's UICollectionView.
  This is left generic enough for it to be re used for other parts of Activity Stream.
  */
 
@@ -476,14 +536,24 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     }
 
     func numberOfHorizontalItems() -> Int {
-        // The number of items to show per row.
-        if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
-            return 8
-        } else if UIDevice.current.userInterfaceIdiom == .pad {
-            return 6
-        } else {
-            return 4
+        guard let traits = currentTraits else {
+            return 0
         }
+        let isLandscape = UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            if isLandscape {
+                return 8
+            } else {
+                return 4
+            }
+        }
+        // On iPad
+        // The number of items in a row is equal to the number of highlights in a row * 2
+        var numItems: Int = Int(ASPanelUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass])
+        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) || (traits.horizontalSizeClass == .compact && isLandscape) {
+            numItems = numItems - 1
+        }
+        return numItems * 2
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {

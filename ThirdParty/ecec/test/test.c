@@ -3,17 +3,30 @@
 #include <inttypes.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 int
 main() {
-  test_aesgcm_valid_crypto_params();
-  test_aesgcm_invalid_crypto_params();
-  test_aesgcm_valid_ciphertexts();
+  test_webpush_aesgcm_headers_from_params();
+  test_webpush_aesgcm_headers_extract_params_ok();
+  test_webpush_aesgcm_headers_extract_params_err();
 
-  test_webpush_aes128gcm_encrypt();
-  test_webpush_aes128gcm_decrypt_valid_payloads();
-  test_aes128gcm_decrypt_invalid_payloads();
+  test_webpush_aesgcm_encrypt_ok();
+  test_webpush_aesgcm_encrypt_pad();
+  test_webpush_aesgcm_decrypt_ok();
+  test_webpush_aesgcm_decrypt_err();
 
+  test_webpush_aes128gcm_encrypt_ok();
+  test_webpush_aes128gcm_encrypt_pad();
+  test_webpush_aes128gcm_decrypt_ok();
+  test_webpush_aes128gcm_decrypt_err();
+  test_aes128gcm_decrypt_ok();
+  test_aes128gcm_decrypt_err();
+
+  test_webpush_aes128gcm_e2e();
+  test_webpush_aesgcm_e2e();
+
+  test_base64url_encode();
   test_base64url_decode();
 
   return 0;

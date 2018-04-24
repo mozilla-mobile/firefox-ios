@@ -7,8 +7,8 @@ import Shared
 
 class URIFixup {
     static func getURL(_ entry: String) -> URL? {
-        let trimmed = entry.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) else {
+        let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: .URLAllowed) else {
             return nil
         }
 
@@ -44,7 +44,10 @@ class URIFixup {
 
     static func punycodedURL(_ string: String) -> URL? {
         var components = URLComponents(string: string)
-        components?.host = AppConstants.MOZ_PUNYCODE ? components?.host?.utf8HostToAscii() : components?.host
+        if AppConstants.MOZ_PUNYCODE {
+            let host = components?.host?.utf8HostToAscii()
+            components?.host = host
+        }
         return components?.url
     }
 }

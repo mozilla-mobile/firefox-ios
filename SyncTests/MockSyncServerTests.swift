@@ -140,7 +140,7 @@ class MockSyncServerTests: XCTestCase {
 
             // JSON contents: should be the empty object.
             let jsonData = try! response.value.rawData()
-            let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)!
+            let jsonString = String(data: jsonData, encoding: .utf8)!
             XCTAssertEqual(jsonString, "{}")
 
             // X-Weave-Timestamp.

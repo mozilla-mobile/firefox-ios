@@ -225,7 +225,7 @@ class ThreeWayTreeMerger {
         }
 
         // Return the first candidate that's a value match.
-        guard let localItem = (guids.flatMap { items[$0] }.find { $0.sameAs(remoteValue) }) else {
+        guard let localItem = (guids.compactMap { items[$0] }.find { $0.sameAs(remoteValue) }) else {
             log.debug("Didn't find a local value match for new remote record \(remote.recordGUID).")
             return nil
         }
@@ -240,7 +240,7 @@ class ThreeWayTreeMerger {
             preconditionFailure("Expected children.")
         }
 
-        let out: [MergedTreeNode] = try mirrorChildren.flatMap { child in
+        let out: [MergedTreeNode] = try mirrorChildren.compactMap { child in
             // TODO: handle deletions. That might change the below from 'Unchanged'
             // to 'New'.
             let childGUID = child.recordGUID
@@ -605,8 +605,14 @@ class ThreeWayTreeMerger {
                     return MergeState.remote
                 }
 
-                log.debug("Comparing local (\(local.localModified ??? "nil")) to remote (\(remote.serverModified)) clock for two-way value merge of \(guid).")
-                if local.localModified! > remote.serverModified {
+                log.debug("Comparing local (\(local.localModified ??? "0")) to remote (\(remote.serverModified)) clock for two-way value merge of \(guid).")
+                if let localModified = local.localModified, localModified > remote.serverModified {
+                    // If we're taking the local record because it was modified, check to see
+                    // whether the remote record has a creation date that we want to keep.
+                    let dateAddedRemote = remote.dateAdded ?? remote.serverModified
+                    if (local.dateAdded ?? UInt64.max) > dateAddedRemote {
+                        return MergeState.new(value: local.copyWithDateAdded(dateAddedRemote))
+                    }
                     return MergeState.local
                 }
                 return MergeState.remote
@@ -673,7 +679,7 @@ class ThreeWayTreeMerger {
         case let .folder(_, localChildren):
             if case let .folder(_, remoteChildren) = remoteNode {
                 // Structural merge.
-                if localChildren.sameElements(remoteChildren, f: { $0.recordGUID == $1.recordGUID }) {
+                if localChildren.sameElements(remoteChildren) {
                     // Great!
                     log.debug("Local and remote records have same children in two-way merge.")
                     result.structureState = MergeState.new(value: localNode)    // TODO: what if it's the same as the mirror?

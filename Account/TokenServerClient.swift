@@ -18,6 +18,7 @@ public struct TokenServerToken {
     public let key: String
     public let api_endpoint: String
     public let uid: UInt64
+    public let hashedFxAUID: String
     public let durationInSeconds: UInt64
     // A healthy token server reports its timestamp.
     public let remoteTimestamp: Timestamp
@@ -36,10 +37,12 @@ public struct TokenServerToken {
             let key = json["key"].string,
             let api_endpoint = json["api_endpoint"].string,
             let uid = json["uid"].int64,
+            let hashedFxAUID = json["hashed_fxa_uid"].string,
             let durationInSeconds = json["duration"].int64,
             let remoteTimestamp = json["remoteTimestamp"].int64 {
                 return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: UInt64(uid),
-                    durationInSeconds: UInt64(durationInSeconds), remoteTimestamp: Timestamp(remoteTimestamp))
+                                        hashedFxAUID: hashedFxAUID, durationInSeconds: UInt64(durationInSeconds),
+                                        remoteTimestamp: Timestamp(remoteTimestamp))
         }
         return nil
     }
@@ -50,6 +53,7 @@ public struct TokenServerToken {
             "key": key as AnyObject,
             "api_endpoint": api_endpoint as AnyObject,
             "uid": NSNumber(value: uid as UInt64),
+            "hashed_fxa_uid": hashedFxAUID as AnyObject,
             "duration": NSNumber(value: durationInSeconds as UInt64),
             "remoteTimestamp": NSNumber(value: remoteTimestamp),
         ]
@@ -123,9 +127,11 @@ open class TokenServerClient {
             let key = json["key"].string,
             let api_endpoint = json["api_endpoint"].string,
             let uid = json["uid"].int,
+            let hashedFxAUID = json["hashed_fxa_uid"].string,
             let durationInSeconds = json["duration"].int64, durationInSeconds > 0 {
             return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: UInt64(uid),
-                durationInSeconds: UInt64(durationInSeconds), remoteTimestamp: remoteTimestamp)
+                                    hashedFxAUID: hashedFxAUID, durationInSeconds: UInt64(durationInSeconds),
+                                    remoteTimestamp: remoteTimestamp)
         }
         return nil
     }
@@ -133,7 +139,10 @@ open class TokenServerClient {
     lazy fileprivate var alamofire: SessionManager = {
         let ua = UserAgent.tokenServerClientUserAgent
         let configuration = URLSessionConfiguration.ephemeral
-        return SessionManager.managerWithUserAgent(ua, configuration: configuration)
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = ua
+        configuration.httpAdditionalHeaders = defaultHeaders
+        return SessionManager(configuration: configuration)
     }()
 
     open func token(_ assertion: String, clientState: String? = nil) -> Deferred<Maybe<TokenServerToken>> {

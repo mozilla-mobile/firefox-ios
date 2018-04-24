@@ -108,6 +108,31 @@ public func chunk<T>(_ arr: [T], by: Int) -> [ArraySlice<T>] {
     return result
 }
 
+public func chunkCollection<E, X, T: Collection>(_ items: T, by: Int, f: ([E]) -> [X]) -> [X] where T.Iterator.Element == E {
+    assert(by >= 0)
+    let max = by > 0 ? by : 1
+    var i = 0
+    var acc: [E] = []
+    var results: [X] = []
+    var iter = items.makeIterator()
+
+    while let item = iter.next() {
+        if i >= max {
+            results.append(contentsOf: f(acc))
+            acc = []
+            i = 0
+        }
+        acc.append(item)
+        i += 1
+    }
+
+    if !acc.isEmpty {
+        results.append(contentsOf: f(acc))
+    }
+
+    return results
+}
+
 public extension Sequence {
     // [T] -> (T -> K) -> [K: [T]]
     // As opposed to `groupWith` (to follow Haskell's naming), which would be
@@ -125,7 +150,7 @@ public extension Sequence {
 
     func zip<S: Sequence>(_ elems: S) -> [(Self.Iterator.Element, S.Iterator.Element)] {
         var rights = elems.makeIterator()
-        return self.flatMap { lhs in
+        return self.compactMap { lhs in
             guard let rhs = rights.next() else {
                 return nil
             }
@@ -134,7 +159,7 @@ public extension Sequence {
     }
 }
 
-public func optDictionaryEqual<K: Equatable, V: Equatable>(_ lhs: [K: V]?, rhs: [K: V]?) -> Bool {
+public func optDictionaryEqual<K, V: Equatable>(_ lhs: [K: V]?, rhs: [K: V]?) -> Bool {
     switch (lhs, rhs) {
     case (.none, .none):
         return true
@@ -151,7 +176,7 @@ public func optDictionaryEqual<K: Equatable, V: Equatable>(_ lhs: [K: V]?, rhs: 
  * Return members of `a` that aren't nil, changing the type of the sequence accordingly.
  */
 public func optFilter<T>(_ a: [T?]) -> [T] {
-    return a.flatMap { $0 }
+    return a.compactMap { $0 }
 }
 
 /**
@@ -192,7 +217,7 @@ public func findOneValue<K, V>(_ map: [K: V], f: (V) -> Bool) -> V? {
  * It's usually convenient for this to accept an optional.
  */
 public func jsonsToStrings(_ arr: [JSON]?) -> [String]? {
-    return arr?.flatMap { $0.stringValue }
+    return arr?.compactMap { $0.stringValue }
 }
 
 // Encapsulate a callback in a way that we can use it with NSTimer.

@@ -49,7 +49,7 @@ class TestHistory: ProfileTest {
         let expectation = self.expectation(description: "Wait for history")
         history.getSitesByLastVisit(100).upon { result in
             XCTAssertTrue(result.isSuccess)
-            history.getSitesByFrecencyWithHistoryLimit(100, whereURLContains: url).upon { result in
+            history.getFrecentHistory().getSites(whereURLContains: url, historyLimit: 100, bookmarksLimit: 0).upon { result in
                 XCTAssertTrue(result.isSuccess)
                 let cursor = result.successValue!
                 XCTAssertEqual(cursor.status, CursorStatus.success, "returned success \(cursor.statusMessage)")
@@ -199,7 +199,7 @@ class TestHistory: ProfileTest {
             cb()
             return
         } else {
-            runRandom(&history, cmdIn: -1) { [history]_ in
+            runRandom(&history, cmdIn: -1) { [history] in
                 var history = history
                 self.runMultiRandom(&history, val: val+1, numCmds: numCmds, cb: cb)
             }
@@ -211,7 +211,7 @@ class TestHistory: ProfileTest {
         queue.async { [history] in
             var history = history
             // Each thread creates its own history provider
-            self.runMultiRandom(&history, val: 0, numCmds: self.NumCmds) { _ in
+            self.runMultiRandom(&history, val: 0, numCmds: self.NumCmds) {
                 DispatchQueue.main.async(execute: cb)
             }
         }

@@ -68,4 +68,60 @@ class DeferredTests: XCTestCase {
 
         waitForExpectations(timeout: 10, handler: nil)
     }
+
+    func testPassAccumulate() {
+        let leak = self.expectation(description: "deinit")
+
+        class TestClass {
+            let end: XCTestExpectation
+            init(e: XCTestExpectation) {
+                end = e
+                accumulate([self.aSimpleFunction]).upon { _ in
+
+                }
+            }
+
+            func aSimpleFunction() -> Success {
+                return succeed()
+            }
+            deinit {
+                end.fulfill()
+            }
+        }
+
+        var myclass: TestClass? = TestClass(e: leak)
+        myclass = nil
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+
+
+    func testFailAccumulate() {
+        let leak = self.expectation(description: "deinit")
+
+        class TestError: MaybeErrorType {
+            var description = "Error"
+        }
+
+        class TestClass {
+            let end: XCTestExpectation
+            init(e: XCTestExpectation) {
+                end = e
+                accumulate([self.aSimpleFunction]).upon { _ in
+
+                }
+            }
+
+            func aSimpleFunction() -> Success {
+                return Deferred(value: Maybe(failure: TestError()))
+            }
+            deinit {
+                end.fulfill()
+            }
+        }
+
+        var myclass: TestClass? = TestClass(e: leak)
+        myclass = nil
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+
 }

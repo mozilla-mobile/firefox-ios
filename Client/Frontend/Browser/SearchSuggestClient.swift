@@ -11,9 +11,9 @@ let SearchSuggestClientErrorInvalidEngine = 0
 let SearchSuggestClientErrorInvalidResponse = 1
 
 /*
- * Clients of SearchSuggestionClient should retain the object during the 
+ * Clients of SearchSuggestionClient should retain the object during the
  * lifetime of the search suggestion query, as requests are canceled during destruction.
- * 
+ *
  * Query callbacks that must run even if they are cancelled should wrap their contents in `withExtendendLifetime`.
  */
 class SearchSuggestClient {
@@ -23,7 +23,10 @@ class SearchSuggestClient {
 
     lazy fileprivate var alamofire: SessionManager = {
         let configuration = URLSessionConfiguration.ephemeral
-        return SessionManager.managerWithUserAgent(self.userAgent, configuration: configuration)
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = self.userAgent
+        configuration.httpAdditionalHeaders = defaultHeaders
+        return SessionManager(configuration: configuration)
     }()
 
     init(searchEngine: OpenSearchEngine, userAgent: String) {

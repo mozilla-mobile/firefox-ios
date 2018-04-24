@@ -4,24 +4,11 @@
 
 import XCTest
 
-let defaultSearchEngine1 = "Yahoo"
+let defaultSearchEngine1 = "Google"
 let defaultSearchEngine2 = "Amazon.com"
 let customSearchEngine = ["name": "youtube", "url": "http://youtube.com/search?q=%s"]
 
 class SearchSettingsUITests: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testDefaultSearchEngine() {
         navigator.goto(SearchSettings)
         // Check the default browser

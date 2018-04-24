@@ -7,8 +7,8 @@ import Storage
 
 class BackForwardTableViewCell: UITableViewCell {
     
-    struct BackForwardViewCellUX {
-        static let bgColor = UIColor(colorLiteralRed: 0.7, green: 0.7, blue: 0.7, alpha: 1)
+    private struct BackForwardViewCellUX {
+        static let bgColor = UIColor.gray
         static let faviconWidth = 29
         static let faviconPadding: CGFloat = 20
         static let labelPadding = 20
@@ -16,6 +16,7 @@ class BackForwardTableViewCell: UITableViewCell {
         static let borderBold = 5
         static let IconSize = 23
         static let fontSize: CGFloat = 12.0
+        static let textColor = UIColor.Photon.Grey80
     }
     
     lazy var faviconView: UIImageView = {
@@ -25,6 +26,7 @@ class BackForwardTableViewCell: UITableViewCell {
         faviconView.layer.borderWidth = 0.5
         faviconView.layer.borderColor = UIColor(white: 0, alpha: 0.1).cgColor
         faviconView.layer.masksToBounds = true
+        faviconView.contentMode = .center
         return faviconView
     }()
     
@@ -32,6 +34,7 @@ class BackForwardTableViewCell: UITableViewCell {
         let label = UILabel()
         label.text = " "
         label.font = label.font.withSize(BackForwardViewCellUX.fontSize)
+        label.textColor = BackForwardViewCellUX.textColor
         return label
     }()
 
@@ -41,7 +44,7 @@ class BackForwardTableViewCell: UITableViewCell {
     var isCurrentTab = false {
         didSet {
             if isCurrentTab {
-                label.font = UIFont(name:"HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
+                label.font = UIFont(name: "HelveticaNeue-Bold", size: BackForwardViewCellUX.fontSize)
             }
         }
     }
@@ -51,13 +54,14 @@ class BackForwardTableViewCell: UITableViewCell {
             if let s = site {
                 faviconView.setFavicon(forSite: s, onCompletion: { [weak self] (color, url) in
                     if s.tileURL.isLocal {
-                        self?.faviconView.image = UIImage(named: "faviconFox" )
+                        self?.faviconView.image = UIImage(named: "faviconFox")
+                        self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: BackForwardViewCellUX.IconSize, height: BackForwardViewCellUX.IconSize))
                         self?.faviconView.backgroundColor = UIColor.white
                         return
                     }
                     
                     self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: BackForwardViewCellUX.IconSize, height: BackForwardViewCellUX.IconSize))
-                    self?.faviconView.contentMode = .center
+                    self?.faviconView.backgroundColor = color == .clear ? .white : color
                 })
                 var title = s.title
                 if title.isEmpty {
@@ -66,12 +70,6 @@ class BackForwardTableViewCell: UITableViewCell {
                 label.text = title
                 setNeedsLayout()
             }
-        }
-    }
-    
-    var isPrivate = false {
-        didSet {
-            label.textColor = isPrivate ? UIColor.white : UIColor.black
         }
     }
     
@@ -118,18 +116,18 @@ class BackForwardTableViewCell: UITableViewCell {
         }
         
         context.saveGState()
-        context.setLineCap(CGLineCap.square)
+        context.setLineCap(.square)
         context.setStrokeColor(BackForwardViewCellUX.bgColor.cgColor)
         context.setLineWidth(1.0)
-        context.move(to: CGPoint(x: startPoint.x, y: startPoint.y))
-        context.addLine(to: CGPoint(x: endPoint.x, y: endPoint.y))
+        context.move(to: startPoint)
+        context.addLine(to: endPoint)
         context.strokePath()
         context.restoreGState()
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         if highlighted {
-            self.backgroundColor = UIColor(colorLiteralRed: 0, green: 0, blue: 0, alpha: 0.1)
+            self.backgroundColor = UIColor(white: 0, alpha: 0.1)
         } else {
             self.backgroundColor = UIColor.clear
         }
@@ -140,6 +138,6 @@ class BackForwardTableViewCell: UITableViewCell {
         connectingForwards = true
         connectingBackwards = true
         isCurrentTab = false
-        label.font = UIFont(name:"HelveticaNeue", size: BackForwardViewCellUX.fontSize)
+        label.font = UIFont(name: "HelveticaNeue", size: BackForwardViewCellUX.fontSize)
     }
 }

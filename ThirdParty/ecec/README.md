@@ -1,13 +1,12 @@
 # ecec
 
-[![Build Status](https://travis-ci.org/kitcambridge/ecec.svg?branch=master)](https://travis-ci.org/kitcambridge/ecec)
-[![Coverage](https://img.shields.io/codecov/c/github/kitcambridge/ecec/master.svg)](https://codecov.io/github/kitcambridge/ecec)
+![GitHub version](https://badge.fury.io/gh/web-push-libs%2Fecec.svg)
+[![Build Status](https://travis-ci.org/web-push-libs/ecec.svg?branch=master)](https://travis-ci.org/web-push-libs/ecec)
+[![Coverage](https://img.shields.io/codecov/c/github/web-push-libs/ecec/master.svg)](https://codecov.io/github/web-push-libs/ecec)
 
 **ecec** is a C implementation of the [HTTP Encrypted Content-Encoding](http://httpwg.org/http-extensions/draft-ietf-httpbis-encryption-encoding.html) draft. It's a port of the reference [JavaScript implementation](https://github.com/martinthomson/encrypted-content-encoding).
 
-Currently, **ecec** only implements enough to support decrypting [Web Push messages](http://webpush-wg.github.io/webpush-encryption/), which use a shared secret derived using elliptic-curve Diffie-Hellman.
-
-Encryption and usage without ECDH are planned for future releases. In the meantime, please have a look at `tools/ece-decrypt` for an example of how to use the library, or read on.
+Encrypted content-coding is used to encrypt [Web Push messages](https://webpush-wg.github.io/webpush-encryption/), and can be used standalone.
 
 ## Table of Contents
 
@@ -99,8 +98,6 @@ All [Web Push libraries](https://github.com/web-push-libs) support the "aesgcm" 
 
 If the `Crypto-Key` header contains multiple keys, the sender must also include a `keyid` to match the encryption parameters to the key. The drafts have examples for [a single key without a `keyid`](https://tools.ietf.org/html/draft-ietf-webpush-encryption-04#section-5), and [multiple keys with `keyid`s](https://tools.ietf.org/html/draft-ietf-httpbis-encryption-encoding-02#section-5.6).
 
-**ecec** will extract the relevant parameters from the `Crypto-Key` and `Encryption` headers before decrypting the message. You don't need to parse the headers yourself.
-
 ```c
 uint8_t rawSubPrivKey[ECE_WEBPUSH_PRIVATE_KEY_LENGTH] = {0};
 uint8_t authSecret[ECE_WEBPUSH_AUTH_SECRET_LENGTH] = {0};
@@ -111,15 +108,26 @@ const char* encryptionHeader = "salt=...; rs=...";
 uint8_t* ciphertext = NULL;
 size_t ciphertextLen = 0;
 
-size_t plaintextLen = ece_aesgcm_plaintext_max_length(ciphertextLen);
+uint8_t salt[ECE_SALT_LENGTH];
+uint8_t rawSenderPubKey[ECE_WEBPUSH_PUBLIC_KEY_LENGTH];
+uint32_t rs = 0;
+int err =
+  ece_webpush_aesgcm_headers_extract_params(cryptoKeyHeader, encryptionHeader,
+                                            salt, ECE_SALT_LENGTH,
+                                            rawSenderPubKey,
+                                            ECE_WEBPUSH_PUBLIC_KEY_LENGTH, &rs);
+assert(err == ECE_OK);
+
+size_t plaintextLen = ece_aesgcm_plaintext_max_length(rs, ciphertextLen);
 assert(plaintextLen > 0);
 uint8_t* plaintext = calloc(plaintextLen, sizeof(uint8_t));
 assert(plaintext);
 
-int err = ece_webpush_aesgcm_decrypt(
+err = ece_webpush_aesgcm_decrypt(
   rawSubPrivKey, ECE_WEBPUSH_PRIVATE_KEY_LENGTH, authSecret,
-  ECE_WEBPUSH_AUTH_SECRET_LENGTH, cryptoKeyHeader, encryptionHeader, ciphertext,
-  ciphertextLen, plaintext, &plaintextLen);
+  ECE_WEBPUSH_AUTH_SECRET_LENGTH, salt, ECE_SALT_LENGTH, rawSenderPubKey,
+  ECE_WEBPUSH_PUBLIC_KEY_LENGTH, rs, ciphertext, ciphertextLen, plaintext,
+  &plaintextLen);
 assert(err == ECE_OK);
 
 // `plaintext[0..plaintextLen]` contains the decrypted message.
@@ -137,7 +145,7 @@ free(plaintext);
 
 ### macOS and \*nix
 
-OpenSSL 1.1.0 is new, and backward-incompatible with 1.0.x. If your package manager ([MacPorts](https://www.macports.org/), [Homebrew](https://brew.sh/), [APT](https://help.ubuntu.com/community/AptGet/Howto), [DNF](https://dnf.readthedocs.io/en/latest/), [yum](http://yum.baseurl.org/)) doesn't have 1.1.0 yet, you'll need to compile it yourself. **ecec** does this to run its tests on [Travis CI](https://docs.travis-ci.com/user/ci-environment/); please see `.travis.yml` for the commands.
+OpenSSL 1.1.0 is new, and backward-incompatible with 1.0.x. If your package manager ([MacPorts](https://www.macports.org/), [Homebrew](https://brew.sh/), [APT](https://help.ubuntu.com/community/AptGet/Howto), [DNF](https://dnf.readthedocs.io/en/latest/), [yum](http://yum.baseurl.org/)) doesn't have 1.1.0 yet, you'll need to compile it yourself. **ecec** does this to run its tests on [Travis CI](https://docs.travis-ci.com/user/ci-environment/); please see `.travis/install.sh` for the commands.
 
 In particular, you'll need to set the `OPENSSL_ROOT_DIR` cache entry for CMake to find your compiled version. To build the library:
 
@@ -173,20 +181,20 @@ You can then build the library like so:
 > mkdir build
 > cd build
 > cmake -G "Visual Studio 14 2015 Win64" -DOPENSSL_ROOT_DIR=C:\OpenSSL-Win64 ..
-> cmake --build .
+> cmake --build . [--config Debug|Release]
 ```
 
 To build the decryption tool:
 
 ```powershell
-> cmake --build . --target ece-decrypt
-> .\Debug\ece-decrypt
+> cmake --build . --target ece-decrypt [--config Debug|Release]
+> .\[Debug|Release]\ece-decrypt
 ```
 
 To run the tests:
 
 ```powershell
-> cmake --build . --target check
+> cmake --build . --target check [--config Debug|Release]
 ```
 
 ## What is encrypted content-coding?

@@ -1,0 +1,23 @@
+coverage:
+  precision: 0
+  round: down
+  status:
+    project:
+      default:
+       threshold: 100
+       if_no_uploads: success
+       if_not_found: success
+       if_ci_failed: success
+    patch:
+      default:
+        enabled: no
+        threshold: 30
+        if_no_uploads: success
+        if_not_found: success
+        if_ci_failed: success
+    changes: no
+comment: false
+ignore:
+- "UITests/.*"
+- "XCUITests/.*"
+- "ThirdParty/.*"

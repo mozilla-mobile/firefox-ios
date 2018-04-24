@@ -62,6 +62,21 @@ class UtilsTests: XCTestCase {
         }
     }
 
+    func testChunkCollection() {
+        let examples: [([Int], Int, [[Int]])] = [
+            ([], 2, []),
+            ([1, 2], 0, [[1], [2]]),
+            ([1, 2], 1, [[1], [2]]),
+            ([1, 2, 3], 2, [[1, 2], [3]]),
+            ([1, 2], 3, [[1, 2]]),
+            ([1, 2, 3], 1, [[1], [2], [3]]),
+            ]
+        for (arr, by, expected) in examples {
+            let actual = chunkCollection(arr, by: by) { xs in [xs] }
+            XCTAssertEqual(expected as NSArray, actual as NSArray)
+        }
+    }
+
     func testParseTimestamps() {
         let millis = "1492316843992"        // Firefox for iOS produced millisecond timestamps. Oops.
         let decimal = "1492316843.99"
@@ -76,14 +91,18 @@ class UtilsTests: XCTestCase {
         XCTAssertNil(someKindOfTimestampStringToTimestamp(huge))
         XCTAssertNil(someKindOfTimestampStringToTimestamp("foo"))
 
-        XCTAssertEqual(decimalSecondsStringToTimestamp(decimal) ?? 0, Timestamp(1492316843990))
-        XCTAssertEqual(someKindOfTimestampStringToTimestamp(decimal) ?? 0, Timestamp(1492316843990))
+        let ts1: Timestamp = 1492316843990
+        XCTAssertEqual(decimalSecondsStringToTimestamp(decimal) ?? 0, ts1)
+        XCTAssertEqual(someKindOfTimestampStringToTimestamp(decimal) ?? 0, ts1)
 
-        XCTAssertEqual(decimalSecondsStringToTimestamp(truncated) ?? 0, Timestamp(1492316843000))
-        XCTAssertEqual(someKindOfTimestampStringToTimestamp(truncated) ?? 0, Timestamp(1492316843000))
+        let ts2: Timestamp = 1492316843000
+        XCTAssertEqual(decimalSecondsStringToTimestamp(truncated) ?? 0, ts2)
+        XCTAssertEqual(someKindOfTimestampStringToTimestamp(truncated) ?? 0, ts2)
 
-        XCTAssertEqual(decimalSecondsStringToTimestamp(millis) ?? 0, Timestamp(1492316843992000))  // Oops.
-        XCTAssertEqual(someKindOfTimestampStringToTimestamp(millis) ?? 0, Timestamp(1492316843992))
+        let ts3: Timestamp = 1492316843992000
+        XCTAssertEqual(decimalSecondsStringToTimestamp(millis) ?? 0, ts3)  // Oops.
 
+        let ts4: Timestamp = 1492316843992
+        XCTAssertEqual(someKindOfTimestampStringToTimestamp(millis) ?? 0, ts4)
     }
 }

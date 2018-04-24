@@ -1,0 +1,20 @@
+*Thank you for submitting a pull request, your contributions are greatly appreciated!*
+
+Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
+## Pull Request Checklist
+
+- [ ] My patch has gone through review and I have addressed review comments
+- [ ] My patch has a standard commit message that looks like `Bug 12345678 - This fixes something something`
+
+- [ ] I have updated the *Unit Tests* to cover new or changed functionality
+- [ ] I have updated the *UI Tests* to cover new or changed functionality
+- [ ] I have marked the bug with `[needsuplift]`
+- [ ] I have made sure that localizable strings use `NSLocalizableString()`
+
+## Screenshots
+
+If your patch includes user interface changes that you would like to suggest or that you would like UX to look at, please include them here.
+
+## Notes for testing this patch
+
+If useful, please leave notes for QA, explaining what this patch changes and how it can be best tested and verified.

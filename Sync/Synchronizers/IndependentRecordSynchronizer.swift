@@ -120,4 +120,28 @@ extension TimestampedSingleCollectionSynchronizer {
                 return deferMaybe(timestamp)
             }
     }
+
+    func uploadRecordsSingleBatch<T>(_ records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>) -> Deferred<Maybe<(timestamp: Timestamp, succeeded: [GUID])>> {
+        if records.isEmpty {
+            log.debug("No modified records to upload.")
+            return deferMaybe((timestamp: lastTimestamp, succeeded: []))
+        }
+
+        func reportUploadStatsWrap(result: POSTResult, timestamp: Timestamp?) -> DeferredTimestamp {
+            let stats = SyncUploadStats(sent: result.success.count, sentFailed: result.failed.count)
+            self.statsSession.recordUpload(stats: stats)
+            return deferMaybe(timestamp ?? lastTimestamp)
+        }
+
+        let batch = storageClient.newBatch(ifUnmodifiedSince: (lastTimestamp == 0) ? nil : lastTimestamp, onCollectionUploaded: reportUploadStatsWrap)
+        return batch.addRecords(records, singleBatch: true)
+            >>== batch.endSingleBatch
+            >>== { (succeeded, lastModified) in
+                guard let timestamp = lastModified else {
+                    return deferMaybe(FatalError(message: "Could not retrieve lastModified from the server response."))
+                }
+                self.setTimestamp(timestamp)
+                return deferMaybe((timestamp: timestamp, succeeded: succeeded))
+        }
+    }
 }

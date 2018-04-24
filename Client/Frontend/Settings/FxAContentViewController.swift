@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Shared
 import SnapKit
 import UIKit
@@ -23,8 +22,6 @@ protocol FxAContentViewControllerDelegate: class {
  * fxa-content-server git repository.
  */
 class FxAContentViewController: SettingsContentViewController, WKScriptMessageHandler {
-    var fxaOptions = FxALaunchParams()
-
     fileprivate enum RemoteCommand: String {
         case canLinkAccount = "can_link_account"
         case loaded = "loaded"
@@ -37,9 +34,18 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     let profile: Profile
 
-    init(profile: Profile) {
+    init(profile: Profile, fxaOptions: FxALaunchParams? = nil) {
         self.profile = profile
+        
         super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
+        
+        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
+            self.url = self.createFxAURLWith(fxaOptions, profile: profile)
+        } else {
+            self.url = profile.accountConfiguration.signInURL
+        }
+
+        NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -49,26 +55,40 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if AppConstants.MOZ_SHOW_FXA_AVATAR {
+            profile.getAccount()?.updateProfile()
+        }
+        
+        // If the FxAContentViewController was launched from a FxA deferred link
+        // onboarding might not have been shown. Check to see if it needs to be
+        // displayed and don't animate.
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.browserViewController.presentIntroViewController(false, animated: false)
+        }
+    }
 
     override func makeWebView() -> WKWebView {
-        // Inject  our setup code after the page loads.
-        let source = getJS()
-        let userScript = WKUserScript(
-            source: source,
-            injectionTime: WKUserScriptInjectionTime.atDocumentEnd,
-            forMainFrameOnly: true
-        )
-
         // Handle messages from the content server (via our user script).
         let contentController = WKUserContentController()
-        contentController.addUserScript(userScript)
-        contentController.add(LeakAvoider(delegate:self), name: "accountsCommandHandler")
+        contentController.add(LeakAvoider(delegate: self), name: "accountsCommandHandler")
+
+        // Inject our user script after the page loads.
+        if let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js") {
+            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
+                let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+                contentController.addUserScript(userScript)
+            }
+        }
 
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
 
         let webView = WKWebView(
-            frame: CGRect(x: 0, y: 0, width: 1, height: 1),
+            frame: CGRect(width: 1, height: 1),
             configuration: config
         )
         webView.allowsLinkPreview = false
@@ -85,7 +105,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let data = [
             "type": type,
             "content": content,
-        ] as [String : Any]
+        ] as [String: Any]
         let json = JSON(data).stringValue() ?? ""
         let script = "window.postMessage(\(json), '\(self.url.absoluteString)');"
         webView.evaluateJavaScript(script, completionHandler: nil)
@@ -116,27 +136,35 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let helper = FxALoginHelper.sharedInstance
         helper.delegate = self
         helper.application(app, didReceiveAccountJSON: data)
+
+        if profile.hasAccount() {
+            LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
+        }
+
+        LeanPlumClient.shared.track(event: .signsInFxa)
+    }
+
+    @objc fileprivate func userDidVerify(_ notification: Notification) {
+        guard let account = profile.getAccount() else {
+            return
+        }
+        // We can't verify against the actionNeeded of the account,
+        // because of potential race conditions.
+        // However, we restrict visibility of this method, and make sure
+        // we only Notify via the FxALoginStateMachine.
+        let flags = FxALoginFlags(pushEnabled: account.pushRegistration != nil,
+                                  verified: true)
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
+        DispatchQueue.main.async {
+            self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
+        }
     }
 
     // The content server page is ready to be shown.
     fileprivate func onLoaded() {
         self.timer?.invalidate()
         self.timer = nil
-        self.isLoaded = true
-
-        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
-            fillField("email", value: self.fxaOptions.email)
-            fillField("access_code", value: self.fxaOptions.access_code)
-        }
-    }
-    
-    // Attempt to fill out a field in content view
-    fileprivate func fillField(_ className: String?, value: String?) {
-        guard let name = className, let val = value else {
-            return
-        }
-        let script = "$('.\(name)').val('\(val)');"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        self.isLoaded = true        
     }
 
     // Handle a message coming from the content server.
@@ -180,10 +208,25 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             handleRemoteCommand(detail["command"].stringValue, data: detail["data"])
         }
     }
-
-    fileprivate func getJS() -> String {
-        let fileRoot = Bundle.main.path(forResource: "FxASignIn", ofType: "js")
-        return (try! NSString(contentsOfFile: fileRoot!, encoding: String.Encoding.utf8.rawValue)) as String
+    
+    // Configure the FxA signin url based on any passed options.
+    public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile) -> URL {
+        let profileUrl = profile.accountConfiguration.signInURL
+        
+        guard let launchParams = fxaOptions else {
+            return profileUrl
+        }
+        
+        // Only append `signin`, `entrypoint` and `utm_*` parameters. Note that you can't
+        // override the service and context params.
+        var params = launchParams.query
+        params.removeValue(forKey: "service")
+        params.removeValue(forKey: "context")
+        let queryURL = params.filter { $0.key == "signin" || $0.key == "entrypoint" || $0.key.range(of: "utm_") != nil }.map({
+            return "\($0.key)=\($0.value)"
+        }).joined(separator: "&")
+        
+        return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
     }
 
     override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

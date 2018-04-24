@@ -17,12 +17,8 @@ public enum NSFileManagerExtensionsErrorCodes: Int {
 
 public extension FileManager {
 
-    private func directoryEnumeratorForURL(_ url: URL) throws -> FileManager.DirectoryEnumerator {
-        let prefetchedProperties = [
-            URLResourceKey.isRegularFileKey,
-            URLResourceKey.fileAllocatedSizeKey,
-            URLResourceKey.totalFileAllocatedSizeKey
-        ]
+    private func directoryEnumerator(for url: URL) throws -> FileManager.DirectoryEnumerator {
+        let prefetchedProperties: [URLResourceKey] = [.isRegularFileKey, .fileAllocatedSizeKey, .totalFileAllocatedSizeKey]
 
         // If we run into an issue getting an enumerator for the given URL, capture the error and bail out later.
         var enumeratorError: NSError?
@@ -46,7 +42,7 @@ public extension FileManager {
         return directoryEnumerator
     }
 
-    private func sizeForItemURL(_ url: Any, withPrefix prefix: String) throws -> Int64 {
+    private func size(for url: Any, withPrefix prefix: String) throws -> Int64 {
         guard let itemURL = url as? URL else {
             throw errorWithCode(.enumeratorElementNotURL)
         }
@@ -60,10 +56,10 @@ public extension FileManager {
     }
 
     func allocatedSizeOfDirectoryAtURL(_ url: URL, forFilesPrefixedWith prefix: String, isLargerThanBytes threshold: Int64) throws -> Bool {
-        let directoryEnumerator = try directoryEnumeratorForURL(url)
+        let enumerator = try directoryEnumerator(for: url)
         var acc: Int64 = 0
-        for item in directoryEnumerator {
-            acc += try sizeForItemURL(item as AnyObject, withPrefix: prefix)
+        for item in enumerator {
+            acc += try size(for: item as AnyObject, withPrefix: prefix)
             if acc > threshold {
                 return true
             }
@@ -80,9 +76,9 @@ public extension FileManager {
      - throws: Error reading/operating on disk.
      */
     func getAllocatedSizeOfDirectoryAtURL(_ url: URL, forFilesPrefixedWith prefix: String) throws -> Int64 {
-        let directoryEnumerator = try directoryEnumeratorForURL(url)
-        return try directoryEnumerator.reduce(0) {
-            let size = try sizeForItemURL($1 as AnyObject, withPrefix: prefix)
+        let enumerator = try directoryEnumerator(for: url)
+        return try enumerator.reduce(0) {
+            let size = try self.size(for: $1 as AnyObject, withPrefix: prefix)
             return $0 + size
         }
     }

@@ -2,18 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
-import UIKit
-import WebImage
-
 enum MetadataKeys: String {
-    case imageURL = "image_url"
+    case imageURL = "image"
     case imageDataURI = "image_data_uri"
     case pageURL = "url"
     case title = "title"
     case description = "description"
     case type = "type"
     case provider = "provider"
+    case favicon = "icon"
+    case keywords = "keywords"
 }
 
 /*
@@ -27,8 +25,18 @@ public struct PageMetadata {
     public let description: String?
     public let type: String?
     public let providerName: String?
+    public let faviconURL: String?
+    public let keywordsString: String?
+    public var keywords: Set<String> {
+        guard let string = keywordsString else {
+            return Set()
+        }
 
-    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, mediaDataURI: String?, cacheImages: Bool = true) {
+        let strings = string.split(separator: ",", omittingEmptySubsequences: true).map(String.init)
+        return Set(strings)
+    }
+
+    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, faviconURL: String? = nil, keywords: String? = nil) {
         self.id = id
         self.siteURL = siteURL
         self.mediaURL = mediaURL
@@ -36,10 +44,8 @@ public struct PageMetadata {
         self.description = description
         self.type = type
         self.providerName = providerName
-
-        if cacheImages {
-            self.cacheImage(fromDataURI: mediaDataURI, forURL: mediaURL)
-        }
+        self.faviconURL = faviconURL
+        self.keywordsString = keywords
     }
 
     public static func fromDictionary(_ dict: [String: Any]) -> PageMetadata? {
@@ -49,38 +55,6 @@ public struct PageMetadata {
 
         return PageMetadata(id: nil, siteURL: siteURL, mediaURL: dict[MetadataKeys.imageURL.rawValue] as? String,
                             title: dict[MetadataKeys.title.rawValue] as? String, description: dict[MetadataKeys.description.rawValue] as? String,
-                            type: dict[MetadataKeys.type.rawValue] as? String, providerName: dict[MetadataKeys.provider.rawValue] as? String, mediaDataURI: dict[MetadataKeys.imageDataURI.rawValue] as? String)
-    }
-
-    fileprivate func cacheImage(fromDataURI dataURI: String?, forURL urlString: String?) {
-        if let urlString = urlString,
-            let url = URL(string: urlString) {
-            if let dataURI = dataURI,
-                let dataURL = URL(string: dataURI),
-                !SDWebImageManager.shared().cachedImageExists(for: dataURL),
-                let data = try? Data(contentsOf: dataURL),
-                let image = UIImage(data: data) {
-
-                self.cache(image: image, forURL: url)
-            } else if !SDWebImageManager.shared().cachedImageExists(for: url) {
-                // download image direct from URL
-                self.downloadAndCache(fromURL: url)
-            }
-        }
-    }
-
-    fileprivate func downloadAndCache(fromURL webUrl: URL) {
-        let imageManager = SDWebImageManager.shared()
-        let _ = imageManager?.downloadImage(with: webUrl, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, error, cacheType, success, url) in
-            guard let image = image else {
-                return
-            }
-            self.cache(image: image, forURL: webUrl)
-        }
-    }
-
-    fileprivate func cache(image: UIImage, forURL url: URL) {
-        let imageManager = SDWebImageManager.shared()
-        imageManager?.saveImage(toCache: image, for: url)
+                            type: dict[MetadataKeys.type.rawValue] as? String, providerName: dict[MetadataKeys.provider.rawValue] as? String, faviconURL: dict[MetadataKeys.favicon.rawValue] as? String, keywords: dict[MetadataKeys.keywords.rawValue] as? String)
     }
 }

@@ -14,7 +14,7 @@ import SwiftyJSON
 private let log = Logger.syncLogger
 
 class MockSyncDelegate: SyncDelegate {
-    func displaySentTabForURL(_ URL: URL, title: String) {
+    func displaySentTab(for url: URL, title: String, from deviceName: String?) {
     }
 }
 
@@ -120,7 +120,7 @@ extension MockSyncableHistory: SyncableHistory {
                         log.debug("Local modified: \(existingLocal.localModified ??? "nil"); remote: \(modified).")
 
                         // Should always be a value if marked as changed.
-                        if existingLocal.localModified! > modified {
+                        if let localModified = existingLocal.localModified, localModified > modified {
                             // Nothing to do: it's marked as changed.
                             log.debug("Discarding remote non-visit changes!")
                             self.places[place.guid]?.serverModified = modified
@@ -189,7 +189,7 @@ class HistorySynchronizerTests: XCTestCase {
         let prefs = MockProfilePrefs()
         let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
 
-        let synchronizer = HistorySynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs)
+        let synchronizer = HistorySynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs, why: .scheduled)
 
         let expectation = self.expectation(description: "Waiting for application.")
         var succeeded = false

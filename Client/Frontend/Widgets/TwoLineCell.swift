@@ -11,7 +11,7 @@ struct TwoLineCellUX {
     static let BadgeSize: CGFloat = 16
     static let BadgeMargin: CGFloat = 16
     static let BorderFrameSize: CGFloat = 32
-    static let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x333333)
+    static let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey80
     static let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGray : UIColor.gray
     static let DetailTextTopMargin: CGFloat = 0
 }
@@ -32,7 +32,7 @@ class TwoLineTableViewCell: UITableViewCell {
     }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
 
         contentView.addSubview(_textLabel)
         contentView.addSubview(_detailTextLabel)
@@ -40,7 +40,7 @@ class TwoLineTableViewCell: UITableViewCell {
         twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
 
         indentationWidth = 0
-        layoutMargins = UIEdgeInsets.zero
+        layoutMargins = .zero
 
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
     }
@@ -51,7 +51,7 @@ class TwoLineTableViewCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        twoLineHelper.layoutSubviews()
+        twoLineHelper.layoutSubviews(accessoryWidth: self.contentView.frame.origin.x)
     }
 
     override func prepareForReuse() {
@@ -63,6 +63,20 @@ class TwoLineTableViewCell: UITableViewCell {
         twoLineHelper.setupDynamicFonts()
     }
 
+    // Save background color on UITableViewCell "select" because it disappears in the default behavior
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        let color = imageView?.backgroundColor
+        super.setHighlighted(highlighted, animated: animated)
+        imageView?.backgroundColor = color
+    }
+
+    // Save background color on UITableViewCell "select" because it disappears in the default behavior
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        let color = imageView?.backgroundColor
+        super.setSelected(selected, animated: animated)
+        imageView?.backgroundColor = color
+    }
+    
     func setRightBadge(_ badge: UIImage?) {
         if let badge = badge {
             self.accessoryView = UIImageView(image: badge)
@@ -85,13 +99,13 @@ class SiteTableViewCell: TwoLineTableViewCell {
     let borderView = UIView()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        twoLineHelper.layoutSubviews()
+        twoLineHelper.layoutSubviews(accessoryWidth: self.contentView.frame.origin.x)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -129,7 +143,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
         contentView.addSubview(_detailTextLabel)
         contentView.addSubview(imageView)
 
-        layoutMargins = UIEdgeInsets.zero
+        layoutMargins = .zero
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -182,10 +196,10 @@ private class TwoLineCellHelper {
 
     func setupDynamicFonts() {
         textLabel.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
-        detailTextLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallHistoryPanel
+        detailTextLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
     }
 
-    func layoutSubviews() {
+    func layoutSubviews(accessoryWidth: CGFloat = 0) {
         guard let container = self.container else {
             return
         }
@@ -200,11 +214,28 @@ private class TwoLineCellHelper {
 
         let textRightInset: CGFloat = hasRightBadge ? (TwoLineCellUX.BadgeSize + TwoLineCellUX.BadgeMargin) : 0
 
-        imageView.frame = CGRect(x: TwoLineCellUX.BorderViewMargin, y: (height - TwoLineCellUX.ImageSize) / 2, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize)
         textLabel.frame = CGRect(x: textLeft, y: (height - contentHeight) / 2,
-            width: container.frame.width - textLeft - TwoLineCellUX.BorderViewMargin - textRightInset, height: textLabelHeight)
+                                 width: container.frame.width - textLeft - TwoLineCellUX.BorderViewMargin - textRightInset, height: textLabelHeight)
         detailTextLabel.frame = CGRect(x: textLeft, y: textLabel.frame.maxY + TwoLineCellUX.DetailTextTopMargin,
-            width: container.frame.width - textLeft - TwoLineCellUX.BorderViewMargin - textRightInset, height: detailTextLabelHeight)
+                                       width: container.frame.width - textLeft - TwoLineCellUX.BorderViewMargin - textRightInset, height: detailTextLabelHeight)
+
+        // Like the comment above, this is not ideal. This code should probably be refactored to use autolayout. That will remove a lot of the pixel math and remove code duplication.
+
+        if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
+            imageView.frame = CGRect(x: TwoLineCellUX.BorderViewMargin, y: (height - TwoLineCellUX.ImageSize) / 2, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize)
+        } else {
+            imageView.frame = CGRect(x: container.frame.width - TwoLineCellUX.ImageSize - TwoLineCellUX.BorderViewMargin, y: (height - TwoLineCellUX.ImageSize) / 2, width: TwoLineCellUX.ImageSize, height: TwoLineCellUX.ImageSize)
+
+            textLabel.frame = textLabel.frame.offsetBy(dx: -(TwoLineCellUX.ImageSize + TwoLineCellUX.BorderViewMargin - textRightInset), dy: 0)
+            detailTextLabel.frame = detailTextLabel.frame.offsetBy(dx: -(TwoLineCellUX.ImageSize + TwoLineCellUX.BorderViewMargin - textRightInset), dy: 0)
+
+            // If the cell has an accessory, shift them all to the left even more. Only required on RTL.
+            if accessoryWidth != 0 {
+                imageView.frame = imageView.frame.offsetBy(dx: -accessoryWidth, dy: 0)
+                textLabel.frame = textLabel.frame.offsetBy(dx: -accessoryWidth, dy: 0)
+                detailTextLabel.frame = detailTextLabel.frame.offsetBy(dx: -accessoryWidth, dy: 0)
+            }
+        }
     }
 
     func setLines(_ text: String?, detailText: String?) {

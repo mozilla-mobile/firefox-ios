@@ -40,7 +40,7 @@ class SearchInputView: UIView {
         textField.delegate = self
         textField.textColor = SearchInputViewUX.inputColor
         textField.tintColor = SearchInputViewUX.inputColor
-        textField.addTarget(self, action: #selector(SearchInputView.inputTextDidChange(_:)), for: .editingChanged)
+        textField.addTarget(self, action: #selector(inputTextDidChange), for: .editingChanged)
         textField.accessibilityLabel = NSLocalizedString("Search Input Field", tableName: "LoginManager", comment: "Accessibility label for the search input field in the Logins list")
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
@@ -61,8 +61,8 @@ class SearchInputView: UIView {
 
     fileprivate lazy var closeButton: UIButton = {
         let button = UIButton()
-        button.addTarget(self, action: #selector(SearchInputView.tappedClose), for: .touchUpInside)
-        button.setImage(UIImage(named: "clear"), for: UIControlState())
+        button.addTarget(self, action: #selector(tappedClose), for: .touchUpInside)
+        button.setImage(UIImage(named: "clear"), for: [])
         button.accessibilityLabel = NSLocalizedString("Clear Search", tableName: "LoginManager",
             comment: "Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode")
         return button
@@ -79,7 +79,7 @@ class SearchInputView: UIView {
     fileprivate lazy var overlay: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(SearchInputView.tappedSearch)))
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedSearch)))
 
         view.isAccessibilityElement = true
         view.accessibilityLabel =  NSLocalizedString("Enter Search Mode", tableName: "LoginManager", comment: "Accessibility label for entering search mode for logins")
@@ -160,7 +160,7 @@ class SearchInputView: UIView {
         }
     }
 
-    // didSet callbacks don't trigger when a property is being set in the init() call 
+    // didSet callbacks don't trigger when a property is being set in the init() call
     // but calling a method that does works fine.
     fileprivate func setEditing(_ editing: Bool) {
         isEditing = editing
@@ -174,20 +174,20 @@ class SearchInputView: UIView {
 // MARK: - Selectors
 extension SearchInputView {
 
-    func tappedSearch() {
+    @objc func tappedSearch() {
         isEditing = true
         inputField.becomeFirstResponder()
         delegate?.searchInputViewBeganEditing(self)
     }
 
-    func tappedClose() {
+    @objc func tappedClose() {
         isEditing = false
         delegate?.searchInputViewFinishedEditing(self)
         inputField.text = nil
         inputField.resignFirstResponder()
     }
 
-    func inputTextDidChange(_ textField: UITextField) {
+    @objc func inputTextDidChange(_ textField: UITextField) {
         delegate?.searchInputView(self, didChangeTextTo: textField.text ?? "")
     }
 }
@@ -197,7 +197,7 @@ extension SearchInputView: UITextFieldDelegate {
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         // If there is no text, go back to showing the title view
-        if (textField.text?.characters.count ?? 0) == 0 {
+        if textField.text?.isEmpty ?? true {
             isEditing = false
             delegate?.searchInputViewFinishedEditing(self)
         }

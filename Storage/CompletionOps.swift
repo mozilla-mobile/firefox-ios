@@ -66,3 +66,24 @@ open class BufferCompletionOp: PerhapsNoOp {
     public init() {
     }
 }
+
+// This supports the "simple" bookmark syncing scenario where 3-way-merging is disabled:
+// After upload, we first remove from the buffer the deleted records,
+// then we move new local records to the buffer.
+open class BufferUpdatedCompletionOp: PerhapsNoOp {
+    internal let bufferValuesToMoveFromLocal: Set<GUID>
+    internal let deletedValues: Set<GUID>
+    internal let mobileRoot: BookmarkMirrorItem
+    internal let modifiedTime: Timestamp
+
+    open var isNoOp: Bool {
+        return false
+    }
+
+    public init(bufferValuesToMoveFromLocal: Set<GUID>, deletedValues: Set<GUID>, mobileRoot: BookmarkMirrorItem, modifiedTime: Timestamp) {
+        self.bufferValuesToMoveFromLocal = bufferValuesToMoveFromLocal
+        self.deletedValues = deletedValues
+        self.mobileRoot = mobileRoot
+        self.modifiedTime = modifiedTime
+    }
+}

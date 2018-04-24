@@ -14,19 +14,21 @@ class LoginInputTests: KIFTestCase {
         super.setUp()
         profile = (UIApplication.shared.delegate as! AppDelegate).profile!
         webRoot = SimplePageServer.start()
+        BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
     
     override func tearDown() {
         _ = profile.logins.removeAll().value
-        BrowserUtils.resetToAboutHome(tester())
-        BrowserUtils.clearPrivateData(tester: tester())
+        BrowserUtils.resetToAboutHome()
+        BrowserUtils.clearPrivateData()
         super.tearDown()
     }
     
     func enterUrl(url: String) {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\(url)\n"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
     }
     
     func waitForLoginDialog(text: String, appears: Bool = true) {
@@ -37,7 +39,7 @@ class LoginInputTests: KIFTestCase {
             failedReason = "Dialog still displayed"
         }
         
-        let saveLoginDialog = GREYCondition(name: "Check login dialog appears", block: { _ in
+        let saveLoginDialog = GREYCondition(name: "Check login dialog appears", block: {
             var errorOrNil: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel(text),
                                               grey_sufficientlyVisible()])

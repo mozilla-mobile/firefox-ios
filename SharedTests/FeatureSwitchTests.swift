@@ -26,6 +26,10 @@ class FeatureSwitchTests: XCTestCase {
     func testConsistentWhenChangingPercentage() {
         let featureID = "test-persistent-over-releases"
         let prefs = MockProfilePrefs()
+        let guardFeatureSwitch = FeatureSwitch(named: featureID, allowPercentage: 50, buildChannel: buildChannel)
+        while guardFeatureSwitch.alwaysMembership(prefs) {
+            guardFeatureSwitch.resetMembership(prefs)
+        }
         var membership = false
         var changed = 0
         for percent in 0..<100 {
@@ -37,6 +41,30 @@ class FeatureSwitchTests: XCTestCase {
         }
 
         XCTAssertEqual(changed, 1, "Users should get and keep the feature if the feature is becoming successful")
+    }
+
+    func testReallyConsistentWhenChangingPercentage() {
+        for _ in 0..<1000 {
+            testConsistentWhenChangingPercentage()
+        }
+    }
+
+    func testUserEnabled() {
+        let prefs = MockProfilePrefs()
+        let featureSwitch = FeatureSwitch(named: "test-user-enabled", allowPercentage: 0, buildChannel: buildChannel)
+        XCTAssertFalse(featureSwitch.isMember(prefs), "The feature should be disabled")
+        featureSwitch.setMembership(true, for: prefs) // enable the feature
+        XCTAssertTrue(featureSwitch.isMember(prefs), "The feature should be enabled")
+        featureSwitch.setMembership(false, for: prefs) // disable the feature
+        XCTAssertFalse(featureSwitch.isMember(prefs), "The feature should be disabled again")
+    }
+
+    func testForceDisabled() {
+        let prefs = MockProfilePrefs()
+        let featureSwitch = FeatureSwitch(named: "test-user-disabled", allowPercentage: 100, buildChannel: buildChannel)
+        XCTAssertTrue(featureSwitch.isMember(prefs), "The feature should be enabled")
+        featureSwitch.setMembership(false, for: prefs) // disable the feature
+        XCTAssertFalse(featureSwitch.isMember(prefs), "The feature should be disabled again")
     }
 }
 
@@ -68,7 +96,7 @@ extension FeatureSwitchTests {
         let prefs = MockProfilePrefs()
         measure {
             for _ in 0..<1000 {
-                let _ = featureSwitch.isMember(prefs)
+                _ = featureSwitch.isMember(prefs)
             }
         }
     }
@@ -101,7 +129,7 @@ private extension FeatureSwitchTests {
     }
 
     func testExactly(_ featureSwitch: FeatureSwitch, expected: Int) {
-        let testCount = 10
+        let testCount = 1000
         let count = sampleN(featureSwitch, testCount: testCount)
         let normalizedExpectedCount = (testCount * expected) / 100
         XCTAssertEqual(count, normalizedExpectedCount)

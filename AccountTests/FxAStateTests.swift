@@ -9,9 +9,11 @@ import SwiftyJSON
 
 import XCTest
 
+let keyLength = UInt(KeyLength)
+
 class FxAStateTests: XCTestCase {
     class func stateForLabel(_ label: FxAStateLabel) -> FxAState {
-        let keyLength = UInt(KeyLength) // Ah, Swift.
+        let kXCS = "6ae94683571c7a7c54dab4700aa3995f"
         let now = Date.now()
 
         switch label {
@@ -30,18 +32,18 @@ class FxAStateTests: XCTestCase {
 
         case .cohabitingBeforeKeyPair:
             return CohabitingBeforeKeyPairState(sessionToken: Data.randomOfLength(keyLength)!,
-                kA: Data.randomOfLength(keyLength)!, kB: Data.randomOfLength(keyLength)!)
+                kSync: Data.randomOfLength(keyLength)!, kXCS: kXCS)
 
         case .cohabitingAfterKeyPair:
             let keyPair = RSAKeyPair.generate(withModulusSize: 512)!
             return CohabitingAfterKeyPairState(sessionToken: Data.randomOfLength(keyLength)!,
-                kA: Data.randomOfLength(keyLength)!, kB: Data.randomOfLength(keyLength)!,
+                kSync: Data.randomOfLength(keyLength)!, kXCS: kXCS,
                 keyPair: keyPair, keyPairExpiresAt: now + 1)
 
         case .married:
             let keyPair = RSAKeyPair.generate(withModulusSize: 512)!
             return MarriedState(sessionToken: Data.randomOfLength(keyLength)!,
-                kA: Data.randomOfLength(keyLength)!, kB: Data.randomOfLength(keyLength)!,
+                kSync: Data.randomOfLength(keyLength)!, kXCS: kXCS,
                 keyPair: keyPair, keyPairExpiresAt: now + 1,
                 certificate: "certificate", certificateExpiresAt: now + 2)
 
@@ -77,5 +79,25 @@ class FxAStateTests: XCTestCase {
         XCTAssertNotEqual(
             NSDictionary(dictionary: state1.asJSON().dictionaryObject!),
             NSDictionary(dictionary: state2.asJSON().dictionaryObject!))
+    }
+
+    func testMigrationV1V2() {
+        let marriedState = FxAStateTests.stateForLabel(.married) as! MarriedState
+
+        // Modify the JSON to make it look like a v1 persisted state.
+        var dict = marriedState.asJSON().dictionary!
+        dict["version"] = 1
+        dict.removeValue(forKey: "kXCS")
+        dict.removeValue(forKey: "kSync")
+        let kA = Data.randomOfLength(keyLength)!
+        let kB = Data.randomOfLength(keyLength)!
+        dict["kA"] = JSON(kA.hexEncodedString)
+        dict["kB"] = JSON(kB.hexEncodedString)
+        let stateV1 = JSON(dict)
+
+        let loadedState = state(fromJSON: stateV1)!
+        let newJSON = loadedState.asJSON()
+        XCTAssertNotNil(newJSON["kSync"])
+        XCTAssertNotNil(newJSON["kXCS"])
     }
 }

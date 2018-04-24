@@ -62,8 +62,8 @@ func makeLoginRecord(_ login: Login) -> Record<LoginPayload> {
  * works with logins, server records and collection are passwords.
  */
 open class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
-    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
-        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "passwords")
+    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, why: SyncReason) {
+        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, why: why, collection: "passwords")
     }
 
     override var storageVersion: Int {
@@ -174,7 +174,7 @@ open class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             log.debug("Applying incoming password records from response timestamped \(ts), last modified \(lm).")
             log.debug("Records header hint: \(response.metadata.records ??? "nil")")
             return self.applyIncomingToStorage(logins, records: response.value, fetched: lm) >>> effect {
-                NotificationCenter.default.post(name: NotificationDataRemoteLoginChangesWereApplied, object: nil)
+                NotificationCenter.default.post(name: .DataRemoteLoginChangesWereApplied, object: nil)
             }
         }
 

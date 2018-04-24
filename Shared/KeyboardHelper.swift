@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Foundation
 
 /**
  * The keyboard state at the time of notification.
@@ -66,9 +65,9 @@ open class KeyboardHelper: NSObject {
      * Starts monitoring the keyboard state.
      */
     open func startObserving() {
-        NotificationCenter.default.addObserver(self, selector: #selector(KeyboardHelper.SELkeyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(KeyboardHelper.SELkeyboardDidShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(KeyboardHelper.SELkeyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: .UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
     }
 
     deinit {
@@ -80,18 +79,16 @@ open class KeyboardHelper: NSObject {
      * Delegates are weakly held.
      */
     open func addDelegate(_ delegate: KeyboardHelperDelegate) {
-        for weakDelegate in delegates {
-            // Reuse any existing slots that have been deallocated.
-            if weakDelegate.delegate == nil {
-                weakDelegate.delegate = delegate
-                return
-            }
+        // Reuse any existing slots that have been deallocated.
+        for weakDelegate in delegates where weakDelegate.delegate == nil {
+            weakDelegate.delegate = delegate
+            return
         }
 
         delegates.append(WeakKeyboardDelegate(delegate))
     }
 
-    func SELkeyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
@@ -100,7 +97,7 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    func SELkeyboardDidShow(_ notification: Notification) {
+    @objc func keyboardDidShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
@@ -109,7 +106,7 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    func SELkeyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {

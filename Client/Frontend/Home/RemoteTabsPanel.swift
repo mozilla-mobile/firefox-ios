@@ -15,14 +15,14 @@ private let log = Logger.browserLogger
 private struct RemoteTabsPanelUX {
     static let HeaderHeight = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
     static let RowHeight = SiteTableViewControllerUX.RowHeight
-    static let HeaderBackgroundColor = UIColor(rgb: 0xf8f8f8)
+    static let HeaderBackgroundColor = UIColor.Photon.Grey10
 
     static let EmptyStateTitleTextColor = UIColor.darkGray
 
     static let EmptyStateInstructionsTextColor = UIColor.gray
     static let EmptyStateInstructionsWidth = 170
     static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
-    static let EmptyStateSignInButtonColor = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
+    static let EmptyStateSignInButtonColor = UIColor(red: 0.3, green: 0.62, blue: 1, alpha: 1)
     static let EmptyStateSignInButtonTitleColor = UIColor.white
     static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
     static let EmptyStateSignInButtonHeight = 44
@@ -48,15 +48,15 @@ class RemoteTabsPanel: UIViewController, HomePanel {
     fileprivate lazy var tableViewController: RemoteTabsTableViewController = RemoteTabsTableViewController()
     fileprivate lazy var historyBackButton: HistoryBackButton = {
         let button = HistoryBackButton()
-        button.addTarget(self, action: #selector(RemoteTabsPanel.historyBackButtonWasTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(historyBackButtonWasTapped), for: .touchUpInside)
         return button
     }()
     var profile: Profile!
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(RemoteTabsPanel.notificationReceived(_:)), name: NotificationFirefoxAccountChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(RemoteTabsPanel.notificationReceived(_:)), name: NotificationProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .ProfileDidFinishSyncing, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -89,14 +89,9 @@ class RemoteTabsPanel: UIViewController, HomePanel {
         tableViewController.didMove(toParentViewController: self)
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-    }
-
-    func notificationReceived(_ notification: Notification) {
+    @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing:
+        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
             DispatchQueue.main.async {
                 print(notification.name)
                 self.tableViewController.refreshTabs()
@@ -110,7 +105,7 @@ class RemoteTabsPanel: UIViewController, HomePanel {
     }
 
     @objc fileprivate func historyBackButtonWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        let _ = self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -127,7 +122,7 @@ enum RemoteTabsError {
         case .noClients:
             return Strings.EmptySyncedTabsPanelNullStateDescription
         case .noTabs:
-            return NSLocalizedString("You don't have any tabs open in Firefox on your other devices.", comment: "Error message in the remote tabs panel")
+            return NSLocalizedString("You don’t have any tabs open in Firefox on your other devices.", comment: "Error message in the remote tabs panel")
         case .failedToSync:
             return NSLocalizedString("There was a problem accessing tabs from your other devices. Try again in a few moments.", comment: "Error message in the remote tabs panel")
         }
@@ -162,7 +157,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let clientTabs = self.clientAndTabs[section]
         let client = clientTabs.client
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! TwoLineHeaderFooterView
-        view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
+        view.frame = CGRect(width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
         view.textLabel?.text = client.name
         view.contentView.backgroundColor = RemoteTabsPanelUX.HeaderBackgroundColor
 
@@ -192,6 +187,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
             image?.accessibilityLabel = NSLocalizedString("mobile device", comment: "Accessibility label for Mobile Device image in remote tabs list")
         }
         view.imageView.image = image
+        view.imageView.contentMode = .center
 
         view.mergeAccessibilityLabels()
         return view
@@ -295,14 +291,14 @@ class RemoteTabsErrorCell: UITableViewCell {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
-        titleLabel.textAlignment = NSTextAlignment.center
+        titleLabel.textAlignment = .center
         titleLabel.textColor = RemoteTabsPanelUX.EmptyStateTitleTextColor
         containerView.addSubview(titleLabel)
 
         let instructionsLabel = UILabel()
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         instructionsLabel.text = error.localizedString()
-        instructionsLabel.textAlignment = NSTextAlignment.center
+        instructionsLabel.textAlignment = .center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
         containerView.addSubview(instructionsLabel)
@@ -369,29 +365,29 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
-        titleLabel.textAlignment = NSTextAlignment.center
+        titleLabel.textAlignment = .center
         titleLabel.textColor = RemoteTabsPanelUX.EmptyStateTitleTextColor
         contentView.addSubview(titleLabel)
 
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        instructionsLabel.text = Strings.EmptySyncedTabsPanelStateDescription
-        instructionsLabel.textAlignment = NSTextAlignment.center
+        instructionsLabel.text = Strings.EmptySyncedTabsPanelNotSignedInStateDescription
+        instructionsLabel.textAlignment = .center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
         contentView.addSubview(instructionsLabel)
 
         signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
-        signInButton.setTitle(NSLocalizedString("Sign in", comment: "See http://mzl.la/1Qtkf0j"), for: UIControlState())
-        signInButton.setTitleColor(RemoteTabsPanelUX.EmptyStateSignInButtonTitleColor, for: UIControlState())
-        signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.subheadline)
+        signInButton.setTitle(Strings.FxASignInToSync, for: [])
+        signInButton.setTitleColor(RemoteTabsPanelUX.EmptyStateSignInButtonTitleColor, for: [])
+        signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
-        signInButton.addTarget(self, action: #selector(RemoteTabsNotLoggedInCell.SELsignIn), for: UIControlEvents.touchUpInside)
+        signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         contentView.addSubview(signInButton)
 
-        createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), for: UIControlState())
-        createAnAccountButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.caption1)
-        createAnAccountButton.addTarget(self, action: #selector(RemoteTabsNotLoggedInCell.SELcreateAnAccount), for: UIControlEvents.touchUpInside)
+        createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), for: [])
+        createAnAccountButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
+        createAnAccountButton.addTarget(self, action: #selector(createAnAccount), for: .touchUpInside)
         contentView.addSubview(createAnAccountButton)
 
         imageView.snp.makeConstraints { (make) -> Void in
@@ -419,13 +415,13 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc fileprivate func SELsignIn() {
+    @objc fileprivate func signIn() {
         if let homePanel = self.homePanel {
             homePanel.homePanelDelegate?.homePanelDidRequestToSignIn(homePanel)
         }
     }
 
-    @objc fileprivate func SELcreateAnAccount() {
+    @objc fileprivate func createAnAccount() {
         if let homePanel = self.homePanel {
             homePanel.homePanelDelegate?.homePanelDidRequestToCreateAccount(homePanel)
         }
@@ -483,13 +479,18 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         }
     }
 
+    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.register(TwoLineHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
         tableView.register(TwoLineTableViewCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
 
         tableView.rowHeight = RemoteTabsPanelUX.RowHeight
-        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.separatorInset = .zero
 
         tableView.delegate = nil
         tableView.dataSource = nil
@@ -499,13 +500,13 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        refreshControl?.addTarget(self, action: #selector(RemoteTabsTableViewController.refreshTabs), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(refreshTabs), for: .valueChanged)
         refreshTabs()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        refreshControl?.removeTarget(self, action: #selector(RemoteTabsTableViewController.refreshTabs), for: .valueChanged)
+        refreshControl?.removeTarget(self, action: #selector(refreshTabs), for: .valueChanged)
     }
 
     fileprivate func startRefreshing() {
@@ -547,7 +548,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
 
         tableView.isScrollEnabled = false
         tableView.allowsSelection = false
-        tableView.tableFooterView = UIView(frame: CGRect.zero)
+        tableView.tableFooterView = UIView(frame: .zero)
 
         // Short circuit if the user is not logged in
         if !profile.hasSyncableAccount() {
@@ -556,7 +557,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             return
         }
 
-        self.profile.getCachedClientsAndTabs().uponQueue(DispatchQueue.main) { result in
+        self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
             if let clientAndTabs = result.successValue {
                 self.updateDelegateClientAndTabData(clientAndTabs)
             }
@@ -565,7 +566,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime) ?? 0
             if Date.now() > lastSyncTime && Date.now() - lastSyncTime > OneSecondInMilliseconds * 5 {
                 self.startRefreshing()
-                self.profile.getClientsAndTabs().uponQueue(DispatchQueue.main) { result in
+                self.profile.getClientsAndTabs().uponQueue(.main) { result in
                     // We set the last sync time to now, regardless of whether the sync was successful, to avoid trying to sync over
                     // and over again in cases whether the client is unable to sync (e.g. when there is no network connectivity).
                     self.profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)
@@ -583,5 +584,28 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
                 self.endRefreshing()
             }
         }
+    }
+
+    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == .began else { return }
+        let touchPoint = longPressGestureRecognizer.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
+        presentContextMenu(for: indexPath)
+    }
+}
+
+extension RemoteTabsTableViewController: HomePanelContextMenu {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
+        guard let contextMenu = completionHandler() else { return }
+        self.present(contextMenu, animated: true, completion: nil)
+    }
+
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        guard let tab = (tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource)?.tabAtIndexPath(indexPath) else { return nil }
+        return Site(url: String(describing: tab.URL), title: tab.title)
+    }
+
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
+        return getDefaultContextMenuActions(for: site, homePanelDelegate: remoteTabsPanel?.homePanelDelegate)
     }
 }

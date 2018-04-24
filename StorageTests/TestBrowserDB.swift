@@ -31,19 +31,16 @@ class TestBrowserDB: XCTestCase {
         rm("foo.db.bak.1-wal")
     }
 
-    class MockFailingTable: Table {
+    class MockFailingSchema: Schema {
         var name: String { return "FAILURE" }
-        var version: Int { return 1 }
-        func exists(_ db: SQLiteDBConnection) -> Bool {
-            return false
-        }
+        var version: Int { return BrowserSchema.DefaultVersion + 1 }
         func drop(_ db: SQLiteDBConnection) -> Bool {
             return true
         }
         func create(_ db: SQLiteDBConnection) -> Bool {
             return false
         }
-        func updateTable(_ db: SQLiteDBConnection, from: Int) -> Bool {
+        func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
             return false
         }
     }
@@ -56,11 +53,26 @@ class TestBrowserDB: XCTestCase {
         }
     }
 
-    func testMovesDB() {
-        let db = BrowserDB(filename: "foo.db", files: self.files)
-        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
-        XCTAssertTrue(db.createOrUpdate(BrowserTable()) == .success)
+    func testUpgradeV33toV34RemovesLongURLs() {
+        let db = BrowserDB(filename: "v33.db", schema: BrowserSchema(), files: SupportingFiles())
+        let results = db.runQuery("SELECT bmkUri, title FROM bookmarksLocal WHERE type = 1", args: nil, factory: { row in
+            (row[0] as! String, row[1] as! String)
+        }).value.successValue!
 
+        // The bookmark with the long URL has been deleted.
+        XCTAssertTrue(results.count == 1)
+
+        let remaining = results[0]!
+
+        // This one's title has been truncated to 4096 chars.
+        XCTAssertEqual(remaining.1.count, 4096)
+        XCTAssertEqual(remaining.1.utf8.count, 4096)
+        XCTAssertTrue(remaining.1.hasPrefix("abcdefghijkl"))
+        XCTAssertEqual(remaining.0, "http://example.com/short")
+    }
+
+    func testMovesDB() {
+        var db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
         db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
 
         XCTAssertTrue(files.exists("foo.db"))
@@ -78,13 +90,17 @@ class TestBrowserDB: XCTestCase {
 
         let center = NotificationCenter.default
         let listener = MockListener()
-        center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated(_:)), name: NotificationDatabaseWasRecreated, object: nil)
+        center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated), name: .DatabaseWasRecreated, object: nil)
         defer { center.removeObserver(listener) }
 
         // It'll still fail, but it moved our old DB.
         // Our current observation is that closing the DB deletes the .shm file and also
         // checkpoints the WAL.
-        XCTAssertFalse(db.createOrUpdate(MockFailingTable()) == .success)
+        db.forceClose()
+
+        db = BrowserDB(filename: "foo.db", schema: MockFailingSchema(), files: self.files)
+        db.run("CREATE TABLE foo (bar TEXT)").failed() // This won't actually write since we'll get a failed connection
+        db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
         db.run("CREATE TABLE foo (bar TEXT)").succeeded() // Just so we have writes in the WAL.
 
         XCTAssertTrue(files.exists("foo.db"))

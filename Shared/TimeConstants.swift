@@ -9,12 +9,27 @@ public typealias MicrosecondTimestamp = UInt64
 
 public let ThreeWeeksInSeconds = 3 * 7 * 24 * 60 * 60
 
+public let OneYearInMilliseconds = 12 * OneMonthInMilliseconds
 public let OneMonthInMilliseconds = 30 * OneDayInMilliseconds
 public let OneWeekInMilliseconds = 7 * OneDayInMilliseconds
 public let OneDayInMilliseconds = 24 * OneHourInMilliseconds
 public let OneHourInMilliseconds = 60 * OneMinuteInMilliseconds
 public let OneMinuteInMilliseconds = 60 * OneSecondInMilliseconds
 public let OneSecondInMilliseconds: UInt64 = 1000
+
+fileprivate let rfc822DateFormatter: DateFormatter = {
+    let dateFormatter = DateFormatter()
+    dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
+    dateFormatter.dateFormat = "EEE',' dd MMM yyyy HH':'mm':'ss 'GMT'"
+    dateFormatter.locale = Locale(identifier: "en_US")
+    return dateFormatter
+}()
+
+extension Timestamp {
+    public static func uptimeInMilliseconds() -> Timestamp {
+        return Timestamp(DispatchTime.now().uptimeNanoseconds) / 1000000
+    }
+}
 
 extension Date {
     public static func now() -> Timestamp {
@@ -40,15 +55,11 @@ extension Date {
     public func toRelativeTimeString() -> String {
         let now = Date()
 
-        let units: NSCalendar.Unit = [NSCalendar.Unit.second, NSCalendar.Unit.minute, NSCalendar.Unit.day, NSCalendar.Unit.weekOfYear, NSCalendar.Unit.month, NSCalendar.Unit.year, NSCalendar.Unit.hour]
+        let units: Set<Calendar.Component> = [.second, .minute, .day, .weekOfYear, .month, .year, .hour]
+        let components = Calendar.current.dateComponents(units, from: self, to: now)
 
-        let components = (Calendar.current as NSCalendar).components(units,
-            from: self,
-            to: now,
-            options: [])
-        
         if components.year! > 0 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: .short, timeStyle: .short))
         }
 
         if components.month == 1 {
@@ -56,7 +67,7 @@ extension Date {
         }
 
         if components.month! > 1 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: .short, timeStyle: .short))
         }
 
         if components.weekOfYear! > 0 {
@@ -72,12 +83,16 @@ extension Date {
         }
 
         if components.hour! > 0 || components.minute! > 0 {
-            let absoluteTime = DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.none, timeStyle: DateFormatter.Style.short)
+            let absoluteTime = DateFormatter.localizedString(from: self, dateStyle: .none, timeStyle: .short)
             let format = NSLocalizedString("today at %@", comment: "Relative date for date older than a minute.")
             return String(format: format, absoluteTime)
         }
 
         return String(format: NSLocalizedString("just now", comment: "Relative time for a tab that was visited within the last few moments."))
+    }
+
+    public func toRFC822String() -> String {
+        return rfc822DateFormatter.string(from: self)
     }
 }
 

@@ -8,165 +8,150 @@ import Shared
 
 class SnackBarUX {
     static var MaxWidth: CGFloat = 400
+    static let BorderWidth: CGFloat = 0.5
+    static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)
+    static let HighlightText = UIColor(red: 42/255, green: 121/255, blue: 213/255, alpha: 1.0)
 }
 
 /**
  * A specialized version of UIButton for use in SnackBars. These are displayed evenly
  * spaced in the bottom of the bar. The main convenience of these is that you can pass
  * in a callback in the constructor (although these also style themselves appropriately).
- *
- *``SnackButton(title: "OK", { _ in print("OK", terminator: "\n") })``
  */
+typealias SnackBarCallback = (_ bar: SnackBar) -> Void
 class SnackButton: UIButton {
-    let callback: (_ bar: SnackBar) -> Void
+    let callback: SnackBarCallback?
     fileprivate var bar: SnackBar!
 
-    /**
-     * An image to show as the background when a button is pressed. This is currently a 1x1 pixel blue color
-     */
-    lazy var highlightImg: UIImage = {
-        let size = CGSize(width: 1, height: 1)
-        return UIImage.createWithColor(size, color: UIConstants.HighlightColor)
-    }()
-
-    init(title: String, accessibilityIdentifier: String, callback: @escaping (_ bar: SnackBar) -> Void) {
-        self.callback = callback
-
-        super.init(frame: CGRect.zero)
-
-        setTitle(title, for: UIControlState())
-        titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
-        setBackgroundImage(highlightImg, for: .highlighted)
-        setTitleColor(UIConstants.HighlightText, for: .highlighted)
-
-        addTarget(self, action: #selector(SnackButton.onClick), for: .touchUpInside)
-
-        self.accessibilityIdentifier = accessibilityIdentifier
+    override open var isHighlighted: Bool {
+        didSet {
+            self.backgroundColor = isHighlighted ? SnackBarUX.HighlightColor : .clear
+        }
     }
 
-    override init(frame: CGRect) {
-        self.callback = { bar in }
-        super.init(frame: frame)
+    init(title: String, accessibilityIdentifier: String, callback: @escaping SnackBarCallback) {
+        self.callback = callback
+
+        super.init(frame: .zero)
+
+        setTitle(title, for: .normal)
+        titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
+        setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
+        setTitleColor(SettingsUX.TableViewRowTextColor, for: .normal)
+        addTarget(self, action: #selector(onClick), for: .touchUpInside)
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func onClick() {
-        callback(bar)
+    @objc func onClick() {
+        callback?(bar)
+    }
+
+    func drawSeparator() {
+        let separator = UIView()
+        separator.backgroundColor = UIConstants.BorderColor
+        self.addSubview(separator)
+        separator.snp.makeConstraints { make in
+            make.leading.equalTo(self)
+            make.width.equalTo(SnackBarUX.BorderWidth)
+            make.top.bottom.equalTo(self)
+        }
     }
 
 }
 
-/**
- * Presents some information to the user. Can optionally include some buttons and an image. Usage:
- *
- * ``let bar = SnackBar(text: "This is some text in the snackbar.",
- *     img: UIImage(named: "bookmark"),
- *     buttons: [
- *         SnackButton(title: "OK", { _ in print("OK", terminator: "\n") }),
- *         SnackButton(title: "Cancel", { _ in print("Cancel", terminator: "\n") }),
- *         SnackButton(title: "Maybe", { _ in print("Maybe", terminator: "\n") })
- *     ]
- * )``
- */
 class SnackBar: UIView {
-    let imageView: UIImageView
-    let textLabel: UILabel
-    let contentView: UIView
-    let backgroundView: UIView
-    let buttonsView: Toolbar
-    fileprivate var buttons = [SnackButton]()
+    let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
+
+    private lazy var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        // These are requried to make sure that the image is _never_ smaller or larger than its actual size
+        imageView.setContentHuggingPriority(.required, for: .horizontal)
+        imageView.setContentHuggingPriority(.required, for: .vertical)
+        imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        imageView.setContentCompressionResistancePriority(.required, for: .vertical)
+        return imageView
+    }()
+
+    private lazy var textLabel: UILabel = {
+        let label = UILabel()
+        label.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
+        label.lineBreakMode = .byWordWrapping
+        label.setContentCompressionResistancePriority(.required, for: .horizontal)
+        label.backgroundColor = nil
+        label.numberOfLines = 0
+        label.textColor = SettingsUX.TableViewRowTextColor
+        label.backgroundColor = UIColor.clear
+        return label
+    }()
+
+    private lazy var buttonsView: UIStackView = {
+        let stack = UIStackView()
+        stack.distribution = .fillEqually
+        return stack
+    }()
+
+    private lazy var titleView: UIStackView = {
+        let stack = UIStackView()
+        stack.spacing = UIConstants.DefaultPadding
+        stack.distribution = .fill
+        stack.axis = .horizontal
+        stack.alignment = .center
+        return stack
+    }()
+
     // The Constraint for the bottom of this snackbar. We use this to transition it
     var bottom: Constraint?
 
-    convenience init(text: String, img: UIImage?, buttons: [SnackButton]?) {
-        var attributes = [String: AnyObject]()
-        attributes[NSFontAttributeName] = DynamicFontHelper.defaultHelper.DefaultMediumFont
-        attributes[NSBackgroundColorAttributeName] = UIColor.clear
-        let attrText = NSAttributedString(string: text, attributes: attributes)
-        self.init(attrText: attrText, img: img, buttons: buttons)
-    }
+    init(text: String, img: UIImage?) {
+        super.init(frame: .zero)
 
-    init(attrText: NSAttributedString, img: UIImage?, buttons: [SnackButton]?) {
-        imageView = UIImageView()
-        textLabel = UILabel()
-        contentView = UIView()
-        buttonsView = Toolbar()
-        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.extraLight))
-
-        super.init(frame: CGRect.zero)
-
-        imageView.image = img
-        textLabel.attributedText = attrText
-        if let buttons = buttons {
-            for button in buttons {
-                addButton(button)
-            }
-        }
+        imageView.image = img ?? UIImage(named: "defaultFavicon")
+        textLabel.text = text
         setup()
     }
 
-    fileprivate override init(frame: CGRect) {
-        imageView = UIImageView()
-        textLabel = UILabel()
-        contentView = UIView()
-        buttonsView = Toolbar()
-        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.extraLight))
-
-        super.init(frame: frame)
-    }
-
     fileprivate func setup() {
-        textLabel.backgroundColor = nil
-
         addSubview(backgroundView)
-        addSubview(contentView)
-        contentView.addSubview(imageView)
-        contentView.addSubview(textLabel)
+        titleView.addArrangedSubview(imageView)
+        titleView.addArrangedSubview(textLabel)
+
+        let separator = UIView()
+        separator.backgroundColor = UIConstants.BorderColor
+
+        addSubview(titleView)
+        addSubview(separator)
         addSubview(buttonsView)
 
-        self.backgroundColor = UIColor.clear
-        buttonsView.drawTopBorder = true
-        buttonsView.drawBottomBorder = false
-        buttonsView.drawSeperators = true
+        separator.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(self)
+            make.height.equalTo(SnackBarUX.BorderWidth)
+            make.top.equalTo(buttonsView.snp.top).offset(-1)
+        }
 
-        imageView.contentMode = UIViewContentMode.left
+        backgroundView.snp.makeConstraints { make in
+            make.bottom.left.right.equalTo(self)
+            // Offset it by the width of the top border line so we can see the line from the super view
+            make.top.equalTo(self).offset(1)
+        }
 
-        textLabel.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
-        textLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        textLabel.numberOfLines = 0
-        textLabel.backgroundColor = UIColor.clear
+        titleView.snp.makeConstraints { make in
+            make.top.equalTo(self).offset(UIConstants.DefaultPadding)
+            make.centerX.equalTo(self).priority(500)
+            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 2).priority(1000)
+        }
+
+        backgroundColor = UIColor.clear
+        self.layer.borderWidth = SnackBarUX.BorderWidth
+        self.layer.borderColor = UIConstants.BorderColor.cgColor
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let imageWidth: CGFloat
-        if let img = imageView.image {
-            imageWidth = img.size.width + UIConstants.DefaultPadding * 2
-        } else {
-            imageWidth = 0
-        }
-        self.textLabel.preferredMaxLayoutWidth = contentView.frame.width - (imageWidth + UIConstants.DefaultPadding)
-        super.layoutSubviews()
-    }
-
-    fileprivate func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
-        context.setStrokeColor(UIConstants.BorderColor.cgColor)
-        context.setLineWidth(1)
-        context.move(to: CGPoint(x: start.x, y: start.y))
-        context.addLine(to: CGPoint(x: end.x, y: end.y))
-        context.strokePath()
-    }
-
-    override func draw(_ rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
-        drawLine(context!, start: CGPoint(x: 0, y: 1), end: CGPoint(x: frame.size.width, y: 1))
     }
 
     /**
@@ -181,43 +166,10 @@ class SnackBar: UIView {
     override func updateConstraints() {
         super.updateConstraints()
 
-        backgroundView.snp.remakeConstraints { make in
-            make.bottom.left.right.equalTo(self)
-            // Offset it by the width of the top border line so we can see the line from the super view
-            make.top.equalTo(self).offset(1)
-        }
-
-        contentView.snp.remakeConstraints { make in
-            make.top.left.right.equalTo(self).inset(UIEdgeInsets(equalInset: UIConstants.DefaultPadding))
-        }
-
-        if let img = imageView.image {
-            imageView.snp.remakeConstraints { make in
-                make.left.centerY.equalTo(contentView)
-                // To avoid doubling the padding, the textview doesn't have an inset on its left side.
-                // Instead, it relies on the imageView to tell it where its left side should be.
-                make.width.equalTo(img.size.width + UIConstants.DefaultPadding)
-                make.height.equalTo(img.size.height + UIConstants.DefaultPadding)
-            }
-        } else {
-            imageView.snp.remakeConstraints { make in
-                make.width.height.equalTo(0)
-                make.top.left.equalTo(self)
-                make.bottom.lessThanOrEqualTo(contentView.snp.bottom)
-            }
-        }
-
-        textLabel.snp.remakeConstraints { make in
-            make.top.equalTo(contentView)
-            make.left.equalTo(self.imageView.snp.right)
-            make.trailing.equalTo(contentView)
-            make.bottom.lessThanOrEqualTo(contentView.snp.bottom)
-        }
-
         buttonsView.snp.remakeConstraints { make in
-            make.top.equalTo(contentView.snp.bottom).offset(UIConstants.DefaultPadding)
+            make.top.equalTo(titleView.snp.bottom).offset(UIConstants.DefaultPadding)
             make.bottom.equalTo(self.snp.bottom)
-            make.left.right.equalTo(self)
+            make.leading.trailing.equalTo(self)
             if self.buttonsView.subviews.count > 0 {
                 make.height.equalTo(UIConstants.SnackbarButtonHeight)
             } else {
@@ -230,30 +182,19 @@ class SnackBar: UIView {
         return alpha != 0 && self.superview != nil
     }
 
-    /**
-     * Helper for animating the Snackbar showing on screen.
-     */
     func show() {
         alpha = 1
         bottom?.update(offset: 0)
     }
 
-    /**
-     * Helper for animating the Snackbar leaving the screen.
-     */
-    func hide() {
-        alpha = 0
-        var h = frame.height
-        if h == 0 {
-            h = UIConstants.ToolbarHeight
-        }
-        bottom?.update(offset: h)
-    }
-
-    fileprivate func addButton(_ snackButton: SnackButton) {
+    func addButton(_ snackButton: SnackButton) {
         snackButton.bar = self
-        buttonsView.addButtons(snackButton)
-        buttonsView.setNeedsUpdateConstraints()
+        buttonsView.addArrangedSubview(snackButton)
+
+        // Only show the separator on the left of the button if it is not the first view
+        if buttonsView.arrangedSubviews.count != 1 {
+            snackButton.drawSeparator()
+        }
     }
 }
 
@@ -263,32 +204,39 @@ class SnackBar: UIView {
  * you stay on the current tab though, it will persist until you interact with it.
  */
 class TimerSnackBar: SnackBar {
-    fileprivate var prevURL: URL?
     fileprivate var timer: Timer?
     fileprivate var timeout: TimeInterval
 
-    init(timeout: TimeInterval = 10, attrText: NSAttributedString, img: UIImage?, buttons: [SnackButton]?) {
+    init(timeout: TimeInterval = 10, text: String, img: UIImage?) {
         self.timeout = timeout
-        super.init(attrText: attrText, img: img, buttons: buttons)
-    }
-
-    override init(frame: CGRect) {
-        self.timeout = 0
-        super.init(frame: frame)
+        super.init(text: text, img: img)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL) {
+        let bar = TimerSnackBar(text: Strings.ExternalLinkAppStoreConfirmationTitle, img: UIImage(named: "defaultFavicon"))
+        let openAppStore = SnackButton(title: Strings.OKString, accessibilityIdentifier: "ConfirmOpenInAppStore") { bar in
+            tab.removeSnackbar(bar)
+            UIApplication.shared.openURL(appStoreURL)
+        }
+        let cancelButton = SnackButton(title: Strings.CancelString, accessibilityIdentifier: "CancelOpenInAppStore") { bar in
+            tab.removeSnackbar(bar)
+        }
+        bar.addButton(openAppStore)
+        bar.addButton(cancelButton)
+        tab.addSnackbar(bar)
+    }
+    
     override func show() {
-        self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(TimerSnackBar.SELTimerDone), userInfo: nil, repeats: false)
+        self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(timerDone), userInfo: nil, repeats: false)
         RunLoop.current.add(self.timer!, forMode: RunLoopMode.defaultRunLoopMode)
         super.show()
     }
 
-    @objc
-    func SELTimerDone() {
+    @objc func timerDone() {
         self.timer = nil
     }
 
@@ -296,7 +244,6 @@ class TimerSnackBar: SnackBar {
         if !showing {
             return timer != nil
         }
-
         return super.shouldPersist(tab)
     }
 }

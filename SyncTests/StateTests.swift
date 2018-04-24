@@ -47,7 +47,7 @@ class StateTests: XCTestCase {
     }
 
     func baseScratchpad() -> Scratchpad {
-        let syncKeyBundle = KeyBundle.fromKB(Bytes.generateRandomBytes(32))
+        let syncKeyBundle = KeyBundle.fromKSync(Bytes.generateRandomBytes(64))
         let keys = Fetched(value: Keys(defaultBundle: syncKeyBundle), timestamp: 1001)
         let b = Scratchpad(b: syncKeyBundle, persistingTo: MockProfilePrefs()).evolve()
         let _ = b.setKeys(keys)

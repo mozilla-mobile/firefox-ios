@@ -4,24 +4,11 @@
 
 import XCTest
 
-let website = ["url": "www.mozilla.org", "value": "www.mozilla.org/", "subDomain": "https://www.mozilla.org/en-US/firefox/products"]
+let website = ["url": "www.mozilla.org", "value": "www.mozilla.org", "subDomain": "https://www.mozilla.org/en-US/firefox/products"]
 
 class DomainAutocompleteTest: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testAutocomplete() {
-        navigator.openURL(urlString: website["url"]!)
+        navigator.openURL(website["url"]!)
 
         // Basic autocompletion cases
         navigator.goto(URLBarOpen)
@@ -40,7 +27,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Test that deleting characters works correctly with autocomplete
     func testAutocompleteDeletingChars() {
-        navigator.openURL(urlString: website["url"]!)
+        navigator.openURL(website["url"]!)
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
 
@@ -58,7 +45,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Delete the entire string and verify that the home panels are shown again.
     func testDeleteEntireString() {
-        navigator.openURL(urlString: website["url"]!)
+        navigator.openURL(website["url"]!)
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
         waitforExistence(app.buttons["Clear text"])
@@ -74,17 +61,18 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Ensure that the scheme is included in the autocompletion.
     func testEnsureSchemeIncludedAutocompletion() {
-        navigator.openURL(urlString: website["url"]!)
+        navigator.openURL(website["url"]!)
+        waitUntilPageLoad()
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("https")
         waitForValueContains(app.textFields["address"], value: "mozilla")
         let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "https://www.mozilla.org/", "Wrong autocompletion")
+        XCTAssertEqual(value as? String, "https://www.mozilla.org", "Wrong autocompletion")
     }
     // Non-matches.
     func testNoMatches() {
-        navigator.openURL(urlString: website["url"]!)
-        navigator.openURL(urlString: website["subDomain"]!)
+        navigator.openURL(website["url"]!)
+        navigator.openURL(website["subDomain"]!)
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("baz")
         let value = app.textFields["address"].value
@@ -132,35 +120,35 @@ class DomainAutocompleteTest: BaseTestCase {
         app.textFields["address"].typeText("a")
         waitForValueContains(app.textFields["address"], value: ".com")
         let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "amazon.com/", "Wrong autocompletion")
+        XCTAssertEqual(value as? String, "amazon.com", "Wrong autocompletion")
 
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText("an")
         waitForValueContains(app.textFields["address"], value: ".com")
         let value2 = app.textFields["address"].value
-        XCTAssertEqual(value2 as? String, "answers.com/", "Wrong autocompletion")
+        XCTAssertEqual(value2 as? String, "answers.com", "Wrong autocompletion")
 
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText("anc")
         waitForValueContains(app.textFields["address"], value: ".com")
         let value3 = app.textFields["address"].value
-        XCTAssertEqual(value3 as? String, "ancestry.com/", "Wrong autocompletion")
+        XCTAssertEqual(value3 as? String, "ancestry.com", "Wrong autocompletion")
     }
     // Test mixed case autocompletion.
     func testMixedCaseAutocompletion() {
-        navigator.openURL(urlString: website1["url"]!)
+        navigator.openURL(website1["url"]!)
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("MoZ")
         waitForValueContains(app.textFields["address"], value: ".org")
         let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "MoZilla.org/", "Wrong autocompletion")
+        XCTAssertEqual(value as? String, "MoZilla.org", "Wrong autocompletion")
 
         // Test that leading spaces still show suggestions.
         app.buttons["Clear text"].tap()
         app.textFields["address"].typeText("    moz")
         waitForValueContains(app.textFields["address"], value: ".org")
         let value2 = app.textFields["address"].value
-        XCTAssertEqual(value2 as? String, "    mozilla.org/", "Wrong autocompletion")
+        XCTAssertEqual(value2 as? String, "    mozilla.org", "Wrong autocompletion")
 
         // Test that trailing spaces do *not* show suggestions.
         app.buttons["Clear text"].tap()
@@ -169,5 +157,40 @@ class DomainAutocompleteTest: BaseTestCase {
         let value3 = app.textFields["address"].value
         // No autocompletion, just what user typed
         XCTAssertEqual(value3 as? String, "    moz ", "Wrong autocompletion")
+    }
+
+    func testDeletingCharsUpdateTheResults() {
+        let url1 = ["url" : "git.es", "label" : "git.es - Dominio premium en venta"]
+        let url2 = ["url" : "github.com", "label" : "The world’s leading software development platform · GitHub"]
+
+        navigator.openURL(url1["url"]!)
+        waitUntilPageLoad()
+        navigator.openURL(url2["url"]!)
+        waitUntilPageLoad()
+        navigator.goto(URLBarOpen)
+        app.typeText("gith")
+
+        waitforExistence(app.tables["SiteTable"].cells.staticTexts[url2["label"]!])
+        // There should be only one matching entry
+        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
+        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
+
+        // Remove 2 chars ("th")  to have two coincidences with git
+        app.typeText("\u{0008}")
+        app.typeText("\u{0008}")
+
+        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
+        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
+
+        // Remove All chars so that there is not any matches
+        let charsAddressBar: String = (app.textFields["address"].value! as? String)!
+
+        for _ in 1...charsAddressBar.count {
+            app.typeText("\u{0008}")
+        }
+
+        waitforNoExistence(app.tables["SiteTable"].staticTexts[url2["label"]!])
+        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
+        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
     }
 }

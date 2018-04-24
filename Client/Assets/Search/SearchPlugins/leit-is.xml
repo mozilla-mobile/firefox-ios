@@ -1,0 +1,14 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>leit.is</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAABC1BMVEXtHCTtHCS+Fh0AAADiGiK2Fh2+Fh3tHCTtHCTtHCTpHia+Fh3tHCTtHCTtHCTtHCS9Fh2+Fh3tHCTtHCTtHCTtHCS+Fh2+Fh3tHCTtHCTtHCS+Fh2+Fh2+Fh2+Fh3tHCS+Fh3///+/GCC1AAHtGSDrCgr4q6701tjEMjXsHCTCLjC1FRvyztHrHCO7DxW4EhLorK/3HSW9FhzuHCT4HibAFh31HCXpGyO2FRvoGyL6HSazFRzsFBvAHiW5Bg3rAAn77e31l5r2j5TwDRHzz9H6urzprbH4qq3moqW9Ky3sCBGqAAGxAADy3N7sz9Lxy83qtbb4sbTxeoDzY2i6NDfqJyysERHdBAjfAALR/CriAAAAH3RSTlP88P0ABv749/Js/unSz70b/MJv4Nva2s/Fw8K9bmwak2+rfgAAAl1JREFUaN7d2Mly2kAUheGLW8yT7cxjd0QGNzZJhISMIE4MeLYzj+//JJFsV50NJSTw2fhfsP24VyWpS6KUU22VK3LjFcqtqqOUqHazolk120qchibWcKSqqVXlsab2SMqaWkE0twJ7ApGKpiZSiH/R7QJefrhMx3GAs09JZ6FYBhD//5+T6XQ6+fF75lsK8OrwRdLnrX8j31KA75fAm18dG/iWARxfAVvnbi/QlgC8vgYuigMIDKDjbhsIFMDEggeBAFwJRAACCYDAAxIhZAKx0IdAAcwQAgHAlojAAFuiAHEQSADuaQIAwbcsADOwAAhEwIzx9OYAyQwjbRkAhN2R32MA2FIUb4kB4I6LZ7AkAFuyDABCBIEAYEsMAIK2DABCFPiWAmCGQFsKAMHTlgRAIABoCIEDDBKBA+AkEHkkADOELAACC4BAASCYXkgCIHja0oBYwHmJAeA0wwIgUAAIAQQCAIEAQPAtC4DAArAlAgBhsIsZGIAZGwgEAFsiANgSBAKAGUgAnhokAAIJgMAA0DAWSADeQCELwJcTFoCTAAuAsBjoXrzN0nyhX1sIHHT/vMuScecK6wuB/W8nR+8XdnSyN3+GYiqQp72PBqG1mwL2lwCO2cAheUWzyZedg52sfc0KIL/WPe1m7tSYvIDM/nbOO5kzbl7A+kHNLbpZyzEBBC/qj81yAahokoAJ0oQwMqsJJbmjUwVvRaEu9zQibOm+PNTpJcL28sAT2ZR0wOqVhGfiNDMIZrjkJX7giGo3aEJp47kSpZzN1t2CpBZE68W1fJXq9Y2njlL/Abl3c5L7HsSwAAAAAElFTkSuQmCC</Image>
+<Url type="text/html" method="GET" template="http://leit.is/leita" resultdomain="leit.is">
+  <Param name="utf-8" value="✓"/>
+  <Param name="search" value="{searchTerms}"/>
+</Url>
+<SearchForm>http://leit.is/</SearchForm>
+</SearchPlugin>

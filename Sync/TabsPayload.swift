@@ -29,7 +29,7 @@ open class TabsPayload: CleartextPayloadJSON {
         }
 
         func toRemoteTabForClient(_ guid: GUID) -> RemoteTab? {
-            let urls = urlHistory.flatMap({ $0.asURL })
+            let urls = urlHistory.compactMap({ $0.asURL })
             if urls.isEmpty {
                 log.debug("Bug 1201875 - Discarding tab as history has no conforming URLs.")
                 return nil
@@ -111,7 +111,7 @@ open class TabsPayload: CleartextPayloadJSON {
     var remoteTabs: [RemoteTab] {
         if let clientGUID = self["id"].string {
             let payloadTabs = self["tabs"].arrayValue
-            let remoteTabs = payloadTabs.flatMap({ Tab.remoteTabFromJSON($0, clientGUID: clientGUID) })
+            let remoteTabs = payloadTabs.compactMap({ Tab.remoteTabFromJSON($0, clientGUID: clientGUID) })
             if payloadTabs.count != remoteTabs.count {
                 log.debug("Bug 1201875 - Missing remote tabs from sync")
             }
@@ -122,7 +122,7 @@ open class TabsPayload: CleartextPayloadJSON {
     }
 
     var tabs: [Tab] {
-        return self["tabs"].arrayValue.flatMap(Tab.fromJSON)
+        return self["tabs"].arrayValue.compactMap(Tab.fromJSON)
     }
 
     var clientName: String {

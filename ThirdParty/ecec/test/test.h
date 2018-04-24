@@ -19,22 +19,52 @@ ece_log(const char* funcName, int line, const char* expr, const char* format,
         ...);
 
 void
-test_aesgcm_valid_crypto_params();
+test_webpush_aesgcm_headers_from_params(void);
 
 void
-test_aesgcm_invalid_crypto_params();
+test_webpush_aesgcm_headers_extract_params_ok(void);
 
 void
-test_aesgcm_valid_ciphertexts();
+test_webpush_aesgcm_headers_extract_params_err(void);
 
 void
-test_webpush_aes128gcm_encrypt();
+test_webpush_aesgcm_encrypt_ok(void);
 
 void
-test_webpush_aes128gcm_decrypt_valid_payloads();
+test_webpush_aesgcm_encrypt_pad(void);
 
 void
-test_aes128gcm_decrypt_invalid_payloads();
+test_webpush_aesgcm_decrypt_ok(void);
 
 void
-test_base64url_decode();
+test_webpush_aesgcm_decrypt_err(void);
+
+void
+test_webpush_aes128gcm_encrypt_ok(void);
+
+void
+test_webpush_aes128gcm_encrypt_pad(void);
+
+void
+test_aes128gcm_decrypt_ok(void);
+
+void
+test_webpush_aes128gcm_decrypt_ok(void);
+
+void
+test_aes128gcm_decrypt_err(void);
+
+void
+test_webpush_aes128gcm_decrypt_err(void);
+
+void
+test_webpush_aes128gcm_e2e(void);
+
+void
+test_webpush_aesgcm_e2e(void);
+
+void
+test_base64url_encode(void);
+
+void
+test_base64url_decode(void);

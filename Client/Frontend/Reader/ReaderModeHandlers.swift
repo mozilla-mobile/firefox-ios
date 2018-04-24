@@ -6,6 +6,8 @@ import Foundation
 import GCDWebServers
 
 struct ReaderModeHandlers {
+    static let ReaderModeStyleHash = "sha256-L2W8+0446ay9/L1oMrgucknQXag570zwgQrHwE68qbQ="
+
     static var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
 
     static func register(_ webServer: WebServer, profile: Profile) {
@@ -43,7 +45,7 @@ struct ReaderModeHandlers {
                         if let html = ReaderModeUtils.generateReaderContent(readabilityResult, initialStyle: readerModeStyle),
                             let response = GCDWebServerDataResponse(html: html) {
                             // Apply a Content Security Policy that disallows everything except images from anywhere and fonts and css from our internal server
-                            response.setValue("default-src 'none'; img-src *; style-src http://localhost:*; font-src http://localhost:*", forAdditionalHeader: "Content-Security-Policy")
+                            response.setValue("default-src 'none'; img-src *; style-src http://localhost:* '\(ReaderModeStyleHash)'; font-src http://localhost:*", forAdditionalHeader: "Content-Security-Policy")
                             return response
                         }
                     } catch _ {
@@ -58,14 +60,14 @@ struct ReaderModeHandlers {
                         if let readerViewLoadingPath = Bundle.main.path(forResource: "ReaderViewLoading", ofType: "html") {
                             do {
                                 let readerViewLoading = try NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: String.Encoding.utf8.rawValue)
-                                readerViewLoading.replaceOccurrences(of: "%ORIGINAL-URL%", with: url.absoluteString,
-                                    options: NSString.CompareOptions.literal, range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(of: "%LOADING-TEXT%", with: NSLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app."),
-                                    options: NSString.CompareOptions.literal, range: NSRange(location: 0, length: readerViewLoading.length))
+                                readerViewLoading.replaceOccurrences(of: "%ORIGINAL-URL%", with: url.absoluteString, 
+                                    options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
+                                readerViewLoading.replaceOccurrences(of: "%LOADING-TEXT%", with: NSLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app."), 
+                                    options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 readerViewLoading.replaceOccurrences(of: "%LOADING-FAILED-TEXT%", with: NSLocalizedString("The page could not be displayed in Reader View.", comment: "Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
-                                    options: NSString.CompareOptions.literal, range: NSRange(location: 0, length: readerViewLoading.length))
+                                    options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 readerViewLoading.replaceOccurrences(of: "%LOAD-ORIGINAL-TEXT%", with: NSLocalizedString("Load original page", comment: "Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
-                                    options: NSString.CompareOptions.literal, range: NSRange(location: 0, length: readerViewLoading.length))
+                                    options: .literal, range: NSRange(location: 0, length: readerViewLoading.length))
                                 return GCDWebServerDataResponse(html: readerViewLoading as String)
                             } catch _ {
                             }

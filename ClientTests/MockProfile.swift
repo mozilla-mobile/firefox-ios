@@ -5,7 +5,6 @@
 @testable import Client
 import Foundation
 import Account
-import ReadingList
 import Shared
 import Storage
 import Sync
@@ -29,6 +28,7 @@ open class MockSyncManager: SyncManager {
     open func syncClientsThenTabs() -> SyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
     open func syncHistory() -> SyncResult { return completedWithStats(collection: "mock_history") }
     open func syncLogins() -> SyncResult { return completedWithStats(collection: "mock_logins") }
+    open func mirrorBookmarks() -> SyncResult { return completedWithStats(collection: "mock_bookmarks") }
     open func syncEverything(why: SyncReason) -> Success {
         return succeed()
     }
@@ -88,7 +88,7 @@ open class MockActivityStreamDataObserver: DataObserver {
         self.profile = profile
     }
 
-    public func invalidate(highlights: Bool) {
+    public func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topsites: Bool) {
 
     }
 }
@@ -99,18 +99,24 @@ open class MockProfile: Profile {
     public var places: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
     public var files: FileAccessor
     public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
+    public var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage
+    public var syncManager: SyncManager!
+
     public lazy var panelDataObservers: PanelDataObservers = {
         return MockPanelDataObservers(profile: self)
     }()
 
     var db: BrowserDB
+    var readingListDB: BrowserDB
 
     fileprivate let name: String = "mockaccount"
 
     init() {
         files = MockFiles()
-        db = BrowserDB(filename: "mock.db", files: files)
-        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        syncManager = MockSyncManager()
+        logins = MockLogins(files: files)
+        db = BrowserDB(filename: "mock.db", schema: BrowserSchema(), files: files)
+        readingListDB = BrowserDB(filename: "mock_ReadingList.db", schema: ReadingListSchema(), files: files)
         places = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
         recommendations = places
         history = places
@@ -144,10 +150,6 @@ open class MockProfile: Profile {
         return Locale.current.identifier == "zh_CN"
     }()
 
-    lazy public var syncManager: SyncManager = {
-        return MockSyncManager()
-    }()
-
     lazy public var certStore: CertStore = {
         return CertStore()
     }()
@@ -168,8 +170,8 @@ open class MockProfile: Profile {
         return MockProfilePrefs()
     }()
 
-    lazy public var readingList: ReadingListService? = {
-        return ReadingListService(profileStoragePath: self.files.rootPath as String)
+    lazy public var readingList: ReadingList = {
+        return SQLiteReadingList(db: self.readingListDB)
     }()
 
     lazy public var recentlyClosedTabs: ClosedTabsStore = {
@@ -182,10 +184,6 @@ open class MockProfile: Profile {
 
     fileprivate lazy var syncCommands: SyncCommands = {
         return SQLiteRemoteClientsAndTabs(db: self.db)
-    }()
-
-    lazy public var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
-        return MockLogins(files: self.files)
     }()
 
     public let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
@@ -217,6 +215,10 @@ open class MockProfile: Profile {
     }
 
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
+        return deferMaybe([])
+    }
+
+    public func getCachedClients() -> Deferred<Maybe<[RemoteClient]>> {
         return deferMaybe([])
     }
 

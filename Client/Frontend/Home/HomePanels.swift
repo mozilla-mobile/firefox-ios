@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import Shared
 
@@ -20,11 +19,7 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                if FeatureSwitches.activityStream.isMember(profile.prefs) {
                     return ActivityStreamPanel(profile: profile)
-                } else {
-                    return TopSitesPanel(profile: profile)
-                }
             },
             imageName: "TopSites",
             accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label"),

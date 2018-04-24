@@ -5,19 +5,6 @@
 import XCTest
 
 class ReaderViewTest: BaseTestCase {
-    var navigator: Navigator!
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        app = XCUIApplication()
-        navigator = createScreenGraph(app).navigator(self)
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testLoadReaderContent() {
         navigator.goto(BrowserTab)
         app.buttons["Reader View"].tap()
@@ -28,39 +15,65 @@ class ReaderViewTest: BaseTestCase {
 
     private func addContentToReaderView() {
         navigator.goto(BrowserTab)
+        waitUntilPageLoad()
         app.buttons["Reader View"].tap()
         waitforExistence(app.buttons["Add to Reading List"])
         app.buttons["Add to Reading List"].tap()
     }
 
+    private func checkReadingListNumberOfItems(items: Int) {
+        waitforExistence(app.tables["ReadingTable"])
+        let list = app.tables["ReadingTable"].cells.count
+        XCTAssertEqual(list, items, "The number of items in the reading table is not correct")
+    }
+
     func testAddToReadingList() {
         // Initially reading list is empty
-        navigator.goto(NewTabScreen)
-        waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
 
         // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
         XCTAssertFalse(app.buttons["HomePanels.ReadingList"].isEnabled)
         XCTAssertTrue(app.buttons["HomePanels.Bookmarks"].isEnabled)
 
-        let readingtableTable = app.tables["ReadingTable"]
-        waitforExistence(readingtableTable)
-        let list = app.tables["ReadingTable"].cells.count
-        XCTAssertEqual(list, 0, "There should not be any entry in the reading table")
+        checkReadingListNumberOfItems(items: 0)
 
-        navigator.nowAt(NewTabScreen)
         // Add item to reading list and check that it appears
         addContentToReaderView()
-        navigator.goto(NewTabScreen)
-        waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
+        waitforExistence(app.buttons["HomePanels.ReadingList"])
 
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        waitforExistence(savedToReadingList)
         XCTAssertTrue(savedToReadingList.exists)
-        waitforExistence(app.tables["ReadingTable"])
-        let listAfter = app.tables["ReadingTable"].cells.count
-        XCTAssertEqual(listAfter, 1, "There should not be any entry in the reading table")
+        checkReadingListNumberOfItems(items: 1)
+    }
+
+    func testAddToReadingListPrivateMode() {
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        // Initially reading list is empty
+        navigator.goto(HomePanel_ReadingList)
+
+        // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
+        XCTAssertFalse(app.buttons["HomePanels.ReadingList"].isEnabled)
+        XCTAssertTrue(app.buttons["HomePanels.Bookmarks"].isEnabled)
+        checkReadingListNumberOfItems(items: 0)
+
+        // Add item to reading list and check that it appears
+        addContentToReaderView()
+        navigator.goto(HomePanel_ReadingList)
+        waitforExistence(app.buttons["HomePanels.ReadingList"])
+
+        // Check that there is one item
+        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        waitforExistence(savedToReadingList)
+        XCTAssertTrue(savedToReadingList.exists)
+        checkReadingListNumberOfItems(items: 1)
+
+        // Check that it appears on regular mode
+        navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.goto(HomePanel_ReadingList)
+        checkReadingListNumberOfItems(items: 1)
     }
 
     func testMarkAsReadAndUreadFromReaderView() {
@@ -85,19 +98,15 @@ class ReaderViewTest: BaseTestCase {
         waitforExistence(app.buttons["Add to Reading List"])
 
         // Go to reader list view to check that there is not any item there
-        navigator.goto(NewTabScreen)
+        navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
-
-        let readingtableTable = app.tables["ReadingTable"]
-        waitforExistence(readingtableTable)
-        let list = app.tables["ReadingTable"].cells.count
-        XCTAssertEqual(list, 0, "There should not be any entry in the reading table")
+        checkReadingListNumberOfItems(items: 0)
     }
 
     func testMarkAsReadAndUnreadFromReadingList() {
         addContentToReaderView()
-        navigator.goto(NewTabScreen)
+        navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
 
@@ -115,7 +124,7 @@ class ReaderViewTest: BaseTestCase {
 
     func testRemoveFromReadingList() {
         addContentToReaderView()
-        navigator.goto(NewTabScreen)
+        navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
 
@@ -128,9 +137,63 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertFalse(savedToReadingList.exists)
 
         // Reader list view should be empty
-        let readingtableTable = app.tables["ReadingTable"]
-        waitforExistence(readingtableTable)
-        let list = app.tables["ReadingTable"].cells.count
-        XCTAssertEqual(list, 0, "There should not be any entry in the reading table")
+        checkReadingListNumberOfItems(items: 0)
+    }
+
+    func testAddToReadingListFromPageOptionsMenu() {
+        // First time Reading list is empty
+        navigator.goto(HomePanel_ReadingList)
+        checkReadingListNumberOfItems(items: 0)
+
+        // Add item to Reading List from Page Options Menu
+        navigator.goto(BrowserTab)
+        waitUntilPageLoad()
+        navigator.browserPerformAction(.addReadingListOption)
+
+        // Now there should be an item on the list
+        navigator.nowAt(BrowserTab)
+        navigator.browserPerformAction(.openReadingListOption)
+        checkReadingListNumberOfItems(items: 1)
+    }
+
+    func testOpenSavedForReadingLongPressInNewTab() {
+        // Add item to Reading List
+        addContentToReaderView()
+        navigator.browserPerformAction(.openReadingListOption)
+
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual(numTab, "1")
+
+        // Long tap on the item just saved
+        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        savedToReadingList.press(forDuration: 1)
+
+        // Select to open in New Tab
+        waitforExistence(app.tables["Context Menu"])
+        app.tables.cells["quick_action_new_tab"].tap()
+
+        // Now there should be two tabs open
+        let numTabAfter = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual(numTabAfter, "2")
+    }
+
+    func testRemoveSavedForReadingLongPress() {
+        // Add item to Reading List
+        addContentToReaderView()
+        navigator.browserPerformAction(.openReadingListOption)
+
+        // Long tap on the item just saved and choose remove
+        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        savedToReadingList.press(forDuration: 1)
+        waitforExistence(app.tables["Context Menu"])
+        app.tables.cells["action_remove"].tap()
+
+        // Verify the item has been removed
+        waitforNoExistence(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
+        XCTAssertFalse(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
+    }
+
+    func testOpenSavedForReadingLongPressInPrivateTab() {
+        // To Be defined once the new FxScreenGraph lands
     }
 }

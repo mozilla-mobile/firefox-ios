@@ -174,6 +174,10 @@ open class CachingBufferItemSource: BufferItemSource {
         return self.prefetchBufferItemsWithGUIDs(guids) >>> { self.cache.takingGUIDs(guids) }
     }
 
+    public func getBufferChildrenGUIDsForParent(_ guid: GUID) -> Deferred<Maybe<[GUID]>> {
+        return self.source.getBufferChildrenGUIDsForParent(guid)
+    }
+
     open func prefetchBufferItemsWithGUIDs<T: Collection>(_ guids: T) -> Success where T.Iterator.Element == GUID {
         log.debug("Prefetching \(guids.count) buffer items: \(guids.prefix(10))….")
         if guids.isEmpty {

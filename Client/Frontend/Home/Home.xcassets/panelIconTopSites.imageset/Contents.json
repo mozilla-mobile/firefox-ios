@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "Top sites.png"
+      "filename" : "topsites.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "Top sites@2x.png"
+      "filename" : "topsites@2x.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "Top sites@3x.png"
+      "filename" : "topsites@3x.png",
+      "scale" : "3x"
     }
   ],
   "info" : {

@@ -72,7 +72,7 @@ class FxALoginStateMachine {
                 if let keyPair = result.successValue {
                     log.info("Generated key pair!  Transitioning to CohabitingAfterKeyPair.")
                     let newState = CohabitingAfterKeyPairState(sessionToken: state.sessionToken,
-                        kA: state.kA, kB: state.kB,
+                        kSync: state.kSync, kXCS: state.kXCS,
                         keyPair: keyPair, keyPairExpiresAt: now + OneMonthInMilliseconds)
                     return Deferred(value: newState)
                 } else {
@@ -88,7 +88,7 @@ class FxALoginStateMachine {
                 if let response = result.successValue {
                     log.info("Signed public key!  Transitioning to Married.")
                     let newState = MarriedState(sessionToken: state.sessionToken,
-                        kA: state.kA, kB: state.kB,
+                        kSync: state.kSync, kXCS: state.kXCS,
                         keyPair: state.keyPair, keyPairExpiresAt: state.keyPairExpiresAt,
                         certificate: response.certificate, certificateExpiresAt: now + OneDayInMilliseconds)
                     return Deferred(value: newState)
@@ -128,8 +128,11 @@ class FxALoginStateMachine {
                 if let response = result.successValue {
                     if let kB = response.wrapkB.xoredWith(state.unwrapkB) {
                         log.info("Unwrapped keys response.  Transition to CohabitingBeforeKeyPair.")
+                        self.notifyAccountVerified()
+                        let kSync = FxAClient10.deriveKSync(kB)
+                        let kXCS = FxAClient10.computeClientState(kB)
                         let newState = CohabitingBeforeKeyPairState(sessionToken: state.sessionToken,
-                            kA: response.kA, kB: kB)
+                            kSync: kSync, kXCS: kXCS)
                         return Deferred(value: newState)
                     } else {
                         log.error("Failed to unwrap keys response!  Transitioning to Separated in order to fetch new initial datum.")
@@ -173,5 +176,9 @@ class FxALoginStateMachine {
             log.warning("User interaction required; not transitioning.")
             return same
         }
+    }
+
+    fileprivate func notifyAccountVerified() {
+        NotificationCenter.default.post(name: .FirefoxAccountVerified, object: nil, userInfo: nil)
     }
 }

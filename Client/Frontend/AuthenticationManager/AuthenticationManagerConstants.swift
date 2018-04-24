@@ -22,10 +22,13 @@ extension PasscodeInterval {
 // Strings used in multiple areas within the Authentication Manager
 struct AuthenticationStrings {
     static let passcode =
-        NSLocalizedString("Passcode", tableName: "AuthenticationManager", comment: "Label for the Passcode item in Settings")
+        NSLocalizedString("Passcode For Logins", tableName: "AuthenticationManager", comment: "Label for the Passcode item in Settings")
 
     static let touchIDPasscodeSetting =
         NSLocalizedString("Touch ID & Passcode", tableName: "AuthenticationManager", comment: "Label for the Touch ID/Passcode item in Settings")
+
+    static let faceIDPasscodeSetting =
+        NSLocalizedString("Face ID & Passcode", tableName: "AuthenticationManager", comment: "Label for the Face ID/Passcode item in Settings")
 
     static let requirePasscode =
         NSLocalizedString("Require Passcode", tableName: "AuthenticationManager", comment: "Text displayed in the 'Interval' section, followed by the current interval setting, e.g. 'Immediately'")

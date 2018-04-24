@@ -5,42 +5,17 @@
 import Foundation
 
 public extension String {
-    public func startsWith(_ other: String) -> Bool {
-        // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
-        if other.isEmpty {
-            return true
-        }
-        if let range = self.range(of: other,
-                options: NSString.CompareOptions.anchored) {
-            return range.lowerBound == self.startIndex
-        }
-        return false
+    func escape() -> String? {
+        // We can't guaruntee that strings have a valid string encoding, as this is an entry point for tainted data,
+        // we should be very careful about forcefully dereferencing optional types.
+        // https://stackoverflow.com/questions/33558933/why-is-the-return-value-of-string-addingpercentencoding-optional#33558934
+        let queryItemDividers = CharacterSet(charactersIn: "?=&")
+        let allowedEscapes = CharacterSet.urlQueryAllowed.symmetricDifference(queryItemDividers)
+        return self.addingPercentEncoding(withAllowedCharacters: allowedEscapes)
     }
 
-    public func endsWith(_ other: String) -> Bool {
-        // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
-        if other.isEmpty {
-            return true
-        }
-        if let range = self.range(of: other,
-                options: [NSString.CompareOptions.anchored, NSString.CompareOptions.backwards]) {
-            return range.upperBound == self.endIndex
-        }
-        return false
-    }
-
-    func escape() -> String {
-        let raw: NSString = self as NSString
-        let allowedEscapes = CharacterSet(charactersIn: ":/?&=;+!@#$()',*")
-        let str = raw.addingPercentEncoding(withAllowedCharacters: allowedEscapes)
-        return str as String!
-    }
-
-    func unescape() -> String {
-        return CFURLCreateStringByReplacingPercentEscapes(
-            kCFAllocatorDefault,
-            self as CFString,
-            "[]." as CFString) as String
+    func unescape() -> String? {
+        return self.removingPercentEncoding
     }
 
     /**
@@ -54,17 +29,17 @@ public extension String {
     :returns: A String with `maxLength` characters or less
     */
     func ellipsize(maxLength: Int) -> String {
-        if (maxLength >= 2) && (self.characters.count > maxLength) {
-            let index1 = self.characters.index(self.startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
-            let index2 = self.characters.index(self.endIndex, offsetBy: maxLength / -2)
+        if (maxLength >= 2) && (self.count > maxLength) {
+            let index1 = self.index(self.startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
+            let index2 = self.index(self.endIndex, offsetBy: maxLength / -2)
 
-            return self.substring(to: index1) + "…\u{2060}" + self.substring(from: index2)
+            return String(self[..<index1]) + "…\u{2060}" + String(self[index2...])
         }
         return self
     }
 
     private var stringWithAdditionalEscaping: String {
-        return self.replacingOccurrences(of: "|", with: "%7C", options: NSString.CompareOptions(), range: nil)
+        return self.replacingOccurrences(of: "|", with: "%7C")
     }
 
     public var asURL: URL? {
@@ -89,10 +64,10 @@ public extension String {
     /// Adds a newline at the closest space from the middle of a string.
     /// Example turning "Mark as Read" into "Mark as\n Read"
     public func stringSplitWithNewline() -> String {
-        let mid = self.characters.count/2
+        let mid = self.count / 2
 
-        let arr: [Int] = self.characters.indices.flatMap {
-            if self.characters[$0] == " " {
+        let arr: [Int] = self.indices.compactMap {
+            if self[$0] == " " {
                 return self.distance(from: startIndex, to: $0)
             }
 
@@ -102,7 +77,13 @@ public extension String {
             return self
         }
         var newString = self
-        newString.insert("\n", at: newString.characters.index(newString.characters.startIndex, offsetBy: closest.element))
+        newString.insert("\n", at: newString.index(newString.startIndex, offsetBy: closest.element))
         return newString
+    }
+
+    public static func contentsOfFileWithResourceName(_ name: String, ofType type: String, fromBundle bundle: Bundle, encoding: String.Encoding, error: NSErrorPointer) -> String? {
+        return bundle.path(forResource: name, ofType: type).flatMap {
+            try? String(contentsOfFile: $0, encoding: encoding)
+        }
     }
 }

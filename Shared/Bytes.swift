@@ -24,14 +24,13 @@ open class Bytes {
     open class func generateGUID() -> GUID {
         // Turns the standard NSData encoding into the URL-safe variant that Sync expects.
         return generateRandomBytes(9)
-            .base64EncodedString(options: NSData.Base64EncodingOptions())
-            .replacingOccurrences(of: "/", with: "_", options: NSString.CompareOptions(), range: nil)
-            .replacingOccurrences(of: "+", with: "-", options: NSString.CompareOptions(), range: nil)
+            .base64EncodedString(options: [])
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "+", with: "-")
     }
 
     open class func decodeBase64(_ b64: String) -> Data? {
-        return Data(base64Encoded: b64,
-                      options: NSData.Base64DecodingOptions())
+        return Data(base64Encoded: b64, options: [])
     }
 
     /**
@@ -39,7 +38,7 @@ open class Bytes {
      * This is to allow HMAC to be computed of the raw base64 string.
      */
     open class func dataFromBase64(_ b64: String) -> Data? {
-        return b64.data(using: String.Encoding.ascii, allowLossyConversion: false)
+        return b64.data(using: .ascii, allowLossyConversion: false)
     }
 
     func fromHex(_ str: String) -> Data {

@@ -11,7 +11,7 @@ import Deferred
 
 class MockFiles: FileAccessor {
     init() {
-        let docPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
+        let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         super.init(rootPath: (docPath as NSString).appendingPathComponent("testing"))
     }
 }
@@ -42,7 +42,7 @@ class MockMalformableLogin: LoginData {
 
     required init(guid: String, hostname: String, username: String, password: String, formSubmitURL: String) {
         self.guid = guid
-        self.credentials = URLCredential(user: username, password: password, persistence: URLCredential.Persistence.none)
+        self.credentials = URLCredential(user: username, password: password, persistence: .none)
         self.hostname = hostname
         self.password = password
         self.username = username
@@ -71,7 +71,7 @@ class AuthenticatorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.db = BrowserDB(filename: "testsqlitelogins.db", files: MockFiles())
+        self.db = BrowserDB(filename: "testsqlitelogins.db", schema: LoginsSchema(), files: MockFiles())
         self.logins = SQLiteLogins(db: self.db)
         self.logins.removeAll().succeeded()
     }
@@ -105,13 +105,16 @@ class AuthenticatorTests: XCTestCase {
 
     fileprivate func rawQueryForAllLogins() -> Deferred<Maybe<Cursor<String>>> {
         let projection = MainLoginColumns
-        let sql =
-        "SELECT \(projection) FROM " +
-            "\(TableLoginsLocal) WHERE is_deleted = 0 " +
-            "UNION ALL " +
-            "SELECT \(projection) FROM " +
-            "\(TableLoginsMirror) WHERE is_overridden = 0 " +
-        "ORDER BY hostname ASC"
+        let sql = """
+            SELECT \(projection)
+            FROM loginsL
+            WHERE is_deleted = 0
+            UNION ALL
+            SELECT \(projection)
+            FROM loginsM
+            WHERE is_overridden = 0
+            ORDER BY hostname ASC
+            """
         return db.runQuery(sql, args: nil, factory: hostnameFactory)
     }
 

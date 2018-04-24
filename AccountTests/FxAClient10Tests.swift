@@ -19,8 +19,14 @@ class FxAClient10Tests: LiveAccountTest {
 
     func testClientState() {
         let kB = "fd5c747806c07ce0b9d69dcfea144663e630b65ec4963596a22f24910d7dd15d".hexDecodedData
-        let clientState = FxAClient10.computeClientState(kB)!
+        let clientState = FxAClient10.computeClientState(kB)
         XCTAssertEqual(clientState, "6ae94683571c7a7c54dab4700aa3995f")
+    }
+
+    func testDeriveKSync() {
+        let kB = "fd5c747806c07ce0b9d69dcfea144663e630b65ec4963596a22f24910d7dd15d".hexDecodedData
+        let kSyncHex = FxAClient10.deriveKSync(kB).hexEncodedString
+        XCTAssertEqual(kSyncHex, "ad501a50561be52b008878b2e0d8a73357778a712255f7722f497b5d4df14b05dc06afb836e1521e882f521eb34691d172337accdbf6e2a5b968b05a7bbb9885")
     }
 
     func testErrorOutput() {
@@ -107,7 +113,7 @@ class FxAClient10Tests: LiveAccountTest {
                 case let .failure(error):
                     return Deferred(value: .failure(error))
                 case let .success(loginResponse):
-                    return client.keys(loginResponse.value.keyFetchToken)
+                    return client.keys(loginResponse.keyFetchToken)
                 }
             }
             keys.upon { result in
@@ -135,7 +141,7 @@ class FxAClient10Tests: LiveAccountTest {
                     return Deferred(value: .failure(error))
                 case let .success(loginResponse):
                     let keyPair = RSAKeyPair.generate(withModulusSize: 1024)!
-                    return client.sign(loginResponse.value.sessionToken, publicKey: keyPair.publicKey)
+                    return client.sign(loginResponse.sessionToken, publicKey: keyPair.publicKey)
                 }
             }
             sign.upon { result in
@@ -150,5 +156,16 @@ class FxAClient10Tests: LiveAccountTest {
             }
         }
         self.waitForExpectations(timeout: 10, handler: nil)
+    }
+    
+    func testProfileSuccess() {
+        withVerifiedAccountNoExpectations { emailUTF8, quickStretchedPW in
+            let stageConfiguration = StageFirefoxAccountConfiguration()
+            let client = FxAClient10(authEndpoint: stageConfiguration.authEndpointURL, oauthEndpoint: stageConfiguration.oauthEndpointURL, profileEndpoint: stageConfiguration.profileEndpointURL)
+            let response = (client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true) >>== { login in
+                return client.getProfile(withSessionToken: login.sessionToken as NSData)
+            }).value.successValue
+            XCTAssertNotNil(response?.uid)
+        }
     }
 }

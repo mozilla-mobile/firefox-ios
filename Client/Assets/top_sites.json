@@ -60,7 +60,8 @@
     "url": "http://www.amazon.com/",
     "image_url": "amazon-com.png",
     "background_color": "#FFF",
-    "domain": "amazon.com"
+    "is_multi_region_domain": "true",
+    "domain": "amazon"
   },
   {
     "title": "americanexpress",
@@ -277,7 +278,8 @@
     "url": "http://craigslist.org/",
     "image_url": "craigslist-org.png",
     "background_color": "#652892",
-    "domain": "craigslist.org"
+    "is_multi_region_domain": "true",
+    "domain": "craigslist"
   },
   {
     "title": "dailymail",
@@ -494,7 +496,7 @@
     "url": "http://go.com",
     "image_url": "go-com.png",
     "background_color": "#000",
-    "domain": ".com"
+    "domain": "go.com"
   },
   {
     "title": "goodreads",
@@ -508,15 +510,9 @@
     "url": "https://www.google.com/",
     "image_url": "google-com.png",
     "background_color": "#FFF",
-    "domain": "google.com"
+    "is_multi_region_domain": "true",
+    "domain": "google"
   },
-     {
-     "title": "google",
-     "url": "https://www.google.com/",
-     "image_url": "google-com.png",
-     "background_color": "#FFF",
-     "domain": "google.ca"
-     },
   {
     "title": "admin.google",
     "url": "https://admin.google.com/",
@@ -833,6 +829,13 @@
     "domain": "msn.com"
   },
   {
+    "title": "mozilla",
+    "url": "http://www.mozilla.com.cn/",
+    "image_url": "mozilla-com.png",
+    "background_color": "#000",
+    "domain": "mozilla.com.cn"
+  },
+  {
     "title": "nbcnews",
     "url": "http://www.nbcnews.com/",
     "image_url": "nbcnews-com.png",
@@ -999,6 +1002,13 @@
     "image_url": "sears-com.png",
     "background_color": "#00265a",
     "domain": "sears.com"
+  },
+  {
+    "title": "sina",
+    "url": "http://www.sina.cn/",
+    "image_url": "sina-com.png",
+    "background_color": "#ff0000",
+    "domain": "sina.cn"
   },
   {
     "title": "sina",

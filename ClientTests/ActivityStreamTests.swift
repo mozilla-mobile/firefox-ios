@@ -8,7 +8,7 @@ import XCTest
 import Shared
 import Storage
 import Deferred
-import Telemetry
+import SyncTelemetry
 
 class ActivityStreamTests: XCTestCase {
     var profile: MockProfile!
@@ -30,7 +30,7 @@ class ActivityStreamTests: XCTestCase {
     func testDeletionOfSingleSuggestedSite() {
         let siteToDelete = panel.defaultTopSites()[0]
 
-        panel.hideURLFromTopSites(URL(string: siteToDelete.url)!)
+        panel.hideURLFromTopSites(siteToDelete)
         let newSites = panel.defaultTopSites()
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
@@ -41,7 +41,7 @@ class ActivityStreamTests: XCTestCase {
     func testDeletionOfAllDefaultSites() {
         let defaultSites = panel.defaultTopSites()
         defaultSites.forEach({
-            panel.hideURLFromTopSites(URL(string: $0.url)!)
+            panel.hideURLFromTopSites($0)
         })
 
         let newSites = panel.defaultTopSites()
@@ -104,9 +104,9 @@ extension ActivityStreamTests {
 
     func testContextMenuOnTopSiteEmitsRemoveEvent() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let topSitesContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .topSites)
+        let topSitesContextMenu = panel.contextMenu(for: mockSite, with: IndexPath(item: 0, section: ActivityStreamPanel.Section.topSites.rawValue))
 
-        let removeAction = topSitesContextMenu?.actions.find { $0.title == Strings.RemoveFromASContextMenuTitle }
+        let removeAction = topSitesContextMenu?.actions[0].find { $0.title == Strings.RemoveContextMenuTitle }
         removeAction?.handler?(removeAction!)
 
         let pingsSent = (telemetry.eventsTracker as! MockPingClient).pingsReceived
@@ -117,10 +117,10 @@ extension ActivityStreamTests {
 
     func testContextMenuOnHighlightsEmitsRemoveDismissEvents() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let highlightsContextMenu = panel.contextMenuForSite(mockSite, atIndex: 0, forSection: .highlights)
+        let highlightsContextMenu = panel.contextMenu(for: mockSite, with: IndexPath(row: 0, section: ActivityStreamPanel.Section.highlights.rawValue))
 
-        let dismiss = highlightsContextMenu?.actions.find { $0.title == Strings.RemoveFromASContextMenuTitle }
-        let delete = highlightsContextMenu?.actions.find { $0.title == Strings.DeleteFromHistoryContextMenuTitle }
+        let dismiss = highlightsContextMenu?.actions[0].find { $0.title == Strings.RemoveContextMenuTitle }
+        let delete = highlightsContextMenu?.actions[0].find { $0.title == Strings.DeleteFromHistoryContextMenuTitle }
 
         dismiss?.handler?(dismiss!)
         delete?.handler?(delete!)
@@ -154,19 +154,18 @@ extension ActivityStreamTests {
 
     func testBadStateEventsForHighlights() {
         let goodSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        goodSite.icon = Favicon(url: "http://image", date: Date(), type: .local)
+        goodSite.icon = Favicon(url: "http://image", date: Date())
         goodSite.metadata = PageMetadata(id: nil,
                                          siteURL: "http://mozilla.org",
                                          mediaURL: "http://image",
                                          title: "Mozilla",
                                          description: "Web",
                                          type: nil,
-                                         providerName: nil,
-                                         mediaDataURI: nil)
+                                         providerName: nil)
         let badSite = Site(url: "http://mozilla.org", title: "Mozilla")
         profile.recommendations = MockRecommender(highlights: [goodSite, badSite])
 
-        // Since invalidateHighlights calls back into the main thread, we can't 
+        // Since invalidateHighlights calls back into the main thread, we can't
         // simply call .value on this to block since the app will dead lock when
         // trying to call back onto a blocked main thread.
         let expect = XCTestExpectation(description: "Sent bad highlight pings")
@@ -185,19 +184,18 @@ extension ActivityStreamTests {
 
     func testBadStateEventsForTopSites() {
         let goodSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        goodSite.icon = Favicon(url: "http://image", date: Date(), type: .local)
+        goodSite.icon = Favicon(url: "http://image", date: Date())
         goodSite.metadata = PageMetadata(id: nil,
                                          siteURL: "http://mozilla.org",
                                          mediaURL: "http://image",
                                          title: "Mozilla",
                                          description: "Web",
                                          type: nil,
-                                         providerName: nil,
-                                         mediaDataURI: nil)
+                                         providerName: nil)
         let badSite = Site(url: "http://mozilla.org", title: "Mozilla")
         profile.history = MockTopSitesHistory(sites: [goodSite, badSite])
 
-        // Since invalidateHighlights calls back into the main thread, we can't 
+        // Since invalidateHighlights calls back into the main thread, we can't
         // simply call .value on this to block since the app will dead lock when
         // trying to call back onto a blocked main thread.
         let expect = XCTestExpectation(description: "Sent bad top site pings")
@@ -223,11 +221,15 @@ class MockPingClient: PingCentreClient {
         pingsReceived.append(data)
         return succeed()
     }
+
+    public func sendBatch(_ data: [[String : Any]], validate: Bool) -> Success {
+        pingsReceived += data
+        return succeed()
+    }
 }
 
 fileprivate class MockRecommender: HistoryRecommendations {
-    func invalidateHighlights() -> Success {
-        // no-op since we don't need to purge a cache for our mock recommender
+    func repopulateHighlights() -> Success {
         return succeed()
     }
 
@@ -240,7 +242,15 @@ fileprivate class MockRecommender: HistoryRecommendations {
     func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
         return deferMaybe(ArrayCursor(data: highlights))
     }
+
+    func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+        return deferMaybe(ArrayCursor(data: []))
+    }
     
+    func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success {
+        return succeed()
+    }
+
     func removeHighlightForURL(_ url: String) -> Success {
         guard let foundSite = highlights.filter({ $0.url == url }).first else {
             return succeed()
@@ -260,6 +270,10 @@ fileprivate class MockTopSitesHistory: MockableHistory {
 
     override func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         return deferMaybe(ArrayCursor(data: mockTopSites))
+    }
+
+    override func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
+        return deferMaybe(ArrayCursor(data: []))
     }
 
     override func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> {

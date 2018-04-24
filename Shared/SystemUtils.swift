@@ -29,9 +29,9 @@ public struct SystemUtils {
 }
 
 extension SystemUtils {
-    // This should be run on first run of the application. 
+    // This should be run on first run of the application.
     // It shouldn't be run from an extension.
-    // Its function is to write a lock file that is only accessible from the application, 
+    // Its function is to write a lock file that is only accessible from the application,
     // and not accessible from extension when the device is locked. Thus, we can tell if an extension is being run
     // when the device is locked.
     public static func onFirstRun() {
@@ -44,8 +44,8 @@ extension SystemUtils {
         if fm.fileExists(atPath: lockFile) {
             return
         }
-        let contents = "Device is unlocked".data(using: String.Encoding.utf8)
-        fm.createFile(atPath: lockFile, contents: contents, attributes: [FileAttributeKey.protectionKey.rawValue: FileProtectionType.complete])
+        let contents = "Device is unlocked".data(using: .utf8)
+        fm.createFile(atPath: lockFile, contents: contents, attributes: [FileAttributeKey(rawValue: FileAttributeKey.protectionKey.rawValue): FileProtectionType.complete])
     }
 
     private static var lockedDeviceURL: URL? {
@@ -58,7 +58,7 @@ extension SystemUtils {
             return true
         }
         do {
-            let _ = try Data(contentsOf: lockFileURL, options: .mappedIfSafe)
+            _ = try Data(contentsOf: lockFileURL, options: .mappedIfSafe)
             return false
         } catch let err as NSError {
             return err.code == 257

@@ -6,16 +6,16 @@ import UIKit
 import Shared
 import Storage
 
-struct ActivityStreamHighlightCellUX {
+private struct ActivityStreamHighlightCellUX {
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x353535)
     static let BorderWidth: CGFloat = 0.5
     static let CellSideOffset = 20
     static let TitleLabelOffset = 2
     static let CellTopBottomOffset = 12
-    static let SiteImageViewSize: CGSize = UIDevice.current.userInterfaceIdiom == .pad ? CGSize(width: 99, height: 120) : CGSize(width: 99, height: 90)
+    static let SiteImageViewSize = CGSize(width: 99, height: UIDevice.current.userInterfaceIdiom == .pad ? 120 : 90)
     static let StatusIconSize = 12
     static let FaviconSize = CGSize(width: 45, height: 45)
-    static let DescriptionLabelColor = UIColor(colorString: "919191")
+    static let DescriptionLabelColor = UIColor(rgb: 0x919191) // Not found in Photon colors
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
     static let BorderColor = UIColor(white: 0, alpha: 0.1)
@@ -25,7 +25,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBoldActivityStream
+        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeHeavyWeightAS
         titleLabel.textColor = ActivityStreamHighlightCellUX.LabelColor
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 3
@@ -34,7 +34,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
-        descriptionLabel.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
+        descriptionLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
@@ -43,19 +43,19 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var domainLabel: UILabel = {
         let descriptionLabel = UILabel()
-        descriptionLabel.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
+        descriptionLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
-        descriptionLabel.setContentCompressionResistancePriority(1000, for: UILayoutConstraintAxis.vertical)
+        descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         return descriptionLabel
     }()
 
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
-        siteImageView.contentMode = UIViewContentMode.scaleAspectFit
+        siteImageView.contentMode = .scaleAspectFit
         siteImageView.clipsToBounds = true
-        siteImageView.contentMode = UIViewContentMode.center
+        siteImageView.contentMode = .center
         siteImageView.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
         siteImageView.layer.borderColor = ActivityStreamHighlightCellUX.BorderColor.cgColor
         siteImageView.layer.borderWidth = ActivityStreamHighlightCellUX.BorderWidth
@@ -65,7 +65,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var statusIcon: UIImageView = {
         let statusIcon = UIImageView()
-        statusIcon.contentMode = UIViewContentMode.scaleAspectFit
+        statusIcon.contentMode = .scaleAspectFit
         statusIcon.clipsToBounds = true
         statusIcon.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
         return statusIcon
@@ -129,8 +129,8 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
         statusIcon.snp.makeConstraints { make in
             make.size.equalTo(ActivityStreamHighlightCellUX.StatusIconSize)
+            make.centerY.equalTo(descriptionLabel.snp.centerY)
             make.leading.equalTo(siteImageView)
-            make.bottom.equalTo(contentView)
         }
     }
 
@@ -151,27 +151,41 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
             self.siteImageView.sd_setImage(with: mediaURL)
             self.siteImageView.contentMode = .scaleAspectFill
         } else {
+            let itemURL = site.tileURL
             self.siteImageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url)  in
-                self?.siteImageView.image = self?.siteImageView.image?.createScaled(ActivityStreamHighlightCellUX.FaviconSize)
+                if itemURL == url {
+                    self?.siteImageView.image = self?.siteImageView.image?.createScaled(ActivityStreamHighlightCellUX.FaviconSize)
+                    self?.siteImageView.backgroundColor = color
+                }
             })
             self.siteImageView.contentMode = .center
         }
 
         self.domainLabel.text = site.tileURL.hostSLD
-        self.titleLabel.text = site.title.characters.count <= 1 ? site.url : site.title
+        self.titleLabel.text = site.title.isEmpty ? site.url : site.title
 
         if let bookmarked = site.bookmarked, bookmarked {
-            self.descriptionLabel.text = "Bookmarked"
+            self.descriptionLabel.text = Strings.HighlightBookmarkText
             self.statusIcon.image = UIImage(named: "context_bookmark")
         } else {
-            self.descriptionLabel.text = "Visited"
+            self.descriptionLabel.text = Strings.HighlightVistedText
             self.statusIcon.image = UIImage(named: "context_viewed")
         }
     }
+    
+    func configureWithPocketStory(_ pocketStory: PocketStory) {
+        self.siteImageView.sd_setImage(with: pocketStory.imageURL)
+        self.siteImageView.contentMode = .scaleAspectFill
+        
+        self.domainLabel.text = pocketStory.domain
+        self.titleLabel.text = pocketStory.title
+        
+        self.descriptionLabel.text = Strings.PocketTrendingText
+        self.statusIcon.image = UIImage(named: "context_pocket")
+    }
 }
 
-struct HighlightIntroCellUX {
-    static let foxImageName = "fox_finder"
+private struct HighlightIntroCellUX {
     static let margin: CGFloat = 20
     static let foxImageWidth: CGFloat = 168
 }
@@ -180,7 +194,7 @@ class HighlightIntroCell: UICollectionViewCell {
 
     lazy var titleLabel: UILabel = {
         let textLabel = UILabel()
-        textLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
+        textLabel.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
         textLabel.textColor = UIColor.black
         textLabel.numberOfLines = 1
         textLabel.adjustsFontSizeToFitWidth = true
@@ -188,15 +202,9 @@ class HighlightIntroCell: UICollectionViewCell {
         return textLabel
     }()
 
-    lazy var mainImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: HighlightIntroCellUX.foxImageName)
-        return imageView
-    }()
-
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = DynamicFontHelper.defaultHelper.DeviceFontDescriptionActivityStream
+        label.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
         label.textColor = UIColor.darkGray
         label.numberOfLines = 0
         return label
@@ -206,7 +214,6 @@ class HighlightIntroCell: UICollectionViewCell {
         super.init(frame: frame)
 
         contentView.addSubview(titleLabel)
-        contentView.addSubview(mainImageView)
         contentView.addSubview(descriptionLabel)
 
         titleLabel.text = Strings.HighlightIntroTitle
@@ -214,14 +221,7 @@ class HighlightIntroCell: UICollectionViewCell {
 
         let titleInsets = UIEdgeInsets(top: HighlightIntroCellUX.margin, left: 0, bottom: 0, right: 0)
         titleLabel.snp.makeConstraints { make in
-            make.leading.top.equalTo(self.contentView).inset(titleInsets)
-            make.trailing.equalTo(mainImageView.snp.leading)
-        }
-
-        mainImageView.snp.makeConstraints { make in
-            make.top.equalTo(self.contentView)
-            make.width.equalTo(HighlightIntroCellUX.foxImageWidth)
-            make.trailing.equalTo(self.contentView).offset(-HighlightIntroCellUX.margin/2)
+            make.leading.top.trailing.equalTo(self.contentView).inset(titleInsets)
         }
 
         descriptionLabel.snp.makeConstraints { make in

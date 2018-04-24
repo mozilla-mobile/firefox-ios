@@ -10,7 +10,7 @@ import XCTest
 
 class MockFiles: FileAccessor {
     init() {
-        let docPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)[0]
+        let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         super.init(rootPath: (docPath as NSString).appendingPathComponent("testing"))
     }
 }
@@ -35,8 +35,7 @@ extension Site {
 class TestSQLiteHistoryFrecencyPerf: XCTestCase {
     func testFrecencyPerf() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -45,9 +44,9 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
         history.clearHistory().succeeded()
         populateHistoryForFrecencyCalculations(history, siteCount: count)
 
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                history.getSitesByFrecencyWithHistoryLimit(10, includeIcon: false).succeeded()
+                history.getFrecentHistory().getSites(whereURLContains: nil, historyLimit: 10, bookmarksLimit: 0).succeeded()
             }
             self.stopMeasuring()
         }
@@ -57,8 +56,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
 class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
     func testCachePerf() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -68,8 +66,8 @@ class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
         populateHistoryForFrecencyCalculations(history, siteCount: count)
 
         history.setTopSitesNeedsInvalidation()
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
-            history.updateTopSitesCacheIfInvalidated().succeeded()
+        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
+            history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
             self.stopMeasuring()
         }
     }

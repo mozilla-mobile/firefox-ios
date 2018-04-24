@@ -11,7 +11,7 @@ import Deferred
 
 private let log = Logger.browserLogger
 
-struct RecentlyClosedPanelUX {
+private struct RecentlyClosedPanelUX {
     static let IconSize = CGSize(width: 23, height: 23)
     static let IconBorderColor = UIColor(white: 0, alpha: 0.1)
     static let IconBorderWidth: CGFloat = 0.5
@@ -73,8 +73,9 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
     }
 
     @objc fileprivate func historyBackButtonWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        let _ = self.navigationController?.popViewController(animated: true)
+        _ = self.navigationController?.popViewController(animated: true)
     }
+
 }
 
 class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
@@ -82,18 +83,30 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     var recentlyClosedTabs: [ClosedTab] = []
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
+    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress))
+    }()
+
     init() {
         super.init(nibName: nil, bundle: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "Recently Closed Tabs List"
         self.recentlyClosedTabs = profile.recentlyClosedTabs.tabs
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == .began else { return }
+        let touchPoint = longPressGestureRecognizer.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
+        presentContextMenu(for: indexPath)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -104,17 +117,20 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         let tab = recentlyClosedTabs[indexPath.row]
         let displayURL = tab.url.displayURL ?? tab.url
         twoLineCell.setLines(tab.title, detailText: displayURL.absoluteDisplayString)
-        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!, type: .guess) : nil
+        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!) : nil
         cell.imageView!.layer.borderColor = RecentlyClosedPanelUX.IconBorderColor.cgColor
         cell.imageView!.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
         cell.imageView?.setIcon(site, forURL: displayURL, completed: { (color, url) in
-            cell.imageView?.image = cell.imageView?.image?.createScaled(RecentlyClosedPanelUX.IconSize)
-            cell.imageView?.contentMode = .center
+            if url == displayURL {
+                cell.imageView?.image = cell.imageView?.image?.createScaled(RecentlyClosedPanelUX.IconSize)
+                cell.imageView?.contentMode = .center
+                cell.imageView?.backgroundColor = color
+            }
         })
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let homePanelDelegate = homePanelDelegate,
               let recentlyClosedTabsPanel = recentlyClosedTabsPanel else {
             log.warning("No site or no URL when selecting row.")
@@ -129,7 +145,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     }
 
     // Functions that deal with showing header rows.
-    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
@@ -137,4 +153,26 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         return profile.recentlyClosedTabs.tabs.count
     }
 
+}
+
+extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
+        guard let contextMenu = completionHandler() else { return }
+        self.present(contextMenu, animated: true, completion: nil)
+    }
+
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        let closedTab = recentlyClosedTabs[indexPath.row]
+        let site: Site
+        if let title = closedTab.title {
+            site = Site(url: String(describing: closedTab.url), title: title)
+        } else {
+            site = Site(url: String(describing: closedTab.url), title: "")
+        }
+        return site
+    }
+
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
+        return getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate)
+    }
 }

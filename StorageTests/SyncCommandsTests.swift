@@ -34,18 +34,17 @@ class SyncCommandsTests: XCTestCase {
             try files.remove("browser.db")
         } catch _ {
         }
-        db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
-        // create clients
+        db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
 
+        // create clients
         let now = Date.now()
         let client1GUID = Bytes.generateGUID()
         let client2GUID = Bytes.generateGUID()
         let client3GUID = Bytes.generateGUID()
 
-        self.clients.append(RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS"))
-        self.clients.append(RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin"))
-        self.clients.append(RemoteClient(guid: client3GUID, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS"))
+        self.clients.append(RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: "55.0.1", fxaDeviceId: nil))
+        self.clients.append(RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin", version: "55.0.1", fxaDeviceId: nil))
+        self.clients.append(RemoteClient(guid: client3GUID, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", version: "55.0.1", fxaDeviceId: nil))
         clientsAndTabs = SQLiteRemoteClientsAndTabs(db: db)
         clientsAndTabs.insertOrUpdateClients(clients).succeeded()
 
@@ -71,7 +70,7 @@ class SyncCommandsTests: XCTestCase {
             "command": "displayURI",
             "args": [shareItem.url, "abcdefghijkl", shareItem.title ?? ""]
         ]
-        XCTAssertEqual(JSON(object: jsonObj).stringValue(), syncCommand.value)
+        XCTAssertEqual(JSON(jsonObj).stringValue(), syncCommand.value)
     }
 
     func testInsertWithNoURLOrTitle() {
@@ -81,12 +80,13 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(3, $0.successValue!)
 
-            var error2: NSError? = nil
-            let commandCursor = self.db.withConnection(&error2) { (connection, err) -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+            let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
+                let select = "SELECT count(*) FROM commands"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            XCTAssertNil(error2)
+            
+            let commandCursor = commandCursorDeferred.value.successValue!
+            
             XCTAssertNotNil(commandCursor[0])
             XCTAssertEqual(3, commandCursor[0]!)
             e.fulfill()
@@ -103,12 +103,13 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(3, $0.successValue!)
 
-            var error: NSError? = nil
-            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+            let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
+                let select = "SELECT count(*) FROM commands"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            XCTAssertNil(error)
+
+            let commandCursor = commandCursorDeferred.value.successValue!
+
             XCTAssertNotNil(commandCursor[0])
             XCTAssertEqual(3, commandCursor[0]!)
             e.fulfill()
@@ -125,12 +126,13 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertTrue($0.isSuccess)
             XCTAssertEqual(12, $0.successValue!)
 
-            var error: NSError? = nil
-            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+            let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
+                let select = "SELECT count(*) FROM commands"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            XCTAssertNil(error)
+
+            let commandCursor = commandCursorDeferred.value.successValue!
+
             XCTAssertNotNil(commandCursor[0])
             XCTAssertEqual(12, commandCursor[0]!)
             e.fulfill()
@@ -177,22 +179,25 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertTrue(result.isSuccess)
             a.fulfill()
 
-            var error: NSError? = nil
-            let commandCursor = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
+            let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
+                let select = "SELECT count(*) FROM commands WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            XCTAssertNil(error)
+
+            let commandCursor = commandCursorDeferred.value.successValue!
+
             XCTAssertNotNil(commandCursor[0])
             XCTAssertEqual(0, commandCursor[0]!)
             b.fulfill()
 
             client = self.clients[1]
-            let commandCursor2 = self.db.withConnection(&error) { (connection, err) -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
+            let commandCursor2Deferred = self.db.withConnection { connection -> Cursor<Int> in
+                let select = "SELECT count(*) FROM commands WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            XCTAssertNil(error)
+            
+            let commandCursor2 = commandCursor2Deferred.value.successValue!
+
             XCTAssertNotNil(commandCursor2[0])
             XCTAssertEqual(4, commandCursor2[0]!)
             c.fulfill()

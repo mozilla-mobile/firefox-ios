@@ -14,10 +14,7 @@
 
 if [ "$1" == "--force" ]; then
     rm -rf Carthage/*
-fi
-
-if ! cmp -s Cartfile.resolved Carthage/Cartfile.resolved; then
-  rm -rf Carthage/*
+    rm -rf ~/Library/Caches/org.carthage.CarthageKit
 fi
 
 # Only enable this on the Xcode Server because it times out if it does not
@@ -28,7 +25,9 @@ if [ ! -z "$XCS_BOT_ID"  ]; then
   CARTHAGE_VERBOSE="--verbose"
 fi
 
-if [ ! -f Carthage/Cartfile.resolved ]; then
-  carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --no-use-binaries
-  cp Cartfile.resolved Carthage/Cartfile.resolved
-fi
+carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
+
+# Install Node.js dependencies and build user scripts
+
+npm install
+npm run build

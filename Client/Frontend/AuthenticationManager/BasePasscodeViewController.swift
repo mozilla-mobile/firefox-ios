@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import SwiftKeychainWrapper
 
-/// Base UIViewController subclass containing methods for displaying common error messaging 
+/// Base UIViewController subclass containing methods for displaying common error messaging
 /// for the various Passcode configuration screens.
 class BasePasscodeViewController: UIViewController {
     var authenticationInfo: AuthenticationKeychainInfo?
@@ -25,12 +25,12 @@ class BasePasscodeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        view.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.dismissAnimated))
         automaticallyAdjustsScrollViewInsets = false
     }
 
-    func dismissAnimated() {
+    @objc func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
     }
 }
@@ -58,7 +58,7 @@ extension BasePasscodeViewController {
 
     func failMismatchPasscode() {
         let mismatchPasscodeError
-            = NSLocalizedString("Passcodes didn't match. Try again.",
+            = NSLocalizedString("Passcodes didn’t match. Try again.",
                 tableName: "AuthenticationManager",
                 comment: "Error message displayed to user when their confirming passcode doesn't match the first code.")
         displayError(mismatchPasscodeError)

@@ -28,18 +28,18 @@ class ChevronView: UIView {
         didSet {
             switch style {
             case .rounded:
-                lineCapStyle = CGLineCap.round
-                lineJoinStyle = CGLineJoin.round
+                lineCapStyle = .round
+                lineJoinStyle = .round
             case .angular:
-                lineCapStyle = CGLineCap.butt
-                lineJoinStyle = CGLineJoin.miter
+                lineCapStyle = .butt
+                lineJoinStyle = .miter
 
             }
         }
     }
 
     init(direction: ChevronDirection) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
         self.direction = direction
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
@@ -50,7 +50,7 @@ class ChevronView: UIView {
             }
         }
         self.backgroundColor = UIColor.clear
-        self.contentMode = UIViewContentMode.redraw
+        self.contentMode = .redraw
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -66,13 +66,13 @@ class ChevronView: UIView {
 
         switch direction {
         case .left:
-            path = drawLeftChevronAt(CGPoint(x: rect.size.width - (strokeLength + Padding), y: strokeLength + Padding), strokeLength:strokeLength)
+            path = drawLeftChevronAt(CGPoint(x: rect.size.width - (strokeLength + Padding), y: strokeLength + Padding), strokeLength: strokeLength)
         case .up:
-            path = drawUpChevronAt(CGPoint(x: (rect.size.width - Padding) - strokeLength, y: (strokeLength / 2) + Padding), strokeLength:strokeLength)
+            path = drawUpChevronAt(CGPoint(x: (rect.size.width - Padding) - strokeLength, y: (strokeLength / 2) + Padding), strokeLength: strokeLength)
         case .right:
-            path = drawRightChevronAt(CGPoint(x: rect.size.width - Padding, y: strokeLength + Padding), strokeLength:strokeLength)
+            path = drawRightChevronAt(CGPoint(x: rect.size.width - Padding, y: strokeLength + Padding), strokeLength: strokeLength)
         case .down:
-            path = drawDownChevronAt(CGPoint(x: (rect.size.width - Padding) - strokeLength, y: (strokeLength * 1.5) + Padding), strokeLength:strokeLength)
+            path = drawDownChevronAt(CGPoint(x: (rect.size.width - Padding) - strokeLength, y: (strokeLength * 1.5) + Padding), strokeLength: strokeLength)
         }
 
         tintColor.set()

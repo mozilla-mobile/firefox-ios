@@ -7,8 +7,8 @@ import Foundation
 import XCTest
 import Shared
 
-private let DefaultSearchEngineName = "Yahoo"
-private let ExpectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "Twitter", "Wikipedia", "Yahoo"]
+private let DefaultSearchEngineName = "Google"
+private let ExpectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "Twitter", "Wikipedia"]
 
 class SearchEnginesTests: XCTestCase {
 
@@ -24,7 +24,7 @@ class SearchEnginesTests: XCTestCase {
     }
 
     func testDefaultEngineOnStartup() {
-        // If this is our first run, Yahoo should be first for the en locale.
+        // If this is our first run, Google should be first for the en locale.
         let profile = MockProfile()
         let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
         XCTAssertEqual(engines.defaultEngine.shortName, DefaultSearchEngineName)
@@ -94,7 +94,6 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertEqual(engines2.orderedEngines[3].shortName, ExpectedEngineNames[1])
         XCTAssertEqual(engines2.orderedEngines[4].shortName, ExpectedEngineNames[3])
         XCTAssertEqual(engines2.orderedEngines[5].shortName, ExpectedEngineNames[5])
-        XCTAssertEqual(engines2.orderedEngines[6].shortName, ExpectedEngineNames[6])
     }
 
     func testQuickSearchEngines() {
@@ -143,35 +142,30 @@ class SearchEnginesTests: XCTestCase {
         let profile = MockProfile()
         let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
 
-        // By default, you should see an opt-in, and suggestions are disabled.
-        XCTAssertTrue(engines.shouldShowSearchSuggestionsOptIn)
-        XCTAssertFalse(engines.shouldShowSearchSuggestions)
+        // By default, you should see search suggestions
+        XCTAssertTrue(engines.shouldShowSearchSuggestions)
 
         // Setting should be persisted.
-        engines.shouldShowSearchSuggestionsOptIn = false
-        engines.shouldShowSearchSuggestions = true
+        engines.shouldShowSearchSuggestions = false
 
         let engines2 = SearchEngines(prefs: profile.prefs, files: profile.files)
-        XCTAssertFalse(engines2.shouldShowSearchSuggestionsOptIn)
-        XCTAssertTrue(engines2.shouldShowSearchSuggestions)
+        XCTAssertFalse(engines2.shouldShowSearchSuggestions)
     }
 
-    func testDirectoriesForLanguageIdentifier() {
-        XCTAssertEqual(
-            SearchEngines.directoriesForLanguageIdentifier("nl", basePath: "/tmp", fallbackIdentifier: "en"),
-            ["/tmp/nl", "/tmp/en"]
-        )
-        XCTAssertEqual(
-            SearchEngines.directoriesForLanguageIdentifier("en-US", basePath: "/tmp", fallbackIdentifier: "en"),
-            ["/tmp/en-US", "/tmp/en"]
-        )
-        XCTAssertEqual(
-            SearchEngines.directoriesForLanguageIdentifier("es-MX", basePath: "/tmp", fallbackIdentifier: "en"),
-            ["/tmp/es-MX", "/tmp/es", "/tmp/en"]
-        )
-        XCTAssertEqual(
-            SearchEngines.directoriesForLanguageIdentifier("zh-Hans-CN", basePath: "/tmp", fallbackIdentifier: "en"),
-            ["/tmp/zh-Hans-CN", "/tmp/zh-CN", "/tmp/zh", "/tmp/en"]
-        )
+    func testUnorderedSearchEngines() {
+        XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "zh-TW")).flatMap({$0.shortName}), ["Google", "Bing", "DuckDuckGo", "Wikipedia (zh)"])
+        XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-CA")).flatMap({$0.shortName}), ["Google", "Bing", "Amazon.com", "DuckDuckGo", "Twitter", "Wikipedia"])
+        XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "de-DE")).flatMap({$0.shortName}), ["Google", "Bing", "Amazon.de", "DuckDuckGo", "Qwant", "Twitter", "Wikipedia (de)"])
+        XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-US")).flatMap({$0.shortName}), ["Google", "Bing", "Amazon.com", "DuckDuckGo", "Twitter", "Wikipedia"])
     }
+
+    func testGetOrderedEngines() {
+        // setup an existing search engine in the profile
+        let profile = MockProfile()
+        profile.prefs.setObject(["Google"], forKey: "search.orderedEngineNames")
+        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
+        XCTAssert(engines.orderedEngines.count > 1, "There should be more than one search engine")
+        XCTAssertEqual(engines.orderedEngines.first!.shortName, "Google", "Google should be the first search engine")
+    }
+
 }

@@ -19,7 +19,7 @@ import XCTest
 open class LiveAccountTest: XCTestCase {
     lazy var signedInUser: JSON? = {
         if let path = Bundle(for: type(of: self)).path(forResource: "signedInUser.json", ofType: nil) {
-            if let contents = try? String(contentsOfFile: path, encoding: String.Encoding.utf8) {
+            if let contents = try? String(contentsOfFile: path, encoding: .utf8) {
                 let json = JSON(parseJSON: contents)
                 if json.isError() {
                     return nil
@@ -49,9 +49,10 @@ open class LiveAccountTest: XCTestCase {
                 XCTAssertTrue(json["verified"].bool ?? false)
             }
             let email = json["email"].stringValue
+            let password = json["password"].stringValue
             let emailUTF8 = email.utf8EncodedData
-            let password = email.utf8EncodedData
-            let stretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: password)
+            let passwordUT8 = password.utf8EncodedData
+            let stretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: passwordUT8)
             completion(emailUTF8, stretchedPW)
         } else {
             // This is the standard case: signedInUser.json is {}.
@@ -61,6 +62,12 @@ open class LiveAccountTest: XCTestCase {
 
     func withVerifiedAccount(_ completion: (Data, Data) -> Void) {
         withExistingAccount(true, completion: completion)
+    }
+    
+    // Helper function that waits for expectations to clear
+    func withVerifiedAccountNoExpectations(_ completion: (Data, Data) -> Void) {
+        withExistingAccount(true, completion: completion)
+        self.waitForExpectations(timeout: 10, handler: nil)
     }
 
     func withCertificate(_ completion: @escaping (XCTestExpectation, Data, KeyPair, String) -> Void) {
@@ -76,7 +83,7 @@ open class LiveAccountTest: XCTestCase {
                     expectation.fulfill()
                     return Deferred(value: .failure(error))
                 case let .success(loginResponse):
-                    return client.sign(loginResponse.value.sessionToken, publicKey: keyPair.publicKey)
+                    return client.sign(loginResponse.sessionToken, publicKey: keyPair.publicKey)
                 }
             }
             sign.upon { result in
@@ -106,8 +113,8 @@ open class LiveAccountTest: XCTestCase {
     }
 
     // Internal helper.
-    func account(_ email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
-        let client = FxAClient10(endpoint: configuration.authEndpointURL)
+    func account(_ email: String, password: String, deviceName: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
+        let client = FxAClient10(authEndpoint: configuration.authEndpointURL)
         let emailUTF8 = email.utf8EncodedData
         let passwordUTF8 = password.utf8EncodedData
         let quickStretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: passwordUTF8)
@@ -115,7 +122,7 @@ open class LiveAccountTest: XCTestCase {
         return login.bind { result in
             if let response = result.successValue {
                 let unwrapkB = FxAClient10.computeUnwrapKey(quickStretchedPW)
-                return Deferred(value: Maybe(success: FirefoxAccount.from(configuration, andLoginResponse: response, unwrapkB: unwrapkB)))
+                return Deferred(value: Maybe(success: FirefoxAccount.from(configuration, andLoginResponse: response, unwrapkB: unwrapkB, deviceName: deviceName)))
             } else {
                 return Deferred(value: Maybe(failure: result.failureValue!))
             }
@@ -124,7 +131,7 @@ open class LiveAccountTest: XCTestCase {
 
     func getTestAccount() -> Deferred<Maybe<FirefoxAccount>> {
         // TODO: Use signedInUser.json here.  It's hard to include the same resource file in two Xcode targets.
-        return self.account("998797987.sync@restmail.net", password: "998797987.sync@restmail.net",
+        return self.account("998797987.sync@restmail.net", password: "998797987.sync@restmail.net", deviceName: "My iPhone",
             configuration: ProductionFirefoxAccountConfiguration())
     }
 

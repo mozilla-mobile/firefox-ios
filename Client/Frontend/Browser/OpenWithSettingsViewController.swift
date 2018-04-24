@@ -30,11 +30,11 @@ class OpenWithSettingsViewController: UITableViewController {
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
-        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
-        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
+        let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
-        headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle
+        headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle.uppercased()
         headerView.showTopBorder = false
         headerView.showBottomBorder = true
 
@@ -45,7 +45,7 @@ class OpenWithSettingsViewController: UITableViewController {
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
 
-        NotificationCenter.default.addObserver(self, selector: #selector(OpenWithSettingsViewController.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -58,7 +58,7 @@ class OpenWithSettingsViewController: UITableViewController {
         self.prefs.setString(currentChoice, forKey: PrefsKeys.KeyMailToOption)
     }
 
-    func appDidBecomeActive() {
+    @objc func appDidBecomeActive() {
         reloadMailProviderSource()
         updateCurrentChoice()
         tableView.reloadData()
@@ -105,10 +105,8 @@ class OpenWithSettingsViewController: UITableViewController {
 
         let option = mailProviderSource[indexPath.row]
 
-        cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.name)
+        cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.name, enabled: option.enabled)
         cell.accessoryType = (currentChoice == option.scheme && option.enabled) ? .checkmark : .none
-
-        cell.textLabel?.textColor = option.enabled ? UIConstants.TableViewRowTextColor : UIConstants.TableViewDisabledRowTextColor
         cell.isUserInteractionEnabled = option.enabled
 
         return cell

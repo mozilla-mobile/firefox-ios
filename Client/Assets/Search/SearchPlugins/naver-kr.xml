@@ -1,0 +1,21 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>네이버</ShortName>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAsVBMVEUAAAAAxjsAxjsAxjsAxjsAxjsAxjsAxjsAxjsAxjsAxjv///8AxTgAviCl67oAwCcAvyS68Mq278cBxjwAxz7i+ene+OYAwzEAwzAAvRsAuhCs7cAAwi0AuxMAvyF24pcAxDTa9+J95KE10mQDxTXv/PPn+u73/fnV9uHU9t7L9NnA8tK078if67pc3IZR2n1G13Ms0FwizVMay0sSyUMLxjsAuQ2S5quP5qlq35Fn349FqiBSAAAACnRSTlMAbQbS+cQbwM/zdNZNQwAAAbpJREFUaN7t2ltPwkAQhuEFCupMa6s7KLs9UI6eOYOH///D1HhR2gtJA19i4r63s+mT3k5GKdVsnHkEyDtrNNVXnXOCdd5RqtkiYK2mahC0hmoTtLbyCJqnCJwDHOAABzjAAb8CfqVDD+oBWsIsKBdK6QFF5XEWSh3AT/rxZal4ZISKcnqLy/N+4tcAxtGAK02ScE/oUXX+ENQB/PCKq72ke1+4pZvK+Do6FuBFKlhgMo4ECnCc+hoK8DwVLHC3zQQK8JXJNRTgmRUswJtAsMCTyTUU4HcrWIDXRrDAY9DTUID7FgzwyggWuI8SLMBDCwZ4uRMs0DVhFwrw0J76DwZTLjV6PjFwPeJS08GJga4dcrlTA4m5wQKyW2IBfWuHYCDJ7qFAT8wKC5DYPhbQPfMIBUjMGguQ2A8soHPzBAVIgg0WILEzLKDz9BkKkGTbOyhAYudYQPtpDAVIovEECpCkCyxAfvpyCKi/StBJMZYwmR65SqguQ+JXnVORmFExL5Yhx6xzItK0L4RBzXVO7X2TX+nvrdQc4AAHOMAB/wvwCNoF/OwBfriBPz1RHaDQ6qif8x+C1P4+//kEmHiHMNEXZywAAAAASUVORK5CYII=</Image>
+<Url type="application/x-suggestions+json" method="GET" template="http://ac.search.naver.com/nx/ac">
+	<Param name="of" value="os" />
+	<Param name="ie" value="utf-8" />
+	<Param name="q" value="{searchTerms}" />
+</Url>
+<Url type="text/html" method="GET" template="http://m.search.naver.com/search.naver">
+	<Param name="where" value="m"/>
+	<Param name="frm" value="ff"/>
+  	<Param name="sm" value="oss"/>
+	<Param name="ie" value="utf8"/>
+	<Param name="query" value="{searchTerms}"/>
+</Url>
+<SearchForm>http://m.naver.com</SearchForm>
+</SearchPlugin>

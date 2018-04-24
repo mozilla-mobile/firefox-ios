@@ -8,8 +8,12 @@ import Shared
 import XCGLogger
 import Deferred
 
-open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType {
+open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType, SyncPingFailureFormattable {
     open let record: Record<T>
+
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
+    }
 
     open var description: String {
         return "Failed to serialize record: \(record)"
@@ -23,7 +27,7 @@ open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType {
 private let log = Logger.syncLogger
 
 private typealias UploadRecord = (guid: GUID, payload: String, sizeBytes: Int)
-private typealias DeferredResponse = Deferred<Maybe<StorageResponse<POSTResult>>>
+public typealias DeferredResponse = Deferred<Maybe<StorageResponse<POSTResult>>>
 
 typealias BatchUploadFunction = (_ lines: [String], _ ifUnmodifiedSince: Timestamp?, _ queryParams: [URLQueryItem]?) -> Deferred<Maybe<StorageResponse<POSTResult>>>
 
@@ -41,6 +45,24 @@ private enum AccumulateRecordError: MaybeErrorType {
 
     case full(uploadOp: DeferredResponse)
     case unknown
+}
+
+open class TooManyRecordsError: MaybeErrorType, SyncPingFailureFormattable {
+    open var description: String {
+        return "Trying to send too many records in a single batch."
+    }
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
+    }
+}
+
+open class RecordsFailedToUpload: MaybeErrorType, SyncPingFailureFormattable {
+    open var description: String {
+        return "Some records failed to upload"
+    }
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
+    }
 }
 
 open class Sync15BatchClient<T: CleartextPayloadJSON> {
@@ -93,7 +115,23 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
             >>> succeed
     }
 
-    open func addRecords(_ records: [Record<T>]) -> Success {
+    // If in batch mode, will discard the batch if any record fails
+    open func endSingleBatch() -> Deferred<Maybe<(succeeded: [GUID], lastModified: Timestamp?)>> {
+        return self.start() >>== { response in
+            let succeeded = response.value.success
+            guard let token = self.batchToken else {
+                return deferMaybe((succeeded: succeeded, lastModified: response.metadata.lastModifiedMilliseconds))
+            }
+            guard succeeded.count == self.totalRecords else {
+                return deferMaybe(RecordsFailedToUpload())
+            }
+            return self.commitBatch(token) >>== { commitResp in
+                return deferMaybe((succeeded: succeeded, lastModified: commitResp.metadata.lastModifiedMilliseconds))
+            }
+        }
+    }
+
+    open func addRecords(_ records: [Record<T>], singleBatch: Bool = false) -> Success {
         guard !records.isEmpty else {
             return succeed()
         }
@@ -104,13 +142,30 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
             return { self.serialize(record) }
         }
 
-        return accumulate(serializeThunks) >>== { self.addRecords($0.makeIterator()) }
+        return accumulate(serializeThunks) >>== {
+            let iter = $0.makeIterator()
+            if singleBatch {
+                return self.addRecordsInSingleBatch(iter)
+            } else {
+                return self.addRecords(iter)
+            }
+        }
     }
 
     fileprivate func addRecords(_ generator: IndexingIterator<[UploadRecord]>) -> Success {
         var mutGenerator = generator
         while let record = mutGenerator.next() {
             return accumulateOrUpload(record) >>> { self.addRecords(mutGenerator) }
+        }
+        return succeed()
+    }
+
+    fileprivate func addRecordsInSingleBatch(_ generator: IndexingIterator<[UploadRecord]>) -> Success {
+        var mutGenerator = generator
+        while let record = mutGenerator.next() {
+            guard self.addToPost(record) else {
+                return deferMaybe(TooManyRecordsError())
+            }
         }
         return succeed()
     }
@@ -220,7 +275,7 @@ open class Sync15BatchClient<T: CleartextPayloadJSON> {
     fileprivate func moveForward(_ response: StorageResponse<POSTResult>) {
         let lastModified = response.metadata.lastModifiedMilliseconds
         self.ifUnmodifiedSince = lastModified
-        let _ = self.onCollectionUploaded(response.value, lastModified)
+        _ = self.onCollectionUploaded(response.value, lastModified)
     }
 
     fileprivate func resetBatch() {

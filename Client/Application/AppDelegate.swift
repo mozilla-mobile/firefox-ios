@@ -7,10 +7,13 @@ import Storage
 import AVFoundation
 import XCGLogger
 import MessageUI
-import WebImage
+import SDWebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
-import Telemetry
+import SyncTelemetry
+import Sync
+import CoreSpotlight
+import UserNotifications
 
 private let log = Logger.browserLogger
 
@@ -29,28 +32,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     weak var profile: Profile?
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
-    var foregroundStartTime = 0
+    var applicationCleanlyBackgrounded = true
 
     weak var application: UIApplication?
     var launchOptions: [AnyHashable: Any]?
 
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
 
-    var openInFirefoxParams: LaunchParams?
-
-    var appStateStore: AppStateStore!
-
-    var systemBrightness: CGFloat = UIScreen.main.brightness
+    var receivedURLs: [URL]?
+    var unifiedTelemetry: UnifiedTelemetry?
 
     @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        //
+        // Determine if the application cleanly exited last time it was used. We default to true in
+        // case we have never done this before. Then check if the "ApplicationCleanlyBackgrounded" user
+        // default exists and whether was properly set to true on app exit.
+        //
+        // Then we always set the user default to false. It will be set to true when we the application
+        // is backgrounded.
+        //
+
+        self.applicationCleanlyBackgrounded = true
+
+        let defaults = UserDefaults()
+        if defaults.object(forKey: "ApplicationCleanlyBackgrounded") != nil {
+            self.applicationCleanlyBackgrounded = defaults.bool(forKey: "ApplicationCleanlyBackgrounded")
+        }
+        defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
+        defaults.synchronize()
+
         // Hold references to willFinishLaunching parameters for delayed app launch
         self.application = application
         self.launchOptions = launchOptions
 
-        log.debug("Configuring window…")
-
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window!.backgroundColor = UIConstants.AppBackgroundColor
+        self.window!.backgroundColor = UIColor.white
 
         // Short circuit the app if we want to email logs from the debug menu
         if DebugSettingsBundleOptions.launchIntoEmailComposer {
@@ -63,130 +79,96 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     @discardableResult fileprivate func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
-        log.debug("Setting UA…")
+        log.info("startApplication begin")
+
+        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
+        // before getting the Profile.
+        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
+        Sentry.shared.setup(sendUsageData: sendUsageData)
+        
         // Set the Firefox UA for browsing.
         setUserAgent()
 
-        log.debug("Starting keyboard helper…")
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
 
-        log.debug("Starting dynamic font helper…")
         DynamicFontHelper.defaultHelper.startObserving()
 
-        log.debug("Setting custom menu items…")
         MenuHelper.defaultHelper.setItems()
 
-        log.debug("Creating Sync log file…")
         let logDate = Date()
         // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
         Logger.syncLogger.newLogWithDate(logDate)
 
-        log.debug("Creating Browser log file…")
         Logger.browserLogger.newLogWithDate(logDate)
 
-        log.debug("Getting profile…")
         let profile = getProfile(application)
-        appStateStore = AppStateStore(prefs: profile.prefs)
 
-        log.debug("Initializing Sentry…")
-        SentryIntegration.shared.setup(profile: profile)
-
-        log.debug("Initializing telemetry…")
-        Telemetry.initWithPrefs(profile.prefs)
+        unifiedTelemetry = UnifiedTelemetry(profile: profile)
 
         if !DebugSettingsBundleOptions.disableLocalWebServer {
-            log.debug("Starting web server…")
             // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
             setUpWebServer(profile)
         }
 
-        log.debug("Setting AVAudioSession category…")
-        do {
-            // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
-        } catch _ {
-            log.error("Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
-        }
-
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
 
-        log.debug("Configuring tabManager…")
+        // Temporary fix for Bug 1390871 - NSInvalidArgumentException: -[WKContentView menuHelperFindInPage]: unrecognized selector
+        if #available(iOS 11, *) {
+            if let clazz = NSClassFromString("WKCont" + "ent" + "View"), let swizzledMethod = class_getInstanceMethod(TabWebViewMenuHelper.self, #selector(TabWebViewMenuHelper.swizzledMenuHelperFindInPage)) {
+                class_addMethod(clazz, MenuHelper.SelectorFindInPage, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
+            }
+        }
+
         self.tabManager = TabManager(prefs: profile.prefs, imageStore: imageStore)
         self.tabManager.stateDelegate = self
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
-        log.debug("Initing BVC…")
 
         browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
+        browserViewController.edgesForExtendedLayout = []
+
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
         navigationController.delegate = self
         navigationController.isNavigationBarHidden = true
-
-        if AppConstants.MOZ_STATUS_BAR_NOTIFICATION {
-            rootViewController = NotificationRootViewController(rootViewController: navigationController)
-        } else {
-            rootViewController = navigationController
-        }
+        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
+        rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController
 
-        log.debug("Adding observers…")
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
+        NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
-                profile.readingList?.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
+                profile.readingList.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.current.name)
             }
         }
 
-        NotificationCenter.default.addObserver(forName: NotificationFirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
+        NotificationCenter.default.addObserver(forName: .FirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
             profile.flushAccount()
         }
 
-        // check to see if we started 'cos someone tapped on a notification.
-        if let localNotification = launchOptions?[UIApplicationLaunchOptionsKey.localNotification] as? UILocalNotification {
-            viewURLInNewTab(localNotification)
-        }
-        
         adjustIntegration = AdjustIntegration(profile: profile)
 
-        // We need to check if the app is a clean install to use for
-        // preventing the What's New URL from appearing.
-        if getProfile(application).prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
-            getProfile(application).prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+        if LeanPlumClient.shouldEnable(profile: profile) {
+            LeanPlumClient.shared.setup(profile: profile)
+            LeanPlumClient.shared.set(enabled: true)
         }
 
-        log.debug("Updating authentication keychain state to reflect system state")
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
-
-        resetForegroundStartTime()
-        if !(profile.prefs.boolForKey(InitialPingSentKey) ?? false) {
-            // Try to send an initial core ping when the user first opens the app so that they're
-            // "on the map". This lets us know they exist if they try the app once, crash, then uninstall.
-            // sendCorePing() only sends the ping if the user is offline, so if the first ping doesn't
-            // go through *and* the user crashes then uninstalls on the first run, then we're outta luck.
-            profile.prefs.setBool(true, forKey: InitialPingSentKey)
-            sendCorePing()
-        }
 
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
-        // Run an invalidate when we come back into the app.
-        profile.panelDataObservers.activityStream.invalidate(highlights: true)
-
-        log.debug("Done with setting up the application.")
+        log.info("startApplication end")
         return true
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        log.debug("Application will terminate.")
-
         // We have only five seconds here, so let's hope this doesn't take too long.
         self.profile?.shutdown()
 
@@ -211,7 +193,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if let profile = self.profile {
             return profile
         }
-        let p = BrowserProfile(localName: "profile", app: application)
+        let p = BrowserProfile(localName: "profile", syncDelegate: application.syncDelegate)
         self.profile = p
         return p
     }
@@ -220,21 +202,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
-        log.debug("Did finish launching.")
+        adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
-        log.debug("Setting up Adjust")
-        self.adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
+        UNUserNotificationCenter.current().delegate = self
+        SentTabAction.registerActions()
+        UIScrollView.doBadSwizzleStuff()
 
         #if BUDDYBUILD
-            log.debug("Setting up BuddyBuild SDK")
+            print("Setting up BuddyBuild SDK")
             BuddyBuildSDK.setup()
         #endif
         
-        log.debug("Making window key and visible…")
-        self.window!.makeKeyAndVisible()
+        window!.makeKeyAndVisible()
 
         // Now roll logs.
-        log.debug("Triggering log roll.")
         DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
             Logger.syncLogger.deleteOldLogsDownToSizeLimit()
             Logger.browserLogger.deleteOldLogsDownToSizeLimit()
@@ -248,94 +229,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             shouldPerformAdditionalDelegateHandling = false
         }
 
-        log.debug("Done with applicationDidFinishLaunching.")
+        // Force the ToolbarTextField in LTR mode - without this change the UITextField's clear
+        // button will be in the incorrect position and overlap with the input text. Not clear if
+        // that is an iOS bug or not.
+        AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
         return shouldPerformAdditionalDelegateHandling
     }
 
-    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        guard let routerpath = NavigationPath(url: url) else {
             return false
         }
-
-        guard let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
-                let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
-            // Something very strange has happened; org.mozilla.Client should be the zeroeth URL type.
-            log.error("Custom URL schemes not available for validating")
-            return false
+        DispatchQueue.main.async {
+            NavigationPath.handle(nav: routerpath, with: self.browserViewController)
         }
-
-        guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
-            log.warning("Cannot handle \(components.scheme ?? "nil") URL scheme")
-            return false
-        }
-
-        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
-            // Extract optional FxA deep-linking options
-            let fxaQuery = url.getQuery()
-            let fxaParams: FxALaunchParams
-            fxaParams = FxALaunchParams(view: fxaQuery["fxa"], email: fxaQuery["email"], access_code: fxaQuery["access_code"])
-            
-            if fxaParams.view != nil {
-                launchFxAFromURL(fxaParams)
-                return true
-            }
-        }
-
-        var url: String?
-        var isPrivate: Bool = false
-        
-        for item in (components.queryItems ?? []) as [URLQueryItem] {
-            switch item.name {
-            case "url":
-                url = item.value
-            case "private":
-                isPrivate = NSString(string: item.value ?? "false").boolValue
-            default: ()
-            }
-        }
-        
-        let params: LaunchParams
-
-        if let url = url, let newURL = URL(string: url) {
-            params = LaunchParams(url: newURL, isPrivate: isPrivate)
-        } else {
-            params = LaunchParams(url: nil, isPrivate: isPrivate)
-        }
-
-        if application.applicationState == .active {
-            // If we are active then we can ask the BVC to open the new tab right away. 
-            // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
-            launchFromURL(params)
-        } else {
-            openInFirefoxParams = params
-        }
-
         return true
-    }
-    
-    func launchFxAFromURL(_ params: FxALaunchParams) {
-        guard params.view != nil else {
-            return
-        }
-        self.browserViewController.presentSignInViewController(params)
-    }
-
-    func launchFromURL(_ params: LaunchParams) {
-        let isPrivate = params.isPrivate ?? false
-        if let newURL = params.url {
-            self.browserViewController.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
-        } else {
-            self.browserViewController.openBlankNewTab(isPrivate: isPrivate)
-        }
-    }
-
-    func application(_ application: UIApplication, shouldAllowExtensionPointIdentifier extensionPointIdentifier: UIApplicationExtensionPointIdentifier) -> Bool {
-        if let thirdPartyKeyboardSettingBool = getProfile(application).prefs.boolForKey(AllowThirdPartyKeyboardsKey), extensionPointIdentifier == UIApplicationExtensionPointIdentifier.keyboard {
-            return thirdPartyKeyboardSettingBool
-        }
-
-        return false
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
@@ -345,14 +254,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             return
         }
 
-        profile?.reopen()
+        //
+        // We are back in the foreground, so set CleanlyBackgrounded to false so that we can detect that
+        // the application was cleanly backgrounded later.
+        //
 
-        NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: true)
-        self.profile?.syncManager.applicationDidBecomeActive()
+        let defaults = UserDefaults()
+        defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
+        defaults.synchronize()
+
+        if let profile = self.profile {
+            profile.reopen()
+
+            if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
+                FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+            }
+
+            profile.syncManager.applicationDidBecomeActive()
+        }
 
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
-        self.browserViewController.loadQueuedTabs()
+        self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
+        self.receivedURLs = nil
+        application.applicationIconBadgeNumber = 0
 
         // handle quick actions is available
         let quickActions = QuickActions.sharedInstance
@@ -363,22 +288,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             quickActions.launchedShortcutItem = nil
         }
 
-        // Check if we have a URL from an external app or extension waiting to launch,
-        // then launch it on the main thread.
-        if let params = openInFirefoxParams {
-            openInFirefoxParams = nil
-            DispatchQueue.main.async {
-                self.launchFromURL(params)
-            }
-        }
+        UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        //
+        // At this point we are happy to mark the app as CleanlyBackgrounded. If a crash happens in background
+        // sync then that crash will still be reported. But we won't bother the user with the Restore Tabs
+        // dialog. We don't have to because at this point we already saved the tab state properly.
+        //
+
+        let defaults = UserDefaults()
+        defaults.set(true, forKey: "ApplicationCleanlyBackgrounded")
+        defaults.synchronize()
+
         syncOnDidEnterBackground(application: application)
 
-        let elapsed = Int(Date().timeIntervalSince1970) - foregroundStartTime
-        Telemetry.recordEvent(UsageTelemetry.makeEvent(elapsed))
-        sendCorePing()
+        UnifiedTelemetry.recordEvent(category: .action, method: .background, object: .app)
     }
 
     fileprivate func syncOnDidEnterBackground(application: UIApplication) {
@@ -389,14 +315,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         profile.syncManager.applicationDidEnterBackground()
 
         var taskId: UIBackgroundTaskIdentifier = 0
-        taskId = application.beginBackgroundTask (expirationHandler: { _ in
-            log.warning("Running out of background time, but we have a profile shutdown pending.")
+        taskId = application.beginBackgroundTask (expirationHandler: {
+            print("Running out of background time, but we have a profile shutdown pending.")
             self.shutdownProfileWhenNotActive(application)
             application.endBackgroundTask(taskId)
         })
 
         if profile.hasSyncableAccount() {
-            profile.syncManager.syncEverything(why: .backgrounded).uponQueue(DispatchQueue.main) { _ in
+            profile.syncManager.syncEverything(why: .backgrounded).uponQueue(.main) { _ in
                 self.shutdownProfileWhenNotActive(application)
                 application.endBackgroundTask(taskId)
             }
@@ -408,52 +334,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     fileprivate func shutdownProfileWhenNotActive(_ application: UIApplication) {
         // Only shutdown the profile if we are not in the foreground
-        guard application.applicationState != UIApplicationState.active else {
+        guard application.applicationState != .active else {
             return
         }
 
         profile?.shutdown()
     }
 
-    func applicationWillResignActive(_ application: UIApplication) {
-        NightModeHelper.restoreNightModeBrightness((self.profile?.prefs)!, toForeground: false)
-    }
-
     func applicationWillEnterForeground(_ application: UIApplication) {
         // The reason we need to call this method here instead of `applicationDidBecomeActive`
-        // is that this method is only invoked whenever the application is entering the foreground where as 
+        // is that this method is only invoked whenever the application is entering the foreground where as
         // `applicationDidBecomeActive` will get called whenever the Touch ID authentication overlay disappears.
         self.updateAuthenticationInfo()
-
-        resetForegroundStartTime()
-
-    }
-
-    fileprivate func resetForegroundStartTime() {
-        foregroundStartTime = Int(Date().timeIntervalSince1970)
-    }
-
-    /// Send a telemetry ping if the user hasn't disabled reporting.
-    /// We still create and log the ping for non-release channels, but we don't submit it.
-    fileprivate func sendCorePing() {
-        guard let profile = profile, (profile.prefs.boolForKey("settings.sendUsageData") ?? true) else {
-            log.debug("Usage sending is disabled. Not creating core telemetry ping.")
-            return
-        }
-
-        DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
-            // The core ping resets data counts when the ping is built, meaning we'll lose
-            // the data if the ping doesn't go through. To minimize loss, we only send the
-            // core ping if we have an active connection. Until we implement a fault-handling
-            // telemetry layer that can resend pings, this is the best we can do.
-            guard DeviceInfo.hasConnectivity() else {
-                log.debug("No connectivity. Not creating core telemetry ping.")
-                return
-            }
-
-            let ping = CorePing(profile: profile)
-            Telemetry.send(ping: ping, docType: .core)
-        }
     }
 
     fileprivate func updateAuthenticationInfo() {
@@ -473,6 +365,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         AboutLicenseHandler.register(server)
         SessionRestoreHandler.register(server)
 
+        if AppConstants.IsRunningTest {
+            registerHandlersForTestMethods(server: server.server)
+        }
+
         // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task
         // catching and handling the error seemed to fix things, but we're not sure why.
         // Either way, not implicitly unwrapping a try is not a great way of doing things
@@ -480,7 +376,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         do {
             try server.start()
         } catch let err as NSError {
-            log.error("Unable to start WebServer \(err)")
+            print("Error: Unable to start WebServer \(err)")
         }
     }
 
@@ -503,32 +399,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         FaviconFetcher.userAgent = UserAgent.desktopUserAgent()
     }
 
-    func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UILocalNotification, completionHandler: @escaping () -> Void) {
-        if let actionId = identifier {
-            if let action = SentTabAction(rawValue: actionId) {
-                viewURLInNewTab(notification)
-                switch action {
-                case .bookmark:
-                    addBookmark(notification)
-                    break
-                case .readingList:
-                    addToReadingList(notification)
-                    break
-                default:
-                    break
-                }
-            } else {
-                print("ERROR: Unknown notification action received")
-            }
-        } else {
-            print("ERROR: Unknown notification received")
-        }
-    }
-
-    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
-        viewURLInNewTab(notification)
-    }
-
     fileprivate func presentEmailComposerWithLogs() {
         if let buildNumber = Bundle.main.object(forInfoDictionaryKey: String(kCFBundleVersionKey)) as? NSString {
             let mailComposeViewController = MFMailComposeViewController()
@@ -549,7 +419,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
 
             if DebugSettingsBundleOptions.attachTabStateToDebugEmail {
-                if let tabStateDebugData = TabManager.tabRestorationDebugInfo().data(using: String.Encoding.utf8) {
+                if let tabStateDebugData = TabManager.tabRestorationDebugInfo().data(using: .utf8) {
                     mailComposeViewController.addAttachmentData(tabStateDebugData, mimeType: "text/plain", fileName: "tabState.txt")
                 }
 
@@ -563,38 +433,69 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+
+        // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
+        // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
         if let url = userActivity.webpageURL {
+            let query = url.getQuery()
+            
+            // Check for fxa sign-in code and launch the login screen directly
+            if query["signin"] != nil {
+                browserViewController.launchFxAFromDeeplinkURL(url)
+                return true
+            }
+            
+            // Per Adjust documenation, https://docs.adjust.com/en/universal-links/#running-campaigns-through-universal-links,
+            // it is recommended that links contain the `deep_link` query parameter. This link will also
+            // be url encoded.
+            if let deepLink = query["deep_link"]?.removingPercentEncoding, let url = URL(string: deepLink) {
+                browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
+                return true
+            }
+
             browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
             return true
         }
+
+        // Otherwise, check if the `NSUserActivity` is a CoreSpotlight item and switch to its tab or
+        // open a new one.
+        if userActivity.activityType == CSSearchableItemActionType {
+            if let userInfo = userActivity.userInfo,
+                let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
+                let url = URL(string: urlString) {
+                browserViewController.switchToTabForURLOrOpen(url, isPrivileged: true)
+                return true
+            }
+        }
+
         return false
     }
 
-    fileprivate func viewURLInNewTab(_ notification: UILocalNotification) {
-        if let alertURL = notification.userInfo?[TabSendURLKey] as? String {
+    fileprivate func viewURLInNewTab(_ notification: UNNotification) {
+        if let alertURL = notification.request.content.userInfo[SentTabAction.TabSendURLKey] as? String {
             if let urlToOpen = URL(string: alertURL) {
                 browserViewController.openURLInNewTab(urlToOpen, isPrivileged: true)
             }
         }
     }
 
-    fileprivate func addBookmark(_ notification: UILocalNotification) {
-        if let alertURL = notification.userInfo?[TabSendURLKey] as? String,
-            let title = notification.userInfo?[TabSendTitleKey] as? String {
-            let tabState = TabState(isPrivate: false, desktopSite: false, isBookmarked: false, url: URL(string: alertURL), title: title, favicon: nil)
+    fileprivate func addBookmark(_ notification: UNNotification) {
+        if let alertURL = notification.request.content.userInfo[SentTabAction.TabSendURLKey] as? String,
+            let title = notification.request.content.userInfo[SentTabAction.TabSendTitleKey] as? String {
+            let tabState = TabState(isPrivate: false, desktopSite: false, url: URL(string: alertURL), title: title, favicon: nil)
                 browserViewController.addBookmark(tabState)
 
                 let userData = [QuickActions.TabURLKey: alertURL,
                     QuickActions.TabTitleKey: title]
-                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: UIApplication.shared)
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
         }
     }
 
-    fileprivate func addToReadingList(_ notification: UILocalNotification) {
-        if let alertURL = notification.userInfo?[TabSendURLKey] as? String,
-           let title = notification.userInfo?[TabSendTitleKey] as? String {
+    fileprivate func addToReadingList(_ notification: UNNotification) {
+        if let alertURL = notification.request.content.userInfo[SentTabAction.TabSendURLKey] as? String,
+            let title = notification.request.content.userInfo[SentTabAction.TabSendTitleKey] as? String {
             if let urlToOpen = URL(string: alertURL) {
-                NotificationCenter.default.post(name: NSNotification.Name.FSReadingListAddReadingListItem, object: self, userInfo: ["URL": urlToOpen, "Title": title])
+                NotificationCenter.default.post(name: .FSReadingListAddReadingListItem, object: self, userInfo: ["URL": urlToOpen, "Title": title])
             }
         }
     }
@@ -609,20 +510,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 // MARK: - Root View Controller Animations
 extension AppDelegate: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-            if operation == UINavigationControllerOperation.push {
-                return BrowserToTrayAnimator()
-            } else if operation == UINavigationControllerOperation.pop {
-                return TrayToBrowserAnimator()
-            } else {
-                return nil
-            }
+        switch operation {
+        case .push:
+            return BrowserToTrayAnimator()
+        case .pop:
+            return TrayToBrowserAnimator()
+        default:
+            return nil
+        }
     }
 }
 
 extension AppDelegate: TabManagerStateDelegate {
     func tabManagerWillStoreTabs(_ tabs: [Tab]) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.flatMap( Tab.toTab )
+        let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toTab )
 
         // Don't insert into the DB immediately. We tend to contend with more important
         // work like querying for top sites.
@@ -641,9 +543,27 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     }
 }
 
-extension AppDelegate {
-    func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
-        FxALoginHelper.sharedInstance.application(application, didRegisterUserNotificationSettings: notificationSettings)
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        if let action = SentTabAction(rawValue: response.actionIdentifier) {
+            viewURLInNewTab(response.notification)
+            switch action {
+            case .bookmark:
+                addBookmark(response.notification)
+                break
+            case .readingList:
+                addToReadingList(response.notification)
+                break
+            default:
+                break
+            }
+        } else {
+            log.error("Unknown notification action received")
+        }
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        viewURLInNewTab(notification)
     }
 }
 
@@ -657,37 +577,170 @@ extension AppDelegate {
         FxALoginHelper.sharedInstance.apnsRegisterDidFail()
     }
 
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        log.info("APNS NOTIFICATION \(userInfo)")
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if Logger.logPII && log.isEnabledFor(level: .info) {
+            NSLog("APNS NOTIFICATION \(userInfo)")
+        }
+
+        // At this point, we know that NotificationService has been run.
+        // We get to this point if the notification was received while the app was in the foreground
+        // OR the app was backgrounded and now the user has tapped on the notification.
+        // Either way, if this method is being run, then the app is foregrounded.
+
+        // Either way, we should zero the badge number.
+        application.applicationIconBadgeNumber = 0
 
         guard let profile = self.profile else {
             return completionHandler(.noData)
         }
 
+        // NotificationService will have decrypted the push message, and done some syncing
+        // activity. If the `client` collection was synced, and there are `displayURI` commands (i.e. sent tabs)
+        // NotificationService will have collected them for us in the userInfo.
+        if let serializedTabs = userInfo["sentTabs"] as? [[String: String]] {
+            // Let's go ahead and open those.
+            let receivedURLs = serializedTabs.compactMap { item -> URL? in
+                guard let tabURL = item["url"] else {
+                    return nil
+                }
+                return URL(string: tabURL)
+            }
+
+            if receivedURLs.count > 0 {
+                // Remember which URLs we received so we can filter them out later when
+                // loading the queued tabs.
+                self.receivedURLs = receivedURLs
+                
+                // If we're in the foreground, load the queued tabs now.
+                if application.applicationState == .active {
+                    DispatchQueue.main.async {
+                        self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
+                        self.receivedURLs = nil
+                    }
+                }
+
+                return completionHandler(.newData)
+            }
+        }
+
+        // By now, we've dealt with any sent tab notifications.
+        //
+        // The only thing left to do now is to perform actions that can only be performed
+        // while the app is foregrounded.
+        //
+        // Use the push message handler to re-parse the message,
+        // this time with a BrowserProfile and processing the return
+        // differently than in NotificationService.
         let handler = FxAPushMessageHandler(with: profile)
         handler.handle(userInfo: userInfo).upon { res in
-            completionHandler(res.isSuccess ? .newData : .noData)
+            if let message = res.successValue {
+                switch message {
+                case .accountVerified:
+                    _ = handler.postVerification()
+                case .thisDeviceDisconnected:
+                    FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+                default:
+                    break
+                }
+            }
+
+            completionHandler(res.isSuccess ? .newData : .failed)
         }
     }
 
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-        log.info("APNS NOTIFICATION \(userInfo)")
-        guard let profile = self.profile else {
-            return
-        }
-
-        let handler = FxAPushMessageHandler(with: profile)
-        handler.handle(userInfo: userInfo)
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        let completionHandler: (UIBackgroundFetchResult) -> Void = { _ in }
+        self.application(application, didReceiveRemoteNotification: userInfo, fetchCompletionHandler: completionHandler)
     }
 }
 
-struct FxALaunchParams {
-    var view: String?
-    var email: String?
-    var access_code: String?
+extension UIApplication {
+    var syncDelegate: SyncDelegate {
+        return AppSyncDelegate(app: self)
+    }
+
+    static var isInPrivateMode: Bool {
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        return appDelegate?.browserViewController.tabManager.selectedTab?.isPrivate ?? false
+    }
 }
 
-struct LaunchParams {
-    let url: URL?
-    let isPrivate: Bool?
+class AppSyncDelegate: SyncDelegate {
+    let app: UIApplication
+
+    init(app: UIApplication) {
+        self.app = app
+    }
+
+    open func displaySentTab(for url: URL, title: String, from deviceName: String?) {
+        DispatchQueue.main.sync {
+            if let appDelegate = app.delegate as? AppDelegate, app.applicationState == .active {
+                appDelegate.browserViewController.switchToTabForURLOrOpen(url, isPrivileged: false)
+                return
+            }
+
+            // check to see what the current notification settings are and only try and send a notification if
+            // the user has agreed to them
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                if settings.alertSetting == .enabled {
+                    if Logger.logPII {
+                        log.info("Displaying notification for URL \(url.absoluteString)")
+                    }
+
+                    let notificationContent = UNMutableNotificationContent()
+                    let title: String
+                    if let deviceName = deviceName {
+                        title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
+                    } else {
+                        title = Strings.SentTab_TabArrivingNotification_NoDevice_title
+                    }
+                    notificationContent.title = title
+                    notificationContent.body = url.absoluteDisplayExternalString
+                    notificationContent.userInfo = [SentTabAction.TabSendURLKey: url.absoluteString, SentTabAction.TabSendTitleKey: title]
+                    notificationContent.categoryIdentifier = "org.mozilla.ios.SentTab.placeholder"
+
+                    // `timeInterval` must be greater than zero
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
+
+                    // The identifier for each notification request must be unique in order to be created
+                    let requestIdentifier = "\(SentTabAction.TabSendCategory).\(url.absoluteString)"
+                    let request = UNNotificationRequest(identifier: requestIdentifier, content: notificationContent, trigger: trigger)
+
+                    UNUserNotificationCenter.current().add(request) { error in
+                        if let error = error {
+                            log.error(error.localizedDescription)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * This exists because the Sync code is extension-safe, and thus doesn't get
+ * direct access to UIApplication.sharedApplication, which it would need to
+ * display a notification.
+ * This will also likely be the extension point for wipes, resets, and
+ * getting access to data sources during a sync.
+ */
+
+enum SentTabAction: String {
+    case view = "TabSendViewAction"
+    case bookmark = "TabSendBookmarkAction"
+    case readingList = "TabSendReadingListAction"
+
+    static let TabSendURLKey = "TabSendURL"
+    static let TabSendTitleKey = "TabSendTitle"
+    static let TabSendCategory = "TabSendCategory"
+
+    static func registerActions() {
+        let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue, title: Strings.SentTabViewActionTitle, options: .foreground)
+        let bookmarkAction = UNNotificationAction(identifier: SentTabAction.bookmark.rawValue, title: Strings.SentTabBookmarkActionTitle, options: .authenticationRequired)
+        let readingListAction = UNNotificationAction(identifier: SentTabAction.readingList.rawValue, title: Strings.SentTabAddToReadingListActionTitle, options: .authenticationRequired)
+
+        // Register ourselves to handle the notification category set by NotificationService for APNS notifications
+        let sentTabCategory = UNNotificationCategory(identifier: "org.mozilla.ios.SentTab.placeholder", actions: [viewAction, bookmarkAction, readingListAction], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))
+        UNUserNotificationCenter.current().setNotificationCategories([sentTabCategory])
+    }
 }

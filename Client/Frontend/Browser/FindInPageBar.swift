@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 
 protocol FindInPageBarDelegate: class {
@@ -30,13 +29,21 @@ class FindInPageBar: UIView {
 
     var currentResult = 0 {
         didSet {
-            matchCountView.text = "\(currentResult)/\(totalResults)"
+            if totalResults > 500 {
+                matchCountView.text = "\(currentResult)/500+"
+            } else {
+                matchCountView.text = "\(currentResult)/\(totalResults)"
+            }
         }
     }
 
     var totalResults = 0 {
         didSet {
-            matchCountView.text = "\(currentResult)/\(totalResults)"
+            if totalResults > 500 {
+                matchCountView.text = "\(currentResult)/500+"
+            } else {
+                matchCountView.text = "\(currentResult)/\(totalResults)"
+            }
             previousButton.isEnabled = totalResults > 1
             nextButton.isEnabled = previousButton.isEnabled
         }
@@ -49,48 +56,53 @@ class FindInPageBar: UIView {
 
         set {
             searchText.text = newValue
-            SELdidTextChange(searchText)
+            didTextChange(searchText)
         }
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = UIColor.white
+        backgroundColor = .white
 
-        searchText.addTarget(self, action: #selector(FindInPageBar.SELdidTextChange(_:)), for: UIControlEvents.editingChanged)
+        searchText.addTarget(self, action: #selector(didTextChange), for: .editingChanged)
         searchText.textColor = FindInPageUX.SearchTextColor
         searchText.font = FindInPageUX.SearchTextFont
-        searchText.autocapitalizationType = UITextAutocapitalizationType.none
-        searchText.autocorrectionType = UITextAutocorrectionType.no
+        searchText.autocapitalizationType = .none
+        searchText.autocorrectionType = .no
         searchText.inputAssistantItem.leadingBarButtonGroups = []
         searchText.inputAssistantItem.trailingBarButtonGroups = []
         searchText.enablesReturnKeyAutomatically = true
         searchText.returnKeyType = .search
+        searchText.accessibilityIdentifier = "FindInPage.searchField"
         addSubview(searchText)
 
         matchCountView.textColor = FindInPageUX.MatchCountColor
         matchCountView.font = FindInPageUX.MatchCountFont
         matchCountView.isHidden = true
+        matchCountView.accessibilityIdentifier = "FindInPage.matchCount"
         addSubview(matchCountView)
 
-        previousButton.setImage(UIImage(named: "find_previous"), for: UIControlState())
-        previousButton.setTitleColor(FindInPageUX.ButtonColor, for: UIControlState())
+        previousButton.setImage(UIImage(named: "find_previous"), for: [])
+        previousButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
         previousButton.accessibilityLabel = NSLocalizedString("Previous in-page result", tableName: "FindInPage", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
-        previousButton.addTarget(self, action: #selector(FindInPageBar.SELdidFindPrevious(_:)), for: UIControlEvents.touchUpInside)
+        previousButton.addTarget(self, action: #selector(didFindPrevious), for: .touchUpInside)
+        previousButton.accessibilityIdentifier = "FindInPage.find_previous"
         addSubview(previousButton)
 
-        nextButton.setImage(UIImage(named: "find_next"), for: UIControlState())
-        nextButton.setTitleColor(FindInPageUX.ButtonColor, for: UIControlState())
+        nextButton.setImage(UIImage(named: "find_next"), for: [])
+        nextButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
         nextButton.accessibilityLabel = NSLocalizedString("Next in-page result", tableName: "FindInPage", comment: "Accessibility label for next result button in Find in Page Toolbar.")
-        nextButton.addTarget(self, action: #selector(FindInPageBar.SELdidFindNext(_:)), for: UIControlEvents.touchUpInside)
+        nextButton.addTarget(self, action: #selector(didFindNext), for: .touchUpInside)
+        nextButton.accessibilityIdentifier = "FindInPage.find_next"
         addSubview(nextButton)
 
         let closeButton = UIButton()
-        closeButton.setImage(UIImage(named: "find_close"), for: UIControlState())
-        closeButton.setTitleColor(FindInPageUX.ButtonColor, for: UIControlState())
+        closeButton.setImage(UIImage(named: "find_close"), for: [])
+        closeButton.setTitleColor(FindInPageUX.ButtonColor, for: [])
         closeButton.accessibilityLabel = NSLocalizedString("Done", tableName: "FindInPage", comment: "Done button in Find in Page Toolbar.")
-        closeButton.addTarget(self, action: #selector(FindInPageBar.SELdidPressClose(_:)), for: UIControlEvents.touchUpInside)
+        closeButton.addTarget(self, action: #selector(didPressClose), for: .touchUpInside)
+        closeButton.accessibilityIdentifier = "FindInPage.close"
         addSubview(closeButton)
 
         let topBorder = UIView()
@@ -100,11 +112,15 @@ class FindInPageBar: UIView {
         searchText.snp.makeConstraints { make in
             make.leading.top.bottom.equalTo(self).inset(UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0))
         }
+        searchText.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        searchText.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
         matchCountView.snp.makeConstraints { make in
             make.leading.equalTo(searchText.snp.trailing)
             make.centerY.equalTo(self)
         }
+        matchCountView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        matchCountView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
 
         previousButton.snp.makeConstraints { make in
             make.leading.equalTo(matchCountView.snp.trailing)
@@ -139,20 +155,20 @@ class FindInPageBar: UIView {
         return super.becomeFirstResponder()
     }
 
-    @objc fileprivate func SELdidFindPrevious(_ sender: UIButton) {
+    @objc fileprivate func didFindPrevious(_ sender: UIButton) {
         delegate?.findInPage(self, didFindPreviousWithText: searchText.text ?? "")
     }
 
-    @objc fileprivate func SELdidFindNext(_ sender: UIButton) {
+    @objc fileprivate func didFindNext(_ sender: UIButton) {
         delegate?.findInPage(self, didFindNextWithText: searchText.text ?? "")
     }
 
-    @objc fileprivate func SELdidTextChange(_ sender: UITextField) {
-        matchCountView.isHidden = searchText.text?.isEmpty ?? true
+    @objc fileprivate func didTextChange(_ sender: UITextField) {
+        matchCountView.isHidden = searchText.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
         delegate?.findInPage(self, didTextChange: searchText.text ?? "")
     }
 
-    @objc fileprivate func SELdidPressClose(_ sender: UIButton) {
+    @objc fileprivate func didPressClose(_ sender: UIButton) {
         delegate?.findInPageDidPressClose(self)
     }
 }

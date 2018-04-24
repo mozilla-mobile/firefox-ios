@@ -24,7 +24,6 @@ digraph CarthageFxiOS {
   "Fuzi" -> "SendTo"
   "Fuzi" -> "ShareTo"
   "Onyx" -> "Client"
-  "readability" -> "Client"
   "SwiftKeychainWrapper" -> "Shared"
   "Deferred" -> "Shared"
   "KIF" -> "ReadingList"

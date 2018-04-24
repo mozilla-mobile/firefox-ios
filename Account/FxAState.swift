@@ -8,7 +8,7 @@ import Shared
 import SwiftyJSON
 
 // The version of the state schema we persist.
-let StateSchemaVersion = 1
+let StateSchemaVersion = 2
 
 // We want an enum because the set of states is closed.  However, each state has state-specific
 // behaviour, and the state's behaviour accumulates, so each state is a class.  Switch on the
@@ -46,16 +46,33 @@ func state(fromJSON json: JSON) -> FxAState? {
         return nil
     }
     if let version = json["version"].int {
-        if version == StateSchemaVersion {
-            return stateV1(fromJSON:json)
+        if version == 1 {
+            return stateV1(fromJSON: json)
+        } else if version == 2 {
+            return stateV2(fromJSON: json)
         }
     }
     return nil
 }
 
 func stateV1(fromJSON json: JSON) -> FxAState? {
+    var json = json
+    json["version"] = 2
+    if let kB = json["kB"].string?.hexDecodedData {
+        let kSync = FxAClient10.deriveKSync(kB)
+        let kXCS = FxAClient10.computeClientState(kB)
+        json["kSync"] = JSON(kSync.hexEncodedString as NSString)
+        json["kXCS"] = JSON(kXCS as NSString)
+        json["kA"] = JSON.null
+        json["kB"] = JSON.null
+    }
+    return stateV2(fromJSON: json)
+}
+
+// Identical to V1 except `(kA, kB)` have been replaced with `(kSync, kXCS)` throughout.
+func stateV2(fromJSON json: JSON) -> FxAState? {
     if let labelString = json["label"].string {
-        if let label = FxAStateLabel(rawValue:  labelString) {
+        if let label = FxAStateLabel(rawValue: labelString) {
             switch label {
             case .engagedBeforeVerified:
                 if let
@@ -80,36 +97,36 @@ func stateV1(fromJSON json: JSON) -> FxAState? {
             case .cohabitingBeforeKeyPair:
                 if let
                     sessionToken = json["sessionToken"].string?.hexDecodedData,
-                    let kA = json["kA"].string?.hexDecodedData,
-                    let kB = json["kB"].string?.hexDecodedData {
-                    return CohabitingBeforeKeyPairState(sessionToken: sessionToken, kA: kA, kB: kB)
+                    let kSync = json["kSync"].string?.hexDecodedData,
+                    let kXCS = json["kXCS"].string {
+                    return CohabitingBeforeKeyPairState(sessionToken: sessionToken, kSync: kSync, kXCS: kXCS)
                 }
 
             case .cohabitingAfterKeyPair:
                 if let
                     sessionToken = json["sessionToken"].string?.hexDecodedData,
-                    let kA = json["kA"].string?.hexDecodedData,
-                    let kB = json["kB"].string?.hexDecodedData,
+                    let kSync = json["kSync"].string?.hexDecodedData,
+                    let kXCS = json["kXCS"].string,
                     let keyPairJSON = json["keyPair"].dictionaryObject,
                     let keyPair = RSAKeyPair(jsonRepresentation: keyPairJSON),
                     let keyPairExpiresAt = json["keyPairExpiresAt"].int64 {
-                        return CohabitingAfterKeyPairState(sessionToken: sessionToken, kA: kA, kB: kB,
-                            keyPair: keyPair, keyPairExpiresAt: UInt64(keyPairExpiresAt))
+                    return CohabitingAfterKeyPairState(sessionToken: sessionToken, kSync: kSync, kXCS: kXCS,
+                                                       keyPair: keyPair, keyPairExpiresAt: UInt64(keyPairExpiresAt))
                 }
 
             case .married:
                 if let
                     sessionToken = json["sessionToken"].string?.hexDecodedData,
-                    let kA = json["kA"].string?.hexDecodedData,
-                    let kB = json["kB"].string?.hexDecodedData,
+                    let kSync = json["kSync"].string?.hexDecodedData,
+                    let kXCS = json["kXCS"].string,
                     let keyPairJSON = json["keyPair"].dictionaryObject,
                     let keyPair = RSAKeyPair(jsonRepresentation: keyPairJSON),
                     let keyPairExpiresAt = json["keyPairExpiresAt"].int64,
                     let certificate = json["certificate"].string,
                     let certificateExpiresAt = json["certificateExpiresAt"].int64 {
-                    return MarriedState(sessionToken: sessionToken, kA: kA, kB: kB,
-                        keyPair: keyPair, keyPairExpiresAt: UInt64(keyPairExpiresAt),
-                        certificate: certificate, certificateExpiresAt: UInt64(certificateExpiresAt))
+                    return MarriedState(sessionToken: sessionToken, kSync: kSync, kXCS: kXCS,
+                                        keyPair: keyPair, keyPairExpiresAt: UInt64(keyPairExpiresAt),
+                                        certificate: certificate, certificateExpiresAt: UInt64(certificateExpiresAt))
                 }
 
             case .separated:
@@ -144,7 +161,7 @@ open class FxAState: JSONLiteralConvertible {
         return JSON([
             "version": StateSchemaVersion,
             "label": self.label.rawValue,
-        ] as NSDictionary)
+        ])
     }
 }
 
@@ -168,7 +185,7 @@ open class TokenState: FxAState {
     open override func asJSON() -> JSON {
         var d: [String: JSON] = super.asJSON().dictionary!
         d["sessionToken"] = JSON(sessionToken.hexEncodedString as NSString)
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 }
 
@@ -187,7 +204,7 @@ open class ReadyForKeys: TokenState {
         var d: [String: JSON] = super.asJSON().dictionary!
         d["keyFetchToken"] = JSON(keyFetchToken.hexEncodedString as NSString)
         d["unwrapkB"] = JSON(unwrapkB.hexEncodedString as NSString)
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 }
 
@@ -209,7 +226,7 @@ open class EngagedBeforeVerifiedState: ReadyForKeys {
         var d = super.asJSON().dictionary!
         d["knownUnverifiedAt"] = JSON(NSNumber(value: knownUnverifiedAt))
         d["lastNotifiedUserAt"] = JSON(NSNumber(value: lastNotifiedUserAt))
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 
     func withUnwrapKey(_ unwrapkB: Data) -> EngagedBeforeVerifiedState {
@@ -233,20 +250,20 @@ open class EngagedAfterVerifiedState: ReadyForKeys {
 
 // Not an externally facing state!
 open class TokenAndKeys: TokenState {
-    open let kA: Data
-    open let kB: Data
+    open let kSync: Data
+    open let kXCS: String
 
-    init(sessionToken: Data, kA: Data, kB: Data) {
-        self.kA = kA
-        self.kB = kB
+    init(sessionToken: Data, kSync: Data, kXCS: String) {
+        self.kSync = kSync
+        self.kXCS = kXCS
         super.init(sessionToken: sessionToken)
     }
 
     open override func asJSON() -> JSON {
         var d = super.asJSON().dictionary!
-        d["kA"] = JSON(kA.hexEncodedString as NSString)
-        d["kB"] = JSON(kB.hexEncodedString as NSString)
-        return JSON(d as NSDictionary)
+        d["kSync"] = JSON(kSync.hexEncodedString as NSString)
+        d["kXCS"] = JSON(kXCS as NSString)
+        return JSON(d)
     }
 }
 
@@ -260,17 +277,17 @@ open class TokenKeysAndKeyPair: TokenAndKeys {
     // Timestamp, in milliseconds after the epoch, when keyPair expires.  After this time, generate a new keyPair.
     let keyPairExpiresAt: Timestamp
 
-    init(sessionToken: Data, kA: Data, kB: Data, keyPair: KeyPair, keyPairExpiresAt: Timestamp) {
+    init(sessionToken: Data, kSync: Data, kXCS: String, keyPair: KeyPair, keyPairExpiresAt: Timestamp) {
         self.keyPair = keyPair
         self.keyPairExpiresAt = keyPairExpiresAt
-        super.init(sessionToken: sessionToken, kA: kA, kB: kB)
+        super.init(sessionToken: sessionToken, kSync: kSync, kXCS: kXCS)
     }
 
     open override func asJSON() -> JSON {
         var d = super.asJSON().dictionary!
-        d["keyPair"] = JSON(keyPair.jsonRepresentation() as NSDictionary)
+        d["keyPair"] = JSON(keyPair.jsonRepresentation())
         d["keyPairExpiresAt"] = JSON(NSNumber(value: keyPairExpiresAt))
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 
     func isKeyPairExpired(_ now: Timestamp) -> Bool {
@@ -288,17 +305,17 @@ open class MarriedState: TokenKeysAndKeyPair {
     let certificate: String
     let certificateExpiresAt: Timestamp
 
-    init(sessionToken: Data, kA: Data, kB: Data, keyPair: KeyPair, keyPairExpiresAt: Timestamp, certificate: String, certificateExpiresAt: Timestamp) {
+    init(sessionToken: Data, kSync: Data, kXCS: String, keyPair: KeyPair, keyPairExpiresAt: Timestamp, certificate: String, certificateExpiresAt: Timestamp) {
         self.certificate = certificate
         self.certificateExpiresAt = certificateExpiresAt
-        super.init(sessionToken: sessionToken, kA: kA, kB: kB, keyPair: keyPair, keyPairExpiresAt: keyPairExpiresAt)
+        super.init(sessionToken: sessionToken, kSync: kSync, kXCS: kXCS, keyPair: keyPair, keyPairExpiresAt: keyPairExpiresAt)
     }
 
     open override func asJSON() -> JSON {
         var d = super.asJSON().dictionary!
         d["certificate"] = JSON(certificate as NSString)
         d["certificateExpiresAt"] = JSON(NSNumber(value: certificateExpiresAt))
-        return JSON(d as NSDictionary)
+        return JSON(d)
     }
 
     func isCertificateExpired(_ now: Timestamp) -> Bool {
@@ -307,13 +324,13 @@ open class MarriedState: TokenKeysAndKeyPair {
 
     func withoutKeyPair() -> CohabitingBeforeKeyPairState {
         let newState = CohabitingBeforeKeyPairState(sessionToken: sessionToken,
-            kA: kA, kB: kB)
+            kSync: kSync, kXCS: kXCS)
         return newState
     }
 
     func withoutCertificate() -> CohabitingAfterKeyPairState {
         let newState = CohabitingAfterKeyPairState(sessionToken: sessionToken,
-            kA: kA, kB: kB,
+            kSync: kSync, kXCS: kXCS,
             keyPair: keyPair, keyPairExpiresAt: keyPairExpiresAt)
         return newState
     }

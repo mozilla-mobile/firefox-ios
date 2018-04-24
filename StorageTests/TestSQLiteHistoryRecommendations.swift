@@ -6,7 +6,7 @@ import Foundation
 import Shared
 @testable import Storage
 import Deferred
-import WebImage
+import SDWebImage
 
 import XCTest
 
@@ -20,27 +20,28 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
     var db: BrowserDB!
     var prefs: MockProfilePrefs!
     var history: SQLiteHistory!
-    var bookmarks: SQLiteBookmarkBufferStorage!
+    var bookmarks: MergedSQLiteBookmarks!
+    var metadata: SQLiteMetadata!
 
     override func setUp() {
         super.setUp()
 
-        db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        metadata = SQLiteMetadata(db: db)
         prefs = MockProfilePrefs()
         history = SQLiteHistory(db: db, prefs: prefs)
-        bookmarks = SQLiteBookmarkBufferStorage(db: db)
+        bookmarks = MergedSQLiteBookmarks(db: db)
     }
 
     override func tearDown() {
         // Clear out anything we might have changed on disk
         history.clearHistory().succeeded()
-        history.clearHighlights().succeeded()
-        db.run("DELETE FROM \(AttachedTablePageMetadata)").succeeded()
-        db.run("DELETE FROM \(TableActivityStreamBlocklist)").succeeded()
+        db.run("DELETE FROM page_metadata").succeeded()
+        db.run("DELETE FROM highlights").succeeded()
+        db.run("DELETE FROM activity_stream_blocklist").succeeded()
 
-        SDWebImageManager.shared().imageCache.clearDisk()
-        SDWebImageManager.shared().imageCache.clearMemory()
+        SDWebImageManager.shared().imageCache?.clearDisk()
+        SDWebImageManager.shared().imageCache?.clearMemory()
 
         super.tearDown()
     }
@@ -94,14 +95,12 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitD2).succeeded()
         history.addLocalVisit(siteVisitD3).succeeded()
         history.addLocalVisit(siteVisitD4).succeeded()
-
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 2)
         XCTAssertEqual(highlights[0]!.title, "A")
         XCTAssertEqual(highlights[1]!.title, "C")
     }
-
 
     /*
      * Verify that we do not return a highlight if
@@ -150,7 +149,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitD3).succeeded()
         history.addLocalVisit(siteVisitD4).succeeded()
 
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 0)
     }
@@ -181,10 +180,19 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.addLocalVisit(siteVisitC1).succeeded()
         history.addLocalVisit(siteVisitC2).succeeded()
 
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A")
+    }
+
+    func testBookmarkHighlights() {
+        history.clearHistory().succeeded()
+        populateForRecommendationCalculations(history, bookmarks: bookmarks, metadata: metadata, historyCount: 10, bookmarkCount: 10)
+
+        let sites = history.getRecentBookmarks(5).value.successValue?.asArray()
+        XCTAssertEqual(sites!.count, 5, "5 bookmarks should have been fetched")
+        sites!.forEach { XCTAssertEqual($0.guid, "bookmark-\(sites!.index(of: $0)!)"); XCTAssertEqual($0.metadata?.description, "Test Description") }
     }
 
     func testMetadataReturnedInHighlights() {
@@ -214,16 +222,16 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         // add metadata for 2 of the sites
         let metadata = SQLiteMetadata(db: db)
         let pageA = PageMetadata(id: nil, siteURL: siteA.url, mediaURL: "http://image.com",
-                                title: siteA.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+                                title: siteA.title, description: "Test Description", type: nil, providerName: nil)
         metadata.storeMetadata(pageA, forPageURL: siteA.url.asURL!, expireAt: Date.now() + 3000).succeeded()
         let pageB = PageMetadata(id: nil, siteURL: siteB.url, mediaURL: "http://image.com",
-                                 title: siteB.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+                                 title: siteB.title, description: "Test Description", type: nil, providerName: nil)
         metadata.storeMetadata(pageB, forPageURL: siteB.url.asURL!, expireAt: Date.now() + 3000).succeeded()
         let pageC = PageMetadata(id: nil, siteURL: siteC.url, mediaURL: "http://image.com",
-                                 title: siteC.title, description: "Test Description", type: nil, providerName: nil, mediaDataURI: nil, cacheImages: false)
+                                 title: siteC.title, description: "Test Description", type: nil, providerName: nil)
         metadata.storeMetadata(pageC, forPageURL: siteC.url.asURL!, expireAt: Date.now() + 3000).succeeded()
 
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 3)
 
@@ -243,13 +251,13 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.clearHistory().succeeded()
         history.addLocalVisit(siteVisitA1).succeeded()
 
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         var highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A")
 
         history.removeHighlightForURL(siteA.url).succeeded()
-        history.invalidateHighlights().succeeded()
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
         highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 0)
     }
@@ -264,40 +272,36 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         history.clearHistory().succeeded()
         history.addLocalVisit(siteVisitA1).succeeded()
 
-        history.invalidateHighlights().succeeded()
-        var highlights = history.getHighlights().value.successValue!
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
+        let highlights = history.getHighlights().value.successValue!
         XCTAssertEqual(highlights.count, 1)
         XCTAssertEqual(highlights[0]!.title, "A")
-
-        history.clearHighlights().succeeded()
-        highlights = history.getHighlights().value.successValue!
-        XCTAssertEqual(highlights.count, 0)
     }
 }
 
 class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
     func testRecommendationPref() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", files: files)
-        db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let metadata = SQLiteMetadata(db: db)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
-        let bookmarks = SQLiteBookmarkBufferStorage(db: db)
+        let bookmarks = MergedSQLiteBookmarks(db: db)
 
         let count = 500
 
         history.clearHistory().succeeded()
-        populateForRecommendationCalculations(history, bookmarks: bookmarks, historyCount: count, bookmarkCount: count)
-        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+        populateForRecommendationCalculations(history, bookmarks: bookmarks, metadata: metadata, historyCount: count, bookmarkCount: count)
+        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0...5 {
-                history.invalidateHighlights().succeeded()
+                history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
             }
             self.stopMeasuring()
         }
     }
 }
 
-private func populateForRecommendationCalculations(_ history: SQLiteHistory, bookmarks: SQLiteBookmarkBufferStorage, historyCount: Int, bookmarkCount: Int) {
+private func populateForRecommendationCalculations(_ history: SQLiteHistory, bookmarks: MergedSQLiteBookmarks, metadata: SQLiteMetadata, historyCount: Int, bookmarkCount: Int) {
     let baseMillis: UInt64 = baseInstantInMillis - 20000
 
     for i in 0..<historyCount {
@@ -305,7 +309,6 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         site.guid = "abc\(i)def"
 
         history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).succeeded()
-
         for j in 0...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
             addVisitForSite(site, intoHistory: history, from: .local, atTime: visitTime)
@@ -313,7 +316,7 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         }
     }
 
-    let bookmarkItems: [BookmarkMirrorItem] = (0..<bookmarkCount).map { i in
+    (0..<bookmarkCount).forEach { i in
         let modifiedTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i))
         let bookmarkSite = Site(url: "http://bookmark-\(i)/", title: "\(i) Bookmark")
         bookmarkSite.guid = "bookmark-\(i)"
@@ -322,13 +325,9 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         addVisitForSite(bookmarkSite, intoHistory: history, from: .remote, atTime: modifiedTime)
         addVisitForSite(bookmarkSite, intoHistory: history, from: .local, atTime: modifiedTime)
         addVisitForSite(bookmarkSite, intoHistory: history, from: .remote, atTime: modifiedTime)
-        
-        return BookmarkMirrorItem.bookmark("http://bookmark-\(i)/", modified: modifiedTime, hasDupe: false,
-                                            parentID: BookmarkRoots.MenuFolderGUID,
-                                            parentName: "Menu Bookmarks",
-                                            title: "\(i) Bookmark", description: nil,
-                                            URI: "http://bookmark-\(i)/", tags: "", keyword: nil)
+        let pageA = PageMetadata(id: nil, siteURL: bookmarkSite.url, mediaURL: "http://image.com",
+                                 title: bookmarkSite.title, description: "Test Description", type: nil, providerName: nil)
+        metadata.storeMetadata(pageA, forPageURL: bookmarkSite.url.asURL!, expireAt: Date.now() + 3000).succeeded()
+        bookmarks.local.addToMobileBookmarks(URL(string:"http://bookmark-\(i)/")!, title: "\(i) Bookmark", favicon: nil).succeeded()
     }
-
-    bookmarks.applyRecords(bookmarkItems).succeeded()
 }

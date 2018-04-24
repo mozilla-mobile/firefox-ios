@@ -5,20 +5,26 @@
 import Account
 import Shared
 import UIKit
-import XCGLogger
-import SwiftyJSON
 
-// The following are only here because we use master for L10N and otherwise these strings would disappear from the v1.0 release
-private let Bug1204635_S1 = NSLocalizedString("Clear Everything", tableName: "ClearPrivateData", comment: "Title of the Clear private data dialog.")
-private let Bug1204635_S2 = NSLocalizedString("Are you sure you want to clear all of your data? This will also close all open tabs.", tableName: "ClearPrivateData", comment: "Message shown in the dialog prompting users if they want to clear everything")
-private let Bug1204635_S3 = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
-private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
+struct SettingsUX {
+    static let TableViewHeaderBackgroundColor = UIConstants.AppBackgroundColor
+    static let TableViewHeaderTextColor = UIColor.Photon.Grey50
+    static let TableViewRowTextColor = UIColor.Photon.Grey90
+    static let TableViewDisabledRowTextColor = UIColor.lightGray
+    static let TableViewSeparatorColor = UIColor(rgb: 0xD1D1D4)
+    static let TableViewHeaderFooterHeight = CGFloat(44)
+    static let TableViewRowErrorTextColor = UIColor(red: 255/255, green: 0/255, blue: 26/255, alpha: 1.0)
+    static let TableViewRowWarningTextColor = UIColor(red: 245/255, green: 166/255, blue: 35/255, alpha: 1.0)
+    static let TableViewRowActionAccessoryColor = UIColor(red: 0.29, green: 0.56, blue: 0.89, alpha: 1.0)
+    static let TableViewRowSyncTextColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+}
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting: NSObject {
     fileprivate var _title: NSAttributedString?
     fileprivate var _footerTitle: NSAttributedString?
     fileprivate var _cellHeight: CGFloat?
+    fileprivate var _image: UIImage?
 
     weak var delegate: SettingsDelegate?
 
@@ -43,6 +49,8 @@ class Setting: NSObject {
 
     var textAlignment: NSTextAlignment { return .natural }
     
+    var image: UIImage? { return _image }
+    
     fileprivate(set) var enabled: Bool = true
 
     // Called when the cell is setup. Call if you need the default behaviour.
@@ -51,11 +59,13 @@ class Setting: NSObject {
         cell.detailTextLabel?.numberOfLines = 0
         cell.textLabel?.attributedText = title
         cell.textLabel?.textAlignment = textAlignment
-        cell.textLabel?.numberOfLines = 0
+        cell.textLabel?.numberOfLines = 1
+        cell.textLabel?.lineBreakMode = .byTruncatingTail
         cell.accessoryType = accessoryType
         cell.accessoryView = nil
         cell.selectionStyle = enabled ? .default : .none
         cell.accessibilityIdentifier = accessibilityIdentifier
+        cell.imageView?.image = _image
         if let title = title?.string {
             if let detailText = cell.detailTextLabel?.text {
                 cell.accessibilityLabel = "\(title), \(detailText)"
@@ -67,9 +77,9 @@ class Setting: NSObject {
         }
         cell.accessibilityTraits = UIAccessibilityTraitButton
         cell.indentationWidth = 0
-        cell.layoutMargins = UIEdgeInsets.zero
+        cell.layoutMargins = .zero
         // So that the separator line goes all the way to the left edge.
-        cell.separatorInset = UIEdgeInsets.zero
+        cell.separatorInset = .zero
     }
 
     // Called when the pref is tapped.
@@ -105,23 +115,19 @@ class SettingSection: Setting {
 
     var count: Int {
         var count = 0
-        for setting in children {
-            if !setting.hidden {
-                count += 1
-            }
+        for setting in children where !setting.hidden {
+            count += 1
         }
         return count
     }
 
     subscript(val: Int) -> Setting? {
         var i = 0
-        for setting in children {
-            if !setting.hidden {
-                if i == val {
-                    return setting
-                }
-                i += 1
+        for setting in children where !setting.hidden {
+            if i == val {
+                return setting
             }
+            i += 1
         }
         return nil
     }
@@ -131,7 +137,7 @@ private class PaddedSwitch: UIView {
     fileprivate static let Padding: CGFloat = 8
 
     init(switchView: UISwitch) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
 
         addSubview(switchView)
 
@@ -147,14 +153,14 @@ private class PaddedSwitch: UIView {
 // A helper class for settings with a UISwitch.
 // Takes and optional settingsDidChange callback and status text.
 class BoolSetting: Setting {
-    let prefKey: String
+    let prefKey: String? // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
 
     fileprivate let prefs: Prefs
     fileprivate let defaultValue: Bool
     fileprivate let settingDidChange: ((Bool) -> Void)?
     fileprivate let statusText: NSAttributedString?
 
-    init(prefs: Prefs, prefKey: String, defaultValue: Bool, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, attributedTitleText: NSAttributedString, attributedStatusText: NSAttributedString? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         self.prefs = prefs
         self.prefKey = prefKey
         self.defaultValue = defaultValue
@@ -163,12 +169,12 @@ class BoolSetting: Setting {
         super.init(title: attributedTitleText)
     }
 
-    convenience init(prefs: Prefs, prefKey: String, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+    convenience init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
-            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
+            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor])
         }
-        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
+        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
@@ -179,9 +185,11 @@ class BoolSetting: Setting {
         super.onConfigureCell(cell)
 
         let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: #selector(BoolSetting.switchValueChanged(_:)), for: UIControlEvents.valueChanged)
-        control.isOn = prefs.boolForKey(prefKey) ?? defaultValue
+        control.onTintColor = UIConstants.SystemBlueColor
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
+        control.accessibilityIdentifier = prefKey
+        
+        displayBool(control)
         if let title = title {
             if let status = status {
                 control.accessibilityLabel = "\(title.string), \(status.string)"
@@ -195,9 +203,58 @@ class BoolSetting: Setting {
     }
 
     @objc func switchValueChanged(_ control: UISwitch) {
-        prefs.setBool(control.isOn, forKey: prefKey)
+        writeBool(control)
         settingDidChange?(control.isOn)
+        UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: self.prefKey, extras: ["to": control.isOn])
     }
+
+    // These methods allow a subclass to control how the pref is saved
+    func displayBool(_ control: UISwitch) {
+        guard let key = prefKey else {
+            return
+        }
+        control.isOn = prefs.boolForKey(key) ?? defaultValue
+    }
+
+    func writeBool(_ control: UISwitch) {
+        guard let key = prefKey else {
+            return
+        }
+        prefs.setBool(control.isOn, forKey: key)
+    }
+}
+
+class PrefPersister: SettingValuePersister {
+    fileprivate let prefs: Prefs
+    let prefKey: String
+
+    init(prefs: Prefs, prefKey: String) {
+        self.prefs = prefs
+        self.prefKey = prefKey
+    }
+
+    func readPersistedValue() -> String? {
+        return prefs.stringForKey(prefKey)
+    }
+
+    func writePersistedValue(value: String?) {
+        if let value = value {
+            prefs.setString(value, forKey: prefKey)
+        } else {
+            prefs.removeObjectForKey(prefKey)
+        }
+    }
+}
+
+class StringPrefSetting: StringSetting {
+    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
+        super.init(defaultValue: defaultValue, placeholder: placeholder, accessibilityIdentifier: accessibilityIdentifier, persister: PrefPersister(prefs: prefs, prefKey: prefKey), settingIsValid: isValueValid, settingDidChange: settingDidChange)
+    }
+}
+
+protocol SettingValuePersister {
+    func readPersistedValue() -> String?
+    func writePersistedValue(value: String?)
 }
 
 /// A helper class for a setting backed by a UITextField.
@@ -205,24 +262,22 @@ class BoolSetting: Setting {
 /// If settingIsValid returns false, the Setting will not change and the text remains red.
 class StringSetting: Setting, UITextFieldDelegate {
 
-    let prefKey: String
-    fileprivate let Padding: CGFloat = 8
+    var Padding: CGFloat = 8
 
-    fileprivate let prefs: Prefs
     fileprivate let defaultValue: String?
     fileprivate let placeholder: String
     fileprivate let settingDidChange: ((String?) -> Void)?
     fileprivate let settingIsValid: ((String?) -> Bool)?
+    fileprivate let persister: SettingValuePersister
 
     let textField = UITextField()
 
-    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
-        self.prefs = prefs
-        self.prefKey = prefKey
+    init(defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, persister: SettingValuePersister, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
         self.defaultValue = defaultValue
         self.settingDidChange = settingDidChange
         self.settingIsValid = isValueValid
         self.placeholder = placeholder
+        self.persister = persister
 
         super.init()
         self.accessibilityIdentifier = accessibilityIdentifier
@@ -246,7 +301,7 @@ class StringSetting: Setting, UITextFieldDelegate {
             make.trailing.equalTo(cell.contentView).offset(-Padding)
             make.leading.equalTo(cell.contentView).offset(Padding)
         }
-        textField.text = prefs.stringForKey(prefKey) ?? defaultValue
+        textField.text = self.persister.readPersistedValue() ?? defaultValue
         textFieldDidChange(textField)
     }
 
@@ -269,7 +324,7 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
-        let color = isValid(textField.text) ? UIConstants.TableViewRowTextColor : UIConstants.DestructiveRed
+        let color = isValid(textField.text) ? SettingsUX.TableViewRowTextColor : UIConstants.DestructiveRed
         textField.textColor = color
     }
 
@@ -282,13 +337,41 @@ class StringSetting: Setting, UITextFieldDelegate {
         if !isValid(text) {
             return
         }
-        if let text = prepareValidValue(userInput: text) {
-            prefs.setString(text, forKey: prefKey)
-        } else {
-            prefs.removeObjectForKey(prefKey)
-        }
+        self.persister.writePersistedValue(value: prepareValidValue(userInput: text))
         // Call settingDidChange with text or nil.
         settingDidChange?(text)
+    }
+}
+
+class CheckmarkSetting: Setting {
+    let onChanged: () -> Void
+    let isEnabled: () -> Bool
+    private let subtitle: NSAttributedString?
+
+    override var status: NSAttributedString? {
+        return subtitle
+    }
+
+    init(title: NSAttributedString, subtitle: NSAttributedString?, accessibilityIdentifier: String? = nil, isEnabled: @escaping () -> Bool, onChanged: @escaping () -> Void) {
+        self.subtitle = subtitle
+        self.onChanged = onChanged
+        self.isEnabled = isEnabled
+        super.init(title: title)
+        self.accessibilityIdentifier = accessibilityIdentifier
+    }
+
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        cell.accessoryType = isEnabled() ? .checkmark : .none
+        cell.selectionStyle = .none
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        // Force editing to end for any focused text fields so they can finish up validation first.
+        navigationController?.view.endEditing(true)
+        if !isEnabled() {
+            onChanged()
+        }
     }
 }
 
@@ -315,9 +398,9 @@ class ButtonSetting: Setting {
         if isEnabled?() ?? true {
             cell.textLabel?.textColor = destructive ? UIConstants.DestructiveRed : UIConstants.HighlightBlue
         } else {
-            cell.textLabel?.textColor = UIConstants.TableViewDisabledRowTextColor
+            cell.textLabel?.textColor = SettingsUX.TableViewDisabledRowTextColor
         }
-        cell.textLabel?.textAlignment = NSTextAlignment.center
+        cell.textLabel?.textAlignment = .center
         cell.accessibilityTraits = UIAccessibilityTraitButton
         cell.selectionStyle = .none
     }
@@ -357,20 +440,25 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
     override var accessoryType: UITableViewCellAccessoryType { return .none }
 
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags flags: FxALoginFlags) {
-        // Reload the data to reflect the new Account immediately.
-        settings.tableView.reloadData()
-        // And start advancing the Account state in the background as well.
-        settings.SELrefresh()
-
-        // Dismiss the FxA content view if the account is verified.
+        // This method will get called twice: once when the user signs in, and once
+        // when the account is verified by email – on this device or another.
+        // If the user hasn't dismissed the fxa content view controller,
+        // then we should only do that (thus finishing the sign in/verification process)
+        // once the account is verified.
+        // By the time we get to here, we should be syncing or just about to sync in the
+        // background, most likely from FxALoginHelper.
         if flags.verified {
-            let _ = settings.navigationController?.popToRootViewController(animated: true)
+            _ = settings.navigationController?.popToRootViewController(animated: true)
+            // Reload the data to reflect the new Account immediately.
+            settings.tableView.reloadData()
+            // And start advancing the Account state in the background as well.
+            settings.refresh()
         }
     }
 
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController) {
         NSLog("didCancel")
-        let _ = settings.navigationController?.popToRootViewController(animated: true)
+        _ = settings.navigationController?.popToRootViewController(animated: true)
     }
 }
 
@@ -401,6 +489,8 @@ class SettingsTableViewController: UITableViewController {
     var profile: Profile!
     var tabManager: TabManager!
 
+    var hasSectionSeparatorLine = true
+
     /// Used to calculate cell heights.
     fileprivate lazy var dummyToggleCell: UITableViewCell = {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "dummyCell")
@@ -413,12 +503,9 @@ class SettingsTableViewController: UITableViewController {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
-        let tableFooter = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
-        tableFooter.showTopBorder = false
-        tableView.tableFooterView = tableFooter
-        
-        tableView.separatorColor = UIConstants.TableViewSeparatorColor
-        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
+        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
     }
@@ -427,24 +514,24 @@ class SettingsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
 
         settings = generateSettings()
-
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELsyncDidChangeState), name: NotificationProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SettingsTableViewController.SELfirefoxAccountDidChange), name: NotificationFirefoxAccountChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(firefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
 
         tableView.reloadData()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        SELrefresh()
+        refresh()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidStartSyncing, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+
+        [Notification.Name.ProfileDidStartSyncing, Notification.Name.ProfileDidFinishSyncing, Notification.Name.FirefoxAccountChanged].forEach { name in
+            NotificationCenter.default.removeObserver(self, name: name, object: nil)
+        }
     }
 
     // Override to provide settings in subclasses
@@ -452,13 +539,13 @@ class SettingsTableViewController: UITableViewController {
         return []
     }
 
-    @objc fileprivate func SELsyncDidChangeState() {
+    @objc fileprivate func syncDidChangeState() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
 
-    @objc fileprivate func SELrefresh() {
+    @objc fileprivate func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
         if let account = self.profile.getAccount() {
             account.advance().upon { state in
@@ -471,7 +558,7 @@ class SettingsTableViewController: UITableViewController {
         }
     }
 
-    @objc func SELfirefoxAccountDidChange() {
+    @objc func firefoxAccountDidChange() {
         self.tableView.reloadData()
     }
 
@@ -506,11 +593,10 @@ class SettingsTableViewController: UITableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
-            headerView.titleLabel.text = sectionTitle
+            headerView.titleLabel.text = sectionTitle.uppercased()
         }
-
         // Hide the top border for the top section to avoid having a double line at the top
-        if section == 0 {
+        if section == 0 || !hasSectionSeparatorLine {
             headerView.showTopBorder = false
         } else {
             headerView.showTopBorder = true
@@ -520,21 +606,25 @@ class SettingsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
         let sectionSetting = settings[section]
-        if let sectionFooter = sectionSetting.footerTitle?.string {
-            footerView.titleLabel.text = sectionFooter
+        guard let sectionFooter = sectionSetting.footerTitle?.string else {
+            return nil
         }
+        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
+        footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
         footerView.showBottomBorder = false
         return footerView
     }
 
-    //is this needed?
+    // To hide a footer dynamically requires returning nil from viewForFooterInSection
+    // and setting the height to zero.
+    // However, we also want the height dynamically calculated, there is a magic constant
+    // for that: `UITableViewAutomaticDimension`.
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionSetting = settings[section]
         if let _ = sectionSetting.footerTitle?.string {
-            return 44
+            return UITableViewAutomaticDimension
         }
         return 0
     }
@@ -576,52 +666,14 @@ class SettingsTableViewController: UITableViewController {
         guard let text = text else { return 0 }
 
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs = [NSFontAttributeName: label.font as Any]
+        let attrs = [NSAttributedStringKey.font: label.font as Any]
         let boundingRect = NSString(string: text).boundingRect(with: size,
-            options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: attrs, context: nil)
+            options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
     }
 }
 
-class SettingsTableFooterView: UIView {
-    var logo: UIImageView = {
-        var image =  UIImageView(image: UIImage(named: "settingsFlatfox"))
-        image.contentMode = UIViewContentMode.center
-        image.accessibilityIdentifier = "SettingsTableFooterView.logo"
-        return image
-    }()
-
-    fileprivate lazy var topBorder: CALayer = {
-        let topBorder = CALayer()
-        topBorder.backgroundColor = UIConstants.SeparatorColor.cgColor
-        return topBorder
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        layer.addSublayer(topBorder)
-        addSubview(logo)
-    }
-    
-    var showTopBorder: Bool = true {
-        didSet {
-            topBorder.isHidden = !showTopBorder
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        topBorder.frame = CGRect(x: 0.0, y: 0.0, width: frame.size.width, height: 0.5)
-        logo.center = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
-    }
-}
-
-struct SettingsTableSectionHeaderFooterViewUX {
+private struct SettingsTableSectionHeaderFooterViewUX {
     static let titleHorizontalPadding: CGFloat = 15
     static let titleVerticalPadding: CGFloat = 6
     static let titleVerticalLongPadding: CGFloat = 20
@@ -654,8 +706,8 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
 
     lazy var titleLabel: UILabel = {
         var headerLabel = UILabel()
-        headerLabel.textColor = UIConstants.TableViewHeaderTextColor
-        headerLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFontWeightRegular)
+        headerLabel.textColor = SettingsUX.TableViewHeaderTextColor
+        headerLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
         headerLabel.numberOfLines = 0
         return headerLabel
     }()
@@ -674,7 +726,7 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        contentView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
         addSubview(topBorder)
         addSubview(bottomBorder)
@@ -725,3 +777,4 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
         }
     }
 }
+

@@ -9,8 +9,7 @@ open class UserAgent {
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {
-        return "\(prefix)/\(AppInfo.appVersion)b\(AppInfo.buildNumber) " +
-               "(\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(DeviceInfo.appName()))"
+        return "\(prefix)/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName))"
     }
 
     open static var syncUserAgent: String {
@@ -23,6 +22,10 @@ open class UserAgent {
 
     open static var fxaUserAgent: String {
         return clientUserAgent(prefix: "Firefox-iOS-FxA")
+    }
+
+    open static var defaultClientUserAgent: String {
+        return clientUserAgent(prefix: "Firefox-iOS")
     }
 
     /**
@@ -76,15 +79,15 @@ open class UserAgent {
         // Extract the WebKit version and use it as the Safari version.
         let webKitVersionRegex = try! NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: [])
 
-        let match = webKitVersionRegex.firstMatch(in: userAgent, options:[],
-            range: NSRange(location: 0, length: userAgent.characters.count))
+        let match = webKitVersionRegex.firstMatch(in: userAgent, options: [],
+            range: NSRange(location: 0, length: userAgent.count))
 
         if match == nil {
             print("Error: Unable to determine WebKit version in UA.")
             return userAgent     // Fall back to Safari's.
         }
 
-        let webKitVersion = (userAgent as NSString).substring(with: match!.rangeAt(1))
+        let webKitVersion = (userAgent as NSString).substring(with: match!.range(at: 1))
 
         // Insert "FxiOS/<version>" before the Mobile/ section.
         let mobileRange = (userAgent as NSString).range(of: "Mobile/")
@@ -108,7 +111,7 @@ open class UserAgent {
 
         // Spoof platform section
         let platformRegex = try! NSRegularExpression(pattern: "\\([^\\)]+\\)", options: [])
-        guard let platformMatch = platformRegex.firstMatch(in: userAgent as String, options:[], range: NSRange(location: 0, length: userAgent.length)) else {
+        guard let platformMatch = platformRegex.firstMatch(in: userAgent as String, options: [], range: NSRange(location: 0, length: userAgent.length)) else {
             print("Error: Unable to determine platform in UA.")
             return String(userAgent)
         }
@@ -117,7 +120,7 @@ open class UserAgent {
         // Strip mobile section
         let mobileRegex = try! NSRegularExpression(pattern: " FxiOS/[^ ]+ Mobile/[^ ]+", options: [])
         
-        guard let mobileMatch = mobileRegex.firstMatch(in: userAgent as String, options:[], range: NSRange(location: 0, length: userAgent.length)) else {
+        guard let mobileMatch = mobileRegex.firstMatch(in: userAgent as String, options: [], range: NSRange(location: 0, length: userAgent.length)) else {
             print("Error: Unable to find Mobile section in UA.")
             return String(userAgent)
         }

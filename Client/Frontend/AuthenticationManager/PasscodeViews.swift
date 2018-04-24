@@ -31,11 +31,11 @@ class PasscodeInputView: UIView, UIKeyInput {
     fileprivate var inputtedCode: String = ""
 
     fileprivate var blankDigitString: NSAttributedString {
-        return NSAttributedString(string: "\(blankCharacter)", attributes: [NSFontAttributeName: digitFont])
+        return NSAttributedString(string: "\(blankCharacter)", attributes: [NSAttributedStringKey.font: digitFont])
     }
 
     fileprivate var filledDigitString: NSAttributedString {
-        return NSAttributedString(string: "\(filledCharacter)", attributes: [NSFontAttributeName: digitFont])
+        return NSAttributedString(string: "\(filledCharacter)", attributes: [NSAttributedStringKey.font: digitFont])
     }
 
     @objc var keyboardType: UIKeyboardType = .numberPad
@@ -47,7 +47,7 @@ class PasscodeInputView: UIView, UIKeyInput {
     }
 
     convenience init(passcodeSize: Int) {
-        self.init(frame: CGRect.zero, passcodeSize: passcodeSize)
+        self.init(frame: .zero, passcodeSize: passcodeSize)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,28 +64,28 @@ class PasscodeInputView: UIView, UIKeyInput {
     }
 
     @objc var hasText: Bool {
-        return inputtedCode.characters.count > 0
+        return !inputtedCode.isEmpty
     }
 
     @objc func insertText(_ text: String) {
-        guard inputtedCode.characters.count < passcodeSize else {
+        guard inputtedCode.count < passcodeSize else {
             return
         }
 
         inputtedCode += text
         setNeedsDisplay()
-        if inputtedCode.characters.count == passcodeSize {
+        if inputtedCode.count == passcodeSize {
             delegate?.passcodeInputView(self, didFinishEnteringCode: inputtedCode)
         }
     }
 
     // Required for implementing UIKeyInput
     @objc func deleteBackward() {
-        guard inputtedCode.characters.count > 0 else {
+        guard !inputtedCode.isEmpty else {
             return
         }
 
-        inputtedCode.remove(at: inputtedCode.characters.index(before: inputtedCode.endIndex))
+        inputtedCode.remove(at: inputtedCode.index(before: inputtedCode.endIndex))
         setNeedsDisplay()
     }
 
@@ -100,10 +100,10 @@ class PasscodeInputView: UIView, UIKeyInput {
 
         (0..<passcodeSize).forEach { index in
             let offset = floor(rect.width / CGFloat(passcodeSize))
-            var circleRect = CGRect(origin: CGPoint.zero, size: circleSize)
+            var circleRect = CGRect(size: circleSize)
             circleRect.center = CGPoint(x: (offset * CGFloat(index + 1))  - offset / 2, y: rect.height / 2)
 
-            if index < inputtedCode.characters.count {
+            if index < inputtedCode.count {
                 context.fillEllipse(in: circleRect)
             } else {
                 context.strokeEllipse(in: circleRect)
@@ -114,7 +114,7 @@ class PasscodeInputView: UIView, UIKeyInput {
 
 /// A pane that gets displayed inside the PasscodeViewController that displays a title and a passcode input field.
 class PasscodePane: UIView {
-    let codeInputView = PasscodeInputView(passcodeSize: 4)
+    let codeInputView: PasscodeInputView
 
     var codeViewCenterConstraint: Constraint?
     var containerCenterConstraint: Constraint?
@@ -139,9 +139,10 @@ class PasscodePane: UIView {
         }
     }
 
-    init(title: String? = nil) {
-        super.init(frame: CGRect.zero)
-        backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+    init(title: String? = nil, passcodeSize: Int = 4) {
+        codeInputView = PasscodeInputView(passcodeSize: passcodeSize)
+        super.init(frame: .zero)
+        backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
 
         titleLabel.text = title
         centerContainer.addSubview(titleLabel)
@@ -165,8 +166,8 @@ class PasscodePane: UIView {
             make.size.equalTo(PasscodeUX.PasscodeFieldSize)
         }
         layoutIfNeeded()
-        NotificationCenter.default.addObserver(self, selector: #selector(PasscodePane.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(PasscodePane.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
     }
 
     func shakePasscode() {
@@ -185,12 +186,7 @@ class PasscodePane: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-    }
-    
-    func keyboardWillShow(_ sender: Notification) {
+    @objc func keyboardWillShow(_ sender: Notification) {
         guard let keyboardFrame = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue else {
             return
         }
@@ -201,7 +197,7 @@ class PasscodePane: UIView {
         })
     }
     
-    func keyboardWillHide(_ sender: Notification) {
+    @objc func keyboardWillHide(_ sender: Notification) {
         UIView.animate(withDuration: 0.1, animations: {
             self.containerCenterConstraint?.update(offset: 0)
             self.layoutIfNeeded()

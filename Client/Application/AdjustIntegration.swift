@@ -85,10 +85,12 @@ class AdjustIntegration: NSObject {
     /// timestamp in seconds since the UNIX epoch.
 
     fileprivate func saveAttribution(_ attribution: ADJAttribution) throws {
-        let dictionary = NSMutableDictionary(dictionary: attribution.dictionary())
-        dictionary["_timestamp"] = NSNumber(value: Int64(Date().timeIntervalSince1970) as Int64)
-        let data = try JSONSerialization.data(withJSONObject: dictionary, options: [JSONSerialization.WritingOptions.prettyPrinted])
-        try data.write(to: URL(fileURLWithPath: try getAttributionPath()), options: [])
+        if let attributionDictionary = attribution.dictionary() {
+            let dictionary = NSMutableDictionary(dictionary: attributionDictionary)
+            dictionary["_timestamp"] = NSNumber(value: Int64(Date().timeIntervalSince1970) as Int64)
+            let data = try JSONSerialization.data(withJSONObject: dictionary, options: [JSONSerialization.WritingOptions.prettyPrinted])
+            try data.write(to: URL(fileURLWithPath: try getAttributionPath()), options: [])
+        }
     }
 
     /// Return the path to the `AdjustAttribution.json` file. Throws an `NSError` if we could not build the path.
@@ -107,7 +109,7 @@ class AdjustIntegration: NSObject {
     /// data yet.
     
     fileprivate func shouldEnable() throws -> Bool {
-        if profile.prefs.boolForKey("settings.sendUsageData") ?? true {
+        if profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true {
             return true
         }
         return try hasAttribution() == false
@@ -117,7 +119,7 @@ class AdjustIntegration: NSObject {
     /// setting.
     
     fileprivate func shouldTrackRetention() -> Bool {
-        return profile.prefs.boolForKey("settings.sendUsageData") ?? true
+        return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
     }
 }
 
@@ -180,4 +182,14 @@ extension AdjustIntegration: AdjustDelegate {
     static func setEnabled(_ enabled: Bool) {
         Adjust.setEnabled(enabled)
     }
+    
+    /// Store the deeplink url from Adjust SDK. Per Adjust documentation, any interstitial view launched could interfere
+    /// with launching the deeplink. We let the interstial view decide what to do with deeplink.
+    /// Ref: https://github.com/adjust/ios_sdk#deferred-deep-linking-scenario
+    
+    func adjustDeeplinkResponse(_ deeplink: URL!) -> Bool {
+        profile.prefs.setString("\(deeplink)", forKey: "AdjustDeeplinkKey")
+        return true
+    }
+
 }

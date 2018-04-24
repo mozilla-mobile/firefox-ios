@@ -20,7 +20,7 @@ struct AboutLicenseHandler {
         webServer.registerHandlerForMethod("GET", module: "about", resource: "license") { (request: GCDWebServerRequest?) -> GCDWebServerResponse! in
             let path = Bundle.main.path(forResource: "Licenses", ofType: "html")
             do {
-                let html = try NSString(contentsOfFile: path!, encoding: String.Encoding.utf8.rawValue) as String
+                let html = try String(contentsOfFile: path!, encoding: .utf8)
                 return GCDWebServerDataResponse(html: html)
             } catch {
                 print("Unable to register webserver \(error)")
@@ -32,7 +32,7 @@ struct AboutLicenseHandler {
 
 extension GCDWebServerDataResponse {
     convenience init(XHTML: String) {
-        let data = XHTML.data(using: String.Encoding.utf8, allowLossyConversion: false)
+        let data = XHTML.data(using: .utf8, allowLossyConversion: false)
         self.init(data: data, contentType: "application/xhtml+xml; charset=utf-8")
     }
 }

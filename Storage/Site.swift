@@ -13,36 +13,6 @@ public func ==<T>(lhs: T, rhs: T) -> Bool where T: Identifiable {
     return lhs.id == rhs.id
 }
 
-public enum IconType: Int {
-    public func isPreferredTo (_ other: IconType) -> Bool {
-        return rank > other.rank
-    }
-
-    fileprivate var rank: Int {
-        switch self {
-        case .appleIconPrecomposed:
-            return 5
-        case .appleIcon:
-            return 4
-        case .icon:
-            return 3
-        case .local:
-            return 2
-        case .guess:
-            return 1
-        case .noneFound:
-            return 0
-        }
-    }
-
-    case icon = 0
-    case appleIcon = 1
-    case appleIconPrecomposed = 2
-    case guess = 3
-    case local = 4
-    case noneFound = 5
-}
-
 open class Favicon: Identifiable {
     open var id: Int?
 
@@ -50,12 +20,10 @@ open class Favicon: Identifiable {
     open let date: Date
     open var width: Int?
     open var height: Int?
-    open let type: IconType
 
-    public init(url: String, date: Date = Date(), type: IconType) {
+    public init(url: String, date: Date = Date()) {
         self.url = url
         self.date = date
-        self.type = type
     }
 }
 
@@ -78,13 +46,14 @@ open class Site: Identifiable {
     open fileprivate(set) var bookmarked: Bool?
 
     public convenience init(url: String, title: String) {
-        self.init(url: url, title: title, bookmarked: false)
+        self.init(url: url, title: title, bookmarked: false, guid: nil)
     }
 
-    public init(url: String, title: String, bookmarked: Bool?) {
+    public init(url: String, title: String, bookmarked: Bool?, guid: String? = nil) {
         self.url = url
         self.title = title
         self.bookmarked = bookmarked
+        self.guid = guid
     }
 
     open func setBookmarked(_ bookmarked: Bool) {

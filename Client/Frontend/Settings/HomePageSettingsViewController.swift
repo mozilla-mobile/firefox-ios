@@ -64,22 +64,11 @@ class HomePageSettingsViewController: SettingsTableViewController {
                 onClick: setHomePage(nil)),
             ]
 
-        let settings: [SettingSection] = [
-            SettingSection(title: NSAttributedString(string: Strings.SettingsHomePageURLSectionTitle), children: basicSettings),
-            SettingSection(children: [
-                BoolSetting(prefs: prefs,
-                    prefKey: HomePageConstants.HomePageButtonIsInMenuPrefKey,
-                    defaultValue: true,
-                    titleText: Strings.SettingsHomePageUIPositionTitle,
-                    statusText: Strings.SettingsHomePageUIPositionSubtitle),
-            ])
-        ]
-
-        return settings
+        return [SettingSection(title: NSAttributedString(string: Strings.SettingsHomePageURLSectionTitle), children: basicSettings)]
     }
 }
 
-class WebPageSetting: StringSetting {
+class WebPageSetting: StringPrefSetting {
     init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingDidChange: ((String?) -> Void)? = nil) {
         super.init(prefs: prefs,
                    prefKey: prefKey,

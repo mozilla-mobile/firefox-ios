@@ -22,12 +22,12 @@ extension Data {
 
 extension String {
     public var sha1: Data {
-        let data = self.data(using: String.Encoding.utf8)!
+        let data = self.data(using: .utf8)!
         return data.sha1
     }
 
     public var sha256: Data {
-        let data = self.data(using: String.Encoding.utf8)!
+        let data = self.data(using: .utf8)!
         return data.sha256
     }
 }
@@ -47,13 +47,13 @@ extension Data {
 
 extension String {
     public var utf8EncodedData: Data {
-        return self.data(using: String.Encoding.utf8, allowLossyConversion: false)!
+        return self.data(using: .utf8, allowLossyConversion: false)!
     }
 }
 
 extension Data {
     public var utf8EncodedString: String? {
-        return NSString(data: self, encoding: String.Encoding.utf8.rawValue) as String?
+        return String(data: self, encoding: .utf8)
     }
 }
 

@@ -7,16 +7,32 @@ import Foundation
 public struct PrefsKeys {
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
-    public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
-    public static let KeyTopSitesCacheSize = "topSitesCacheSize"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
-    public static let KeyHomePageButtonIsInMenu = "HomePageButtonIsInMenuPrefKey"
-    public static let KeyNoImageModeButtonIsInMenu = "NoImageModeButtonIsInMenuPrefKey"
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
-    public static let KeyNewTab = "NewTabPrefKey"
     public static let KeyNightModeButtonIsInMenu = "NightModeButtonIsInMenuPrefKey"
     public static let KeyNightModeStatus = "NightModeStatus"
     public static let KeyMailToOption = "MailToOption"
+    public static let HasFocusInstalled = "HasFocusInstalled"
+    public static let HasPocketInstalled = "HasPocketInstalled"
+    public static let IntroSeen = "IntroViewControllerSeen"
+
+    //Activity Stream
+    public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
+    public static let KeyTopSitesCacheSize = "topSitesCacheSize"
+    public static let KeyNewTab = "NewTabPrefKey"
+    public static let ASPocketStoriesVisible = "ASPocketStoriesVisible"
+    public static let ASRecentHighlightsVisible = "ASRecentHighlightsVisible"
+    public static let ASBookmarkHighlightsVisible = "ASBookmarkHighlightsVisible"
+    public static let ASLastInvalidation = "ASLastInvalidation"
+
+    public static let KeyUseCustomSyncService = "useCustomSyncService"
+    public static let KeyCustomSyncToken = "customSyncTokenServer"
+    public static let KeyCustomSyncProfile = "customSyncProfileServer"
+    public static let KeyCustomSyncOauth = "customSyncOauthServer"
+    public static let KeyCustomSyncAuth = "customSyncAuthServer"
+    public static let KeyCustomSyncWeb = "customSyncWebServer"
+    public static let UseStageServer = "useStageSyncService"
+    
 }
 
 public struct PrefsDefaults {
@@ -43,7 +59,7 @@ public protocol Prefs {
     func unsignedLongForKey(_ defaultName: String) -> UInt64?
     func stringArrayForKey(_ defaultName: String) -> [String]?
     func arrayForKey(_ defaultName: String) -> [Any]?
-    func dictionaryForKey(_ defaultName: String) -> [String : Any]?
+    func dictionaryForKey(_ defaultName: String) -> [String: Any]?
     func removeObjectForKey(_ defaultName: String)
     func clearAll()
 }
@@ -120,27 +136,15 @@ open class MockProfilePrefs: Prefs {
     }
 
     open func unsignedLongForKey(_ defaultName: String) -> UInt64? {
-        let num = things[name(defaultName)] as? UInt64
-        if let num = num {
-            return num
-        }
-        return nil
+        return things[name(defaultName)] as? UInt64
     }
 
     open func longForKey(_ defaultName: String) -> Int64? {
-        let num = things[name(defaultName)] as? Int64
-        if let num = num {
-            return num
-        }
-        return nil
+        return things[name(defaultName)] as? Int64
     }
 
     open func intForKey(_ defaultName: String) -> Int32? {
-        let num = things[name(defaultName)] as? Int32
-        if let num = num {
-            return num
-        }
-        return nil
+        return things[name(defaultName)] as? Int32
     }
 
     open func stringArrayForKey(_ defaultName: String) -> [String]? {
@@ -153,7 +157,7 @@ open class MockProfilePrefs: Prefs {
     }
 
     open func arrayForKey(_ defaultName: String) -> [Any]? {
-        let r: Any? = things.object(forKey: defaultName) as Any?
+        let r: Any? = things.object(forKey: name(defaultName)) as Any?
         if r == nil {
             return nil
         }
@@ -163,7 +167,7 @@ open class MockProfilePrefs: Prefs {
         return nil
     }
 
-    open func dictionaryForKey(_ defaultName: String) -> [String : Any]? {
+    open func dictionaryForKey(_ defaultName: String) -> [String: Any]? {
         return things.object(forKey: name(defaultName)) as? [String: Any]
     }
 
@@ -172,6 +176,8 @@ open class MockProfilePrefs: Prefs {
     }
 
     open func clearAll() {
-        self.things.removeAllObjects()
+        let dictionary = things as! [String: Any]
+        let keysToDelete: [String] = dictionary.keys.filter { $0.hasPrefix(self.prefix) }
+        things.removeObjects(forKeys: keysToDelete)
     }
 }

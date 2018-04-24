@@ -29,20 +29,21 @@ extension SQLiteMetadata: Metadata {
     /// - returns: Deferred on success
     public func storeMetadata(_ metadata: PageMetadata, forPageURL pageURL: URL,
                               expireAt: UInt64) -> Success {
-        guard let cacheKey = SQLiteMetadata.cacheKeyForURL(pageURL as URL) else {
+        guard let cacheKey = pageURL.displayURL?.absoluteString else {
             return succeed()
         }
 
         // Replace any matching cache_key entries if they exist
-        let selectUniqueCacheKey = "COALESCE((SELECT cache_key FROM \(AttachedTablePageMetadata) WHERE cache_key = ?), ?)"
+        let selectUniqueCacheKey = "coalesce((SELECT cache_key FROM page_metadata WHERE cache_key = ?), ?)"
         let args: Args = [cacheKey, cacheKey, metadata.siteURL, metadata.mediaURL, metadata.title,
                           metadata.type, metadata.description, metadata.providerName,
                           expireAt]
 
-        let insert =
-        "INSERT OR REPLACE INTO \(AttachedTablePageMetadata)" +
-        "(cache_key, site_url, media_url, title, type, description, provider_name, expired_at) " +
-        "VALUES ( \(selectUniqueCacheKey), ?, ?, ?, ?, ?, ?, ?)"
+        let insert = """
+            INSERT OR REPLACE INTO page_metadata (
+                cache_key, site_url, media_url, title, type, description, provider_name, expired_at
+            ) VALUES (\(selectUniqueCacheKey), ?, ?, ?, ?, ?, ?, ?)
+            """
 
         return self.db.run(insert, withArgs: args)
     }
@@ -55,9 +56,4 @@ extension SQLiteMetadata: Metadata {
         return self.db.run(sql)
     }
 
-    static func cacheKeyForURL(_ url: URL) -> CacheKey? {
-        var key = url.normalizedHost ?? ""
-        key = key + url.path + (url.query ?? "")
-        return key
-    }
 }

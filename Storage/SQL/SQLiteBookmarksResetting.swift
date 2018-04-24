@@ -38,8 +38,8 @@ extension SQLiteBookmarkBufferStorage: ResettableSyncStorage {
 
     public func wipeBookmarks() -> Success {
         return self.db.run([
-            "DELETE FROM \(TableBookmarksBufferStructure)",
-            "DELETE FROM \(TableBookmarksBuffer)",
+            "DELETE FROM bookmarksBufferStructure",
+            "DELETE FROM bookmarksBuffer",
         ])
     }
 }
@@ -69,46 +69,46 @@ extension SQLiteBookmarks {
         // 2. Drop anything from local that's deleted. We don't need to track the
         //    deletion now. Optional: keep them around if they're non-uploaded changes.
         let removeLocalDeletions =
-        "DELETE FROM \(TableBookmarksLocal) WHERE is_deleted IS 1 " +
+            "DELETE FROM bookmarksLocal WHERE is_deleted IS 1 " +
             (preserveDeletions ? "AND sync_status IS NOT \(SyncStatus.changed.rawValue)" : "")
 
         // 3. Mark everything in local as New.
         let markLocalAsNew =
-        "UPDATE \(TableBookmarksLocal) SET sync_status = \(SyncStatus.new.rawValue)"
+            "UPDATE bookmarksLocal SET sync_status = \(SyncStatus.new.rawValue)"
 
         // 4. Insert into local anything not overridden left in mirror.
         //    Note that we use the server modified time as our substitute local modified time.
         //    This will provide an ounce of conflict avoidance if the user re-links the same
         //    account at a later date.
-        let copyMirrorContents =
-        "INSERT OR IGNORE INTO \(TableBookmarksLocal) " +
-        "(sync_status, local_modified, " +
-        " guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos," +
-        " description, tags, keyword, folderName, queryId, faviconID) " +
-        "SELECT " +
-        "\(SyncStatus.new.rawValue) AS sync_status, " +
-        "server_modified AS local_modified, " +
-        "guid, type, bmkUri, title, parentid, parentName, " +
-        "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, faviconID " +
-        "FROM \(TableBookmarksMirror) WHERE is_overridden IS 0"
+        let copyMirrorContents = """
+            INSERT OR IGNORE INTO bookmarksLocal (
+                sync_status, local_modified, guid, date_added, type, bmkUri, title,
+                parentid, parentName, feedUri, siteUri, pos, description, tags, keyword,
+                folderName, queryId, faviconID
+            )
+            SELECT
+                \(SyncStatus.new.rawValue) AS sync_status, server_modified AS local_modified,
+                guid, date_added, type, bmkUri, title, parentid, parentName, feedUri, siteUri,
+                pos, description, tags, keyword, folderName, queryId, faviconID
+            FROM bookmarksMirror
+            WHERE is_overridden IS 0
+            """
 
         // 5.(pre) I have a database right in front of me that violates an assumption: a full
         // bookmarksMirrorStructure and an empty bookmarksMirror. Clean up, just in case.
         let removeOverriddenStructure =
-        "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN (SELECT guid FROM \(TableBookmarksMirror) WHERE is_overridden IS 1)"
+            "DELETE FROM bookmarksMirrorStructure WHERE parent IN (SELECT guid FROM bookmarksMirror WHERE is_overridden IS 1)"
 
         // 5. Insert into localStructure anything left in mirrorStructure.
         //    This won't copy the structure of any folders that were already overridden --
         //    we already deleted those, and the deletions cascaded.
         let copyMirrorStructure =
-        "INSERT INTO \(TableBookmarksLocalStructure) SELECT * FROM \(TableBookmarksMirrorStructure)"
+            "INSERT INTO bookmarksLocalStructure SELECT * FROM bookmarksMirrorStructure"
 
         // 6. Blank the mirror.
-        let removeMirrorStructure =
-        "DELETE FROM \(TableBookmarksMirrorStructure)"
+        let removeMirrorStructure = "DELETE FROM bookmarksMirrorStructure"
 
-        let removeMirrorContents =
-        "DELETE FROM \(TableBookmarksMirror)"
+        let removeMirrorContents = "DELETE FROM bookmarksMirror"
 
         return db.run([
             deferForeignKeys,

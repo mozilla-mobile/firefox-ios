@@ -7,19 +7,14 @@ import WebKit
 import Shared
 
 struct NoImageModePrefsKey {
-    static let NoImageModeButtonIsInMenu = PrefsKeys.KeyNoImageModeButtonIsInMenu
     static let NoImageModeStatus = PrefsKeys.KeyNoImageModeStatus
 }
 
-class NoImageModeHelper: TabHelper {
+class NoImageModeHelper: TabContentScript {
     fileprivate weak var tab: Tab?
 
     required init(tab: Tab) {
         self.tab = tab
-        if let path = Bundle.main.path(forResource: "NoImageModeHelper", ofType: "js"), let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentStart, forMainFrameOnly: true)
-            tab.webView!.configuration.userContentController.addUserScript(userScript)
-        }
     }
 
     static func name() -> String {
@@ -34,11 +29,15 @@ class NoImageModeHelper: TabHelper {
         // Do nothing.
     }
 
-    static func isNoImageModeAvailable(_ state: AppState) -> Bool {
-        return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeButtonIsInMenu) ?? AppConstants.MOZ_NO_IMAGE_MODE
+    static func isActivated(_ prefs: Prefs) -> Bool {
+        return prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
     }
 
-    static func isNoImageModeActivated(_ state: AppState) -> Bool {
-        return state.prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
+    static func toggle(profile: Profile, tabManager: TabManager) {
+        if #available(iOS 11, *) {
+            let enabled = !isActivated(profile.prefs)
+            profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+            tabManager.tabs.forEach { $0.noImageMode = enabled }
+        }
     }
 }

@@ -8,8 +8,10 @@ import SnapKit
 
 struct ButtonToastUX {
     static let ToastPadding = 15.0
+    static let TitleSpacing = 2.0
     static let ToastButtonPadding: CGFloat = 10.0
-    static let ToastDelay = 0.9
+    static let TitleButtonPadding: CGFloat = 5.0
+    static let ToastDelay = DispatchTimeInterval.milliseconds(900)
     static let ToastButtonBorderRadius: CGFloat = 5
     static let ToastButtonBorderWidth: CGFloat = 1
 }
@@ -17,11 +19,7 @@ struct ButtonToastUX {
 private class HighlightableButton: UIButton {
     override var isHighlighted: Bool {
         didSet {
-            if isHighlighted {
-                self.backgroundColor = UIColor.white
-            } else {
-                self.backgroundColor = UIColor.clear
-            }
+            self.backgroundColor = isHighlighted ? .white : .clear
         }
     }
 }
@@ -37,13 +35,13 @@ class ButtonToast: UIView {
     }()
     fileprivate var animationConstraint: Constraint?
     fileprivate lazy var gestureRecognizer: UITapGestureRecognizer = {
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ButtonToast.handleTap(_:)))
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.cancelsTouchesInView = false
         return gestureRecognizer
     }()
     
     init(labelText: String, descriptionText: String? = nil, buttonText: String, completion:@escaping (_ buttonPressed: Bool) -> Void) {
-        super.init(frame: CGRect.zero)
+        super.init(frame: .zero)
         completionHandler = completion
         
         self.clipsToBounds = true
@@ -75,11 +73,15 @@ class ButtonToast: UIView {
         button.layer.cornerRadius = ButtonToastUX.ToastButtonBorderRadius
         button.layer.borderWidth = ButtonToastUX.ToastButtonBorderWidth
         button.layer.borderColor = UIColor.white.cgColor
-        button.setTitle(buttonText, for: UIControlState())
+        button.setTitle(buttonText, for: [])
         button.setTitleColor(self.toast.backgroundColor, for: .highlighted)
         button.titleLabel?.font = SimpleToastUX.ToastFont
-        
-        let recognizer = UITapGestureRecognizer(target: self, action:#selector(ButtonToast.buttonPressed(_:)))
+        button.titleLabel?.numberOfLines = 1
+        button.titleLabel?.lineBreakMode = .byClipping
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.titleLabel?.minimumScaleFactor = 0.1
+
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(buttonPressed))
         button.addGestureRecognizer(recognizer)
         toast.addSubview(button)
         var descriptionLabel: UILabel?
@@ -87,8 +89,7 @@ class ButtonToast: UIView {
         if let text = descriptionText {
             let textLabel = UILabel()
             textLabel.textColor = UIColor.white
-            label.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultMediumFontSize, weight: UIFontWeightRegular)
-            textLabel.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultMediumFontSize, weight: UIFontWeightRegular)
+            textLabel.font = SimpleToastUX.ToastFont
             textLabel.text = text
             textLabel.lineBreakMode = .byTruncatingTail
             toast.addSubview(textLabel)
@@ -96,21 +97,24 @@ class ButtonToast: UIView {
         }
         
         if let description = descriptionLabel {
+            label.numberOfLines = 1 // if showing a description we cant wrap to the second line
+            label.lineBreakMode = .byClipping
+            label.adjustsFontSizeToFitWidth = true
             label.snp.makeConstraints { (make) in
                 make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
-                make.top.equalTo(toast).offset(ButtonToastUX.ToastButtonPadding)
-                make.trailing.equalTo(button.snp.leading)
+                make.top.equalTo(toast).offset(ButtonToastUX.TitleButtonPadding)
+                make.trailing.equalTo(button.snp.leading).offset(-ButtonToastUX.TitleButtonPadding)
             }
             description.snp.makeConstraints { (make) in
                 make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
-                make.bottom.equalTo(toast).offset(-ButtonToastUX.ToastButtonPadding)
-                make.trailing.equalTo(button.snp.leading)
+                make.top.equalTo(label.snp.bottom).offset(ButtonToastUX.TitleSpacing)
+                make.trailing.equalTo(button.snp.leading).offset(-ButtonToastUX.TitleButtonPadding)
             }
         } else {
             label.snp.makeConstraints { (make) in
                 make.leading.equalTo(toast).offset(ButtonToastUX.ToastPadding)
                 make.centerY.equalTo(toast)
-                make.trailing.equalTo(button.snp.leading)
+                make.trailing.equalTo(button.snp.leading).offset(-ButtonToastUX.TitleButtonPadding)
             }
         }
         
@@ -143,17 +147,16 @@ class ButtonToast: UIView {
         )
     }
     
-    func showToast(duration: Double = SimpleToastUX.ToastDismissAfter) {
+    func showToast(duration: DispatchTimeInterval = SimpleToastUX.ToastDismissAfter) {
         layoutIfNeeded()
         UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration, animations: {
                 self.animationConstraint?.update(offset: 0)
                 self.layoutIfNeeded()
             },
             completion: { finished in
-                let dispatchTime = DispatchTime.now() + Double(Int64(duration * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-                DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                     self.dismiss(false)
-                })
+                }
             }
         )
     }
@@ -168,7 +171,7 @@ class ButtonToast: UIView {
         superview?.addGestureRecognizer(gestureRecognizer)
     }
     
-    func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
+    @objc func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
         dismiss(false)
     }
 }

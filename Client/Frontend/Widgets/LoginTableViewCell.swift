@@ -2,21 +2,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import SnapKit
 import Storage
 
-@objc
 protocol LoginTableViewCellDelegate: class {
     func didSelectOpenAndFillForCell(_ cell: LoginTableViewCell)
     func shouldReturnAfterEditingDescription(_ cell: LoginTableViewCell) -> Bool
+    func infoItemForCell(_ cell: LoginTableViewCell) -> InfoItem?
 }
 
 private struct LoginTableViewCellUX {
     static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
     static let highlightedLabelTextColor = UIConstants.SystemBlueColor
-    static let highlightedLabelEditingTextColor = UIConstants.TableViewHeaderTextColor
+    static let highlightedLabelEditingTextColor = SettingsUX.TableViewHeaderTextColor
 
     static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
     static let descriptionLabelTextColor = UIColor.black
@@ -42,11 +41,39 @@ class LoginTableViewCell: UITableViewCell {
 
     weak var delegate: LoginTableViewCellDelegate?
 
+    // In order for context menu handling, this is required
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        guard let item = delegate?.infoItemForCell(self) else {
+            return false
+        }
+
+        // Menu actions for password
+        if item == .passwordItem {
+            let showRevealOption = self.descriptionLabel.isSecureTextEntry ? (action == MenuHelper.SelectorReveal) : (action == MenuHelper.SelectorHide)
+            return action == MenuHelper.SelectorCopy || showRevealOption
+        }
+
+        // Menu actions for Website
+        if item == .websiteItem {
+            return action == MenuHelper.SelectorCopy || action == MenuHelper.SelectorOpenAndFill
+        }
+
+        // Menu actions for Username
+        if item == .usernameItem {
+            return action == MenuHelper.SelectorCopy
+        }
+        
+        return false
+    }
+
     lazy var descriptionLabel: UITextField = {
         let label = UITextField()
         label.font = LoginTableViewCellUX.descriptionLabelFont
         label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
-        label.textAlignment = .left
         label.backgroundColor = UIColor.white
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
@@ -54,6 +81,7 @@ class LoginTableViewCell: UITableViewCell {
         label.accessibilityElementsHidden = true
         label.adjustsFontSizeToFitWidth = false
         label.delegate = self
+        label.isAccessibilityElement = true
         return label
     }()
 
@@ -64,7 +92,6 @@ class LoginTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
-        label.textAlignment = .left
         label.backgroundColor = UIColor.white
         label.numberOfLines = 1
         return label
@@ -112,10 +139,10 @@ class LoginTableViewCell: UITableViewCell {
         }
 
         let attributes = [
-            NSFontAttributeName: LoginTableViewCellUX.descriptionLabelFont
+            NSAttributedStringKey.font: LoginTableViewCellUX.descriptionLabelFont
         ]
 
-        return descriptionText.size(attributes: attributes)
+        return descriptionText.size(withAttributes: attributes)
     }
 
     var displayDescriptionAsPassword: Bool = false {
@@ -185,9 +212,7 @@ class LoginTableViewCell: UITableViewCell {
         super.layoutSubviews()
 
         // Adjust indent frame
-        var indentFrame = CGRect(
-            origin: CGPoint.zero,
-            size: CGSize(width: LoginTableViewCellUX.indentWidth, height: frame.height))
+        var indentFrame = CGRect(width: LoginTableViewCellUX.indentWidth, height: frame.height)
 
         if !showingIndent {
             indentFrame.origin.x = -LoginTableViewCellUX.indentWidth
@@ -207,38 +232,38 @@ class LoginTableViewCell: UITableViewCell {
         case .iconAndBothLabels:
             iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(LoginTableViewCellUX.IconImageSize)
             }
 
             labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp.right).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(iconImageView.snp.trailing).offset(LoginTableViewCellUX.HorizontalMargin)
             }
 
             highlightedLabel.snp.remakeConstraints { make in
-                make.left.top.equalTo(labelContainer)
+                make.leading.top.equalTo(labelContainer)
                 make.bottom.equalTo(descriptionLabel.snp.top)
                 make.width.equalTo(labelContainer)
             }
 
             descriptionLabel.snp.remakeConstraints { make in
-                make.left.bottom.equalTo(labelContainer)
+                make.leading.bottom.equalTo(labelContainer)
                 make.top.equalTo(highlightedLabel.snp.bottom)
                 make.width.equalTo(labelContainer)
             }
         case .iconAndDescriptionLabel:
             iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(LoginTableViewCellUX.IconImageSize)
             }
 
             labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp.right).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(iconImageView.snp.trailing).offset(LoginTableViewCellUX.HorizontalMargin)
             }
 
             highlightedLabel.snp.remakeConstraints { make in
@@ -246,7 +271,7 @@ class LoginTableViewCell: UITableViewCell {
             }
 
             descriptionLabel.snp.remakeConstraints { make in
-                make.top.left.bottom.equalTo(labelContainer)
+                make.top.leading.bottom.equalTo(labelContainer)
                 make.width.equalTo(labelContainer)
             }
         case .noIconAndBothLabels:
@@ -256,24 +281,24 @@ class LoginTableViewCell: UITableViewCell {
 
             iconImageView.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.left.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
                 make.height.width.equalTo(0)
             }
 
             labelContainer.snp.remakeConstraints { make in
                 make.centerY.equalTo(contentView)
-                make.right.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.left.equalTo(iconImageView.snp.right).offset(editingOffset)
+                make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
+                make.leading.equalTo(iconImageView.snp.trailing).offset(editingOffset)
             }
 
             highlightedLabel.snp.remakeConstraints { make in
-                make.left.top.equalTo(labelContainer)
+                make.leading.top.equalTo(labelContainer)
                 make.bottom.equalTo(descriptionLabel.snp.top)
                 make.width.equalTo(labelContainer)
             }
 
             descriptionLabel.snp.remakeConstraints { make in
-                make.left.bottom.equalTo(labelContainer)
+                make.leading.bottom.equalTo(labelContainer)
                 make.top.equalTo(highlightedLabel.snp.bottom)
                 make.width.equalTo(labelContainer)
             }

@@ -3,13 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-
 import Shared
 import Storage
 import XCGLogger
 import Deferred
-
-private let log = Logger.browserLogger
 
 private typealias SectionNumber = Int
 private typealias CategoryNumber = Int
@@ -24,7 +21,7 @@ private struct HistoryPanelUX {
 }
 
 private func getDate(_ dayOffset: Int) -> Date {
-    let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+    let calendar = Calendar(identifier: .gregorian)
     let nowComponents = (calendar as NSCalendar).components([.year, .month, .day], from: Date())
     let today = calendar.date(from: nowComponents)!
     return (calendar as NSCalendar).date(byAdding: NSCalendar.Unit.day, value: dayOffset, to: today, options: [])!
@@ -34,8 +31,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     private var currentSyncedDevicesCount: Int?
 
-    var events = [NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged]
+    var events: [Notification.Name] = [.FirefoxAccountChanged, .PrivateDataClearedHistory, .DynamicFontChanged]
     var refreshControl: UIRefreshControl?
+
+    fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+    }()
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
     private let QueryLimit = 100
@@ -54,21 +55,18 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Lifecycle
     init() {
         super.init(nibName: nil, bundle: nil)
-        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(HistoryPanel.notificationReceived(_:)), name: $0, object: nil) }
+        events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        events.forEach { NotificationCenter.default.removeObserver(self, name: $0, object: nil) }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "History List"
-        updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
+        updateSyncedDevicesCount().uponQueue(.main) { result in
             self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
         }
     }
@@ -84,11 +82,27 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         } else if refreshControl?.isRefreshing == false {
             removeRefreshControl()
         }
-        updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
-            self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
+
+        if profile.hasSyncableAccount() {
+            syncDetailText = " "
+            updateSyncedDevicesCount().uponQueue(.main) { result in
+                self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
+            }
+        } else {
+            syncDetailText = ""
         }
     }
 
+    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == .began else { return }
+        let touchPoint = longPressGestureRecognizer.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
+
+        if indexPath.section != 0 {
+            presentContextMenu(for: indexPath)
+        }
+    }
+    
     // MARK: - History Data Store
     func updateNumberOfSyncedDevices(_ count: Int?) {
         if let count = count, count > 0 {
@@ -106,14 +120,16 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    func notificationReceived(_ notification: Notification) {
+    @objc func notificationReceived(_ notification: Notification) {
+        reloadData()
+
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
+        case .FirefoxAccountChanged, .PrivateDataClearedHistory:
             if self.profile.hasSyncableAccount() {
                 resyncHistory()
             }
             break
-        case NotificationDynamicFontChanged:
+        case .DynamicFontChanged:
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
@@ -122,7 +138,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             break
         default:
             // no need to do anything at all
-            log.warning("Received unexpected notification \(notification.name)")
+            print("Error: Received unexpected notification \(notification.name)")
             break
         }
     }
@@ -137,14 +153,14 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func resyncHistory() {
-        profile.syncManager.syncHistory().uponQueue(DispatchQueue.main) { result in
+        profile.syncManager.syncHistory().uponQueue(.main) { result in
             if result.isSuccess {
                 self.reloadData()
             } else {
                 self.endRefreshing()
             }
 
-            self.updateSyncedDevicesCount().uponQueue(DispatchQueue.main) { result in
+            self.updateSyncedDevicesCount().uponQueue(.main) { result in
                 self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
             }
         }
@@ -152,14 +168,14 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     // MARK: - Refreshing TableView
     func addRefreshControl() {
-        let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(HistoryPanel.refresh), for: UIControlEvents.valueChanged)
-        self.refreshControl = refresh
-        self.tableView.addSubview(refresh)
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.refreshControl = control
+        self.tableView.refreshControl = control
     }
 
     func removeRefreshControl() {
-        self.refreshControl?.removeFromSuperview()
+        self.tableView.refreshControl = nil
         self.refreshControl = nil
     }
 
@@ -179,7 +195,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     override func reloadData() {
-        self.fetchData().uponQueue(DispatchQueue.main) { result in
+        self.fetchData().uponQueue(.main) { result in
             if let data = result.successValue {
                 self.setData(data)
                 self.tableView.reloadData()
@@ -212,7 +228,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
         welcomeLabel.text = Strings.HistoryPanelEmptyStateTitle
-        welcomeLabel.textAlignment = NSTextAlignment.center
+        welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         welcomeLabel.textColor = HistoryPanelUX.WelcomeScreenItemTextColor
         welcomeLabel.numberOfLines = 0
@@ -250,19 +266,17 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 section += 1
             }
             if count > 0 {
-                log.debug("Category \(i) has \(count) rows, and thus is section \(section).")
                 self.categories.append((section: section, rows: count, offset: offset))
                 sectionLookup[section] = i
                 offset += count
                 section += 1
             } else {
-                log.debug("Category \(i) has 0 rows, and thus has no section.")
                 self.categories.append((section: nil, rows: 0, offset: offset))
             }
         }
     }
 
-    private func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
+    fileprivate func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
         let offset = self.categories[sectionLookup[indexPath.section]!].offset
         return data[indexPath.row + offset]
     }
@@ -302,7 +316,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - TableView Delegate / DataSource
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        cell.accessoryType = UITableViewCellAccessoryType.none
+        cell.accessoryType = .none
 
         if indexPath.section == 0 {
             cell.imageView!.layer.borderWidth = 0
@@ -313,7 +327,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func configureRecentlyClosed(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        cell.accessoryType = .disclosureIndicator
         cell.textLabel!.text = Strings.RecentlyClosedTabsButtonTitle
         cell.detailTextLabel!.text = ""
         cell.imageView!.image = UIImage(named: "recently_closed")
@@ -323,15 +337,17 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             cell.imageView!.alpha = 0.5
             cell.selectionStyle = .none
         }
+        cell.accessibilityIdentifier = "HistoryPanel.recentlyClosedCell"
         return cell
     }
 
     func configureSyncedTabs(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+        cell.accessoryType = .disclosureIndicator
         cell.textLabel!.text = Strings.SyncedTabsTableViewCellTitle
         cell.detailTextLabel!.text = self.syncDetailText
         cell.imageView!.image = UIImage(named: "synced_devices")
-        cell.imageView?.backgroundColor = UIColor.white
+        cell.imageView?.backgroundColor = .white
+        cell.accessibilityIdentifier = "HistoryPanel.syncedDevicesCell"
         return cell
     }
 
@@ -342,24 +358,25 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             cell.imageView!.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
             cell.imageView!.layer.borderWidth = HistoryPanelUX.IconBorderWidth
             cell.imageView?.setIcon(site.icon, forURL: site.tileURL, completed: { (color, url) in
-                cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
-                cell.imageView?.contentMode = .center
+                if site.tileURL == url {
+                    cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
+                    cell.imageView?.backgroundColor = color
+                    cell.imageView?.contentMode = .center
+                }
             })
         }
         return cell
     }
 
-    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         var count = 1
-        for category in self.categories {
-            if category.rows > 0 {
-                count += 1
-            }
+        for category in self.categories where category.rows > 0 {
+            count += 1
         }
         return count
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAtIndexPath indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             self.tableView.deselectRow(at: indexPath, animated: true)
             return indexPath.row == 0 ? self.showRecentlyClosed() : self.showSyncedTabs()
@@ -371,7 +388,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             }
             return
         }
-        log.warning("No site or no URL when selecting row.")
+        print("Error: No site or no URL when selecting row.")
+    }
+
+    func pinTopSite(_ site: Site) {
+        _ = profile.history.addPinnedTopSite(site).value
     }
 
     func showSyncedTabs() {
@@ -428,100 +449,125 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return self.categories[uiSectionToCategory(section)].rows
     }
 
-    func tableView(_ tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
-    func tableView(_ tableView: UITableView, editActionsForRowAtIndexPath indexPath: IndexPath) -> [AnyObject]? {
-        if indexPath.section == 0 {
-            return []
-        }
-        let title = NSLocalizedString("Remove", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
+    fileprivate func removeHistoryForURLAtIndexPath(indexPath: IndexPath) {
+        if let site = self.siteForIndexPath(indexPath) {
+            // Why the dispatches? Because we call success and failure on the DB
+            // queue, and so calling anything else that calls through to the DB will
+            // deadlock. This problem will go away when the history API switches to
+            // Deferred instead of using callbacks.
+            self.profile.history.removeHistoryForURL(site.url)
+                .upon { res in
+                    self.fetchData().uponQueue(.main) { result in
+                        // If a section will be empty after removal, we must remove the section itself.
+                        if let data = result.successValue {
 
-        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: title, handler: { (action, indexPath) in
-            if let site = self.siteForIndexPath(indexPath) {
-                // Why the dispatches? Because we call success and failure on the DB
-                // queue, and so calling anything else that calls through to the DB will
-                // deadlock. This problem will go away when the history API switches to
-                // Deferred instead of using callbacks.
-                self.profile.history.removeHistoryForURL(site.url)
-                    .upon { res in
-                        self.fetchData().uponQueue(DispatchQueue.main) { result in
-                            // If a section will be empty after removal, we must remove the section itself.
-                            if let data = result.successValue {
+                            let oldCategories = self.categories
+                            self.data = data
+                            self.computeSectionOffsets()
 
-                                let oldCategories = self.categories
-                                self.data = data
-                                self.computeSectionOffsets()
+                            let sectionsToDelete = NSMutableIndexSet()
+                            var rowsToDelete = [IndexPath]()
+                            let sectionsToAdd = NSMutableIndexSet()
+                            var rowsToAdd = [IndexPath]()
 
-                                let sectionsToDelete = NSMutableIndexSet()
-                                var rowsToDelete = [IndexPath]()
-                                let sectionsToAdd = NSMutableIndexSet()
-                                var rowsToAdd = [IndexPath]()
+                            for (index, category) in self.categories.enumerated() {
+                                let oldCategory = oldCategories[index]
 
-                                for (index, category) in self.categories.enumerated() {
-                                    let oldCategory = oldCategories[index]
+                                // don't bother if we're not displaying this category
+                                if oldCategory.section == nil && category.section == nil {
+                                    continue
+                                }
 
-                                    // don't bother if we're not displaying this category
-                                    if oldCategory.section == nil && category.section == nil {
-                                        continue
-                                    }
+                                // 1. add a new section if the section didn't previously exist
+                                if oldCategory.section == nil && category.section != oldCategory.section {
+                                    sectionsToAdd.add(category.section!)
+                                }
 
-                                    // 1. add a new section if the section didn't previously exist
-                                    if oldCategory.section == nil && category.section != oldCategory.section {
-                                        log.debug("adding section \(category.section ?? 0)")
-                                        sectionsToAdd.add(category.section!)
-                                    }
+                                // 2. add a new row if there are more rows now than there were before
+                                if oldCategory.rows < category.rows {
+                                    rowsToAdd.append(IndexPath(row: category.rows-1, section: category.section!))
+                                }
 
-                                    // 2. add a new row if there are more rows now than there were before
-                                    if oldCategory.rows < category.rows {
-                                        log.debug("adding row to \(category.section ?? 0)) at \(category.rows-1)")
-                                        rowsToAdd.append(IndexPath(row: category.rows-1, section: category.section!))
-                                    }
-
-                                    // if we're dealing with the section where the row was deleted:
-                                    // 1. if the category no longer has a section, then we need to delete the entire section
-                                    // 2. delete a row if the number of rows has been reduced
-                                    // 3. delete the selected row and add a new one on the bottom of the section if the number of rows has stayed the same
-                                    if oldCategory.section == indexPath.section {
-                                        if category.section == nil {
-                                            log.debug("deleting section \(indexPath.section)")
-                                            sectionsToDelete.add(indexPath.section)
-                                        } else if oldCategory.section == category.section {
-                                            if oldCategory.rows > category.rows {
-                                                log.debug("deleting row from \(category.section ?? 0) at \(indexPath.row)")
-                                                rowsToDelete.append(indexPath)
-                                            } else if category.rows == oldCategory.rows {
-                                                log.debug("in section \(category.section ?? 0), removing row at \(indexPath.row) and inserting row at \(category.rows-1)")
-                                                rowsToDelete.append(indexPath)
-                                                rowsToAdd.append(IndexPath(row: category.rows-1, section: indexPath.section))
-                                            }
+                                // if we're dealing with the section where the row was deleted:
+                                // 1. if the category no longer has a section, then we need to delete the entire section
+                                // 2. delete a row if the number of rows has been reduced
+                                // 3. delete the selected row and add a new one on the bottom of the section if the number of rows has stayed the same
+                                if oldCategory.section == indexPath.section {
+                                    if category.section == nil {
+                                        sectionsToDelete.add(indexPath.section)
+                                    } else if oldCategory.section == category.section {
+                                        if oldCategory.rows > category.rows {
+                                            rowsToDelete.append(indexPath)
+                                        } else if category.rows == oldCategory.rows {
+                                            rowsToDelete.append(indexPath)
+                                            rowsToAdd.append(IndexPath(row: category.rows-1, section: indexPath.section))
                                         }
                                     }
                                 }
-
-                                tableView.beginUpdates()
-                                if sectionsToAdd.count > 0 {
-                                    tableView.insertSections(sectionsToAdd as IndexSet, with: UITableViewRowAnimation.left)
-                                }
-                                if sectionsToDelete.count > 0 {
-                                    tableView.deleteSections(sectionsToDelete as IndexSet, with: UITableViewRowAnimation.right)
-                                }
-                                if !rowsToDelete.isEmpty {
-                                    tableView.deleteRows(at: rowsToDelete, with: UITableViewRowAnimation.right)
-                                }
-
-                                if !rowsToAdd.isEmpty {
-                                    tableView.insertRows(at: rowsToAdd, with: UITableViewRowAnimation.right)
-                                }
-
-                                tableView.endUpdates()
-                                self.updateEmptyPanelState()
                             }
+
+                            self.tableView.beginUpdates()
+                            if sectionsToAdd.count > 0 {
+                                self.tableView.insertSections(sectionsToAdd as IndexSet, with: .left)
+                            }
+                            if sectionsToDelete.count > 0 {
+                                self.tableView.deleteSections(sectionsToDelete as IndexSet, with: .right)
+                            }
+                            if !rowsToDelete.isEmpty {
+                                self.tableView.deleteRows(at: rowsToDelete, with: .right)
+                            }
+
+                            if !rowsToAdd.isEmpty {
+                                self.tableView.insertRows(at: rowsToAdd, with: .right)
+                            }
+                            
+                            self.tableView.endUpdates()
+                            self.updateEmptyPanelState()
                         }
-                }
+                    }
             }
+        }
+    }
+
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        if indexPath.section == 0 {
+            return []
+        }
+        let title = NSLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
+
+        let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
+            self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
         })
         return [delete]
+    }
+}
+
+extension HistoryPanel: HomePanelContextMenu {
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
+        guard let contextMenu = completionHandler() else { return }
+        self.present(contextMenu, animated: true, completion: nil)
+    }
+
+    func getSiteDetails(for indexPath: IndexPath) -> Site? {
+        return siteForIndexPath(indexPath)
+    }
+
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
+        guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
+
+        let removeAction = PhotonActionSheetItem(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
+            self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
+        })
+
+        let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+            self.pinTopSite(site)
+        })
+        actions.append(pinTopSite)
+        actions.append(removeAction)
+        return actions
     }
 }

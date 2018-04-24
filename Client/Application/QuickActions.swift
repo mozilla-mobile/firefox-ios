@@ -12,6 +12,7 @@ enum ShortcutType: String {
     case newTab = "NewTab"
     case newPrivateTab = "NewPrivateTab"
     case openLastBookmark = "OpenLastBookmark"
+    case qrCode = "QRCode"
 
     init?(fullType: String) {
         guard let last = fullType.components(separatedBy: ".").last else { return nil }
@@ -101,7 +102,7 @@ class QuickActions: NSObject {
         return true
     }
 
-    fileprivate func handleShortCutItemOfType(_ type: ShortcutType, userData: [String : NSSecureCoding]?, browserViewController: BrowserViewController) {
+    fileprivate func handleShortCutItemOfType(_ type: ShortcutType, userData: [String: NSSecureCoding]?, browserViewController: BrowserViewController) {
         switch type {
         case .newTab:
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: false)
@@ -113,11 +114,13 @@ class QuickActions: NSObject {
             if let urlToOpen = (userData?[QuickActions.TabURLKey] as? String)?.asURL {
                 handleOpenURL(withBrowserViewController: browserViewController, urlToOpen: urlToOpen)
             }
+        case .qrCode:
+            handleQRCode(with: browserViewController)
         }
     }
 
     fileprivate func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController, isPrivate: Bool) {
-        bvc.openBlankNewTab(isPrivate: isPrivate)
+        bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
     }
 
     fileprivate func handleOpenURL(withBrowserViewController bvc: BrowserViewController, urlToOpen: URL) {
@@ -128,5 +131,12 @@ class QuickActions: NSObject {
         // if so, open to that tab,
         // otherwise, create a new tab with the bookmarked URL
         bvc.switchToTabForURLOrOpen(urlToOpen, isPrivileged: true)
+    }
+    
+    fileprivate func handleQRCode(with vc: QRCodeViewControllerDelegate & UIViewController) {
+        let qrCodeViewController = QRCodeViewController()
+        qrCodeViewController.qrCodeDelegate = vc
+        let controller = UINavigationController(rootViewController: qrCodeViewController)
+        vc.present(controller, animated: true, completion: nil)
     }
 }

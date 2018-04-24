@@ -8,7 +8,7 @@ import Shared
 
 import XCTest
 
-// TODO: rewrite this test to not use BrowserTable. It used to use HistoryTable…
+// TODO: rewrite this test to not use BrowserSchema. It used to use HistoryTable…
 class TestSwiftData: XCTestCase {
     var swiftData: SwiftData?
     var urlCounter = 1
@@ -21,19 +21,12 @@ class TestSwiftData: XCTestCase {
         } catch _ {
         }
         testDB = (try! (files.getAndEnsureDirectory() as NSString)).appendingPathComponent("testSwiftData.db")
-        swiftData = SwiftData(filename: testDB)
-        let table = BrowserTable()
+        swiftData = SwiftData(filename: testDB, schema: BrowserSchema(), files: files)
+        let table = BrowserSchema()
 
         // Ensure static flags match expected values.
         XCTAssert(SwiftData.ReuseConnections, "Reusing database connections")
         XCTAssert(SwiftData.EnableWAL, "WAL enabled")
-
-        let _ = swiftData!.withConnection(SwiftData.Flags.readWriteCreate) { db in
-            let f = FaviconsTable<Favicon>()
-            let _ = f.create(db)    // Because BrowserTable needs it.
-            let _ = table.create(db)
-            return nil
-        }
 
         XCTAssertNil(addSite(table, url: "http://url0", title: "title0"), "Added url0.")
     }
@@ -89,19 +82,20 @@ class TestSwiftData: XCTestCase {
         XCTAssertNil(writeDuringRead(true), "Insertion succeeded")
     }
 
-    fileprivate func writeDuringRead(_ safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> NSError? {
+    fileprivate func writeDuringRead(_ safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> MaybeErrorType? {
 
         // Query the database and hold the cursor.
         var c: Cursor<SDRow>!
-        let error = swiftData!.withConnection(SwiftData.Flags.readOnly) { db in
+        let result = swiftData!.withConnection(SwiftData.Flags.readOnly) { db -> Void in
             if safeQuery {
                 c = db.executeQuery("SELECT * FROM history", factory: { $0 })
             } else {
                 c = db.executeQueryUnsafe("SELECT * FROM history", factory: { $0 }, withArgs: nil)
             }
-            return nil
+            return ()
         }
-        XCTAssertNil(error, "Queried database")
+
+        XCTAssertNil(result.value.failureValue, "Queried database")
 
         // If we have a live cursor, this will step to the first result.
         // Stepping through a prepared statement without resetting it will lock the connection.
@@ -116,14 +110,16 @@ class TestSwiftData: XCTestCase {
         }
 
         defer { urlCounter += 1 }
-        return addSite(BrowserTable(), url: "http://url/\(urlCounter)", title: "title\(urlCounter)")
+        return addSite(BrowserSchema(), url: "http://url/\(urlCounter)", title: "title\(urlCounter)")
     }
 
-    fileprivate func addSite(_ table: BrowserTable, url: String, title: String) -> NSError? {
-        return swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> NSError? in
+    fileprivate func addSite(_ table: BrowserSchema, url: String, title: String) -> MaybeErrorType? {
+        let result = swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> Void in
             let args: Args = [Bytes.generateGUID(), url, title]
-            return connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
+            try connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
         }
+        
+        return result.value.failureValue
     }
 
     func testEncrypt() {
@@ -135,25 +131,47 @@ class TestSwiftData: XCTestCase {
         } catch _ {
         }
         let path = testDB
-        func verifyData(_ swiftData: SwiftData) -> NSError? {
-            return swiftData.withConnection(SwiftData.Flags.readOnly) { db in
-                return nil
+        func verifyData(_ swiftData: SwiftData) -> MaybeErrorType? {
+            let resultDeferred = swiftData.withConnection(SwiftData.Flags.readOnly) { db -> Void in
+                return ()
             }
+            return resultDeferred.value.failureValue
         }
 
-        XCTAssertNotNil(SwiftData(filename: path!), "Connected to unencrypted database")
+        XCTAssertNotNil(SwiftData(filename: path!, schema: BrowserSchema(), files: files), "Connected to unencrypted database")
 
         // Encrypt the database.
-        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret")), "Encrypted database")
+        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret", schema: BrowserSchema(), files: files)), "Encrypted database")
 
         // Now change the encryption key.
-        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret2", prevKey: "Secret")), "Re-encrypted database")
+        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret2", prevKey: "Secret", schema: BrowserSchema(), files: files)), "Re-encrypted database")
 
         // Changing the encryption without the prevKey should fail.
-        XCTAssertNotNil(verifyData(SwiftData(filename: path!)), "Failed decrypting database")
+        XCTAssertNotNil(verifyData(SwiftData(filename: path!, schema: BrowserSchema(), files: files)), "Failed decrypting database")
 
         // Now remove the encryption key.
-        XCTAssertNil(verifyData(SwiftData(filename: path!, prevKey: "Secret2")), "Decrypted database")
+        XCTAssertNil(verifyData(SwiftData(filename: path!, prevKey: "Secret2", schema: BrowserSchema(), files: files)), "Decrypted database")
+    }
+
+    func testNulls() {
+        guard let db = swiftData else {
+            XCTFail("DB not open")
+            return
+        }
+        db.withConnection(SwiftData.Flags.readWriteCreate) { db in
+            try! db.executeChange("CREATE TABLE foo ( bar TEXT, baz INTEGER )")
+            try! db.executeChange("INSERT INTO foo VALUES (NULL, 1), ('here', 2)")
+            let shouldBeString = db.executeQuery("SELECT bar FROM foo WHERE baz = 2", factory: { (row) in row["bar"] }).asArray()[0]
+            guard let s = shouldBeString as? String else {
+                XCTFail("Couldn't cast.")
+                return
+            }
+            XCTAssertEqual(s, "here")
+
+            let shouldBeNull = db.executeQuery("SELECT bar FROM foo WHERE baz = 1", factory: { (row) in row["bar"] }).asArray()[0]
+            XCTAssertNil(shouldBeNull as? String)
+            XCTAssertNil(shouldBeNull)
+        }.succeeded()
     }
 
     func testArrayCursor() {

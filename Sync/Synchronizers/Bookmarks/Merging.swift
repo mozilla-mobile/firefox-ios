@@ -72,7 +72,7 @@ open class BookmarksMergeResult: PerhapsNoOp {
 
 // MARK: - Errors.
 
-open class BookmarksMergeError: MaybeErrorType {
+open class BookmarksMergeError: MaybeErrorType, SyncPingFailureFormattable {
     fileprivate let error: Error?
 
     init(error: Error?=nil) {
@@ -81,6 +81,10 @@ open class BookmarksMergeError: MaybeErrorType {
 
     open var description: String {
         return "Merge error: \(self.error ??? "nil")"
+    }
+
+    open var failureReasonName: SyncPingFailureReasonName {
+        return .otherError
     }
 }
 
@@ -102,7 +106,7 @@ open class BookmarksMergeErrorTreeIsUnrooted: BookmarksMergeConsistencyError {
     }
 }
 
-enum MergeState<T> {
+enum MergeState<T: Equatable>: Equatable {
     case unknown              // Default state.
     case unchanged            // Nothing changed: no work needed.
     case remote               // Take the associated remote value.
@@ -137,22 +141,19 @@ enum MergeState<T> {
             return "New"
         }
     }
-}
 
-func ==<T: Equatable>(lhs: MergeState<T>, rhs: MergeState<T>) -> Bool {
-    switch (lhs, rhs) {
-    case (.unknown, .unknown):
-        return true
-    case (.unchanged, .unchanged):
-        return true
-    case (.remote, .remote):
-        return true
-    case (.local, .local):
-        return true
-    case let (.new(lh), .new(rh)):
-        return lh == rh
-    default:
-        return false
+    static func ==(lhs: MergeState, rhs: MergeState) -> Bool {
+        switch (lhs, rhs) {
+        case (.unknown, .unknown),
+             (.unchanged, .unchanged),
+             (.remote, .remote),
+             (.local, .local):
+            return true
+        case let (.new(lh), .new(rh)):
+            return lh == rh
+        default:
+            return false
+        }
     }
 }
 

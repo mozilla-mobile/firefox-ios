@@ -10,19 +10,11 @@ class L10nIntroSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testIntro() {
-        let app = XCUIApplication()
-        snapshot("Intro-1")
-        app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        sleep(2)
-        snapshot("Intro-2")
-        app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        sleep(2)
-        snapshot("Intro-3")
-        app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        sleep(2)
-        snapshot("Intro-4")
-        app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        sleep(2)
-        snapshot("01Intro-5")
+        var num = 1
+        allIntroPages.forEach { screenName in
+            navigator.goto(screenName)
+            snapshot("Intro-\(num)-\(screenName)")
+            num += 1
+        }
     }
 }

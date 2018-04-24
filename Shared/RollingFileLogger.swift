@@ -8,7 +8,7 @@ import XCGLogger
 //// A rolling file logger that saves to a different log file based on given timestamp.
 open class RollingFileLogger: XCGLogger {
 
-    fileprivate static let TwoMBsInBytes: Int64 = 2 * 100000
+    public static let TwoMBsInBytes: Int64 = 2 * 100000
     fileprivate let sizeLimit: Int64
     fileprivate let logDirectoryPath: String?
 
@@ -62,7 +62,7 @@ open class RollingFileLogger: XCGLogger {
         }
 
         let files = try FileManager.default.contentsOfDirectoryAtPath(logPath, withFilenamePrefix: root)
-        return files.flatMap { filename in
+        return files.compactMap { filename in
             if let url = URL(string: "\(logPath)/\(filename)") {
                 return (filename, url)
             }

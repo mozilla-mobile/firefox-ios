@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import Shared
 import SwiftKeychainWrapper
@@ -12,19 +11,23 @@ private let logger = Logger.browserLogger
 
 private func presentNavAsFormSheet(_ presented: UINavigationController, presenter: UINavigationController?, settings: AuthenticationSettingsViewController?) {
     presented.modalPresentationStyle = .formSheet
-    presenter?.present(presented, animated: true, completion: {
+    presenter?.present(presented, animated: true) {
         if let selectedRow = settings?.tableView.indexPathForSelectedRow {
             settings?.tableView.deselectRow(at: selectedRow, animated: false)
         }
-    })
+    }
 }
 
 class TurnPasscodeOnSetting: Setting {
     weak var settings: AuthenticationSettingsViewController?
 
+    override var accessibilityIdentifier: String? {
+        return "TurnOnPasscode"
+    }
+
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
         self.settings = settings as? AuthenticationSettingsViewController
-        super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOnPasscode),
+        super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOnPasscode, enabled: true),
                    delegate: delegate)
     }
 
@@ -38,9 +41,13 @@ class TurnPasscodeOnSetting: Setting {
 class TurnPasscodeOffSetting: Setting {
     weak var settings: AuthenticationSettingsViewController?
 
+    override var accessibilityIdentifier: String? {
+        return "TurnOffPasscode"
+    }
+
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil) {
         self.settings = settings as? AuthenticationSettingsViewController
-        super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOffPasscode),
+        super.init(title: NSAttributedString.tableRowTitle(AuthenticationStrings.turnOffPasscode, enabled: true),
                    delegate: delegate)
     }
 
@@ -54,12 +61,14 @@ class TurnPasscodeOffSetting: Setting {
 class ChangePasscodeSetting: Setting {
     weak var settings: AuthenticationSettingsViewController?
 
+    override var accessibilityIdentifier: String? {
+        return "ChangePasscode"
+    }
+
     init(settings: SettingsTableViewController, delegate: SettingsDelegate? = nil, enabled: Bool) {
         self.settings = settings as? AuthenticationSettingsViewController
 
-        let attributedTitle: NSAttributedString = enabled ?
-            NSAttributedString.tableRowTitle(AuthenticationStrings.changePasscode) :
-            NSAttributedString.disabledTableRowTitle(AuthenticationStrings.changePasscode)
+        let attributedTitle: NSAttributedString = NSAttributedString.tableRowTitle(AuthenticationStrings.changePasscode, enabled: enabled)
 
         super.init(title: attributedTitle,
                    delegate: delegate,
@@ -78,6 +87,10 @@ class RequirePasscodeSetting: Setting {
 
     fileprivate weak var navigationController: UINavigationController?
 
+    override var accessibilityIdentifier: String? {
+        return "PasscodeInterval"
+    }
+
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
 
     override var style: UITableViewCellStyle { return .value1 }
@@ -86,7 +99,7 @@ class RequirePasscodeSetting: Setting {
         // Only show the interval if we are enabled and have an interval set.
         let authenticationInterval = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
         if let interval = authenticationInterval?.requiredPasscodeInterval, enabled {
-            return NSAttributedString.disabledTableRowTitle(interval.settingTitle)
+            return NSAttributedString.tableRowTitle(interval.settingTitle, enabled: false)
         }
         return NSAttributedString(string: "")
     }
@@ -96,7 +109,7 @@ class RequirePasscodeSetting: Setting {
         self.settings = settings as? AuthenticationSettingsViewController
 
         let title = AuthenticationStrings.requirePasscode
-        let attributedTitle = (enabled ?? true) ? NSAttributedString.tableRowTitle(title) : NSAttributedString.disabledTableRowTitle(title)
+        let attributedTitle = NSAttributedString.tableRowTitle(title, enabled: enabled ?? true)
         super.init(title: attributedTitle,
                    delegate: delegate,
                    enabled: enabled)
@@ -182,7 +195,7 @@ class TouchIDSetting: Setting {
         let accessoryContainer = UIView(frame: control.frame)
         accessoryContainer.addSubview(control)
 
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(TouchIDSetting.switchTapped))
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(switchTapped))
         accessoryContainer.addGestureRecognizer(gesture)
 
         cell.accessoryView = accessoryContainer
@@ -220,18 +233,11 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         updateTitleForTouchIDState()
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AuthenticationSettingsViewController.refreshSettings(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .PasscodeDidRemove, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .PasscodeDidCreate, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .UIApplicationDidBecomeActive, object: nil)
 
         tableView.accessibilityIdentifier = "AuthenticationManager.settingsTableView"
-    }
-
-    deinit {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name(rawValue: NotificationPasscodeDidCreate), object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -243,8 +249,15 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
     }
 
     fileprivate func updateTitleForTouchIDState() {
-        if LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
-            navigationItem.title = AuthenticationStrings.touchIDPasscodeSetting
+        let localAuthContext = LAContext()
+        if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
+            let title: String
+            if #available(iOS 11.0, *), localAuthContext.biometryType == .faceID {
+                title = AuthenticationStrings.faceIDPasscodeSetting
+            } else {
+                title = AuthenticationStrings.touchIDPasscodeSetting
+            }
+            navigationItem.title = title
         } else {
             navigationItem.title = AuthenticationStrings.passcode
         }
@@ -262,11 +275,15 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         var requirePasscodeSectionChildren: [Setting] = [RequirePasscodeSetting(settings: self)]
         let localAuthContext = LAContext()
         if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
+            let title: String
+            if #available(iOS 11.0, *), localAuthContext.biometryType == .faceID {
+                title = Strings.UseFaceID
+            } else {
+                title = Strings.UseTouchID
+            }
             requirePasscodeSectionChildren.append(
                 TouchIDSetting(
-                    title: NSAttributedString.tableRowTitle(
-                        NSLocalizedString("Use Touch ID", tableName:  "AuthenticationManager", comment: "List section title for when to use Touch ID")
-                    ),
+                    title: NSAttributedString.tableRowTitle(title, enabled: true),
                     navigationController: self.navigationController,
                     delegate: nil,
                     enabled: true,
@@ -312,7 +329,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
 }
 
 extension AuthenticationSettingsViewController {
-    func refreshSettings(_ notification: Notification) {
+    @objc func refreshSettings(_ notification: Notification) {
         updateTitleForTouchIDState()
         settings = generateSettings()
         tableView.reloadData()

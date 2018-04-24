@@ -16,8 +16,8 @@ struct TodayStrings {
     static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
 }
 
-struct TodayUX {
-    static let privateBrowsingColor = UIColor(colorString: "CE6EFC")
+private struct TodayUX {
+    static let privateBrowsingColor = UIColor(rgb: 0xCE6EFC)
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
     static let linkTextSize: CGFloat = 10.0
     static let labelTextSize: CGFloat = 14.0
@@ -25,11 +25,12 @@ struct TodayUX {
     static let copyLinkImageWidth: CGFloat = 23
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
-    static let iOS9LeftMargin: CGFloat = 40
 }
 
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding {
+
+    var copiedURL: URL?
 
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
@@ -79,13 +80,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
-        if #available(iOS 10, *) {
-            // no custom margin needed
-        } else {
-            button.imageView?.snp.updateConstraints { make in
-                make.left.equalTo(button.snp.left).offset(TodayUX.iOS9LeftMargin)
-            }
-        }
         return button
     }()
 
@@ -123,22 +117,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // on iOS10 widgetView will be a UIVisualEffectView and on ios9 it will just be the main self.view
         let widgetView: UIView!
-        if #available(iOSApplicationExtension 10.0, *) {
-            self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
-            let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
-            self.view.addSubview(effectView)
-            effectView.snp.makeConstraints { make in
-                make.edges.equalTo(self.view)
-            }
-            widgetView = effectView.contentView
-        } else {
-            widgetView = self.view
-            self.view.tintColor = UIColor.white
-            openCopiedLinkButton.label.textColor = UIColor.white
+        self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
+        let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
+        self.view.addSubview(effectView)
+        effectView.snp.makeConstraints { make in
+            make.edges.equalTo(self.view)
         }
-
+        widgetView = effectView.contentView
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
 
@@ -162,16 +148,21 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func widgetMarginInsets(forProposedMarginInsets defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
-        return UIEdgeInsets.zero
+        return .zero
     }
 
     func updateCopiedLink() {
-        if let url = UIPasteboard.general.copiedURL {
-            self.openCopiedLinkButton.isHidden = false
-            self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
-            self.openCopiedLinkButton.subtitleLabel.text = url.absoluteString
-        } else {
-            self.openCopiedLinkButton.isHidden = true
+        UIPasteboard.general.asyncURL().uponQueue(.main) { res in
+            if let copiedURL: URL? = res.successValue,
+                let url = copiedURL {
+                self.openCopiedLinkButton.isHidden = false
+                self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
+                self.openCopiedLinkButton.subtitleLabel.text = url.absoluteDisplayString
+                self.copiedURL = url
+            } else {
+                self.openCopiedLinkButton.isHidden = true
+                self.copiedURL = nil
+            }
         }
     }
 
@@ -185,17 +176,15 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     fileprivate func openContainingApp(_ urlSuffix: String = "") {
-        let urlString = "\(scheme)://\(urlSuffix)"
+        let urlString = "\(scheme)://open-url\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
         }
     }
 
     @objc func onPressOpenClibpoard(_ view: UIView) {
-        if let urlString = UIPasteboard.general.string,
-            let _ = URL(string: urlString) {
-            let encodedString =
-                urlString.escape()
+        if let url = copiedURL,
+            let encodedString = url.absoluteString.escape() {
             openContainingApp("?url=\(encodedString)")
         }
     }
@@ -203,7 +192,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
 extension UIButton {
     func setBackgroundColor(_ color: UIColor, forState state: UIControlState) {
-        let colorView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        let colorView = UIView(frame: CGRect(width: 1, height: 1))
         colorView.backgroundColor = color
 
         UIGraphicsBeginImageContext(colorView.bounds.size)
@@ -264,7 +253,7 @@ class ButtonWithSublabel: UIButton {
     }
 
     convenience init() {
-        self.init(frame: CGRect.zero)
+        self.init(frame: .zero)
     }
 
     override init(frame: CGRect) {

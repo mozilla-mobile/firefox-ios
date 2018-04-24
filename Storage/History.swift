@@ -24,19 +24,25 @@ public protocol BrowserHistory {
     @discardableResult func removeHistoryForURL(_ url: String) -> Success
     func removeSiteFromTopSites(_ site: Site) -> Success
     func removeHostFromTopSites(_ host: String) -> Success
-
-    func getSitesByFrecencyWithHistoryLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
-    func getSitesByFrecencyWithHistoryLimit(_ limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
-    func getSitesByFrecencyWithHistoryLimit(_ limit: Int, bookmarksLimit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
+    func getFrecentHistory() -> FrecentHistory
     func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
-
     func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
     func setTopSitesNeedsInvalidation()
-    func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>>
     func setTopSitesCacheSize(_ size: Int32)
     func clearTopSitesCache() -> Success
-    @discardableResult func refreshTopSitesCache() -> Success
-    func areTopSitesDirty(withLimit limit: Int) -> Deferred<Maybe<Bool>>
+
+    // Pinning top sites
+    func removeFromPinnedTopSites(_ site: Site) -> Success
+    func addPinnedTopSite(_ site: Site) -> Success
+    func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>>
+}
+
+/**
+ * An interface for fast repeated frecency queries.
+ */
+public protocol FrecentHistory {
+    func getSites(whereURLContains filter: String?, historyLimit limit: Int, bookmarksLimit: Int) -> Deferred<Maybe<Cursor<Site>>>
+    func updateTopSitesCacheQuery() -> (String, Args?)
 }
 
 /**
@@ -44,8 +50,10 @@ public protocol BrowserHistory {
  */
 public protocol HistoryRecommendations {
     func getHighlights() -> Deferred<Maybe<Cursor<Site>>>
+    func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
+
     func removeHighlightForURL(_ url: String) -> Success
-    func invalidateHighlights() -> Success
+    func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success
 }
 
 /**

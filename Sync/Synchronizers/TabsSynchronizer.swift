@@ -13,8 +13,8 @@ private let log = Logger.syncLogger
 let TabsStorageVersion = 1
 
 open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
-    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
-        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "tabs")
+    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, why: SyncReason) {
+        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, why: why, collection: "tabs")
     }
 
     override var storageVersion: Int {
@@ -37,7 +37,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
         let tabsJSON = JSON([
             "id": guid,
             "clientName": self.scratchpad.clientName,
-            "tabs": tabs.flatMap { $0.toDictionary() }
+            "tabs": tabs.compactMap { $0.toDictionary() }
         ])
         if Logger.logPII {
             log.verbose("Sending tabs JSON \(tabsJSON.stringValue() ?? "nil")")
@@ -163,8 +163,8 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
 
             if !self.remoteHasChanges(info) {
                 // upload local tabs if they've changed or we're in a fresh start.
-                let _ = uploadOurTabs(localTabs, toServer: tabsClient)
-                return deferMaybe(completedWithStats)
+                return uploadOurTabs(localTabs, toServer: tabsClient)
+                    >>> { deferMaybe(self.completedWithStats) }
             }
 
             return tabsClient.getSince(self.lastFetched)
@@ -192,7 +192,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
 
 extension RemoteTab {
     public func toDictionary() -> Dictionary<String, Any>? {
-        let tabHistory = history.flatMap { $0.absoluteString }
+        let tabHistory = history.compactMap { $0.absoluteString }
         if tabHistory.isEmpty {
             return nil
         }

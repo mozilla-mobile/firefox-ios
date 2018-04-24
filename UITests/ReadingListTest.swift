@@ -13,17 +13,19 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         super.setUp()
         // We undo the localhost/127.0.0.1 switch in order to get 'localhost' in accessibility labels.
         webRoot = SimplePageServer.start()
-            .replacingOccurrences(of: "127.0.0.1", with: "localhost", options: NSString.CompareOptions(), range: nil)
+            .replacingOccurrences(of: "127.0.0.1", with: "localhost")
+        BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
     
     func enterUrl(url: String) {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\(url)\n"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
     }
     
     func waitForReadingList() {
-        let readingList = GREYCondition(name: "wait until Reading List Add btn appears", block: { _ in
+        let readingList = GREYCondition(name: "wait until Reading List Add btn appears", block: {
             var errorOrNil: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel("Add to Reading List"),
                                               grey_sufficientlyVisible()])
@@ -37,15 +39,14 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     }
     
     func waitForEmptyReadingList() {
-        let readable = GREYCondition(name: "Check readable list is empty", block: { _ in
-            var errorOrNil: NSError?
-            let matcher = grey_allOf([grey_accessibilityLabel("Readable page"),
+        let readable = GREYCondition(name: "Check readable list is empty", block: {
+            var error: NSError?
+            let matcher = grey_allOf([grey_accessibilityLabel("Save pages to your Reading List by tapping the book plus icon in the Reader View controls."),
                                               grey_sufficientlyVisible()])
             EarlGrey.select(elementWithMatcher: matcher)
-                .assert(grey_notNil(), error: &errorOrNil)
+                .assert(grey_notNil(), error: &error)
             
-            let success = errorOrNil != nil
-            return success
+            return error == nil
         }).wait(withTimeout: 10)
         GREYAssertTrue(readable, reason: "Read list should not appear")
     }
@@ -93,12 +94,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
             .perform(grey_tap())
         
         waitForEmptyReadingList()
-        
-        EarlGrey.select(elementWithMatcher:
-            grey_allOf([grey_accessibilityLabel("Cancel"),
-                                grey_accessibilityTrait(UIAccessibilityTraitButton),
-                                grey_sufficientlyVisible()]))
-            .perform(grey_tap())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
     }
     
     func testReadingListAutoMarkAsRead() {
@@ -120,9 +116,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
             .perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Reading list"))
             .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("MarkAsRead"))
-            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
-            .assert(grey_notNil())
+        tester().waitForView(withAccessibilityLabel: "Readable page, unread, localhost")
         // Select to Read
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("localhost"))
             .perform(grey_tap())
@@ -136,27 +130,28 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         
         // Make sure the article is marked as read
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Readable page"))
-            .assert(grey_notNil())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("MarkAsUnread"))
             .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
             .assert(grey_notNil())
+        tester().waitForView(withAccessibilityLabel: "Readable page, read, localhost")
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("localhost"))
             .assert(grey_notNil())
         
         // Remove the list entry
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Readable page"))
+            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
             .perform(grey_swipeSlowInDirection(GREYDirection.left))
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Remove"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UITableViewCellActionButton")!))
+            .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
             .perform(grey_tap())
         
         // check the entry no longer exist
         waitForEmptyReadingList()
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
     }
     
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
-        BrowserUtils.clearPrivateData(tester: tester())
+        BrowserUtils.resetToAboutHome()
+        BrowserUtils.clearPrivateData()
         super.tearDown()
     }
 }

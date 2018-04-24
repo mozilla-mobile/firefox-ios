@@ -8,7 +8,7 @@ public protocol AccessibilityActionsSource: class {
     func accessibilityCustomActionsForView(_ view: UIView) -> [UIAccessibilityCustomAction]?
 }
 
-open class AccessibleAction {
+open class AccessibleAction: NSObject {
     open let name: String
     open let handler: () -> Bool
 
@@ -19,19 +19,19 @@ open class AccessibleAction {
 }
 
 extension AccessibleAction { // UIAccessibilityCustomAction
-    @objc private func SELperformAccessibilityAction() -> Bool {
+    @objc private func performAccessibilityAction() -> Bool {
         return handler()
     }
 
     public var accessibilityCustomAction: UIAccessibilityCustomAction {
-        return UIAccessibilityCustomAction(name: name, target: self, selector: #selector(AccessibleAction.SELperformAccessibilityAction))
+        return UIAccessibilityCustomAction(name: name, target: self, selector: #selector(performAccessibilityAction))
     }
 }
 
 extension AccessibleAction { // UIAlertAction
     private var alertActionHandler: (UIAlertAction!) -> Void {
         return { (_: UIAlertAction!) -> Void in
-            let _ = self.handler()
+            _ = self.handler()
         }
     }
 

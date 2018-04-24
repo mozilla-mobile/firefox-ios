@@ -12,7 +12,7 @@ private struct PrintedPageUX {
 
 class TabPrintPageRenderer: UIPrintPageRenderer {
     fileprivate weak var tab: Tab?
-    let textAttributes = [NSFontAttributeName: PrintedPageUX.PageTextFont]
+    let textAttributes = [NSAttributedStringKey.font: PrintedPageUX.PageTextFont]
     let dateString: String
 
     required init(tab: Tab) {
@@ -58,7 +58,7 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
     }
 
     func drawTextAtPoint(_ text: String, rect: CGRect, onLeft: Bool) {
-        let size = text.size(attributes: textAttributes)
+        let size = text.size(withAttributes: textAttributes)
         let x, y: CGFloat
         if onLeft {
             x = rect.minX

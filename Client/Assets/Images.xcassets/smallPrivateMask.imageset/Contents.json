@@ -2,7 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "mask.pdf"
+      "filename" : "new-private-tab.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "new-private-tab@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "new-private-tab@3x.png",
+      "scale" : "3x"
     }
   ],
   "info" : {

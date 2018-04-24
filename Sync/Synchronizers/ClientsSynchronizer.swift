@@ -50,12 +50,15 @@ open class WipeCommand: Command {
 open class DisplayURICommand: Command {
     let uri: URL
     let title: String
+    let sender: String
 
     public init?(command: String, args: [JSON]) {
         if let uri = args[0].string?.asURL,
+            let sender = args[1].string,
             let title = args[2].string {
-                self.uri = uri
-                self.title = title
+            self.uri = uri
+            self.sender = sender
+            self.title = title
         } else {
             // Oh, Swift.
             self.uri = "http://localhost/".asURL!
@@ -69,8 +72,18 @@ open class DisplayURICommand: Command {
     }
 
     open func run(_ synchronizer: ClientsSynchronizer) -> Success {
-        synchronizer.delegate.displaySentTabForURL(uri, title: title)
-        return succeed()
+        func display(_ deviceName: String? = nil) -> Success {
+            synchronizer.delegate.displaySentTab(for: uri, title: title, from: deviceName)
+            return succeed()
+        }
+
+        guard let sender = synchronizer.localClients?.getClient(guid: sender) else {
+            return display()
+        }
+
+        return sender >>== { client in
+            return display(client?.name)
+        }
     }
 
     open static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
@@ -83,6 +96,32 @@ open class DisplayURICommand: Command {
     }
 }
 
+open class RepairResponseCommand: Command {
+    let repairResponse: RepairResponse
+
+    public init(command: String, args: [JSON]) {
+        self.repairResponse = RepairResponse.fromJSON(args: args[0])
+    }
+
+    open class func fromName(_ command: String, args: [JSON]) -> Command? {
+        return RepairResponseCommand(command: command, args: args)
+    }
+
+    open func run(_ synchronizer: ClientsSynchronizer) -> Success {
+        let repairer = BookmarksRepairRequestor(scratchpad: synchronizer.scratchpad, basePrefs: synchronizer.basePrefs, remoteClients: synchronizer.localClients!)
+        return repairer.continueRepairs(response: self.repairResponse) >>> succeed
+    }
+
+    open static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
+        let json = JSON(parseJSON: syncCommand.value)
+        if let name = json["command"].string,
+            let args = json["args"].array {
+            return RepairResponseCommand.fromName(name, args: args)
+        }
+        return nil
+    }
+}
+
 let Commands: [String: (String, [JSON]) -> Command?] = [
     "wipeAll": WipeCommand.fromName,
     "wipeEngine": WipeCommand.fromName,
@@ -90,12 +129,15 @@ let Commands: [String: (String, [JSON]) -> Command?] = [
     // resetAll
     // logout
     "displayURI": DisplayURICommand.fromName,
+    "repairResponse": RepairResponseCommand.fromName
 ]
 
 open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
-    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
-        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "clients")
+    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, why: SyncReason) {
+        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, why: why, collection: "clients")
     }
+
+    var localClients: RemoteClientsAndTabs?
 
     override var storageVersion: Int {
         return ClientsStorageVersion
@@ -121,16 +163,17 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         let guid = self.scratchpad.clientGUID
         let formfactor = formFactorString()
         
-        let json = JSON(object: [
+        let json = JSON([
             "id": guid,
+            "fxaDeviceId": self.scratchpad.fxaDeviceId,
             "version": AppInfo.appVersion,
             "protocols": ["1.5"],
             "name": self.scratchpad.clientName,
             "os": "iOS",
             "commands": [JSON](),
             "type": "mobile",
-            "appPackage": Bundle.main.bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
-            "application": DeviceInfo.appName(),
+            "appPackage": AppInfo.baseBundleIdentifier,
+            "application": AppInfo.displayName,
             "device": DeviceInfo.deviceModel(),
             "formfactor": formfactor])
 
@@ -283,7 +326,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         }
     }
 
-    fileprivate func applyStorageResponse(_ response: StorageResponse<[Record<ClientPayload>]>, toLocalClients localClients: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
+    fileprivate func applyStorageResponse(_ response: StorageResponse<[Record<ClientPayload>]>, toLocalClients localClients: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>, notifier: CollectionChangedNotifier?) -> Success {
         log.debug("Applying clients response.")
 
         var downloadStats = SyncDownloadStats()
@@ -329,21 +372,28 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             }
             >>== { self.processCommandsFromRecord(ours, withServer: storageClient) }
             >>== { (shouldUpload, commands) in
-                return self.maybeUploadOurRecord(shouldUpload, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
+                let isFirstSync = self.lastFetched == 0
+                let ourRecordDidChange = self.why == .didLogin || self.why == .clientNameChanged
+                return self.maybeUploadOurRecord(shouldUpload || ourRecordDidChange, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
                     >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: storageClient) }
                     >>> {
                         log.debug("Running \(commands.count) commands.")
-                        for (command) in commands {
-                            let _ = command.run(self)
+                        for command in commands {
+                            _ = command.run(self)
                         }
                         self.lastFetched = responseTimestamp!
+                        if isFirstSync,
+                           let notifier = notifier {
+                            DispatchQueue.global(qos: DispatchQoS.background.qosClass).async { _ = notifier.notifyAll(collectionsChanged: ["clients"], reason: "firstsync") }
+                        }
                         return succeed()
                 }
         }
     }
 
-    open func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
+    open func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections, notifier: CollectionChangedNotifier?) -> SyncResult {
         log.debug("Synchronizing clients.")
+        self.localClients = localClients // Store for later when we process a repairResponse command
 
         if let reason = self.reasonToNotSync(storageClient) {
             switch reason {
@@ -365,22 +415,18 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
         let clientsClient = storageClient.clientForCollection(self.collection, encrypter: encrypter!)
 
-        if !self.remoteHasChanges(info) {
-            log.debug("No remote changes for clients. (Last fetched \(self.lastFetched).)")
-            statsSession.start()
-            return self.maybeUploadOurRecord(false, ifUnmodifiedSince: nil, toServer: clientsClient)
-                >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: clientsClient) }
-                >>> { deferMaybe(self.completedWithStats) }
-        }
-
         // TODO: some of the commands we process might involve wiping collections or the
         // entire profile. We should model this as an explicit status, and return it here
         // instead of .completed.
         statsSession.start()
-        return clientsClient.getSince(self.lastFetched)
+        // XXX: This is terrible. We always force a re-sync of the clients to work around
+        // the fact that `fxaDeviceId` may not have been populated if the list of clients
+        // hadn't changed since before the update to v8.0. To force a re-sync, we get all
+        // clients since the beginning of time instead of looking at `self.lastFetched`.
+        return clientsClient.getSince(0)
             >>== { response in
                 return self.wipeIfNecessary(localClients)
-                    >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient) }
+                    >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient, notifier: notifier) }
             }
             >>> { deferMaybe(self.completedWithStats) }
     }

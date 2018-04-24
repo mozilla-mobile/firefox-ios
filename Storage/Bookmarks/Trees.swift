@@ -8,8 +8,7 @@ import Shared
 private let log = Logger.syncLogger
 
 // MARK: - Defining a tree structure for syncability.
-
-public enum BookmarkTreeNode: Equatable {
+public enum BookmarkTreeNode: Comparable {
     indirect case folder(guid: GUID, children: [BookmarkTreeNode])
     case nonFolder(guid: GUID)
     case unknown(guid: GUID)
@@ -61,40 +60,39 @@ public enum BookmarkTreeNode: Equatable {
     }
 
     // Returns false for unknowns.
-    public func isSameTypeAs(_ other: BookmarkTreeNode) -> Bool {
-        switch self {
-        case .folder:
-            if case .folder = other {
-                return true
-            }
-        case .nonFolder:
-            if case .nonFolder = other {
-                return true
-            }
+    public func isSameType(as other: BookmarkTreeNode) -> Bool {
+        switch (self, other) {
+        case (.folder, .folder),
+             (.nonFolder, .nonFolder):
+            return true
         default:
             return false
         }
-        return false
     }
-}
 
-public func == (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
-    switch lhs {
-    case let .folder(guid, children):
-        if case let .folder(rguid, rchildren) = rhs {
-            return guid == rguid && children == rchildren
+    public static func == (lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
+        switch lhs {
+        case let .folder(guid, children):
+            if case let .folder(rguid, rchildren) = rhs {
+                return guid == rguid && children == rchildren
+            }
+            return false
+        case let .nonFolder(guid):
+            if case let .nonFolder(rguid) = rhs {
+                return guid == rguid
+            }
+            return false
+        case let .unknown(guid):
+            if case let .unknown(rguid) = rhs {
+                return guid == rguid
+            }
+            return false
         }
-        return false
-    case let .nonFolder(guid):
-        if case let .nonFolder(rguid) = rhs {
-            return guid == rguid
-        }
-        return false
-    case let .unknown(guid):
-        if case let .unknown(rguid) = rhs {
-            return guid == rguid
-        }
-        return false
+
+    }
+
+    public static func <(lhs: BookmarkTreeNode, rhs: BookmarkTreeNode) -> Bool {
+        return lhs.recordGUID < rhs.recordGUID
     }
 }
 

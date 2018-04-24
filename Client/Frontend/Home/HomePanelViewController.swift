@@ -2,21 +2,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Shared
 import SnapKit
 import UIKit
-import Storage        // For VisitType.
+import Storage
 
 private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 40
     static let ButtonContainerBorderColor = UIColor.black.withAlphaComponent(0.1)
-    static let BackgroundColorNormalMode = UIConstants.PanelBackgroundColor
     static let BackgroundColorPrivateMode = UIConstants.PrivateModeAssistantToolbarBackgroundColor
-    static let EditDoneButtonRightPadding: CGFloat = -12
     static let ToolbarButtonDeselectedColorNormalMode = UIColor(white: 0.2, alpha: 0.5)
     static let ToolbarButtonDeselectedColorPrivateMode = UIColor(white: 0.9, alpha: 1)
+    static let ButtonHighlightLineHeight: CGFloat = 2
+    static let ButtonSelectionAnimationDuration = 0.2
 }
 
 protocol HomePanelViewControllerDelegate: class {
@@ -27,28 +26,23 @@ protocol HomePanelViewControllerDelegate: class {
     func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
 }
 
-@objc
 protocol HomePanel: class {
     weak var homePanelDelegate: HomePanelDelegate? { get set }
-    @objc optional func endEditing()
 }
 
 struct HomePanelUX {
     static let EmptyTabContentOffset = -180
 }
 
-@objc
 protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(_ homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(_ homePanel: HomePanel)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func homePanel(_ homePanel: HomePanel, didSelectURL url: URL, visitType: VisitType)
     func homePanel(_ homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType)
-    @objc optional func homePanelWillEnterEditingMode(_ homePanel: HomePanel)
 }
 
 struct HomePanelState {
-    var isPrivate: Bool = false
     var selectedIndex: Int = 0
 }
 
@@ -59,75 +53,61 @@ enum HomePanelType: Int {
     case readingList = 3
 
     var localhostURL: URL {
-        return URL(string:"#panel=\(self.rawValue)", relativeTo: UIConstants.AboutHomePage as URL)!
+        return URL(string: "#panel=\(self.rawValue)", relativeTo: UIConstants.AboutHomePage as URL)!
     }
 }
 
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
+
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [HomePanelDescriptor]!
     var url: URL?
     weak var delegate: HomePanelViewControllerDelegate?
-    weak var appStateDelegate: AppStateDelegate?
 
-    fileprivate var buttonContainerView: UIView!
+    fileprivate var buttonContainerView = UIStackView()
     fileprivate var buttonContainerBottomBorderView: UIView!
     fileprivate var controllerContainerView: UIView!
     fileprivate var buttons: [UIButton] = []
+    fileprivate var highlightLine = UIView() //The line underneath a panel button that shows which one is selected
 
-    fileprivate var finishEditingButton: UIButton?
-    fileprivate var editingPanel: HomePanel?
-
-    var isPrivateMode: Bool = false {
-        didSet {
-            if oldValue != isPrivateMode {
-                self.buttonContainerView.backgroundColor = isPrivateMode ? HomePanelViewControllerUX.BackgroundColorPrivateMode : HomePanelViewControllerUX.BackgroundColorNormalMode
-                self.updateButtonTints()
-                self.updateAppState()
-            }
-        }
-    }
+    fileprivate var buttonTintColor: UIColor?
+    fileprivate var buttonSelectedTintColor: UIColor?
 
     var homePanelState: HomePanelState {
-        return HomePanelState(isPrivate: isPrivateMode, selectedIndex: selectedPanel?.rawValue ?? 0)
+        return HomePanelState(selectedIndex: selectedPanel?.rawValue ?? 0)
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = HomePanelViewControllerUX.BackgroundColorNormalMode
-
-        let blur: UIVisualEffectView? = DeviceInfo.isBlurSupported() ? UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.light)) : nil
-
-        if let blur = blur {
-            view.addSubview(blur)
-        }
-
-        buttonContainerView = UIView()
-        buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColorNormalMode
+        view.backgroundColor = UIConstants.AppBackgroundColor
+        
+        buttonContainerView.axis = .horizontal
+        buttonContainerView.alignment = .fill
+        buttonContainerView.distribution = .fillEqually
+        buttonContainerView.spacing = 14
         buttonContainerView.clipsToBounds = true
         buttonContainerView.accessibilityNavigationStyle = .combined
         buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).")
         view.addSubview(buttonContainerView)
-
+        buttonContainerView.addSubview(highlightLine)
+        
         self.buttonContainerBottomBorderView = UIView()
-        buttonContainerView.addSubview(buttonContainerBottomBorderView)
+        self.view.addSubview(buttonContainerBottomBorderView)
         buttonContainerBottomBorderView.backgroundColor = HomePanelViewControllerUX.ButtonContainerBorderColor
 
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
 
-        blur?.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
-
         buttonContainerView.snp.makeConstraints { make in
-            make.top.left.right.equalTo(self.view)
+            make.top.equalTo(self.view)
+            make.leading.trailing.equalTo(self.view).inset(14)
             make.height.equalTo(HomePanelViewControllerUX.ButtonContainerHeight)
         }
 
         buttonContainerBottomBorderView.snp.makeConstraints { make in
             make.top.equalTo(self.buttonContainerView.snp.bottom).offset(-1)
-            make.left.right.bottom.equalTo(self.buttonContainerView)
+            make.bottom.equalTo(self.buttonContainerView)
+            make.leading.trailing.equalToSuperview()
         }
 
         controllerContainerView.snp.makeConstraints { make in
@@ -139,20 +119,12 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         updateButtons()
 
         // Gesture recognizer to dismiss the keyboard in the URLBarView when the buttonContainerView is tapped
-        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(HomePanelViewController.SELhandleDismissKeyboardGestureRecognizer(_:)))
+        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
-
-        // Invalidate our activity stream data sources whenever we open up the home panels
-        self.profile.panelDataObservers.activityStream.invalidate(highlights: false)
     }
 
-    fileprivate func updateAppState() {
-        let state = mainStore.updateState(.homePanels(homePanelState: homePanelState))
-        self.appStateDelegate?.appDidUpdateState(state)
-    }
-
-    func SELhandleDismissKeyboardGestureRecognizer(_ gestureRecognizer: UITapGestureRecognizer) {
+    @objc func dismissKeyboard(_ gestureRecognizer: UITapGestureRecognizer) {
         view.window?.rootViewController?.view.endEditing(true)
     }
 
@@ -194,7 +166,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 }
             }
             self.updateButtonTints()
-            self.updateAppState()
         }
     }
 
@@ -205,7 +176,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+        return .lightContent
     }
 
     fileprivate func hideCurrentPanel() {
@@ -230,63 +201,59 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         panel.didMove(toParentViewController: self)
     }
 
-    func SELtappedButton(_ sender: UIButton!) {
-        for (index, button) in buttons.enumerated() {
-            if button == sender {
-                selectedPanel = HomePanelType(rawValue: index)
-                delegate?.homePanelViewController(self, didSelectPanel: index)
-                break
+    @objc func tappedButton(_ sender: UIButton!) {
+        for (index, button) in buttons.enumerated() where button == sender {
+            selectedPanel = HomePanelType(rawValue: index)
+            delegate?.homePanelViewController(self, didSelectPanel: index)
+            if selectedPanel == .bookmarks {
+                UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .bookmarksPanel, value: .homePanelTabButton)
             }
+            break
         }
-    }
-
-    func endEditing(_ sender: UIButton!) {
-        toggleEditingMode(false)
-        editingPanel?.endEditing?()
-        editingPanel = nil
     }
 
     fileprivate func updateButtons() {
-        // Remove any existing buttons if we're rebuilding the toolbar.
-        for button in buttons {
-            button.removeFromSuperview()
-        }
-        buttons.removeAll()
-
-        var prev: UIView? = nil
         for panel in panels {
             let button = UIButton()
-            buttonContainerView.addSubview(button)
-            button.addTarget(self, action: #selector(HomePanelViewController.SELtappedButton(_:)), for: UIControlEvents.touchUpInside)
+            button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
             if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)") {
-                button.setImage(image, for: UIControlState.normal)
+                button.setImage(image, for: .normal)
             }
-            if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)Selected") {
-                button.setImage(image, for: UIControlState.selected)
-            }
+            button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 4, right: 0)
             button.accessibilityLabel = panel.accessibilityLabel
             button.accessibilityIdentifier = panel.accessibilityIdentifier
             buttons.append(button)
-
-            button.snp.remakeConstraints { make in
-                let left = prev?.snp.right ?? self.view.snp.left
-                make.left.equalTo(left)
-                make.height.centerY.equalTo(self.buttonContainerView)
-                make.width.equalTo(self.buttonContainerView).dividedBy(self.panels.count)
-            }
-
-            prev = button
+            self.buttonContainerView.addArrangedSubview(button)
         }
     }
     
     func updateButtonTints() {
+        var selectedbutton: UIView?
         for (index, button) in self.buttons.enumerated() {
             if index == self.selectedPanel?.rawValue {
-                button.tintColor = isPrivateMode ? UIConstants.PrivateModePurple : UIConstants.HighlightBlue
+                button.tintColor = self.buttonSelectedTintColor
+                selectedbutton = button
             } else {
-                button.tintColor = isPrivateMode ? HomePanelViewControllerUX.ToolbarButtonDeselectedColorPrivateMode : HomePanelViewControllerUX.ToolbarButtonDeselectedColorNormalMode
+                button.tintColor = self.buttonTintColor
             }
         }
+        guard let button = selectedbutton else {
+            return
+        }
+
+        // Calling this before makes sure that only the highlightline animates and not the homepanels
+        self.view.setNeedsUpdateConstraints()
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: HomePanelViewControllerUX.ButtonSelectionAnimationDuration, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: {
+            self.highlightLine.snp.remakeConstraints { make in
+                make.leading.equalTo(button.snp.leading)
+                make.trailing.equalTo(button.snp.trailing)
+                make.bottom.equalToSuperview()
+                make.height.equalTo(HomePanelViewControllerUX.ButtonHighlightLineHeight)
+            }
+            self.view.setNeedsUpdateConstraints()
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
 
     func homePanel(_ homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType) {
@@ -296,8 +263,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         // (e.g., "http://foo.com/bar/?query=%s"), and this will get them the same behavior as if
         // they'd copied and pasted into the URL bar.
         // See BrowserViewController.urlBar:didSubmitText:.
-        guard let url = URIFixup.getURL(url) ??
-                        profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
+        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
             Logger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
             return
         }
@@ -321,40 +287,57 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
+}
 
-    func homePanelWillEnterEditingMode(_ homePanel: HomePanel) {
-        editingPanel = homePanel
-        toggleEditingMode(true)
+// MARK: UIAppearance
+extension HomePanelViewController: Themeable {
+    func applyTheme(_ theme: Theme) {
+        buttonContainerView.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
+        view.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
+        buttonTintColor = UIColor.HomePanel.ToolbarTint.colorFor(theme)
+        buttonSelectedTintColor = UIColor.HomePanel.ToolbarHighlight.colorFor(theme)
+        highlightLine.backgroundColor = UIColor.HomePanel.ToolbarHighlight.colorFor(theme)
+        updateButtonTints()
+    }
+}
+
+protocol HomePanelContextMenu {
+    func getSiteDetails(for indexPath: IndexPath) -> Site?
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]?
+    func presentContextMenu(for indexPath: IndexPath)
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?)
+}
+
+extension HomePanelContextMenu {
+    func presentContextMenu(for indexPath: IndexPath) {
+        guard let site = getSiteDetails(for: indexPath) else { return }
+
+        presentContextMenu(for: site, with: indexPath, completionHandler: {
+            return self.contextMenu(for: site, with: indexPath)
+        })
     }
 
-    func toggleEditingMode(_ editing: Bool) {
-        let translateDown = CGAffineTransform(translationX: 0, y: UIConstants.ToolbarHeight)
-        let translateUp = CGAffineTransform(translationX: 0, y: -UIConstants.ToolbarHeight)
+    func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
+        guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
 
-        if editing {
-            let button = UIButton(type: UIButtonType.system)
-            button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), for: UIControlState())
-            button.addTarget(self, action: #selector(HomePanelViewController.endEditing(_:)), for: UIControlEvents.touchUpInside)
-            button.transform = translateDown
-            button.titleLabel?.textAlignment = .right
-            button.tintColor = self.isPrivateMode ? UIConstants.PrivateModeActionButtonTintColor : UIConstants.SystemBlueColor
-            self.buttonContainerView.addSubview(button)
-            button.snp.makeConstraints { make in
-                make.right.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonRightPadding)
-                make.centerY.equalTo(self.buttonContainerView)
-            }
-            self.buttonContainerView.layoutIfNeeded()
-            finishEditingButton = button
+        let contextMenu = PhotonActionSheet(site: site, actions: actions)
+        contextMenu.modalPresentationStyle = .overFullScreen
+        contextMenu.modalTransitionStyle = .crossDissolve
+
+        return contextMenu
+    }
+
+    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonActionSheetItem]? {
+        guard let siteURL = URL(string: site.url) else { return nil }
+
+        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { action in
+            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
 
-        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: { () -> Void in
-            self.buttons.forEach { $0.transform = editing ? translateUp : CGAffineTransform.identity }
-            self.finishEditingButton?.transform = editing ? CGAffineTransform.identity : translateDown
-        }, completion: { _ in
-            if !editing {
-                self.finishEditingButton?.removeFromSuperview()
-                self.finishEditingButton = nil
-            }
-        })
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
+            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }
+
+        return [openInNewTabAction, openInNewPrivateTabAction]
     }
 }

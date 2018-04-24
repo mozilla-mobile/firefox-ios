@@ -2,12 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Shared
 import WebKit
 import UIKit
 import EarlGrey
 import GCDWebServers
+@testable import Client
 
 class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
@@ -16,12 +16,12 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
+        BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
 
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
-        BrowserUtils.clearPrivateData(tester: tester())
+        BrowserUtils.resetToAboutHome()
     }
 
     func visitSites(noOfSites: Int) -> [(title: String, domain: String, dispDomain: String, url: String)] {
@@ -29,8 +29,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         for pageNo in 1...noOfSites {
             let url = "\(webRoot!)/numberedPage.html?page=\(pageNo)"
             EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
-                .perform(grey_typeText("\(url)\n"))
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+            EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
 
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
             let dom = URL(string: url)!.normalizedHost!
@@ -40,7 +40,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             = ("Page \(pageNo)", dom, dispDom, url)
             urls.append(tuple)
         }
-        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.resetToAboutHome()
         return urls
     }
 
@@ -73,8 +73,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testRemembersToggles() {
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe:false, tester: tester())
-        BrowserUtils.openClearPrivateDataDialog(false, tester: tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe:false)
+        BrowserUtils.openClearPrivateDataDialog(false)
 
         // Ensure the toggles match our settings.
         [
@@ -87,81 +87,44 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             .waitForView(withAccessibilityLabel: clearable.rawValue, value: switchValue, traits: UIAccessibilityTraitNone))
         }
 
-        BrowserUtils.closeClearPrivateDataDialog(tester())
-    }
-
-    func testClearsTopSitesPanel() {
-        let urls = visitSites(noOfSites: 2)
-        let dispDomains = Set<String>(urls.map { $0.dispDomain })
-        let fullDomains = Set<String>(urls.map { $0.domain })
-        var errorOrNil: NSError?
-        
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Top sites")).perform(grey_tap())
-        
-        // Only one will be found -- we collapse by domain.
-        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
-
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[0].title))
-            .assert(grey_notNil(), error: &errorOrNil)
-        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
-        GREYInteractionErrorCode.elementNotFoundErrorCode,
-        "Expected to have removed top site panel \(urls[0])")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(urls[1].title))
-            .assert(grey_notNil(), error: &errorOrNil)
-        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
-        GREYInteractionErrorCode.elementNotFoundErrorCode,
-        "We shouldn't find the other URL, either.")
-    }
-
-    func testDisabledHistoryDoesNotClearTopSitesPanel() {
-        let urls = visitSites(noOfSites: 2)
-        let dispDomains = Set<String>(urls.map { $0.dispDomain })
-        let fullDomains = Set<String>(urls.map { $0.domain })
-
-        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false, tester: tester())
-        anyDomainsExistOnTopSites(dispDomains, fulldomains: fullDomains)
+        BrowserUtils.closeClearPrivateDataDialog()
     }
 
     func testClearsHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
-        var errorOrNil: NSError?
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
         let url1 = urls[0].url
         let url2 = urls[1].url
-        
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1)).assert(grey_notNil())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2)).assert(grey_notNil())
+        tester().waitForView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().waitForView(withAccessibilityLabel: url1)
+        tester().waitForView(withAccessibilityLabel: url2)
 
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false, tester: tester())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
-        
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
-            .assert(grey_notNil(), error: &errorOrNil)
-        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
-        GREYInteractionErrorCode.elementNotFoundErrorCode,
-                       "Expected to have removed history row \(url1)")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2))
-            .assert(grey_notNil(), error: &errorOrNil)
-        XCTAssertEqual(GREYInteractionErrorCode(rawValue: errorOrNil!.code),
-        GREYInteractionErrorCode.elementNotFoundErrorCode,
-                       "Expected to have removed history row \(url2)")
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false)
+        tester().tapView(withAccessibilityLabel: "Bookmarks")
+        tester().tapView(withAccessibilityLabel: "History")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: url1)
+        tester().waitForAbsenceOfView(withAccessibilityLabel: url2)
     }
 
     func testDisabledHistoryDoesNotClearHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
         var errorOrNil: NSError?
 
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
         let url1 = urls[0].url
         let url2 = urls[1].url
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1)).assert(grey_notNil())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2)).assert(grey_notNil())
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false, tester: tester())
-        
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false)
+        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
+
+        let historyListShown = GREYCondition(name: "Wait for history to appear", block: {
+            var errorOrNil: NSError?
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
+                .assert(grey_notNil(), error: &errorOrNil)
+            let success = errorOrNil == nil
+            return success
+        }).wait(withTimeout: 20)
+        GREYAssertTrue(historyListShown, reason: "Failed to display history list")
+
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
             .assert(grey_notNil(), error: &errorOrNil)
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2))
@@ -170,10 +133,11 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsCookies() {
         let url = "\(webRoot!)/numberedPage.html?page=1"
-        
+    
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
-            .perform(grey_typeText("\(url)\n"))
+        
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
@@ -186,14 +150,14 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(cookies.sessionStorage, "foo=bar")
 
         // Verify that cookies are not cleared when Cookies is deselected.
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cookies]), swipe: true, tester: tester())
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cookies]), swipe: false)
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "foo=bar")
         XCTAssertEqual(cookies.localStorage, "foo=bar")
         XCTAssertEqual(cookies.sessionStorage, "foo=bar")
 
         // Verify that cookies are cleared when Cookies is selected.
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cookies], swipe: true, tester: tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cookies], swipe: false)
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "")
         XCTAssertEqual(cookies.localStorage, "null")
@@ -205,20 +169,20 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let cacheRoot = cachedServer.start()
         let url = "\(cacheRoot)/cachedPage.html"
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
-            .perform(grey_typeText("\(url)\n"))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Cache test")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
         let requests = cachedServer.requests
 
         // Verify that clearing non-cache items will keep the page in the cache.
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cache]), swipe: true, tester: tester())
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cache]), swipe: false)
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests)
 
         // Verify that clearing the cache will fire a new request.
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cache], swipe: true, tester: tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cache], swipe: false)
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests + 1)
     }
@@ -249,6 +213,21 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         cookie = (items[0], items[1], items[2])
         return cookie
     }
+
+    @available(iOS 11, *)
+    func testClearsTrackingProtectionWhitelist() {
+        let wait = expectation(description: "wait for file write")
+        ContentBlockerHelper.whitelist(enable: true, url: URL(string: "http://www.mozilla.com")!) {
+            wait.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.TrackingProtection], swipe: false)
+
+        let data = ContentBlockerHelper.readWhitelistFile()
+        XCTAssert(data == nil || data!.isEmpty)
+    }
+
 }
 
 /// Server that keeps track of requests.

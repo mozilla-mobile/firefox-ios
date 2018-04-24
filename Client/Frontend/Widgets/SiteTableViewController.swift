@@ -9,9 +9,9 @@ struct SiteTableViewControllerUX {
     static let HeaderHeight = CGFloat(32)
     static let RowHeight = CGFloat(44)
     static let HeaderBorderColor = UIColor(rgb: 0xCFD5D9).withAlphaComponent(0.8)
-    static let HeaderTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x232323)
-    static let HeaderBackgroundColor = UIColor(rgb: 0xf7f8f7)
-    static let HeaderFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
+    static let HeaderTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey80
+    static let HeaderBackgroundColor = UIColor.Photon.Grey10
+    static let HeaderFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
     static let HeaderTextMargin = CGFloat(16)
 }
 
@@ -35,7 +35,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
         titleLabel.textColor = SiteTableViewControllerUX.HeaderTextColor
-        titleLabel.textAlignment = .left
 
         addSubview(topBorder)
         addSubview(bottomBorder)
@@ -95,8 +94,8 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.dataSource = self
         tableView.register(SiteTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
-        tableView.layoutMargins = UIEdgeInsets.zero
-        tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag
+        tableView.layoutMargins = .zero
+        tableView.keyboardDismissMode = .onDrag
         tableView.backgroundColor = UIConstants.PanelBackgroundColor
         tableView.separatorColor = UIConstants.SeparatorColor
         tableView.accessibilityIdentifier = "SiteTable"
@@ -104,6 +103,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
+
+        if #available(iOS 11.0, *), let _ = self as? HomePanelContextMenu {
+            tableView.dragDelegate = self
+        }
     }
 
     deinit {
@@ -111,6 +114,15 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         // explicitly nil out its references to us to avoid crashes. Bug 1218826.
         tableView.dataSource = nil
         tableView.delegate = nil
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { context in
+            //The AS context menu does not behave correctly. Dismiss it when rotating.
+            if let _ = self.presentedViewController as? PhotonActionSheet {
+                self.presentedViewController?.dismiss(animated: true, completion: nil)
+            }
+        }, completion: nil)
     }
 
     func reloadData() {
@@ -128,7 +140,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath)
         if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
-            cell.separatorInset = UIEdgeInsets.zero
+            cell.separatorInset = .zero
         }
         return cell
     }
@@ -147,5 +159,24 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
         return false
+    }
+}
+
+@available(iOS 11.0, *)
+extension SiteTableViewController: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let homePanelVC = self as? HomePanelContextMenu, let site = homePanelVC.getSiteDetails(for: indexPath), let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url) else {
+            return []
+        }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = site
+        return [dragItem]
+    }
+
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
+        presentedViewController?.dismiss(animated: true)
     }
 }

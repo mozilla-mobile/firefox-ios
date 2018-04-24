@@ -4,11 +4,14 @@
 
 import Foundation
 import Shared
+import EarlGrey
 
 class DomainAutocompleteTests: KIFTestCase {
     override func setUp() {
+
         super.setUp()
-        BrowserUtils.dismissFirstRunUI(tester())
+        BrowserUtils.configEarlGrey()
+        BrowserUtils.dismissFirstRunUI()
     }
     
     func testAutocomplete() {
@@ -19,24 +22,25 @@ class DomainAutocompleteTests: KIFTestCase {
 
         // Multiple subdomains.
         tester().enterText(intoCurrentFirstResponder: "f")
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "f", completion: "oo.bar.baz.org/")
+        tester().waitForAnimationsToFinish()
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "f", completion: "oo.bar.baz.org")
         tester().clearTextFromFirstResponder()
+        tester().waitForAnimationsToFinish()
         tester().enterText(intoCurrentFirstResponder: "b")
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "b", completion: "ar.baz.org/")
+        tester().waitForAnimationsToFinish()
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "b", completion: "ar.baz.org")
         tester().enterText(intoCurrentFirstResponder: "a")
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ba", completion: "r.baz.org/")
+        tester().waitForAnimationsToFinish()
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ba", completion: "r.baz.org")
         tester().enterText(intoCurrentFirstResponder: "z")
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "baz", completion: ".org/")
+        tester().waitForAnimationsToFinish()
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "baz", completion: ".org")
     }
 
     override func tearDown() {
         super.tearDown()
-        do {
-            try tester().tryFindingTappableView(withAccessibilityLabel: "Cancel")
-            tester().tapView(withAccessibilityLabel: "Cancel")
-        } catch _ {
-        }
-        BrowserUtils.resetToAboutHome(tester())
-        BrowserUtils.clearPrivateData(tester: tester())
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
+        BrowserUtils.resetToAboutHome()
+        BrowserUtils.clearPrivateData()
     }
 }

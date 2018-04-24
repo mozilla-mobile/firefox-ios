@@ -16,7 +16,7 @@ private let log = Logger.browserLogger
 struct OpenInViewUX {
     static let ViewHeight: CGFloat = 40.0
     static let TextFont = UIFont.systemFont(ofSize: 16)
-    static let TextColor = UIColor(red: 74.0/255.0, green: 144.0/255.0, blue: 226.0/255.0, alpha: 1.0)
+    static let TextColor = UIColor.Photon.Blue60
     static let TextOffset = -15
     static let OpenInString = NSLocalizedString("Open in…", comment: "String indicating that the file can be opened in another application on the device")
 }
@@ -36,7 +36,7 @@ struct OpenIn {
     static let helpers: [OpenInHelper.Type] = [OpenPdfInHelper.self, OpenPassBookHelper.self, ShareFileHelper.self]
     
     static func helperForResponse(_ response: URLResponse) -> OpenInHelper? {
-        return helpers.flatMap { $0.init(response: response) }.first
+        return helpers.compactMap { $0.init(response: response) }.first
     }
 }
 
@@ -57,7 +57,7 @@ class ShareFileHelper: NSObject, OpenInHelper {
         let alertController = UIAlertController(
             title: Strings.OpenInDownloadHelperAlertTitle,
             message: Strings.OpenInDownloadHelperAlertMessage,
-            preferredStyle: UIAlertControllerStyle.alert)
+            preferredStyle: .alert)
         alertController.addAction( UIAlertAction(title: Strings.OpenInDownloadHelperAlertCancel, style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: Strings.OpenInDownloadHelperAlertConfirm, style: .default) { (action) in
             let objectsToShare = [self.url]
@@ -94,7 +94,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
             let alertController = UIAlertController(
                 title: Strings.UnableToAddPassErrorTitle,
                 message: Strings.UnableToAddPassErrorMessage,
-                preferredStyle: UIAlertControllerStyle.alert)
+                preferredStyle: .alert)
             alertController.addAction(
                 UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .cancel) { (action) in
                     // Do nothing.
@@ -104,7 +104,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
         }
         let passLibrary = PKPassLibrary()
         if passLibrary.containsPass(pass) {
-            UIApplication.shared.openURL(pass.passURL!)
+            UIApplication.shared.open(pass.passURL!, options: [:])
         } else {
             let addController = PKAddPassesViewController(pass: pass)
             UIApplication.shared.keyWindow?.rootViewController?.present(addController, animated: true, completion: nil)
@@ -118,7 +118,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     fileprivate var docController: UIDocumentInteractionController?
     fileprivate var openInURL: URL?
 
-    lazy var openInView: UIView? = getOpenInView(self)()
+    lazy var openInView: UIView? = getOpenInView()
 
     lazy var documentDirectory: URL = {
         return URL(string: NSTemporaryDirectory())!.appendingPathComponent("pdfs")
@@ -156,7 +156,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
     func getOpenInView() -> OpenInView {
         let overlayView = OpenInView()
 
-        overlayView.openInButton.addTarget(self, action: #selector(OpenPdfInHelper.open), for: .touchUpInside)
+        overlayView.openInButton.addTarget(self, action: #selector(open), for: .touchUpInside)
         return overlayView
     }
 
@@ -193,7 +193,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
         }
     }
 
-    func open() {
+    @objc func open() {
         createLocalCopyOfPDF()
         guard let _parentView = self.openInView!.superview, let docController = self.docController else { log.error("view doesn't have a superview so can't open anything"); return }
         // iBooks should be installed by default on all devices we care about, so regardless of whether or not there are other pdf-capable
@@ -213,8 +213,8 @@ class OpenInView: UIView {
 
     init() {
         super.init(frame: .zero)
-        openInButton.setTitleColor(OpenInViewUX.TextColor, for: UIControlState.normal)
-        openInButton.setTitle(OpenInViewUX.OpenInString, for: UIControlState.normal)
+        openInButton.setTitleColor(OpenInViewUX.TextColor, for: .normal)
+        openInButton.setTitle(OpenInViewUX.OpenInString, for: .normal)
         openInButton.titleLabel?.font = OpenInViewUX.TextFont
         openInButton.sizeToFit()
         self.addSubview(openInButton)

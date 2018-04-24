@@ -28,7 +28,7 @@ class SessionRestoreTests: KIFTestCase {
         jsonDict["history"] = [url1, url2, url3]
         jsonDict["currentPage"] = -1 as Any?
         let json = JSON(jsonDict)
-        let escapedJSON = json.stringValue()?.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet())
+        let escapedJSON = json.stringValue()?.addingPercentEncoding(withAllowedCharacters: .URLAllowed)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
         let restoreURL = URL(string: "/about/sessionrestore?history=\(escapedJSON!)", relativeTo: webView.url!)
         
@@ -39,7 +39,9 @@ class SessionRestoreTests: KIFTestCase {
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("url"))
             .perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
-            .perform(grey_typeText("\(restoreURL!.absoluteString)\n"))
+            .perform(grey_replaceText(restoreURL!.absoluteString))
+        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
+            .perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Back"))
             .perform(grey_tap())
@@ -47,7 +49,7 @@ class SessionRestoreTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Back"))
             .perform(grey_tap())
-        let wentBack = GREYCondition(name: "Check browser went back", block: { _ in
+        let wentBack = GREYCondition(name: "Check browser went back", block: {
             var errorOrNil: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel("Top sites"),
                                               grey_sufficientlyVisible()])
@@ -84,7 +86,7 @@ class SessionRestoreTests: KIFTestCase {
     }
     
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
-        BrowserUtils.clearPrivateData(tester: tester())
+        BrowserUtils.resetToAboutHome()
+        BrowserUtils.clearPrivateData()
     }
 }

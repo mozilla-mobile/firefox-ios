@@ -6,8 +6,6 @@ import Foundation
 import SwiftKeychainWrapper
 import Shared
 
-let NotificationPasscodeDidChange   = "NotificationPasscodeDidChange"
-
 /// Displayed to the user when changing an existing passcode.
 class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputViewDelegate {
     fileprivate var newPasscode: String?
@@ -17,9 +15,9 @@ class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
         super.init()
         self.title = AuthenticationStrings.changePasscode
         self.panes = [
-            PasscodePane(title: AuthenticationStrings.enterPasscode),
-            PasscodePane(title: AuthenticationStrings.enterNewPasscode),
-            PasscodePane(title: AuthenticationStrings.reenterPasscode),
+            PasscodePane(title: AuthenticationStrings.enterPasscode, passcodeSize: authenticationInfo?.passcode?.count ?? 6),
+            PasscodePane(title: AuthenticationStrings.enterNewPasscode, passcodeSize: 6),
+            PasscodePane(title: AuthenticationStrings.reenterPasscode, passcodeSize: 6),
         ]
     }
     
@@ -88,6 +86,6 @@ class ChangePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
         authenticationInfo?.updatePasscode(code)
         KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
         let notificationCenter = NotificationCenter.default
-        notificationCenter.post(name: Notification.Name(rawValue: NotificationPasscodeDidChange), object: nil)
+        notificationCenter.post(name: .PasscodeDidChange, object: nil)
     }
 }

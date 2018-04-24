@@ -9,15 +9,7 @@ import Shared
 import XCTest
 
 private func getBrowserDB(_ filename: String, files: FileAccessor) -> BrowserDB? {
-    let db = BrowserDB(filename: filename, files: files)
-    db.attachDB(filename: "metadata.db", as: AttachedDatabaseMetadata)
-
-    // BrowserTable exists only to perform create/update etc. operations -- it's not
-    // a queryable thing that needs to stick around.
-    if db.createOrUpdate(BrowserTable()) != .success {
-        return nil
-    }
-    return db
+    return BrowserDB(filename: filename, schema: BrowserSchema(), files: files)
 }
 
 extension SQLiteBookmarks {
@@ -27,6 +19,213 @@ extension SQLiteBookmarks {
 }
 
 // MARK: - Tests.
+
+class TestTruncation: XCTestCase {
+    func testTruncate() {
+        let a = "🤠"
+        let b = "abcdefghi"
+        let c = ""
+        XCTAssertEqual(a.truncateToUTF8ByteCount(1), "")
+        XCTAssertEqual(a.truncateToUTF8ByteCount(4), a)
+        XCTAssertEqual(a.truncateToUTF8ByteCount(16), a)
+
+        XCTAssertEqual(b.truncateToUTF8ByteCount(16), b)
+        XCTAssertEqual(b.truncateToUTF8ByteCount(5), "abcde")
+        XCTAssertEqual(b.truncateToUTF8ByteCount(0), "")
+        XCTAssertEqual(c.truncateToUTF8ByteCount(1), c)
+        XCTAssertEqual(c.truncateToUTF8ByteCount(4), c)
+    }
+}
+
+class BrowserDBV15: Schema {
+    var name: String = "BROWSER"
+    var version: Int = 15
+
+    func getHistoryTableCreationString() -> String {
+        let sql = """
+            CREATE TABLE IF NOT EXISTS history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                -- Not null, but the value might be replaced by the server's.
+                guid TEXT NOT NULL UNIQUE,
+                -- May only be null for deleted records.
+                url TEXT UNIQUE,
+                title TEXT NOT NULL,
+                -- Can be null. Integer milliseconds.
+                server_modified INTEGER,
+                -- Can be null. Client clock. In extremis only.
+                local_modified INTEGER,
+                -- Boolean. Locally deleted.
+                is_deleted TINYINT NOT NULL,
+                -- Boolean. Set when changed or visits added.
+                should_upload TINYINT NOT NULL,
+                domain_id INTEGER REFERENCES domains(id) ON DELETE CASCADE,
+                CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)
+            )
+            """
+
+        return sql
+    }
+
+    func getDomainsTableCreationString() -> String {
+        let sql = """
+            CREATE TABLE IF NOT EXISTS domains (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                domain TEXT NOT NULL UNIQUE,
+                showOnTopSites TINYINT NOT NULL DEFAULT 1
+            )
+            """
+
+        return sql
+    }
+
+    func getQueueTableCreationString() -> String {
+        let sql = """
+            CREATE TABLE IF NOT EXISTS queue (
+                url TEXT NOT NULL UNIQUE,
+                title TEXT
+            )
+            """
+
+        return sql
+    }
+
+    func getVisitsTableCreationString() -> String {
+        let sql = """
+            CREATE TABLE IF NOT EXISTS visits (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                siteID INTEGER NOT NULL REFERENCES history(id) ON DELETE CASCADE,
+                -- Microseconds since epoch.
+                date REAL NOT NULL,
+                type INTEGER NOT NULL,
+                -- Some visits are local. Some are remote ('mirrored'). This boolean flag is the split.
+                is_local TINYINT NOT NULL,
+                UNIQUE (siteID, date, type)
+            )
+            """
+
+        return sql
+    }
+
+    func getFaviconsTableCreationString() -> String {
+        let sql = """
+            CREATE TABLE IF NOT EXISTS favicons (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                url TEXT NOT NULL UNIQUE,
+                width INTEGER,
+                height INTEGER,
+                type INTEGER NOT NULL,
+                date REAL NOT NULL
+            )
+            """
+
+        return sql
+    }
+
+    func getBookmarksTableCreationStringForTable(_ table: String, withAdditionalColumns: String="") -> String {
+        // The stupid absence of naming conventions here is thanks to pre-Sync Weave. Sorry.
+        // For now we have the simplest possible schema: everything in one.
+        let sql = """
+            CREATE TABLE IF NOT EXISTS \(table)
+                -- Shared fields.
+                ( id INTEGER PRIMARY KEY AUTOINCREMENT
+                , guid TEXT NOT NULL UNIQUE
+                -- Type enum.
+                , type TINYINT NOT NULL
+                -- Record/envelope metadata that'll allow us to do merges.
+                -- Boolean
+                , is_deleted TINYINT NOT NULL DEFAULT 0
+                -- GUID
+                , parentid TEXT
+                , parentName TEXT
+                -- Type-specific fields. These should be NOT NULL in many cases, but we're going
+                -- for a sparse schema, so this'll do for now. Enforce these in the application code.
+                -- LIVEMARKS
+                , feedUri TEXT, siteUri TEXT
+                -- SEPARATORS
+                , pos INT
+                -- FOLDERS, BOOKMARKS, QUERIES
+                , title TEXT, description TEXT
+                -- BOOKMARKS, QUERIES
+                , bmkUri TEXT, tags TEXT, keyword TEXT
+                -- QUERIES
+                , folderName TEXT, queryId TEXT
+                \(withAdditionalColumns)
+                , CONSTRAINT parentidOrDeleted CHECK (parentid IS NOT NULL OR is_deleted = 1)
+                , CONSTRAINT parentNameOrDeleted CHECK (parentName IS NOT NULL OR is_deleted = 1)
+            )
+            """
+
+        return sql
+    }
+
+    func getBookmarksStructureTableCreationStringForTable(_ table: String, referencingMirror mirror: String) -> String {
+        let sql = """
+            CREATE TABLE IF NOT EXISTS \(table)
+                ( parent TEXT NOT NULL REFERENCES \(mirror)(guid) ON DELETE CASCADE
+                -- Should be the GUID of a child.
+                , child TEXT NOT NULL
+                -- Should advance from 0.
+                , idx INTEGER NOT NULL
+            )
+            """
+
+        return sql
+    }
+
+    let iconColumns = ", faviconID INTEGER REFERENCES favicons(id) ON DELETE SET NULL"
+    let mirrorColumns = ", is_overridden TINYINT NOT NULL DEFAULT 0"
+
+    let serverColumns =
+        ", server_modified INTEGER NOT NULL" +  // Milliseconds.
+        ", hasDupe TINYINT NOT NULL DEFAULT 0"  // Boolean, 0 (false) if deleted.
+
+    let localColumns =
+        ", local_modified INTEGER" +            // Can be null. Client clock. In extremis only.
+        ", sync_status TINYINT NOT NULL"        // SyncStatus enum. Set when changed or created.
+
+    func create(_ db: SQLiteDBConnection) -> Bool {
+        let bookmarksLocal = self.getBookmarksTableCreationStringForTable(TableBookmarksLocal, withAdditionalColumns: self.localColumns + self.iconColumns)
+        let bookmarksLocalStructure = self.getBookmarksStructureTableCreationStringForTable(TableBookmarksLocalStructure, referencingMirror: TableBookmarksLocal)
+        let bookmarksBuffer = getBookmarksTableCreationStringForTable(TableBookmarksBuffer, withAdditionalColumns: self.serverColumns)
+        let bookmarksBufferStructure = self.getBookmarksStructureTableCreationStringForTable(TableBookmarksBufferStructure, referencingMirror: TableBookmarksBuffer)
+        let bookmarksMirror = getBookmarksTableCreationStringForTable(TableBookmarksMirror, withAdditionalColumns: self.serverColumns + self.mirrorColumns + self.iconColumns)
+        let bookmarksMirrorStructure = self.getBookmarksStructureTableCreationStringForTable(TableBookmarksMirrorStructure, referencingMirror: TableBookmarksMirror)
+
+        let stmts = [
+            bookmarksLocal,
+            bookmarksLocalStructure,
+            bookmarksBuffer,
+            bookmarksBufferStructure,
+            bookmarksMirror,
+            bookmarksMirrorStructure,
+            self.getHistoryTableCreationString(),
+            self.getDomainsTableCreationString(),
+            self.getQueueTableCreationString(),
+            self.getVisitsTableCreationString(),
+            self.getFaviconsTableCreationString()
+        ]
+        do {
+            for sql in stmts {
+                try db.executeChange(sql, withArgs: nil)
+            }
+        } catch _ as NSError {
+            return false
+        }
+        return true
+    }
+
+    func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
+        // Do nothing
+        return false
+    }
+
+    func drop(_ db: SQLiteDBConnection) -> Bool {
+        // Do nothing
+        return false
+    }
+
+
+}
 
 class TestSQLiteBookmarks: XCTestCase {
     let files = MockFiles()
@@ -44,7 +243,27 @@ class TestSQLiteBookmarks: XCTestCase {
         self.remove("TSQLBtestRecursiveAndURLDelete.db")
         self.remove("TSQLBtestUnrooted.db")
         self.remove("TSQLBtestTreeBuilding.db")
+        self.remove("TSQLBtestLocalBookmarksModifications.db")
+        self.remove("TSQLBtestApplyBufferUpdatedCompletionOp.db")
+        self.remove("TSQLBtestApplyRecordsPendingDeletions.db")
+        self.remove("TSQLBtestDBUpgradeBeforeDateAdded.db")
         super.tearDown()
+    }
+
+    func testDateAddedMigration() {
+        let schema = BrowserDBV15()
+        let destination = BrowserSchema()
+        var db = BrowserDB(filename: "TSQLBtestDBUpgradeBeforeDateAdded.db", schema: schema, files: files)
+        XCTAssertTrue(db.withConnection({ connection -> Int in
+            connection.version
+        }).value.successValue == schema.version, "Creating BrowserSchema beforeDateAdded")
+        db.forceClose()
+
+        db = BrowserDB(filename: "TSQLBtestDBUpgradeBeforeDateAdded.db", schema: destination, files: files)
+        XCTAssertTrue(db.withConnection({ connection -> Int in
+            connection.version
+        }).value.successValue == destination.version, "Upgrading BrowserSchema to the latest version")
+        db.forceClose()
     }
 
     func testBookmarks() {
@@ -71,28 +290,279 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertFalse(factory.hasDesktopBookmarks().value.successValue ?? true)
         let toolbar = BookmarkRoots.ToolbarFolderGUID
         XCTAssertTrue(bookmarks.db.run([
-            "UPDATE \(TableBookmarksLocal) SET parentid = '\(toolbar)' WHERE guid = '\(guid)'",
-            "UPDATE \(TableBookmarksLocalStructure) SET parent = '\(toolbar)' WHERE child = '\(guid)'",
+            "UPDATE bookmarksLocal SET parentid = '\(toolbar)' WHERE guid = '\(guid)'",
+            "UPDATE bookmarksLocalStructure SET parent = '\(toolbar)' WHERE child = '\(guid)'",
             ]).value.isSuccess)
         XCTAssertTrue(factory.hasDesktopBookmarks().value.successValue ?? true)
     }
 
+    func testGetLocalBookmarksModifications() {
+        guard let db = getBrowserDB("TSQLBtestLocalBookmarksModifications.db", files: self.files) else {
+            XCTFail("Unable to create browser DB.")
+            return
+        }
+        let bookmarks = SQLiteBookmarks(db: db)
+
+        let localQuery = """
+            INSERT INTO bookmarksLocal
+                (guid, type, bmkUri, title, parentid, parentName, sync_status)
+            VALUES
+                (?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', 2),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', 2),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', 2),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', 2),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', 0),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', 2),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', 2),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', 2)
+            """
+
+        let localArgs: Args = [
+            "folder123", "123 (nok)", BookmarkRoots.MobileFolderGUID,
+            "bookmark123", "http://example.org/1", "Bookmark in folder 123 (nok)", "folder123",
+            "bookmark_other_folder", "http://example.org/2", "Bookmark in another folder (nok)", BookmarkRoots.ToolbarFolderGUID,
+            "bookmark_good_nonsynced", "http://example.org/3", "Bookmark 1 (ok)", BookmarkRoots.MobileFolderGUID,
+            "bookmark_good_synced", "http://example.org/4", "Bookmark 2 (nok)", BookmarkRoots.MobileFolderGUID,
+            "bookmark_duplicate_in_buffer", "http://example.org/5", "Bookmark in buffer(nok)", BookmarkRoots.MobileFolderGUID,
+            "bookmark_good_additional", "http://example.org/6", "Bookmark additional 1", BookmarkRoots.MobileFolderGUID,
+            "bookmark_good_additional_over_limit", "http://example.org/7", "Bookmark additional 2", BookmarkRoots.MobileFolderGUID,
+        ]
+
+        let structureQuery = """
+            INSERT INTO bookmarksLocalStructure
+                (parent, child, idx)
+            VALUES
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?)
+            """
+
+        let structureArgs: Args = [
+            BookmarkRoots.MobileFolderGUID, "folder123", 0,
+            "folder123", "bookmark123", 0,
+            BookmarkRoots.ToolbarFolderGUID, "bookmark_other_folder", 0,
+            BookmarkRoots.MobileFolderGUID, "bookmark_good_nonsynced", 1,
+            BookmarkRoots.MobileFolderGUID, "bookmark_good_synced", 2,
+            BookmarkRoots.MobileFolderGUID, "bookmark_duplicate_in_buffer", 3,
+            BookmarkRoots.MobileFolderGUID, "bookmark_good_additional", 4,
+            BookmarkRoots.MobileFolderGUID, "bookmark_good_additional_over_limit", 5,
+        ]
+
+        let bufferQuery = """
+            INSERT INTO bookmarksBuffer
+                (guid, type, bmkUri, title, parentid, parentName, server_modified)
+            VALUES
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?)
+            """
+
+        let bufferArgs: Args = [
+            "bookmark_duplicate_in_buffer", "http://example.org/5", "Bookmark in buffer(nok)", BookmarkRoots.MobileFolderGUID, Date.now(),
+            "bookmark_to_delete", "http://example.org/delme", "Bookmark in buffer to delete(ok)", BookmarkRoots.MobileFolderGUID, 88888
+        ]
+
+        let bufferStructureQuery = """
+            INSERT INTO bookmarksBufferStructure
+                (parent, child, idx)
+            VALUES
+                (?, ?, ?),
+                (?, ?, ?)
+            """
+
+        let bufferStructureArgs: Args = [
+            "bookmark_duplicate_in_buffer", "bookmark_duplicate_in_buffer", 0, // It's its own parent because we are lazy.
+            "bookmark_to_delete", "bookmark_to_delete", 0
+        ]
+
+        let pendingDeletionsQuery = "INSERT INTO pending_deletions (id) VALUES (?)"
+
+        let pendingDeletionsArgs: Args = [
+            "bookmark_to_delete"
+        ]
+
+        db.run([
+            (sql: localQuery, args: localArgs),
+            (sql: structureQuery, args: structureArgs),
+            (sql: bufferQuery, args: bufferArgs),
+            (sql: bufferStructureQuery, args: bufferStructureArgs),
+            (sql: pendingDeletionsQuery, args: pendingDeletionsArgs),
+        ]).succeeded()
+
+        var modifications = bookmarks.getLocalBookmarksModifications(limit: 3).value.successValue!
+        XCTAssertEqual(modifications.additions.count, 2)
+        XCTAssertEqual(modifications.additions.map { $0.guid }, ["bookmark_good_nonsynced", "bookmark_good_additional"])
+        XCTAssertEqual(modifications.deletions.count, 1)
+        XCTAssertEqual(modifications.deletions, ["bookmark_to_delete"])
+
+        // Deletions are prioritized.
+        modifications = bookmarks.getLocalBookmarksModifications(limit: 1).value.successValue!
+        XCTAssertEqual(modifications.additions.count, 0)
+        XCTAssertEqual(modifications.deletions.count, 1)
+        XCTAssertEqual(modifications.deletions, ["bookmark_to_delete"])
+    }
+
+    func testApplyRecordsRemovesPendingDeletions() {
+        guard let db = getBrowserDB("TSQLBtestApplyRecordsPendingDeletions.db", files: self.files) else {
+            XCTFail("Unable to create browser DB.")
+            return
+        }
+        let bookmarks = MergedSQLiteBookmarks(db: db)
+
+        let bufferQuery = """
+            INSERT INTO bookmarksBuffer
+                (guid, type, bmkUri, title, parentid, parentName, server_modified)
+            VALUES
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?)
+            """
+
+        let bufferArgs: Args = [
+            "bkm1", "http://example.org/1", "Bookmark 1", BookmarkRoots.MobileFolderGUID, Date.now(),
+            "bkm2", "http://example.org/2", "Bookmark 2", BookmarkRoots.MobileFolderGUID, Date.now()
+        ]
+
+        let bufferStructureQuery = """
+            INSERT INTO bookmarksBufferStructure
+                (parent, child, idx)
+            VALUES
+                (?, ?, ?),
+                (?, ?, ?)
+            """
+
+        let bufferStructureArgs: Args = [
+            "bkm1", "bkm1", 0, // It's its own parent because we are lazy.
+            "bkm2", "bkm2", 0
+        ]
+
+        let pendingDeletionsQuery = "INSERT INTO pending_deletions (id) VALUES (?)"
+
+        let pendingDeletionsArgs: Args = [
+            "bkm2"
+        ]
+
+        db.run([
+            (sql: bufferQuery, args: bufferArgs),
+            (sql: bufferStructureQuery, args: bufferStructureArgs),
+            (sql: pendingDeletionsQuery, args: pendingDeletionsArgs),
+        ]).succeeded()
+
+        let modified: [BookmarkMirrorItem] = [BookmarkMirrorItem.bookmark("bkm2", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: "bkm2", parentName: nil, title: "BKM 2", description: nil, URI: "https://test.com", tags: "", keyword: nil)]
+        bookmarks.applyRecords(modified).succeeded()
+
+        XCTAssertTrue(db.queryReturnsNoResults("SELECT * FROM pending_deletions").value.successValue!)
+    }
+
+    func testApplyBufferUpdatedCompletionOp() {
+        guard let db = getBrowserDB("TSQLBtestApplyBufferUpdatedCompletionOp.db", files: self.files) else {
+            XCTFail("Unable to create browser DB.")
+            return
+        }
+        let bookmarks = SQLiteBookmarks(db: db)
+        bookmarks.addToMobileBookmarks("http://example.org/1".asURL!, title: "Bookmark 1", favicon: nil).succeeded()
+        bookmarks.addToMobileBookmarks("http://example.org/2".asURL!, title: "Bookmark 2", favicon: nil).succeeded()
+        bookmarks.addToMobileBookmarks("http://example.org/3".asURL!, title: "Bookmark 3", favicon: nil).succeeded()
+        bookmarks.addToMobileBookmarks("http://example.org/4".asURL!, title: "Bookmark 4", favicon: nil).succeeded()
+        var localTree = bookmarks.treeForLocal().value.successValue!
+        var mobileFolderNode = localTree.find(BookmarkRoots.MobileFolderGUID)!
+        let localChildrenGUIDs = mobileFolderNode.children!.map { $0.recordGUID }
+        XCTAssertEqual(localChildrenGUIDs.count, 4)
+        let childrenGUIDsUploaded = localChildrenGUIDs.dropLast(1)
+        let childrenGUIDsFailed = localChildrenGUIDs.dropFirst(3)
+
+        let bufferQuery = """
+            INSERT INTO bookmarksBuffer
+                (guid, type, bmkUri, title, parentid, parentName, server_modified)
+            VALUES
+                (?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', ?),
+                (?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', ?),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', ?)
+            """
+
+        let bkmBufModified = Date.now()
+        let bufferArgs: Args = [
+            BookmarkRoots.RootGUID, "", BookmarkRoots.RootGUID, 123,
+            BookmarkRoots.MobileFolderGUID, "Mobile Bookmarks", BookmarkRoots.RootGUID, 456,
+            "bkmbuf", "http://example.org/5", "Bookmark 5", BookmarkRoots.MobileFolderGUID, bkmBufModified,
+            "bkmtodelete", "http://example.org/to_delete", "Bookmark to delete", BookmarkRoots.MobileFolderGUID, 88888,
+            "bkmtodelete_uploadfail", "http://example.org/to_delete_updfail", "Bookmark to delete but upload failed", BookmarkRoots.MobileFolderGUID, 88888
+        ]
+
+        let bufferStructureQuery = """
+            INSERT INTO bookmarksBufferStructure
+                (parent, child, idx)
+            VALUES
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?)
+            """
+
+        let bufferStructureArgs: Args = [
+            BookmarkRoots.RootGUID, BookmarkRoots.RootGUID, 0,
+            BookmarkRoots.RootGUID, BookmarkRoots.MobileFolderGUID, 0,
+            BookmarkRoots.MobileFolderGUID, "bkmbuf", 0,
+            BookmarkRoots.MobileFolderGUID, "bkmtodelete", 1,
+            BookmarkRoots.MobileFolderGUID, "bkmtodelete_uploadfail", 2,
+        ]
+
+        let pendingDeletionsQuery = "INSERT INTO pending_deletions (id) VALUES (?), (?)"
+
+        let pendingDeletionsArgs: Args = [
+            "bkmtodelete", "bkmtodelete_uploadfail"
+        ]
+
+        db.run([
+            (sql: bufferQuery, args: bufferArgs),
+            (sql: bufferStructureQuery, args: bufferStructureArgs),
+            (sql: pendingDeletionsQuery, args: pendingDeletionsArgs),
+            ]).succeeded()
+
+        let mobileRoot = BookmarkMirrorItem.folder(BookmarkRoots.MobileFolderGUID, dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.MobileFolderGUID,
+                                                   parentName: nil, title: "Mobile Bookmarks", description: nil, children: ["bkmbuf"] + childrenGUIDsUploaded)
+        let op = BufferUpdatedCompletionOp(bufferValuesToMoveFromLocal: Set(childrenGUIDsUploaded), deletedValues: Set(["bkmtodelete"]), mobileRoot: mobileRoot, modifiedTime: 123456)
+
+        let mergedBookmarks = MergedSQLiteBookmarks(db: db)
+        mergedBookmarks.applyBufferUpdatedCompletionOp(op).succeeded()
+
+        let rootFolder = mergedBookmarks.getBufferItemWithGUID(BookmarkRoots.RootGUID).value.successValue!
+        XCTAssertEqual(rootFolder.serverModified, 123)
+        let mobileFolder = mergedBookmarks.getBufferItemWithGUID(BookmarkRoots.MobileFolderGUID).value.successValue!
+        XCTAssertEqual(mobileFolder.serverModified, 123456)
+        let childrenGUIDs = mergedBookmarks.getBufferChildrenGUIDsForParent(BookmarkRoots.MobileFolderGUID).value.successValue!
+        XCTAssertEqual(childrenGUIDs, ["bkmbuf", "bkmtodelete_uploadfail"] + childrenGUIDsUploaded)
+        let children = mergedBookmarks.getBufferItemsWithGUIDs(["bkmbuf"] + childrenGUIDsUploaded).value.successValue!
+        for item in children.values {
+            XCTAssertEqual(item.serverModified, item.guid == "bkmbuf" ? bkmBufModified : 123456)
+        }
+        localTree = bookmarks.treeForLocal().value.successValue!
+        mobileFolderNode = localTree.find(BookmarkRoots.MobileFolderGUID)!
+        XCTAssertEqual(mobileFolderNode.children!.map { $0.recordGUID }, Array(childrenGUIDsFailed))
+    }
+
     fileprivate func createStockMirrorTree(_ db: BrowserDB) {
         // Set up a mirror tree.
-        let mirrorQuery =
-        "INSERT INTO \(TableBookmarksMirror) (guid, type, bmkUri, title, parentid, parentName, description, tags, keyword, is_overridden, server_modified, pos) " +
-        "VALUES " +
-        "(?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-
-        "(?, \(BookmarkNodeType.separator.rawValue), NULL, NULL, ?, '', '', '', '', 0, \(Date.now()), 0), " +
-
-        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL), " +
-        "(?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL) "
+        let mirrorQuery = """
+            INSERT INTO bookmarksMirror
+                (guid, type, bmkUri, title, parentid, parentName, description, tags, keyword, is_overridden, server_modified, pos)
+            VALUES
+                (?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL),
+                (?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL),
+                (?, \(BookmarkNodeType.folder.rawValue), NULL, ?, ?, '', '', '', '', 0, \(Date.now()), NULL),
+                (?, \(BookmarkNodeType.separator.rawValue), NULL, NULL, ?, '', '', '', '', 0, \(Date.now()), 0),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL),
+                (?, \(BookmarkNodeType.bookmark.rawValue), ?, ?, ?, '', '', '', '', 0, \(Date.now()), NULL)
+            """
 
         let mirrorArgs: Args = [
             "folderAAAAAA", "AAA", BookmarkRoots.ToolbarFolderGUID,
@@ -108,17 +578,20 @@ class TestSQLiteBookmarks: XCTestCase {
             "bookmark3001", "http://example.org/3", "Bookmark 3", "folderBBBBBB",
         ]
 
-        let structureQuery =
-        "INSERT INTO \(TableBookmarksMirrorStructure) (parent, child, idx) VALUES " +
-        "(?, ?, ?), " +
-        "(?, ?, ?), " +
-        "(?, ?, ?), " +
-        "(?, ?, ?), " +
-        "(?, ?, ?), " +
-        "(?, ?, ?), " +
-        "(?, ?, ?), " +
-        "(?, ?, ?), " +
-        "(?, ?, ?) "
+        let structureQuery = """
+            INSERT INTO bookmarksMirrorStructure
+                (parent, child, idx)
+            VALUES
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?),
+                (?, ?, ?)
+            """
 
         let structureArgs: Args = [
             BookmarkRoots.ToolbarFolderGUID, "folderAAAAAA", 0,
@@ -223,13 +696,16 @@ class TestSQLiteBookmarks: XCTestCase {
             "somefolder02", BookmarkNodeType.folder.rawValue, 0, BookmarkRoots.MobileFolderGUID, "Mobile Bookmarks", "Some Other Folder",
         ]
         let now = Date.now()
-        let bufferSQL =
-        "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
-        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
-        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
-        "(\(now), ?, ?, ?, ?, ?, ?, NULL)"
+        let bufferSQL = """
+            INSERT INTO bookmarksBuffer
+                (server_modified, guid, type, date_added, is_deleted, parentid, parentName, title, bmkUri)
+            VALUES
+                (\(now), ?, ?, \(now), ?, ?, ?, ?, ?),
+                (\(now), ?, ?, \(now), ?, ?, ?, ?, ?),
+                (\(now), ?, ?, \(now), ?, ?, ?, ?, NULL)
+            """
 
-        let bufferStructureSQL = "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES ('somefolder02', 'rooted000002', 0)"
+        let bufferStructureSQL = "INSERT INTO bookmarksBufferStructure (parent, child, idx) VALUES ('somefolder02', 'rooted000002', 0)"
         db.run(bufferSQL, withArgs: args).succeeded()
         db.run(bufferStructureSQL).succeeded()
 
@@ -375,14 +851,18 @@ class TestSQLiteBookmarks: XCTestCase {
         ]
 
         let now = Date.now()
-        let bufferSQL = "INSERT INTO \(TableBookmarksBuffer) (server_modified, guid, type, is_deleted, parentid, parentName, title, bmkUri) VALUES " +
-        "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
-        "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
-        "(\(now), ?, ?, ?, ?, ?, ?, NULL), " +
-        "(\(now), ?, ?, ?, ?, ?, ?, ?), " +
-        "(\(now), ?, ?, 1, NULL, NULL, NULL, NULL) "
+        let bufferSQL = """
+            INSERT INTO bookmarksBuffer
+                (server_modified, guid, type, date_added, is_deleted, parentid, parentName, title, bmkUri)
+            VALUES
+                (\(now), ?, ?, \(now), ?, ?, ?, ?, NULL),
+                (\(now), ?, ?, \(now), ?, ?, ?, ?, NULL),
+                (\(now), ?, ?, \(now), ?, ?, ?, ?, NULL),
+                (\(now), ?, ?, \(now), ?, ?, ?, ?, ?),
+                (\(now), ?, ?, \(now), 1, NULL, NULL, NULL, NULL)
+            """
 
-        let bufferStructureSQL = "INSERT INTO \(TableBookmarksBufferStructure) (parent, child, idx) VALUES (?, ?, ?)"
+        let bufferStructureSQL = "INSERT INTO bookmarksBufferStructure (parent, child, idx) VALUES (?, ?, ?)"
         let bufferStructureArgs: Args = ["ihavenoparent", "ihavenochildren", 0]
         db.run([(bufferSQL, bufferArgs), (bufferStructureSQL, bufferStructureArgs)]).succeeded()
 
@@ -522,10 +1002,10 @@ class TestSQLiteBookmarks: XCTestCase {
             BookmarkRoots.MobileFolderGUID,
         ]
 
-        XCTAssertEqual(rootGUIDs, db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
-        XCTAssertEqual(positioned, db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) ORDER BY idx"))
-        XCTAssertEqual([], db.getGUIDs("SELECT guid FROM \(TableBookmarksMirror)"))
-        XCTAssertEqual([], db.getGUIDs("SELECT child FROM \(TableBookmarksMirrorStructure)"))
+        XCTAssertEqual(rootGUIDs, db.getGUIDs("SELECT guid FROM bookmarksLocal ORDER BY id"))
+        XCTAssertEqual(positioned, db.getGUIDs("SELECT child FROM bookmarksLocalStructure ORDER BY idx"))
+        XCTAssertEqual([], db.getGUIDs("SELECT guid FROM bookmarksMirror"))
+        XCTAssertEqual([], db.getGUIDs("SELECT child FROM bookmarksMirrorStructure"))
 
         // Add a local bookmark.
         let bookmarks = SQLiteBookmarks(db: db)
@@ -535,8 +1015,8 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(rowA.bookmarkURI, "http://example.org/")
         XCTAssertEqual(rowA.title, "Example")
         XCTAssertEqual(rowA.parentName, "The Mobile")
-        XCTAssertEqual(rootGUIDs + [rowA.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
-        XCTAssertEqual([rowA.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(rootGUIDs + [rowA.guid], db.getGUIDs("SELECT guid FROM bookmarksLocal ORDER BY id"))
+        XCTAssertEqual([rowA.guid], db.getGUIDs("SELECT child FROM bookmarksLocalStructure WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
         XCTAssertEqual(SyncStatus.new, db.getSyncStatusForGUID(rowA.guid))
 
         // Add another. Order should be maintained.
@@ -545,8 +1025,8 @@ class TestSQLiteBookmarks: XCTestCase {
         let rowB = db.getRecordByURL("https://reddit.com/", fromTable: TableBookmarksLocal)
         XCTAssertEqual(rowB.bookmarkURI, "https://reddit.com/")
         XCTAssertEqual(rowB.title, "Reddit")
-        XCTAssertEqual(rootGUIDs + [rowA.guid, rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
-        XCTAssertEqual([rowA.guid, rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(rootGUIDs + [rowA.guid, rowB.guid], db.getGUIDs("SELECT guid FROM bookmarksLocal ORDER BY id"))
+        XCTAssertEqual([rowA.guid, rowB.guid], db.getGUIDs("SELECT child FROM bookmarksLocalStructure WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
         XCTAssertEqual(SyncStatus.new, db.getSyncStatusForGUID(rowA.guid))
         XCTAssertEqual(SyncStatus.new, db.getSyncStatusForGUID(rowB.guid))
 
@@ -558,18 +1038,18 @@ class TestSQLiteBookmarks: XCTestCase {
 
         // Delete the first. sync_status was New, so the row was immediately deleted.
         bookmarks.testFactory.removeByURL("http://example.org/").succeeded()
-        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
-        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM bookmarksLocal ORDER BY id"))
+        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM bookmarksLocalStructure WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
         let positionsAfterDelete = db.getPositionsForChildrenOfParent(BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksLocalStructure)
         XCTAssertEqual(positionsAfterDelete.count, 1)
         XCTAssertEqual(positionsAfterDelete[rowB.guid], 0)
 
         // Manually shuffle all of these into the mirror, as if we were fully synchronized.
         db.moveLocalToMirrorForTesting()
-        XCTAssertEqual([], db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id"))
-        XCTAssertEqual([], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure)"))
-        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
-        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksMirrorStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual([], db.getGUIDs("SELECT guid FROM bookmarksLocal ORDER BY id"))
+        XCTAssertEqual([], db.getGUIDs("SELECT child FROM bookmarksLocalStructure"))
+        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM bookmarksMirror ORDER BY id"))
+        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM bookmarksMirrorStructure WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
         let mirrorPositions = db.getPositionsForChildrenOfParent(BookmarkRoots.MobileFolderGUID, fromTable: TableBookmarksMirrorStructure)
         XCTAssertEqual(mirrorPositions.count, 1)
         XCTAssertEqual(mirrorPositions[rowB.guid], 0)
@@ -586,12 +1066,12 @@ class TestSQLiteBookmarks: XCTestCase {
         let rowC = db.getRecordByURL("https://letsencrypt.org/", fromTable: TableBookmarksLocal)
 
         // We have the old structure in the mirror.
-        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
-        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksMirrorStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM bookmarksMirror ORDER BY id"))
+        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM bookmarksMirrorStructure WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
         // We have the new structure in the local table.
-        XCTAssertEqual(Set([BookmarkRoots.MobileFolderGUID, rowC.guid]), Set(db.getGUIDs("SELECT guid FROM \(TableBookmarksLocal) ORDER BY id")))
-        XCTAssertEqual([rowB.guid, rowC.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(Set([BookmarkRoots.MobileFolderGUID, rowC.guid]), Set(db.getGUIDs("SELECT guid FROM bookmarksLocal ORDER BY id")))
+        XCTAssertEqual([rowB.guid, rowC.guid], db.getGUIDs("SELECT child FROM bookmarksLocalStructure WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
         // Parent is changed. The new record is New. The unmodified and deleted records aren't present.
         XCTAssertNil(db.getSyncStatusForGUID(rowA.guid))
@@ -602,11 +1082,11 @@ class TestSQLiteBookmarks: XCTestCase {
         // If we delete the old record, we mark it as changed, and it's no longer in the structure.
         bookmarks.testFactory.removeByGUID(rowB.guid).succeeded()
         XCTAssertEqual(SyncStatus.changed, db.getSyncStatusForGUID(rowB.guid))
-        XCTAssertEqual([rowC.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual([rowC.guid], db.getGUIDs("SELECT child FROM bookmarksLocalStructure WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
         // Add a duplicate to test multi-deletion (unstar).
         bookmarks.insertBookmark("https://letsencrypt.org/".asURL!, title: "Let's Encrypt", favicon: nil, intoFolder: BookmarkRoots.MobileFolderGUID, withTitle: "Mobile").succeeded()
-        let guidD = db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx").last!
+        let guidD = db.getGUIDs("SELECT child FROM bookmarksLocalStructure WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx").last!
         XCTAssertNotEqual(rowC.guid, guidD)
         XCTAssertEqual(SyncStatus.new, db.getSyncStatusForGUID(guidD))
         XCTAssertEqual(SyncStatus.changed, db.getSyncStatusForGUID(BookmarkRoots.MobileFolderGUID))
@@ -616,11 +1096,11 @@ class TestSQLiteBookmarks: XCTestCase {
         bookmarks.testFactory.removeByURL(rowC.bookmarkURI!).succeeded()
         XCTAssertNil(db.getSyncStatusForGUID(rowC.guid))
         XCTAssertNil(db.getSyncStatusForGUID(guidD))
-        XCTAssertEqual([], db.getGUIDs("SELECT child FROM \(TableBookmarksLocalStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual([], db.getGUIDs("SELECT child FROM bookmarksLocalStructure WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
 
         // The mirror structure is unchanged after all this.
-        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM \(TableBookmarksMirror) ORDER BY id"))
-        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM \(TableBookmarksMirrorStructure) WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
+        XCTAssertEqual(rootGUIDs + [rowB.guid], db.getGUIDs("SELECT guid FROM bookmarksMirror ORDER BY id"))
+        XCTAssertEqual([rowB.guid], db.getGUIDs("SELECT child FROM bookmarksMirrorStructure WHERE parent = '\(BookmarkRoots.MobileFolderGUID)' ORDER BY idx"))
     }
 
     /*
@@ -698,9 +1178,9 @@ class TestSQLiteBookmarks: XCTestCase {
         }
         let bookmarks = SQLiteBookmarkBufferStorage(db: db)
 
-        let record1 = BookmarkMirrorItem.bookmark("aaaaaaaaaaaa", modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "AAA", description: "AAA desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
-        let record2 = BookmarkMirrorItem.bookmark("bbbbbbbbbbbb", modified: Date.now() + 10, hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "BBB", description: "BBB desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
-        let toolbar = BookmarkMirrorItem.folder("toolbar", modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "Bookmarks Toolbar", description: "Add bookmarks to this folder to see them displayed on the Bookmarks Toolbar", children: ["aaaaaaaaaaaa", "bbbbbbbbbbbb"])
+        let record1 = BookmarkMirrorItem.bookmark("aaaaaaaaaaaa", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "AAA", description: "AAA desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
+        let record2 = BookmarkMirrorItem.bookmark("bbbbbbbbbbbb", dateAdded: Date.now(), modified: Date.now() + 10, hasDupe: false, parentID: BookmarkRoots.ToolbarFolderGUID, parentName: "Bookmarks Toolbar", title: "BBB", description: "BBB desc", URI: "http://getfirefox.com", tags: "[]", keyword: nil)
+        let toolbar = BookmarkMirrorItem.folder("toolbar", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "Bookmarks Toolbar", description: "Add bookmarks to this folder to see them displayed on the Bookmarks Toolbar", children: ["aaaaaaaaaaaa", "bbbbbbbbbbbb"])
         let recordsA: [BookmarkMirrorItem] = [record1, toolbar, record2]
         bookmarks.applyRecords(recordsA, withMaxVars: 3).succeeded()
 
@@ -710,13 +1190,13 @@ class TestSQLiteBookmarks: XCTestCase {
         let children = ["M87np9Vfh_2s", "-JxRyqNte-ue", "6lIQzUtbjE8O", "eOg3jPSslzXl", "1WJIi9EjQErp", "z5uRo45Rvfbd", "EK3lcNd0sUFN", "gFD3GTljgu12", "eRZGsbN1ew9-", "widfEdgGn9de", "l7eTOR4Uf6xq", "vPbxG-gpN4Rb", "4dwJ8CototFe", "zK-kw9Ii6ScW", "eDmDU-gtEFW6", "lKjqWQaL_syt", "ETVDvWgGT31Q", "3Z_bMIHPSZQ8", "Fqu4_bJOk7fT", "Uo_5K1QrA67j", "gDTXNg4m1AJZ", "zpds8P-9xews", "87zjNtVGPtEp", "ZJru8Sn3qhW7", "txVnzBBBOgLP", "JTnRqFaj_oNa", "soaMlfmM4kjR", "g8AcVBjo6IRf", "uPUDaiG4q637", "rfq2bUud_w4d", "XBGxsiuUG2UD", "-VQRnJlyAvMs", "6wu7TScKdTU7", "ZeFji2hLVpLj", "HpCn_TVizMWX", "IPR5HZwRdlwi", "00JFOGuWnhWB", "P1jb3qKt32Vg", "D6MQJ43V1Ir5", "qWSoXFteRfsq", "o2avfYqEdomL", "xRS0U0YnjK9G", "VgOgzE_xfP4w", "SwP3rMJGvoO3", "Hf2jEgI_-PWa", "AyhmBi7Cv598", "-PaMuzTJXxVk", "JMhYrg8SlY5K", "SQeySEjzyplL", "GTAwd2UkEQEe", "x3RsZj5Ilebr", "sRZWZqPi74FP", "amHR50TpygA6", "XSk782ceVNN6", "ipiMyYQzeypI", "ph2k3Nqfhau4", "m5JKC3hAEQ0H", "yTVerkmQbNxk", "7taA6FbbbUbH", "PZvpbSRuJLPs", "C8atoa25U94F", "KOfNJk_ISLc6", "Bt74lBG9tJq6", "BuHoY2rUhuKA", "XTmoWKnwfIPl", "ZATwa3oTD1m0", "e8TczN5It6Am", "6kCUYs8hQtKg", "jDD8s5aiKoex", "QmpmcrYwLU29", "nCRcekynuJ08", "resttaI4J9tu", "EKSX3HV55VU3", "2-yCz0EIsVls", "sSeeGw3VbBY-", "qfpCrU34w9y0", "RKDgzPWecD6m", "5SgXEKu_dICW", "R143WAeB5E5r", "8Ns4-NiKG62r", "4AHuZDvop5XX", "YCP1OsO1goFF", "CYYaU1mQ_N6t", "UGkzEOMK8cuU", "1RzZOarkzQBa", "qSW2Z3cZSI9c", "ooPlKEAfQsnn", "jIUScoKLiXQt", "bjNTKugzRRL1", "hR24ZVnHUZcs", "3j2IDAZgUyYi", "xnWcy-sQDJRu", "UCcgJqGk3bTV", "WSSRWeptH9tq", "4ugv47OGD2E2", "XboCZgUx-x3x", "HrmWqiqsuLrm", "OjdxvRJ3Jb6j"]
         // swiftlint:enable line_length
 
-        let mA = BookmarkMirrorItem.bookmark("jIUScoKLiXQt", modified: Date.now(), hasDupe: false, parentID: "mobile", parentName: "mobile", title: "Join the Engineering Leisure Class — Medium", description: nil, URI: "https://medium.com/@chrisloer/join-the-engineering-leisure-class-b3083c09a78e", tags: "[]", keyword: nil)
+        let mA = BookmarkMirrorItem.bookmark("jIUScoKLiXQt", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: "mobile", parentName: "mobile", title: "Join the Engineering Leisure Class — Medium", description: nil, URI: "https://medium.com/@chrisloer/join-the-engineering-leisure-class-b3083c09a78e", tags: "[]", keyword: nil)
 
-        let mB = BookmarkMirrorItem.folder("UjAHxFOGEqU8", modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: children)
+        let mB = BookmarkMirrorItem.folder("UjAHxFOGEqU8", dateAdded: Date.now(), modified: Date.now(), hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: children)
         bookmarks.applyRecords([mA, mB]).succeeded()
 
         func childCount(_ parent: GUID) -> Int? {
-            let sql = "SELECT COUNT(*) AS childCount FROM \(TableBookmarksBufferStructure) WHERE parent = ?"
+            let sql = "SELECT count(*) AS childCount FROM bookmarksBufferStructure WHERE parent = ?"
             let args: Args = [parent]
             return db.runQuery(sql, args: args, factory: { $0["childCount"] as! Int }).value.successValue?[0]
         }
@@ -725,7 +1205,7 @@ class TestSQLiteBookmarks: XCTestCase {
         XCTAssertEqual(children.count, childCount("UjAHxFOGEqU8"))
 
         // Insert an empty mobile bookmarks folder, so we can verify that the structure table is wiped.
-        let mBEmpty = BookmarkMirrorItem.folder("UjAHxFOGEqU8", modified: Date.now() + 1, hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: [])
+        let mBEmpty = BookmarkMirrorItem.folder("UjAHxFOGEqU8", dateAdded: Date.now(), modified: Date.now() + 1, hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: [])
         bookmarks.applyRecords([mBEmpty]).succeeded()
 
         // We no longer have children.

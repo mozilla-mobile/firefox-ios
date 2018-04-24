@@ -304,6 +304,23 @@ class NSURLExtensionsTests: XCTestCase {
         badurls.forEach { XCTAssertFalse(URL(string:$0)!.schemeIsValid, $0) }
     }
 
+    func testIsLocalUtility() {
+        let goodurls = [
+            "http://localhost:6571/reader-mode/page",
+            "http://LOCALhost:6571/about/sessionrestore.html",
+            "http://127.0.0.1:6571/errors/error.html"
+        ]
+        let badurls = [
+            "http://google.com",
+            "tel:6044044004",
+            "hax://localhost:6571/testhomepage",
+            "http://127.0.0.1:6571/test/atesthomepage.html"
+        ]
+
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isLocalUtility, $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isLocalUtility, $0) }
+    }
+
     func testisLocal() {
         let goodurls = [
             "http://localhost:6571/reader-mode/page",
@@ -448,6 +465,33 @@ class NSURLExtensionsTests: XCTestCase {
         XCTAssertEqual("http://foo.com/bar/?ppp=123", urlC.absoluteString)
         XCTAssertEqual("http://bar.com/noo?qqq=123", urlD.absoluteString)
         XCTAssertEqual("http://foo.com/bar/?ppp=123&rrr=aaa", urlE.absoluteString)
+    }
+
+    func testHidingFromDataDetectors() {
+        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else {
+            XCTFail()
+            return
+        }
+
+        let urls = ["https://example.com", "example.com", "http://example.com"]
+        for u in urls {
+            let url = URL(string: u)!
+
+            let original = url.absoluteDisplayString
+            let matches = detector.matches(in: original, options: [], range: NSMakeRange(0, original.count))
+            guard matches.count > 0 else {
+                print("\(url) doesn't match as a URL")
+                continue
+            }
+
+            let modified = url.absoluteDisplayExternalString
+            XCTAssertNotEqual(original, modified)
+            
+            let newMatches = detector.matches(in: modified, options: [], range: NSMakeRange(0, modified.count))
+
+            XCTAssertEqual(0, newMatches.count, "\(modified) is not a valid URL")
+        }
+
     }
 
 }

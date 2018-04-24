@@ -255,7 +255,7 @@ class ErrorPageHelper {
     }
 }
 
-extension ErrorPageHelper: TabHelper {
+extension ErrorPageHelper: TabContentScript {
     static func name() -> String {
         return "ErrorPageHelper"
     }
@@ -272,13 +272,13 @@ extension ErrorPageHelper: TabHelper {
 
             switch type {
             case ErrorPageHelper.MessageOpenInSafari:
-                UIApplication.shared.openURL(originalURL)
+                UIApplication.shared.open(originalURL, options: [:])
             case ErrorPageHelper.MessageCertVisitOnce:
                 if let cert = certFromErrorURL(errorURL),
                    let host = originalURL.host {
                     let origin = "\(host):\(originalURL.port ?? 443)"
                     ErrorPageHelper.certStore?.addCertificate(cert, forOrigin: origin)
-                    let _ = message.webView?.reload()
+                    _ = message.webView?.reload()
                 }
             default:
                 assertionFailure("Unknown error message")
