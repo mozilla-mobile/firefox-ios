@@ -63,6 +63,7 @@ class ShareViewController: UIViewController {
 
         let pageInfoRow = makePageInfoRow(addTo: stackView)
         makeSeparator(addTo: stackView)
+        makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefoxNow, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
         makeActionRow(addTo: stackView, label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
         makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
         makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
@@ -256,7 +257,7 @@ class ShareViewController: UIViewController {
 
 extension ShareViewController {
     @objc func actionLoadInBackground(gesture: UIGestureRecognizer) {
-        // To avoid re-rentry deom double tap, each action function disables the gesture
+        // To avoid re-rentry from double tap, each action function disables the gesture
         gesture.isEnabled = false
         animateToActionDoneView(withTitle: Strings.ShareLoadInBackgroundDone)
 
@@ -304,6 +305,31 @@ extension ShareViewController {
         sendToDevice.delegate = delegate
         let vc = sendToDevice.initialViewController()
         navigationController?.pushViewController(vc, animated: true)
+    }
+
+    @objc func actionOpenInFirefoxNow(gesture: UIGestureRecognizer) {
+        gesture.isEnabled = false
+
+        func firefoxUrl(_ url: String) -> String {
+            let encoded = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics) ?? ""
+            return "firefox://open-url?url=\(encoded)"
+        }
+
+        if let shareItem = shareItem,
+            let url = URL(string: firefoxUrl(shareItem.url)) {
+            var responder = self as UIResponder?
+            let selectorOpenURL = sel_registerName("openURL:")
+            while let item = responder {
+                if item.responds(to: selectorOpenURL) {
+                    item.perform(selectorOpenURL, with: url, afterDelay: 0)
+                    break
+                }
+
+                responder = item.next
+            }
+        }
+
+        finish(afterDelay: 0)
     }
 }
 

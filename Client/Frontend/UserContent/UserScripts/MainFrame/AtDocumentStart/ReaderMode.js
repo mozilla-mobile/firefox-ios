@@ -26,47 +26,49 @@ function debug(s) {
 }
 
 function checkReadability() {
-  if (document.location.href.match(readerModeURL)) {
-    debug({Type: "ReaderModeStateChange", Value: "Active"});
-    webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Active"});
-    return;
-  }
+  setTimeout(function() {
+    if (document.location.href.match(readerModeURL)) {
+      debug({Type: "ReaderModeStateChange", Value: "Active"});
+      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Active"});
+      return;
+    }
 
-  if ((document.location.protocol === "http:" || document.location.protocol === "https:") && document.location.pathname !== "/") {
-    // Short circuit in case we already ran Readability. This mostly happens when going
-    // back/forward: the page will be cached and the result will still be there.
-    if (readabilityResult && readabilityResult.content) {
-      debug({Type: "ReaderModeStateChange", Value: "Available"});
-      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Available"});
+    if ((document.location.protocol === "http:" || document.location.protocol === "https:") && document.location.pathname !== "/") {
+      // Short circuit in case we already ran Readability. This mostly happens when going
+      // back/forward: the page will be cached and the result will still be there.
+      if (readabilityResult && readabilityResult.content) {
+        debug({Type: "ReaderModeStateChange", Value: "Available"});
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Available"});
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderContentParsed", Value: readabilityResult});
+        return;
+      }
+
+      var Readability = require("readability/Readability.js");
+
+      var uri = {
+        spec: document.location.href,
+        host: document.location.host,
+        prePath: document.location.protocol + "//" + document.location.host, // TODO This is incomplete, needs username/password and port
+        scheme: document.location.protocol.substr(0, document.location.protocol.indexOf(":")),
+        pathBase: document.location.protocol + "//" + document.location.host + location.pathname.substr(0, location.pathname.lastIndexOf("/") + 1)
+      }
+
+      // document.cloneNode() can cause the webview to break (bug 1128774).
+      // Serialize and then parse the document instead.
+      var docStr = new XMLSerializer().serializeToString(document);
+      var doc = new DOMParser().parseFromString(docStr, "text/html");
+      var readability = new Readability(uri, doc, { debug: DEBUG });
+      readabilityResult = readability.parse();
+
+      debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
+      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
       webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderContentParsed", Value: readabilityResult});
       return;
     }
 
-    var Readability = require("readability/Readability.js");
-
-    var uri = {
-      spec: document.location.href,
-      host: document.location.host,
-      prePath: document.location.protocol + "//" + document.location.host, // TODO This is incomplete, needs username/password and port
-      scheme: document.location.protocol.substr(0, document.location.protocol.indexOf(":")),
-      pathBase: document.location.protocol + "//" + document.location.host + location.pathname.substr(0, location.pathname.lastIndexOf("/") + 1)
-    }
-
-    // document.cloneNode() can cause the webview to break (bug 1128774).
-    // Serialize and then parse the document instead.
-    var docStr = new XMLSerializer().serializeToString(document);
-    var doc = new DOMParser().parseFromString(docStr, "text/html");
-    var readability = new Readability(uri, doc, { debug: DEBUG });
-    readabilityResult = readability.parse();
-
-    debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
-    webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
-    webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderContentParsed", Value: readabilityResult});
-    return;
-  }
-
-  debug({Type: "ReaderModeStateChange", Value: "Unavailable"});
-  webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Unavailable"});
+    debug({Type: "ReaderModeStateChange", Value: "Unavailable"});
+    webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Unavailable"});
+  }, 100);
 }
 
 // Readerize the document. Since we did the actual readerization already in checkReadability, we

@@ -209,6 +209,9 @@
                   Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
                </Test>
                <Test
+                  Identifier = "PhotonActionSheetTest/testSendToDeviceFromShareOption()">
+               </Test>
+               <Test
                   Identifier = "ReaderViewTest">
                </Test>
                <Test
@@ -273,7 +276,6 @@
       buildConfiguration = "Fennec_Enterprise"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "1"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"

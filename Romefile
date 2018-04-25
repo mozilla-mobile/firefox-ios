@@ -3,7 +3,6 @@
 
 [IgnoreMap]
   xcconfigs = xcconfigs
-  Fuzi = Fuzi
 
 [RepositoryMap]
   telemetry-ios = Telemetry
@@ -11,3 +10,4 @@
   onepassword-app-extension = OnePasswordExtension
   ios_sdk = AdjustSDK
   GCDWebServer = GCDWebServers
+  JSONSchema.swift = JSONSchema
