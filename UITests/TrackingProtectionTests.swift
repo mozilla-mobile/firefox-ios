@@ -8,30 +8,30 @@ import EarlGrey
 @testable import Client
 
 func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
-    EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-    EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
-    EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+    EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
+    EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
+    EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
 
     let dialogAppeared = GREYCondition(name: "Wait for JS dialog") {
         var errorOrNil: NSError?
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("OK"))
             .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .assert(grey_notNil(), error: &errorOrNil)
         let success = errorOrNil == nil
         return success
     }
-    let success = dialogAppeared?.wait(withTimeout: 10)
-    GREYAssertTrue(success!, reason: "Failed to display JS dialog")
+    let success = dialogAppeared.wait(withTimeout: 10)
+    GREYAssertTrue(success, reason: "Failed to display JS dialog")
 
     if shouldBlockImage {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("image not loaded."))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("image not loaded."))
             .assert(grey_notNil())
     } else {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("image loaded."))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("image loaded."))
             .assert(grey_notNil())
     }
 
-    EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("OK"))
+    EarlGrey.selectElement(with: grey_accessibilityLabel("OK"))
         .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
         .assert(grey_enabled())
         .perform((grey_tap()))
@@ -110,19 +110,19 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         // Check tracking protection is enabled on private tabs only in Settings
         let menuAppeared = GREYCondition(name: "Wait for the Settings dialog to appear") {
             var errorOrNil: NSError?
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Search")).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Search")).assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil
             return success
         }
 
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_text("Settings")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())
 
-        let success = menuAppeared?.wait(withTimeout: 20)
-        GREYAssertTrue(success!, reason: "Failed to display settings dialog")
+        let success = menuAppeared.wait(withTimeout: 20)
+        GREYAssertTrue(success, reason: "Failed to display settings dialog")
         
         // Scroll to Tracking Protection Menu
-        EarlGrey.select(elementWithMatcher:grey_accessibilityLabel("Tracking Protection"))
+        EarlGrey.selectElement(with:grey_accessibilityLabel("Tracking Protection"))
             .using(searchAction: grey_scrollInDirection(GREYDirection.down, 200),
                    onElementWithMatcher: grey_kindOfClass(UITableView.self))
             .assert(grey_notNil())
@@ -137,29 +137,29 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     
     func testNormalTrackingProtection() {
         openTPSetting()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(false))
+        EarlGrey.selectElement(with: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(false))
         closeTPSetting()
 
         if BrowserUtils.iPad() {
-        EarlGrey.select(elementWithMatcher:grey_accessibilityID("TopTabsViewController.tabsButton"))
+        EarlGrey.selectElement(with:grey_accessibilityID("TopTabsViewController.tabsButton"))
                 .perform(grey_tap())
         } else {
-            EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabToolbar.tabsButton"))
+            EarlGrey.selectElement(with:grey_accessibilityID("TabToolbar.tabsButton"))
                 .perform(grey_tap())
         }
-        EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabTrayController.addTabButton"))
+        EarlGrey.selectElement(with:grey_accessibilityID("TabTrayController.addTabButton"))
             .perform(grey_tap())
 
         checkTrackingProtection(isBlocking: false, isTPDisabled: true)
 
         openTPSetting()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(true))
+        EarlGrey.selectElement(with: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(true))
         closeTPSetting()
 
         // Now with the TP enabled, the image should be blocked
         checkTrackingProtection(isBlocking: true)
         openTPSetting()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(false))
+        EarlGrey.selectElement(with: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(false))
         closeTPSetting()
     }
 
@@ -197,16 +197,16 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     func testPrivateTabPageTrackingProtection() {
 
         if BrowserUtils.iPad() {
-            EarlGrey.select(elementWithMatcher:
+            EarlGrey.selectElement(with:
                 grey_accessibilityID("TopTabsViewController.tabsButton"))
                 .perform(grey_tap())
         } else {
-            EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabToolbar.tabsButton"))
+            EarlGrey.selectElement(with:grey_accessibilityID("TabToolbar.tabsButton"))
                 .perform(grey_tap())
         }
-        EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabTrayController.maskButton"))
+        EarlGrey.selectElement(with:grey_accessibilityID("TabTrayController.maskButton"))
             .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabTrayController.addTabButton"))
+        EarlGrey.selectElement(with:grey_accessibilityID("TabTrayController.addTabButton"))
             .perform(grey_tap())
 
         checkTrackingProtection(isBlocking: true)

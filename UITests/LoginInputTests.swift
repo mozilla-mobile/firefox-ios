@@ -26,9 +26,9 @@ class LoginInputTests: KIFTestCase {
     }
     
     func enterUrl(url: String) {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
     }
     
     func waitForLoginDialog(text: String, appears: Bool = true) {
@@ -43,7 +43,7 @@ class LoginInputTests: KIFTestCase {
             var errorOrNil: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel(text),
                                               grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher)
+            EarlGrey.selectElement(with: matcher)
                 .assert(grey_notNil(), error: &errorOrNil)
             if appears == true {
                 success = errorOrNil == nil
@@ -66,7 +66,7 @@ class LoginInputTests: KIFTestCase {
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
         
         waitForLoginDialog(text: "Save login \(username) for \(self.webRoot!)?")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("SaveLoginPrompt.dontSaveButton")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("SaveLoginPrompt.dontSaveButton")).perform(grey_tap())
     }
     
     func testLoginFormDisplaysUpdateSnackbarIfPreviouslySaved() {
@@ -80,14 +80,14 @@ class LoginInputTests: KIFTestCase {
         tester().enterText(password1, intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
         waitForLoginDialog(text: "Save login \(username) for \(self.webRoot!)?")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("SaveLoginPrompt.saveLoginButton"))
+        EarlGrey.selectElement(with: grey_accessibilityID("SaveLoginPrompt.saveLoginButton"))
             .perform(grey_tap())
         
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText(password2, intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
         waitForLoginDialog(text: "Update login \(username) for \(self.webRoot!)?")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("UpdateLoginPrompt.updateButton"))
+        EarlGrey.selectElement(with: grey_accessibilityID("UpdateLoginPrompt.updateButton"))
             .perform(grey_tap())
     }
     
@@ -114,7 +114,7 @@ class LoginInputTests: KIFTestCase {
         tester().enterText(password1, intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
         waitForLoginDialog(text: "Save login \(username) for \(self.webRoot!)?")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("SaveLoginPrompt.saveLoginButton"))
+        EarlGrey.selectElement(with: grey_accessibilityID("SaveLoginPrompt.saveLoginButton"))
             .perform(grey_tap())
         
         tester().enterText(username, intoWebViewInputWithName: "username")

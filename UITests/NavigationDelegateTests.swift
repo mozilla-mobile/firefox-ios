@@ -26,15 +26,15 @@ class NavigationDelegateTests: KIFTestCase {
     }
     
     func enterUrl(url: String) {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
     }
     
     func testAppStoreLinkShowsConfirmation() {
         let url = "\(webRoot!)/navigationDelegate.html"
         enterUrl(url: url)
         tester().tapWebViewElementWithAccessibilityLabel("link")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("CancelOpenInAppStore")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("CancelOpenInAppStore")).perform(grey_tap())
     }
 }

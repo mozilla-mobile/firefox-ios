@@ -39,7 +39,7 @@ class DomainAutocompleteTests: KIFTestCase {
 
     override func tearDown() {
         super.tearDown()
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("goBack")).perform(grey_tap())
         BrowserUtils.resetToAboutHome()
         BrowserUtils.clearPrivateData()
     }

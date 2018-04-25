@@ -28,9 +28,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         var urls: [(title: String, domain: String, dispDomain: String, url: String)] = []
         for pageNo in 1...noOfSites {
             let url = "\(webRoot!)/numberedPage.html?page=\(pageNo)"
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+            EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
+            EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
+            EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
 
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
             let dom = URL(string: url)!.normalizedHost!
@@ -63,7 +63,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             let matcher = grey_allOf([grey_accessibilityLabel(withoutDot),
                                               grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")!),
                                               grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &errorOrNil)
             
             if errorOrNil == nil {
                 return true
@@ -114,30 +114,30 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let url1 = urls[0].url
         let url2 = urls[1].url
         BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false)
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("History")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("History")).perform(grey_tap())
 
         let historyListShown = GREYCondition(name: "Wait for history to appear", block: {
             var errorOrNil: NSError?
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
+            EarlGrey.selectElement(with: grey_accessibilityLabel(url1))
                 .assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil
             return success
         }).wait(withTimeout: 20)
         GREYAssertTrue(historyListShown, reason: "Failed to display history list")
 
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url1))
+        EarlGrey.selectElement(with: grey_accessibilityLabel(url1))
             .assert(grey_notNil(), error: &errorOrNil)
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(url2))
+        EarlGrey.selectElement(with: grey_accessibilityLabel(url2))
             .assert(grey_notNil(), error: &errorOrNil)
     }
 
     func testClearsCookies() {
         let url = "\(webRoot!)/numberedPage.html?page=1"
     
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
@@ -168,9 +168,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let cachedServer = CachedPageServer()
         let cacheRoot = cachedServer.start()
         let url = "\(cacheRoot)/cachedPage.html"
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Cache test")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView

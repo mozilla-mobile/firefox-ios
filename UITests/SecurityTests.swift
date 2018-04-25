@@ -17,11 +17,11 @@ class SecurityTests: KIFTestCase {
     }
     
     func enterUrl(url: String) {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url"))
+        EarlGrey.selectElement(with: grey_accessibilityID("url"))
             .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
+        EarlGrey.selectElement(with: grey_accessibilityID("address"))
             .perform(grey_replaceText(url))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
+        EarlGrey.selectElement(with: grey_accessibilityID("address"))
             .perform(grey_typeText("\n"))
     }
     
