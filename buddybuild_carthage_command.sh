@@ -12,7 +12,7 @@ if [ "$USE_ROME_CARTHAGE" = "YES" ]; then
     rome download --platform iOS
 
     echo "[Rome script] list what is missing and update/build if needed"
-    rome list --missing --platform ios | awk '{print $1}' | xargs carthage update --platform ios
+    rome list --missing --platform ios | awk '{print $1}' | xargs carthage bootstrap --platform ios
 
     echo "[Rome script] upload what is missing"
     rome list --missing --platform ios | awk '{print $1}' | xargs rome upload --platform ios

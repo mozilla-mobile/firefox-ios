@@ -10,3 +10,4 @@
   onepassword-app-extension = OnePasswordExtension
   ios_sdk = AdjustSDK
   GCDWebServer = GCDWebServers
+  JSONSchema.swift = JSONSchema
