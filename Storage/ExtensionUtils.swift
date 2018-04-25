@@ -23,6 +23,7 @@ public struct ExtensionUtils {
     /// Has a completionHandler because ultimately an XPC call to the sharing application is done.
     /// We can always extract a URL and sometimes a title. The favicon is currently just a placeholder, but
     /// future code can possibly interact with a web page to find a proper icon.
+    /// If no URL is found, but a text provider *is*, then use the raw text as a fallback.
     public static func extractSharedItemFromExtensionContext(_ extensionContext: NSExtensionContext?, completionHandler: @escaping (ShareItem?, Error?) -> Void) {
         guard let extensionContext = extensionContext,
               let inputItems = extensionContext.inputItems as? [NSExtensionItem] else {
@@ -74,9 +75,8 @@ public struct ExtensionUtils {
                 if let url = URL(string: text) {
                     completionHandler(ShareItem(url: url.absoluteString, title: nil, favicon: nil), nil)
                 } else {
-
+                    // @TODO Support searching for the selected text, perhaps urlScheme://open-text?text=\(query)
                     completionHandler(nil, nil)
-                    // maybe do a text search urlScheme://open-text?text=\(query)
                 }
 
             }
