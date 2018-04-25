@@ -204,6 +204,12 @@ class TabManager: NSObject {
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
         }
+        if tab!.isPrivate == true {
+            UITextField.appearance().keyboardAppearance = .dark
+        }
+        else {
+            UITextField.appearance().keyboardAppearance = .light
+        }
     }
 
     func shouldClearPrivateTabs() -> Bool {
