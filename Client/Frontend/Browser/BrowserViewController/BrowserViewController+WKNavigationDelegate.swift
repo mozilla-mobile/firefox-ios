@@ -137,6 +137,8 @@ extension BrowserViewController: WKNavigationDelegate {
             } else if navigationAction.navigationType == .backForward {
                 restoreSpoofedUserAgentIfRequired(webView, newRequest: navigationAction.request)
             }
+
+            pendingRequests[url.absoluteString] = navigationAction.request
             decisionHandler(.allow)
             return
         }
@@ -151,6 +153,32 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
         }
+        decisionHandler(.cancel)
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        var request: URLRequest?
+        if let url = navigationResponse.response.url {
+            request = pendingRequests.removeValue(forKey: url.absoluteString)
+        }
+
+        guard var helperForURL = OpenIn.helperForRequest(request, response: navigationResponse.response, canShowInWebView: navigationResponse.canShowMIMEType, browserViewController: self) else {
+            if navigationResponse.canShowMIMEType {
+                decisionHandler(.allow)
+                return
+            }
+
+            let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
+            ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.url!, inWebView: webView)
+            decisionHandler(.allow)
+            return
+        }
+
+        if helperForURL.openInView == nil {
+            helperForURL.openInView = navigationToolbar.menuButton
+        }
+
+        helperForURL.open()
         decisionHandler(.cancel)
     }
 
