@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import MobileCoreServices
 import PassKit
 import WebKit
 import SnapKit
@@ -22,9 +23,32 @@ struct OpenInViewUX {
 }
 
 struct MIMEType {
+    static let Bitmap = "image/bmp"
+    static let CSS = "text/css"
+    static let GIF = "image/gif"
+    static let JavaScript = "text/javascript"
+    static let JPEG = "image/jpeg"
+    static let HTML = "text/html"
     static let OctetStream = "application/octet-stream"
     static let Passbook = "application/vnd.apple.pkpass"
     static let PDF = "application/pdf"
+    static let PlainText = "text/plain"
+    static let PNG = "image/png"
+    static let WebP = "image/webp"
+
+    private static let webViewViewableTypes: [String] = [MIMEType.Bitmap, MIMEType.GIF, MIMEType.JPEG, MIMEType.HTML, MIMEType.PDF, MIMEType.PlainText, MIMEType.PNG, MIMEType.WebP]
+
+    static func canShowInWebView(_ mimeType: String) -> Bool {
+        return webViewViewableTypes.contains(mimeType)
+    }
+
+    static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {
+        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension as CFString, nil)?.takeRetainedValue(), let mimeType = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() {
+            return mimeType as String
+        }
+
+        return "application/octet-stream"
+    }
 }
 
 protocol OpenInHelper {

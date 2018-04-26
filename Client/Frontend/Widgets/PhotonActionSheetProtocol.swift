@@ -49,20 +49,24 @@ extension PhotonActionSheetProtocol {
             tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
             UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .bookmarksPanel, value: .appMenu)
         }
-        
-        let openHistory = PhotonActionSheetItem(title: Strings.AppMenuHistoryTitleString, iconString: "menu-panel-History") { action in
-            tab.loadRequest(PrivilegedRequest(url: HomePanelType.history.localhostURL) as URLRequest)
-        }
-        
+
         let openReadingList = PhotonActionSheetItem(title: Strings.AppMenuReadingListTitleString, iconString: "menu-panel-ReadingList") { action in
             tab.loadRequest(PrivilegedRequest(url: HomePanelType.readingList.localhostURL) as URLRequest)
         }
-        
+
+        let openHistory = PhotonActionSheetItem(title: Strings.AppMenuHistoryTitleString, iconString: "menu-panel-History") { action in
+            tab.loadRequest(PrivilegedRequest(url: HomePanelType.history.localhostURL) as URLRequest)
+        }
+
+        let openDownloads = PhotonActionSheetItem(title: Strings.AppMenuDownloadsTitleString, iconString: "menu-panel-Downloads") { action in
+            tab.loadRequest(PrivilegedRequest(url: HomePanelType.downloads.localhostURL) as URLRequest)
+        }
+
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
             HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
         }
         
-        var actions = [openTopSites, openBookmarks, openReadingList, openHistory]
+        var actions = [openTopSites, openBookmarks, openReadingList, openHistory, openDownloads]
         if HomePageHelper(prefs: self.profile.prefs).isHomePageAvailable {
             actions.insert(openHomePage, at: 0)
         }
