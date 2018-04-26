@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$USE_ROME_CARTHAGE" = "YES" && "$BUDDYBUILD_SCHEME" != "Fennec_Enterprise_*" ]; then
+if [[ "$USE_ROME_CARTHAGE" = "YES"  &&  "$BUDDYBUILD_SCHEME" != "Fennec_Enterprise_*" ]] ; then
     echo "[Rome script] installing rome "
     brew install blender/homebrew-tap/rome
 
