@@ -162,26 +162,23 @@ extension BrowserViewController: WKNavigationDelegate {
             request = pendingRequests.removeValue(forKey: url.absoluteString)
         }
 
-        let helperForURL = OpenIn.helperForRequest(request, response: navigationResponse.response)
-        if navigationResponse.canShowMIMEType {
-            if let openInHelper = helperForURL {
-                addViewForOpenInHelper(openInHelper)
+        guard var helperForURL = OpenIn.helperForRequest(request, response: navigationResponse.response, canShowInWebView: navigationResponse.canShowMIMEType, browserViewController: self) else {
+            if navigationResponse.canShowMIMEType {
+                decisionHandler(.allow)
+                return
             }
+
+            let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
+            ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.url!, inWebView: webView)
             decisionHandler(.allow)
             return
         }
 
-        guard var openInHelper = helperForURL else {
-            let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
-            ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.url!, inWebView: webView)
-            return decisionHandler(.allow)
+        if helperForURL.openInView == nil {
+            helperForURL.openInView = navigationToolbar.menuButton
         }
 
-        if openInHelper.openInView == nil {
-            openInHelper.openInView = navigationToolbar.menuButton
-        }
-
-        openInHelper.open()
+        helperForURL.open()
         decisionHandler(.cancel)
     }
 
