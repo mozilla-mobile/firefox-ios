@@ -64,5 +64,15 @@ class HomePanels {
             imageName: "ReadingList",
             accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label"),
             accessibilityIdentifier: "HomePanels.ReadingList"),
+
+        HomePanelDescriptor(
+            makeViewController: { profile in
+                let controller = DownloadsPanel()
+                controller.profile = profile
+                return controller
+            },
+            imageName: "Downloads",
+            accessibilityLabel: NSLocalizedString("Downloads", comment: "Panel accessibility label"),
+            accessibilityIdentifier: "HomePanels.Downloads"),
         ]
 }
