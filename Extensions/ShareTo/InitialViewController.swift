@@ -57,6 +57,18 @@ class InitialViewController: UIViewController {
         let popupView = ShareViewController()
         popupView.delegate = self
         embedController = EmbeddedNavController(parent: self, rootViewController: popupView)
+        view.alpha = 0
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // The system share dialog dims the screen, then once our share action is selected it closes and the
+        // screen undims and our view controller is shown which again dims the screen. Without a short fade in
+        // the effect appears flash-like.
+        UIView.animate(withDuration: 0.2) {
+            self.view.alpha = 1
+        }
     }
 }
 
@@ -80,10 +92,16 @@ extension InitialViewController: ShareControllerDelegate {
                 deferred.fill(item)
             } else {
                 deferred.fill(nil)
-                self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+                self.extensionContext?.cancelRequest(withError: CocoaError(.keyValueValidation))
             }
         })
 
         return deferred
+    }
+
+    // At startup, the extension may show an alert that it can't share. In this case for a better UI, rather than showing
+    // 2 popup dialogs (the main one and then the alert), just show the alert.
+    func hidePopupWhenShowingAlert() {
+        embedController.navigationController.view.alpha = 0
     }
 }

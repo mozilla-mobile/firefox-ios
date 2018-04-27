@@ -35,6 +35,7 @@ protocol ShareControllerDelegate: class {
     func finish(afterDelay: TimeInterval)
     func getValidExtensionContext() -> NSExtensionContext?
     func getShareItem() -> Deferred<ShareItem?>
+    func hidePopupWhenShowingAlert()
 }
 
 class ShareViewController: UIViewController {
@@ -87,6 +88,8 @@ class ShareViewController: UIViewController {
 
         delegate?.getShareItem().uponQueue(.main) { shareItem in
             guard let shareItem = shareItem, shareItem.isShareable else {
+                self.delegate?.hidePopupWhenShowingAlert()
+
                 let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .default) { _ in self.finish(afterDelay: 0) })
                 self.present(alert, animated: true, completion: nil)
