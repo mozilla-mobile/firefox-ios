@@ -427,7 +427,8 @@ extension PhotonActionSheetProtocol {
         }
 
         let action: ((PhotonActionSheetItem) -> Void) = { action in
-            showFxA(nil)
+            let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
+            showFxA(fxaParams)
         }
 
         guard let title = title(), let iconString = imageName() else { return nil }

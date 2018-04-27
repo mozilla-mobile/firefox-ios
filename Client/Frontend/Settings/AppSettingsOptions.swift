@@ -38,7 +38,8 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAContentViewController(profile: profile)
+        let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
+        let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
         viewController.delegate = self
         viewController.url = settings.profile.accountConfiguration.signInURL
         navigationController?.pushViewController(viewController, animated: true)
@@ -379,7 +380,8 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAContentViewController(profile: profile)
+        let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
+        let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
         viewController.delegate = self
 
         if let account = profile.getAccount() {
