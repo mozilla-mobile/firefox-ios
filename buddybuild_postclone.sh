@@ -12,7 +12,7 @@ function setup_virtualenv {
 # Install Node.js dependencies and build user scripts
 #
 
-npm install
+npm install --silent
 npm run build
 
 #
