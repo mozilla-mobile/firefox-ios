@@ -1,7 +1,7 @@
 github "getsentry/sentry-cocoa" "3.11.1"
 github "Alamofire/Alamofire" "4.3.0"
 github "sleroux/Deferred" "35b8927c1b94ce074e10793c57e1f80d0e2227fa"
-github "mozilla-mobile/Fuzi" "5efbd6104ea2c5036d7c590aead7b108c331cfbf"
+github "cezheng/Fuzi" "2.0.2"
 github "swisspol/GCDWebServer" "3.3.2"
 github "kif-framework/KIF" "v3.6.0"
 github "SnapKit/SnapKit" "3.1.2"
