@@ -1297,7 +1297,7 @@ extension BrowserViewController: URLBarDelegate {
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
                                                  findInPage: findInPageAction, presentableVC: self, isBookmarked: isBookmarked,
                                                  success: successCallback)
-            self.presentSheetWith(actions: pageActions, on: self, from: button)
+            self.presentSheetWith(title: Strings.PageActionMenuTitle, actions: pageActions, on: self, from: button)
         }
     }
     
