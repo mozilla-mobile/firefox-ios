@@ -10,13 +10,13 @@ struct SettingsUX {
     static let TableViewHeaderBackgroundColor = UIConstants.AppBackgroundColor
     static let TableViewHeaderTextColor = UIColor.Photon.Grey50
     static let TableViewRowTextColor = UIColor.Photon.Grey90
-    static let TableViewDisabledRowTextColor = UIColor.lightGray
-    static let TableViewSeparatorColor = UIColor(rgb: 0xD1D1D4)
+    static let TableViewDisabledRowTextColor = UIColor.Photon.Grey40
+    static let TableViewSeparatorColor = UIColor.Photon.Grey30
     static let TableViewHeaderFooterHeight = CGFloat(44)
-    static let TableViewRowErrorTextColor = UIColor(red: 255/255, green: 0/255, blue: 26/255, alpha: 1.0)
-    static let TableViewRowWarningTextColor = UIColor(red: 245/255, green: 166/255, blue: 35/255, alpha: 1.0)
-    static let TableViewRowActionAccessoryColor = UIColor(red: 0.29, green: 0.56, blue: 0.89, alpha: 1.0)
-    static let TableViewRowSyncTextColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+    static let TableViewRowErrorTextColor = UIColor.Photon.Red50
+    static let TableViewRowWarningTextColor = UIColor.Photon.Orange50
+    static let TableViewRowActionAccessoryColor = UIColor.Photon.Blue50
+    static let TableViewRowSyncTextColor = UIColor.Photon.Grey80
 }
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.

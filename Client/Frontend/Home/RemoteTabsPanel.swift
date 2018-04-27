@@ -17,13 +17,13 @@ private struct RemoteTabsPanelUX {
     static let RowHeight = SiteTableViewControllerUX.RowHeight
     static let HeaderBackgroundColor = UIColor.Photon.Grey10
 
-    static let EmptyStateTitleTextColor = UIColor.darkGray
+    static let EmptyStateTitleTextColor = UIColor.Photon.Grey60
 
-    static let EmptyStateInstructionsTextColor = UIColor.gray
+    static let EmptyStateInstructionsTextColor = UIColor.Photon.Grey50
     static let EmptyStateInstructionsWidth = 170
     static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
-    static let EmptyStateSignInButtonColor = UIColor(red: 0.3, green: 0.62, blue: 1, alpha: 1)
-    static let EmptyStateSignInButtonTitleColor = UIColor.white
+    static let EmptyStateSignInButtonColor = UIColor.Photon.Green60
+    static let EmptyStateSignInButtonTitleColor = UIColor.Photon.White100
     static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
     static let EmptyStateSignInButtonHeight = 44
     static let EmptyStateSignInButtonWidth = 200

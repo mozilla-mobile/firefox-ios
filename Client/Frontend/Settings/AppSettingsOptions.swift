@@ -82,7 +82,7 @@ class SyncNowSetting: WithAccountSetting {
             return NSAttributedString(
                 string: Strings.FxANoInternetConnection,
                 attributes: [
-                    NSAttributedStringKey.foregroundColor: UIColor.red,
+                    NSAttributedStringKey.foregroundColor: UIColor.Photon.Red60,
                     NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultMediumFont
                 ]
             )
@@ -91,7 +91,7 @@ class SyncNowSetting: WithAccountSetting {
         return NSAttributedString(
             string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
             attributes: [
-                NSAttributedStringKey.foregroundColor: self.enabled ? SettingsUX.TableViewRowSyncTextColor : UIColor.gray,
+                NSAttributedStringKey.foregroundColor: self.enabled ? SettingsUX.TableViewRowSyncTextColor : UIColor.Photon.Grey50,
                 NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFont
             ]
         )
@@ -157,7 +157,7 @@ class SyncNowSetting: WithAccountSetting {
 
         let formattedLabel = timestampFormatter.string(from: Date.fromTimestamp(timestamp))
         let attributedString = NSMutableAttributedString(string: formattedLabel)
-        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.gray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)]
+        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.Photon.Grey50, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)]
         let range = NSRange(location: 0, length: attributedString.length)
         attributedString.setAttributes(attributes, range: range)
         return attributedString
@@ -369,7 +369,7 @@ class AccountStatusSetting: WithAccountSetting {
                 break
             }
             
-            let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
+            let orange = UIColor.Photon.Orange50
             let range = NSRange(location: 0, length: string.count)
             let attrs = [NSAttributedStringKey.foregroundColor: orange]
             let res = NSMutableAttributedString(string: string)

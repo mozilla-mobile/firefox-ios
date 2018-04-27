@@ -246,7 +246,7 @@ class OpenInView: UIView {
             make.height.equalTo(self)
             make.trailing.equalTo(self).offset(OpenInViewUX.TextOffset)
         }
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = UIColor.Photon.White100
     }
 
     required init?(coder aDecoder: NSCoder) {

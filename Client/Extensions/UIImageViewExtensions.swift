@@ -34,7 +34,7 @@ public extension UIImageView {
     private func color(forImage image: UIImage, andURL url: URL, completed completionBlock: ((UIColor, URL?) -> Void)? = nil) {
         guard let domain = url.baseDomain else {
             self.backgroundColor = .gray
-            completionBlock?(UIColor.gray, url)
+            completionBlock?(UIColor.Photon.Grey50, url)
             return
         }
 
@@ -45,8 +45,8 @@ public extension UIImageView {
             image.getColors(scaleDownSize: CGSize(width: 25, height: 25)) {colors in
                 let isSame = [colors.primary, colors.secondary, colors.detail].every { $0 == colors.primary }
                 if isSame {
-                    completionBlock?(UIColor.white, url)
-                    FaviconFetcher.colors[domain] = UIColor.white
+                    completionBlock?(UIColor.Photon.White100, url)
+                    FaviconFetcher.colors[domain] = UIColor.Photon.White100
                 } else {
                     completionBlock?(colors.background, url)
                     FaviconFetcher.colors[domain] = colors.background

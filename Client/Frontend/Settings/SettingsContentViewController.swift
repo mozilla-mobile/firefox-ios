@@ -70,7 +70,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.interstitialSpinnerView.startAnimating()
     }
 
-    init(backgroundColor: UIColor = UIColor.white, title: NSAttributedString? = nil) {
+    init(backgroundColor: UIColor = UIColor.Photon.White100, title: NSAttributedString? = nil) {
         interstitialBackgroundColor = backgroundColor
         settingsTitle = title
         super.init(nibName: nil, bundle: nil)
@@ -129,7 +129,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         let error = UILabel()
         if let _ = settingsTitle {
             error.text = TODOPageLoadErrorString
-            error.textColor = UIColor.red // Firefox Orange!
+            error.textColor = UIColor.Photon.Red60
             error.textAlignment = .center
         }
         error.isHidden = true

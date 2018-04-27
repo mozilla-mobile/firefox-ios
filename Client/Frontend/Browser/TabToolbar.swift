@@ -153,7 +153,7 @@ class ToolbarButton: UIButton {
         adjustsImageWhenHighlighted = false
         selectedTintColor = tintColor
         unselectedTintColor = tintColor
-        disabledTintColor = UIColor.gray
+        disabledTintColor = UIColor.Photon.Grey50
         imageView?.contentMode = .scaleAspectFit
     }
 

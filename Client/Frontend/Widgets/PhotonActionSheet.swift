@@ -13,7 +13,7 @@ private struct PhotonActionSheetUX {
     static let HeaderFooterHeight: CGFloat = 20
     static let RowHeight: CGFloat = 50
     static let BorderWidth: CGFloat = 0.5
-    static let BorderColor = UIColor(white: 0, alpha: 0.1)
+    static let BorderColor = UIColor.Photon.Grey30
     static let CornerRadius: CGFloat = 10
     static let SiteImageViewSize = 52
     static let IconSize = CGSize(width: 24, height: 24)
@@ -335,13 +335,13 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         titleLabel.numberOfLines = 1
-        titleLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.gray
+        titleLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey50
         return titleLabel
     }()
 
     lazy var separatorView: UIView = {
         let separatorLine = UIView()
-        separatorLine.backgroundColor = UIColor.lightGray
+        separatorLine.backgroundColor = UIColor.Photon.Grey40
         return separatorLine
     }()
 
@@ -477,7 +477,7 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
         self.backgroundView?.backgroundColor = .clear
-        separatorLineView.backgroundColor = UIColor.lightGray
+        separatorLineView.backgroundColor = UIColor.Photon.Grey40
         self.contentView.addSubview(separatorLineView)
         separatorLineView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)

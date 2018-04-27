@@ -37,7 +37,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     init(profile: Profile, fxaOptions: FxALaunchParams? = nil) {
         self.profile = profile
         
-        super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
+        super.init(backgroundColor: UIColor.Photon.Grey20, title: NSAttributedString(string: "Firefox Accounts"))
         
         if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
             self.url = self.createFxAURLWith(fxaOptions, profile: profile)

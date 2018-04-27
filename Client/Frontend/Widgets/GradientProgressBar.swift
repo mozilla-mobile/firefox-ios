@@ -87,7 +87,7 @@ open class GradientProgressBar: UIProgressView {
         alphaMaskLayer.anchorPoint = .zero
         alphaMaskLayer.position = .zero
 
-        alphaMaskLayer.backgroundColor = UIColor.white.cgColor
+        alphaMaskLayer.backgroundColor = UIColor.Photon.White100.cgColor
     }
     
     private func setupGradientLayer() {

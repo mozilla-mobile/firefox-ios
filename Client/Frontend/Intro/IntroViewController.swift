@@ -88,7 +88,7 @@ class IntroViewController: UIViewController {
         }
 
         assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.Photon.White100
 
         // Add Views
         view.addSubview(pageControl)
@@ -321,8 +321,8 @@ extension IntroViewController: UIScrollViewDelegate {
 
         var percentageOfScroll = currentHorizontalOffset / maximumHorizontalOffset
         percentageOfScroll = percentageOfScroll > 1.0 ? 1.0 : percentageOfScroll
-        let whiteComponent = UIColor.white.components
-        let grayComponent = UIColor(rgb: 0xF2F2F2).components
+        let whiteComponent = UIColor.Photon.White100.components
+        let grayComponent = UIColor.Photon.Grey20.components
         let newRed   = (1.0 - percentageOfScroll) * whiteComponent.red   + percentageOfScroll * grayComponent.red
         let newGreen = (1.0 - percentageOfScroll) * whiteComponent.green + percentageOfScroll * grayComponent.green
         let newBlue  = (1.0 - percentageOfScroll) * whiteComponent.blue  + percentageOfScroll * grayComponent.blue

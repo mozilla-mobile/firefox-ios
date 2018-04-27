@@ -9,8 +9,8 @@ import Shared
 
 private struct QRCodeViewControllerUX {
     static let navigationBarBackgroundColor = UIColor.black
-    static let navigationBarTitleColor = UIColor.white
-    static let maskViewBackgroungColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+    static let navigationBarTitleColor = UIColor.Photon.White100
+    static let maskViewBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
     static let isLightingNavigationItemColor = UIColor(red: 0.45, green: 0.67, blue: 0.84, alpha: 1)
 }
 
@@ -38,7 +38,7 @@ class QRCodeViewController: UIViewController {
     private lazy var instructionsLabel: UILabel = {
         let label = UILabel()
         label.text = Strings.ScanQRCodeInstructionsLabel
-        label.textColor = UIColor.white
+        label.textColor = UIColor.Photon.White100
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -78,13 +78,13 @@ class QRCodeViewController: UIViewController {
 
         // Setup the NavigationItem
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-goBack"), style: .plain, target: self, action: #selector(goBack))
-        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.white
+        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.Photon.White100
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "qrcode-light"), style: .plain, target: self, action: #selector(openLight))
         if captureDevice.hasTorch {
-            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.White100
         } else {
-            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.gray
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.Grey50
             self.navigationItem.rightBarButtonItem?.isEnabled = false
         }
 
@@ -97,7 +97,7 @@ class QRCodeViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
 
-        maskView.backgroundColor = QRCodeViewControllerUX.maskViewBackgroungColor
+        maskView.backgroundColor = QRCodeViewControllerUX.maskViewBackgroundColor
         self.view.addSubview(maskView)
         self.view.addSubview(scanBorder)
         self.view.addSubview(scanLine)
@@ -185,7 +185,7 @@ class QRCodeViewController: UIViewController {
                 captureDevice.torchMode = AVCaptureDevice.TorchMode.off
                 captureDevice.unlockForConfiguration()
                 navigationItem.rightBarButtonItem?.image = UIImage(named: "qrcode-light")
-                navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+                navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.White100
             } catch {
                 print(error)
             }

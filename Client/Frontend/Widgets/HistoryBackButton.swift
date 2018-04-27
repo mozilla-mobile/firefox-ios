@@ -37,7 +37,7 @@ class HistoryBackButton: UIButton {
         addSubview(chevron)
         addSubview(title)
 
-        backgroundColor = UIColor.white
+        backgroundColor = UIColor.Photon.White100
 
         chevron.snp.makeConstraints { make in
             make.leading.equalTo(self.safeArea.leading).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)

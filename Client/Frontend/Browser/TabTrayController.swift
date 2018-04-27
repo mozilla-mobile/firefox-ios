@@ -32,7 +32,7 @@ private struct LightTabCellUX {
 }
 
 private struct DarkTabCellUX {
-    static let TabTitleTextColor = UIColor.white
+    static let TabTitleTextColor = UIColor.Photon.White100
 }
 
 protocol TabCellDelegate: class {
@@ -69,7 +69,7 @@ class TabCell: UICollectionViewCell {
     var margin = CGFloat(0)
 
     override init(frame: CGRect) {
-        self.backgroundHolder.backgroundColor = UIColor.white
+        self.backgroundHolder.backgroundColor = UIColor.Photon.White100
         self.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         self.backgroundHolder.clipsToBounds = true
         self.backgroundHolder.backgroundColor = TabTrayControllerUX.CellBackgroundColor
@@ -94,7 +94,7 @@ class TabCell: UICollectionViewCell {
         self.closeButton.setImage(UIImage.templateImageNamed("tab_close"), for: [])
         self.closeButton.imageView?.contentMode = .scaleAspectFit
         self.closeButton.contentMode = .center
-        self.closeButton.tintColor = UIColor.lightGray
+        self.closeButton.tintColor = UIColor.Photon.Grey40
         self.closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
 
         super.init(frame: frame)
@@ -782,7 +782,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         let tab = tabs[indexPath.item]
         tabCell.style = tab.isPrivate ? .dark : .light
         tabCell.titleText.text = tab.displayTitle
-        tabCell.closeButton.tintColor = tab.isPrivate ? UIColor.white : UIColor.gray
+        tabCell.closeButton.tintColor = tab.isPrivate ? UIColor.Photon.White100 : UIColor.Photon.Grey50
 
         if !tab.displayTitle.isEmpty {
             tabCell.accessibilityLabel = tab.displayTitle
@@ -798,7 +798,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
             let defaultFavicon = UIImage(named: "defaultFavicon")
             if tab.isPrivate {
                 tabCell.favicon.image = defaultFavicon
-                tabCell.favicon.tintColor = UIColor.white
+                tabCell.favicon.tintColor = UIColor.Photon.White100
             } else {
                 tabCell.favicon.image = defaultFavicon
             }
@@ -950,9 +950,9 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 }
 
 private struct EmptyPrivateTabsViewUX {
-    static let TitleColor = UIColor.white
+    static let TitleColor = UIColor.Photon.White100
     static let TitleFont = UIFont.systemFont(ofSize: 22, weight: UIFont.Weight.medium)
-    static let DescriptionColor = UIColor.white
+    static let DescriptionColor = UIColor.Photon.White100
     static let DescriptionFont = UIFont.systemFont(ofSize: 17)
     static let LearnMoreFont = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
     static let TextMargin: CGFloat = 18

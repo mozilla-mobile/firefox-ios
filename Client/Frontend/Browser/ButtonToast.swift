@@ -62,7 +62,7 @@ class ButtonToast: UIView {
     
     fileprivate func createView(_ labelText: String, descriptionText: String?, buttonText: String) -> UIView {
         let label = UILabel()
-        label.textColor = UIColor.white
+        label.textColor = UIColor.Photon.White100
         label.font = SimpleToastUX.ToastFont
         label.text = labelText
         label.lineBreakMode = .byWordWrapping
@@ -72,7 +72,7 @@ class ButtonToast: UIView {
         let button = HighlightableButton()
         button.layer.cornerRadius = ButtonToastUX.ToastButtonBorderRadius
         button.layer.borderWidth = ButtonToastUX.ToastButtonBorderWidth
-        button.layer.borderColor = UIColor.white.cgColor
+        button.layer.borderColor = UIColor.Photon.White100.cgColor
         button.setTitle(buttonText, for: [])
         button.setTitleColor(self.toast.backgroundColor, for: .highlighted)
         button.titleLabel?.font = SimpleToastUX.ToastFont
@@ -88,7 +88,7 @@ class ButtonToast: UIView {
         
         if let text = descriptionText {
             let textLabel = UILabel()
-            textLabel.textColor = UIColor.white
+            textLabel.textColor = UIColor.Photon.White100
             textLabel.font = SimpleToastUX.ToastFont
             textLabel.text = text
             textLabel.lineBreakMode = .byTruncatingTail

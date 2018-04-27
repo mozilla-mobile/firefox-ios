@@ -221,7 +221,7 @@ class TopTabCell: UICollectionViewCell {
 
 class TopTabFader: UIView {
     lazy var hMaskLayer: CAGradientLayer = {
-        let innerColor: CGColor = UIColor(white: 1, alpha: 1.0).cgColor
+        let innerColor: CGColor = UIColor.Photon.White100.cgColor
         let outerColor: CGColor = UIColor(white: 1, alpha: 0.0).cgColor
         let hMaskLayer = CAGradientLayer()
         hMaskLayer.colors = [outerColor, innerColor, innerColor, outerColor]
