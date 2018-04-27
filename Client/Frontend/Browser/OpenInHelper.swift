@@ -39,7 +39,7 @@ struct MIMEType {
     private static let webViewViewableTypes: [String] = [MIMEType.Bitmap, MIMEType.GIF, MIMEType.JPEG, MIMEType.HTML, MIMEType.PDF, MIMEType.PlainText, MIMEType.PNG, MIMEType.WebP]
 
     static func canShowInWebView(_ mimeType: String) -> Bool {
-        return webViewViewableTypes.contains(mimeType)
+        return webViewViewableTypes.contains(mimeType.lowercased())
     }
 
     static func mimeTypeFromFileExtension(_ fileExtension: String) -> String {
@@ -47,7 +47,7 @@ struct MIMEType {
             return mimeType as String
         }
 
-        return "application/octet-stream"
+        return MIMEType.OctetStream
     }
 }
 

@@ -97,9 +97,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.reloadData()
 
             switch notification.name {
-            case .FileDidDownload:
-                break
-            case .PrivateDataClearedHistory:
+            case .FileDidDownload, .PrivateDataClearedHistory:
                 break
             case .DynamicFontChanged:
                 if self.emptyStateOverlayView.superview != nil {
@@ -206,7 +204,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubview(toFront: emptyStateOverlayView)
-                emptyStateOverlayView.snp.makeConstraints { make -> Void in
+                emptyStateOverlayView.snp.makeConstraints { make in
                     make.edges.equalTo(self.tableView)
                 }
             }
@@ -250,7 +248,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     fileprivate func downloadedFileForIndexPath(_ indexPath: IndexPath) -> DownloadedFile? {
-        return downloadedFiles[indexPath.row]
+        return downloadedFiles[safe: indexPath.row]
     }
 
     // MARK: - TableView Delegate / DataSource
