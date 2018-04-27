@@ -251,6 +251,7 @@ class Tab: NSObject {
             webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
+        contentScriptManager.helpers.removeAll()
     }
 
     var loading: Bool {
