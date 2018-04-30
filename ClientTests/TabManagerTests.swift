@@ -295,35 +295,36 @@ class TabManagerTests: XCTestCase {
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)
         let delegate = MockTabManagerDelegate()
 
-        func addTab(_ load: Bool) -> Tab {
+        func addTab(_ visit: Bool) -> Tab {
             let tab = manager.addTab()
-            if load {
+            if visit {
                 tab.lastExecutedTime = Date.now()
             }
             return tab
         }
 
-        let tab0 = addTab(false) // not loaded
+        let tab0 = addTab(false) // not visited
         let tab1 = addTab(true)
         let tab2 = addTab(true)
-        let tab3 = addTab(false) // not loaded
-        let tab4 = addTab(true)
+        let tab3 = addTab(true)
+        let tab4 = addTab(false) // not visited
 
-        // starting at tab2, we should be selecting
-        // [ tab4, tab1, tab3, tab0 ]
+        // starting at tab1, we should be selecting
+        // [ tab3, tab4, tab2, tab0 ]
 
-        manager.selectTab(tab2)
+        manager.selectTab(tab1)
+        tab1.parent = tab3
         manager.removeTab(manager.selectedTab!)
-        // Rule: most recently loaded.
-        XCTAssertEqual(manager.selectedTab, tab4)
-
-        manager.removeTab(manager.selectedTab!)
-        // Rule: most recently loaded.
-        XCTAssertEqual(manager.selectedTab, tab1)
+        // Rule: parent tab if it was the most recently visited
+        XCTAssertEqual(manager.selectedTab, tab3)
 
         manager.removeTab(manager.selectedTab!)
         // Rule: next to the right.
-        XCTAssertEqual(manager.selectedTab, tab3)
+        XCTAssertEqual(manager.selectedTab, tab4)
+
+        manager.removeTab(manager.selectedTab!)
+        // Rule: next to the left, when none to the right
+        XCTAssertEqual(manager.selectedTab, tab2)
 
         manager.removeTab(manager.selectedTab!)
         // Rule: last one left.

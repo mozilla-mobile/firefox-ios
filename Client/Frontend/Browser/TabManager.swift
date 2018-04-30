@@ -196,6 +196,7 @@ class TabManager: NSObject {
 
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
+        selectedTab?.lastExecutedTime = Date.now()
 
         delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous) }
         if let tab = previous {
@@ -417,7 +418,8 @@ class TabManager: NSObject {
             // If it wasn't the selected tab we removed, then keep it like that.
             // It might have changed index, so we look it up again.
             _selectedIndex = tabs.index(of: oldTab) ?? -1
-        } else if let newTab = viableTabs.reduce(viableTabs.first, { currentBestTab, tab2 in
+        } else if let parentTab = tab.parent,
+            let newTab = viableTabs.reduce(viableTabs.first, { currentBestTab, tab2 in
             if let tab1 = currentBestTab, let time1 = tab1.lastExecutedTime {
                 if let time2 = tab2.lastExecutedTime {
                     return time1 <= time2 ? tab2 : tab1
@@ -426,8 +428,8 @@ class TabManager: NSObject {
             } else {
                 return tab2
             }
-        }), tab !== newTab, newTab.lastExecutedTime != nil {
-            // Next we look for the most recently loaded one. It might not exist, of course.
+        }), parentTab == newTab, tab !== newTab, newTab.lastExecutedTime != nil {
+            // We select the most recently visited tab, only if it is also the parent tab of the closed tab.
             _selectedIndex = tabs.index(of: newTab) ?? -1
         } else {
             // By now, we've just removed the selected one, and no previously loaded
