@@ -35,6 +35,11 @@ class AdjustIntegration: NSObject {
     
     init(profile: Profile) {
         self.profile = profile
+
+        super.init()
+
+        // Move the "AdjustAttribution.json" file from the documents directory to the caches directory.
+        migratePathComponentInDocumentsDirectory(AdjustAttributionFileName, to: .cachesDirectory)
     }
 
     /// Return an ADJConfig object if Adjust has been enabled. It is determined from the values in
@@ -96,7 +101,7 @@ class AdjustIntegration: NSObject {
     /// Return the path to the `AdjustAttribution.json` file. Throws an `NSError` if we could not build the path.
 
     fileprivate func getAttributionPath() throws -> String {
-        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        guard let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
             throw NSError(domain: AdjustIntegrationErrorDomain, code: -1,
                 userInfo: [NSLocalizedDescriptionKey: "Could not build \(AdjustAttributionFileName) path"])
         }
@@ -192,4 +197,23 @@ extension AdjustIntegration: AdjustDelegate {
         return true
     }
 
+    private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
+        guard let oldPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(pathComponent).path, FileManager.default.fileExists(atPath: oldPath) else {
+            return
+        }
+
+        print("Migrating \(pathComponent) from ~/Documents to \(destinationSearchPath)")
+        guard let newPath = try? FileManager.default.url(for: destinationSearchPath, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(pathComponent).path else {
+            print("Unable to get destination path \(destinationSearchPath) to move \(pathComponent)")
+            return
+        }
+
+        do {
+            try FileManager.default.moveItem(atPath: oldPath, toPath: newPath)
+
+            print("Migrated \(pathComponent) to \(destinationSearchPath) successfully")
+        } catch let error as NSError {
+            print("Unable to move \(pathComponent) to \(destinationSearchPath): \(error.localizedDescription)")
+        }
+    }
 }
