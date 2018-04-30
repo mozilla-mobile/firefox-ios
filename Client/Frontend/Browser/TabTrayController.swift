@@ -233,6 +233,7 @@ class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
+    var otherBrowsingModeOffset: CGPoint
 
     var collectionView: UICollectionView!
     var draggedCell: TabCell?
@@ -284,6 +285,7 @@ class TabTrayController: UIViewController {
     init(tabManager: TabManager, profile: Profile) {
         self.tabManager = tabManager
         self.profile = profile
+        self.otherBrowsingModeOffset = CGPoint(x: 0.0, y: 0.0)
         super.init(nibName: nil, bundle: nil)
 
         tabManager.addDelegate(self)
@@ -439,6 +441,9 @@ class TabTrayController: UIViewController {
     @objc func didTogglePrivateMode() {
         let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
+        let newOffset = CGPoint(x: 0.0, y: collectionView.contentOffset.y)
+        collectionView.setContentOffset(self.otherBrowsingModeOffset, animated:false)
+        self.otherBrowsingModeOffset = newOffset
         let fromView: UIView
         if !privateTabsAreEmpty(), let snapshot = collectionView.snapshotView(afterScreenUpdates: false) {
             snapshot.frame = collectionView.frame
