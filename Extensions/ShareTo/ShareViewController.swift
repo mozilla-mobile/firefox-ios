@@ -44,6 +44,8 @@ class ShareViewController: UIViewController {
     private var stackView: UIStackView!
     private var sendToDevice: SendToDevice?
     private var actionDoneRow: (row: UIStackView, label: UILabel)!
+    private var pageInfoHeight: Constraint!
+    private var actionRowHeights = [Constraint]()
 
     weak var delegate: ShareControllerDelegate?
 
@@ -112,6 +114,13 @@ class ShareViewController: UIViewController {
         }
     }
 
+    func layout(forTraitCollection traitCollection: UITraitCollection) {
+        pageInfoHeight.update(offset: isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight)
+        actionRowHeights.forEach {
+            $0.update(offset: isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight)
+        }
+    }
+
     private func makePageInfoRow(addTo parent: UIStackView) -> (row: UIStackView, pageTitleLabel: UILabel, urlLabel: UILabel) {
         let row = UIStackView()
         row.axis = .horizontal
@@ -119,7 +128,7 @@ class ShareViewController: UIViewController {
         row.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(row)
         row.snp.makeConstraints { make in
-            make.height.equalTo(UX.pageInfoRowHeight)
+            pageInfoHeight = make.height.equalTo(isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight).constraint
         }
 
         let verticalStackView = UIStackView()
@@ -143,14 +152,14 @@ class ShareViewController: UIViewController {
     }
 
     private func makeActionRow(addTo parent: UIStackView, label: String, imageName: String, action: Selector, hasNavigation: Bool) {
-
         let row = UIStackView()
         row.axis = .horizontal
         row.spacing = UX.actionRowSpacingBetweenIconAndTitle
         row.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(row)
         row.snp.makeConstraints { make in
-            make.height.equalTo(UX.actionRowHeight)
+            let c = make.height.equalTo(isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight).constraint
+            actionRowHeights.append(c)
         }
 
         let icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))

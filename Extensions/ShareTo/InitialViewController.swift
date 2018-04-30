@@ -8,6 +8,18 @@ import Deferred
 import Shared
 import Storage
 
+// Reports portrait screen size regardless of the current orientation.
+func screenSizeOrientationIndependent() -> CGSize {
+    let screenSize = UIScreen.main.bounds.size
+    return CGSize(width: min(screenSize.width, screenSize.height), height: max(screenSize.width, screenSize.height))
+}
+
+// Small iPhone screens in landscape require that the popup have a shorter height.
+func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
+    let hasSmallScreen = screenSizeOrientationIndependent().width <= CGFloat(UX.topViewWidth)
+    return hasSmallScreen && traitCollection.verticalSizeClass == .compact
+}
+
 /*
  The initial view controller is full-screen and is the only one with a valid extension context.
  It is just a wrapper with a semi-transparent background to darken the screen
@@ -21,24 +33,36 @@ class EmbeddedNavController {
     weak var parent: UIViewController?
     var controllers = [UIViewController]()
     var navigationController: UINavigationController
+    var heightConstraint: Constraint!
 
-    init (parent: UIViewController, rootViewController: UIViewController) {
+    init(parent: UIViewController, rootViewController: UIViewController) {
         self.parent = parent
         navigationController = UINavigationController(rootViewController: rootViewController)
 
         parent.addChildViewController(navigationController)
         parent.view.addSubview(navigationController.view)
 
-        let width = min(UIScreen.main.bounds.width, CGFloat(UX.topViewWidth))
+        let width = min(screenSizeOrientationIndependent().width * 0.90, CGFloat(UX.topViewWidth))
 
         navigationController.view.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalTo(width)
-            make.height.equalTo(UX.topViewHeight)
+            heightConstraint = make.height.equalTo(UX.topViewHeight).constraint
+            if isLandscapeSmallScreen(navigationController.traitCollection) {
+                layout(forTraitCollection: navigationController.traitCollection)
+            }
         }
 
         navigationController.view.layer.cornerRadius = UX.dialogCornerRadius
         navigationController.view.layer.masksToBounds = true
+    }
+
+    func layout(forTraitCollection: UITraitCollection) {
+        if isLandscapeSmallScreen(forTraitCollection) {
+            heightConstraint.update(offset: UX.topViewHeight - (UX.numberOfActionRows + 2) * UX.perRowShrinkageForLandscape)
+        } else {
+            heightConstraint.update(offset: UX.topViewHeight)
+        }
     }
 
     deinit {
@@ -50,13 +74,16 @@ class EmbeddedNavController {
 @objc(InitialViewController)
 class InitialViewController: UIViewController {
     var embedController: EmbeddedNavController!
+    var shareViewController: ShareViewController!
 
     override func viewDidLoad() {
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.0, alpha: UX.alphaForFullscreenOverlay)
-        let popupView = ShareViewController()
-        popupView.delegate = self
-        embedController = EmbeddedNavController(parent: self, rootViewController: popupView)
+        // This is the view controller for the popup dialog
+        shareViewController = ShareViewController()
+        shareViewController.delegate = self
+        embedController = EmbeddedNavController(parent: self, rootViewController: shareViewController)
         view.alpha = 0
     }
 
@@ -68,6 +95,19 @@ class InitialViewController: UIViewController {
         // the effect appears flash-like.
         UIView.animate(withDuration: 0.2) {
             self.view.alpha = 1
+        }
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        setOverrideTraitCollection(UITraitCollection(verticalSizeClass: .compact), forChildViewController: embedController.navigationController)
+        coordinator.animate(alongsideTransition: { _ in
+            self.embedController.layout(forTraitCollection: newCollection)
+            self.shareViewController.layout(forTraitCollection: newCollection)
+        }) { _ in
+            // There is a layout change propagation bug for this view setup (i.e. container view controller that is a UINavigationViewController).
+            // This is the only way to force UINavigationBar to perform a layout. Without this, the layout is for the previous size class.
+            self.embedController.navigationController.isNavigationBarHidden = true
+            self.embedController.navigationController.isNavigationBarHidden = false
         }
     }
 }

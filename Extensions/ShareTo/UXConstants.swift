@@ -24,4 +24,7 @@ struct UX {
     static let separatorColor = UIColor.Photon.Grey30
     static let baseFont = UIFont.systemFont(ofSize: 15)
     static let actionRowTextAndIconColor = UIColor.Photon.Grey80
+
+    static let numberOfActionRows = 5 // One more row than this for the page info row.
+    static let perRowShrinkageForLandscape = 8
 }
