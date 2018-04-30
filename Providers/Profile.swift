@@ -268,6 +268,13 @@ open class BrowserProfile: Profile {
         // Create the "Downloads" folder in the documents directory.
         if let downloadsPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads").path {
             try? FileManager.default.createDirectory(atPath: downloadsPath, withIntermediateDirectories: true, attributes: nil)
+
+            // Hide the "__leanplum.sqlite" file in the documents directory.
+            if var leanplumFile = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("__leanplum.sqlite"), FileManager.default.fileExists(atPath: leanplumFile.path) {
+                var resourceValues = URLResourceValues()
+                resourceValues.isHidden = true
+                try? leanplumFile.setResourceValues(resourceValues)
+            }
         }
     }
 
