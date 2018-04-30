@@ -38,7 +38,7 @@ class Download: NSObject {
         self.mimeType = preflightResponse.mimeType ?? "application/octet-stream"
         self.filename = preflightResponse.suggestedFilename ?? "unknown"
 
-        self.totalBytesExpected = preflightResponse.expectedContentLength
+        self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
         self.bytesDownloaded = 0
 
         super.init()
