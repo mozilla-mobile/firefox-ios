@@ -31,6 +31,8 @@ class Download: NSObject {
     private(set) var session: URLSession?
     private(set) var task: URLSessionDownloadTask?
 
+    private(set) var isComplete = false
+
     init(preflightResponse: URLResponse, request: URLRequest) {
         self.preflightResponse = preflightResponse
         self.request = request
@@ -72,6 +74,7 @@ extension Download: URLSessionTaskDelegate, URLSessionDownloadDelegate {
         do {
             let destination = try uniqueDownloadPathForFilename(filename)
             try FileManager.default.moveItem(at: location, to: destination)
+            isComplete = true
             delegate?.download(self, didFinishDownloadingTo: destination)
         } catch let error {
             delegate?.download(self, didCompleteWithError: error)
@@ -111,6 +114,10 @@ class DownloadQueue {
 
     var delegate: DownloadQueueDelegate?
 
+    var isEmpty: Bool {
+        return downloads.isEmpty
+    }
+
     fileprivate var combinedBytesDownloaded: Int64 = 0
     fileprivate var combinedTotalBytesExpected: Int64?
     fileprivate var lastDownloadError: Error?
@@ -138,6 +145,14 @@ class DownloadQueue {
 
         download.resume()
         delegate?.downloadQueue(self, didStartDownload: download)
+    }
+
+    func cancelAllDownloads() {
+        for download in downloads {
+            if !download.isComplete {
+                download.cancel()
+            }
+        }
     }
 }
 

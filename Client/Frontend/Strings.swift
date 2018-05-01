@@ -343,6 +343,15 @@ extension Strings {
 // Download Helper
 extension Strings {
     public static let OpenInDownloadHelperAlertDownloadNow = NSLocalizedString("Downloads.Alert.DownloadNow", value: "Download Now", comment: "The label of the button the user will press to start downloading a file")
+    public static let DownloadsButtonTitle = NSLocalizedString("DownloadToast.GoToDownloads.Button", value: "Downloads", comment: "The button to open a new tab with the Downloads home panel")
+    public static let CancelDownloadDialogTitle = NSLocalizedString("CancelDownload.Dialog.Title", value: "Cancel Download", comment: "Alert dialog title when the user taps the cancel download icon.")
+    public static let CancelDownloadDialogMessage = NSLocalizedString("CancelDownload.Dialog.Message", value: "Are you sure you want to cancel this download?", comment: "Alert dialog body when the user taps the cancel download icon.")
+    public static let CancelDownloadDialogResume = NSLocalizedString("CancelDownload.Dialog.Resume", value: "Resume", comment: "Button declining the cancellation of the download.")
+    public static let CancelDownloadDialogCancel = NSLocalizedString("CancelDownload.Dialog.Cancel", value: "Cancel", comment: "Button confirming the cancellation of the download.")
+    public static let DownloadCancelledToastLabelText = NSLocalizedString("DownloadCancelledToast.LabelText", value: "Download Cancelled", comment: "The label text in the Download Cancelled toast for showing confirmation that the download was cancelled.")
+    public static let DownloadFailedToastLabelText = NSLocalizedString("DownloadFailedToast.LabelText", value: "Download Failed", comment: "The label text in the Download Failed toast for showing confirmation that the download has failed.")
+    public static let DownloadFailedToastButtonTitled = NSLocalizedString("DownloadFailedToast.Retry.Button", value: "Retry", comment: "The button to retry a failed download from the Download Failed toast.")
+    public static let DownloadMultipleFilesToastDescriptionText = NSLocalizedString("DownloadMultipleFilesToast.DescriptionText", value: "1 of %d files", comment: "The description text in the Download progress toast for showing the number of files when multiple files are downloading.")
 }
 
 // Add Custom Search Engine

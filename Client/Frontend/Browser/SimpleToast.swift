@@ -16,7 +16,6 @@ struct SimpleToastUX {
 }
 
 struct SimpleToast {
-
     func showAlertWithText(_ text: String, bottomContainer: UIView) {
         let toast = self.createView()
         toast.text = text

@@ -95,7 +95,8 @@ class BrowserViewController: UIViewController {
 
     fileprivate var keyboardState: KeyboardState?
 
-    var pendingToast: ButtonToast? // A toast that might be waiting for BVC to appear before displaying
+    var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
+    var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
     // Tracking navigation items to record history types.
     // TODO: weak references?
@@ -571,7 +572,7 @@ class BrowserViewController: UIViewController {
 
         if let toast = self.pendingToast {
             self.pendingToast = nil
-            show(buttonToast: toast, afterWaiting: ButtonToastUX.ToastDelay)
+            show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
         }
         showQueuedAlertIfAvailable()
     }
@@ -1191,7 +1192,7 @@ class BrowserViewController: UIViewController {
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipboardBar bar: ButtonToast) {
-        show(buttonToast: bar, duration: ClipboardBarToastUX.ToastDelay)
+        show(toast: bar, duration: ClipboardBarToastUX.ToastDelay)
     }
 }
 
@@ -1745,7 +1746,7 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
                 self.tabManager.selectTab(tab)
             }
         })
-        self.show(buttonToast: toast)
+        self.show(toast: toast)
     }
 }
 
@@ -1773,7 +1774,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
 }
 
 extension BrowserViewController: TabManagerDelegate {
-
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
@@ -1880,28 +1880,28 @@ extension BrowserViewController: TabManagerDelegate {
         updateTabCountUsingTabManager(tabManager)
     }
 
-    func show(buttonToast: ButtonToast, afterWaiting delay: DispatchTimeInterval = SimpleToastUX.ToastDelayBefore, duration: DispatchTimeInterval = SimpleToastUX.ToastDismissAfter) {
+    func show(toast: Toast, afterWaiting delay: DispatchTimeInterval = SimpleToastUX.ToastDelayBefore, duration: DispatchTimeInterval? = SimpleToastUX.ToastDismissAfter) {
+        if let downloadToast = toast as? DownloadToast {
+            self.downloadToast = downloadToast
+        }
+
         // If BVC isnt visible hold on to this toast until viewDidAppear
         if self.view.window == nil {
-            self.pendingToast = buttonToast
+            self.pendingToast = toast
             return
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            self.view.addSubview(buttonToast)
-            buttonToast.snp.makeConstraints { make in
-                make.left.right.equalTo(self.view)
-                make.bottom.equalTo(self.webViewContainer)
-            }
-            buttonToast.showToast(duration: duration)
-        }
+        toast.showToast(viewController: self, delay: delay, duration: duration, makeConstraints: { make in
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.webViewContainer)
+        })
     }
     
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         guard let toast = toast, !tabTrayController.privateMode else {
             return
         }
-        show(buttonToast: toast, afterWaiting: ButtonToastUX.ToastDelay)
+        show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
     }
 
     fileprivate func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
@@ -2400,7 +2400,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                             self.tabManager.selectTab(tab)
                         }
                     })
-                    self.show(buttonToast: toast)
+                    self.show(toast: toast)
             }
 
             if !isPrivate {
