@@ -17,6 +17,7 @@ import SDWebImage
 import SwiftyJSON
 import Telemetry
 import Sentry
+import Deferred
 
 private let KVOs: [KVOConstants] = [
     .estimatedProgress,
@@ -1292,11 +1293,16 @@ extension BrowserViewController: URLBarDelegate {
         
         guard let tab = tabManager.selectedTab, let urlString = tab.url?.absoluteString else { return }
 
-        fetchBookmarkStatus(for: urlString).uponQueue(.main) {
+        let deferredBookmarkStatus: Deferred<Maybe<Bool>> = fetchBookmarkStatus(for: urlString)
+        let deferredPinnedTopSiteStatus: Deferred<Maybe<Bool>> = fetchPinnedTopSiteStatus(for: urlString)
+
+        // Wait for both the bookmark status and the pinned status
+        deferredBookmarkStatus.both(deferredPinnedTopSiteStatus).uponQueue(.main) {
             let isBookmarked = $0.successValue ?? false
+            let isPinned = $1.successValue ?? false
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
                                                  findInPage: findInPageAction, presentableVC: self, isBookmarked: isBookmarked,
-                                                 success: successCallback)
+                                                 isPinned: isPinned, success: successCallback)
             self.presentSheetWith(title: Strings.PageActionMenuTitle, actions: pageActions, on: self, from: button)
         }
     }

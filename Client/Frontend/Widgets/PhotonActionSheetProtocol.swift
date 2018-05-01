@@ -125,6 +125,7 @@ extension PhotonActionSheetProtocol {
                        findInPage:  @escaping () -> Void,
                        presentableVC: PresentableVC,
                        isBookmarked: Bool,
+                       isPinned: Bool,
                        success: @escaping (String) -> Void) -> Array<[PhotonActionSheetItem]> {
         
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
@@ -176,18 +177,27 @@ extension PhotonActionSheetProtocol {
         }
         
         let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { action in
-            guard let url = tab.url?.displayURL,
-                  let sql = self.profile.history as? SQLiteHistory else { return }
-            let absoluteString = url.absoluteString
+            guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
             
-            sql.getSitesForURLs([absoluteString]) >>== { result in
-                guard let siteOp = result.asArray().first, let site = siteOp else {
-                    log.warning("Could not get site for \(absoluteString)")
-                    return
+            sql.getSitesForURLs([url.absoluteString]).bind { val -> Success in
+                guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
+                    return succeed()
                 }
-                
-                _ = self.profile.history.addPinnedTopSite(site).value
-            }
+
+                return self.profile.history.addPinnedTopSite(site)
+                }.uponQueue(.main) { _ in }
+        }
+
+        let removeTopSitesPin = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin") { action in
+            guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
+
+            sql.getSitesForURLs([url.absoluteString]).bind { val -> Success in
+                guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
+                    return succeed()
+                }
+
+                return self.profile.history.removeFromPinnedTopSites(site)
+            }.uponQueue(.main) { _ in }
         }
 
         let sendToDevice = PhotonActionSheetItem(title: Strings.SendToDeviceTitle, iconString: "menu-Send-to-Device") { action in
@@ -231,9 +241,10 @@ extension PhotonActionSheetProtocol {
             }
         }
 
+        let pinAction = (isPinned ? removeTopSitesPin : pinToTopSites)
         mainActions.append(contentsOf: [sendToDevice, copyURL])
 
-        return [mainActions, [findInPageAction, toggleDesktopSite, pinToTopSites]]
+        return [mainActions, [findInPageAction, toggleDesktopSite, pinAction]]
     }
 
     func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
@@ -243,6 +254,10 @@ extension PhotonActionSheetProtocol {
             }
             return factory.isBookmarked(url)
         }
+    }
+
+    func fetchPinnedTopSiteStatus(for url: String) -> Deferred<Maybe<Bool>> {
+        return self.profile.history.isPinnedTopSite(url)
     }
 
     func getLongPressLocationBarActions(with urlBar: URLBarView) -> [PhotonActionSheetItem] {
