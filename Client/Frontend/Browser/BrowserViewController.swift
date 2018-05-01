@@ -1053,7 +1053,7 @@ class BrowserViewController: UIViewController {
         LeanPlumClient.shared.track(event: .userSharedWebpage)
     }
 
-    func updateFindInPageVisibility(visible: Bool) {
+    func updateFindInPageVisibility(visible: Bool, tab: Tab? = nil) {
         if visible {
             if findInPageBar == nil {
                 let findInPageBar = FindInPageBar()
@@ -1079,7 +1079,8 @@ class BrowserViewController: UIViewController {
             self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
-            guard let webView = tabManager.selectedTab?.webView else { return }
+            let tab = tab ?? tabManager.selectedTab
+            guard let webView = tab?.webView else { return }
             webView.evaluateJavaScript("__firefox__.findDone()", completionHandler: nil)
             findInPageBar.removeFromSuperview()
             self.findInPageBar = nil
@@ -1825,7 +1826,7 @@ extension BrowserViewController: TabManagerDelegate {
             }
         }
 
-        updateFindInPageVisibility(visible: false)
+        updateFindInPageVisibility(visible: false, tab: previous)
 
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
