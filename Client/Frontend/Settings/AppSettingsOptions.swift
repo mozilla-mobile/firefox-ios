@@ -400,11 +400,13 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
-        cell.imageView?.frame = CGRect(width: 30, height: 30)
-        cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.height)! / 2
-        cell.imageView?.layer.masksToBounds = true
-        cell.imageView?.image = image
+        if let imageView = cell.imageView {
+            imageView.subviews.forEach({ $0.removeFromSuperview() })
+            imageView.frame = CGRect(width: 30, height: 30)
+            imageView.layer.cornerRadius = (imageView.frame.height) / 2
+            imageView.layer.masksToBounds = true
+            imageView.image = image
+        }
     }
 }
 
