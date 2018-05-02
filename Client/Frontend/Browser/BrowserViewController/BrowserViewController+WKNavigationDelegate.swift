@@ -178,6 +178,9 @@ extension BrowserViewController: WKNavigationDelegate {
             helperForURL.openInView = navigationToolbar.menuButton
         }
 
+        // Clear the network activity indicator if our helper is handling the request.
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+
         helperForURL.open()
         decisionHandler(.cancel)
     }

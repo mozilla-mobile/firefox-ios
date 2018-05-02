@@ -661,11 +661,10 @@ extension TabTrayController: TabManagerDelegate {
 
         if let toast = toast {
             view.addSubview(toast)
-            toast.snp.makeConstraints { make in
-                make.left.right.equalTo(view)
-                make.bottom.equalTo(toolbar.snp.top)
-            }
-            toast.showToast()
+            toast.showToast(makeConstraints: { make in
+                make.left.right.equalTo(self.view)
+                make.bottom.equalTo(self.toolbar.snp.top)
+            })
         }
     }
 }
