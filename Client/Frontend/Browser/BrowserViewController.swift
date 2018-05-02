@@ -114,6 +114,10 @@ class BrowserViewController: UIViewController {
     // allow us to re-trigger the `URLRequest` if the user requests a file to be downloaded.
     var pendingRequests = [String : URLRequest]()
 
+    // This is set when the user taps "Download Link" from the context menu. We then force a
+    // download of the next request through the `WKNavigationDelegate` that matches this URL.
+    var pendingDownloadURL: URL? = nil
+
     let downloadQueue = DownloadQueue()
 
     init(profile: Profile, tabManager: TabManager) {
@@ -2402,20 +2406,27 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             if !isPrivate {
                 let newTabTitle = NSLocalizedString("Open in New Tab", comment: "Context menu item for opening a link in a new tab")
-                let openNewTabAction =  UIAlertAction(title: newTabTitle, style: .default) { (action: UIAlertAction) in
+                let openNewTabAction =  UIAlertAction(title: newTabTitle, style: .default) { _ in
                     addTab(url, false)
                 }
                 actionSheetController.addAction(openNewTabAction)
             }
 
             let openNewPrivateTabTitle = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
-            let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: .default) { (action: UIAlertAction) in
+            let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: .default) { _ in
                 addTab(url, true)
             }
             actionSheetController.addAction(openNewPrivateTabAction)
 
+            let downloadTitle = NSLocalizedString("Download Link", comment: "Context menu item for downloading a link URL")
+            let downloadAction = UIAlertAction(title: downloadTitle, style: .default) { _ in
+                self.pendingDownloadURL = url
+                currentTab.webView?.evaluateJavaScript("window.__firefox__.download('\(url.absoluteString)', '\(UserScriptManager.securityToken)')")
+            }
+            actionSheetController.addAction(downloadAction)
+
             let copyTitle = NSLocalizedString("Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
-            let copyAction = UIAlertAction(title: copyTitle, style: .default) { (action: UIAlertAction) -> Void in
+            let copyAction = UIAlertAction(title: copyTitle, style: .default) { _ in
                 UIPasteboard.general.url = url as URL
             }
             actionSheetController.addAction(copyAction)
@@ -2434,7 +2445,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let photoAuthorizeStatus = PHPhotoLibrary.authorizationStatus()
             let saveImageTitle = NSLocalizedString("Save Image", comment: "Context menu item for saving an image")
-            let saveImageAction = UIAlertAction(title: saveImageTitle, style: .default) { (action: UIAlertAction) -> Void in
+            let saveImageAction = UIAlertAction(title: saveImageTitle, style: .default) { _ in
                 if photoAuthorizeStatus == .authorized || photoAuthorizeStatus == .notDetermined {
                     self.getImage(url as URL) {
                         UIImageWriteToSavedPhotosAlbum($0, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
@@ -2443,7 +2454,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     let accessDenied = UIAlertController(title: NSLocalizedString("Firefox would like to access your Photos", comment: "See http://mzl.la/1G7uHo7"), message: NSLocalizedString("This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7"), preferredStyle: .alert)
                     let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
                     accessDenied.addAction(dismissAction)
-                    let settingsAction = UIAlertAction(title: NSLocalizedString("Open Settings", comment: "See http://mzl.la/1G7uHo7"), style: .default ) { (action: UIAlertAction!) -> Void in
+                    let settingsAction = UIAlertAction(title: NSLocalizedString("Open Settings", comment: "See http://mzl.la/1G7uHo7"), style: .default ) { _ in
                         UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:])
                     }
                     accessDenied.addAction(settingsAction)
@@ -2453,7 +2464,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             actionSheetController.addAction(saveImageAction)
 
             let copyImageTitle = NSLocalizedString("Copy Image", comment: "Context menu item for copying an image to the clipboard")
-            let copyAction = UIAlertAction(title: copyImageTitle, style: .default) { (action: UIAlertAction) -> Void in
+            let copyAction = UIAlertAction(title: copyImageTitle, style: .default) { _ in
                 // put the actual image on the clipboard
                 // do this asynchronously just in case we're in a low bandwidth situation
                 let pasteboard = UIPasteboard.general
