@@ -2336,18 +2336,16 @@ extension BrowserViewController: IntroViewControllerDelegate {
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil) {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let vcToPresent: UIViewController
-        if profile.hasAccount() {
-            let settingsTableViewController = AppSettingsTableViewController()
+        if profile.hasAccount(), let status = profile.getAccount()?.actionNeeded, status == .none {
+            let settingsTableViewController = SyncContentSettingsViewController()
             settingsTableViewController.profile = profile
-            settingsTableViewController.tabManager = tabManager
             vcToPresent = settingsTableViewController
         } else {
             let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions)
-            signInVC.delegate = self            
-            signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
+            signInVC.delegate = self
             vcToPresent = signInVC
         }
-
+        vcToPresent.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
         let settingsNavigationController = SettingsNavigationController(rootViewController: vcToPresent)
 		settingsNavigationController.modalPresentationStyle = .formSheet
         settingsNavigationController.navigationBar.isTranslucent = false
