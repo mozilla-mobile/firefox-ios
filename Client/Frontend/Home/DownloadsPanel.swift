@@ -43,7 +43,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     var profile: Profile!
     var tableView = UITableView()
 
-    private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedHistory, .DynamicFontChanged]
+    private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged]
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
@@ -97,7 +97,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.reloadData()
 
             switch notification.name {
-            case .FileDidDownload, .PrivateDataClearedHistory:
+            case .FileDidDownload, .PrivateDataClearedDownloadedFiles:
                 break
             case .DynamicFontChanged:
                 if self.emptyStateOverlayView.superview != nil {

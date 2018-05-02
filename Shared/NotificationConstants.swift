@@ -13,6 +13,7 @@ extension Notification.Name {
     public static let FirefoxAccountDeviceRegistrationUpdated = Notification.Name("FirefoxAccountDeviceRegistrationUpdated")
 
     public static let PrivateDataClearedHistory = Notification.Name("PrivateDataClearedHistory")
+    public static let PrivateDataClearedDownloadedFiles = Notification.Name("PrivateDataClearedDownloadedFiles")
 
     // Fired when the user finishes navigating to a page and the location has changed
     public static let OnLocationChange = Notification.Name("OnLocationChange")

@@ -37,6 +37,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
         if #available(iOS 11, *) {
             items.append((TrackingProtectionClearable(), true))
         }
+        items.append((DownloadedFilesClearable(), false)) // Don't clear downloaded files by default
         return items
     }()
 
