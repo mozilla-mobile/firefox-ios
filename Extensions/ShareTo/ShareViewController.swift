@@ -65,8 +65,7 @@ class ShareViewController: UIViewController {
 
         let pageInfoRow = makePageInfoRow(addTo: stackView)
         makeSeparator(addTo: stackView)
-        makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefoxNow, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
-        makeActionRow(addTo: stackView, label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
+        makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
         makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
         makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
         makeSeparator(addTo: stackView)
@@ -115,6 +114,10 @@ class ShareViewController: UIViewController {
     }
 
     func layout(forTraitCollection traitCollection: UITraitCollection) {
+        if !UX.enableResizeRowsForSmallScreens {
+            return
+        }
+
         pageInfoHeight.update(offset: isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight)
         actionRowHeights.forEach {
             $0.update(offset: isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight)
@@ -265,21 +268,6 @@ class ShareViewController: UIViewController {
 }
 
 extension ShareViewController {
-    @objc func actionLoadInBackground(gesture: UIGestureRecognizer) {
-        // To avoid re-rentry from double tap, each action function disables the gesture
-        gesture.isEnabled = false
-        animateToActionDoneView(withTitle: Strings.ShareLoadInBackgroundDone)
-
-        if let shareItem = shareItem {
-            let profile = BrowserProfile(localName: "profile")
-            profile.queue.addToQueue(shareItem).uponQueue(.main) { _ in
-                profile.shutdown()
-            }
-        }
-
-        finish()
-    }
-
     @objc func actionBookmarkThisPage(gesture: UIGestureRecognizer) {
         gesture.isEnabled = false
         animateToActionDoneView(withTitle: Strings.ShareBookmarkThisPageDone)

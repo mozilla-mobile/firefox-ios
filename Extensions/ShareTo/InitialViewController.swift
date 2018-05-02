@@ -16,6 +16,10 @@ func screenSizeOrientationIndependent() -> CGSize {
 
 // Small iPhone screens in landscape require that the popup have a shorter height.
 func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
+    if !UX.enableResizeRowsForSmallScreens {
+        return false
+    }
+
     let hasSmallScreen = screenSizeOrientationIndependent().width <= CGFloat(UX.topViewWidth)
     return hasSmallScreen && traitCollection.verticalSizeClass == .compact
 }
@@ -48,9 +52,7 @@ class EmbeddedNavController {
             make.center.equalToSuperview()
             make.width.equalTo(width)
             heightConstraint = make.height.equalTo(UX.topViewHeight).constraint
-            if isLandscapeSmallScreen(navigationController.traitCollection) {
-                layout(forTraitCollection: navigationController.traitCollection)
-            }
+            layout(forTraitCollection: navigationController.traitCollection)
         }
 
         navigationController.view.layer.cornerRadius = UX.dialogCornerRadius
@@ -58,11 +60,14 @@ class EmbeddedNavController {
     }
 
     func layout(forTraitCollection: UITraitCollection) {
-        if isLandscapeSmallScreen(forTraitCollection) {
-            heightConstraint.update(offset: UX.topViewHeight - (UX.numberOfActionRows + 2) * UX.perRowShrinkageForLandscape)
+        let updatedHeight: Int
+        if UX.enableResizeRowsForSmallScreens {
+            let shrinkage = UX.navBarLandscapeShrinkage + (UX.numberOfActionRows + 1 /*one info row*/) * UX.perRowShrinkageForLandscape
+            updatedHeight = isLandscapeSmallScreen(forTraitCollection) ? UX.topViewHeight - shrinkage : UX.topViewHeight
         } else {
-            heightConstraint.update(offset: UX.topViewHeight)
+            updatedHeight = forTraitCollection.verticalSizeClass == .compact ? UX.topViewHeight - UX.navBarLandscapeShrinkage :  UX.topViewHeight
         }
+        heightConstraint.update(offset: updatedHeight)
     }
 
     deinit {
@@ -99,7 +104,7 @@ class InitialViewController: UIViewController {
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-        setOverrideTraitCollection(UITraitCollection(verticalSizeClass: .compact), forChildViewController: embedController.navigationController)
+
         coordinator.animate(alongsideTransition: { _ in
             self.embedController.layout(forTraitCollection: newCollection)
             self.shareViewController.layout(forTraitCollection: newCollection)
@@ -145,3 +150,4 @@ extension InitialViewController: ShareControllerDelegate {
         embedController.navigationController.view.alpha = 0
     }
 }
+
