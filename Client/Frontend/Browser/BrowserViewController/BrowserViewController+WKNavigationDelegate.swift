@@ -162,7 +162,11 @@ extension BrowserViewController: WKNavigationDelegate {
             request = pendingRequests.removeValue(forKey: url.absoluteString)
         }
 
-        guard var helperForURL = OpenIn.helperForRequest(request, response: navigationResponse.response, canShowInWebView: navigationResponse.canShowMIMEType, browserViewController: self) else {
+        // We can only show this content in the web view if this URL is not pending
+        // download via the context menu.
+        let canShowInWebView = navigationResponse.canShowMIMEType && (navigationResponse.response.url != pendingDownloadURL)
+
+        guard var helperForURL = OpenIn.helperForRequest(request, response: navigationResponse.response, canShowInWebView: canShowInWebView, browserViewController: self) else {
             if navigationResponse.canShowMIMEType {
                 decisionHandler(.allow)
                 return
@@ -180,6 +184,10 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Clear the network activity indicator if our helper is handling the request.
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
+
+        // Clear the pending download URL so that subsequent requests to the same URL
+        // don't invoke another download.
+        pendingDownloadURL = nil
 
         helperForURL.open()
         decisionHandler(.cancel)
