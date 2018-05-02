@@ -43,7 +43,7 @@ class DownloadToast: Toast {
     var descriptionText: String {
         let downloadedSize = ByteCountFormatter.string(fromByteCount: combinedBytesDownloaded, countStyle: .file)
         let expectedSize = combinedTotalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: combinedTotalBytesExpected!, countStyle: .file) : nil
-        let descriptionText = expectedSize != nil ? "\(downloadedSize)/\(expectedSize!)" : downloadedSize
+        let descriptionText = expectedSize != nil ? String(format: Strings.DownloadProgressToastDescriptionText, downloadedSize, expectedSize!) : downloadedSize
 
         guard downloads.count > 1 else {
             return descriptionText
@@ -51,7 +51,7 @@ class DownloadToast: Toast {
 
         let fileCountDescription = String(format: Strings.DownloadMultipleFilesToastDescriptionText, downloads.count)
 
-        return "\(fileCountDescription) \(descriptionText)"
+        return String(format: Strings.DownloadMultipleFilesAndProgressToastDescriptionText, fileCountDescription, descriptionText)
     }
 
     var downloads: [Download] = []
