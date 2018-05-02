@@ -9,7 +9,7 @@ struct UX {
     static let durationToShowDoneDialog: TimeInterval = UX.doneDialogAnimationDuration + 0.8
     static let alphaForFullscreenOverlay: CGFloat = 0.3
     static let dialogCornerRadius: CGFloat = 8
-    static let topViewHeight = 364
+    static let topViewHeight = 315
     static let topViewWidth = 345
     static let viewHeightForDoneState = 170
     static let pageInfoRowHeight = 64
@@ -25,6 +25,11 @@ struct UX {
     static let baseFont = UIFont.systemFont(ofSize: 15)
     static let actionRowTextAndIconColor = UIColor.Photon.Grey80
 
-    static let numberOfActionRows = 5 // One more row than this for the page info row.
-    static let perRowShrinkageForLandscape = 8
+    static let navBarLandscapeShrinkage = 10 // iOS automatically shrinks nav bar in compact landscape
+    static let numberOfActionRows = 4 // One more row than this for the page info row.
+
+    // Small iPhone screens in landscape can only fit 4 rows without resizing the screen. We can fit one more row
+    // by shrinking rows, so this shrinkage code is here if needed.
+    static let enableResizeRowsForSmallScreens = UX.numberOfActionRows > 4
+    static let perRowShrinkageForLandscape = UX.enableResizeRowsForSmallScreens ? 8 : 0
 }
