@@ -148,10 +148,8 @@ class DownloadQueue {
     }
 
     func cancelAllDownloads() {
-        for download in downloads {
-            if !download.isComplete {
-                download.cancel()
-            }
+        for download in downloads where !download.isComplete {
+            download.cancel()
         }
     }
 }

@@ -8,7 +8,8 @@ import SnapKit
 class Toast: UIView {
     var animationConstraint: Constraint?
     var completionHandler: ((Bool) -> Void)?
-    var viewController: UIViewController?
+
+    weak var viewController: UIViewController?
 
     var dismissed = false
 
