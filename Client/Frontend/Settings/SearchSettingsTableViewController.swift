@@ -154,7 +154,7 @@ class SearchSettingsTableViewController: UITableViewController {
         } else {
             // The first engine -- the default engine -- is not shown in the quick search engine list.
             // But the option to add Custom Engine is.
-            return AppConstants.MOZ_CUSTOM_SEARCH_ENGINE ? model.orderedEngines.count : model.orderedEngines.count - 1
+            return model.orderedEngines.count
         }
     }
 

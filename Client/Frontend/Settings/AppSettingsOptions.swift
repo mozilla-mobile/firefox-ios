@@ -47,13 +47,10 @@ class ConnectSetting: WithoutAccountSetting {
     
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            cell.imageView?.image = UIImage.templateImageNamed("FxA-Default")
-            cell.imageView?.tintColor = .lightGray
-            cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.size.width)! / 2
-            cell.imageView?.layer.masksToBounds = true
-        }
+        cell.imageView?.image = UIImage.templateImageNamed("FxA-Default")
+        cell.imageView?.tintColor = .lightGray
+        cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.size.width)! / 2
+        cell.imageView?.layer.masksToBounds = true
     }
 }
 
@@ -116,10 +113,6 @@ class SyncNowSetting: WithAccountSetting {
     override var style: UITableViewCellStyle { return .value1 }
     
     override var image: UIImage? {
-        if !AppConstants.MOZ_SHOW_FXA_AVATAR {
-            return nil
-        }
-        
         guard let syncStatus = profile.syncManager.syncDisplayState else {
             return syncIcon
         }
@@ -236,30 +229,28 @@ class SyncNowSetting: WithAccountSetting {
         cell.accessoryType = accessoryType
         cell.isUserInteractionEnabled = !profile.syncManager.isSyncing && DeviceInfo.hasConnectivity()
         
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            // Animation that loops continously until stopped
-            continuousRotateAnimation.fromValue = 0.0
-            continuousRotateAnimation.toValue = CGFloat(Double.pi)
-            continuousRotateAnimation.isRemovedOnCompletion = true
-            continuousRotateAnimation.duration = 0.5
-            continuousRotateAnimation.repeatCount = .infinity
-            
-            // To ensure sync icon is aligned properly with user's avatar, an image is created with proper
-            // dimensions and color, then the scaled sync icon is added as a subview.
-            imageView.contentMode = .center
-            imageView.image = image
-            
-            cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
-            cell.imageView?.image = syncIconWrapper
-            cell.imageView?.addSubview(imageView)
-            
-            if let syncStatus = profile.syncManager.syncDisplayState {
-                switch syncStatus {
-                case .inProgress:
-                    self.startRotateSyncIcon()
-                default:
-                    self.stopRotateSyncIcon()
-                }
+        // Animation that loops continously until stopped
+        continuousRotateAnimation.fromValue = 0.0
+        continuousRotateAnimation.toValue = CGFloat(Double.pi)
+        continuousRotateAnimation.isRemovedOnCompletion = true
+        continuousRotateAnimation.duration = 0.5
+        continuousRotateAnimation.repeatCount = .infinity
+
+        // To ensure sync icon is aligned properly with user's avatar, an image is created with proper
+        // dimensions and color, then the scaled sync icon is added as a subview.
+        imageView.contentMode = .center
+        imageView.image = image
+
+        cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
+        cell.imageView?.image = syncIconWrapper
+        cell.imageView?.addSubview(imageView)
+
+        if let syncStatus = profile.syncManager.syncDisplayState {
+            switch syncStatus {
+            case .inProgress:
+                self.startRotateSyncIcon()
+            default:
+                self.stopRotateSyncIcon()
             }
         }
     }
@@ -303,10 +294,6 @@ class AccountStatusSetting: WithAccountSetting {
     }
     
     override var image: UIImage? {
-        if !AppConstants.MOZ_SHOW_FXA_AVATAR {
-            return nil
-        }
-        
         if let image = profile.getAccount()?.fxaProfile?.avatar.image {
             return image.createScaled(CGSize(width: 30, height: 30))
         }
@@ -413,13 +400,12 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            cell.imageView?.subviews.forEach({ $0.removeFromSuperview() })
-            cell.imageView?.frame = CGRect(width: 30, height: 30)
-            cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.height)! / 2
-            cell.imageView?.layer.masksToBounds = true
-            cell.imageView?.image = image
+        if let imageView = cell.imageView {
+            imageView.subviews.forEach({ $0.removeFromSuperview() })
+            imageView.frame = CGRect(width: 30, height: 30)
+            imageView.layer.cornerRadius = (imageView.frame.height) / 2
+            imageView.layer.masksToBounds = true
+            imageView.image = image
         }
     }
 }

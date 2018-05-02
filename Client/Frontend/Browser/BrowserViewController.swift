@@ -387,10 +387,9 @@ class BrowserViewController: UIViewController {
         alertStackView.axis = .vertical
         alertStackView.alignment = .center
 
-        if AppConstants.MOZ_CLIPBOARD_BAR {
-            clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
-            clipboardBarDisplayHandler?.delegate = self
-        }
+        clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
+        clipboardBarDisplayHandler?.delegate = self
+
         
         scrollController.urlBar = urlBar
         scrollController.header = header

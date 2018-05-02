@@ -33,7 +33,7 @@ extension SQLiteHistory: HistoryRecommendations {
         SELECT historyID, url, siteTitle, guid, is_bookmarked
         FROM (
             SELECT history.id AS historyID, history.url AS url, history.title AS siteTitle, guid, history.domain_id, NULL AS visitDate, 1 AS is_bookmarked
-            FROM (\(AppConstants.MOZ_SIMPLE_BOOKMARKS_SYNCING ? urisForSimpleSyncedBookmarks : urisForLocalBookmarks))
+            FROM (\(urisForSimpleSyncedBookmarks))
                 LEFT JOIN history ON history.url = bmkUri
                 \(removeMultipleDomainsSubquery)
             WHERE

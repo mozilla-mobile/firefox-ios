@@ -85,7 +85,7 @@ open class FxADeviceRegistrator {
         }
 
         let pushParams: FxADevicePushParams?
-        if AppConstants.MOZ_FXA_PUSH, let pushRegistration = account.pushRegistration {
+        if let pushRegistration = account.pushRegistration {
             let subscription = pushRegistration.defaultSubscription
             pushParams = FxADevicePushParams(callback: subscription.endpoint.absoluteString, publicKey: subscription.p256dhPublicKey, authKey: subscription.authKey)
         } else {
