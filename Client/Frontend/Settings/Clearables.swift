@@ -164,3 +164,22 @@ class TrackingProtectionClearable: Clearable {
     }
 }
 
+// Clears our downloaded files in the `~/Documents/Downloads` folder.
+class DownloadedFilesClearable: Clearable {
+    var label: String {
+        return NSLocalizedString("Downloaded Files", tableName: "ClearPrivateData", comment: "Settings item for deleting downloaded files")
+    }
+
+    func clear() -> Success {
+        if let downloadsPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads"),
+            let files = try? FileManager.default.contentsOfDirectory(at: downloadsPath, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants]) {
+            for file in files {
+                try? FileManager.default.removeItem(at: file)
+            }
+        }
+
+        NotificationCenter.default.post(name: .PrivateDataClearedDownloadedFiles, object: nil)
+
+        return succeed()
+    }
+}
