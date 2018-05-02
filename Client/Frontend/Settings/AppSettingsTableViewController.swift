@@ -24,9 +24,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
         
         // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
         // display name, etc.
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            profile.getAccount()?.updateProfile()
-        }
+        profile.getAccount()?.updateProfile()
+
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -66,18 +65,13 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
 
-        if AppConstants.MOZ_CLIPBOARD_BAR {
-            generalSettings += [
-                BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
-                            titleText: Strings.SettingsOfferClipboardBarTitle,
-                            statusText: Strings.SettingsOfferClipboardBarStatus)
-            ]
-        }
+        generalSettings += [
+            BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
+                        titleText: Strings.SettingsOfferClipboardBarTitle,
+                        statusText: Strings.SettingsOfferClipboardBarStatus)
+        ]
 
-        var accountSectionTitle: NSAttributedString?
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
-        }
+        var accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
 
         let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
         settings += [

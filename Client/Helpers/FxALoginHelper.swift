@@ -97,10 +97,6 @@ class FxALoginHelper {
         // accountVerified is needed by delegates.
         accountVerified = account.actionNeeded != .needsVerification
 
-        guard AppConstants.MOZ_FXA_PUSH else {
-            return loginDidSucceed()
-        }
-
         if let _ = account.pushRegistration {
             // We have an account, and it's already registered for push notifications.
             return loginDidSucceed()
@@ -149,9 +145,7 @@ class FxALoginHelper {
         accountVerified = data["verified"].bool ?? false
         self.account = account
         
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            account.updateProfile()
-        }
+        account.updateProfile()
         
         let leanplum = LeanPlumClient.shared
         if leanplum.isLPEnabled() && leanplum.isFxAPrePushEnabled() {
@@ -203,12 +197,8 @@ class FxALoginHelper {
         // Record that we have asked the user, and they have given an answer.
         profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
 
-        if AppConstants.MOZ_FXA_PUSH {
-            DispatchQueue.main.async {
-                application.registerForRemoteNotifications()
-            }
-        } else {
-            readyForSyncing()
+        DispatchQueue.main.async {
+            application.registerForRemoteNotifications()
         }
     }
         

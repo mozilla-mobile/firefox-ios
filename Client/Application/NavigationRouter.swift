@@ -115,9 +115,7 @@ enum NavigationPath {
     }
     
     private static func handleFxA(params: FxALaunchParams, with bvc: BrowserViewController) {
-        if AppConstants.MOZ_FXA_DEEP_LINK_FORM_FILL {
-            bvc.presentSignInViewController(params)
-        }
+        bvc.presentSignInViewController(params)
     }
     
     private static func handleHomePanel(panel: HomePanelPath, with bvc: BrowserViewController) {

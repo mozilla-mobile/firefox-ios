@@ -214,9 +214,6 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                 }
                 return deferMaybe(result)
             } >>== { result in
-                guard AppConstants.MOZ_SIMPLE_BOOKMARKS_SYNCING else {
-                    return deferMaybe(result)
-                }
                 guard case .completed = result else {
                     return deferMaybe(result)
                 }

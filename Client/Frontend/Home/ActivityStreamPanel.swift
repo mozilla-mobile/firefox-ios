@@ -536,7 +536,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func getPocketSites() -> Success {
-        let showPocket = (profile.prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible) ?? Pocket.IslocaleSupported(Locale.current.identifier)) && AppConstants.MOZ_POCKET_STORIES
+        let showPocket = (profile.prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible) ?? Pocket.IslocaleSupported(Locale.current.identifier))
         guard showPocket else {
             self.pocketStories = []
             return succeed()

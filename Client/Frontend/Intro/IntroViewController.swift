@@ -83,9 +83,7 @@ class IntroViewController: UIViewController {
     fileprivate var imagesBackgroundView = UIView()
 
     override func viewDidLoad() {
-        if AppConstants.MOZ_LP_INTRO {
-            syncViaLP()
-        }
+        syncViaLP()
 
         assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
         view.backgroundColor = UIColor.Photon.White100

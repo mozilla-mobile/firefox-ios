@@ -811,11 +811,7 @@ open class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
     init(bookmarks: SQLiteBookmarks) {
         // This relies on SQLiteBookmarks being the storage for both directions.
         self.localFactory = SQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .local)
-        if AppConstants.MOZ_SIMPLE_BOOKMARKS_SYNCING {
-            self.bufferFactory = EditableBufferBookmarksSQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .buffer)
-        } else {
-            self.bufferFactory = SQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .buffer)
-        }
+        self.bufferFactory = EditableBufferBookmarksSQLiteBookmarksModelFactory(bookmarks: bookmarks, direction: .buffer)
     }
 
     // This is a special-case class, so here's the special-case behavior to
