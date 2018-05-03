@@ -92,6 +92,7 @@ let HomePanel_TopSites = "HomePanel.TopSites.0"
 let HomePanel_Bookmarks = "HomePanel.Bookmarks.1"
 let HomePanel_History = "HomePanel.History.2"
 let HomePanel_ReadingList = "HomePanel.ReadingList.3"
+let HomePanel_Downloads = "HomePanel.Downloads.4"
 
 let allHomePanels = [
     HomePanel_Bookmarks,
@@ -416,6 +417,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["HomePanels.Bookmarks"], to: HomePanel_Bookmarks)
         screenState.tap(app.buttons["HomePanels.History"], to: HomePanel_History)
         screenState.tap(app.buttons["HomePanels.ReadingList"], to: HomePanel_ReadingList)
+        screenState.tap(app.buttons["HomePanels.Downloads"], to: HomePanel_Downloads)
 
         screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarHomePanel, if: "tablet == true") { userState in
             userState.isPrivate = !userState.isPrivate
@@ -454,6 +456,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(HomePanel_ReadingList) { screenState in
+        screenState.noop(to: HomePanelsScreen)
+    }
+
+    map.addScreenState(HomePanel_Downloads) { screenState in
+        screenState.dismissOnUse = true
+        //screenState.backAction = dismissContextMenuAction
         screenState.noop(to: HomePanelsScreen)
     }
 
@@ -836,6 +844,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.cells["menu-panel-Bookmarks"], to: HomePanel_Bookmarks)
         screenState.tap(app.tables.cells["menu-panel-History"], to: HomePanel_History)
         screenState.tap(app.tables.cells["menu-panel-ReadingList"], to: HomePanel_ReadingList)
+        screenState.tap(app.tables.cells["menu-panel-Downloads"], to: HomePanel_Downloads)
 
         screenState.tap(app.tables.cells["menu-NoImageMode"], forAction: Action.ToggleNoImageMode, transitionTo: BrowserTabMenu) { userState in
             userState.noImageMode = !userState.noImageMode
