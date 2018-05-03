@@ -59,30 +59,30 @@ class BookmarksPanelTests: KIFTestCase {
 
         createSomeBufferBookmarks()
 
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks Toolbar")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("AAA"))
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Bookmarks Toolbar")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("AAA"))
             .assert(grey_sufficientlyVisible())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Some Livemark"))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Some Livemark"))
             .assert(grey_sufficientlyVisible())
         
         // When we tap the livemark, we load the siteURI.
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Some Livemark")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Some Livemark")).perform(grey_tap())
         
         // … so we show the truncated URL.
         // Strangely, earlgrey cannot find the label in buddybuild, but passes locally.
         // Using KIF for this check for now.
-        EarlGrey.select(elementWithMatcher: grey_accessibilityValue("www.google.ca/")).assert(grey_sufficientlyVisible())
+        EarlGrey.selectElement(with: grey_accessibilityValue("www.google.ca/")).assert(grey_sufficientlyVisible())
     }
 
     private func navigateBackInTableView() {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).inRoot(grey_kindOfClass(UITableView.self)).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Bookmarks")).inRoot(grey_kindOfClass(UITableView.self)).perform(grey_tap())
     }
     
     private func navigateFolder(withTitle title: String) {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(title)).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel(title)).perform(grey_tap())
     }
 
     private func makeBookmark(guid: GUID, parentID: GUID, title: String) -> BookmarkMirrorItem {
@@ -94,7 +94,7 @@ class BookmarksPanelTests: KIFTestCase {
     }
     
     private func assertRowExists(withTitle title: String) {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel(title)).inRoot(grey_kindOfClass(UITableView.self)).assert(grey_notNil())
+        EarlGrey.selectElement(with: grey_accessibilityLabel(title)).inRoot(grey_kindOfClass(UITableView.self)).assert(grey_notNil())
     }
 
     func testMobileBookmarks() {
@@ -119,15 +119,15 @@ class BookmarksPanelTests: KIFTestCase {
             makeFolder(guid: BookmarkRoots.MobileFolderGUID, parentID: BookmarkRoots.RootGUID, title: "", childrenGuids: ["bm-guid0"])
             ])
         XCTAssert(applyResult.value.isSuccess)
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
         
         // is this in the root?
         assertRowExists(withTitle: "xyz")
         
         navigateFolder(withTitle: "Desktop Bookmarks")
         // this should be missing, they are shown in the root
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Mobile Bookmarks")).assert(grey_nil())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Mobile Bookmarks")).assert(grey_nil())
         
         // TEST: Add a local bookmark, and then navigate back to the root view (the navigation will refresh the table).
         let isAdded = (bookmarks as! MergedSQLiteBookmarks).local.addToMobileBookmarks(URL(string: "http://another-unused")!, title: "123", favicon: nil)
@@ -165,12 +165,12 @@ class BookmarksPanelTests: KIFTestCase {
 
         // Test deletion not available
 
-        var row = EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("item-in-remote-subfolder"))
+        var row = EarlGrey.selectElement(with: grey_accessibilityLabel("item-in-remote-subfolder"))
         row.perform(grey_longPress())
         // verify the context menu does not have deletion option
-        EarlGrey.select(elementWithMatcher: deleteAction).assert(grey_nil())
+        EarlGrey.selectElement(with: deleteAction).assert(grey_nil())
         // close the context menu
-        EarlGrey.select(elementWithMatcher: GREYMatchers.matcher(forText: "Pin to Top Sites")).perform(grey_tap())
+        EarlGrey.selectElement(with: GREYMatchers.matcher(forText: "Pin to Top Sites")).perform(grey_tap())
 
         navigateBackInTableView()
 
@@ -181,13 +181,13 @@ class BookmarksPanelTests: KIFTestCase {
         let tv = tester().waitForView(withAccessibilityIdentifier: "Bookmarks List") as! UITableView
         let rowCount = tv.numberOfRows(inSection: 0)
 
-        row = EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("xyz"))
+        row = EarlGrey.selectElement(with: grey_accessibilityLabel("xyz"))
         row.perform(grey_longPress())
-        EarlGrey.select(elementWithMatcher: deleteAction).perform(grey_tap())
+        EarlGrey.selectElement(with: deleteAction).perform(grey_tap())
 
         XCTAssert(tv.numberOfRows(inSection: 0) == rowCount - 1)
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("goBack")).perform(grey_tap())
     }
   
     func testRefreshBookmarks() {
@@ -200,8 +200,8 @@ class BookmarksPanelTests: KIFTestCase {
             makeFolder(guid: BookmarkRoots.MobileFolderGUID, parentID: BookmarkRoots.RootGUID, title: "", childrenGuids: ["bm-guid0"])
             ])
         XCTAssert(applyResult.value.isSuccess)
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
         
         // Add a bookmark
         let isAdded = (bookmarks as! MergedSQLiteBookmarks).local.addToMobileBookmarks(URL(string: "http://new-bookmark")!, title: "NewBookmark", favicon: nil)
@@ -209,11 +209,11 @@ class BookmarksPanelTests: KIFTestCase {
         
         // Pull to refresh
         assertRowExists(withTitle: "xyz")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("xyz")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.down, 0.7, 0.7))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("xyz")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.down, 0.7, 0.7))
         
         // Verify new bookmark exists
         assertRowExists(withTitle: "NewBookmark")
 
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("goBack")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("goBack")).perform(grey_tap())
     }
 }

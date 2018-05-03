@@ -36,7 +36,8 @@ class AuthenticationTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("auth fail")
 
         // Enter valid credentials and ensure the page loads.
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Reload")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Reload"))
+            .perform(grey_tap())
 		enterCredentials(usernameValue: "Username", passwordValue: "Password", username: "user", password: "pass")
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
@@ -47,22 +48,22 @@ class AuthenticationTests: KIFTestCase {
         loadAuthPage()
 
         // Make sure the credentials were saved and auto-filled.
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Log in"))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Log in"))
             .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .perform(grey_tap())
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
         // Add a private tab.
         if BrowserUtils.iPad() {
-            EarlGrey.select(elementWithMatcher:grey_accessibilityID("TopTabsViewController.tabsButton"))
+            EarlGrey.selectElement(with:grey_accessibilityID("TopTabsViewController.tabsButton"))
                 .perform(grey_tap())
         } else {
-            EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabToolbar.tabsButton"))
+            EarlGrey.selectElement(with:grey_accessibilityID("TabToolbar.tabsButton"))
                 .perform(grey_tap())
         }
-        EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabTrayController.maskButton"))
+        EarlGrey.selectElement(with:grey_accessibilityID("TabTrayController.maskButton"))
             .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher:grey_accessibilityID("TabTrayController.addTabButton"))
+        EarlGrey.selectElement(with:grey_accessibilityID("TabTrayController.addTabButton"))
             .perform(grey_tap())
         loadAuthPage()
 
@@ -75,21 +76,21 @@ class AuthenticationTests: KIFTestCase {
     }
 
     fileprivate func loadAuthPage() {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText("\(webRoot!)/auth.html"))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText("\(webRoot!)/auth.html"))
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
     }
 
     fileprivate func logOut() {
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_replaceText("\(webRoot!)/auth.html?logout=1"))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText("\(webRoot!)/auth.html?logout=1"))
+        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         // Wait until the dialog shows up
 		let dialogAppeared = GREYCondition(name: "Wait the login dialog to appear", block: {
 			var errorOrNil: NSError?
 			let matcher = grey_allOf([grey_accessibilityLabel("Cancel"),
 			                                 grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher)
+            EarlGrey.selectElement(with: matcher)
 				.inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
 				.assert(grey_notNil(), error: &errorOrNil)
 			let success = errorOrNil == nil
@@ -98,7 +99,7 @@ class AuthenticationTests: KIFTestCase {
 		
 		GREYAssertTrue(dialogAppeared, reason: "Failed to display login dialog")
 
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Cancel"))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Cancel"))
             .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .perform(grey_tap())
     }

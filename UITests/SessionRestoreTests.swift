@@ -36,24 +36,24 @@ class SessionRestoreTests: KIFTestCase {
         // After triggering the restore, the session should look like this:
         //   about:home, page1, *page2*, page3
         // where page2 is active.
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("url"))
+        EarlGrey.selectElement(with: grey_accessibilityID("url"))
             .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
+        EarlGrey.selectElement(with: grey_accessibilityID("address"))
             .perform(grey_replaceText(restoreURL!.absoluteString))
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("address"))
+        EarlGrey.selectElement(with: grey_accessibilityID("address"))
             .perform(grey_typeText("\n"))
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Back"))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Back"))
             .perform(grey_tap())
         
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Back"))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Back"))
             .perform(grey_tap())
         let wentBack = GREYCondition(name: "Check browser went back", block: {
             var errorOrNil: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel("Top sites"),
                                               grey_sufficientlyVisible()])
-            EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil
             return success
         }).wait(withTimeout: 5)
@@ -68,11 +68,11 @@ class SessionRestoreTests: KIFTestCase {
         }
         XCTAssertFalse(canGoBack, "Reached the beginning of browser history")
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Forward"))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Forward"))
             .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Forward"))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Forward"))
             .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Forward"))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Forward"))
             .perform(grey_tap())
         tester().waitForWebViewElementWithAccessibilityLabel("Page 3")
         let canGoForward: Bool

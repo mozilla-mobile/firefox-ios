@@ -31,48 +31,48 @@ class LoginManagerTests: KIFTestCase {
         // Wait until the dialog shows up
         let menuAppeared = GREYCondition(name: "Wait the Settings dialog to appear", block: { () -> Bool in
             var errorOrNil: NSError?
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Search")).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Search")).assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil
             return success
         })
         
         if BrowserUtils.iPad() {
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
             let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
                                               grey_accessibilityID("menu-Settings")])
-            EarlGrey.select(elementWithMatcher: settings_button).perform(grey_tap())
+            EarlGrey.selectElement(with: settings_button).perform(grey_tap())
         } else {
             let menu_button = grey_allOf([grey_accessibilityLabel("Menu"),
                                           grey_accessibilityID("TabToolbar.menuButton")])
-            EarlGrey.select(elementWithMatcher: menu_button).perform(grey_tap())
-            EarlGrey.select(elementWithMatcher: grey_text("Settings")).perform(grey_tap())
+            EarlGrey.selectElement(with: menu_button).perform(grey_tap())
+            EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())
         }
         
-        let success = menuAppeared?.wait(withTimeout: 20)
-        GREYAssertTrue(success!, reason: "Failed to display settings dialog")
+        let success = menuAppeared.wait(withTimeout: 20)
+        GREYAssertTrue(success, reason: "Failed to display settings dialog")
         if BrowserUtils.iPad() {
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins"))
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Logins"))
                 .using(searchAction: grey_scrollInDirection(.down, 200),
                        onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
                 .assert(grey_notNil())
         }
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Logins")).perform(grey_tap())
     }
     
     fileprivate func closeLoginManager() {
-        EarlGrey.select(elementWithMatcher:grey_allOf([grey_accessibilityLabel("Settings"), grey_kindOfClass(NSClassFromString("UIButtonLabel")!)])).perform(grey_tap())
+        EarlGrey.selectElement(with:grey_allOf([grey_accessibilityLabel("Settings"), grey_kindOfClass(NSClassFromString("UIButtonLabel")!)])).perform(grey_tap())
 
         let DoneAppeared = GREYCondition(name: "Wait for the Done button", block: { () -> Bool in
             var errorOrNil: NSError?
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
+            EarlGrey.selectElement(with: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
                 .assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil
             return success
         })
-        let success = DoneAppeared?.wait(withTimeout: 10)
-        GREYAssertTrue(success!, reason: "Failed to see Done button")
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem")).perform(grey_tap())
+        let success = DoneAppeared.wait(withTimeout: 10)
+        GREYAssertTrue(success, reason: "Failed to see Done button")
+        EarlGrey.selectElement(with: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem")).perform(grey_tap())
    }
     
     fileprivate func generateLogins() {
@@ -100,13 +100,13 @@ class LoginManagerTests: KIFTestCase {
         let menuShown = GREYCondition(name: "Wait for " + name) {
             var errorOrNil: NSError?
             
-            EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &errorOrNil)
+            EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil
             return success
         }
-        let success = menuShown?.wait(withTimeout: 10)
-        GREYAssertTrue(success!, reason: name + " Menu not shown")
-        EarlGrey.select(elementWithMatcher: matcher).perform(grey_tap())
+        let success = menuShown.wait(withTimeout: 10)
+        GREYAssertTrue(success, reason: name + " Menu not shown")
+        EarlGrey.selectElement(with: matcher).perform(grey_tap())
     }
     
     fileprivate func generateStringListWithFormat(_ format: String, numRange: CountableRange<Int>, prefixes: String) -> [String] {
@@ -214,19 +214,19 @@ class LoginManagerTests: KIFTestCase {
         XCTAssertTrue(passwordField.isSecureTextEntry)
         
         // Tap the ‘Reveal’ menu option
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("passwordField")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("passwordField")).perform(grey_tap())
         waitForMatcher(name: "Reveal")
         passwordField = tester().waitForView(withAccessibilityIdentifier: "passwordField") as! UITextField
         XCTAssertFalse(passwordField.isSecureTextEntry)
         
         // Tap the ‘Hide’ menu option
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("passwordField")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("passwordField")).perform(grey_tap())
         waitForMatcher(name: "Hide")
         passwordField = tester().waitForView(withAccessibilityIdentifier: "passwordField") as! UITextField
         XCTAssertTrue(passwordField.isSecureTextEntry)
         
         // Tap the ‘Copy’ menu option
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("passwordField")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("passwordField")).perform(grey_tap())
         waitForMatcher(name: "Copy")
     
         tester().tapView(withAccessibilityLabel: "Logins")
@@ -242,11 +242,11 @@ class LoginManagerTests: KIFTestCase {
         
         tester().waitForView(withAccessibilityLabel: "password")
         
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("websiteField")).perform(grey_tap())
         waitForMatcher(name: "Copy")
         
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("websiteField")).perform(grey_tap())
         waitForMatcher(name: "Open & Fill")
 
         tester().wait(forTimeInterval: 2)
@@ -263,7 +263,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "password")
         
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("websiteField")).perform(grey_tap())
         waitForMatcher(name: "Open & Fill")
         
         tester().wait(forTimeInterval: 10)
@@ -272,29 +272,29 @@ class LoginManagerTests: KIFTestCase {
     
     func testOpenAndFillFromPrivateContext() {
         if BrowserUtils.iPad() {
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("TopTabsViewController.tabsButton"))
+            EarlGrey.selectElement(with: grey_accessibilityID("TopTabsViewController.tabsButton"))
                 .perform(grey_tap())
         } else {
-            EarlGrey.select(elementWithMatcher: grey_accessibilityID("TabToolbar.tabsButton")).perform(grey_tap())
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.tabsButton")).perform(grey_tap())
         }
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Private Mode")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Add Tab")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Private Mode")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Add Tab")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
         if BrowserUtils.iPad() {
             let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
                                               grey_accessibilityID("menu-Settings")])
-            EarlGrey.select(elementWithMatcher: settings_button).perform(grey_tap())
+            EarlGrey.selectElement(with: settings_button).perform(grey_tap())
         } else {
-            EarlGrey.select(elementWithMatcher: grey_text("Settings")).perform(grey_tap())
+            EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())
         }
 
         if BrowserUtils.iPad() {
-            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins"))
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Logins"))
                 .using(searchAction: grey_scrollInDirection(.down, 200),
                        onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
                 .assert(grey_notNil())
         }
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Logins")).perform(grey_tap())
         
         tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
         tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
@@ -302,7 +302,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "password")
         
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("websiteField")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("websiteField")).perform(grey_tap())
         waitForMatcher(name: "Open & Fill")
         
         tester().wait(forTimeInterval: 10)
@@ -318,7 +318,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "password")
         
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        EarlGrey.select(elementWithMatcher: grey_accessibilityID("usernameField")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("usernameField")).perform(grey_tap())
         waitForMatcher(name: "Copy")
         
         tester().tapView(withAccessibilityLabel: "Logins")
