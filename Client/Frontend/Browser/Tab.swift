@@ -220,6 +220,16 @@ class Tab: NSObject {
         // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
         // to trigger the session restore via custom handlers
         if let sessionData = self.sessionData {
+            // If the last URL in this tab was a `file://` URL, skip session restore and go
+            // directly to loading the URL. This is fine since the only way to get to a file
+            // URL is from the Downloads home panel, so there's no history to restore.
+            if let lastURL = sessionData.urls.last, lastURL.isFileURL {
+                let fileRequest = PrivilegedRequest(url: lastURL) as URLRequest
+                lastRequest = fileRequest
+                webView.load(fileRequest)
+                return
+            }
+
             restoring = true
 
             var urls = [String]()
