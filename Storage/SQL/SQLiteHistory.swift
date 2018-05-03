@@ -395,6 +395,16 @@ extension SQLiteHistory: BrowserHistory {
         }
     }
 
+    public func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>> {
+        let sql = """
+        SELECT * FROM pinned_top_sites
+        WHERE url = ?
+        LIMIT 1
+        """
+        let args: Args = [url]
+        return self.db.queryReturnsResults(sql, args: args)
+    }
+
     public func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
         let sql = """
             SELECT * FROM pinned_top_sites LEFT OUTER JOIN view_history_id_favicon ON

@@ -35,6 +35,7 @@ public protocol BrowserHistory {
     func removeFromPinnedTopSites(_ site: Site) -> Success
     func addPinnedTopSite(_ site: Site) -> Success
     func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>>
+    func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>>
 }
 
 /**
