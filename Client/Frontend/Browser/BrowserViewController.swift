@@ -1128,7 +1128,7 @@ class BrowserViewController: UIViewController {
         }
 
         if let url = webView.url {
-            if !url.isErrorPageURL, !url.isAboutHomeURL {
+            if !url.isErrorPageURL, !url.isAboutHomeURL, !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
 
                 // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
