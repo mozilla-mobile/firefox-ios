@@ -152,11 +152,23 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return false
     }
 
-    private func shareDownloadedFile(_ downloadedFile: DownloadedFile) {
+    private func shareDownloadedFile(_ downloadedFile: DownloadedFile, indexPath: IndexPath) {
         let helper = ShareExtensionHelper(url: downloadedFile.path, tab: nil)
         let controller = helper.createActivityViewController { completed, activityType in
             print("Shared downloaded file: \(completed)")
         }
+
+        if let popoverPresentationController = controller.popoverPresentationController {
+            guard let tableViewCell = tableView.cellForRow(at: indexPath) else {
+                print("Unable to get table view cell at index path: \(indexPath)")
+                return
+            }
+
+            popoverPresentationController.sourceView = tableViewCell
+            popoverPresentationController.sourceRect = tableViewCell.bounds
+            popoverPresentationController.permittedArrowDirections = .any
+        }
+
         present(controller, animated: true, completion: nil)
     }
 
@@ -271,7 +283,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         if let downloadedFile = downloadedFileForIndexPath(indexPath) {
             guard downloadedFile.canShowInWebView else {
-                shareDownloadedFile(downloadedFile)
+                shareDownloadedFile(downloadedFile, indexPath: indexPath)
                 return
             }
 
@@ -303,7 +315,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         })
         let share = UITableViewRowAction(style: .normal, title: shareTitle, handler: { (action, indexPath) in
             if let downloadedFile = self.downloadedFileForIndexPath(indexPath) {
-                self.shareDownloadedFile(downloadedFile)
+                self.shareDownloadedFile(downloadedFile, indexPath: indexPath)
             }
         })
         share.backgroundColor = view.tintColor
