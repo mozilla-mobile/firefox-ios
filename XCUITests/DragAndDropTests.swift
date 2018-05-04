@@ -4,7 +4,7 @@
 
 import XCTest
 
-let firstWebsite = ["url": "www.youtube.com", "tabName": "Home - YouTube"]
+let firstWebsite = ["url": "www.wikipedia.org", "tabName": "Wikipedia"]
 let secondWebsite = ["url": "www.twitter.com", "tabName": "Twitter"]
 let homeTab = ["tabName": "home"]
 let websiteWithSearchField = ["url": "https://developer.mozilla.org/en-US/search", "urlSearchField": "Search the docs"]
@@ -76,12 +76,12 @@ class DragAndDropTests: BaseTestCase {
 
     func testRearrangeMoreThan3TabsTabTray() {
         // Arranging more than 3 to check that it works moving tabs between lines
-        let thirdWebsite = ["url": "wikipedia.com", "tabName": "Wikipedia"]
+        let thirdWebsite = ["url": "example.com", "tabName": "Example Domain"]
 
         // Open three websites and home tab
         openTwoWebsites()
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.openNewURL(urlString: "wikipedia.com")
+        navigator.openNewURL(urlString: thirdWebsite["url"]!)
         waitUntilPageLoad()
         navigator.goto(TabTray)
 
@@ -201,7 +201,6 @@ class DragAndDropTests: BaseTestCase {
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
         openTwoWebsites()
         navigator.goto(HomePanel_History)
-        waitforExistence(app.tables["History List"])
 
         let firstEntryOnList = app.tables["History List"].cells.element(boundBy: 2).staticTexts[secondWebsite["tabName"]!]
         let secondEntryOnList = app.tables["History List"].cells.element(boundBy: 3).staticTexts[firstWebsite["tabName"]!]
