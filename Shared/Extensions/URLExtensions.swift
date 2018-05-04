@@ -186,6 +186,10 @@ extension URL {
     }
 
     public var displayURL: URL? {
+        if self.isFileURL {
+            return URL(string: "file://\(self.lastPathComponent)")
+        }
+
         if self.isReaderModeURL {
             return self.decodeReaderModeURL?.havingRemovedAuthorisationComponents()
         }

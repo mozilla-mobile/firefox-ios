@@ -215,10 +215,21 @@ class ErrorPageHelper {
     func showPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
         // Don't show error pages for error pages.
         if url.isErrorPageURL {
-            if let previousURL = url.originalURLFromErrorURL,
-               let index = ErrorPageHelper.redirecting.index(of: previousURL) {
-                ErrorPageHelper.redirecting.remove(at: index)
+            if let previousURL = url.originalURLFromErrorURL {
+                // If the previous URL is a local file URL that we know exists,
+                // just load it in the web view. This works around an issue
+                // where we are unable to redirect to a `file://` URL during
+                // session restore.
+                if previousURL.isFileURL, FileManager.default.fileExists(atPath: previousURL.path) {
+                    webView.load(PrivilegedRequest(url: previousURL) as URLRequest)
+                    return
+                }
+
+                if let index = ErrorPageHelper.redirecting.index(of: previousURL) {
+                    ErrorPageHelper.redirecting.remove(at: index)
+                }
             }
+
             return
         }
 
