@@ -558,9 +558,9 @@ extension ActivityStreamPanel: DataObserverDelegate {
                 return succeed()
             }
 
-            // How sites are merged together. We compare against the urls second level domain. example m.youtube.com is compared against `youtube`
+            // How sites are merged together. We compare against the url's base domain. example m.youtube.com is compared against `youtube.com`
             let unionOnURL = { (site: Site) -> String in
-                return URL(string: site.url)?.hostSLD ?? ""
+                return URL(string: site.url)?.baseDomain ?? ""
             }
 
             // Fetch the default sites
