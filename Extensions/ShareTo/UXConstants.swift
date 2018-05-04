@@ -10,6 +10,7 @@ struct UX {
     static let alphaForFullscreenOverlay: CGFloat = 0.3
     static let dialogCornerRadius: CGFloat = 8
     static let topViewHeight = 315
+    static let topViewHeightForSearchMode = 160
     static let topViewWidth = 345
     static let viewHeightForDoneState = 170
     static let pageInfoRowHeight = 64

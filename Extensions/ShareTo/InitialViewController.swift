@@ -39,7 +39,7 @@ class EmbeddedNavController {
     var navigationController: UINavigationController
     var heightConstraint: Constraint!
 
-    init(parent: UIViewController, rootViewController: UIViewController) {
+    init(isSearchMode: Bool, parent: UIViewController, rootViewController: UIViewController) {
         self.parent = parent
         navigationController = UINavigationController(rootViewController: rootViewController)
 
@@ -48,11 +48,14 @@ class EmbeddedNavController {
 
         let width = min(screenSizeOrientationIndependent().width * 0.90, CGFloat(UX.topViewWidth))
 
+        let initialHeight = isSearchMode ? UX.topViewHeightForSearchMode : UX.topViewHeight
         navigationController.view.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.width.equalTo(width)
-            heightConstraint = make.height.equalTo(UX.topViewHeight).constraint
-            layout(forTraitCollection: navigationController.traitCollection)
+            heightConstraint = make.height.equalTo(initialHeight).constraint
+            if (!isSearchMode) {
+                layout(forTraitCollection: navigationController.traitCollection)
+            }
         }
 
         navigationController.view.layer.cornerRadius = UX.dialogCornerRadius
@@ -85,11 +88,25 @@ class InitialViewController: UIViewController {
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         super.viewDidLoad()
         view.backgroundColor = UIColor(white: 0.0, alpha: UX.alphaForFullscreenOverlay)
-        // This is the view controller for the popup dialog
-        shareViewController = ShareViewController()
-        shareViewController.delegate = self
-        embedController = EmbeddedNavController(parent: self, rootViewController: shareViewController)
         view.alpha = 0
+
+        getShareItem().uponQueue(.main) { shareItem in
+            guard let shareItem = shareItem else {
+                self.hidePopupWhenShowingAlert()
+
+                let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .default) { _ in self.finish(afterDelay: 0) })
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+
+            // This is the view controller for the popup dialog
+            self.shareViewController = ShareViewController()
+            self.shareViewController.delegate = self
+            self.shareViewController.shareItem = shareItem
+
+            self.embedController = EmbeddedNavController(isSearchMode: !shareItem.isUrlType(), parent: self, rootViewController: self.shareViewController)
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -103,8 +120,20 @@ class InitialViewController: UIViewController {
         }
     }
 
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+    func getShareItem() -> Deferred<ExtensionUtils.ExtractedShareItem?> {
+        let deferred = Deferred<ExtensionUtils.ExtractedShareItem?>()
+        ExtensionUtils.extractSharedItem(fromExtensionContext: extensionContext) { item, error in
+            if let item = item, error == nil {
+                deferred.fill(item)
+            } else {
+                deferred.fill(nil)
+                self.extensionContext?.cancelRequest(withError: CocoaError(.keyValueValidation))
+            }
+        }
+        return deferred
+    }
 
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         coordinator.animate(alongsideTransition: { _ in
             self.embedController.layout(forTraitCollection: newCollection)
             self.shareViewController.layout(forTraitCollection: newCollection)
@@ -128,20 +157,6 @@ extension InitialViewController: ShareControllerDelegate {
 
     func getValidExtensionContext() -> NSExtensionContext? {
         return extensionContext
-    }
-
-    func getShareItem() -> Deferred<ShareItem?> {
-        let deferred = Deferred<ShareItem?>()
-        ExtensionUtils.extractSharedItemFromExtensionContext(extensionContext, completionHandler: { item, error in
-            if let item = item, error == nil {
-                deferred.fill(item)
-            } else {
-                deferred.fill(nil)
-                self.extensionContext?.cancelRequest(withError: CocoaError(.keyValueValidation))
-            }
-        })
-
-        return deferred
     }
 
     // At startup, the extension may show an alert that it can't share. In this case for a better UI, rather than showing

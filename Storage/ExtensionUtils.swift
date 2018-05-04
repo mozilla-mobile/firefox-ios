@@ -19,12 +19,25 @@ extension NSItemProvider {
 }
 
 public struct ExtensionUtils {
+    public enum ExtractedShareItem {
+        case shareItem(ShareItem)
+        case rawText(String)
+
+        public func isUrlType() -> Bool {
+            if case .shareItem(_) = self {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+
     /// Look through the extensionContext for a url and title. Walks over all inputItems and then over all the attachments.
     /// Has a completionHandler because ultimately an XPC call to the sharing application is done.
     /// We can always extract a URL and sometimes a title. The favicon is currently just a placeholder, but
     /// future code can possibly interact with a web page to find a proper icon.
     /// If no URL is found, but a text provider *is*, then use the raw text as a fallback.
-    public static func extractSharedItemFromExtensionContext(_ extensionContext: NSExtensionContext?, completionHandler: @escaping (ShareItem?, Error?) -> Void) {
+    public static func extractSharedItem(fromExtensionContext extensionContext: NSExtensionContext?, completionHandler: @escaping (ExtractedShareItem?, Error?) -> Void) {
         guard let extensionContext = extensionContext,
               let inputItems = extensionContext.inputItems as? [NSExtensionItem] else {
             completionHandler(nil, nil)
@@ -50,7 +63,8 @@ public struct ExtensionUtils {
                         }
 
                         let title = inputItem.attributedContentText?.string
-                        completionHandler(ShareItem(url: url.absoluteString, title: title, favicon: nil), nil)
+                        let extracted = ExtractedShareItem.shareItem(ShareItem(url: url.absoluteString, title: title, favicon: nil))
+                        completionHandler(extracted, nil)
                     }
 
                     return
@@ -65,6 +79,17 @@ public struct ExtensionUtils {
             }
         }
 
+        // See if the text is URL-like enough to be an url, in particular, check if it has a valid TLD.
+        func textToUrl(_ text: String) -> URL? {
+            guard text.contains(".") else { return nil }
+            var text = text
+            if !text.hasPrefix("http") {
+                text = "http://" + text
+            }
+            let url = URL(string: text)
+            return url?.publicSuffix != nil ? url : nil
+        }
+
         if let textProvider = textProviderFallback {
             textProvider.processText { obj, err in
                 guard err == nil, let text = obj as? String else {
@@ -72,17 +97,17 @@ public struct ExtensionUtils {
                     return
                 }
 
-                if let url = URL(string: text) {
-                    completionHandler(ShareItem(url: url.absoluteString, title: nil, favicon: nil), nil)
-                } else {
-                    // @TODO Support searching for the selected text, perhaps urlScheme://open-text?text=\(query)
-                    completionHandler(nil, nil)
+                if let url = textToUrl(text) {
+                    let extracted = ExtractedShareItem.shareItem(ShareItem(url: url.absoluteString, title: nil, favicon: nil))
+                    completionHandler(extracted, nil)
+                    return
                 }
 
+                let extracted = ExtractedShareItem.rawText(text)
+                completionHandler(extracted, nil)
             }
-            return
+        } else {
+            completionHandler(nil, nil)
         }
-
-        completionHandler(nil, nil)
     }
 }

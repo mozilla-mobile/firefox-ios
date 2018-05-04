@@ -34,7 +34,6 @@ extension UILabel {
 protocol ShareControllerDelegate: class {
     func finish(afterDelay: TimeInterval)
     func getValidExtensionContext() -> NSExtensionContext?
-    func getShareItem() -> Deferred<ShareItem?>
     func hidePopupWhenShowingAlert()
 }
 
@@ -49,13 +48,15 @@ func addAppExtensionTelemetryEvent(forMethod method: String) {
 }
 
 class ShareViewController: UIViewController {
-    private var shareItem: ShareItem?
+    var shareItem: ExtensionUtils.ExtractedShareItem?
     private var viewsShownDuringDoneAnimation = [UIView]()
     private var stackView: UIStackView!
-    private var sendToDevice: SendToDevice?
     private var actionDoneRow: (row: UIStackView, label: UILabel)!
-    private var pageInfoHeight: Constraint!
+    private var sendToDevice: SendToDevice?
+    private var pageInfoHeight: Constraint?
     private var actionRowHeights = [Constraint]()
+    private var pageInfoRowTitleLabel: UILabel?
+    private var pageInfoRowUrlLabel: UILabel?
 
     weak var delegate: ShareControllerDelegate?
 
@@ -73,13 +74,35 @@ class ShareViewController: UIViewController {
         setupNavBar()
         setupStackView()
 
+        guard let shareItem = shareItem else { return }
+
+        self.setupRows()
+
+        switch shareItem {
+        case .shareItem(let item):
+            self.pageInfoRowUrlLabel?.text = item.url
+            self.pageInfoRowTitleLabel?.text = item.title
+        case .rawText(let text):
+            self.pageInfoRowTitleLabel?.text = "“" + text + "”"
+        }
+    }
+
+    private func setupRows() {
         let pageInfoRow = makePageInfoRow(addTo: stackView)
+        pageInfoRowTitleLabel = pageInfoRow.pageTitleLabel
+        pageInfoRowUrlLabel = pageInfoRow.urlLabel
         makeSeparator(addTo: stackView)
-        makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
-        makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
-        makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
-        makeSeparator(addTo: stackView)
-        makeActionRow(addTo: stackView, label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
+
+        if shareItem?.isUrlType() ?? true {
+            makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
+            makeSeparator(addTo: stackView)
+            makeActionRow(addTo: stackView, label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
+        } else {
+            pageInfoRowUrlLabel?.removeFromSuperview()
+            makeActionRow(addTo: stackView, label: Strings.ShareSearchInFirefox, imageName: "quickSearch", action: #selector(actionSearchInFirefox), hasNavigation: false)
+        }
 
         let footerSpaceRow = UIView()
         stackView.addArrangedSubview(footerSpaceRow)
@@ -96,21 +119,6 @@ class ShareViewController: UIViewController {
 
         // All other views are hidden for the done animation.
         viewsShownDuringDoneAnimation += [pageInfoRow.row, footerSpaceRow, actionDoneRow.row]
-
-        delegate?.getShareItem().uponQueue(.main) { shareItem in
-            guard let shareItem = shareItem, shareItem.isShareable else {
-                self.delegate?.hidePopupWhenShowingAlert()
-
-                let alert = UIAlertController(title: Strings.SendToErrorTitle, message: Strings.SendToErrorMessage, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: Strings.SendToErrorOKButton, style: .default) { _ in self.finish(afterDelay: 0) })
-                self.present(alert, animated: true, completion: nil)
-                return
-            }
-
-            self.shareItem = shareItem
-            pageInfoRow.urlLabel.text = shareItem.url
-            pageInfoRow.pageTitleLabel.text = shareItem.title
-        }
     }
 
     private func makeSeparator(addTo parent: UIStackView) {
@@ -128,7 +136,7 @@ class ShareViewController: UIViewController {
             return
         }
 
-        pageInfoHeight.update(offset: isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight)
+        pageInfoHeight?.update(offset: isLandscapeSmallScreen(traitCollection) ? UX.pageInfoRowHeight - UX.perRowShrinkageForLandscape : UX.pageInfoRowHeight)
         actionRowHeights.forEach {
             $0.update(offset: isLandscapeSmallScreen(traitCollection) ? UX.actionRowHeight - UX.perRowShrinkageForLandscape : UX.actionRowHeight)
         }
@@ -282,9 +290,9 @@ extension ShareViewController {
         gesture.isEnabled = false
         animateToActionDoneView(withTitle: Strings.ShareBookmarkThisPageDone)
 
-        if let shareItem = shareItem {
+        if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
-            _ = profile.bookmarks.shareItem(shareItem).value // Blocks until database has settled
+            _ = profile.bookmarks.shareItem(item).value // Blocks until database has settled
             profile.shutdown()
 
             addAppExtensionTelemetryEvent(forMethod: "bookmark-this-page")
@@ -297,9 +305,9 @@ extension ShareViewController {
         gesture.isEnabled = false
         animateToActionDoneView(withTitle: Strings.ShareAddToReadingListDone)
 
-        if let shareItem = shareItem {
+        if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
-            profile.readingList.createRecordWithURL(shareItem.url, title: shareItem.title ?? "", addedBy: UIDevice.current.name)
+            profile.readingList.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.current.name)
             profile.shutdown()
 
             addAppExtensionTelemetryEvent(forMethod: "add-to-reading-list")
@@ -309,39 +317,60 @@ extension ShareViewController {
     }
 
     @objc func actionSendToDevice(gesture: UIGestureRecognizer) {
+        guard let shareItem = shareItem, case .shareItem(let item) = shareItem else {
+            return
+        }
+
         gesture.isEnabled = false
         sendToDevice = SendToDevice()
         guard let sendToDevice = sendToDevice else { return }
-        sendToDevice.sharedItem = shareItem
+        sendToDevice.sharedItem = item
         sendToDevice.delegate = delegate
         let vc = sendToDevice.initialViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
 
-    @objc func actionOpenInFirefoxNow(gesture: UIGestureRecognizer) {
-        gesture.isEnabled = false
-
+    func openFirefox(withUrl url: String, isSearch: Bool) {
         // Telemetry is handled in the app delegate that receives this event.
         let profile = BrowserProfile(localName: "profile")
         profile.prefs.setBool(true, forKey: PrefsKeys.AppExtensionTelemetryOpenUrl)
 
-        func firefoxUrl(_ url: String) -> String {
+       func firefoxUrl(_ url: String) -> String {
             let encoded = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics) ?? ""
+            if isSearch {
+                return "firefox://open-text?text=\(encoded)"
+            }
             return "firefox://open-url?url=\(encoded)"
         }
 
-        if let shareItem = shareItem,
-            let url = URL(string: firefoxUrl(shareItem.url)) {
-            var responder = self as UIResponder?
-            let selectorOpenURL = sel_registerName("openURL:")
-            while let item = responder {
-                if item.responds(to: selectorOpenURL) {
-                    item.perform(selectorOpenURL, with: url, afterDelay: 0)
-                    break
-                }
-
-                responder = item.next
+        guard let url = URL(string: firefoxUrl(url)) else { return }
+        var responder = self as UIResponder?
+        let selectorOpenURL = sel_registerName("openURL:")
+        while let current = responder {
+            if current.responds(to: selectorOpenURL) {
+                current.perform(selectorOpenURL, with: url, afterDelay: 0)
+                break
             }
+
+            responder = current.next
+        }
+    }
+
+    @objc func actionSearchInFirefox(gesture: UIGestureRecognizer) {
+        gesture.isEnabled = false
+
+        if let shareItem = shareItem, case .rawText(let text) = shareItem {
+            openFirefox(withUrl: text, isSearch: true)
+        }
+
+        finish(afterDelay: 0)
+    }
+
+    @objc func actionOpenInFirefoxNow(gesture: UIGestureRecognizer) {
+        gesture.isEnabled = false
+
+        if let shareItem = shareItem, case .shareItem(let item) = shareItem {
+            openFirefox(withUrl: item.url, isSearch: false)
         }
 
         finish(afterDelay: 0)

@@ -989,7 +989,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false) {
+    func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
         let freshTab = tabManager.selectedTab
@@ -999,8 +999,10 @@ class BrowserViewController: UIViewController {
                 // Without a delay, the text field fails to become first responder
                 // Check that the newly created tab is still selected.
                 // This let's the user spam the Cmd+T button without lots of responder changes.
-                if freshTab == self.tabManager.selectedTab {
-                    self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+                guard freshTab == self.tabManager.selectedTab else { return }
+                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+                if let text = searchText {
+                    self.urlBar.setLocation(text, search: true)
                 }
             }
         }
