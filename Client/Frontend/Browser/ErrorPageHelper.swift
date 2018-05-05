@@ -221,7 +221,7 @@ class ErrorPageHelper {
                 // where we are unable to redirect to a `file://` URL during
                 // session restore.
                 if previousURL.isFileURL, FileManager.default.fileExists(atPath: previousURL.path) {
-                    webView.load(PrivilegedRequest(url: previousURL) as URLRequest)
+                    webView.loadFileURL(previousURL, allowingReadAccessTo: previousURL)
                     return
                 }
 

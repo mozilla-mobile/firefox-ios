@@ -52,7 +52,7 @@ struct MIMEType {
 }
 
 protocol OpenInHelper {
-    init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, browserViewController: BrowserViewController)
+    init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController)
     var openInView: UIView? { get set }
     func open()
 }
@@ -60,8 +60,8 @@ protocol OpenInHelper {
 struct OpenIn {
     static let helpers: [OpenInHelper.Type] = [OpenPdfInHelper.self, OpenPassBookHelper.self, DownloadHelper.self]
     
-    static func helperForRequest(_ request: URLRequest?, response: URLResponse, canShowInWebView: Bool, browserViewController: BrowserViewController) -> OpenInHelper? {
-        return helpers.compactMap { $0.init(request: request, response: response, canShowInWebView: canShowInWebView, browserViewController: browserViewController) }.first
+    static func helperForRequest(_ request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) -> OpenInHelper? {
+        return helpers.compactMap { $0.init(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: browserViewController) }.first
     }
 }
 
@@ -72,7 +72,7 @@ class DownloadHelper: NSObject, OpenInHelper {
     fileprivate let preflightResponse: URLResponse
     fileprivate let browserViewController: BrowserViewController
 
-    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, browserViewController: BrowserViewController) {
+    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
         guard let request = request else {
             return nil
         }
@@ -81,7 +81,7 @@ class DownloadHelper: NSObject, OpenInHelper {
         let mimeType = response.mimeType ?? MIMEType.OctetStream
         let isAttachment = contentDisposition?.starts(with: "attachment") ?? (mimeType == MIMEType.OctetStream)
 
-        guard isAttachment || !canShowInWebView else {
+        guard isAttachment || !canShowInWebView || forceDownload else {
             return nil
         }
 
@@ -124,9 +124,9 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
 
     fileprivate let browserViewController: BrowserViewController
 
-    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, browserViewController: BrowserViewController) {
+    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
         guard let mimeType = response.mimeType, mimeType == MIMEType.Passbook, PKAddPassesViewController.canAddPasses(),
-            let responseURL = response.url else { return nil }
+            let responseURL = response.url, !forceDownload else { return nil }
         self.url = responseURL
         self.browserViewController = browserViewController
         super.init()
@@ -173,9 +173,9 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
 
     fileprivate var filepath: URL?
 
-    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, browserViewController: BrowserViewController) {
+    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
         guard let mimeType = response.mimeType, mimeType == MIMEType.PDF, UIApplication.shared.canOpenURL(URL(string: "itms-books:")!),
-            let responseURL = response.url else { return nil }
+            let responseURL = response.url, !forceDownload else { return nil }
         url = responseURL
         super.init()
         setFilePath(response.suggestedFilename ?? url.lastPathComponent )

@@ -165,9 +165,12 @@ extension BrowserViewController: WKNavigationDelegate {
         // We can only show this content in the web view if this URL is not pending
         // download via the context menu.
         let canShowInWebView = navigationResponse.canShowMIMEType && (navigationResponse.response.url != pendingDownloadURL)
+        let forceDownload = navigationResponse.response.url == pendingDownloadURL
 
-        guard var helperForURL = OpenIn.helperForRequest(request, response: navigationResponse.response, canShowInWebView: canShowInWebView, browserViewController: self) else {
+        let openInHelper = OpenIn.helperForRequest(request, response: navigationResponse.response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self)
+        guard var helperForURL = openInHelper, helperForURL is DownloadHelper else {
             if navigationResponse.canShowMIMEType {
+                addViewForOpenInHelper(openInHelper)
                 decisionHandler(.allow)
                 return
             }
