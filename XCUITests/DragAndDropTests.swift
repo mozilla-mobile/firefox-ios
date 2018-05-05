@@ -200,6 +200,7 @@ class DragAndDropTests: BaseTestCase {
     func testDragAndDropHistoryEntry() {
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
         openTwoWebsites()
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_History)
 
         let firstEntryOnList = app.tables["History List"].cells.element(boundBy: 2).staticTexts[secondWebsite["tabName"]!]
