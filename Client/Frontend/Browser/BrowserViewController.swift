@@ -1168,8 +1168,8 @@ class BrowserViewController: UIViewController {
     }
     
     // MARK: open in helper utils
-    func addViewForOpenInHelper(_ openInHelper: OpenInHelper) {
-        guard let view = openInHelper.openInView else { return }
+    func addViewForOpenInHelper(_ openInHelper: OpenInHelper?) {
+        guard let openInHelper = openInHelper, let view = openInHelper.openInView else { return }
         webViewContainerToolbar.addSubview(view)
         webViewContainerToolbar.snp.updateConstraints { make in
             make.height.equalTo(OpenInViewUX.ViewHeight)

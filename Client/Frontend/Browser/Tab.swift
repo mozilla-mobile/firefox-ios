@@ -330,6 +330,10 @@ class Tab: NSObject {
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
         if let webView = webView {
             lastRequest = request
+            if let url = request.url, url.isFileURL, request.isPrivileged {
+                return webView.loadFileURL(url, allowingReadAccessTo: url)
+            }
+
             return webView.load(request)
         }
         return nil
