@@ -60,6 +60,7 @@ extension PhotonActionSheetProtocol {
 
         let openDownloads = PhotonActionSheetItem(title: Strings.AppMenuDownloadsTitleString, iconString: "menu-panel-Downloads") { action in
             tab.loadRequest(PrivilegedRequest(url: HomePanelType.downloads.localhostURL) as URLRequest)
+            UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .appMenu)
         }
 
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in

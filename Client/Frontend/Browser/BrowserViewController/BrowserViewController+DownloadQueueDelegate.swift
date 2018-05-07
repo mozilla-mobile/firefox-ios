@@ -52,6 +52,7 @@ extension BrowserViewController: DownloadQueueDelegate {
                 let downloadCompleteToast = ButtonToast(labelText: download.filename, imageName: "check", buttonText: Strings.DownloadsButtonTitle, completion: { buttonPressed in
                     if buttonPressed {
                         self.openURLInNewTab(HomePanelType.downloads.localhostURL, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false, isPrivileged: true)
+                        UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .downloadCompleteToast)
                     }
                 })
 
