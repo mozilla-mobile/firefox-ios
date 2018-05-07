@@ -31,6 +31,23 @@ extension UILabel {
     }
 }
 
+// Credit: https://stackoverflow.com/a/48860391/490488
+extension String {
+    static var quotes: (String, String) {
+        guard
+            let bQuote = Locale.current.quotationBeginDelimiter,
+            let eQuote = Locale.current.quotationEndDelimiter
+            else { return ("“", "”") }
+
+        return (bQuote, eQuote)
+    }
+
+    var quoted: String {
+        let (bQuote, eQuote) = String.quotes
+        return bQuote + self + eQuote
+    }
+}
+
 protocol ShareControllerDelegate: class {
     func finish(afterDelay: TimeInterval)
     func getValidExtensionContext() -> NSExtensionContext?
@@ -83,7 +100,7 @@ class ShareViewController: UIViewController {
             self.pageInfoRowUrlLabel?.text = item.url
             self.pageInfoRowTitleLabel?.text = item.title
         case .rawText(let text):
-            self.pageInfoRowTitleLabel?.text = "“" + text + "”"
+            self.pageInfoRowTitleLabel?.text = text.quoted
         }
     }
 
