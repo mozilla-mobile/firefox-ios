@@ -112,6 +112,7 @@ class ShareViewController: UIViewController {
 
         if shareItem?.isUrlType() ?? true {
             makeActionRow(addTo: stackView, label: Strings.ShareOpenInFirefox, imageName: "open-in-firefox", action: #selector(actionOpenInFirefoxNow), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: Strings.ShareLoadInBackground, imageName: "menu-Show-Tabs", action: #selector(actionLoadInBackground), hasNavigation: false)
             makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
             makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
             makeSeparator(addTo: stackView)
@@ -304,6 +305,23 @@ class ShareViewController: UIViewController {
 }
 
 extension ShareViewController {
+    @objc func actionLoadInBackground(gesture: UIGestureRecognizer) {
+        // To avoid re-rentry from double tap, each action function disables the gesture
+        gesture.isEnabled = false
+        animateToActionDoneView(withTitle: Strings.ShareLoadInBackgroundDone)
+
+        if let shareItem = shareItem, case .shareItem(let item) = shareItem {
+            let profile = BrowserProfile(localName: "profile")
+            profile.queue.addToQueue(item).uponQueue(.main) { _ in
+                profile.shutdown()
+            }
+
+            addAppExtensionTelemetryEvent(forMethod: "load-in-background")
+        }
+
+        finish()
+    }
+
     @objc func actionBookmarkThisPage(gesture: UIGestureRecognizer) {
         gesture.isEnabled = false
         animateToActionDoneView(withTitle: Strings.ShareBookmarkThisPageDone)
