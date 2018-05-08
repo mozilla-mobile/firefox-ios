@@ -418,10 +418,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         var title = String()
         switch sectionLookup[section]! {
         case 0: return nil
-        case 1: title = NSLocalizedString("Today", comment: "History tableview section header")
-        case 2: title = NSLocalizedString("Yesterday", comment: "History tableview section header")
-        case 3: title = NSLocalizedString("Last week", comment: "History tableview section header")
-        case 4: title = NSLocalizedString("Last month", comment: "History tableview section header")
+        case 1: title = Strings.TableDateSectionTitleToday
+        case 2: title = Strings.TableDateSectionTitleYesterday
+        case 3: title = Strings.TableDateSectionTitleLastWeek
+        case 4: title = Strings.TableDateSectionTitleLastMonth
         default:
             assertionFailure("Invalid history section \(section)")
         }
