@@ -210,7 +210,6 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private func deleteDownloadedFile(_ downloadedFile: DownloadedFile) -> Bool {
         do {
             try FileManager.default.removeItem(at: downloadedFile.path)
-            groupedDownloadedFiles.remove(downloadedFile)
             return true
         } catch let error {
             print("Unable to delete downloaded file: \(error.localizedDescription)")
@@ -403,6 +402,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             if let downloadedFile = self.downloadedFileForIndexPath(indexPath) {
                 if self.deleteDownloadedFile(downloadedFile) {
                     self.tableView.beginUpdates()
+                    self.groupedDownloadedFiles.remove(downloadedFile)
                     self.tableView.deleteRows(at: [indexPath], with: .right)
                     self.tableView.endUpdates()
                     self.updateEmptyPanelState()
