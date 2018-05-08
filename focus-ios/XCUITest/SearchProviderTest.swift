@@ -19,7 +19,7 @@ class SearchProviderTest: BaseTestCase {
 	
     func testSearchProvider() {
 		// Removing Twitter since it seems to be blocked from BB devices
-		let searchEngines = ["Google", "Yahoo", "DuckDuckGo", "Wikipedia", "Amazon.com"]
+		let searchEngines = ["Google", "DuckDuckGo", "Wikipedia", "Amazon.com"]
 		
 		for searchEngine in searchEngines {
 			changeSearchProvider(provider: searchEngine)
@@ -105,14 +105,6 @@ class SearchProviderTest: BaseTestCase {
                     waitForValueContains(element: app.webViews.textFields["Search"], value: searchWord)
                 } else if app.webViews.otherElements["Search"].exists {
                     waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
-                }
-            case "Yahoo":
-				waitForValueContains(element: urlbarUrltextTextField, value: "https://search.yahoo.com")
-                
-                if app.otherElements["banner"].searchFields["Search"].exists {
-                   waitForValueContains(element: app.otherElements["banner"].searchFields["Search"], value: searchWord)
-                } else if app.webViews.otherElements[searchWord + " - - Yahoo Search Results"].exists {
-                    XCTAssertTrue(true)
                 }
            case "DuckDuckGo":
 				waitForValueContains(element: urlbarUrltextTextField, value: "https://duckduckgo.com/?q=mozilla")

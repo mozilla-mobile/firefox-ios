@@ -9,7 +9,6 @@
   <key>as</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>google</string>
     <string>amazon-in</string>
     <string>duckduckgo</string>
@@ -29,7 +28,6 @@
     <string>be.wikipedia.org</string>
     <string>duckduckgo</string>
     <string>tut.by</string>
-    <string>yahoo</string>
     <string>yandex.by</string>
   </array>
   <key>be-BY</key>
@@ -39,12 +37,10 @@
     <string>be.wikipedia.org</string>
     <string>duckduckgo</string>
     <string>tut.by</string>
-    <string>yahoo</string>
   </array>
   <key>bn-IN</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>rediff</string>
@@ -53,7 +49,6 @@
   <key>br</key>
   <array>
     <string>google</string>
-    <string>yahoo-france</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-br</string>
@@ -79,7 +74,6 @@
   <key>cy</key>
   <array>
     <string>google</string>
-    <string>yahoo-en-GB</string>
     <string>amazon-en-GB</string>
     <string>duckduckgo</string>
     <string>wikipedia-cy</string>
@@ -95,7 +89,6 @@
   <key>de</key>
   <array>
     <string>google</string>
-    <string>yahoo-de</string>
     <string>amazon-de</string>
     <string>duckduckgo</string>
     <string>qwant</string>
@@ -105,7 +98,6 @@
   <key>default</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -114,7 +106,6 @@
   <key>dsb</key>
   <array>
     <string>google</string>
-    <string>yahoo-de</string>
     <string>amazon-de</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -131,7 +122,6 @@
   <key>en-CA</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -140,7 +130,6 @@
   <key>en-GB</key>
   <array>
     <string>google</string>
-    <string>yahoo-en-GB</string>
     <string>amazon-en-GB</string>
     <string>duckduckgo</string>
     <string>qwant</string>
@@ -150,7 +139,6 @@
   <key>en-US</key>
   <array>
     <string>google-2018</string>
-    <string>yahoo</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -166,7 +154,6 @@
   <key>eo</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>duckduckgo</string>
     <string>reta-vortaro</string>
     <string>twitter</string>
@@ -183,7 +170,6 @@
   <key>es-CL</key>
   <array>
     <string>google</string>
-    <string>yahoo-cl</string>
     <string>drae</string>
     <string>duckduckgo</string>
     <string>mercadolibre-cl</string>
@@ -193,7 +179,6 @@
   <key>es-ES</key>
   <array>
     <string>google</string>
-    <string>yahoo-es</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-es</string>
@@ -201,7 +186,6 @@
   <key>es-MX</key>
   <array>
     <string>google</string>
-    <string>yahoo-mx</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>mercadolibre-mx</string>
@@ -219,7 +203,6 @@
   <key>eu</key>
   <array>
     <string>google</string>
-    <string>yahoo-es</string>
     <string>duckduckgo</string>
     <string>elebila</string>
     <string>wikipedia-eu</string>
@@ -229,12 +212,10 @@
     <string>google</string>
     <string>duckduckgo</string>
     <string>wikipedia-fa</string>
-    <string>yahoo</string>
   </array>
   <key>ff</key>
   <array>
     <string>google</string>
-    <string>yahoo-france</string>
     <string>amazon-france</string>
     <string>duckduckgo</string>
     <string>wikipedia-fr</string>
@@ -244,14 +225,12 @@
     <string>google</string>
     <string>twitter</string>
     <string>wikipedia-fi</string>
-    <string>yahoo-fi</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
   </array>
   <key>fr</key>
   <array>
     <string>google</string>
-    <string>yahoo-france</string>
     <string>duckduckgo</string>
     <string>qwant</string>
     <string>twitter</string>
@@ -276,7 +255,6 @@
   <key>gd</key>
   <array>
     <string>google</string>
-    <string>yahoo-en-GB</string>
     <string>duckduckgo</string>
     <string>faclair-beag</string>
     <string>wikipedia-gd</string>
@@ -284,7 +262,6 @@
   <key>gl</key>
   <array>
     <string>google</string>
-    <string>yahoo-es</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -293,7 +270,6 @@
   <key>gu-IN</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>amazon-in</string>
     <string>duckduckgo</string>
     <string>wikipedia-gu</string>
@@ -308,7 +284,6 @@
   <key>hi-IN</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>amazon-in</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -317,7 +292,6 @@
   <key>hr</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>amazon-en-GB</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -326,7 +300,6 @@
   <key>hsb</key>
   <array>
     <string>google</string>
-    <string>yahoo-de</string>
     <string>amazon-de</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -344,7 +317,6 @@
   <key>hy-AM</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>list-am</string>
@@ -353,7 +325,6 @@
   <key>id</key>
   <array>
     <string>google</string>
-    <string>yahoo-id</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-id</string>
@@ -361,7 +332,6 @@
   <key>is</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>leit-is</string>
@@ -386,7 +356,6 @@
   <key>ka</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>wikipedia-ka</string>
@@ -395,7 +364,6 @@
   <array>
     <string>yandex</string>
     <string>google</string>
-    <string>yahoo</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-kk</string>
@@ -404,7 +372,6 @@
   <array>
     <string>yandex</string>
     <string>google-nocodes</string>
-    <string>yahoo</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-kk</string>
@@ -412,7 +379,6 @@
   <key>kn</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>amazon-in</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -431,7 +397,6 @@
   <key>lo</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-lo</string>
@@ -455,7 +420,6 @@
   <key>ml</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-ml</string>
@@ -463,7 +427,6 @@
   <key>mr</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>amazon-in</string>
     <string>duckduckgo</string>
     <string>rediff</string>
@@ -472,7 +435,6 @@
   <key>ms</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -481,7 +443,6 @@
   <key>my</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -513,7 +474,6 @@
   <key>or</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>amazon-in</string>
     <string>duckduckgo</string>
     <string>wikipedia-or</string>
@@ -529,7 +489,6 @@
   <key>pt-BR</key>
   <array>
     <string>google</string>
-    <string>yahoo-br</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-br</string>
@@ -543,7 +502,6 @@
   <key>rm</key>
   <array>
     <string>google</string>
-    <string>yahoo-ch</string>
     <string>duckduckgo</string>
     <string>leo_ende_de</string>
     <string>pledarigrond</string>
@@ -617,7 +575,6 @@
   <key>sq</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>amazon-en-GB</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -626,7 +583,6 @@
   <key>sr</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>duckduckgo</string>
     <string>twitter</string>
     <string>wikipedia-sr</string>
@@ -642,7 +598,6 @@
   <key>ta</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>amazon-in</string>
     <string>duckduckgo</string>
     <string>wikipedia-ta</string>
@@ -651,7 +606,6 @@
   <key>te</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>amazon-in</string>
     <string>duckduckgo</string>
     <string>wikipedia-te</string>
@@ -699,7 +653,6 @@
   <key>ur</key>
   <array>
     <string>google</string>
-    <string>yahoo-in</string>
     <string>amazon-in</string>
     <string>duckduckgo</string>
     <string>twitter</string>
@@ -708,7 +661,6 @@
   <key>uz</key>
   <array>
     <string>google</string>
-    <string>yahoo</string>
     <string>amazondotcom</string>
     <string>duckduckgo</string>
     <string>twitter</string>
