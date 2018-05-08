@@ -12,7 +12,7 @@ private struct DownloadsPanelUX {
     static let WelcomeScreenItemWidth = 170
 }
 
-struct DownloadedFile {
+struct DownloadedFile: Equatable {
     let path: URL
     let size: UInt64
     let lastModified: Date
@@ -36,6 +36,65 @@ struct DownloadedFile {
     var mimeType: String {
         return MIMEType.mimeTypeFromFileExtension(fileExtension)
     }
+
+    static public func ==(lhs: DownloadedFile, rhs: DownloadedFile) -> Bool {
+        return lhs.path == rhs.path
+    }
+}
+
+private func getDate(dayOffset: Int) -> Date {
+    let calendar = Calendar(identifier: .gregorian)
+    let components = calendar.dateComponents([.year, .month, .day], from: Date())
+    let today = calendar.date(from: components)!
+    return calendar.date(byAdding: .day, value: dayOffset, to: today)!
+}
+
+struct DateGroupedTableData<T : Equatable> {
+    let todayTimestamp = getDate(dayOffset: 0).timeIntervalSince1970
+    let yesterdayTimestamp = getDate(dayOffset: -1).timeIntervalSince1970
+    let lastWeekTimestamp = getDate(dayOffset: -7).timeIntervalSince1970
+
+    var today: [(T, TimeInterval)] = []
+    var yesterday: [(T, TimeInterval)] = []
+    var lastWeek: [(T, TimeInterval)] = []
+    var older: [(T, TimeInterval)] = []
+
+    mutating func add(_ item: T, timestamp: TimeInterval) {
+        if timestamp > todayTimestamp {
+            today.append((item, timestamp))
+        } else if timestamp > yesterdayTimestamp {
+            yesterday.append((item, timestamp))
+        } else if timestamp > lastWeekTimestamp {
+            lastWeek.append((item, timestamp))
+        } else {
+            older.append((item, timestamp))
+        }
+    }
+
+    mutating func remove(_ item: T) {
+        if let index = today.index(where: { item == $0.0 }) {
+            today.remove(at: index)
+        } else if let index = yesterday.index(where: { item == $0.0 }) {
+            yesterday.remove(at: index)
+        } else if let index = lastWeek.index(where: { item == $0.0 }) {
+            lastWeek.remove(at: index)
+        } else if let index = older.index(where: { item == $0.0 }) {
+            older.remove(at: index)
+        }
+    }
+
+    func itemsForSection(_ section: Int) -> [T] {
+        switch section {
+        case 0:
+            return today.map({ $0.0 })
+        case 1:
+            return yesterday.map({ $0.0 })
+        case 2:
+            return lastWeek.map({ $0.0 })
+        default:
+            return older.map({ $0.0 })
+        }
+    }
 }
 
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, HomePanel {
@@ -47,7 +106,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
-    private var downloadedFiles: [DownloadedFile] = []
+    private var groupedDownloadedFiles = DateGroupedTableData<DownloadedFile>()
     private var fileExtensionIcons: [String : UIImage] = [:]
 
     // MARK: - Lifecycle
@@ -114,8 +173,15 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func reloadData() {
-        downloadedFiles = fetchData()
+        groupedDownloadedFiles = DateGroupedTableData<DownloadedFile>()
+
+        let downloadedFiles = fetchData()
+        for downloadedFile in downloadedFiles {
+            groupedDownloadedFiles.add(downloadedFile, timestamp: downloadedFile.lastModified.timeIntervalSince1970)
+        }
+
         fileExtensionIcons = [:]
+
         tableView.reloadData()
         updateEmptyPanelState()
     }
@@ -144,6 +210,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private func deleteDownloadedFile(_ downloadedFile: DownloadedFile) -> Bool {
         do {
             try FileManager.default.removeItem(at: downloadedFile.path)
+            groupedDownloadedFiles.remove(downloadedFile)
             return true
         } catch let error {
             print("Unable to delete downloaded file: \(error.localizedDescription)")
@@ -212,7 +279,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     // MARK: - Empty State
     private func updateEmptyPanelState() {
-        if downloadedFiles.count == 0 {
+        var count = 0;
+        count += groupedDownloadedFiles.today.count
+        count += groupedDownloadedFiles.yesterday.count
+        count += groupedDownloadedFiles.lastWeek.count
+        count += groupedDownloadedFiles.older.count
+
+        if count == 0 {
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubview(toFront: emptyStateOverlayView)
@@ -260,7 +333,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     fileprivate func downloadedFileForIndexPath(_ indexPath: IndexPath) -> DownloadedFile? {
-        return downloadedFiles[safe: indexPath.row]
+        let downloadedFilesInSection = groupedDownloadedFiles.itemsForSection(indexPath.section)
+        return downloadedFilesInSection[safe: indexPath.row]
     }
 
     // MARK: - TableView Delegate / DataSource
@@ -268,6 +342,25 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "TwoLineTableViewCell", for: indexPath) as! TwoLineTableViewCell
 
         return configureDownloadedFile(cell, for: indexPath)
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        guard groupedDownloadedFiles.itemsForSection(section).count > 0 else { return nil }
+
+        switch section {
+        case 0:
+            return Strings.TableDateSectionTitleToday
+        case 1:
+            return Strings.TableDateSectionTitleYesterday
+        case 2:
+            return Strings.TableDateSectionTitleLastWeek
+        case 3:
+            return Strings.TableDateSectionTitleLastMonth
+        default:
+            assertionFailure("Invalid Downloads section \(section)")
+        }
+
+        return nil
     }
 
     func configureDownloadedFile(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
@@ -291,8 +384,12 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 4
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return downloadedFiles.count
+        return groupedDownloadedFiles.itemsForSection(section).count
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -305,7 +402,6 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         let delete = UITableViewRowAction(style: .destructive, title: deleteTitle, handler: { (action, indexPath) in
             if let downloadedFile = self.downloadedFileForIndexPath(indexPath) {
                 if self.deleteDownloadedFile(downloadedFile) {
-                    self.downloadedFiles.remove(at: indexPath.row)
                     self.tableView.beginUpdates()
                     self.tableView.deleteRows(at: [indexPath], with: .right)
                     self.tableView.endUpdates()

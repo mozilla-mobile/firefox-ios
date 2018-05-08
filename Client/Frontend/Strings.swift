@@ -21,6 +21,14 @@ extension Strings {
     public static let CancelString = NSLocalizedString("Cancel", comment: "Label for Cancel button")
 }
 
+// Table date section titles.
+extension Strings {
+    public static let TableDateSectionTitleToday = NSLocalizedString("Today", comment: "History tableview section header")
+    public static let TableDateSectionTitleYesterday = NSLocalizedString("Yesterday", comment: "History tableview section header")
+    public static let TableDateSectionTitleLastWeek = NSLocalizedString("Last week", comment: "History tableview section header")
+    public static let TableDateSectionTitleLastMonth = NSLocalizedString("Last month", comment: "History tableview section header")
+}
+
 // Top Sites.
 extension Strings {
     public static let TopSitesEmptyStateDescription = NSLocalizedString("TopSites.EmptyState.Description", value: "Your most visited sites will show up here.", comment: "Description label for the empty Top Sites state.")
