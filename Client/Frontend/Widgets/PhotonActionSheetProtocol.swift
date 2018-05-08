@@ -25,7 +25,11 @@ extension PhotonActionSheetProtocol {
         let sheet = PhotonActionSheet(title: title, actions: actions, closeButtonTitle: closeButtonTitle, style: style)
         sheet.modalPresentationStyle = style
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
-        
+        if let account = profile.getAccount(), account.actionNeeded == .none {
+            // the sync manager is only needed when we have a logged in user with sync in a good state
+            sheet.syncManager = profile.syncManager // the syncmanager is used to display the sync button in the browser menu
+        }
+
         if let popoverVC = sheet.popoverPresentationController, sheet.modalPresentationStyle == .popover {
             popoverVC.delegate = viewController
             popoverVC.sourceView = view
@@ -456,7 +460,7 @@ extension PhotonActionSheetProtocol {
         if let actionNeeded = account?.actionNeeded {
             iconURL = (actionNeeded == .none) ? account?.fxaProfile?.avatar.url : nil
         }
-        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, handler: action)
+        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, accessory: .Sync, handler: action)
         return [syncOption]
     }
 }
