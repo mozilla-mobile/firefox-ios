@@ -38,9 +38,11 @@ class EmbeddedNavController {
     var controllers = [UIViewController]()
     var navigationController: UINavigationController
     var heightConstraint: Constraint!
+    let isSearchMode: Bool
 
     init(isSearchMode: Bool, parent: UIViewController, rootViewController: UIViewController) {
         self.parent = parent
+        self.isSearchMode = isSearchMode
         navigationController = UINavigationController(rootViewController: rootViewController)
 
         parent.addChildViewController(navigationController)
@@ -53,9 +55,7 @@ class EmbeddedNavController {
             make.center.equalToSuperview()
             make.width.equalTo(width)
             heightConstraint = make.height.equalTo(initialHeight).constraint
-            if (!isSearchMode) {
-                layout(forTraitCollection: navigationController.traitCollection)
-            }
+            layout(forTraitCollection: navigationController.traitCollection)
         }
 
         navigationController.view.layer.cornerRadius = UX.dialogCornerRadius
@@ -63,6 +63,11 @@ class EmbeddedNavController {
     }
 
     func layout(forTraitCollection: UITraitCollection) {
+        if isSearchMode {
+            // Dialog size doesn't change
+            return
+        }
+
         let updatedHeight: Int
         if UX.enableResizeRowsForSmallScreens {
             let shrinkage = UX.navBarLandscapeShrinkage + (UX.numberOfActionRows + 1 /*one info row*/) * UX.perRowShrinkageForLandscape

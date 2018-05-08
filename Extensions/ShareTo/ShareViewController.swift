@@ -149,7 +149,8 @@ class ShareViewController: UIViewController {
     }
 
     func layout(forTraitCollection traitCollection: UITraitCollection) {
-        if !UX.enableResizeRowsForSmallScreens {
+        let isSearchMode = !(shareItem?.isUrlType() ?? true) // Dialog doesn't change size in search mode
+        if !UX.enableResizeRowsForSmallScreens || isSearchMode {
             return
         }
 
