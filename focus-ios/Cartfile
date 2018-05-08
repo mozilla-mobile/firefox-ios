@@ -6,3 +6,4 @@ github "mozilla-mobile/AutocompleteTextField" "master"
 github "mozilla-mobile/telemetry-ios" ~> 1.1.0
 github "getsentry/sentry-cocoa" "3.2.1"
 github "AgileBits/onepassword-extension" "new/carthage+ios10"
+github "sleroux/Deferred"                   "Swift3.0"

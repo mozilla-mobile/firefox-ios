@@ -5,7 +5,7 @@
 import UIKit
 import SnapKit
 
-private extension BlockLists.List {
+private extension BlocklistName {
     var labelText: String {
         switch self {
         case .advertising: return UIConstants.strings.adTrackerLabel
@@ -47,16 +47,16 @@ class TrackingProtectionBreakdownVisualizer: UIView {
 
         backgroundColor = UIConstants.colors.trackingProtectionBreakdownBackground
 
-        adSection.backgroundColor = BlockLists.List.advertising.color
+        adSection.backgroundColor = BlocklistName.advertising.color
         addSubview(adSection)
 
-        analyticSection.backgroundColor = BlockLists.List.analytics.color
+        analyticSection.backgroundColor = BlocklistName.analytics.color
         addSubview(analyticSection)
 
-        socialSection.backgroundColor = BlockLists.List.social.color
+        socialSection.backgroundColor = BlocklistName.social.color
         addSubview(socialSection)
 
-        contentSection.backgroundColor = BlockLists.List.content.color
+        contentSection.backgroundColor = BlocklistName.content.color
         addSubview(contentSection)
     }
     
@@ -180,10 +180,10 @@ class TrackingProtectionBreakdownView: UIView {
     private let titleLabel = UILabel()
     private let counterLabel = UILabel()
     private let breakdown = TrackingProtectionBreakdownVisualizer()
-    private let adItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.adTrackerLabel, color: BlockLists.List.advertising.color)
-    private let analyticItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.analyticTrackerLabel, color: BlockLists.List.analytics.color)
-    private let contentItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.contentTrackerLabel, color: BlockLists.List.content.color)
-    private let socialItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.socialTrackerLabel, color: BlockLists.List.social.color)
+    private let adItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.adTrackerLabel, color: BlocklistName.advertising.color)
+    private let analyticItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.analyticTrackerLabel, color: BlocklistName.analytics.color)
+    private let contentItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.contentTrackerLabel, color: BlocklistName.content.color)
+    private let socialItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.socialTrackerLabel, color: BlocklistName.social.color)
     private var stackView: UIStackView?
     private let learnMoreWrapper = UIView()
     fileprivate let learnMoreButton = UIButton()
@@ -423,7 +423,7 @@ class TrackingProtectionView: UIView {
 class TrackingProtectionSummaryViewController: UIViewController {
     weak var delegate: TrackingProtectionSummaryDelegate?
     
-    var trackingProtectionStatus = TrackingProtectionStatus.on(TrackingInformation()) {
+    var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
             trackingProtectionView.trackingProtectionStatus = trackingProtectionStatus
         }

@@ -147,6 +147,9 @@
 		E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
+		EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */; };
+		EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96E209380CE00BA6739 /* URLExtensions.swift */; };
+		EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = EB84F9702093815500BA6739 /* effective_tld_names.dat */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
 		F84AFE751DE77FE6005C4DD1 /* LaunchScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */; };
 		F84AFE761DE77FE6005C4DD1 /* LaunchScreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F84AFE731DE77FE6005C4DD1 /* LaunchScreen@2x.png */; };
@@ -740,6 +743,9 @@
 		E4D0AB881E300EFE00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4D0AB891E300EFF00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4D0AB8A1E300F0000DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackingProtectionPageStats.swift; path = Lib/TrackingProtection/TrackingProtectionPageStats.swift; sourceTree = "<group>"; };
+		EB84F96E209380CE00BA6739 /* URLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
+		EB84F9702093815500BA6739 /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = effective_tld_names.dat; sourceTree = "<group>"; };
 		F4C4943B406FCA9B74B4E186 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F805722E1DBEE504004339C1 /* WebCacheUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebCacheUtils.swift; sourceTree = "<group>"; };
 		F84AFE721DE77FE6005C4DD1 /* LaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreen.png; sourceTree = "<group>"; };
@@ -1057,6 +1063,8 @@
 		E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */ = {
 			isa = PBXGroup;
 			children = (
+				EB84F9702093815500BA6739 /* effective_tld_names.dat */,
+				EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */,
 				74F94FF41FD9CA070047E629 /* Intro.strings */,
 				D50939A81FBF807A005D4316 /* Settings.bundle */,
 				B3AFC2B91F7C0B66001AEF38 /* Modules */,
@@ -1111,6 +1119,7 @@
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
 				D3E54FDD1DF0E0D6003E1AFF /* UIImageExtensions.swift */,
 				D32F71D21BCEF67C006D44FC /* UIViewExtensions.swift */,
+				EB84F96E209380CE00BA6739 /* URLExtensions.swift */,
 				D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */,
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
 				D3426B021DBAE3800016DA5A /* URLBarContainer.swift */,
@@ -1387,6 +1396,7 @@
 				D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */,
 				E40AFC741DDDE96D00DA5651 /* InfoPlist.strings in Resources */,
 				D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */,
+				EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */,
 				D3E2C8FB1D9F17AC00DEBE3D /* disconnect-advertising.json in Resources */,
 				D362D2AB1C4EAF940041980A /* rights-focus.html in Resources */,
 				D3E2C8FC1D9F17AC00DEBE3D /* disconnect-analytics.json in Resources */,
@@ -1446,6 +1456,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
 			);
 			name = "Run Script (Carthage)";
 			outputPaths = (
@@ -1540,6 +1551,7 @@
 				746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */,
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,
 				E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */,
+				EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */,
 				74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */,
 				D5F72FB31FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift in Sources */,
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
@@ -1564,6 +1576,7 @@
 				E47F9AEE1DB9338600A93285 /* AdjustIntegration.swift in Sources */,
 				D3E54FD11DEFB063003E1AFF /* SearchEngineManager.swift in Sources */,
 				D392881D1BC5CF180016A9A0 /* UIColorExtensions.swift in Sources */,
+				EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeView.swift in Sources */,
 				D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */,
 				D3E251EB1DAD714C005918DC /* SafariInstructionsViewController.swift in Sources */,

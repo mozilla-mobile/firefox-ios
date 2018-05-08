@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupContinuousDeploymentTooling()
         setupErrorTracking()
         setupTelemetry()
+        TPStatsBlocklistChecker.shared.startup()
 
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains

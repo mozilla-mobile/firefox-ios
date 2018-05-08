@@ -47,7 +47,7 @@ class BrowserViewController: UIViewController {
         case animating
     }
 
-    private var trackingProtectionStatus: TrackingProtectionStatus = .on(TrackingInformation()) {
+    private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
             trackingProtectionSummaryController.trackingProtectionStatus = trackingProtectionStatus
             urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus)
