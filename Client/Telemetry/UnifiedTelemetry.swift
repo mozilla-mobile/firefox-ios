@@ -68,22 +68,36 @@ class UnifiedTelemetry {
             return outputDict
         }
 
-       Telemetry.default.beforeSerializePing(pingType: MobileEventPingBuilder.PingType) { (inputDict) -> [String: Any?] in
-           var outputDict = inputDict
+        Telemetry.default.beforeSerializePing(pingType: MobileEventPingBuilder.PingType) { (inputDict) -> [String: Any?] in
+            var outputDict = inputDict
 
-           var settings: [String: String?] = inputDict["settings"] as? [String: String?] ?? [:]
+            var settings: [String: String?] = inputDict["settings"] as? [String: String?] ?? [:]
 
-           let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
-           settings["defaultSearchEngine"] = searchEngines.defaultEngine.engineID ?? "custom"
+            let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
+            settings["defaultSearchEngine"] = searchEngines.defaultEngine.engineID ?? "custom"
 
-           if let windowBounds = UIApplication.shared.keyWindow?.bounds {
-               settings["windowWidth"] = String(describing: windowBounds.width)
-               settings["windowHeight"] = String(describing: windowBounds.height)
-           }
+            if let windowBounds = UIApplication.shared.keyWindow?.bounds {
+                settings["windowWidth"] = String(describing: windowBounds.width)
+                settings["windowHeight"] = String(describing: windowBounds.height)
+            }
 
-           outputDict["settings"] = settings
-           return outputDict
-       }
+            outputDict["settings"] = settings
+
+            // App Extension telemetry requires reading events stored in prefs, then clearing them from prefs.
+            if let extensionEvents = profile.prefs.arrayForKey(PrefsKeys.AppExtensionTelemetryEventArray) as? [[String: String]],
+                var pingEvents = outputDict["events"] as? [[Any?]] {
+                profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryEventArray)
+
+                extensionEvents.forEach { extensionEvent in
+                    let category = UnifiedTelemetry.EventCategory.appExtensionAction.rawValue
+                    let newEvent = TelemetryEvent(category: category, method: extensionEvent["method"] ?? "", object: extensionEvent["object"] ?? "")
+                    pingEvents.append(newEvent.toArray())
+                }
+                outputDict["events"] = pingEvents
+            }
+
+            return outputDict
+        }
 
        Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
        Telemetry.default.add(pingBuilderType: MobileEventPingBuilder.self)
@@ -99,6 +113,7 @@ class UnifiedTelemetry {
 extension UnifiedTelemetry {
     public enum EventCategory: String {
         case action = "action"
+        case appExtensionAction = "app-extension-action"
     }
 
     public enum EventMethod: String {
@@ -114,6 +129,7 @@ extension UnifiedTelemetry {
         case scan = "scan"
         case tap = "tap"
         case view = "view"
+        case applicationOpenUrl = "application-open-url"
     }
 
     public enum EventObject: String {
