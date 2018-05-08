@@ -238,14 +238,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        if let profile = profile, let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
-            profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
-            UnifiedTelemetry.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: .url)
-        }
-
         guard let routerpath = NavigationPath(url: url) else {
             return false
         }
+
+        if let profile = profile, let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
+            profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
+            var object = UnifiedTelemetry.EventObject.url
+            if case .text(_) = routerpath {
+                object = .searchText
+            }
+            UnifiedTelemetry.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
+        }
+
+
         DispatchQueue.main.async {
             NavigationPath.handle(nav: routerpath, with: self.browserViewController)
         }
