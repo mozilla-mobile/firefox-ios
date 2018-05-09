@@ -741,11 +741,13 @@ extension ActivityStreamPanel: DataObserverDelegate {
         case .pocket:
             site = Site(url: pocketStories[index].url.absoluteString, title: pocketStories[index].title)
             telemetry.reportEvent(.Click, source: .Pocket, position: index)
-            LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: ["Source": "Activity Stream" as AnyObject])
+            let params = ["Source": "Activity Stream", "StoryType": "Article"]
+            LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: params)
         case .pocketVideo:
             site = Site(url: pocketVideoStories[index].url.absoluteString, title: pocketVideoStories[index].title)
             telemetry.reportEvent(.Click, source: .Pocket, position: index)
-            LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: ["Source": "Activity Stream" as AnyObject])
+            let params = ["Source": "Activity Stream", "StoryType": "Video"]
+            LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: params)
         case .topSites, .highlightIntro:
             return
         }
@@ -808,7 +810,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             self.telemetry.reportEvent(.NewTab, source: pingSource, position: index)
-            let source = ["Source": "Activity Stream Long Press Context Menu" as AnyObject]
+            let source = ["Source": "Activity Stream Long Press Context Menu"]
             LeanPlumClient.shared.track(event: .openedNewTab, withParameters: source)
             if Section(indexPath.section) == .pocket {
                 LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: source)

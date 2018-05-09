@@ -109,7 +109,7 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
                 self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
                 ContentBlockerHelper.prefsChanged()
                 self.tableView.reloadData()
-                LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue as AnyObject])
+                LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue])
                 UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockingConfig.Prefs.StrengthKey, extras: ["to": option.rawValue])
             })
         }

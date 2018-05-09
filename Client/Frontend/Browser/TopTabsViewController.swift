@@ -205,7 +205,7 @@ class TopTabsViewController: UIViewController {
             return
         }
         self.delegate?.topTabsDidPressNewTab(self.isPrivate)
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Add tab button in the URL Bar on iPad" as AnyObject])
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Add tab button in the URL Bar on iPad"])
     }
 
     @objc func togglePrivateModeTapped() {

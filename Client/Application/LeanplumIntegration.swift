@@ -185,7 +185,7 @@ class LeanPlumClient {
     }
 
     // Events
-    func track(event: LPEvent, withParameters parameters: [String: AnyObject]? = nil) {
+    func track(event: LPEvent, withParameters parameters: [String: String]? = nil) {
         guard isLPEnabled() else {
             return
         }

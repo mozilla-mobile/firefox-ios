@@ -150,7 +150,7 @@ class IntroViewController: UIViewController {
             // We also need to let LP know this happened so we can track when a A/B test was not run
             guard self?.pageControl.currentPage == 0 else {
                 let totalTime = Date.now() - startTime
-                LeanPlumClient.shared.track(event: .onboardingTestLoadedTooSlow, withParameters: ["Total time": "\(totalTime) ms" as AnyObject])
+                LeanPlumClient.shared.track(event: .onboardingTestLoadedTooSlow, withParameters: ["Total time": "\(totalTime) ms"])
                 return
             }
 
@@ -219,12 +219,12 @@ class IntroViewController: UIViewController {
 
     @objc func startBrowsing() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: false)
-        LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
+        LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": String(pageControl.currentPage)])
     }
 
     @objc func login() {
         delegate?.introViewControllerDidFinish(self, requestToLogin: true)
-        LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": pageControl.currentPage as AnyObject])
+        LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": String(pageControl.currentPage)])
     }
 
     @objc func changePage() {
