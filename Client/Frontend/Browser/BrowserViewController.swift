@@ -390,7 +390,6 @@ class BrowserViewController: UIViewController {
 
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
-
         
         scrollController.urlBar = urlBar
         scrollController.header = header

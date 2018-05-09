@@ -164,7 +164,7 @@ extension ActivityStreamPanel {
             switch self {
             case .highlights: return Strings.ASHighlightsTitle
             case .pocket: return Strings.ASPocketTitle
-            case .pocketVideo: return nil
+            case .pocketVideo: return Strings.ASPocketTitle
             case .topSites: return nil
             case .highlightIntro: return nil
             }
@@ -298,7 +298,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                     return view
                 case .pocketVideo:
                     if !self.pocketVideoStories.isEmpty {
-                        view.title = Section(Section.pocket.rawValue).title
+                        view.title = title
                         view.moreButton.isHidden = false
                         view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
                     }
@@ -469,7 +469,6 @@ extension ActivityStreamPanel {
         return pocketItemCell
     }
 
-
     func configureHighlightIntroCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let introCell = cell as! HighlightIntroCell
         //The cell is configured on creation. No need to configure. But leave this here in case we need it.
@@ -508,7 +507,6 @@ extension ActivityStreamPanel: DataObserverDelegate {
                 self.collectionView?.reloadData()
             }
         }
-        
 
         accumulate([self.getHighlights, self.getTopSites]).uponQueue(.main) { _ in
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
