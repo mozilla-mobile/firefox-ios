@@ -444,7 +444,8 @@ open class BrowserProfile: Profile {
     }
 
     public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
-        let id = DeviceInfo.clientIdentifier(self.prefs)
+        let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
+        let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
         let commands = items.map { item in
             SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
