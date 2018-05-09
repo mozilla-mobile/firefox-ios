@@ -33,7 +33,7 @@ private struct TabLocationViewUX {
     static let URLBarPadding = 4
 }
 
-class TabLocationView: UIView, TabEventHandler {
+class TabLocationView: UIView {
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
@@ -174,7 +174,7 @@ class TabLocationView: UIView, TabEventHandler {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.tabObservers = registerFor(.didChangeContentBlocking, queue: .main)
+        self.tabObservers = registerFor(.didChangeContentBlocking, .didGainFocus, queue: .main)
 
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
         longPressRecognizer.delegate = self
@@ -232,21 +232,6 @@ class TabLocationView: UIView, TabEventHandler {
             let dragInteraction = UIDragInteraction(delegate: self)
             dragInteraction.allowsSimultaneousRecognitionDuringLift = true
             self.addInteraction(dragInteraction)
-        }
-    }
-
-    func tabDidChangeContentBlockerStatus(_ tab: Tab) {
-        assertIsMainThread("UI changes must be on the main thread")
-        guard #available(iOS 11.0, *), let blocker = tab.contentBlocker as? ContentBlockerHelper else { return }
-        switch blocker.status {
-        case .Blocking:
-            self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
-            self.trackingProtectionButton.isHidden = false
-        case .Disabled, .NoBlockedURLs:
-            self.trackingProtectionButton.isHidden = true
-        case .Whitelisted:
-            self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
-            self.trackingProtectionButton.isHidden = false
         }
     }
 
@@ -363,6 +348,31 @@ extension TabLocationView: Themeable {
         pageOptionsButton.unselectedTintColor = UIColor.TextField.PageOptionsUnselected.colorFor(theme)
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
         separatorLine.backgroundColor = UIColor.TextField.Separator.colorFor(theme)
+    }
+}
+
+extension TabLocationView: TabEventHandler {
+    private func updateBlockerStatus(forTab tab: Tab) {
+        assertIsMainThread("UI changes must be on the main thread")
+        guard #available(iOS 11.0, *), let blocker = tab.contentBlocker as? ContentBlockerHelper else { return }
+        switch blocker.status {
+        case .Blocking:
+            self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
+            self.trackingProtectionButton.isHidden = false
+        case .Disabled, .NoBlockedURLs:
+            self.trackingProtectionButton.isHidden = true
+        case .Whitelisted:
+            self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
+            self.trackingProtectionButton.isHidden = false
+        }
+    }
+
+    func tabDidGainFocus(_ tab: Tab) {
+        updateBlockerStatus(forTab: tab)
+    }
+
+    func tabDidChangeContentBlockerStatus(_ tab: Tab) {
+        updateBlockerStatus(forTab: tab)
     }
 }
 
