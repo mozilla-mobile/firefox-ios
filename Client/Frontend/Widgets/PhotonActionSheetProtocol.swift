@@ -131,7 +131,27 @@ extension PhotonActionSheetProtocol {
                        isBookmarked: Bool,
                        isPinned: Bool,
                        success: @escaping (String) -> Void) -> Array<[PhotonActionSheetItem]> {
-        
+        if tab.url?.isFileURL ?? false {
+            let shareFile = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
+                guard let url = tab.url else { return }
+
+                let helper = ShareExtensionHelper(url: url, tab: nil)
+                let controller = helper.createActivityViewController { completed, activityType in
+                    print("Shared downloaded file: \(completed)")
+                }
+
+                if let popoverPresentationController = controller.popoverPresentationController {
+                    popoverPresentationController.sourceView = buttonView
+                    popoverPresentationController.sourceRect = buttonView.bounds
+                    popoverPresentationController.permittedArrowDirections = .any
+                }
+
+                presentableVC.present(controller, animated: true, completion: nil)
+            }
+
+            return [[shareFile]]
+        }
+
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
             tab.toggleDesktopSite()
@@ -224,7 +244,7 @@ extension PhotonActionSheetProtocol {
             bvc.present(navigationController, animated: true, completion: nil)
         }
         
-        let share = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
+        let sharePage = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let url = tab.canonicalURL?.displayURL else { return }
             presentShareMenu(url, tab, buttonView, .up)
         }
@@ -234,7 +254,7 @@ extension PhotonActionSheetProtocol {
             success(Strings.AppMenuCopyURLConfirmMessage)
         }
 
-        var mainActions = [share]
+        var mainActions = [sharePage]
 
         // Disable bookmarking and reading list if the URL is too long.
         if !tab.urlIsTooLong {
