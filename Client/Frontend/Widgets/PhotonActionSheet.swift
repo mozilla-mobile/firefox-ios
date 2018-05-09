@@ -660,7 +660,6 @@ private class PhotonActionSheetCell: UITableViewCell {
                 if action.iconAlignment == .right {
                     stackView.addArrangedSubview(statusIcon)
                 } else {
-
                     stackView.insertArrangedSubview(statusIcon, at: 0)
                 }
             } else {
@@ -699,7 +698,6 @@ private class PhotonActionSheetCell: UITableViewCell {
                     syncButton?.contentHorizontalAlignment = .right
                     syncButton?.snp.makeConstraints { make in
                         make.size.equalTo(40)
-                        make.height.equalTo(40)
                     }
                 }
                 syncButton?.updateAnimations()
@@ -708,7 +706,6 @@ private class PhotonActionSheetCell: UITableViewCell {
                     make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding))
                 }
             }
-
         default:
             break // Do nothing. The rest are not supported yet.
         }
