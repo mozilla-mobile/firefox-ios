@@ -508,7 +508,7 @@ class TabTrayController: UIViewController {
     }
 
     func openNewTab() {
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray" as AnyObject])
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray"])
         openNewTab(nil)
     }
 
