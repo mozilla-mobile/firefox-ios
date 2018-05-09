@@ -861,6 +861,11 @@ class BrowserViewController: UIViewController {
                 let progress = change?[.newKey] as? Float else { break }
             if !(webView.url?.isLocalUtility ?? false) {
                 urlBar.updateProgressBar(progress)
+                if progress > 0.9 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.200) {
+                        Profiler.end(bookend: .load_url)
+                    }
+                }
             } else {
                 urlBar.hideProgressBar()
             }
