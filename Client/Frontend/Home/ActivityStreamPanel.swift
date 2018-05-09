@@ -297,9 +297,11 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                     view.title = title
                     return view
                 case .pocketVideo:
-                    view.title = Section(Section.pocket.rawValue).title
-                    view.moreButton.isHidden = false
-                    view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
+                    if !self.pocketVideoStories.isEmpty {
+                        view.title = Section(Section.pocket.rawValue).title
+                        view.moreButton.isHidden = false
+                        view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
+                    }
                     return view
                 case .pocket:
                     if self.pocketVideoStories.isEmpty {
@@ -574,7 +576,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
     func getPocketVideos() -> Success {
         let showPocket = (profile.prefs.boolForKey(PrefsKeys.ASPocketStoriesVisible) ?? Pocket.IslocaleSupported(Locale.current.identifier))
-        guard showPocket else {
+        guard showPocket, LeanPlumClient.shared.enablePocketVideo.boolValue() else {
             self.pocketVideoStories = []
             return succeed()
         }
