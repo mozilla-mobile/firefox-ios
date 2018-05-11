@@ -37,7 +37,7 @@ class L10nBaseSnapshotTests: XCTestCase {
     }
 
     func springboardStart(_ app: XCUIApplication, args: [String] = []) {
-        XCUIDevice.shared().press(.home)
+        XCUIDevice.shared.press(.home)
         app.launchArguments += [LaunchArguments.Test] + args
         app.activate()
     }

@@ -874,14 +874,6 @@ extension MMNavigator where T == FxUserState {
         self.openURL(urlString)
     }
 
-    // Closes all Tabs from the option in TabTrayMenu
-    func closeAllTabs() {
-        let app = XCUIApplication()
-        app.buttons["TabTrayController.removeTabsButton"].tap()
-        app.sheets.buttons["Close All Tabs"].tap()
-        self.nowAt(HomePanelsScreen)
-    }
-
     // Add a new Tab from the New Tab option in Browser Tab Menu
     func createNewTab() {
         let app = XCUIApplication()
