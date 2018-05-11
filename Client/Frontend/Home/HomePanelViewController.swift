@@ -206,6 +206,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             delegate?.homePanelViewController(self, didSelectPanel: index)
             if selectedPanel == .bookmarks {
                 UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .bookmarksPanel, value: .homePanelTabButton)
+            } else if selectedPanel == .downloads {
+                UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .homePanelTabButton)
             }
             break
         }
