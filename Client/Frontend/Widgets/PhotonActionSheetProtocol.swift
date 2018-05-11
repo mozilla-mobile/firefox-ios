@@ -123,7 +123,22 @@ extension PhotonActionSheetProtocol {
 
         return items
     }
-    
+
+    fileprivate func shareFileURL(_ url: URL, buttonView: UIView, presentableVC: PresentableVC) {
+        let helper = ShareExtensionHelper(url: url, tab: nil)
+        let controller = helper.createActivityViewController { completed, activityType in
+            print("Shared downloaded file: \(completed)")
+        }
+
+        if let popoverPresentationController = controller.popoverPresentationController {
+            popoverPresentationController.sourceView = buttonView
+            popoverPresentationController.sourceRect = buttonView.bounds
+            popoverPresentationController.permittedArrowDirections = .up
+        }
+
+        presentableVC.present(controller, animated: true, completion: nil)
+    }
+
     func getTabActions(tab: Tab, buttonView: UIView,
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
                        findInPage:  @escaping () -> Void,
@@ -135,18 +150,7 @@ extension PhotonActionSheetProtocol {
             let shareFile = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
                 guard let url = tab.url else { return }
 
-                let helper = ShareExtensionHelper(url: url, tab: nil)
-                let controller = helper.createActivityViewController { completed, activityType in
-                    print("Shared downloaded file: \(completed)")
-                }
-
-                if let popoverPresentationController = controller.popoverPresentationController {
-                    popoverPresentationController.sourceView = buttonView
-                    popoverPresentationController.sourceRect = buttonView.bounds
-                    popoverPresentationController.permittedArrowDirections = .any
-                }
-
-                presentableVC.present(controller, animated: true, completion: nil)
+                self.shareFileURL(url, buttonView: buttonView, presentableVC: presentableVC)
             }
 
             return [[shareFile]]
@@ -246,7 +250,20 @@ extension PhotonActionSheetProtocol {
         
         let sharePage = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let url = tab.canonicalURL?.displayURL else { return }
-            presentShareMenu(url, tab, buttonView, .up)
+
+            if let temporaryDocument = tab.temporaryDocument {
+                temporaryDocument.getURL().uponQueue(.main, block: { tempDocURL in
+                    // If we successfully got a temp file URL, share it like a downloaded file,
+                    // otherwise present the ordinary share menu for the web URL.
+                    if tempDocURL.isFileURL {
+                        self.shareFileURL(tempDocURL, buttonView: buttonView, presentableVC: presentableVC)
+                    } else {
+                        presentShareMenu(url, tab, buttonView, .up)
+                    }
+                })
+            } else {
+                presentShareMenu(url, tab, buttonView, .up)
+            }
         }
 
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in

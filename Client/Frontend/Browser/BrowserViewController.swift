@@ -1167,31 +1167,6 @@ class BrowserViewController: UIViewController {
         // Remember whether or not a desktop site was requested
         tab.desktopSite = webView.customUserAgent?.isEmpty == false
     }
-    
-    // MARK: open in helper utils
-    func addViewForOpenInHelper(_ openInHelper: OpenInHelper?) {
-        guard let openInHelper = openInHelper, let view = openInHelper.openInView else { return }
-        webViewContainerToolbar.addSubview(view)
-        webViewContainerToolbar.snp.updateConstraints { make in
-            make.height.equalTo(OpenInViewUX.ViewHeight)
-        }
-        view.snp.makeConstraints { make in
-            make.edges.equalTo(webViewContainerToolbar)
-        }
-        
-        self.openInHelper = openInHelper
-    }
-    
-    func removeOpenInView() {
-        guard let _ = self.openInHelper else { return }
-        webViewContainerToolbar.subviews.forEach { $0.removeFromSuperview() }
-        
-        webViewContainerToolbar.snp.updateConstraints { make in
-            make.height.equalTo(0)
-        }
-        
-        self.openInHelper = nil
-    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
@@ -1787,7 +1762,6 @@ extension BrowserViewController: TabManagerDelegate {
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
         if let wv = previous?.webView {
-            removeOpenInView()
             wv.endEditing(true)
             wv.accessibilityLabel = nil
             wv.accessibilityElementsHidden = true
