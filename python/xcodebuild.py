@@ -12,7 +12,7 @@ class XCodeBuild(object):
     binary = 'xcodebuild'
     destination = 'platform=iOS Simulator,name=iPhone X'
     logger = logging.getLogger()
-    scheme = 'Fennec_Enterprise_XCUITests'
+    scheme = 'Fennec_Enterprise_XCUITests_Integration'
     xcrun = XCRun()
 
     def __init__(self, log):

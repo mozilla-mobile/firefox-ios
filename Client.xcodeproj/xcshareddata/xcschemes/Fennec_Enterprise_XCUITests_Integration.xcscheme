@@ -194,13 +194,13 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "BaseTestCase">
+               </Test>
+               <Test
+                  Identifier = "DragAndDropTests">
+               </Test>
+               <Test
                   Identifier = "HomePageUITest">
-               </Test>
-               <Test
-                  Identifier = "IntegrationTests">
-               </Test>
-               <Test
-                  Identifier = "IntegrationTests/testFxASyncBookmark()">
                </Test>
                <Test
                   Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
@@ -216,6 +216,15 @@
                </Test>
                <Test
                   Identifier = "PhotonActionSheetTest/testSendToDeviceFromShareOption()">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateMode()">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
                   Identifier = "ReaderViewTest">
@@ -236,22 +245,7 @@
                   Identifier = "ToolbarTests/testShowToolbarWhenScrollingDefaultOption()">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testAddPrivateTabByLongPressTabsButton()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTest/testAddTabByLongPressTabsButton()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTest/testCloseTabFromLongPressTabsButton()">
-               </Test>
-               <Test
                   Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTest/testSwitchBetweenTabsNoPrivatePrivateToastButton()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTest/testSwitchBetweenTabsToastButton()">
                </Test>
             </SkippedTests>
          </TestableReference>
@@ -275,6 +269,18 @@
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "FXA_EMAIL"
+            value = "$(FXA_EMAIL)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "FXA_PASSWORD"
+            value = "$(FXA_PASSWORD)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
