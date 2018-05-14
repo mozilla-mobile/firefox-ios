@@ -356,8 +356,10 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
             return highlights.isEmpty ? .zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
         case .highlightIntro:
             return !highlights.isEmpty ? .zero : CGSize(width: self.view.frame.size.width, height: Section(section).headerHeight.height)
-        case .pocket, .pocketVideo:
-            return pocketStories.isEmpty ? .zero : Section(section).headerHeight
+        case .pocketVideo:
+            return pocketVideoStories.isEmpty ? .zero : Section(section).headerHeight
+        case .pocket:
+            return (pocketStories.isEmpty || !pocketVideoStories.isEmpty) ? .zero : Section(section).headerHeight
         case .topSites:
             return Section(section).headerHeight
         }
@@ -465,7 +467,7 @@ extension ActivityStreamPanel {
     func configurePocketVideoItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let pocketStory = pocketVideoStories[indexPath.row]
         let pocketItemCell = cell as! ActivityStreamHighlightCell
-        pocketItemCell.configureWithPocketStory(pocketStory)
+        pocketItemCell.configureWithPocketVideoStory(pocketStory)
         return pocketItemCell
     }
 

@@ -78,6 +78,18 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         return selectedOverlay
     }()
 
+    fileprivate lazy var playLabel: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage.templateImageNamed("play")
+        view.tintColor = .white
+        view.alpha = 0.97
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.3
+        view.layer.shadowRadius = 2
+        view.isHidden = true
+        return view
+    }()
+
     override var isSelected: Bool {
         didSet {
             self.selectedOverlay.isHidden = !isSelected
@@ -98,6 +110,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(statusIcon)
         contentView.addSubview(domainLabel)
+        contentView.addSubview(playLabel)
 
         siteImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView)
@@ -132,6 +145,10 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
             make.centerY.equalTo(descriptionLabel.snp.centerY)
             make.leading.equalTo(siteImageView)
         }
+
+        playLabel.snp.makeConstraints { make in
+            make.center.equalTo(siteImageView.snp.center)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -143,6 +160,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         self.siteImageView.image = nil
         contentView.backgroundColor = UIColor.clear
         siteImageView.backgroundColor = UIColor.clear
+        playLabel.isHidden = true
     }
 
     func configureWithSite(_ site: Site) {
@@ -182,6 +200,11 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         
         self.descriptionLabel.text = Strings.PocketTrendingText
         self.statusIcon.image = UIImage(named: "context_pocket")
+    }
+
+    func configureWithPocketVideoStory(_ pocketStory: PocketStory) {
+        playLabel.isHidden = false
+        self.configureWithPocketStory(pocketStory)
     }
 }
 
