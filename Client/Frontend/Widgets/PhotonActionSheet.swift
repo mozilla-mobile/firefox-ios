@@ -595,6 +595,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         disclosureIndicator.removeFromSuperview()
         disclosureLabel.removeFromSuperview()
         toggleSwitch.removeFromSuperview()
+        statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -646,6 +647,7 @@ private class PhotonActionSheetCell: UITableViewCell {
             statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: []) { (img, err, _, _) in
                 if let img = img {
                     self.statusIcon.image = img.createScaled(PhotonActionSheetUX.IconSize)
+                    self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
                 }
             }
             // When the iconURL is not nil we are most likely showing a profile picture.
