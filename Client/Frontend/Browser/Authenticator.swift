@@ -131,7 +131,7 @@ class Authenticator {
         let cancel = UIAlertAction(title: CancelButtonTitle, style: .cancel) { (action) -> Void in
             deferred.fill(Maybe(failure: LoginDataError(description: "Save password cancelled")))
         }
-        alert.addAction(cancel,  accessibilityIdentifier: "authenticationAlert.cancel")
+        alert.addAction(cancel, accessibilityIdentifier: "authenticationAlert.cancel")
 
         // Add a username textfield.
         alert.addTextField { (textfield) -> Void in

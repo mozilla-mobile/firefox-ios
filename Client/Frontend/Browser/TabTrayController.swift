@@ -431,9 +431,9 @@ class TabTrayController: UIViewController {
     }
 
     @objc func didTapLearnMore() {
-        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         if let langID = Locale.preferredLanguages.first {
-            let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(langID)/private-browsing-ios".asURL!)
+            let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion ?? "0.0")/iOS/\(langID)/private-browsing-ios".asURL!)
             openNewTab(learnMoreRequest)
         }
     }
@@ -669,7 +669,7 @@ extension TabTrayController: TabManagerDelegate {
 
 extension TabTrayController: UIScrollViewAccessibilityDelegate {
     func accessibilityScrollStatus(for scrollView: UIScrollView) -> String? {
-        var visibleCells = collectionView.visibleCells as! [TabCell]
+        guard var visibleCells = collectionView.visibleCells as? [TabCell] else { return nil }
         var bounds = collectionView.bounds
         bounds = bounds.offsetBy(dx: collectionView.contentInset.left, dy: collectionView.contentInset.top)
         bounds.size.width -= collectionView.contentInset.left + collectionView.contentInset.right
@@ -702,12 +702,11 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
 
 extension TabTrayController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
-        let tabCell = animator.animatingView as! TabCell
-        if let indexPath = collectionView.indexPath(for: tabCell) {
-            let tab = tabsToDisplay[indexPath.item]
-            tabManager.removeTab(tab)
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
-        }
+        guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
+
+        let tab = tabsToDisplay[indexPath.item]
+        tabManager.removeTab(tab)
+        UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
     }
 }
 
@@ -777,7 +776,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let tabCell = collectionView.dequeueReusableCell(withReuseIdentifier: TabCell.Identifier, for: indexPath) as! TabCell
+        guard let tabCell = collectionView.dequeueReusableCell(withReuseIdentifier: TabCell.Identifier, for: indexPath) as? TabCell else { return UICollectionViewCell() }
         tabCell.animator.delegate = cellDelegate
         tabCell.delegate = cellDelegate
 
