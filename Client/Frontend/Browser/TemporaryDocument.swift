@@ -84,7 +84,6 @@ extension TemporaryDocument: URLSessionTaskDelegate, URLSessionDownloadDelegate 
             pendingResult?.fill(url)
             pendingResult = nil
         } catch let error {
-            print(error.localizedDescription)
             // If we encounter an error downloading the temp file, just return with the
             // original remote URL so it can still be shared as a web URL.
             if let remoteURL = request.url {

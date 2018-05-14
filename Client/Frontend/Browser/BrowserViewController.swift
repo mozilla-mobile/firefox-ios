@@ -44,7 +44,6 @@ class BrowserViewController: UIViewController {
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
-    let webViewContainerToolbar = UIView()
     var statusBarOverlay: UIView!
     fileprivate(set) var toolbar: TabToolbar?
     var searchController: SearchViewController?
@@ -336,7 +335,6 @@ class BrowserViewController: UIViewController {
         view.addSubview(webViewContainerBackdrop)
 
         webViewContainer = UIView()
-        webViewContainer.addSubview(webViewContainerToolbar)
         view.addSubview(webViewContainer)
 
         // Temporary work around for covering the non-clipped web view content
@@ -395,7 +393,6 @@ class BrowserViewController: UIViewController {
         scrollController.header = header
         scrollController.footer = footer
         scrollController.snackBars = alertStackView
-        scrollController.webViewContainerToolbar = webViewContainerToolbar
 
         self.updateToolbarStateForTraitCollection(self.traitCollection)
 
@@ -428,11 +425,6 @@ class BrowserViewController: UIViewController {
 
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer)
-        }
-
-        webViewContainerToolbar.snp.makeConstraints { make in
-            make.left.right.top.equalTo(webViewContainer)
-            make.height.equalTo(0)
         }
     }
 
@@ -556,7 +548,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-        self.webViewContainerToolbar.isHidden = false
 
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
@@ -1233,7 +1224,6 @@ extension BrowserViewController {
 
 extension BrowserViewController: URLBarDelegate {
     func showTabTray() {
-        webViewContainerToolbar.isHidden = true
         updateFindInPageVisibility(visible: false)
         
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
@@ -1783,8 +1773,7 @@ extension BrowserViewController: TabManagerDelegate {
             scrollController.tab = selected
             webViewContainer.addSubview(webView)
             webView.snp.makeConstraints { make in
-                make.top.equalTo(webViewContainerToolbar.snp.bottom)
-                make.left.right.bottom.equalTo(self.webViewContainer)
+                make.left.right.top.bottom.equalTo(self.webViewContainer)
             }
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"
