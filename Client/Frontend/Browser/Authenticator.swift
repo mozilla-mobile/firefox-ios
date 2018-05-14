@@ -104,16 +104,16 @@ class Authenticator {
         }
 
         let deferred = Deferred<Maybe<LoginData>>()
-        let alert: UIAlertController
+        let alert: AlertController
         let title = NSLocalizedString("Authentication required", comment: "Authentication prompt title")
         if !(protectionSpace.realm?.isEmpty ?? true) {
             let msg = NSLocalizedString("A username and password are being requested by %@. The site says: %@", comment: "Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string")
             let formatted = NSString(format: msg as NSString, protectionSpace.host, protectionSpace.realm ?? "") as String
-            alert = UIAlertController(title: title, message: formatted, preferredStyle: .alert)
+            alert = AlertController(title: title, message: formatted, preferredStyle: .alert)
         } else {
             let msg = NSLocalizedString("A username and password are being requested by %@.", comment: "Authentication prompt message with no realm. Parameter is the hostname of the site")
             let formatted = NSString(format: msg as NSString, protectionSpace.host) as String
-            alert = UIAlertController(title: title, message: formatted, preferredStyle: .alert)
+            alert = AlertController(title: title, message: formatted, preferredStyle: .alert)
         }
 
         // Add a button to log in.
@@ -125,13 +125,13 @@ class Authenticator {
                 deferred.fill(Maybe(success: login))
                 loginsHelper?.setCredentials(login)
         }
-        alert.addAction(action)
+        alert.addAction(action, accessibilityIdentifier: "authenticationAlert.loginRequired")
 
         // Add a cancel button.
         let cancel = UIAlertAction(title: CancelButtonTitle, style: .cancel) { (action) -> Void in
             deferred.fill(Maybe(failure: LoginDataError(description: "Save password cancelled")))
         }
-        alert.addAction(cancel)
+        alert.addAction(cancel,  accessibilityIdentifier: "authenticationAlert.cancel")
 
         // Add a username textfield.
         alert.addTextField { (textfield) -> Void in

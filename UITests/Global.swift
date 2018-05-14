@@ -238,7 +238,7 @@ class BrowserUtils {
 
         let goPrivateModeBtn = grey_allOf([grey_accessibilityID("TabTrayController.maskButton"), grey_accessibilityValue("Off")])
         let goNormalModeBtn = grey_allOf([grey_accessibilityID("TabTrayController.maskButton"), grey_accessibilityValue("On")])
-        let closeAllBtn = grey_allOf([grey_accessibilityLabel("Close All Tabs"), grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)])
+        let closeAllBtn = grey_allOf([grey_accessibilityLabel("TabTrayController.deleteButton.closeAll"), grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)])
         // Clear all Private and normal tabs
         EarlGrey.selectElement(with: goPrivateModeBtn).assert(grey_notNil(), error: &error)
 

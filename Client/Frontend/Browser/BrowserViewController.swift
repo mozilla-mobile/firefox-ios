@@ -1571,21 +1571,21 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         guard self.presentedViewController == nil else {
             return
         }
-        let controller = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
-        }))
+        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newTab")
         controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
-        }))
+        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newPrivateTab")
         controller.addAction(UIAlertAction(title: Strings.CloseTabTitle, style: .destructive, handler: { _ in
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
             }
-        }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil))
+        }), accessibilityIdentifier: "toolbarTabButtonLongPress.closeTab")
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "toolbarTabButtonLongPress.cancel")
         controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
         controller.popoverPresentationController?.sourceRect = button.frame
         let generator = UIImpactFeedbackGenerator(style: .heavy)
@@ -2390,7 +2390,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
         let touchSize = CGSize(width: 0, height: 16)
 
-        let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let actionSheetController = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         var dialogTitle: String?
 
         if let url = elements.link, let currentTab = tabManager.selectedTab {
@@ -2417,14 +2417,14 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let openNewTabAction =  UIAlertAction(title: newTabTitle, style: .default) { _ in
                     addTab(url, false)
                 }
-                actionSheetController.addAction(openNewTabAction)
+                actionSheetController.addAction(openNewTabAction, accessibilityIdentifier: "linkContextMenu.openInNewTab")
             }
 
             let openNewPrivateTabTitle = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
             let openNewPrivateTabAction =  UIAlertAction(title: openNewPrivateTabTitle, style: .default) { _ in
                 addTab(url, true)
             }
-            actionSheetController.addAction(openNewPrivateTabAction)
+            actionSheetController.addAction(openNewPrivateTabAction, accessibilityIdentifier: "linkContextMenu.openInNewPrivateTab")
 
             let downloadTitle = NSLocalizedString("Download Link", comment: "Context menu item for downloading a link URL")
             let downloadAction = UIAlertAction(title: downloadTitle, style: .default) { _ in
@@ -2432,19 +2432,19 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 currentTab.webView?.evaluateJavaScript("window.__firefox__.download('\(url.absoluteString)', '\(UserScriptManager.securityToken)')")
                 UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
             }
-            actionSheetController.addAction(downloadAction)
+            actionSheetController.addAction(downloadAction, accessibilityIdentifier: "linkContextMenu.download")
 
             let copyTitle = NSLocalizedString("Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
             let copyAction = UIAlertAction(title: copyTitle, style: .default) { _ in
                 UIPasteboard.general.url = url as URL
             }
-            actionSheetController.addAction(copyAction)
+            actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyLink")
 
             let shareTitle = NSLocalizedString("Share Link", comment: "Context menu item for sharing a link URL")
             let shareAction = UIAlertAction(title: shareTitle, style: .default) { _ in
                 self.presentActivityViewController(url as URL, sourceView: self.view, sourceRect: CGRect(origin: touchPoint, size: touchSize), arrowDirection: .any)
             }
-            actionSheetController.addAction(shareAction)
+            actionSheetController.addAction(shareAction, accessibilityIdentifier: "linkContextMenu.share")
         }
 
         if let url = elements.image {
@@ -2470,7 +2470,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     self.present(accessDenied, animated: true, completion: nil)
                 }
             }
-            actionSheetController.addAction(saveImageAction)
+            actionSheetController.addAction(saveImageAction, accessibilityIdentifier: "linkContextMenu.saveImage")
 
             let copyImageTitle = NSLocalizedString("Copy Image", comment: "Context menu item for copying an image to the clipboard")
             let copyAction = UIAlertAction(title: copyImageTitle, style: .default) { _ in
@@ -2496,7 +2496,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     application.endBackgroundTask(taskId)
                 }
             }
-            actionSheetController.addAction(copyAction)
+            actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyImage")
         }
 
         // If we're showing an arrow popup, set the anchor to the long press location.
