@@ -180,18 +180,24 @@ class TopTabsTest: BaseTestCase {
         XCTAssert(app.buttons["HomePanels.TopSites"].exists)
     }
 
+    private func openNtabsFromTabTray(numTabs: Int) {
+        for _ in 1...numTabs {
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+        }
+    }
+
     func testCloseAllTabsUndo() {
         // A different tab than home is open to do the proper checks
         navigator.openURL(url)
         waitUntilPageLoad()
-        navigator.createSeveralTabsFromTabTray (numberTabs: 3)
+        openNtabsFromTabTray(numTabs: 3)
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
 
         // Close all tabs, undo it and check that the number of tabs is correct
-        navigator.closeAllTabs()
+        navigator.performAction(Action.AcceptRemovingAllTabs)
         app.buttons["Undo"].tap()
         navigator.nowAt(BrowserTab)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
@@ -203,14 +209,14 @@ class TopTabsTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(url)
         waitUntilPageLoad()
-        navigator.createSeveralTabsFromTabTray (numberTabs: 3)
+        openNtabsFromTabTray(numTabs: 3)
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
 
         // Close all tabs, undo it and check that the number of tabs is correct
-        navigator.closeAllTabs()
+        navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
         app.buttons["Undo"].tap()
         navigator.nowAt(BrowserTab)
@@ -223,14 +229,14 @@ class TopTabsTest: BaseTestCase {
         navigator.openURL(url)
         waitUntilPageLoad()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
-        navigator.createSeveralTabsFromTabTray (numberTabs: 3)
+        openNtabsFromTabTray(numTabs: 3)
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
 
         // Close all tabs and check that the number of tabs is correct
-        navigator.closeAllTabs()
+        navigator.performAction(Action.AcceptRemovingAllTabs)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         waitforNoExistence(app.collectionViews.cells[urlLabel])
     }
@@ -241,14 +247,14 @@ class TopTabsTest: BaseTestCase {
         navigator.openURL(url)
         waitUntilPageLoad()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
-        navigator.createSeveralTabsFromTabTray (numberTabs: 3)
+        openNtabsFromTabTray(numTabs: 3)
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
 
         // Close all tabs and check that the number of tabs is correct
-        navigator.closeAllTabs()
+        navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
     }
 

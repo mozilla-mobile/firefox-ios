@@ -21,7 +21,7 @@ class SiteLoadTest: BaseTestCase {
             navigator.nowAt(BrowserTab)
             navigator.goto(TabTray)
 
-            navigator.closeAllTabs()
+            navigator.performAction(Action.AcceptRemovingAllTabs)
             navigator.goto(BrowserTab)
             waitforNoExistence(app.staticTexts["1 tab(s) closed"])
 
