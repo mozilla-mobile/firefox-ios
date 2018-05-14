@@ -116,6 +116,7 @@ class Action {
     static let ReloadURL = "ReloadURL"
 
     static let OpenNewTabFromTabTray = "OpenNewTabFromTabTray"
+    static let AcceptRemovingAllTabs = "AcceptRemovingAllTabs"
 
     static let TogglePrivateMode = "TogglePrivateBrowing"
     static let TogglePrivateModeFromTabBarHomePanel = "TogglePrivateModeFromTabBarHomePanel"
@@ -729,6 +730,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(CloseTabMenu) { screenState in
+        screenState.tap(app.sheets.buttons["Close All Tabs"], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
         screenState.backAction = cancelBackAction
     }
 
