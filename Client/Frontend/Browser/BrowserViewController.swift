@@ -44,7 +44,6 @@ class BrowserViewController: UIViewController {
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
-    let webViewContainerToolbar = UIView()
     var statusBarOverlay: UIView!
     fileprivate(set) var toolbar: TabToolbar?
     var searchController: SearchViewController?
@@ -336,7 +335,6 @@ class BrowserViewController: UIViewController {
         view.addSubview(webViewContainerBackdrop)
 
         webViewContainer = UIView()
-        webViewContainer.addSubview(webViewContainerToolbar)
         view.addSubview(webViewContainer)
 
         // Temporary work around for covering the non-clipped web view content
@@ -395,7 +393,6 @@ class BrowserViewController: UIViewController {
         scrollController.header = header
         scrollController.footer = footer
         scrollController.snackBars = alertStackView
-        scrollController.webViewContainerToolbar = webViewContainerToolbar
 
         self.updateToolbarStateForTraitCollection(self.traitCollection)
 
@@ -428,11 +425,6 @@ class BrowserViewController: UIViewController {
 
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer)
-        }
-
-        webViewContainerToolbar.snp.makeConstraints { make in
-            make.left.right.top.equalTo(webViewContainer)
-            make.height.equalTo(0)
         }
     }
 
@@ -556,7 +548,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-        self.webViewContainerToolbar.isHidden = false
 
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
@@ -1167,31 +1158,6 @@ class BrowserViewController: UIViewController {
         // Remember whether or not a desktop site was requested
         tab.desktopSite = webView.customUserAgent?.isEmpty == false
     }
-    
-    // MARK: open in helper utils
-    func addViewForOpenInHelper(_ openInHelper: OpenInHelper?) {
-        guard let openInHelper = openInHelper, let view = openInHelper.openInView else { return }
-        webViewContainerToolbar.addSubview(view)
-        webViewContainerToolbar.snp.updateConstraints { make in
-            make.height.equalTo(OpenInViewUX.ViewHeight)
-        }
-        view.snp.makeConstraints { make in
-            make.edges.equalTo(webViewContainerToolbar)
-        }
-        
-        self.openInHelper = openInHelper
-    }
-    
-    func removeOpenInView() {
-        guard let _ = self.openInHelper else { return }
-        webViewContainerToolbar.subviews.forEach { $0.removeFromSuperview() }
-        
-        webViewContainerToolbar.snp.updateConstraints { make in
-            make.height.equalTo(0)
-        }
-        
-        self.openInHelper = nil
-    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
@@ -1258,7 +1224,6 @@ extension BrowserViewController {
 
 extension BrowserViewController: URLBarDelegate {
     func showTabTray() {
-        webViewContainerToolbar.isHidden = true
         updateFindInPageVisibility(visible: false)
         
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
@@ -1789,7 +1754,6 @@ extension BrowserViewController: TabManagerDelegate {
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
         if let wv = previous?.webView {
-            removeOpenInView()
             wv.endEditing(true)
             wv.accessibilityLabel = nil
             wv.accessibilityElementsHidden = true
@@ -1811,8 +1775,7 @@ extension BrowserViewController: TabManagerDelegate {
             scrollController.tab = selected
             webViewContainer.addSubview(webView)
             webView.snp.makeConstraints { make in
-                make.top.equalTo(webViewContainerToolbar.snp.bottom)
-                make.left.right.bottom.equalTo(self.webViewContainer)
+                make.left.right.top.bottom.equalTo(self.webViewContainer)
             }
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"

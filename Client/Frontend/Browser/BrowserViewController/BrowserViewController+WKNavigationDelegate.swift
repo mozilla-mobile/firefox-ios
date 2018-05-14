@@ -35,9 +35,6 @@ extension BrowserViewController: WKNavigationDelegate {
                 urlBar.updateReaderModeState(ReaderModeState.unavailable)
                 hideReaderModeBar(animated: false)
             }
-
-            // remove the open in overlay view if it is present
-            removeOpenInView()
         }
     }
 
@@ -157,43 +154,58 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        let response = navigationResponse.response
+        let responseURL = response.url
+
         var request: URLRequest?
-        if let url = navigationResponse.response.url {
+        if let url = responseURL {
             request = pendingRequests.removeValue(forKey: url.absoluteString)
         }
 
         // We can only show this content in the web view if this URL is not pending
         // download via the context menu.
-        let canShowInWebView = navigationResponse.canShowMIMEType && (navigationResponse.response.url != pendingDownloadURL)
-        let forceDownload = navigationResponse.response.url == pendingDownloadURL
+        let canShowInWebView = navigationResponse.canShowMIMEType && (responseURL != pendingDownloadURL)
+        let forceDownload = responseURL == pendingDownloadURL
 
-        let openInHelper = OpenIn.helperForRequest(request, response: navigationResponse.response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self)
-        guard var helperForURL = openInHelper, helperForURL is DownloadHelper else {
-            if navigationResponse.canShowMIMEType {
-                addViewForOpenInHelper(openInHelper)
-                decisionHandler(.allow)
-                return
-            }
+        // Check if this response should be handed off to Passbook.
+        if let passbookHelper = OpenPassBookHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
+            // Clear the network activity indicator since our helper is handling the request.
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
 
-            let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: Strings.UnableToDownloadError])
-            ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.url!, inWebView: webView)
-            decisionHandler(.allow)
+            // Open our helper and cancel this response from the webview.
+            passbookHelper.open()
+            decisionHandler(.cancel)
             return
         }
 
-        if helperForURL.openInView == nil {
-            helperForURL.openInView = navigationToolbar.menuButton
+        // Check if this response should be downloaded.
+        if let downloadHelper = DownloadHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
+            // Clear the network activity indicator since our helper is handling the request.
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+
+            // Clear the pending download URL so that subsequent requests to the same URL
+            // don't invoke another download.
+            pendingDownloadURL = nil
+
+            // Open our helper and cancel this response from the webview.
+            downloadHelper.open()
+            decisionHandler(.cancel)
+            return
         }
 
-        // Clear the network activity indicator if our helper is handling the request.
-        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        // If the content type is not HTML, create a temporary document so it can be downloaded and
+        // shared to external applications later. Otherwise, clear the old temporary document.
+        if let tab = tabManager[webView] {
+            if response.mimeType != MIMEType.HTML, let request = request {
+                tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
+            } else {
+                tab.temporaryDocument = nil
+            }
+        }
 
-        // Clear the pending download URL so that subsequent requests to the same URL
-        // don't invoke another download.
-        pendingDownloadURL = nil
-
-        helperForURL.open()
-        decisionHandler(.cancel)
+        // If none of our helpers are responsible for handling this response,
+        // just let the webview handle it as normal.
+        decisionHandler(.allow)
     }
 
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
