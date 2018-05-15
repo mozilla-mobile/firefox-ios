@@ -519,26 +519,27 @@ private class PhotonActionSheetCell: UITableViewCell {
 
     var syncButton: SyncMenuButton?
 
+    private func createLabel() -> UILabel {
+        let label = UILabel()
+        label.minimumScaleFactor = 0.75 // Scale the font if we run out of space
+        label.textColor = PhotonActionSheetCellUX.LabelColor
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        label.adjustsFontSizeToFitWidth = true
+        return label
+    }
+
     lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
-        titleLabel.minimumScaleFactor = 0.8 // Scale the font if we run out of space
-        titleLabel.textColor = PhotonActionSheetCellUX.LabelColor
-        titleLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        titleLabel.numberOfLines = 4
-        titleLabel.adjustsFontSizeToFitWidth = true
-        return titleLabel
+        let label = createLabel()
+        label.numberOfLines = 4
+        label.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
+        return label
     }()
 
     lazy var subtitleLabel: UILabel = {
-        let textLabel = UILabel()
-        textLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        textLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        textLabel.minimumScaleFactor = 0.75 // Scale the font if we run out of space
-        textLabel.textColor = PhotonActionSheetCellUX.LabelColor
-        textLabel.numberOfLines = 3
-        textLabel.adjustsFontSizeToFitWidth = true
-        return textLabel
+        let label = createLabel()
+        label.numberOfLines = 0
+        label.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
+        return label
     }()
     
     lazy var statusIcon: UIImageView = {
@@ -606,6 +607,10 @@ private class PhotonActionSheetCell: UITableViewCell {
         
         selectedOverlay.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
+        }
+
+        statusIcon.snp.makeConstraints { make in
+            make.width.equalTo(PhotonActionSheetUX.IconSize.width)
         }
 
         // Setup our StackViews
@@ -683,6 +688,9 @@ private class PhotonActionSheetCell: UITableViewCell {
             stackView.addArrangedSubview(disclosureLabel)
         case .Disclosure:
             stackView.addArrangedSubview(disclosureIndicator)
+            disclosureIndicator.snp.makeConstraints { make in
+                make.width.equalTo(PhotonActionSheetUX.IconSize.width)
+            }
         case .Switch:
             let image = action.isEnabled ? UIImage(named: "menu-Toggle-On") : UIImage(named: "menu-Toggle-Off")
             toggleSwitch.isAccessibilityElement = true
