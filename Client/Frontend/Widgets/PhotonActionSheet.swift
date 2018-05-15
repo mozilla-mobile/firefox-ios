@@ -522,10 +522,10 @@ private class PhotonActionSheetCell: UITableViewCell {
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
-        titleLabel.minimumScaleFactor = 0.8 // Scale the font if we run out of space
+        titleLabel.minimumScaleFactor = 0.5 // Scale the font if we run out of space
         titleLabel.textColor = PhotonActionSheetCellUX.LabelColor
         titleLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        titleLabel.numberOfLines = 4
+        titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
         return titleLabel
     }()
@@ -606,6 +606,10 @@ private class PhotonActionSheetCell: UITableViewCell {
         
         selectedOverlay.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
+        }
+
+        statusIcon.snp.makeConstraints { make in
+            make.width.equalTo(PhotonActionSheetUX.IconSize.width)
         }
 
         // Setup our StackViews
