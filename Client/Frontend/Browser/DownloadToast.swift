@@ -167,13 +167,13 @@ class DownloadToast: Toast {
     }
 
     @objc func buttonPressed(_ gestureRecognizer: UIGestureRecognizer) {
-        let alert = UIAlertController(title: Strings.CancelDownloadDialogTitle, message: Strings.CancelDownloadDialogMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: Strings.CancelDownloadDialogResume, style: .cancel, handler: nil))
+        let alert = AlertController(title: Strings.CancelDownloadDialogTitle, message: Strings.CancelDownloadDialogMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: Strings.CancelDownloadDialogResume, style: .cancel, handler: nil), accessibilityIdentifier: "cancelDownloadAlert.resume")
         alert.addAction(UIAlertAction(title: Strings.CancelDownloadDialogCancel, style: .default, handler: { action in
             self.completionHandler?(true)
             self.dismiss(true)
             UnifiedTelemetry.recordEvent(category: .action, method: .cancel, object: .download)
-        }))
+        }), accessibilityIdentifier: "cancelDownloadAlert.cancel")
 
         viewController?.present(alert, animated: true, completion: nil)
     }

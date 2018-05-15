@@ -721,16 +721,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     if !isTablet {
         map.addScreenState(TabTrayLongPressMenu) { screenState in
             screenState.dismissOnUse = true
-            screenState.tap(app.buttons["New Tab"], forAction: Action.OpenNewTabLongPressTabsButton, transitionTo: NewTabScreen)
-            screenState.tap(app.buttons["New Private Tab"], forAction: Action.OpenPrivateTabLongPressTabsButton, transitionTo: NewTabScreen) { userState in
+            screenState.tap(app.buttons["toolbarTabButtonLongPress.newTab"], forAction: Action.OpenNewTabLongPressTabsButton, transitionTo: NewTabScreen)
+            screenState.tap(app.buttons["toolbarTabButtonLongPress.newPrivateTab"], forAction: Action.OpenPrivateTabLongPressTabsButton, transitionTo: NewTabScreen) { userState in
                 userState.isPrivate = !userState.isPrivate
             }
-            screenState.tap(app.buttons["Close Tab"], forAction: Action.CloseTabFromTabTrayLongPressMenu, Action.CloseTab, transitionTo: HomePanelsScreen)
+            screenState.tap(app.buttons["toolbarTabButtonLongPress.closeTab"], forAction: Action.CloseTabFromTabTrayLongPressMenu, Action.CloseTab, transitionTo: HomePanelsScreen)
         }
     }
 
     map.addScreenState(CloseTabMenu) { screenState in
-        screenState.tap(app.sheets.buttons["Close All Tabs"], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
+        screenState.tap(app.sheets.buttons["TabTrayController.deleteButton.closeAll"], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
         screenState.backAction = cancelBackAction
     }
 
