@@ -260,10 +260,10 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         if metadataObjects.isEmpty {
             self.captureSession.stopRunning()
-            let alert = UIAlertController(title: "", message: Strings.ScanQRCodeInvalidDataErrorMessage, preferredStyle: .alert)
+            let alert = AlertController(title: "", message: Strings.ScanQRCodeInvalidDataErrorMessage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: { (UIAlertAction) in
                 self.captureSession.startRunning()
-            }))
+            }), accessibilityIdentifier: "qrCodeAlert.okButton")
             self.present(alert, animated: true, completion: nil)
         } else {
             self.captureSession.stopRunning()
