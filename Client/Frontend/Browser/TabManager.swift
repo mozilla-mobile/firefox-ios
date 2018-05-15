@@ -71,6 +71,9 @@ class TabManager: NSObject {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
+        // We do this to go against the configuration of the <meta name="viewport">
+        // tag to behave the same way as Safari :-(
+        configuration.ignoresViewportScaleLimits = true
         return configuration
     }()
 
@@ -79,6 +82,9 @@ class TabManager: NSObject {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
+        // We do this to go against the configuration of the <meta name="viewport">
+        // tag to behave the same way as Safari :-(
+        configuration.ignoresViewportScaleLimits = true
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         return configuration
     }()
