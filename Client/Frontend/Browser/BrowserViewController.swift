@@ -515,7 +515,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func crashedLastLaunch() -> Bool {
-        return Sentry.crashedLastLaunch
+        return Sentry.crashedLastLaunch || Sentry.forceCrashedLastSession
     }
 
     fileprivate func cleanlyBackgrounded() -> Bool {

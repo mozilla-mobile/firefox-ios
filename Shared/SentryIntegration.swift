@@ -22,7 +22,10 @@ public class Sentry {
         return Client.shared?.crashedLastLaunch() ?? false
     }
 
+    public static var forceCrashedLastSession = false
+
     private let SentryDSNKey = "SentryDSN"
+    private let SentryForceCrashedLastSession = "SentryForceCrashedLastSession"
     private let SentryDeviceAppHashKey = "SentryDeviceAppHash"
     private let DefaultDeviceAppHash = "0000000000000000000000000000000000000000"
     private let DeviceAppHashLength = UInt(20)
@@ -33,6 +36,18 @@ public class Sentry {
 
     public func setup(sendUsageData: Bool) {
         assert(!enabled, "Sentry.setup() should only be called once")
+        guard let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) else {
+            Logger.browserLogger.debug("Not enabling Sentry; Unable to get UserDefaults")
+            return
+        }
+
+        // Check if we force-crashed the last session. If so, clear the pref so it
+        // doesn't persist to the next session.
+        Sentry.forceCrashedLastSession = defaults.bool(forKey: SentryForceCrashedLastSession)
+        if Sentry.forceCrashedLastSession {
+            defaults.set(false, forKey: SentryForceCrashedLastSession)
+            defaults.synchronize()
+        }
 
         if DeviceInfo.isSimulator() {
             Logger.browserLogger.debug("Not enabling Sentry; Running in Simulator")
@@ -59,7 +74,7 @@ public class Sentry {
             // If we have not already for this install, generate a completely random identifier
             // for this device. It is stored in the app group so that the same value will
             // be used for both the main application and the app extensions.
-            if let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier), defaults.string(forKey: SentryDeviceAppHashKey) == nil {
+            if defaults.string(forKey: SentryDeviceAppHashKey) == nil {
                 defaults.set(Bytes.generateRandomBytes(DeviceAppHashLength).hexEncodedString, forKey: SentryDeviceAppHashKey)
                 defaults.synchronize()
             }
@@ -81,7 +96,20 @@ public class Sentry {
     }
 
     public func crash() {
+        // Set the pref to remember that we force-crashed the last session
+        // before actually crashing.
+        if let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) {
+            defaults.set(true, forKey: SentryForceCrashedLastSession)
+            defaults.synchronize()
+        }
+
+        // First try Sentry's built-in utility to force-crash (doesn't work in iOS 11).
         Client.shared?.crash()
+
+        // Otherwise, crash the old-fashioned way :-)
+        var s: String?
+        s = nil
+        print(s!.description)
     }
 
     /*
