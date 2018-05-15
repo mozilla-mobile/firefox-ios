@@ -215,8 +215,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let maxHeight = self.view.frame.height - (style == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0)
         tableView.snp.makeConstraints { make in
             heightConstraint?.deactivate()
-            // The height of the menu should be no more than 80 percent of the screen
-            heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.8)).constraint
+            // The height of the menu should be no more than 85 percent of the screen
+            heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.85)).constraint
         }
         if style == .popover {
             self.preferredContentSize = self.tableView.contentSize
