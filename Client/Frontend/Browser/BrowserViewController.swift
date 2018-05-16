@@ -390,6 +390,7 @@ class BrowserViewController: UIViewController {
         clipboardBarDisplayHandler?.delegate = self
         
         scrollController.urlBar = urlBar
+        scrollController.readerModeBar = readerModeBar
         scrollController.header = header
         scrollController.footer = footer
         scrollController.snackBars = alertStackView
@@ -2096,6 +2097,7 @@ extension BrowserViewController {
             readerModeBar.delegate = self
             view.insertSubview(readerModeBar, belowSubview: header)
             self.readerModeBar = readerModeBar
+            scrollController.readerModeBar = self.readerModeBar
         }
 
         updateReaderModeBar()
@@ -2108,6 +2110,7 @@ extension BrowserViewController {
             readerModeBar.removeFromSuperview()
             self.readerModeBar = nil
             self.updateViewConstraints()
+            scrollController.readerModeBar = self.readerModeBar
         }
     }
 
