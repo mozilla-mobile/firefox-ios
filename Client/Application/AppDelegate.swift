@@ -482,31 +482,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return false
     }
 
-    fileprivate func viewURLInNewTab(_ notification: UNNotification) {
-        if let alertURL = notification.request.content.userInfo[SentTabAction.TabSendURLKey] as? String {
-            if let urlToOpen = URL(string: alertURL) {
-                browserViewController.openURLInNewTab(urlToOpen, isPrivileged: true)
-            }
-        }
-    }
-
-    fileprivate func addBookmark(_ notification: UNNotification) {
-        if let alertURL = notification.request.content.userInfo[SentTabAction.TabSendURLKey] as? String,
-            let title = notification.request.content.userInfo[SentTabAction.TabSendTitleKey] as? String {
-            let tabState = TabState(isPrivate: false, desktopSite: false, url: URL(string: alertURL), title: title, favicon: nil)
-                browserViewController.addBookmark(tabState)
-
-                let userData = [QuickActions.TabURLKey: alertURL,
-                    QuickActions.TabTitleKey: title]
-                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
-        }
-    }
-
-    fileprivate func addToReadingList(_ notification: UNNotification) {
-        if let alertURL = notification.request.content.userInfo[SentTabAction.TabSendURLKey] as? String,
-            let title = notification.request.content.userInfo[SentTabAction.TabSendTitleKey] as? String {
-            if let urlToOpen = URL(string: alertURL) {
-                NotificationCenter.default.post(name: .FSReadingListAddReadingListItem, object: self, userInfo: ["URL": urlToOpen, "Title": title])
+    fileprivate func openURLsInNewTabs(_ notification: UNNotification) {
+        if let sentURLs = notification.request.content.userInfo["sentTabs"] as? [NSDictionary] {
+            for sentURL in sentURLs {
+                if let urlString = sentURL.value(forKey: "url") as? String, let url = URL(string: urlString) {
+                    browserViewController.openURLInNewTab(url, isPrivileged: true)
+                }
             }
         }
     }
@@ -556,25 +537,11 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        if let action = SentTabAction(rawValue: response.actionIdentifier) {
-            viewURLInNewTab(response.notification)
-            switch action {
-            case .bookmark:
-                addBookmark(response.notification)
-                break
-            case .readingList:
-                addToReadingList(response.notification)
-                break
-            default:
-                break
-            }
-        } else {
-            log.error("Unknown notification action received")
-        }
+        openURLsInNewTabs(response.notification)
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        viewURLInNewTab(notification)
+        openURLsInNewTabs(notification)
     }
 }
 
@@ -738,8 +705,6 @@ class AppSyncDelegate: SyncDelegate {
 
 enum SentTabAction: String {
     case view = "TabSendViewAction"
-    case bookmark = "TabSendBookmarkAction"
-    case readingList = "TabSendReadingListAction"
 
     static let TabSendURLKey = "TabSendURL"
     static let TabSendTitleKey = "TabSendTitle"
@@ -747,11 +712,9 @@ enum SentTabAction: String {
 
     static func registerActions() {
         let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue, title: Strings.SentTabViewActionTitle, options: .foreground)
-        let bookmarkAction = UNNotificationAction(identifier: SentTabAction.bookmark.rawValue, title: Strings.SentTabBookmarkActionTitle, options: .authenticationRequired)
-        let readingListAction = UNNotificationAction(identifier: SentTabAction.readingList.rawValue, title: Strings.SentTabAddToReadingListActionTitle, options: .authenticationRequired)
 
         // Register ourselves to handle the notification category set by NotificationService for APNS notifications
-        let sentTabCategory = UNNotificationCategory(identifier: "org.mozilla.ios.SentTab.placeholder", actions: [viewAction, bookmarkAction, readingListAction], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))
+        let sentTabCategory = UNNotificationCategory(identifier: "org.mozilla.ios.SentTab.placeholder", actions: [viewAction], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))
         UNUserNotificationCenter.current().setNotificationCategories([sentTabCategory])
     }
 }
