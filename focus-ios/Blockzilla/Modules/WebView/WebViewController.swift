@@ -16,7 +16,7 @@ protocol BrowserState {
 }
 
 protocol WebController {
-    weak var delegate: WebControllerDelegate? { get set }
+    var delegate: WebControllerDelegate? { get set }
     var canGoBack: Bool { get }
     var canGoForward: Bool { get }
 
@@ -44,15 +44,17 @@ class WebViewController: UIViewController, WebController {
     private var browserView = WKWebView()
     var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
-    fileprivate var trackingProtecitonStatus = TrackingProtectionStatus.on(TrackingInformation()) {
+    private var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
-            delegate?.webController(self, didUpdateTrackingProtectionStatus: trackingProtecitonStatus)
+            delegate?.webController(self, didUpdateTrackingProtectionStatus: trackingProtectionStatus)
         }
     }
 
-    fileprivate var trackingInformation = TrackingInformation() {
+    fileprivate var trackingInformation = TPPageStats() {
         didSet {
-            if case .on = trackingProtecitonStatus { trackingProtecitonStatus = .on(trackingInformation) }
+            if case .on = trackingProtectionStatus {
+                trackingProtectionStatus = .on(trackingInformation)
+            }
         }
     }
 
@@ -70,7 +72,7 @@ class WebViewController: UIViewController, WebController {
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
-        trackingProtecitonStatus = .on(TrackingInformation())
+        trackingProtectionStatus = .on(TPPageStats())
         browserView = WKWebView()
         setupWebview()
     }
@@ -134,21 +136,21 @@ class WebViewController: UIViewController, WebController {
     }
 
     func disableTrackingProtection() {
-        guard case .on = trackingProtecitonStatus else { return }
+        guard case .on = trackingProtectionStatus else { return }
 
         browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtection")
         browserView.configuration.userContentController.removeScriptMessageHandler(forName: "focusTrackingProtectionPostLoad")
         browserView.configuration.userContentController.removeAllUserScripts()
         browserView.configuration.userContentController.removeAllContentRuleLists()
-        trackingProtecitonStatus = .off
+        trackingProtectionStatus = .off
     }
 
     func enableTrackingProtection() {
-        guard case .off = trackingProtecitonStatus else { return }
+        guard case .off = trackingProtectionStatus else { return }
 
         setupBlockLists()
         setupUserScripts()
-        trackingProtecitonStatus = .on(TrackingInformation())
+        trackingProtectionStatus = .on(TPPageStats())
     }
 }
 
@@ -173,7 +175,7 @@ extension WebViewController: UIScrollViewDelegate {
 extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         delegate?.webControllerDidStartNavigation(self)
-        if case .on = trackingProtecitonStatus { trackingInformation = TrackingInformation() }
+        if case .on = trackingProtectionStatus { trackingInformation = TPPageStats() }
 
         updateBackForwardState(webView: webView)
     }
@@ -223,14 +225,19 @@ extension WebViewController: WKUIDelegate {
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let body = message.body as? [String: String],
-            let urlString = body["url"] else { return }
+            let urlString = body["url"],
+            var components = URLComponents(string: urlString) else {
+                return
+        }
 
-        guard var components = URLComponents(string: urlString) else { return }
         components.scheme = "http"
         guard let url = components.url else { return }
 
-        if let listItem = TrackingProtection.shared.isBlocked(url: url) {
-            trackingInformation = trackingInformation.create(byAddingListItem: listItem)
+        let enabled = Utils.getEnabledLists().compactMap { BlocklistName(rawValue: $0) }
+        TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledLists: enabled).uponQueue(.main) { listItem in
+            if let listItem = listItem {
+                self.trackingInformation = self.trackingInformation.create(byAddingListItem: listItem)
+            }
         }
     }
 }
