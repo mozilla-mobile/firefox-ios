@@ -528,6 +528,16 @@ private class PhotonActionSheetCell: UITableViewCell {
         return label
     }
 
+    private func createIconImageView() -> UIImageView {
+        let icon = UIImageView()
+        icon.contentMode = .scaleAspectFit
+        icon.clipsToBounds = true
+        icon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
+        icon.setContentHuggingPriority(.required, for: .horizontal)
+        icon.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return icon
+    }
+
     lazy var titleLabel: UILabel = {
         let label = createLabel()
         label.numberOfLines = 4
@@ -543,12 +553,7 @@ private class PhotonActionSheetCell: UITableViewCell {
     }()
     
     lazy var statusIcon: UIImageView = {
-        let statusIcon = UIImageView()
-        statusIcon.contentMode = .scaleAspectFit
-        statusIcon.clipsToBounds = true
-        statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
-        statusIcon.setContentHuggingPriority(.required, for: .horizontal)
-        return statusIcon
+        return createIconImageView()
     }()
 
     lazy var disclosureLabel: UILabel = {
@@ -570,10 +575,8 @@ private class PhotonActionSheetCell: UITableViewCell {
     }()
 
     lazy var disclosureIndicator: UIImageView = {
-        let disclosureIndicator = UIImageView(image: UIImage(named: "menu-Disclosure"))
-        disclosureIndicator.contentMode = .scaleAspectFit
-        disclosureIndicator.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
-        disclosureIndicator.setContentHuggingPriority(.required, for: .horizontal)
+        let disclosureIndicator = createIconImageView()
+        disclosureIndicator.image = UIImage(named: "menu-Disclosure")
         return disclosureIndicator
     }()
 
@@ -607,10 +610,6 @@ private class PhotonActionSheetCell: UITableViewCell {
         
         selectedOverlay.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
-        }
-
-        statusIcon.snp.makeConstraints { make in
-            make.width.equalTo(PhotonActionSheetUX.IconSize.width)
         }
 
         // Setup our StackViews
@@ -688,9 +687,6 @@ private class PhotonActionSheetCell: UITableViewCell {
             stackView.addArrangedSubview(disclosureLabel)
         case .Disclosure:
             stackView.addArrangedSubview(disclosureIndicator)
-            disclosureIndicator.snp.makeConstraints { make in
-                make.width.equalTo(PhotonActionSheetUX.IconSize.width)
-            }
         case .Switch:
             let image = action.isEnabled ? UIImage(named: "menu-Toggle-On") : UIImage(named: "menu-Toggle-Off")
             toggleSwitch.isAccessibilityElement = true
