@@ -39,6 +39,7 @@ class TabScrollingController: NSObject {
     weak var header: UIView?
     weak var footer: UIView?
     weak var urlBar: URLBarView?
+    weak var readerModeBar: ReaderModeBarView?
     weak var snackBars: UIView?
 
     var footerBottomConstraint: Constraint?
@@ -74,7 +75,11 @@ class TabScrollingController: NSObject {
     fileprivate var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     fileprivate var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
-    fileprivate var topScrollHeight: CGFloat { return header?.frame.height ?? 0 }
+    fileprivate var topScrollHeight: CGFloat {
+        guard let headerHeight = header?.frame.height else { return 0 }
+        guard let readerModeHeight = readerModeBar?.frame.height else { return headerHeight }
+        return headerHeight + readerModeHeight
+    }
     fileprivate var bottomScrollHeight: CGFloat { return footer?.frame.height ?? 0 }
     fileprivate var snackBarsFrame: CGRect { return snackBars?.frame ?? .zero }
 
@@ -226,6 +231,7 @@ private extension TabScrollingController {
 
         let alpha = 1 - abs(headerTopOffset / topScrollHeight)
         urlBar?.updateAlphaForSubviews(alpha)
+        readerModeBar?.updateAlphaForSubviews(alpha)
     }
 
     func isHeaderDisplayedForGivenOffset(_ offset: CGFloat) -> Bool {
@@ -257,6 +263,7 @@ private extension TabScrollingController {
             self.headerTopOffset = headerOffset
             self.footerBottomOffset = footerOffset
             self.urlBar?.updateAlphaForSubviews(alpha)
+            self.readerModeBar?.updateAlphaForSubviews(alpha)
             self.header?.superview?.layoutIfNeeded()
         }
 
