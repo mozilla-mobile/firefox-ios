@@ -43,10 +43,10 @@ fi
 
 if [ "$BUDDYBUILD_SCHEME" == FirefoxBeta ]; then
   echo "Setting SentryDSN to $SENTRY_DSN_BETA_110"
-  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_BETA_110" "Client/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_BETA_120" "Client/Info.plist"
 elif [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
   echo "Setting SentryDSN to $SENTRY_DSN_RELEASE_110"
-  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_RELEASE_110" "Client/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_RELEASE_120" "Client/Info.plist"
 fi
 
 #
