@@ -109,6 +109,10 @@ class ReaderModeBarView: UIView {
         return button
     }
 
+    func updateAlphaForSubviews(_ alpha: CGFloat) {
+        self.alpha = alpha
+    }
+
     @objc func tappedReadStatusButton(_ sender: UIButton!) {
         UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readingListItem, value: unread ? .markAsRead : .markAsUnread, extras: [ "from": "reader-mode-toolbar" ])
         delegate?.readerModeBar(self, didSelectButton: unread ? .markAsRead : .markAsUnread)
