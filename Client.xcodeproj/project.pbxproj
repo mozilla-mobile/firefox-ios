@@ -3964,6 +3964,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F84B22551A0920C600AAB793 /* Build configuration list for PBXNativeTarget "ShareTo" */;
 			buildPhases = (
+				EBE7631F20ACBEAA00E27F2D /* ShellScript */,
 				F84B22451A0920C600AAB793 /* Sources */,
 				F84B22461A0920C600AAB793 /* Frameworks */,
 				F84B22471A0920C600AAB793 /* Resources */,
@@ -4560,6 +4561,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		EBE7631F20ACBEAA00E27F2D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sh Extensions/ShareTo/copyimages.sh ";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
