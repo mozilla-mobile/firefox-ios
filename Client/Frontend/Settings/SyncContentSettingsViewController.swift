@@ -34,6 +34,7 @@ class ManageSetting: Setting {
 }
 
 class DisconnectSetting: Setting {
+    let settingsVC: SettingsTableViewController
     let profile: Profile
     override var accessoryType: UITableViewCellAccessoryType { return .none }
     override var textAlignment: NSTextAlignment { return .center }
@@ -42,6 +43,7 @@ class DisconnectSetting: Setting {
         return NSAttributedString(string: Strings.SettingsDisconnectSyncButton, attributes: [NSAttributedStringKey.foregroundColor: UIConstants.DestructiveRed])
     }
     init(settings: SettingsTableViewController) {
+        self.settingsVC = settings
         self.profile = settings.profile
     }
 
@@ -60,7 +62,14 @@ class DisconnectSetting: Setting {
             UIAlertAction(title: Strings.SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
                 FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
-                _ = navigationController?.popViewController(animated: true)
+
+                // If there is more than one view controller in the navigation controller, we can pop.
+                // Otherwise, assume that we got here directly from the App Menu and dismiss the VC.
+                if let navigationController = navigationController, navigationController.viewControllers.count > 1 {
+                    _ = navigationController.popViewController(animated: true)
+                } else {
+                    self.settingsVC.dismiss(animated: true, completion: nil)
+                }
         })
         navigationController?.present(alertController, animated: true, completion: nil)
     }
