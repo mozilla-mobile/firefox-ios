@@ -48,7 +48,7 @@ class ConnectSetting: WithoutAccountSetting {
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
         cell.imageView?.image = UIImage.templateImageNamed("FxA-Default")
-        cell.imageView?.tintColor = .lightGray
+        cell.imageView?.tintColor = UIColor.Photon.Grey40
         cell.imageView?.layer.cornerRadius = (cell.imageView?.frame.size.width)! / 2
         cell.imageView?.layer.masksToBounds = true
     }

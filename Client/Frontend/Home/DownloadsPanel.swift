@@ -8,7 +8,7 @@ import Storage
 
 private struct DownloadsPanelUX {
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemTextColor = UIColor.gray
+    static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 170
 }
 
@@ -251,7 +251,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return icon
     }
 
-    private func roundRectImageWithLabel(_ label: String, width: CGFloat, height: CGFloat, radius: CGFloat = 5.0, strokeWidth: CGFloat = 1.0, strokeColor: UIColor = .darkGray, fontSize: CGFloat = 9.0) -> UIImage? {
+    private func roundRectImageWithLabel(_ label: String, width: CGFloat, height: CGFloat, radius: CGFloat = 5.0, strokeWidth: CGFloat = 1.0, strokeColor: UIColor = UIColor.Photon.Grey60, fontSize: CGFloat = 9.0) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0.0)
         let context = UIGraphicsGetCurrentContext()
         context?.setStrokeColor(strokeColor.cgColor)

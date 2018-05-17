@@ -130,7 +130,7 @@ class TabLocationView: UIView {
         let trackingProtectionButton = UIButton()
         trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
         trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
-        trackingProtectionButton.tintColor = .gray
+        trackingProtectionButton.tintColor = UIColor.Photon.Grey50
         trackingProtectionButton.imageView?.contentMode = .scaleAspectFill
         trackingProtectionButton.isHidden = true
         return trackingProtectionButton
