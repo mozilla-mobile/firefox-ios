@@ -2,7 +2,7 @@ import logging
 import os
 import subprocess
 
-from python.xcrun import XCRun
+from xcrun import XCRun
 
 here = os.path.dirname(__file__)
 logging.getLogger(__name__).addHandler(logging.NullHandler())

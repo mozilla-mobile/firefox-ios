@@ -20,8 +20,9 @@ pipeline {
         }
         stage('test') {
             steps {
-                dir('python') {
+                dir('SyncIntegrationTests') {
                     sh 'pipenv install'
+                    sh 'pipenv check'
                     sh 'pipenv run pytest ' +
                         '--color=yes ' +
                         '--junit-xml=results/junit.xml ' +
@@ -32,13 +33,13 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts 'python/results/*'
-            junit 'python/results/*.xml'
+            archiveArtifacts 'SyncIntegrationTests/results/*'
+            junit 'SyncIntegrationTests/results/*.xml'
             publishHTML(target: [
                 allowMissing: false,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'python/results',
+                reportDir: 'SyncIntegrationTests/results',
                 reportFiles: 'index.html',
                 reportName: 'HTML Report'])
         }

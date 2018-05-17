@@ -9,8 +9,8 @@ import mozinstall
 import mozversion
 import pytest
 
-from python.tps import TPS
-from python.xcodebuild import XCodeBuild
+from tps import TPS
+from xcodebuild import XCodeBuild
 
 here = os.path.dirname(__file__)
 
