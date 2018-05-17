@@ -414,9 +414,10 @@ extension ActivityStreamPanel {
         case .highlights:
             return self.highlights.count
         case .pocket:
-            return pocketStories.isEmpty ? 0 : Int(numItems)
+            // There should always be a full row of pocket stories (numItems) otherwise don't show them
+            return pocketStories.isEmpty || (pocketStories.count < Int(numItems)) ? 0 : Int(numItems)
         case .pocketVideo:
-            return pocketVideoStories.isEmpty ? 0 : Int(numItems)
+            return pocketVideoStories.isEmpty || (pocketVideoStories.count < Int(numItems)) ? 0 : Int(numItems)
         case .highlightIntro:
             return self.highlights.isEmpty && showHighlightIntro && isHighlightsEnabled() ? 1 : 0
         }
