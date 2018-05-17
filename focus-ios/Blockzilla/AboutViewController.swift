@@ -163,7 +163,7 @@ private class AboutHeaderView: UIView {
 
 
 
-        let aboutParagraph = UILabel()
+        let aboutParagraph = SmartLabel()
         aboutParagraph.attributedText = attributed
         aboutParagraph.textColor = UIConstants.colors.defaultFont
         aboutParagraph.font = UIConstants.fonts.aboutText
@@ -172,7 +172,7 @@ private class AboutHeaderView: UIView {
     }()
 
     private lazy var versionNumber: UILabel = {
-        let label = UILabel()
+        let label = SmartLabel()
         label.text = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         label.font = UIConstants.fonts.aboutText
         label.textColor = UIConstants.colors.defaultFont.withAlphaComponent(0.5)

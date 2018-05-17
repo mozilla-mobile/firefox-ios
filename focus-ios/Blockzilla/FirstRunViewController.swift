@@ -19,14 +19,14 @@ class FirstRunViewController: UIViewController {
         let wave = WaveView()
         view.addSubview(wave)
 
-        let title = UILabel()
+        let title = SmartLabel()
         title.font = UIConstants.fonts.firstRunTitle
         title.numberOfLines = 0
         title.textColor = .white
         title.attributedText = NSAttributedString(string: UIConstants.strings.firstRunTitle, attributes: attributes)
         view.addSubview(title)
 
-        let message = UILabel()
+        let message = SmartLabel()
         message.font = UIConstants.fonts.firstRunMessage
         message.numberOfLines = 0
         message.textColor = .white

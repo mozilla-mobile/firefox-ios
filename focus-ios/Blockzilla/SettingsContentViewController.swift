@@ -141,7 +141,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         view.addSubview(spinner)
         
-        let error = UILabel()
+        let error = SmartLabel()
 //        error.text = TODOPageLoadErrorString
 //        error.textColor = UIColor.red
 //        error.textAlignment = NSTextAlignment.center

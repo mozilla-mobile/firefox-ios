@@ -12,9 +12,9 @@ protocol AddCustomDomainViewControllerDelegate: class {
 
 class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     private let autocompleteSource: CustomAutocompleteSource
-    private let inputLabel = UILabel()
+    private let inputLabel = SmartLabel()
     private let textInput: UITextField = InsetTextField(insetBy: 10)
-    private let inputDescription = UILabel()
+    private let inputDescription = SmartLabel()
     weak var delegate: AddCustomDomainViewControllerDelegate?
     
     init(autocompleteSource: CustomAutocompleteSource) {

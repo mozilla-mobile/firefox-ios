@@ -56,7 +56,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         cell.textLabel?.text = " "
         cell.backgroundColor = UIConstants.colors.background
 
-        let label = UILabel()
+        let label = SmartLabel()
         label.text = labelText
         label.textColor = UIConstants.colors.tableSectionHeader
         label.font = UIConstants.fonts.tableSectionHeader

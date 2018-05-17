@@ -22,7 +22,7 @@ class Toast {
         toast.layer.cornerRadius = 18
         window.addSubview(toast)
 
-        let label = UILabel()
+        let label = SmartLabel()
         label.text = text
         label.textColor = UIConstants.colors.toastText
         label.font = UIConstants.fonts.toast

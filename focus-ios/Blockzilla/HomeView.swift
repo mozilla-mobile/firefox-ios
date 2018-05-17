@@ -12,10 +12,10 @@ protocol HomeViewDelegate: class {
 class HomeView: UIView {
     weak var delegate: HomeViewDelegate?
     private(set) var settingsButton: UIButton! = nil
-    private let description1 = UILabel()
-    private let description2 = UILabel()
+    private let description1 = SmartLabel()
+    private let description2 = SmartLabel()
     private let trackerStatsView = UIView()
-    private let trackerStatsLabel = UILabel()
+    private let trackerStatsLabel = SmartLabel()
     
     init() {
         super.init(frame: CGRect.zero)

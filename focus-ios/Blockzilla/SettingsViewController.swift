@@ -8,8 +8,8 @@ import UIKit
 import Telemetry
 
 class SettingsTableViewSearchCell: UITableViewCell {
-    private let newLabel = UILabel()
-    private let accessoryLabel = UILabel()
+    private let newLabel = SmartLabel()
+    private let accessoryLabel = SmartLabel()
     private let spacerView = UIView()
 
     var accessoryLabelText: String? {
@@ -284,6 +284,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
 
+        cell.textLabel?.setupShrinkage()
+        cell.detailTextLabel?.setupShrinkage()
+
         return cell
     }
 
@@ -356,7 +359,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         cell.textLabel?.text = " "
         cell.backgroundColor = UIConstants.colors.background
 
-        let label = UILabel()
+        let label = SmartLabel()
         label.text = labelText
         label.textColor = UIConstants.colors.tableSectionHeader
         label.font = UIConstants.fonts.tableSectionHeader

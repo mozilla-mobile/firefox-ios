@@ -21,7 +21,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     
     private var nameInput = UITextField()
     private var templateInput = UITextView()
-    private var templatePlaceholderLabel = UILabel()
+    private var templatePlaceholderLabel = SmartLabel()
     
     init(delegate: AddSearchEngineDelegate, searchEngineManager: SearchEngineManager) {
         self.delegate = delegate
@@ -49,7 +49,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         let container = UIView()
         view.addSubview(container)
         
-        let nameLabel = UILabel()
+        let nameLabel = SmartLabel()
         nameLabel.text = UIConstants.strings.NameToDisplay
         nameLabel.textColor = UIConstants.colors.settingsTextLabel
         container.addSubview(nameLabel)
@@ -75,7 +75,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templatePlaceholderLabel.numberOfLines = 0
         templateContainer.addSubview(templatePlaceholderLabel)
         
-        let templateLabel = UILabel()
+        let templateLabel = SmartLabel()
         templateLabel.text = UIConstants.strings.AddSearchEngineTemplate
         templateLabel.textColor = UIConstants.colors.settingsTextLabel
         container.addSubview(templateLabel)
@@ -90,7 +90,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.autocorrectionType = .no
         templateContainer.addSubview(templateInput)
 
-        let exampleLabel = UILabel()
+        let exampleLabel = SmartLabel()
         let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
         let subtitle = NSMutableAttributedString(string: UIConstants.strings.AddSearchEngineTemplateExample, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
         let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])

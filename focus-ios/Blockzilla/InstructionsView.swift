@@ -46,7 +46,7 @@ private class InstructionView: UIView {
         imageView.image = image
         addSubview(imageView)
 
-        let label = UILabel()
+        let label = SmartLabel()
         label.text = text
         label.textColor = UIConstants.colors.defaultFont
         label.numberOfLines = 0

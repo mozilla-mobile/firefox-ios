@@ -23,7 +23,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
 
         view.addSubview(tableView)
 
-        let label = UILabel()
+        let label = SmartLabel()
         label.text = UIConstants.strings.autocompleteEmptyState
         label.font = UIConstants.fonts.settingsDescriptionText
         label.textColor = UIConstants.colors.settingsTextLabel

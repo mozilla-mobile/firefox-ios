@@ -33,7 +33,7 @@ private class DisabledStateView: UIView {
     init() {
         super.init(frame: CGRect.zero)
 
-        let label = UILabel()
+        let label = SmartLabel()
         label.text = UIConstants.strings.safariInstructionsNotEnabled
         label.textColor = UIConstants.colors.focusRed
         label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.vertical)

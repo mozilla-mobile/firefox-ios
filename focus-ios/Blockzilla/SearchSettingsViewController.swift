@@ -41,7 +41,7 @@ class SearchSettingsViewController: UITableViewController {
         cell.textLabel?.text = " "
         cell.backgroundColor = UIConstants.colors.background
         
-        let label = UILabel()
+        let label = SmartLabel()
         label.text = UIConstants.strings.InstalledSearchEngines
         label.textColor = UIConstants.colors.tableSectionHeader
         label.font = UIConstants.fonts.tableSectionHeader
@@ -76,7 +76,7 @@ class SearchSettingsViewController: UITableViewController {
             return cell
         } else if indexPath.item > engines.count {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "restoreDefaultEngines")
-            let label = UILabel()
+            let label = SmartLabel()
             label.text = UIConstants.strings.RestoreSearchEnginesLabel
             label.font = UIFont.systemFont(ofSize: 17)
             label.textColor = UIConstants.colors.settingsTextLabel

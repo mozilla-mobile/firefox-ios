@@ -733,7 +733,7 @@ private class URLTextField: AutocompleteTextField {
 }
 
 class TrackingProtectionBadge: UIView {
-    let counterLabel = UILabel()
+    let counterLabel = SmartLabel()
     let trackingProtectionOff = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_off").imageFlippedForRightToLeftLayoutDirection())
     let trackingProtectionCounter = UIImageView(image: #imageLiteral(resourceName: "tracking_protection_counter").imageFlippedForRightToLeftLayoutDirection())
     let counterLabelWrapper = UIView()

@@ -126,8 +126,8 @@ class TrackingProtectionBreakdownVisualizer: UIView {
 
 class TrackingProtectionBreakdownItem: UIView {
     private let indicatorView = UIView()
-    private let titleLabel = UILabel()
-    private let counterLabel = UILabel()
+    private let titleLabel = SmartLabel()
+    private let counterLabel = SmartLabel()
 
     override var intrinsicContentSize: CGSize { return CGSize(width: 0, height: 56) }
 
@@ -154,9 +154,13 @@ class TrackingProtectionBreakdownItem: UIView {
             make.width.equalTo(8)
         }
 
+        let counterWidth = NSString(string: "1000").size(withAttributes: [NSAttributedStringKey.font: counterLabel.font]).width
+
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(indicatorView.snp.centerY)
             make.leading.equalTo(indicatorView.snp.trailing).offset(12)
+            // Leave space on the right for the label to grow
+            make.trailing.equalToSuperview().inset(counterWidth)
         }
 
         counterLabel.snp.makeConstraints { make in
@@ -177,8 +181,8 @@ class TrackingProtectionBreakdownItem: UIView {
 }
 
 class TrackingProtectionBreakdownView: UIView {
-    private let titleLabel = UILabel()
-    private let counterLabel = UILabel()
+    private let titleLabel = SmartLabel()
+    private let counterLabel = SmartLabel()
     private let breakdown = TrackingProtectionBreakdownVisualizer()
     private let adItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.adTrackerLabel, color: BlocklistName.advertising.color)
     private let analyticItem = TrackingProtectionBreakdownItem(text: UIConstants.strings.analyticTrackerLabel, color: BlocklistName.analytics.color)
@@ -288,11 +292,10 @@ class TrackingProtectionBreakdownView: UIView {
 
 class TrackingProtectionToggleView: UIView {
     private let icon = UIImageView(image: #imageLiteral(resourceName: "tracking_protection").imageFlippedForRightToLeftLayoutDirection())
-    private let label = UILabel(frame: .zero)
+    private let label = SmartLabel(frame: .zero)
     let toggle = UISwitch()
     private let borderView = UIView()
-    private let descriptionLabel = UILabel()
-
+    private let descriptionLabel = SmartLabel()
 
     var trackingProtectionStatus = TrackingProtectionStatus.off {
         didSet {
@@ -337,8 +340,7 @@ class TrackingProtectionToggleView: UIView {
         }
 
         label.snp.makeConstraints {make in
-            make.leading.equalTo(icon.snp.trailing).offset(08)
-            make.height.equalToSuperview()
+            make.leading.equalTo(icon.snp.trailing).offset(8)
             make.centerY.equalToSuperview()
             make.trailing.equalTo(toggle.snp.leading).offset(-8)
         }
@@ -347,6 +349,8 @@ class TrackingProtectionToggleView: UIView {
             make.centerY.equalToSuperview()
             make.trailing.equalTo(safeAreaLayoutGuide).offset(-16)
         }
+
+        toggle.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         borderView.snp.makeConstraints { make in
             make.top.equalTo(toggle.snp.bottom).offset(8)
