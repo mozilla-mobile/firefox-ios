@@ -78,3 +78,6 @@ MozBuildID.xcconfig
 
 # Node.js
 node_modules
+
+# Copied ShareTo images
+Extensions/ShareTo/Images.xcassets/copied_by_build_script
