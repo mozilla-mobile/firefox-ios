@@ -80,4 +80,4 @@ MozBuildID.xcconfig
 node_modules
 
 # Copied ShareTo images
-Extensions/ShareTo/Images.xcassets/copied
+Extensions/ShareTo/Images.xcassets/copied_by_build_script

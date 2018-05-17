@@ -1,4 +1,4 @@
-dest="Extensions/ShareTo/Images.xcassets/copied"
+dest="Extensions/ShareTo/Images.xcassets/copied_by_build_script"
 mkdir -p $dest
 
 rsync -a ./Client/Frontend/Home/Home.xcassets/emptySync.imageset $dest
