@@ -112,8 +112,7 @@ class SnapshotTests: XCTestCase {
     
     func test09TrackingProtection() {
         let app = XCUIApplication()
-         // Skip the Intro
-        app.buttons["skipButton.button"].tap()
+
         // Inject a string into clipboard
         let clipboardString = "Hello world"
         UIPasteboard.general.string = clipboardString
@@ -130,8 +129,7 @@ class SnapshotTests: XCTestCase {
     
     func test10CustomSearchEngines() {
         let app = XCUIApplication()
-        // Skip the Intro
-        app.buttons["skipButton.button"].tap()
+
         // Cancel URLBar
         app.buttons["URLBar.cancelButton"].tap()
         app.buttons["HomeView.settingsButton"].tap()
@@ -142,8 +140,7 @@ class SnapshotTests: XCTestCase {
     
     func test11AutocompleteURLs() {
         let app = XCUIApplication()
-        // Skip the Intro
-        app.buttons["skipButton.button"].tap()
+
         // Cancel URLBar
         app.buttons["URLBar.cancelButton"].tap()
         app.buttons["HomeView.settingsButton"].tap()
