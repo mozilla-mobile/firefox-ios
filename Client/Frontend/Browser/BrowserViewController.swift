@@ -116,7 +116,7 @@ class BrowserViewController: UIViewController {
 
     // This is set when the user taps "Download Link" from the context menu. We then force a
     // download of the next request through the `WKNavigationDelegate` that matches this web view.
-    var pendingDownloadWebView: WKWebView? = nil
+    weak var pendingDownloadWebView: WKWebView? = nil
 
     let downloadQueue = DownloadQueue()
 
