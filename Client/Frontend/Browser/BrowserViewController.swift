@@ -115,8 +115,8 @@ class BrowserViewController: UIViewController {
     var pendingRequests = [String : URLRequest]()
 
     // This is set when the user taps "Download Link" from the context menu. We then force a
-    // download of the next request through the `WKNavigationDelegate` that matches this URL.
-    var pendingDownloadURL: URL? = nil
+    // download of the next request through the `WKNavigationDelegate` that matches this web view.
+    weak var pendingDownloadWebView: WKWebView? = nil
 
     let downloadQueue = DownloadQueue()
 
@@ -2394,7 +2394,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let downloadTitle = NSLocalizedString("Download Link", comment: "Context menu item for downloading a link URL")
             let downloadAction = UIAlertAction(title: downloadTitle, style: .default) { _ in
-                self.pendingDownloadURL = url
+                self.pendingDownloadWebView = currentTab.webView
                 currentTab.webView?.evaluateJavaScript("window.__firefox__.download('\(url.absoluteString)', '\(UserScriptManager.securityToken)')")
                 UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
             }

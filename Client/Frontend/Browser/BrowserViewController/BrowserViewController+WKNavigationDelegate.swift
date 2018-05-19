@@ -162,10 +162,10 @@ extension BrowserViewController: WKNavigationDelegate {
             request = pendingRequests.removeValue(forKey: url.absoluteString)
         }
 
-        // We can only show this content in the web view if this URL is not pending
+        // We can only show this content in the web view if this web view is not pending
         // download via the context menu.
-        let canShowInWebView = navigationResponse.canShowMIMEType && (responseURL != pendingDownloadURL)
-        let forceDownload = responseURL == pendingDownloadURL
+        let canShowInWebView = navigationResponse.canShowMIMEType && (webView != pendingDownloadWebView)
+        let forceDownload = webView == pendingDownloadWebView
 
         // Check if this response should be handed off to Passbook.
         if let passbookHelper = OpenPassBookHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
@@ -183,9 +183,9 @@ extension BrowserViewController: WKNavigationDelegate {
             // Clear the network activity indicator since our helper is handling the request.
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
 
-            // Clear the pending download URL so that subsequent requests to the same URL
-            // don't invoke another download.
-            pendingDownloadURL = nil
+            // Clear the pending download web view so that subsequent navigations from the same
+            // web view don't invoke another download.
+            pendingDownloadWebView = nil
 
             // Open our helper and cancel this response from the webview.
             downloadHelper.open()
