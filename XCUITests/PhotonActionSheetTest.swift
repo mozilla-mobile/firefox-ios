@@ -70,4 +70,62 @@ class PhotonActionSheetTest: BaseTestCase {
         waitforExistence(app.images["emptySync"])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
+
+    private func openNewShareSheet() {
+        navigator.openURL("example.com")
+        navigator.goto(PageOptionsMenu)
+        app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
+        waitforExistence(app.buttons["Copy"])
+        let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
+        moreElement.tap()
+        waitforExistence(app.switches["Fennec"])
+        app.switches["Fennec"].tap()
+        app.buttons["Done"].tap()
+        waitforExistence(app.buttons["Copy"])
+        let fennecElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["Fennec"]
+        fennecElement.tap()
+        waitforExistence(app.navigationBars["ShareTo.ShareView"])
+    }
+
+    private func disableFennec() {
+        navigator.nowAt(BrowserTab)
+        navigator.goto(PageOptionsMenu)
+        waitforExistence(app.tables["Context Menu"])
+        app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
+        waitforExistence(app.buttons["Copy"])
+        let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
+        moreElement.tap()
+        app.switches["Fennec"].tap()
+        app.buttons["Done"].tap()
+        waitforExistence(app.buttons["Copy"])
+    }
+
+    func testSharePageWithShareSheetOptions() {
+        openNewShareSheet()
+        XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)
+        XCTAssertTrue(app.staticTexts["Load in Background"].exists)
+        XCTAssertTrue(app.staticTexts["Bookmark This Page"].exists)
+        XCTAssertTrue(app.staticTexts["Add to Reading List"].exists)
+        XCTAssertTrue(app.staticTexts["Send to Device"].exists)
+        app.buttons["Cancel"].tap()
+        disableFennec()
+    }
+
+    func testShareSheetSendToDevice() {
+        openNewShareSheet()
+        app.staticTexts["Send to Device"].tap()
+        XCTAssertTrue(app.images["emptySync"].exists)
+        XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
+        app.navigationBars.buttons["Close"].tap()
+        disableFennec()
+    }
+
+    func testShareSheetOpenAndCancel() {
+        openNewShareSheet()
+        app.buttons["Cancel"].tap()
+        // User is back to the BrowserTab where the sharesheet was launched
+        waitforExistence(app.textFields["url"])
+        waitForValueContains(app.textFields["url"], value:"example.com/")
+        disableFennec()
+    }
 }
