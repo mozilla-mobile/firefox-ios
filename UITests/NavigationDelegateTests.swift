@@ -34,7 +34,10 @@ class NavigationDelegateTests: KIFTestCase {
     func testAppStoreLinkShowsConfirmation() {
         let url = "\(webRoot!)/navigationDelegate.html"
         enterUrl(url: url)
+        tester().waitForAnimationsToFinish()
+        tester().waitForWebViewElementWithAccessibilityLabel("link")
         tester().tapWebViewElementWithAccessibilityLabel("link")
+        tester().wait(forTimeInterval: 2)
         EarlGrey.selectElement(with: grey_accessibilityID("CancelOpenInAppStore")).perform(grey_tap())
     }
 }
