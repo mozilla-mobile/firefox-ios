@@ -107,6 +107,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.typeText("\r")
 
         // Go to settings and set MDN as the default
+        waitUntilPageLoad()
         navigator.goto(SearchSettings)
 
         app.navigationBars["Search"].buttons["Edit"].tap()
@@ -123,7 +124,6 @@ class ThirdPartySearchTest: BaseTestCase {
         app.typeText("window")
         waitforNoExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
-
     }
 
     func testCustomEngineFromCorrectTemplate() {
@@ -137,6 +137,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars.buttons["customEngineSaveButton"].tap()
 
         // Perform a search using a custom search engine
+        waitforExistence(app.tables.staticTexts["Ask"])
         navigator.goto(HomePanelsScreen)
         app.textFields["url"].tap()
         app.typeText("strange charm")
