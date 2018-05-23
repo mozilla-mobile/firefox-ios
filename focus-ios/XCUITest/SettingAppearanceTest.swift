@@ -74,7 +74,7 @@ class SettingAppearanceTest: BaseTestCase {
         
         // Swipe up
         waitforExistence(element: app.tables.switches["BlockerToggle.BlockAds"])
-        app.tables.children(matching: .cell).element(boundBy: 0).swipeUp()
+        app.tables.firstMatch.swipeUp()
         
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAds"].value as! String, "1")
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAnalytics"].value as! String, "1")
