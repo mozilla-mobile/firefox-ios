@@ -43,6 +43,9 @@
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "เพิ่ม URL ที่กำหนดเอง";
 
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "ตรวจสอบ URL ที่คุณป้อนอีกครั้ง";
+
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "ตัวอย่าง: example.com";
 
@@ -55,6 +58,9 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ เพิ่ม URL ที่กำหนดเอง";
 
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "เพิ่มและจัดการ URL เติมอัตโนมัติที่กำหนดเอง";
+
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "URL ที่กำหนดเอง";
 
@@ -64,11 +70,23 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "เพิ่ม URL ที่กำหนดเองใหม่แล้ว";
 
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "เปิดใช้งานเพื่อให้มีการเติมอัตโนมัติของ %@ ผ่าน 450 URL ยอดนิยมในแถบที่อยู่";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "การเติมอัตโนมัติ";
+
 /* Title for the default URL list section */
 "Autocomplete.defaultTitle" = "รายการ URL เริ่มต้น";
 
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "ถูกปิดใช้งาน";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "ไม่มี URL ที่กำหนดเองที่จะแสดงผล";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "ถูกเปิดใช้งาน";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ย้อนกลับ";
@@ -204,6 +222,9 @@
 
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "วางหรือป้อนสตริงการค้นหา หากจำเป็นให้แทนที่คำค้นหาด้วย: %s";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "การเติม URL อัตโนมัติ";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "การปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ อาจทำให้วิดีโอและหน้าเว็บบางส่วนไม่สมบูรณ์";

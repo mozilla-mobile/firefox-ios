@@ -109,17 +109,11 @@
 /* Label on button to cancel edits */
 "Cancel" = "Cancel";
 
-/* label describing something as disabled */
-"Disabled" = "Disabled";
-
 /* Label on button to complete edits */
 "Done" = "Done";
 
 /* Label on button to allow edits */
 "Edit" = "Edit";
-
-/* label describing something as enabled */
-"Enabled" = "Enabled";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Try again";

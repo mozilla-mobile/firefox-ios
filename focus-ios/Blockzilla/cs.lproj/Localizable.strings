@@ -43,6 +43,51 @@
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Přidat vlastní URL adresu";
 
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Zkontrolujte zadanou URL adresu.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Příklad: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL adresa k přidání";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Vložte nebo napište URL adresu";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Přidat vlastní URL adresu";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Přidání a správa vlastních URL adres pro automatické doplňování.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Vlastní URL adresy";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "SEZNAM VLASTNÍCH URL ADRES";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Vlastní URL adresa přidána.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Povolením této možnosti umožníte aplikaci %@ automaticky doplňovat více než 450 populárních URL adres.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Automatické doplňování";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "VÝCHOZÍ SEZNAM URL ADRES";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Zakázáno";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Žádné vlastní URL adresy k zobrazení";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Povoleno";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Zpět";
 
@@ -60,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Zastavit";
+
+/* Label on button to cancel edits */
+"Cancel" = "Zrušit";
+
+/* Label on button to complete edits */
+"Done" = "Hotovo";
+
+/* Label on button to allow edits */
+"Edit" = "Upravit";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Zkusit znovu";
@@ -94,11 +148,14 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Otevřít Mapy";
 
-/* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Automaticky blokuje sledovací prvky, zatímco procházíte. Poté stačí klepnout pro vymazání zobrazených stránek, vyhledávání, cookies a hesel z vašeho zařízení.";
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "OK, rozumím!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelTagline" = "Procházejte, jako když se nikdo nedívá.";
+"FirstRun.messageLabelDescription" = "Automaticky blokuje sledovací prvky, zatímco prohlížíte. Poté stačí klepnout pro vymazání zobrazených stránek, vyhledávání, cookies a hesel z vašeho zařízení.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Prohlížejte, jako když se nikdo nedívá.";
 
 /* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
 "Focus.handoffSyncing" = "Probíhá synchronizace Apple Handoff";
@@ -107,7 +164,7 @@
 "Home.descriptionLabel1" = "Automatické anonymní prohlížení.";
 
 /* Second label for product description on the home screen */
-"Home.descriptionLabel2" = "Procházejte. Smažte. Opakujte.";
+"Home.descriptionLabel2" = "Prohlížejte. Smažte. Opakujte.";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Zrušit";
@@ -133,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Otevřete Nastavení";
 
+/* Save button label */
+"Save" = "Uložit";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Přidat jiný vyhledávací modul";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Přidat jiný vyhledávací modul";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Přidat vyhledávací modul";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "NAINSTALOVANÉ VYHLEDÁVACÍ MODULY";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Zobrazovaný název";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Nový vyhledávací modul byl přidán.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Obnovit výchozí vyhledávací moduly";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Název vyhledávacího modulu";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Řetězec používaný pro vyhledávání";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Vložte nebo zadejte výraz k vyhledání. Pokud je to nutné, nahraďte hledaný výraz za: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Automatické doplňování URL adresy";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokování ostatních sledujících prvků může rozbít některá videa a webové stránky.";
 
@@ -150,6 +243,12 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Nastavení";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Vyhledávací modul";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "VYHLEDÁVÁNÍ";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRACE";
@@ -218,7 +317,7 @@
 "URL.eraseButtonLabel" = "VYMAZAT";
 
 /* Message shown after pressing the Erase button */
-"URL.eraseMessageLabel" = "Vaše historie procházení byla vymazána.";
+"URL.eraseMessageLabel" = "Vaše historie prohlížení byla vymazána.";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Hledat nebo vložit adresu";
@@ -262,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "„%@“ žádá o přístup k vašim fotkám";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Příklad: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Sledující reklamy";
 
@@ -273,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Ochrana proti sledování je vypnuta";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Zjistit více";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sledující soc. sítě";

@@ -59,7 +59,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ საკუთარი URL მისამართის დამატება";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "დაამატეთ და მართეთ საკუთარი URLs მისამართები.";
+"Autocomplete.customDescriptoin" = "დაამატეთ და მართეთ საკუთარი URL მისამართები.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "საკუთარი URL მისამართები";
@@ -71,7 +71,7 @@
 "Autocomplete.customUrlAdded" = "ახალი საკუთარი URL დაემატა.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "ჩართეთ და %@-ში გექნებათ 450-ზე მეტი სასურველი URLs ბმული მისამართების ზოლში.";
+"Autocomplete.defaultDescriptoin" = "ჩართეთ და %@ თავად დაასრულებს 450-ზე მეტ ცნობილ URL ბმულს, მისამართების ველში აკრეფისას.";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "თვითშევსება";
@@ -83,7 +83,7 @@
 "Autocomplete.disabled" = "გამორთულია";
 
 /* Label for button to add a custom URL */
-"Autocomplete.emptyState" = "საკუთარი URLs მისამართები არაა დამატებული";
+"Autocomplete.emptyState" = "საკუთარი URL მისამართები არაა დამატებული";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "ჩართულია";
@@ -311,7 +311,7 @@
 "URL.cancelLabel" = "გაუქმება";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "ჩასმა & გადასვლა";
+"URL.contextMenu" = "ჩასმა და გადასვლა";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "გასუფთავება";

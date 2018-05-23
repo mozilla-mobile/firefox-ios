@@ -65,7 +65,7 @@
 "Autocomplete.customLabel" = "Aangepaste URL’s";
 
 /* Title for the default URL list section */
-"Autocomplete.customTitle" = "AANGEPASTE URL-LIJST";
+"Autocomplete.customTitle" = "LIJST VAN AANGEPASTE URL’S";
 
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Nieuwe aangepaste URL toegevoegd.";
@@ -77,7 +77,7 @@
 "Autocomplete.defaultLabel" = "Automatisch aanvullen";
 
 /* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "STANDAARD URL-LIJST";
+"Autocomplete.defaultTitle" = "LIJST VAN STANDAARD-URL’S";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Uitgeschakeld";

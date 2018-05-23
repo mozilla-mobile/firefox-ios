@@ -137,7 +137,7 @@
 "ExternalLink.emailButton" = "Email";
 
 /* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.messageTitleWithPlaceholder" = "Si sta uscendo da %@.";
+"ExternalLink.messageTitleWithPlaceholder" = "Stai uscendo da %@.";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "Apri App Store";
@@ -221,7 +221,7 @@
 "Settings.Search.SearchTemplate" = "Stringa di ricerca da utilizzare";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Incollare o inserire la stringa di ricerca. Se necessario sostituire i termini di ricerca con %s.";
+"Settings.Search.SearchTemplatePlaceholder" = "Incolla o inserisci la stringa di ricerca. Se necessario sostituisci i termini di ricerca con %s.";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Completamento automatico indirizzi";
@@ -281,7 +281,7 @@
 "Settings.toggleBlockOther" = "Blocca altri contenuti traccianti";
 
 /* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "L’attivazione potrebbe causare problemi di funzionamento in alcune pagine";
+"Settings.toggleBlockOtherDescription" = "L’attivazione potrebbe causare errori imprevisti in alcune pagine";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Blocca traccianti social";

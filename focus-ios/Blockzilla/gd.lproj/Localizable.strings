@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "Bheir %@ smachd dhut.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Cuir URL gnàthaichte ris";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Thoir sùil eile air an URL a chuir thu a-steach.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Ball-eisimpleir: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "An URL a thèid a chur ris";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Cuir URL ann";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Cuir URL gnàthaichte ris";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Cuir ris is stiùirich URLaichean gnàthaichte a thèid a fhèin-choileanadh.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URLaichean gnàthaichte";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "LIOSTA NAN URL GNÀTHAICHTE";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Chaidh URL gnàthaichte ùr a chur ris.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Cuir an comas airson ’s gum fèin-choilean %@ barrachd air 450 URL fèillmhor ann am bàr an t-seòlaidh.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Fèin-choileanadh";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "LIOSTA NAN URL BUNAITEACH";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "À comas";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Chan eil URL gnàthaichte ann a sheallamaid";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "An comas";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Air ais";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Sguir dheth";
+
+/* Label on button to cancel edits */
+"Cancel" = "Sguir dheth";
+
+/* Label on button to complete edits */
+"Done" = "Deiseil";
+
+/* Label on button to allow edits */
+"Edit" = "Deasaich";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Feuch ris a‑rithist";
@@ -90,6 +147,9 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Fosgail Maps";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Ceart, tha mi agaibh!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Bac tracaichean air loidhne gu fèin-obrachail nuair a nì thu brabhsadh. Thoir gnogag an uairsin airson na duilleagan air an do thadhail thu, na luirg a rinn thu, briosgaidean is faclan-faire a sguabadh às an uidheam agad.";
@@ -130,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Fosgail aplacaid nan roghainnean";
 
+/* Save button label */
+"Save" = "Sàbhail";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Cuir einnsean-luirg eile ris";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Cuir einnsean-luirg eile ris";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Cuir einnsean-luirg ris";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "EINNSEANAN-LUIRG STÀLAICHTE";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "An t-ainm a thèid a shealltainn";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Chaidh einnsean-luirg ùr a chur ris.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Aisig na h-einnseanan-luirg bunaiteach";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Ainm an einnsein-luirg";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "An sreang luirg a thèid a chleachdadh";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Cuir sreang luirg a-steach. Ma bhios feum, cuir na leanas an àite a’ bhriathair-luirg: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Fèin-choileanadh URLaichean";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Ma bhacas tu tracaichean susbaint eile, dh’fhaoidte nach obraich cuid a dhuilleagan-lìn is videothan tuilleadh.";
 
@@ -147,6 +243,12 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Roghainnean";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Einnseanan-luirg";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "LORG";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "AMALACHADH";
@@ -259,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "Bu mhath le “%@” cothrom air na dealbhan agad";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Mar eisimpleir: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Tracaichean sanasachd";
 
@@ -270,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Tha an dìon o thracadh dheth";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Barrachd fiosrachaidh";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Tracaichean sòisealta";

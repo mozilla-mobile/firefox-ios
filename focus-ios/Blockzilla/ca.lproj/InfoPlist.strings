@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Això permet fer vídeos i pujar-los.";
 
 /* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Això permet desar fotos i pujar-les.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Això permet desar fotos i pujar-les.";
 

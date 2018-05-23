@@ -236,7 +236,7 @@
 "Settings.blockOtherYes" = "Înțeleg";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla se străduieşte să colecteze doar ceea ce avem nevoie ca să oferim și să îmbunătățim %@ pentru toată lumea.";
+"Settings.detailTextSendUsageData" = "La Mozilla noi colectăm doar strictul necesar de date pentru a crea și îmbunătăți %@ pentru toată lumea.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Află mai multe.";

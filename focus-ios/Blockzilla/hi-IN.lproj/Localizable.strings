@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ आपको नियंत्रण में रखता है.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "उपभोक्ता निर्धारित URL जोड़ें";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "आपके द्वारा दर्ज URL कि दोहरी जाँच करें.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "उदाहरण: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "जोड़ने के लिए URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "URL पेस्ट करें या दर्ज करें";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ अपनी संशोधित URL जोड़ें";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "उपभोक्ता संशोधित स्वत: पूर्ण URLs जोड़ें और प्रबंधित करें.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "उपभोक्ता संशोधित URLs";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "CUSTOM URL LIST";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "नया उपभोक्ता संशोधित URL जोड़ा गया.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "पता पट्ट में 450 लोकप्रिय URLs पर %@ स्वत: पूर्णता के लिए सक्षम करें.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "स्‍वत: पूर्ण";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "DEFAULT URL LIST";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "निष्क्रिय";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "प्रदर्शित करने के लिए कोई उपभोक्ता संशोधित URLs नहीं";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "सक्रिय";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "वापस";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "रोकें";
+
+/* Label on button to cancel edits */
+"Cancel" = "रद्द करें";
+
+/* Label on button to complete edits */
+"Done" = "संपन्न";
+
+/* Label on button to allow edits */
+"Edit" = "संपादन";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "पुनः प्रयास करें";
@@ -90,6 +147,9 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "नक्शा खोलें";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "ठीक है, समझ गया!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "आप ब्राउज करने के दौरान ऑनलाइन ट्रैकर्स को स्वचालित रूप से रोकें. तब अपने उपकरण से देखे गये पृष्ठों, खोजों, कुकीज और कूटशब्दों को मिटाने के लिए दबाएँ.";
@@ -130,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "सेटिंग अनुप्रयोग खोलें";
 
+/* Save button label */
+"Save" = "सहेजें";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "एक और खोज इंजन जोड़ें";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ एक और खोज इंजन जोड़ें";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "खोज इंजन जोड़ें";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "प्रदर्शित करने के लिए नाम";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "नया खोज इंजन जोड़ा गया.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "मूल खोज इंजन पुनर्स्थापित करें";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "खोज इंजन का नाम";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "उपयोग के लिए खोज स्ट्रिंग";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "खोज स्ट्रिंग पेस्ट करें या दर्ज करें. यदि ज़रूरी हो, तो खोज शब्द को %s से बदलें.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL स्वत: पूर्ण";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "अन्य सामग्री ट्रैकर्स को अवरुद्ध करना कुछ वीडियो और वेब पृष्ठों को नुकसान पहुंचा सकता है.";
 
@@ -147,6 +243,12 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "सेटिंग्स";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "खोज इंजन";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SEARCH";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "एकीकरण";
@@ -259,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” आपकी तस्वीरें एक्सेस करना चाहता है";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "उदाहरण: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "विज्ञापन ट्रैकर्स";
 
@@ -270,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "ट्रैकिंग सुरक्षा बंद";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "अधिक जानें";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "सामाजिक ट्रैकर्स";

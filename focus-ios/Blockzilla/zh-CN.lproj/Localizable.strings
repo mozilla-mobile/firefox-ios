@@ -59,7 +59,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ 添加自定义网址";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "添加和管理自定义的自动完成网址。";
+"Autocomplete.customDescriptoin" = "添加和管理自定义的自动补全网址。";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "自定义网址";
@@ -71,10 +71,10 @@
 "Autocomplete.customUrlAdded" = "已添加新的自定义网址。";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "启用在 %@ 地址栏自动完成超过 450 个流行网址。";
+"Autocomplete.defaultDescriptoin" = "开启后，可在 %@ 地址栏自动补全超过 450 个流行网址。";
 
 /* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "自动完成";
+"Autocomplete.defaultLabel" = "自动补全";
 
 /* Title for the default URL list section */
 "Autocomplete.defaultTitle" = "默认网址列表";
@@ -224,7 +224,7 @@
 "Settings.Search.SearchTemplatePlaceholder" = "主角或输入搜索字符串。如果必要，用 %s 表示搜索关键词。";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "网址自动完成";
+"Settings.autocompleteSection" = "网址自动补全";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "拦截其他内容跟踪器可能对某些视频和网页有影响。";
@@ -236,7 +236,7 @@
 "Settings.blockOtherYes" = "知道了";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla 仅收集必要的信息用以改进 %@ 以适合大众。";
+"Settings.detailTextSendUsageData" = "Mozilla 坚持仅收集用来为大众改进 %@ 所必需的数据。";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "详细了解。";

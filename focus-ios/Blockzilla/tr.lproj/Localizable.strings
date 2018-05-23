@@ -224,7 +224,7 @@
 "Settings.Search.SearchTemplatePlaceholder" = "Arama dizgisini yapıştırın veya yazın. Gerekirse aranan terimin yerine %s yazın.";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "Otomatik Adres Tamamlama";
+"Settings.autocompleteSection" = "Otomatik adres tamamlama";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Diğer içerik takipçilerini engellemek bazı videoları ve web sayfalarını bozabilir.";

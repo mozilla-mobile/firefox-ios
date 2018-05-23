@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ ເຮັດໃຫ້ທ່ານສາມາດຄວບຄຸມໄດ້ດັ່ງລຸ່ມນີ້:";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "ເພີ່ມ URL ທີ່ກຳນົດເອງ";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "ກວດສອບ URL ທີ່ທ່ານໄດ້ປ້ອນເຂົ້າໄປ.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "ຕົວຢ່າງ: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL ທີ່ຈະເພີ່ມ";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "ວາງ ຫລື ປ້ອນ URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ເພີ່ມ URL ທີ່ກຳນົດເອງ";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "ເພີ່ມ ແລະ ຈັດການ URLs ທີ່ກຳໜົດເອງເຕິມອັດຕະໂນມັດ.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URLs ທີ່ກຳນົດເອງ";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "ລາຍການ URL ທີ່ກຳນົດເອງ";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "ເພີ່ມ URL ທີ່ກຳນົດເອງໃຫມ່ແລ້ວ.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "ເປີດໃຊ້ງານເພື່ອໃຫ້ມີການເຕິມອັດຕະໂນມັດຂອງ %@ ຜ່ານ 450 URLs ຍອດນິຍົມໃນແຖບທີ່ຢູ່";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "ສຳເລັດແບບອັດຕະໂນມັດ";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "ລາຍການ URL ພື້ນຖານ";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "ຖືກປິດການນຳໃຊ້";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "ບໍ່ມີ URLs ກຳນົດເອງທີ່ຈະສະແດງຜົນ";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "ເປີດໃຊ້ງານແລ້ວ";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ກັບຄືນ";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "ຢຸດ";
+
+/* Label on button to cancel edits */
+"Cancel" = "ຍົກເລີກ";
+
+/* Label on button to complete edits */
+"Done" = "ສຳເລັດ";
+
+/* Label on button to allow edits */
+"Edit" = "ແກ້ໄຂ";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "ລອງໃໝ່ອີກຄັ້ງ";
@@ -90,6 +147,9 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "ເປີດແຜນທີ່";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "ມັນຈະບັອກຕົວຕິດຕາມອອນໄລນ໌ແບບອັດຕະໂນມັດໃນຂະນະທີ່ທ່ານກຳລັງທ່ອງເວັບຢູ່. ຫລັງຈາກນັ້ນໃຫ້ແຕະເພື່ອລົບລ້າງຫນ້າເວັບທີ່ທ່ານໄດ້ເຂົ້າໄປເບິງ, ການຄົ້ນຫາ, ຄຸກກີ້ ແລະ ລະຫັດຜ່ານອອກຈາກອຸປະກອນຂອງທ່ານ.";
@@ -130,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "ເປີດການຕັ້ງຄ່າ App";
 
+/* Save button label */
+"Save" = "ບັນທຶກ";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "ເພີ່ມເຄື່ອງມືການຄົ້ນຫາຕົວອື່ນ";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ ເພີ່ມເຄື່ອງມືການຄົ້ນຫາຕົວອື່ນ";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "ເພີ່ມເຄື່ອງມືການຄົ້ນຫາ";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "ຕິດຕັ້ງເຄື່ອງມືການຄົ້ນຫາແລ້ວ";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "ຊື່ທີຈະສະແດງ";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "ໄດ້ເພີ່ມເຄືອງມີການຄົ້ນຫາຕົວໃຫມ່ແລ້ວ";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "ກູ້ຄືນເຄື່ອງມືການຄົ້ນຫາເລີ່ມຕົ້ນ";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "ຊື່ເຄື່ອງມືການຄົ້ນຫາ";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "ຊອກຫາສະຕຣິງທີ່ຈະໃຊ້";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "ວາງ ຫຼື ປ້ອນ String ການຄົ້ນຫາ ຫາກຈຳເປັນໃຫ້ແທນທີ່ຄຳຄົ້ນຫາດ້ວຍ: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "ການເຕີມ URL ແບບອັດຕະໂນມັດ";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "ການບັອກຕົວຕິດຕາມຂອງເນື້ອຫາຕ່າງໆອາດຈະເຮັດໃຫ້ບາງວິດີໂອ ແລະ ຫນ້າເວັບບໍ່ສົມບູນໄດ້.";
 
@@ -147,6 +243,12 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "ການຕັ້ງຄ່າ";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "ເຄື່ອງມືການຄົ້ນຫາ";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "ຄົ້ນຫາ";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
@@ -259,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ຕ້ອງການເຂົ້າເຖິງຮູບພາບຂອງທ່ານ";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ຕົວຢ່າງ: searchengineexample.com/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "ຕົວຕິດຕາມໂຄສະນາ";
 
@@ -270,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "ປິດການປ້ອງກັນການຕິດຕາມ";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "ຮຽນຮູ້ເພີ່ມເຕີມ";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "ຕົວຕິດຕາມທາງສືສັງຄົມ";

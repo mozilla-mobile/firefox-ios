@@ -19,6 +19,9 @@
 /* Label for row in About screen */
 "About.rowHelp" = "Ajuda";
 
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Avís de privadesa";
+
 /* Label for row in About screen */
 "About.rowRights" = "Els vostres drets";
 
@@ -37,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "El %@ us dóna el control.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Afegeix URL personalitzat";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Reviseu l'URL que heu introduït.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Exemple: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL per afegir";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Enganxeu o escriviu un URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Afegeix URL personalitzat";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Afegiu i gestioneu els URL d'emplenament automàtic personalitzats.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URL personalitzats";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "LLISTA D'URL PERSONALITZATS";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "S'ha afegit un URL personalitzat nou.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Activeu-lo per fer permetre que el %@ empleni automàticament més de 450 URL populars a la barra d'adreces.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Emplenament automàtic";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "LLISTA D'URL PER DEFECTE";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Desactivat";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "No hi ha cap URL personalitzat per mostrar";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Activat";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Enrere";
 
@@ -54,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Atura";
+
+/* Label on button to cancel edits */
+"Cancel" = "Cancel·la";
+
+/* Label on button to complete edits */
+"Done" = "Fet";
+
+/* Label on button to allow edits */
+"Edit" = "Edita";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Torna-ho a provar";
@@ -82,14 +142,23 @@
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "Obre l'App Store";
 
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "El %@ vol obrir l'App Store.";
+
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Obre els Mapes";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Entesos";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Bloqueu automàticament els elements que us fan el seguiment mentre navegueu. Esborreu amb un sol toc les pàgines visitades, cerques, galetes i contrasenyes del dispositiu.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Navegueu sense sentir-vos observat.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "L'Apple Handoff està sincronitzant";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "Navegació privada automàtica.";
@@ -121,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Obriu l'aplicació «Configuració»";
 
+/* Save button label */
+"Save" = "Desa";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Afegeix un altre motor de cerca";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Afegeix un altre motor de cerca";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Afegeix un motor de cerca";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "MOTORS DE CERCA INSTAL·LATS";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Nom per mostrar";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "S'ha afegit un motor de cerca nou.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Restaura els motors de cerca per defecte";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Nom del motor de cerca";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Cadena de cerca que s'utilitzarà";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Enganxeu o escriviu una cadena de cerca. Si és necessari, substituïu el terme de cerca per «%s».";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Emplenament automàtic d'URL";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Si bloqueu altres elements de seguiment de contingut, és possible que alguns vídeos i pàgines web no funcionin correctament.";
 
@@ -130,8 +235,20 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Entesos";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla s'esforça per recollir només les dades necessàries per oferir i millorar el %@ per a tothom.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Més informació.";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Paràmetres";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Motor de cerca";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "CERCA";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRACIÓ";
@@ -148,8 +265,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Bloca els elements de seguiment de publicitat";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Alguns anuncis fan el seguiment de les visites als llocs, fins i tot si no feu clic als anuncis";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Bloca els elements de seguiment d'anàlisi";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "S'utilitzen per recollir, analitzar i mesurar activitats com ara els tocs i el desplaçament";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Bloca tipus de lletra web";
@@ -157,8 +280,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Bloca altres elements de seguiment de contingut";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Si s'activa, algunes pàgines podrien comportar-se de forma inesperada";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Bloca els elements de seguiment social";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Està incrustat en els llocs per fer el seguiment de les vostres visites i per mostrar alguns elements com els botons de compartició";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Pot causar problemes amb alguns vídeos i pàgines web";
@@ -166,8 +295,17 @@
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Envia dades d'ús";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Novetats";
+
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Instal·leu el Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Obre amb el %@";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancel·la";
@@ -190,12 +328,66 @@
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Elements blocats";
 
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Obre amb el %@";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Selecciona la barra d'ubicació";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Enllaç que heu copiat: %@";
+
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Copia la imatge";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Copia l'enllaç";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Desa la imatge";
 
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Comparteix l'enllaç";
+
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
 "externalAppLinkWithAppName.messageTitle" = "El %1$@ vol obrir %2$@";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Això permet desar imatges al vostre Rodet";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Obre els paràmetres";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "El «%@» vol accedir a les vostres fotos";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Exemple: exemplemotorcerca.com/search/?q=%s";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Elements de seguiment de publicitat";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Elements de seguiment d'anàlisi";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Elements de seguiment de contingut";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Protecció contra el seguiment desactivada";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Més informació";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Elements de seguiment social";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Desactiva fins que tanqui el %@ o toqui ESBORRA.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Protecció contra el seguiment";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Trieu si el %@ ha de blocar, entre d'altres, els elements de seguiment de publicitat, d'anàlisi i social.";
 

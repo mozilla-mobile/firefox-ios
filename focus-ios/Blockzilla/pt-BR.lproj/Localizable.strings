@@ -44,7 +44,7 @@
 "Autocomplete.addCustomUrl" = "Adicionar URL personalizada";
 
 /* Label for error state when entering an invalid URL */
-"Autocomplete.addCustomUrlError" = "Verifique novamente a URL digitada.";
+"Autocomplete.addCustomUrlError" = "Verifique novamente o URL digitado.";
 
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "Exemplo: exemplo.com";
@@ -53,7 +53,7 @@
 "Autocomplete.addCustomUrlLabel" = "URL a adicionar";
 
 /* Placeholder for the input field to add a custom URL */
-"Autocomplete.addCustomUrlPlaceholder" = "Cole ou digite a URL";
+"Autocomplete.addCustomUrlPlaceholder" = "Cole ou digite o URL";
 
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Adicionar URL personalizada";
@@ -68,7 +68,7 @@
 "Autocomplete.customTitle" = "LISTA DE URLs PERSONALIZADOS";
 
 /* Label for toast alerting a custom URL has been added */
-"Autocomplete.customUrlAdded" = "Nova URL personalizada adicionada.";
+"Autocomplete.customUrlAdded" = "Novo URL personalizado adicionado.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Habilite o %@ para ter preenchimento automático de mais de 450 URLs populares na barra de endereços.";
@@ -77,7 +77,7 @@
 "Autocomplete.defaultLabel" = "Preenchimento automático";
 
 /* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "LISTA DE URLs PREDEFINIDA";
+"Autocomplete.defaultTitle" = "LISTA DE URLs PADRÃO";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Desativado";
@@ -212,7 +212,7 @@
 "Settings.Search.NewSearchEngineAdded" = "Novo mecanismo de pesquisa adicionado.";
 
 /* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Restaurar mecanismos de pesquisa predefinidos";
+"Settings.Search.RestoreEngine" = "Restaurar os mecanismos de pesquisa padrões";
 
 /* Placeholder text for input of new search engine name */
 "Settings.Search.SearchEngineName" = "Nome do mecanismo de pesquisa";
@@ -296,7 +296,7 @@
 "Settings.toggleSafari" = "Safari";
 
 /* Label for Send Usage Data toggle on main screen */
-"Settings.toggleSendUsageData" = "Enviar os dados de utilização";
+"Settings.toggleSendUsageData" = "Enviar dados de uso";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "O que há de novo";

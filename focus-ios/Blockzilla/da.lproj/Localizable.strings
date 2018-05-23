@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ lader dig bestemme.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Tilføj tilpasset URL";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Dobbelttjek den indtastede URL.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Eksempel: eksempel.dk";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL der skal tilføjes";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Indsæt eller indtast URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Tilføj tilpasset URL";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Tilføj og håndter brugerdefineret autofuldførelse af URL'er.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Brugerdefinerede URL'er";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "LISTE MED BRUGERDEFINEREDE URL'ER";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Ny brugerdefineret URL tilføjet.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Aktiver for at få %@ til at autofuldføre over 450 populære URL'er i adresselinjen.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Autofuldførelse";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "STANDARD URL-LISTE";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Deaktiveret";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Ingen brugerdefinerede URL'er at vise";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Aktiveret";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Tilbage";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Stop";
+
+/* Label on button to cancel edits */
+"Cancel" = "Anuller";
+
+/* Label on button to complete edits */
+"Done" = "Færdig";
+
+/* Label on button to allow edits */
+"Edit" = "Rediger";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Prøv igen";
@@ -90,6 +147,9 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Åbn Kort";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "OK, forstået!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Bloker automatisk online sporings-mekanismer, når du bruger nettet. Tryk for at slette besøgte sider, søgninger, cookies og adgangskoder fra din enhed.";
@@ -130,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Åbn appen Indstillinger";
 
+/* Save button label */
+"Save" = "Gem";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Tilføj en ny søgetjeneste";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Tilføj en ny søgetjeneste";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Tilføj søgetjeneste";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLEREDE SØGETJENESTER";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Navn der skal vises";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Ny søgetjeneste tilføjet.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Gendan standard-søgetjenester";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Søgetjenestens navn";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Søgestreng der skal anvendes";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Indsæt eller indtast søgestreng. Om nødvendigt, erstat søgetermen med: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Autofuldfør URL";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blokering af andre indholdstrackere kan forhindre visning af nogle videoer og websider.";
 
@@ -147,6 +243,12 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Indstillinger";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Søgetjeneste";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SØG";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
@@ -259,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” vil gerne have adgang til dine billeder";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Eksempel: søgetjeneste.eksempel.dk/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Sporing via reklamer";
 
@@ -270,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Beskyttelse mod sporing er slået fra";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Læs mere";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sporing via sociale medier";

@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@(e)k agintea ematen dizu.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Gehitu URL perstonalizatua";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Egiaztatu idatzi duzun URLa.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Adibidea: adibidea.eus";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Gehitu beharreko URLa";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Itsatsi edo idatzi URLa";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Gehitu URL perstonalizatua";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Gehitu eta kudeatu automatikoki osatzeko URL pertsonalizatuak.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "URL pertsonalizatuak";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "URL ZERRENDA PERTSONALIZATUA";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "URL pertsonalizatu berria gehitu da.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Gaituz gero, helbide-barran automatikoki osatuko ditu 450 URL ezagun baino gehiago %@(e)k.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Osatze automatikoa";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "URL ZERRENDA PERTSONALIZATUA";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Desgaituta";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Bistaratu beharreko URL pertsonalizaturik ez";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Gaituta";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Atzera";
 
@@ -57,6 +105,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Gelditu";
+
+/* Label on button to cancel edits */
+"Cancel" = "Utzi";
+
+/* Label on button to complete edits */
+"Done" = "Eginda";
+
+/* Label on button to allow edits */
+"Edit" = "Editatu";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Saiatu berriro";
@@ -90,6 +147,9 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Ireki mapak";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Ulertuta!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Automatikoki blokeatu jarraipena nabigatu ahala. Ondoren sakatu zure gailutik ezabatzeko bisitatutako orriak, bilaketak, cookieak eta pasahitzak.";
@@ -130,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Ireki ezarpenen aplikazioa";
 
+/* Save button label */
+"Save" = "Gorde";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Gehitu beste bilaketa-motor bat";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Gehitu beste bilaketa-motor bat";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Gehitu bilaketa-motorra";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALATUTAKO BILAKETA-MOTORRAK";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Bistaratzeko izena";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Bilaketa-motor berria gehitu da.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Berrezarri bilaketa-motor lehenetsiak";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Bilaketa-motorraren izena";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Erabili beharreko bilaketa-katea";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Itsatsi edo idatzi bilaketa-katea. Beharrezkoa bada, ordezkatu bilaketa-terminoa ondorengoarekin: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URLen osatze automatikoa";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Bestelako jarraipen-elementuak blokeatzean zenbait bideo eta web orri apur litezke.";
 
@@ -147,6 +243,12 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Ezarpenak";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Bilaketa-motorra";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "BILAKETA";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRAZIOA";
@@ -259,6 +361,9 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "\"%@\" aplikazioak zure argazkietarako sarbidea nahi du";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Adibidea: adibidea.eus/search/?q=%s";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Iragarkien jarraipen-elementuak";
 
@@ -270,6 +375,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Jarraipenaren babesa desgaituta";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Argibide gehiago";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sare sozialetako jarraipen-elementuak";

@@ -152,7 +152,7 @@
 "FirstRun.lastSlide.buttonLabel" = "OK, eg forstår det!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Automatisk blokkering av sporfølgjarar medan du surfar. Deretter trykkjer du for å sletta besøkte sider, søk, informasjonskapslar og passord frå eininga.";
+"FirstRun.messageLabelDescription" = "Automatisk blokkering av sporarar medan du surfar. Deretter trykkjer du for å slette besøkte sider, søk, informasjonskapslar og passord frå eininga.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Surf som om ingen ser på.";
@@ -383,7 +383,7 @@
 "trackingProtection.socialTrackerLabel" = "Sosiale sporfølgjarar";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Deaktiver til du lukkar %@ eller trykkjer SLETT.";
+"trackingProtection.toggleDescription1" = "Deaktiver til du lèt att %@ eller trykkjer SLETT.";
 
 /* Text for the toggle that temporarily disables tracking protection. */
 "trackingProtection.toggleLabel" = "Sporingsvern";

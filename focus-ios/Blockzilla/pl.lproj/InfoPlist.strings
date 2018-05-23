@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "Pozwoli to kręcić i wgrywać filmy.";
 
 /* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "Pozwoli to zachowywać i wgrywać zdjęcia.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Pozwoli to zachowywać i wgrywać zdjęcia.";
 

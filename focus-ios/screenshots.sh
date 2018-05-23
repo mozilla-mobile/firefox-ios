@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Note that fil is tl in the l10n repo
-LANGUAGES="af,ar,az,bn,br,ca,cs,cy,de,dsb,en-US,eo,es,es-CL,eu,fa,fil,fr,ga-IE,gd,he,hi-IN,hsb,hu,id,is,it,ja,kab,kk,ko,lo,my,nb-NO,nl,nn-NO,pl,pt-BR,pt-PT,ru,ses,sk,sl,sq,sv-SE,th,tr,uk,uz,zh-CN,zh-TW"
+LANGUAGES="af,an,ar,ast,az,bn,br,bs,ca,cs,cy,da,de,dsb,el,en,eo,es-AR,es-CL,es-ES,es-MX,eu,fa,fi,fil,fr,ga,gd,he,hi-IN,hsb,hu,hy-AM,ia,id,is,it,ja,ka,kab,kk,kn,ko,lo,ms,my,nb,ne-NP,nl,nn,pl,pt-BR,pt-PT,ro,ru,ses,sk,sl,sq,sv,ta,te,th,tr,uk,ur,uz,vi,zh-CN,zh-TW"
 
 if [ $# -eq 1 ]; then
   LANGUAGES=$1

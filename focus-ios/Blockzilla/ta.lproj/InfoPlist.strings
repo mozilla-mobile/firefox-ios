@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "இது காணொளிகளை எடுத்து பதிவேற்றச் செய்கிறது.";
 
 /* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "படங்களைச் சேமித்து பதிவேற்ற செய்கிறது.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "இது படங்களைச் சேமித்து பதிவேற்றச் செய்கிறது.";
 

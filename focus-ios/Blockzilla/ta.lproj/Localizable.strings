@@ -40,6 +40,54 @@
 /* Label on About screen */
 "About.topLabel" = "%@ உங்களை கட்டுப்பாட்டில் வைக்கும்.";
 
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "தனிபயன் URL சேர்";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "நீங்கள் உள்ளிட்ட URL இருமுறை சரிபார்க்கவும்.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "எகா: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "சேர்க்க வேண்டிய URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "URL ஒட்டு அல்லது உள்ளிடு";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ தனிபயன் URL சேர்";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "தனிபயன் தானியங்குநிரப்பு URLs சேர்த்து நிர்வகி.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "தனிபயன் URLs";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "தனிப்பயன் URL பட்டியல்";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "புது தனிபயன் URL சேர்க்கப்பட்டது.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "முகவரிப்பட்டையில் 450 பிரபல URLs உடைய %@ தானியங்குநிரப்பலைச் செயற்படுத்தவும்.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "தானியங்கு நிரப்பி";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "இயல்புநிலை URL பட்டியல்";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "முடக்கப்பட்டது";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "காட்ட தனிப்பயன் URLs இல்லை";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "செயல்படுத்தப்பட்டது";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "பின்செல்";
 
@@ -58,11 +106,23 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "நிறுத்து";
 
+/* Label on button to cancel edits */
+"Cancel" = "ரத்து";
+
+/* Label on button to complete edits */
+"Done" = "முடிந்தது";
+
+/* Label on button to allow edits */
+"Edit" = "திருத்து";
+
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "மீண்டும் முயற்சி";
 
 /* Button label used for cancelling to open another app from Focus */
 "ExternalAppLink.cancelTitle" = "ரத்து";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ வேறொரு செயலியில் திறக்க விரும்புகிறது";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "திற";
@@ -82,14 +142,23 @@
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "செயலி கடையைத் திற";
 
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ செயலி கடையைத் திறக்க விரும்புகிறது.";
+
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "வரைபடத்தைத் திற";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "சரி, கிடைத்துவிட்டது!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "நீங்கள் உலாவும் போது தடமறிபவைகளை தானாக தடு. உங்கள் சாதனத்தில் நீங்கள் பார்த்த வலைப்பக்கங்கள், தேடல்கள், நினைவிகள், மற்றும் கடவுச்சொல்லை அகற்ற தட்டவும்.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "மற்றவர்களுக்கு தெரியா வண்ணம் உலாவு.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "ஆப்பிள் ஹேண்ட்ஆப் ஒத்திசைக்கிறது";
 
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "தானியக்க தனிப்பட்ட உலாவல்.";
@@ -121,6 +190,42 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "அமைவுகள் செயலியைத் திற";
 
+/* Save button label */
+"Save" = "சேமி";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "+ மற்றொரு தேடு பொறியைச் சேர்";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ மற்றொரு தேடு பொறியைச் சேர்";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "தேடும் பொறியைச் சேர்";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "நிறுவப்பட்ட தேடுபொறிகள்";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "காட்ட வேண்டிய பெயர்";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "புது தேடுபொறி சேர்க்கப்பட்டது.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "முன்னிருப்பு தேடுபொறிகளை மீட்டமை";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "தேடுபொறி பெயர்";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "பயன்படுத்த வேண்டிய தேடல் தொடர்";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "தேடல் தொடரை ஒட்டு அல்லது உள்ளிடு. தேவைப்படின், தேடல் தொடரை பதிலிடு: %s.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL தானியங்கு நிரப்பு";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "மற்ற உள்ளடக்க தடமறிதல்களைத் தடுப்பதால் சில காணொளிகள் மற்றும் வலைப்பக்கங்கள் முறியலாம்.";
 
@@ -130,11 +235,20 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "எனக்கு புரிந்தது";
 
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "அனைவருக்கும் %@ வழங்கவும் மேம்படுத்தவும் தேவையானதை மட்டும் சேகரிக்க மொசில்லா உறுதிபூண்டுள்ளது.";
+
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "மேலும் அறிய.";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "அமைவுகள்";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "தேடுபொறி";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "தேடு";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ஒன்றிணைத்தல்";
@@ -151,8 +265,14 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "விளம்பர பின்தொடரிகளைத் தடு";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "சில விளம்பரங்கள், நீங்கள் அதனை சொடுக்காவிட்டாலும் தள பார்வைகளைப் பின்தொடரும்";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "பகுப்பாய்வு பின்தொடரிகளைத் தடு";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "தட்டல், உருட்டுதல் போன்ற செயல்களைச் சேகரிக்கும், ஆய்வுசெய்யும் அளவிடும்";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "இணைய எழுத்துருக்களைத் தடு";
@@ -160,14 +280,26 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "பிற உள்ளடக்க பின்தொடரலை தடு";
 
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "செயற்படுத்துவது சில பக்கங்கள் எதிர்பாராமல் தவறாகச் செயல்பட காரணமாகலாம்";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "சமூக பின்தொடரலை தடு";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "உங்கள் பார்வைகளைப் பின்தொடரவும் பகிர்தல் பொத்தான் போன்றவற்றைக் காட்டவும் தளத்தில் உட்பொதியப்பட்டிருக்கும்";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "சில காணொளிகளும் இணையப் பக்கங்களும் உடையலாம்";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "சப்பாரி";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "பயனளவு தரவை அனுப்பு";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "புதியவைகள்";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "பயர்பாக்ஸ் செயலியைப் பெறுக";
@@ -193,12 +325,69 @@
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "%@ சொல்லைத் தேடு";
 
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "பின்தொடரி";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ திறக்கவும்";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "இருப்பிடப் பட்டையைத் தேர்ந்தெடு";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "நீங்கள் நகலெடுத்த இணைப்பு: %@";
 
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "படத்தை நகலெடு";
 
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "இணைப்பைப் படியெடு";
+
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "படத்தைச் சேமி";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "தொடுப்பைப் பகிர்";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ செயலியில் திறக்க விரும்புகிறது";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "இது கருவியினுள் படத்தைச் சேமிக்க அனுமதிக்கிறது";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "அமைவுகளைத் திற";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "“%@” உங்கள் படங்களை அணுக விரும்புகிறது";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "எகா: searchengineexample.com/search/?q=%s";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "விளம்பர பின்தொடரிகள்";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "பகுப்பாய்வு பின்தொடரிகள்";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "உள்ளடக்க பின்தொடரிகள்";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "தடமறியல் பாதுகாப்பு அணைந்துள்ளது";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "மேலும் அறிய";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "சமூக பின்தொடரிகள்";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "%@ உலாவியை மூடும் வரையில் அல்லது அழி என்பதைத் தட்டும் வரையில் முடக்கவும்.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "தடமறியல் பாதுகாப்பு";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Choose whether %@ விளம்பரங்கள், பகுப்பாய்வு, சமூக, மற்றும் பிற பின்தொடரிகளைத் தடுக்கிறதா என்பதைத் தேர்ந்தெடுக்கவும்.";
 

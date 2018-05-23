@@ -58,8 +58,14 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Agregar URL personalizada";
 
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Agregar y administrar URLs personalizadas.";
+
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "URLs personalizadas";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "CUSTOM URL LIST";
 
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Nueva URL personalizada agregada.";
@@ -69,6 +75,9 @@
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "Autocompletar";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "DEFAULT URL LIST";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Deshabilitado";
