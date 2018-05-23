@@ -36,29 +36,29 @@ class UserActivityHandler {
     }
 
     fileprivate func setUserActivityForTab(_ tab: Tab, url: URL) {
-        guard !tab.isPrivate, url.isWebPage(includeDataURIs: false), !url.isLocal else {
-            tab.userActivity?.resignCurrent()
-            tab.userActivity = nil
+        guard let isPrivate = tab.ref?.isPrivate, !isPrivate, url.isWebPage(includeDataURIs: false), !url.isLocal else {
+            tab.ref?.userActivity?.resignCurrent()
+            tab.ref?.userActivity = nil
             return
         }
 
-        tab.userActivity?.invalidate()
+        tab.ref?.userActivity?.invalidate()
 
         let userActivity = NSUserActivity(activityType: browsingActivityType)
         userActivity.webpageURL = url
         userActivity.becomeCurrent()
 
-        tab.userActivity = userActivity
+        tab.ref?.userActivity = userActivity
     }
 }
 
 extension UserActivityHandler: TabEventHandler {
     func tabDidGainFocus(_ tab: Tab) {
-        tab.userActivity?.becomeCurrent()
+        tab.ref?.userActivity?.becomeCurrent()
     }
 
     func tabDidLoseFocus(_ tab: Tab) {
-        tab.userActivity?.resignCurrent()
+        tab.ref?.userActivity?.resignCurrent()
     }
 
     func tab(_ tab: Tab, didChangeURL url: URL) {
@@ -74,10 +74,10 @@ extension UserActivityHandler: TabEventHandler {
     }
 
     func tabDidClose(_ tab: Tab) {
-        guard let userActivity = tab.userActivity else {
+        guard let userActivity = tab.ref?.userActivity else {
             return
         }
-        tab.userActivity = nil
+        tab.ref?.userActivity = nil
         userActivity.invalidate()
     }
 }

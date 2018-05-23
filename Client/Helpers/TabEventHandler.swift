@@ -147,12 +147,12 @@ extension TabEventLabel {
 }
 
 extension TabEvent {
-    func notification(for tab: Any) -> Notification {
+    func notification(for tab: Tab) -> Notification {
         return Notification(name: label.name, object: tab, userInfo: ["payload": self])
     }
 
     /// Use this method to post notifications to any concerned listeners.
-    static func post(_ event: TabEvent, for tab: Any) {
+    static func post(_ event: TabEvent, for tab: Tab) {
         center.post(event.notification(for: tab))
     }
 }

@@ -219,15 +219,15 @@ class TimerSnackBar: SnackBar {
     static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL) {
         let bar = TimerSnackBar(text: Strings.ExternalLinkAppStoreConfirmationTitle, img: UIImage(named: "defaultFavicon"))
         let openAppStore = SnackButton(title: Strings.OKString, accessibilityIdentifier: "ConfirmOpenInAppStore") { bar in
-            tab.removeSnackbar(bar)
+            tab.ref?.removeSnackbar(bar)
             UIApplication.shared.openURL(appStoreURL)
         }
         let cancelButton = SnackButton(title: Strings.CancelString, accessibilityIdentifier: "CancelOpenInAppStore") { bar in
-            tab.removeSnackbar(bar)
+            tab.ref?.removeSnackbar(bar)
         }
         bar.addButton(openAppStore)
         bar.addButton(cancelButton)
-        tab.addSnackbar(bar)
+        tab.ref?.addSnackbar(bar)
     }
     
     override func show() {

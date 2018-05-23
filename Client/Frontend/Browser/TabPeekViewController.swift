@@ -37,7 +37,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     lazy var previewActions: [UIPreviewActionItem] = {
         var actions = [UIPreviewActionItem]()
 
-        let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
+        let urlIsTooLongToSave = self.tab?.ref?.urlIsTooLong ?? false
         if !self.ignoreURL && !urlIsTooLongToSave {
             if !self.isInReadingList {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .default) { previewAction, viewController in
@@ -62,7 +62,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             // as we are only allowed 4 in total and we always want to display close tab
             if actions.count < 3 {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .default) { previewAction, viewController in
-                    guard let url = self.tab?.canonicalURL else { return }
+                    guard let url = self.tab?.ref?.canonicalURL else { return }
                     UIPasteboard.general.url = url
                     SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
                 })
@@ -88,13 +88,13 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let webViewAccessibilityLabel = tab?.webView?.accessibilityLabel {
+        if let webViewAccessibilityLabel = tab?.ref?.webView?.accessibilityLabel {
             previewAccessibilityLabel = String(format: NSLocalizedString("Preview of %@", tableName: "3DTouchActions", comment: "Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab."), webViewAccessibilityLabel)
         }
         // if there is no screenshot, load the URL in a web page
         // otherwise just show the screenshot
-        setupWebView(tab?.webView)
-        guard let screenshot = tab?.screenshot else { return }
+        setupWebView(tab?.ref?.webView)
+        guard let screenshot = tab?.ref?.screenshot else { return }
         setupWithScreenshot(screenshot)
     }
 
@@ -133,7 +133,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             return
         }
 
-        guard let displayURL = tab.url?.absoluteString, !displayURL.isEmpty else {
+        guard let displayURL = tab.ref?.url?.absoluteString, !displayURL.isEmpty else {
             return
         }
 
@@ -153,8 +153,8 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             let clientPickerController = ClientPickerViewController()
             clientPickerController.clientPickerDelegate = clientPickerDelegate
             clientPickerController.profile = browserProfile
-            if let url = tab.url?.absoluteString {
-                clientPickerController.shareItem = ShareItem(url: url, title: tab.title, favicon: nil)
+            if let url = tab.ref?.url?.absoluteString {
+                clientPickerController.shareItem = ShareItem(url: url, title: tab.ref?.title, favicon: nil)
             }
 
             self.clientPicker = UINavigationController(rootViewController: clientPickerController)

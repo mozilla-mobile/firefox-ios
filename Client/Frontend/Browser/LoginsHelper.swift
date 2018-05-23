@@ -145,24 +145,24 @@ class LoginsHelper: TabContentScript {
         }
 
         if let existingPrompt = self.snackBar {
-            tab?.removeSnackbar(existingPrompt)
+            tab?.ref?.removeSnackbar(existingPrompt)
         }
 
         snackBar = TimerSnackBar(text: promptMessage, img: UIImage(named: "key"))
         let dontSave = SnackButton(title: Strings.LoginsHelperDontSaveButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.dontSaveButton") { bar in
-            self.tab?.removeSnackbar(bar)
+            self.tab?.ref?.removeSnackbar(bar)
             self.snackBar = nil
             return
         }
         let save = SnackButton(title: Strings.LoginsHelperSaveLoginButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton") { bar in
-            self.tab?.removeSnackbar(bar)
+            self.tab?.ref?.removeSnackbar(bar)
             self.snackBar = nil
             self.profile.logins.addLogin(login)
             LeanPlumClient.shared.track(event: .savedLoginAndPassword)
         }
         snackBar?.addButton(dontSave)
         snackBar?.addButton(save)
-        tab?.addSnackbar(snackBar!)
+        tab?.ref?.addSnackbar(snackBar!)
     }
 
     fileprivate func promptUpdateFromLogin(login old: LoginData, toLogin new: LoginData) {
@@ -180,23 +180,23 @@ class LoginsHelper: TabContentScript {
         }
 
         if let existingPrompt = self.snackBar {
-            tab?.removeSnackbar(existingPrompt)
+            tab?.ref?.removeSnackbar(existingPrompt)
         }
 
         snackBar = TimerSnackBar(text: formatted, img: UIImage(named: "key"))
         let dontSave = SnackButton(title: Strings.LoginsHelperDontUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.donttUpdateButton") { bar in
-            self.tab?.removeSnackbar(bar)
+            self.tab?.ref?.removeSnackbar(bar)
             self.snackBar = nil
             return
         }
         let update = SnackButton(title: Strings.LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton") { bar in
-            self.tab?.removeSnackbar(bar)
+            self.tab?.ref?.removeSnackbar(bar)
             self.snackBar = nil
             self.profile.logins.updateLoginByGUID(guid, new: new, significant: new.isSignificantlyDifferentFrom(old))
         }
         snackBar?.addButton(dontSave)
         snackBar?.addButton(update)
-        tab?.addSnackbar(snackBar!)
+        tab?.ref?.addSnackbar(snackBar!)
     }
 
     fileprivate func requestLogins(_ login: LoginData, requestId: String) {
@@ -211,7 +211,7 @@ class LoginsHelper: TabContentScript {
 
             let json = JSON(jsonObj)
             let src = "window.__firefox__.logins.inject(\(json.stringValue()!))"
-            self.tab?.webView?.evaluateJavaScript(src, completionHandler: { (obj, err) -> Void in
+            self.tab?.ref?.webView?.evaluateJavaScript(src, completionHandler: { (obj, err) -> Void in
             })
         }
     }

@@ -218,7 +218,7 @@ let ReaderModeNamespace = "window.__firefox__.reader"
 class ReaderMode: TabContentScript {
     var delegate: ReaderModeDelegate?
 
-    fileprivate weak var tab: Tab?
+    fileprivate var tab: Tab?
     var state: ReaderModeState = ReaderModeState.unavailable
     fileprivate var originalURL: URL?
 
@@ -282,7 +282,7 @@ class ReaderMode: TabContentScript {
     var style: ReaderModeStyle = DefaultReaderModeStyle {
         didSet {
             if state == ReaderModeState.active {
-                tab?.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: { (object, error) -> Void in
+                tab?.ref?.webView?.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: { (object, error) -> Void in
                     return
                 })
             }

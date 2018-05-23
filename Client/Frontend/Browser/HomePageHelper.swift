@@ -46,7 +46,7 @@ class HomePageHelper {
             log.error("User requested a homepage that wasn't a valid URL")
             return
         }
-        tab.loadRequest(URLRequest(url: url))
+        tab.ref?.loadRequest(URLRequest(url: url))
     }
 
     func openHomePage(inTab tab: Tab, presentAlertOn viewController: UIViewController?) {
@@ -64,7 +64,7 @@ class HomePageHelper {
             preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogNo, style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogYes, style: .default) { _ in
-            self.currentURL = tab.url as URL?
+            self.currentURL = tab.ref?.url as URL?
         })
         viewController?.present(alertController, animated: true, completion: nil)
     }

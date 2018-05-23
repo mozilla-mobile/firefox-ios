@@ -59,13 +59,13 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
     }
 
     private func observeURLForFirstTab(firstTab: Tab) {
-        if firstTab.webView == nil {
+        if firstTab.ref?.webView == nil {
             // Nothing to do; bail out.
             firstTabLoaded = true
             return
         }
         self.firstTab = firstTab
-        firstTab.observeURLChanges(delegate: self)
+        firstTab.ref?.observeURLChanges(delegate: self)
     }
 
     @objc private func didRestoreSession() {
@@ -92,7 +92,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
             return
         }
 
-        tab.removeURLChangeObserver(delegate: self)
+        tab.ref?.removeURLChangeObserver(delegate: self)
         firstTabLoaded = true
         checkIfShouldDisplayBar()
     }

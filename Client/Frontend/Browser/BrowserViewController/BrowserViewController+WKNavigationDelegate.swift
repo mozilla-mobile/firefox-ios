@@ -21,7 +21,7 @@ extension WKNavigationAction {
 
 extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        if tabManager.selectedTab?.webView !== webView {
+        if tabManager.selectedTab?.ref?.webView !== webView {
             return
         }
 
@@ -104,7 +104,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if let tab = tabManager.selectedTab, isStoreURL(url) {
             decisionHandler(.cancel)
 
-            let alreadyShowingSnackbarOnThisTab = tab.bars.count > 0
+            let alreadyShowingSnackbarOnThisTab = (tab.ref?.bars.count ?? 0) > 0
             if !alreadyShowingSnackbarOnThisTab {
                 TimerSnackBar.showAppStoreConfirmationBar(forTab: tab, appStoreURL: url)
             }
@@ -197,9 +197,9 @@ extension BrowserViewController: WKNavigationDelegate {
         // shared to external applications later. Otherwise, clear the old temporary document.
         if let tab = tabManager[webView] {
             if response.mimeType != MIMEType.HTML, let request = request {
-                tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
+                tab.ref?.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
             } else {
-                tab.temporaryDocument = nil
+                tab.ref?.temporaryDocument = nil
             }
         }
 
@@ -237,7 +237,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // The challenge may come from a background tab, so ensure it's the one visible.
         tabManager.selectTab(tab)
 
-        let loginsHelper = tab.getContentScript(name: LoginsHelper.name()) as? LoginsHelper
+        let loginsHelper = tab.ref?.getContentScript(name: LoginsHelper.name()) as? LoginsHelper
         Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(.main) { res in
             if let credentials = res.successValue {
                 completionHandler(.useCredential, credentials.credentials)
@@ -250,10 +250,10 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = tabManager[webView] else { return }
 
-        tab.url = webView.url
+        tab.ref?.url = webView.url
         self.scrollController.resetZoomState()
 
-        if tabManager.selectedTab === tab {
+        if tabManager.selectedTab == tab {
             updateUIForReaderHomeStateForTab(tab)
         }
     }

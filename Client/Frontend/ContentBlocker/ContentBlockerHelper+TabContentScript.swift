@@ -24,7 +24,7 @@ extension ContentBlockerHelper: TabContentScript {
         guard isEnabled,
             let body = message.body as? [String: String],
             let urlString = body["url"],
-            let mainDocumentUrl = tab?.webView?.url else {
+            let mainDocumentUrl = tab?.ref?.webView?.url else {
             return
         }
         

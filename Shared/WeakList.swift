@@ -26,8 +26,8 @@ open class WeakList<T: AnyObject>: Sequence {
      */
     open func insert(_ item: T) {
         // Reuse any existing slots that have been deallocated.
-        for wrapper in items where wrapper.value == nil {
-            wrapper.value = item
+        for wrapper in items where wrapper.ref == nil {
+            wrapper.ref = item
             return
         }
 
@@ -43,7 +43,7 @@ open class WeakList<T: AnyObject>: Sequence {
             }
 
             for i in index..<self.items.count {
-                if let value = self.items[i].value {
+                if let value = self.items[i].ref {
                     index = i + 1
                     return value
                 }
@@ -56,9 +56,9 @@ open class WeakList<T: AnyObject>: Sequence {
 }
 
 open class WeakRef<T: AnyObject> {
-    public weak var value: T?
+    public weak var ref: T?
 
     public init(_ value: T) {
-        self.value = value
+        self.ref = value
     }
 }

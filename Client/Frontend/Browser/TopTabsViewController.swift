@@ -117,7 +117,11 @@ class TopTabsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if self.tabsToDisplay != self.tabStore {
+        let isEqual = tabsToDisplay.enumerated().reduce(true) { (accumulator, element) in
+            return accumulator && element.element.ref === tabStore[element.offset].ref
+        }
+
+        if !isEqual {
             performTabUpdates()
         }
     }
@@ -175,7 +179,7 @@ class TopTabsViewController: UIViewController {
 
         view.backgroundColor = UIColor.Photon.Grey80
         tabsButton.applyTheme(.Normal)
-        if let currentTab = tabManager.selectedTab {
+        if let currentTab = tabManager.selectedTab?.ref {
             applyTheme(currentTab.isPrivate ? .Private : .Normal)
         }
         updateTabCount(tabStore.count, animated: false)
@@ -320,10 +324,10 @@ extension TopTabsViewController: UICollectionViewDataSource {
         let tabCell = collectionView.dequeueReusableCell(withReuseIdentifier: TopTabCell.Identifier, for: indexPath) as! TopTabCell
         tabCell.delegate = self
         
-        let tab = tabStore[index]
+        guard let tab = tabStore[index].ref else { return tabCell }
         tabCell.style = tab.isPrivate ? .dark : .light
         tabCell.titleText.text = tab.displayTitle
-        
+
         if tab.displayTitle.isEmpty {
             if tab.webView?.url?.isLocalUtility ?? true {
                 tabCell.titleText.text = Strings.AppMenuNewTabTitleString
@@ -337,7 +341,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
             tabCell.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
         }
 
-        tabCell.selectedTab = (tab == tabManager.selectedTab)
+        tabCell.selectedTab = (tab == tabManager.selectedTab?.ref)
         if let siteURL = tab.url?.displayURL {
             tabCell.favicon.setIcon(tab.displayFavicon, forURL: siteURL, completed: { (color, url) in
                 if siteURL == url {
@@ -384,8 +388,8 @@ extension TopTabsViewController: UICollectionViewDragDelegate {
 
         // Get the tab's current URL. If it is `nil`, check the `sessionData` since
         // it may be a tab that has not been restored yet.
-        var url = tab.url
-        if url == nil, let sessionData = tab.sessionData {
+        var url = tab.ref?.url
+        if url == nil, let sessionData = tab.ref?.sessionData {
             let urls = sessionData.urls
             let index = sessionData.currentPage + urls.count - 1
             if index < urls.count {
@@ -648,7 +652,7 @@ extension TopTabsViewController: TabManagerDelegate {
     // Because we don't know when we are about to transition to private mode
     // check to make sure that the tab we are trying to add is being added to the right tab group
     fileprivate func tabsMatchDisplayGroup(_ a: Tab?, b: Tab?) -> Bool {
-        if let a = a, let b = b, a.isPrivate == b.isPrivate {
+        if let a = a?.ref, let b = b?.ref, a.isPrivate == b.isPrivate {
             return true
         }
         return false
@@ -715,7 +719,7 @@ extension TopTabsViewController: TabManagerDelegate {
         }
 
         // dont want to hold a ref to a deleted tab
-        if tab === oldSelectedTab {
+        if tab == oldSelectedTab {
             oldSelectedTab = nil
         }
 

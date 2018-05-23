@@ -21,11 +21,11 @@ class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 private extension TrayToBrowserAnimator {
     func transitionFromTray(_ tabTray: TabTrayController, toBrowser bvc: BrowserViewController, usingContext transitionContext: UIViewControllerContextTransitioning) {
         let container = transitionContext.containerView
-        guard let selectedTab = bvc.tabManager.selectedTab else { return }
+        guard let selectedTab = bvc.tabManager.selectedTab?.ref else { return }
 
         let tabManager = bvc.tabManager
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        guard let expandFromIndex = displayedTabs.index(of: selectedTab) else { return }
+        guard let expandFromIndex = displayedTabs.index(of: Tab(selectedTab)) else { return }
 
         bvc.view.frame = transitionContext.finalFrame(for: bvc)
 
@@ -112,11 +112,11 @@ private extension BrowserToTrayAnimator {
     func transitionFromBrowser(_ bvc: BrowserViewController, toTabTray tabTray: TabTrayController, usingContext transitionContext: UIViewControllerContextTransitioning) {
 
         let container = transitionContext.containerView
-        guard let selectedTab = bvc.tabManager.selectedTab else { return }
+        guard let selectedTab = bvc.tabManager.selectedTab?.ref else { return }
 
         let tabManager = bvc.tabManager
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        guard let scrollToIndex = displayedTabs.index(of: selectedTab) else { return }
+        guard let scrollToIndex = displayedTabs.index(of: Tab(selectedTab)) else { return }
 
         tabTray.view.frame = transitionContext.finalFrame(for: tabTray)
 
@@ -256,7 +256,7 @@ private func calculateExpandedCellFrameFromBVC(_ bvc: BrowserViewController) -> 
     // there is no toolbar for home panels
     if !bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
         return frame
-    } else if let url = bvc.tabManager.selectedTab?.url, url.isAboutURL && bvc.toolbar == nil {
+    } else if let url = bvc.tabManager.selectedTab?.ref?.url, url.isAboutURL && bvc.toolbar == nil {
         frame.size.height += UIConstants.BottomToolbarHeight
     }
 
@@ -265,7 +265,7 @@ private func calculateExpandedCellFrameFromBVC(_ bvc: BrowserViewController) -> 
 
 private func shouldDisplayFooterForBVC(_ bvc: BrowserViewController) -> Bool {
     if bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
-        if let url = bvc.tabManager.selectedTab?.url {
+        if let url = bvc.tabManager.selectedTab?.ref?.url {
             return !url.isAboutURL
         }
     }
@@ -275,7 +275,7 @@ private func shouldDisplayFooterForBVC(_ bvc: BrowserViewController) -> Bool {
 private func toggleWebViewVisibility(_ show: Bool, usingTabManager tabManager: TabManager) {
     for i in 0..<tabManager.count {
         if let tab = tabManager[i] {
-            tab.webView?.isHidden = !show
+            tab.ref?.webView?.isHidden = !show
         }
     }
 }
@@ -301,20 +301,21 @@ private func transformToolbarsToFrame(_ toolbars: [UIView?], toRect endRect: CGR
 
 private func createTransitionCellFromTab(_ tab: Tab?, withFrame frame: CGRect) -> TabCell {
     let cell = TabCell(frame: frame)
-    cell.screenshotView.image = tab?.screenshot
-    cell.titleText.text = tab?.displayTitle
+    guard let tab = tab?.ref else { return cell }
+    cell.screenshotView.image = tab.screenshot
+    cell.titleText.text = tab.displayTitle
 
-    if let tab = tab, tab.isPrivate {
+    if tab.isPrivate {
         cell.style = .dark
     }
 
-    if let favIcon = tab?.displayFavicon {
+    if let favIcon = tab.displayFavicon {
         cell.favicon.sd_setImage(with: URL(string: favIcon.url)!)
     } else {
         let defaultFavicon = UIImage(named: "defaultFavicon")
-        if tab?.isPrivate ?? false {
+        if tab.isPrivate {
             cell.favicon.image = defaultFavicon
-            cell.favicon.tintColor = (tab?.isPrivate ?? false) ? UIColor.Photon.White100 : UIColor.Photon.Grey60
+            cell.favicon.tintColor = tab.isPrivate ? UIColor.Photon.White100 : UIColor.Photon.Grey60
         } else {
             cell.favicon.image = defaultFavicon
         }

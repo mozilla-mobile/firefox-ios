@@ -20,7 +20,7 @@ class UserScriptManager {
                let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
                 let wrappedSource = "(function() { const SECURITY_TOKEN = '\(UserScriptManager.securityToken)'; \(source) })()"
                 let userScript = WKUserScript(source: wrappedSource, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
-                tab.webView?.configuration.userContentController.addUserScript(userScript)
+                tab.ref?.webView?.configuration.userContentController.addUserScript(userScript)
             }
         }
     }

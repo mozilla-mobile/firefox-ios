@@ -22,7 +22,7 @@ class PrintHelper: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let tab = tab, let webView = tab.webView {
+        if let tab = tab, let webView = tab.ref?.webView {
             let printController = UIPrintInteractionController.shared
             printController.printFormatter = webView.viewPrintFormatter()
             printController.present(animated: true, completionHandler: nil)
