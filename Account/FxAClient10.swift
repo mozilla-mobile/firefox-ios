@@ -13,7 +13,24 @@ public let FxAClientErrorDomain = "org.mozilla.fxa.error"
 public let FxAClientUnknownError = NSError(domain: FxAClientErrorDomain, code: 999,
     userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
 
+public let FxAClientCommandSendTab = "https://identity.mozilla.com/cmd/open-uri"
+
 let KeyLength: Int = 32
+
+public struct FxAMessage {
+    let topic: String
+    let data: [String : JSON]
+
+    static func fromJSON(_ json: JSON) -> FxAMessage? {
+        guard json.error == nil,
+            let topic = json["topic"].string,
+            let data = json["data"].dictionary else {
+                return nil
+        }
+
+        return FxAMessage(topic: topic, data: data)
+    }
+}
 
 public struct FxALoginResponse {
     public let remoteEmail: String
@@ -54,6 +71,14 @@ public struct FxADevicesResponse {
 
 public struct FxANotifyResponse {
     let success: Bool
+}
+
+public struct FxASendMessageResponse {
+    let success: Bool
+}
+
+public struct FxAMessagesResponse {
+    let messages: [FxAMessage]
 }
 
 public struct FxAOAuthResponse {
@@ -267,6 +292,23 @@ open class FxAClient10 {
         return FxANotifyResponse(success: json.error == nil)
     }
 
+    fileprivate class func sendMessageResponse(fromJSON json: JSON) -> FxASendMessageResponse {
+        return FxASendMessageResponse(success: json.error == nil)
+    }
+
+    fileprivate class func messagesResponse(fromJSON json: JSON) -> FxAMessagesResponse? {
+        guard json.error == nil,
+            let jsonMessages = json.array else {
+                return nil
+        }
+
+        let messages = jsonMessages.compactMap { (jsonMessage) -> FxAMessage? in
+            return FxAMessage.fromJSON(jsonMessage)
+        }
+
+        return FxAMessagesResponse(messages: messages)
+    }
+
     fileprivate class func deviceDestroyResponse(fromJSON json: JSON) -> FxADeviceDestroyResponse {
         return FxADeviceDestroyResponse(success: json.error == nil)
     }
@@ -410,6 +452,44 @@ open class FxAClient10 {
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.deviceDestroyResponse)
+    }
+
+    open func messages(atIndex index: UInt? = nil, limit: UInt? = nil, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxAMessagesResponse>> {
+        var queryParams: [URLQueryItem] = []
+        if let index = index {
+            queryParams.append(URLQueryItem(name: "index", value: "\(index)"))
+        }
+        if let limit = limit {
+            queryParams.append(URLQueryItem(name: "limit", value: "\(limit)"))
+        }
+
+        let URL = self.authURL.appendingPathComponent("/account/devices/messages").withQueryParams(queryParams)
+        var mutableURLRequest = URLRequest(url: URL)
+        mutableURLRequest.httpMethod = HTTPMethod.get.rawValue
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let salt: Data = Data()
+        let contextInfo: Data = FxAClient10.KW("sessionToken")
+        let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
+        mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
+
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.messagesResponse)
+    }
+
+    open func sendMessage(topic: String, data: [String : JSON], toDeviceID deviceID: GUID, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxASendMessageResponse>> {
+        let URL = self.authURL.appendingPathComponent("/account/devices/messages")
+        var mutableURLRequest = URLRequest(url: URL)
+        let httpBody: JSON = JSON(["topic": topic, "data": data, "to": deviceID])
+        mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        mutableURLRequest.httpBody = httpBody.stringValue()?.utf8EncodedData
+
+        let salt: Data = Data()
+        let contextInfo: Data = FxAClient10.KW("sessionToken")
+        let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
+        mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
+
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.sendMessageResponse)
     }
 
     open func registerOrUpdate(device: FxADevice, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxADevice>> {

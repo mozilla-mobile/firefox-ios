@@ -95,11 +95,16 @@ open class FxADeviceRegistrator {
         let client = client ?? FxAClient10(authEndpoint: account.configuration.authEndpointURL, oauthEndpoint: account.configuration.oauthEndpointURL, profileEndpoint: account.configuration.profileEndpointURL)
         let device: FxADevice
         let registrationResult: FxADeviceRegistrationResult
+
+        let isFxAMessagesEnabled = true
+        // TODO: build correct dict here
+        let availableCommands: [String : Any] = isFxAMessagesEnabled ? [FxAClientCommandSendTab: "SENDTABKEY"] : [:]
+
         if let registration = account.deviceRegistration {
-            device = FxADevice.forUpdate(account.deviceName, id: registration.id, push: pushParams)
+            device = FxADevice.forUpdate(account.deviceName, id: registration.id, availableCommands: availableCommands, push: pushParams)
             registrationResult = .updated
         } else {
-            device = FxADevice.forRegister(account.deviceName, type: "mobile", push: pushParams)
+            device = FxADevice.forRegister(account.deviceName, type: "mobile", availableCommands: availableCommands, push: pushParams)
             registrationResult = .registered
         }
 

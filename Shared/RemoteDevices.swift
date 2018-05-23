@@ -12,12 +12,14 @@ open class RemoteDevice {
     public let type: String?
     public let isCurrentDevice: Bool
     public let lastAccessTime: Timestamp?
+    public let availableCommands: [String : Any]?
 
-    public init(id: String?, name: String, type: String?, isCurrentDevice: Bool, lastAccessTime: Timestamp?) {
+    public init(id: String?, name: String, type: String?, isCurrentDevice: Bool, lastAccessTime: Timestamp?, availableCommands: [String : Any]?) {
         self.id = id
         self.name = name
         self.type = type
         self.isCurrentDevice = isCurrentDevice
         self.lastAccessTime = lastAccessTime
+        self.availableCommands = availableCommands
     }
 }

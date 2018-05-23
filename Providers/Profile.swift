@@ -445,17 +445,31 @@ open class BrowserProfile: Profile {
     public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
         let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
         let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
+        let fxaDeviceIds = clients.compactMap { $0.fxaDeviceId }
+
+        // TODO: If the RemoteDevice has the FxA Messages "availableCommands",
+        // send the tab via that instead.
+        // (e.g. https://hg.mozilla.org/mozilla-central/rev/8ef95c56df04#l2.16)
+        let deferredRemoteDevices = fxaDeviceIds.map { fxaDeviceId in
+            return self.remoteClientsAndTabs.getRemoteDevice(fxaDeviceId: fxaDeviceId)
+        }
+
+        all(deferredRemoteDevices).upon { maybeRemoteDevices in
+            let remoteDevices = maybeRemoteDevices.compactMap({ $0.successValue ?? nil })
+
+            // TODO: Check if each remote device has the "availableCommands" to receive FxA messages (FxAClientCommandSendTab)
+        }
+
         let commands = items.map { item in
             SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
 
         func notifyClients() {
-            let deviceIDs = clients.compactMap { $0.fxaDeviceId }
             guard let account = self.getAccount() else {
                 return
             }
-
-            account.notify(deviceIDs: deviceIDs, collectionsChanged: ["clients"], reason: "sendtab")
+            
+            account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
         }
 
         return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> {
