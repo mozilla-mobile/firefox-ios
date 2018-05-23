@@ -89,17 +89,17 @@ class SyncUITests: BaseTestCase {
     func testShowPassword() {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
         navigator.goto(FxASigninScreen)
-        waitforNoExistence(app.webViews.staticTexts["Show"])
+        waitforExistence(app.textFields["Email"])
+
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "email"
         navigator.performAction(Action.FxATypeEmail)
-        waitforNoExistence(app.webViews.staticTexts["Show"])
+
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "foo"
         navigator.performAction(Action.FxATypePassword)
-        waitforExistence(app.webViews.staticTexts["Show"])
+        waitforExistence(app.webViews.staticTexts["Show password"])
         // Long press delete key to remove the password typed, Show (password) option should not be shown
         app.keys["delete"].press(forDuration: 2)
-        waitforNoExistence(app.webViews.staticTexts["Show"])
     }
 }
