@@ -194,13 +194,61 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "ActivityStreamTest">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest">
+               </Test>
+               <Test
+                  Identifier = "BaseTestCase">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests">
+               </Test>
+               <Test
+                  Identifier = "BrowsingPDFTests">
+               </Test>
+               <Test
+                  Identifier = "ClipBoardTests">
+               </Test>
+               <Test
+                  Identifier = "CopiedLinksTests">
+               </Test>
+               <Test
+                  Identifier = "DatabaseFixtureTest">
+               </Test>
+               <Test
+                  Identifier = "DomainAutocompleteTest">
+               </Test>
+               <Test
+                  Identifier = "DragAndDropTests">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests">
+               </Test>
+               <Test
+                  Identifier = "FirstRunTourTests">
+               </Test>
+               <Test
+                  Identifier = "FxScreenGraphTests">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests">
+               </Test>
+               <Test
+                  Identifier = "HomePageSettingsTest">
+               </Test>
+               <Test
+                  Identifier = "HomePageSettingsUITests">
+               </Test>
+               <Test
                   Identifier = "HomePageUITest">
                </Test>
                <Test
-                  Identifier = "IntegrationTests">
+                  Identifier = "MailAppSettingsTests">
                </Test>
                <Test
-                  Identifier = "IntegrationTests/testFxASyncBookmark()">
+                  Identifier = "NavigationTest">
                </Test>
                <Test
                   Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
@@ -215,16 +263,64 @@
                   Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
                </Test>
                <Test
+                  Identifier = "NewTabSettingsTest">
+               </Test>
+               <Test
+                  Identifier = "NightModeTests">
+               </Test>
+               <Test
+                  Identifier = "NoImageTests">
+               </Test>
+               <Test
+                  Identifier = "PhotonActionSheetTest">
+               </Test>
+               <Test
                   Identifier = "PhotonActionSheetTest/testSendToDeviceFromShareOption()">
+               </Test>
+               <Test
+                  Identifier = "PocketTest">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateMode()">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
                   Identifier = "ReaderViewTest">
                </Test>
                <Test
+                  Identifier = "ScreenGraphTest">
+               </Test>
+               <Test
+                  Identifier = "SearchSettingsUITests">
+               </Test>
+               <Test
+                  Identifier = "SearchTests">
+               </Test>
+               <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">
                </Test>
                <Test
+                  Identifier = "SettingsTest">
+               </Test>
+               <Test
                   Identifier = "SiteLoadTest">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests">
+               </Test>
+               <Test
+                  Identifier = "ThirdPartySearchTest">
+               </Test>
+               <Test
+                  Identifier = "ToolbarTests">
                </Test>
                <Test
                   Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingLandscape()">
@@ -236,22 +332,13 @@
                   Identifier = "ToolbarTests/testShowToolbarWhenScrollingDefaultOption()">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testAddPrivateTabByLongPressTabsButton()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTest/testAddTabByLongPressTabsButton()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTest/testCloseTabFromLongPressTabsButton()">
+                  Identifier = "TopTabsTest">
                </Test>
                <Test
                   Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testSwitchBetweenTabsNoPrivatePrivateToastButton()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTest/testSwitchBetweenTabsToastButton()">
+                  Identifier = "TrackingProtectionTests">
                </Test>
             </SkippedTests>
          </TestableReference>
@@ -275,6 +362,18 @@
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "FXA_EMAIL"
+            value = "$(FXA_EMAIL)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "FXA_PASSWORD"
+            value = "$(FXA_PASSWORD)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

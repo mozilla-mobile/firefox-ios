@@ -69,7 +69,9 @@ signedInUser.json
 # Generated config file
 MozBuildID.xcconfig
 
-# Python.
+# Python
+__pycache__
+.pytest_cache
 *.pyc
 
 # SQLite

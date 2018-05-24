@@ -203,6 +203,12 @@
                   Identifier = "HomePageUITest">
                </Test>
                <Test
+                  Identifier = "IntegrationTests">
+               </Test>
+               <Test
+                  Identifier = "IntegrationTests/testFxASyncBookmark()">
+               </Test>
+               <Test
                   Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
                </Test>
                <Test

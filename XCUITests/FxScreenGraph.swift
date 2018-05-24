@@ -523,11 +523,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
             app.webViews.textFields["Email"].tap()
-            type(text: userState.fxaUsername!)
+            app.webViews.textFields["Email"].typeText(userState.fxaUsername!)
         }
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
             app.webViews.secureTextFields["Password"].tap()
-            type(text: userState.fxaPassword!)
+            app.webViews.secureTextFields["Password"].typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
             app.webViews.buttons["Sign in"].tap()

@@ -12,7 +12,7 @@ class BaseTestCase: XCTestCase {
 
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.
-    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew]
+    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer]
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
@@ -56,8 +56,8 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func waitforExistence(_ element: XCUIElement, file: String = #file, line: UInt = #line) {
-        waitFor(element, with: "exists == true", file: file, line: line)
+    func waitforExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
     func waitforNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
@@ -127,4 +127,3 @@ extension XCUIElement {
         }
     }
 }
-
