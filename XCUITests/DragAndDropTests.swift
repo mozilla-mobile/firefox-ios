@@ -218,11 +218,14 @@ class DragAndDropTests: BaseTestCase {
 
     func testDragAndDropBookmarkEntry() {
         navigator.openURL(firstWebsite["url"]!)
+        waitUntilPageLoad()
         navigator.performAction(Action.BookmarkThreeDots)
 
         navigator.openURL(secondWebsite["url"]!)
+        waitUntilPageLoad()
         navigator.performAction(Action.BookmarkThreeDots)
 
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Bookmarks)
         waitforExistence(app.tables["Bookmarks List"])
 
