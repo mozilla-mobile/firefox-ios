@@ -1049,7 +1049,7 @@ class ASHeaderView: UICollectionReusableView {
         button.titleLabel?.font = ASHeaderViewUX.TextFont
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
-        button.setTitleColor(.gray, for: .highlighted)
+        button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
         return button
     }()
 

@@ -33,7 +33,7 @@ public extension UIImageView {
     */
     private func color(forImage image: UIImage, andURL url: URL, completed completionBlock: ((UIColor, URL?) -> Void)? = nil) {
         guard let domain = url.baseDomain else {
-            self.backgroundColor = .gray
+            self.backgroundColor = UIColor.Photon.Grey50
             completionBlock?(UIColor.Photon.Grey50, url)
             return
         }
