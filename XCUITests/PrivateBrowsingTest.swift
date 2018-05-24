@@ -145,6 +145,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(url1)
         enableClosePrivateBrowsingOptionWhenLeaving()
         // Leave PM by tapping on PM shourt cut
+        navigator.goto(NewTabScreen)
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -201,6 +202,9 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Open website and check it does not appear under history once going back to regular mode
         navigator.openURL("http://example.com")
+        waitUntilPageLoad()
+        // This action to enable private mode is defined on HomePanel Screen that is why we need to open a new tab and be sure we are on that screen to use the correct action
+        navigator.goto(NewTabScreen)
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
         navigator.goto(HomePanel_History)
         waitforExistence(app.tables["History List"])
