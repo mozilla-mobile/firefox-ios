@@ -68,6 +68,7 @@ class HistoryTests: BaseTestCase {
         navigator.goto(BrowserTab)
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
 
         // The Closed Tabs list should contain the info of the website just closed
@@ -85,7 +86,7 @@ class HistoryTests: BaseTestCase {
         navigator.goto(BrowserTab)
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
-        navigator.goto(HomePanel_History)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
         // Once the website is visited and closed it will appear in Recently Closed Tabs list
         waitforExistence(app.tables["Recently Closed Tabs List"])
