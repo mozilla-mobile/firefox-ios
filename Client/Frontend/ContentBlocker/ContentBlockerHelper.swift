@@ -61,7 +61,7 @@ class ContentBlockerHelper {
     static var whitelistedDomains = WhitelistedDomains()
 
     static let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
-    weak var tab: Tab?
+    var tab: Tab?
     private(set) var userPrefs: Prefs?
 
     var isUserEnabled: Bool? {
@@ -69,7 +69,7 @@ class ContentBlockerHelper {
             setupTabTrackingProtection()
             guard let tab = tab else { return }
             TabEvent.post(.didChangeContentBlocking, for: tab)
-            tab.reload()
+            tab.ref?.reload()
         }
     }
 
@@ -77,7 +77,7 @@ class ContentBlockerHelper {
         if let enabled = isUserEnabled {
             return enabled
         }
-        guard let tab = tab else { return false }
+        guard let tab = tab?.ref else { return false }
         return tab.isPrivate ? isEnabledInPrivateBrowsing : isEnabledInNormalBrowsing
     }
 
@@ -86,7 +86,7 @@ class ContentBlockerHelper {
             return .Disabled
         }
         if stats.total == 0 {
-            guard let url = tab?.url else {
+            guard let url = tab?.ref?.url else {
                 return .NoBlockedURLs
             }
             return ContentBlockerHelper.isWhitelisted(url: url) ? .Whitelisted : .NoBlockedURLs
@@ -214,7 +214,7 @@ class ContentBlockerHelper {
     }
 
     private func removeTrackingProtection() {
-        guard let tab = tab else { return }
+        guard let tab = tab?.ref else { return }
         tab.webView?.configuration.userContentController.removeAllContentRuleLists()
 
         if let rule = ContentBlockerHelper.blockImagesRule, tab.noImageMode {
@@ -223,7 +223,7 @@ class ContentBlockerHelper {
     }
 
     private func addToTab(contentRuleList: WKContentRuleList) {
-        tab?.webView?.configuration.userContentController.add(contentRuleList)
+        tab?.ref?.webView?.configuration.userContentController.add(contentRuleList)
     }
 
     func noImageMode(enabled: Bool) {
@@ -232,12 +232,12 @@ class ContentBlockerHelper {
         if enabled {
             addToTab(contentRuleList: rule)
         } else {
-            tab?.webView?.configuration.userContentController.remove(rule)
+            tab?.ref?.webView?.configuration.userContentController.remove(rule)
         }
 
         // Async required here to ensure remove() call is processed.
         DispatchQueue.main.async() {
-            self.tab?.webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))")
+            self.tab?.ref?.webView?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))")
         }
     }
 
@@ -387,15 +387,15 @@ extension ContentBlockerHelper {
 extension ContentBlockerHelper {
 
     static func setTrackingProtectionMode(_ enabled: Bool, for prefs: Prefs, with tabManager: TabManager) {
-        guard let isPrivate = tabManager.selectedTab?.isPrivate else { return }
+        guard let isPrivate = tabManager.selectedTab?.ref?.isPrivate else { return }
         let key = isPrivate ? ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey : ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey
         prefs.setBool(enabled, forKey: key)
         ContentBlockerHelper.prefsChanged()
     }
 
     static func isTrackingProtectionActive(tabManager: TabManager) -> Bool {
-        guard let blocker = tabManager.selectedTab?.contentBlocker as? ContentBlockerHelper else { return false }
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        guard let blocker = tabManager.selectedTab?.ref?.contentBlocker as? ContentBlockerHelper else { return false }
+        let isPrivate = tabManager.selectedTab?.ref?.isPrivate ?? false
         return isPrivate ? blocker.isEnabledInPrivateBrowsing : blocker.isEnabledInNormalBrowsing
     }
 

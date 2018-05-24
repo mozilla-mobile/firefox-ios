@@ -27,8 +27,8 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
         self.footerHeight = PrintedPageUX.PageMarginScale * PrintedPageUX.PageInsets
         self.headerHeight = PrintedPageUX.PageMarginScale * PrintedPageUX.PageInsets
 
-        if let tab = self.tab {
-            let formatter = tab.webView!.viewPrintFormatter()
+        if  let webView = tab.ref?.webView {
+            let formatter = webView.viewPrintFormatter()
             formatter.perPageContentInsets = UIEdgeInsets(top: PrintedPageUX.PageInsets, left: PrintedPageUX.PageInsets, bottom: PrintedPageUX.PageInsets, right: PrintedPageUX.PageInsets)
             addPrintFormatter(formatter, startingAtPageAt: 0)
         }
@@ -39,7 +39,8 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
         let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // url on left
-        self.drawTextAtPoint(tab!.url?.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
+        let text = tab?.ref?.url?.displayURL?.absoluteString ?? ""
+        self.drawTextAtPoint(text, rect: headerRect, onLeft: true)
 
         // page number on right
         let pageNumberString = "\(pageIndex + 1)"
@@ -51,7 +52,7 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
         let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // page title on left
-        self.drawTextAtPoint(tab!.displayTitle, rect: headerRect, onLeft: true)
+        self.drawTextAtPoint(tab?.ref?.displayTitle ?? "", rect: headerRect, onLeft: true)
 
         // date on right
         self.drawTextAtPoint(dateString, rect: headerRect, onLeft: false)

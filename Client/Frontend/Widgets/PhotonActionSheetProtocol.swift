@@ -43,7 +43,7 @@ extension PhotonActionSheetProtocol {
     //Returns a list of actions which is used to build a menu
     //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
     func getHomePanelActions() -> [PhotonActionSheetItem] {
-        guard let tab = self.tabManager.selectedTab else { return [] }
+        guard let tab = self.tabManager.selectedTab?.ref else { return [] }
 
         let openTopSites = PhotonActionSheetItem(title: Strings.AppMenuTopSitesTitleString, iconString: "menu-panel-TopSites") { action in
             tab.loadRequest(PrivilegedRequest(url: HomePanelType.topSites.localhostURL) as URLRequest)
@@ -68,7 +68,7 @@ extension PhotonActionSheetProtocol {
         }
 
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
-            HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
+            HomePageHelper(prefs: self.profile.prefs).openHomePage(Tab(tab))
         }
         
         var actions = [openTopSites, openBookmarks, openReadingList, openHistory, openDownloads]
@@ -147,6 +147,7 @@ extension PhotonActionSheetProtocol {
                        isBookmarked: Bool,
                        isPinned: Bool,
                        success: @escaping (String) -> Void) -> Array<[PhotonActionSheetItem]> {
+        guard let tab = tab.ref else { return Array<[PhotonActionSheetItem]>() }
         if tab.url?.isFileURL ?? false {
             let shareFile = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
                 guard let url = tab.url else { return }
@@ -259,11 +260,11 @@ extension PhotonActionSheetProtocol {
                     if tempDocURL.isFileURL {
                         self.shareFileURL(tempDocURL, buttonView: buttonView, presentableVC: presentableVC)
                     } else {
-                        presentShareMenu(url, tab, buttonView, .up)
+                        presentShareMenu(url, Tab(tab), buttonView, .up)
                     }
                 })
             } else {
-                presentShareMenu(url, tab, buttonView, .up)
+                presentShareMenu(url, Tab(tab), buttonView, .up)
             }
         }
 
@@ -334,24 +335,24 @@ extension PhotonActionSheetProtocol {
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
         let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlocking, iconString: "menu-TrackingProtection") { _ in
             // When TP is off for the tab tapping enable in this menu should turn it back on for the Tab.
-            if let blocker = tab.contentBlocker as? ContentBlockerHelper, blocker.isUserEnabled == false {
+            if let blocker = tab.ref?.contentBlocker as? ContentBlockerHelper, blocker.isUserEnabled == false {
                 blocker.isUserEnabled = true
             } else {
                 ContentBlockerHelper.toggleTrackingProtectionMode(for: self.profile.prefs, tabManager: self.tabManager)
             }
-            tab.reload()
+            tab.ref?.reload()
         }
 
         let moreInfo = PhotonActionSheetItem(title: Strings.TPBlockingMoreInfo, iconString: "menu-Info") { _ in
             let url = SupportUtils.URLForTopic("tracking-protection-ios")!
-            tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
+            tab.ref?.loadRequest(PrivilegedRequest(url: url) as URLRequest)
         }
         return [[moreInfo], [enableTP]]
     }
 
     @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionEnabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
+        guard let blocker = tab.ref?.contentBlocker as? ContentBlockerHelper, let currentURL = tab.ref?.url else {
             return []
         }
 
@@ -366,7 +367,7 @@ extension PhotonActionSheetProtocol {
         let addToWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionDisableTitle, iconString: "menu-TrackingProtection-Off") { _ in
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
             ContentBlockerHelper.whitelist(enable: true, url: currentURL) {
-                tab.reload()
+                tab.ref?.reload()
             }
         }
         return [statList, [addToWhitelist]]
@@ -374,13 +375,13 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     private func menuActionsForWhitelistedSite(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        guard let currentURL = tab.url else {
+        guard let currentURL = tab.ref?.url else {
             return []
         }
 
         let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionWhiteListRemove, iconString: "menu-TrackingProtection") { _ in
             ContentBlockerHelper.whitelist(enable: false, url: currentURL) {
-                tab.reload()
+                tab.ref?.reload()
             }
         }
         return [[removeFromWhitelist]]
@@ -388,7 +389,7 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     func getTrackingMenu(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else {
+        guard let blocker = tab.ref?.contentBlocker as? ContentBlockerHelper else {
             return []
         }
 
@@ -422,7 +423,7 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     func getTrackingSubMenu(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else {
+        guard let blocker = tab.ref?.contentBlocker as? ContentBlockerHelper else {
             return []
         }
         switch blocker.status {
@@ -438,16 +439,16 @@ extension PhotonActionSheetProtocol {
     }
 
     func getRefreshLongPressMenu(for tab: Tab) -> [PhotonActionSheetItem] {
-        guard tab.webView?.url != nil && (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
+        guard tab.ref?.webView?.url != nil && (tab.ref?.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active else {
             return []
         }
 
-        let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
+        let toggleActionTitle = (tab.ref?.desktopSite ?? false) ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
-            tab.toggleDesktopSite()
+            tab.ref?.toggleDesktopSite()
         }
 
-        if #available(iOS 11, *), let helper = tab.contentBlocker as? ContentBlockerHelper {
+        if #available(iOS 11, *), let helper = tab.ref?.contentBlocker as? ContentBlockerHelper {
             let title = helper.isEnabled ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
             let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { action in

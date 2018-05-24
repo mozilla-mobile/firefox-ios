@@ -35,9 +35,9 @@ class FocusHelper: TabContentScript {
 
         switch eventType {
         case "focus":
-            tab?.isEditing = true
+            tab?.ref?.isEditing = true
         case "blur":
-            tab?.isEditing = false
+            tab?.ref?.isEditing = false
         default:
             return log.error("FocusHelper.js sent unhandled eventType")
         }

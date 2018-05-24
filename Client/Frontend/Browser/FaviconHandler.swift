@@ -23,7 +23,7 @@ class FaviconHandler {
     }
 
     func loadFaviconURL(_ faviconURL: String, forTab tab: Tab) -> Deferred<Maybe<(Favicon, Data?)>> {
-        guard let iconURL = URL(string: faviconURL), let currentURL = tab.url else {
+        guard let iconURL = URL(string: faviconURL), let currentURL = tab.ref?.url, let isPrivate = tab.ref?.isPrivate else {
             return deferMaybe(FaviconError())
         }
 
@@ -31,7 +31,8 @@ class FaviconHandler {
         let manager = SDWebImageManager.shared()
         let url = currentURL.absoluteString
         let site = Site(url: url, title: "")
-        let options: SDWebImageOptions = tab.isPrivate ? SDWebImageOptions([.lowPriority, .cacheMemoryOnly]) : SDWebImageOptions([.lowPriority])
+
+        let options: SDWebImageOptions = isPrivate ? SDWebImageOptions([.lowPriority, .cacheMemoryOnly]) : SDWebImageOptions([.lowPriority])
 
         var fetch: SDWebImageOperation? = nil
 
@@ -42,9 +43,9 @@ class FaviconHandler {
         }
 
         let onSuccess: (Favicon, Data?) -> Void = { [weak tab] (favicon, data) -> Void in
-            tab?.favicons.append(favicon)
+            tab?.ref?.favicons.append(favicon)
 
-            guard !(tab?.isPrivate ?? true), let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile else {
+            guard !isPrivate, let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile else {
                 deferred.fill(Maybe(success: (favicon, data)))
                 return
             }
@@ -100,7 +101,7 @@ class FaviconHandler {
 
 extension FaviconHandler: TabEventHandler {
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
-        tab.favicons.removeAll(keepingCapacity: false)
+        tab.ref?.favicons.removeAll(keepingCapacity: false)
         guard let faviconURL = metadata.faviconURL else {
             return
         }

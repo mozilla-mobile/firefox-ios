@@ -354,7 +354,7 @@ extension TabLocationView: Themeable {
 extension TabLocationView: TabEventHandler {
     private func updateBlockerStatus(forTab tab: Tab) {
         assertIsMainThread("UI changes must be on the main thread")
-        guard #available(iOS 11.0, *), let blocker = tab.contentBlocker as? ContentBlockerHelper else { return }
+        guard #available(iOS 11.0, *), let blocker = tab.ref?.contentBlocker as? ContentBlockerHelper else { return }
         switch blocker.status {
         case .Blocking:
             self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)

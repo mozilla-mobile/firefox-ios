@@ -27,7 +27,7 @@ class MetadataParserHelper: TabEventHandler {
     func tab(_ tab: Tab, didChangeURL url: URL) {
         // Get the metadata out of the page-metadata-parser, and into a type safe struct as soon
         // as possible.
-        guard let webView = tab.webView,
+        guard let webView = tab.ref?.webView,
             let url = webView.url, url.isWebPage(includeDataURIs: false), !url.isLocal else {
             return
         }
@@ -38,17 +38,17 @@ class MetadataParserHelper: TabEventHandler {
             }
 
             guard let dict = result as? [String: Any],
-                let pageURL = tab.url?.displayURL,
+                let pageURL = tab.ref?.url?.displayURL,
                 let pageMetadata = PageMetadata.fromDictionary(dict) else {
                     log.debug("Page contains no metadata!")
                     return
             }
 
-            tab.pageMetadata = pageMetadata
+            tab.ref?.pageMetadata = pageMetadata
             TabEvent.post(.didLoadPageMetadata(pageMetadata), for: tab)
 
             let userInfo: [String: Any] = [
-                "isPrivate": tab.isPrivate,
+                "isPrivate": tab.ref?.isPrivate,
                 "pageMetadata": pageMetadata,
                 "tabURL": pageURL
             ]

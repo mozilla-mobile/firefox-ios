@@ -239,7 +239,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tabManager.selectedTab?.goToBackForwardListItem(listData[indexPath.item])
+        tabManager.selectedTab?.ref?.goToBackForwardListItem(listData[indexPath.item])
         dismiss(animated: true, completion: nil)
     }
     

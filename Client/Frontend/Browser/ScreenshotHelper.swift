@@ -19,18 +19,18 @@ class ScreenshotHelper {
     func takeScreenshot(_ tab: Tab) {
         var screenshot: UIImage?
 
-        if let url = tab.url {
+        if let url = tab.ref?.url {
             if url.isAboutHomeURL {
                 if let homePanel = controller?.homePanelController {
                     screenshot = homePanel.view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 }
             } else {
-                let offset = CGPoint(x: 0, y: -(tab.webView?.scrollView.contentInset.top ?? 0))
-                screenshot = tab.webView?.screenshot(offset: offset, quality: UIConstants.ActiveScreenshotQuality)
+                let offset = CGPoint(x: 0, y: -(tab.ref?.webView?.scrollView.contentInset.top ?? 0))
+                screenshot = tab.ref?.webView?.screenshot(offset: offset, quality: UIConstants.ActiveScreenshotQuality)
             }
         }
 
-        tab.setScreenshot(screenshot)
+        tab.ref?.setScreenshot(screenshot)
     }
 
     /// Takes a screenshot after a small delay.
@@ -42,7 +42,7 @@ class ScreenshotHelper {
             // If the view controller isn't visible, the screenshot will be blank.
             // Wait until the view controller is visible again to take the screenshot.
             guard self.viewIsVisible else {
-                tab.pendingScreenshot = true
+                tab.ref?.pendingScreenshot = true
                 return
             }
 
@@ -51,9 +51,11 @@ class ScreenshotHelper {
     }
 
     func takePendingScreenshots(_ tabs: [Tab]) {
-        for tab in tabs where tab.pendingScreenshot {
-            tab.pendingScreenshot = false
-            takeDelayedScreenshot(tab)
+        for tab in tabs {
+            if let concreteTab = tab.ref, concreteTab.pendingScreenshot {
+                concreteTab.pendingScreenshot = false
+                takeDelayedScreenshot(tab)
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ class ShareExtensionHelper: NSObject {
     fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
 
     init(url: URL, tab: Tab?) {
-        self.selectedURL = tab?.canonicalURL?.displayURL ?? url
+        self.selectedURL = tab?.ref?.canonicalURL?.displayURL ?? url
         self.selectedTab = tab
     }
 
@@ -25,7 +25,7 @@ class ShareExtensionHelper: NSObject {
 
         let printInfo = UIPrintInfo(dictionary: nil)
 
-        let absoluteString = selectedTab?.url?.absoluteString ?? selectedURL.absoluteString
+        let absoluteString = selectedTab?.ref?.url?.absoluteString ?? selectedURL.absoluteString
         printInfo.jobName = absoluteString
         printInfo.outputType = .general
         activityItems.append(printInfo)
@@ -34,7 +34,7 @@ class ShareExtensionHelper: NSObject {
             activityItems.append(TabPrintPageRenderer(tab: tab))
         }
 
-        if let title = selectedTab?.title {
+        if let title = selectedTab?.ref?.title {
             activityItems.append(TitleActivityItemProvider(title: title))
         }
         activityItems.append(self)
@@ -115,7 +115,7 @@ private extension ShareExtensionHelper {
     }
 
     func findLoginExtensionItem() {
-        guard let selectedWebView = selectedTab?.webView else {
+        guard let selectedWebView = selectedTab?.ref?.webView else {
             return
         }
 
@@ -132,7 +132,7 @@ private extension ShareExtensionHelper {
     }
 
     func fillPasswords(_ returnedItems: [AnyObject]) {
-        guard let selectedWebView = selectedTab?.webView else {
+        guard let selectedWebView = selectedTab?.ref?.webView else {
             return
         }
 

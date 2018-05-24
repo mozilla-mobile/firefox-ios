@@ -9,23 +9,39 @@ import Shared
 import SwiftyJSON
 import XCGLogger
 
+extension Array where Element == Tab {
+    func index(of tab: Tab) -> Index? {
+        return index(where: { $0.ref == tab.ref })
+    }
+}
+
+func ==(lhs: Tab?, rhs: Tab?) -> Bool {
+    if let l = lhs, let r = rhs {
+        return l.ref === r.ref
+    }
+    return lhs === nil && rhs === nil
+}
+
 protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
 }
 
-@objc
 protocol TabDelegate {
     func tab(_ tab: Tab, didAddSnackbar bar: SnackBar)
     func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar)
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String)
-    @objc optional func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
-    @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
+    func tab(_ tab: Tab, didCreateWebView webView: WKWebView) // optional
+    func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) // optional
 }
 
-@objc
-protocol URLChangeDelegate {
+extension TabDelegate {
+    func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {}
+    func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {}
+}
+
+protocol URLChangeDelegate: class {
     func tab(_ tab: Tab, urlDidChangeTo url: URL)
 }
 
@@ -37,7 +53,17 @@ struct TabState {
     var favicon: Favicon?
 }
 
-class Tab: NSObject {
+/**
+ Tab access is wrapped to ensure it is never held strongly.
+ Please follow the guidelines for Tab object usage:
+ • function args and return params should be a Tab (which is weak), not a ConcreteTab
+ • the TabManager is the only ConcreteTab owner, and has no restrictions such as the above
+ • Use `==` to check for Tab equality, alternatively, use `tab1.ref == tab2.ref`, or `tab1.ref?.webView == tab2.ref?.webView`. Do not use `===` as it will not warn about type mismatches.
+ • Avoid unwrapping the Tab to a ConcreteTab at the top of a function (`guard let tab = tab.ref...`) unless it really makes your life easier. Working directly with a ConcreteTab makes it more likely that it will accidentally get captured strongly.
+ **/
+typealias Tab = WeakRef<ConcreteTab>
+
+class ConcreteTab: NSObject {
     fileprivate var _isPrivate: Bool = false
     internal fileprivate(set) var isPrivate: Bool {
         get {
@@ -149,12 +175,13 @@ class Tab: NSObject {
 
         if #available(iOS 11, *) {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
-                contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
+                contentBlocker = ContentBlockerHelper(tab: Tab(self), profile: profile)
             }
         }
     }
 
     class func toTab(_ tab: Tab) -> RemoteTab? {
+        guard let tab = tab.ref else { return nil }
         if let displayURL = tab.url?.displayURL, RemoteTab.shouldIncludeURL(displayURL) {
             let history = Array(tab.historyList.filter(RemoteTab.shouldIncludeURL).reversed())
             return RemoteTab(clientGUID: nil,
@@ -213,8 +240,8 @@ class Tab: NSObject {
 
             self.webView = webView
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
-            self.userScriptManager = UserScriptManager(tab: self)
-            tabDelegate?.tab?(self, didCreateWebView: webView)
+            self.userScriptManager = UserScriptManager(tab: Tab(self))
+            tabDelegate?.tab(Tab(self), didCreateWebView: webView)
         }
     }
 
@@ -250,10 +277,10 @@ class Tab: NSObject {
         }
     }
 
-    deinit {
+    func cleanup() {
         if let webView = webView {
             webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
-            tabDelegate?.tab?(self, willDeleteWebView: webView)
+            tabDelegate?.tab(Tab(self), willDeleteWebView: webView)
         }
         contentScriptManager.helpers.removeAll()
     }
@@ -370,7 +397,7 @@ class Tab: NSObject {
     }
 
     func addContentScript(_ helper: TabContentScript, name: String) {
-        contentScriptManager.addContentScript(helper, name: name, forTab: self)
+        contentScriptManager.addContentScript(helper, name: name, forTab: Tab(self))
     }
 
     func getContentScript(name: String) -> TabContentScript? {
@@ -401,13 +428,13 @@ class Tab: NSObject {
 
     func addSnackbar(_ bar: SnackBar) {
         bars.append(bar)
-        tabDelegate?.tab(self, didAddSnackbar: bar)
+        tabDelegate?.tab(Tab(self), didAddSnackbar: bar)
     }
 
     func removeSnackbar(_ bar: SnackBar) {
         if let index = bars.index(of: bar) {
             bars.remove(at: index)
-            tabDelegate?.tab(self, didRemoveSnackbar: bar)
+            tabDelegate?.tab(Tab(self), didRemoveSnackbar: bar)
         }
     }
 
@@ -418,7 +445,7 @@ class Tab: NSObject {
 
     func expireSnackbars() {
         // Enumerate backwards here because we may remove items from the list as we go.
-        bars.reversed().filter({ !$0.shouldPersist(self) }).forEach({ removeSnackbar($0) })
+        bars.reversed().filter({ !$0.shouldPersist(Tab(self)) }).forEach({ removeSnackbar($0) })
     }
 
     func setScreenshot(_ screenshot: UIImage?, revUUID: Bool = true) {
@@ -459,11 +486,14 @@ class Tab: NSObject {
             return
         }
 
-        self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
+        self.urlDidChangeDelegate?.tab(Tab(self), urlDidChangeTo: url)
     }
 
-    func isDescendentOf(_ ancestor: Tab) -> Bool {
-        return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
+    func isDescendentOf(_ ancestor: ConcreteTab) -> Bool {
+        let seq = sequence(first: parent) { (tab) -> Tab? in
+            return tab?.ref?.parent
+        }
+        return seq.contains { $0?.ref == ancestor }
     }
 
     func setNightMode(_ enabled: Bool) {
@@ -495,9 +525,9 @@ class Tab: NSObject {
     }
 }
 
-extension Tab: TabWebViewDelegate {
+extension ConcreteTab: TabWebViewDelegate {
     fileprivate func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
-        tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
+        tabDelegate?.tab(Tab(self), didSelectFindInPageForSelection: selection)
     }
 }
 
@@ -525,7 +555,7 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         // If this helper handles script messages, then get the handler name and register it. The Browser
         // receives all messages and then dispatches them to the right TabHelper.
         if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
-            tab.webView?.configuration.userContentController.add(self, name: scriptMessageHandlerName)
+            tab.ref?.webView?.configuration.userContentController.add(self, name: scriptMessageHandlerName)
         }
     }
 

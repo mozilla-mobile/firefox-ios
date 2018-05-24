@@ -33,7 +33,7 @@ class TabScrollingController: NSObject {
 
     // Constraint-based animation is causing PDF docs to flicker. This is used to bypass this animation.
     var isTabShowingPDF: Bool {
-        return (tab?.mimeType ?? "") == MIMEType.PDF
+        return (tab?.ref?.mimeType ?? "") == MIMEType.PDF
     }
 
     weak var header: UIView?
@@ -71,7 +71,7 @@ class TabScrollingController: NSObject {
         return panGesture
     }()
 
-    fileprivate var scrollView: UIScrollView? { return tab?.webView?.scrollView }
+    fileprivate var scrollView: UIScrollView? { return tab?.ref?.webView?.scrollView }
     fileprivate var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     fileprivate var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     fileprivate var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
@@ -163,7 +163,7 @@ class TabScrollingController: NSObject {
 
 private extension TabScrollingController {
     func tabIsLoading() -> Bool {
-        return tab?.loading ?? true
+        return tab?.ref?.loading ?? true
     }
 
     func isBouncingAtBottom() -> Bool {

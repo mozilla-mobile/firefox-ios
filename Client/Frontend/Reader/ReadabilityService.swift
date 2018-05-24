@@ -20,7 +20,7 @@ class ReadabilityOperation: Operation {
     var url: URL
     var semaphore: DispatchSemaphore
     var result: ReadabilityOperationResult?
-    var tab: Tab!
+    var tab: ConcreteTab!
     var readerModeCache: ReaderModeCache
 
     init(url: URL, readerModeCache: ReaderModeCache) {
@@ -39,11 +39,11 @@ class ReadabilityOperation: Operation {
 
         DispatchQueue.main.async(execute: { () -> Void in
             let configuration = WKWebViewConfiguration()
-            self.tab = Tab(configuration: configuration)
+            self.tab = ConcreteTab(configuration: configuration)
             self.tab.createWebview()
             self.tab.navigationDelegate = self
 
-            let readerMode = ReaderMode(tab: self.tab)
+            let readerMode = ReaderMode(tab: Tab(self.tab))
             readerMode.delegate = self
             self.tab.addContentScript(readerMode, name: ReaderMode.name())
 
@@ -103,7 +103,7 @@ extension ReadabilityOperation: ReaderModeDelegate {
     }
 
     func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
-        guard tab == self.tab else {
+        guard tab.ref == self.tab else {
             return
         }
 

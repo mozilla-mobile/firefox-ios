@@ -341,7 +341,7 @@ class TabTrayController: UIViewController {
             make.bottom.equalTo(self.toolbar.snp.top)
         }
 
-        if let tab = tabManager.selectedTab, tab.isPrivate {
+        if let tab = tabManager.selectedTab?.ref, tab.isPrivate {
             privateMode = true
         }
 
@@ -758,7 +758,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
      */
     func removeTab(_ tabToRemove: Tab) -> Int {
         var index: Int = -1
-        for (i, tab) in tabs.enumerated() where tabToRemove === tab {
+        for (i, tab) in tabs.enumerated() where tabToRemove == tab {
             index = i
             tabs.remove(at: index)
             break
@@ -780,7 +780,8 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         tabCell.animator.delegate = cellDelegate
         tabCell.delegate = cellDelegate
 
-        let tab = tabs[indexPath.item]
+        guard let tab = tabs[indexPath.item].ref else { return tabCell }
+
         tabCell.style = tab.isPrivate ? .dark : .light
         tabCell.titleText.text = tab.displayTitle
         tabCell.closeButton.tintColor = tab.isPrivate ? UIColor.Photon.White100 : UIColor.Photon.Grey50
@@ -804,7 +805,7 @@ fileprivate class TabManagerDataSource: NSObject, UICollectionViewDataSource {
                 tabCell.favicon.image = defaultFavicon
             }
         }
-        if tab == tabManager.selectedTab {
+        if tab == tabManager.selectedTab?.ref {
             tabCell.setTabSelected(tab.isPrivate)
         }
         tabCell.screenshotView.image = tab.screenshot
@@ -831,8 +832,8 @@ extension TabManagerDataSource: UICollectionViewDragDelegate {
 
         // Get the tab's current URL. If it is `nil`, check the `sessionData` since
         // it may be a tab that has not been restored yet.
-        var url = tab.url
-        if url == nil, let sessionData = tab.sessionData {
+        var url = tab.ref?.url
+        if url == nil, let sessionData = tab.ref?.sessionData {
             let urls = sessionData.urls
             let index = sessionData.currentPage + urls.count - 1
             if index < urls.count {
@@ -871,7 +872,7 @@ extension TabManagerDataSource: UICollectionViewDropDelegate {
         isDragging = false
 
         let destinationIndex = destinationIndexPath.item
-        tabManager.moveTab(isPrivate: tab.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndex)
+        tabManager.moveTab(isPrivate: tab.ref?.isPrivate ?? false, fromIndex: sourceIndex, toIndex: destinationIndex)
         tabs.insert(tabs.remove(at: sourceIndex), at: destinationIndex)
         collectionView.moveItem(at: IndexPath(item: sourceIndex, section: 0), to: destinationIndexPath)
     }

@@ -34,7 +34,7 @@ open class BrowserDB {
     // At any point the operation could complete on another thread, so it is held weakly.
     // Swift compiler bug: failing to compile WeakRef<Cancellable> here.
     public func cancel(databaseOperation: WeakRef<AnyObject>) {
-        weak var databaseOperation = databaseOperation.value as? Cancellable
+        weak var databaseOperation = databaseOperation.ref as? Cancellable
 
         db.suspendQueue()
         defer {

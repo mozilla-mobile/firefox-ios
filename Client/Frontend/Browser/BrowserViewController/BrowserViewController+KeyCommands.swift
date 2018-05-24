@@ -10,20 +10,20 @@ extension BrowserViewController {
     @objc private func reloadTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "reload"])
         if let tab = tabManager.selectedTab, homePanelController == nil {
-            tab.reload()
+            tab.ref?.reload()
         }
     }
 
     @objc private func goBackKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "go-back"])
-        if let tab = tabManager.selectedTab, tab.canGoBack, homePanelController == nil {
+        if let tab = tabManager.selectedTab?.ref, tab.canGoBack, homePanelController == nil {
             tab.goBack()
         }
     }
 
     @objc private func goForwardKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "go-forward"])
-        if let tab = tabManager.selectedTab, tab.canGoForward {
+        if let tab = tabManager.selectedTab?.ref, tab.canGoForward {
             tab.goForward()
         }
     }
@@ -63,11 +63,11 @@ extension BrowserViewController {
 
     @objc private func nextTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "next-tab"])
-        guard let currentTab = tabManager.selectedTab else {
+        guard let currentTab = tabManager.selectedTab, let isPrivate = currentTab.ref?.isPrivate else {
             return
         }
 
-        let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        let tabs = isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         if let index = tabs.index(of: currentTab), index + 1 < tabs.count {
             tabManager.selectTab(tabs[index + 1])
         } else if let firstTab = tabs.first {
@@ -77,11 +77,11 @@ extension BrowserViewController {
 
     @objc private func previousTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "previous-tab"])
-        guard let currentTab = tabManager.selectedTab else {
+        guard let currentTab = tabManager.selectedTab, let isPrivate = currentTab.ref?.isPrivate else {
             return
         }
 
-        let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        let tabs = isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         if let index = tabs.index(of: currentTab), index - 1 < tabs.count && index != 0 {
             tabManager.selectTab(tabs[index - 1])
         } else if let lastTab = tabs.last {
@@ -134,7 +134,7 @@ extension BrowserViewController {
             UIKeyCommand(input: "\t", modifierFlags: [.command, .alternate], action: #selector(showTabTrayKeyCommand), discoverabilityTitle: Strings.ShowTabTrayFromTabKeyCodeTitle)
         ]
 
-        let isEditingText = tabManager.selectedTab?.isEditing ?? false
+        let isEditingText = tabManager.selectedTab?.ref?.isEditing ?? false
 
         if urlBar.inOverlayMode {
             return tabNavigation + searchLocationCommands

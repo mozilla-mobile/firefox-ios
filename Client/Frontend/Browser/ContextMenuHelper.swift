@@ -36,7 +36,7 @@ class ContextMenuHelper: NSObject {
     }
 
     func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UIGestureRecognizer? {
-        return tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined().first(where: { $0.description.contains(descriptionFragment) })
+        return tab?.ref?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined().first(where: { $0.description.contains(descriptionFragment) })
     }
 
     @objc func longPressGestureDetected(_ sender: UIGestureRecognizer) {

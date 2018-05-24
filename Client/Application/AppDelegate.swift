@@ -516,7 +516,7 @@ extension AppDelegate: UINavigationControllerDelegate {
 extension AppDelegate: TabManagerStateDelegate {
     func tabManagerWillStoreTabs(_ tabs: [Tab]) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toTab )
+        let storedTabs: [RemoteTab] = tabs.compactMap( ConcreteTab.toTab )
 
         // Don't insert into the DB immediately. We tend to contend with more important
         // work like querying for top sites.
@@ -639,7 +639,7 @@ extension UIApplication {
 
     static var isInPrivateMode: Bool {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
-        return appDelegate?.browserViewController.tabManager.selectedTab?.isPrivate ?? false
+        return appDelegate?.browserViewController.tabManager.selectedTab?.ref?.isPrivate ?? false
     }
 }
 
