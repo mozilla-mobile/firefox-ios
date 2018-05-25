@@ -4,7 +4,25 @@
 
 import XCTest
 
+private let testingURL = "example.com"
+
 class IntegrationTests: BaseTestCase {
+
+    let testWithDB = ["testFxASyncHistory"]
+
+    // This DB contains 1 entry example.com
+    let historyDB = "exampleURL.db"
+
+    override func setUp() {
+     // Test name looks like: "[Class testFunc]", parse out the function name
+     let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
+     let key = String(parts[1])
+     if testWithDB.contains(key) {
+     // for the current test name, add the db fixture used
+     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.LoadDatabasePrefix + historyDB]
+     }
+     super.setUp()
+     }
 
     func allowNotifications () {
         addUIInterruptionMonitor(withDescription: "notifications") { (alert) -> Bool in
@@ -22,14 +40,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
     }
 
-    func testFxASyncBookmark () {
-        // Go to a webpage, and add to bookmarks
-        navigator.createNewTab()
-        loadWebPage("www.example.com")
-        navigator.nowAt(BrowserTab)
-        bookmark()
-
-        // Sign into Firefox Accounts
+    private func signInFxAccounts() {
         navigator.goto(FxASigninScreen)
         waitforExistence(app.webViews.staticTexts["Sign in"], timeout: 10)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
@@ -38,10 +49,35 @@ class IntegrationTests: BaseTestCase {
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
         allowNotifications()
+    }
 
-        // Wait for initial sync to complete
+    private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
         waitforExistence(app.tables.staticTexts["Sync Now"], timeout: 10)
+    }
+
+    func testFxASyncHistory () {
+        // History is generated using the DB so go directly to Sign in
+        // Sign into Firefox Accounts
+        navigator.goto(BrowserTabMenu)
+        signInFxAccounts()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
+    }
+
+    func testFxASyncBookmark () {
+        // Go to a webpage, and add to bookmarks
+        navigator.createNewTab()
+        loadWebPage(testingURL)
+        navigator.nowAt(BrowserTab)
+        bookmark()
+
+        // Sign into Firefox Accounts
+        signInFxAccounts()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
     }
 }
