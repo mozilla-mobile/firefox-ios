@@ -218,9 +218,6 @@
                   Identifier = "PhotonActionSheetTest/testSendToDeviceFromShareOption()">
                </Test>
                <Test
-                  Identifier = "ReaderViewTest">
-               </Test>
-               <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">
                </Test>
                <Test

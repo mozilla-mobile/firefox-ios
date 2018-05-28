@@ -8,6 +8,7 @@ class ReaderViewTest: BaseTestCase {
     func testLoadReaderContent() {
         navigator.goto(BrowserTab)
         app.buttons["Reader View"].tap()
+        app.buttons["Reload"].tap()
         // The settings of reader view are shown as well as the content of the web site
         waitforExistence(app.buttons["Display Settings"])
         XCTAssertTrue(app.webViews.staticTexts["The Book of Mozilla"].exists)
@@ -17,6 +18,8 @@ class ReaderViewTest: BaseTestCase {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
         app.buttons["Reader View"].tap()
+        app.buttons["Reload"].tap()
+        waitUntilPageLoad()
         waitforExistence(app.buttons["Add to Reading List"])
         app.buttons["Add to Reading List"].tap()
     }
@@ -39,6 +42,7 @@ class ReaderViewTest: BaseTestCase {
 
         // Add item to reading list and check that it appears
         addContentToReaderView()
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
 
@@ -61,6 +65,7 @@ class ReaderViewTest: BaseTestCase {
 
         // Add item to reading list and check that it appears
         addContentToReaderView()
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
 
@@ -106,6 +111,7 @@ class ReaderViewTest: BaseTestCase {
 
     func testMarkAsReadAndUnreadFromReadingList() {
         addContentToReaderView()
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
@@ -124,6 +130,7 @@ class ReaderViewTest: BaseTestCase {
 
     func testRemoveFromReadingList() {
         addContentToReaderView()
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
@@ -191,9 +198,5 @@ class ReaderViewTest: BaseTestCase {
         // Verify the item has been removed
         waitforNoExistence(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
         XCTAssertFalse(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
-    }
-
-    func testOpenSavedForReadingLongPressInPrivateTab() {
-        // To Be defined once the new FxScreenGraph lands
     }
 }

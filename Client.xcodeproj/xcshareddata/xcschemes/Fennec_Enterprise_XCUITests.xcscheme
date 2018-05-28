@@ -233,9 +233,6 @@
                   Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
-                  Identifier = "ReaderViewTest">
-               </Test>
-               <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">
                </Test>
                <Test
