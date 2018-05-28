@@ -3613,7 +3613,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 			};
@@ -3661,7 +3661,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
@@ -3710,7 +3710,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
@@ -3759,7 +3759,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
@@ -3808,7 +3808,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
@@ -3857,7 +3857,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.blockzilla.ScreenshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = Blockzilla;
 				VALIDATE_PRODUCT = YES;
