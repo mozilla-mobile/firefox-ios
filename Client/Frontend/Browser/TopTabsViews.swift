@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 struct TopTabsSeparatorUX {
     static let Identifier = "Separator"
@@ -187,6 +188,39 @@ class TopTabCell: UICollectionViewCell {
             titleText.textColor = UIColor.lightText
             backgroundColor = UIColor.Photon.Grey70
             highlightLine.backgroundColor = UIColor.Photon.Purple50
+        }
+    }
+
+    func configureWith(tab: Tab, isSelected: Bool) {
+        self.style = tab.isPrivate ? .dark : .light
+        self.titleText.text = tab.displayTitle
+
+        if tab.displayTitle.isEmpty {
+            if tab.webView?.url?.isLocalUtility ?? true {
+                self.titleText.text = Strings.AppMenuNewTabTitleString
+            } else {
+                self.titleText.text = tab.webView?.url?.absoluteDisplayString
+            }
+            self.accessibilityLabel = tab.url?.aboutComponent ?? ""
+            self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
+        } else {
+            self.accessibilityLabel = tab.displayTitle
+            self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, tab.displayTitle)
+        }
+
+        self.selectedTab = isSelected
+        if let siteURL = tab.url?.displayURL {
+            self.favicon.setIcon(tab.displayFavicon, forURL: siteURL, completed: { (color, url) in
+                if siteURL == url {
+                    self.favicon.image = self.favicon.image?.createScaled(CGSize(width: 15, height: 15))
+                    self.favicon.backgroundColor = color == .clear ? .white : color
+                    self.favicon.contentMode = .center
+                }
+            })
+        } else {
+            self.favicon.image = UIImage(named: "defaultFavicon")
+            self.favicon.contentMode = .scaleAspectFit
+            self.favicon.backgroundColor = .clear
         }
     }
     
