@@ -53,58 +53,84 @@ function install() {
     });
   }
 
-  let originalOpen = null;
-  let originalSend = null;
+  let originalXHROpen = null;
+  let originalXHRSend = null;
+  let originalFetch = null;
   let originalImageSrc = null;
   let mutationObserver = null;
 
   function injectStatsTracking(enabled) {
     // This enable/disable section is a change from the original Focus iOS version.
     if (enabled) {
-      if (originalOpen) {
+      if (originalXHROpen) {
         return;
       }
       window.addEventListener("load", onLoadNativeCallback, false);
     } else {
       window.removeEventListener("load", onLoadNativeCallback, false);
 
-      if (originalOpen) { // if one is set, then all the enable code has run
-        XMLHttpRequest.prototype.open = originalOpen;
-        XMLHttpRequest.prototype.send = originalSend;
+      if (originalXHROpen) { // if one is set, then all the enable code has run
+        XMLHttpRequest.prototype.open = originalXHROpen;
+        XMLHttpRequest.prototype.send = originalXHRSend;
+        window.fetch = originalFetch;
         Image.prototype.src = originalImageSrc;
         mutationObserver.disconnect();
 
-        originalOpen = originalSend = originalImageSrc = mutationObserver = null;
+        originalXHROpen = originalXHRSend = originalImageSrc = mutationObserver = null;
       }
       return;
     }
 
     // -------------------------------------------------
-    // Send ajax requests URLs to the host application
+    // Send XHR request URLs to the host application
     // -------------------------------------------------
-    var xhrProto = XMLHttpRequest.prototype;
-    if (!originalOpen) {
-      originalOpen = xhrProto.open;
-      originalSend = xhrProto.send;
+    if (!originalXHROpen) {
+      originalXHROpen = XMLHttpRequest.prototype.open;
+      originalXHRSend = XMLHttpRequest.prototype.send;
     }
 
-    xhrProto.open = function(method, url) {
-      this._url = url;
-      return originalOpen.apply(this, arguments);
+    // WeakMaps for storing "private" properties that
+    // are inaccessible to web content.
+    var _url = new WeakMap();
+    var _tpErrorHandler = new WeakMap();
+
+    XMLHttpRequest.prototype.open = function(method, url) {
+      _url.set(this, url);
+      return originalXHROpen.apply(this, arguments);
     };
 
-    xhrProto.send = function(body) {
+    XMLHttpRequest.prototype.send = function(body) {
       // Only attach the `error` event listener once for this
       // `XMLHttpRequest` instance.
-      if (!this._tpErrorHandler) {
+      if (!_tpErrorHandler.get(this)) {
         // If this `XMLHttpRequest` instance fails to load, we
         // can assume it has been blocked.
-        this._tpErrorHandler = function() {
-          sendMessage(this._url);
+        var tpErrorHandler = function() {
+          sendMessage(_url.get(this));
         };
-        this.addEventListener("error", this._tpErrorHandler);
+        _tpErrorHandler.set(this, tpErrorHandler);
+        this.addEventListener("error", tpErrorHandler);
       }
-      return originalSend.apply(this, arguments);
+      return originalXHRSend.apply(this, arguments);
+    };
+
+    // -------------------------------------------------
+    // Send `fetch()` request URLs to the host application
+    // -------------------------------------------------
+    if (!originalFetch) {
+      originalFetch = window.fetch;
+    }
+
+    window.fetch = function(input, init) {
+      var result = originalFetch.apply(window, arguments);
+      result.catch(function() {
+        if (typeof input === 'string') {
+          sendMessage(input);
+        } else if (input instanceof Request) {
+          sendMessage(input.url);
+        }
+      });
+      return result;
     };
 
     // -------------------------------------------------
@@ -121,13 +147,14 @@ function install() {
       set: function(value) {
         // Only attach the `error` event listener once for this
         // Image instance.
-        if (!this._tpErrorHandler) {
+        if (!_tpErrorHandler.get(this)) {
           // If this `Image` instance fails to load, we can assume
           // it has been blocked.
-          this._tpErrorHandler = function() {
+          var tpErrorHandler = function() {
             sendMessage(this.src);
           };
-          this.addEventListener("error", this._tpErrorHandler);
+          _tpErrorHandler.set(this, tpErrorHandler);
+          this.addEventListener("error", tpErrorHandler);
         }
 
         originalImageSrc.set.call(this, value);
@@ -141,13 +168,49 @@ function install() {
     mutationObserver = new MutationObserver(function(mutations) {
       mutations.forEach(function(mutation) {
         mutation.addedNodes.forEach(function(node) {
-          // Only consider `<script src="*">` elements.
+          // `<script src="*">` elements.
           if (node.tagName === "SCRIPT" && node.src) {
             // If the `<script>`  fails to load, we can assume
             // it has been blocked.
             node.addEventListener("error", function() {
               sendMessage(node.src);
             });
+            return;
+          }
+
+          // `<iframe src="*">` elements where [src] is not "about:blank".
+          if (node.tagName === "IFRAME" && node.src) {
+            // Wait one tick before checking the `<iframe>`. If it is blocked
+            // this is enough time before checking it.
+            setTimeout(function() {
+              if (node.src === "about:blank") {
+                return;
+              }
+
+              try {
+                // If an exception is thrown getting the <iframe>'s location,
+                // then we can assume that the <iframe> loaded successfully
+                // which means it was not blocked. If we can get the <iframe>'s
+                // location and it is "about:blank", but the [src] attribute is
+                // *not* "about:blank", then we can assume that the <iframe>
+                // was blocked from loading.
+                var frameHref = node.contentWindow.location.href;
+                if (frameHref === "about:blank") {
+                  sendMessage(node.src);
+                }
+              } catch (e) {}
+            }, 1);
+            return;
+          }
+
+          // `<link href="*">` elements.
+          if (node.tagName === "LINK" && node.href) {
+            // If the `<link>` fails to load, we can assume
+            // it has been blocked.
+            node.addEventListener("error", function() {
+              sendMessage(node.href);
+            });
+            return;
           }
         });
       });
