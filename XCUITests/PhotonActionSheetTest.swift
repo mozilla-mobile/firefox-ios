@@ -76,14 +76,17 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.goto(PageOptionsMenu)
         app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
         waitforExistence(app.buttons["Copy"])
-        let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
-        moreElement.tap()
-        waitforExistence(app.switches["Fennec"])
-        app.switches["Fennec"].tap()
-        app.buttons["Done"].tap()
-        waitforExistence(app.buttons["Copy"])
         let fennecElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["Fennec"]
+        if (!fennecElement.exists) {
+            let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
+            moreElement.tap()
+            waitforExistence(app.switches["Fennec"])
+            app.switches["Fennec"].tap()
+            app.buttons["Done"].tap()
+            waitforExistence(app.buttons["Copy"])
+        }
         fennecElement.tap()
+
         waitforExistence(app.navigationBars["ShareTo.ShareView"])
     }
 
