@@ -5,3 +5,21 @@ ignore:
   - "./Shared"
 
 comment: false
+
+coverage:
+  precision: 2
+  round: down
+  status:
+    project:
+      default:
+       threshold: 1%
+       if_not_found: success
+    patch:
+      default:
+        enabled: yes
+        threshold: 1%
+        if_not_found: success
+    changes:
+      default:
+        enabled: no
+        if_not_found: success 
