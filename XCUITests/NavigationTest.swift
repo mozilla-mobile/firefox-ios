@@ -303,7 +303,9 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Share Link"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
     }
+
     func testLongPressLinkOptionsPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(website_2["url"]!)
@@ -313,7 +315,7 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Share Link"].exists, "The option is not shown")
-
+        XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
     }
     // Only testing Share and Copy Link, the other two options are already covered in other tests
     func testCopyLink() {
@@ -345,6 +347,25 @@ class NavigationTest: BaseTestCase {
         waitUntilPageLoad()
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         app.buttons[optionSelected].tap()
+    }
+
+    func testDownloadLink() {
+        longPressLinkOptions(optionSelected: "Download Link")
+        waitforExistence(app.tables["Context Menu"])
+        XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
+        app.tables["Context Menu"].cells["download"].tap()
+        navigator.goto(BrowserTabMenu)
+        app.tables.cells["menu-panel-Downloads"].tap()
+        waitforExistence(app.tables["DownloadsTable"])
+        // There should be one item downloaded. It's name and size should be shown
+        let downloadedList = app.tables["DownloadsTable"].cells.count
+        XCTAssertEqual(downloadedList, 1, "The number of items in the downloads table is not correct")
+        XCTAssertTrue(app.tables.cells.staticTexts["reserved.html"].exists)
+
+        // Tap on the just downloaded link to check that the web page is loaded
+        app.tables.cells.staticTexts["reserved.html"].tap()
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: "reserved.html")
     }
 
     func testShareLink() {
