@@ -7,6 +7,11 @@ import Storage
 import SnapKit
 import Shared
 
+private func isSmallScreen() -> Bool {
+    let size = UIScreen.main.bounds.size
+    return min(size.width, size.height) < 700
+}
+
 private struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
     static let Padding: CGFloat = 10
@@ -216,7 +221,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.snp.makeConstraints { make in
             heightConstraint?.deactivate()
             // The height of the menu should be no more than 85 percent of the screen
-            heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.85)).constraint
+            heightConstraint = make.height.equalTo(min(self.tableView.contentSize.height, maxHeight * 0.90)).constraint
         }
         if style == .popover {
             self.preferredContentSize = self.tableView.contentSize
@@ -625,7 +630,8 @@ private class PhotonActionSheetCell: UITableViewCell {
         contentView.addSubview(stackView)
 
         let padding = PhotonActionSheetCell.Padding
-        let topPadding = PhotonActionSheetCell.HorizontalPadding
+        let shrinkage: CGFloat = isSmallScreen() ? 3 : 0
+        let topPadding = PhotonActionSheetCell.HorizontalPadding - shrinkage
         stackView.snp.makeConstraints { make in
             make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding, left: padding, bottom: topPadding, right: padding))
         }
