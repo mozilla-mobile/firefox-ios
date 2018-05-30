@@ -132,7 +132,7 @@ class HistoryTests: BaseTestCase {
         navigator.goto(BrowserTab)
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
-
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
         waitforExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
@@ -142,8 +142,8 @@ class HistoryTests: BaseTestCase {
         waitforExistence(app.tables["Context Menu"])
         app.tables.cells["quick_action_new_tab"].tap()
         navigator.goto(TabTray)
-        let numTabsOpen2 = userState.numTabs
-        XCTAssertEqual(numTabsOpen2, 2)
+        let numTabsOpen3 = userState.numTabs
+        XCTAssertEqual(numTabsOpen3, 3)
     }
 
     func testOpenInNewPrivateTabRecentlyClosedItem() {
@@ -151,6 +151,7 @@ class HistoryTests: BaseTestCase {
         navigator.goto(BrowserTab)
         navigator.goto(TabTray)
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
         waitforExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
@@ -178,14 +179,14 @@ class HistoryTests: BaseTestCase {
         app.collectionViews.cells[webpage["label"]!].swipeRight()
 
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_History)
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitforNoExistence(app.tables["Recently Closed Tabs List"])
 
         // Now verify that on regular mode the recently closed list is empty too
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.goto(HomePanelsScreen)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_History)
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitforNoExistence(app.tables["Recently Closed Tabs List"])
