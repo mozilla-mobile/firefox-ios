@@ -26,9 +26,89 @@ struct IntroViewControllerUX {
     static let FadeDuration = 0.25
 }
 
+protocol PageControlDelegate {
+    func incrementPage(_ pageControl: PageControl)
+    func decrementPage(_ pageControl: PageControl)
+}
+
+class PageControl: UIView {
+    
+    var currentPage = 0 {
+        didSet {
+            selectIndex(currentPage)
+        }
+    }
+    
+    var numberOfPages = 0 {
+        didSet {
+            addPages()
+        }
+    }
+    
+    var stack = UIStackView()
+    var delegate: PageControlDelegate?
+    
+    func addPages() {
+        var buttonArray = [UIButton]()
+        
+        // Ensure we have at least one button
+        if numberOfPages == 0 {
+            return
+        }
+        
+        for _ in 0..<numberOfPages {
+            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 6, height: 6))
+            button.setImage(UIImage(imageLiteralResourceName: "page_indicator"), for: .normal)
+            buttonArray.append(button)
+        }
+        
+        // Enable the buttons to be tapped to switch to a new page
+        buttonArray.forEach() { button in
+            button.addTarget(self, action: #selector(selected(sender:)), for: .touchUpInside)
+        }
+        
+        stack = UIStackView(arrangedSubviews: buttonArray)
+        stack.spacing = 20
+        stack.distribution = .equalCentering
+        stack.alignment = .center
+        stack.accessibilityIdentifier = UIConstants.strings.onboardingStackView
+        
+        currentPage = 0
+    }
+    
+    func selectIndex(_ index:Int){
+        let buttons = stack.arrangedSubviews as! [UIButton]
+        for button in buttons {
+            button.isSelected = false
+            button.alpha = 0.3
+        }
+        
+        buttons[index].isSelected = true
+        buttons[index].alpha = 1
+    }
+    
+    @objc func selected(sender : UIButton){
+        guard let buttonSubviews = stack.arrangedSubviews as? [UIButton] else {
+            return
+        }
+        
+        guard let buttonIndex = buttonSubviews.index(of: sender) else {
+            return
+        }
+    
+        if buttonIndex > currentPage {
+            currentPage += 1
+            delegate?.incrementPage(self)
+        } else if buttonIndex < currentPage {
+            currentPage -= 1
+            delegate?.decrementPage(self)
+        }
+    }
+}
+
 class IntroViewController: UIViewController {
     
-    let pageControl = UIPageControl()
+    let pageControl = PageControl()
     let containerView = UIView()
     let skipButton = UIButton()
     private let backgroundDark = GradientBackgroundView()
@@ -66,14 +146,16 @@ class IntroViewController: UIViewController {
         }
         
         pageViewController = ScrollViewController()
+        pageControl.delegate = pageViewController
         addChildViewController(pageViewController)
         view.addSubview(pageViewController.view)
-        view.addSubview(pageControl)
+        
+        view.addSubview(pageControl.stack)
         view.addSubview(skipButton)
         
         pageControl.backgroundColor = .clear
         pageControl.isUserInteractionEnabled = false
-        pageControl.snp.makeConstraints { make in
+        pageControl.stack.snp.makeConstraints { make in
             make.top.equalTo(pageViewController.view.snp.centerY).offset(IntroViewControllerUX.Height/2 + IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom).priority(.high)
             make.centerX.equalTo(self.view)
             make.bottom.lessThanOrEqualTo(self.view).offset(24).priority(.required)
@@ -133,7 +215,28 @@ extension IntroViewController: ScrollViewControllerDelegate {
     }
 }
 
-class ScrollViewController: UIPageViewController {
+class ScrollViewController: UIPageViewController, PageControlDelegate {
+    
+    @objc func incrementPage(_ pageControl: PageControl) {
+        changePage(isIncrement: true)
+    }
+    
+    func decrementPage(_ pageControl: PageControl) {
+        changePage(isIncrement: false)
+    }
+    
+    private func changePage(isIncrement: Bool) {
+        guard let currentViewController = viewControllers?.first, let nextViewController = isIncrement ?
+            dataSource?.pageViewController(self, viewControllerAfter: currentViewController):
+            dataSource?.pageViewController(self, viewControllerBefore: currentViewController) else { return }
+        
+        guard let newIndex = orderedViewControllers.index(of: nextViewController) else { return }
+        let direction: UIPageViewControllerNavigationDirection = isIncrement ? .forward : .reverse
+        
+        setViewControllers([nextViewController], direction: direction, animated: true, completion: nil)
+        scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: newIndex)
+    }
+    
     private var slides = [UIImage]()
     private var orderedViewControllers: [UIViewController] = []
     weak var scrollViewControllerDelegate: ScrollViewControllerDelegate?
@@ -248,7 +351,7 @@ class ScrollViewController: UIPageViewController {
             cardButton.setTitle(UIConstants.strings.NextIntroButtonTitle, for: .normal)
             cardButton.setTitleColor(UIConstants.colors.firstRunNextButton, for: .normal)
             cardButton.titleLabel?.font = UIConstants.fonts.firstRunButton
-            cardButton.addTarget(self, action: #selector(ScrollViewController.didTapNextButton), for: UIControlEvents.touchUpInside)
+            cardButton.addTarget(self, action: #selector(ScrollViewController.incrementPage), for: UIControlEvents.touchUpInside)
         }
         
         introView.addSubview(cardButton)
@@ -262,14 +365,6 @@ class ScrollViewController: UIPageViewController {
     
     @objc func didTapStartBrowsingButton() {
         scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didDismissSlideDeck: true)
-    }
-    
-    @objc func didTapNextButton() {
-        guard let currentViewController = self.viewControllers?.first else { return }
-        guard let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) else { return }
-        setViewControllers([nextViewController], direction: .forward, animated: true, completion: nil)
-        guard let viewControllerIndex = orderedViewControllers.index(of: nextViewController) else { return }
-        scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didUpdatePageIndex: viewControllerIndex)
     }
     
     fileprivate func attributedStringForLabel(_ text: String) -> NSMutableAttributedString {

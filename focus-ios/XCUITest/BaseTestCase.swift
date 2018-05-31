@@ -11,7 +11,8 @@ class BaseTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        XCUIApplication().launch()
+        app.launchArguments = ["testMode"]
+        app.launch()
     }
     
     override func tearDown() {

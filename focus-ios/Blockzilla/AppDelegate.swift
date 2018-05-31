@@ -53,6 +53,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let prefIntroDone = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone)
 
+        if AppInfo.isTesting() {
+            let firstRunViewController = IntroViewController()
+            rootViewController.present(firstRunViewController, animated: false, completion: nil)
+            return true
+        }
+        
         let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
         if needToShowFirstRunExperience {
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
