@@ -333,6 +333,12 @@ class Tab: NSObject {
 
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
         if let webView = webView {
+            // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
+            if let url = request.url, let syncedReaderModeURL = url.decodeReaderModeURL, let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
+                let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
+                lastRequest = readerModeRequest
+                return webView.load(readerModeRequest)
+            }
             lastRequest = request
             if let url = request.url, url.isFileURL, request.isPrivileged {
                 return webView.loadFileURL(url, allowingReadAccessTo: url)
