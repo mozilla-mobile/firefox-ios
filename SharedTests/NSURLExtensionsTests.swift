@@ -257,15 +257,35 @@ class NSURLExtensionsTests: XCTestCase {
         badurls.forEach { XCTAssertFalse(URL(string:$0)!.isReaderModeURL, $0) }
     }
 
+    func testisSyncedReaderModeURL() {
+        let goodurls = [
+            "about:reader?url=",
+            "about:reader?url=http://example.com",
+            "about:reader?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage"
+        ]
+        let badurls = [
+            "http://google.com",
+            "http://localhost:6571/sessionrestore.html",
+            "about:reader",
+            "http://about:reader?url=http://example.com"
+        ]
+
+        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isSyncedReaderModeURL, $0) }
+        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isSyncedReaderModeURL, $0) }
+    }
+
     func testdecodeReaderModeURL() {
         let goodurls = [
-            ("http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page"))
+            ("http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page")),
+            ("about:reader?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page")),
+            ("about:reader?url=http%3A%2F%2Fexample%2Ecom%3Furl%3Dparam%26key%3Dvalue", URL(string: "http://example.com?url=param&key=value"))
         ]
         let badurls = [
             "http://google.com",
             "http://localhost:6571/sessionrestore.html",
             "http://localhost:1234/about/home/#panel=0",
-            "http://localhost:6571/reader-mode/page"
+            "http://localhost:6571/reader-mode/page",
+            "about:reader?url="
         ]
 
         goodurls.forEach { XCTAssertEqual(URL(string:$0.0)!.decodeReaderModeURL, $0.1) }

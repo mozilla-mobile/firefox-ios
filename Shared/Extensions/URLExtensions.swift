@@ -329,8 +329,12 @@ extension URL {
         return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
     }
 
+    public var isSyncedReaderModeURL: Bool {
+        return self.absoluteString.hasPrefix("about:reader?url=")
+    }
+
     public var decodeReaderModeURL: URL? {
-        if self.isReaderModeURL {
+        if self.isReaderModeURL || self.isSyncedReaderModeURL {
             if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems, queryItems.count == 1 {
                 if let queryItem = queryItems.first, let value = queryItem.value {
                     return URL(string: value)
