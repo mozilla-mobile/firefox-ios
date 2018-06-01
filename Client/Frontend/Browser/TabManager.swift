@@ -454,8 +454,7 @@ class TabManager: NSObject {
 
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")
 
-        // There's still some time between this and the webView being destroyed. We don't want to pick up any stray events.
-        tab.webView?.navigationDelegate = nil
+        tab.close()
 
         if notify {
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab) }

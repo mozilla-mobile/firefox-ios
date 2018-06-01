@@ -9,6 +9,8 @@ import Shared
 import SwiftyJSON
 import XCGLogger
 
+fileprivate var debugTabCount = 0
+
 protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
@@ -152,6 +154,8 @@ class Tab: NSObject {
                 contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
             }
         }
+
+        debugTabCount += 1
     }
 
     class func toTab(_ tab: Tab) -> RemoteTab? {
@@ -251,11 +255,37 @@ class Tab: NSObject {
     }
 
     deinit {
+        debugTabCount -= 1
+
+        #if DEBUG
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        func checkTabCount(failures: Int) {
+            // Need delay for pool to drain.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                if appDelegate.tabManager.tabs.count == debugTabCount {
+                    return
+                }
+
+                // If this assert has false positives, remove it and just log an error.
+                assert(failures < 3, "Tab init/deinit imbalance, possible memory leak.")
+                checkTabCount(failures: failures + 1)
+            }
+        }
+        checkTabCount(failures: 0)
+        #endif
+    }
+
+    func close() {
+        webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
+
         if let webView = webView {
-            webView.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
+
         contentScriptManager.helpers.removeAll()
+        webView?.navigationDelegate = nil
+        webView?.removeFromSuperview()
+        webView = nil
     }
 
     var loading: Bool {
