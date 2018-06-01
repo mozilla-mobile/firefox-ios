@@ -9,22 +9,35 @@ let webpage = ["url": "www.mozilla.org", "label": "Internet for people, not prof
 let closedWebPageLabel = "The Book of Mozilla"
 
 class HistoryTests: BaseTestCase {
+    let testWithDB = ["testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings"]
+
+    // This DDBB contains those 4 websites listed in the name
+    let historyDB = "browserYoutubeTwitterMozillaExample.db"
+
+    override func setUp() {
+        // Test name looks like: "[Class testFunc]", parse out the function name
+        let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
+        let key = String(parts[1])
+        if testWithDB.contains(key) {
+            // for the current test name, add the db fixture used
+            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.LoadDatabasePrefix + historyDB]
+        }
+        super.setUp()
+    }
+
     func testEmptyHistoryListFirstTime() {
         // Go to History List from Top Sites and check it is empty
         navigator.goto(HomePanel_History)
         waitforExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
         XCTAssertTrue(app.tables.cells["HistoryPanel.recentlyClosedCell"].exists)
         XCTAssertTrue(app.tables.cells["HistoryPanel.syncedDevicesCell"].exists)
-        XCTAssertFalse(app.tables.otherElements.staticTexts["Today"].exists)
     }
 
     func testOpenHistoryFromBrowserContextMenuOptions() {
-        navigator.openURL(webpage["url"]!)
         navigator.browserPerformAction(.openHistoryOption)
 
         // Go to History List from Browser context menu and there should be one entry
         waitforExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
-        XCTAssertTrue(app.tables.otherElements.staticTexts["Today"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts[webpage["label"]!].exists)
     }
 
@@ -37,9 +50,7 @@ class HistoryTests: BaseTestCase {
 
     func testClearHistoryFromSettings() {
         // Browse to have an item in history list
-        navigator.openURL(webpage["url"]!)
-        waitUntilPageLoad()
-        navigator.goto(BrowserTabMenu)
+        //navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_History)
         waitforExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
         XCTAssertTrue(app.tables.cells.staticTexts[webpage["label"]!].exists)
