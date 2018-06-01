@@ -14,6 +14,7 @@
 		0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */; };
 		0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */; };
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
+		1D3FEEA120C0A73D00FFAA8C /* RequestDesktopTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */; };
 		1DE6DA2220BF410400CE337B /* QuickAddAutocompleteURLTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE6DA2120BF410400CE337B /* QuickAddAutocompleteURLTest.swift */; };
 		1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */; };
 		2825C3665AB14081B262F767 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */; };
@@ -224,6 +225,7 @@
 		0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingAppearanceTest.swift; sourceTree = "<group>"; };
 		0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsianLocaleTest.swift; sourceTree = "<group>"; };
 		1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestDesktopTest.swift; sourceTree = "<group>"; };
 		1DE6DA2120BF410400CE337B /* QuickAddAutocompleteURLTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAddAutocompleteURLTest.swift; sourceTree = "<group>"; };
 		1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTest.swift; sourceTree = "<group>"; };
 		29B90C056305836CB297FF79 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -835,6 +837,7 @@
 		0BA39A841DD2B8E4005F970A /* XCUITest */ = {
 			isa = PBXGroup;
 			children = (
+				1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */,
 				1DE6DA2120BF410400CE337B /* QuickAddAutocompleteURLTest.swift */,
 				1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */,
 				0B4868651F2250A3008C3C09 /* PastenGoTest.swift */,
@@ -1512,6 +1515,7 @@
 				0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */,
 				4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */,
 				0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */,
+				1D3FEEA120C0A73D00FFAA8C /* RequestDesktopTest.swift in Sources */,
 				4F1284861FC5E242001A775B /* TPSettingsTest.swift in Sources */,
 				4FE4E6F61FBB5E2C001BB779 /* TPSidebarBadge.swift in Sources */,
 				1DE6DA2220BF410400CE337B /* QuickAddAutocompleteURLTest.swift in Sources */,

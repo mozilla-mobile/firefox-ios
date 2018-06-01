@@ -185,6 +185,11 @@ class BrowserViewController: UIViewController {
         containWebView()
         createHomeView()
         createURLBar()
+        
+        // Listen for request desktop site notifications
+        let nc = NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
+            self.webViewController.requestDesktop()
+        }
 
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
@@ -639,6 +644,24 @@ extension BrowserViewController: URLBarDelegate {
 }
 
 extension BrowserViewController: BrowserToolsetDelegate {
+    func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset) {
+        // Request desktop site
+        urlBar.dismiss()
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Request Desktop Site", style: .default, handler: { (action) in
+            self.webViewController.requestDesktop()
+        }))
+        alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
+
+        // Must handle iPad interface separately, as it does not implement action sheets
+        let iPadAlert = alert.popoverPresentationController
+        iPadAlert?.sourceView = browserToolbar.stopReloadButton
+        iPadAlert?.sourceRect = browserToolbar.stopReloadButton.bounds
+        
+        present(alert, animated: true)
+    }
+    
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
         urlBar.dismiss()
         webViewController.goBack()

@@ -8,6 +8,7 @@ protocol BrowserToolsetDelegate: class {
     func browserToolsetDidPressBack(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressForward(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressReload(_ browserToolbar: BrowserToolset)
+    func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressStop(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressSend(_ browserToolbar: BrowserToolset)
 }
@@ -42,7 +43,10 @@ class BrowserToolset {
         stopReloadButton.tintColor = UIConstants.colors.toolbarButtonNormal
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressReload))
+        stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
+        stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
 
         sendButton.tintColor = UIConstants.colors.toolbarButtonNormal
         sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active"), for: .normal)
@@ -92,6 +96,13 @@ class BrowserToolset {
             delegate?.browserToolsetDidPressStop(self)
         } else {
             delegate?.browserToolsetDidPressReload(self)
+        }
+    }
+    
+    @objc func didLongPressReload(recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == .began && !isLoading {
+            stopReloadButton.alpha = 1
+            delegate?.browserToolsetDidLongPressReload(self)
         }
     }
 

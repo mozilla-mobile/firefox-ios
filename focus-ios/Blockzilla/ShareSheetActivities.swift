@@ -118,6 +118,37 @@ class OpenInChromeActivity: UIActivity {
     }
 }
 
+class RequestDesktopActivity: UIActivity {
+    fileprivate let url: URL
+    private let app = UIApplication.shared
+    
+    init(url: URL) {
+        self.url = url
+    }
+    
+    override var activityTitle: String? {
+        return UIConstants.strings.shareMenuRequestDesktop
+    }
+    
+    override var activityImage: UIImage? {
+        return #imageLiteral(resourceName: "request_desktop_site_activity")
+    }
+    
+    override func perform() {
+        // Reload in desktop mode
+        reloadAsDesktopSite(url: url)
+        activityDidFinish(true)
+    }
+    
+    override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
+        return true
+    }
+    
+    func reloadAsDesktopSite(url: URL) {
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification)))
+    }
+}
+
 /// This Activity Item Provider subclass does two things that are non-standard behaviour:
 ///
 /// * We return NSNull if the calling activity is not supposed to see the title. For example the Copy action, which should only paste the URL. We also include Message and Mail to have parity with what Safari exposes.

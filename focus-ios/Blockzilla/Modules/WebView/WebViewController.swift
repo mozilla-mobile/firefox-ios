@@ -82,6 +82,26 @@ class WebViewController: UIViewController, WebController {
     func goBack() { browserView.goBack() }
     func goForward() { browserView.goForward() }
     func reload() { browserView.reload() }
+    
+    @available(iOS 9, *)
+    func requestDesktop() {
+        guard let currentItem = browserView.backForwardList.currentItem else {
+            return
+        }
+    
+        browserView.customUserAgent = UserAgent.getDesktopUserAgent()
+        
+        if currentItem.url != currentItem.initialURL {
+            // Reload the initial URL to avoid UA specific redirection
+            browserView.load(URLRequest(url: currentItem.initialURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60))
+        } else {
+            reload() // Reload the current URL. We cannot use loadRequest in this case because it seems to leverage caching.
+        }
+        
+        // Unset the desktopUserAgent
+        browserView.customUserAgent = UserAgent.browserUserAgent
+    }
+    
     func stop() { browserView.stopLoading() }
 
     private func setupWebview() {
