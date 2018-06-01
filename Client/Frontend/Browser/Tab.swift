@@ -138,7 +138,7 @@ class Tab: NSObject {
     fileprivate var contentScriptManager = TabContentScriptManager()
     private(set) var userScriptManager: UserScriptManager?
 
-    fileprivate var configuration: WKWebViewConfiguration?
+    fileprivate let configuration: WKWebViewConfiguration
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
     /// tab instance, queue it for later until we become foregrounded.
@@ -192,14 +192,12 @@ class Tab: NSObject {
 
     func createWebview() {
         if webView == nil {
-            assert(configuration != nil, "Create webview can only be called once")
-            configuration!.userContentController = WKUserContentController()
-            configuration!.preferences = WKPreferences()
-            configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false
-            configuration!.allowsInlineMediaPlayback = true
-            let webView = TabWebView(frame: .zero, configuration: configuration!)
+            configuration.userContentController = WKUserContentController()
+            configuration.preferences = WKPreferences()
+            configuration.preferences.javaScriptCanOpenWindowsAutomatically = false
+            configuration.allowsInlineMediaPlayback = true
+            let webView = TabWebView(frame: .zero, configuration: configuration)
             webView.delegate = self
-            configuration = nil
 
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.allowsBackForwardNavigationGestures = true

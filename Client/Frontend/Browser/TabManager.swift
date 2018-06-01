@@ -93,7 +93,9 @@ class TabManager: NSObject {
 
     fileprivate let prefs: Prefs
     var selectedIndex: Int { return _selectedIndex }
-    var tempTabs: [Tab]?
+
+    // Enables undo of recently closed tabs
+    var recentlyClosedForUndo = [SavedTab]()
 
     var normalTabs: [Tab] {
         assert(Thread.isMainThread)
@@ -222,6 +224,8 @@ class TabManager: NSObject {
     //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
     //we only want to remove all private tabs when leaving PBM and not when entering.
     func willSwitchTabMode(leavingPBM: Bool) {
+        recentlyClosedForUndo.removeAll()
+        
         if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()
         }
@@ -505,7 +509,10 @@ class TabManager: NSObject {
     }
 
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
-        tempTabs = tabs
+        recentlyClosedForUndo = tabs.compactMap { tab in
+            return SavedTab(tab: tab, isSelected: false)
+        }
+
         var tabsCopy = tabs
         
         // Remove the current tab last to prevent switching tabs while removing tabs
@@ -522,7 +529,8 @@ class TabManager: NSObject {
             tab.hideContent()
         }
         var toast: ButtonToast?
-        if let numberOfTabs = tempTabs?.count, numberOfTabs > 0 {
+        let numberOfTabs = recentlyClosedForUndo.count
+        if numberOfTabs > 0 {
             toast = ButtonToast(labelText: String.localizedStringWithFormat(Strings.TabsDeleteAllUndoTitle, numberOfTabs), buttonText: Strings.TabsDeleteAllUndoAction, completion: { buttonPressed in
                 if buttonPressed {
                     self.undoCloseTabs()
@@ -539,27 +547,31 @@ class TabManager: NSObject {
     }
     
     func undoCloseTabs() {
-        guard let tempTabs = self.tempTabs, tempTabs.count > 0 else {
+        guard recentlyClosedForUndo.count > 0 else {
             return
         }
-        let tabsCopy = normalTabs
-        restoreTabs(tempTabs)
+
         self.isRestoring = true
-        for tab in tempTabs {
+
+        restoreInternal(savedTabs: recentlyClosedForUndo, clearPrivateTabs: false)
+        recentlyClosedForUndo.removeAll()
+
+        tabs.forEach { tab in
             tab.showContent(true)
         }
-        if !tempTabs[0].isPrivate {
-            removeTabs(tabsCopy)
+
+        // In non-private mode, delete all tabs will automatically create a tab
+        if !tabs[0].isPrivate {
+            removeTab(tabs[0])
         }
-        selectTab(tempTabs.first)
+
         self.isRestoring = false
+
         delegates.forEach { $0.get()?.tabManagerDidRestoreTabs(self) }
-        self.tempTabs?.removeAll()
-        tabs.first?.createWebview()
     }
     
     func eraseUndoCache() {
-        tempTabs?.removeAll()
+        recentlyClosedForUndo.removeAll()
     }
 
     func removeTabs(_ tabs: [Tab]) {
@@ -792,13 +804,11 @@ extension TabManager {
         }
     }
 
-    fileprivate func restoreTabsInternal() {
-        guard var savedTabs = TabManager.tabsToRestore() else {
-            return
-        }
-
+    fileprivate func restoreInternal(savedTabs: [SavedTab], clearPrivateTabs: Bool) {
+        guard savedTabs.count > 0 else { return }
+        var savedTabs = savedTabs
         // Make sure to wipe the private tabs if the user has the pref turned on
-        if shouldClearPrivateTabs() {
+        if clearPrivateTabs {
             savedTabs = savedTabs.filter { !$0.isPrivate }
         }
 
@@ -855,12 +865,17 @@ extension TabManager {
 
     func restoreTabs() {
         isRestoring = true
+        defer { isRestoring = false }
 
         if count == 0 && !AppConstants.IsRunningTest && !DebugSettingsBundleOptions.skipSessionRestore {
+            guard let savedTabs = TabManager.tabsToRestore() else {
+                return
+            }
+
             // This is wrapped in an Objective-C @try/@catch handler because NSKeyedUnarchiver may throw exceptions which Swift cannot handle
             _ = Try(
                 withTry: { () -> Void in
-                    self.restoreTabsInternal()
+                    self.restoreInternal(savedTabs: savedTabs, clearPrivateTabs: self.shouldClearPrivateTabs())
                 },
                 catch: { exception in
                     Sentry.shared.send(message: "Failed to restore tabs: ", tag: SentryTag.tabManager, severity: .error, description: "\(exception ??? "nil")")
@@ -876,18 +891,6 @@ extension TabManager {
                 selectTab(tab)
             }
         }
-    }
-    
-    func restoreTabs(_ savedTabs: [Tab]) {
-        isRestoring = true
-        for tab in savedTabs {
-            tabs.append(tab)
-            tab.navigationDelegate = self.navDelegate
-            for delegate in delegates {
-                delegate.get()?.tabManager(self, didAddTab: tab)
-            }
-        }
-        isRestoring = false
     }
 }
 
