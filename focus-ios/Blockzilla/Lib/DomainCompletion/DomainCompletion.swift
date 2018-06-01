@@ -41,11 +41,16 @@ class CustomCompletionSource: CustomAutocompleteSource {
     }
 
     func add(suggestion: String) -> CustomCompletionResult {
-        let sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSMakeRange(0, suggestion.count), withTemplate: "")
+        var sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSMakeRange(0, suggestion.count), withTemplate: "")
 
         guard !sanitizedSuggestion.isEmpty else { return .error(.invalidUrl) }
         
         guard sanitizedSuggestion.contains(".") else { return .error(.invalidUrl) }
+        
+        // Drop trailing slash, otherwise URLs will end with two when added from quick add URL menu action
+        if sanitizedSuggestion.suffix(1) == "/" {
+            sanitizedSuggestion = String(sanitizedSuggestion.dropLast())
+        }
 
         var domains = getSuggestions()
         guard !domains.contains(sanitizedSuggestion) else { return .error(.duplicateDomain) }

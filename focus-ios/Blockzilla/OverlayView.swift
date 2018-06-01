@@ -20,6 +20,7 @@ class OverlayView: UIView {
     private var searchQuery = ""
     private let copyButton = UIButton()
     private let copyBorder = UIView()
+    public var currentURL = ""
 
     init() {
         super.init(frame: CGRect.zero)
