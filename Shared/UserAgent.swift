@@ -127,7 +127,7 @@ open class UserAgent {
 
         // The iOS major version is equal to the Safari major version
         let majoriOSVersion = (UIDevice.current.systemVersion as NSString).components(separatedBy: ".")[0]
-        userAgent.replaceCharacters(in: mobileMatch.range, with: "Version/\(majoriOSVersion).0 ")
+        userAgent.replaceCharacters(in: mobileMatch.range, with: " Version/\(majoriOSVersion).0")
 
         return String(userAgent)
     }
