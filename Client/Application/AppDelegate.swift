@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
 
-    var receivedURLs: [URL]?
+    var receivedURLs = [URL]()
     var unifiedTelemetry: UnifiedTelemetry?
 
     @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -286,8 +286,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
-        self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
-        self.receivedURLs = nil
+        browserViewController.loadQueuedTabs(receivedURLs: receivedURLs)
+        receivedURLs.removeAll()
         application.applicationIconBadgeNumber = 0
 
         // handle quick actions is available
@@ -483,11 +483,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     fileprivate func openURLsInNewTabs(_ notification: UNNotification) {
-        if let sentURLs = notification.request.content.userInfo["sentTabs"] as? [NSDictionary] {
-            for sentURL in sentURLs {
-                if let urlString = sentURL.value(forKey: "url") as? String, let url = URL(string: urlString) {
-                    browserViewController.openURLInNewTab(url, isPrivileged: true)
-                }
+        guard let urls = notification.request.content.userInfo["sentTabs"] as? [NSDictionary]  else { return }
+        for sentURL in urls {
+            if let urlString = sentURL.value(forKey: "url") as? String, let url = URL(string: urlString) {
+                receivedURLs.append(url)
             }
         }
     }
@@ -577,23 +576,18 @@ extension AppDelegate {
         // NotificationService will have collected them for us in the userInfo.
         if let serializedTabs = userInfo["sentTabs"] as? [[String: String]] {
             // Let's go ahead and open those.
-            let receivedURLs = serializedTabs.compactMap { item -> URL? in
-                guard let tabURL = item["url"] else {
-                    return nil
+            for item in serializedTabs {
+                if let tabURL = item["url"], let url = URL(string: tabURL) {
+                    receivedURLs.append(url)
                 }
-                return URL(string: tabURL)
             }
 
             if receivedURLs.count > 0 {
-                // Remember which URLs we received so we can filter them out later when
-                // loading the queued tabs.
-                self.receivedURLs = receivedURLs
-                
                 // If we're in the foreground, load the queued tabs now.
                 if application.applicationState == .active {
                     DispatchQueue.main.async {
                         self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
-                        self.receivedURLs = nil
+                        self.receivedURLs.removeAll()
                     }
                 }
 
