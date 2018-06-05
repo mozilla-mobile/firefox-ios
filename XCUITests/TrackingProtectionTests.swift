@@ -10,7 +10,7 @@ let tpIsDisabledString = "The site includes elements that may track your browsin
 let noTrackingElementsString = "No tracking elements detected on this page."
 
 let websiteWithBlockedElements = "twitter.com"
-let websiteWithoutBlockedElements = "facebook.com"
+let websiteWithoutBlockedElements = "wikipedia.com"
 let differentWebsite = "mozilla.org"
 
 class TrackingProtectionTests: BaseTestCase {
@@ -129,6 +129,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL(websiteWithoutBlockedElements)
         waitUntilPageLoad()
         navigator.goto(URLBarLongPressMenu)
+        waitforExistence(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString])
         XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString].exists, "TP menu is wrong when blocking elements")
     }
 
