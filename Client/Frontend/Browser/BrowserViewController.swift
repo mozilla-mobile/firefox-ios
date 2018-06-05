@@ -112,11 +112,11 @@ class BrowserViewController: UIViewController {
     // Keep track of allowed `URLRequest`s from `webView(_:decidePolicyFor:decisionHandler:)` so
     // that we can obtain the originating `URLRequest` when a `URLResponse` is received. This will
     // allow us to re-trigger the `URLRequest` if the user requests a file to be downloaded.
-    var pendingRequests = [String : URLRequest]()
+    var pendingRequests = [String: URLRequest]()
 
     // This is set when the user taps "Download Link" from the context menu. We then force a
     // download of the next request through the `WKNavigationDelegate` that matches this web view.
-    weak var pendingDownloadWebView: WKWebView? = nil
+    weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue = DownloadQueue()
 
@@ -842,7 +842,10 @@ class BrowserViewController: UIViewController {
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        let webView = object as! WKWebView
+        guard let webView = object as? WKWebView else {
+            assert(false)
+            return
+        }
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
             return
@@ -1835,16 +1838,13 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {
+        if let url = tab.url, !url.isAboutURL && !tab.isPrivate {
+            profile.recentlyClosedTabs.addTab(url as URL, title: tab.title, faviconURL: tab.displayFavicon?.url)
+        }
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab) {
         updateTabCountUsingTabManager(tabManager)
-        // tabDelegate is a weak ref (and the tab's webView may not be destroyed yet)
-        // so we don't expcitly unset it.
-
-        if let url = tab.url, !url.isAboutURL && !tab.isPrivate {
-            profile.recentlyClosedTabs.addTab(url as URL, title: tab.title, faviconURL: tab.displayFavicon?.url)
-        }
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
