@@ -51,7 +51,7 @@ class ClientTests: XCTestCase {
 
     func testDesktopUserAgent() {
         let compare: (String) -> Bool = { ua in
-            let range = ua.range(of: "^Mozilla/5\\.0 \\(Macintosh; Intel Mac OS X [0-9_]+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) Safari/[0-9\\.]+$", options: .regularExpression)
+            let range = ua.range(of: "^Mozilla/5\\.0 \\(Macintosh; Intel Mac OS X [0-9_]+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) Version/[0-9\\.]+ Safari/[0-9\\.]+$", options: .regularExpression)
             return range != nil
         }
 
