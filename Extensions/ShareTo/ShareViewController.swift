@@ -116,7 +116,7 @@ class ShareViewController: UIViewController {
             makeActionRow(addTo: stackView, label: Strings.ShareBookmarkThisPage, imageName: "AddToBookmarks", action: #selector(actionBookmarkThisPage), hasNavigation: false)
             makeActionRow(addTo: stackView, label: Strings.ShareAddToReadingList, imageName: "AddToReadingList", action: #selector(actionAddToReadingList), hasNavigation: false)
             makeSeparator(addTo: stackView)
-            makeActionRow(addTo: stackView, label: Strings.ShareSendToDevice, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
+            makeActionRow(addTo: stackView, label: Strings.SendToDeviceTitle, imageName: "menu-Send-to-Device", action: #selector(actionSendToDevice), hasNavigation: true)
         } else {
             pageInfoRowUrlLabel?.removeFromSuperview()
             makeActionRow(addTo: stackView, label: Strings.ShareSearchInFirefox, imageName: "quickSearch", action: #selector(actionSearchInFirefox), hasNavigation: false)
