@@ -8,6 +8,7 @@ from mozprofile import Profile
 import mozinstall
 import mozversion
 import pytest
+import requests
 
 from tps import TPS
 from xcodebuild import XCodeBuild
@@ -40,15 +41,17 @@ def firefox_log(pytestconfig, tmpdir):
 
 @pytest.fixture(scope='session')
 def tps_addon(pytestconfig, tmpdir_factory):
-    url = 'https://index.taskcluster.net/v1/task/' \
-          'gecko.v2.mozilla-central.latest.firefox.addons.tps/' \
-          'artifacts/public/tps.xpi'
     path = pytestconfig.getoption('tps')
-    if path is None:
-        cache_dir = str(pytestconfig.cache.makedir('tps'))
-        scraper = DirectScraper(url, destination=cache_dir)
-        path = scraper.download()
-    yield path
+    if path is not None:
+        yield path
+    task_url = 'https://index.taskcluster.net/v1/task/' \
+               'gecko.v2.mozilla-central.latest.firefox.addons.tps'
+    task_id = requests.get(task_url).json().get('taskId')
+    cache_dir = str(pytestconfig.cache.makedir('tps-{}'.format(task_id)))
+    addon_url = 'https://queue.taskcluster.net/v1/task/' \
+                '{}/artifacts/public/tps.xpi'.format(task_id)
+    scraper = DirectScraper(addon_url, destination=cache_dir)
+    yield scraper.download()
 
 
 @pytest.fixture
