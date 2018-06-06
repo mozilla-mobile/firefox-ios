@@ -36,6 +36,20 @@ public extension Logger {
         return value
     }()
 
+    static func copyPreviousLogsToDocuments() {
+        if let defaultLogDirectoryPath = logFileDirectoryPath(inDocuments: false),
+            let documentsLogDirectoryPath = logFileDirectoryPath(inDocuments: true),
+            let previousLogFiles = try? FileManager.default.contentsOfDirectory(atPath: defaultLogDirectoryPath) {
+            let defaultLogDirectoryURL = URL(fileURLWithPath: defaultLogDirectoryPath, isDirectory: true)
+            let documentsLogDirectoryURL = URL(fileURLWithPath: documentsLogDirectoryPath, isDirectory: true)
+            for previousLogFile in previousLogFiles {
+                let previousLogFileURL = defaultLogDirectoryURL.appendingPathComponent(previousLogFile)
+                let targetLogFileURL = documentsLogDirectoryURL.appendingPathComponent(previousLogFile)
+                try? FileManager.default.copyItem(at: previousLogFileURL, to: targetLogFileURL)
+            }
+        }
+    }
+
     /**
     Return the log file directory path. If the directory doesn't exist, make sure it exist first before returning the path.
 

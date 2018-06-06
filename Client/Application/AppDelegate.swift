@@ -71,17 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
         if DebugSettingsBundleOptions.saveLogsToDocuments {
-            if let defaultLogDirectoryPath = Logger.logFileDirectoryPath(inDocuments: false),
-                let documentsLogDirectoryPath = Logger.logFileDirectoryPath(inDocuments: true),
-                let previousLogFiles = try? FileManager.default.contentsOfDirectory(atPath: defaultLogDirectoryPath) {
-                let defaultLogDirectoryURL = URL(fileURLWithPath: defaultLogDirectoryPath, isDirectory: true)
-                let documentsLogDirectoryURL = URL(fileURLWithPath: documentsLogDirectoryPath, isDirectory: true)
-                for previousLogFile in previousLogFiles {
-                    let previousLogFileURL = defaultLogDirectoryURL.appendingPathComponent(previousLogFile)
-                    let targetLogFileURL = documentsLogDirectoryURL.appendingPathComponent(previousLogFile)
-                    try? FileManager.default.copyItem(at: previousLogFileURL, to: targetLogFileURL)
-                }
-            }
+            Logger.copyPreviousLogsToDocuments();
         }
 
         return startApplication(application, withLaunchOptions: launchOptions)
