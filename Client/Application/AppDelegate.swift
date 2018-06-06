@@ -489,6 +489,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 receivedURLs.append(url)
             }
         }
+
+        // Check if the app is foregrounded, _also_ verify the BVC is initialized. Most BVC functions depend on viewDidLoad() having run –if not, they will crash.
+        if UIApplication.shared.applicationState == .active && browserViewController.isViewLoaded {
+            browserViewController.loadQueuedTabs(receivedURLs: receivedURLs)
+            receivedURLs.removeAll()
+        }
     }
 
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
