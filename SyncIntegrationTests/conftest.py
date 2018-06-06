@@ -18,7 +18,8 @@ here = os.path.dirname(__file__)
 
 @pytest.fixture(scope='session')
 def firefox(pytestconfig, tmpdir_factory):
-    binary = pytestconfig.getoption('firefox')
+    binary = os.getenv('MOZREGRESSION_BINARY',
+                       pytestconfig.getoption('firefox'))
     if binary is None:
         cache_dir = str(pytestconfig.cache.makedir('firefox'))
         scraper = FactoryScraper('daily', destination=cache_dir)
