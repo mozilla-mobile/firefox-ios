@@ -68,14 +68,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.backgroundColor = UIColor.Photon.White100
 
-        // Short circuit the app if we want to email logs from the debug menu
-        if DebugSettingsBundleOptions.launchIntoEmailComposer {
-            self.window?.rootViewController = UIViewController()
-            presentEmailComposerWithLogs()
-            return true
-        } else {
-            return startApplication(application, withLaunchOptions: launchOptions)
+        // If the 'Save logs to Files app on next launch' toggle
+        // is turned on in the Settings app, copy over old logs.
+        if DebugSettingsBundleOptions.saveLogsToDocuments {
+            if let defaultLogDirectoryPath = Logger.logFileDirectoryPath(inDocuments: false),
+                let documentsLogDirectoryPath = Logger.logFileDirectoryPath(inDocuments: true),
+                let previousLogFiles = try? FileManager.default.contentsOfDirectory(atPath: defaultLogDirectoryPath) {
+                let defaultLogDirectoryURL = URL(fileURLWithPath: defaultLogDirectoryPath, isDirectory: true)
+                let documentsLogDirectoryURL = URL(fileURLWithPath: documentsLogDirectoryPath, isDirectory: true)
+                for previousLogFile in previousLogFiles {
+                    let previousLogFileURL = defaultLogDirectoryURL.appendingPathComponent(previousLogFile)
+                    let targetLogFileURL = documentsLogDirectoryURL.appendingPathComponent(previousLogFile)
+                    try? FileManager.default.copyItem(at: previousLogFileURL, to: targetLogFileURL)
+                }
+            }
         }
+
+        return startApplication(application, withLaunchOptions: launchOptions)
     }
 
     @discardableResult fileprivate func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
@@ -106,10 +115,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         unifiedTelemetry = UnifiedTelemetry(profile: profile)
 
-        if !DebugSettingsBundleOptions.disableLocalWebServer {
-            // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
-            setUpWebServer(profile)
-        }
+        // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
+        setUpWebServer(profile)
 
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
 
@@ -261,9 +268,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(_ application: UIApplication) {
-        guard !DebugSettingsBundleOptions.launchIntoEmailComposer else {
-            return
-        }
 
         //
         // We are back in the foreground, so set CleanlyBackgrounded to false so that we can detect that
@@ -408,39 +412,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Some sites will only serve HTML that points to .ico files.
         // The FaviconFetcher is explicitly for getting high-res icons, so use the desktop user agent.
         FaviconFetcher.userAgent = UserAgent.desktopUserAgent()
-    }
-
-    fileprivate func presentEmailComposerWithLogs() {
-        if let buildNumber = Bundle.main.object(forInfoDictionaryKey: String(kCFBundleVersionKey)) as? NSString {
-            let mailComposeViewController = MFMailComposeViewController()
-            mailComposeViewController.mailComposeDelegate = self
-            mailComposeViewController.setSubject("Debug Info for iOS client version v\(appVersion) (\(buildNumber))")
-
-            if DebugSettingsBundleOptions.attachLogsToDebugEmail {
-                do {
-                    let logNamesAndData = try Logger.diskLogFilenamesAndData()
-                    logNamesAndData.forEach { nameAndData in
-                        if let data = nameAndData.1 {
-                            mailComposeViewController.addAttachmentData(data, mimeType: "text/plain", fileName: nameAndData.0)
-                        }
-                    }
-                } catch _ {
-                    print("Failed to retrieve logs from device")
-                }
-            }
-
-            if DebugSettingsBundleOptions.attachTabStateToDebugEmail {
-                if let tabStateDebugData = TabManager.tabRestorationDebugInfo().data(using: .utf8) {
-                    mailComposeViewController.addAttachmentData(tabStateDebugData, mimeType: "text/plain", fileName: "tabState.txt")
-                }
-
-                if let tabStateData = TabManager.tabArchiveData() {
-                    mailComposeViewController.addAttachmentData(tabStateData as Data, mimeType: "application/octet-stream", fileName: "tabsState.archive")
-                }
-            }
-
-            self.window?.rootViewController?.present(mailComposeViewController, animated: true, completion: nil)
-        }
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
