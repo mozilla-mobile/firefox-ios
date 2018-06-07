@@ -194,10 +194,19 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "ActivityStreamTest/testTopSitesOpenInNewPrivateTab()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testPromptPassCodeUponReentry()">
+               </Test>
+               <Test
                   Identifier = "BaseTestCase">
                </Test>
                <Test
                   Identifier = "DragAndDropTests">
+               </Test>
+               <Test
+                  Identifier = "FirstRunTourTests/testFirstRunTour()">
                </Test>
                <Test
                   Identifier = "HomePageUITest">
@@ -207,6 +216,9 @@
                </Test>
                <Test
                   Identifier = "IntegrationTests/testFxASyncBookmark()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testLongPressLinkOptions()">
                </Test>
                <Test
                   Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
@@ -221,7 +233,28 @@
                   Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
                </Test>
                <Test
+                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowBlankPage()">
+               </Test>
+               <Test
+                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowYourBookmarks()">
+               </Test>
+               <Test
+                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowYourHistory()">
+               </Test>
+               <Test
+                  Identifier = "NewTabSettingsTest/testCheckNewTabSettingsByDefault()">
+               </Test>
+               <Test
+                  Identifier = "PhotonActionSheetTest/testPinToTop()">
+               </Test>
+               <Test
                   Identifier = "PhotonActionSheetTest/testSendToDeviceFromShareOption()">
+               </Test>
+               <Test
+                  Identifier = "PhotonActionSheetTest/testShareOptionIsShownFromShortCut()">
+               </Test>
+               <Test
+                  Identifier = "PhotonActionSheetTest/testSharePageWithShareSheetOptions()">
                </Test>
                <Test
                   Identifier = "PrivateBrowsingTest/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()">
@@ -233,7 +266,19 @@
                   Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
+                  Identifier = "ReaderViewTest/testAddToReadingList()">
+               </Test>
+               <Test
+                  Identifier = "ReaderViewTest/testLoadReaderContent()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testSavedLoginSelectUnselect()">
+               </Test>
+               <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">
+               </Test>
+               <Test
+                  Identifier = "SearchTests/testSearchEngine()">
                </Test>
                <Test
                   Identifier = "SiteLoadTest">
@@ -248,7 +293,28 @@
                   Identifier = "ToolbarTests/testShowToolbarWhenScrollingDefaultOption()">
                </Test>
                <Test
+                  Identifier = "TopTabsTest/testAddTabFromTabTray()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testCloseAllTabsPrivateModeUndo()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testCloseAllTabsUndo()">
+               </Test>
+               <Test
                   Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testSwitchBetweenTabsNoPrivatePrivateToastButton()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testSwitchBetweenTabsToastButton()">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests/testEnableDisableTPforSite()">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests/testTrackingProtection()">
                </Test>
             </SkippedTests>
          </TestableReference>
