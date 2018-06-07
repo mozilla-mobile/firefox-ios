@@ -14,6 +14,7 @@ pytest = "*"
 pytest-fxa = "*"
 pytest-html = "*"
 pytest-metadata = "*"
+requests = "*"
 
 [dev-packages]
 

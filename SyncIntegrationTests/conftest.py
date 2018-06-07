@@ -8,6 +8,7 @@ from mozprofile import Profile
 import mozinstall
 import mozversion
 import pytest
+import requests
 
 from tps import TPS
 from xcodebuild import XCodeBuild
@@ -17,7 +18,8 @@ here = os.path.dirname(__file__)
 
 @pytest.fixture(scope='session')
 def firefox(pytestconfig, tmpdir_factory):
-    binary = pytestconfig.getoption('firefox')
+    binary = os.getenv('MOZREGRESSION_BINARY',
+                       pytestconfig.getoption('firefox'))
     if binary is None:
         cache_dir = str(pytestconfig.cache.makedir('firefox'))
         scraper = FactoryScraper('daily', destination=cache_dir)
@@ -40,15 +42,17 @@ def firefox_log(pytestconfig, tmpdir):
 
 @pytest.fixture(scope='session')
 def tps_addon(pytestconfig, tmpdir_factory):
-    url = 'https://index.taskcluster.net/v1/task/' \
-          'gecko.v2.mozilla-central.latest.firefox.addons.tps/' \
-          'artifacts/public/tps.xpi'
     path = pytestconfig.getoption('tps')
-    if path is None:
-        cache_dir = str(pytestconfig.cache.makedir('tps'))
-        scraper = DirectScraper(url, destination=cache_dir)
-        path = scraper.download()
-    yield path
+    if path is not None:
+        yield path
+    task_url = 'https://index.taskcluster.net/v1/task/' \
+               'gecko.v2.mozilla-central.latest.firefox.addons.tps'
+    task_id = requests.get(task_url).json().get('taskId')
+    cache_dir = str(pytestconfig.cache.makedir('tps-{}'.format(task_id)))
+    addon_url = 'https://queue.taskcluster.net/v1/task/' \
+                '{}/artifacts/public/tps.xpi'.format(task_id)
+    scraper = DirectScraper(addon_url, destination=cache_dir)
+    yield scraper.download()
 
 
 @pytest.fixture
@@ -68,22 +72,35 @@ def tps_log(pytestconfig, tmpdir):
 @pytest.fixture
 def tps_profile(pytestconfig, tps_addon, tps_config, tps_log, fxa_urls):
     preferences = {
+        'app.update.enabled': False,
+        'browser.dom.window.dump.enabled': True,
         'browser.onboarding.enabled': False,
+        'browser.sessionstore.resume_from_crash': False,
+        'browser.shell.checkDefaultBrowser': False,
         'browser.startup.homepage_override.mstone': 'ignore',
         'browser.startup.page': 0,
+        'browser.tabs.warnOnClose': False,
+        'browser.warnOnQuit': False,
         'datareporting.policy.dataSubmissionEnabled': False,
         # 'devtools.chrome.enabled': True,
         # 'devtools.debugger.remote-enabled': True,
+        'engine.bookmarks.repair.enabled': False,
         'extensions.autoDisableScopes': 10,
         'extensions.legacy.enabled': True,
+        'extensions.update.enabled': False,
+        'extensions.update.notifyUser': False,
         'identity.fxaccounts.autoconfig.uri': fxa_urls['content'],
         'testing.tps.skipPingValidation': True,
+        'services.sync.firstSync': 'notReady',
+        'services.sync.lastversion': '1.0',
         'services.sync.log.appender.console': 'Trace',
         'services.sync.log.appender.dump': 'Trace',
         'services.sync.log.appender.file.level': 'Trace',
         'services.sync.log.appender.file.logOnSuccess': True,
         'services.sync.log.logger': 'Trace',
         'services.sync.log.logger.engine': 'Trace',
+        'services.sync.testing.tps': True,
+        'toolkit.startup.max_resumed_crashes': -1,
         'tps.config': json.dumps(tps_config),
         'tps.logfile': tps_log,
         'tps.seconds_since_epoch': int(time.time()),
