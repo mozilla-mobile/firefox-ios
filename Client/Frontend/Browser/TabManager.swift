@@ -865,13 +865,23 @@ extension TabManager {
 
     func restoreTabs() {
         isRestoring = true
-        defer { isRestoring = false }
+        defer {
+            isRestoring = false
+
+            // Always make sure there is a single normal tab.
+            if normalTabs.isEmpty {
+                let tab = addTab()
+                if selectedTab == nil {
+                    selectTab(tab)
+                }
+            }
+        }
+
+        guard let savedTabs = TabManager.tabsToRestore() else {
+            return
+        }
 
         if count == 0 && !AppConstants.IsRunningTest && !DebugSettingsBundleOptions.skipSessionRestore {
-            guard let savedTabs = TabManager.tabsToRestore() else {
-                return
-            }
-
             // This is wrapped in an Objective-C @try/@catch handler because NSKeyedUnarchiver may throw exceptions which Swift cannot handle
             _ = Try(
                 withTry: { () -> Void in
@@ -881,15 +891,6 @@ extension TabManager {
                     Sentry.shared.send(message: "Failed to restore tabs: ", tag: SentryTag.tabManager, severity: .error, description: "\(exception ??? "nil")")
                 }
             )
-        }
-        isRestoring = false
-
-        // Always make sure there is a single normal tab.
-        if normalTabs.isEmpty {
-            let tab = addTab()
-            if selectedTab == nil {
-                selectTab(tab)
-            }
         }
     }
 }
