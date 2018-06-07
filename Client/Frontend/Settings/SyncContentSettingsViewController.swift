@@ -140,14 +140,11 @@ class SyncContentSettingsViewController: SettingsTableViewController {
     }
 
     func engineSettingChanged(_ engineName: String) -> (Bool) -> Void {
-        let prefName = "sync.engine.\(engineName).enabledStateChanged"
         return { enabled in
-            if let _ = self.profile.prefs.boolForKey(prefName) { // Switch it back to not-changed
-                self.profile.prefs.removeObjectForKey(prefName)
-                self.enginesToSyncOnExit.remove(engineName)
-            } else {
-                self.profile.prefs.setBool(true, forKey: prefName)
+            if enabled {
                 self.enginesToSyncOnExit.insert(engineName)
+            } else {
+                self.enginesToSyncOnExit.remove(engineName)
             }
         }
     }
