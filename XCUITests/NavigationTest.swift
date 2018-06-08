@@ -146,7 +146,7 @@ class NavigationTest: BaseTestCase {
     }
 
     private func checkDesktopView() {
-        let desktopViewElement = app.webViews.links.staticTexts["About Google"]
+        let desktopViewElement = app.webViews.links.staticTexts["About"]
         waitforExistence(desktopViewElement)
         XCTAssertTrue (desktopViewElement.exists, "Desktop view is not available")
     }
