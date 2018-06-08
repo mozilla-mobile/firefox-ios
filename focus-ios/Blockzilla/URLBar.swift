@@ -550,7 +550,7 @@ class URLBar: UIView {
         isEditing = false
         updateLockIcon()
         updateShieldIcon()
-        urlText.resignFirstResponder()
+        let _ = urlText.resignFirstResponder()
         setTextToURL()
         self.toolset.sendButton.isEnabled = true
         delegate?.urlBarDidDismiss(self)
@@ -705,7 +705,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
         }
         
         // When text.characters.count == 0, it is the HomeView
-        if let text = autocompleteTextField.text, !isEditing, text.characters.count == 0 {
+        if let text = autocompleteTextField.text, !isEditing, text.count == 0 {
             shouldPresent = true
         }
 

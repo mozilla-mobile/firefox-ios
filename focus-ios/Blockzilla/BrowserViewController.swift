@@ -187,7 +187,7 @@ class BrowserViewController: UIViewController {
         createURLBar()
         
         // Listen for request desktop site notifications
-        let nc = NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
             self.webViewController.requestDesktop()
         }
 
