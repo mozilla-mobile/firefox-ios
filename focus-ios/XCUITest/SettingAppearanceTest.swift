@@ -19,9 +19,6 @@ class SettingAppearanceTest: BaseTestCase {
     func testCheckSetting() {
         app.buttons["Settings"].tap()
         
-        
-        app.tables.firstMatch.swipeUp()
-
         // Check About page
         let aboutCell = app.cells["settingsViewController.about"]
         waitforExistence(element: aboutCell)
@@ -99,6 +96,16 @@ class SettingAppearanceTest: BaseTestCase {
         otherContentSwitch.tap()
         alertsQuery.buttons["No, Thanks"].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
+        
+        // Check navigate to app store review and back
+        let reviewCell = app.cells["settingsViewController.rateFocus"]
+        let safariApp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
+        
+        waitforHittable(element: reviewCell)
+        reviewCell.tap()
+        waitforExistence(element: safariApp)
+        XCTAssert(safariApp.state == .runningForeground)
+        app.activate()
     }
     
     func testOpenInSafari() {

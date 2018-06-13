@@ -225,6 +225,7 @@ struct UIConstants {
         static let selectLocationBarTitle = NSLocalizedString("browserShortcutDescription.selectLocationBar", value: "Select Location Bar", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
         static let trackersDescriptionLabel = NSLocalizedString("trackingProtection.trackerDescriptionLabel", value: "Choose whether %@ blocks ad, analytic, social, and other trackers.", comment: "General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar")
         static let trackingProtectionLearnMore = NSLocalizedString("trackingProtection.learnMore", value: "Learn More", comment: "Text for the button to learn more about Tracking Protection.")
+        static let ratingSetting = NSLocalizedString("Settings.rate", value: "Rate Firefox Focus", comment: "Title for rating firefox in settings")
         static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Power up your privacy", comment: "Title for the first panel 'Welcome' in the First Run tour.")
         static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
         static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "Take private browsing to the next level. Block ads and other content that can track you across sites and bog down page load times.", comment: "Description for the 'Welcome' panel in the First Run tour.")
@@ -274,5 +275,9 @@ struct UIConstants {
         static let autocompleteCustomURLAdded = NSLocalizedString("Autocomplete.customUrlAdded", value: "New Custom URL added.", comment: "Label for toast alerting a custom URL has been added")
         static let shareTrackerStatsLabel = NSLocalizedString("share.trackerStatsLabel", value: "%@ trackers blocked so far", comment: "Text used when the user shares their trackers blocked stats")
         static let shareTrackerStatsText = NSLocalizedString("share.trackerStatsText", value: "%@, the privacy browser from Mozilla, has already blocked %@ trackers for me. Fewer ads and trackers following me around means faster browsing! Get Focus for yourself here", comment: "The text shared to users after the user chooses to share there tracker stats")
+        
+        static let userDefaultsLaunchThresholdKey = "launchThreshold"
+        static let userDefaultsLaunchCountKey = "launchCount"
+        static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"
     }
 }

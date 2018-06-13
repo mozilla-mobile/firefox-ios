@@ -267,6 +267,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = UIConstants.strings.aboutTitle
                 cell.accessibilityIdentifier = "settingsViewController.about"
+            } else if indexPath.section == 4 && indexPath.row == 2 {
+                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "ratingCell")
+                cell.textLabel?.text = UIConstants.strings.ratingSetting
+                cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             } else {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "toggleCell")
                 let toggle = toggleForIndexPath(indexPath)
@@ -296,7 +300,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 1: return 1 // Integration.
         case 2: return 4 // Privacy.
         case 3: return 1 // Performance.
-        case 4: return 2 // Mozilla.
+        case 4: return 3 // Mozilla.
         default:
             assertionFailure("Invalid section")
             return 0
@@ -311,7 +315,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // Height for the Search Engine and Learn More row.
         if indexPath.section == 0 { return UITableViewAutomaticDimension }
         if indexPath.section == 5 ||
-            (indexPath.section == 4 && indexPath.row == 1) {
+            (indexPath.section == 4 && indexPath.row >= 1) {
             return 44
         }
 
@@ -406,6 +410,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 4:
             if indexPath.row == 1 {
                 aboutClicked()
+            } else if indexPath.row == 2 {
+                if let reviewURL = URL(string: "https://itunes.apple.com/us/app/firefox-focus-privacy-browser/id1055677337?mt=8"), UIApplication.shared.canOpenURL(reviewURL) {
+                    UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
+                }
             }
         default: break
         }

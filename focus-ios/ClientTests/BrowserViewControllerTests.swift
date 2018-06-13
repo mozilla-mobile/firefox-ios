@@ -8,6 +8,41 @@ import XCTest
 
 class BrowserViewControllerTests: XCTestCase {
     private let mockUserDefaults = MockUserDefaults()
+    
+    func testRequestReviewThreshold() {
+        let bvc = BrowserViewController()
+        mockUserDefaults.clear()
+        
+        // Ensure initial threshold is set
+        mockUserDefaults.set(1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        bvc.requestReviewIfNecessary()
+        XCTAssert(mockUserDefaults.integer(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey) == 14)
+        XCTAssert(mockUserDefaults.object(forKey: UIConstants.strings.userDefaultsLastReviewRequestDate) == nil)
+
+        // Trigger first actual review request
+        mockUserDefaults.set(15, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        bvc.requestReviewIfNecessary()
+        
+        // Check second threshold and date are set
+        XCTAssert(mockUserDefaults.integer(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey) == 64)
+        guard let prevDate = mockUserDefaults.object(forKey: UIConstants.strings.userDefaultsLastReviewRequestDate) as? Date else {
+            XCTFail()
+            return
+        }
+        
+        let daysSinceLastRequest = Calendar.current.dateComponents([.day], from: prevDate, to: Date()).day ?? -1
+        XCTAssert(daysSinceLastRequest == 0)
+        
+        // Trigger second review request with prevDate < 90 days (i.e. launch threshold should remain the same due to early return)
+        mockUserDefaults.set(65, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        bvc.requestReviewIfNecessary()
+        XCTAssert(mockUserDefaults.integer(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey) == 64)
+
+        // Trigger actual second review
+        mockUserDefaults.set(nil, forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
+        bvc.requestReviewIfNecessary()
+        XCTAssert(mockUserDefaults.integer(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey) == 114)
+    }
 
     func testShareButtonPreviouslyInGroup() {
         let bvc = BrowserViewController()
@@ -65,5 +100,8 @@ fileprivate class MockUserDefaults: UserDefaults {
         removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
         removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
         removeObject(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
+        removeObject(forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
+        removeObject(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        removeObject(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
     }
 }

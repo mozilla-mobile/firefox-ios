@@ -24,6 +24,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupTelemetry()
         TPStatsBlocklistChecker.shared.startup()
 
+        // Count number of app launches for requesting a review
+        let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+    
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
         // localStorage in-memory (bug 1319208), so we just disable it altogether.
