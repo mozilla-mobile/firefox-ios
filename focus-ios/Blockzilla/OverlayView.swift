@@ -10,6 +10,7 @@ protocol OverlayViewDelegate: class {
     func overlayViewDidPressSettings(_ overlayView: OverlayView)
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String)
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String)
+    func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String)
 }
 
 class OverlayView: UIView {
@@ -20,6 +21,8 @@ class OverlayView: UIView {
     private var searchQuery = ""
     private let copyButton = UIButton()
     private let copyBorder = UIView()
+    private let findInPageButton = InsetButton()
+    private let findInPageBorder = UIView()
     public var currentURL = ""
 
     init() {
@@ -47,8 +50,35 @@ class OverlayView: UIView {
             make.height.equalTo(1)
         }
         
-        copyButton.titleLabel?.font = UIConstants.fonts.copyButton
         let padding = UIConstants.layout.searchButtonInset
+        findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
+        findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+        findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
+        findInPageButton.addTarget(self, action: #selector(didPressFindOnPage), for: .touchUpInside)
+        findInPageButton.accessibilityIdentifier = "FindInPageBar.button"
+        if UIView.userInterfaceLayoutDirection(for: findInPageButton.semanticContentAttribute) == .rightToLeft {
+            findInPageButton.contentHorizontalAlignment = .right
+        } else {
+            findInPageButton.contentHorizontalAlignment = .left
+        }
+        addSubview(findInPageButton)
+        
+        findInPageBorder.isHidden = true
+        findInPageBorder.backgroundColor = UIConstants.colors.copyButtonBorder
+        addSubview(findInPageBorder)
+        
+        findInPageButton.snp.makeConstraints { make in
+            make.top.equalTo(searchBorder.snp.bottom)
+            make.leading.trailing.equalTo(self)
+            make.height.equalTo(56)
+        }
+        findInPageBorder.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(self)
+            make.top.equalTo(findInPageButton.snp.bottom)
+            make.height.equalTo(1)
+        }
+
+        copyButton.titleLabel?.font = UIConstants.fonts.copyButton
         copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         copyButton.titleLabel?.lineBreakMode = .byTruncatingTail
         if UIView.userInterfaceLayoutDirection(for: copyButton.semanticContentAttribute) == .rightToLeft {
@@ -118,10 +148,10 @@ class OverlayView: UIView {
         return attributedString
     }
     
-    func setAttributedButtonTitle(phrase: String, button: InsetButton) {
+    func setAttributedButtonTitle(phrase: String, button: InsetButton, localizedStringFormat: String) {
         
         let attributedString = getAttributedButtonTitle(phrase: phrase,
-                                                        localizedStringFormat: UIConstants.strings.searchButton)
+                                                        localizedStringFormat: localizedStringFormat)
         
         button.setAttributedTitle(attributedString, for: .normal)
     }
@@ -144,8 +174,11 @@ class OverlayView: UIView {
                     let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
                     self.searchButton.animateHidden(query.isEmpty, duration: duration)
                     self.searchBorder.animateHidden(query.isEmpty, duration: duration)
+                    self.findInPageButton.animateHidden(query.isEmpty, duration: duration)
+                    self.findInPageBorder.animateHidden(query.isEmpty, duration: duration)
                 }
-                self.setAttributedButtonTitle(phrase: query, button: self.searchButton)
+                self.setAttributedButtonTitle(phrase: query, button: self.searchButton, localizedStringFormat: UIConstants.strings.searchButton)
+                self.setAttributedButtonTitle(phrase: query, button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
                 self.updateCopyConstraint(showCopyButton: showCopyButton)
             }
         }
@@ -163,7 +196,7 @@ class OverlayView: UIView {
             } else {
                 copyButton.snp.remakeConstraints { make in
                     make.leading.trailing.equalTo(self)
-                    make.top.equalTo(searchBorder)
+                    make.top.equalTo(findInPageBorder)
                     make.height.equalTo(56)
                 }
             }
@@ -178,6 +211,9 @@ class OverlayView: UIView {
     }
     @objc private func didPressCopy() {
         delegate?.overlayView(self, didSubmitText: UIPasteboard.general.string!)
+    }
+    @objc private func didPressFindOnPage() {
+        delegate?.overlayView(self, didSearchOnPage: searchQuery)
     }
     @objc private func didPressSettings() {
         delegate?.overlayViewDidPressSettings(self)

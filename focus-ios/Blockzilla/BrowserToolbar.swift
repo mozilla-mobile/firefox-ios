@@ -26,8 +26,7 @@ class BrowserToolbar: UIView {
         background.addSubview(backgroundBright)
 
         let borderView = UIView()
-        borderView.backgroundColor = UIConstants.colors.toolbarBorder
-        borderView.alpha = 0.9
+        borderView.backgroundColor = UIConstants.Photon.Grey70
         addSubview(borderView)
 
         stackView.distribution = .fillEqually

@@ -355,7 +355,7 @@ class URLBar: UIView {
         
     }
     
-    @objc private func activateTextField(sender: UITapGestureRecognizer) {
+    @objc public func activateTextField() {
         urlText.isUserInteractionEnabled = true
         urlText.becomeFirstResponder()
     }

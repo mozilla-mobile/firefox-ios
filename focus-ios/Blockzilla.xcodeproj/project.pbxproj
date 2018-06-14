@@ -14,6 +14,10 @@
 		0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */; };
 		0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */; };
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
+		1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */ = {isa = PBXBuildFile; fileRef = 1D3BEDF820C5E6C70019B722 /* FindInPage.js */; };
+		1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */; };
+		1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */; };
+		1DE903CE20C751D7002E53ED /* FindInPageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE903CD20C751D7002E53ED /* FindInPageTest.swift */; };
 		1D3FEEA120C0A73D00FFAA8C /* RequestDesktopTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */; };
 		1D47758820C1E66000C074AE /* CopyTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D47758720C1E66000C074AE /* CopyTest.swift */; };
 		1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */; };
@@ -226,6 +230,10 @@
 		0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingAppearanceTest.swift; sourceTree = "<group>"; };
 		0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsianLocaleTest.swift; sourceTree = "<group>"; };
 		1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		1D3BEDF820C5E6C70019B722 /* FindInPage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FindInPage.js; sourceTree = "<group>"; };
+		1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageBar.swift; sourceTree = "<group>"; };
+		1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTest.swift; sourceTree = "<group>"; };
+		1DE903CD20C751D7002E53ED /* FindInPageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInPageTest.swift; sourceTree = "<group>"; };
 		1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestDesktopTest.swift; sourceTree = "<group>"; };
 		1D47758720C1E66000C074AE /* CopyTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyTest.swift; sourceTree = "<group>"; };
 		1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTest.swift; sourceTree = "<group>"; };
@@ -839,6 +847,7 @@
 		0BA39A841DD2B8E4005F970A /* XCUITest */ = {
 			isa = PBXGroup;
 			children = (
+				1DE903CD20C751D7002E53ED /* FindInPageTest.swift */,
 				1D47758720C1E66000C074AE /* CopyTest.swift */,
 				1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */,
 				1DE6DA2120BF410400CE337B /* QuickAddAutocompleteURLTest.swift */,
@@ -1104,6 +1113,8 @@
 				F84AFE741DE77FE6005C4DD1 /* LaunchScreen@3x.png */,
 				D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */,
 				B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */,
+				1D3BEDF820C5E6C70019B722 /* FindInPage.js */,
+				1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */,
 				747ADA171FC38EFC00970132 /* IntroViewController.swift */,
 				D30179C21BCC6F65009AD388 /* AboutViewController.swift */,
 				74584E341FA1077000AF2582 /* SettingsContentViewController.swift */,
@@ -1407,6 +1418,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3B3232E1BD16A0F00B0EEE4 /* licenses.html in Resources */,
+				1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */,
 				E4BF2DDE1BACE8CA00DA9D68 /* Assets.xcassets in Resources */,
 				B3F4A3171FA136E70029A6F2 /* preload.js in Resources */,
 				6616A36F1BD17EFA00C7E493 /* style.css in Resources */,
@@ -1511,6 +1523,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DE903CE20C751D7002E53ED /* FindInPageTest.swift in Sources */,
 				0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */,
 				0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */,
 				1D47758820C1E66000C074AE /* CopyTest.swift in Sources */,
@@ -1597,6 +1610,7 @@
 				746D78FB1F4E0095002EB522 /* ShareSheetActivities.swift in Sources */,
 				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
+				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				747ADA181FC38EFC00970132 /* IntroViewController.swift in Sources */,

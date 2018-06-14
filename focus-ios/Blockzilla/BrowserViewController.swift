@@ -22,6 +22,7 @@ class BrowserViewController: UIViewController {
 
     private let trackingProtectionSummaryController = TrackingProtectionSummaryViewController()
 
+    fileprivate var keyboardState: KeyboardState?
     fileprivate let browserToolbar = BrowserToolbar()
     fileprivate var homeView: HomeView?
     fileprivate let overlayView = OverlayView()
@@ -30,6 +31,8 @@ class BrowserViewController: UIViewController {
     fileprivate var urlBar: URLBar!
     fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
+    fileprivate var findInPageBar: FindInPageBar?
+    fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
 
     fileprivate var drawerConstraint: Constraint!
     fileprivate var toolbarBottomConstraint: Constraint!
@@ -179,6 +182,10 @@ class BrowserViewController: UIViewController {
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.bottom.equalTo(mainContainerView)
         }
+        
+        view.addSubview(alertStackView)
+        alertStackView.axis = .vertical
+        alertStackView.alignment = .center
 
         // true if device is an iPad or is an iPhone in landscape mode
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == view.frame.size.width || view.frame.size.width > view.frame.size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && view.frame.size.width > view.frame.size.height)
@@ -186,6 +193,7 @@ class BrowserViewController: UIViewController {
         containWebView()
         createHomeView()
         createURLBar()
+        updateViewConstraints()
         
         // Listen for request desktop site notifications
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
@@ -215,7 +223,7 @@ class BrowserViewController: UIViewController {
         let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
         
         if userHasSeenIntro && !urlBar.inBrowsingMode {
-            self.urlBar.becomeFirstResponder()
+            urlBar.activateTextField()
         }
         
         super.viewDidAppear(animated)
@@ -316,6 +324,58 @@ class BrowserViewController: UIViewController {
 
         Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
     }
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        alertStackView.snp.remakeConstraints { make in
+            make.centerX.equalTo(self.view)
+            make.width.equalTo(self.view.snp.width)
+            
+            if let keyboardHeight = keyboardState?.intersectionHeightForView(view: self.view), keyboardHeight > 0 {
+                make.bottom.equalTo(self.view).offset(-keyboardHeight)
+            } else if !browserToolbar.isHidden {
+                make.bottom.equalTo(self.browserToolbar.snp.top)
+            } else {
+                make.bottom.equalTo(self.view.snp.bottom)
+            }
+        }
+    }
+    
+    func updateFindInPageVisibility(visible: Bool, text: String = "") {
+        if visible {
+            if findInPageBar == nil {
+                urlBar.dismiss()
+                let findInPageBar = FindInPageBar()
+                self.findInPageBar = findInPageBar
+                findInPageBar.text = text
+                findInPageBar.delegate = self
+                
+                alertStackView.addArrangedSubview(findInPageBar)
+                
+                findInPageBar.snp.makeConstraints { make in
+                    make.height.equalTo(UIConstants.ToolbarHeight)
+                    make.leading.trailing.equalTo(alertStackView)
+                }
+                
+                updateViewConstraints()
+                
+                // We make the find-in-page bar the first responder below, causing the keyboard delegates
+                // to fire. This, in turn, will animate the Find in Page container since we use the same
+                // delegate to slide the bar up and down with the keyboard. We don't want to animate the
+                // constraints added above, however, so force a layout now to prevent these constraints
+                // from being lumped in with the keyboard animation.
+                findInPageBar.layoutIfNeeded()
+            }
+            
+            self.findInPageBar?.becomeFirstResponder()
+        } else if let findInPageBar = self.findInPageBar {
+            findInPageBar.endEditing(true)
+            webViewController.evaluate("__firefox__.findDone()", completion: nil)
+            findInPageBar.removeFromSuperview()
+            self.findInPageBar = nil
+            updateViewConstraints()
+        }
+    }
 
     fileprivate func resetBrowser() {
         // Screenshot the browser, showing the screenshot on top.
@@ -359,7 +419,7 @@ class BrowserViewController: UIViewController {
                 screenshotView.alpha = 0
                 self.mainContainerView.layoutIfNeeded()
             }, completion: { _ in
-                self.urlBar.becomeFirstResponder()
+                self.urlBar.activateTextField()
                 Toast(text: UIConstants.strings.eraseMessage).show()
                 screenshotView.removeFromSuperview()
             })
@@ -445,7 +505,7 @@ class BrowserViewController: UIViewController {
     }
 
     func openOverylay(text: String) {
-        urlBar.becomeFirstResponder()
+        urlBar.activateTextField()
         urlBar.fillUrlBar(text: text)
     }
 
@@ -497,7 +557,7 @@ class BrowserViewController: UIViewController {
     }
     
     @objc private func selectLocationBar() {
-        urlBar.becomeFirstResponder()
+        urlBar.activateTextField()
     }
     
     @objc private func reload() {
@@ -584,6 +644,31 @@ class BrowserViewController: UIViewController {
     }
 }
 
+extension BrowserViewController: FindInPageBarDelegate {
+    func findInPage(_ findInPage: FindInPageBar, didTextChange text: String) {
+        find(text, function: "find")
+    }
+    
+    func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
+        findInPageBar?.endEditing(true)
+        find(text, function: "findNext")
+    }
+    
+    func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+        findInPageBar?.endEditing(true)
+        find(text, function: "findPrevious")
+    }
+    
+    func findInPageDidPressClose(_ findInPage: FindInPageBar) {
+        updateFindInPageVisibility(visible: false)
+    }
+    
+    fileprivate func find(_ text: String, function: String) {
+        let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
+        webViewController.evaluate("__firefox__.\(function)(\"\(escaped)\")", completion: nil)
+    }
+}
+
 extension BrowserViewController: URLBarDelegate {
     
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
@@ -655,6 +740,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressDelete(_ urlBar: URLBar) {
+        updateFindInPageVisibility(visible: false)
         self.resetBrowser()
     }
 
@@ -667,6 +753,7 @@ extension BrowserViewController: URLBarDelegate {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
             self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
+            self.updateFindInPageVisibility(visible: false)
             self.view.layoutIfNeeded()
         }
     }
@@ -704,22 +791,18 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
     
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.goForward()
     }
 
     func browserToolsetDidPressReload(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.reload()
     }
 
     func browserToolsetDidPressStop(_ browserToolset: BrowserToolset) {
-        urlBar.dismiss()
         webViewController.stop()
     }
 
@@ -729,10 +812,12 @@ extension BrowserViewController: BrowserToolsetDelegate {
         let shareExtensionHelper = OpenUtils(url: url, webViewController: webViewController)
         let controller = shareExtensionHelper.buildShareViewController(url: url, title: webViewController.title, printFormatter: webViewController.printFormatter, anchor: browserToolset.sendButton)
 
+        updateFindInPageVisibility(visible: false)
         present(controller, animated: true, completion: nil)
     }
 
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
+        updateFindInPageVisibility(visible: false)
         showSettings()
     }
 }
@@ -773,6 +858,12 @@ extension BrowserViewController: OverlayViewDelegate {
 
         urlBar.dismiss()
     }
+    
+    func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String) {
+        updateFindInPageVisibility(visible: true, text: query)
+        self.find(query, function: "find")
+    }
+    
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
         guard !text.isEmpty else {
@@ -797,6 +888,21 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: WebControllerDelegate {
+    func webControllerDidStartProvisionalNavigation(_ controller: WebController) {
+        urlBar.dismiss()
+        updateFindInPageVisibility(visible: false)
+    }
+    
+    func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?) {
+        if let total = totalResults {
+            findInPageBar?.totalResults = total
+        }
+        
+        if let current = currentResult {
+            findInPageBar?.currentResult = current
+        }
+    }
+    
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
         browserToolbar.isLoading = true
@@ -896,6 +1002,7 @@ extension BrowserViewController: WebControllerDelegate {
         self.urlBar.collapseUrlBar(expandAlpha: max(0, (1 - scrollBarOffsetAlpha * 2)), collapseAlpha: max(0, -(1 - scrollBarOffsetAlpha * 2)))
         self.urlBarTopConstraint.update(offset: -scrollBarOffsetAlpha * (UIConstants.layout.urlBarHeight - UIConstants.layout.collapsedUrlBarHeight))
         self.toolbarBottomConstraint.update(offset: scrollBarOffsetAlpha * (UIConstants.layout.browserToolbarHeight + view.safeAreaInsets.bottom))
+        updateViewConstraints()
         scrollView.bounds.origin.y += (lastOffsetAlpha - scrollBarOffsetAlpha) * UIConstants.layout.urlBarHeight
 
         lastScrollOffset = scrollView.contentOffset

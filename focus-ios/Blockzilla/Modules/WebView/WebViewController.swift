@@ -24,6 +24,7 @@ protocol WebController {
 }
 
 protocol WebControllerDelegate: class {
+    func webControllerDidStartProvisionalNavigation(_ controller: WebController)
     func webControllerDidStartNavigation(_ controller: WebController)
     func webControllerDidFinishNavigation(_ controller: WebController)
     func webController(_ controller: WebController, didFailNavigationWithError error: Error)
@@ -36,6 +37,7 @@ protocol WebControllerDelegate: class {
     func webController(_ controller: WebController, stateDidChange state: BrowserState)
     func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus)
+    func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?)
 }
 
 class WebViewController: UIViewController, WebController {
@@ -153,6 +155,11 @@ class WebViewController: UIViewController, WebController {
         let source2 = try! String(contentsOf: Bundle.main.url(forResource: "postload", withExtension: "js")!)
         let script2 = WKUserScript(source: source2, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
         browserView.configuration.userContentController.addUserScript(script2)
+        
+        browserView.configuration.userContentController.add(self, name: "findInPageHandler")
+        let source3 = try! String(contentsOf: Bundle.main.url(forResource: "FindInPage", withExtension: "js")!)
+        let script3 = WKUserScript(source: source3, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        browserView.configuration.userContentController.addUserScript(script3)
     }
 
     func disableTrackingProtection() {
@@ -171,6 +178,10 @@ class WebViewController: UIViewController, WebController {
         setupBlockLists()
         setupUserScripts()
         trackingProtectionStatus = .on(TPPageStats())
+    }
+    
+    func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
+        browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
 }
 
@@ -221,6 +232,10 @@ extension WebViewController: WKNavigationDelegate {
         }
         decisionHandler(decision)
     }
+    
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        delegate?.webControllerDidStartProvisionalNavigation(self)
+    }
 }
 
 extension WebViewController: BrowserState {
@@ -244,6 +259,20 @@ extension WebViewController: WKUIDelegate {
 
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "findInPageHandler" {
+            let data = message.body as! [String: Int]
+            
+            // We pass these separately as they're sent in different messages to the userContentController
+            if let currentResult = data["currentResult"] {
+                delegate?.webController(self, didUpdateFindInPageResults: currentResult, totalResults: nil)
+            }
+            
+            if let totalResults = data["totalResults"] {
+                delegate?.webController(self, didUpdateFindInPageResults: nil, totalResults: totalResults)
+            }
+            return
+        }
+        
         guard let body = message.body as? [String: String],
             let urlString = body["url"],
             var components = URLComponents(string: urlString) else {

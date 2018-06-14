@@ -6,6 +6,9 @@ import Foundation
 import UIKit
 
 struct UIConstants {
+    
+    static var ToolbarHeight: CGFloat = 46
+
     struct colors {
         static let background = UIColor(rgb: 0x272727)
         static let buttonHighlight = UIColor(rgb: 0x333333)
@@ -62,6 +65,76 @@ struct UIConstants {
         static let trackingProtectionSecondary = UIColor(rgb: 0xB2B2B2)
         static let trackingProtectionBreakdownBackground = UIColor(rgb: 0x414146)
         static let trackingProtectionLearnMore = UIColor(rgb: 0x0A84FF)
+    }
+    
+    struct Photon {
+        static let Magenta50 = UIColor(rgb: 0xff1ad9)
+        static let Magenta60 = UIColor(rgb: 0xed00b5)
+        static let Magenta70 = UIColor(rgb: 0xb5007f)
+        static let Magenta80 = UIColor(rgb: 0x7d004f)
+        static let Magenta90 = UIColor(rgb: 0x440027)
+        
+        static let Purple30 = UIColor(rgb: 0xc069ff)
+        static let Purple40 = UIColor(rgb: 0xad3bff)
+        static let Purple50 = UIColor(rgb: 0x9400ff)
+        static let Purple60 = UIColor(rgb: 0x8000d7)
+        static let Purple70 = UIColor(rgb: 0x6200a4)
+        static let Purple80 = UIColor(rgb: 0x440071)
+        static let Purple90 = UIColor(rgb: 0x25003e)
+        
+        static let Blue40 = UIColor(rgb: 0x45a1ff)
+        static let Blue50 = UIColor(rgb: 0x0a84ff)
+        static let Blue60 = UIColor(rgb: 0x0060df)
+        static let Blue70 = UIColor(rgb: 0x003eaa)
+        static let Blue80 = UIColor(rgb: 0x002275)
+        static let Blue90 = UIColor(rgb: 0x000f40)
+        
+        static let Teal50 = UIColor(rgb: 0x00feff)
+        static let Teal60 = UIColor(rgb: 0x00c8d7)
+        static let Teal70 = UIColor(rgb: 0x008ea4)
+        static let Teal80 = UIColor(rgb: 0x005a71)
+        static let Teal90 = UIColor(rgb: 0x002d3e)
+        
+        static let Green50 = UIColor(rgb: 0x30e60b)
+        static let Green60 = UIColor(rgb: 0x12bc00)
+        static let Green70 = UIColor(rgb: 0x058b00)
+        static let Green80 = UIColor(rgb: 0x006504)
+        static let Green90 = UIColor(rgb: 0x003706)
+        
+        static let Yellow50 = UIColor(rgb: 0xffe900)
+        static let Yellow60 = UIColor(rgb: 0xd7b600)
+        static let Yellow70 = UIColor(rgb: 0xa47f00)
+        static let Yellow80 = UIColor(rgb: 0x715100)
+        static let Yellow90 = UIColor(rgb: 0x3e2800)
+        
+        static let Red50 = UIColor(rgb: 0xff0039)
+        static let Red60 = UIColor(rgb: 0xd70022)
+        static let Red70 = UIColor(rgb: 0xa4000f)
+        static let Red80 = UIColor(rgb: 0x5a0002)
+        static let Red90 = UIColor(rgb: 0x3e0200)
+        
+        static let Orange50 = UIColor(rgb: 0xff9400)
+        static let Orange60 = UIColor(rgb: 0xd76e00)
+        static let Orange70 = UIColor(rgb: 0xa44900)
+        static let Orange80 = UIColor(rgb: 0x712b00)
+        static let Orange90 = UIColor(rgb: 0x3e1300)
+        
+        static let Grey10 = UIColor(rgb: 0xf9f9fa)
+        static let Grey20 = UIColor(rgb: 0xededf0)
+        static let Grey30 = UIColor(rgb: 0xd7d7db)
+        static let Grey40 = UIColor(rgb: 0xb1b1b3)
+        static let Grey50 = UIColor(rgb: 0x737373)
+        static let Grey60 = UIColor(rgb: 0x4a4a4f)
+        static let Grey70 = UIColor(rgb: 0x38383d)
+        static let Grey80 = UIColor(rgb: 0x2a2a2e)
+        static let Grey90 = UIColor(rgb: 0x0c0c0d)
+        
+        static let Ink70 = UIColor(rgb: 0x363959)
+        static let Ink80 = UIColor(rgb: 0x202340)
+        static let Ink90 = UIColor(rgb: 0x0f1126)
+        
+        static let White100 = UIColor(rgb: 0xffffff)
+        
     }
 
     struct fonts {
@@ -178,6 +251,7 @@ struct UIConstants {
         static let safariInstructionsOpen = NSLocalizedString("Safari.instructionsOpen", value: "Open Settings App", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsNotEnabled = String(format: NSLocalizedString("Safari.instructionsNotEnabled", value: "%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.productName)
         static let searchButton = NSLocalizedString("URL.searchLabel", value: "Search for %@", comment: "Label displayed for search button when typing in the URL bar")
+        static let findInPageButton = NSLocalizedString("URL.findOnPageLabel", value: "Find in page: %@", comment: "Label displayed for find in page button when typing in the URL Bar")
         static let settingsBlockOtherMessage = NSLocalizedString("Settings.blockOtherMessage", value: "Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
         static let settingsBlockOtherNo = NSLocalizedString("Settings.blockOtherNo", value: "No, Thanks", comment: "Button label for declining Content blocker alert")
         static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes", value: "I Understand", comment: "Button label for accepting Content blocker alert")
