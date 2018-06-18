@@ -6,6 +6,14 @@ import XCTest
 
 private let LabelPrompt: String = "Turn on search suggestions?"
 private let SuggestedSite: String = "foobar meaning"
+private let SuggestedSite2: String = "foobar2000"
+private let SuggestedSite3: String = "foobar2000 mac"
+
+private let SuggestedSite4: String = "foo bar baz"
+private let SuggestedSite5: String = "foo bar baz qux"
+private let SuggestedSite6: String = "foobar bit perfect"
+
+
 
 class SearchTests: BaseTestCase {
     private func typeOnSearchBar(text: String) {
@@ -86,7 +94,12 @@ class SearchTests: BaseTestCase {
         waitforNoExistence(app.staticTexts[LabelPrompt])
 
         // Suggestions should be shown
-        waitforExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitforExistence(app.tables["SiteTable"])
+        if !(app.tables["SiteTable"].buttons[SuggestedSite].exists) {
+            if !(app.tables["SiteTable"].buttons[SuggestedSite2].exists) {
+                waitforExistence(app.tables["SiteTable"].buttons[SuggestedSite3])
+            }
+        }
 
         // Typing / should stop showing suggestions
         app.textFields["address"].typeText("/")
@@ -94,7 +107,12 @@ class SearchTests: BaseTestCase {
 
         // Typing space and char after / should show suggestions again
         app.textFields["address"].typeText(" b")
-        waitforExistence(app.tables["SiteTable"].buttons["foobar burn cd"])
+        waitforExistence(app.tables["SiteTable"])
+        if !(app.tables["SiteTable"].buttons[SuggestedSite4].exists) {
+            if !(app.tables["SiteTable"].buttons[SuggestedSite5].exists) {
+                waitforExistence(app.tables["SiteTable"].buttons[SuggestedSite6])
+            }
+        }
     }
 
     func testCopyPasteComplete() {
