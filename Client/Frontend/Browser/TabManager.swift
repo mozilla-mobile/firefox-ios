@@ -850,16 +850,16 @@ extension TabManager {
             tabToSelect = tabs.first
         }
 
+        if let tab = tabToSelect {
+            selectTab(tab)
+            tab.createWebview()
+        }
+
         // Only tell our delegates that we restored tabs if we actually restored a tab(s)
         if savedTabs.count > 0 {
             for delegate in delegates {
                 delegate.get()?.tabManagerDidRestoreTabs(self)
             }
-        }
-
-        if let tab = tabToSelect {
-            selectTab(tab)
-            tab.createWebview()
         }
     }
 
