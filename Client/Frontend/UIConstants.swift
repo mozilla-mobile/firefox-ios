@@ -5,10 +5,11 @@
 import Foundation
 import Shared
 
-// A browser color represents the color of UI in both Private browsing mode and normal mode
-struct BrowserColor {
+// Represents the color of UI in both Private browsing mode and normal mode
+struct AppColor {
     let normalColor: UIColor
     let PBMColor: UIColor
+    
     init(normal: UIColor, pbm: UIColor) {
         self.normalColor = normal
         self.PBMColor = pbm
@@ -40,39 +41,39 @@ extension UIColor {
     }
 
     struct Browser {
-        static let Background = BrowserColor(normal: Photon.Grey10, pbm: Photon.Grey70)
-        static let Text = BrowserColor(normal: .white, pbm: Photon.Grey60)
-        static let URLBarDivider = BrowserColor(normal: Photon.Grey90A10, pbm: Photon.Grey60)
+        static let Background = AppColor(normal: Photon.Grey10, pbm: Photon.Grey70)
+        static let Text = AppColor(normal: .white, pbm: Photon.Grey60)
+        static let URLBarDivider = AppColor(normal: Photon.Grey90A10, pbm: Photon.Grey60)
         static let LocationBarBackground = Photon.Grey30
-        static let Tint = BrowserColor(normal: Photon.Grey80, pbm: Photon.Grey30)
+        static let Tint = AppColor(normal: Photon.Grey80, pbm: Photon.Grey30)
     }
 
     struct URLBar {
-        static let Border = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey80)
-        static let ActiveBorder = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Grey60)
-        static let Tint = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Grey10)
+        static let Border = AppColor(normal: Photon.Grey50, pbm: Photon.Grey80)
+        static let ActiveBorder = AppColor(normal: Photon.Blue50A30, pbm: Photon.Grey60)
+        static let Tint = AppColor(normal: Photon.Blue50A30, pbm: Photon.Grey10)
     }
 
     struct TextField {
-        static let Background = BrowserColor(normal: .white, pbm: Defaults.MobileGreyF)
-        static let TextAndTint = BrowserColor(normal: Photon.Grey80, pbm: .white)
-        static let Highlight = BrowserColor(normal: Defaults.iOSHighlightBlue, pbm: Defaults.Purple60A30)
-        static let ReaderModeButtonSelected = BrowserColor(normal: Photon.Blue40, pbm: Defaults.MobilePrivatePurple)
-        static let ReaderModeButtonUnselected = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey40)
+        static let Background = AppColor(normal: .white, pbm: Defaults.MobileGreyF)
+        static let TextAndTint = AppColor(normal: Photon.Grey80, pbm: .white)
+        static let Highlight = AppColor(normal: Defaults.iOSHighlightBlue, pbm: Defaults.Purple60A30)
+        static let ReaderModeButtonSelected = AppColor(normal: Photon.Blue40, pbm: Defaults.MobilePrivatePurple)
+        static let ReaderModeButtonUnselected = AppColor(normal: Photon.Grey50, pbm: Photon.Grey40)
         static let PageOptionsSelected = ReaderModeButtonSelected
         static let PageOptionsUnselected = UIColor.Browser.Tint
-        static let Separator = BrowserColor(normal: Photon.Grey30, pbm: Photon.Grey70)
+        static let Separator = AppColor(normal: Photon.Grey30, pbm: Photon.Grey70)
     }
 
     // The back/forward/refresh/menu button (bottom toolbar)
     struct ToolbarButton {
-        static let SelectedTint = BrowserColor(normal: Photon.Blue40, pbm: Photon.Purple50)
-        static let DisabledTint = BrowserColor(normal: Photon.Grey30, pbm: Photon.Grey50)
+        static let SelectedTint = AppColor(normal: Photon.Blue40, pbm: Photon.Purple50)
+        static let DisabledTint = AppColor(normal: Photon.Grey30, pbm: Photon.Grey50)
     }
 
     struct LoadingBar {
-        static let Start = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Purple50)
-        static let End = BrowserColor(normal: Photon.Blue50, pbm: Photon.Magenta50)
+        static let Start = AppColor(normal: Photon.Blue50A30, pbm: Photon.Purple50)
+        static let End = AppColor(normal: Photon.Blue50, pbm: Photon.Magenta50)
     }
 
     struct TabTray {
@@ -80,7 +81,7 @@ extension UIColor {
     }
 
     struct TopTabs {
-        static let PrivateModeTint = BrowserColor(normal: Photon.Grey10, pbm: Photon.Grey40)
+        static let PrivateModeTint = AppColor(normal: Photon.Grey10, pbm: Photon.Grey40)
         static let Background = Photon.Grey80
     }
 
@@ -88,9 +89,9 @@ extension UIColor {
         // These values are the same for both private/normal.
         // The homepanel toolbar needed to be able to theme, not anymore.
         // Keep this just in case someone decides they want it to theme again
-        static let ToolbarBackground = BrowserColor(normal: Photon.Grey10, pbm: Photon.Grey10)
-        static let ToolbarHighlight = BrowserColor(normal: Photon.Blue50, pbm: Photon.Blue50)
-        static let ToolbarTint = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey50)
+        static let ToolbarBackground = AppColor(normal: Photon.Grey10, pbm: Photon.Grey10)
+        static let ToolbarHighlight = AppColor(normal: Photon.Blue50, pbm: Photon.Blue50)
+        static let ToolbarTint = AppColor(normal: Photon.Grey50, pbm: Photon.Grey50)
     }
 }
 
