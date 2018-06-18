@@ -94,8 +94,8 @@ class FindInPageTests: BaseTestCase {
         app.textFields[""].typeText("lorem")
 
         // There should be matches
-        waitforExistence(app.staticTexts["1/3"])
-        XCTAssertTrue(app.staticTexts["1/3"].exists)
+        waitforExistence(app.staticTexts["1/5"])
+        XCTAssertTrue(app.staticTexts["1/5"].exists)
     }
 
     func testQueryWithNoMatches() {
