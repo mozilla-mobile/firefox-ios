@@ -5,30 +5,6 @@
 import Foundation
 import Shared
 
-// Represents the color of UI in both Private browsing mode and normal mode
-struct AppColor {
-    let normalColor: UIColor
-    let PBMColor: UIColor
-    
-    init(normal: UIColor, pbm: UIColor) {
-        self.normalColor = normal
-        self.PBMColor = pbm
-    }
-
-    init(normal: Int, pbm: Int) {
-        self.normalColor = UIColor(rgb: normal)
-        self.PBMColor = UIColor(rgb: pbm)
-    }
-
-    func color(isPBM: Bool) -> UIColor {
-        return isPBM ? PBMColor : normalColor
-    }
-
-    func colorFor(_ theme: Theme) -> UIColor {
-        return color(isPBM: theme == .Private)
-    }
-}
-
 extension UIColor {
     // These are defaults from http://design.firefox.com/photon/visuals/color.html
     struct Defaults {
