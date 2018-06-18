@@ -36,7 +36,6 @@ protocol TopTabCellDelegate: class {
 class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
-    fileprivate var isPrivate = false
     fileprivate var isDragging = false
 
     lazy var collectionView: UICollectionView = {
@@ -81,7 +80,7 @@ class TopTabsViewController: UIViewController {
     }()
 
     fileprivate var tabsToDisplay: [Tab] {
-        return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        return AppThemeState.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
 
     // Handle animations.
@@ -174,10 +173,8 @@ class TopTabsViewController: UIViewController {
         }
 
         view.backgroundColor = UIColor.Photon.Grey80
-        tabsButton.applyTheme(.Normal)
-        if let currentTab = tabManager.selectedTab {
-            applyTheme(currentTab.isPrivate ? .Private : .Normal)
-        }
+        tabsButton.applyTheme()
+        applyTheme()
         updateTabCount(tabStore.count, animated: false)
     }
     
@@ -204,7 +201,7 @@ class TopTabsViewController: UIViewController {
         if pendingReloadData {
             return
         }
-        self.delegate?.topTabsDidPressNewTab(self.isPrivate)
+        self.delegate?.topTabsDidPressNewTab(AppThemeState.isPrivate)
         LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Add tab button in the URL Bar on iPad"])
     }
 
@@ -212,21 +209,20 @@ class TopTabsViewController: UIViewController {
         if isUpdating || pendingReloadData {
             return
         }
-        let isPrivate = self.isPrivate
+        AppThemeState.isPrivate = !AppThemeState.isPrivate
+
         delegate?.topTabsDidTogglePrivateMode()
         self.pendingReloadData = true // Stops animations from happening
         let oldSelectedTab = self.oldSelectedTab
         self.oldSelectedTab = tabManager.selectedTab
-        self.privateModeButton.setSelected(!isPrivate, animated: true)
+        self.privateModeButton.setSelected(!AppThemeState.isPrivate, animated: true)
 
         //if private tabs is empty and we are transitioning to it add a tab
-        if tabManager.privateTabs.isEmpty  && !isPrivate {
+        if tabManager.privateTabs.isEmpty && !AppThemeState.isPrivate {
             tabManager.addTab(isPrivate: true)
         }
 
-        //get the tabs from which we will select which one to nominate for tribute (selection)
-        //the isPrivate boolean still hasnt been flipped. (It'll be flipped in the BVC didSelectedTabChange method)
-        let tabs = !isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        let tabs = AppThemeState.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         if let tab = oldSelectedTab, tabs.index(of: tab) != nil {
             tabManager.selectTab(tab)
         } else {
@@ -281,19 +277,18 @@ extension TopTabsViewController: UIDropInteractionDelegate {
                 return
             }
 
-            self.tabManager.addTab(URLRequest(url: url), isPrivate: self.isPrivate)
+            self.tabManager.addTab(URLRequest(url: url), isPrivate: AppThemeState.isPrivate)
         }
     }
 }
 
 extension TopTabsViewController: Themeable {
-    func applyTheme(_ theme: Theme) {
-        tabsButton.applyTheme(theme)
+    func applyTheme(_ theme: ThemeName) {
+        tabsButton.applyTheme()
         tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Photon.Grey80
         tabsButton.textColor = UIColor.Photon.Grey40
 
-        isPrivate = (theme == Theme.Private)
-        privateModeButton.applyTheme(theme)
+        privateModeButton.applyTheme()
         privateModeButton.tintColor = UIColor.TopTabs.PrivateModeTint.colorFor(theme)
         privateModeButton.imageView?.tintColor = privateModeButton.tintColor
         newTab.tintColor = UIColor.Photon.Grey40
@@ -321,7 +316,7 @@ extension TopTabsViewController: UICollectionViewDataSource {
         tabCell.delegate = self
         
         let tab = tabStore[index]
-        tabCell.style = tab.isPrivate ? .dark : .light
+        tabCell.style = tab.isPrivate ? .dark : .light //// DARK STYLE?
         tabCell.titleText.text = tab.displayTitle
         
         if tab.displayTitle.isEmpty {
@@ -423,7 +418,7 @@ extension TopTabsViewController: UICollectionViewDropDelegate {
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
         isDragging = false
 
-        self.tabManager.moveTab(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
+        self.tabManager.moveTab(isPrivate: AppThemeState.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
         self.performTabUpdates()
     }
 

@@ -54,8 +54,8 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
-    fileprivate func setTheme(theme: Theme, forButtons buttons: [Themeable]) {
-        buttons.forEach { $0.applyTheme(theme) }
+    fileprivate func setTheme(forButtons buttons: [Themeable]) {
+        buttons.forEach { $0.applyTheme() }
     }
 
     init(toolbar: TabToolbarProtocol) {
@@ -89,7 +89,7 @@ open class TabToolbarHelper: NSObject {
         toolbar.menuButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
         toolbar.menuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
         toolbar.menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
-        setTheme(theme: .Normal, forButtons: toolbar.actionButtons)
+        setTheme(forButtons: toolbar.actionButtons)
     }
 
     func didClickBack() {
@@ -182,7 +182,7 @@ class ToolbarButton: UIButton {
 }
 
 extension ToolbarButton: Themeable {
-    func applyTheme(_ theme: Theme) {
+    func applyTheme(_ theme: ThemeName) {
         selectedTintColor = UIColor.ToolbarButton.SelectedTint.colorFor(theme)
         disabledTintColor = UIColor.ToolbarButton.DisabledTint.colorFor(theme)
         unselectedTintColor = UIColor.Browser.Tint.colorFor(theme)
@@ -280,8 +280,9 @@ extension TabToolbar: TabToolbarProtocol {
 }
 
 extension TabToolbar: Themeable {
-    func applyTheme(_ theme: Theme) {
+    func applyTheme(_ theme: ThemeName) {
         backgroundColor = UIColor.Browser.Background.colorFor(theme)
-        helper?.setTheme(theme: theme, forButtons: actionButtons)
+
+        helper?.setTheme(forButtons: actionButtons)
     }
 }

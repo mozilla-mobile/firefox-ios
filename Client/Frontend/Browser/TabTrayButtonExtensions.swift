@@ -19,10 +19,10 @@ class PrivateModeButton: ToggleButton, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func applyTheme(_ theme: Theme) {
+    func applyTheme(_ theme: ThemeName) {
         tintColor = UIColor.Browser.Tint.colorFor(theme)
         imageView?.tintColor = tintColor
-        isSelected = theme == .Private
+        isSelected = AppThemeState.isPrivate
         accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
     }
 }

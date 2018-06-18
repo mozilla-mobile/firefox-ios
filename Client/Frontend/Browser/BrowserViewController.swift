@@ -204,8 +204,7 @@ class BrowserViewController: UIViewController {
             toolbar = TabToolbar()
             footer.addSubview(toolbar!)
             toolbar?.tabToolbarDelegate = self
-            let theme = (tabManager.selectedTab?.isPrivate ?? false) ? Theme.Private : Theme.Normal
-            toolbar?.applyTheme(theme)
+            toolbar?.applyTheme()
             updateTabCountUsingTabManager(self.tabManager)
         }
         
@@ -513,6 +512,8 @@ class BrowserViewController: UIViewController {
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         clipboardBarDisplayHandler?.checkIfShouldDisplayBar()
+
+        applyTheme()
     }
 
     fileprivate func crashedLastLaunch() -> Bool {
@@ -701,8 +702,8 @@ class BrowserViewController: UIViewController {
             assertionFailure("homePanelController is still nil after assignment.")
             return
         }
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        homePanelController.applyTheme(isPrivate ? Theme.Private : Theme.Normal)
+
+        homePanelController.applyTheme()
         let panelNumber = tabManager.selectedTab?.url?.fragment
 
         // splitting this out to see if we can get better crash reports when this has a problem
@@ -946,8 +947,8 @@ class BrowserViewController: UIViewController {
 
     // MARK: Opening New Tabs
 
-    func switchToPrivacyMode(isPrivate: Bool ) {
-//        applyTheme(isPrivate ? Theme.PrivateMode : Theme.NormalMode)
+    func switchToPrivacyMode(isPrivate: Bool) {
+        AppThemeState.isPrivate = isPrivate
 
         let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
         if tabTrayController.privateMode != isPrivate {
@@ -1767,9 +1768,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
-            if tab.isPrivate != previous?.isPrivate {
-                applyTheme(tab.isPrivate ? .Private : .Normal)
-            }
+
             readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
             if let privateModeButton = topTabsViewController?.privateModeButton, previous != nil && previous?.isPrivate != tab.isPrivate {
                 privateModeButton.setSelected(tab.isPrivate, animated: true)
@@ -2079,11 +2078,8 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
 extension BrowserViewController {
     func updateReaderModeBar() {
         if let readerModeBar = readerModeBar {
-            if let tab = self.tabManager.selectedTab, tab.isPrivate {
-                readerModeBar.applyTheme(.Private)
-            } else {
-                readerModeBar.applyTheme(.Normal)
-            }
+            readerModeBar.applyTheme()
+
             if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString, let record = profile.readingList.getRecordWithURL(url).value.successValue {
                 readerModeBar.unread = record.unread
                 readerModeBar.added = true
@@ -2715,9 +2711,9 @@ extension BrowserViewController: TabTrayDelegate {
 // MARK: Browser Chrome Theming
 extension BrowserViewController: Themeable {
 
-    func applyTheme(_ theme: Theme) {
+    func applyTheme(_ theme: ThemeName) {
         let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
-        ui.forEach { $0?.applyTheme(theme) }
+        ui.forEach { $0?.applyTheme() }
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
         setNeedsStatusBarAppearanceUpdate()
     }

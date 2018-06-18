@@ -292,7 +292,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
 // MARK: UIAppearance
 extension HomePanelViewController: Themeable {
-    func applyTheme(_ theme: Theme) {
+    func applyTheme(_ theme: ThemeName) {
         buttonContainerView.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
         view.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
         buttonTintColor = UIColor.HomePanel.ToolbarTint.colorFor(theme)

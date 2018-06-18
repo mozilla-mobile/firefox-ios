@@ -77,8 +77,6 @@ class URLBarView: UIView {
         }
     }
 
-    fileprivate var currentTheme: Theme = .Normal
-
     var toolbarIsShowing = false
     var topTabsIsShowing = false
 
@@ -333,7 +331,7 @@ class URLBarView: UIView {
             make.edges.equalTo(self.locationView)
         }
         
-        locationTextField.applyTheme(currentTheme)
+        locationTextField.applyTheme()
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -662,14 +660,13 @@ extension URLBarView {
 
 extension URLBarView: Themeable {
 
-    func applyTheme(_ theme: Theme) {
-        locationView.applyTheme(theme)
-        locationTextField?.applyTheme(theme)
-        actionButtons.forEach { $0.applyTheme(theme) }
-        tabsButton.applyTheme(theme)
+    func applyTheme(_ theme: ThemeName) {
+        locationView.applyTheme()
+        locationTextField?.applyTheme()
+        actionButtons.forEach { $0.applyTheme() }
+        tabsButton.applyTheme()
 
         progressBar.setGradientColors(startColor: UIColor.LoadingBar.Start.colorFor(theme), endColor: UIColor.LoadingBar.End.colorFor(theme))
-        currentTheme = theme
         locationBorderColor = UIColor.URLBar.Border.colorFor(theme).withAlphaComponent(0.3)
         locationActiveBorderColor = UIColor.URLBar.ActiveBorder.colorFor(theme)
         cancelTintColor = UIColor.Browser.Tint.colorFor(theme)
@@ -780,7 +777,7 @@ class ToolbarTextField: AutocompleteTextField {
 
 extension ToolbarTextField: Themeable {
 
-    func applyTheme(_ theme: Theme) {
+    func applyTheme(_ theme: ThemeName) {
         backgroundColor = UIColor.TextField.Background.colorFor(theme)
         textColor = UIColor.TextField.TextAndTint.colorFor(theme)
         clearButtonTintColor = textColor
