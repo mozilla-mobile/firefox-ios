@@ -69,11 +69,11 @@ class TabDisplayManager: NSObject {
         //get the tabs from which we will select which one to nominate for tribute (selection)
         //the isPrivate boolean still hasnt been flipped. (It'll be flipped in the BVC didSelectedTabChange method)
         let tabs = !isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-            if let tab = oldSelectedTab, tabs.index(of: tab) != nil {
-                tabManager.selectTab(tab)
-            } else {
-                tabManager.selectTab(tabs.last)
-            }
+        if let tab = oldSelectedTab, tabs.index(of: tab) != nil {
+            tabManager.selectTab(tab)
+        } else {
+            tabManager.selectTab(tabs.last)
+        }
     }
 }
 
