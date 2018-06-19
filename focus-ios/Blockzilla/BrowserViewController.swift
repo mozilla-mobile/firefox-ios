@@ -199,6 +199,11 @@ class BrowserViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
             self.webViewController.requestDesktop()
         }
+        
+        // Listen for find in page actvitiy notifications
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil)  { _ in
+            self.updateFindInPageVisibility(visible: true, text: "")
+        }
 
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()

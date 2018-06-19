@@ -31,6 +31,8 @@ class OpenUtils: NSObject {
         
         activities.append(RequestDesktopActivity(url: url))
 
+        activities.append(FindInPageActivity())
+
         if canOpenInFirefox {
             activities.append(OpenInFirefoxActivity(url: url))
         }

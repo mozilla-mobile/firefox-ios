@@ -118,9 +118,31 @@ class OpenInChromeActivity: UIActivity {
     }
 }
 
+class FindInPageActivity: UIActivity {
+    override var activityTitle: String? {
+        return UIConstants.strings.shareMenuFindInPage
+    }
+    
+    override var activityImage: UIImage? {
+        return #imageLiteral(resourceName: "ios-find-in-page")
+    }
+    
+    override func perform() {
+        openFindInPage()
+        activityDidFinish(true)
+    }
+    
+    override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
+        return true
+    }
+    
+    func openFindInPage() {
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.findInPageNotification)))
+    }
+}
+
 class RequestDesktopActivity: UIActivity {
     fileprivate let url: URL
-    private let app = UIApplication.shared
     
     init(url: URL) {
         self.url = url
