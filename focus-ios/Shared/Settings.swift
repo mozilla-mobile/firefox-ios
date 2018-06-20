@@ -5,6 +5,7 @@
 import Foundation
 
 enum SettingsToggle: String {
+    case biometricLogin = "BiometricLogin"
     case blockAds = "BlockAds"
     case blockAnalytics = "BlockAnalytics"
     case blockSocial = "BlockSocial"
@@ -23,6 +24,7 @@ struct Settings {
 
     private static func defaultForToggle(_ toggle: SettingsToggle) -> Bool {
         switch toggle {
+        case .biometricLogin: return false
         case .blockAds: return true
         case .blockAnalytics: return true
         case .blockSocial: return true
