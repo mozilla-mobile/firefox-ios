@@ -56,6 +56,7 @@ class HomeView: UIView {
         trackerStatsLabel.font = UIConstants.fonts.shareTrackerStatsLabel
         trackerStatsLabel.textColor = UIConstants.colors.defaultFont
         trackerStatsLabel.numberOfLines = 0
+        trackerStatsLabel.minimumScaleFactor = 0.65
         trackerStatsView.addSubview(trackerStatsLabel)
         
         let trackerStatsShareButton = UIButton()
@@ -95,13 +96,14 @@ class HomeView: UIView {
             make.bottom.equalTo(self).offset(-24)
             make.height.equalTo(20)
             make.centerX.equalToSuperview()
-            make.width.equalTo(300)
+            make.width.greaterThanOrEqualTo(300)
+            make.width.lessThanOrEqualToSuperview().offset(-32)
         }
         
         trackerStatsLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.left.equalTo(shieldLogo.snp.right).offset(8)
-            make.right.equalTo(trackerStatsShareButton.snp.left).offset(13)
+            make.right.equalTo(trackerStatsShareButton.snp.left).offset(-13)
             make.height.equalToSuperview()
         }
         
@@ -113,7 +115,8 @@ class HomeView: UIView {
         trackerStatsShareButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.right.equalToSuperview()
-            make.width.equalTo(80)
+            make.width.equalTo(80).priority(500)
+            make.width.greaterThanOrEqualTo(50)
             make.height.equalTo(36)
         }
     }
@@ -128,6 +131,7 @@ class HomeView: UIView {
     
     func showTrackerStatsShareButton(text: String) {
         trackerStatsLabel.text = text
+        trackerStatsLabel.sizeToFit()
         trackerStatsView.isHidden = false
         description1.isHidden = true
         description2.isHidden = true
