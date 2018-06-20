@@ -97,7 +97,7 @@ open class FxADeviceRegistrator {
         let registrationResult: FxADeviceRegistrationResult
 
         let isFxAMessagesEnabled = true
-        // TODO: build correct dict here
+        // TODO: Get the actual encryption key our own client
         let availableCommands: [String : Any] = isFxAMessagesEnabled ? [FxAClientCommandSendTab: "SENDTABKEY"] : [:]
 
         if let registration = account.deviceRegistration {

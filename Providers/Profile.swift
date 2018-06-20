@@ -142,7 +142,7 @@ protocol Profile: AnyObject {
 
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
-    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>>
+    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Success
 
     var syncManager: SyncManager! { get }
 }
@@ -442,7 +442,11 @@ open class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
 
-    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
+    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Success {
+        guard let account = self.getAccount() else {
+            return deferMaybe(NoAccountError())
+        }
+
         let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
         let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
         let fxaDeviceIds = clients.compactMap { $0.fxaDeviceId }
@@ -454,29 +458,38 @@ open class BrowserProfile: Profile {
             return self.remoteClientsAndTabs.getRemoteDevice(fxaDeviceId: fxaDeviceId)
         }
 
+        let result = Success()
+
         all(deferredRemoteDevices).upon { maybeRemoteDevices in
+            var oldRemoteClients: [RemoteClient] = []
             let remoteDevices = maybeRemoteDevices.compactMap({ $0.successValue ?? nil })
 
-            // TODO: Check if each remote device has the "availableCommands" to receive FxA messages (FxAClientCommandSendTab)
-        }
-
-        let commands = items.map { item in
-            SyncCommand.displayURIFromShareItem(item, asClient: id)
-        }
-
-        func notifyClients() {
-            guard let account = self.getAccount() else {
-                return
+            for remoteDevice in remoteDevices {
+                if let _ = remoteDevice.availableCommands?[FxAClientCommandSendTab] {
+                    // TODO: Send tab using new FxA Messages API
+                    print("**** TODO: Send tab using new FxA Messages API (\(remoteDevice.id ?? "nil")) ****")
+                } else {
+                    if let oldRemoteClient = clients.find({ $0.fxaDeviceId == remoteDevice.id }) {
+                        oldRemoteClients.append(oldRemoteClient)
+                    }
+                }
             }
-            
-            account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
+
+            if oldRemoteClients.isEmpty {
+                result.fill(Maybe(success: ()))
+            } else {
+                let commands = items.map({ SyncCommand.displayURIFromShareItem($0, asClient: id) })
+
+                self.remoteClientsAndTabs.insertCommands(commands, forClients: oldRemoteClients) >>> {
+                    self.syncManager.syncClients() >>> {
+                        account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
+                        result.fill(Maybe(success: ()))
+                    }
+                }
+            }
         }
 
-        return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> {
-            let syncStatus = self.syncManager.syncClients()
-            syncStatus >>> notifyClients
-            return syncStatus
-        }
+        return result
     }
 
     lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
@@ -573,6 +586,10 @@ open class BrowserProfile: Profile {
         if let account = account {
             self.keychain.set(account.dictionary() as NSCoding, forKey: name + ".account", withAccessibility: .afterFirstUnlock)
         }
+    }
+
+    class NoAccountError: MaybeErrorType {
+        var description = "No account."
     }
 
     // Extends NSObject so we can use timers.
@@ -1282,10 +1299,6 @@ open class BrowserProfile: Profile {
                 Date.now() < stopBy &&
                 self.profile.hasSyncableAccount()
             }
-        }
-
-        class NoAccountError: MaybeErrorType {
-            var description = "No account."
         }
 
         public func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success {
