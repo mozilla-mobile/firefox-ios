@@ -35,7 +35,7 @@ class SnackButton: UIButton {
         super.init(frame: .zero)
 
         setTitle(title, for: .normal)
-        titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
+        titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
         setTitleColor(UIConstants.ControlTintColor, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
@@ -116,7 +116,6 @@ class SnackBar: UIView {
     }
 
     fileprivate func setup() {
-        //backgroundView.clipsToBounds = true;
         addSubview(backgroundView)
         titleView.addArrangedSubview(imageView)
         titleView.addArrangedSubview(textLabel)
@@ -124,6 +123,7 @@ class SnackBar: UIView {
         let separator = UIView()
         separator.backgroundColor = UIConstants.SeparatorColor
 
+        //titleView.clipsToBounds = true;
         addSubview(titleView)
         addSubview(separator)
         addSubview(buttonsView)
@@ -137,7 +137,7 @@ class SnackBar: UIView {
         backgroundView.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(self)
             // Offset it by the width of the top border line so we can see the line from the super view
-            make.top.equalTo(self).offset(1)
+            make.top.equalTo(self)//.offset(1)
         }
 
         titleView.snp.makeConstraints { make in
@@ -147,14 +147,22 @@ class SnackBar: UIView {
         }
 
         backgroundColor = UIColor.clear
+        self.clipsToBounds = true
         self.layer.borderWidth = SnackBarUX.BorderWidth
         self.layer.borderColor = UIConstants.SeparatorColor.cgColor
 
         self.layer.cornerRadius = 8
-        //self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        if #available(iOS 11.0, *) {
+            self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        } else {
+            // Fallback on earlier versions
+        }
+        /*
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOpacity = 1
         self.layer.shadowRadius = 10
+        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+ */
     }
 
     required init?(coder aDecoder: NSCoder) {
