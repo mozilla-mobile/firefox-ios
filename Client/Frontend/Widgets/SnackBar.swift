@@ -37,7 +37,7 @@ class SnackButton: UIButton {
         setTitle(title, for: .normal)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
-        setTitleColor(SettingsUX.TableViewRowTextColor, for: .normal)
+        setTitleColor(UIConstants.ControlTintColor, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -52,7 +52,7 @@ class SnackButton: UIButton {
 
     func drawSeparator() {
         let separator = UIView()
-        separator.backgroundColor = UIConstants.BorderColor
+        separator.backgroundColor = UIConstants.SeparatorColor
         self.addSubview(separator)
         separator.snp.makeConstraints { make in
             make.leading.equalTo(self)
@@ -65,7 +65,6 @@ class SnackButton: UIButton {
 
 class SnackBar: UIView {
     let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
-
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -80,6 +79,7 @@ class SnackBar: UIView {
     private lazy var textLabel: UILabel = {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
+        label.font = label.font.withSize(16)
         label.lineBreakMode = .byWordWrapping
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.backgroundColor = nil
@@ -116,12 +116,13 @@ class SnackBar: UIView {
     }
 
     fileprivate func setup() {
+        //backgroundView.clipsToBounds = true;
         addSubview(backgroundView)
         titleView.addArrangedSubview(imageView)
         titleView.addArrangedSubview(textLabel)
 
         let separator = UIView()
-        separator.backgroundColor = UIConstants.BorderColor
+        separator.backgroundColor = UIConstants.SeparatorColor
 
         addSubview(titleView)
         addSubview(separator)
@@ -142,12 +143,18 @@ class SnackBar: UIView {
         titleView.snp.makeConstraints { make in
             make.top.equalTo(self).offset(UIConstants.DefaultPadding)
             make.centerX.equalTo(self).priority(500)
-            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 2).priority(1000)
+            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 5).priority(1000)
         }
 
         backgroundColor = UIColor.clear
         self.layer.borderWidth = SnackBarUX.BorderWidth
-        self.layer.borderColor = UIConstants.BorderColor.cgColor
+        self.layer.borderColor = UIConstants.SeparatorColor.cgColor
+
+        self.layer.cornerRadius = 8
+        //self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 1
+        self.layer.shadowRadius = 10
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -218,15 +225,15 @@ class TimerSnackBar: SnackBar {
 
     static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL) {
         let bar = TimerSnackBar(text: Strings.ExternalLinkAppStoreConfirmationTitle, img: UIImage(named: "defaultFavicon"))
-        let openAppStore = SnackButton(title: Strings.OKString, accessibilityIdentifier: "ConfirmOpenInAppStore") { bar in
+        let openAppStore = SnackButton(title: Strings.AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore") { bar in
             tab.removeSnackbar(bar)
             UIApplication.shared.openURL(appStoreURL)
         }
-        let cancelButton = SnackButton(title: Strings.CancelString, accessibilityIdentifier: "CancelOpenInAppStore") { bar in
+        let cancelButton = SnackButton(title: Strings.NotNowString, accessibilityIdentifier: "CancelOpenInAppStore") { bar in
             tab.removeSnackbar(bar)
         }
-        bar.addButton(openAppStore)
         bar.addButton(cancelButton)
+        bar.addButton(openAppStore)
         tab.addSnackbar(bar)
     }
     

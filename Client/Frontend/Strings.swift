@@ -19,6 +19,8 @@ private func applicationBundle() -> Bundle {
 extension Strings {
     public static let OKString = NSLocalizedString("OK", comment: "OK button")
     public static let CancelString = NSLocalizedString("Cancel", comment: "Label for Cancel button")
+    public static let NotNowString = NSLocalizedString("Not Now", comment: "label for Not Now button")
+    public static let AppStoreString = NSLocalizedString("Open App Store", comment: "Open App Store button")
 }
 
 // Table date section titles.
@@ -467,7 +469,7 @@ extension Strings {
 
 // Snackbar shown when tapping app store link
 extension Strings {
-    public static let ExternalLinkAppStoreConfirmationTitle = NSLocalizedString("ExternalLink.AppStore.ConfirmationTitle", value: "Open this link in the App Store app?", comment: "Question shown to user when tapping a link that opens the App Store app")
+    public static let ExternalLinkAppStoreConfirmationTitle = NSLocalizedString("ExternalLink.AppStore.ConfirmationTitle", value: "Open this link in the App Store?", comment: "Question shown to user when tapping a link that opens the App Store app")
 }
 
 // ContentBlocker/TrackingProtection strings
