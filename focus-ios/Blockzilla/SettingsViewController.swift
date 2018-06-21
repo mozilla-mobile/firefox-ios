@@ -529,7 +529,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @objc private func whatsNewClicked() {
         highlightsButton?.tintColor = UIColor.white
         
-        guard let url = SupportUtils.URLForTopic(topic: "whats-new-focus-ios-4") else { return }
+        guard let url = SupportUtils.URLForTopic(topic: "whats-new-focus-ios-6") else { return }
         navigationController?.pushViewController(SettingsContentViewController(url: url), animated: true)
         
         whatsNew.didShowWhatsNew()
