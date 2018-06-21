@@ -29,13 +29,17 @@ class SnackButton: UIButton {
         }
     }
 
-    init(title: String, accessibilityIdentifier: String, callback: @escaping SnackBarCallback) {
+    init(title: String, accessibilityIdentifier: String, bold: Bool, callback: @escaping SnackBarCallback) {
         self.callback = callback
 
         super.init(frame: .zero)
 
+        if bold {
+            titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFontBold
+        } else {
+            titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
+        }
         setTitle(title, for: .normal)
-        titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
         setTitleColor(UIConstants.ControlTintColor, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
@@ -233,11 +237,11 @@ class TimerSnackBar: SnackBar {
 
     static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL) {
         let bar = TimerSnackBar(text: Strings.ExternalLinkAppStoreConfirmationTitle, img: UIImage(named: "defaultFavicon"))
-        let openAppStore = SnackButton(title: Strings.AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore") { bar in
+        let openAppStore = SnackButton(title: Strings.AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore", bold: true) { bar in
             tab.removeSnackbar(bar)
             UIApplication.shared.openURL(appStoreURL)
         }
-        let cancelButton = SnackButton(title: Strings.NotNowString, accessibilityIdentifier: "CancelOpenInAppStore") { bar in
+        let cancelButton = SnackButton(title: Strings.NotNowString, accessibilityIdentifier: "CancelOpenInAppStore", bold: false) { bar in
             tab.removeSnackbar(bar)
         }
         bar.addButton(cancelButton)
