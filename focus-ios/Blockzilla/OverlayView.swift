@@ -69,7 +69,7 @@ class OverlayView: UIView {
         
         findInPageButton.snp.makeConstraints { make in
             make.top.equalTo(searchBorder.snp.bottom)
-            make.leading.trailing.equalTo(self)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
         }
         findInPageBorder.snp.makeConstraints { make in
@@ -93,7 +93,7 @@ class OverlayView: UIView {
         addSubview(copyBorder)
         
         copyButton.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(self)
+            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(56)
         }
         copyBorder.snp.makeConstraints { make in
@@ -190,12 +190,12 @@ class OverlayView: UIView {
             copyBorder.isHidden = false
             if searchButton.isHidden || searchQuery.isEmpty {
                 copyButton.snp.remakeConstraints { make in
-                    make.top.leading.trailing.equalTo(self)
+                    make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
                     make.height.equalTo(56)
                 }
             } else {
                 copyButton.snp.remakeConstraints { make in
-                    make.leading.trailing.equalTo(self)
+                    make.leading.trailing.equalTo(safeAreaLayoutGuide)
                     make.top.equalTo(findInPageBorder)
                     make.height.equalTo(56)
                 }
