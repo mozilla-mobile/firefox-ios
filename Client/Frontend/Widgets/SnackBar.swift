@@ -72,7 +72,7 @@ class SnackBar: UIView {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        // These are requried to make sure that the image is _never_ smaller or larger than its actual size
+        // These are required to make sure that the image is _never_ smaller or larger than its actual size
         imageView.setContentHuggingPriority(.required, for: .horizontal)
         imageView.setContentHuggingPriority(.required, for: .vertical)
         imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -82,11 +82,9 @@ class SnackBar: UIView {
 
     private lazy var textLabel: UILabel = {
         let label = UILabel()
-        label.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
-        label.font = label.font.withSize(16)
+        label.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         label.lineBreakMode = .byWordWrapping
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
-        label.backgroundColor = nil
         label.numberOfLines = 0
         label.textColor = SettingsUX.TableViewRowTextColor
         label.backgroundColor = UIColor.clear
@@ -145,12 +143,13 @@ class SnackBar: UIView {
 
         titleView.snp.makeConstraints { make in
             make.top.equalTo(self).offset(UIConstants.DefaultPadding)
+            make.height.equalTo(UIConstants.SnackbarButtonHeight - 2*UIConstants.DefaultPadding)
             make.centerX.equalTo(self).priority(500)
-            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 5).priority(1000)
+            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 6).priority(1000)
         }
 
         backgroundColor = UIColor.clear
-        self.clipsToBounds = true //overridden by masksToBounds = false
+        //self.clipsToBounds = true //overridden by masksToBounds = false
         self.layer.borderWidth = SnackBarUX.BorderWidth
         self.layer.borderColor = UIConstants.SeparatorColor.cgColor
         self.layer.cornerRadius = 8
@@ -163,7 +162,7 @@ class SnackBar: UIView {
         //bezierpath does not show up
         //self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.layer.cornerRadius).cgPath
         self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.5
+        self.layer.shadowOpacity = 0.4
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 3
         self.layer.masksToBounds = false
