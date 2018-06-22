@@ -160,9 +160,9 @@ class SnackBar: UIView {
         }
 
         //bezierpath does not show up
-        //self.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.layer.cornerRadius).cgPath
+        //self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
         self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.4
+        self.layer.shadowOpacity = 0.3
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 3
         self.layer.masksToBounds = false
