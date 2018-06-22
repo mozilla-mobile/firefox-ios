@@ -164,9 +164,9 @@ class BoolSetting: Setting {
     convenience init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
-            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor])
+            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerText])
         }
-        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
+        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
@@ -316,7 +316,7 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
-        let color = isValid(textField.text) ? SettingsUX.TableViewRowTextColor : UIConstants.DestructiveRed
+        let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIConstants.DestructiveRed
         textField.textColor = color
     }
 
@@ -355,7 +355,7 @@ class CheckmarkSetting: Setting {
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
         cell.accessoryType = .checkmark
-        cell.tintColor = isEnabled() ? SettingsUX.TableViewRowActionAccessoryColor : UIColor.white
+        cell.tintColor = isEnabled() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -390,7 +390,7 @@ class ButtonSetting: Setting {
         if isEnabled?() ?? true {
             cell.textLabel?.textColor = destructive ? UIConstants.DestructiveRed : UIConstants.HighlightBlue
         } else {
-            cell.textLabel?.textColor = SettingsUX.TableViewDisabledRowTextColor
+            cell.textLabel?.textColor = UIColor.theme.tableView.disabledRowText
         }
         cell.textLabel?.textAlignment = .center
         cell.accessibilityTraits = UIAccessibilityTraitButton
@@ -495,8 +495,8 @@ class SettingsTableViewController: UITableViewController {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
-        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
@@ -698,7 +698,7 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
 
     lazy var titleLabel: UILabel = {
         var headerLabel = UILabel()
-        headerLabel.textColor = SettingsUX.TableViewHeaderTextColor
+        headerLabel.textColor = UIColor.theme.tableView.headerText
         headerLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
         headerLabel.numberOfLines = 0
         return headerLabel
@@ -718,7 +718,7 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        contentView.backgroundColor = UIColor.theme.tableView.headerBackground
         addSubview(titleLabel)
         addSubview(topBorder)
         addSubview(bottomBorder)

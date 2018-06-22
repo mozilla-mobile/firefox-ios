@@ -241,7 +241,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = textField.text != ""
         settingDidChange?(textView.text)
-        let color = isValid(textField.text) ? SettingsUX.TableViewRowTextColor : UIConstants.DestructiveRed
+        let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIConstants.DestructiveRed
         textField.textColor = color
     }
 

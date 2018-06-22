@@ -16,7 +16,7 @@ class ManageSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: Strings.FxAManageAccount, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: Strings.FxAManageAccount, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

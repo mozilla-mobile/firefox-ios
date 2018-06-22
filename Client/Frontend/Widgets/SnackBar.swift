@@ -37,7 +37,7 @@ class SnackButton: UIButton {
         setTitle(title, for: .normal)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
-        setTitleColor(SettingsUX.TableViewRowTextColor, for: .normal)
+        setTitleColor(UIColor.theme.tableView.rowText, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -84,7 +84,7 @@ class SnackBar: UIView {
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.backgroundColor = nil
         label.numberOfLines = 0
-        label.textColor = SettingsUX.TableViewRowTextColor
+        label.textColor = UIColor.theme.tableView.rowText
         label.backgroundColor = UIColor.clear
         return label
     }()
