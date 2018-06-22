@@ -916,7 +916,6 @@ extension BrowserViewController: HomeViewDelegate {
         let text = String(format: UIConstants.strings.shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
         present(shareController, animated: true)
-        urlBar?.shouldPresent = false
     }
 }
 
