@@ -771,11 +771,19 @@ extension BrowserViewController: URLBarDelegate {
         overlayView.setSearchQuery(query: text, animated: true)
     }
 
-    func urlBarDidPressScrollTop(_: URLBar) {
+    func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
         guard !urlBar.isEditing else { return }
 
         switch scrollBarState {
         case .expanded:
+            let y = tap.location(in: urlBar).y
+            
+            // If the tap is greater than this threshold, the user wants to type in the URL bar
+            if y >= 10 {
+                urlBar.activateTextField()
+                return
+            }
+            
             // Just scroll the vertical position so the page doesn't appear under
             // the notch on the iPhone X
             var point = webViewController.scrollView.contentOffset
