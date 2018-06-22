@@ -149,7 +149,7 @@ class SnackBar: UIView {
         }
 
         backgroundColor = UIColor.clear
-        //self.clipsToBounds = true //overridden by masksToBounds = false
+        self.clipsToBounds = true //overridden by masksToBounds = false
         self.layer.borderWidth = SnackBarUX.BorderWidth
         self.layer.borderColor = UIConstants.SeparatorColor.cgColor
         self.layer.cornerRadius = 8
@@ -159,14 +159,15 @@ class SnackBar: UIView {
             // Fallback on earlier versions
         }
 
-        //bezierpath does not show up
-        //self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        /*
+    //not implementing shadow for now
+        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOpacity = 0.3
         self.layer.shadowOffset = CGSize.zero
         self.layer.shadowRadius = 3
         self.layer.masksToBounds = false
-
+*/
     }
 
     required init?(coder aDecoder: NSCoder) {
