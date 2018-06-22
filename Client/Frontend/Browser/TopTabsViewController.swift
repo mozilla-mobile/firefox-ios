@@ -33,6 +33,8 @@ class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var tabDisplayManager: TabDisplayManager!
+    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.Identifier
+
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
@@ -79,10 +81,8 @@ class TopTabsViewController: UIViewController {
     init(tabManager: TabManager) {
         self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
-        let focusTab: () -> Void = {
-            self.scrollToCurrentTab(true, centerCell: true)
-        }
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, selectTab: focusTab)
+
+        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
         [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
@@ -214,8 +214,33 @@ class TopTabsViewController: UIViewController {
         }
     }
 
-    func reloadData() {
-        tabDisplayManager.reloadData()
+}
+
+extension TopTabsViewController: TabDisplayer {
+
+    func focusSelectedTab() {
+        self.scrollToCurrentTab(true, centerCell: true)
+    }
+
+    func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
+        guard let tabCell = cell as? TopTabCell else { return UICollectionViewCell() }
+        tabCell.delegate = self
+        let isSelected = (tab == tabManager.selectedTab)
+        tabCell.configureWith(tab: tab, isSelected: isSelected)
+        return tabCell
+    }
+}
+
+extension TopTabsViewController: TopTabCellDelegate {
+    func tabCellDidClose(_ cell: UICollectionViewCell) {
+        // Trying to remove tabs while animating can lead to crashes as indexes change. If updates are happening don't allow tabs to be removed.
+        guard let index = collectionView.indexPath(for: cell)?.item else {
+            return
+        }
+        if let tab = self.tabDisplayManager.tabStore[safe: index] {
+            tabManager.removeTab(tab)
+        }
+
     }
 }
 
@@ -234,4 +259,3 @@ extension TopTabsViewController: Themeable, PrivateModeUI {
         collectionView.backgroundColor = view.backgroundColor
     }
 }
-

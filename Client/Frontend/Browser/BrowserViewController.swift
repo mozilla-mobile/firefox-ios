@@ -945,7 +945,6 @@ class BrowserViewController: UIViewController {
     }
 
     // MARK: Opening New Tabs
-
     func switchToPrivacyMode(isPrivate: Bool) {
         let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
         if tabTrayController.privateMode != isPrivate {
@@ -978,9 +977,6 @@ class BrowserViewController: UIViewController {
 
         switchToPrivacyMode(isPrivate: isPrivate)
         _ = tabManager.addTabAndSelect(request, isPrivate: isPrivate)
-        if url == nil && NewTabAccessors.getNewTabPage(profile.prefs) == .blankPage {
-            urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
-        }
     }
 
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
@@ -1829,6 +1825,9 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateInContentHomePanel(selected?.url as URL?)
+        if let tab = selected, tab.url == nil, !tab.restoring, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
+            self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+        }
     }
 
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
@@ -2643,13 +2642,10 @@ extension BrowserViewController: TabTrayDelegate {
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
     func tabTrayDidDismiss(_ tabTray: TabTrayController) {
-        topTabsViewController?.reloadData()
         resetBrowserChrome()
     }
 
-    func tabTrayDidAddTab(_ tabTray: TabTrayController, tab: Tab) {
-        topTabsViewController?.reloadData()
-    }
+    func tabTrayDidAddTab(_ tabTray: TabTrayController, tab: Tab) {}
 
     func tabTrayDidAddBookmark(_ tab: Tab) {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
