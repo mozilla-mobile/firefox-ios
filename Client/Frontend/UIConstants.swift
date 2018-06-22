@@ -42,6 +42,21 @@ class TableViewColor {
     var syncText: UIColor { return UIColor.Photon.Grey80 }
 }
 
+
+class URLBarColor {
+    var border: UIColor { return UIColor.Photon.Grey50 }
+    var activeBorder: UIColor { return UIColor.Photon.Blue50A30 }
+    var tint: UIColor { return UIColor.Photon.Blue50A30 }
+}
+
+class BrowserColor2 {
+    var background: UIColor { return UIColor.Photon.Grey10 }
+    var text: UIColor { return .white }
+    var urlBarDivider: UIColor { return UIColor.Photon.Grey90A10 }
+    var locationBarBackground: UIColor { return UIColor.Photon.Grey30 }
+    var tint: UIColor { return UIColor.Photon.Grey80 }
+}
+
 extension UIColor {
     // These are defaults from http://design.firefox.com/photon/visuals/color.html
     struct Defaults {
@@ -53,19 +68,6 @@ extension UIColor {
         static let LightBeige = UIColor(rgb: 0xf0e6dc)
     }
 
-    struct Browser {
-        static let Background = BrowserColor(normal: Photon.Grey10, pbm: Photon.Grey70)
-        static let Text = BrowserColor(normal: .white, pbm: Photon.Grey60)
-        static let URLBarDivider = BrowserColor(normal: Photon.Grey90A10, pbm: Photon.Grey60)
-        static let LocationBarBackground = Photon.Grey30
-        static let Tint = BrowserColor(normal: Photon.Grey80, pbm: Photon.Grey30)
-    }
-
-    struct URLBar {
-        static let Border = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey80)
-        static let ActiveBorder = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Grey60)
-        static let Tint = BrowserColor(normal: Photon.Blue50A30, pbm: Photon.Grey10)
-    }
 
     struct TextField {
         static let Background = BrowserColor(normal: .white, pbm: Defaults.MobileGreyF)
@@ -74,7 +76,7 @@ extension UIColor {
         static let ReaderModeButtonSelected = BrowserColor(normal: Photon.Blue40, pbm: Defaults.MobilePrivatePurple)
         static let ReaderModeButtonUnselected = BrowserColor(normal: Photon.Grey50, pbm: Photon.Grey40)
         static let PageOptionsSelected = ReaderModeButtonSelected
-        static let PageOptionsUnselected = UIColor.Browser.Tint
+        static let PageOptionsUnselected = UIColor.theme.browser.tint
         static let Separator = BrowserColor(normal: Photon.Grey30, pbm: Photon.Grey70)
     }
 
@@ -90,7 +92,7 @@ extension UIColor {
     }
 
     struct TabTray {
-        static let Background = Browser.Background
+        static let Background = UIColor.theme.browser.background
     }
 
     struct TopTabs {

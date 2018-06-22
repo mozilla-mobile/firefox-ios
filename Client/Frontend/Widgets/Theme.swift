@@ -18,14 +18,15 @@ var currentTheme = Normal()
 protocol Theme2 {
     var name: String { get }
     var tableView: TableViewColor { get }
+    var urlbar: URLBarColor { get }
+    var browser: BrowserColor2 { get }
 }
 
 struct Normal: Theme2 {
     var name: String { return "Normal" }
-
-    var tableView: TableViewColor {
-        return TableViewColor()
-    }
+    var tableView: TableViewColor { return TableViewColor() }
+    var urlbar: URLBarColor { return URLBarColor() }
+    var browser: BrowserColor2 { return BrowserColor2() }
 }
 
 extension UIColor {
