@@ -9,8 +9,6 @@ import Shared
 class SnackBarUX {
     static var MaxWidth: CGFloat = 400
     static let BorderWidth: CGFloat = 0.5
-    static let HighlightColor = UIColor.Defaults.iOSHighlightBlue.withAlphaComponent(0.9)
-    static let HighlightText = UIColor.Photon.Blue60
 }
 
 /**
@@ -25,7 +23,7 @@ class SnackButton: UIButton {
 
     override open var isHighlighted: Bool {
         didSet {
-            self.backgroundColor = isHighlighted ? SnackBarUX.HighlightColor : .clear
+            self.backgroundColor = isHighlighted ? UIColor.theme.snackbar.highlight : .clear
         }
     }
 
@@ -36,7 +34,7 @@ class SnackButton: UIButton {
 
         setTitle(title, for: .normal)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
-        setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
+        setTitleColor(UIColor.theme.snackbar.highlightText, for: .highlighted)
         setTitleColor(UIColor.theme.tableView.rowText, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
@@ -52,7 +50,7 @@ class SnackButton: UIButton {
 
     func drawSeparator() {
         let separator = UIView()
-        separator.backgroundColor = UIConstants.BorderColor
+        separator.backgroundColor = UIColor.theme.snackbar.border
         self.addSubview(separator)
         separator.snp.makeConstraints { make in
             make.leading.equalTo(self)
@@ -121,7 +119,7 @@ class SnackBar: UIView {
         titleView.addArrangedSubview(textLabel)
 
         let separator = UIView()
-        separator.backgroundColor = UIConstants.BorderColor
+        separator.backgroundColor = UIColor.theme.snackbar.border
 
         addSubview(titleView)
         addSubview(separator)
@@ -147,7 +145,7 @@ class SnackBar: UIView {
 
         backgroundColor = UIColor.clear
         self.layer.borderWidth = SnackBarUX.BorderWidth
-        self.layer.borderColor = UIConstants.BorderColor.cgColor
+        self.layer.borderColor = UIColor.theme.snackbar.border.cgColor
     }
 
     required init?(coder aDecoder: NSCoder) {

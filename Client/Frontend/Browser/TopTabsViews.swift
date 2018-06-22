@@ -178,16 +178,9 @@ class TopTabCell: UICollectionViewCell {
     }
     
     fileprivate func applyStyle(_ style: Style) {
-        switch style {
-        case Style.light:
-            titleText.textColor = UIColor.darkText
-            backgroundColor = UIConstants.AppBackgroundColor
-            highlightLine.backgroundColor = UIColor.Photon.Blue60
-        case Style.dark:
-            titleText.textColor = UIColor.lightText
-            backgroundColor = UIColor.Photon.Grey70
-            highlightLine.backgroundColor = UIColor.Photon.Purple50
-        }
+        titleText.textColor = UIColor.darkText
+        backgroundColor = UIColor.theme.browser.background
+        highlightLine.backgroundColor = UIColor.theme.topTabs.selectedLine
     }
     
     required init?(coder aDecoder: NSCoder) {

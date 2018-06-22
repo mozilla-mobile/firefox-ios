@@ -10,8 +10,6 @@ import Storage
 private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 40
-    static let ButtonContainerBorderColor = UIColor.Photon.Grey30
-    static let BackgroundColorPrivateMode = UIConstants.PrivateModeAssistantToolbarBackgroundColor
     static let ButtonHighlightLineHeight: CGFloat = 2
     static let ButtonSelectionAnimationDuration = 0.2
 }
@@ -78,7 +76,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.AppBackgroundColor
+        view.backgroundColor = UIColor.theme.browser.background
         
         buttonContainerView.axis = .horizontal
         buttonContainerView.alignment = .fill
@@ -92,7 +90,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         
         self.buttonContainerBottomBorderView = UIView()
         self.view.addSubview(buttonContainerBottomBorderView)
-        buttonContainerBottomBorderView.backgroundColor = HomePanelViewControllerUX.ButtonContainerBorderColor
+        buttonContainerBottomBorderView.backgroundColor = UIColor.theme.homePanel.buttonContainerBorder
 
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
@@ -293,11 +291,11 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 // MARK: UIAppearance
 extension HomePanelViewController: Themeable {
     func applyTheme(_ theme: Theme) {
-        buttonContainerView.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
-        view.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
-        buttonTintColor = UIColor.HomePanel.ToolbarTint.colorFor(theme)
-        buttonSelectedTintColor = UIColor.HomePanel.ToolbarHighlight.colorFor(theme)
-        highlightLine.backgroundColor = UIColor.HomePanel.ToolbarHighlight.colorFor(theme)
+        buttonContainerView.backgroundColor = UIColor.theme.homePanel.toolbarBackground
+        view.backgroundColor = UIColor.theme.homePanel.toolbarBackground
+        buttonTintColor = UIColor.theme.homePanel.toolbarTint
+        buttonSelectedTintColor = UIColor.theme.homePanel.toolbarHighlight
+        highlightLine.backgroundColor = UIColor.theme.homePanel.toolbarHighlight
         updateButtonTints()
     }
 }

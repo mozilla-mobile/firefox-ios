@@ -513,13 +513,13 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIConstants.HighlightBlue
+        label.textColor = UIColor.theme.general.highlightBlue
         return label
     }()
 
     lazy var chevron: ChevronView = {
         let chevron = ChevronView(direction: .left)
-        chevron.tintColor = UIConstants.HighlightBlue
+        chevron.tintColor = UIColor.theme.general.highlightBlue
         chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
         return chevron
     }()

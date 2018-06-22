@@ -208,7 +208,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.separatorInset = .zero
         tableView.layoutMargins = .zero
-        tableView.separatorColor = UIConstants.SeparatorColor
+        tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.register(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
 
         // Set an empty footer to prevent empty cells from appearing in the list.
@@ -218,7 +218,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
             tableView.dragDelegate = self
         }
 
-        view.backgroundColor = UIConstants.PanelBackgroundColor
+        view.backgroundColor = UIColor.theme.tableView.rowBackground
 
         if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
             records = newRecords

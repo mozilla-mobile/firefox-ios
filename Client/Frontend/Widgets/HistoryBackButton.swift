@@ -14,14 +14,14 @@ private struct HistoryBackButtonUX {
 class HistoryBackButton: UIButton {
     lazy var title: UILabel = {
         let label = UILabel()
-        label.textColor = UIConstants.HighlightBlue
+        label.textColor = UIColor.theme.general.highlightBlue
         label.text = Strings.HistoryBackButtonTitle
         return label
     }()
 
     lazy var chevron: ChevronView = {
         let chevron = ChevronView(direction: .left)
-        chevron.tintColor = UIConstants.HighlightBlue
+        chevron.tintColor = UIColor.theme.general.highlightBlue
         chevron.lineWidth = HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronLineWidth
         return chevron
     }()

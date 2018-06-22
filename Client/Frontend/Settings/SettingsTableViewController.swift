@@ -316,7 +316,7 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
-        let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIConstants.DestructiveRed
+        let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIColor.theme.general.destructiveRed
         textField.textColor = color
     }
 
@@ -388,7 +388,7 @@ class ButtonSetting: Setting {
         super.onConfigureCell(cell)
 
         if isEnabled?() ?? true {
-            cell.textLabel?.textColor = destructive ? UIConstants.DestructiveRed : UIConstants.HighlightBlue
+            cell.textLabel?.textColor = destructive ? UIColor.theme.general.destructiveRed : UIColor.theme.general.highlightBlue
         } else {
             cell.textLabel?.textColor = UIColor.theme.tableView.disabledRowText
         }
@@ -706,13 +706,13 @@ class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
 
     fileprivate lazy var topBorder: UIView = {
         let topBorder = UIView()
-        topBorder.backgroundColor = UIConstants.SeparatorColor
+        topBorder.backgroundColor = UIColor.theme.tableView.separator
         return topBorder
     }()
 
     fileprivate lazy var bottomBorder: UIView = {
         let bottomBorder = UIView()
-        bottomBorder.backgroundColor = UIConstants.SeparatorColor
+        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
         return bottomBorder
     }()
 

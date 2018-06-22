@@ -9,8 +9,8 @@ import Shared
 
 struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(6.0)
-    static let BackgroundColor = UIColor.TopTabs.Background
-    static let CellBackgroundColor = UIColor.TopTabs.Background
+    static let BackgroundColor = UIColor.theme.topTabs.background
+    static let CellBackgroundColor = UIColor.theme.topTabs.background
     static let TextBoxHeight = CGFloat(32.0)
     static let FaviconSize = CGFloat(20)
     static let Margin = CGFloat(15)
@@ -79,7 +79,7 @@ class TabCell: UICollectionViewCell {
         self.screenshotView.isUserInteractionEnabled = false
         self.screenshotView.alignLeft = true
         self.screenshotView.alignTop = true
-        screenshotView.backgroundColor = UIConstants.AppBackgroundColor
+        screenshotView.backgroundColor = UIColor.theme.browser.background
 
         self.favicon.backgroundColor = UIColor.clear
         self.favicon.layer.cornerRadius = 2.0
@@ -138,7 +138,7 @@ class TabCell: UICollectionViewCell {
 
     func setTabSelected(_ isPrivate: Bool) {
         // This creates a border around a tabcell. Using the shadow craetes a border _outside_ of the tab frame.
-        layer.shadowColor = (isPrivate ? UIConstants.PrivateModePurple : UIConstants.SystemBlueColor).cgColor
+        layer.shadowColor = (isPrivate ? UIColor.theme.tabTray.privateModePurple : UIConstants.SystemBlueColor).cgColor
         layer.shadowOpacity = 1
         layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
         layer.masksToBounds = false
@@ -987,7 +987,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
         button.setTitle(
             NSLocalizedString("Learn More", tableName: "PrivateBrowsing", comment: "Text button displayed when there are no tabs open while in private mode"),
             for: [])
-        button.setTitleColor(UIConstants.PrivateModeTextHighlightColor, for: [])
+        button.setTitleColor(UIColor.theme.tabTray.privateModeLearnMore, for: [])
         button.titleLabel?.font = EmptyPrivateTabsViewUX.LearnMoreFont
         return button
     }()
@@ -1171,7 +1171,7 @@ class TrayToolbar: UIView {
     fileprivate func applyTheme(_ theme: Theme) {
         addTabButton.tintColor = UIColor.theme.browser.tint
         deleteButton.tintColor = UIColor.theme.browser.tint
-        backgroundColor = UIColor.TabTray.Background
+        backgroundColor = UIColor.theme.tabTray.background
         maskButton.applyTheme(theme)
     }
 }

@@ -183,8 +183,8 @@ class ToolbarButton: UIButton {
 
 extension ToolbarButton: Themeable {
     func applyTheme(_ theme: Theme) {
-        selectedTintColor = UIColor.ToolbarButton.SelectedTint.colorFor(theme)
-        disabledTintColor = UIColor.ToolbarButton.DisabledTint.colorFor(theme)
+        selectedTintColor = UIColor.theme.toolbarButton.selectedTint
+        disabledTintColor = UIColor.theme.toolbarButton.disabledTint
         unselectedTintColor = UIColor.theme.browser.tint
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor

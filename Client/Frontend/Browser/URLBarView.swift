@@ -668,7 +668,7 @@ extension URLBarView: Themeable {
         actionButtons.forEach { $0.applyTheme(theme) }
         tabsButton.applyTheme(theme)
 
-        progressBar.setGradientColors(startColor: UIColor.LoadingBar.Start.colorFor(theme), endColor: UIColor.LoadingBar.End.colorFor(theme))
+        progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start, endColor: UIColor.theme.loadingBar.end)
         currentTheme = theme
         locationBorderColor = UIColor.theme.urlbar.border.withAlphaComponent(0.3)
         locationActiveBorderColor = UIColor.theme.urlbar.activeBorder
@@ -781,9 +781,9 @@ class ToolbarTextField: AutocompleteTextField {
 extension ToolbarTextField: Themeable {
 
     func applyTheme(_ theme: Theme) {
-        backgroundColor = UIColor.TextField.Background.colorFor(theme)
-        textColor = UIColor.TextField.TextAndTint.colorFor(theme)
+        backgroundColor = UIColor.theme.textField.background
+        textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
-        highlightColor = UIColor.TextField.Highlight.colorFor(theme)
+        highlightColor = UIColor.theme.textField.highlight
     }
 }

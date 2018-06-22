@@ -20,6 +20,15 @@ protocol Theme2 {
     var tableView: TableViewColor { get }
     var urlbar: URLBarColor { get }
     var browser: BrowserColor2 { get }
+    var toolbarButton: ToolbarButtonColor { get }
+    var loadingBar: LoadingBarColor { get }
+    var tabTray: TabTrayColor { get }
+    var topTabs: TopTabsColor { get }
+    var textField: TextFieldColor { get }
+    var homePanel: HomePanelColor { get }
+    var snackbar: SnackBarColor { get }
+    var general: GeneralColor { get }
+    var searchInput: SearchInputColor { get }
 }
 
 struct Normal: Theme2 {
@@ -27,6 +36,15 @@ struct Normal: Theme2 {
     var tableView: TableViewColor { return TableViewColor() }
     var urlbar: URLBarColor { return URLBarColor() }
     var browser: BrowserColor2 { return BrowserColor2() }
+    var toolbarButton: ToolbarButtonColor { return ToolbarButtonColor() }
+    var loadingBar: LoadingBarColor { return LoadingBarColor() }
+    var tabTray: TabTrayColor { return TabTrayColor() }
+    var topTabs: TopTabsColor { return TopTabsColor() }
+    var textField: TextFieldColor { return TextFieldColor() }
+    var homePanel: HomePanelColor { return HomePanelColor() }
+    var snackbar: SnackBarColor { return SnackBarColor() }
+    var general: GeneralColor { return GeneralColor() }
+    var searchInput: SearchInputColor { return SearchInputColor() }
 }
 
 extension UIColor {
@@ -34,4 +52,3 @@ extension UIColor {
         return currentTheme
     }
 }
-

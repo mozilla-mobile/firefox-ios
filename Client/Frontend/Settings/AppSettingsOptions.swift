@@ -670,7 +670,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
         let statusText = NSMutableAttributedString()
         statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerText]))
         statusText.append(NSAttributedString(string: " "))
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSAttributedStringKey.foregroundColor: UIConstants.HighlightBlue]))
+        statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.general.highlightBlue]))
 
         super.init(
             prefs: prefs, prefKey: AppConstants.PrefSendUsageData, defaultValue: true,
@@ -898,7 +898,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
         let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
+        control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? self.profile.isChinaEdition
         cell.accessoryView = control
@@ -951,7 +951,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
         let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
+        control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? false
         cell.accessoryView = control
