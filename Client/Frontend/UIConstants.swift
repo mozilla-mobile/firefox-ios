@@ -5,29 +5,7 @@
 import Foundation
 import Shared
 
-// A browser color represents the color of UI in both Private browsing mode and normal mode
-struct BrowserColor {
-    let normalColor: UIColor
-    let PBMColor: UIColor
-    init(normal: UIColor, pbm: UIColor) {
-        self.normalColor = normal
-        self.PBMColor = pbm
-    }
-
-    init(normal: Int, pbm: Int) {
-        self.normalColor = UIColor(rgb: normal)
-        self.PBMColor = UIColor(rgb: pbm)
-    }
-
-    func color(isPBM: Bool) -> UIColor {
-        return isPBM ? PBMColor : normalColor
-    }
-
-    func colorFor(_ theme: Theme) -> UIColor {
-        return color(isPBM: theme == .Private)
-    }
-}
-
+// Convenience reference to these normal mode colors which are used in a few color classes.
 fileprivate let defaultBackground = UIColor.Photon.Grey10
 fileprivate let defaultSeparator = UIColor.Photon.Grey30
     
@@ -39,14 +17,11 @@ class TableViewColor {
     var headerBackground: UIColor { return defaultBackground }
     var headerText: UIColor { return UIColor.Photon.Grey50 }
     var rowActionAccessory: UIColor { return UIColor.Photon.Blue50 }
-
+    var controlTint: UIColor { return rowActionAccessory }
+    var syncText: UIColor { return UIColor.Photon.Grey80 }
     var errorText: UIColor { return UIColor.Photon.Red50 }
     var warningText: UIColor { return UIColor.Photon.Orange50 }
-    var syncText: UIColor { return UIColor.Photon.Grey80 }
-
-    var controlTint: UIColor { return rowActionAccessory }
 }
-
 
 class URLBarColor {
     var border: UIColor { return UIColor.Photon.Grey50 }
@@ -54,7 +29,7 @@ class URLBarColor {
     var tint: UIColor { return UIColor.Photon.Blue50A30 }
 }
 
-class BrowserColor2 {
+class BrowserColor {
     var background: UIColor { return defaultBackground }
     var text: UIColor { return .white }
     var urlBarDivider: UIColor { return UIColor.Photon.Grey90A10 }

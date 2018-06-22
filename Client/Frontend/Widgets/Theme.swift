@@ -19,7 +19,7 @@ protocol Theme2 {
     var name: String { get }
     var tableView: TableViewColor { get }
     var urlbar: URLBarColor { get }
-    var browser: BrowserColor2 { get }
+    var browser: BrowserColor { get }
     var toolbarButton: ToolbarButtonColor { get }
     var loadingBar: LoadingBarColor { get }
     var tabTray: TabTrayColor { get }
@@ -35,7 +35,7 @@ struct Normal: Theme2 {
     var name: String { return "Normal" }
     var tableView: TableViewColor { return TableViewColor() }
     var urlbar: URLBarColor { return URLBarColor() }
-    var browser: BrowserColor2 { return BrowserColor2() }
+    var browser: BrowserColor { return BrowserColor() }
     var toolbarButton: ToolbarButtonColor { return ToolbarButtonColor() }
     var loadingBar: LoadingBarColor { return LoadingBarColor() }
     var tabTray: TabTrayColor { return TabTrayColor() }
