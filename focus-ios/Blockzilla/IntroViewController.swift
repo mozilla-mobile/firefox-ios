@@ -166,7 +166,7 @@ class IntroViewController: UIViewController {
         skipButton.titleLabel?.font = UIConstants.fonts.aboutText
         skipButton.setTitleColor(.white, for: .normal)
         skipButton.sizeToFit()
-        skipButton.accessibilityIdentifier = "skipButton.button"
+        skipButton.accessibilityIdentifier = "IntroViewController.button"
         skipButton.addTarget(self, action: #selector(IntroViewController.didTapSkipButton), for: UIControlEvents.touchUpInside)
         
         skipButton.snp.makeConstraints { make in

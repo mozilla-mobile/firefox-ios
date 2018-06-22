@@ -16,7 +16,7 @@ class SnapshotTests: XCTestCase {
     func test01Screenshots() {
         let app = XCUIApplication()
         snapshot("00FirstRun")
-        app.buttons["FirstRunViewController.button"].tap()
+        app.buttons["IntroViewController.button"].tap()
 
         snapshot("01Home")
 
@@ -130,8 +130,6 @@ class SnapshotTests: XCTestCase {
     func test10CustomSearchEngines() {
         let app = XCUIApplication()
 
-        // Cancel URLBar
-        app.buttons["URLBar.cancelButton"].tap()
         app.buttons["HomeView.settingsButton"].tap()
         app.cells["SettingsViewController.searchCell"].tap()
         app.cells["addSearchEngine"].tap()
@@ -141,8 +139,6 @@ class SnapshotTests: XCTestCase {
     func test11AutocompleteURLs() {
         let app = XCUIApplication()
 
-        // Cancel URLBar
-        app.buttons["URLBar.cancelButton"].tap()
         app.buttons["HomeView.settingsButton"].tap()
         app.cells["SettingsViewController.autocompleteCell"].tap()
         snapshot("11AutocompleteURLs")
