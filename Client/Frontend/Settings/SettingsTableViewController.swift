@@ -7,16 +7,8 @@ import Shared
 import UIKit
 
 struct SettingsUX {
-    static let TableViewHeaderBackgroundColor = UIConstants.AppBackgroundColor
-    static let TableViewHeaderTextColor = UIColor.Photon.Grey50
-    static let TableViewRowTextColor = UIColor.Photon.Grey90
-    static let TableViewDisabledRowTextColor = UIColor.Photon.Grey40
-    static let TableViewSeparatorColor = UIColor.Photon.Grey30
     static let TableViewHeaderFooterHeight = CGFloat(44)
-    static let TableViewRowErrorTextColor = UIColor.Photon.Red50
-    static let TableViewRowWarningTextColor = UIColor.Photon.Orange50
-    static let TableViewRowActionAccessoryColor = UIColor.Photon.Blue50
-    static let TableViewRowSyncTextColor = UIColor.Photon.Grey80
+    
 }
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.

@@ -11,3 +11,26 @@ enum Theme: String {
     case Private
     case Normal
 }
+
+/////////////////
+var currentTheme = Normal()
+
+protocol Theme2 {
+    var name: String { get }
+    var tableView: TableViewColor { get }
+}
+
+struct Normal: Theme2 {
+    var name: String { return "Normal" }
+
+    var tableView: TableViewColor {
+        return TableViewColor()
+    }
+}
+
+extension UIColor {
+    static var theme: Theme2 {
+        return currentTheme
+    }
+}
+

@@ -28,6 +28,20 @@ struct BrowserColor {
     }
 }
 
+class TableViewColor {
+    var rowBackground: UIColor { return UIColor.Photon.White100 }
+    var rowText: UIColor { return UIColor.Photon.Grey90 }
+    var disabledRowText: UIColor { return UIColor.Photon.Grey40 }
+    var separator: UIColor { return UIColor.Photon.Grey30 }
+    var headerBackground: UIColor { return UIConstants.AppBackgroundColor }
+    var headerText: UIColor { return UIColor.Photon.Grey50 }
+    var rowActionAccessory: UIColor { return UIColor.Photon.Blue50 }
+
+    var errorText: UIColor { return UIColor.Photon.Red50 }
+    var warningText: UIColor { return UIColor.Photon.Orange50 }
+    var syncText: UIColor { return UIColor.Photon.Grey80 }
+}
+
 extension UIColor {
     // These are defaults from http://design.firefox.com/photon/visuals/color.html
     struct Defaults {
