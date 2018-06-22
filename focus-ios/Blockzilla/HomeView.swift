@@ -96,7 +96,7 @@ class HomeView: UIView {
             make.bottom.equalTo(self).offset(-24)
             make.height.equalTo(20)
             make.centerX.equalToSuperview()
-            make.width.greaterThanOrEqualTo(300)
+            make.width.greaterThanOrEqualTo(280)
             make.width.lessThanOrEqualToSuperview().offset(-32)
         }
         
