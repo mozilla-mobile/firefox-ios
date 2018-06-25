@@ -46,9 +46,13 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
 
     override func generateSettings() -> [SettingSection] {
         //let tabSetting = CurrentTabSetting(profile: profile)
+        self.currentChoice = NewTabAccessors.getNewTabPage(self.prefs)
+        self.hasHomePage = HomePageAccessors.getHomePage(self.prefs) != nil
+
         let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "hi", isEnabled: {return self.currentChoice == NewTabPage.topSites}, onChanged: {
             self.currentChoice = NewTabPage.topSites
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.PrefKey)
+            print(NewTabAccessors.getNewTabPage(self.prefs))
             self.tableView.reloadData()
         })
         let showBlankPage = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBlankPage), subtitle: nil, accessibilityIdentifier: "hi", isEnabled: {return self.currentChoice == NewTabPage.blankPage}, onChanged: {
@@ -82,7 +86,12 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
         let history = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASRecentHighlightsVisible, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabHiglightsHistory))
         let secondSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: nil, children: [pocketSetting, bookmarks, history])
 
-        return [firstSection, secondSection]
+        if (self.currentChoice == NewTabPage.topSites){
+            self.tableView.reloadData()
+            return [firstSection, secondSection]
+        } else {
+            return [firstSection]
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
