@@ -29,7 +29,7 @@ class SnackButton: UIButton {
         }
     }
 
-    init(title: String, accessibilityIdentifier: String, bold: Bool, callback: @escaping SnackBarCallback) {
+    init(title: String, accessibilityIdentifier: String, bold: Bool = false, callback: @escaping SnackBarCallback) {
         self.callback = callback
 
         super.init(frame: .zero)
@@ -137,13 +137,12 @@ class SnackBar: UIView {
 
         backgroundView.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(self)
-            // Offset it by the width of the top border line so we can see the line from the super view
-            make.top.equalTo(self)//.offset(1)
+            make.top.equalTo(self)
         }
 
         titleView.snp.makeConstraints { make in
             make.top.equalTo(self).offset(UIConstants.DefaultPadding)
-            make.height.equalTo(UIConstants.SnackbarButtonHeight - 2*UIConstants.DefaultPadding)
+            make.height.equalTo(UIConstants.SnackbarButtonHeight - 2 * UIConstants.DefaultPadding)
             make.centerX.equalTo(self).priority(500)
             make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 6).priority(1000)
         }
@@ -155,19 +154,8 @@ class SnackBar: UIView {
         self.layer.cornerRadius = 8
         if #available(iOS 11.0, *) {
             self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        } else {
-            // Fallback on earlier versions
         }
 
-        /*
-    //not implementing shadow for now
-        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.3
-        self.layer.shadowOffset = CGSize.zero
-        self.layer.shadowRadius = 3
-        self.layer.masksToBounds = false
-*/
     }
 
     required init?(coder aDecoder: NSCoder) {
