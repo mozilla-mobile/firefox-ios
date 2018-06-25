@@ -35,6 +35,7 @@ class URLBar: UIView {
     private let toolset = BrowserToolset()
     private let urlTextContainer = UIView()
     private let urlText = URLTextField()
+    var draggableUrlTextView: UIView { return urlText }
     private let truncatedUrlText = UITextView()
     private let shieldIcon = TrackingProtectionBadge()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))

@@ -205,6 +205,9 @@ class BrowserViewController: UIViewController {
             self.webViewController.requestDesktop()
         }
         
+        let dropInteraction = UIDropInteraction(delegate: self)
+        view.addInteraction(dropInteraction)
+      
         // Listen for find in page actvitiy notifications
         NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil)  { _ in
             self.updateFindInPageVisibility(visible: true, text: "")
@@ -332,6 +335,9 @@ class BrowserViewController: UIViewController {
         urlBar.showToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
+        let dragInteraction = UIDragInteraction(delegate: self)
+        urlBar.addInteraction(dragInteraction)
+        
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
             topURLBarConstraints = [
@@ -721,6 +727,54 @@ class BrowserViewController: UIViewController {
     
     private func setNumberOfLifetimeTrackersBlocked(numberOfTrackers: Int) {
         UserDefaults.standard.set(numberOfTrackers, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
+    }
+}
+
+extension BrowserViewController: UIDragInteractionDelegate, UIDropInteractionDelegate {
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        guard let url = urlBar.url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
+        return [dragItem]
+    }
+
+    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
+        let params = UIDragPreviewParameters()
+        params.backgroundColor = UIColor.clear
+        return UITargetedDragPreview(view: urlBar.draggableUrlTextView, parameters: params)
+    }
+ 
+    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
+        for item in session.items {
+            item.previewProvider = {
+                guard let url = self.urlBar.url else {
+                    return UIDragPreview(view: UIView())
+                }
+                return UIDragPreview(for: url)
+            }
+        }
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: URL.self)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        _ = session.loadObjects(ofClass: URL.self) { urls in
+
+            guard let url = urls.first else {
+                return
+            }
+            
+            self.ensureBrowsingMode()
+            self.urlBar.fillUrlBar(text: url.absoluteString)
+            self.submit(url: url)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drop, object: TelemetryEventObject.searchBar)
+        }
     }
 }
 

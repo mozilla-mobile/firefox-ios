@@ -30,6 +30,8 @@ class TelemetryEventMethod {
     public static let share = "share"
     public static let customDomainRemoved = "removed"
     public static let customDomainReordered = "reordered"
+    public static let drag = "drag"
+    public static let drop = "drop"
 }
 
 class TelemetryEventObject {

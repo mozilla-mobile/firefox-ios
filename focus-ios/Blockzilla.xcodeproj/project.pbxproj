@@ -14,6 +14,7 @@
 		0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */; };
 		0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */; };
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
+		1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D199EF120D813D300CDF976 /* DragAndDropTest.swift */; };
 		1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */ = {isa = PBXBuildFile; fileRef = 1D3BEDF820C5E6C70019B722 /* FindInPage.js */; };
 		1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */; };
 		1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */; };
@@ -230,6 +231,7 @@
 		0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingAppearanceTest.swift; sourceTree = "<group>"; };
 		0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsianLocaleTest.swift; sourceTree = "<group>"; };
 		1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		1D199EF120D813D300CDF976 /* DragAndDropTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragAndDropTest.swift; sourceTree = "<group>"; };
 		1D3BEDF820C5E6C70019B722 /* FindInPage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FindInPage.js; sourceTree = "<group>"; };
 		1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageBar.swift; sourceTree = "<group>"; };
 		1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTest.swift; sourceTree = "<group>"; };
@@ -847,6 +849,7 @@
 		0BA39A841DD2B8E4005F970A /* XCUITest */ = {
 			isa = PBXGroup;
 			children = (
+				1D199EF120D813D300CDF976 /* DragAndDropTest.swift */,
 				1DE903CD20C751D7002E53ED /* FindInPageTest.swift */,
 				1D47758720C1E66000C074AE /* CopyTest.swift */,
 				1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */,
@@ -1525,6 +1528,7 @@
 			files = (
 				1DE903CE20C751D7002E53ED /* FindInPageTest.swift in Sources */,
 				0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */,
+				1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */,
 				0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */,
 				1D47758820C1E66000C074AE /* CopyTest.swift in Sources */,
 				0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */,
