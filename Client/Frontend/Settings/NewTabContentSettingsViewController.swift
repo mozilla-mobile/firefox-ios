@@ -85,12 +85,8 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
         let history = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASRecentHighlightsVisible, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabHiglightsHistory))
         let secondSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: nil, children: [pocketSetting, bookmarks, history])
 
-        if (self.currentChoice == NewTabPage.topSites){
-            self.tableView.reloadData()
-            return [firstSection, secondSection]
-        } else {
-            return [firstSection]
-        }
+        return [firstSection, secondSection]
+
     }
 
     override func viewDidDisappear(_ animated: Bool) {
