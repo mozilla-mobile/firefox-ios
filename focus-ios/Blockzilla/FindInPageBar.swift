@@ -75,6 +75,7 @@ class FindInPageBar: UIView {
         searchText.enablesReturnKeyAutomatically = true
         searchText.returnKeyType = .search
         searchText.accessibilityIdentifier = "FindInPage.searchField"
+        searchText.delegate = self
         addSubview(searchText)
 
         matchCountView.textColor = FindInPageUX.MatchCountColor
@@ -170,5 +171,12 @@ class FindInPageBar: UIView {
 
     @objc fileprivate func didPressClose(_ sender: UIButton) {
         delegate?.findInPageDidPressClose(self)
+    }
+}
+
+extension FindInPageBar: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        return true
     }
 }
