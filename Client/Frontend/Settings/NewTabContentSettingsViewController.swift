@@ -74,7 +74,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             }
             self.tableView.reloadData()
         })
-        let firstSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabSectionName), footerTitle: nil, children: [showTopSites, showBlankPage, showBookmarks, showHistory, showHomepage])
+        let firstSection = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showBlankPage, showBookmarks, showHistory, showHomepage])
         
         let isPocketEnabledDefault = Pocket.IslocaleSupported(Locale.current.identifier)
         let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabPocket))

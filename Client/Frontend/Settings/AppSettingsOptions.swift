@@ -992,6 +992,7 @@ class NewTabPageSetting: Setting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
 
+    
     override var accessibilityIdentifier: String? { return "NewTab" }
 
     init(settings: SettingsTableViewController) {
