@@ -77,6 +77,8 @@ open class FxADeviceRegistration: NSObject, NSCoding {
 
 open class FxADeviceRegistrator {
     open static func registerOrUpdateDevice(_ account: FirefoxAccount, sessionToken: NSData, client: FxAClient10? = nil) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
+        // TODO: Bypass this check the first time through after updating the app?
+
         // If we've already registered, the registration version is up-to-date, *and* we've (re-)registered
         // within the last week, do nothing. We re-register weekly as a sanity check.
         if let registration = account.deviceRegistration, registration.version == DeviceRegistrationVersion &&
@@ -93,12 +95,11 @@ open class FxADeviceRegistrator {
         }
 
         let client = client ?? FxAClient10(authEndpoint: account.configuration.authEndpointURL, oauthEndpoint: account.configuration.oauthEndpointURL, profileEndpoint: account.configuration.profileEndpointURL)
+
+        let availableCommands = account.availableCommands()
+
         let device: FxADevice
         let registrationResult: FxADeviceRegistrationResult
-
-        let isFxAMessagesEnabled = true
-        // TODO: Get the actual encryption key our own client
-        let availableCommands: [String : Any] = isFxAMessagesEnabled ? [FxAClientCommandSendTab: "SENDTABKEY"] : [:]
 
         if let registration = account.deviceRegistration {
             device = FxADevice.forUpdate(account.deviceName, id: registration.id, availableCommands: availableCommands, push: pushParams)
@@ -108,6 +109,8 @@ open class FxADeviceRegistrator {
             registrationResult = .registered
         }
 
+        // TODO: Does `availableCommands` need copied into `FxADeviceRegistration`?
+
         let registeredDevice = client.registerOrUpdate(device: device, withSessionToken: sessionToken)
         let registration: Deferred<Maybe<FxADeviceRegistration>> = registeredDevice.bind { result in
             if let device = result.successValue {
@@ -116,7 +119,7 @@ open class FxADeviceRegistrator {
 
             // Recover from the error -- if we can.
             if let error = result.failureValue as? FxAClientError,
-               case .remote(let remoteError) = error {
+                case .remote(let remoteError) = error {
                 switch remoteError.code {
                 case FxAccountRemoteError.DeviceSessionConflict:
                     return recoverFromDeviceSessionConflict(account, client: client, sessionToken: sessionToken)

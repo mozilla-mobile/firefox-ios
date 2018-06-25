@@ -385,56 +385,75 @@ open class FirefoxAccount {
         return d >>> succeed
     }
 
-    open func availableCommands() -> Deferred<Maybe<[String : Any]>> {
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
-        return getEncryptedKey() >>== { sendTabKey in
-            guard let sendTabKey = sendTabKey else {
-                return deferMaybe([:])
-            }
-
-            let commands = [FxAClientCommandSendTab: sendTabKey as Any]
-            return deferMaybe(commands)
+    open func availableCommands() -> [String : Any] {
+        guard let sendTabKey = getEncryptedKey() else {
+            return [:]
         }
+
+        let commands = [FxAClientCommandSendTab: sendTabKey as Any]
+        return commands
     }
 
-    open func getEncryptedKey() -> Deferred<Maybe<[String : String]?>> {
-        /*
-         let sendTabKeys = await this._getKeys();
-         if (!sendTabKeys) {
-         sendTabKeys = await this._generateAndPersistKeys();
-         }
-         // Strip the private key from the bundle to encrypt.
-         const keyToEncrypt = {
-         publicKey: sendTabKeys.publicKey,
-         authSecret: sendTabKeys.authSecret,
-         };
-         const {kSync} = await this._fxAccounts.getSignedInUser();
-         if (!kSync) {
-         return null;
-         }
-         const keyBundle = BulkKeyBundle.fromHexKey(kSync);
-         const IV = Weave.Crypto.generateRandomIV();
-         const ciphertext = await Weave.Crypto.encrypt(JSON.stringify(keyToEncrypt), keyBundle.encryptionKeyB64, IV);
-         const hmac = this._ciphertextHMAC(keyBundle, ciphertext);
-         return JSON.stringify({
-         IV,
-         hmac,
-         ciphertext
-         });
-         */
+    func getKeys() -> [String : String]? {
+        let state = stateCache.value?.asJSON()
+        print(state?.rawString() ?? "(nil)")
 
-        // Get kSync.
-        syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kSync) in
-            
+        return nil
+    }
+
+    func generateAndPersistKeys() -> [String : String]? {
+        guard let keys = try? PushCrypto.sharedInstance.generateKeys(),
+            let publicKey = keys.p256dhPublicKey.utf8EncodedData.base64urlSafeEncodedString,
+            let authSecret = keys.auth.utf8EncodedData.base64urlSafeEncodedString else {
+            return nil
         }
 
-        // TEMP
-        var kSync: String? = nil
-        if (kSync == nil) {
-            return deferMaybe(nil)
+        let sendTabKeys = [
+            "publicKey": publicKey,
+            "privateKey": keys.p256dhPrivateKey,
+            "authSecret": authSecret
+        ]
+
+        // TODO: Save this to keychain (via KeychainCache?)
+
+        return sendTabKeys
+    }
+
+    open func getEncryptedKey() -> [String : String]? {
+        var sendTabKeys = getKeys()
+        if sendTabKeys == nil {
+            sendTabKeys = generateAndPersistKeys()
         }
 
-        return deferMaybe([:])
+        guard let publicKey = sendTabKeys?["publicKey"],
+            let authSecret = sendTabKeys?["authSecret"],
+            let marriedState = stateCache.value as? MarriedState else {
+            return nil
+        }
+
+        let keyToEncrypt = JSON([
+            "publicKey": publicKey,
+            "authSecret": authSecret
+        ])
+
+        let keyBundle = KeyBundle.fromKSync(marriedState.kSync)
+
+        guard let cleartext = try? keyToEncrypt.rawData(options: []),
+            let (ciphertext, iv) = keyBundle.encrypt(cleartext) else {
+            return nil
+        }
+
+        let hmac = keyBundle.hmac(ciphertext)
+
+        guard let ivString = iv.base64urlSafeEncodedString,
+            let hmacString = hmac.base64urlSafeEncodedString,
+            let ciphertextString = ciphertext.base64urlSafeEncodedString else {
+            return nil
+        }
+
+        let encryptedKey = ["IV": ivString, "hmac": hmacString, "ciphertext": ciphertextString]
+
+        return encryptedKey
     }
 
     @discardableResult open func advance() -> Deferred<FxAState> {
