@@ -15,6 +15,9 @@ private let log = Logger.syncLogger
 // The version of the account schema we persist.
 let AccountSchemaVersion = 2
 
+// FxA Commands
+public let FxAClientCommandSendTab = "https://identity.mozilla.com/cmd/open-uri"
+
 /// A FirefoxAccount mediates access to identity attached services.
 ///
 /// All data maintained as part of the account or its state should be
@@ -380,6 +383,58 @@ open class FirefoxAccount {
             }
         }
         return d >>> succeed
+    }
+
+    open func availableCommands() -> Deferred<Maybe<[String : Any]>> {
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+        return getEncryptedKey() >>== { sendTabKey in
+            guard let sendTabKey = sendTabKey else {
+                return deferMaybe([:])
+            }
+
+            let commands = [FxAClientCommandSendTab: sendTabKey as Any]
+            return deferMaybe(commands)
+        }
+    }
+
+    open func getEncryptedKey() -> Deferred<Maybe<[String : String]?>> {
+        /*
+         let sendTabKeys = await this._getKeys();
+         if (!sendTabKeys) {
+         sendTabKeys = await this._generateAndPersistKeys();
+         }
+         // Strip the private key from the bundle to encrypt.
+         const keyToEncrypt = {
+         publicKey: sendTabKeys.publicKey,
+         authSecret: sendTabKeys.authSecret,
+         };
+         const {kSync} = await this._fxAccounts.getSignedInUser();
+         if (!kSync) {
+         return null;
+         }
+         const keyBundle = BulkKeyBundle.fromHexKey(kSync);
+         const IV = Weave.Crypto.generateRandomIV();
+         const ciphertext = await Weave.Crypto.encrypt(JSON.stringify(keyToEncrypt), keyBundle.encryptionKeyB64, IV);
+         const hmac = this._ciphertextHMAC(keyBundle, ciphertext);
+         return JSON.stringify({
+         IV,
+         hmac,
+         ciphertext
+         });
+         */
+
+        // Get kSync.
+        syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kSync) in
+            
+        }
+
+        // TEMP
+        var kSync: String? = nil
+        if (kSync == nil) {
+            return deferMaybe(nil)
+        }
+
+        return deferMaybe([:])
     }
 
     @discardableResult open func advance() -> Deferred<FxAState> {

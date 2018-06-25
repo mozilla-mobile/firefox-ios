@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Deferred
+import Account
 import Foundation
 import Shared
 @testable import Storage
@@ -457,6 +458,10 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return deferMaybe(self.clientsAndTabs)
+    }
+
+    open func getRemoteDevice(fxaDeviceId: String) -> Deferred<Maybe<RemoteDevice?>> {
+        return deferMaybe(nil)
     }
 
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {

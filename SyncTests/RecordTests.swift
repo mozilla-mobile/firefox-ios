@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import Account
 import Storage
 @testable import Sync
 import UIKit
@@ -33,7 +34,7 @@ class RecordTests: XCTestCase {
         let p = CleartextPayloadJSON(JSON(["id": "guid"]))
         let r = Record<CleartextPayloadJSON>(id: "guid", payload: p, modified: Date.now(), sortindex: 15, ttl: nil)
         let k = KeyBundle.random()
-        let s = k.serializer({ $0.json })
+        let s = keysPayloadSerializer(keyBundle: k, { $0.json })
         let json = s(r)!
         XCTAssertEqual(json["id"].stringValue, "guid")
         XCTAssertTrue(json["ttl"].isNull())
@@ -178,8 +179,8 @@ class RecordTests: XCTestCase {
         let inputString = "{\"sortindex\": 131, \"payload\": \"{\\\"ciphertext\\\":\\\"YJB4dr0vZEIWPirfU2FCJvfzeSLiOP5QWasol2R6ILUxdHsJWuUuvTZVhxYQfTVNou6hVV67jfAvi5Cs+bqhhQsv7icZTiZhPTiTdVGt+uuMotxauVA5OryNGVEZgCCTvT3upzhDFdDbJzVd9O3/gU/b7r/CmAHykX8bTlthlbWeZ8oz6gwHJB5tPRU15nM/m/qW1vyKIw5pw/ZwtAy630AieRehGIGDk+33PWqsfyuT4EUFY9/Ly+8JlnqzxfiBCunIfuXGdLuqTjJOxgrK8mI4wccRFEdFEnmHvh5x7fjl1ID52qumFNQl8zkB75C8XK25alXqwvRR6/AQSP+BgQ==\\\",\\\"IV\\\":\\\"v/0BFgicqYQsd70T39rraA==\\\",\\\"hmac\\\":\\\"59605ed696f6e0e6e062a03510cff742bf6b50d695c042e8372a93f4c2d37dac\\\"}\", \"id\": \"0-P9fabp9vJD\", \"modified\": 1326254123.65}"
 
         let keyBundle = KeyBundle(encKeyB64: b64E, hmacKeyB64: b64H)!
-        let decryptClient = keyBundle.factory({ CleartextPayloadJSON($0) })
-        let encryptClient = keyBundle.serializer({ $0.json })   // It's already a JSON.
+        let decryptClient = keysPayloadFactory(keyBundle: keyBundle, { CleartextPayloadJSON($0) })
+        let encryptClient = keysPayloadSerializer(keyBundle: keyBundle, { $0.json }) // It's already a JSON.
 
         let toRecord = {
             return Record<CleartextPayloadJSON>.fromEnvelope($0, payloadFactory: decryptClient)

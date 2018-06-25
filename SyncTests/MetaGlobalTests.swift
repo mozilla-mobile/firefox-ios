@@ -71,8 +71,9 @@ class MetaGlobalTests: XCTestCase {
 
     func storeCryptoKeys(keys: Keys) {
         let keyBundle = KeyBundle.fromKSync(kSync)
-        let record = Record(id: "keys", payload: keys.asPayload())
-        let envelope = EnvelopeJSON(keyBundle.serializer({ $0.json })(record)!)
+        let record = Record(id: "keys", payload: keys.asPayload()) as Record<CleartextPayloadJSON>
+        let serializer = keysPayloadSerializer(keyBundle: keyBundle, { $0.json })
+        let envelope = EnvelopeJSON(serializer(record)!)
         server.storeRecords(records: [envelope], inCollection: "crypto")
     }
 
