@@ -1001,7 +1001,7 @@ class NewTabPageSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = NewTabContentSettingsViewController()
+        let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
