@@ -244,7 +244,7 @@ class BrowserViewController: UIViewController {
         self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
         // Register for foreground notification to check biometric authentication
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: nil) { notification in
             var biometricError: NSError?
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
