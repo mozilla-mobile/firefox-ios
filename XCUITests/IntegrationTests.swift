@@ -80,4 +80,24 @@ class IntegrationTests: BaseTestCase {
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
     }
+
+    func testFxASyncTabs () {
+        navigator.openURL(testingURL)
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        signInFxAccounts()
+
+        // Wait for initial sync to complete
+        navigator.nowAt(BrowserTab)
+        // This is only to check that the device's name changed
+        navigator.goto(SettingsScreen)
+        app.tables.cells.element(boundBy: 0).tap()
+        waitforExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
+        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec on iOS")
+
+        // Sync again just to make sure to sync after new name is shown
+        app.buttons["Settings"].tap()
+        app.tables.cells.element(boundBy: 1).tap()
+        waitforExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
+    }
 }
