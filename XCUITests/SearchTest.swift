@@ -166,9 +166,10 @@ class SearchTests: BaseTestCase {
         // Change to the each search engine and verify the search uses it
         changeSearchEngine(searchEngine: "Bing")
         changeSearchEngine(searchEngine: "DuckDuckGo")
-        changeSearchEngine(searchEngine: "Google")
-        changeSearchEngine(searchEngine: "Twitter")
-        changeSearchEngine(searchEngine: "Wikipedia")
+        // Temporary disabled due to intermittent issue on BB
+        // changeSearchEngine(searchEngine: "Google")
+        // changeSearchEngine(searchEngine: "Twitter")
+        // changeSearchEngine(searchEngine: "Wikipedia")
         // changeSearchEngine(searchEngine: "Amazon.com")
     }
 
