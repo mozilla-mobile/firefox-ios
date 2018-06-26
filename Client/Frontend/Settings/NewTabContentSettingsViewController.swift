@@ -71,7 +71,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
         })
         let showHomepage = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabHomePage), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return (self.currentChoice == NewTabPage.homePage) && self.hasHomePage}, onChanged: {
             self.hasHomePage = HomePageAccessors.getHomePage(self.prefs) != nil
-            if (self.hasHomePage){
+            if self.hasHomePage {
                 self.currentChoice = NewTabPage.homePage
                 self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.PrefKey)
             }
