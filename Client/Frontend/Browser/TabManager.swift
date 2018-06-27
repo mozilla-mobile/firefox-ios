@@ -390,20 +390,8 @@ class TabManager: NSObject {
     //Switch between private browsing tab and normal tab
     func switchTabMode (_ tab: Tab) {
         assert(Thread.isMainThread)
-/*
-        var tabIndex: Int = -1
 
-        let viableTabs: [Tab] = tab.isPrivate ? normalTabs : privateTabs
-        tabIndex = viableTabs.count - 2
-
-        if let currentTab = viableTabs[safe: tabIndex] {
-            _selectedIndex = tabs.index(of: currentTab) ?? -1
-        } else {
-            _selectedIndex = -1
-        }
-         selectTab(selectedTab, previous: nil)
-*/
-        selectTab(tabs.last, previous: nil)
+        tab.isPrivate ? selectTab(normalTabs.last, previous: nil) : selectTab(privateTabs.last, previous: nil)
     }
     // This method is duplicated to hide the flushToDisk option from consumers.
     func removeTab(_ tab: Tab) {
