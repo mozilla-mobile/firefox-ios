@@ -109,8 +109,6 @@ open class FxADeviceRegistrator {
             registrationResult = .registered
         }
 
-        // TODO: Does `availableCommands` need copied into `FxADeviceRegistration`?
-
         let registeredDevice = client.registerOrUpdate(device: device, withSessionToken: sessionToken)
         let registration: Deferred<Maybe<FxADeviceRegistration>> = registeredDevice.bind { result in
             if let device = result.successValue {

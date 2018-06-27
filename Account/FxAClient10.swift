@@ -13,21 +13,6 @@ public let FxAClientErrorDomain = "org.mozilla.fxa.error"
 public let FxAClientUnknownError = NSError(domain: FxAClientErrorDomain, code: 999,
     userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
 
-public struct FxAMessage {
-    let topic: String
-    let data: [String : JSON]
-
-    static func fromJSON(_ json: JSON) -> FxAMessage? {
-        guard json.error == nil,
-            let topic = json["topic"].string,
-            let data = json["data"].dictionary else {
-                return nil
-        }
-
-        return FxAMessage(topic: topic, data: data)
-    }
-}
-
 public struct FxALoginResponse {
     public let remoteEmail: String
     public let uid: String
@@ -73,8 +58,8 @@ public struct FxASendMessageResponse {
     let success: Bool
 }
 
-public struct FxAMessagesResponse {
-    let messages: [FxAMessage]
+public struct FxACommandsResponse {
+    let commands: [FxACommand]
 }
 
 public struct FxAOAuthResponse {
@@ -292,17 +277,18 @@ open class FxAClient10 {
         return FxASendMessageResponse(success: json.error == nil)
     }
 
-    fileprivate class func messagesResponse(fromJSON json: JSON) -> FxAMessagesResponse? {
+    fileprivate class func commandsResponse(fromJSON json: JSON) -> FxACommandsResponse? {
         guard json.error == nil,
-            let jsonMessages = json.array else {
+            let _ = json["index"].int,
+            let jsonCommands = json["messages"].array else { // Commands are under "messages" for some reason
                 return nil
         }
 
-        let messages = jsonMessages.compactMap { (jsonMessage) -> FxAMessage? in
-            return FxAMessage.fromJSON(jsonMessage)
+        let commands = jsonCommands.compactMap { (jsonCommand) -> FxACommand? in
+            return FxACommand.fromJSON(jsonCommand)
         }
 
-        return FxAMessagesResponse(messages: messages)
+        return FxACommandsResponse(commands: commands)
     }
 
     fileprivate class func deviceDestroyResponse(fromJSON json: JSON) -> FxADeviceDestroyResponse {
@@ -450,7 +436,7 @@ open class FxAClient10 {
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.deviceDestroyResponse)
     }
 
-    open func messages(atIndex index: UInt? = nil, limit: UInt? = nil, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxAMessagesResponse>> {
+    open func commands(atIndex index: UInt? = nil, limit: UInt? = nil, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxACommandsResponse>> {
         var queryParams: [URLQueryItem] = []
         if let index = index {
             queryParams.append(URLQueryItem(name: "index", value: "\(index)"))
@@ -459,7 +445,7 @@ open class FxAClient10 {
             queryParams.append(URLQueryItem(name: "limit", value: "\(limit)"))
         }
 
-        let URL = self.authURL.appendingPathComponent("/account/devices/messages").withQueryParams(queryParams)
+        let URL = self.authURL.appendingPathComponent("/account/device/commands").withQueryParams(queryParams)
         var mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.httpMethod = HTTPMethod.get.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -469,13 +455,13 @@ open class FxAClient10 {
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
-        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.messagesResponse)
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.commandsResponse)
     }
 
-    open func sendMessage(topic: String, data: [String : JSON], toDeviceID deviceID: GUID, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxASendMessageResponse>> {
-        let URL = self.authURL.appendingPathComponent("/account/devices/messages")
+    open func invokeCommand(name: String, targetDeviceID: GUID, payload: String, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxASendMessageResponse>> {
+        let URL = self.authURL.appendingPathComponent("/account/devices/invoke_command")
         var mutableURLRequest = URLRequest(url: URL)
-        let httpBody: JSON = JSON(["topic": topic, "data": data, "to": deviceID])
+        let httpBody: JSON = JSON(["command": name, "target": targetDeviceID, "payload": payload])
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = httpBody.stringValue()?.utf8EncodedData
@@ -495,6 +481,8 @@ open class FxAClient10 {
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = device.toJSON().stringValue()?.utf8EncodedData
+
+        // TODO: Check that `availableCommands` is present in `httpBody`
 
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")

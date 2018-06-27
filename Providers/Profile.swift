@@ -465,7 +465,7 @@ open class BrowserProfile: Profile {
             let remoteDevices = maybeRemoteDevices.compactMap({ $0.successValue ?? nil })
 
             for remoteDevice in remoteDevices {
-                if let keyBundle = remoteDevice.availableCommands?[FxAClientCommandSendTab] {
+                if let keyBundle = remoteDevice.availableCommands?[FxACommandSendTab.Name] {
                     // TODO: Send tab using new FxA Messages API
                     print("**** TODO: Send tab using new FxA Messages API (\(remoteDevice.id ?? "nil")) ****")
                 } else {

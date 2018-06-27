@@ -402,6 +402,7 @@
 		D0B29EE01F460BDF00C7CEFC /* LoginsSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B29EDF1F460BDF00C7CEFC /* LoginsSchema.swift */; };
 		D0B693D5206C5BB9008A8B11 /* TestSQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */; };
 		D0BE845520E1660F006A1282 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE845420E1660F006A1282 /* Keys.swift */; };
+		D0BE847F20E3F500006A1282 /* FxACommandsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE847E20E3F500006A1282 /* FxACommandsClient.swift */; };
 		D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */; };
 		D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */; };
 		D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95EF5201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift */; };
@@ -1542,6 +1543,7 @@
 		D0B29EDF1F460BDF00C7CEFC /* LoginsSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsSchema.swift; sourceTree = "<group>"; };
 		D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSQLiteReadingList.swift; sourceTree = "<group>"; };
 		D0BE845420E1660F006A1282 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		D0BE847E20E3F500006A1282 /* FxACommandsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxACommandsClient.swift; sourceTree = "<group>"; };
 		D0C95DF1200EAD3000E4E51C /* FindInPage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FindInPage.js; sourceTree = "<group>"; };
 		D0C95DF5200EADD500E4E51C /* LoginsHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = LoginsHelper.js; sourceTree = "<group>"; };
 		D0C95DF7200EAE3000E4E51C /* NightModeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = NightModeHelper.js; sourceTree = "<group>"; };
@@ -2344,6 +2346,7 @@
 				2FA436221ABB8436008031D1 /* FirefoxAccount.swift */,
 				2FA436231ABB8436008031D1 /* FirefoxAccountConfiguration.swift */,
 				2FA436251ABB8436008031D1 /* FxAClient10.swift */,
+				D0BE847E20E3F500006A1282 /* FxACommandsClient.swift */,
 				D32A350D1D6530D80066DAE9 /* FxADevice.swift */,
 				D3DBE6E41D6516FE00033FFF /* FxADeviceRegistration.swift */,
 				2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */,
@@ -4748,6 +4751,7 @@
 			files = (
 				2FA4362B1ABB8436008031D1 /* FirefoxAccountConfiguration.swift in Sources */,
 				39F99FE41E3A6F1700F353B4 /* PushClient.swift in Sources */,
+				D0BE847F20E3F500006A1282 /* FxACommandsClient.swift in Sources */,
 				39F99FE51E3A6F1700F353B4 /* PushConfiguration.swift in Sources */,
 				D32A350E1D6530D80066DAE9 /* FxADevice.swift in Sources */,
 				D047C55620E1640B001A3C07 /* KeyBundle.swift in Sources */,
