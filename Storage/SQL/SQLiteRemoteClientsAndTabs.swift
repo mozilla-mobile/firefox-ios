@@ -30,7 +30,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     class func remoteDeviceFactory(_ row: SDRow) -> RemoteDevice {
-        let availableCommands = JSON(parseJSON: (row["availableCommands"] as? String) ?? "{}").dictionaryObject ?? [:]
+        let availableCommands = JSON(parseJSON: (row["availableCommands"] as? String) ?? "{}").dictionaryObject as? [String : JSON] ?? [:]
         return RemoteDevice(
             id: row["guid"] as? String,
             name: row["name"] as! String,

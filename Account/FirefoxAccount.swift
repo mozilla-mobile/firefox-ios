@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 import Deferred
+import SwiftKeychainWrapper
 import SwiftyJSON
 import FxA
 import SDWebImage
@@ -50,6 +51,7 @@ open class FirefoxAccount {
     open var pushRegistration: PushRegistration?
 
     fileprivate let stateCache: KeychainCache<FxAState>
+    fileprivate var sendTabKeys: [String : String]?
     open var syncAuthState: SyncAuthState! // We can't give a reference to self if this is a let.
 
     // To prevent advance() consumers racing, we maintain a shared advance() deferred (`advanceDeferred`).  If an
@@ -385,20 +387,53 @@ open class FirefoxAccount {
         return d >>> succeed
     }
 
-    open func availableCommands() -> [String : Any] {
+    open func availableCommands() -> [String : JSON] {
         guard let sendTabKey = getEncryptedKey() else {
             return [:]
         }
 
-        let commands = [FxAClientCommandSendTab: sendTabKey as Any]
+        let commands = [FxAClientCommandSendTab: sendTabKey]
         return commands
     }
 
-    func getKeys() -> [String : String]? {
-        let state = stateCache.value?.asJSON()
-        print(state?.rawString() ?? "(nil)")
+    // TODO: Check this
+    func encrypt(message: String, device: FxADevice) -> String? {
+        guard let bundle = device.availableCommands?[FxAClientCommandSendTab],
+            let marriedState = stateCache.value as? MarriedState else {
+            return nil
+        }
 
-        return nil
+        let syncKeyBundle = KeyBundle.fromKSync(marriedState.kSync)
+
+        guard let cipherdata = bundle["ciphertext"].string?.base64urlSafeDecodedData,
+            let iv = bundle["IV"].string?.base64urlSafeDecodedData,
+            let decryptedKeyString = syncKeyBundle.decrypt(cipherdata, iv: iv) else {
+            return nil
+        }
+
+        let decryptedKey = JSON(parseJSON: decryptedKeyString)
+
+        guard let publicKey = decryptedKey["publicKey"].string?.base64urlSafeDecodedData,
+            let authSecret = decryptedKey["authSecret"].string?.base64urlSafeDecodedData,
+            let plaintext = message.data(using: .utf8),
+            let result = try? PushCrypto.sharedInstance.aes128gcm(plaintext: plaintext, encryptWith: publicKey, authenticateWith: authSecret, rs: plaintext.count, padLen: 0).base64urlSafeEncodedString else {
+            return nil
+        }
+
+        return result
+    }
+
+    // TODO: Check this
+    func decrypt(ciphertext: String) -> String? {
+        guard let sendTabKeys = self.sendTabKeys,
+            let publicKey = sendTabKeys["publicKey"]?.base64urlSafeDecodedData,
+            let authSecret = sendTabKeys["authSecret"]?.base64urlSafeDecodedData,
+            let cipherdata = ciphertext.base64urlSafeDecodedData,
+            let decrypted = try? PushCrypto.sharedInstance.aes128gcm(payload: cipherdata, decryptWith: publicKey, authenticateWith: authSecret) else {
+            return nil
+        }
+
+        return decrypted.utf8EncodedString
     }
 
     func generateAndPersistKeys() -> [String : String]? {
@@ -415,18 +450,19 @@ open class FirefoxAccount {
         ]
 
         // TODO: Save this to keychain (via KeychainCache?)
+        self.sendTabKeys = sendTabKeys
+
+        if let prefsBranchPrefix = self.configuration.prefs?.getBranchPrefix() {
+            print(prefsBranchPrefix)
+        }
 
         return sendTabKeys
     }
 
-    open func getEncryptedKey() -> [String : String]? {
-        var sendTabKeys = getKeys()
-        if sendTabKeys == nil {
-            sendTabKeys = generateAndPersistKeys()
-        }
-
-        guard let publicKey = sendTabKeys?["publicKey"],
-            let authSecret = sendTabKeys?["authSecret"],
+    open func getEncryptedKey() -> JSON? {
+        guard let sendTabKeys = self.sendTabKeys ?? generateAndPersistKeys(),
+            let publicKey = sendTabKeys["publicKey"],
+            let authSecret = sendTabKeys["authSecret"],
             let marriedState = stateCache.value as? MarriedState else {
             return nil
         }
@@ -451,7 +487,7 @@ open class FirefoxAccount {
             return nil
         }
 
-        let encryptedKey = ["IV": ivString, "hmac": hmacString, "ciphertext": ciphertextString]
+        let encryptedKey = JSON(["IV": ivString, "hmac": hmacString, "ciphertext": ciphertextString])
 
         return encryptedKey
     }
