@@ -1535,11 +1535,32 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
     }
-    
+
+    func getTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
+        //guard let tab = self.tabManager.selectedTab else { return [] }
+
+        let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "menu-panel-TopSites") { action in
+            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)}
+        let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "menu-panel-TopSites") { action in
+            if let tab = self.tabManager.selectedTab {
+                self.tabManager.removeTab(tab)
+            }}
+        return [newTab, closeTab]
+    }
+
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         guard self.presentedViewController == nil else {
             return
         }
+        var actions: [[PhotonActionSheetItem]] = []
+
+        actions.append(getTabToolbarLongPressActions())
+
+        // force a modal if the menu is being displayed in compact split screen
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
+        /*
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
@@ -1560,6 +1581,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         present(controller, animated: true, completion: nil)
+*/
     }
 
     func showBackForwardList() {
