@@ -1539,8 +1539,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func getTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
         //isSelected = theme == .Private
         let browsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "menu-panel-TopSites") { action in
-        let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-        self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)}
+            if let tab = self.tabManager.selectedTab {
+                self.tabManager.switchTabMode(tab)
+            }}
         return [browsingMode]
     }
     func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
@@ -1556,7 +1557,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
             }}
-        return [newTab, newPrivateTab, closeTab]
+        return /*tabTrayController.privateMode ? [newPrivateTab, closeTab] : */[newTab, closeTab]
     }
 
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
