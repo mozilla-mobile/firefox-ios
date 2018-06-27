@@ -1537,16 +1537,26 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func getTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
+        //isSelected = theme == .Private
+        let browsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "menu-panel-TopSites") { action in
+        let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+        self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)}
+        return [browsingMode]
+    }
+    func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
         //guard let tab = self.tabManager.selectedTab else { return [] }
 
         let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "menu-panel-TopSites") { action in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)}
+        let newPrivateTab = PhotonActionSheetItem(title: Strings.NewPrivateTabTitle, iconString: "menu-panel-TopSites") { action in
+            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)}
         let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "menu-panel-TopSites") { action in
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
             }}
-        return [newTab, closeTab]
+        return [newTab, newPrivateTab, closeTab]
     }
 
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -1554,13 +1564,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             return
         }
         var actions: [[PhotonActionSheetItem]] = []
-
         actions.append(getTabToolbarLongPressActions())
+        actions.append(getMoreTabToolbarLongPressActions())
 
         // force a modal if the menu is being displayed in compact split screen
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
         presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
-        /*
+/*
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
