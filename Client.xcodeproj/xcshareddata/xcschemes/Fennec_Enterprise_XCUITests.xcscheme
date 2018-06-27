@@ -224,6 +224,9 @@
                   Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
                </Test>
                <Test
+                  Identifier = "NavigationTest/testPopUpBlocker()">
+               </Test>
+               <Test
                   Identifier = "NavigationTest/testReloadPreservesMobileOrDesktopSite()">
                </Test>
                <Test
