@@ -388,11 +388,22 @@ class TabManager: NSObject {
     }
 
     //Switch between private browsing tab and normal tab
-    func switchTabMode (_ tab: Tab) {
+    func switchTabMode (_ tab: Tab) -> Bool {
         assert(Thread.isMainThread)
 
+        if privateTabs.last != nil {
         tab.isPrivate ? selectTab(normalTabs.last, previous: nil) : selectTab(privateTabs.last, previous: nil)
+        } else {
+            if tab.isPrivate {
+                selectTab(normalTabs.last, previous: nil)
+            } else {
+                //will need to open new blank private page
+                return true
+            }
+        }
+        return false
     }
+
     // This method is duplicated to hide the flushToDisk option from consumers.
     func removeTab(_ tab: Tab) {
         self.removeTab(tab, flushToDisk: true, notify: true)
