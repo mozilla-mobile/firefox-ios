@@ -19,6 +19,7 @@ class TrackingProtectionSettings: BaseTestCase {
     func testInactiveSettings() {
 
         // Go to in-app settings
+        waitforHittable(element: app.buttons["Settings"])
         app.buttons["Settings"].tap()
         waitforExistence(element: app.tables.switches["BlockerToggle.BlockAnalytics"])
 
@@ -40,6 +41,7 @@ class TrackingProtectionSettings: BaseTestCase {
         XCTAssertEqual(app.staticTexts["TrackingProtectionBadge.counterLabel"].label, "0")
 
         // Open the tracking protection sidebar
+        waitforHittable(element: app.otherElements["URLBar.trackingProtectionIcon"])
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
 
         // Wait for the sidebar to open
@@ -54,12 +56,15 @@ class TrackingProtectionSettings: BaseTestCase {
         XCTAssertEqual(counters.element(boundBy: 3).label, "0") // Content trackers
 
         // Close the sidebar
+        waitforHittable(element: app.buttons["TrackingProtectionView.closeButton"])
         app.buttons["TrackingProtectionView.closeButton"].tap()
 
         // Erase the history
+        waitforHittable(element: app.buttons["ERASE"])
         app.buttons["ERASE"].tap()
 
         // Reset in-app settings (work-around until issue: #731)
+        waitforHittable(element: app.buttons["Settings"])
         app.buttons["Settings"].tap()
         waitforExistence(element: app.tables.switches["BlockerToggle.BlockAnalytics"])
 

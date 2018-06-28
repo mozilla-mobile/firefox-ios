@@ -29,6 +29,7 @@ class OverlayView: UIView {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         searchButton.isHidden = true
+        searchButton.accessibilityIdentifier = "OverlayView.searchButton"
         searchButton.alpha = 0
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
@@ -168,7 +169,7 @@ class OverlayView: UIView {
                     self.copyButton.setAttributedTitle(NSAttributedString(string: String(format: UIConstants.strings.linkYouCopied, url.absoluteString), attributes: [NSAttributedStringKey.foregroundColor: UIColor.white]), for: .normal)
                     showCopyButton = url.isWebPage()
                 }
-
+                
                 // Show or hide the search button depending on whether there's entered text.
                 if self.searchButton.isHidden != query.isEmpty {
                     let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0

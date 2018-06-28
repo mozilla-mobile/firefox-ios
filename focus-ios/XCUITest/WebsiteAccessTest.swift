@@ -18,8 +18,7 @@ class WebsiteAccessTests: BaseTestCase {
  
     func testVisitWebsite() {
         // Check initial page
-        XCTAssertTrue(app.staticTexts["Browse. Erase. Repeat."].exists)
-        XCTAssertTrue(app.staticTexts["Automatic private browsing."].exists)
+        checkForHomeScreen()
         
         // Enter 'mozilla' on the search field
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
@@ -28,6 +27,7 @@ class WebsiteAccessTests: BaseTestCase {
         
         // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below
         let label = app.textFields["Search or enter address"]
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
         waitForValueMatch(element: label, value: "mozilla.org/")
         waitforExistence(element: app.buttons["Search for mozilla"])
@@ -49,8 +49,7 @@ class WebsiteAccessTests: BaseTestCase {
         //waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
         
         // Check it is on the initial page
-        waitforExistence(element: app.staticTexts["Browse. Erase. Repeat."])
-        waitforExistence(element: app.staticTexts["Automatic private browsing."])
+        checkForHomeScreen()
     }
     
     func testDisableAutocomplete() {
@@ -65,8 +64,11 @@ class WebsiteAccessTests: BaseTestCase {
         
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
-        waitforExistence(element: app.buttons["Search for mozilla"])
+        waitforExistence(element: app.buttons["OverlayView.searchButton"])
+        let searchForButton = app.buttons["OverlayView.searchButton"]
+        XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
         waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla")
         app.buttons["URLBar.cancelButton"].tap()
         
@@ -79,8 +81,9 @@ class WebsiteAccessTests: BaseTestCase {
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
         
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("mozilla")
-        waitforExistence(element: app.buttons["Search for mozilla"])
+        XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
         waitForValueMatch(element: searchOrEnterAddressTextField, value: "mozilla.org/")
         app.buttons["URLBar.cancelButton"].tap()
     }
@@ -102,6 +105,7 @@ class WebsiteAccessTests: BaseTestCase {
         
         // Test auto completing the domain
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.typeText("getfire")
         waitforExistence(element: app.buttons["Search for getfire"])
         waitForValueMatch(element: searchOrEnterAddressTextField, value: "getfirefox.com/")

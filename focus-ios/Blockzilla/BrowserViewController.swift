@@ -484,6 +484,7 @@ class BrowserViewController: UIViewController {
     }
     
     func requestReviewIfNecessary() {
+        if AppInfo.isTesting() { return }
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
         let threshold = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
 

@@ -53,7 +53,6 @@ class AsianLocaleTest: BaseTestCase {
         
         // Erase the history, check it is on the initial page
 		app.buttons["ERASE"].tap()
-        waitforExistence(element: app.staticTexts["Browse. Erase. Repeat."])
-        waitforExistence(element: app.staticTexts["Automatic private browsing."])
+        checkForHomeScreen()
 	}
 }
