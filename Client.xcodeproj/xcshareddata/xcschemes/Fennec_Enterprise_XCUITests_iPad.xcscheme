@@ -302,6 +302,9 @@
                   Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
                </Test>
                <Test
+                  Identifier = "TopTabsTest/testLongTapTabCounter()">
+               </Test>
+               <Test
                   Identifier = "TopTabsTest/testSwitchBetweenTabsNoPrivatePrivateToastButton()">
                </Test>
                <Test
