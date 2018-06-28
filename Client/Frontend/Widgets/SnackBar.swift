@@ -29,15 +29,19 @@ class SnackButton: UIButton {
         }
     }
 
-    init(title: String, accessibilityIdentifier: String, callback: @escaping SnackBarCallback) {
+    init(title: String, accessibilityIdentifier: String, bold: Bool = false, callback: @escaping SnackBarCallback) {
         self.callback = callback
 
         super.init(frame: .zero)
 
+        if bold {
+            titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFontBold
+        } else {
+            titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
+        }
         setTitle(title, for: .normal)
-        titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
-        setTitleColor(SettingsUX.TableViewRowTextColor, for: .normal)
+        setTitleColor(UIConstants.ControlTintColor, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -52,7 +56,7 @@ class SnackButton: UIButton {
 
     func drawSeparator() {
         let separator = UIView()
-        separator.backgroundColor = UIConstants.BorderColor
+        separator.backgroundColor = UIConstants.SeparatorColor
         self.addSubview(separator)
         separator.snp.makeConstraints { make in
             make.leading.equalTo(self)
@@ -65,11 +69,10 @@ class SnackButton: UIButton {
 
 class SnackBar: UIView {
     let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
-
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        // These are requried to make sure that the image is _never_ smaller or larger than its actual size
+        // These are required to make sure that the image is _never_ smaller or larger than its actual size
         imageView.setContentHuggingPriority(.required, for: .horizontal)
         imageView.setContentHuggingPriority(.required, for: .vertical)
         imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -79,10 +82,9 @@ class SnackBar: UIView {
 
     private lazy var textLabel: UILabel = {
         let label = UILabel()
-        label.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
+        label.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         label.lineBreakMode = .byWordWrapping
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
-        label.backgroundColor = nil
         label.numberOfLines = 0
         label.textColor = SettingsUX.TableViewRowTextColor
         label.backgroundColor = UIColor.clear
@@ -121,7 +123,7 @@ class SnackBar: UIView {
         titleView.addArrangedSubview(textLabel)
 
         let separator = UIView()
-        separator.backgroundColor = UIConstants.BorderColor
+        separator.backgroundColor = UIConstants.SeparatorColor
 
         addSubview(titleView)
         addSubview(separator)
@@ -135,19 +137,25 @@ class SnackBar: UIView {
 
         backgroundView.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(self)
-            // Offset it by the width of the top border line so we can see the line from the super view
-            make.top.equalTo(self).offset(1)
+            make.top.equalTo(self)
         }
 
         titleView.snp.makeConstraints { make in
             make.top.equalTo(self).offset(UIConstants.DefaultPadding)
+            make.height.equalTo(UIConstants.SnackbarButtonHeight - 2 * UIConstants.DefaultPadding)
             make.centerX.equalTo(self).priority(500)
-            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 2).priority(1000)
+            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 6).priority(1000)
         }
 
         backgroundColor = UIColor.clear
+        self.clipsToBounds = true //overridden by masksToBounds = false
         self.layer.borderWidth = SnackBarUX.BorderWidth
-        self.layer.borderColor = UIConstants.BorderColor.cgColor
+        self.layer.borderColor = UIConstants.SeparatorColor.cgColor
+        self.layer.cornerRadius = 8
+        if #available(iOS 11.0, *) {
+            self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        }
+
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -218,15 +226,15 @@ class TimerSnackBar: SnackBar {
 
     static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL) {
         let bar = TimerSnackBar(text: Strings.ExternalLinkAppStoreConfirmationTitle, img: UIImage(named: "defaultFavicon"))
-        let openAppStore = SnackButton(title: Strings.OKString, accessibilityIdentifier: "ConfirmOpenInAppStore") { bar in
+        let openAppStore = SnackButton(title: Strings.AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore", bold: true) { bar in
             tab.removeSnackbar(bar)
             UIApplication.shared.openURL(appStoreURL)
         }
-        let cancelButton = SnackButton(title: Strings.CancelString, accessibilityIdentifier: "CancelOpenInAppStore") { bar in
+        let cancelButton = SnackButton(title: Strings.NotNowString, accessibilityIdentifier: "CancelOpenInAppStore", bold: false) { bar in
             tab.removeSnackbar(bar)
         }
-        bar.addButton(openAppStore)
         bar.addButton(cancelButton)
+        bar.addButton(openAppStore)
         tab.addSnackbar(bar)
     }
     
