@@ -190,8 +190,8 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertFalse(app.staticTexts["Apple"].exists)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        //app.buttons["TabTrayController.maskButton"].tap()
         navigator.goto(TabTray)
+        waitforExistence(app.cells["Apple"])
         app.cells["Apple"].tap()
 
         XCTAssertFalse(TopSiteCellgroup.exists)
