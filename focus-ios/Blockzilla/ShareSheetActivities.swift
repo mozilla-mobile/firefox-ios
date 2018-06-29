@@ -167,6 +167,7 @@ class RequestDesktopActivity: UIActivity {
     }
     
     func reloadAsDesktopSite(url: URL) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification)))
     }
 }

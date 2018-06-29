@@ -38,6 +38,9 @@ class TelemetryEventObject {
     public static let app = "app"
     public static let searchBar = "search_bar"
     public static let eraseButton = "erase_button"
+    public static let findInPageBar = "find_in_page_bar"
+    public static let findNext = "find_next"
+    public static let findPrev = "find_prev"
     public static let onboarding = "ios_onboarding_v1"
     public static let firstRun = "previous_first_run"
     public static let settingsButton = "settings_button"
@@ -51,4 +54,6 @@ class TelemetryEventObject {
     public static let websiteLink = "website_link"
     public static let autofill = "autofill"
     public static let trackerStatsShareButton = "tracker_stats_share_button"
+    public static let quickAddCustomDomainButton = "quick_add_custom_domain_button"
+    public static let requestDesktop = "request_desktop"
 }

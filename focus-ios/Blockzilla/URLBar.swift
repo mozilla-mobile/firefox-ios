@@ -373,6 +373,7 @@ class URLBar: UIView {
     
     @objc func addCustomURL() {
         guard let url = self.url else { return }
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
         delegate?.urlBar(self, didAddCustomURL: url)
     }
     

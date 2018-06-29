@@ -401,6 +401,8 @@ class BrowserViewController: UIViewController {
     func updateFindInPageVisibility(visible: Bool, text: String = "") {
         if visible {
             if findInPageBar == nil {
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.findInPageBar)
+                
                 urlBar.dismiss()
                 let findInPageBar = FindInPageBar()
                 self.findInPageBar = findInPageBar
@@ -788,16 +790,19 @@ extension BrowserViewController: FindInPageBarDelegate {
     }
     
     func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.findNext)
         findInPageBar?.endEditing(true)
         find(text, function: "findNext")
     }
     
     func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.findPrev)
         findInPageBar?.endEditing(true)
         find(text, function: "findPrevious")
     }
     
     func findInPageDidPressClose(_ findInPage: FindInPageBar) {
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.findInPageBar)
         updateFindInPageVisibility(visible: false)
     }
     
@@ -924,6 +929,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
         
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Request Desktop Site", style: .default, handler: { (action) in
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
             self.webViewController.requestDesktop()
         }))
         alert.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
