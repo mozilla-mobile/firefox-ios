@@ -15,8 +15,7 @@ class BrowserViewController: UIViewController {
     }
 
     private var splashScreen: UIView?
-    private let context = LAContext()
-
+    private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
     private let drawerContainerView = DrawerView(frame: .zero)
     private let drawerOverlayView = UIView()
@@ -251,31 +250,35 @@ class BrowserViewController: UIViewController {
             var biometricError: NSError?
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
-            if self.webViewContainer.isHidden || !Settings.getToggle(SettingsToggle.biometricLogin) {
+            if  !Settings.getToggle(SettingsToggle.biometricLogin) || !AppDelegate.needsAuthenticated || self.webViewContainer.isHidden {
+                AppDelegate.splashView?.animateHidden(true, duration: 0.25)
                 return
             }
+            AppDelegate.needsAuthenticated = false
 
-            self.displaySplashScreen()
+            self.context = LAContext()
+            self.context.localizedReason = UIConstants.strings.biometricReason
+            self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
             if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
                 self.context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: self.context.localizedReason) {
                     [unowned self] (success, _) in
 
                     DispatchQueue.main.async {
-                        self.hideSplashScreen()
                         if success {
                             self.showToolbars()
                         } else {
                             // Clear the browser session, as the user failed to authenticate
                             self.resetBrowser()
                         }
+                        AppDelegate.splashView?.animateHidden(true, duration: 0.25)
                     }
                 }
             } else {
                 // Ran into an error with biometrics, so disable them and clear the browser:
                 Settings.set(false, forToggle: SettingsToggle.biometricLogin)
                 self.resetBrowser()
-                self.hideSplashScreen()
+                AppDelegate.splashView?.animateHidden(true, duration: 0.25)
             }
         }
     }
