@@ -296,4 +296,35 @@ class TopTabsTest: BaseTestCase {
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         closeTabTrayView(goBackToBrowserTab: "home")
         }
+
+    func testLongTapTabCounter() {
+        if !iPad() {
+            // Long tap on Tab Counter should show the correct options
+            app.buttons["Show Tabs"].press(forDuration: 1)
+            waitforExistence(app.buttons["toolbarTabButtonLongPress.newTab"])
+            XCTAssertTrue(app.buttons["toolbarTabButtonLongPress.newTab"].exists)
+            XCTAssertTrue(app.buttons["toolbarTabButtonLongPress.newPrivateTab"].exists)
+            XCTAssertTrue(app.buttons["toolbarTabButtonLongPress.closeTab"].exists)
+
+            // Open New Tab
+            app.buttons["toolbarTabButtonLongPress.newTab"].tap()
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+            app.collectionViews.cells["home"].firstMatch.tap()
+
+            // Open Private Tab
+            navigator.nowAt(HomePanelsScreen)
+            app.buttons["Show Tabs"].press(forDuration: 1)
+            waitforExistence(app.buttons["toolbarTabButtonLongPress.newTab"])
+            app.buttons["toolbarTabButtonLongPress.newPrivateTab"].tap()
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+
+            // Close tab
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            navigator.nowAt(HomePanelsScreen)
+            app.buttons["Show Tabs"].press(forDuration: 1)
+            waitforExistence(app.buttons["toolbarTabButtonLongPress.newTab"])
+            app.buttons["toolbarTabButtonLongPress.closeTab"].tap()
+            checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        }
+    }
 }
