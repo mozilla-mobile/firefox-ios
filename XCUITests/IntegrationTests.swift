@@ -33,13 +33,6 @@ class IntegrationTests: BaseTestCase {
         app.swipeDown()
     }
 
-    private func bookmark() {
-        navigator.goto(PageOptionsMenu)
-        waitforExistence(app.tables.cells["Bookmark This Page"])
-        app.tables.cells["Bookmark This Page"].tap()
-        navigator.nowAt(BrowserTab)
-    }
-
     private func signInFxAccounts() {
         navigator.goto(FxASigninScreen)
         waitforExistence(app.webViews.staticTexts["Sign in"], timeout: 10)
