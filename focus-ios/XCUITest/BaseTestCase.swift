@@ -11,7 +11,7 @@ class BaseTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        app.launchArguments = ["testMode"]
+        app.launchArguments = ["testMode", "RESET_PREFS"]
         app.launch()
     }
     
@@ -120,20 +120,60 @@ class BaseTestCase: XCTestCase {
         return false
     }
     
+    func search(searchWord: String, waitForLoadToFinish: Bool = true) {
+        let app = XCUIApplication()
+        
+        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        waitforHittable(element: searchOrEnterAddressTextField)
+        
+        UIPasteboard.general.string = searchWord
+
+        // Must press this way in order to support iPhone 5s
+        searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).press(forDuration: 1.5)
+        waitforExistence(element: app.menuItems["Paste & Go"])
+        app.menuItems["Paste & Go"].tap()
+        
+        if waitForLoadToFinish {
+            let finishLoadingTimeout: TimeInterval = 30
+            let progressIndicator = app.progressIndicators.element(boundBy: 0)
+            waitFor(progressIndicator,
+                    with: "exists != true",
+                    description: "Problem loading \(searchWord)",
+                timeout: finishLoadingTimeout)
+        }
+    }
+    
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         let app = XCUIApplication()
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-        searchOrEnterAddressTextField.tap()
         
-        searchOrEnterAddressTextField.typeText(url + "\n")
-
-        // Wait for 2 seconds until the progressbar appears. Using waitForExistence is not reliable, since it
-        // sometimes waits until idle, and by that time progressbard has gone.
-        Thread.sleep(forTimeInterval: 2)
-
-        // Now check for progressBar to disappear
+        UIPasteboard.general.string = url
+        waitforHittable(element: searchOrEnterAddressTextField)
+        
+        // Must press this way in order to support iPhone 5s
+        searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).press(forDuration: 1.5)
+        waitforExistence(element: app.menuItems["Paste & Go"])
+        app.menuItems["Paste & Go"].tap()
+        
         if waitForLoadToFinish {
-            waitForWebPageLoad()
+            let finishLoadingTimeout: TimeInterval = 30
+            let progressIndicator = app.progressIndicators.element(boundBy: 0)
+            waitFor(progressIndicator,
+                    with: "exists != true",
+                    description: "Problem loading \(url)",
+                timeout: finishLoadingTimeout)
+        }
+    }
+    
+    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0) {
+        let predicate = NSPredicate(format: predicateString)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        if result != .completed {
+            let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
+            print(message)
         }
     }
     

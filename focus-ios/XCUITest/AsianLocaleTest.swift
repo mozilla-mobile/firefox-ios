@@ -26,33 +26,17 @@ class AsianLocaleTest: BaseTestCase {
         
 		// Enter 'mozilla' on the search field
 		search(searchWord: "모질라")
+        app.buttons["ERASE"].tap()
+        checkForHomeScreen()
+        
 		search(searchWord: "モジラ")
+        app.buttons["ERASE"].tap()
+        checkForHomeScreen()
+        
 		search(searchWord: "因特網")
-	}
-	
-	func search(searchWord: String) {
-		let app = XCUIApplication()
-		
-		let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-		XCTAssertTrue(searchOrEnterAddressTextField.exists)
-		XCTAssertTrue(searchOrEnterAddressTextField.isEnabled)
-		
-		// Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below
-        searchOrEnterAddressTextField.tap()
-		searchOrEnterAddressTextField.typeText(searchWord)
-		waitforExistence(element: app.buttons["Search for " + searchWord])
-		app.buttons["Search for " + searchWord].tap()
-        
-        // Check the correct site is reached
-        waitForWebPageLoad()
-        if app.webViews.textFields["Search"].exists {
-            waitForValueContains(element: app.webViews.textFields["Search"], value: searchWord)
-        } else if app.webViews.otherElements["Search"].exists {
-            waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
-        }
-        
-        // Erase the history, check it is on the initial page
-		app.buttons["ERASE"].tap()
+        app.buttons["ERASE"].tap()
         checkForHomeScreen()
 	}
+	
+	
 }

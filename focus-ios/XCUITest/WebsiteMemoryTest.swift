@@ -21,7 +21,7 @@ class WebsiteMemoryTest: BaseTestCase {
         var googleSearchField: XCUIElement = app.webViews.otherElements["Search"]
 
         // Enter 'google' on the search field to go to google site
-        loadWebPage("google")
+        loadWebPage("google.com")
         if app.webViews.otherElements["Search"].exists {
             // Do nothing, it's the initially expected type
         } else if  app.webViews.searchFields["Search"].exists {
@@ -49,7 +49,7 @@ class WebsiteMemoryTest: BaseTestCase {
         // The popup is also checked in PastenGOTest
         //waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
         checkForHomeScreen()
-        loadWebPage("google")
+        loadWebPage("google.com")
         waitforExistence(element: googleSearchField)
         googleSearchField.tap()
 

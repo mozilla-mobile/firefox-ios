@@ -19,7 +19,7 @@ class TrackingProtectionSidebar: BaseTestCase {
     func testActiveProtectionSidebar() {
 
         // Visit https://www.mozilla.org
-        loadWebPage("mozilla")
+        loadWebPage("mozilla.org")
 
         // Check the correct site is reached
         waitForWebPageLoad()
@@ -82,7 +82,7 @@ class TrackingProtectionSidebar: BaseTestCase {
     func testInactiveProtectionSidebar() {
 
         // Visit https://www.mozilla.org
-        loadWebPage("mozilla")
+        loadWebPage("mozilla.org")
 
         // Check the correct site is reached
         waitForWebPageLoad()

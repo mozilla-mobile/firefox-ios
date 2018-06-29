@@ -62,4 +62,8 @@ class AppInfo {
     static var isBetaBuild: Bool {
         return (Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String)?.contains("enterprise") ?? false
     }
+    
+    open class func testRequestsReset() -> Bool {
+        return ProcessInfo.processInfo.arguments.contains("RESET_PREFS")
+    }
 }

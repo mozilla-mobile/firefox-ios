@@ -24,9 +24,7 @@ class DragAndDropTest: BaseTestCase {
     func testDragElement() {
         if UIDevice.current.userInterfaceIdiom == .pad {
             let urlBarTextField = app.textFields["URLBar.urlText"]
-            urlBarTextField.tap()
-            urlBarTextField.typeText("developer.mozilla.org/en-US/search\n")
-            waitForWebPageLoad()
+            loadWebPage("developer.mozilla.org/en-US/search")
             
             // Check the text in the search field before dragging and dropping the url text field
             XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].placeholderValue, "Search the docs")

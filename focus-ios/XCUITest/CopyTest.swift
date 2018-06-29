@@ -4,6 +4,8 @@
 
 import XCTest
 
+// Note: this test is tested as part of the base test case, and thus is disabled here.
+
 class CopyTest: BaseTestCase {
         
     override func setUp() {
@@ -18,25 +20,18 @@ class CopyTest: BaseTestCase {
     
     func testCopyMenuItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
-        urlBarTextField.tap()
-        urlBarTextField.typeText("https://www.google.com/\n")
-        waitForWebPageLoad()
-
+        
+        loadWebPage("google.com")
         urlBarTextField.press(forDuration: 1.0)
         waitforHittable(element: app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
         
-        waitforHittable(element: app.textFields["URLBar.urlText"])
-        urlBarTextField.tap()
-        urlBarTextField.typeText("bing.com\n")
-
-        waitForWebPageLoad()
-        
+        loadWebPage("bing.com")
         urlBarTextField.tap()
         urlBarTextField.press(forDuration: 1.0)
         waitforHittable(element: app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
-
+        
         
         waitForWebPageLoad()
         guard let text = urlBarTextField.value as? String else {

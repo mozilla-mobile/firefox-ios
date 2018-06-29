@@ -18,10 +18,9 @@ class QuickAddAutocompleteURLTest: BaseTestCase {
     func testURLContextMenu() {
         
         let urlBarTextField = app.textFields["URLBar.urlText"]
-        urlBarTextField.tap()
-        urlBarTextField.typeText("https://fast.com/\n")
+        loadWebPage("fast.com")
+
         urlBarTextField.press(forDuration: 1.0)
-        
         waitforHittable(element: app.menuItems["Add Custom URL"])
         app.menuItems["Add Custom URL"].tap()
         

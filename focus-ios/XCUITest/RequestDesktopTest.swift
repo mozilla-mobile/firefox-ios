@@ -19,11 +19,7 @@ class RequestDesktopTest: BaseTestCase {
     func testLongPressReloadButton() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
         
-        // Wait for existence rather than hittable because the textfield is technically disabled
-        waitforExistence(element: urlBarTextField)
-        app.textFields["URLBar.urlText"].tap()
-        app.typeText("facebook.com\n")
-        
+        loadWebPage("facebook.com")
         waitforExistence(element:  app.buttons["BrowserToolset.stopReloadButton"])
         app.buttons["BrowserToolset.stopReloadButton"].press(forDuration: 1.0)
         
@@ -46,9 +42,7 @@ class RequestDesktopTest: BaseTestCase {
         let urlBarTextField = app.textFields["URLBar.urlText"]
         
         // Wait for existence rather than hittable because the textfield is technically disabled
-        waitforExistence(element: urlBarTextField)
-        app.textFields["URLBar.urlText"].tap()
-        app.typeText("facebook.com\n")
+        loadWebPage("facebook.com")
         
         waitforExistence(element:  app.buttons["BrowserToolset.sendButton"])
         app.buttons["BrowserToolset.sendButton"].tap()

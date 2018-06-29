@@ -31,7 +31,7 @@ class TrackingProtectionSettings: BaseTestCase {
         app.navigationBars["Settings"].children(matching: .button).matching(identifier: "Back").element(boundBy: 0).tap()
 
         // Visit https://www.mozilla.org
-        loadWebPage("mozilla")
+        loadWebPage("mozilla.org")
 
         // Check the correct site is reached
         waitForWebPageLoad()
