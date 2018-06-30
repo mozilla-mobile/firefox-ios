@@ -24,7 +24,7 @@ class Utils {
     ]
 
     static func getEnabledLists() -> [String] {
-        return lists.flatMap { toggle, list in
+        return lists.compactMap { (toggle, list) -> String? in
             return Settings.getToggle(toggle) ? list : nil
         }
     }
