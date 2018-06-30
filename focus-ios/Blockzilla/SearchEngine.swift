@@ -67,11 +67,11 @@ class SearchEngine: NSObject, NSCoding {
         var faviconImage = UIImage()
 
         let faviconLabel = SmartLabel(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-        faviconLabel.backgroundColor = UIColor(rgb: 0xededf0)
+        faviconLabel.backgroundColor = UIConstants.Photon.Purple80
         faviconLabel.text = String(faviconLetter)
         faviconLabel.textAlignment = .center
         faviconLabel.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
-        faviconLabel.textColor = UIColor.black
+        faviconLabel.textColor = UIColor.white
         UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
         faviconLabel.layer.render(in: UIGraphicsGetCurrentContext()!)
         faviconImage = UIGraphicsGetImageFromCurrentImageContext()!
