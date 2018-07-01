@@ -207,6 +207,51 @@ extension BrowserViewController: WKNavigationDelegate {
         // just let the webview handle it as normal.
         decisionHandler(.allow)
     }
+    
+    /// Invoked when an error occurs while starting to load data for the main frame.
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
+        // to open an external application and hand it over to UIApplication.openURL(). The result
+        // will be that we switch to the external app, for example the app store, while keeping the
+        // original web page in the tab instead of replacing it with an error page.
+        let error = error as NSError
+        if error.domain == "WebKitErrorDomain" && error.code == 102 {
+            return
+        }
+        
+        if checkIfWebContentProcessHasCrashed(webView, error: error as NSError) {
+            return
+        }
+        
+        if error.code == Int(CFNetworkErrors.cfurlErrorCancelled.rawValue) {
+            if let tab = tabManager[webView], tab === tabManager.selectedTab {
+                urlBar.currentURL = tab.url?.displayURL
+            }
+            return
+        }
+        
+        if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
+            ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
+            
+            // If the local web server isn't working for some reason (Firefox cellular data is
+            // disabled in settings, for example), we'll fail to load the session restore URL.
+            // We rely on loading that page to get the restore callback to reset the restoring
+            // flag, so if we fail to load that page, reset it here.
+            if url.aboutComponent == "sessionrestore" {
+                tabManager.tabs.filter { $0.webView == webView }.first?.restoring = false
+            }
+        }
+    }
+    
+    fileprivate func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
+        if error.code == WKError.webContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
+            print("WebContent process has crashed. Trying to reload to restart it.")
+            webView.reload()
+            return true
+        }
+        
+        return false
+    }
 
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
