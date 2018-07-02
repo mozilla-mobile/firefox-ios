@@ -251,6 +251,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateSafariEnabledState()
+        tableView.reloadData()
     }
 
     @objc private func applicationDidBecomeActive() {
