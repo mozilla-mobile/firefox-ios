@@ -373,8 +373,11 @@ open class FirefoxAccount {
         guard let ownDeviceId = self.deviceRegistration?.id else {
             return deferMaybe(FxAClientError.local(NSError()))
         }
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
 
+        // Clear Send Tab keys from Keychain.
+        commandsClient.sendTab.sendTabKeysCache.value = nil
+
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
         return client.destroyDevice(ownDeviceId: ownDeviceId, withSessionToken: session.sessionToken as NSData) >>> succeed
     }
 

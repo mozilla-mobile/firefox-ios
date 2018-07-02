@@ -145,12 +145,12 @@ open class FxACommandSendTab {
 
     let commandsClient: FxACommandsClient
     let account: FirefoxAccount
-
-    fileprivate var sendTabKeys: [String : String]?
+    let sendTabKeysCache: KeychainCache<FxACommandSendTabKeys>
 
     init(commandsClient: FxACommandsClient, account: FirefoxAccount) {
         self.commandsClient = commandsClient
         self.account = account
+        self.sendTabKeysCache = KeychainCache(branch: "account.sendTabKeys", label: account.stateCache.label, value: nil)
     }
 
     public func send(to devices: [FxADevice], url: String, title: String) {
@@ -237,9 +237,9 @@ open class FxACommandSendTab {
 
     // TODO: Check this
     func decrypt(ciphertext: String) -> String? {
-        guard let sendTabKeys = self.sendTabKeys,
-            let publicKey = sendTabKeys["publicKey"]?.base64urlSafeDecodedData,
-            let authSecret = sendTabKeys["authSecret"]?.base64urlSafeDecodedData,
+        guard let sendTabKeys = self.sendTabKeysCache.value,
+            let publicKey = sendTabKeys.publicKey.base64urlSafeDecodedData,
+            let authSecret = sendTabKeys.authSecret.base64urlSafeDecodedData,
             let cipherdata = ciphertext.base64urlSafeDecodedData,
             let decrypted = try? PushCrypto.sharedInstance.aes128gcm(payload: cipherdata, decryptWith: publicKey, authenticateWith: authSecret) else {
                 return nil
@@ -248,21 +248,17 @@ open class FxACommandSendTab {
         return decrypted.utf8EncodedString
     }
 
-    func generateAndPersistKeys() -> [String : String]? {
+    func generateAndPersistKeys() -> FxACommandSendTabKeys? {
         guard let keys = try? PushCrypto.sharedInstance.generateKeys(),
             let publicKey = keys.p256dhPublicKey.utf8EncodedData.base64urlSafeEncodedString,
             let authSecret = keys.auth.utf8EncodedData.base64urlSafeEncodedString else {
                 return nil
         }
 
-        let sendTabKeys = [
-            "publicKey": publicKey,
-            "privateKey": keys.p256dhPrivateKey,
-            "authSecret": authSecret
-        ]
+        let sendTabKeys = FxACommandSendTabKeys(publicKey: publicKey, privateKey: keys.p256dhPrivateKey, authSecret: authSecret)
 
-        // TODO: Save this to keychain (via KeychainCache?)
-        self.sendTabKeys = sendTabKeys
+        // Save to Keychain.
+        sendTabKeysCache.value = sendTabKeys
 
         if let prefsBranchPrefix = account.configuration.prefs?.getBranchPrefix() {
             print(prefsBranchPrefix)
@@ -272,16 +268,14 @@ open class FxACommandSendTab {
     }
 
     func getEncryptedKey() -> JSON? {
-        guard let sendTabKeys = self.sendTabKeys ?? generateAndPersistKeys(),
-            let publicKey = sendTabKeys["publicKey"],
-            let authSecret = sendTabKeys["authSecret"],
+        guard let sendTabKeys = self.sendTabKeysCache.value ?? generateAndPersistKeys(),
             let marriedState = account.stateCache.value as? MarriedState else {
             return nil
         }
 
         let keyToEncrypt = JSON([
-            "publicKey": publicKey,
-            "authSecret": authSecret
+            "publicKey": sendTabKeys.publicKey,
+            "authSecret": sendTabKeys.authSecret
         ])
 
         let keyBundle = KeyBundle.fromKSync(marriedState.kSync)
