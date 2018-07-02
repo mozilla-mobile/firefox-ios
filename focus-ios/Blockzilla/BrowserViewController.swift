@@ -1060,6 +1060,10 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.isLoading = true
         toggleURLBarBackground(isBright: false)
         showToolbars()
+        
+        if webViewController.url?.absoluteString != "about:blank" {
+            urlBar.url = webViewController.url
+        }
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
