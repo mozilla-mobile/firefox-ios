@@ -28,11 +28,9 @@ class OpenUtils: NSObject {
     func buildShareViewController(url: URL, title: String? = nil, printFormatter: UIPrintFormatter?, anchor: UIView) -> UIActivityViewController {
         var activities = [UIActivity]()
         var activityItems: [Any] = [url]
-        
-        activities.append(RequestDesktopActivity(url: url))
-
         activities.append(FindInPageActivity())
-
+        activities.append(RequestDesktopActivity(url: url))
+        
         if canOpenInFirefox {
             activities.append(OpenInFirefoxActivity(url: url))
         }
