@@ -120,7 +120,27 @@ public class FxACommandsClient {
     }
 }
 
-public class FxACommandSendTab {
+open class FxACommandSendTabKeys: JSONLiteralConvertible {
+    open var publicKey: String
+    open var privateKey: String
+    open var authSecret: String
+
+    public init(publicKey: String, privateKey: String, authSecret: String) {
+        self.publicKey = publicKey
+        self.privateKey = privateKey
+        self.authSecret = authSecret
+    }
+
+    open func asJSON() -> JSON {
+        return JSON([
+            "publicKey": self.publicKey,
+            "privateKey": self.privateKey,
+            "authSecret": self.authSecret
+        ])
+    }
+}
+
+open class FxACommandSendTab {
     public static let Name = "https://identity.mozilla.com/cmd/open-uri"
 
     let commandsClient: FxACommandsClient

@@ -449,7 +449,19 @@ open class BrowserProfile: Profile {
 
         let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
         let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
+        let commands = items.map({ SyncCommand.displayURIFromShareItem($0, asClient: id) })
         let fxaDeviceIds = clients.compactMap { $0.fxaDeviceId }
+
+        // If FxA Messages (Pushbox) is not enabled for this build, simply send the
+        // tabs using the old mechanism via Sync.
+        guard AppConstants.MOZ_FXA_MESSAGES else {
+            return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> {
+                self.syncManager.syncClients() >>> {
+                    account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
+                    return succeed()
+                }
+            }
+        }
 
         // TODO: If the RemoteDevice has the FxA Messages "availableCommands",
         // send the tab via that instead.
@@ -478,8 +490,6 @@ open class BrowserProfile: Profile {
             if oldRemoteClients.isEmpty {
                 result.fill(Maybe(success: ()))
             } else {
-                let commands = items.map({ SyncCommand.displayURIFromShareItem($0, asClient: id) })
-
                 self.remoteClientsAndTabs.insertCommands(commands, forClients: oldRemoteClients) >>> {
                     self.syncManager.syncClients() >>> {
                         account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
