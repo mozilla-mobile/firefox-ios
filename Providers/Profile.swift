@@ -1096,6 +1096,9 @@ open class BrowserProfile: Profile {
                 return deferMaybe(statuses)
             }
 
+            // TODO: Invoke `account.commandsClient.fetchMissedRemoteCommands()` to
+            // catch any missed FxA commands at time of Sync.
+
             if !isSyncing {
                 // A sync isn't already going on, so start another one.
                 let statsSession = SyncOperationStatsSession(why: why, uid: account.uid, deviceID: account.deviceRegistration?.id)
