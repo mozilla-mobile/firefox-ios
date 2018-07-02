@@ -215,13 +215,7 @@
                   Identifier = "ActivityStreamTest/testTopSitesBookmarkNewTopSite()">
                </Test>
                <Test
-                  Identifier = "ActivityStreamTest/testTopSitesOpenInNewPrivateTabDefaultTopSite()">
-               </Test>
-               <Test
                   Identifier = "ActivityStreamTest/testTopSitesOpenInNewTab()">
-               </Test>
-               <Test
-                  Identifier = "ActivityStreamTest/testTopSitesOpenInNewTabDefaultTopSite()">
                </Test>
                <Test
                   Identifier = "ActivityStreamTest/testTopSitesRemove()">
@@ -299,7 +293,7 @@
                   Identifier = "BrowsingPDFTests">
                </Test>
                <Test
-                  Identifier = "ClipBoardTests">
+                  Identifier = "ClipBoardTests/testClipboard()">
                </Test>
                <Test
                   Identifier = "CopiedLinksTests">

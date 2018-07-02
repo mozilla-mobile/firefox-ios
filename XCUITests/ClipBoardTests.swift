@@ -51,4 +51,19 @@ class ClipBoardTests: BaseTestCase {
         app.menuItems["Paste"].tap()
         waitForValueContains(app.textFields["address"], value: "www.example.com")
     }
+
+    func testClipboardPasteAndGo() {
+        navigator.openURL(url)
+        waitUntilPageLoad()
+        navigator.goto(PageOptionsMenu)
+        print(app.debugDescription)
+        navigator.performAction(Action.CopyAddressPAM)
+
+        checkCopiedUrl()
+        navigator.createNewTab()
+        app.textFields["url"].press(forDuration: 3)
+        waitforExistence(app.tables["Context Menu"])
+        app.cells["menu-PasteAndGo"].tap()
+        waitForValueContains(app.textFields["url"], value: "www.example.com")
+    }
 }

@@ -170,6 +170,7 @@ class Action {
     static let FxATapOnSignInButton = "FxATapOnSignInButton"
 
     static let PinToTopSitesPAM = "PinToTopSitesPAM"
+    static let CopyAddressPAM = "CopyAddressPAM"
 }
 
 private var isTablet: Bool {
@@ -828,6 +829,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
         screenState.tap(app.tables["Context Menu"].cells["action_remove"], forAction: Action.CloseTabFromPageOptions, Action.CloseTab, transitionTo: HomePanelsScreen, if: "tablet != true")
         screenState.tap(app.tables.cells["action_pin"], forAction: Action.PinToTopSitesPAM)
+        screenState.tap(app.tables.cells["menu-Copy-Link"], forAction: Action.CopyAddressPAM)
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
     }
