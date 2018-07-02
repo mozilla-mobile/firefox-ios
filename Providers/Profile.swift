@@ -142,7 +142,7 @@ protocol Profile: AnyObject {
 
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
-    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Success
+    func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success
 
     var syncManager: SyncManager! { get }
 }
@@ -442,20 +442,20 @@ open class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
 
-    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Success {
+    public func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success {
         guard let account = self.getAccount() else {
             return deferMaybe(NoAccountError())
         }
 
         let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
         let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
-        let commands = items.map({ SyncCommand.displayURIFromShareItem($0, asClient: id) })
+        let command = SyncCommand.displayURIFromShareItem(item, asClient: id)
         let fxaDeviceIds = clients.compactMap { $0.fxaDeviceId }
 
         // If FxA Messages (Pushbox) is not enabled for this build, simply send the
         // tabs using the old mechanism via Sync.
         guard AppConstants.MOZ_FXA_MESSAGES else {
-            return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> {
+            return self.remoteClientsAndTabs.insertCommands([command], forClients: clients) >>> {
                 self.syncManager.syncClients() >>> {
                     account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
                     return succeed()
@@ -473,13 +473,13 @@ open class BrowserProfile: Profile {
         let result = Success()
 
         all(deferredRemoteDevices).upon { maybeRemoteDevices in
+            var newRemoteDevices: [FxADevice] = []
             var oldRemoteClients: [RemoteClient] = []
-            let remoteDevices = maybeRemoteDevices.compactMap({ $0.successValue ?? nil })
+            let remoteDevices = maybeRemoteDevices.compactMap({ $0.successValue as? FxADevice })
 
             for remoteDevice in remoteDevices {
-                if let keyBundle = remoteDevice.availableCommands?[FxACommandSendTab.Name] {
-                    // TODO: Send tab using new FxA Messages API
-                    print("**** TODO: Send tab using new FxA Messages API (\(remoteDevice.id ?? "nil")) ****")
+                if account.commandsClient.sendTab.isDeviceCompatible(remoteDevice) {
+                    newRemoteDevices.append(remoteDevice)
                 } else {
                     if let oldRemoteClient = clients.find({ $0.fxaDeviceId == remoteDevice.id }) {
                         oldRemoteClients.append(oldRemoteClient)
@@ -487,10 +487,15 @@ open class BrowserProfile: Profile {
                 }
             }
 
+            if !newRemoteDevices.isEmpty {
+                // TODO: Check result and fallback to old API if necessary
+                account.commandsClient.sendTab.send(to: newRemoteDevices, url: item.url, title: item.title ?? "")
+            }
+
             if oldRemoteClients.isEmpty {
                 result.fill(Maybe(success: ()))
             } else {
-                self.remoteClientsAndTabs.insertCommands(commands, forClients: oldRemoteClients) >>> {
+                self.remoteClientsAndTabs.insertCommands([command], forClients: oldRemoteClients) >>> {
                     self.syncManager.syncClients() >>> {
                         account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
                         result.fill(Maybe(success: ()))

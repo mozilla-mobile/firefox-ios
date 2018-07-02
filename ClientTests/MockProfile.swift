@@ -234,7 +234,7 @@ open class MockProfile: Profile {
         return deferMaybe(0)
     }
 
-    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Success {
+    public func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success {
         return succeed()
     }
 }

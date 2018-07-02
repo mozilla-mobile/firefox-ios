@@ -173,16 +173,15 @@ open class FxACommandSendTab {
         // TODO: gather stats here about success/failures
     }
 
-    public func isDeviceCompatible(_ device: FxADevice) -> Deferred<Maybe<Bool>> {
-        return account.marriedState() >>== { marriedState in
-            guard let availableCommands = device.availableCommands,
-                let sendTabCommand = availableCommands[FxACommandSendTab.Name],
-                let theirKid = sendTabCommand["kid"].string else {
-                return deferMaybe(false)
-            }
-
-            return deferMaybe(theirKid == marriedState.kXCS)
+    public func isDeviceCompatible(_ device: FxADevice) -> Bool {
+        guard let marriedState = account.stateCache.value as? MarriedState,
+            let availableCommands = device.availableCommands,
+            let sendTabCommand = availableCommands[FxACommandSendTab.Name],
+            let theirKid = sendTabCommand["kid"].string else {
+            return false
         }
+
+        return theirKid == marriedState.kXCS
     }
 
     public func handle(sender: FxADevice, encrypted: String) {

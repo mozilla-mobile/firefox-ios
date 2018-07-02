@@ -2709,7 +2709,7 @@ extension BrowserViewController: ClientPickerViewControllerDelegate, Instruction
             present(alert, animated: true, completion: nil)
             return
         }
-        profile.sendItems([shareItem], toClients: clients).uponQueue(.main) { _ in
+        profile.sendItem(shareItem, toClients: clients).uponQueue(.main) { _ in
             self.popToBVC()
         }
     }
