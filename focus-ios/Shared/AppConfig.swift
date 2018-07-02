@@ -11,6 +11,7 @@ protocol AppConfig {
     var productName: String { get }
     var rightsFile: String { get }
     var supportPath: String { get }
+    var appId: String { get }
     var wordmark: UIImage { get }
 }
 
@@ -20,6 +21,7 @@ struct FocusAppConfig: AppConfig {
     let productName = "Focus"
     let rightsFile = "rights-focus.html"
     let supportPath = "kb/focus"
+    let appId = "1055677337"
     let wordmark = #imageLiteral(resourceName: "img_focus_wordmark")
 }
 
@@ -29,5 +31,6 @@ struct KlarAppConfig: AppConfig {
     let productName = "Klar"
     let rightsFile = "rights-klar.html"
     let supportPath = "products/klar"
+    let appId = "1073435754"
     let wordmark = #imageLiteral(resourceName: "img_klar_wordmark")
 }
