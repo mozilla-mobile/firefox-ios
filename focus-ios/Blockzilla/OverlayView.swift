@@ -157,7 +157,7 @@ class OverlayView: UIView {
         button.setAttributedTitle(attributedString, for: .normal)
     }
     
-    func setSearchQuery(query: String, animated: Bool) {
+    func setSearchQuery(query: String, animated: Bool, hideFindInPage: Bool) {
         searchQuery = query
         let query = query.trimmingCharacters(in: .whitespaces)
 
@@ -175,8 +175,8 @@ class OverlayView: UIView {
                     let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
                     self.searchButton.animateHidden(query.isEmpty, duration: duration)
                     self.searchBorder.animateHidden(query.isEmpty, duration: duration)
-                    self.findInPageButton.animateHidden(query.isEmpty, duration: duration)
-                    self.findInPageBorder.animateHidden(query.isEmpty, duration: duration)
+                    self.findInPageButton.animateHidden((query.isEmpty || hideFindInPage), duration: duration)
+                    self.findInPageBorder.animateHidden((query.isEmpty || hideFindInPage), duration: duration)
                 }
                 self.setAttributedButtonTitle(phrase: query, button: self.searchButton, localizedStringFormat: UIConstants.strings.searchButton)
                 self.setAttributedButtonTitle(phrase: query, button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
@@ -226,7 +226,7 @@ class OverlayView: UIView {
     }
 
     func dismiss() {
-        setSearchQuery(query: "", animated: false)
+        setSearchQuery(query: "", animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = true
         copyBorder.isHidden = true
@@ -236,7 +236,7 @@ class OverlayView: UIView {
     }
 
     func present() {
-        setSearchQuery(query: "", animated: false)
+        setSearchQuery(query: "", animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = false
         copyBorder.isHidden = false
