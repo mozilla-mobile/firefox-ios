@@ -101,7 +101,7 @@ class SnapshotTests: XCTestCase {
 
         // Tap URL field, check for paste & go menu
         searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.press(forDuration: 1.5)
+        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).press(forDuration: 1.5)
         expectation(for: NSPredicate(format: "count > 0"), evaluatedWith: app.menuItems, handler: nil)
         waitForExpectations(timeout: 10, handler: nil)
 
