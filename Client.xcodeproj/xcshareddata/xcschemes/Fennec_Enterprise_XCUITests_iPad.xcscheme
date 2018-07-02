@@ -233,6 +233,9 @@
                   Identifier = "NavigationTest/testReloadPreservesMobileOrDesktopSite()">
                </Test>
                <Test
+                  Identifier = "NavigationTest/testSSL()">
+               </Test>
+               <Test
                   Identifier = "NavigationTest/testScrollsToTopWithMultipleTabs()">
                </Test>
                <Test
