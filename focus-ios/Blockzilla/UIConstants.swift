@@ -192,7 +192,7 @@ struct UIConstants {
     struct strings {
         static let aboutLearnMoreButton = NSLocalizedString("About.learnMoreButton", value: "Learn more", comment: "Button on About screen")
         static let aboutMissionLabel = NSLocalizedString("About.missionLabel", value: "%@ is produced by Mozilla. Our mission is to foster a healthy, open Internet.", comment: "Label on About screen")
-        static let reloadDesktopTitle = NSLocalizedString("Request Desktop Site", comment: "Action Sheet Button for Requesting the Desktop Site")
+        static let reloadDesktopTitle = NSLocalizedString("Request Desktop Site", comment: "Label for button that requests the desktop version of the currently loaded website.")
         static let aboutPrivateBulletHeader = NSLocalizedString("About.privateBulletHeader", value: "Use it as a private browser:", comment: "Label on About screen")
         static let aboutPrivateBullet1 = NSLocalizedString("About.privateBullet1", value: "Search and browse right in the app", comment: "Label on About screen")
         static let aboutPrivateBullet2 = NSLocalizedString("About.privateBullet2", value: "Block trackers (or update settings to allow trackers)", comment: "Label on About screen")
@@ -206,8 +206,8 @@ struct UIConstants {
         static let aboutTitle = NSLocalizedString("About.screenTitle", value: "About Firefox Focus", comment: "Title for the About screen")
         static let whatsNewTitle = NSLocalizedString("Settings.whatsNewTitle", value: "What’s New", comment: "Title for What's new screen")
         static let aboutTopLabel = NSLocalizedString("About.topLabel", value: "%@ puts you in control.", comment: "Label on About screen")
-        static let biometricReason = NSLocalizedString("BiometricPrompt.reason", value: "Authenticate to continue session.", comment: "Reason for requesting biometric access")
-        static let newSessionFromBiometricFailure = NSLocalizedString("BiometricPrompt.cancel", value: "New Session", comment: "Cancel option after failing biometric check")
+        static let biometricReason = NSLocalizedString("BiometricPrompt.reason", value: "Unlock %@ when re-opening in order to prevent unauthorized access.", comment: "%@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app.")
+        static let newSessionFromBiometricFailure = NSLocalizedString("BiometricPrompt.newSession", value: "New Session", comment: "Create a new session after failing a biometric check")
         static let browserBack = NSLocalizedString("Browser.backLabel", value: "Back", comment: "Accessibility label for the back button")
         static let browserForward = NSLocalizedString("Browser.forwardLabel", value: "Forward", comment: "Accessibility label for the forward button")
         static let browserReload = NSLocalizedString("Browser.reloadLabel", value: "Reload", comment: "Accessibility label for the reload button")
@@ -218,7 +218,6 @@ struct UIConstants {
         static let copyMenuButton = NSLocalizedString("Browser.copyMenuLabel", value: "Copy", comment: "Copy URL button in URL long press menu")
         static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
         static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "Your browsing history has been erased.", comment: "Message shown after pressing the Erase button")
-        static let onboardingStackView = NSLocalizedString("Intro.stackView", comment: "Accessibility identifier for onboarding page indicator stack view")
         static let errorTryAgain = NSLocalizedString("Error.tryAgainButton", value: "Try again", comment: "Button label to reload the error page")
         static let externalLinkCall = NSLocalizedString("ExternalLink.callButton", value: "Call", comment: "Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html")
         static let externalLinkCancel = NSLocalizedString("ExternalLink.cancelButton", value: "Cancel", comment: "Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html")
@@ -236,9 +235,9 @@ struct UIConstants {
         static let labelBlockAds = NSLocalizedString("Settings.toggleBlockAds", value: "Block ad trackers", comment: "Label for toggle on main screen")
         static let labelBlockAdsDescription = NSLocalizedString("Settings.toggleBlockAdsDescription", value: "Some ads track site visits, even if you don’t click the ads", comment: "Description for 'Block ad Trackers'")
         static let labelFaceIDLogin = NSLocalizedString("Settings.toggleFaceID", value: "Use Face ID to unlock app", comment: "Label for toggle on settings screen")
-        static let labelFaceIDLoginDescription = NSLocalizedString("Settings.toggleFaceIDDescription", value: "Face ID can unlock Firefox Focus if a URL is already open in the app", comment: "Description for 'Enable Face ID'")
+        static let labelFaceIDLoginDescription = NSLocalizedString("Settings.toggleFaceIDDescription", value: "Face ID can unlock %@ if a URL is already open in the app", comment: "%@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu.")
         static let labelTouchIDLogin = NSLocalizedString("Settings.toggleTouchID", value: "Use Touch ID to unlock app", comment: "Label for toggle on settings screen")
-        static let labelTouchIDLoginDescription = NSLocalizedString("Settings.toggleTouchIDDescription", value: "Touch ID can unlock Firefox Focus if a URL is already open in the app", comment: "Description for 'Enable Touch ID'")
+        static let labelTouchIDLoginDescription = NSLocalizedString("Settings.toggleTouchIDDescription", value: "Touch ID can unlock %@ if a URL is already open in the app", comment: "%@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu.")
         static let labelBlockAnalytics = NSLocalizedString("Settings.toggleBlockAnalytics", value: "Block analytics trackers", comment: "Label for toggle on main screen")
         static let labelBlockAnalyticsDescription = NSLocalizedString("Settings.toggleBlockAnalyticsDescription", value: "Used to collect, analyze and measure activities like tapping and scrolling", comment: "Description for 'Block analytics Trackers'")
         static let labelBlockSocial = NSLocalizedString("Settings.toggleBlockSocial", value: "Block social trackers", comment: "Label for toggle on main screen")
@@ -257,7 +256,7 @@ struct UIConstants {
         static let safariInstructionsOpen = NSLocalizedString("Safari.instructionsOpen", value: "Open Settings App", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsNotEnabled = String(format: NSLocalizedString("Safari.instructionsNotEnabled", value: "%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.productName)
         static let searchButton = NSLocalizedString("URL.searchLabel", value: "Search for %@", comment: "Label displayed for search button when typing in the URL bar")
-        static let findInPageButton = NSLocalizedString("URL.findOnPageLabel", value: "Find in page: %@", comment: "Label displayed for find in page button when typing in the URL Bar")
+        static let findInPageButton = NSLocalizedString("URL.findOnPageLabel", value: "Find in page: %@", comment: "Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page.")
         static let settingsBlockOtherMessage = NSLocalizedString("Settings.blockOtherMessage", value: "Blocking other content trackers may break some videos and Web pages.", comment: "Alert message shown when toggling the Content blocker")
         static let settingsBlockOtherNo = NSLocalizedString("Settings.blockOtherNo", value: "No, Thanks", comment: "Button label for declining Content blocker alert")
         static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes", value: "I Understand", comment: "Button label for accepting Content blocker alert")
@@ -271,7 +270,7 @@ struct UIConstants {
         static let toggleSectionMozilla = NSLocalizedString("Settings.sectionMozilla", value: "MOZILLA", comment: "Section label for Mozilla toggles")
         static let toggleSectionPerformance = NSLocalizedString("Settings.sectionPerformance", value: "PERFORMANCE", comment: "Section label for performance toggles")
         static let toggleSectionPrivacy = NSLocalizedString("Settings.sectionPrivacy", value: "PRIVACY", comment: "Section label for privacy toggles")
-        static let toggleSectionSecurity = NSLocalizedString("Settings.sectionSecurity", value: "SECURITY", comment: "Section label for security toggles")
+        static let toggleSectionSecurity = NSLocalizedString("Settings.sectionSecurity", value: "SECURITY", comment: "Header label for security toggles displayed in the settings menu")
         static let toggleSafari = NSLocalizedString("Settings.toggleSafari", value: "Safari", comment: "Safari toggle label on settings screen")
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
@@ -279,8 +278,6 @@ struct UIConstants {
         static let shareMenuRequestDesktop = NSLocalizedString("ShareMenu.RequestDesktop", value: "Request Desktop Site", comment: "Text for the share menu option when a user wants to reload the site as a desktop")
         static let shareMenuFindInPage = NSLocalizedString("ShareMenu.FindInPage", value: "Find in Page", comment: "Text for the share menu option when a user wants to open the find in page menu")
         static let shareMenuGetTheFirefoxApp = NSLocalizedString("ShareMenu.GetFirefox", value: "Get the Firefox App", comment: "Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string.")
-        static let requestDesktopNotification = NSLocalizedString("Notification.requestDesktop", comment: "Notification name for requesting a website in desktop form.")
-        static let findInPageNotification = NSLocalizedString("Notification.findInPage", comment: "Notification name for opening the find in page menu.")
         static let urlPasteAndGo = NSLocalizedString("URL.contextMenu", value: "Paste & Go", comment: "Text for the URL context menu when a user long presses on the URL bar with clipboard contents.")
         static let saveImage = NSLocalizedString("contextMenu.saveImageTitle", value: "Save Image", comment: "Text for the context menu when a user wants to save an image after long pressing it.")
         static let copyImage = NSLocalizedString("contextMenu.copyImageTitle", value: "Copy Image", comment: "Text for the context menu when a user wants to copy an image after long pressing it.")
@@ -308,7 +305,7 @@ struct UIConstants {
         static let selectLocationBarTitle = NSLocalizedString("browserShortcutDescription.selectLocationBar", value: "Select Location Bar", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
         static let trackersDescriptionLabel = NSLocalizedString("trackingProtection.trackerDescriptionLabel", value: "Choose whether %@ blocks ad, analytic, social, and other trackers.", comment: "General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar")
         static let trackingProtectionLearnMore = NSLocalizedString("trackingProtection.learnMore", value: "Learn More", comment: "Text for the button to learn more about Tracking Protection.")
-        static let ratingSetting = NSLocalizedString("Settings.rate", value: "Rate Firefox Focus", comment: "Title for rating firefox in settings")
+        static let ratingSetting = NSLocalizedString("Settings.rate", value: "Rate %@", comment: "%@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store.")
         static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title", tableName: "Intro", value: "Power up your privacy", comment: "Title for the first panel 'Welcome' in the First Run tour.")
         static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
         static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "Take private browsing to the next level. Block ads and other content that can track you across sites and bog down page load times.", comment: "Description for the 'Welcome' panel in the First Run tour.")
@@ -331,8 +328,6 @@ struct UIConstants {
         static let CardTitleHistory = NSLocalizedString("Intro.Slides.History.Title", tableName: "Intro", value: "Your history is history", comment: "Title for the third  panel 'History' in the First Run tour.")
         static let CardTextHistory = NSLocalizedString("Intro.Slides.History.Description", tableName: "Intro", value: "Clear your entire browsing session history, passwords, cookies anytime with a single tap.", comment: "Description for the 'History' panel in the First Run tour.")
         static let AddSearchEngineButtonWithPlus = NSLocalizedString("Settings.Search.AddSearchEngineButtonWithPlus", value: "+ Add Another Search Engine", comment: "Text for button to add another search engine in settings with the + prefix")
-        static let enabled = NSLocalizedString("Enabled", value: "Enabled", comment: "label describing something as enabled")
-        static let disabled = NSLocalizedString("Disabled", value: "Disabled", comment: "label describing something as disabled")
         static let edit = NSLocalizedString("Edit", value: "Edit", comment: "Label on button to allow edits")
         static let done = NSLocalizedString("Done", value: "Done", comment: "Label on button to complete edits")
         static let cancelLabel = NSLocalizedString("Cancel", value: "Cancel", comment: "Label on button to cancel edits")
@@ -356,11 +351,13 @@ struct UIConstants {
         static let autocompleteAddCustomUrlExample = NSLocalizedString("Autocomplete.addCustomUrlExample", value: "Example: example.com", comment: "A label displaying an example URL")
         static let autocompleteEmptyState = NSLocalizedString("Autocomplete.emptyState", value: "No Custom URLs to display", comment: "Label for button to add a custom URL")
         static let autocompleteCustomURLAdded = NSLocalizedString("Autocomplete.customUrlAdded", value: "New Custom URL added.", comment: "Label for toast alerting a custom URL has been added")
-        static let shareTrackerStatsLabel = NSLocalizedString("share.trackerStatsLabel", value: "%@ trackers blocked so far", comment: "Text used when the user shares their trackers blocked stats")
-        static let shareTrackerStatsText = NSLocalizedString("share.trackerStatsText", value: "%@, the privacy browser from Mozilla, has already blocked %@ trackers for me. Fewer ads and trackers following me around means faster browsing! Get Focus for yourself here", comment: "The text shared to users after the user chooses to share there tracker stats")
-        
+        static let shareTrackerStatsLabel = NSLocalizedString("share.trackerStatsLabel", value: "Trackers blocked: %@", comment: "Text used when the user shares their trackers blocked stats")
+        static let shareTrackerStatsText = NSLocalizedString("share.trackerStatsText", value: "%@, the privacy browser from Mozilla, has already blocked %@ trackers for me. Fewer ads and trackers following me around means faster browsing! Get Focus for yourself here", comment: "First %@ is the app name. Second %@ is the number of trackers that have been blocked. This is the text shared to others (on social media or otherwise) after the user chooses to share their tracker stats")
+
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"
+        static let requestDesktopNotification = "Notification.requestDesktop"
+        static let findInPageNotification = "Notification.findInPage"
     }
 }

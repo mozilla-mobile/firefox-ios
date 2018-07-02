@@ -71,7 +71,7 @@ class PageControl: UIView {
         stack.spacing = 20
         stack.distribution = .equalCentering
         stack.alignment = .center
-        stack.accessibilityIdentifier = UIConstants.strings.onboardingStackView
+        stack.accessibilityIdentifier = "Intro.stackView"
         
         currentPage = 0
     }
