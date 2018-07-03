@@ -21,7 +21,7 @@ public struct UIConstants {
     static let AboutHomePage = URL(string: "\(WebServer.sharedInstance.base)/about/home/")!
 
     static let DefaultPadding: CGFloat = 10
-    static let SnackbarButtonHeight: CGFloat = 48
+    static let SnackbarButtonHeight: CGFloat = 57
     static let TopToolbarHeight: CGFloat = 56
     static var ToolbarHeight: CGFloat = 46
     static var BottomToolbarHeight: CGFloat {

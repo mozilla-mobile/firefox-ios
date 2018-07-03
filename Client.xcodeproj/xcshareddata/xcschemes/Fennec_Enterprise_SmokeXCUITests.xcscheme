@@ -194,19 +194,157 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "ActivityStreamTest/testTopSitesOpenInNewPrivateTab()">
+                  Identifier = "ActivityStreamTest/testActivityStreamPages()">
                </Test>
                <Test
-                  Identifier = "AuthenticationTest/testPromptPassCodeUponReentry()">
+                  Identifier = "ActivityStreamTest/testContextMenuInLandscape()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testDefaultSites()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testOpenTopSitesFromContextMenu()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesAdd()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesBookmarkDefaultTopSite()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesBookmarkNewTopSite()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesOpenInNewPrivateTabDefaultTopSite()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesOpenInNewTab()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesOpenInNewTabDefaultTopSite()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesRemove()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesRemoveAllDefaultTopSitesAddNewOne()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesRemoveAllExceptDefaultClearPrivateData()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesRemoveAllExceptPinnedClearPrivateData()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesRemoveDefaultTopSite()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesShareDefaultTopSite()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesShareNewTopSite()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesShiftAfterRemovingOne()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testChangePassCode()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testChangePasscodeShowsErrorStates()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testChangeRequirePasscodeInterval()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testChangedPasswordMustBeNew()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testChangingIntervalResetsValidationTimer()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testEnteringLoginsUsingPasscode()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testEnteringLoginsUsingPasscodeWithFiveMinutesInterval()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testEnteringLoginsWithNoPasscode()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testPasscodeMustBeCorrectWhenRemoving()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testPasscodesMustMatchWhenCreating()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testPromptPassCodeUponReentryWithDelay()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testTurnOnOff()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testWrongPasscodeAttemptsPersistAcrossEntryAndConfirmation()">
+               </Test>
+               <Test
+                  Identifier = "AuthenticationTest/testWrongPasscodeDisplaysAttemptsAndMaxError()">
                </Test>
                <Test
                   Identifier = "BaseTestCase">
                </Test>
                <Test
+                  Identifier = "BookmarkingTests">
+               </Test>
+               <Test
+                  Identifier = "BrowsingPDFTests">
+               </Test>
+               <Test
+                  Identifier = "ClipBoardTests">
+               </Test>
+               <Test
+                  Identifier = "CopiedLinksTests">
+               </Test>
+               <Test
+                  Identifier = "DatabaseFixtureTest">
+               </Test>
+               <Test
+                  Identifier = "DomainAutocompleteTest">
+               </Test>
+               <Test
+                  Identifier = "DownloadFilesTests">
+               </Test>
+               <Test
                   Identifier = "DragAndDropTests">
                </Test>
                <Test
-                  Identifier = "FirstRunTourTests/testFirstRunTour()">
+                  Identifier = "FindInPageTests">
+               </Test>
+               <Test
+                  Identifier = "FirstRunTourTests/testShowTourFromSettings()">
+               </Test>
+               <Test
+                  Identifier = "FirstRunTourTests/testStartBrowsingFromFifthScreen()">
+               </Test>
+               <Test
+                  Identifier = "FirstRunTourTests/testStartBrowsingFromFourthScreen()">
+               </Test>
+               <Test
+                  Identifier = "FirstRunTourTests/testStartBrowsingFromSecondScreen()">
+               </Test>
+               <Test
+                  Identifier = "FirstRunTourTests/testStartBrowsingFromThirdScreen()">
+               </Test>
+               <Test
+                  Identifier = "FxScreenGraphTests">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests">
+               </Test>
+               <Test
+                  Identifier = "HomePageSettingsTest">
+               </Test>
+               <Test
+                  Identifier = "HomePageSettingsUITests">
                </Test>
                <Test
                   Identifier = "HomePageUITest">
@@ -218,13 +356,28 @@
                   Identifier = "IntegrationTests/testFxASyncBookmark()">
                </Test>
                <Test
-                  Identifier = "NavigationTest/testLongPressLinkOptions()">
+                  Identifier = "MailAppSettingsTests">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testCancelLongPressLinkMenu()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testCopyLink()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testCopyLinkPrivateMode()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testDownloadLink()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testLongPressLinkOptionsPrivateMode()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testNavigation()">
                </Test>
                <Test
                   Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
-               </Test>
-               <Test
-                  Identifier = "NavigationTest/testPopUpBlocker()">
                </Test>
                <Test
                   Identifier = "NavigationTest/testReloadPreservesMobileOrDesktopSite()">
@@ -233,31 +386,55 @@
                   Identifier = "NavigationTest/testScrollsToTopWithMultipleTabs()">
                </Test>
                <Test
+                  Identifier = "NavigationTest/testShareLink()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testShareLinkPrivateMode()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testTapSignInShowsFxAFromRemoteTabPanel()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testTapSignInShowsFxAFromTour()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testTapSigninShowsFxAFromSettings()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromMenu()">
+               </Test>
+               <Test
                   Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
                </Test>
                <Test
-                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowBlankPage()">
+                  Identifier = "NewTabSettingsTest/testToggleOffOnAdditionalContentBookmarks()">
                </Test>
                <Test
-                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowYourBookmarks()">
+                  Identifier = "NightModeTests">
                </Test>
                <Test
-                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowYourHistory()">
+                  Identifier = "NoImageTests">
                </Test>
                <Test
-                  Identifier = "NewTabSettingsTest/testCheckNewTabSettingsByDefault()">
-               </Test>
-               <Test
-                  Identifier = "PhotonActionSheetTest/testPinToTop()">
+                  Identifier = "PhotonActionSheetTest/testSendToDeviceFromPageOptionsMenu()">
                </Test>
                <Test
                   Identifier = "PhotonActionSheetTest/testSendToDeviceFromShareOption()">
                </Test>
                <Test
-                  Identifier = "PhotonActionSheetTest/testShareOptionIsShownFromShortCut()">
+                  Identifier = "PhotonActionSheetTest/testShareOptionIsShown()">
                </Test>
                <Test
-                  Identifier = "PhotonActionSheetTest/testSharePageWithShareSheetOptions()">
+                  Identifier = "PhotonActionSheetTest/testShareSheetOpenAndCancel()">
+               </Test>
+               <Test
+                  Identifier = "PhotonActionSheetTest/testShareSheetSendToDevice()">
+               </Test>
+               <Test
+                  Identifier = "PocketTest">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTest">
                </Test>
                <Test
                   Identifier = "PrivateBrowsingTest/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()">
@@ -269,22 +446,79 @@
                   Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
-                  Identifier = "ReaderViewTest/testAddToReadingList()">
+                  Identifier = "ReaderViewTest/testAddToReadingListFromPageOptionsMenu()">
                </Test>
                <Test
-                  Identifier = "ReaderViewTest/testLoadReaderContent()">
+                  Identifier = "ReaderViewTest/testAddToReadingListPrivateMode()">
                </Test>
                <Test
-                  Identifier = "SaveLoginTest/testSavedLoginSelectUnselect()">
+                  Identifier = "ReaderViewTest/testMarkAsReadAndUnreadFromReadingList()">
+               </Test>
+               <Test
+                  Identifier = "ReaderViewTest/testMarkAsReadAndUreadFromReaderView()">
+               </Test>
+               <Test
+                  Identifier = "ReaderViewTest/testOpenSavedForReadingLongPressInNewTab()">
+               </Test>
+               <Test
+                  Identifier = "ReaderViewTest/testRemoveFromReadingList()">
+               </Test>
+               <Test
+                  Identifier = "ReaderViewTest/testRemoveFromReadingView()">
+               </Test>
+               <Test
+                  Identifier = "ReaderViewTest/testRemoveSavedForReadingLongPress()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testDeleteLogin()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testDoNotSaveLogin()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testEditOneLoginEntry()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testSaveLogin()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testSearchLogin()">
+               </Test>
+               <Test
+                  Identifier = "ScreenGraphTest">
+               </Test>
+               <Test
+                  Identifier = "SearchSettingsUITests">
+               </Test>
+               <Test
+                  Identifier = "SearchTests/testCopyPasteComplete()">
+               </Test>
+               <Test
+                  Identifier = "SearchTests/testDefaultSearchEngine()">
                </Test>
                <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">
                </Test>
                <Test
-                  Identifier = "SearchTests/testSearchEngine()">
+                  Identifier = "SearchTests/testDoNotShowSuggestionsWhenEnteringURL()">
+               </Test>
+               <Test
+                  Identifier = "SearchTests/testPromptPresence()">
+               </Test>
+               <Test
+                  Identifier = "SettingsTest">
                </Test>
                <Test
                   Identifier = "SiteLoadTest">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests">
+               </Test>
+               <Test
+                  Identifier = "ThirdPartySearchTest">
+               </Test>
+               <Test
+                  Identifier = "ToolbarTests">
                </Test>
                <Test
                   Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingLandscape()">
@@ -296,31 +530,58 @@
                   Identifier = "ToolbarTests/testShowToolbarWhenScrollingDefaultOption()">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testAddTabFromTabTray()">
+                  Identifier = "TopTabsTest/testAddPrivateTabByLongPressTabsButton()">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testCloseAllTabsPrivateModeUndo()">
+                  Identifier = "TopTabsTest/testAddTabByLongPressTabsButton()">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testCloseAllTabsUndo()">
+                  Identifier = "TopTabsTest/testAddTabFromContext()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testAddTabFromSettings()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testCloseAllTabs()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testCloseAllTabsPrivateMode()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testCloseOneTab()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTest/testCloseTabFromLongPressTabsButton()">
                </Test>
                <Test
                   Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testLongTapTabCounter()">
+                  Identifier = "TopTabsTest/testSwitchBetweenTabs()">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testSwitchBetweenTabsNoPrivatePrivateToastButton()">
+                  Identifier = "TrackingProtectionTests/testDisableForSiteDoesNotDisableForOthersDifferentTab()">
                </Test>
                <Test
-                  Identifier = "TopTabsTest/testSwitchBetweenTabsToastButton()">
+                  Identifier = "TrackingProtectionTests/testDisableForSiteDoesNotDisableForOthersSameTab()">
                </Test>
                <Test
-                  Identifier = "TrackingProtectionTests/testEnableDisableTPforSite()">
+                  Identifier = "TrackingProtectionTests/testDisableforSiteIsKeptAfterBrowsing()">
                </Test>
                <Test
-                  Identifier = "TrackingProtectionTests/testTrackingProtection()">
+                  Identifier = "TrackingProtectionTests/testDisablingTPforOneSiteDoesNotChangeGeneralTPOption()">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests/testMenuWhenThereAreBlockedElements()">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests/testMenuWhenThereAreNotBlockedElements()">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests/testTPMenuHomePanel()">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests/testTrackingProtectionToggle()">
                </Test>
             </SkippedTests>
          </TestableReference>

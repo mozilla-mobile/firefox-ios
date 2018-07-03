@@ -37,8 +37,12 @@ class PhotonActionSheetTest: BaseTestCase {
     func testShareOptionIsShownFromShortCut() {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
-        app.buttons["TabLocationView.pageOptionsButton"].press(forDuration: 1)
-        // Wait to see the Share options sheet
+        waitforExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        let pageObjectButton = app.buttons["TabLocationView.pageOptionsButton"]
+        // Fix to bug 1467393, url bar long press is shown sometimes instead of the share menu
+        let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
+        pageObjectButtonCenter.press(forDuration: 1)
+
         waitforExistence(app.buttons["Copy"])
     }
 

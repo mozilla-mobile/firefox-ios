@@ -108,7 +108,8 @@ class HomePanelColor {
 class SnackBarColor {
     var highlight: UIColor { return UIColor.Defaults.iOSTextHighlightBlue.withAlphaComponent(0.9) }
     var highlightText: UIColor { return UIColor.Photon.Blue60 }
-    var border: UIColor { return UIColor.Photon.Grey60 }
+    var border: UIColor { return UIColor.Photon.Grey30 }
+    var title: UIColor { return UIColor.Photon.Blue50 }
 }
 
 class GeneralColor {
