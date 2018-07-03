@@ -72,6 +72,8 @@ extension FxAPushMessageHandler {
 
         let result: PushMessageResult
         switch command {
+        case .commandReceived:
+            result = handleCommandReceived(json["data"])
         case .deviceConnected:
             result = handleDeviceConnected(json["data"])
         case .deviceDisconnected:
@@ -114,6 +116,16 @@ extension FxAPushMessageHandler {
 }
 
 /// An extension to handle each of the messages.
+extension FxAPushMessageHandler {
+    func handleCommandReceived(_ data: JSON?) -> PushMessageResult {
+        guard let index = data?["index"].int else {
+            return messageIncomplete(.commandReceived)
+        }
+        let message = PushMessage.commandReceived(index)
+        return deferMaybe(message)
+    }
+}
+
 extension FxAPushMessageHandler {
     func handleDeviceConnected(_ data: JSON?) -> PushMessageResult {
         guard let deviceName = data?["deviceName"].string else {
@@ -211,6 +223,7 @@ fileprivate extension FxAPushMessageHandler {
 }
 
 enum PushMessageType: String {
+    case commandReceived = "fxaccounts:command_received"
     case deviceConnected = "fxaccounts:device_connected"
     case deviceDisconnected = "fxaccounts:device_disconnected"
     case profileUpdated = "fxaccounts:profile_updated"
@@ -223,6 +236,7 @@ enum PushMessageType: String {
 }
 
 enum PushMessage: Equatable {
+    case commandReceived(Int)
     case deviceConnected(String)
     case deviceDisconnected(String?)
     case profileUpdated
@@ -236,6 +250,8 @@ enum PushMessage: Equatable {
 
     var messageType: PushMessageType {
         switch self {
+        case .commandReceived(_):
+            return .commandReceived
         case .deviceConnected(_):
             return .deviceConnected
         case .deviceDisconnected(_):
@@ -261,6 +277,8 @@ enum PushMessage: Equatable {
         }
 
         switch (lhs, rhs) {
+        case (.commandReceived(let lIndex), .commandReceived(let rIndex)):
+            return lIndex == rIndex
         case (.deviceConnected(let lName), .deviceConnected(let rName)):
             return lName == rName
         case (.collectionChanged(let lList), .collectionChanged(let rList)):

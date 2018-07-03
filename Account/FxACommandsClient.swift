@@ -40,7 +40,7 @@ public class FxACommandsClient {
         self.sendTab = FxACommandSendTab(commandsClient: self, account: account)
     }
 
-    public func send(commandName: String, toDevice device: FxADevice, withPayload payload: String) -> Deferred<Maybe<FxASendMessageResponse>> {
+    public func invoke(commandName: String, toDevice device: FxADevice, withPayload payload: String) -> Deferred<Maybe<FxASendMessageResponse>> {
         guard let deviceID = device.id else {
             return deferMaybe(FxACommandsClientError())
         }
@@ -52,7 +52,7 @@ public class FxACommandsClient {
         }
     }
 
-    public func consumeRemoteCommand(index: UInt) {
+    public func consumeRemoteCommand(index: Int) {
         fetchRemoteCommands(index: index, limit: 1) >>== { response in
             let commands = response.commands
             if commands.count != 1 {
@@ -85,7 +85,7 @@ public class FxACommandsClient {
 
     }
 
-    func fetchRemoteCommands(index: UInt, limit: UInt? = nil) -> Deferred<Maybe<FxACommandsResponse>> {
+    func fetchRemoteCommands(index: Int, limit: UInt? = nil) -> Deferred<Maybe<FxACommandsResponse>> {
         return account.marriedState() >>== { marriedState in
             let sessionToken = marriedState.sessionToken as NSData
             let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL)
@@ -164,7 +164,7 @@ open class FxACommandSendTab {
 
         for device in devices {
             encrypt(message: jsonString, device: device) >>== { encryptedPayload in
-                self.commandsClient.send(commandName: FxACommandSendTab.Name, toDevice: device, withPayload: encryptedPayload).bind { result in
+                self.commandsClient.invoke(commandName: FxACommandSendTab.Name, toDevice: device, withPayload: encryptedPayload).bind { result in
                     return deferMaybe(result.isSuccess)
                 }
             }

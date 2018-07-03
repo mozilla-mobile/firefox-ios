@@ -436,7 +436,7 @@ open class FxAClient10 {
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.deviceDestroyResponse)
     }
 
-    open func commands(atIndex index: UInt? = nil, limit: UInt? = nil, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxACommandsResponse>> {
+    open func commands(atIndex index: Int? = nil, limit: UInt? = nil, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxACommandsResponse>> {
         var queryParams: [URLQueryItem] = []
         if let index = index {
             queryParams.append(URLQueryItem(name: "index", value: "\(index)"))

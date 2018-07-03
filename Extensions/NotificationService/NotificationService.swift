@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Account
 import Shared
 import Storage
 import Sync
@@ -56,7 +57,7 @@ class NotificationService: UNNotificationServiceExtension {
         // Rather than changing tabQueue, we manually nil it out here.
         display.tabQueue = nil
         display.messageDelivered = false
-        display.displayNotification(what, with: error)
+        display.displayNotification(what, profile: profile, with: error)
         if !display.messageDelivered {
             display.displayUnknownMessageNotification()
         }
@@ -84,12 +85,18 @@ class SyncDataDisplay {
         self.tabQueue = tabQueue
     }
 
-    func displayNotification(_ message: PushMessage? = nil, with error: PushMessageError? = nil) {
+    func displayNotification(_ message: PushMessage? = nil, profile: ExtensionProfile?, with error: PushMessageError? = nil) {
         guard let message = message, error == nil else {
             return displayUnknownMessageNotification()
         }
 
         switch message {
+        case .commandReceived(let commandIndex):
+            guard let profile = profile, let account = profile.getAccount() else {
+                return displayUnknownMessageNotification()
+            }
+
+            displayNewSentTabNotification(commandIndex: commandIndex, account: account)
         case .accountVerified:
             displayAccountVerifiedNotification()
         case .deviceConnected(let deviceName):
@@ -100,7 +107,7 @@ class SyncDataDisplay {
             displayThisDeviceDisconnectedNotification()
         case .collectionChanged(let collections):
             if collections.contains("clients") {
-                displaySentTabNotification()
+                displayOldSentTabNotification()
             } else {
                 displayUnknownMessageNotification()
             }
@@ -143,7 +150,7 @@ extension SyncDataDisplay {
         // if, by any change we haven't dealt with the message, then perhaps we
         // can recycle it as a sent tab message.
         if sentTabs.count > 0 {
-            displaySentTabNotification()
+            displayOldSentTabNotification()
         } else {
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
         }
@@ -151,7 +158,14 @@ extension SyncDataDisplay {
 }
 
 extension SyncDataDisplay {
-    func displaySentTabNotification() {
+    func displayNewSentTabNotification(commandIndex: Int, account: FirefoxAccount) {
+        // TODO: Handle some result from `consumeRemoteCommand()`
+        account.commandsClient.consumeRemoteCommand(index: commandIndex)
+    }
+}
+
+extension SyncDataDisplay {
+    func displayOldSentTabNotification() {
         // We will need to be more precise about calling these SentTab alerts
         // once we are a) detecting different types of notifications and b) adding actions.
         // For now, we need to add them so we can handle zero-tab sent-tab-notifications.
