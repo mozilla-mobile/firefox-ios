@@ -15,14 +15,18 @@ private struct TabsButtonUX {
 }
 
 class TabsButton: UIButton {
+    var privateModeBadge = UIImageView.init(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
 
-    var textColor = UIColor.Photon.White100 {
+    let privateModeBadgeSize = CGFloat(16)
+    let privateModeBadgeOffset = CGFloat(10)
+
+    var textColor = UIColor.clear {
         didSet {
             countLabel.textColor = textColor
             borderView.color = textColor
         }
     }
-    var titleBackgroundColor  = UIColor.Photon.White100 {
+    var titleBackgroundColor = UIColor.clear {
         didSet {
             labelBackground.backgroundColor = titleBackgroundColor
         }
@@ -33,17 +37,13 @@ class TabsButton: UIButton {
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
-                countLabel.textColor = textColor
                 borderView.color = titleBackgroundColor
-                labelBackground.backgroundColor = titleBackgroundColor
             } else {
-                countLabel.textColor = textColor
                 borderView.color = textColor
-                labelBackground.backgroundColor = titleBackgroundColor
             }
         }
     }
-    
+
     override var transform: CGAffineTransform {
         didSet {
             clonedTabsButton?.transform = transform
@@ -90,6 +90,8 @@ class TabsButton: UIButton {
         insideButton.addSubview(borderView)
         insideButton.addSubview(countLabel)
         addSubview(insideButton)
+        addSubview(privateModeBadge)
+        privateModeBadge.isHidden = true
         isAccessibilityElement = true
         accessibilityTraits |= UIAccessibilityTraitButton
     }
@@ -108,6 +110,12 @@ class TabsButton: UIButton {
         insideButton.snp.remakeConstraints { (make) -> Void in
             make.size.equalTo(24)
             make.center.equalTo(self)
+        }
+
+        privateModeBadge.snp.remakeConstraints { make in
+            make.size.equalTo(privateModeBadgeSize)
+            make.centerX.equalToSuperview().offset(privateModeBadgeOffset)
+            make.centerY.equalToSuperview().offset(-privateModeBadgeOffset)
         }
     }
 
@@ -210,13 +218,19 @@ class TabsButton: UIButton {
     }
 }
 
-extension TabsButton: Themeable {
-    func applyTheme(_ theme: Theme) {
-        titleBackgroundColor = UIColor.theme.browser.background
-        textColor = UIColor.theme.browser.tint
-        countLabel.textColor = UIColor.theme.browser.tint
-        borderView.color = UIColor.theme.browser.tint
-        labelBackground.backgroundColor = UIColor.theme.browser.background
+extension TabsButton: Themeable, PrivateModeUI {
+    func applyTheme() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            titleBackgroundColor = UIColor.theme.topTabs.background
+            textColor = UIColor.theme.topTabs.buttonTint
+        } else {
+            titleBackgroundColor = UIColor.theme.browser.background
+            textColor = UIColor.theme.browser.tint
+        }
+    }
+
+    func applyUIMode(isPrivate: Bool) {
+        privateModeBadge.isHidden = !isPrivate
     }
 }
 

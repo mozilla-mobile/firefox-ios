@@ -4,18 +4,17 @@
 import Foundation
 
 protocol Themeable {
-    func applyTheme(_ theme: Theme)
+    func applyTheme()
 }
 
-enum Theme: String {
-    case Private
-    case Normal
+protocol PrivateModeUI {
+    func applyUIMode(isPrivate: Bool)
 }
 
 var currentTheme = Normal() // TODO replace with theme manager
 
 extension UIColor {
-    static var theme: Theme2 {
+    static var theme: Theme {
         return currentTheme
     }
 }
@@ -46,7 +45,6 @@ class URLBarColor {
 
 class BrowserColor {
     var background: UIColor { return defaultBackground }
-    var text: UIColor { return .white }
     var urlBarDivider: UIColor { return UIColor.Photon.Grey90A10 }
     var locationBarBackground: UIColor { return UIColor.Photon.Grey30 }
     var tint: UIColor { return UIColor.Photon.Grey80 }
@@ -64,15 +62,25 @@ class LoadingBarColor {
 }
 
 class TabTrayColor {
-    var background: UIColor { return defaultBackground }
+    var tabTitleText: UIColor { return UIColor.black }
+    var background: UIColor { return UIColor.Photon.Grey80 }
+    var cellBackground: UIColor { return defaultBackground }
+    var toolbar: UIColor { return defaultBackground }
+    var toolbarButtonTint: UIColor { return UIColor.Photon.Grey80 }
     var privateModeLearnMore: UIColor { return UIColor.Photon.Purple60 }
     var privateModePurple: UIColor { return UIColor.Defaults.MobilePrivatePurple }
+
+    var privateModeButtonOffTint: UIColor { return toolbarButtonTint }
+    var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
 }
 
 class TopTabsColor {
-    var privateModeTint: UIColor { return UIColor.Photon.Grey10 } // remove me
     var background: UIColor { return UIColor.Photon.Grey80 }
-    var selectedLine: UIColor { return UIColor.Photon.Blue60 }
+    var selectedLineNormalMode: UIColor { return UIColor.Photon.Blue60 }
+    var selectedLinePrivateMode: UIColor { return UIColor.Photon.Purple50 }
+    var buttonTint: UIColor { return UIColor.Photon.Grey40 }
+    var privateModeButtonOffTint: UIColor { return buttonTint }
+    var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
 }
 
 class TextFieldColor {
@@ -119,7 +127,7 @@ class GeneralColor {
     var separator: UIColor { return defaultSeparator }
 }
 
-protocol Theme2 {
+protocol Theme {
     var name: String { get }
     var tableView: TableViewColor { get }
     var urlbar: URLBarColor { get }
@@ -135,7 +143,7 @@ protocol Theme2 {
     var searchInput: SearchInputColor { get }
 }
 
-struct Normal: Theme2 {
+struct Normal: Theme {
     var name: String { return "Normal" }
     var tableView: TableViewColor { return TableViewColor() }
     var urlbar: URLBarColor { return URLBarColor() }

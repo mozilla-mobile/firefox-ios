@@ -174,7 +174,7 @@ private extension BrowserToTrayAnimator {
                 cell.title.transform = .identity
                 cell.layoutIfNeeded()
                 
-                UIApplication.shared.windows.first?.backgroundColor = TabTrayControllerUX.BackgroundColor
+                UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.tabTray.background
                 tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
                 
                 transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
@@ -303,10 +303,6 @@ private func createTransitionCellFromTab(_ tab: Tab?, withFrame frame: CGRect) -
     let cell = TabCell(frame: frame)
     cell.screenshotView.image = tab?.screenshot
     cell.titleText.text = tab?.displayTitle
-
-    if let tab = tab, tab.isPrivate {
-        cell.style = .dark
-    }
 
     if let favIcon = tab?.displayFavicon {
         cell.favicon.sd_setImage(with: URL(string: favIcon.url)!)

@@ -4,9 +4,10 @@
 
 import UIKit
 
-class PrivateModeButton: ToggleButton, Themeable {
-    var light: Bool = false
-    
+class PrivateModeButton: ToggleButton, PrivateModeUI {
+    var offTint = UIColor.black
+    var onTint = UIColor.black
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
@@ -19,10 +20,12 @@ class PrivateModeButton: ToggleButton, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func applyTheme(_ theme: Theme) {
-        tintColor = UIColor.theme.browser.tint
+    func applyUIMode(isPrivate: Bool) {
+        isSelected = isPrivate
+
+        tintColor = isPrivate ? onTint : offTint
         imageView?.tintColor = tintColor
-        isSelected = theme == .Private
+
         accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
     }
 }

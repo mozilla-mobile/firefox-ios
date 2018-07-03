@@ -66,7 +66,6 @@ class TopTabsViewController: UIViewController {
         let privateModeButton = PrivateModeButton()
         privateModeButton.semanticContentAttribute = .forceLeftToRight
         privateModeButton.accessibilityIdentifier = "TopTabsViewController.privateModeButton"
-        privateModeButton.light = true
         privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
         return privateModeButton
     }()
@@ -149,10 +148,9 @@ class TopTabsViewController: UIViewController {
         }
 
         view.backgroundColor = UIColor.Photon.Grey80
-        tabsButton.applyTheme(.Normal)
-        if let currentTab = tabManager.selectedTab {
-            applyTheme(currentTab.isPrivate ? .Private : .Normal)
-        }
+        tabsButton.applyTheme()
+        applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+
         updateTabCount(tabDisplayManager.tabCount, animated: false)
     }
     
@@ -221,17 +219,18 @@ class TopTabsViewController: UIViewController {
     }
 }
 
-extension TopTabsViewController: Themeable {
-    func applyTheme(_ theme: Theme) {
-        tabsButton.applyTheme(theme)
-        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Photon.Grey80
-        tabsButton.textColor = UIColor.Photon.Grey40
+extension TopTabsViewController: Themeable, PrivateModeUI {
+    func applyUIMode(isPrivate: Bool) {
+        tabDisplayManager.isPrivate = isPrivate
 
-        self.tabDisplayManager.isPrivate = (theme == Theme.Private)
-        privateModeButton.applyTheme(theme)
-        privateModeButton.tintColor = UIColor.theme.topTabs.privateModeTint
-        privateModeButton.imageView?.tintColor = privateModeButton.tintColor
-        newTab.tintColor = UIColor.Photon.Grey40
+        privateModeButton.onTint = UIColor.theme.topTabs.privateModeButtonOnTint
+        privateModeButton.offTint = UIColor.theme.topTabs.privateModeButtonOffTint
+        privateModeButton.applyUIMode(isPrivate: tabDisplayManager.isPrivate)
+    }
+
+    func applyTheme() {
+        tabsButton.applyTheme()
+        newTab.tintColor = UIColor.theme.topTabs.buttonTint
         collectionView.backgroundColor = view.backgroundColor
     }
 }
