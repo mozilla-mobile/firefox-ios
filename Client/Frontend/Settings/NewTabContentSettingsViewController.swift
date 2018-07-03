@@ -30,8 +30,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
     /* variables for checkmark settings */
     let prefs: Prefs
     var currentChoice: NewTabPage!
-    var hasHomePage: Bool!
-
+    var hasHomePage = false
     init(prefs: Prefs) {
         self.prefs = prefs
         super.init(style: .grouped)
