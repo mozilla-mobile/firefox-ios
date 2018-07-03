@@ -59,25 +59,19 @@ public class FxACommandsClient {
                 log.warning("Should have retrieved 1 and only 1 message, got \(commands.count)")
             }
 
-/*
-             return this._fxAccounts._withCurrentAccountState(async (getUserData, updateUserData) => {
-                 const {device} = await getUserData(["device"]);
-                 if (!device) {
-                     throw new Error("No device registration.");
-                 }
-                 const handledCommands = (device.handledCommands || []).concat(messages.map(m => m.index));
-                 await updateUserData({
-                     device: {...device, handledCommands}
-                 });
-                 await this._handleCommands(messages);
+            let prefs = self.account.configuration.prefs
+            var handledCommands = prefs?.arrayForKey(PrefsKeys.KeyFxAHandledCommands) as? [Int] ?? []
+            handledCommands.append(contentsOf: commands.map({ $0.index }))
 
-                 // Once the handledCommands array length passes a threshold, check the
-                 // potentially missed remote commands in order to clear it.
-                 if (handledCommands.length > 20) {
-                     await this.fetchMissedRemoteCommands();
-                 }
-             });
-*/
+            prefs?.setObject(handledCommands, forKey: PrefsKeys.KeyFxAHandledCommands)
+
+            self.handleCommands(commands)
+
+            // Once the `handledCommands` array length passes a threshold, check the
+            // potentially missed remote commands in order to clear it.
+            if handledCommands.count > 20 {
+                self.fetchMissedRemoteCommands()
+            }
         }
     }
 
