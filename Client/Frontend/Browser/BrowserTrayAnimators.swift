@@ -75,7 +75,7 @@ private extension TrayToBrowserAnimator {
             cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.height)
 
             bvc.tabTrayDidDismiss(tabTray)
-            UIApplication.shared.windows.first?.backgroundColor = UIConstants.AppBackgroundColor
+            UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.browser.background
             tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
             tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
             tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)

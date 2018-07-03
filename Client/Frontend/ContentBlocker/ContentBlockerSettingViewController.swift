@@ -18,7 +18,7 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
 
         var attributes = [NSAttributedStringKey: AnyObject]()
         attributes[NSAttributedStringKey.font] = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        attributes[NSAttributedStringKey.foregroundColor] = UIConstants.HighlightBlue
+        attributes[NSAttributedStringKey.foregroundColor] = UIColor.theme.general.highlightBlue
 
         let button = UIButton()
         button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)

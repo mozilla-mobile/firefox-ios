@@ -16,7 +16,6 @@ private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
 // MARK: -  Lifecycle
 struct ASPanelUX {
-    static let backgroundColor = UIConstants.AppBackgroundColor
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 14)
@@ -108,7 +107,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         Section.allValues.forEach { self.collectionView?.register(Section($0.rawValue).cellType, forCellWithReuseIdentifier: Section($0.rawValue).cellIdentifier) }
         self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header")
         self.collectionView?.register(ASFooterView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer")
-        collectionView?.backgroundColor = ASPanelUX.backgroundColor
+        collectionView?.backgroundColor = UIColor.theme.browser.background
         collectionView?.keyboardDismissMode = .onDrag
         
         self.profile.panelDataObservers.activityStream.delegate = self

@@ -56,8 +56,8 @@ class SearchSettingsTableViewController: UITableViewController {
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
 
-        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .plain, target: self,
                                                                  action: #selector(beginEditing))
@@ -96,7 +96,7 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
                 let toggle = UISwitch()
-                toggle.onTintColor = UIConstants.ControlTintColor
+                toggle.onTintColor = UIColor.theme.tableView.controlTint
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
@@ -115,7 +115,7 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.showsReorderControl = true
 
                 let toggle = UISwitch()
-                toggle.onTintColor = UIConstants.ControlTintColor
+                toggle.onTintColor = UIColor.theme.tableView.controlTint
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
                 toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)

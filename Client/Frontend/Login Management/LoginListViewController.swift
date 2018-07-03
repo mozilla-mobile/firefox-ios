@@ -14,7 +14,7 @@ private struct LoginListUX {
     static let SearchHeight: CGFloat = 58
     static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
     static let selectionButtonTextColor = UIColor.Photon.White100
-    static let selectionButtonBackground = UIConstants.HighlightBlue
+    static let selectionButtonBackground = UIColor.theme.general.highlightBlue
     static let NoResultsFont: UIFont = UIFont.systemFont(ofSize: 16)
     static let NoResultsTextColor: UIColor = UIColor.Photon.Grey40
 }

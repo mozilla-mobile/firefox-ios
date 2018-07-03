@@ -95,8 +95,8 @@ class PasscodeInputView: UIView, UIKeyInput {
         guard let context = UIGraphicsGetCurrentContext() else { return }
 
         context.setLineWidth(1)
-        context.setStrokeColor(UIConstants.PasscodeDotColor.cgColor)
-        context.setFillColor(UIConstants.PasscodeDotColor.cgColor)
+        context.setStrokeColor(UIColor.theme.general.passcodeDot.cgColor)
+        context.setFillColor(UIColor.theme.general.passcodeDot.cgColor)
 
         (0..<passcodeSize).forEach { index in
             let offset = floor(rect.width / CGFloat(passcodeSize))
@@ -142,7 +142,7 @@ class PasscodePane: UIView {
     init(title: String? = nil, passcodeSize: Int = 4) {
         codeInputView = PasscodeInputView(passcodeSize: passcodeSize)
         super.init(frame: .zero)
-        backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        backgroundColor = UIColor.theme.tableView.headerBackground
 
         titleLabel.text = title
         centerContainer.addSubview(titleLabel)

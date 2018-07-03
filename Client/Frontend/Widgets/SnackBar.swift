@@ -9,8 +9,6 @@ import Shared
 class SnackBarUX {
     static var MaxWidth: CGFloat = 400
     static let BorderWidth: CGFloat = 0.5
-    static let HighlightColor = UIColor.Defaults.iOSHighlightBlue.withAlphaComponent(0.9)
-    static let HighlightText = UIColor.Photon.Blue60
 }
 
 /**
@@ -25,7 +23,7 @@ class SnackButton: UIButton {
 
     override open var isHighlighted: Bool {
         didSet {
-            self.backgroundColor = isHighlighted ? SnackBarUX.HighlightColor : .clear
+            self.backgroundColor = isHighlighted ? UIColor.theme.snackbar.highlight : .clear
         }
     }
 
@@ -40,8 +38,8 @@ class SnackButton: UIButton {
             titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         }
         setTitle(title, for: .normal)
-        setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
-        setTitleColor(UIConstants.ControlTintColor, for: .normal)
+        setTitleColor(UIColor.theme.snackbar.highlightText, for: .highlighted)
+        setTitleColor(UIColor.theme.snackbar.title, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -56,7 +54,7 @@ class SnackButton: UIButton {
 
     func drawSeparator() {
         let separator = UIView()
-        separator.backgroundColor = UIConstants.SeparatorColor
+        separator.backgroundColor = UIColor.theme.snackbar.border
         self.addSubview(separator)
         separator.snp.makeConstraints { make in
             make.leading.equalTo(self)
@@ -86,7 +84,7 @@ class SnackBar: UIView {
         label.lineBreakMode = .byWordWrapping
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.numberOfLines = 0
-        label.textColor = SettingsUX.TableViewRowTextColor
+        label.textColor = UIColor.theme.tableView.rowText
         label.backgroundColor = UIColor.clear
         return label
     }()
@@ -123,7 +121,7 @@ class SnackBar: UIView {
         titleView.addArrangedSubview(textLabel)
 
         let separator = UIView()
-        separator.backgroundColor = UIConstants.SeparatorColor
+        separator.backgroundColor = UIColor.theme.snackbar.border
 
         addSubview(titleView)
         addSubview(separator)
@@ -150,12 +148,11 @@ class SnackBar: UIView {
         backgroundColor = UIColor.clear
         self.clipsToBounds = true //overridden by masksToBounds = false
         self.layer.borderWidth = SnackBarUX.BorderWidth
-        self.layer.borderColor = UIConstants.SeparatorColor.cgColor
+        self.layer.borderColor = UIColor.theme.snackbar.border.cgColor
         self.layer.cornerRadius = 8
         if #available(iOS 11.0, *) {
             self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         }
-
     }
 
     required init?(coder aDecoder: NSCoder) {

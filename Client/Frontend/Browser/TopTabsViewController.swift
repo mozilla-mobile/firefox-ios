@@ -229,7 +229,7 @@ extension TopTabsViewController: Themeable {
 
         self.tabDisplayManager.isPrivate = (theme == Theme.Private)
         privateModeButton.applyTheme(theme)
-        privateModeButton.tintColor = UIColor.TopTabs.PrivateModeTint.colorFor(theme)
+        privateModeButton.tintColor = UIColor.theme.topTabs.privateModeTint
         privateModeButton.imageView?.tintColor = privateModeButton.tintColor
         newTab.tintColor = UIColor.Photon.Grey40
         collectionView.backgroundColor = view.backgroundColor

@@ -35,7 +35,7 @@ extension PhotonActionSheetProtocol {
             popoverVC.sourceView = view
             popoverVC.sourceRect = CGRect(x: view.frame.width/2, y: view.frame.size.height * 0.75, width: 1, height: 1)
             popoverVC.permittedArrowDirections = .up
-            popoverVC.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
+            popoverVC.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
         }
         viewController.present(sheet, animated: true, completion: nil)
     }

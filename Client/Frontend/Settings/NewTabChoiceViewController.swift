@@ -33,7 +33,7 @@ class NewTabChoiceViewController: UITableViewController {
         tableView.accessibilityIdentifier = "NewTabPage.Setting.Options"
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
         let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
