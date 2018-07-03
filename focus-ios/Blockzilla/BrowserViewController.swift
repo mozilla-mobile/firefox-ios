@@ -319,7 +319,10 @@ class BrowserViewController: UIViewController {
         
         if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
             let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-            homeView.showTrackerStatsShareButton(text: String(format: UIConstants.strings.shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
+            
+            // Since this is only English locale for now, don't worry about localizing for now
+            let shareTrackerStatsLabel = "%@ trackers blocked so far"
+            homeView.showTrackerStatsShareButton(text: String(format: shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
         } else {
             homeView.hideTrackerStatsShareButton()
         }
@@ -1012,7 +1015,8 @@ extension BrowserViewController: HomeViewDelegate {
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
         let appStoreUrl = URL(string:String(format: "https://mzl.la/2GZBav0"))
         // Add space after shareTrackerStatsText to add URL in sentence
-        let text = String(format: UIConstants.strings.shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
+        let shareTrackerStatsText = "%@, the privacy browser from Mozilla, has already blocked %@ trackers for me. Fewer ads and trackers following me around means faster browsing! Get Focus for yourself here"
+        let text = String(format: shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
         present(shareController, animated: true)
     }
