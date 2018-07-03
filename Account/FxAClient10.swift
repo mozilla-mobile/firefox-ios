@@ -59,6 +59,7 @@ public struct FxASendMessageResponse {
 }
 
 public struct FxACommandsResponse {
+    let index: Int
     let commands: [FxACommand]
 }
 
@@ -279,7 +280,7 @@ open class FxAClient10 {
 
     fileprivate class func commandsResponse(fromJSON json: JSON) -> FxACommandsResponse? {
         guard json.error == nil,
-            let _ = json["index"].int,
+            let jsonIndex = json["index"].int,
             let jsonCommands = json["messages"].array else { // Commands are under "messages" for some reason
                 return nil
         }
@@ -288,7 +289,7 @@ open class FxAClient10 {
             return FxACommand.fromJSON(jsonCommand)
         }
 
-        return FxACommandsResponse(commands: commands)
+        return FxACommandsResponse(index: jsonIndex, commands: commands)
     }
 
     fileprivate class func deviceDestroyResponse(fromJSON json: JSON) -> FxADeviceDestroyResponse {

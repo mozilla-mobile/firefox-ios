@@ -82,7 +82,21 @@ public class FxACommandsClient {
     }
 
     public func fetchMissedRemoteCommands() {
+        let prefs = account.configuration.prefs
+        let lastCommandIndex = Int(prefs?.intForKey(PrefsKeys.KeyFxALastCommandIndex) ?? 0)
+        var handledCommands = prefs?.arrayForKey(PrefsKeys.KeyFxAHandledCommands) as? [Int] ?? []
 
+        handledCommands.append(lastCommandIndex)
+
+        fetchRemoteCommands(index: lastCommandIndex) >>== { response in
+            let missedCommands = response.commands.filter({ !handledCommands.contains($0.index) })
+            prefs?.setInt(Int32(lastCommandIndex), forKey: PrefsKeys.KeyFxALastCommandIndex)
+            prefs?.setObject([], forKey: PrefsKeys.KeyFxAHandledCommands)
+
+            if !missedCommands.isEmpty {
+                self.handleCommands(missedCommands)
+            }
+        }
     }
 
     func fetchRemoteCommands(index: Int, limit: UInt? = nil) -> Deferred<Maybe<FxACommandsResponse>> {
