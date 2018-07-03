@@ -118,9 +118,9 @@ class SettingAppearanceTest: BaseTestCase {
         
         waitforHittable(element: app.buttons["Share"])
         app.buttons["Share"].tap()
-        let requestDesktop = app.buttons["Request Desktop Site"]
-        waitforHittable(element: requestDesktop)
-        requestDesktop.swipeLeft()
+        let findInPage = app.buttons["Find in Page"]
+        waitforHittable(element: findInPage)
+        findInPage.swipeLeft()
         
         let safariButton = app.buttons["Open in Safari"]
         waitforHittable(element: safariButton)
@@ -134,7 +134,6 @@ class SettingAppearanceTest: BaseTestCase {
         app.activate()
         
         // Now back to Focus
-        waitForValueContains(element: app.textFields["Search or enter address"], value: "https://www.google")
         waitForWebPageLoad()
         app.buttons["ERASE"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
