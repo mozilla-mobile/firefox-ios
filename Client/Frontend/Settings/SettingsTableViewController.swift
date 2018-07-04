@@ -11,6 +11,16 @@ struct SettingsUX {
     
 }
 
+extension UILabel {
+    // iOS bug: NSAttributed string color is ignored without setting font/color to nil
+    func assign(attributed: NSAttributedString?) {
+        guard let attributed = attributed else { return }
+        textColor = nil
+        font = nil
+        attributedText = attributed
+    }
+}
+
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting: NSObject {
     fileprivate var _title: NSAttributedString?
@@ -47,9 +57,10 @@ class Setting: NSObject {
 
     // Called when the cell is setup. Call if you need the default behaviour.
     func onConfigureCell(_ cell: UITableViewCell) {
+        cell.detailTextLabel?.assign(attributed: status)
         cell.detailTextLabel?.attributedText = status
         cell.detailTextLabel?.numberOfLines = 0
-        cell.textLabel?.attributedText = title
+        cell.textLabel?.assign(attributed: title)
         cell.textLabel?.textAlignment = textAlignment
         cell.textLabel?.numberOfLines = 1
         cell.textLabel?.lineBreakMode = .byTruncatingTail
@@ -567,6 +578,7 @@ class SettingsTableViewController: UITableViewController {
                 cell = tableView.dequeueReusableCell(withIdentifier: Identifier, for: indexPath)
             }
             setting.onConfigureCell(cell)
+            cell.backgroundColor = UIColor.theme.tableView.rowBackground
             return cell
         }
         return tableView.dequeueReusableCell(withIdentifier: Identifier, for: indexPath)

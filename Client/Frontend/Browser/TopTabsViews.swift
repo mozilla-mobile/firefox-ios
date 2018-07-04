@@ -61,35 +61,17 @@ class TopTabsHeaderFooter: UICollectionReusableView {
     }
 }
 
-class TopTabCell: UICollectionViewCell {
-    enum Style {
-        case light
-        case dark
-    }
-    
+class TopTabCell: UICollectionViewCell, PrivateModeUI {
+
     static let Identifier = "TopTabCellIdentifier"
     static let ShadowOffsetSize: CGFloat = 2 //The shadow is used to hide the tab separator
-    
-    var style: Style = .light {
-        didSet {
-            if style != oldValue {
-                applyStyle(style)
-            }
-        }
-    }
-    
+
     var selectedTab = false {
         didSet {
             backgroundColor = selectedTab ? UIColor.Photon.Grey10 : UIColor.Photon.Grey80
             titleText.textColor = selectedTab ? UIColor.Photon.Grey90 : UIColor.Photon.Grey40
             highlightLine.isHidden = !selectedTab
             closeButton.tintColor = selectedTab ? UIColor.Photon.Grey80 : UIColor.Photon.Grey40
-            // restyle if we are in PBM
-            if style == .dark && selectedTab {
-                backgroundColor =  UIColor.Photon.Grey70
-                titleText.textColor = UIColor.Photon.Grey10
-                closeButton.tintColor = UIColor.Photon.Grey10
-            }
             closeButton.backgroundColor = backgroundColor
             closeButton.layer.shadowColor = backgroundColor?.cgColor
             if selectedTab {
@@ -175,17 +157,15 @@ class TopTabCell: UICollectionViewCell {
         
         self.clipsToBounds = false
         
-        applyStyle(style)
+        applyUIMode(isPrivate: false)
     }
     
-    fileprivate func applyStyle(_ style: Style) {
-        titleText.textColor = UIColor.darkText
-        backgroundColor = UIColor.theme.browser.background
-        highlightLine.backgroundColor = UIColor.theme.topTabs.selectedLine
+    func applyUIMode(isPrivate: Bool) {
+        highlightLine.backgroundColor = isPrivate ?  UIColor.theme.topTabs.selectedLinePrivateMode : UIColor.theme.topTabs.selectedLineNormalMode 
     }
 
     func configureWith(tab: Tab, isSelected: Bool) {
-        self.style = tab.isPrivate ? .dark : .light
+        applyUIMode(isPrivate: tab.isPrivate)
         self.titleText.text = tab.displayTitle
 
         if tab.displayTitle.isEmpty {
