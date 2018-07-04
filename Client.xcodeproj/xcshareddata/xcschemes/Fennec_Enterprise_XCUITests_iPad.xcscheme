@@ -197,6 +197,12 @@
                   Identifier = "ActivityStreamTest/testTopSitesOpenInNewPrivateTab()">
                </Test>
                <Test
+                  Identifier = "ActivityStreamTest/testTopSitesOpenInNewPrivateTabDefaultTopSite()">
+               </Test>
+               <Test
+                  Identifier = "ActivityStreamTest/testTopSitesOpenInNewTabDefaultTopSite()">
+               </Test>
+               <Test
                   Identifier = "AuthenticationTest/testPromptPassCodeUponReentry()">
                </Test>
                <Test
