@@ -420,27 +420,22 @@ class BrowserViewController: UIViewController {
                 
                 alertStackView.addArrangedSubview(findInPageBar)
                 mainContainerView.insertSubview(fillerView, belowSubview: browserToolbar)
-                
-                findInPageBar.snp.makeConstraints { make in
-                    make.height.equalTo(UIConstants.ToolbarHeight)
-                    make.leading.trailing.equalTo(alertStackView)
-                    make.bottom.equalTo(alertStackView.snp.bottom)
-                }
-                
-                fillerView.snp.makeConstraints { make in
-                    make.top.equalTo(alertStackView.snp.bottom)
-                    make.bottom.equalTo(self.view)
-                    make.leading.trailing.equalTo(alertStackView)
-                }
-                
+
                 updateViewConstraints()
                 
-                // We make the find-in-page bar the first responder below, causing the keyboard delegates
-                // to fire. This, in turn, will animate the Find in Page container since we use the same
-                // delegate to slide the bar up and down with the keyboard. We don't want to animate the
-                // constraints added above, however, so force a layout now to prevent these constraints
-                // from being lumped in with the keyboard animation.
-                alertStackView.layoutIfNeeded()
+                UIView.animate(withDuration: 2.0, animations: {
+                    findInPageBar.snp.makeConstraints { make in
+                        make.height.equalTo(UIConstants.ToolbarHeight)
+                        make.leading.trailing.equalTo(self.alertStackView)
+                        make.bottom.equalTo(self.alertStackView.snp.bottom)
+                    }
+                }) { (_) in
+                    fillerView.snp.makeConstraints { make in
+                        make.top.equalTo(self.alertStackView.snp.bottom)
+                        make.bottom.equalTo(self.view)
+                        make.leading.trailing.equalTo(self.alertStackView)
+                    }
+                }
             }
             
             self.findInPageBar?.becomeFirstResponder()
@@ -1222,8 +1217,6 @@ extension BrowserViewController: WebControllerDelegate {
 
         scrollBarState = .animating
         
-        // Must update view constraints so find in page bar knows to snap to top of browserToolBar again
-        updateViewConstraints()
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
             self.urlBarTopConstraint.update(offset: 0)
