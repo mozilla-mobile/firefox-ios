@@ -8,10 +8,10 @@ private let testingURL = "example.com"
 
 class IntegrationTests: BaseTestCase {
 
-    let testWithDB = ["testFxASyncHistory"]
+    let testWithDB = ["testFxASyncHistory", "testFxASyncBookmark"]
 
     // This DB contains 1 entry example.com
-    let historyDB = "exampleURL.db"
+    let historyDB = "exampleURLHistoryBookmark.db"
 
     override func setUp() {
      // Test name looks like: "[Class testFunc]", parse out the function name
@@ -31,13 +31,6 @@ class IntegrationTests: BaseTestCase {
         }
         sleep(5)
         app.swipeDown()
-    }
-
-    private func bookmark() {
-        navigator.goto(PageOptionsMenu)
-        waitforExistence(app.tables.cells["Bookmark This Page"])
-        app.tables.cells["Bookmark This Page"].tap()
-        navigator.nowAt(BrowserTab)
     }
 
     private func signInFxAccounts() {
@@ -68,12 +61,7 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncBookmark () {
-        // Go to a webpage, and add to bookmarks
-        navigator.createNewTab()
-        loadWebPage(testingURL)
-        navigator.nowAt(BrowserTab)
-        bookmark()
-
+        // Bookmark is added by the DB
         // Sign into Firefox Accounts
         signInFxAccounts()
 

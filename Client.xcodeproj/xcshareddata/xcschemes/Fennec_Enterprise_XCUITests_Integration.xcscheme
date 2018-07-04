@@ -221,6 +221,9 @@
                   Identifier = "DomainAutocompleteTest">
                </Test>
                <Test
+                  Identifier = "DownloadFilesTests">
+               </Test>
+               <Test
                   Identifier = "DragAndDropTests">
                </Test>
                <Test
@@ -294,6 +297,9 @@
                </Test>
                <Test
                   Identifier = "ReaderViewTest">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest">
                </Test>
                <Test
                   Identifier = "ScreenGraphTest">
