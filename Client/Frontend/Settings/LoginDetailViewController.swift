@@ -79,7 +79,7 @@ class LoginDetailViewController: SensitiveViewController {
 
         tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
-        tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SeparatorIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SeparatorIdentifier)
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -177,7 +177,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             return loginCell
 
         case .lastModifiedSeparator:
-            let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SeparatorIdentifier) as! SettingsTableSectionHeaderFooterView
+            let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SeparatorIdentifier) as! ThemedTableSectionHeaderFooterView
             footer.titleAlignment = .top
             let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the current login was last modified with the timestamp as the parameter.")
             let formattedLabel = String(format: lastModified, Date.fromMicrosecondTimestamp(login.timePasswordChanged).toRelativeTimeString())

@@ -26,6 +26,7 @@ enum SettingsPage: String {
     case search
     case clearData = "clear-private-data"
     case fxa
+    case theme
 }
 
 // Used by the App to navigate to different views.
@@ -181,6 +182,8 @@ enum NavigationPath {
             controller.pushViewController(viewController, animated: true)
         case .fxa:
             bvc.presentSignInViewController()
+        case .theme:
+            controller.pushViewController(ThemeSettingsController(), animated: true)
         }
     }
 }

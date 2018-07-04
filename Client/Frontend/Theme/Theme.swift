@@ -11,12 +11,15 @@ protocol PrivateModeUI {
     func applyUIMode(isPrivate: Bool)
 }
 
-var currentTheme = Normal() // TODO replace with theme manager
-
 extension UIColor {
     static var theme: Theme {
-        return currentTheme
+        return ThemeManager.instance.current
     }
+}
+
+enum BuiltinThemeName: String {
+    case normal
+    case dark
 }
 
 // Convenience reference to these normal mode colors which are used in a few color classes.
@@ -143,8 +146,8 @@ protocol Theme {
     var searchInput: SearchInputColor { get }
 }
 
-struct Normal: Theme {
-    var name: String { return "Normal" }
+class NormalTheme: Theme {
+    var name: String { return BuiltinThemeName.normal.rawValue }
     var tableView: TableViewColor { return TableViewColor() }
     var urlbar: URLBarColor { return URLBarColor() }
     var browser: BrowserColor { return BrowserColor() }
@@ -158,4 +161,3 @@ struct Normal: Theme {
     var general: GeneralColor { return GeneralColor() }
     var searchInput: SearchInputColor { return SearchInputColor() }
 }
-

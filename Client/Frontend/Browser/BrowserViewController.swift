@@ -168,9 +168,7 @@ class BrowserViewController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let isIpad = shouldShowTopTabsForTraitCollection(traitCollection)
-        return (isPrivate || isIpad) ? .lightContent : .default
+        return ThemeManager.instance.statusBarStyle
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
