@@ -194,6 +194,12 @@ class OverlayView: UIView {
                     make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
                     make.height.equalTo(56)
                 }
+            } else if findInPageButton.isHidden {
+                copyButton.snp.remakeConstraints { make in
+                    make.leading.trailing.equalTo(safeAreaLayoutGuide)
+                    make.top.equalTo(searchBorder)
+                    make.height.equalTo(56)
+                }
             } else {
                 copyButton.snp.remakeConstraints { make in
                     make.leading.trailing.equalTo(safeAreaLayoutGuide)
