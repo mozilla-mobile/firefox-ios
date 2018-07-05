@@ -229,9 +229,9 @@ private class AboutHeaderView: UIView {
         }
 
         learnMoreButton.snp.makeConstraints { make in
-            make.top.equalTo(aboutParagraph.snp.bottom).offset(-7)
+            make.top.greaterThanOrEqualTo(aboutParagraph.snp.bottom).priority(.required)
             make.leading.equalTo(aboutParagraph)
-            make.bottom.equalTo(self).inset(50)
+            make.bottom.equalTo(self).inset(50).priority(.low)
         }
     }
 

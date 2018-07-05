@@ -357,7 +357,8 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         introView.addSubview(cardButton)
         introView.bringSubview(toFront: cardButton)
         cardButton.snp.makeConstraints { make in
-            make.bottom.equalTo(introView).offset(-24)
+            make.top.greaterThanOrEqualTo(textLabel.snp.bottom).offset(5).priority(.required)
+            make.bottom.equalTo(introView).offset(-24).priority(.low)
             make.centerX.equalTo(introView)
         }
         orderedViewControllers.append(viewController)
