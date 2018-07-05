@@ -1474,17 +1474,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 }
 
-extension BrowserViewController: MenuHelperInterface {
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return super.canPerformAction(action, withSender: sender) || action == MenuHelper.SelectorFindInPage
-    }
-    @objc func menuHelperSearchWithFirefox() {
-        //evaluateJavaScript("getSelection().toString()") { result, _ in
-        //   let selection = result as? String ?? "" }
-        self.openBlankNewTab(focusLocationField: true, isPrivate: false, searchFor: "placeholder")
-    }
-}
-
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.goBack()
@@ -1700,6 +1689,11 @@ extension BrowserViewController: TabDelegate {
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
         updateFindInPageVisibility(visible: true)
         findInPageBar?.text = selection
+    }
+
+    func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
+        tab.isPrivate ? openBlankNewTab(focusLocationField: false, isPrivate: true) : openBlankNewTab(focusLocationField: false)
+        submitSearchText(selection)
     }
 }
 
