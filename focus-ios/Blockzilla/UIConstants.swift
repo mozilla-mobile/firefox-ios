@@ -201,9 +201,9 @@ struct UIConstants {
         static let aboutRowRights = NSLocalizedString("About.rowRights", value: "Your Rights", comment: "Label for row in About screen")
         static let aboutRowPrivacy = NSLocalizedString("About.rowPrivacy", value: "Privacy Notice", comment: "Link to Privacy Notice in the About screen")
         static let aboutSafariBulletHeader = NSLocalizedString("About.safariBulletHeader", value: "Use it as a Safari extension:", comment: "Label on About screen")
+        static let aboutTitle = NSLocalizedString("About.screenTitle", value: "About %@", comment: "%@ is the product name (Focus/Klar). Title for the About screen")
         static let aboutSafariBullet1 = NSLocalizedString("About.safariBullet1", value: "Block trackers for improved privacy", comment: "Label on About screen")
         static let aboutSafariBullet2 = NSLocalizedString("About.safariBullet2", value: "Block Web fonts to reduce page size", comment: "Label on About screen")
-        static let aboutTitle = NSLocalizedString("About.screenTitle", value: "About %@", comment: "%@ is the product name (Focus/Klar). Title for the About screen")
         static let whatsNewTitle = NSLocalizedString("Settings.whatsNewTitle", value: "What’s New", comment: "Title for What's new screen")
         static let aboutTopLabel = NSLocalizedString("About.topLabel", value: "%@ puts you in control.", comment: "Label on About screen")
         static let biometricReason = NSLocalizedString("BiometricPrompt.reason", value: "Unlock %@ when re-opening in order to prevent unauthorized access.", comment: "%@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app.")
@@ -354,7 +354,7 @@ struct UIConstants {
 
         static let findInPagePreviousLabel = NSLocalizedString("FindInPage.PreviousResult", value: "Find previous in page", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
         static let findInPageNextLabel = NSLocalizedString("FindInPage.NextResult", value: "Find next in page", comment: "Accessibility label for next result button in Find in Page Toolbar.")
-        static let findInPageDoneLabel = NSLocalizedString("FindInPage.Done", tableName: "Find in page done", comment: "Done button in Find in Page Toolbar.")
+        static let findInPageDoneLabel = NSLocalizedString("FindInPage.Done", value: "Find in page done", comment: "Done button in Find in Page Toolbar.")
         
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
