@@ -44,7 +44,7 @@ open class MenuHelper: NSObject {
         let findInPageTitle = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Text selection menu item")
         let findInPageItem = UIMenuItem(title: findInPageTitle, action: MenuHelper.SelectorFindInPage)
 
-        let searchTitle = NSLocalizedString("Search with Firefox", tableName: "FindInPage", comment: "Text selection menu item")
+        let searchTitle = NSLocalizedString("Search with Firefox", tableName: "SearchWithFirefox", comment: "Search in New Tab Text selection menu item")
         let searchItem = UIMenuItem(title: searchTitle, action: MenuHelper.SelectorSearchWithFirefox)
         UIMenuController.shared.menuItems = [copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem, searchItem]
     }
