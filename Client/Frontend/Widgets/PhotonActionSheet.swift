@@ -665,7 +665,7 @@ private class PhotonActionSheetCell: UITableViewCell {
                 }
             }
             // When the iconURL is not nil we are most likely showing a profile picture.
-            // In that case we do not need a tint color. And make sure the image is sized correctly
+            // In that case we do not need a tint color. And make sure the image is sized correctly.
             // This is for the sync profile button in the menu
             if action.iconURL == nil {
                 statusIcon.tintColor = self.tintColor
