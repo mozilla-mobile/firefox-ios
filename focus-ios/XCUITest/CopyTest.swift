@@ -20,15 +20,17 @@ class CopyTest: BaseTestCase {
     
     func testCopyMenuItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
+        loadWebPage("http://localhost:6573/licenses.html")
         
-        loadWebPage("google.com")
-        urlBarTextField.press(forDuration: 1.0)
+        // Must offset textfield press to support 5S.
+        urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).press(forDuration: 1.5)
         waitforHittable(element: app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
+        waitforNoExistence(element: app.menuItems["Copy"])
         
         loadWebPage("bing.com")
         urlBarTextField.tap()
-        urlBarTextField.press(forDuration: 1.0)
+        urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).press(forDuration: 1.5)
         waitforHittable(element: app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
         
@@ -39,6 +41,6 @@ class CopyTest: BaseTestCase {
             return
         }
         
-        XCTAssert(text == "https://www.google.com/")
+        XCTAssert(text == "http://localhost:6573/licenses.html")
     }
 }

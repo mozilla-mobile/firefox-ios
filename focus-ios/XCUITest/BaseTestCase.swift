@@ -145,6 +145,7 @@ class BaseTestCase: XCTestCase {
     }
     
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
+        let storedUrl = UIPasteboard.general.string
         let app = XCUIApplication()
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         
@@ -165,6 +166,7 @@ class BaseTestCase: XCTestCase {
                     description: "Problem loading \(url)",
                 timeout: finishLoadingTimeout)
         }
+        UIPasteboard.general.string = storedUrl
     }
     
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0) {
