@@ -354,7 +354,7 @@ struct UIConstants {
 
         static let findInPagePreviousLabel = NSLocalizedString("FindInPage.PreviousResult", value: "Find previous in page", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
         static let findInPageNextLabel = NSLocalizedString("FindInPage.NextResult", value: "Find next in page", comment: "Accessibility label for next result button in Find in Page Toolbar.")
-        static let findInPageDoneLabel = NSLocalizedString("FindInPage.Done", value: "Find in page done", comment: "Done button in Find in Page Toolbar.")
+        static let findInPageDoneLabel = NSLocalizedString("FindInPage.Done", value: "Find in page done", comment: "Accessibility label for done button in Find in Page Toolbar.")
         
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
