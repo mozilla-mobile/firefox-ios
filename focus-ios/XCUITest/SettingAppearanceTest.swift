@@ -31,27 +31,14 @@ class SettingAppearanceTest: BaseTestCase {
         // Check Help page, wait until the webpage is shown
         waitforHittable(element: tablesQuery.staticTexts["Help"])
         tablesQuery.staticTexts["Help"].tap()
-        if app.label == "Firefox Focus" {
-            waitforHittable(element: app.staticTexts["What is Firefox Focus?"])
-            app.navigationBars["Firefox_Focus.SettingsContentView"].buttons["About"].tap()
-        } else {
-            waitforHittable(element: app.staticTexts["Firefox Klar"])
-            app.navigationBars["Firefox_Klar.SettingsContentView"].buttons["About"].tap()
-        }
+        app.navigationBars.buttons.element(boundBy: 0).tap()
         
         // Check Your Rights page, until the text is displayed
         tablesQuery.staticTexts["Your Rights"].tap()
-        if app.label == "Firefox Focus" {
-            waitforHittable(element: app.staticTexts["Your Rights"])
-            app.navigationBars["Firefox_Focus.SettingsContentView"].buttons["About"].tap()
-        } else {
-            waitforHittable(element: app.staticTexts["Ihre Rechte"])
-            app.navigationBars["Firefox_Klar.SettingsContentView"].buttons["About"].tap()
-        }
+        app.navigationBars.buttons.element(boundBy: 0).tap()
         
-        // Go to Settings
-        waitforHittable(element: app.navigationBars["About"].buttons["Settings"])
-        app.navigationBars["About"].buttons["Settings"].tap()
+        // Go back to Settings
+        app.navigationBars.buttons.element(boundBy: 0).tap()
         
         //Check the initial state of the switch values
         let safariSwitch = app.tables.switches["Safari"]
