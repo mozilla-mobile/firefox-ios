@@ -26,7 +26,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLoad() {
         headerView.delegate = self
 
-        title = UIConstants.strings.aboutTitle
+        title = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
 
         configureTableView()
     }

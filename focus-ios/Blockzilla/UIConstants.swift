@@ -201,7 +201,7 @@ struct UIConstants {
         static let aboutRowRights = NSLocalizedString("About.rowRights", value: "Your Rights", comment: "Label for row in About screen")
         static let aboutRowPrivacy = NSLocalizedString("About.rowPrivacy", value: "Privacy Notice", comment: "Link to Privacy Notice in the About screen")
         static let aboutSafariBulletHeader = NSLocalizedString("About.safariBulletHeader", value: "Use it as a Safari extension:", comment: "Label on About screen")
-        static let aboutTitle = NSLocalizedString("About.screenTitle", value: "About %@", comment: "%@ is the product name (Focus/Klar). Title for the About screen")
+        static let aboutTitle = NSLocalizedString("About.title", value: "About %@", comment: "%@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page.")
         static let aboutSafariBullet1 = NSLocalizedString("About.safariBullet1", value: "Block trackers for improved privacy", comment: "Label on About screen")
         static let aboutSafariBullet2 = NSLocalizedString("About.safariBullet2", value: "Block Web fonts to reduce page size", comment: "Label on About screen")
         static let whatsNewTitle = NSLocalizedString("Settings.whatsNewTitle", value: "What’s New", comment: "Title for What's new screen")
