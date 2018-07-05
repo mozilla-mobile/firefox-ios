@@ -6,13 +6,16 @@ import XCTest
 
 let url1 = "www.mozilla.org"
 let url2 = "www.facebook.com"
+let url3 = "www.wikipedia.com"
 
 let url1Label = "Internet for people, not profit — Mozilla"
 let url2Label = "Facebook - Log In or Sign Up"
+let url3Label = "Wikipedia"
 
 class PrivateBrowsingTest: BaseTestCase {
     func testPrivateTabDoesNotTrackHistory() {
-        navigator.openURL(url1)
+        navigator.openURL(url3)
+        waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         // Go to History screen
         waitforExistence(app.tables.cells["History"])
@@ -20,7 +23,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(BrowserTab)
         waitforExistence(app.tables["History List"])
 
-        XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
+        XCTAssertTrue(app.tables["History List"].staticTexts[url3Label].exists)
         // History without counting Recently Closed and Synced devices
         let history = app.tables["History List"].cells.count - 2
 
@@ -30,12 +33,13 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         navigator.openURL(url2)
+        waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "facebook")
         navigator.goto(BrowserTabMenu)
         waitforExistence(app.tables.cells["History"])
         app.tables.cells["History"].tap()
         waitforExistence(app.tables["History List"])
-        XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
+        XCTAssertTrue(app.tables["History List"].staticTexts[url3Label].exists)
         XCTAssertFalse(app.tables["History List"].staticTexts[url2Label].exists)
 
         // Open one tab in private browsing and check the total number of tabs
