@@ -427,4 +427,15 @@ class NavigationTest: BaseTestCase {
         let numTabsAfter = app.buttons["Show Tabs"].value
         XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
     }
+
+    func testSSL() {
+        navigator.openURL("https://expired.badssl.com/")
+        waitforExistence(app.buttons["Advanced"], timeout: 10)
+        app.buttons["Advanced"].tap()
+
+        waitforExistence(app.links["Visit site anyway"])
+        app.links["Visit site anyway"].tap()
+        waitforExistence(app.webViews.otherElements["expired.badssl.com"], timeout: 10)
+        XCTAssertTrue(app.webViews.otherElements["expired.badssl.com"].exists)
+    }
  }
