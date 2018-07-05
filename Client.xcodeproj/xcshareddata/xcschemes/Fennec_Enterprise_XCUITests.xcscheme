@@ -209,6 +209,9 @@
                   Identifier = "BaseTestCase">
                </Test>
                <Test
+                  Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
+               </Test>
+               <Test
                   Identifier = "DragAndDropTests">
                </Test>
                <Test

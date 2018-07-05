@@ -293,7 +293,7 @@
                   Identifier = "BrowsingPDFTests">
                </Test>
                <Test
-                  Identifier = "ClipBoardTests">
+                  Identifier = "ClipBoardTests/testClipboard()">
                </Test>
                <Test
                   Identifier = "CopiedLinksTests">
