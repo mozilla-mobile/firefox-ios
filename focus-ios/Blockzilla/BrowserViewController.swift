@@ -258,7 +258,7 @@ class BrowserViewController: UIViewController {
             AppDelegate.needsAuthenticated = false
 
             self.context = LAContext()
-            self.context.localizedReason = UIConstants.strings.biometricReason
+            self.context.localizedReason = String(format: UIConstants.strings.biometricReason, AppInfo.productName)
             self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
             if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
