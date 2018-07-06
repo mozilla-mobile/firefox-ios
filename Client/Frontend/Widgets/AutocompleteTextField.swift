@@ -293,3 +293,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
 }
+
+extension AutocompleteTextField : MenuHelperInterface {
+    func menuHelperPasteAndGo() {
+        if let pasteboardContents = UIPasteboard.general.string {
+            /*urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents) */
+            print("Hello")
+        }
+    }
+}
