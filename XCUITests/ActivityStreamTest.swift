@@ -191,11 +191,18 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
+        if !app.cells["Apple"].exists {
+            app.cells.element(boundBy: 0).tap()
+            waitForValueContains(app.textFields["url"], value: "apple")
+            app.buttons["Show Tabs"].tap()
+        }
         waitforExistence(app.cells["Apple"])
         app.cells["Apple"].tap()
 
+        // The website is open
         XCTAssertFalse(TopSiteCellgroup.exists)
-        XCTAssert(app.staticTexts["Apple"].exists)
+        XCTAssertTrue(app.textFields["url"].exists)
+        waitForValueContains(app.textFields["url"], value: "apple.com")
     }
 
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
