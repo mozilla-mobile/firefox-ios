@@ -14,7 +14,7 @@ private struct HomePanelViewControllerUX {
     static let ButtonSelectionAnimationDuration = 0.2
 }
 
-protocol HomePanelViewControllerDelegate: class {
+protocol HomePanelViewControllerDelegate: AnyObject {
     func homePanelViewController(_ homePanelViewController: HomePanelViewController, didSelectURL url: URL, visitType: VisitType)
     func homePanelViewController(_ HomePanelViewController: HomePanelViewController, didSelectPanel panel: Int)
     func homePanelViewControllerDidRequestToSignIn(_ homePanelViewController: HomePanelViewController)
@@ -22,7 +22,7 @@ protocol HomePanelViewControllerDelegate: class {
     func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
 }
 
-protocol HomePanel: class {
+protocol HomePanel: AnyObject {
     weak var homePanelDelegate: HomePanelDelegate? { get set }
 }
 
@@ -30,7 +30,7 @@ struct HomePanelUX {
     static let EmptyTabContentOffset = -180
 }
 
-protocol HomePanelDelegate: class {
+protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToSignIn(_ homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(_ homePanel: HomePanel)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)

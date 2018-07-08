@@ -21,7 +21,7 @@ struct IntroUX {
     static let FadeDuration = 0.25
 }
 
-protocol IntroViewControllerDelegate: class {
+protocol IntroViewControllerDelegate: AnyObject {
     func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool)
 }
 

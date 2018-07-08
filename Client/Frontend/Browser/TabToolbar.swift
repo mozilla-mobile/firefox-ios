@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Shared
 
-protocol TabToolbarProtocol: class {
+protocol TabToolbarProtocol: AnyObject {
     weak var tabToolbarDelegate: TabToolbarDelegate? { get set }
     var tabsButton: TabsButton { get }
     var menuButton: ToolbarButton { get }
@@ -22,7 +22,7 @@ protocol TabToolbarProtocol: class {
     func updateTabCount(_ count: Int, animated: Bool)
 }
 
-protocol TabToolbarDelegate: class {
+protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)

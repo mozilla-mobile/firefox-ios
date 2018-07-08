@@ -42,7 +42,7 @@ private struct SearchViewControllerUX {
     static let IconBorderWidth: CGFloat = 0.5
 }
 
-protocol SearchViewControllerDelegate: class {
+protocol SearchViewControllerDelegate: AnyObject {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL)
     func searchViewController(_ searchViewController: SearchViewController, didLongPressSuggestion suggestion: String)
     func presentSearchSettingsController()
@@ -537,7 +537,7 @@ fileprivate class ButtonScrollView: UIScrollView {
     }
 }
 
-fileprivate protocol SuggestionCellDelegate: class {
+fileprivate protocol SuggestionCellDelegate: AnyObject {
     func suggestionCell(_ suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String)
     func suggestionCell(_ suggestionCell: SuggestionCell, didLongPressSuggestion suggestion: String)
 }

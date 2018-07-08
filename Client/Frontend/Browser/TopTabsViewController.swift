@@ -21,7 +21,7 @@ struct TopTabsUX {
     static let SeparatorHeight: CGFloat = 32
 }
 
-protocol TopTabsDelegate: class {
+protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab(_ isPrivate: Bool)
     func topTabsDidTogglePrivateMode()

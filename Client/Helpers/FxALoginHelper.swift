@@ -18,7 +18,7 @@ private let log = Logger.browserLogger
 private let verificationPollingInterval = DispatchTimeInterval.seconds(3)
 private let verificationMaxRetries = 100 // Poll every 3 seconds for 5 minutes.
 
-protocol FxAPushLoginDelegate: class {
+protocol FxAPushLoginDelegate: AnyObject {
     func accountLoginDidFail()
 
     func accountLoginDidSucceed(withFlags flags: FxALoginFlags)

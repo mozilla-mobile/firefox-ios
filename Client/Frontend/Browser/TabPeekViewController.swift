@@ -7,7 +7,7 @@ import Shared
 import Storage
 import WebKit
 
-protocol TabPeekDelegate: class {
+protocol TabPeekDelegate: AnyObject {
     func tabPeekDidAddBookmark(_ tab: Tab)
     @discardableResult func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController)

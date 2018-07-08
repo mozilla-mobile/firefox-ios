@@ -474,7 +474,7 @@ class WithoutAccountSetting: AccountSetting {
 }
 
 @objc
-protocol SettingsDelegate: class {
+protocol SettingsDelegate: AnyObject {
     func settingsOpenURLInNewTab(_ url: URL)
 }
 

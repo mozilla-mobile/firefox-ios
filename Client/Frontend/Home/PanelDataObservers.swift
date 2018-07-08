@@ -17,7 +17,7 @@ protocol DataObserver {
     func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
 }
 
-protocol DataObserverDelegate: class {
+protocol DataObserverDelegate: AnyObject {
     func didInvalidateDataSources(refresh forced: Bool, highlightsRefreshed: Bool, topSitesRefreshed: Bool)
     func willInvalidateDataSources(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
 }

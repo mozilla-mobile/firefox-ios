@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Storage
 
-protocol LoginTableViewCellDelegate: class {
+protocol LoginTableViewCellDelegate: AnyObject {
     func didSelectOpenAndFillForCell(_ cell: LoginTableViewCell)
     func shouldReturnAfterEditingDescription(_ cell: LoginTableViewCell) -> Bool
     func infoItemForCell(_ cell: LoginTableViewCell) -> InfoItem?

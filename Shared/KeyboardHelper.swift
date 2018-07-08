@@ -40,7 +40,7 @@ public struct KeyboardState {
     }
 }
 
-public protocol KeyboardHelperDelegate: class {
+public protocol KeyboardHelperDelegate: AnyObject {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState)
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState)
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState)

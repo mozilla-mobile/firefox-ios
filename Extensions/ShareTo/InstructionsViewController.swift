@@ -12,7 +12,7 @@ private struct InstructionsViewControllerUX {
     static let LinkColor = UIColor.Photon.Blue60
 }
 
-protocol InstructionsViewControllerDelegate: class {
+protocol InstructionsViewControllerDelegate: AnyObject {
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController)
 }
 
