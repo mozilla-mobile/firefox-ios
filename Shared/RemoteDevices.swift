@@ -14,9 +14,9 @@ open class RemoteDevice {
     public let type: String?
     public let isCurrentDevice: Bool
     public let lastAccessTime: Timestamp?
-    public let availableCommands: [String : JSON]?
+    public let availableCommands: JSON?
 
-    public init(id: String?, name: String, type: String?, isCurrentDevice: Bool, lastAccessTime: Timestamp?, availableCommands: [String : JSON]?) {
+    public init(id: String?, name: String, type: String?, isCurrentDevice: Bool, lastAccessTime: Timestamp?, availableCommands: JSON?) {
         self.id = id
         self.name = name
         self.type = type

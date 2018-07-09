@@ -391,13 +391,13 @@ open class FirefoxAccount {
         return d >>> succeed
     }
 
-    open func availableCommands() -> [String : JSON] {
+    open func availableCommands() -> JSON {
         guard let sendTabKey = commandsClient.sendTab.getEncryptedKey() else {
-            return [:]
+            return JSON()
         }
 
         let commands = [FxACommandSendTab.Name: sendTabKey]
-        return commands
+        return JSON(commands)
     }
 
     @discardableResult open func advance() -> Deferred<FxAState> {

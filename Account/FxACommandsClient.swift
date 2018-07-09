@@ -40,7 +40,7 @@ public class FxACommandsClient {
         self.sendTab = FxACommandSendTab(commandsClient: self, account: account)
     }
 
-    public func invoke(commandName: String, toDevice device: FxADevice, withPayload payload: String) -> Deferred<Maybe<FxASendMessageResponse>> {
+    public func invoke(commandName: String, toDevice device: RemoteDevice, withPayload payload: String) -> Deferred<Maybe<FxASendMessageResponse>> {
         guard let deviceID = device.id else {
             return deferMaybe(FxACommandsClientError())
         }
@@ -161,7 +161,7 @@ open class FxACommandSendTab {
         self.sendTabKeysCache = KeychainCache(branch: "account.sendTabKeys", label: account.stateCache.label, value: nil)
     }
 
-    public func send(to devices: [FxADevice], url: String, title: String) {
+    public func send(to devices: [RemoteDevice], url: String, title: String) {
         let json = JSON([
             "entries": [["title": title, "url": url]]
         ])
@@ -181,11 +181,19 @@ open class FxACommandSendTab {
         // TODO: gather stats here about success/failures
     }
 
-    public func isDeviceCompatible(_ device: FxADevice) -> Bool {
+    public func isDeviceCompatible(_ device: RemoteDevice) -> Bool {
         guard let marriedState = account.stateCache.value as? MarriedState,
-            let availableCommands = device.availableCommands,
-            let sendTabCommand = availableCommands[FxACommandSendTab.Name],
-            let theirKid = sendTabCommand["kid"].string else {
+            let availableCommands = device.availableCommands else {
+            return false
+        }
+
+        guard let sendTabCommandString = availableCommands[FxACommandSendTab.Name].string else {
+            return false
+        }
+
+        let sendTabCommand = JSON(parseJSON: sendTabCommandString)
+
+        guard let theirKid = sendTabCommand["kid"].string else {
             return false
         }
 
@@ -216,16 +224,19 @@ open class FxACommandSendTab {
     }
 
     // TODO: Check this
-    func encrypt(message: String, device: FxADevice) -> Deferred<Maybe<String>> {
+    func encrypt(message: String, device: RemoteDevice) -> Deferred<Maybe<String>> {
         return account.marriedState() >>== { marriedState in
-            guard let bundle = device.availableCommands?[FxACommandSendTab.Name] else {
+            guard let bundleString = device.availableCommands?[FxACommandSendTab.Name].string else {
                 return deferMaybe(FxACommandsClientError())
             }
 
+            let bundle = JSON(parseJSON: bundleString)
             let syncKeyBundle = KeyBundle.fromKSync(marriedState.kSync)
 
-            guard let cipherdata = bundle["ciphertext"].string?.base64urlSafeDecodedData,
-                let iv = bundle["IV"].string?.base64urlSafeDecodedData,
+            guard let cipherdataString = bundle["ciphertext"].string,
+                let ivString = bundle["IV"].string,
+                let cipherdata = Bytes.decodeBase64(cipherdataString),
+                let iv = Bytes.decodeBase64(ivString),
                 let decryptedKeyString = syncKeyBundle.decrypt(cipherdata, iv: iv) else {
                 return deferMaybe(FxACommandsClientError())
             }
@@ -257,13 +268,11 @@ open class FxACommandSendTab {
     }
 
     func generateAndPersistKeys() -> FxACommandSendTabKeys? {
-        guard let keys = try? PushCrypto.sharedInstance.generateKeys(),
-            let publicKey = keys.p256dhPublicKey.utf8EncodedData.base64urlSafeEncodedString,
-            let authSecret = keys.auth.utf8EncodedData.base64urlSafeEncodedString else {
-                return nil
+        guard let keys = try? PushCrypto.sharedInstance.generateKeys() else {
+            return nil
         }
 
-        let sendTabKeys = FxACommandSendTabKeys(publicKey: publicKey, privateKey: keys.p256dhPrivateKey, authSecret: authSecret)
+        let sendTabKeys = FxACommandSendTabKeys(publicKey: keys.p256dhPublicKey, privateKey: keys.p256dhPrivateKey, authSecret: keys.auth)
 
         // Save to Keychain.
         sendTabKeysCache.value = sendTabKeys
@@ -275,7 +284,7 @@ open class FxACommandSendTab {
         return sendTabKeys
     }
 
-    func getEncryptedKey() -> JSON? {
+    func getEncryptedKey() -> String? {
         guard let sendTabKeys = self.sendTabKeysCache.value ?? generateAndPersistKeys(),
             let marriedState = account.stateCache.value as? MarriedState else {
             return nil
@@ -294,12 +303,9 @@ open class FxACommandSendTab {
         }
 
         let hmac = keyBundle.hmac(ciphertext)
-
-        guard let ivString = iv.base64urlSafeEncodedString,
-            let hmacString = hmac.base64urlSafeEncodedString,
-            let ciphertextString = ciphertext.base64urlSafeEncodedString else {
-            return nil
-        }
+        let ivString = iv.base64EncodedString
+        let hmacString = hmac.hexEncodedString
+        let ciphertextString = ciphertext.base64EncodedString
 
         let encryptedKey = JSON([
             "kid": marriedState.kXCS,
@@ -308,6 +314,6 @@ open class FxACommandSendTab {
             "ciphertext": ciphertextString
         ])
 
-        return encryptedKey
+        return encryptedKey.rawString(options: [])?.replacingOccurrences(of: "\\/", with: "/")
     }
 }

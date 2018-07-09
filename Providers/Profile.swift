@@ -473,9 +473,9 @@ open class BrowserProfile: Profile {
         let result = Success()
 
         all(deferredRemoteDevices).upon { maybeRemoteDevices in
-            var newRemoteDevices: [FxADevice] = []
+            var newRemoteDevices: [RemoteDevice] = []
             var oldRemoteClients: [RemoteClient] = []
-            let remoteDevices = maybeRemoteDevices.compactMap({ $0.successValue as? FxADevice })
+            let remoteDevices = maybeRemoteDevices.compactMap({ $0.successValue as? RemoteDevice })
 
             for remoteDevice in remoteDevices {
                 if account.commandsClient.sendTab.isDeviceCompatible(remoteDevice) {

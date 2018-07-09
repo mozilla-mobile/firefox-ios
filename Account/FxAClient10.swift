@@ -462,7 +462,7 @@ open class FxAClient10 {
     open func invokeCommand(name: String, targetDeviceID: GUID, payload: String, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxASendMessageResponse>> {
         let URL = self.authURL.appendingPathComponent("/account/devices/invoke_command")
         var mutableURLRequest = URLRequest(url: URL)
-        let httpBody: JSON = JSON(["command": name, "target": targetDeviceID, "payload": payload])
+        let httpBody: JSON = JSON(["command": name, "target": targetDeviceID, "payload": ["encrypted": payload]])
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = httpBody.stringValue()?.utf8EncodedData
@@ -481,7 +481,7 @@ open class FxAClient10 {
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.httpBody = device.toJSON().stringValue()?.utf8EncodedData
+        mutableURLRequest.httpBody = device.toJSON().rawString(options: [])?.utf8EncodedData
 
         // TODO: Check that `availableCommands` is present in `httpBody`
 

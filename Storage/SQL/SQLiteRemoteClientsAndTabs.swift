@@ -30,7 +30,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     class func remoteDeviceFactory(_ row: SDRow) -> RemoteDevice {
-        let availableCommands = JSON(parseJSON: (row["availableCommands"] as? String) ?? "{}").dictionaryObject as? [String : JSON] ?? [:]
+        let availableCommands = JSON(parseJSON: (row["availableCommands"] as? String) ?? "{}")
         return RemoteDevice(
             id: row["guid"] as? String,
             name: row["name"] as! String,
@@ -368,7 +368,7 @@ extension SQLiteRemoteClientsAndTabs: RemoteDevices {
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     """
 
-                let availableCommands = JSON(device.availableCommands).stringValue
+                let availableCommands = device.availableCommands?.rawString() ?? "{}"
                 let args: Args = [device.id, device.name, device.type, device.isCurrentDevice, now, now, device.lastAccessTime, availableCommands]
                 try conn.executeChange(sql, withArgs: args)
             }
