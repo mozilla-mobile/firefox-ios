@@ -13,9 +13,7 @@ class ThemeManager {
     var current: Theme = themeFrom(name: UserDefaults.standard.string(forKey: prefKeyThemeName)) {
         didSet {
             UserDefaults.standard.set(current.name, forKey: prefKeyThemeName)
-            let appDelegate = UIApplication.shared.delegate as? AppDelegate
-            appDelegate?.browserViewController.applyTheme()
-            appDelegate?.browserViewController.setNeedsStatusBarAppearanceUpdate()
+            NotificationCenter.default.post(name: .DisplayThemeChanged, object: nil)
         }
     }
 
