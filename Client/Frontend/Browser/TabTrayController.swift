@@ -358,7 +358,7 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
             return a.section < b.section || (a.section == b.section && a.row < b.row)
         }
 
-        if indexPaths.count == 0 {
+        guard !indexPaths.isEmpty else {
             return NSLocalizedString("No tabs", comment: "Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray")
         }
 
