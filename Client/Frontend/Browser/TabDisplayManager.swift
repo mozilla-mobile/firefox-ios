@@ -6,20 +6,38 @@ import Foundation
 import Shared
 import Storage
 
+@objc protocol TabSelectionDelegate: class {
+    func didSelectTabAtIndex(_ index: Int)
+}
+
+protocol TopTabCellDelegate: class {
+    func tabCellDidClose(_ cell: UICollectionViewCell)
+}
+
+
+protocol TabDisplayer: class {
+    typealias TabCellIdentifer = String
+    var tabCellIdentifer: TabCellIdentifer { get set }
+
+    func focusSelectedTab()
+    func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell
+}
+
 class TabDisplayManager: NSObject {
 
-    let tabManager: TabManager
+    fileprivate let tabManager: TabManager
     var isPrivate = false
     fileprivate var isDragging = false
+    fileprivate let collectionView: UICollectionView
+    typealias CompletionBlock = () -> Void
 
-    let collectionView: UICollectionView
-    let focusSelectedTab: () -> Void
     private var tabObservers: TabObservers!
+    fileprivate weak var tabDisplayer: TabDisplayer?
 
-    // Handle animations.
     var tabStore: [Tab] = [] //the actual datastore
     fileprivate var pendingUpdatesToTabs: [Tab] = [] //the datastore we are transitioning to
     fileprivate var needReloads: [Tab?] = [] // Tabs that need to be reloaded
+    fileprivate var completionBlocks: [CompletionBlock] = [] //blocks are performed once animations finish
     fileprivate var isUpdating = false
     var pendingReloadData = false
     fileprivate var oldTabs: [Tab]? // The last state of the tabs before an animation
@@ -29,7 +47,7 @@ class TabDisplayManager: NSObject {
         return self.tabStore.count
     }
 
-    var tabsToDisplay: [Tab] {
+    private var tabsToDisplay: [Tab] {
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
 
@@ -38,18 +56,22 @@ class TabDisplayManager: NSObject {
         return self.tabManager.isRestoring || self.collectionView.frame == CGRect.zero
     }
 
-    init(collectionView: UICollectionView, tabManager: TabManager, selectTab: @escaping () -> Void) {
+    init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer) {
         self.collectionView = collectionView
+        self.tabDisplayer = tabDisplayer
         self.tabManager = tabManager
-        focusSelectedTab = selectTab
+        self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
         super.init()
+
         tabManager.addDelegate(self)
         self.tabObservers = registerFor(.didLoadFavicon, .didChangeURL, queue: .main)
         self.tabStore = self.tabsToDisplay
     }
 
-    deinit {
+    // Once we are done with TabManager we need to call removeObservers to avoid a retain cycle with the observers
+    func removeObservers() {
         unregister(tabObservers)
+        tabObservers = nil
     }
 
     func togglePBM() {
@@ -83,13 +105,16 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let tabCell = collectionView.dequeueReusableCell(withReuseIdentifier: TopTabCell.Identifier, for: indexPath) as! TopTabCell
-        tabCell.delegate = self
-        let tab = tabStore[indexPath.item]
-        let isSelected = (tab == tabManager.selectedTab)
-        tabCell.configureWith(tab: tab, isSelected: isSelected)
-
-        return tabCell
+        let tab = tabStore[indexPath.row]
+        guard let identifer = tabDisplayer?.tabCellIdentifer else {
+            return UICollectionViewCell()
+        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifer, for: indexPath)
+        if let tabCell = tabDisplayer?.cellFactory(for: cell, using: tab) {
+            return tabCell
+        } else {
+            return UICollectionViewCell()
+        }
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -132,23 +157,6 @@ extension TabDisplayManager: UIDropInteractionDelegate {
             }
 
             self.tabManager.addTab(URLRequest(url: url), isPrivate: self.isPrivate)
-        }
-    }
-}
-
-protocol TopTabCellDelegate: class {
-    func tabCellDidClose(_ cell: TopTabCell)
-}
-
-extension TabDisplayManager: TopTabCellDelegate {
-    func tabCellDidClose(_ cell: TopTabCell) {
-        // Trying to remove tabs while animating can lead to crashes as indexes change. If updates are happening don't allow tabs to be removed.
-        guard let index = collectionView.indexPath(for: cell)?.item else {
-            return
-        }
-        let tab = tabStore[index]
-        if tabsToDisplay.index(of: tab) != nil {
-            tabManager.removeTab(tab)
         }
     }
 }
@@ -360,8 +368,10 @@ extension TabDisplayManager {
         self.pendingUpdatesToTabs = newTabs // This var helps other mutations that might happen while updating.
 
         let onComplete: () -> Void = {
+            completion?()
             self.isUpdating = false
             self.pendingUpdatesToTabs = []
+            // run completion blocks
             // Sometimes there might be a pending reload. Lets do that.
             if self.pendingReloadData {
                 return self.reloadData()
@@ -371,7 +381,7 @@ extension TabDisplayManager {
             let tabs = self.oldTabs ?? self.tabStore
             self.updateTabsFrom(tabs, to: self.tabsToDisplay, on: {
                 if !update.inserts.isEmpty || !update.reloads.isEmpty {
-                    self.focusSelectedTab()
+                    self.tabDisplayer?.focusSelectedTab()
                 }
             })
         }
@@ -396,8 +406,11 @@ extension TabDisplayManager {
         needReloads.removeAll()
     }
 
-    func reloadData() {
+    func reloadData(_ completionBlock: CompletionBlock? = nil) {
         assertIsMainThread("reloadData must only be called from main thread")
+        if let block = completionBlock {
+            completionBlocks.append(block)
+        }
 
         if self.isUpdating || self.collectionView.frame == CGRect.zero {
             self.pendingReloadData = true
@@ -412,7 +425,7 @@ extension TabDisplayManager {
             self.collectionView.reloadData()
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.collectionView.layoutIfNeeded()
-            self.focusSelectedTab()
+            self.tabDisplayer?.focusSelectedTab()
         }, completion: { (_) in
             self.isUpdating = false
             self.pendingReloadData = false
@@ -432,7 +445,10 @@ extension TabDisplayManager: TabManagerDelegate {
         return false
     }
 
-    func performTabUpdates() {
+    func performTabUpdates(_ completionBlock: CompletionBlock? = nil) {
+        if let block = completionBlock {
+            completionBlocks.append(block)
+        }
         guard !isUpdating, collectionView.window != nil else {
             return
         }
@@ -442,7 +458,12 @@ extension TabDisplayManager: TabManagerDelegate {
         if self.pendingReloadData && !isUpdating {
             self.reloadData()
         } else {
-            self.updateTabsFrom(self.oldTabs, to: self.tabsToDisplay)
+            self.updateTabsFrom(self.oldTabs, to: self.tabsToDisplay) {
+                for block in self.completionBlocks {
+                    block()
+                }
+                self.completionBlocks.removeAll()
+            }
         }
     }
 
