@@ -14,6 +14,11 @@ class ThemeSettingsController: ThemedTableViewController {
         static var spaceBetweenTableSections: CGFloat = 20
     }
 
+    enum Section: Int {
+        case automaticOnOff
+        case lightDarkPicker
+    }
+
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
 
@@ -72,7 +77,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         guard isAutoBrightnessOn else {
-            return section == 0 ? UX.spaceBetweenTableSections : 1
+            return section == Section.automaticOnOff.rawValue ? UX.spaceBetweenTableSections : 1
         }
         // When auto is on, make footer arbitrarily large enough to handle large block of text.
         return 120
@@ -111,7 +116,9 @@ class ThemeSettingsController: ThemedTableViewController {
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
         cell.selectionStyle = .none
 
-        if indexPath.section == 0 {
+        let section = Section(rawValue: indexPath.section) ?? .automaticOnOff
+        switch section {
+        case .automaticOnOff:
             if indexPath.row == 0 {
                 cell.textLabel?.text = Strings.DisplayThemeAutomaticSwitchTitle
                 cell.detailTextLabel?.text = Strings.DisplayThemeAutomaticSwitchSubtitle
@@ -133,7 +140,8 @@ class ThemeSettingsController: ThemedTableViewController {
                 deviceBrightnessIndicator.thumbTintColor = deviceBrightnessIndicatorColor
                 self.slider = (slider, deviceBrightnessIndicator)
             }
-        } else {
+
+        case .lightDarkPicker:
             if indexPath.row == 0 {
                 cell.textLabel?.text = Strings.DisplayThemeOptionLight
             } else {
@@ -158,11 +166,11 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isAutoBrightnessOn ? 2 : (section == 0 ? 1 : 2)
+        return isAutoBrightnessOn ? 2 : (section == Section.automaticOnOff.rawValue ? 1 : 2)
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? UX.rowHeight : super.tableView(tableView, heightForRowAt: indexPath)
+        return indexPath.section == Section.automaticOnOff.rawValue ? UX.rowHeight : super.tableView(tableView, heightForRowAt: indexPath)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
