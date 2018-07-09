@@ -4,7 +4,12 @@
 
 
 import XCTest
+
+#if FOCUS
 @testable import Firefox_Focus
+#else
+@testable import Firefox_Klar
+#endif
 
 class BrowserViewControllerTests: XCTestCase {
     private let mockUserDefaults = MockUserDefaults()
