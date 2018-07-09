@@ -321,6 +321,7 @@ class TabTrayController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        collectionView.reloadData()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
