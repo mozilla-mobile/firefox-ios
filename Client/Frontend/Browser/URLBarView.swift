@@ -641,6 +641,12 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField) {
         leaveOverlayMode(didCancel: true)
     }
+
+    func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField) {
+        if let pasteboardContents = UIPasteboard.general.string {
+            self.delegate?.urlBar(self, didSubmitText: pasteboardContents)
+        }
+    }
 }
 
 // MARK: UIAppearance

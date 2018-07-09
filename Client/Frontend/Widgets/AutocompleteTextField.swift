@@ -15,6 +15,7 @@ protocol AutocompleteTextFieldDelegate: class {
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField)
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField)
+    func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField)
 }
 
 private struct AutocompleteTextFieldUX {
@@ -23,7 +24,6 @@ private struct AutocompleteTextFieldUX {
 
 class AutocompleteTextField: UITextField, UITextFieldDelegate {
     var autocompleteDelegate: AutocompleteTextFieldDelegate?
-
     // AutocompleteTextLabel repersents the actual autocomplete text.
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
     // This makes sure that the autocomplete doesnt mess with keyboard suggestions provided by third party keyboards.
@@ -290,6 +290,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         applyCompletion()
         super.touchesBegan(touches, with: event)
+    }
+
+}
+
+extension AutocompleteTextField: MenuHelperInterface {
+
+    @objc func menuHelperPasteAndGo() {
+        autocompleteDelegate?.autocompletePasteAndGo(self)
     }
 
 }
