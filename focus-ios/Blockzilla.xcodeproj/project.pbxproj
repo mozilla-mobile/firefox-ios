@@ -2619,8 +2619,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.ShareExtension;
 				PRODUCT_NAME = ShareExtension;
-				PROVISIONING_PROFILE = "8e299321-8c8c-4811-bafe-ac535f64344c";
-				PROVISIONING_PROFILE_SPECIFIER = "Focus Share Profile";
+				PROVISIONING_PROFILE = "2c2c3eef-8a98-49d6-a31f-754ddff5867b";
+				PROVISIONING_PROFILE_SPECIFIER = "Focus Share";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
