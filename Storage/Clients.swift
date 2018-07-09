@@ -14,7 +14,7 @@ public struct RemoteClient: Equatable {
     public let os: String?
     public let version: String?
     public let fxaDeviceId: String?
-    
+
     let protocols: [String]?
 
     let appPackage: String?

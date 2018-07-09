@@ -76,7 +76,7 @@ class TabCell: UICollectionViewCell {
         self.closeButton.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
 
         super.init(frame: frame)
-        
+
         self.animator = SwipeAnimator(animatingView: self)
         self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
@@ -612,7 +612,7 @@ extension TabTrayController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
     }
-    
+
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         guard privateMode else {
             return
@@ -1097,7 +1097,7 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
         var buttonToCenter: UIButton?
         addSubview(deleteButton)
         buttonToCenter = deleteButton
-        
+
         maskButton.accessibilityIdentifier = "TabTrayController.maskButton"
 
         buttonToCenter?.snp.makeConstraints { make in

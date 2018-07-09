@@ -35,7 +35,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     // This variable is a solution to get the right behavior for refocusing
-    // the AutocompleteTextField. The initial transition into Overlay Mode 
+    // the AutocompleteTextField. The initial transition into Overlay Mode
     // doesn't involve the user interacting with AutocompleteTextField.
     // Thus, we update shouldApplyCompletion in touchesBegin() to reflect whether
     // the highlight is active and then the text field is updated accordingly
@@ -98,32 +98,32 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-left-arrow"])
             if isSelectionActive {
                 applyCompletion()
-                
+
                 // Set the current position to the beginning of the text.
                 selectedTextRange = textRange(from: beginningOfDocument, to: beginningOfDocument)
             } else if let range = selectedTextRange {
                 if range.start == beginningOfDocument {
                     break
                 }
-                
+
                 guard let cursorPosition = position(from: range.start, offset: -1) else {
                     break
                 }
-                
+
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
         case UIKeyInputRightArrow:
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-right-arrow"])
             if isSelectionActive {
                 applyCompletion()
-                
+
                 // Set the current position to the end of the text.
                 selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
             } else if let range = selectedTextRange {
                 if range.end == endOfDocument {
                     break
                 }
-                
+
                 guard let cursorPosition = position(from: range.end, offset: 1) else {
                     break
                 }
@@ -137,7 +137,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             break
         }
     }
-    
+
     func highlightAll() {
         let text = self.text
         self.text = ""

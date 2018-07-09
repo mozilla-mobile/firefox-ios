@@ -114,7 +114,7 @@ extension SyncTelemetryTests {
         let uploadStats = synchronizer.statsSession.uploadStats
         XCTAssertEqual(uploadStats.sent, 1)
         XCTAssertEqual(uploadStats.sentFailed, 1)
-        
+
         XCTAssertEqual(uploadStats.asDictionary()["failed"] as? Int, 1)
     }
 

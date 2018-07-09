@@ -10,15 +10,15 @@ import Account
 
 class AdvanceAccountSettingViewController: SettingsTableViewController {
     fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-    
+
     fileprivate var customSyncUrl: String?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = Strings.SettingsAdvanceAccountSectionName
         self.customSyncUrl = self.profile.prefs.stringForKey(PrefsKeys.KeyCustomSyncWeb)
     }
-    
+
     func clearCustomAccountPrefs() {
         self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomSyncService)
         self.profile.prefs.setString("", forKey: PrefsKeys.KeyCustomSyncToken)
@@ -26,7 +26,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
         self.profile.prefs.setString("", forKey: PrefsKeys.KeyCustomSyncOauth)
         self.profile.prefs.setString("", forKey: PrefsKeys.KeyCustomSyncAuth)
         self.profile.prefs.setString("", forKey: PrefsKeys.KeyCustomSyncWeb)
-        
+
         // To help prevent the account being in a strange state, we force it to
         // log out when user clears their custom server preferences.
         self.profile.removeAccount()
@@ -50,7 +50,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
         self.profile.removeAccount()
         self.displaySuccessAlert()
     }
-    
+
     func setCustomAccountPrefs() {
         guard let urlString = self.customSyncUrl, let url = URL(string: urlString) else {
             // If the user attempts to set a nil url, clear all the custom service perferences
@@ -58,14 +58,14 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
             self.displayNoServiceSetAlert()
             return
         }
-        
+
         // FxA stores its server configuation under a well-known path. This attempts to download the configuration
         // and save it into the users preferences.
         let syncConfigureString = urlString + "/.well-known/fxa-client-configuration"
         guard let syncConfigureURL = URL(string: syncConfigureString) else {
             return
         }
-        
+
         URLSession.shared.dataTask(with: syncConfigureURL, completionHandler: {(data, response, error) in
             guard let data = data, error == nil else {
                 // Something went wrong while downloading or parsing the configuration.
@@ -75,14 +75,14 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
             self.setCustomAccountPrefs(data, url: url)
         }).resume()
     }
-    
+
     func displaySuccessAlert() {
         let alertController = UIAlertController(title: "", message: Strings.SettingsAdvanceAccountUrlUpdatedAlertMessage, preferredStyle: .alert)
         let defaultAction = UIAlertAction(title: Strings.SettingsAdvanceAccountUrlUpdatedAlertOk, style: .default, handler: nil)
         alertController.addAction(defaultAction)
         self.present(alertController, animated: true)
     }
-    
+
     func displayErrorAlert() {
         self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomSyncService)
         DispatchQueue.main.async {
@@ -93,7 +93,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
         alertController.addAction(defaultAction)
         self.present(alertController, animated: true)
     }
-    
+
     func displayNoServiceSetAlert() {
         self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomSyncService)
         DispatchQueue.main.async {
@@ -118,7 +118,7 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
                                                                 return
                                                             }
         })
-        
+
         var basicSettings: [Setting] = []
         basicSettings += [
             CustomSyncEnableSetting(
@@ -128,11 +128,11 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
                         // Reload the table data to ensure that the updated custom url is set
                         self.tableView?.reloadData()
                         self.setCustomAccountPrefs()
-                    } 
+                    }
             }),
             customSyncSetting
         ]
-        
+
         let settings: [SettingSection] = [
             SettingSection(title: NSAttributedString(string: ""), children: basicSettings),
             SettingSection(title: NSAttributedString(string: Strings.SettingsAdvanceAccountSectionFooter), children: [])
@@ -140,12 +140,12 @@ class AdvanceAccountSettingViewController: SettingsTableViewController {
 
         return settings
     }
-    
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
         let sectionSetting = settings[section]
         headerView.titleLabel.text = sectionSetting.title?.string
-        
+
         switch section {
         // Hide the bottom border for the FxA custom server notes.
         case 1:

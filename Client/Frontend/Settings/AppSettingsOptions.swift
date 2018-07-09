@@ -44,7 +44,7 @@ class ConnectSetting: WithoutAccountSetting {
         viewController.url = settings.profile.accountConfiguration.signInURL
         navigationController?.pushViewController(viewController, animated: true)
     }
-    
+
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
         cell.imageView?.image = UIImage.templateImageNamed("FxA-Default")
@@ -59,15 +59,15 @@ class SyncNowSetting: WithAccountSetting {
     let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
     let syncIcon = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
-    
+
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
     let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
-    
+
     override init(settings: SettingsTableViewController) {
         super.init(settings: settings)
         NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidFinishSyncing, object: nil)
     }
-    
+
     fileprivate lazy var timestampFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -84,7 +84,7 @@ class SyncNowSetting: WithAccountSetting {
                 ]
             )
         }
-        
+
         return NSAttributedString(
             string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
             attributes: [
@@ -101,7 +101,7 @@ class SyncNowSetting: WithAccountSetting {
             self.imageView.layer.add(self.continuousRotateAnimation, forKey: "rotateKey")
         }
     }
-    
+
     @objc func stopRotateSyncIcon() {
         DispatchQueue.main.async {
             self.imageView.layer.removeAllAnimations()
@@ -111,12 +111,12 @@ class SyncNowSetting: WithAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType { return .none }
 
     override var style: UITableViewCellStyle { return .value1 }
-    
+
     override var image: UIImage? {
         guard let syncStatus = profile.syncManager.syncDisplayState else {
             return syncIcon
         }
-        
+
         switch syncStatus {
         case .inProgress:
             return syncBlueIcon
@@ -228,7 +228,7 @@ class SyncNowSetting: WithAccountSetting {
         }
         cell.accessoryType = accessoryType
         cell.isUserInteractionEnabled = !profile.syncManager.isSyncing && DeviceInfo.hasConnectivity()
-        
+
         // Animation that loops continously until stopped
         continuousRotateAnimation.fromValue = 0.0
         continuousRotateAnimation.toValue = CGFloat(Double.pi)
@@ -292,16 +292,16 @@ class AccountStatusSetting: WithAccountSetting {
             self.settings.tableView.reloadData()
         }
     }
-    
+
     override var image: UIImage? {
         if let image = profile.getAccount()?.fxaProfile?.avatar.image {
             return image.createScaled(CGSize(width: 30, height: 30))
         }
-        
+
         let image = UIImage(named: "placeholder-avatar")
         return image?.createScaled(CGSize(width: 30, height: 30))
     }
-    
+
     override var accessoryType: UITableViewCellAccessoryType {
         if let account = profile.getAccount() {
             switch account.actionNeeded {
@@ -324,15 +324,15 @@ class AccountStatusSetting: WithAccountSetting {
 
     override var title: NSAttributedString? {
         if let account = profile.getAccount() {
-            
+
             if let displayName = account.fxaProfile?.displayName {
                 return NSAttributedString(string: displayName, attributes: [NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.syncText])
             }
-            
+
             if let email = account.fxaProfile?.email {
                 return NSAttributedString(string: email, attributes: [NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.syncText])
             }
-            
+
             return NSAttributedString(string: account.email, attributes: [NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.syncText])
         }
         return nil
@@ -341,7 +341,7 @@ class AccountStatusSetting: WithAccountSetting {
     override var status: NSAttributedString? {
         if let account = profile.getAccount() {
             var string: String
-            
+
             switch account.actionNeeded {
             case .none:
                 return nil
@@ -355,7 +355,7 @@ class AccountStatusSetting: WithAccountSetting {
                 string = Strings.FxAAccountUpgradeFirefox
                 break
             }
-            
+
             let orange = UIColor.theme.tableView.warningText
             let range = NSRange(location: 0, length: string.count)
             let attrs = [NSAttributedStringKey.foregroundColor: orange]
@@ -937,7 +937,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
         // FxA server or FxA stage servers.
         let isOn = prefs.boolForKey(prefKey) ?? false
         let isCustomSync = prefs.boolForKey(PrefsKeys.KeyUseCustomSyncService) ?? false
-        
+
         var configurationURL = ProductionFirefoxAccountConfiguration().authEndpointURL
         if isCustomSync {
             configurationURL = CustomFirefoxAccountConfiguration(prefs: profile.prefs).authEndpointURL
@@ -1028,26 +1028,26 @@ class OpenWithSetting: Setting {
 
 class AdvanceAccountSetting: HiddenSetting {
     let profile: Profile
-    
+
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
-    
+
     override var accessibilityIdentifier: String? { return "AdvanceAccount.Setting" }
-    
+
     override var title: NSAttributedString? {
         return NSAttributedString(string: Strings.SettingsAdvanceAccountTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText])
     }
-    
+
     override init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         super.init(settings: settings)
     }
-    
+
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = AdvanceAccountSettingViewController()        
+        let viewController = AdvanceAccountSettingViewController()
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
-    
+
     override var hidden: Bool {
         return !ShowDebugSettings || profile.hasAccount()
     }

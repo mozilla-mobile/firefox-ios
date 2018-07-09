@@ -73,7 +73,7 @@ class OpenWithSettingsViewController: UITableViewController {
                 }
             })
         }
-        
+
         if !previousChoiceAvailable {
             self.prefs.setString(mailProviderSource[0].scheme, forKey: PrefsKeys.KeyMailToOption)
         }

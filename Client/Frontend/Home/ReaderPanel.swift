@@ -406,7 +406,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
             UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .readingListItem)
         }
     }
-    
+
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
             UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)

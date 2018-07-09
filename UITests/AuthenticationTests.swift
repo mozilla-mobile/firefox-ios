@@ -14,7 +14,7 @@ class AuthenticationTests: KIFTestCase {
         BrowserUtils.configEarlGrey()
 		BrowserUtils.dismissFirstRunUI()
 	}
-	
+
     override func tearDown() {
 		BrowserUtils.resetToAboutHome()
 		BrowserUtils.clearPrivateData()
@@ -31,7 +31,7 @@ class AuthenticationTests: KIFTestCase {
         enterCredentials(usernameValue: "Username", passwordValue: "Password", username: "foo", password: "bar")
         enterCredentials(usernameValue: "foo", passwordValue: "•••", username: "foo2", password: "bar2")
         enterCredentials(usernameValue: "foo2", passwordValue: "••••", username: "foo3", password: "bar3")
-        
+
         // Use KIFTest framework for checking elements within webView
         tester().waitForWebViewElementWithAccessibilityLabel("auth fail")
 
@@ -43,7 +43,7 @@ class AuthenticationTests: KIFTestCase {
 
         // Save the credentials.
         tester().tapView(withAccessibilityIdentifier: "SaveLoginPrompt.saveLoginButton")
-        
+
         logOut()
         loadAuthPage()
 
@@ -96,7 +96,7 @@ class AuthenticationTests: KIFTestCase {
 			let success = errorOrNil == nil
 			return success
 		}).wait(withTimeout: 20)
-		
+
 		GREYAssertTrue(dialogAppeared, reason: "Failed to display login dialog")
 
         EarlGrey.selectElement(with: grey_accessibilityLabel("Cancel"))
@@ -105,7 +105,7 @@ class AuthenticationTests: KIFTestCase {
     }
 
     fileprivate func enterCredentials(usernameValue: String, passwordValue: String, username: String, password: String) {
-		
+
         // In case of IPad, Earl Grey complains that UI Loop has not been finished for password field, reverting.
         let usernameField = tester().waitForViewWithAccessibilityValue(usernameValue) as! UITextField
         let passwordField = tester().waitForViewWithAccessibilityValue(passwordValue) as! UITextField

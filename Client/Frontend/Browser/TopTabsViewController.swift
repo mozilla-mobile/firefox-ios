@@ -45,7 +45,7 @@ class TopTabsViewController: UIViewController {
         collectionView.semanticContentAttribute = .forceLeftToRight
         return collectionView
     }()
-    
+
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
         tabsButton.semanticContentAttribute = .forceLeftToRight
@@ -53,7 +53,7 @@ class TopTabsViewController: UIViewController {
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
-    
+
     fileprivate lazy var newTab: UIButton = {
         let newTab = UIButton.newTabButton()
         newTab.semanticContentAttribute = .forceLeftToRight
@@ -61,7 +61,7 @@ class TopTabsViewController: UIViewController {
         newTab.accessibilityIdentifier = "TopTabsViewController.newTabButton"
         return newTab
     }()
-    
+
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.semanticContentAttribute = .forceLeftToRight
@@ -69,7 +69,7 @@ class TopTabsViewController: UIViewController {
         privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
         return privateModeButton
     }()
-    
+
     fileprivate lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
         let delegate = TopTabsLayoutDelegate()
         delegate.tabSelectionDelegate = tabDisplayManager
@@ -89,7 +89,7 @@ class TopTabsViewController: UIViewController {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -153,7 +153,7 @@ class TopTabsViewController: UIViewController {
 
         updateTabCount(tabDisplayManager.tabCount, animated: false)
     }
-    
+
     func switchForegroundStatus(isInForeground reveal: Bool) {
         // Called when the app leaves the foreground to make sure no information is inadvertently revealed
         if let cells = self.collectionView.visibleCells as? [TopTabCell] {
@@ -164,15 +164,15 @@ class TopTabsViewController: UIViewController {
             }
         }
     }
-    
+
     func updateTabCount(_ count: Int, animated: Bool = true) {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
-    
+
     @objc func tabsTrayTapped() {
         delegate?.topTabsDidPressTabs()
     }
-    
+
     @objc func newTabTapped() {
         if tabDisplayManager.pendingReloadData {
             return
@@ -190,7 +190,7 @@ class TopTabsViewController: UIViewController {
         }
         self.privateModeButton.setSelected(tabDisplayManager.isPrivate, animated: true)
     }
-    
+
     func scrollToCurrentTab(_ animated: Bool = true, centerCell: Bool = false) {
         assertIsMainThread("Only animate on the main thread")
 
@@ -204,7 +204,7 @@ class TopTabsViewController: UIViewController {
                 // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
                 let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
                 if animated {
-                    UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: { 
+                    UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
                         self.collectionView.scrollRectToVisible(padFrame, animated: true)
                     })
                 } else {

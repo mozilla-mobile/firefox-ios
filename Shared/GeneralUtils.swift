@@ -20,7 +20,7 @@ open class PerformanceTimer {
     var endTime: CFAbsoluteTime?
     let threshold: Double
     let label: String
-    
+
     public init(thresholdSeconds: Double = 0.001, label: String = "") {
         self.threshold = thresholdSeconds
         self.label = label

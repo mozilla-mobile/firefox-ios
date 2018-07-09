@@ -109,7 +109,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         self.collectionView?.register(ASFooterView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer")
         collectionView?.backgroundColor = UIColor.theme.browser.background
         collectionView?.keyboardDismissMode = .onDrag
-        
+
         self.profile.panelDataObservers.activityStream.delegate = self
     }
 
@@ -456,7 +456,7 @@ extension ActivityStreamPanel {
         simpleHighlightCell.configureWithSite(site)
         return simpleHighlightCell
     }
-    
+
     func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let pocketStory = pocketStories[indexPath.row]
         let pocketItemCell = cell as! ActivityStreamHighlightCell
@@ -787,7 +787,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         let pingSource: ASPingSource
         let index: Int
         var sourceView: UIView?
-        
+
         switch Section(indexPath.section) {
         case .topSites:
             pingSource = .TopSites
@@ -820,7 +820,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
-        
+
         let bookmarkAction: PhotonActionSheetItem
         if site.bookmarked ?? false {
             bookmarkAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
@@ -1096,7 +1096,7 @@ class ASHeaderView: UICollectionReusableView {
         leftConstraint?.update(offset: titleInsets)
         rightConstraint?.update(offset: -titleInsets)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

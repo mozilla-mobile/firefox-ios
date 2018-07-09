@@ -63,7 +63,7 @@ open class LiveAccountTest: XCTestCase {
     func withVerifiedAccount(_ completion: (Data, Data) -> Void) {
         withExistingAccount(true, completion: completion)
     }
-    
+
     // Helper function that waits for expectations to clear
     func withVerifiedAccountNoExpectations(_ completion: (Data, Data) -> Void) {
         withExistingAccount(true, completion: completion)

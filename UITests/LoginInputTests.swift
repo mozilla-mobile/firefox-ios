@@ -9,7 +9,7 @@ import EarlGrey
 class LoginInputTests: KIFTestCase {
     fileprivate var webRoot: String!
     fileprivate var profile: Profile!
-    
+
     override func setUp() {
         super.setUp()
         profile = (UIApplication.shared.delegate as! AppDelegate).profile!
@@ -17,28 +17,28 @@ class LoginInputTests: KIFTestCase {
         BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
-    
+
     override func tearDown() {
         _ = profile.logins.removeAll().value
         BrowserUtils.resetToAboutHome()
         BrowserUtils.clearPrivateData()
         super.tearDown()
     }
-    
+
     func enterUrl(url: String) {
         EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
         EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
     }
-    
+
     func waitForLoginDialog(text: String, appears: Bool = true) {
         var success = false
         var failedReason = "Failed to display dialog"
-        
+
         if appears == false {
             failedReason = "Dialog still displayed"
         }
-        
+
         let saveLoginDialog = GREYCondition(name: "Check login dialog appears", block: {
             var errorOrNil: NSError?
             let matcher = grey_allOf([grey_accessibilityLabel(text),
@@ -52,29 +52,29 @@ class LoginInputTests: KIFTestCase {
             }
             return success
         }).wait(withTimeout: 10)
-        
+
         GREYAssertTrue(saveLoginDialog, reason: failedReason)
     }
-    
+
     func testLoginFormDisplaysNewSnackbar() {
         let url = "\(webRoot!)/loginForm.html"
         let username = "test@user.com"
-        
+
         enterUrl(url: url)
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText("password", intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
-        
+
         waitForLoginDialog(text: "Save login \(username) for \(self.webRoot!)?")
         EarlGrey.selectElement(with: grey_accessibilityID("SaveLoginPrompt.dontSaveButton")).perform(grey_tap())
     }
-    
+
     func testLoginFormDisplaysUpdateSnackbarIfPreviouslySaved() {
         let url = "\(webRoot!)/loginForm.html"
         let username = "test@user.com"
         let password1 = "password1"
         let password2 = "password2"
-        
+
         enterUrl(url: url)
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText(password1, intoWebViewInputWithName: "password")
@@ -82,7 +82,7 @@ class LoginInputTests: KIFTestCase {
         waitForLoginDialog(text: "Save login \(username) for \(self.webRoot!)?")
         EarlGrey.selectElement(with: grey_accessibilityID("SaveLoginPrompt.saveLoginButton"))
             .perform(grey_tap())
-        
+
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText(password2, intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
@@ -90,25 +90,25 @@ class LoginInputTests: KIFTestCase {
         EarlGrey.selectElement(with: grey_accessibilityID("UpdateLoginPrompt.updateButton"))
             .perform(grey_tap())
     }
-    
+
     func testLoginFormDoesntOfferSaveWhenEmptyPassword() {
         let url = "\(webRoot!)/loginForm.html"
         let username = "test@user.com"
-        
+
         enterUrl(url: url)
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText("", intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
-        
+
         waitForLoginDialog(text: "Save login \(username) for \(self.webRoot!)?", appears: false)
     }
-    
+
     func testLoginFormDoesntOfferUpdateWhenEmptyPassword() {
         let url = "\(webRoot!)/loginForm.html"
         let username = "test@user.com"
         let password1 = "password1"
         let password2 = ""
-        
+
         enterUrl(url: url)
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText(password1, intoWebViewInputWithName: "password")
@@ -116,7 +116,7 @@ class LoginInputTests: KIFTestCase {
         waitForLoginDialog(text: "Save login \(username) for \(self.webRoot!)?")
         EarlGrey.selectElement(with: grey_accessibilityID("SaveLoginPrompt.saveLoginButton"))
             .perform(grey_tap())
-        
+
         tester().enterText(username, intoWebViewInputWithName: "username")
         tester().enterText(password2, intoWebViewInputWithName: "password")
         tester().tapWebViewElementWithAccessibilityLabel("submit_btn")
