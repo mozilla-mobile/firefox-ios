@@ -8,9 +8,6 @@ import Storage
 struct SiteTableViewControllerUX {
     static let HeaderHeight = CGFloat(32)
     static let RowHeight = CGFloat(44)
-    static let HeaderBorderColor = UIColor.Photon.Grey30.withAlphaComponent(0.8)
-    static let HeaderTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey80
-    static let HeaderBackgroundColor = UIColor.Photon.Grey10
     static let HeaderFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
     static let HeaderTextMargin = CGFloat(16)
 }
@@ -29,12 +26,12 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        contentView.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
+        topBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
+        bottomBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
+        contentView.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBackground
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
-        titleLabel.textColor = SiteTableViewControllerUX.HeaderTextColor
+        titleLabel.textColor = UIColor.theme.homePanel.siteTableHeaderText
 
         addSubview(topBorder)
         addSubview(bottomBorder)
@@ -142,11 +139,19 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
             cell.separatorInset = .zero
         }
+        cell.textLabel?.textColor = UIColor.theme.tableView.rowText
         return cell
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderIdentifier)
+    }
+
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let header = view as? UITableViewHeaderFooterView {
+            header.textLabel?.textColor = UIColor.theme.tableView.headerText
+            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

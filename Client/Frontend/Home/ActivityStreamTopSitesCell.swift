@@ -9,7 +9,6 @@ import Storage
 
 private struct TopSiteCellUX {
     static let TitleHeight: CGFloat = 20
-    static let TitleTextColor = UIColor.black
     static let TitleFont = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CellCornerRadius: CGFloat = 4
@@ -47,7 +46,7 @@ class TopSiteItemCell: UICollectionViewCell {
         titleLabel.layer.masksToBounds = true
         titleLabel.textAlignment = .center
         titleLabel.font = TopSiteCellUX.TitleFont
-        titleLabel.textColor = TopSiteCellUX.TitleTextColor
+        titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
         titleLabel.backgroundColor = UIColor.clear
         return titleLabel
     }()

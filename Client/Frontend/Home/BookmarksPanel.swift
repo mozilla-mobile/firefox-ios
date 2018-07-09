@@ -25,14 +25,10 @@ private struct BookmarksPanelUX {
     static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
     static let BookmarkFolderChevronSize: CGFloat = 20
     static let BookmarkFolderChevronLineWidth: CGFloat = 2.0
-    static let BookmarkFolderTextColor = UIColor.Photon.Grey50
-    static let BookmarkFolderBGColor = UIColor.Photon.Grey10.withAlphaComponent(0.3)
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 170
     static let SeparatorRowHeight: CGFloat = 0.5
     static let IconSize: CGFloat = 23
-    static let IconBorderColor = UIColor.Photon.Grey30
     static let IconBorderWidth: CGFloat = 0.5
 }
 
@@ -131,7 +127,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.Photon.White100
+        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
 
         let logoImageView = UIImageView(image: UIImage(named: "emptyBookmarks"))
         overlayView.addSubview(logoImageView)
@@ -150,7 +146,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         welcomeLabel.text = emptyBookmarksText
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        welcomeLabel.textColor = BookmarksPanelUX.WelcomeScreenItemTextColor
+        welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
 
@@ -231,7 +227,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             if let url = bookmark.favicon?.url.asURL, url.scheme == "asset" {
                 cell.imageView?.image = UIImage(named: url.host!)
             } else {
-                cell.imageView?.layer.borderColor = BookmarksPanelUX.IconBorderColor.cgColor
+                cell.imageView?.layer.borderColor = UIColor.theme.homePanel.bookmarkIconBorder.cgColor
                 cell.imageView?.layer.borderWidth = BookmarksPanelUX.IconBorderWidth
                 let bookmarkURL = URL(string: item.url)
                 cell.imageView?.setIcon(bookmark.favicon, forURL: bookmarkURL, completed: { (color, url) in
@@ -299,7 +295,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return SiteTableViewControllerUX.RowHeight
     }
 
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? BookmarkFolderTableViewHeader {
             // for some reason specifying the font in header view init is being ignored, so setting it here
             header.textLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
@@ -490,9 +486,9 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = BookmarksPanelUX.BookmarkFolderBGColor
+        self.backgroundColor = UIColor.theme.homePanel.bookmarkFolderBackground
         textLabel?.backgroundColor = UIColor.clear
-        textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
+        textLabel?.textColor = UIColor.theme.homePanel.bookmarkFolderText
 
         imageView?.image = UIImage(named: "bookmarkFolder")
         accessoryType = .disclosureIndicator
@@ -513,7 +509,7 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.theme.general.highlightBlue
+        label.textColor = UIColor.theme.homePanel.bookmarkCurrentFolderText
         return label
     }()
 
@@ -526,13 +522,13 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
 
     lazy var topBorder: UIView = {
         let view = UIView()
-        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        view.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
         return view
     }()
 
     lazy var bottomBorder: UIView = {
         let view = UIView()
-        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        view.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
         return view
     }()
 

@@ -7,15 +7,13 @@ import SnapKit
 import Shared
 
 private struct TabsButtonUX {
-    static let TitleColor: UIColor = UIColor.Photon.Grey80
-    static let TitleBackgroundColor: UIColor = UIColor.Photon.White100
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 3
 }
 
 class TabsButton: UIButton {
-    var privateModeBadge = UIImageView.init(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
+    var privateModeBadge = UIImageView(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
 
     let privateModeBadgeSize = CGFloat(16)
     let privateModeBadgeOffset = CGFloat(10)

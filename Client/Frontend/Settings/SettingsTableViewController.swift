@@ -15,8 +15,14 @@ extension UILabel {
     // iOS bug: NSAttributed string color is ignored without setting font/color to nil
     func assign(attributed: NSAttributedString?) {
         guard let attributed = attributed else { return }
-        textColor = nil
-        font = nil
+        let attribs = attributed.attributes(at: 0, effectiveRange: nil)
+        if attribs[NSAttributedStringKey.foregroundColor] == nil {
+            // If the text color attribute isn't set, use the table view row text color.
+            textColor = UIColor.theme.tableView.rowText
+        } else {
+            textColor = nil
+            font = nil
+        }
         attributedText = attributed
     }
 }
@@ -291,7 +297,12 @@ class StringSetting: Setting, UITextFieldDelegate {
         if let id = accessibilityIdentifier {
             textField.accessibilityIdentifier = id + "TextField"
         }
-        textField.placeholder = placeholder
+        if let placeholderColor = UIColor.theme.general.settingsTextPlaceholder {
+            textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedStringKey.foregroundColor: placeholderColor])
+        } else {
+            textField.placeholder = placeholder
+        }
+
         textField.textAlignment = .center
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)

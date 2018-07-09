@@ -8,7 +8,6 @@ import Storage
 
 private struct DownloadsPanelUX {
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 170
 }
 
@@ -299,7 +298,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.white
+        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
 
         let logoImageView = UIImageView(image: UIImage(named: "emptyDownloads"))
         overlayView.addSubview(logoImageView)
@@ -318,7 +317,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         welcomeLabel.text = Strings.DownloadsPanelEmptyStateTitle
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        welcomeLabel.textColor = DownloadsPanelUX.WelcomeScreenItemTextColor
+        welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
 
