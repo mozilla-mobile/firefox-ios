@@ -577,8 +577,6 @@ private protocol TabWebViewDelegate: class {
     func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String)
 }
 
-
-
 private class TabWebView: WKWebView, MenuHelperInterface {
     fileprivate weak var delegate: TabWebViewDelegate?
 
