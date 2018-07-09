@@ -206,6 +206,9 @@
                   Identifier = "AuthenticationTest/testPromptPassCodeUponReentry()">
                </Test>
                <Test
+                  Identifier = "BookmarkingTests/testBookmarksAwesomeBar()">
+               </Test>
+               <Test
                   Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
                </Test>
                <Test
