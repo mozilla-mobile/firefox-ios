@@ -28,13 +28,11 @@ protocol TopTabsDelegate: class {
     func topTabsDidChangeTab()
 }
 
-
 class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var tabDisplayManager: TabDisplayManager!
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.Identifier
-
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())

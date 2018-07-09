@@ -46,7 +46,6 @@ class TabTrayController: UIViewController {
     var tabDisplayManager: TabDisplayManager!
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.Identifier
 
-
     var otherBrowsingModeOffset = CGPoint.zero
 
     var collectionView: UICollectionView!
@@ -642,7 +641,6 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
     }
 }
 
-
 protocol TabCellDelegate: class {
     func tabCellDidClose(_ cell: TabCell)
 }
@@ -703,7 +701,7 @@ class TabCell: UICollectionViewCell {
         return button
     }()
 
-    var title = UIVisualEffectView()
+    var title = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
     var animator: SwipeAnimator!
 
     weak var delegate: TabCellDelegate?
