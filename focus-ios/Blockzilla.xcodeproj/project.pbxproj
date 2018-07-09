@@ -1481,7 +1481,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if echo $OTHER_SWIFT_FLAGS | grep -q -e \"-DFOCUS\"; then\n  echo \"Copying Focus-only Carthage frameworks\"\n  /usr/local/bin/carthage copy-frameworks\nelse\n  echo \"Skipping Build Phase for copying Focus-only Carthage frameworks\"\nfi\n";
+			shellScript = "if echo $SWIFT_ACTIVE_COMPILATION_CONDITIONS | grep -q -e \"FOCUS\"; then\n  echo \"Copying Focus-only Carthage frameworks\"\n  /usr/local/bin/carthage copy-frameworks\nelse\n  echo \"Skipping Build Phase for copying Focus-only Carthage frameworks\"\nfi\n";
 		};
 		D38D693F1C471AC7003EF211 /* Run Script (Carthage) */ = {
 			isa = PBXShellScriptBuildPhase;
