@@ -2563,8 +2563,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ShareExtension;
 				PRODUCT_NAME = ShareExtension;
-				PROVISIONING_PROFILE = "bbbf3651-0c25-4720-884b-f9253d8feccd";
-				PROVISIONING_PROFILE_SPECIFIER = "Klar Share Profile";
+				PROVISIONING_PROFILE = "19a73a45-cb96-420d-96d5-2b7b2954781e";
+				PROVISIONING_PROFILE_SPECIFIER = "Klar Share Extension Distribution";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -4061,7 +4061,7 @@
 				OTHER_SWIFT_FLAGS = "-DKLAR";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar;
 				PRODUCT_NAME = "Firefox Klar";
-				PROVISIONING_PROFILE = "2eae84bd-8fb1-4984-b330-8c4a90e69457";
+				PROVISIONING_PROFILE = "3d0198ab-c4fb-4dd9-8140-927873f44e85";
 				PROVISIONING_PROFILE_SPECIFIER = "Klar Distribution";
 				SWIFT_OBJC_BRIDGING_HEADER = "Blockzilla-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -4099,7 +4099,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Klar.ContentBlocker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "761240c5-5a7a-4f61-aefd-c3cf2e67a8dd";
+				PROVISIONING_PROFILE = "2255b2ac-3bcf-4a39-99f9-fd5ccf21c3c9";
 				PROVISIONING_PROFILE_SPECIFIER = "Klar ContentBlocker Distribution";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
