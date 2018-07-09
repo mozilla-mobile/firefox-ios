@@ -95,7 +95,7 @@ class LeanPlumClient {
     private weak var profile: Profile?
     private var prefs: Prefs? { return profile?.prefs }
     private var enabled: Bool = true
-    
+
     // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.
@@ -109,7 +109,7 @@ class LeanPlumClient {
         assert(Thread.isMainThread)
         return UIApplication.isInPrivateMode
     }
-    
+
     func isLPEnabled() -> Bool {
         return enabled && Leanplum.hasStarted()
     }
@@ -162,12 +162,12 @@ class LeanPlumClient {
             LPAttributeKey.signedInSync: profile?.hasAccount() ?? false,
             LPAttributeKey.fxaAccountVerified: profile?.hasSyncableAccount() ?? false
         ]
-        
+
         self.setupCustomTemplates()
-        
+
         Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
-            
+
             // We need to check if the app is a clean install to use for
             // preventing the What's New URL from appearing.
             if self.prefs?.intForKey(PrefsKeys.IntroSeen) == nil {
@@ -218,7 +218,7 @@ class LeanPlumClient {
         self.enabled = enabled
         Leanplum.setTestModeEnabled(!enabled)
     }
-    
+
     func isFxAPrePushEnabled() -> Bool {
        return AppConstants.MOZ_FXA_LEANPLUM_AB_PUSH_TEST && useFxAPrePush.boolValue()
     }
@@ -268,7 +268,7 @@ class LeanPlumClient {
         }
         return LPSettings(appId: appId, developmentKey: developmentKey, productionKey: productionKey)
     }
-    
+
     // This must be called before `Leanplum.start` in order to correctly setup
     // custom message templates.
     private func setupCustomTemplates() {
@@ -284,23 +284,23 @@ class LeanPlumClient {
             LPActionArg(named: LPMessage.ArgCancelButtonText, with: LPMessage.DefaultLaterButtonText),
             LPActionArg(named: LPMessage.ArgCancelButtonTextColor, with: UIColor.Photon.Grey50)
         ]
-        
+
         let responder: LeanplumActionBlock = { (context) -> Bool in
             // Before proceeding, double check that Leanplum FxA prepush config value has been enabled.
             if !self.isFxAPrePushEnabled() {
                 return false
             }
-            
+
             guard let context = context else {
                 return false
             }
-            
+
             // Don't display permission screen if they have already allowed/disabled push permissions
             if self.prefs?.boolForKey(AppRequestedUserNotificationsPrefKey) ?? false {
                 FxALoginHelper.sharedInstance.readyForSyncing()
                 return false
             }
-            
+
             // Present Alert View onto the current top view controller
             let rootViewController = UIApplication.topViewController()
             let alert = UIAlertController(title: context.stringNamed(LPMessage.ArgTitleText), message: context.stringNamed(LPMessage.ArgMessageText), preferredStyle: .alert)
@@ -317,11 +317,11 @@ class LeanPlumClient {
                 FxALoginHelper.sharedInstance.requestUserNotifications(UIApplication.shared)
                 self.prefs?.setBool(true, forKey: AppRequestedUserNotificationsPrefKey)
             }))
-            
+
             rootViewController?.present(alert, animated: true, completion: nil)
             return true
         }
-        
+
         // Register or update the custom Leanplum message
         Leanplum.defineAction(LPMessage.FxAPrePush, of: kLeanplumActionKindMessage, withArguments: args, withOptions: [:], withResponder: responder)
     }

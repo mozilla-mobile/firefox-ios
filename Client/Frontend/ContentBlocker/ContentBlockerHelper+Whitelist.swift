@@ -53,7 +53,7 @@ extension ContentBlockerHelper {
         whitelistedDomains.domainSet = Set<String>()
         updateWhitelist(completion: completion)
     }
-    
+
     private static func updateWhitelist(completion: (() -> Void)?) {
         removeAllRulesInStore {
             compileListsNotInStore {

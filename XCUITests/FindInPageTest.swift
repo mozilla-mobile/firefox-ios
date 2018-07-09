@@ -11,8 +11,8 @@ class FindInPageTests: BaseTestCase {
         navigator.goto(PageOptionsMenu)
         navigator.goto(FindInPage)
 
-        waitforExistence(app.buttons["FindInPage.find_next"])
-        waitforExistence(app.buttons["FindInPage.find_previous"])
+        waitforExistence(app.buttons["FindInPage.find_next"], timeout: 5)
+        waitforExistence(app.buttons["FindInPage.find_previous"], timeout: 5)
         XCTAssertTrue(app.textFields[""].exists)
     }
 
@@ -22,10 +22,7 @@ class FindInPageTests: BaseTestCase {
 
         // Enter some text to start finding
         app.textFields[""].typeText("Book")
-        var i = 0
-        repeat {
-            i = i+1
-        } while (app.textFields["Book"].exists == false && i < 5)
+        waitforExistence(app.textFields["Book"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
     }
 
@@ -79,11 +76,7 @@ class FindInPageTests: BaseTestCase {
 
         // Enter some text to start finding
         app.textFields[""].typeText("The Book of")
-        var i = 0
-        repeat {
-            i = i+1
-        } while (app.textFields["The Book of"].exists == false && i < 5)
-
+        waitforExistence(app.textFields["The Book of"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
     }
 

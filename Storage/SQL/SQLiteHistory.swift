@@ -467,16 +467,16 @@ extension SQLiteHistory: BrowserHistory {
 
         return db.withConnection { conn -> Void in
             let now = Date.now()
-            
+
             if self.updateSite(site, atTime: now, withConnection: conn) > 0 {
                 return
             }
-            
+
             // Insert instead.
             if self.insertSite(site, atTime: now, withConnection: conn) > 0 {
                 return
             }
-            
+
             let err = DatabaseError(description: "Unable to update or insert site; Invalid key returned")
             log.error("recordVisitedSite encountered an error: \(err.localizedDescription)")
             throw err
@@ -1017,7 +1017,7 @@ extension SQLiteHistory: SyncableHistory {
                 guard let row = row, cursor.status == .success else {
                     throw NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: cursor.statusMessage])
                 }
-                
+
                 guard let id = row["siteID"] as? Int,
                     let existingCount = visits[id]?.count,
                     existingCount < visitLimit else {

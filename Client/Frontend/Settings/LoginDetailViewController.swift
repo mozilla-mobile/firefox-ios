@@ -64,7 +64,7 @@ class LoginDetailViewController: SensitiveViewController {
         self.login = login
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
     }
 
@@ -79,7 +79,7 @@ class LoginDetailViewController: SensitiveViewController {
 
         tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
-        tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SeparatorIdentifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SeparatorIdentifier)
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -90,8 +90,8 @@ class LoginDetailViewController: SensitiveViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.accessibilityIdentifier = "Login Detail List"
         tableView.delegate = self
         tableView.dataSource = self
@@ -101,7 +101,7 @@ class LoginDetailViewController: SensitiveViewController {
 
         // Add a line on top of the table view so when the user pulls down it looks 'correct'.
         let topLine = UIView(frame: CGRect(width: tableView.frame.width, height: 0.5))
-        topLine.backgroundColor = SettingsUX.TableViewSeparatorColor
+        topLine.backgroundColor = UIColor.theme.tableView.separator
         tableView.tableHeaderView = topLine
 
         // Normally UITableViewControllers handle responding to content inset changes from keyboard events when editing
@@ -177,7 +177,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             return loginCell
 
         case .lastModifiedSeparator:
-            let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SeparatorIdentifier) as! SettingsTableSectionHeaderFooterView
+            let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SeparatorIdentifier) as! ThemedTableSectionHeaderFooterView
             footer.titleAlignment = .top
             let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the current login was last modified with the timestamp as the parameter.")
             let formattedLabel = String(format: lastModified, Date.fromMicrosecondTimestamp(login.timePasswordChanged).toRelativeTimeString())
@@ -189,7 +189,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             let deleteCell = tableView.dequeueReusableCell(withIdentifier: DefaultCellIdentifier, for: indexPath)
             deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
             deleteCell.textLabel?.textAlignment = .center
-            deleteCell.textLabel?.textColor = UIConstants.DestructiveRed
+            deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraitButton
             return deleteCell
         }
@@ -224,11 +224,11 @@ extension LoginDetailViewController: UITableViewDelegate {
         if ![InfoItem.passwordItem, InfoItem.websiteItem, InfoItem.usernameItem].contains(item) {
             return
         }
-        
+
         guard let cell = tableView.cellForRow(at: indexPath) as? LoginTableViewCell else { return }
-        
+
         cell.becomeFirstResponder()
-        
+
         let menu = UIMenuController.shared
         menu.setTargetRect(cell.frame, in: self.tableView)
         menu.setMenuVisible(true, animated: true)
@@ -311,12 +311,12 @@ extension LoginDetailViewController {
     @objc func doneEditing() {
         editingInfo = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
-        
+
         defer {
             // Required to get UI to reload with changed state
             tableView.reloadData()
         }
-        
+
         // We only care to update if we changed something
         guard let username = usernameField?.text,
                   let password = passwordField?.text, username != login.username || password != login.password else {
@@ -363,7 +363,7 @@ extension LoginDetailViewController: LoginTableViewCellDelegate {
 
         return false
     }
-    
+
     func infoItemForCell(_ cell: LoginTableViewCell) -> InfoItem? {
         if let index = tableView.indexPath(for: cell),
             let item = InfoItem(rawValue: index.row) {

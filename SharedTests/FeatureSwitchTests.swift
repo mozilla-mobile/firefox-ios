@@ -141,7 +141,7 @@ private extension FeatureSwitchTests {
         let acceptableRange = Range(uncheckedBounds: (
             lower: testCount * (expected - epsilon) / 100,
             upper: testCount * (expected + epsilon) / 100))
-        
+
         XCTAssertTrue(acceptableRange.contains(count), "\(count) in \(acceptableRange)?")
     }
 }

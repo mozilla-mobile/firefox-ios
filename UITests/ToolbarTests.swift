@@ -68,7 +68,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
         tester().waitForAnimationsToFinish()
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-        
+
         let urlField = tester().waitForView(withAccessibilityIdentifier: "url") as! UITextField
         XCTAssertEqual("http://" + urlField.text!, url)
     }

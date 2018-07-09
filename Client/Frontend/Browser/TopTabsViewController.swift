@@ -33,6 +33,8 @@ class TopTabsViewController: UIViewController {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     fileprivate var tabDisplayManager: TabDisplayManager!
+    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.Identifier
+
 
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: TopTabsViewLayout())
@@ -45,7 +47,7 @@ class TopTabsViewController: UIViewController {
         collectionView.semanticContentAttribute = .forceLeftToRight
         return collectionView
     }()
-    
+
     fileprivate lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
         tabsButton.semanticContentAttribute = .forceLeftToRight
@@ -53,7 +55,7 @@ class TopTabsViewController: UIViewController {
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
-    
+
     fileprivate lazy var newTab: UIButton = {
         let newTab = UIButton.newTabButton()
         newTab.semanticContentAttribute = .forceLeftToRight
@@ -61,16 +63,15 @@ class TopTabsViewController: UIViewController {
         newTab.accessibilityIdentifier = "TopTabsViewController.newTabButton"
         return newTab
     }()
-    
+
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.semanticContentAttribute = .forceLeftToRight
         privateModeButton.accessibilityIdentifier = "TopTabsViewController.privateModeButton"
-        privateModeButton.light = true
         privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
         return privateModeButton
     }()
-    
+
     fileprivate lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
         let delegate = TopTabsLayoutDelegate()
         delegate.tabSelectionDelegate = tabDisplayManager
@@ -80,17 +81,15 @@ class TopTabsViewController: UIViewController {
     init(tabManager: TabManager) {
         self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
-        let focusTab: () -> Void = {
-            self.scrollToCurrentTab(true, centerCell: true)
-        }
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, selectTab: focusTab)
+
+        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
         [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -149,13 +148,12 @@ class TopTabsViewController: UIViewController {
         }
 
         view.backgroundColor = UIColor.Photon.Grey80
-        tabsButton.applyTheme(.Normal)
-        if let currentTab = tabManager.selectedTab {
-            applyTheme(currentTab.isPrivate ? .Private : .Normal)
-        }
+        tabsButton.applyTheme()
+        applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+
         updateTabCount(tabDisplayManager.tabCount, animated: false)
     }
-    
+
     func switchForegroundStatus(isInForeground reveal: Bool) {
         // Called when the app leaves the foreground to make sure no information is inadvertently revealed
         if let cells = self.collectionView.visibleCells as? [TopTabCell] {
@@ -166,15 +164,15 @@ class TopTabsViewController: UIViewController {
             }
         }
     }
-    
+
     func updateTabCount(_ count: Int, animated: Bool = true) {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
-    
+
     @objc func tabsTrayTapped() {
         delegate?.topTabsDidPressTabs()
     }
-    
+
     @objc func newTabTapped() {
         if tabDisplayManager.pendingReloadData {
             return
@@ -192,7 +190,7 @@ class TopTabsViewController: UIViewController {
         }
         self.privateModeButton.setSelected(tabDisplayManager.isPrivate, animated: true)
     }
-    
+
     func scrollToCurrentTab(_ animated: Bool = true, centerCell: Bool = false) {
         assertIsMainThread("Only animate on the main thread")
 
@@ -206,7 +204,7 @@ class TopTabsViewController: UIViewController {
                 // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
                 let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
                 if animated {
-                    UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: { 
+                    UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
                         self.collectionView.scrollRectToVisible(padFrame, animated: true)
                     })
                 } else {
@@ -216,23 +214,48 @@ class TopTabsViewController: UIViewController {
         }
     }
 
-    func reloadData() {
-        tabDisplayManager.reloadData()
+}
+
+extension TopTabsViewController: TabDisplayer {
+
+    func focusSelectedTab() {
+        self.scrollToCurrentTab(true, centerCell: true)
+    }
+
+    func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
+        guard let tabCell = cell as? TopTabCell else { return UICollectionViewCell() }
+        tabCell.delegate = self
+        let isSelected = (tab == tabManager.selectedTab)
+        tabCell.configureWith(tab: tab, isSelected: isSelected)
+        return tabCell
     }
 }
 
-extension TopTabsViewController: Themeable {
-    func applyTheme(_ theme: Theme) {
-        tabsButton.applyTheme(theme)
-        tabsButton.titleBackgroundColor = view.backgroundColor ?? UIColor.Photon.Grey80
-        tabsButton.textColor = UIColor.Photon.Grey40
+extension TopTabsViewController: TopTabCellDelegate {
+    func tabCellDidClose(_ cell: UICollectionViewCell) {
+        // Trying to remove tabs while animating can lead to crashes as indexes change. If updates are happening don't allow tabs to be removed.
+        guard let index = collectionView.indexPath(for: cell)?.item else {
+            return
+        }
+        if let tab = self.tabDisplayManager.tabStore[safe: index] {
+            tabManager.removeTab(tab)
+        }
 
-        self.tabDisplayManager.isPrivate = (theme == Theme.Private)
-        privateModeButton.applyTheme(theme)
-        privateModeButton.tintColor = UIColor.TopTabs.PrivateModeTint.colorFor(theme)
-        privateModeButton.imageView?.tintColor = privateModeButton.tintColor
-        newTab.tintColor = UIColor.Photon.Grey40
+    }
+}
+
+extension TopTabsViewController: Themeable, PrivateModeUI {
+    func applyUIMode(isPrivate: Bool) {
+        tabDisplayManager.isPrivate = isPrivate
+
+        privateModeButton.onTint = UIColor.theme.topTabs.privateModeButtonOnTint
+        privateModeButton.offTint = UIColor.theme.topTabs.privateModeButtonOffTint
+        privateModeButton.applyUIMode(isPrivate: tabDisplayManager.isPrivate)
+    }
+
+    func applyTheme() {
+        tabsButton.applyTheme()
+        newTab.tintColor = UIColor.theme.topTabs.buttonTint
         collectionView.backgroundColor = view.backgroundColor
     }
 }
-

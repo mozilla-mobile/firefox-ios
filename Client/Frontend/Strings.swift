@@ -19,6 +19,8 @@ private func applicationBundle() -> Bundle {
 extension Strings {
     public static let OKString = NSLocalizedString("OK", comment: "OK button")
     public static let CancelString = NSLocalizedString("Cancel", comment: "Label for Cancel button")
+    public static let NotNowString = NSLocalizedString("Not Now", comment: "label for Not Now button")
+    public static let AppStoreString = NSLocalizedString("Open App Store", comment: "Open App Store button")
 }
 
 // Table date section titles.
@@ -187,7 +189,7 @@ extension Strings {
     public static let FxASettingsDeviceName = NSLocalizedString("Settings.FxA.DeviceName", value: "Device Name", comment: "Label used for the device name settings section.")
     public static let FxAOpenSyncPreferences = NSLocalizedString("FxA.OpenSyncPreferences", value: "Open Sync Preferences", comment: "Button label to open Sync preferences")
     public static let FxAConnectAnotherDevice = NSLocalizedString("FxA.ConnectAnotherDevice", value: "Connect Another Device", comment: "Button label to connect another device to Sync")
-    
+
     // Surface error strings
     public static let FxAAccountVerificationRequiredSurface = NSLocalizedString("FxA.AccountVerificationRequiredSurface", value: "You need to verify %@. Check your email for the verification link from Firefox.", comment: "Message explaining that user needs to check email for Firefox Account verfication link.")
     public static let FxAResendEmail = NSLocalizedString("FxA.ResendEmail", value: "Resend Email", comment: "Button label to resend email")
@@ -332,6 +334,7 @@ extension Strings {
 extension Strings {
     public static let TabsDeleteAllUndoTitle = NSLocalizedString("Tabs.DeleteAllUndo.Title", value: "%d tab(s) closed", comment: "The label indicating that all the tabs were closed")
     public static let TabsDeleteAllUndoAction = NSLocalizedString("Tabs.DeleteAllUndo.Button", value: "Undo", comment: "The button to undo the delete all tabs")
+    public static let TabSearchPlaceholderText = NSLocalizedString("Tabs.Search.PlaceholderText", value: "Search Tabs", comment: "The placeholder text for the tab search bar")
 }
 
 //Clipboard Toast
@@ -471,7 +474,7 @@ extension Strings {
 
 // Snackbar shown when tapping app store link
 extension Strings {
-    public static let ExternalLinkAppStoreConfirmationTitle = NSLocalizedString("ExternalLink.AppStore.ConfirmationTitle", value: "Open this link in the App Store app?", comment: "Question shown to user when tapping a link that opens the App Store app")
+    public static let ExternalLinkAppStoreConfirmationTitle = NSLocalizedString("ExternalLink.AppStore.ConfirmationTitle", value: "Open this link in the App Store?", comment: "Question shown to user when tapping a link that opens the App Store app")
 }
 
 // ContentBlocker/TrackingProtection strings
@@ -583,6 +586,17 @@ extension Strings {
 
     public static let ShareLoadInBackground = NSLocalizedString("ShareExtension.LoadInBackgroundAction.Title", value: "Load in Background", comment: "Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground.")
     public static let ShareLoadInBackgroundDone = NSLocalizedString("ShareExtension.LoadInBackgroundActionDone.Title", value: "Loading in Firefox", comment: "Share extension label shown after user has performed 'Load in Background' action.")
+}
+
+// Display Theme
+extension Strings {
+    public static let SettingsDisplayThemeTitle = NSLocalizedString("Settings.DisplayTheme", value: "Display", comment: "Title in main app settings for Display (theme) settings")
+    public static let DisplayThemeSectionHeader = NSLocalizedString("Settings.DisplayThemeSectionHeader", value: "Theme", comment: "Display (theme) settings section title")
+    public static let DisplayThemeSectionFooter = NSLocalizedString("Settings.DisplayThemeSectionFooter", value: "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display's current brightness.", comment: "Display (theme) settings footer describing how the brightness slider works.")
+    public static let DisplayThemeAutomaticSwitchTitle = NSLocalizedString("Settings.DisplayThemeSwitchTitle", value: "Automatically", comment: "Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider.")
+    public static let DisplayThemeAutomaticSwitchSubtitle = NSLocalizedString("Settings.DisplayThemeSwitchSubtitle", value: "Switch automatically based on screen brightness", comment: "Display (theme) settings switch subtitle, explaining the title 'Automatically'.")
+    public static let DisplayThemeOptionLight = NSLocalizedString("Settings.DisplayThemeOptionLight", value: "Light", comment: "Option choice in display theme settings for light theme")
+    public static let DisplayThemeOptionDark = NSLocalizedString("Settings.DisplayThemeOptionDark", value: "Dark", comment: "Option choice in display theme settings for dark theme")
 }
 
 // MARK: Deprecated Strings (to be removed in next version)

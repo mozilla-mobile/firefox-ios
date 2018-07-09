@@ -12,7 +12,7 @@ class BaseTestCase: XCTestCase {
 
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.
-    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer]
+    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer, LaunchArguments.DeviceName]
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
