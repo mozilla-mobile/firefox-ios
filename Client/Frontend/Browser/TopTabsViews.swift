@@ -79,7 +79,7 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
             }
         }
     }
-    
+
     let titleText: UILabel = {
         let titleText = UILabel()
         titleText.textAlignment = .left
@@ -90,7 +90,7 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
         titleText.semanticContentAttribute = .forceLeftToRight
         return titleText
     }()
-    
+
     let favicon: UIImageView = {
         let favicon = UIImageView()
         favicon.layer.cornerRadius = 2.0
@@ -98,7 +98,7 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
         favicon.semanticContentAttribute = .forceLeftToRight
         return favicon
     }()
-    
+
     let closeButton: UIButton = {
         let closeButton = UIButton()
         closeButton.setImage(UIImage.templateImageNamed("menu-CloseTabs"), for: [])
@@ -120,7 +120,7 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
     }()
 
     weak var delegate: TopTabCellDelegate?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -154,14 +154,14 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
             make.trailing.equalTo(self).offset(TopTabCell.ShadowOffsetSize)
             make.height.equalTo(TopTabsUX.HighlightLineWidth)
         }
-        
+
         self.clipsToBounds = false
-        
+
         applyUIMode(isPrivate: false)
     }
-    
+
     func applyUIMode(isPrivate: Bool) {
-        highlightLine.backgroundColor = isPrivate ?  UIColor.theme.topTabs.selectedLinePrivateMode : UIColor.theme.topTabs.selectedLineNormalMode 
+        highlightLine.backgroundColor = isPrivate ?  UIColor.theme.topTabs.selectedLinePrivateMode : UIColor.theme.topTabs.selectedLineNormalMode
     }
 
     func configureWith(tab: Tab, isSelected: Bool) {
@@ -196,16 +196,16 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
             self.favicon.backgroundColor = .clear
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         self.layer.shadowOpacity = 0
     }
-    
+
     @objc func closeTab() {
         delegate?.tabCellDidClose(self)
     }
@@ -238,12 +238,12 @@ class TopTabFader: UIView {
         hMaskLayer.anchorPoint = .zero
         return hMaskLayer
     }()
-    
+
     init() {
         super.init(frame: .zero)
         layer.mask = hMaskLayer
     }
-    
+
     internal override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -253,7 +253,7 @@ class TopTabFader: UIView {
         hMaskLayer.locations = [0.00, widthA, widthB, 1.0]
         hMaskLayer.frame = CGRect(width: frame.width, height: frame.height)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

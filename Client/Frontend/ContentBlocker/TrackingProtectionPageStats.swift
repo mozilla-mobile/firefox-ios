@@ -22,7 +22,7 @@ struct TPPageStats {
         contentCount = 0
         socialCount = 0
     }
-    
+
     private init(adCount: Int, analyticCount: Int, contentCount: Int, socialCount: Int) {
         self.adCount = adCount
         self.analyticCount = analyticCount
@@ -132,7 +132,7 @@ fileprivate class TPStatsBlocklists {
     func load() {
         // All rules have this prefix on the domain to match.
         let standardPrefix = "^https?://([^/]+\\.)?"
-        
+
         for blockList in BlocklistName.all {
             let list: [[String: AnyObject]]
             do {

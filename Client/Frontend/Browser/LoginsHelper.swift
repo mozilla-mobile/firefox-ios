@@ -45,7 +45,7 @@ class LoginsHelper: TabContentScript {
         //
         // See https://bugzilla.mozilla.org/show_bug.cgi?id=1307822 for details.
         guard UIApplication.shared.applicationState == .active && !profile.isShutdown else {
-            return 
+            return
         }
 
         // We don't use the WKWebView's URL since the page can spoof the URL by using document.location

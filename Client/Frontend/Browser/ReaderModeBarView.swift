@@ -135,7 +135,7 @@ class ReaderModeBarView: UIView {
             readStatusButton.alpha = added ? 1.0 : 0.6
         }
     }
-    
+
     var added: Bool = false {
         didSet {
             let buttonType: ReaderModeBarButtonType = added ? .removeFromReadingList : .addToReadingList

@@ -15,11 +15,11 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         let maskImage = UIImage(named: "smallPrivateMask")?.withRenderingMode(.alwaysTemplate)
         setImage(maskImage, for: [])
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func applyUIMode(isPrivate: Bool) {
         isSelected = isPrivate
 

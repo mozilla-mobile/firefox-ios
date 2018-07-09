@@ -144,9 +144,9 @@ class FxALoginHelper {
         }
         accountVerified = data["verified"].bool ?? false
         self.account = account
-        
+
         account.updateProfile()
-        
+
         let leanplum = LeanPlumClient.shared
         if leanplum.isLPEnabled() && leanplum.isFxAPrePushEnabled() {
             // If Leanplum A/B push notification tests are enabled, defer to them for
@@ -155,7 +155,7 @@ class FxALoginHelper {
             // `apnsRegisterDidFail` to finish setting up Autopush.
             return readyForSyncing()
         }
-        
+
         requestUserNotifications(application)
     }
 
@@ -201,7 +201,7 @@ class FxALoginHelper {
             application.registerForRemoteNotifications()
         }
     }
-        
+
     func getPushConfiguration() -> PushConfiguration? {
         let label = PushConfigurationLabel(rawValue: AppConstants.scheme)
         return label?.toConfiguration()

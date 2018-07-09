@@ -225,7 +225,7 @@ class TabManager: NSObject {
     //we only want to remove all private tabs when leaving PBM and not when entering.
     func willSwitchTabMode(leavingPBM: Bool) {
         recentlyClosedForUndo.removeAll()
-        
+
         if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()
         }
@@ -252,7 +252,7 @@ class TabManager: NSObject {
 
         return popup
     }
-    
+
     @discardableResult func addTab(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
         return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
@@ -313,7 +313,7 @@ class TabManager: NSObject {
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
-    
+
     func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
         assert(Thread.isMainThread)
 
@@ -514,7 +514,7 @@ class TabManager: NSObject {
         }
 
         var tabsCopy = tabs
-        
+
         // Remove the current tab last to prevent switching tabs while removing tabs
         if let selectedTab = selectedTab {
             if let selectedIndex = tabsCopy.index(of: selectedTab) {
@@ -545,7 +545,7 @@ class TabManager: NSObject {
 
         delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
-    
+
     func undoCloseTabs() {
         guard recentlyClosedForUndo.count > 0 else {
             return
@@ -569,7 +569,7 @@ class TabManager: NSObject {
 
         delegates.forEach { $0.get()?.tabManagerDidRestoreTabs(self) }
     }
-    
+
     func eraseUndoCache() {
         recentlyClosedForUndo.removeAll()
     }
@@ -580,7 +580,7 @@ class TabManager: NSObject {
         }
         storeChanges()
     }
-    
+
     func removeAll() {
         removeTabs(self.tabs)
     }

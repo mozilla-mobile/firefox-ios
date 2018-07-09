@@ -104,7 +104,7 @@ class BrowserViewController: UIViewController {
     var navigationToolbar: TabToolbarProtocol {
         return toolbar ?? urlBar
     }
-    
+
     var topTabsViewController: TopTabsViewController?
     let topTabsContainer = UIView()
 
@@ -207,7 +207,7 @@ class BrowserViewController: UIViewController {
             toolbar?.applyTheme()
             updateTabCountUsingTabManager(self.tabManager)
         }
-        
+
         if showTopTabs {
             if topTabsViewController == nil {
                 let topTabsViewController = TopTabsViewController(tabManager: tabManager)
@@ -387,7 +387,7 @@ class BrowserViewController: UIViewController {
 
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
-        
+
         scrollController.urlBar = urlBar
         scrollController.readerModeBar = readerModeBar
         scrollController.header = header
@@ -411,7 +411,7 @@ class BrowserViewController: UIViewController {
             make.leading.trailing.equalTo(self.header)
             make.top.equalTo(urlBarTopTabsContainer)
         }
-        
+
         urlBar.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(urlBarTopTabsContainer)
             make.height.equalTo(UIConstants.TopToolbarHeight)
@@ -439,7 +439,7 @@ class BrowserViewController: UIViewController {
     override var canBecomeFirstResponder: Bool {
         return true
     }
-    
+
     override func becomeFirstResponder() -> Bool {
         // Make the web view the first responder so that it can show the selection menu.
         return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
@@ -473,7 +473,7 @@ class BrowserViewController: UIViewController {
                 // rather than losing data.
                 self.profile.queue.clearQueuedTabs()
             }
-                
+
             // Then, open any received URLs from push notifications.
             if !receivedURLs.isEmpty {
                 DispatchQueue.main.async {
@@ -885,7 +885,7 @@ class BrowserViewController: UIViewController {
             }
         case .title:
             guard let tab = tabManager[webView] else { break }
-            
+
             // Ensure that the tab title *actually* changed to prevent repeated calls
             // to navigateInTab(tab:).
             guard let title = tab.title else { break }
@@ -895,7 +895,7 @@ class BrowserViewController: UIViewController {
         case .canGoBack:
             guard webView == tabManager.selectedTab?.webView,
                 let canGoBack = change?[.newKey] as? Bool else { break }
-            
+
             navigationToolbar.updateBackStatus(canGoBack)
         case .canGoForward:
             guard webView == tabManager.selectedTab?.webView,
@@ -987,7 +987,7 @@ class BrowserViewController: UIViewController {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
         let freshTab = tabManager.selectedTab
-        
+
         if focusLocationField {
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
                 // Without a delay, the text field fails to become first responder
@@ -1102,7 +1102,7 @@ class BrowserViewController: UIViewController {
         controller.modalPresentationStyle = .formSheet
         self.present(controller, animated: true, completion: nil)
     }
-    
+
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
         let notificationCenter = NotificationCenter.default
         var info = [AnyHashable: Any]()
@@ -1158,7 +1158,7 @@ class BrowserViewController: UIViewController {
                 }
             }
         }
-        
+
         // Remember whether or not a desktop site was requested
         tab.desktopSite = webView.customUserAgent?.isEmpty == false
     }
@@ -1229,13 +1229,13 @@ extension BrowserViewController {
 extension BrowserViewController: URLBarDelegate {
     func showTabTray() {
         updateFindInPageVisibility(visible: false)
-        
+
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-        
+
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
         }
-        
+
         navigationController?.pushViewController(tabTrayController, animated: true)
         self.tabTrayController = tabTrayController
     }
@@ -1243,7 +1243,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressReload(_ urlBar: URLBarView) {
         tabManager.selectedTab?.reload()
     }
-    
+
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = self
@@ -1255,15 +1255,15 @@ extension BrowserViewController: URLBarDelegate {
         let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
             self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
         }
-        
+
         let findInPageAction = {
             self.updateFindInPageVisibility(visible: true)
         }
-        
+
         let successCallback: (String) -> Void = { (successMessage) in
             SimpleToast().showAlertWithText(successMessage, bottomContainer: self.webViewContainer)
         }
-        
+
         guard let tab = tabManager.selectedTab, let urlString = tab.url?.absoluteString else { return }
 
         let deferredBookmarkStatus: Deferred<Maybe<Bool>> = fetchBookmarkStatus(for: urlString)
@@ -1279,7 +1279,7 @@ extension BrowserViewController: URLBarDelegate {
             self.presentSheetWith(title: Strings.PageActionMenuTitle, actions: pageActions, on: self, from: button)
         }
     }
-    
+
     func urlBarDidLongPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
         guard let tab = tabManager.selectedTab else { return }
         guard let url = tab.canonicalURL?.displayURL, self.presentedViewController == nil else {
@@ -1298,7 +1298,7 @@ extension BrowserViewController: URLBarDelegate {
             self.presentSheetWith(actions: trackingProtectionMenu, on: self, from: urlBar)
         }
     }
-    
+
     func urlBarDidPressStop(_ urlBar: URLBarView) {
         tabManager.selectedTab?.stop()
     }
@@ -1451,7 +1451,7 @@ extension BrowserViewController: URLBarDelegate {
         guard let profile = profile as? BrowserProfile else {
             return
         }
-        
+
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         } else {
@@ -1535,7 +1535,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
     }
-    
+
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         guard self.presentedViewController == nil else {
             return
@@ -1613,7 +1613,7 @@ extension BrowserViewController: TabDelegate {
 
         let noImageModeHelper = NoImageModeHelper(tab: tab)
         tab.addContentScript(noImageModeHelper, name: NoImageModeHelper.name())
-        
+
         let printHelper = PrintHelper(tab: tab)
         tab.addContentScript(printHelper, name: PrintHelper.name())
 
@@ -1876,7 +1876,7 @@ extension BrowserViewController: TabManagerDelegate {
             make.bottom.equalTo(self.webViewContainer)
         })
     }
-    
+
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         guard let toast = toast, !tabTrayController.privateMode else {
             return
@@ -2220,7 +2220,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             self.launchFxAFromDeeplinkURL(url)
             return true
         }
-        
+
         if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
             let introViewController = IntroViewController()
             introViewController.delegate = self
@@ -2241,7 +2241,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
         return false
     }
-    
+
     func launchFxAFromDeeplinkURL(_ url: URL) {
         self.profile.prefs.removeObjectForKey("AdjustDeeplinkKey")
         var query = url.getQuery()
@@ -2258,7 +2258,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
                 _ = self.navigationController?.popToRootViewController(animated: true)
             }
-            
+
             if requestToLogin {
                 let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
                 self.presentSignInViewController(fxaParams)
@@ -2721,7 +2721,7 @@ extension BrowserViewController: TopTabsDelegate {
         urlBar.leaveOverlayMode(didCancel: true)
         self.urlBarDidPressTabs(urlBar)
     }
-    
+
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
     }
@@ -2732,7 +2732,7 @@ extension BrowserViewController: TopTabsDelegate {
         }
         urlBar.leaveOverlayMode()
     }
-    
+
     func topTabsDidChangeTab() {
         urlBar.leaveOverlayMode(didCancel: true)
     }

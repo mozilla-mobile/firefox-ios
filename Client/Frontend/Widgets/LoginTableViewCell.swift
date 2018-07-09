@@ -66,7 +66,7 @@ class LoginTableViewCell: UITableViewCell {
         if item == .usernameItem {
             return action == MenuHelper.SelectorCopy
         }
-        
+
         return false
     }
 

@@ -117,7 +117,7 @@ enum TabEvent {
             return .didChangeContentBlocking
         }
     }
-    
+
     func handle(_ tab: Tab, with handler: TabEventHandler) {
         switch self {
         case .didChangeURL(let url):
@@ -177,7 +177,7 @@ extension TabEventHandler {
             }
         }
     }
-    
+
     func unregister(_ observers: TabObservers) {
         observers.forEach { observer in
             center.removeObserver(observer)

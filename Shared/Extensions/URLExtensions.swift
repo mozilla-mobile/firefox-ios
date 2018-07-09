@@ -94,7 +94,7 @@ extension URL {
     }
 }
 
-// The list of permanent URI schemes has been taken from http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml 
+// The list of permanent URI schemes has been taken from http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
 private let permanentURISchemes = ["aaa", "aaas", "about", "acap", "acct", "cap", "cid", "coap", "coaps", "crid", "data", "dav", "dict", "dns", "example", "file", "ftp", "geo", "go", "gopher", "h323", "http", "https", "iax", "icap", "im", "imap", "info", "ipp", "ipps", "iris", "iris.beep", "iris.lwz", "iris.xpc", "iris.xpcs", "jabber", "ldap", "mailto", "mid", "msrp", "msrps", "mtqp", "mupdate", "news", "nfs", "ni", "nih", "nntp", "opaquelocktoken", "pkcs11", "pop", "pres", "reload", "rtsp", "rtsps", "rtspu", "service", "session", "shttp", "sieve", "sip", "sips", "sms", "snmp", "soap.beep", "soap.beeps", "stun", "stuns", "tag", "tel", "telnet", "tftp", "thismessage", "tip", "tn3270", "turn", "turns", "tv", "urn", "vemmi", "vnc", "ws", "wss", "xcon", "xcon-userid", "xmlrpc.beep", "xmlrpc.beeps", "xmpp", "z39.50r", "z39.50s"]
 
 extension URL {
@@ -259,7 +259,7 @@ extension URL {
     }
 
     /**
-    Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/. 
+    Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/.
     For example for the url www.bbc.co.uk, based on the entries in the TLD list, the public suffix would return co.uk.
 
     :returns: The public suffix for within the given hostname.
@@ -298,7 +298,7 @@ extension URL {
     public var isIPv6: Bool {
         return host?.contains(":") ?? false
     }
-    
+
     /**
      Returns whether the URL's scheme is one of those listed on the official list of URI schemes.
      This only accepts permanent schemes: historical and provisional schemes are not accepted.
@@ -432,7 +432,7 @@ private extension URL {
         *
         *  On the next run through the loop, we set the new domain to check as the part after the next dot,
         *  update the next dot reference to be the string after the new next dot, and check the TLD entries again.
-        *  If we reach the end of the host (nextDot = nil) and we haven't found anything, then we've hit the 
+        *  If we reach the end of the host (nextDot = nil) and we haven't found anything, then we've hit the
         *  top domain level so we use it by default.
         */
 

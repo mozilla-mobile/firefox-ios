@@ -80,7 +80,7 @@ class TabsButton: UIButton {
         border.isUserInteractionEnabled = false
         return border
     }()
-    
+
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
     fileprivate weak var clonedTabsButton: TabsButton?
 
@@ -143,7 +143,7 @@ class TabsButton: UIButton {
 
         return button
     }
-    
+
     func updateTabCount(_ count: Int, animated: Bool = true) {
         let count = max(count, 1)
         let currentCount = self.countLabel.text
@@ -187,13 +187,13 @@ class TabsButton: UIButton {
             oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
             oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
             oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(-(Double.pi / 2)), 1.0, 0.0, 0.0)
-            
+
             let animate = {
                 newTabsButton.insideButton.layer.transform = CATransform3DIdentity
                 self.insideButton.layer.transform = oldFlipTransform
                 self.insideButton.layer.opacity = 0
             }
-            
+
             let completion: (Bool) -> Void = { completed in
                 let noActiveAnimations = self.insideButton.layer.animationKeys()?.isEmpty ?? true
                 if completed || noActiveAnimations {
@@ -205,7 +205,7 @@ class TabsButton: UIButton {
                 self.countLabel.text = countToBe
                 self.accessibilityValue = countToBe
             }
-            
+
             if animated {
                 UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: [], animations: animate, completion: completion)
             } else {

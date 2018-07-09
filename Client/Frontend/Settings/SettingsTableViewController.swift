@@ -8,7 +8,7 @@ import UIKit
 
 struct SettingsUX {
     static let TableViewHeaderFooterHeight = CGFloat(44)
-    
+
 }
 
 extension UILabel {
@@ -50,9 +50,9 @@ class Setting: NSObject {
     var accessoryType: UITableViewCellAccessoryType { return .none }
 
     var textAlignment: NSTextAlignment { return .natural }
-    
+
     var image: UIImage? { return _image }
-    
+
     fileprivate(set) var enabled: Bool = true
 
     // Called when the cell is setup. Call if you need the default behaviour.
@@ -191,7 +191,7 @@ class BoolSetting: Setting {
         control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
-        
+
         displayBool(control)
         if let title = title {
             if let status = status {
@@ -503,7 +503,7 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.separatorColor = UIColor.theme.tableView.separator
@@ -608,7 +608,7 @@ class SettingsTableViewController: UITableViewController {
 
         return headerView
     }
-    
+
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
         guard let sectionFooter = sectionSetting.footerTitle?.string else {
