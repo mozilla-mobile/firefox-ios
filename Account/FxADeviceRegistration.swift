@@ -112,7 +112,18 @@ open class FxADeviceRegistrator {
         let registeredDevice = client.registerOrUpdate(device: device, withSessionToken: sessionToken)
         let registration: Deferred<Maybe<FxADeviceRegistration>> = registeredDevice.bind { result in
             if let device = result.successValue {
-                return deferMaybe(FxADeviceRegistration(id: device.id!, version: DeviceRegistrationVersion, lastRegistered: Date.now()))
+                // If the device has the `FxACommandSendTab` command already, then use
+                // a valid timestamp. Otherwise, reset to `0` so that we initialize the
+                // `availableCommands` the next time we register (resetting the timestamp
+                // will force re-registration the next time around).
+                let lastRegistered: Timestamp
+                if let _ = availableCommands[FxACommandSendTab.Name].string {
+                    lastRegistered = Date.now()
+                } else {
+                    lastRegistered = 0
+                }
+
+                return deferMaybe(FxADeviceRegistration(id: device.id!, version: DeviceRegistrationVersion, lastRegistered: lastRegistered))
             }
 
             // Recover from the error -- if we can.

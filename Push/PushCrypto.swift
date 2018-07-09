@@ -51,7 +51,7 @@ extension PushCrypto {
         return Data(bytes: plaintext, count: plaintextLen)
     }
 
-    func aes128gcm(plaintext: String, encryptWith rawRecvPubKey: String, authenticateWith authSecret: String, rs: Int, padLen: Int) throws -> String {
+    func aes128gcm(plaintext: String, encryptWith rawRecvPubKey: String, authenticateWith authSecret: String, rs: Int = 4096, padLen: Int = 0) throws -> String {
         guard let rawRecvPubKey = rawRecvPubKey.base64urlSafeDecodedData,
             let authSecret = authSecret.base64urlSafeDecodedData else {
                 throw PushCryptoError.base64DecodeError
@@ -71,7 +71,7 @@ extension PushCrypto {
         return payload
     }
 
-    func aes128gcm(plaintext: Data, encryptWith rawRecvPubKey: Data, authenticateWith authSecret: Data, rs rsInt: Int, padLen: Int) throws -> Data {
+    func aes128gcm(plaintext: Data, encryptWith rawRecvPubKey: Data, authenticateWith authSecret: Data, rs rsInt: Int = 4096, padLen: Int = 0) throws -> Data {
         let rs = UInt32(rsInt)
 
         // rs needs to be >= 18.

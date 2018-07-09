@@ -233,6 +233,7 @@ open class FxACommandSendTab {
             let bundle = JSON(parseJSON: bundleString)
             let syncKeyBundle = KeyBundle.fromKSync(marriedState.kSync)
 
+            // Decrypt the key bundle for the target `device` using `kSync`.
             guard let cipherdataString = bundle["ciphertext"].string,
                 let ivString = bundle["IV"].string,
                 let cipherdata = Bytes.decodeBase64(cipherdataString),
@@ -242,11 +243,13 @@ open class FxACommandSendTab {
             }
 
             let decryptedKey = JSON(parseJSON: decryptedKeyString)
+            let plaintext = message.utf8EncodedData
 
+            // Using the decrypted key bundle for the target `device`, encrypt
+            // the message using aes128gcm.
             guard let publicKey = decryptedKey["publicKey"].string?.base64urlSafeDecodedData,
                 let authSecret = decryptedKey["authSecret"].string?.base64urlSafeDecodedData,
-                let plaintext = message.data(using: .utf8),
-                let result = (try? PushCrypto.sharedInstance.aes128gcm(plaintext: plaintext, encryptWith: publicKey, authenticateWith: authSecret, rs: plaintext.count, padLen: 0).base64urlSafeEncodedString) as? String else {
+                let result = (try? PushCrypto.sharedInstance.aes128gcm(plaintext: plaintext, encryptWith: publicKey, authenticateWith: authSecret).base64urlSafeEncodedString) as? String else {
                 return deferMaybe(FxACommandsClientError())
             }
 

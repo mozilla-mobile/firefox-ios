@@ -483,8 +483,6 @@ open class FxAClient10 {
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = device.toJSON().rawString(options: [])?.utf8EncodedData
 
-        // TODO: Check that `availableCommands` is present in `httpBody`
-
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
