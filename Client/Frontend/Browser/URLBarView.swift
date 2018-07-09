@@ -644,10 +644,10 @@ extension URLBarView: AutocompleteTextFieldDelegate {
         leaveOverlayMode(didCancel: true)
     }
 
-    func autocompletePasteAndGo(autocompleteTextField: AutocompleteTextField) {
+    func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField) {
         if let pasteboardContents = UIPasteboard.general.string {
             self.delegate?.urlBar(self, didSubmitText: pasteboardContents)
-            print(pasteboardContents) }
+        }
     }
 }
 

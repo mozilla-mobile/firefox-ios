@@ -15,7 +15,7 @@ protocol AutocompleteTextFieldDelegate: class {
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField)
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField)
-    func autocompletePasteAndGo( autocompleteTextField: AutocompleteTextField)
+    func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField)
 }
 
 private struct AutocompleteTextFieldUX {
@@ -294,10 +294,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
 }
 
-extension AutocompleteTextField : MenuHelperInterface {
+extension AutocompleteTextField: MenuHelperInterface {
 
-    @ objc func menuHelperPasteAndGo() {
-        autocompleteDelegate?.autocompletePasteAndGo(autocompleteTextField: self)
+    @objc func menuHelperPasteAndGo() {
+        autocompleteDelegate?.autocompletePasteAndGo(self)
     }
 
 }
