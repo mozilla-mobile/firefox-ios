@@ -36,11 +36,11 @@ class NewTabChoiceViewController: UITableViewController {
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
-        let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
+        let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.showTopBorder = false
         headerView.showBottomBorder = true
 
-        let footerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
+        let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
         footerView.showTopBorder = true
         footerView.showBottomBorder = false
 

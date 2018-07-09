@@ -583,6 +583,17 @@ extension Strings {
     public static let ShareLoadInBackgroundDone = NSLocalizedString("ShareExtension.LoadInBackgroundActionDone.Title", value: "Loading in Firefox", comment: "Share extension label shown after user has performed 'Load in Background' action.")
 }
 
+// Display Theme
+extension Strings {
+    public static let SettingsDisplayThemeTitle = NSLocalizedString("Settings.DisplayTheme", value: "Display", comment: "Title in main app settings for Display (theme) settings")
+    public static let DisplayThemeSectionHeader = NSLocalizedString("Settings.DisplayThemeSectionHeader", value: "Theme", comment: "Display (theme) settings section title")
+    public static let DisplayThemeSectionFooter = NSLocalizedString("Settings.DisplayThemeSectionFooter", value: "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display's current brightness.", comment: "Display (theme) settings footer describing how the brightness slider works.")
+    public static let DisplayThemeAutomaticSwitchTitle = NSLocalizedString("Settings.DisplayThemeSwitchTitle", value: "Automatically", comment: "Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider.")
+    public static let DisplayThemeAutomaticSwitchSubtitle = NSLocalizedString("Settings.DisplayThemeSwitchSubtitle", value: "Switch automatically based on screen brightness", comment: "Display (theme) settings switch subtitle, explaining the title 'Automatically'.")
+    public static let DisplayThemeOptionLight = NSLocalizedString("Settings.DisplayThemeOptionLight", value: "Light", comment: "Option choice in display theme settings for light theme")
+    public static let DisplayThemeOptionDark = NSLocalizedString("Settings.DisplayThemeOptionDark", value: "Dark", comment: "Option choice in display theme settings for dark theme")
+}
+
 // MARK: Deprecated Strings (to be removed in next version)
 private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
 private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")

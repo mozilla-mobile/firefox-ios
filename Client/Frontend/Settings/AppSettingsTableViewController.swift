@@ -8,8 +8,6 @@ import Account
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {
-    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -46,6 +44,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             NewTabPageSetting(settings: self),
             HomePageSetting(settings: self),
             OpenWithSetting(settings: self),
+            ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
@@ -130,7 +129,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! SettingsTableSectionHeaderFooterView
+        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
         // Prevent the top border from showing for the General section.
         if !profile.hasAccount() {
             switch section {

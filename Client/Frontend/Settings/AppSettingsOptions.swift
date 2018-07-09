@@ -1052,3 +1052,19 @@ class AdvanceAccountSetting: HiddenSetting {
         return !ShowDebugSettings || profile.hasAccount()
     }
 }
+
+class ThemeSetting: Setting {
+    let profile: Profile
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+    override var style: UITableViewCellStyle { return .value1 }
+    override var accessibilityIdentifier: String? { return "DisplayThemeOption" }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(title: NSAttributedString(string: Strings.SettingsDisplayThemeTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        navigationController?.pushViewController(ThemeSettingsController(), animated: true)
+    }
+}

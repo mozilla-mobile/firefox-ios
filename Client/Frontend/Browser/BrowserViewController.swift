@@ -165,12 +165,17 @@ class BrowserViewController: UIViewController {
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
         downloadQueue.delegate = self
+
+        NotificationCenter.default.addObserver(self, selector: #selector(displayThemeChanged), name: .DisplayThemeChanged, object: nil)
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        let isIpad = shouldShowTopTabsForTraitCollection(traitCollection)
-        return (isPrivate || isIpad) ? .lightContent : .default
+        return ThemeManager.instance.statusBarStyle
+    }
+
+    @objc func displayThemeChanged(notification: Notification) {
+        applyTheme()
+        setNeedsStatusBarAppearanceUpdate()
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
