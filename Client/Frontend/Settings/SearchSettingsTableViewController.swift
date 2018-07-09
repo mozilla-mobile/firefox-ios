@@ -10,7 +10,7 @@ protocol SearchEnginePickerDelegate: class {
     func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?)
 }
 
-class SearchSettingsTableViewController: UITableViewController {
+class SearchSettingsTableViewController: ThemedTableViewController {
     fileprivate let SectionDefault = 0
     fileprivate let ItemDefaultEngine = 0
     fileprivate let ItemDefaultSuggestions = 1
@@ -56,9 +56,6 @@ class SearchSettingsTableViewController: UITableViewController {
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
 
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
-
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .plain, target: self,
                                                                  action: #selector(beginEditing))
     }
@@ -77,14 +74,13 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: UITableViewCell!
+        var cell: UITableViewCell = ThemedTableViewCell()
         var engine: OpenSearchEngine!
 
         if indexPath.section == SectionDefault {
             switch indexPath.item {
             case ItemDefaultEngine:
                 engine = model.defaultEngine
-                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
                 cell.accessibilityValue = engine.shortName
@@ -93,7 +89,6 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
             case ItemDefaultSuggestions:
-                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
                 let toggle = UISwitch()
                 toggle.onTintColor = UIColor.theme.tableView.controlTint
@@ -110,8 +105,6 @@ class SearchSettingsTableViewController: UITableViewController {
             let index = indexPath.item + 1
             if index < model.orderedEngines.count {
                 engine = model.orderedEngines[index]
-
-                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.showsReorderControl = true
 
                 let toggle = UISwitch()
@@ -130,7 +123,6 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.imageView?.layer.masksToBounds = true
                 cell.selectionStyle = .none
             } else {
-                cell = UITableViewCell(style: .default, reuseIdentifier: nil)
                 cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = Strings.SettingsAddCustomEngineTitle
                 cell.accessibilityIdentifier = "customEngineViewButton"
