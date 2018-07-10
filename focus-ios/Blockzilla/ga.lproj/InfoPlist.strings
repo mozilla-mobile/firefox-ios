@@ -2,10 +2,16 @@
 "NSCameraUsageDescription" = "Ligeann seo duit pictiúir a thógáil agus a uaslódáil.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "D'fhéadfadh suíomhanna a dtugann tú cuairt orthu do láthair a iarraidh.";
 
 /* (No Comment) */
 "NSMicrophoneUsageDescription" = "Ligeann seo duit físeáin a thógáil agus a uaslódáil.";
+
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
 
 /* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Ligeann seo duit pictiúir a shábháil agus a uaslódáil.";

@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "यसले तपाईँलाई तस्विर लिन र अपलोड गर्न दिन्छ।";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "तपाईँले भ्रमण गर्ने वेबसाइटले तपाईँको स्थान अनुरोध गर्न सक्छ।";
 
 /* (No Comment) */

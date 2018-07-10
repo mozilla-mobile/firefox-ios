@@ -2,10 +2,16 @@
 "NSCameraUsageDescription" = "U rasmga tushirish va internetga yuklashda yordam beradi.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Sahifalarda joylashuvingiz so‘ralishi mumkin.";
 
 /* (No Comment) */
 "NSMicrophoneUsageDescription" = "U videoga olish va internetga yuklash imkonini beradi.";
+
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
 
 /* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "U rasmni saqlash va internetga yuklash imkonini beradi.";

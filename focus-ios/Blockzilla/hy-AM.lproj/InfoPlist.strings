@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Սա հնարավորություն է տալիս ստանալ և վերբեռնել լուսանկարներ:";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Ձեր այցելած կայքերը կարող են հարցնել ձեր տեղադրությունը:";
 
 /* (No Comment) */

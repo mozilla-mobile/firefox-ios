@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Бұл арқылы фотоларды түсіріп, жүктеуге болады.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Сіз ашатын веб-сайттар сізден орналасуыңызды сұрауы мүмкін.";
 
 /* (No Comment) */
