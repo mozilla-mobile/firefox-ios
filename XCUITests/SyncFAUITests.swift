@@ -4,6 +4,16 @@
 
 import XCTest
 
+let getEndPoint = "http://restmail.net/mail/test-256a5b5b18"
+let postEndPoint = "https://api-accounts.stage.mozaws.net/v1/recovery_email/verify_code"
+let deleteEndPoint = "http://restmail.net/mail/test-256a5b5b18@restmail.net"
+
+let userMail = "test-256a5b5b18@restmail.net"
+let password = "nPuPEcoj"
+
+var uid: String!
+var code: String!
+
 class SyncUITests: BaseTestCase {
     func testUIFromSettings () {
         navigator.goto(FxASigninScreen)
@@ -101,5 +111,141 @@ class SyncUITests: BaseTestCase {
         waitforExistence(app.webViews.staticTexts["Show password"])
         // Long press delete key to remove the password typed, Show (password) option should not be shown
         app.keys["delete"].press(forDuration: 2)
+    }
+
+    func testAccountManagmentPage() {
+        deleteInbox()
+        // Log in
+        navigator.goto(FxASigninScreen)
+        waitforExistence(app.webViews.staticTexts["Sign in"], timeout: 10)
+        userState.fxaUsername = userMail
+        userState.fxaPassword = password
+        navigator.performAction(Action.FxATypeEmail)
+        navigator.performAction(Action.FxATypePassword)
+        navigator.performAction(Action.FxATapOnSignInButton)
+        allowNotifications()
+        // If the account is not verified need to verify it to access the menu
+        if (app.webViews.staticTexts["Confirm this sign-in"].exists) {
+            let group = DispatchGroup()
+            group.enter()
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.verifyAccount() {
+                    sleep(5)
+                    group.leave()
+                }
+            }
+            group.wait()
+        }
+        // Once the sign in is successful check the account management page
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+        waitforExistence(app.tables.cells["menu-TrackingProtection"])
+        // Tap on the sync name option
+        if iPad() {
+            app.tables.cells.element(boundBy: 9).tap()
+        } else {
+            app.tables.cells.element(boundBy: 0).tap()
+        }
+        waitforExistence(app.navigationBars["Firefox Account"])
+        XCTAssertTrue(app.tables.cells["Manage"].exists)
+        XCTAssertTrue(app.cells.switches["sync.engine.bookmarks.enabled"].exists)
+        XCTAssertTrue(app.cells.switches["sync.engine.history.enabled"].exists)
+        XCTAssertTrue(app.cells.switches["sync.engine.tabs.enabled"].exists)
+        XCTAssertTrue(app.cells.switches["sync.engine.passwords.enabled"].exists)
+        XCTAssertTrue(app.cells.textFields["DeviceNameSettingTextField"].exists)
+        XCTAssertTrue(app.cells["SignOut"].exists)
+        disconnectAccount()
+    }
+
+    private func disconnectAccount() {
+        app.cells["SignOut"].tap()
+        app.buttons["Disconnect"].tap()
+        // Remove the history so that starting to sign is does not keep the userEmail
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+        navigator.performAction(Action.AcceptClearPrivateData)
+    }
+
+    func allowNotifications () {
+        addUIInterruptionMonitor(withDescription: "notifications") { (alert) -> Bool in
+            alert.buttons["Allow"].tap()
+            return true
+        }
+        sleep(5)
+        app.swipeDown()
+    }
+
+    private func deleteInbox() {
+    // First Delete the inbox
+    let restUrl = URL(string: deleteEndPoint)
+    var request = URLRequest(url: restUrl!)
+    request.httpMethod = "DELETE"
+
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        print("Delete")
+    }
+    task.resume()
+    }
+
+    private func completeVerification(uid: String, code: String, done: @escaping () -> ()) {
+        // POST to EndPoint api.accounts.firefox.com/v1/recovery_email/verify_code
+        let restUrl = URL(string: postEndPoint)
+        var request = URLRequest(url: restUrl!)
+        request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+
+        request.httpMethod = "POST"
+
+        let jsonObject: [String: Any] = ["uid": uid, "code":code]
+        let data = try! JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions.prettyPrinted)
+        let json = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+        if let json = json {
+            print("json \(json)")
+        }
+        let jsonData = json?.data(using: String.Encoding.utf8.rawValue)
+
+        request.httpBody = jsonData
+        print("json \(jsonData!)")
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("error:", error)
+                return
+            }
+            done()
+        }
+        task.resume()
+    }
+
+    private func verifyAccount(done: @escaping () -> ()) {
+        // GET to EndPoint/mail/test-user
+        let restUrl = URL(string: getEndPoint)
+        var request = URLRequest(url: restUrl!)
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if(error != nil) {
+                print("Error: \(error ?? "Get Error" as! Error)")
+            }
+            let responseString = String(data: data!, encoding: .utf8)
+            print("responseString = \(String(describing: responseString))")
+
+            let regexpUid = "(uid=[a-z0-9]{0,32}$?)"
+            let regexCode = "(code=[a-z0-9]{0,32}$?)"
+            if let rangeUid = responseString?.range(of:regexpUid, options: .regularExpression) {
+                uid = String(responseString![rangeUid])
+            }
+
+            if let rangeCode = responseString?.range(of:regexCode, options: .regularExpression) {
+                code = String(responseString![rangeCode])
+            }
+
+            let finalCodeIndex = code.index(code.endIndex, offsetBy: -32)
+            let codeNumber = code[finalCodeIndex...]
+            let finalUidIndex = uid.index(uid.endIndex, offsetBy: -32)
+            let uidNumber = uid[finalUidIndex...]
+            self.completeVerification(uid: String(uidNumber), code: String(codeNumber)) {
+                done()
+            }
+        }
+        task.resume()
     }
 }
