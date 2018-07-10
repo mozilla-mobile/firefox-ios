@@ -55,7 +55,7 @@ func writeStrings(file xliff.File, path string, skipTransUnits []string, allowIn
 		if transUnit.Note != "" {
 			fmt.Fprintf(w, "/* %s */\n", transUnit.Note)
 		} else {
-			fmt.Fprintf(w, "/* (No Commment) */\n")
+			fmt.Fprintf(w, "/* (No Comment) */\n")
 		}
 		fmt.Fprintf(w, "\"%s\" = \"%s\";\n\n", transUnit.ID, escapeString(transUnit.Target))
 	}
