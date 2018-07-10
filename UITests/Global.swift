@@ -85,7 +85,7 @@ extension KIFUITestActor {
                 }
                 return false
             }
-            
+
             return (element == nil) ? KIFTestStepResult.wait : KIFTestStepResult.success
         }
 
@@ -276,25 +276,25 @@ class BrowserUtils {
 
 	class func dismissFirstRunUI() {
 		var error: NSError?
-        
+
 		let matcher = grey_allOf([
 			grey_accessibilityID("IntroViewController.scrollView"), grey_sufficientlyVisible()])
-		
+
         EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &error)
-		
+
 		if error == nil {
             EarlGrey.selectElement(with: matcher).perform(grey_swipeFastInDirection(GREYDirection.left))
             let buttonMatcher = grey_allOf([
                 grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
-            
+
             EarlGrey.selectElement(with: buttonMatcher).assert(grey_notNil(), error: &error)
-        
+
             if error == nil {
                 EarlGrey.selectElement(with: buttonMatcher).perform(grey_tap())
             }
 		}
 	}
-    
+
     class func iPad() -> Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
@@ -343,7 +343,7 @@ class BrowserUtils {
         EarlGrey.selectElement(with: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
             .perform(grey_tap())
     }
-    
+
     fileprivate class func acceptClearPrivateData() {
         EarlGrey.selectElement(with: grey_allOf([grey_accessibilityLabel("OK"), grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)])).perform(grey_tap())
     }
@@ -375,7 +375,7 @@ class BrowserUtils {
         acceptClearPrivateData()
         closeClearPrivateDataDialog()
     }
-    
+
     class func clearHistoryItems(_ tester: KIFUITestActor, numberOfTests: Int = -1) {
         resetToAboutHome()
         tester.tapView(withAccessibilityLabel: "History")
@@ -458,7 +458,7 @@ class SimplePageServer {
         webServer.addHandler(forMethod: "GET", path: "/loginForm.html", request: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(html: self.getPageData("loginForm"))
         }
-        
+
         webServer.addHandler(forMethod: "GET", path: "/navigationDelegate.html", request: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(html: self.getPageData("navigationDelegate"))
         }

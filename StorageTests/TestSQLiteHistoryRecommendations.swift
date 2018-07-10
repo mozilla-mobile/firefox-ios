@@ -76,7 +76,7 @@ class TestSQLiteHistoryRecommendations: XCTestCase {
         let siteVisitC1 = SiteVisit(site: siteC, date: oneHourAgo + 1, type: .link)
         let siteVisitC2 = SiteVisit(site: siteC, date: oneHourAgo + 1000, type: .link)
         let siteVisitC3 = SiteVisit(site: siteC, date: oneHourAgo + 2000, type: .link)
-        
+
         let siteVisitD1 = SiteVisit(site: siteD, date: oneHourAgo, type: .link)
         let siteVisitD2 = SiteVisit(site: siteD, date: oneHourAgo + 1000, type: .link)
         let siteVisitD3 = SiteVisit(site: siteD, date: oneHourAgo + 2000, type: .link)
@@ -320,7 +320,7 @@ private func populateForRecommendationCalculations(_ history: SQLiteHistory, boo
         let modifiedTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i))
         let bookmarkSite = Site(url: "http://bookmark-\(i)/", title: "\(i) Bookmark")
         bookmarkSite.guid = "bookmark-\(i)"
-        
+
         addVisitForSite(bookmarkSite, intoHistory: history, from: .local, atTime: modifiedTime)
         addVisitForSite(bookmarkSite, intoHistory: history, from: .remote, atTime: modifiedTime)
         addVisitForSite(bookmarkSite, intoHistory: history, from: .local, atTime: modifiedTime)

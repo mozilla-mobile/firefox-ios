@@ -10,7 +10,7 @@ struct FormPostData {
     let target: String
     let enctype: String
     let requestBody: Data
-    
+
     init?(messageBody: Any) {
         guard let messageBodyDict = messageBody as? [String: String],
             let actionString = messageBodyDict["action"],
@@ -22,24 +22,24 @@ struct FormPostData {
             let requestBody = requestBodyString.data(using: .utf8) else {
                 return nil
         }
-        
+
         self.action = action
         self.method = method
         self.target = target
         self.enctype = enctype
         self.requestBody = requestBody
     }
-    
+
     func matchesNavigationAction(_ navigationAction: WKNavigationAction) -> Bool {
         let request = navigationAction.request
         let headers = request.allHTTPHeaderFields ?? [:]
-        
+
         if self.action == request.url,
             self.method == request.httpMethod,
             self.enctype == headers["Content-Type"] {
             return true
         }
-        
+
         return false
     }
 
@@ -60,11 +60,11 @@ class FormPostHelper: TabContentScript {
     required init(tab: Tab) {
         self.tab = tab
     }
-    
+
     static func name() -> String {
         return "FormPostHelper"
     }
-    
+
     func scriptMessageHandlerName() -> String? {
         return "formPostHelper"
     }
@@ -74,7 +74,7 @@ class FormPostHelper: TabContentScript {
             print("Unable to parse FormPostData from script message body.")
             return
         }
-        
+
         blankTargetFormPosts.append(formPostData)
     }
 
@@ -82,13 +82,13 @@ class FormPostHelper: TabContentScript {
         guard let formPostData = blankTargetFormPosts.first(where: { $0.matchesNavigationAction(navigationAction) }) else {
             return navigationAction.request
         }
-        
+
         let request = formPostData.urlRequestWithHeaders(navigationAction.request.allHTTPHeaderFields)
-        
+
         if let index = blankTargetFormPosts.index(where: { $0.matchesNavigationAction(navigationAction) }) {
             blankTargetFormPosts.remove(at: index)
         }
-        
+
         return request
     }
 }

@@ -46,7 +46,7 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var accessoryText: String?
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
-    
+
     init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
@@ -71,7 +71,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     fileprivate(set) var actions: [[PhotonActionSheetItem]]
 
     var syncManager: SyncManager? // used to display the sync button
-    
+
     private var site: Site?
     private let style: PresentationStyle
     private var tintColor = UIColor.Photon.Grey80
@@ -86,11 +86,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tapRecognizer.delegate = self
         return tapRecognizer
     }()
-    
+
     lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setTitle(Strings.CloseButtonTitle, for: .normal)
-        button.backgroundColor = UIConstants.AppBackgroundColor
+        button.backgroundColor = UIColor.theme.browser.background
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
@@ -104,7 +104,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             self.transitioningDelegate = photonTransitionDelegate
         }
     }
-    
+
     init(site: Site, actions: [PhotonActionSheetItem], closeButtonTitle: String = Strings.CloseButtonTitle) {
         self.site = site
         self.actions = [actions]
@@ -120,19 +120,19 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         self.title = title
         self.closeButton.setTitle(closeButtonTitle, for: .normal)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         if style == .centered {
             applyBackgroundBlur()
             self.tintColor = UIConstants.SystemBlueColor
         }
-        
+
         view.addGestureRecognizer(tapRecognizer)
         view.addSubview(tableView)
         view.accessibilityIdentifier = "Action Sheet"
@@ -140,7 +140,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         // In a popover the popover provides the blur background
         // Not using a background color allows the view to style correctly with the popover arrow
         if self.popoverPresentationController == nil {
-            tableView.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
+            tableView.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
             let blurEffect = UIBlurEffect(style: .light)
             let blurEffectView = UIVisualEffectView(effect: blurEffect)
             tableView.backgroundView = blurEffectView
@@ -159,7 +159,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
                 make.bottom.equalTo(self.view.safeArea.bottom).inset(PhotonActionSheetUX.Padding)
             }
         }
-        
+
         if style == .popover {
             self.actions = actions.map({ $0.reversed() }).reversed()
             tableView.snp.makeConstraints { make in
@@ -240,47 +240,47 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             view.addSubview(imageView)
         }
     }
-    
+
     @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         self.dismiss(animated: true, completion: nil)
     }
-    
+
     deinit {
         tableView.dataSource = nil
         tableView.delegate = nil
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
+
         if self.traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass
             || self.traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
             updateViewConstraints()
         }
     }
-    
+
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         if tableView.frame.contains(touch.location(in: self.view)) {
             return false
         }
         return true
     }
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return actions.count
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return actions[section].count
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var action = actions[indexPath.section][indexPath.row]
         guard let handler = action.handler else {
             self.dismiss(nil)
             return
         }
-        
+
         // Switches can be toggled on/off without dismissing the menu
         if action.accessory == .Switch {
             let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -295,7 +295,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
         return handler(action)
     }
-    
+
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
         return false
     }
@@ -308,7 +308,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         cell.configure(with: action, syncManager: syncManager)
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // If we have multiple sections show a separator for each one except the first.
         if section > 0 {
@@ -409,7 +409,7 @@ private class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         titleLabel.numberOfLines = 2
         return titleLabel
     }()
-    
+
     lazy var descriptionLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
@@ -417,7 +417,7 @@ private class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         titleLabel.numberOfLines = 1
         return titleLabel
     }()
-    
+
     lazy var siteImageView: UIImageView = {
         let siteImageView = UIImageView()
         siteImageView.contentMode = .center
@@ -427,44 +427,44 @@ private class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         siteImageView.layer.borderWidth = PhotonActionSheetUX.BorderWidth
         return siteImageView
     }()
-    
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
         self.backgroundView = UIView()
         self.backgroundView?.backgroundColor = .clear
         contentView.addSubview(siteImageView)
-        
+
         siteImageView.snp.remakeConstraints { make in
             make.top.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
             make.centerY.equalTo(contentView)
             make.leading.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
             make.size.equalTo(PhotonActionSheetUX.SiteImageViewSize)
         }
-        
+
         let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
         stackView.spacing = PhotonActionSheetSiteHeaderView.VerticalPadding
         stackView.alignment = .leading
         stackView.axis = .vertical
-        
+
         contentView.addSubview(stackView)
-        
+
         stackView.snp.makeConstraints { make in
             make.leading.equalTo(siteImageView.snp.trailing).offset(PhotonActionSheetSiteHeaderView.Padding)
             make.trailing.equalTo(contentView).inset(PhotonActionSheetSiteHeaderView.Padding)
             make.centerY.equalTo(siteImageView.snp.centerY)
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func prepareForReuse() {
         self.siteImageView.image = nil
         self.siteImageView.backgroundColor = UIColor.clear
     }
-    
+
     func configure(with site: Site) {
         self.siteImageView.setFavicon(forSite: site) { (color, url) in
             self.siteImageView.backgroundColor = color
@@ -556,7 +556,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         label.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         return label
     }()
-    
+
     lazy var statusIcon: UIImageView = {
         return createIconImageView()
     }()
@@ -571,7 +571,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         toggle.contentMode = .scaleAspectFit
         return toggle
     }()
-    
+
     lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
         selectedOverlay.backgroundColor = PhotonActionSheetCellUX.SelectedOverlayColor
@@ -598,7 +598,7 @@ private class PhotonActionSheetCell: UITableViewCell {
             self.selectedOverlay.isHidden = !isSelected
         }
     }
-    
+
     override func prepareForReuse() {
         self.statusIcon.image = nil
         disclosureIndicator.removeFromSuperview()
@@ -606,14 +606,14 @@ private class PhotonActionSheetCell: UITableViewCell {
         toggleSwitch.removeFromSuperview()
         statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
     }
-    
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         isAccessibilityElement = true
         contentView.addSubview(selectedOverlay)
         backgroundColor = .clear
-        
+
         selectedOverlay.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
@@ -636,7 +636,7 @@ private class PhotonActionSheetCell: UITableViewCell {
             make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding, left: padding, bottom: topPadding, right: padding))
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -666,7 +666,7 @@ private class PhotonActionSheetCell: UITableViewCell {
                     }
                 }
             // When the iconURL is not nil we are most likely showing a profile picture.
-            // In that case we do not need a tint color. And make sure the image is sized correctly
+            // In that case we do not need a tint color. And make sure the image is sized correctly.
             // This is for the sync profile button in the menu
             if action.iconURL == nil {
                 statusIcon.tintColor = self.tintColor

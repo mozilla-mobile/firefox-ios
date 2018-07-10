@@ -44,7 +44,7 @@ def firefox_log(pytestconfig, tmpdir):
 def tps_addon(pytestconfig, tmpdir_factory):
     path = pytestconfig.getoption('tps')
     if path is not None:
-        yield path
+        return path
     task_url = 'https://index.taskcluster.net/v1/task/' \
                'gecko.v2.mozilla-central.latest.firefox.addons.tps'
     task_id = requests.get(task_url).json().get('taskId')
@@ -52,7 +52,7 @@ def tps_addon(pytestconfig, tmpdir_factory):
     addon_url = 'https://queue.taskcluster.net/v1/task/' \
                 '{}/artifacts/public/tps.xpi'.format(task_id)
     scraper = DirectScraper(addon_url, destination=cache_dir)
-    yield scraper.download()
+    return scraper.download()
 
 
 @pytest.fixture

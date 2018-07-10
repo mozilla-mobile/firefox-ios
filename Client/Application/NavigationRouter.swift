@@ -26,6 +26,7 @@ enum SettingsPage: String {
     case search
     case clearData = "clear-private-data"
     case fxa
+    case theme
 }
 
 // Used by the App to navigate to different views.
@@ -54,20 +55,20 @@ extension URLComponents {
         return self.queryItems?.first { $0.name == param }?.value
     }
 }
-    
+
 // The root navigation for the Router. Look at the tests to see a complete URL
 enum NavigationPath {
     case url(webURL: URL?, isPrivate: Bool)
     case fxa(params: FxALaunchParams)
     case deepLink(DeepLink)
     case text(String)
-    
+
     init?(url: URL) {
         let urlString = url.absoluteString
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return nil
         }
-        
+
         guard let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
             let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
             // Something very strange has happened; org.mozilla.Client should be the zeroeth URL type.
@@ -77,7 +78,7 @@ enum NavigationPath {
         guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
             return nil
         }
-        
+
         if urlString.starts(with: "\(scheme)://deep-link"), let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL) {
             self = .deepLink(link)
         } else if urlString.starts(with: "\(scheme)://fxa-signin"), components.valueForQuery("signin") != nil {
@@ -118,11 +119,11 @@ enum NavigationPath {
             NavigationPath.handleSettings(settings: settingsPath, with: rootVC, baseSettingsVC: settingsTableViewController, and: bvc)
         }
     }
-    
+
     private static func handleFxA(params: FxALaunchParams, with bvc: BrowserViewController) {
         bvc.presentSignInViewController(params)
     }
-    
+
     private static func handleHomePanel(panel: HomePanelPath, with bvc: BrowserViewController) {
         switch panel {
         case .bookmarks: bvc.openURLInNewTab(HomePanelType.bookmarks.localhostURL, isPrivileged: true)
@@ -131,7 +132,7 @@ enum NavigationPath {
         case .topsites: bvc.openURLInNewTab(HomePanelType.topSites.localhostURL, isPrivileged: true)
         }
     }
-    
+
     private static func handleURL(url: URL?, isPrivate: Bool, with bvc: BrowserViewController) {
         if let newURL = url {
             bvc.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
@@ -145,13 +146,13 @@ enum NavigationPath {
         bvc.openBlankNewTab(focusLocationField: false)
         bvc.urlBar(bvc.urlBar, didSubmitText: text)
     }
-    
+
     private static func handleSettings(settings: SettingsPage, with rootNav: UINavigationController, baseSettingsVC: AppSettingsTableViewController, and bvc: BrowserViewController) {
 
         guard let profile = baseSettingsVC.profile, let tabManager = baseSettingsVC.tabManager else {
             return
         }
-        
+
         let controller = SettingsNavigationController(rootViewController: baseSettingsVC)
         controller.popoverDelegate = bvc
         controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
@@ -181,6 +182,8 @@ enum NavigationPath {
             controller.pushViewController(viewController, animated: true)
         case .fxa:
             bvc.presentSignInViewController()
+        case .theme:
+            controller.pushViewController(ThemeSettingsController(), animated: true)
         }
     }
 }

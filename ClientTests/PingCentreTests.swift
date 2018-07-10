@@ -55,7 +55,7 @@ class PingCentreTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        
+
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses!.insert(MockingURLProtocol.self, at: 0)
 
@@ -97,7 +97,7 @@ class PingCentreTests: XCTestCase {
         XCTAssertTrue(receivedNetworkRequests.count == 1)
 
         client.sendBatch([], validate: true).succeeded()
-        
+
         // Double check that we didn't send the empty payloads request
         XCTAssertTrue(receivedNetworkRequests.count == 1)
     }

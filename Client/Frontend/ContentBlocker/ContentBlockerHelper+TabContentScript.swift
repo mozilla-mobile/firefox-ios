@@ -27,7 +27,7 @@ extension ContentBlockerHelper: TabContentScript {
             let mainDocumentUrl = tab?.webView?.url else {
             return
         }
-        
+
         // Reset the pageStats to make sure the trackingprotection shield icon knows that a page was whitelisted
         guard !ContentBlockerHelper.isWhitelisted(url: mainDocumentUrl) else {
             clearPageStats()

@@ -191,7 +191,7 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         })
 
         statsSession.start()
-        
+
         let doMirror = mirrorer.go(info: info, greenLight: greenLight)
         let run: SyncResult
 
@@ -247,7 +247,7 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                                 }
                             }
                         }
-                        
+
                         let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, statsSession: self.statsSession, greenLight: greenLight)
                         return applier.go()
                     }

@@ -84,7 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
         Sentry.shared.setup(sendUsageData: sendUsageData)
-        
+
         // Set the Firefox UA for browsing.
         setUserAgent()
 
@@ -209,7 +209,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             print("Setting up BuddyBuild SDK")
             BuddyBuildSDK.setup()
         #endif
-        
+
         window!.makeKeyAndVisible()
 
         // Now roll logs.
@@ -410,13 +410,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
         if let url = userActivity.webpageURL {
             let query = url.getQuery()
-            
+
             // Check for fxa sign-in code and launch the login screen directly
             if query["signin"] != nil {
                 browserViewController.launchFxAFromDeeplinkURL(url)
                 return true
             }
-            
+
             // Per Adjust documenation, https://docs.adjust.com/en/universal-links/#running-campaigns-through-universal-links,
             // it is recommended that links contain the `deep_link` query parameter. This link will also
             // be url encoded.
