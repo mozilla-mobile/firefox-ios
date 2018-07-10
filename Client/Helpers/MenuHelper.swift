@@ -31,7 +31,7 @@ open class MenuHelper: NSObject {
     }
 
     open func setItems() {
-        let pasteAndGoTitle = NSLocalizedString("Paste & Go", tableName: "URL", comment: "pastes URL and searches")
+        let pasteAndGoTitle = NSLocalizedString("PasteGo", value: "Paste & Go", comment: "The Paste & go menu item")
         let pasteAndGoItem = UIMenuItem(title: pasteAndGoTitle, action: MenuHelper.SelectorPasteAndGo)
 
         let revealPasswordTitle = NSLocalizedString("Reveal", tableName: "LoginManager", comment: "Reveal password text selection menu item")
@@ -48,8 +48,8 @@ open class MenuHelper: NSObject {
 
         let findInPageTitle = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Text selection menu item")
         let findInPageItem = UIMenuItem(title: findInPageTitle, action: MenuHelper.SelectorFindInPage)
-      
-        let searchTitle = NSLocalizedString("Search with Firefox", tableName: "SearchWithFirefox", comment: "Search in New Tab Text selection menu item")
+
+        let searchTitle = NSLocalizedString("SearchWithFirefox", value: "Search with Firefox", comment: "Search in New Tab Text selection menu item")
         let searchItem = UIMenuItem(title: searchTitle, action: MenuHelper.SelectorSearchWithFirefox)
       
         UIMenuController.shared.menuItems = [pasteAndGoItem, copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem, searchItem]
