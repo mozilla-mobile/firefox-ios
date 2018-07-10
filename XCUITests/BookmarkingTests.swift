@@ -96,4 +96,42 @@ class BookmarkingTests: BaseTestCase {
         navigator.browserPerformAction(.openBookMarksOption)
         checkItemInBookmarkList()
     }
+
+    func testBookmarksAwesomeBar() {
+        navigator.goto(URLBarOpen)
+        typeOnSearchBar(text: "www.ebay")
+        waitforExistence(app.tables["SiteTable"])
+        waitforExistence(app.buttons["www.ebay.com"])
+        XCTAssertTrue(app.buttons["www.ebay.com"].exists)
+        typeOnSearchBar(text: ".com")
+        typeOnSearchBar(text: "\r")
+
+         //Clear text and enter new url
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.goto(URLBarOpen)
+        typeOnSearchBar(text: "http://www.olx.ro")
+
+        // Site table existes but is empty
+        waitforExistence(app.tables["SiteTable"])
+        XCTAssertEqual(app.tables["SiteTable"].cells.count, 0)
+        typeOnSearchBar(text: "\r")
+
+        // Add page to bookmarks
+        navigator.nowAt(BrowserTab)
+        bookmark()
+
+        // Now the site should be suggested
+        navigator.performAction(Action.AcceptClearPrivateData)
+        navigator.goto(BrowserTab)
+        navigator.goto(URLBarOpen)
+        typeOnSearchBar(text: "olx.ro")
+        waitforExistence(app.tables["SiteTable"])
+        waitforExistence(app.buttons["olx.ro"])
+        XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
+    }
+
+    private func typeOnSearchBar(text: String) {
+        waitforExistence(app.textFields["address"])
+        app.textFields["address"].typeText(text)
+    }
 }

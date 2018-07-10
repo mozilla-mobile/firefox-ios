@@ -287,7 +287,10 @@
                   Identifier = "BaseTestCase">
                </Test>
                <Test
-                  Identifier = "BookmarkingTests">
+                  Identifier = "BookmarkingTests/testAccessBookmarksFromContextMenu()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testBookmarkingUI()">
                </Test>
                <Test
                   Identifier = "BrowsingPDFTests">
