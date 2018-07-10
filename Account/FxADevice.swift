@@ -55,9 +55,9 @@ public class FxADevice: RemoteDevice {
         let availableCommands = json["availableCommands"]
 
         let push: FxADevicePushParams?
-        if let pushCallback = json["pushCallback"].stringValue(),
-            let publicKey = json["pushPublicKey"].stringValue(), publicKey != "",
-            let authKey   = json["pushAuthKey"].stringValue(), authKey != "" {
+        if let pushCallback = json["pushCallback"].string,
+            let publicKey = json["pushPublicKey"].string, publicKey != "",
+            let authKey = json["pushAuthKey"].string, authKey != "" {
             push = FxADevicePushParams(callback: pushCallback, publicKey: publicKey, authKey: authKey)
         } else {
             push = nil

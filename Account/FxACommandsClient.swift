@@ -166,7 +166,7 @@ open class FxACommandSendTab {
             "entries": [["title": title, "url": url]]
         ])
 
-        guard let jsonString = json.stringValue() else {
+        guard let jsonString = json.stringify() else {
             return
         }
 

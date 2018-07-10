@@ -68,7 +68,7 @@ public func keysPayloadSerializer<T: CleartextPayloadJSON>(keyBundle: KeyBundle,
                 let iv = iv.base64EncodedString
 
                 // The payload is stringified JSON. Yes, I know.
-                let payload: Any = JSON(["ciphertext": ciphertext, "IV": iv, "hmac": hmac]).stringValue()! as Any
+                let payload: Any = JSON(["ciphertext": ciphertext, "IV": iv, "hmac": hmac]).stringify()! as Any
                 let obj = ["id": record.id,
                            "sortindex": record.sortindex,
                            // This is how SwiftyJSON wants us to express a null that we want to

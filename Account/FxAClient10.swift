@@ -345,7 +345,7 @@ open class FxAClient10 {
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.httpBody = JSON(parameters).stringValue()?.utf8EncodedData
+        mutableURLRequest.httpBody = JSON(parameters).stringify()?.utf8EncodedData
 
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.loginResponse)
     }
@@ -411,7 +411,7 @@ open class FxAClient10 {
         var mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.httpBody = httpBody.stringValue()?.utf8EncodedData
+        mutableURLRequest.httpBody = httpBody.stringify()?.utf8EncodedData
 
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
@@ -427,7 +427,7 @@ open class FxAClient10 {
         let httpBody: JSON = JSON(["id": ownDeviceId])
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.httpBody = httpBody.stringValue()?.utf8EncodedData
+        mutableURLRequest.httpBody = httpBody.stringify()?.utf8EncodedData
 
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
@@ -465,7 +465,7 @@ open class FxAClient10 {
         let httpBody: JSON = JSON(["command": name, "target": targetDeviceID, "payload": ["encrypted": payload]])
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.httpBody = httpBody.stringValue()?.utf8EncodedData
+        mutableURLRequest.httpBody = httpBody.stringify()?.utf8EncodedData
 
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
@@ -515,7 +515,7 @@ open class FxAClient10 {
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
 
-        guard let httpBody = JSON(parameters as NSDictionary).stringValue()?.utf8EncodedData else {
+        guard let httpBody = JSON(parameters as NSDictionary).stringify()?.utf8EncodedData else {
             return deferMaybe(FxAClientError.local(FxAClientUnknownError))
         }
 
@@ -617,7 +617,7 @@ extension FxAClient10: FxALoginClient {
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.httpBody = JSON(parameters as NSDictionary).stringValue()?.utf8EncodedData
+        mutableURLRequest.httpBody = JSON(parameters as NSDictionary).stringify()?.utf8EncodedData
 
         let salt: Data = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")

@@ -368,7 +368,7 @@ extension SQLiteRemoteClientsAndTabs: RemoteDevices {
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     """
 
-                let availableCommands = device.availableCommands?.rawString() ?? "{}"
+                let availableCommands = device.availableCommands?.rawString(options: []) ?? "{}"
                 let args: Args = [device.id, device.name, device.type, device.isCurrentDevice, now, now, device.lastAccessTime, availableCommands]
                 try conn.executeChange(sql, withArgs: args)
             }

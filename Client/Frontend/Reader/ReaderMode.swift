@@ -104,7 +104,7 @@ struct ReaderModeStyle {
 
     /// Encode the style to a JSON dictionary that can be passed to ReaderMode.js
     func encode() -> String {
-        return JSON(["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]).stringValue() ?? ""
+        return JSON(["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]).stringify() ?? ""
     }
 
     /// Encode the style to a dictionary that can be stored in the profile
@@ -202,7 +202,7 @@ struct ReadabilityResult {
     /// Encode to a JSON encoded string
     func encode() -> String {
         let dict: [String: Any] = self.encode()
-        return JSON(dict).stringValue()!
+        return JSON(dict).stringify()!
     }
 }
 

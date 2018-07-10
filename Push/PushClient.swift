@@ -109,10 +109,10 @@ public extension PushClient {
             parameters = ["token": apnsToken]
         }
 
-        mutableURLRequest.httpBody = JSON(parameters).stringValue()?.utf8EncodedData
+        mutableURLRequest.httpBody = JSON(parameters).stringify()?.utf8EncodedData
 
         if experimentalMode {
-            log.info("curl -X POST \(registerURL.absoluteString) --data '\(JSON(parameters).stringValue()!)'")
+            log.info("curl -X POST \(registerURL.absoluteString) --data '\(JSON(parameters).stringify()!)'")
         }
 
         return send(request: mutableURLRequest) >>== { json in
@@ -134,7 +134,7 @@ public extension PushClient {
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let parameters = ["token": apnsToken]
-        mutableURLRequest.httpBody = JSON(parameters).stringValue()?.utf8EncodedData
+        mutableURLRequest.httpBody = JSON(parameters).stringify()?.utf8EncodedData
 
         return send(request: mutableURLRequest) >>== { json in
             return deferMaybe(creds)

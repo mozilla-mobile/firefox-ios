@@ -130,7 +130,7 @@ class FxALoginHelper {
     // It manages the asking for user permission for notification and registration
     // for APNS and WebPush notifications.
     func application(_ application: UIApplication, didReceiveAccountJSON data: JSON) {
-        if data["keyFetchToken"].stringValue() == nil || data["unwrapBKey"].stringValue() == nil {
+        guard data["keyFetchToken"].string != nil, data["unwrapBKey"].string != nil else {
             // The /settings endpoint sends a partial "login"; ignore it entirely.
             log.error("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")
             return self.loginDidFail()

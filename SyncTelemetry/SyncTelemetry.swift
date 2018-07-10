@@ -50,16 +50,16 @@ open class SyncTelemetry {
         var request = URLRequest(url: url)
 
         log.debug("Ping URL: \(url)")
-        log.debug("Ping payload: \(ping.payload.stringValue() ?? "")")
+        log.debug("Ping payload: \(ping.payload.stringify() ?? "")")
 
         // Don't add the common ping format for the mobile core ping.
         let pingString: String?
         if docType != .core {
             var json = JSON(commonPingFormat(forType: docType))
             json["payload"] = ping.payload
-            pingString = json.stringValue()
+            pingString = json.stringify()
         } else {
-            pingString = ping.payload.stringValue()
+            pingString = ping.payload.stringify()
         }
 
         guard let body = pingString?.data(using: .utf8) else {
