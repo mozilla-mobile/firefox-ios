@@ -10,6 +10,6 @@ def test_sync_tabs_from_device(tps, xcodebuild):
     xcodebuild.test('XCUITests/IntegrationTests/testFxASyncTabs')
     tps.run('test_tabs.js')
 
-def test_sync_tabs_from_device(tps, xcodebuild):
+def test_sync_logins_from_device(tps, xcodebuild):
     xcodebuild.test('XCUITests/IntegrationTests/testFxASyncLogins')
     tps.run('test_password.js')

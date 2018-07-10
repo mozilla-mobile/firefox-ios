@@ -110,7 +110,7 @@ class IntegrationTests: BaseTestCase {
         waitforExistence(app.buttons["SaveLoginPrompt.saveLoginButton"])
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
 
-        // Sig in with FxAccount
+        // Sign in with FxAccount
         signInFxAccounts()
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
