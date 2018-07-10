@@ -54,8 +54,8 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
-    fileprivate func setTheme(theme: Theme, forButtons buttons: [Themeable]) {
-        buttons.forEach { $0.applyTheme(theme) }
+    fileprivate func setTheme(forButtons buttons: [Themeable]) {
+        buttons.forEach { $0.applyTheme() }
     }
 
     init(toolbar: TabToolbarProtocol) {
@@ -89,7 +89,7 @@ open class TabToolbarHelper: NSObject {
         toolbar.menuButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
         toolbar.menuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
         toolbar.menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
-        setTheme(theme: .Normal, forButtons: toolbar.actionButtons)
+        setTheme(forButtons: toolbar.actionButtons)
     }
 
     func didClickBack() {
@@ -105,7 +105,7 @@ open class TabToolbarHelper: NSObject {
     func didClickTabs() {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressTabs(toolbar, button: toolbar.tabsButton)
     }
-    
+
     func didLongPressTabs(_ recognizer: UILongPressGestureRecognizer) {
         toolbar.tabToolbarDelegate?.tabToolbarDidLongPressTabs(toolbar, button: toolbar.tabsButton)
     }
@@ -166,7 +166,7 @@ class ToolbarButton: UIButton {
             self.tintColor = isHighlighted ? selectedTintColor : unselectedTintColor
         }
     }
-    
+
     override open var isEnabled: Bool {
         didSet {
             self.tintColor = isEnabled ? unselectedTintColor : disabledTintColor
@@ -178,14 +178,14 @@ class ToolbarButton: UIButton {
             self.imageView?.tintColor = self.tintColor
         }
     }
-    
+
 }
 
 extension ToolbarButton: Themeable {
-    func applyTheme(_ theme: Theme) {
-        selectedTintColor = UIColor.ToolbarButton.SelectedTint.colorFor(theme)
-        disabledTintColor = UIColor.ToolbarButton.DisabledTint.colorFor(theme)
-        unselectedTintColor = UIColor.Browser.Tint.colorFor(theme)
+    func applyTheme() {
+        selectedTintColor = UIColor.theme.toolbarButton.selectedTint
+        disabledTintColor = UIColor.theme.toolbarButton.disabledTint
+        unselectedTintColor = UIColor.theme.browser.tint
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }
@@ -279,9 +279,13 @@ extension TabToolbar: TabToolbarProtocol {
     }
 }
 
-extension TabToolbar: Themeable {
-    func applyTheme(_ theme: Theme) {
-        backgroundColor = UIColor.Browser.Background.colorFor(theme)
-        helper?.setTheme(theme: theme, forButtons: actionButtons)
+extension TabToolbar: Themeable, PrivateModeUI {
+    func applyTheme() {
+        backgroundColor = UIColor.theme.browser.background
+        helper?.setTheme(forButtons: actionButtons)
+    }
+
+    func applyUIMode(isPrivate: Bool) {
+        tabsButton.applyUIMode(isPrivate: isPrivate)
     }
 }

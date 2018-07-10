@@ -32,7 +32,7 @@ public struct ReadingListItem: Equatable {
     public let unread: Bool
     public let archived: Bool
     public let favorite: Bool
-    
+
     /// Initializer for when a record is loaded from a database row
     public init(id: Int, lastModified: Timestamp, url: String, title: String, addedBy: String, unread: Bool = true, archived: Bool = false, favorite: Bool = false) {
         self.id = id

@@ -52,9 +52,14 @@ class DownloadHelper: NSObject, OpenInHelper {
             return nil
         }
 
-        let contentDisposition = (response as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
         let mimeType = response.mimeType ?? MIMEType.OctetStream
-        let isAttachment = contentDisposition?.starts(with: "attachment") ?? (mimeType == MIMEType.OctetStream)
+        let isAttachment = mimeType == MIMEType.OctetStream
+
+        // Bug 1474339 - Don't auto-download files served with 'Content-Disposition: attachment'
+        // Leaving this here for now, but commented out. Checking this HTTP header is
+        // what Desktop does should we ever decide to change our minds on this.
+        // let contentDisposition = (response as? HTTPURLResponse)?.allHeaderFields["Content-Disposition"] as? String
+        // let isAttachment = contentDisposition?.starts(with: "attachment") ?? (mimeType == MIMEType.OctetStream)
 
         guard isAttachment || !canShowInWebView || forceDownload else {
             return nil

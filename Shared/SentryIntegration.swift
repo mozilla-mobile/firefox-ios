@@ -50,7 +50,7 @@ public class Sentry {
         }
 
         Logger.browserLogger.debug("Enabling Sentry crash handler")
-        
+
         do {
             Client.shared = try Client(dsn: dsn)
             try Client.shared?.startCrashHandler()

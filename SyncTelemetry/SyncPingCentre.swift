@@ -106,7 +106,7 @@ class DefaultPingCentreImpl: PingCentreClient {
         guard !data.isEmpty else {
             return succeed()
         }
-        
+
         // Walk through all the pings if we need to validate
         return (validate ? walk(data) { self.validatePayload($0, schema: self.topic.schema) } : succeed())
             >>> {

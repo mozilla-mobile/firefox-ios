@@ -20,7 +20,7 @@ class SeparatorTableCell: UITableViewCell {
         self.indentationWidth = 0
         self.separatorInset = .zero
         self.layoutMargins = .zero
-        self.backgroundColor = UIConstants.PanelBackgroundColor    // So we get a gentle white and grey stripe.
+        self.backgroundColor = UIColor.theme.tableView.rowBackground    // So we get a gentle white and grey stripe.
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -307,7 +307,6 @@
 		7B10AABB1E3A1F650002DD08 /* URLRequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B10AABA1E3A1F650002DD08 /* URLRequestExtensions.swift */; };
 		7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B2142FC1E5E055000CDD3FC /* InfoPlist.strings */; };
 		7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */; };
-		7B3631EA1C244FEE00D12AF9 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3631E91C244FEE00D12AF9 /* Theme.swift */; };
 		7B3D9E651E4CBFDB007A50DA /* NSCoderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3D9E641E4CBFDB007A50DA /* NSCoderExtensions.swift */; };
 		7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B42406D1CA04CAC009B5C28 /* Menu.xcassets */; };
 		7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B4980A71CE363ED0017547C /* Settings.xcassets */; };
@@ -692,6 +691,11 @@
 		EB8A0A77206ABCE000A9859A /* WebPagesForTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7A651020699BD200B52A5F /* WebPagesForTesting.swift */; };
 		EB9407492081353100702E05 /* UXConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB940747208134AF00702E05 /* UXConstants.swift */; };
 		EB94075320850C9F00702E05 /* photon-colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C49854D206173C800893DAE /* photon-colors.swift */; };
+		EB9A178E20E525DF00B12184 /* ThemeSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A178D20E525DF00B12184 /* ThemeSettingsController.swift */; };
+		EB9A179B20E69A7F00B12184 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179820E69A7E00B12184 /* ThemeManager.swift */; };
+		EB9A179C20E69A7F00B12184 /* DarkTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179920E69A7E00B12184 /* DarkTheme.swift */; };
+		EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179A20E69A7E00B12184 /* Theme.swift */; };
+		EB9A179F20E6C1A200B12184 /* ThemedWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179E20E6C1A200B12184 /* ThemedWidgets.swift */; };
 		EBA31D791F7999030055463D /* SyncPingCentre.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D781F7999030055463D /* SyncPingCentre.swift */; };
 		EBA31D7B1F79990C0055463D /* SyncTelemetryEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7A1F79990C0055463D /* SyncTelemetryEvents.swift */; };
 		EBA31D7D1F79996E0055463D /* SyncTelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */; };
@@ -1455,7 +1459,6 @@
 		7B10AABA1E3A1F650002DD08 /* URLRequestExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequestExtensions.swift; sourceTree = "<group>"; };
 		7B2142FD1E5E055000CDD3FC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearPrivateDataTests.swift; sourceTree = "<group>"; };
-		7B3631E91C244FEE00D12AF9 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		7B3632D31C2983F000D12AF9 /* L10nSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10nSnapshotTests.swift; sourceTree = "<group>"; };
 		7B3D9E641E4CBFDB007A50DA /* NSCoderExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCoderExtensions.swift; sourceTree = "<group>"; };
 		7B42406D1CA04CAC009B5C28 /* Menu.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Menu.xcassets; sourceTree = "<group>"; };
@@ -1835,6 +1838,11 @@
 		EB7A651020699BD200B52A5F /* WebPagesForTesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebPagesForTesting.swift; sourceTree = "<group>"; };
 		EB7FFFBF20A9D38C003E1E34 /* AlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		EB940747208134AF00702E05 /* UXConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UXConstants.swift; sourceTree = "<group>"; };
+		EB9A178D20E525DF00B12184 /* ThemeSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsController.swift; sourceTree = "<group>"; };
+		EB9A179820E69A7E00B12184 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		EB9A179920E69A7E00B12184 /* DarkTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DarkTheme.swift; sourceTree = "<group>"; };
+		EB9A179A20E69A7E00B12184 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		EB9A179E20E6C1A200B12184 /* ThemedWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedWidgets.swift; sourceTree = "<group>"; };
 		EBA31D781F7999030055463D /* SyncPingCentre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPingCentre.swift; sourceTree = "<group>"; };
 		EBA31D7A1F79990C0055463D /* SyncTelemetryEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncTelemetryEvents.swift; sourceTree = "<group>"; };
 		EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncTelemetryUtils.swift; sourceTree = "<group>"; };
@@ -2311,6 +2319,7 @@
 				E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */,
 				39AC59191CC574AA0042C2F5 /* HomePageSettingsViewController.swift */,
 				392ED6B61D06E85E009D9B62 /* NewTabChoiceViewController.swift */,
+				EB9A178D20E525DF00B12184 /* ThemeSettingsController.swift */,
 				D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */,
 				2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */,
 				2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */,
@@ -2828,7 +2837,6 @@
 				E65607601C08B4E200534B02 /* SearchInputView.swift */,
 				E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */,
 				C4E3984B1D21F2FD004E89BA /* TabTrayButtonExtensions.swift */,
-				7B3631E91C244FEE00D12AF9 /* Theme.swift */,
 				59A68B1F857A8638598A63A0 /* TwoLineCell.swift */,
 				745DAB3E1CDAB09E00D44181 /* HistoryBackButton.swift */,
 				742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */,
@@ -3273,6 +3281,17 @@
 			path = Lists;
 			sourceTree = "<group>";
 		};
+		EB9A179720E69A7E00B12184 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				EB9A179820E69A7E00B12184 /* ThemeManager.swift */,
+				EB9A179920E69A7E00B12184 /* DarkTheme.swift */,
+				EB9A179A20E69A7E00B12184 /* Theme.swift */,
+				EB9A179E20E6C1A200B12184 /* ThemedWidgets.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
@@ -3450,6 +3469,7 @@
 			children = (
 				D331DFC91CB6E9EE009B5DA2 /* OldStrings.swift */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
+				2C49854D206173C800893DAE /* photon-colors.swift */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
 				D3A994941A368691008AD1AC /* Browser */,
@@ -3462,9 +3482,9 @@
 				F84B21F51A0910F600AAB793 /* Reader */,
 				2F44FC551A9E83E200FD20CC /* Settings */,
 				D3972BF01C22412B00035B87 /* Share */,
+				EB9A179720E69A7E00B12184 /* Theme */,
 				D0FCF7EE1FE44E15004A7995 /* UserContent */,
 				D38A1BEB1A9FA2CA00F6A386 /* Widgets */,
-				2C49854D206173C800893DAE /* photon-colors.swift */,
 			);
 			path = Frontend;
 			sourceTree = "<group>";
@@ -4997,13 +5017,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB9A179F20E6C1A200B12184 /* ThemedWidgets.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
 				D029A04920A62DB0001DB72F /* TemporaryDocument.swift in Sources */,
 				E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
 				E68E7ADC1CAC208200FDCA76 /* SetupPasscodeViewController.swift in Sources */,
-				7B3631EA1C244FEE00D12AF9 /* Theme.swift in Sources */,
 				3B61CD491F2A74EF00D38DE1 /* PocketFeed.swift in Sources */,
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
 				E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */,
@@ -5015,8 +5035,10 @@
 				EB07ADBE207FB3E80048D794 /* InstructionsViewController.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
+				EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */,
 				396E38F31EE0C90D00CC180F /* FxALoginHelper.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
+				EB9A179C20E69A7F00B12184 /* DarkTheme.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
@@ -5030,6 +5052,7 @@
 				EB2A63341F3B49A7004EF8B0 /* ContentBlockerHelper.swift in Sources */,
 				FA6B2AC21D41F02D00429414 /* Punycode.swift in Sources */,
 				D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */,
+				EB9A179B20E69A7F00B12184 /* ThemeManager.swift in Sources */,
 				0B3E7D951B27A7CE00E2E84D /* AboutHomeHandler.swift in Sources */,
 				D331DFCA1CB6E9EE009B5DA2 /* OldStrings.swift in Sources */,
 				D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */,
@@ -5153,6 +5176,7 @@
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconFetcher.swift in Sources */,
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
+				EB9A178E20E525DF00B12184 /* ThemeSettingsController.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				39AC591A1CC574AB0042C2F5 /* HomePageSettingsViewController.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,

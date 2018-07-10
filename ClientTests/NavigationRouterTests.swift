@@ -9,27 +9,27 @@ import WebKit
 import XCTest
 
 class NavigationRouterTests: XCTestCase {
-    
+
     var appScheme: String {
         let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as! [AnyObject]
         let urlType = urlTypes.first as! [String : AnyObject]
         let urlSchemes = urlType["CFBundleURLSchemes"] as! [String]
         return urlSchemes.first!
     }
-    
+
     func testOpenURLScheme() {
         let url = "http://google.com?a=1&b=2&c=foo%20bar".escape()!
         let appURL = "\(appScheme)://open-url?url=\(url)"
         let navItem = NavigationPath(url: URL(string: appURL)!)!
         XCTAssertEqual(navItem, NavigationPath.url(webURL: URL(string: url.unescape()!)!, isPrivate: false))
-        
+
         let emptyNav = NavigationPath(url: URL(string: "\(appScheme)://open-url?private=true")!)
         XCTAssertEqual(emptyNav, NavigationPath.url(webURL: nil, isPrivate: true))
-        
+
         let badNav = NavigationPath(url: URL(string: "\(appScheme)://open-url?url=blah")!)
         XCTAssertEqual(badNav, NavigationPath.url(webURL: URL(string: "blah"), isPrivate: false))
     }
-    
+
     // Test EVERY deep link
     func testDeepLinks() {
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/clear-private-data")!), NavigationPath.deepLink(DeepLink.settings(.clearData)))
@@ -45,7 +45,7 @@ class NavigationRouterTests: XCTestCase {
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/readingList")!), NavigationPath.deepLink(DeepLink.homePanel(.readingList)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/badbad")!), nil)
     }
-    
+
     func testFxALinks() {
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://fxa-signin?signin=coolcodes&user=foo&email=bar")!), NavigationPath.fxa(params: FxALaunchParams(query: ["user": "foo","email": "bar", "signin": "coolcodes"])))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://fxa-signin?user=foo&email=bar")!), nil)

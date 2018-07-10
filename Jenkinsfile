@@ -1,7 +1,7 @@
 pipeline {
     agent any
     triggers {
-        pollSCM('H 0 * * *')
+        cron(env.BRANCH_NAME == 'master' ? 'H 0 * * *' : '')
     }
     options {
         timestamps()

@@ -90,7 +90,7 @@ extension ActivityStreamTests {
             }
         }
     }
-    
+
     func testHighlightEmitsEventOnTap() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
         panel.highlights = [mockSite]
@@ -246,7 +246,7 @@ fileprivate class MockRecommender: HistoryRecommendations {
     func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
         return deferMaybe(ArrayCursor(data: []))
     }
-    
+
     func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success {
         return succeed()
     }
