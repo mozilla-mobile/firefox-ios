@@ -34,11 +34,14 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Safari の拡張機能として使用すると:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "製品情報";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@ について";
+
 /* Label on About screen */
-"About.topLabel" = "%@ でプライバシーを管理できます。";
+"About.topLabel" = "%@ でプライバシー保護。";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "カスタム URL を追加";
@@ -71,7 +74,7 @@
 "Autocomplete.customUrlAdded" = "新しいカスタム URL を追加しました。";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "有効にすると、%1$s のアドレスバーで 450 以上の人気の URL が自動補完されます。";
+"Autocomplete.defaultDescriptoin" = "有効にすると、%@ のアドレスバーで 450 以上の人気の URL が自動補完されます。";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "自動補完";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "有効";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "新規セッション";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "未認証のアクセスを防ぐために再度開く場合は %@ のロックを解除します。";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "戻る";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "コピー";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "カスタム URL を追加";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "進む";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "マップを開く";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "ページ内検索完了";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "ページ内で次を検索";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "ページ内で前を検索";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "OK";
 
@@ -178,11 +202,14 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "デスクトップ版を見る";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari をタップしてコンテンツブロッカーを選択します";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "%@ を有効化";
+"Safari.instructionsEnable" = "%@ を有効にします";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ を有効にしましょう。";
@@ -203,7 +230,7 @@
 "Settings.Search.AddSearchEngineTitle" = "検索エンジンを追加";
 
 /* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "インストール済み検索エンジン";
+"Settings.Search.InstalledSearchEngines" = "選択可能な検索エンジン";
 
 /* Label for input field for the name of the search engine to be added */
 "Settings.Search.NameToDisplay" = "表示名";
@@ -236,10 +263,13 @@
 "Settings.blockOtherYes" = "ブロックする";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla は %@ を皆さんに提供し改善するために必要な情報だけを収集するよう努めています。";
+"Settings.detailTextSendUsageData" = "Mozilla は皆さんに %@ を提供し改善するのに必要な情報だけを収集するよう努めています。";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "詳しくはこちら";
+"Settings.learnMore" = "詳細情報。";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "%@ の評価";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "環境設定";
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "プライバシー";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "セキュリティ";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "追跡広告をブロック";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "ユーザーの訪問を追跡するためサイトに埋め込まれ、共有ボタンのように表示されています";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "アプリのロック解除に Face ID を使用";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "URL をアプリ内ですでに開いていても、Face ID で %@ のロックを解除できます";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "動画やウェブページが正常に表示されない場合があります";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "使用状況データを送信";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "アプリのロック解除にタッチ ID を使用";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "URL をアプリ内ですでに開いていても、タッチ ID で %@ のロックを解除できます";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "新機能";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "ページ内検索";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox アプリを入手する";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "%@ で開く";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "デスクトップ版を見る";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "キャンセル";
@@ -319,6 +370,9 @@
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "ページの表示履歴が消去されました。";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "ページ内検索: %@";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "検索語またはアドレスを入力";
 
@@ -326,7 +380,7 @@
 "URL.searchLabel" = "%@ を検索";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "追跡をブロックしました";
+"URL.trackersBlockedLabel" = "ブロックした追跡";
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ で開く";
@@ -363,6 +417,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "入力例: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "共有";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "追跡広告";

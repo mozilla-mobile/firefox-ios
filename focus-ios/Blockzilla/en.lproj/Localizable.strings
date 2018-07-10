@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Use it as a Safari extension:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "About";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "About %@";
 
 /* Label on About screen */
 "About.topLabel" = "%@ puts you in control.";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Enabled";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "New Session";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Unlock %@ when re-opening in order to prevent unauthorized access.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Back";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Copy";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Add Custom URL";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Forward";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Open Maps";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Find in page done";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Find next in page";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Find previous in page";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "OK, Got It!";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Request Desktop Site";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tap Safari, then select Content Blockers";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Learn more.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Rate %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Settings";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SECURITY";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Block ad trackers";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Embedded on sites to track your visits and to display functionality like share buttons";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Use Face ID to unlock app";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID can unlock %@ if a URL is already open in the app";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "May break some videos and Web pages";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Send usage data";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Use Touch ID to unlock app";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID can unlock %@ if a URL is already open in the app";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "What’s New";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Find in Page";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Get the Firefox App";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Open in %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Request Desktop Site";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancel";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Your browsing history has been erased.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Find in page: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Search or enter address";
@@ -363,6 +417,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Example: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Share";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Ad trackers";

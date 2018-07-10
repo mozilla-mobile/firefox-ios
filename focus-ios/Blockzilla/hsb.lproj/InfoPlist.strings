@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "To wam zmóžnja, fotografować a fota nahrać.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Z tym móžeće nałoženje wotewrěć.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Websydła, kotrež wopytujeće, snano waše stejnišćo žadaja.";
 
 /* (No Comment) */

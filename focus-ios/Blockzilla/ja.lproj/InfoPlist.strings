@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "写真を撮影してアップロードできます。";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "アプリのロックを解除します。";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "訪れたウェブサイトがあなたの位置情報を要求しています。";
 
 /* (No Comment) */

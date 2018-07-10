@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "از آن به عنوان یک افزونه برای Safari استفاده کنید:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "درباره";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "درباره %@";
 
 /* Label on About screen */
 "About.topLabel" = "برنامهٔ %@ شما را در کنترل قرار می‌دهد.";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "فعال شد";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "جلسه جدید";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "بازکردن قفل %@ هنگامی که برای جلوگیری از دسترسی بدون اجازه باز می‌شود.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "بازگشت";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "برداشت";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "اضافه کردنURL دلخواه";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "جلو";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "باز کردن نقشه";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "پیدا در صفحه انجام شد";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "پیاده کردن بعدی در صفحه";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "پیدا کردن قبلی در صفحه";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "باشه، گرفتم!";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "درخواست نسخه رو میزی وب‌سایت";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "بر روی Safari بزنید و سپس Content Blockers را انتخاب کنید";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "بیشتر بدانید.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "نرخ %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "تنظیمات";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "حریم‌خصوصی";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SECURITY";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "مسدود کردن ردیاب‌های تبلیغاتی";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "در صفه جاسازی شده است تا بازدید های شما را دنبال کنند و قابلیت هایی نظیر دکمه همرسانی را به شما نمایش دهد";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "استفاده از تشخیص چهره برای باز‌کردن برنامه";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "تشخیص چهره می‌تواند %@ را باز کند اگر یک URL در حال حاضر در برنامه باز باشد";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "ممکن است باعث خرابی برخی فیلم‌ها و صفحات وب شود";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ارسال اطلاعاتِ استفاده";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "استفاده از تشخیص لمسی برای بازکردن برنامه";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "تشخیص لمس می‌تواند %@ را باز‌کند اگرURL در حال حاضر در برنامه باز باشد";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "چه چیزهایی جدید است";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "پیدا کردن در صفحه";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "دریافت برنامه Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "بازکردن در %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "درخواست نسخه رو میزی وب‌سایت";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "لغو";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "تاریخچه مرور شما پاک شده است.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "پیدا کردن در صفحه: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "جست‌وجو یا ورود نشانی";
@@ -363,6 +417,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "مثال: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "همرسانی";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "دنبال کننده تبلیغ";

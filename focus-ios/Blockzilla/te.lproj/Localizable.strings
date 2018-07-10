@@ -34,11 +34,41 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "దీనిని Safari పొడిగింతగా వాడండి:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "గురించి";
 
 /* Label on About screen */
 "About.topLabel" = "%@ మిమ్మల్ని నియంత్రణలో ఉంచును.";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "ఇష్టానుసారమైన URLను జోడించండి";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "ఉదాహరణ: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "జోడించుటకు URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "URL అతికించండి లేదా ఇవ్వండి";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ఇష్టానుసారమైన URLను జోడించండి";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "ఇష్టానుసారం URLలు";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "అనుకూలీకరణ URL జాబితా";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "స్వయంసమాప్తి";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "అచేతనం";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "చేతనం";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "వెనక్కి";
@@ -57,6 +87,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "ఆపుము";
+
+/* Label on button to cancel edits */
+"Cancel" = "రద్దుచేయు";
+
+/* Label on button to complete edits */
+"Done" = "పూర్తి";
+
+/* Label on button to allow edits */
+"Edit" = "సరిచేయు";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "మళ్ళీ ప్రయత్నించు";
@@ -90,6 +129,9 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "పటములు తెరువు";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "అలాగే, అర్ధమయ్యింది!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "మీరు విహరిస్తున్నపుడు స్వయంచాలితంగా ఆన్లైన్ ట్రాకర్లని నిరోధించండి. ఆ తరువాత సందర్శించిన పేజీలను, శోధనలు, సంకేతపదాలు మరియు కుక్కీలని మీ పరికరం నుండి చెరపండి.";
@@ -130,6 +172,15 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "సెట్టింగ్‌లను తెరవండి";
 
+/* Save button label */
+"Save" = "భద్రపరుచు";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "ప్రదర్శించడానికి పేరు";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL స్వయంపూర్తి";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "ఇతర కంటెంట్ ట్రాకర్లను నిరోధించడం వలన కొన్ని వీడియోలు మరియు వెబ్ పేజీలు విరిగిపోవచ్చు.";
 
@@ -147,6 +198,12 @@
 
 /* Title for settings screen */
 "Settings.screenTitle" = "అమరికలు";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "శోధన యంత్రం";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "శోధన";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
@@ -249,4 +306,16 @@
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "యాడ్ ట్రాకర్లు";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "కంటెంట్ ట్రాకర్లు";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "ఇంకా తెలుసుకోండి";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "సామాజిక ట్రాకర్లు";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "ట్రాకింగ్ సంరక్షణ";
 

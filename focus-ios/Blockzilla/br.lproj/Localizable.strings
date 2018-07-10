@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Arverit anezhañ evel un askouezh Safari:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "A-zivout";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "A-zivout %@";
 
 /* Label on About screen */
 "About.topLabel" = "Chom a rit mestr gant %@.";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Gweredekaet";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Estez nevez";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "DIbrennit %@ pa addigor evit mirout ouzh kement haeziñ diaotreet.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Distreiñ";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Eilañ";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Ouzhpennañ un URL personelaet";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "War-lerc'h";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Digeriñ an arload kartennoù";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Kavet er bajenn";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Kavout an hini da-heul er bajenn";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Kavout an hini kent er bajenn";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Mat eo, komprenet 'm eus!";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Goulenn al lec'hienn evit an urzhiataerioù";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Stokit war Safari ha diuzit ar stankaerioù endalc'had";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Gouzout hiroc'h.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Feur %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Arventennoù";
 
@@ -262,6 +292,9 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "BUHEZ PREVEZ";
 
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "DIOGELROEZ";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Stankañ an heulierien bruderezh";
 
@@ -272,7 +305,7 @@
 "Settings.toggleBlockAnalytics" = "Stankañ an heulierien stadegoù";
 
 /* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Implijet evit dastum, analizañ ha muzuliañ an oberiadennoù evel pouezañ ha dibunañ";
+"Settings.toggleBlockAnalyticsDescription" = "Implijet evit dastum, dielfennañ ha muzuliañ an oberiadennoù evel stokañ ha dibunañ";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Stankañ an nodrezhoù web";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Enkorfet el lec'hiennoù evit heuliañ ho weladennoù ha diskouez keweriusterioù evel an afelloù rannañ";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Implijit Face ID evit dibrennañ an arload";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID a c'hall dibrennañ %@ m'eo digoret un URL en arload endeo";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Gallout a ra mirout videoioù ha pajennadoù web da vont en-dro en un doare dereat";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Kas roadennoù arver";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Implijit Touch ID evit dibrennañ an arload";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID a c'hall dibrennañ %@ m'eo digoret un URL en arload endeo";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Petra nevez";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Kavout er bajennad";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Kaout an arload Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Digeriñ e %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Goulenn al lec'hienn evit an urzhiataerioù";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Nullañ";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Diverket eo bet ho roll istor merdeiñ.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Kavout er bajennad: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Klask pe chomlec'h";
@@ -363,6 +417,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Skouer: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Rannañ";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Heulieroù bruderezh";

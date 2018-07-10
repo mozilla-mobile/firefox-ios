@@ -34,14 +34,14 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Folosește-l ca extensie Safari:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Despre";
 
 /* Label on About screen */
 "About.topLabel" = "%@ îți oferă controlul.";
 
 /* Label for button to add a custom URL */
-"Autocomplete.addCustomUrl" = "Adaugă URL particularizat";
+"Autocomplete.addCustomUrl" = "Adaugă URL personalizat";
 
 /* Label for error state when entering an invalid URL */
 "Autocomplete.addCustomUrlError" = "Reverifică URL-ul introdus.";
@@ -56,19 +56,19 @@
 "Autocomplete.addCustomUrlPlaceholder" = "Lipește sau introdu URL-ul";
 
 /* Label for button to add a custom URL with the + prefix */
-"Autocomplete.addCustomUrlWithPlus" = "+ adaugă URL particularizat";
+"Autocomplete.addCustomUrlWithPlus" = "+ Adaugă URL personalizat";
 
 /* Description for adding and managing custom autocomplete URLs */
 "Autocomplete.customDescriptoin" = "Adaugă și gestionează autocompletare URL-uri.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "URL-uri particularizate";
+"Autocomplete.customLabel" = "URL-uri personalizate";
 
 /* Title for the default URL list section */
-"Autocomplete.customTitle" = "LISTĂ URL-URI PARTICULARIZATE";
+"Autocomplete.customTitle" = "LISTĂ DE URL-URI PERSONALIZATE";
 
 /* Label for toast alerting a custom URL has been added */
-"Autocomplete.customUrlAdded" = "Nou URL particularizat adăugat.";
+"Autocomplete.customUrlAdded" = "Nou URL personalizat adăugat.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Activează pentru a beneficia de autocompletare %@ pentru peste 450 de URL-uri populare din bara de adrese.";
@@ -77,13 +77,13 @@
 "Autocomplete.defaultLabel" = "Autocompletare";
 
 /* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "LISTĂ DE URL-uri IMPLICITE";
+"Autocomplete.defaultTitle" = "LISTĂ DE URL-URI IMPLICITE";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Dezactivat";
 
 /* Label for button to add a custom URL */
-"Autocomplete.emptyState" = "Nu sunt URL-uri particularizate de afișat";
+"Autocomplete.emptyState" = "Nu sunt URL-uri personalizate de afișat";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Activat";
@@ -122,7 +122,7 @@
 "ExternalAppLink.cancelTitle" = "Renunță";
 
 /* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
-"ExternalAppLink.messageTitle" = "%@ dorește să deschidă o altă aplicaţie";
+"ExternalAppLink.messageTitle" = "%@ vrea să deschidă o altă aplicaţie";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Deschide";
@@ -143,7 +143,7 @@
 "ExternalLink.openAppStoreButton" = "Deschide App Store";
 
 /* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ dorește să deschidă App Store.";
+"ExternalLink.openAppStoreTitle" = "%@ vrea să deschidă App Store.";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Deschide Hărți";
@@ -203,7 +203,7 @@
 "Settings.Search.AddSearchEngineTitle" = "Adaugă un motor de căutare";
 
 /* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "MOTOARE CĂUTARE INSTALATE";
+"Settings.Search.InstalledSearchEngines" = "MOTOARE DE CĂUTARE INSTALATE";
 
 /* Label for input field for the name of the search engine to be added */
 "Settings.Search.NameToDisplay" = "Nume de afișat";
@@ -224,7 +224,7 @@
 "Settings.Search.SearchTemplatePlaceholder" = "Lipește sau introdu formatul de căutare. Dacă este necesar, înlocuiește termenul de căutare cu: %s.";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "Autocompletare URL-uri";
+"Settings.autocompleteSection" = "Completare automată de URL-uri";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Blocarea altor urmăritori de conținut ar putea afecta funcționalitatea unor videouri sau pagini web.";
@@ -269,7 +269,7 @@
 "Settings.toggleBlockAdsDescription" = "Anumite reclame urmăresc vizitele pe site, chiar dacă nu dai clic pe reclame";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blochează urmăritorii de analitici";
+"Settings.toggleBlockAnalytics" = "Blochează urmăritorii analitici";
 
 /* Description for 'Block analytics Trackers' */
 "Settings.toggleBlockAnalyticsDescription" = "Folosit pentru a colecta, analiza şi măsura activităţi ca atingere şi derulare";

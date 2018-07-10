@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Utilizzalo come estensione per Safari:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Informazioni su";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Informazioni su %@";
 
 /* Label on About screen */
 "About.topLabel" = "Prendi il controllo con %@.";
@@ -77,7 +80,7 @@
 "Autocomplete.defaultLabel" = "Completamento automatico";
 
 /* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "LISTA DEGLI INDIRIZZI PREDEFINITI";
+"Autocomplete.defaultTitle" = "ELENCO INDIRIZZI PREDEFINITI";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Disattivato";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Attivato";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Nuova sessione";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Sblocca %@ quando viene riaperta per prevenire gli accessi non autorizzati.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Indietro";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Copia";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Aggiungi URL personalizzato";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Avanti";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Apri Mappe";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Trova nella pagina completato";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Trova risultato successivo nella pagina";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Trova risultato precedente nella pagina";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "OK, tutto chiaro.";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Versione desktop";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tocca Safari, poi seleziona Blocchi dei contenuti";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Ulteriori informazioni.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Vota %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Impostazioni";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SICUREZZA";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blocca pubblicità traccianti";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Inseriti nei siti per tenere traccia delle visite e fornire funzionalità come i pulsanti di condivisione";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Usa Face ID per sbloccare l’app";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Consente di sbloccare %@ attraverso Face ID se un URL è già aperto nell’app";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Alcuni video e pagine web potrebbero non funzionare";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Invia dati sull’uso";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Usa Touch ID per sbloccare l’app";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Consente di sbloccare %@ attraverso Touch ID se un URL è già aperto nell’app";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novità";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Trova nella pagina";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Scarica Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Apri in %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Versione desktop";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Annulla";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "La cronologia di navigazione è stata eliminata.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Trova nella pagina: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Cerca o inserisci un indirizzo";
@@ -363,6 +417,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Esempio: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Condividi";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Pubblicità traccianti";

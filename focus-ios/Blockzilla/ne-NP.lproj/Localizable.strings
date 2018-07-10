@@ -25,7 +25,7 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Safari विस्तारको रुपमा प्रयोग गर्नुहोस्:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "हाम्रो बारे";
 
 /* Label on About screen */
@@ -179,7 +179,7 @@
 "Settings.Search.NewSearchEngineAdded" = "नयाँ खोजी इन्जिन थपियो ।";
 
 /* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "पूर्वानिर्धारीत खोज इन्जिन पुनर्स्थापना गर्नुहोस् ";
+"Settings.Search.RestoreEngine" = "पूर्वानिर्धारीत खोज इन्जिन पुनर्स्थापना गर्नुहोस्";
 
 /* Placeholder text for input of new search engine name */
 "Settings.Search.SearchEngineName" = "खोजी इन्जिनको नाम";

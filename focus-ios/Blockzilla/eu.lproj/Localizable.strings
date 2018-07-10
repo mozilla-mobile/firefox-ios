@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Erabili Safariren hedapen gisa:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Honi buruz";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@(r)i buruz";
 
 /* Label on About screen */
 "About.topLabel" = "%@(e)k agintea ematen dizu.";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Gaituta";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Saio berria";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Desblokeatu %@ berriro irekitzean baimenik gabeko sarbidea galarazteko.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Atzera";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopiatu";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Gehitu URL perstonalizatua";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Aurrera";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Ireki mapak";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Orriko bilaketa eginda";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Bilatu hurrengoa orrian";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Bilatu aurrekoa orrian";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Ulertuta!";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Mahaigaineko gunea";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Sakatu Safari-n eta ondoren hautatu edukien blokeatzaileak";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Argibide gehiago.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Baloratu %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Ezarpenak";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIBATUTASUNA";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SEGURTASUNA";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blokeatu publizitatearen jarraipena";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Guneetan txertatuta zure bisiten jarraipena egin eta partekatzeko botoien tankerako eginbideak bistaratzeko";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Erabili Face ID aplikazioa desblokeatzeko";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID erabilita %@ aplikazioa desblokea daiteke aplikazioak dagoeneko URL bat irekita badu";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Zenbait bideo eta web orri apur litzake";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Bidali erabilera-datuak";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Erabili Touch ID aplikazioa desblokeatzeko";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID erabilita %@ aplikazioa desblokea daiteke aplikazioak dagoeneko URL bat irekita badu";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Nobedadeak";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Bilatu orrian";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Eskuratu Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Ireki %@ aplikazioan";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Mahaigaineko gunea";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Utzi";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Zure nabigatze-historia ezabatu egin da.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Bilatu orrian: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Idatzi bilaketa edo helbidea";
@@ -363,6 +417,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Adibidea: adibidea.eus/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Partekatu";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Iragarkien jarraipen-elementuak";

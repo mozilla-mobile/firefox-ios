@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Ez lehetővé teszi, hogy fényképeket készítsen és töltsön fel.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Ezzel kinyithatja az alkalmazást.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "A meglátogatott webhelyek kérhetik az Ön helyét.";
 
 /* (No Comment) */

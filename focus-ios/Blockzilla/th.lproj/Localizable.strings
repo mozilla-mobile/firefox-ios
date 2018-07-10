@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "ใช้เป็นส่วนขยาย Safari:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "เกี่ยวกับ";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "เกี่ยวกับ %@";
 
 /* Label on About screen */
 "About.topLabel" = "%@ ให้คุณได้ควบคุม";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "ถูกเปิดใช้งาน";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "วาระใหม่";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "ปลดล็อค %@ เมื่อเปิดขึ้นมาใหม่อีกครั้งเพื่อป้องกันการเข้าถึงที่ไม่ได้รับอนุญาต";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ย้อนกลับ";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "คัดลอก";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "เพิ่ม URL ที่กำหนดเอง";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "เดินหน้า";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "เปิดแผนที่";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "เสร็จสิ้นการค้นหาในหน้า";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "ค้นหาถัดไปในหน้า";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "ค้นหาก่อนหน้าในหน้า";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "ตกลง เข้าใจแล้ว!";
 
@@ -178,8 +202,11 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "ขอไซต์สำหรับเดสก์ท็อป";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "แตะ Safari จากนั้นเลือก ตัวปิดกั้นเนื้อหา";
+"Safari.instructionsContentBlockers" = "แตะที่ Safari จากนั้นเลือก ตัวปิดกั้นเนื้อหา";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "เปิดใช้งาน %@";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "เรียนรู้เพิ่มเติม";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "ให้คะแนน %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "การตั้งค่า";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "ความเป็นส่วนตัว";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "ความปลอดภัย";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "ปิดกั้นตัวติดตามของโฆษณา";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "ฝังอยู่ในไซต์เพื่อติดตามการเยี่ยมชมของคุณและแสดงผลฟังก์ชันอย่างปุ่มแบ่งปัน";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "ใช้ Face ID เพื่อปลดล็อคแอป";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID สามารถปลดล็อค %@ หาก URL ถูกเปิดอยู่แล้วในแอป";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "อาจทำให้วิดีโอและหน้าเว็บบางส่วนไม่สมบูรณ์";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ส่งข้อมูลการใช้งาน";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "ใช้ Touch ID เพื่อปลดล็อคแอป";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID สามารถปลดล็อค %@ หาก URL ถูกเปิดอยู่แล้วในแอป";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "มีอะไรใหม่";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "ค้นหาในหน้า";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "รับแอป Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "เปิดใน %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "ขอไซต์สำหรับเดสก์ท็อป";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ยกเลิก";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "ล้างประวัติการท่องเว็บของคุณแล้ว";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "ค้นหาในหน้า: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "ค้นหาหรือป้อนที่อยู่";
@@ -364,6 +418,9 @@
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "ตัวอย่าง: searchengineexample.com/search/?q=%s";
 
+/* Text for a share button */
+"share" = "แบ่งปัน";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "ตัวติดตามของโฆษณา";
 
@@ -383,7 +440,7 @@
 "trackingProtection.socialTrackerLabel" = "ตัวติดตามทางสังคม";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "ปิดใช้งานจนกระทั่งคุณปิด %@ หรือแตะ ล้าง";
+"trackingProtection.toggleDescription1" = "ปิดใช้งานจนกระทั่งคุณปิด %@ หรือแตะที่ ล้าง";
 
 /* Text for the toggle that temporarily disables tracking protection. */
 "trackingProtection.toggleLabel" = "การป้องกันการติดตาม";

@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Sử dụng nó như phần mở rộng của Safari:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Giới thiệu";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Giới thiệu %@";
 
 /* Label on About screen */
 "About.topLabel" = "%@ giúp bạn kiểm soát.";
@@ -90,6 +93,12 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Quay lại";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Sao chép";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Thêm URL tùy chỉnh";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Tiếp theo";
@@ -177,6 +186,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Yêu cầu giao diện máy tính";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Chạm Safari, rồi chọn Chặn nội dung";
@@ -289,6 +301,9 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Được nhúng vào các trang web để theo dõi lượt truy cập của bạn và để hiển thị chức năng như các nút chia sẻ";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Sử dụng nhận dạng khuôn mặt để mở ứng dụng";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Có thể không phát được một số video và trang Web";
 
@@ -301,11 +316,17 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Có gì mới";
 
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Tìm trong trang";
+
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Tải ứng dụng Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Mở trong %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Yêu cầu giao diện máy tính";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Hủy bỏ";
@@ -318,6 +339,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Lịch sử duyệt web của bạn đã bị xóa.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Tìm trong trang: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Tìm kiếm hoặc nhập địa chỉ";
@@ -363,6 +387,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Ví dụ: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Chia sẻ";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Trình theo dõi quảng cáo";

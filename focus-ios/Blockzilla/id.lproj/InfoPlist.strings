@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Izinkan mengambil dan mengunggah foto.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Ini memungkinkan Anda membuka kunci aplikasi.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Situs web yang Anda kunjungi dapat meminta lokasi Anda.";
 
 /* (No Comment) */

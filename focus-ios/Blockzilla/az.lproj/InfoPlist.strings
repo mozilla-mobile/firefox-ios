@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Bu, şəkilləri çəkmə və yükləməyinizə imkan verir.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Bu tətbiqin kilidini açmağınıza kömək edir.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Ziyarət etdiyiniz saytlar mövqeyinizi istəyə bilər.";
 
 /* (No Comment) */

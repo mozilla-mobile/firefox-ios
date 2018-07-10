@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "يتيح لك هذا أخذ الصور و رفعها.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "يتيح لك هذا إلغاء قفل التطبيق.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "المواقع التي تزورها يمكن أن تطلب معرفة مكانك.";
 
 /* (No Comment) */

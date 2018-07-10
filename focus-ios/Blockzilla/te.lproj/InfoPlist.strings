@@ -8,5 +8,8 @@
 "NSMicrophoneUsageDescription" = "ఇది మీకు వీడియోలు తీసుకొని అప్లోడ్ చేయడానికి అనుమతిస్తుంది.";
 
 /* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "ఇది ఫొటోలని భద్రపరచి ఎక్కించనిస్తుంది.";
+
+/* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "ఇది మీకు ఫోటోలను సేవ్ చేసి అప్లోడ్ చేయడానికి అనుమతిస్తుంది.";
 

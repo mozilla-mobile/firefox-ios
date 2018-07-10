@@ -34,7 +34,7 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "சப்பாரி நீட்சியாகப் பயன்படுத்து:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "பற்றி";
 
 /* Label on About screen */
@@ -248,7 +248,7 @@
 "Settings.searchLabel" = "தேடுபொறி";
 
 /* Title for the search selection screen */
-"Settings.searchTitle2" = "தேடு";
+"Settings.searchTitle2" = "தேடல்";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ஒன்றிணைத்தல்";

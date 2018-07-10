@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Mae hyn yn caniatáu i chi gymryd lluniau a'u llwytho.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Mae hwn yn eich galluogi i ddatgloi'r ap.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Efallai y bydd gwefannau rydych yn ymweld â nhw'n gofyn am eich lleoliad.";
 
 /* (No Comment) */

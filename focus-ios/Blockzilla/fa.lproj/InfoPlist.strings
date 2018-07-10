@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "به شما اجازه گرفتن و بارگذاری تصاویر را می‌دهد.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "این به شما کمک می‌کند قفل برنامه را باز کنید.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "وب‌سایت‌هایی که بازدید می‌کنید ممکن است مکان شما را درخواست کنند.";
 
 /* (No Comment) */

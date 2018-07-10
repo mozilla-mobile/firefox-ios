@@ -34,11 +34,47 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Χρησιμοποιήστε το ως επέκταση του Safari:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Πληροφορίες";
 
 /* Label on About screen */
 "About.topLabel" = "Το %@ σάς δίνει τον έλεγχο.";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Προσθήκη προσαρμοσμένου URL";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Παράδειγμα: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL προς προσθήκη";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Επικόλληση ή εισαγωγή URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Προσθήκη προσαρμοσμένου URL";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Προσαρμοσμένα URLs";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "ΛΙΣΤΑ ΠΡΟΣΑΡΜΟΣΜΕΝΩΝ URL";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Αυτόματη συμπλήρωση";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "ΛΙΣΤΑ ΠΡΟΕΠΙΛΕΓΜΕΝΩΝ URL";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Ανενεργό";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Κανένα προσαρμοσμένο URLs προς προβολή";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Ενεργό";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Πίσω";
@@ -57,6 +93,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Διακοπή";
+
+/* Label on button to cancel edits */
+"Cancel" = "Ακύρωση";
+
+/* Label on button to complete edits */
+"Done" = "Τέλος";
+
+/* Label on button to allow edits */
+"Edit" = "Επεξεργασία";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Δοκιμάστε ξανά";
@@ -90,6 +135,9 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Άνοιγμα Χαρτών";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "OK, το 'πιασα!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "Αποκλείστε αυτόματα τα διαδικτυακά trackers όσο περιηγείστε. Έπειτα, πατήστε για διαγραφή του ιστορικού, των αναζητήσεων, των cookies και των κωδικών πρόσβασης από τη συσκευή σας.";
@@ -130,6 +178,30 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Άνοιγμα εφαρμογής \"Ρυθμίσεις\"";
 
+/* Save button label */
+"Save" = "Αποθήκευση";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Προσθήκη μιας άλλης μηχανής αναζήτησης";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Προσθήκη μηχανής αναζήτησης";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "ΕΓΚΑΤΕΣΤΗΜΕΝΕΣ ΜΗΧΑΝΕΣ ΑΝΑΖΗΤΗΣΗΣ";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Όνομα προς εμφάνιση";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Προστέθηκε νέα μηχανή αναζήτησης.";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Όνομα μηχανής αναζήτησης";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Αυτόματη συμπλήρωση URL";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Η φραγή των trackers άλλου περιεχομένου ενδέχεται να χαλάσει μερικά βίντεο και ιστοσελίδες.";
 
@@ -148,6 +220,12 @@
 /* Title for settings screen */
 "Settings.screenTitle" = "Ρυθμίσεις";
 
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Μηχανή αναζήτησης";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "ΑΝΑΖΗΤΗΣΗ";
+
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "ΕΝΣΩΜΑΤΩΣΗ";
 
@@ -163,6 +241,9 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Φραγή trackers διαφημίσεων";
 
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Ορισμένες διαφημίσεις παρακολουθούν τις επισκέψεις στον ιστότοπο, ακόμη και αν δεν κάνετε κλικ στις διαφημίσεις";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Φραγή trackers αναλύσεων";
 
@@ -171,6 +252,9 @@
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockOther" = "Φραγή trackers άλλου περιεχομένου";
+
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Η ενεργοποίηση ενδέχεται να προκαλέσει απροσδόκητη συμπεριφορά σε ορισμένες σελίδες";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Φραγή κοινωνικών trackers";
@@ -183,6 +267,9 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Αποστολή δεδομένων χρήσης";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Τι νέο υπάρχει";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Λήψη του Firefox";
@@ -244,8 +331,26 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "Το “%@” θα ήθελε πρόσβαση στις φωτογραφίες σας";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Παράδειγμα: searchengineexample.com/search/?q=%s";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Ιχνηλάτες διαφημίσεων";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Αναλυτικοί ιχνηλάτες";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Ιχνηλάτες περιεχομένου";
+
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Προστασία από παρακολούθηση ανενεργή";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Μάθετε περισσότερα";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Ιχνηλάτες κοινωνικών δικτύων";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Απενεργοποίηση μέχρι να κλείσετε το %@ ή να πατήσετε ΔΙΑΓΡΑΦΗ.";

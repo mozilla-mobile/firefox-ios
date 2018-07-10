@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Garantisci il permesso di scattare e caricare foto.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Consente di sbloccare l’app.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "I siti web visitati possono richiedere la tua posizione.";
 
 /* (No Comment) */

@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Ciri ini membolehkan anda mengambil dan memuat naik foto.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Ini membolehkan anda membuka aplikasi.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Laman web yang anda lawati mungkin meminta lokasi anda.";
 
 /* (No Comment) */

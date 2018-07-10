@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Оны Safari кеңейтуі ретінде қолданыңыз:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Осы туралы";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@ туралы";
 
 /* Label on About screen */
 "About.topLabel" = "%@ басқаруды қолыңызға береді.";
@@ -88,8 +91,17 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Іске қосылған";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Жаңа сессия";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Артқа";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Көшіріп алу";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Таңдауыңызша URL қосу";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Алға";

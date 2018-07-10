@@ -34,11 +34,14 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Seqdec-it am usiɣzef Safari:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Γef";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Ɣef %@";
+
 /* Label on About screen */
-"About.topLabel" = "%@ ak-d-yefk afus ad teqqimeḍ d aqeṛṛu.";
+"About.topLabel" = "%@ ad ak-d-yefk afus ad teqqimeḍ d aqeṛṛu.";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Rnu URL aganan";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Irmed";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Tiɣimit tamaynut";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Serreḥ i %@ di yal tulya akken ad tesweḥleḍ anekcum ur ilaqen ara.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Γer deffir";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Nɣel";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Rnu URL udmawan";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Ɣer zdat";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Ldi Iɣawasen";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Seḥbes anadi deg usebter";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Nadi deg usebter d-iteddun";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Nadi deg usebter yezrin";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "IH, awi-t-id!";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Wali lqem n uselkim";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Senned ɣef Safari, sakin fren Imsewḥal n ugbur";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Issin ugar.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Rnu tazmilt i %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Iɣewwaṛen";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "TABAḌNIT";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "TAƔELLIST";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Sewḥel inedfaṛen";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Ittwarna deg kra n ismal akken ad isfuγel tirziwin inek , akken daγen ad d-yesken timahaltin am tqefalt n beṭṭu";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Seqdec Face ID akken ad tserḥeḍ i usnas";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID yezmer ad iserreḥ i %@ ma yella tansa web teldi yakan deg usnas";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Yezmer ad isewḥel kra n tvidyutin akked kra n isebtar Web ad d-banen akken iwata";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Azen isefka n useqdec";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Seqdec Touch ID akken ad tserḥeḍ i usnas";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID yezmer ad iserreḥ i %@ ma yella tansa web teldi yakan deg usnas";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Amaynut";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Nadi deg usebter";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Awi-d asnas Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Ldi di %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Suter asmel n tnarit";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Sefsex";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Amazray-inek n unadi yettwasfed.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Nadi deg usebter: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Nadi neɣ sekcem tansa";
@@ -363,6 +417,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Amedya: example.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Bḍu";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Ineḍfaṛen n udellel";

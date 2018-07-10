@@ -34,7 +34,7 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Úsalu como estensión de Safari:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Tocante a";
 
 /* Label on About screen */
@@ -48,6 +48,9 @@
 
 /* A label displaying an example URL */
 "Autocomplete.addCustomUrlExample" = "Exemplu: exemplu.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL p'amestar";
 
 /* Placeholder for the input field to add a custom URL */
 "Autocomplete.addCustomUrlPlaceholder" = "Apega o introduz la URL";
@@ -369,6 +372,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Proteición de rastrexu desactivada";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Deprendi más";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Rastrexadores sociales";

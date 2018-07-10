@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Omogoča fotografiranje in pošiljanje fotografij.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Omogoča odklepanje aplikacije.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Spletne strani lahko zahtevajo vašo lokacijo.";
 
 /* (No Comment) */

@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Honekin argazkiak atera eta igo ditzakezu.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Honekin aplikazioa desblokea dezakezu.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Bisitatutako webguneek zure kokapena eska lezakete.";
 
 /* (No Comment) */

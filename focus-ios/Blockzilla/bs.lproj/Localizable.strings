@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Koristi kao Safari ekstenziju:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "O nama";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "O %@";
 
 /* Label on About screen */
 "About.topLabel" = "%@ vam daje kontrolu.";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Omogućeno";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Nova sesija";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Otključajte %@ kada ponovo otvarate narudžbu da spriječite nedozvoljeni pristup.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Nazad";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopiraj";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Dodaj prilagođeni URL";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Naprijed";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Otvori mape";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Traženje na stranici završeno";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Pronađi sljedeće na stranici";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Pronađi prethodno na stranici";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "U redu, razumijem!";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Zahtjevaj desktop stranicu";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Dodirni Safari, onda izaberi Blokere sadržaja";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Saznajte više.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Ocijeni %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Postavke";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SIGURNOST";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blokiraj reklame";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Ugrađene u stranice kako bi pratile vaše posjete i da prikažu funkcije kao što su dugmići za dijeljenje";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Koristite Face ID za otključavanje aplikacije";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID može otključati %@ ako je URL već otvoren u aplikaciji";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Može oštetiti neki video i web stranice";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Šalji podatke o korištenju";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Koristite Touch ID za otključavanje aplikacije";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID može otključati %@ ako je URL već otvoren u aplikaciji";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Šta je novo";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Pronađi na stranici";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Preuzmi Firefox aplikaciju";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Otvori u %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Zahtjevaj desktop stranicu";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Otkaži";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Vaša historija pretraživanja je izbrisana.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Pronađi na stranici: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Tražite ili upišite adresu";
@@ -364,8 +418,11 @@
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Primjer: searchengineexample.com/search/?q=%s";
 
+/* Text for a share button */
+"share" = "Dijeli";
+
 /* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Ad tragači";
+"trackingProtection.adTrackersLabel" = "Reklamni tragači";
 
 /* label for analytic trackers. */
 "trackingProtection.analyticTrackerLabel" = "Analitički tragači";

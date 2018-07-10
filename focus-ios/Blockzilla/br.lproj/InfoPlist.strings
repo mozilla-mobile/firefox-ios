@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Gant se e c'hallit kemer ha pellgas luc'hskeudennoù.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Gant se e c'hallit dibrennañ an arload.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Lec'hiennoù web a weladennit a c'hall azgoulenn ho lec'hiadur.";
 
 /* (No Comment) */

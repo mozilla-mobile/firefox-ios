@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Hiermee kunt u foto’s maken en uploaden.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Hiermee kunt u de app ontgrendelen.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Websites die u bezoekt kunnen om uw locatie vragen.";
 
 /* (No Comment) */

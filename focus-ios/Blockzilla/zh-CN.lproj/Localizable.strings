@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "用作 Safari 扩展，可以：";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "关于";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "关于 %@";
 
 /* Label on About screen */
 "About.topLabel" = "%@ 让您掌控线上生活。";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "已启用";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "新会话";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "重新打开时要求解锁 ％@，以防止未经您允许的使用。";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "后退";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "复制";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "添加自定义网址";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "前进";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "打开地图";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "查找完成";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "查找下一个";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "查找上一个";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "明白了";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "要求桌面版网站";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "点按 Safari，然后选择“内容拦截器”";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "详细了解。";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "为 %@ 打分";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "设置";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "隐私";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "安全";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "拦截广告跟踪器";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "嵌入到网站上从而跟踪您的访问和显示分享按钮";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "使用面容 ID 解锁应用";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "如果网址已在应用中打开，则可用面容 ID 解锁 %@";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "可能对某些网页与视频有影响";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "发送使用统计";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "使用触控 ID 解锁应用";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "如果网址已在应用中打开，则可用触控 ID 解锁 ％@";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "新版变化";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "在页面中查找";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "获取 Firefox 应用";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "在 %@ 中打开";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "要求桌面版网站";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "取消";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "您的浏览记录已清除。";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "在页面中查找：%@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "搜索或输入网址";
@@ -363,6 +417,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "例如：searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "分享";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "广告跟踪器";

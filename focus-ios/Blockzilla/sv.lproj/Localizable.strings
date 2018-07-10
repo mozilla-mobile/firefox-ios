@@ -26,16 +26,19 @@
 "About.rowRights" = "Dina rättigheter";
 
 /* Label on About screen */
-"About.safariBullet1" = "Blockera trackers för förbättrad integritet";
+"About.safariBullet1" = "Blockera trackers för ökad integritet";
 
 /* Label on About screen */
 "About.safariBullet2" = "Blockera webbtypsnitt för att minska sidstorlek";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "Använd som ett Safari tillägg:";
+"About.safariBulletHeader" = "Använd som ett Safari-tillägg:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Om";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Om %@";
 
 /* Label on About screen */
 "About.topLabel" = "%@ sätter dig i kontroll.";
@@ -88,8 +91,17 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Aktiverad";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Ny Session";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Tillbaka";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopiera";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Lägg till anpassad webbadress";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Framåt";
@@ -170,13 +182,16 @@
 "Open.Cancel" = "Avbryt";
 
 /* Label in share alert to open the URL in Firefox */
-"Open.Firefox" = "Firefox (Privat surfning)";
+"Open.Firefox" = "Firefox (privat surfning)";
 
 /* Label in share alert to open the full system share menu */
 "Open.More" = "Mer";
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Begär datorwebbplats";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tryck på Safari och sedan välj Innehållsblockerare";
@@ -241,6 +256,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Läs mer.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Betygsätt %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Inställningar";
 
@@ -262,14 +280,17 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "SEKRETESS";
 
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "Säkerhet";
+
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blockera annons trackers";
+"Settings.toggleBlockAds" = "Blockera annonstrackers";
 
 /* Description for 'Block ad Trackers' */
 "Settings.toggleBlockAdsDescription" = "Vissa annonser spårar dina besök på webbplatsen, även om du inte klickar på annonserna";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blockera analys trackers";
+"Settings.toggleBlockAnalytics" = "Blockera analystrackers";
 
 /* Description for 'Block analytics Trackers' */
 "Settings.toggleBlockAnalyticsDescription" = "Används för att samla in, analysera och mäta aktiviteter som tryckningar och rullningar";
@@ -301,11 +322,17 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Vad är nytt";
 
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Hitta på sidan";
+
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Hämta appen Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Öppna i %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Begär datorwebbplats";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Avbryt";
@@ -318,6 +345,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Din webbhistorik har raderats.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Hitta på sidan: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Sök eller ange adress";
@@ -363,6 +393,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Exempel: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Dela";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Annons trackers";

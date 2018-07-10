@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "此權限讓您可拍照與上傳圖片。";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "讓您可解鎖程式。";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "您造訪的網站可能會向您請求您的所在位置。";
 
 /* (No Comment) */

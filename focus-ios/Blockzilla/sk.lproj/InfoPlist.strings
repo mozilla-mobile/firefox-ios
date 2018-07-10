@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Toto umožňuje vytvárať a odosielať fotografie.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Toto vám umožňuje odomknúť aplikáciu.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Stránky, ktoré navštevujete, môžu požiadať o prezradenie vašej polohy.";
 
 /* (No Comment) */

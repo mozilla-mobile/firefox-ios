@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Hiermit können Sie Fotos machen und hochladen.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Hiermit können Sie die App entsperren.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Von Ihnen besuchte Websites können Ihren Standort abfragen.";
 
 /* (No Comment) */

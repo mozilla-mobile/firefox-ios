@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "საშუალებას გაძლევთ, სურათის გადაღებისა და ატვირთვის.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "საშუალებას გაძლევთ გახსნათ ჩაკეტილი პროგრამა.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "ვებსაიტებმა, შესაძლოა მოითხოვოს თქვენი მდებარეობის მონაცემები.";
 
 /* (No Comment) */

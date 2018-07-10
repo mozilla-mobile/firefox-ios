@@ -34,8 +34,11 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Ei ddefnyddio fel estyniad Safari:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Ynghylch";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Ynghylch %@";
 
 /* Label on About screen */
 "About.topLabel" = "Chi sy'n rheoli gyda %@.";
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Galluogwyd";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Sesiwn Newydd";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Datgloi %@ wrth ailagor er mwyn atal mynediad heb ganiatâd.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Nôl";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Copïo";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Ychwanegu URL Cyfaddas";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Ymlaen";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Agor Maps";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Canfod ar y dudalen gorffen";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Canfod nesaf ar y dudalen";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Canfod blaenorol ar y dudalen";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Iawn, Wedi deall!";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Gofyn am Wefan Lawn";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tapiwch Safari, yna dewis Content Blockers";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Dysgu rhagor.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Graddio %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Gosodiadau";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PREIFATRWYDD";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "DIOGELWCH";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Rhwystro tracwyr hysbysebion";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Wedi eu mewnblannu ar wefannau er mwyn tracio eich ymweliadau ac i ddangos swyddogaethau fel botymau rhannu";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Defnyddio Face ID i ddatgloi ap";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Gall Face ID ddatgloi %@ os oes URL eisoes ar agor yn yr ap";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Gall dorri rhai fideos a thudalennau Gwe";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Anfon data defnydd";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Defnyddiwch Touch ID i ddatgloi ap";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Gall Touch ID ddatgloi %@ os oes URL eisoes ar agor yn yr ap";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Be sy'n Newydd";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Canfod ar y Dudalen";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Estyn Ap Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Agor yn Focus";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Gofyn am Wefan Lawn";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Diddymu";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Mae eich hanes pori wedi cael ei ddileu.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Canfod ar dudalen: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Chwilio neu gyfeiriad";
@@ -363,6 +417,9 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Esampl: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Rhannu";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Tracwyr hysbysebion";

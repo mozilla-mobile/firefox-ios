@@ -34,7 +34,7 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Використовуйте в якості розширення для Safari:";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "Про";
 
 /* Label on About screen */
@@ -236,7 +236,7 @@
 "Settings.blockOtherYes" = "Я розумію";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla намагається збирати лише дані, що необхідні для роботи і вдосконалення %@ для кожного.";
+"Settings.detailTextSendUsageData" = "Mozilla зобов'язується збирати лише дані, що необхідні для роботи і вдосконалення %@.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Докладніше.";

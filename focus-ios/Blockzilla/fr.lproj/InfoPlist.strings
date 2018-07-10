@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Ceci vous permet de prendre des photos et de les envoyer.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Cette autorisation vous permet de déverrouiller l’application.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Les sites web que vous visitez peuvent demander à connaître votre emplacement.";
 
 /* (No Comment) */

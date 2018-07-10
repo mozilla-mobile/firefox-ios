@@ -34,11 +34,29 @@
 /* Label on About screen */
 "About.safariBulletHeader" = "Safari extension အနေနှင့် အသုံးပြုပါ။";
 
-/* Title for the About screen */
+/* (No Comment) */
 "About.screenTitle" = "အကြောင်း";
 
 /* Label on About screen */
 "About.topLabel" = "%@ က သင့်ကို ထိန်းချုပ်နိုင်စွမ်း ရှိစေသည်။";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "စိတ်ကြိုက် URLs တိုးရန်";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "တိုးမဲ့ URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ စိတ်ကြိုက် URLs တိုးရန်";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "စိတ်ကြိုက် URLs";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "ပိတ်ထားသည်";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "ဖွင့်ထားသည်";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "နောက်သို့";
@@ -57,6 +75,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "ရပ်ပါ";
+
+/* Label on button to cancel edits */
+"Cancel" = "မဆောင်ရွက်တော့ပါ";
+
+/* Label on button to complete edits */
+"Done" = "ပြီးပြီ";
+
+/* Label on button to allow edits */
+"Edit" = "ပြင်ဆင်ရန်";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "ထပ်ကြိုးစားကြည့်ပါ";
@@ -90,6 +117,9 @@
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Maps ကို ဖွင့်ပါ";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "အိုကေ၊ သိပါပြီ!";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "သင်ကြည့်ရှုနေစဉ်အတွင်း အွန်လိုင်းနောက်ယောက်ခံ ကိရိယာများကို အလိုအလျောက် ပိတ်ပင်ပါသည်။ လည်ပတ် ကြည့်ရှုခဲ့သော ဝဘ်စာမျက်နှာများ၊ ရှာဖွေမှုများ၊ ကွတ်ကီးများနှင့် စကားဝှက်များကို တို့ထိပြီး ဖယ်ရှားရှင်းလင်းနိုင်သည်။";
@@ -129,6 +159,9 @@
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "အပြင်အဆင်များအက်ပ်ကို ဖွင့်ပါ";
+
+/* Save button label */
+"Save" = "သိမ်းရန်";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "အခြား အကြောင်းအရာနောက်ယောင်ခံကိရိယာများကို ပိတ်ခြင်းသည် အချို့သော ဗီဒီယိုများနှင့် ဝဘ်စာမျက်နှာများကို ကောင်းမွန်စွာ လုပ်ဆောင်နိုင်စေမည် မဟုတ်ပါ။";

@@ -2,7 +2,10 @@
 "NSCameraUsageDescription" = "אפשרות זו מאפשרת לצלם ולהעלות תמונות.";
 
 /* (No Comment) */
-"NSLocationWhenInUseUsageDescription" = "אתרים בהם אתם מבקרים עשויים לבקש את המיקום שלך.";
+"NSFaceIDUsageDescription" = "אפשרות זו מאפשרת לך לשחרר את הנעילה של היישומון.";
+
+/* (No Comment) */
+"NSLocationWhenInUseUsageDescription" = "אתרים בשימושך עשויים לבקש ממך את המיקום שלך.";
 
 /* (No Comment) */
 "NSMicrophoneUsageDescription" = "אפשרות זו מאפשרת להסריט ולהעלות וידאו.";

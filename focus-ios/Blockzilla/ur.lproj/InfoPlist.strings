@@ -1,11 +1,17 @@
 /* (No Comment) */
-"NSCameraUsageDescription" = "۔یہ آُپ کو تصاویر لینے اور اپلوڈ کرنے دیتا ہے۔";
+"NSCameraUsageDescription" = "یہ آُپ کو اپنی تصاویر لینے اور اپلوڈ کرنے دیتا ہے۔";
+
+/* (No Comment) */
+"NSFaceIDUsageDescription" = "یہ آُپکو ایپ کھولنے دیتا ہے۔";
 
 /* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "ویب سائٹ جن کا آپ دورہ کریں شاید آُپ کے محل وقتع کی درخواست کریں۔";
 
 /* (No Comment) */
 "NSMicrophoneUsageDescription" = "۔یہ آُپ کو وڈیوز بنانے اور اپلوڈ کرنے دیتا ہے۔";
+
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "یہ آپ کو تصاویراپلوڈ اور محفوظ کرنے دیتا پے۔";
 
 /* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "یہ آپ کو تصاویراپلوڈ اور محفوظ کرنے دیتا پے۔";
