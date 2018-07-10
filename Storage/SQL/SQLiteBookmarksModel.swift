@@ -874,7 +874,7 @@ open class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
         return self.localFactory.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile)
             >>== {
                 localMobileFolder in
-                
+
                 self.bufferFactory.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile) >>== {
                     bufferMobileFolder in
 

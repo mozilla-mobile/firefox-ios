@@ -86,7 +86,7 @@ class TestSQLiteLogins: XCTestCase {
         let result = logins.getAllLogins().value.successValue!
         XCTAssertEqual(result.count, 2)
     }
-    
+
     func testRemoveManyLogins() {
         log.debug("Remove a large number of logins at once")
         var guids: [GUID] = []

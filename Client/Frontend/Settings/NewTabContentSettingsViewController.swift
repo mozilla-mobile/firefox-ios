@@ -16,7 +16,7 @@ class CurrentTabSetting: Setting {
 
     init(profile: Profile) {
         self.profile = profile
-        super.init(title: NSAttributedString(string: NewTabAccessors.getNewTabPage(profile.prefs).settingTitle, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NewTabAccessors.getNewTabPage(profile.prefs).settingTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -41,7 +41,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let tabSetting = CurrentTabSetting(profile: profile)
         let firstSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabSectionName), footerTitle: nil, children: [tabSetting])
-        
+
         let isPocketEnabledDefault = Pocket.IslocaleSupported(Locale.current.identifier)
         let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabPocket))
         let bookmarks = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASBookmarkHighlightsVisible, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabHighlightsBookmarks))

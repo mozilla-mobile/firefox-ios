@@ -39,7 +39,7 @@ func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
 
 @available(iOS 11.0, *)
 class TrackingProtectionTests: KIFTestCase, TabEventHandler {
-    
+
     private var webRoot: String!
     private var tabObservers: TabObservers!
     var stats = TPPageStats()
@@ -105,7 +105,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         statsIncrement = nil
         statsZero = nil
     }
-    
+
     func openTPSetting() {
         // Check tracking protection is enabled on private tabs only in Settings
         let menuAppeared = GREYCondition(name: "Wait for the Settings dialog to appear") {
@@ -120,7 +120,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
         let success = menuAppeared.wait(withTimeout: 20)
         GREYAssertTrue(success, reason: "Failed to display settings dialog")
-        
+
         // Scroll to Tracking Protection Menu
         EarlGrey.selectElement(with:grey_accessibilityLabel("Tracking Protection"))
             .using(searchAction: grey_scrollInDirection(GREYDirection.down, 200),
@@ -128,13 +128,13 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
             .assert(grey_notNil())
             .perform(grey_tap())
     }
-    
+
     func closeTPSetting() {
         // Exit to main view
         tester().tapView(withAccessibilityLabel: "Settings")
         tester().tapView(withAccessibilityLabel: "Done")
     }
-    
+
     func testNormalTrackingProtection() {
         openTPSetting()
         EarlGrey.selectElement(with: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(false))
@@ -193,7 +193,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         waitForExpectations(timeout: 10, handler: nil)
         checkTrackingProtection(isBlocking: true)
     }
-    
+
     func testPrivateTabPageTrackingProtection() {
 
         if BrowserUtils.iPad() {

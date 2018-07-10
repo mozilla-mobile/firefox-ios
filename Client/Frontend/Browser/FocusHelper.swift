@@ -18,11 +18,11 @@ class FocusHelper: TabContentScript {
     static func name() -> String {
         return "FocusHelper"
     }
-    
+
     func scriptMessageHandlerName() -> String? {
         return "focusHelper"
     }
-    
+
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard let data = message.body as? [String: String] else {
             return log.error("FocusHelper.js sent wrong type of message")

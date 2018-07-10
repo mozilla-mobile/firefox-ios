@@ -17,18 +17,18 @@ import SwiftKeychainWrapper
 class PasscodeEntryViewController: BasePasscodeViewController {
     weak var delegate: PasscodeEntryDelegate?
     fileprivate var passcodePane: PasscodePane
-    
+
     override init() {
         let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
         passcodePane = PasscodePane(title: nil, passcodeSize: authInfo?.passcode?.count ?? 6)
 
         super.init()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = AuthenticationStrings.enterPasscodeTitle
@@ -54,7 +54,7 @@ class PasscodeEntryViewController: BasePasscodeViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         if authenticationInfo?.isLocked() ?? false {
             passcodePane.codeInputView.isUserInteractionEnabled = false
             passcodePane.codeInputView.resignFirstResponder()

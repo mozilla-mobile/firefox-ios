@@ -19,7 +19,7 @@ extension PhotonActionSheetProtocol {
     typealias MenuAction = () -> Void
     typealias IsPrivateTab = Bool
     typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
-    
+
     func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, closeButtonTitle: String = Strings.CloseButtonTitle, suppressPopover: Bool = false) {
         let style: UIModalPresentationStyle = (UIDevice.current.userInterfaceIdiom == .pad && !suppressPopover) ? .popover : .overCurrentContext
         let sheet = PhotonActionSheet(title: title, actions: actions, closeButtonTitle: closeButtonTitle, style: style)
@@ -35,11 +35,11 @@ extension PhotonActionSheetProtocol {
             popoverVC.sourceView = view
             popoverVC.sourceRect = CGRect(x: view.frame.width/2, y: view.frame.size.height * 0.75, width: 1, height: 1)
             popoverVC.permittedArrowDirections = .up
-            popoverVC.backgroundColor = UIConstants.AppBackgroundColor.withAlphaComponent(0.7)
+            popoverVC.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
         }
         viewController.present(sheet, animated: true, completion: nil)
     }
-    
+
     //Returns a list of actions which is used to build a menu
     //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
     func getHomePanelActions() -> [PhotonActionSheetItem] {
@@ -70,7 +70,7 @@ extension PhotonActionSheetProtocol {
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
             HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
         }
-        
+
         var actions = [openTopSites, openBookmarks, openReadingList, openHistory, openDownloads]
         if HomePageHelper(prefs: self.profile.prefs).isHomePageAvailable {
             actions.insert(openHomePage, at: 0)
@@ -78,15 +78,15 @@ extension PhotonActionSheetProtocol {
 
         return actions
     }
-    
+
     /*
      Returns a list of actions which is used to build the general browser menu
      These items repersent global options that are presented in the menu
      TODO: These icons should all have the icons and use Strings.swift
      */
-    
+
     typealias PageOptionsVC = QRCodeViewControllerDelegate & SettingsDelegate & PresentingModalViewControllerDelegate & UIViewController
-    
+
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         var items: [PhotonActionSheetItem] = []
 
@@ -161,7 +161,7 @@ extension PhotonActionSheetProtocol {
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
             tab.toggleDesktopSite()
         }
-        
+
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in
             guard let url = tab.url?.displayURL else { return }
 
@@ -190,7 +190,7 @@ extension PhotonActionSheetProtocol {
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
             success(Strings.AppMenuAddBookmarkConfirmMessage)
         }
-        
+
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { action in
             //TODO: can all this logic go somewhere else?
             guard let url = tab.url?.displayURL else { return }
@@ -204,10 +204,10 @@ extension PhotonActionSheetProtocol {
                 }
             }
         }
-        
+
         let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { action in
             guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
-            
+
             sql.getSitesForURLs([url.absoluteString]).bind { val -> Success in
                 guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
                     return succeed()
@@ -248,7 +248,7 @@ extension PhotonActionSheetProtocol {
             navigationController.modalPresentationStyle = .formSheet
             bvc.present(navigationController, animated: true, completion: nil)
         }
-        
+
         let sharePage = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
             guard let url = tab.canonicalURL?.displayURL else { return }
 
