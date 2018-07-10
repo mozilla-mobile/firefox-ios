@@ -657,21 +657,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         accessibilityLabel = action.title
         selectionStyle = action.handler != nil ? .default : .none
 
-        let button = TabsButton().clone()
-        let renderer = UIGraphicsImageRenderer(size: button.bounds.size)
-        let tabImage = renderer.image { ctx in
-            button.drawHierarchy(in: button.bounds, afterScreenUpdates: true)}.withRenderingMode(.alwaysTemplate)
-
         if let iconName = action.iconString {
-            if iconName == "tabs-button" {
-                let image = tabImage //uses UIImage from TabsButton
-                statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: []) { (img, err, _, _) in
-                    if let img = img {
-                        self.statusIcon.image = img.createScaled(PhotonActionSheetUX.IconSize)
-                        self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
-                    }
-                }
-            } else {
                 let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
                 statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: []) { (img, err, _, _) in
                     if let img = img {
@@ -679,7 +665,6 @@ private class PhotonActionSheetCell: UITableViewCell {
                         self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
                     }
                 }
-            }
             // When the iconURL is not nil we are most likely showing a profile picture.
             // In that case we do not need a tint color. And make sure the image is sized correctly
             // This is for the sync profile button in the menu
