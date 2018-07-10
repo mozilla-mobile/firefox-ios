@@ -1691,6 +1691,11 @@ extension BrowserViewController: TabDelegate {
         updateFindInPageVisibility(visible: true)
         findInPageBar?.text = selection
     }
+
+    func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
+        openBlankNewTab(focusLocationField: false, isPrivate: tab.isPrivate)
+        submitSearchText(selection)
+    }
 }
 
 extension BrowserViewController: HomePanelViewControllerDelegate {

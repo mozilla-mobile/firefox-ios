@@ -10,6 +10,7 @@ import Foundation
     @objc optional func menuHelperReveal()
     @objc optional func menuHelperSecure()
     @objc optional func menuHelperFindInPage()
+    @objc optional func menuHelperSearchWithFirefox()
     @objc optional func menuHelperPasteAndGo()
 }
 
@@ -19,6 +20,7 @@ open class MenuHelper: NSObject {
     open static let SelectorOpenAndFill: Selector = #selector(MenuHelperInterface.menuHelperOpenAndFill)
     open static let SelectorReveal: Selector = #selector(MenuHelperInterface.menuHelperReveal)
     open static let SelectorFindInPage: Selector = #selector(MenuHelperInterface.menuHelperFindInPage)
+    open static let SelectorSearchWithFirefox: Selector = #selector(MenuHelperInterface.menuHelperSearchWithFirefox)
     open static let SelectorPasteAndGo: Selector = #selector(MenuHelperInterface.menuHelperPasteAndGo)
 
     open class var defaultHelper: MenuHelper {
@@ -46,7 +48,10 @@ open class MenuHelper: NSObject {
 
         let findInPageTitle = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Text selection menu item")
         let findInPageItem = UIMenuItem(title: findInPageTitle, action: MenuHelper.SelectorFindInPage)
-
-        UIMenuController.shared.menuItems = [pasteAndGoItem, copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem]
+      
+        let searchTitle = NSLocalizedString("Search with Firefox", tableName: "SearchWithFirefox", comment: "Search in New Tab Text selection menu item")
+        let searchItem = UIMenuItem(title: searchTitle, action: MenuHelper.SelectorSearchWithFirefox)
+      
+        UIMenuController.shared.menuItems = [pasteAndGoItem, copyItem, revealPasswordItem, hidePasswordItem, openAndFillItem, findInPageItem, searchItem]
     }
 }

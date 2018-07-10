@@ -22,6 +22,7 @@ protocol TabDelegate {
     func tab(_ tab: Tab, didAddSnackbar bar: SnackBar)
     func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar)
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String)
+    func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String)
     @objc optional func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
     @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
@@ -533,6 +534,9 @@ extension Tab: TabWebViewDelegate {
     fileprivate func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String) {
         tabDelegate?.tab(self, didSelectFindInPageForSelection: selection)
     }
+    fileprivate func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String) {
+        tabDelegate?.tab(self, didSelectSearchWithFirefoxForSelection: selection)
+    }
 }
 
 private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
@@ -570,6 +574,7 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
 
 private protocol TabWebViewDelegate: class {
     func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String)
+    func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String)
 }
 
 private class TabWebView: WKWebView, MenuHelperInterface {
@@ -583,6 +588,13 @@ private class TabWebView: WKWebView, MenuHelperInterface {
         evaluateJavaScript("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)
+        }
+    }
+
+    @objc func menuHelperSearchWithFirefox() {
+        evaluateJavaScript("getSelection().toString()") { result, _ in
+            let selection = result as? String ?? ""
+            self.delegate?.tabWebViewSearchWithFirefox(self, didSelectSearchWithFirefoxForSelection: selection)
         }
     }
 
