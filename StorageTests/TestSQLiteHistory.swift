@@ -1372,6 +1372,40 @@ class TestSQLiteHistory: XCTestCase {
         }
     }
 
+    func testRemoveHistoryForUrl() {
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        history.setTopSitesCacheSize(20)
+        history.clearTopSitesCache().succeeded()
+        history.clearHistory().succeeded()
+
+        let url1 = "http://url1/"
+        let site1 = Site(url: "http://url1/", title: "title one")
+        let siteVisit1 = SiteVisit(site: site1, date: Date.nowMicroseconds(), type: VisitType.link)
+
+        let url2 = "http://url2/"
+        let site2 = Site(url: "http://url2/", title: "title two")
+        let siteVisit2 = SiteVisit(site: site2, date: Date.nowMicroseconds() + 2000, type: VisitType.link)
+
+        let url3 = "http://url3/"
+        let site3 = Site(url: url3, title: "title three")
+        let siteVisit3 = SiteVisit(site: site3, date: Date.nowMicroseconds() + 4000, type: VisitType.link)
+
+        history.addLocalVisit(siteVisit1).succeeded()
+        history.addLocalVisit(siteVisit2).succeeded()
+        history.addLocalVisit(siteVisit3).succeeded()
+
+        history.removeHistoryForURL(url1).succeeded()
+        history.removeHistoryForURL(url2).succeeded()
+
+        history.getDeletedHistoryToUpload()
+            >>== { guids in
+                XCTAssertEqual(2, guids.count)
+        }
+    }
+
     func testTopSitesFrecencyOrder() {
         let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
