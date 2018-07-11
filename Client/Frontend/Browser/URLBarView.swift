@@ -24,7 +24,7 @@ private struct URLBarViewUX {
     static let ToolbarButtonInsets = UIEdgeInsets(equalInset: Padding)
 }
 
-protocol URLBarDelegate: class {
+protocol URLBarDelegate: AnyObject {
     func urlBarDidPressTabs(_ urlBar: URLBarView)
     func urlBarDidPressReaderMode(_ urlBar: URLBarView)
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied

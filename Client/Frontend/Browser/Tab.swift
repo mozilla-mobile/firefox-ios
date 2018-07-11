@@ -572,7 +572,7 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
     }
 }
 
-private protocol TabWebViewDelegate: class {
+private protocol TabWebViewDelegate: AnyObject {
     func tabWebView(_ tabWebView: TabWebView, didSelectFindInPageForSelection selection: String)
     func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String)
 }

@@ -6,16 +6,15 @@ import Foundation
 import Shared
 import Storage
 
-@objc protocol TabSelectionDelegate: class {
+@objc protocol TabSelectionDelegate: AnyObject {
     func didSelectTabAtIndex(_ index: Int)
 }
 
-protocol TopTabCellDelegate: class {
+protocol TopTabCellDelegate: AnyObject {
     func tabCellDidClose(_ cell: UICollectionViewCell)
 }
 
-
-protocol TabDisplayer: class {
+protocol TabDisplayer: AnyObject {
     typealias TabCellIdentifer = String
     var tabCellIdentifer: TabCellIdentifer { get set }
 

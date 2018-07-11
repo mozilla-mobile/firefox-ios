@@ -6,7 +6,7 @@ import UIKit
 import SDWebImage
 import Shared
 
-protocol SearchEnginePickerDelegate: class {
+protocol SearchEnginePickerDelegate: AnyObject {
     func searchEnginePicker(_ searchEnginePicker: SearchEnginePicker?, didSelectSearchEngine engine: OpenSearchEngine?)
 }
 

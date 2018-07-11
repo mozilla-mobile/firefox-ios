@@ -407,7 +407,7 @@ fileprivate class ListSelectionController: NSObject {
     }
 }
 
-protocol LoginDataSourceObserver: class {
+protocol LoginDataSourceObserver: AnyObject {
     func loginSectionsDidUpdate()
 }
 

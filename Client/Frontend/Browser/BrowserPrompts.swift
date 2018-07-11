@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 import Shared
 
-@objc protocol JSPromptAlertControllerDelegate: class {
+@objc protocol JSPromptAlertControllerDelegate: AnyObject {
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController)
 }
 

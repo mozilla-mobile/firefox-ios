@@ -8,7 +8,7 @@ import UIKit
 import WebKit
 import SwiftyJSON
 
-protocol FxAContentViewControllerDelegate: class {
+protocol FxAContentViewControllerDelegate: AnyObject {
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags: FxALoginFlags)
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController)
 }

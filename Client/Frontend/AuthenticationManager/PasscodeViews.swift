@@ -12,7 +12,7 @@ private struct PasscodeUX {
     static let PasscodeFieldSize: CGSize = CGSize(width: 160, height: 32)
 }
 
-@objc protocol PasscodeInputViewDelegate: class {
+@objc protocol PasscodeInputViewDelegate: AnyObject {
     func passcodeInputView(_ inputView: PasscodeInputView, didFinishEnteringCode code: String)
 }
 

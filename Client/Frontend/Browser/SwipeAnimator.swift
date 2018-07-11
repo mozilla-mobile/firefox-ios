@@ -22,7 +22,7 @@ private let DefaultParameters =
         minExitVelocity: 800,
         recenterAnimationDuration: 0.15)
 
-protocol SwipeAnimatorDelegate: class {
+protocol SwipeAnimatorDelegate: AnyObject {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView)
 }
 

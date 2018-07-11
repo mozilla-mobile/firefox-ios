@@ -8,7 +8,7 @@ import Shared
 import SwiftKeychainWrapper
 
 /// Delegate available for PasscodeEntryViewController consumers to be notified of the validation of a passcode.
-@objc protocol PasscodeEntryDelegate: class {
+@objc protocol PasscodeEntryDelegate: AnyObject {
     func passcodeValidationDidSucceed()
     @objc optional func userDidCancelValidation()
 }

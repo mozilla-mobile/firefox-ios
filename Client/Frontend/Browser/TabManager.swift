@@ -10,7 +10,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-protocol TabManagerDelegate: class {
+protocol TabManagerDelegate: AnyObject {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?)
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab)
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab)
@@ -22,7 +22,7 @@ protocol TabManagerDelegate: class {
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?)
 }
 
-protocol TabManagerStateDelegate: class {
+protocol TabManagerStateDelegate: AnyObject {
     func tabManagerWillStoreTabs(_ tabs: [Tab])
 }
 
