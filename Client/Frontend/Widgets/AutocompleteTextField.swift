@@ -30,6 +30,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private var autocompleteTextLabel: UILabel?
     private var hideCursor: Bool = false
 
+    private let copyShortcutKey = "c"
+
     var isSelectionActive: Bool {
         return autocompleteTextLabel != nil
     }
@@ -86,6 +88,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyInputEscape, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(input: copyShortcutKey, modifierFlags: .command, action: #selector(self.handleKeyCommand(sender:)))
         ]
     }
 
@@ -133,6 +136,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         case UIKeyInputEscape:
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-cancel"])
             autocompleteDelegate?.autocompleteTextFieldDidCancel(self)
+        case copyShortcutKey:
+            if isSelectionActive {
+                UIPasteboard.general.string = self.autocompleteTextLabel?.text
+            } else {
+                if let selectedTextRange = self.selectedTextRange {
+                    UIPasteboard.general.string = self.text(in: selectedTextRange)
+                }
+            }
         default:
             break
         }
