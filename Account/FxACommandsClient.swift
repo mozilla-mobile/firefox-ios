@@ -223,7 +223,6 @@ open class FxACommandSendTab {
         // TODO: Maybe use NotificationCenter to alert the app that this tab was received?
     }
 
-    // TODO: Check this
     func encrypt(message: String, device: RemoteDevice) -> Deferred<Maybe<String>> {
         return account.marriedState() >>== { marriedState in
             guard let bundleString = device.availableCommands?[FxACommandSendTab.Name].string else {
@@ -300,14 +299,13 @@ open class FxACommandSendTab {
 
         let keyBundle = KeyBundle.fromKSync(marriedState.kSync)
 
-        guard let cleartext = try? keyToEncrypt.rawData(options: []),
-            let (ciphertext, iv) = keyBundle.encrypt(cleartext) else {
+        guard let cleartext = keyToEncrypt.stringify(),
+            let (ciphertext, iv) = keyBundle.encrypt(cleartext.utf8EncodedData) else {
             return nil
         }
 
-        let hmac = keyBundle.hmac(ciphertext)
+        let hmacString = keyBundle.hmacString(ciphertext.base64EncodedData())
         let ivString = iv.base64EncodedString
-        let hmacString = hmac.hexEncodedString
         let ciphertextString = ciphertext.base64EncodedString
 
         let encryptedKey = JSON([
