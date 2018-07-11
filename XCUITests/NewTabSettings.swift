@@ -7,8 +7,12 @@ import XCTest
 class NewTabSettingsTest: BaseTestCase {
     func testCheckNewTabSettingsByDefault() {
         navigator.goto(NewTabSettings)
-        waitforExistence(app.navigationBars["New Tab Settings"])
-        waitforExistence(app.tables.cells.staticTexts["Show your Top Sites"])
+        print(app.debugDescription)
+        waitforExistence(app.navigationBars["New Tab"])
+        XCTAssertTrue(app.tables.cells["Top Sites"].exists)
+        XCTAssertTrue(app.tables.cells["Blank Page"].exists)
+        XCTAssertTrue(app.tables.cells["Bookmarks"].exists)
+        XCTAssertTrue(app.tables.cells["History"].exists)
         XCTAssertTrue(app.tables.switches["ASPocketStoriesVisible"].isEnabled)
         XCTAssertTrue(app.tables.switches["ASBookmarkHighlightsVisible"].isEnabled)
         XCTAssertTrue(app.tables.switches["ASRecentHighlightsVisible"].isEnabled)
@@ -36,8 +40,8 @@ class NewTabSettingsTest: BaseTestCase {
     }
 
     func testChangeNewTabSettingsShowBlankPage() {
-        navigator.goto(NewTabChoiceSettings)
-        waitforExistence(app.tables["NewTabPage.Setting.Options"])
+        navigator.goto(NewTabSettings)
+        waitforExistence(app.navigationBars["New Tab"])
 
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -48,22 +52,25 @@ class NewTabSettingsTest: BaseTestCase {
     }
 
     func testChangeNewTabSettingsShowYourBookmarks() {
-        navigator.goto(NewTabChoiceSettings)
-        waitforExistence(app.tables["NewTabPage.Setting.Options"])
+        navigator.goto(NewTabSettings)
+        waitforExistence(app.navigationBars["New Tab"])
         // Show Bookmarks panel without bookmarks
         navigator.performAction(Action.SelectNewTabAsBookmarksPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitforExistence(app.otherElements.images["emptyBookmarks"])
 
         // Add one bookmark and check the new tab screen
-        navigator.performAction(Action.BookmarkThreeDots)
+        navigator.openURL("mozilla.org/en-US/book")
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.Bookmark)
         navigator.goto(NewTabScreen)
         waitforExistence(app.tables["Bookmarks List"].cells.staticTexts["The Book of Mozilla"])
         waitforNoExistence(app.staticTexts["Highlights"])
     }
     func testChangeNewTabSettingsShowYourHistory() {
-        navigator.goto(NewTabChoiceSettings)
-        waitforExistence(app.tables["NewTabPage.Setting.Options"])
+        navigator.goto(NewTabSettings)
+        waitforExistence(app.navigationBars["New Tab"])
         // Show History Panel without history
         navigator.performAction(Action.SelectNewTabAsHistoryPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
