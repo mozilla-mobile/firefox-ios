@@ -139,11 +139,16 @@ class FindInPageTests: BaseTestCase {
         let stringToFind = app.webViews.staticTexts.matching(identifier: textToFind)
         let firstStringToFind = stringToFind.element(boundBy: 0)
         firstStringToFind.press(forDuration: 3)
-
+        waitforExistence(app.menuItems["Copy"])
         // Find in page is correctly launched, bar with text pre-filled and
         // the buttons to find next and previous
-        waitforExistence(app.menuItems["Find in Page"])
-        app.menuItems["Find in Page"].tap()
+        if (app.menuItems["Find in Page"].exists) {
+            app.menuItems["Find in Page"].tap()
+        } else {
+            app.menuItems["Show more items"].tap()
+            waitforExistence(app.menuItems["Find in Page"])
+            app.menuItems["Find in Page"].tap()
+        }
         waitforExistence(app.textFields[textToFind])
         XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")
         XCTAssertTrue(app.buttons["FindInPage.find_previous"].exists, "Find previous button exists")
