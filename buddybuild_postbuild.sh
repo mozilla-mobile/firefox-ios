@@ -10,7 +10,7 @@ test_runner="XCUITests-Runner"
 
 if [ "$BUDDYBUILD_SCHEME" = "Fennec" ]; then
   cd  $BUDDYBUILD_PRODUCT_DIR
-  find . -name "*.dSYM" -print | zip /tmp/dsyms.zip 
+  find . -name "*.dSYM" -print | zip /tmp/dsyms.zip -@
   curl -F ipa=@$BUDDYBUILD_IPA_PATH  -u $NIMBLEDROID_API_KEY: https://nimbledroid.com/api/v2/ipas \
        -F "dsym=@/tmp/dsyms.zip" \
        -F test_identifiers='ActivityStreamTest/testDefaultSites,DomainAutocompleteTest/testAutocomplete,DatabaseFixtureTest/testHistoryDatabaseFixture,BrowsingPDFTests/testBookmarkPDF,ActivityStreamTest/testTopSitesBookmarkNewTopSite,FindInPageTests/testFindInLargeDoc,FirstRunTourTests/testFirstRunTour'
