@@ -228,6 +228,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         highlightsButton?.accessibilityIdentifier = "SettingsViewController.whatsNewButton"
         navigationItem.rightBarButtonItem = highlightsButton
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Done, style: .plain, target: self, action: #selector(doneClicked))
+        
         if whatsNew.shouldShowWhatsNew() {
             highlightsButton?.tintColor = UIConstants.colors.settingsLink
         }
@@ -549,6 +551,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationController?.pushViewController(SettingsContentViewController(url: url), animated: true)
         
         whatsNew.didShowWhatsNew()
+    }
+    
+    @objc private func doneClicked() {
+        navigationController?.dismiss(animated: true, completion: nil)
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {

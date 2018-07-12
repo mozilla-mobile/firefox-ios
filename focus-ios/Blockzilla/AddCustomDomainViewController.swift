@@ -109,10 +109,6 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
 
     private func finish() {
         delegate?.addCustomDomainViewControllerDidFinish(self)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            dismiss(animated: true, completion: nil)
-        } else {
-            self.navigationController?.popViewController(animated: true)
-        }
+        self.navigationController?.popViewController(animated: true)
     }
 }

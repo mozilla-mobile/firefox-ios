@@ -150,21 +150,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         if indexPath.row == domains.count {
             let viewController = AddCustomDomainViewController(autocompleteSource: customAutocompleteSource)
             viewController.delegate = self
-
-            // Present the ViewController modallu on the iPad
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                let navigationController = UINavigationController(rootViewController: viewController)
-                navigationController.modalPresentationStyle = .formSheet
-                let navigationBar = navigationController.navigationBar
-                navigationBar.isTranslucent = false
-                navigationBar.barTintColor = UIConstants.colors.background
-                navigationBar.tintColor = UIConstants.colors.navigationButton
-                navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIConstants.colors.navigationTitle]
-
-                present(navigationController, animated: true, completion: nil)
-            } else {
-                self.navigationController?.pushViewController(viewController, animated: true)
-            }
+            self.navigationController?.pushViewController(viewController, animated: true)
         }
     }
 

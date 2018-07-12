@@ -22,6 +22,8 @@ class BrowserViewController: UIViewController {
     
     private let webViewController = WebViewController()
     private let webViewContainer = UIView()
+    
+    var modalDelegate: ModalDelegate?
 
     private let trackingProtectionSummaryController = TrackingProtectionSummaryViewController()
 
@@ -551,10 +553,16 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showSettings() {
+        guard let modalDelegate = modalDelegate else { return }
+        
         urlBar.shouldPresent = false
+        
         let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: self)
-        navigationController!.pushViewController(settingsViewController, animated: true)
-        navigationController!.setNavigationBarHidden(false, animated: true)
+        
+        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
+        settingsNavController.modalPresentationStyle = .formSheet
+        
+        modalDelegate.presentModal(viewController: settingsNavController, animated: true)
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
     }

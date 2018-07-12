@@ -6,7 +6,7 @@ import UIKit
 import Telemetry
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     var window: UIWindow?
 
     static var splashView: UIView?
@@ -49,8 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
 
-        let rootViewController = UINavigationController(rootViewController: browserViewController)
-        window?.rootViewController = rootViewController
+        browserViewController.modalDelegate = self
+        window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
 
         WebCacheUtils.reset()
@@ -65,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if AppInfo.isTesting() {
             let firstRunViewController = IntroViewController()
-            rootViewController.present(firstRunViewController, animated: false, completion: nil)
+            self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
             return true
         }
         
@@ -76,7 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Set the prefIntroVersion viewed number in the same context as the presentation.
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                rootViewController.present(IntroViewController(), animated: false, completion: nil)
+                self.browserViewController.present(IntroViewController(), animated: false, completion: nil)
             }
         }
         
@@ -311,6 +311,13 @@ extension AppDelegate {
         #endif
     }
     
+    func presentModal(viewController: UIViewController, animated: Bool) {
+        window?.rootViewController?.present(viewController, animated: animated, completion: nil)
+    }
+}
+
+protocol ModalDelegate {
+    func presentModal(viewController: UIViewController, animated: Bool)
 }
 
 extension UINavigationController {
