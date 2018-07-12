@@ -34,6 +34,12 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     fileprivate var previewAccessibilityLabel: String!
 
     // Preview action items.
+    override var previewActionItems: [UIPreviewActionItem] {
+        get {
+            return previewActions
+        }
+    }
+
     lazy var previewActions: [UIPreviewActionItem] = {
         var actions = [UIPreviewActionItem]()
 
