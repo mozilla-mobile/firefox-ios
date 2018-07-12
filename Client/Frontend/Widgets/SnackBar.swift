@@ -38,8 +38,8 @@ class SnackButton: UIButton {
             titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         }
         setTitle(title, for: .normal)
-        setTitleColor(UIColor.theme.snackbar.highlightText, for: .highlighted)
-        setTitleColor(UIColor.theme.snackbar.title, for: .normal)
+        setTitleColor(SnackBarUX.HighlightText, for: .highlighted)
+        setTitleColor(UIConstants.ControlTintColor, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -54,7 +54,7 @@ class SnackButton: UIButton {
 
     func drawSeparator() {
         let separator = UIView()
-        separator.backgroundColor = UIColor.theme.snackbar.border
+        separator.backgroundColor = UIConstants.SeparatorColor
         self.addSubview(separator)
         separator.snp.makeConstraints { make in
             make.leading.equalTo(self)
@@ -121,7 +121,7 @@ class SnackBar: UIView {
         titleView.addArrangedSubview(textLabel)
 
         let separator = UIView()
-        separator.backgroundColor = UIColor.theme.snackbar.border
+        separator.backgroundColor = UIConstants.SeparatorColor
 
         addSubview(titleView)
         addSubview(separator)
@@ -148,7 +148,7 @@ class SnackBar: UIView {
         backgroundColor = UIColor.clear
         self.clipsToBounds = true //overridden by masksToBounds = false
         self.layer.borderWidth = SnackBarUX.BorderWidth
-        self.layer.borderColor = UIColor.theme.snackbar.border.cgColor
+        self.layer.borderColor = UIConstants.SeparatorColor.cgColor
         self.layer.cornerRadius = 8
         if #available(iOS 11.0, *) {
             self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
