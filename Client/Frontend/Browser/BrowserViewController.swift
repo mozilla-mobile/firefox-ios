@@ -1777,7 +1777,7 @@ extension BrowserViewController: TabManagerDelegate {
             if tab.isPrivate != previous?.isPrivate {
                 applyTheme()
 
-                let ui: [PrivateModeUI?] = [toolbar, topTabsViewController]
+                let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
                 ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate) }
             }
 

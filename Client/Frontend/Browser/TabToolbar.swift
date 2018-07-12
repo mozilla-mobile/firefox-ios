@@ -7,13 +7,13 @@ import SnapKit
 import Shared
 
 protocol TabToolbarProtocol: class {
-    weak var tabToolbarDelegate: TabToolbarDelegate? { get set }
-    var tabsButton: TabsButton { get }
+    var tabToolbarDelegate: TabToolbarDelegate? { get set }
+    var tabsButton: TabsButtonContainer { get }
     var menuButton: ToolbarButton { get }
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
     var stopReloadButton: ToolbarButton { get }
-    var actionButtons: [Themeable & UIButton] { get }
+    var actionButtons: [Themeable & UIView] { get }
 
     func updateBackStatus(_ canGoBack: Bool)
     func updateForwardStatus(_ canGoForward: Bool)
@@ -80,9 +80,9 @@ open class TabToolbarHelper: NSObject {
         toolbar.stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
         toolbar.stopReloadButton.addTarget(self, action: #selector(didClickStopReload), for: .touchUpInside)
 
-        toolbar.tabsButton.addTarget(self, action: #selector(didClickTabs), for: .touchUpInside)
+        toolbar.tabsButton.button.addTarget(self, action: #selector(didClickTabs), for: .touchUpInside)
         let longPressGestureTabsButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTabs))
-        toolbar.tabsButton.addGestureRecognizer(longPressGestureTabsButton)
+        toolbar.tabsButton.button.addGestureRecognizer(longPressGestureTabsButton)
 
         toolbar.menuButton.contentMode = .center
         toolbar.menuButton.setImage(UIImage.templateImageNamed("nav-menu"), for: .normal)
@@ -103,11 +103,11 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didClickTabs() {
-        toolbar.tabToolbarDelegate?.tabToolbarDidPressTabs(toolbar, button: toolbar.tabsButton)
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressTabs(toolbar, button: toolbar.tabsButton.button)
     }
 
     func didLongPressTabs(_ recognizer: UILongPressGestureRecognizer) {
-        toolbar.tabToolbarDelegate?.tabToolbarDidLongPressTabs(toolbar, button: toolbar.tabsButton)
+        toolbar.tabToolbarDelegate?.tabToolbarDidLongPressTabs(toolbar, button: toolbar.tabsButton.button)
     }
 
     func didClickForward() {
@@ -194,12 +194,12 @@ extension ToolbarButton: Themeable {
 class TabToolbar: UIView {
     weak var tabToolbarDelegate: TabToolbarDelegate?
 
-    let tabsButton = TabsButton()
+    let tabsButton = TabsButtonContainer()
     let menuButton = ToolbarButton()
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
     let stopReloadButton = ToolbarButton()
-    let actionButtons: [Themeable & UIButton]
+    let actionButtons: [Themeable & UIView]
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
@@ -228,7 +228,7 @@ class TabToolbar: UIView {
         backButton.accessibilityIdentifier = "TabToolbar.backButton"
         forwardButton.accessibilityIdentifier = "TabToolbar.forwardButton"
         stopReloadButton.accessibilityIdentifier = "TabToolbar.stopReloadButton"
-        tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
+        tabsButton.button.accessibilityIdentifier = "TabToolbar.tabsButton"
         menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
         accessibilityNavigationStyle = .combined
         accessibilityLabel = NSLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
@@ -238,7 +238,7 @@ class TabToolbar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func addButtons(_ buttons: [UIButton]) {
+    func addButtons(_ buttons: [UIView]) {
         buttons.forEach { contentView.addArrangedSubview($0) }
     }
 

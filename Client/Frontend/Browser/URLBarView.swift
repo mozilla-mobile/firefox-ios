@@ -108,9 +108,9 @@ class URLBarView: UIView {
 
     let line = UIView()
 
-    lazy var tabsButton: TabsButton = {
-        let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.accessibilityIdentifier = "URLBarView.tabsButton"
+    lazy var tabsButton: TabsButtonContainer = {
+        let tabsButton = TabsButtonContainer()
+        tabsButton.button.accessibilityIdentifier = "URLBarView.tabsButton"
         return tabsButton
     }()
 
@@ -157,7 +157,7 @@ class URLBarView: UIView {
         return backButton
     }()
 
-    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton]
+    lazy var actionButtons: [Themeable & UIView] = [self.tabsButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton]
 
     var currentURL: URL? {
         get {
@@ -680,6 +680,12 @@ extension URLBarView: Themeable {
         backgroundColor = UIColor.theme.browser.background
         line.backgroundColor = UIColor.theme.browser.urlBarDivider
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
+    }
+}
+
+extension URLBarView: PrivateModeUI {
+    func applyUIMode(isPrivate: Bool) {
+        tabsButton.applyUIMode(isPrivate: isPrivate)
     }
 }
 

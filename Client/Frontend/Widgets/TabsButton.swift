@@ -14,12 +14,57 @@ private struct TabsButtonUX {
     static let BorderStrokeWidth: CGFloat = 3
 }
 
-class TabsButton: UIButton {
-    var privateModeBadge = UIImageView.init(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
+class TabsButtonContainer: UIView, Themeable, PrivateModeUI {
+    private var privateModeBadge = UIImageView(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
+    private let _button = TabsButton()
+    var button: UIButton { return _button }
 
     let privateModeBadgeSize = CGFloat(16)
     let privateModeBadgeOffset = CGFloat(10)
 
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        privateModeBadge.isUserInteractionEnabled = false
+        
+        _button.countLabel.text = "0"
+        _button.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the tab toolbar")
+
+        addSubview(button)
+        addSubview(privateModeBadge)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    override func updateConstraints() {
+        super.updateConstraints()
+        button.snp.remakeConstraints { make in
+            make.center.equalToSuperview()
+        }
+
+        privateModeBadge.snp.remakeConstraints { make in
+            make.size.equalTo(privateModeBadgeSize)
+            make.centerX.equalToSuperview().offset(privateModeBadgeOffset)
+            make.centerY.equalToSuperview().offset(-privateModeBadgeOffset)
+        }
+    }
+
+    func updateTabCount(_ count: Int, animated: Bool = true) {
+        _button.updateTabCount(count, animated: animated)
+    }
+
+    func applyTheme() {
+        _button.applyTheme()
+    }
+
+    func applyUIMode(isPrivate: Bool) {
+        privateModeBadge.isHidden = !isPrivate
+    }
+}
+
+fileprivate class TabsButton: UIButton {
     var textColor = UIColor.clear {
         didSet {
             countLabel.textColor = textColor
@@ -90,8 +135,6 @@ class TabsButton: UIButton {
         insideButton.addSubview(borderView)
         insideButton.addSubview(countLabel)
         addSubview(insideButton)
-        addSubview(privateModeBadge)
-        privateModeBadge.isHidden = true
         isAccessibilityElement = true
         accessibilityTraits |= UIAccessibilityTraitButton
     }
@@ -110,12 +153,6 @@ class TabsButton: UIButton {
         insideButton.snp.remakeConstraints { (make) -> Void in
             make.size.equalTo(24)
             make.center.equalTo(self)
-        }
-
-        privateModeBadge.snp.remakeConstraints { make in
-            make.size.equalTo(privateModeBadgeSize)
-            make.centerX.equalToSuperview().offset(privateModeBadgeOffset)
-            make.centerY.equalToSuperview().offset(-privateModeBadgeOffset)
         }
     }
 
@@ -218,7 +255,7 @@ class TabsButton: UIButton {
     }
 }
 
-extension TabsButton: Themeable, PrivateModeUI {
+extension TabsButton: Themeable {
     func applyTheme() {
         if UIDevice.current.userInterfaceIdiom == .pad {
             titleBackgroundColor = UIColor.theme.topTabs.background
@@ -227,10 +264,6 @@ extension TabsButton: Themeable, PrivateModeUI {
             titleBackgroundColor = UIColor.theme.browser.background
             textColor = UIColor.theme.browser.tint
         }
-    }
-
-    func applyUIMode(isPrivate: Bool) {
-        privateModeBadge.isHidden = !isPrivate
     }
 }
 

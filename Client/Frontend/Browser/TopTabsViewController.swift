@@ -46,11 +46,11 @@ class TopTabsViewController: UIViewController {
         return collectionView
     }()
 
-    fileprivate lazy var tabsButton: TabsButton = {
-        let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.semanticContentAttribute = .forceLeftToRight
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
-        tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
+    fileprivate lazy var tabsButton: TabsButtonContainer = {
+        let tabsButton = TabsButtonContainer()
+        tabsButton.button.semanticContentAttribute = .forceLeftToRight
+        tabsButton.button.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
+        tabsButton.button.accessibilityIdentifier = "TopTabsViewController.tabsButton"
         return tabsButton
     }()
 
