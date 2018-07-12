@@ -191,7 +191,7 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
         })
 
         statsSession.start()
-        
+
         let doMirror = mirrorer.go(info: info, greenLight: greenLight)
         let run: SyncResult
 
@@ -247,7 +247,7 @@ open class BufferingBookmarksSynchronizer: TimestampedSingleCollectionSynchroniz
                                 }
                             }
                         }
-                        
+
                         let applier = MergeApplier(buffer: buffer, storage: storage, client: storer, statsSession: self.statsSession, greenLight: greenLight)
                         return applier.go()
                     }
@@ -376,7 +376,7 @@ class MergeApplier {
  * (e.g., an in-memory monotonic counter) or locking to prevent bookmark operations from
  * racing. Later!
  */
-protocol BookmarksStorageMerger: class {
+protocol BookmarksStorageMerger: AnyObject {
     init(buffer: BookmarkBufferStorage & BufferItemSource, storage: SyncableBookmarks & LocalItemSource & MirrorItemSource)
     func merge() -> Deferred<Maybe<BookmarksMergeResult>>
 }

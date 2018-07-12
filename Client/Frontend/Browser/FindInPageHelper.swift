@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import WebKit
 
-protocol FindInPageHelperDelegate: class {
+protocol FindInPageHelperDelegate: AnyObject {
     func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int)
     func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int)
 }

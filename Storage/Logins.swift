@@ -94,7 +94,7 @@ public typealias TimestampedLoginDeltas = (at: Timestamp, changed: LoginDeltas)
 /**
  * LoginData is a wrapper around NSURLCredential and NSURLProtectionSpace to allow us to add extra fields where needed.
  **/
-public protocol LoginData: class {
+public protocol LoginData: AnyObject {
     var guid: String { get set }                 // It'd be nice if this were read-only.
     var credentials: URLCredential { get }
     var protectionSpace: URLProtectionSpace { get }

@@ -9,8 +9,6 @@ import Shared
 class SnackBarUX {
     static var MaxWidth: CGFloat = 400
     static let BorderWidth: CGFloat = 0.5
-    static let HighlightColor = UIColor.Defaults.iOSHighlightBlue.withAlphaComponent(0.9)
-    static let HighlightText = UIColor.Photon.Blue60
 }
 
 /**
@@ -25,7 +23,7 @@ class SnackButton: UIButton {
 
     override open var isHighlighted: Bool {
         didSet {
-            self.backgroundColor = isHighlighted ? SnackBarUX.HighlightColor : .clear
+            self.backgroundColor = isHighlighted ? UIColor.theme.snackbar.highlight : .clear
         }
     }
 
@@ -86,7 +84,7 @@ class SnackBar: UIView {
         label.lineBreakMode = .byWordWrapping
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.numberOfLines = 0
-        label.textColor = SettingsUX.TableViewRowTextColor
+        label.textColor = UIColor.theme.tableView.rowText
         label.backgroundColor = UIColor.clear
         return label
     }()
@@ -144,7 +142,7 @@ class SnackBar: UIView {
             make.top.equalTo(self).offset(UIConstants.DefaultPadding)
             make.height.equalTo(UIConstants.SnackbarButtonHeight - 2 * UIConstants.DefaultPadding)
             make.centerX.equalTo(self).priority(500)
-            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 2).priority(1000)
+            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 6).priority(1000)
         }
 
         backgroundColor = UIColor.clear
@@ -155,7 +153,6 @@ class SnackBar: UIView {
         if #available(iOS 11.0, *) {
             self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         }
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -237,7 +234,7 @@ class TimerSnackBar: SnackBar {
         bar.addButton(openAppStore)
         tab.addSnackbar(bar)
     }
-    
+
     override func show() {
         self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(timerDone), userInfo: nil, repeats: false)
         RunLoop.current.add(self.timer!, forMode: RunLoopMode.defaultRunLoopMode)

@@ -11,7 +11,7 @@ import XCGLogger
 private let log = Logger.syncLogger
 
 // Because generic protocols in Swift are a pain in the ass.
-public protocol BookmarkStorer: class {
+public protocol BookmarkStorer: AnyObject {
     // TODO: this should probably return a timestamp.
     func applyUpstreamCompletionOp(_ op: UpstreamCompletionOp, itemSources: ItemSources, trackingTimesInto local: LocalOverrideCompletionOp) -> Deferred<Maybe<POSTResult>>
 }

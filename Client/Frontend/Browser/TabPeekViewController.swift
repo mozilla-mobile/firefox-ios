@@ -7,7 +7,7 @@ import Shared
 import Storage
 import WebKit
 
-protocol TabPeekDelegate: class {
+protocol TabPeekDelegate: AnyObject {
     func tabPeekDidAddBookmark(_ tab: Tab)
     @discardableResult func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController)
@@ -34,6 +34,12 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     fileprivate var previewAccessibilityLabel: String!
 
     // Preview action items.
+    override var previewActionItems: [UIPreviewActionItem] {
+        get {
+            return previewActions
+        }
+    }
+
     lazy var previewActions: [UIPreviewActionItem] = {
         var actions = [UIPreviewActionItem]()
 

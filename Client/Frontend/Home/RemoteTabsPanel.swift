@@ -69,7 +69,7 @@ class RemoteTabsPanel: UIViewController, HomePanel {
         tableViewController.profile = profile
         tableViewController.remoteTabsPanel = self
 
-        view.backgroundColor = UIConstants.PanelBackgroundColor
+        view.backgroundColor = UIColor.theme.homePanel.panelBackground
 
         addChildViewController(tableViewController)
         self.view.addSubview(tableViewController.view)

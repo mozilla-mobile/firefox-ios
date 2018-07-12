@@ -15,14 +15,18 @@ private struct TabsButtonUX {
 }
 
 class TabsButton: UIButton {
+    var privateModeBadge = UIImageView.init(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
 
-    var textColor = UIColor.Photon.White100 {
+    let privateModeBadgeSize = CGFloat(16)
+    let privateModeBadgeOffset = CGFloat(10)
+
+    var textColor = UIColor.clear {
         didSet {
             countLabel.textColor = textColor
             borderView.color = textColor
         }
     }
-    var titleBackgroundColor  = UIColor.Photon.White100 {
+    var titleBackgroundColor = UIColor.clear {
         didSet {
             labelBackground.backgroundColor = titleBackgroundColor
         }
@@ -33,17 +37,13 @@ class TabsButton: UIButton {
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
-                countLabel.textColor = textColor
                 borderView.color = titleBackgroundColor
-                labelBackground.backgroundColor = titleBackgroundColor
             } else {
-                countLabel.textColor = textColor
                 borderView.color = textColor
-                labelBackground.backgroundColor = titleBackgroundColor
             }
         }
     }
-    
+
     override var transform: CGAffineTransform {
         didSet {
             clonedTabsButton?.transform = transform
@@ -80,7 +80,7 @@ class TabsButton: UIButton {
         border.isUserInteractionEnabled = false
         return border
     }()
-    
+
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
     fileprivate weak var clonedTabsButton: TabsButton?
 
@@ -90,6 +90,8 @@ class TabsButton: UIButton {
         insideButton.addSubview(borderView)
         insideButton.addSubview(countLabel)
         addSubview(insideButton)
+        addSubview(privateModeBadge)
+        privateModeBadge.isHidden = true
         isAccessibilityElement = true
         accessibilityTraits |= UIAccessibilityTraitButton
     }
@@ -108,6 +110,12 @@ class TabsButton: UIButton {
         insideButton.snp.remakeConstraints { (make) -> Void in
             make.size.equalTo(24)
             make.center.equalTo(self)
+        }
+
+        privateModeBadge.snp.remakeConstraints { make in
+            make.size.equalTo(privateModeBadgeSize)
+            make.centerX.equalToSuperview().offset(privateModeBadgeOffset)
+            make.centerY.equalToSuperview().offset(-privateModeBadgeOffset)
         }
     }
 
@@ -135,7 +143,7 @@ class TabsButton: UIButton {
 
         return button
     }
-    
+
     func updateTabCount(_ count: Int, animated: Bool = true) {
         let count = max(count, 1)
         let currentCount = self.countLabel.text
@@ -179,13 +187,13 @@ class TabsButton: UIButton {
             oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
             oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
             oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(-(Double.pi / 2)), 1.0, 0.0, 0.0)
-            
+
             let animate = {
                 newTabsButton.insideButton.layer.transform = CATransform3DIdentity
                 self.insideButton.layer.transform = oldFlipTransform
                 self.insideButton.layer.opacity = 0
             }
-            
+
             let completion: (Bool) -> Void = { completed in
                 let noActiveAnimations = self.insideButton.layer.animationKeys()?.isEmpty ?? true
                 if completed || noActiveAnimations {
@@ -197,7 +205,7 @@ class TabsButton: UIButton {
                 self.countLabel.text = countToBe
                 self.accessibilityValue = countToBe
             }
-            
+
             if animated {
                 UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: [], animations: animate, completion: completion)
             } else {
@@ -210,13 +218,19 @@ class TabsButton: UIButton {
     }
 }
 
-extension TabsButton: Themeable {
-    func applyTheme(_ theme: Theme) {
-        titleBackgroundColor = UIColor.Browser.Background.colorFor(theme)
-        textColor = UIColor.Browser.Tint.colorFor(theme)
-        countLabel.textColor = UIColor.Browser.Tint.colorFor(theme)
-        borderView.color = UIColor.Browser.Tint.colorFor(theme)
-        labelBackground.backgroundColor = UIColor.Browser.Background.colorFor(theme)
+extension TabsButton: Themeable, PrivateModeUI {
+    func applyTheme() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            titleBackgroundColor = UIColor.theme.topTabs.background
+            textColor = UIColor.theme.topTabs.buttonTint
+        } else {
+            titleBackgroundColor = UIColor.theme.browser.background
+            textColor = UIColor.theme.browser.tint
+        }
+    }
+
+    func applyUIMode(isPrivate: Bool) {
+        privateModeBadge.isHidden = !isPrivate
     }
 }
 

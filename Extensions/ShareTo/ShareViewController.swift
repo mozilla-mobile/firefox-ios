@@ -48,7 +48,7 @@ extension String {
     }
 }
 
-protocol ShareControllerDelegate: class {
+protocol ShareControllerDelegate: AnyObject {
     func finish(afterDelay: TimeInterval)
     func getValidExtensionContext() -> NSExtensionContext?
     func hidePopupWhenShowingAlert()

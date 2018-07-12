@@ -9,14 +9,11 @@ private struct SearchInputViewUX {
 
     static let horizontalSpacing: CGFloat = 16
     static let titleFont: UIFont = UIFont.systemFont(ofSize: 16)
-    static let titleColor: UIColor = UIColor.Photon.Grey40
-    static let inputColor: UIColor = UIConstants.HighlightBlue
-    static let borderColor: UIColor = UIConstants.SeparatorColor
     static let borderLineWidth: CGFloat = 0.5
     static let closeButtonSize: CGFloat = 36
 }
 
-@objc protocol SearchInputViewDelegate: class {
+@objc protocol SearchInputViewDelegate: AnyObject {
 
     func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String)
 
@@ -38,8 +35,8 @@ class SearchInputView: UIView {
     lazy var inputField: UITextField = {
         let textField = UITextField()
         textField.delegate = self
-        textField.textColor = SearchInputViewUX.inputColor
-        textField.tintColor = SearchInputViewUX.inputColor
+        textField.textColor = UIColor.theme.searchInput.input
+        textField.tintColor = UIColor.theme.searchInput.input
         textField.addTarget(self, action: #selector(inputTextDidChange), for: .editingChanged)
         textField.accessibilityLabel = NSLocalizedString("Search Input Field", tableName: "LoginManager", comment: "Accessibility label for the search input field in the Logins list")
         textField.autocorrectionType = .no
@@ -51,7 +48,7 @@ class SearchInputView: UIView {
         let label = UILabel()
         label.text = NSLocalizedString("Search", tableName: "LoginManager", comment: "Title for the search field at the top of the Logins list screen")
         label.font = SearchInputViewUX.titleFont
-        label.textColor = SearchInputViewUX.titleColor
+        label.textColor = UIColor.theme.searchInput.title
         return label
     }()
 
@@ -72,7 +69,7 @@ class SearchInputView: UIView {
 
     fileprivate lazy var bottomBorder: UIView = {
         let border = UIView()
-        border.backgroundColor = SearchInputViewUX.borderColor
+        border.backgroundColor = UIColor.theme.searchInput.border
         return border
     }()
 

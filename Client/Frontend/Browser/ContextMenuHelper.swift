@@ -4,7 +4,7 @@
 
 import WebKit
 
-protocol ContextMenuHelperDelegate: class {
+protocol ContextMenuHelperDelegate: AnyObject {
     func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UIGestureRecognizer)
     func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer)
 }

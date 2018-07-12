@@ -8,7 +8,7 @@ import UIKit
 import WebKit
 import SwiftyJSON
 
-protocol FxAContentViewControllerDelegate: class {
+protocol FxAContentViewControllerDelegate: AnyObject {
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags: FxALoginFlags)
     func contentViewControllerDidCancel(_ viewController: FxAContentViewController)
 }
@@ -36,7 +36,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     init(profile: Profile, fxaOptions: FxALaunchParams? = nil) {
         self.profile = profile
-        
+
         super.init(backgroundColor: UIColor.Photon.Grey20, title: NSAttributedString(string: "Firefox Accounts"))
 
         self.url = self.createFxAURLWith(fxaOptions, profile: profile)
@@ -51,12 +51,12 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
+
         profile.getAccount()?.updateProfile()
-        
+
         // If the FxAContentViewController was launched from a FxA deferred link
         // onboarding might not have been shown. Check to see if it needs to be
         // displayed and don't animate.
@@ -158,7 +158,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     fileprivate func onLoaded() {
         self.timer?.invalidate()
         self.timer = nil
-        self.isLoaded = true        
+        self.isLoaded = true
     }
 
     // Handle a message coming from the content server.
@@ -202,15 +202,15 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             handleRemoteCommand(detail["command"].stringValue, data: detail["data"])
         }
     }
-    
+
     // Configure the FxA signin url based on any passed options.
     public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile) -> URL {
         let profileUrl = profile.accountConfiguration.signInURL
-        
+
         guard let launchParams = fxaOptions else {
             return profileUrl
         }
-        
+
         // Only append `signin`, `entrypoint` and `utm_*` parameters. Note that you can't
         // override the service and context params.
         var params = launchParams.query
@@ -219,7 +219,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let queryURL = params.filter { $0.key == "signin" || $0.key == "entrypoint" || $0.key.range(of: "utm_") != nil }.map({
             return "\($0.key)=\($0.value)"
         }).joined(separator: "&")
-        
+
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
     }
 

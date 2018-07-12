@@ -92,7 +92,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
 /**
  * A Profile manages access to the user's data.
  */
-protocol Profile: class {
+protocol Profile: AnyObject {
     var bookmarks: BookmarksModelFactorySource & KeywordSearchSource & ShareToDestination & SyncableBookmarks & LocalItemSource & MirrorItemSource { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
@@ -113,7 +113,7 @@ protocol Profile: class {
     #endif
 
     var isShutdown: Bool { get }
-    
+
     func shutdown()
     func reopen()
 
@@ -281,7 +281,7 @@ open class BrowserProfile: Profile {
     func reopen() {
         log.debug("Reopening profile.")
         isShutdown = false
-        
+
         db.reopenIfClosed()
         loginsDB.reopenIfClosed()
     }
@@ -449,16 +449,16 @@ open class BrowserProfile: Profile {
         let commands = items.map { item in
             SyncCommand.displayURIFromShareItem(item, asClient: id)
         }
-        
+
         func notifyClients() {
             let deviceIDs = clients.compactMap { $0.fxaDeviceId }
             guard let account = self.getAccount() else {
                 return
             }
-            
+
             account.notify(deviceIDs: deviceIDs, collectionsChanged: ["clients"], reason: "sendtab")
         }
-        
+
         return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> {
             let syncStatus = self.syncManager.syncClients()
             syncStatus >>> notifyClients
@@ -492,14 +492,14 @@ open class BrowserProfile: Profile {
         self.keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
         if let dictionary = self.keychain.object(forKey: key) as? [String: AnyObject] {
             let account =  FirefoxAccount.fromDictionary(dictionary)
-            
+
             // Check to see if the account configuration set is a custom service
             // and update it to use the custom servers.
             if let configuration = account?.configuration as? CustomFirefoxAccountConfiguration {
                 account?.configuration = CustomFirefoxAccountConfiguration(prefs: self.prefs)
             }
             account?.updateProfile()
-            
+
             return account
         }
         return nil
@@ -543,7 +543,7 @@ open class BrowserProfile: Profile {
         self.account = account
 
         flushAccount()
-        
+
         // tell any observers that our account has changed
         DispatchQueue.main.async {
             // Many of the observers for this notifications are on the main thread,
@@ -1139,7 +1139,7 @@ open class BrowserProfile: Profile {
                 }
                 return accumulate(thunks)
             }
-            
+
             return readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
                 let updateEnginePref: ((String, Bool) -> Void) = { engine, enabled in
                     self.prefsForSync.setBool(enabled, forKey: "engine.\(engine).enabled")

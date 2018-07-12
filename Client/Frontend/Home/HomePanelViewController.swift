@@ -10,13 +10,11 @@ import Storage
 private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 40
-    static let ButtonContainerBorderColor = UIColor.Photon.Grey30
-    static let BackgroundColorPrivateMode = UIConstants.PrivateModeAssistantToolbarBackgroundColor
     static let ButtonHighlightLineHeight: CGFloat = 2
     static let ButtonSelectionAnimationDuration = 0.2
 }
 
-protocol HomePanelViewControllerDelegate: class {
+protocol HomePanelViewControllerDelegate: AnyObject {
     func homePanelViewController(_ homePanelViewController: HomePanelViewController, didSelectURL url: URL, visitType: VisitType)
     func homePanelViewController(_ HomePanelViewController: HomePanelViewController, didSelectPanel panel: Int)
     func homePanelViewControllerDidRequestToSignIn(_ homePanelViewController: HomePanelViewController)
@@ -24,7 +22,7 @@ protocol HomePanelViewControllerDelegate: class {
     func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
 }
 
-protocol HomePanel: class {
+protocol HomePanel: AnyObject {
     weak var homePanelDelegate: HomePanelDelegate? { get set }
 }
 
@@ -32,7 +30,7 @@ struct HomePanelUX {
     static let EmptyTabContentOffset = -180
 }
 
-protocol HomePanelDelegate: class {
+protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToSignIn(_ homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(_ homePanel: HomePanel)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
@@ -78,8 +76,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.AppBackgroundColor
-        
+        view.backgroundColor = UIColor.theme.browser.background
+
         buttonContainerView.axis = .horizontal
         buttonContainerView.alignment = .fill
         buttonContainerView.distribution = .fillEqually
@@ -89,10 +87,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).")
         view.addSubview(buttonContainerView)
         buttonContainerView.addSubview(highlightLine)
-        
+
         self.buttonContainerBottomBorderView = UIView()
         self.view.addSubview(buttonContainerBottomBorderView)
-        buttonContainerBottomBorderView.backgroundColor = HomePanelViewControllerUX.ButtonContainerBorderColor
+        buttonContainerBottomBorderView.backgroundColor = UIColor.theme.homePanel.buttonContainerBorder
 
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
@@ -227,7 +225,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             self.buttonContainerView.addArrangedSubview(button)
         }
     }
-    
+
     func updateButtonTints() {
         var selectedbutton: UIView?
         for (index, button) in self.buttons.enumerated() {
@@ -284,7 +282,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func homePanelDidRequestToSignIn(_ homePanel: HomePanel) {
         delegate?.homePanelViewControllerDidRequestToSignIn(self)
     }
-    
+
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         delegate?.homePanelViewControllerDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
@@ -292,12 +290,12 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
 // MARK: UIAppearance
 extension HomePanelViewController: Themeable {
-    func applyTheme(_ theme: Theme) {
-        buttonContainerView.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
-        view.backgroundColor = UIColor.HomePanel.ToolbarBackground.colorFor(theme)
-        buttonTintColor = UIColor.HomePanel.ToolbarTint.colorFor(theme)
-        buttonSelectedTintColor = UIColor.HomePanel.ToolbarHighlight.colorFor(theme)
-        highlightLine.backgroundColor = UIColor.HomePanel.ToolbarHighlight.colorFor(theme)
+    func applyTheme() {
+        buttonContainerView.backgroundColor = UIColor.theme.homePanel.toolbarBackground
+        view.backgroundColor = UIColor.theme.homePanel.toolbarBackground
+        buttonTintColor = UIColor.theme.homePanel.toolbarTint
+        buttonSelectedTintColor = UIColor.theme.homePanel.toolbarHighlight
+        highlightLine.backgroundColor = UIColor.theme.homePanel.toolbarHighlight
         updateButtonTints()
     }
 }

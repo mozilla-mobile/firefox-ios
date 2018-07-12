@@ -19,8 +19,8 @@ private func applicationBundle() -> Bundle {
 extension Strings {
     public static let OKString = NSLocalizedString("OK", comment: "OK button")
     public static let CancelString = NSLocalizedString("Cancel", comment: "Label for Cancel button")
-    public static let NotNowString = NSLocalizedString("Not Now", comment: "label for Not Now button")
-    public static let AppStoreString = NSLocalizedString("Open App Store", comment: "Open App Store button")
+    public static let NotNowString = NSLocalizedString("Toasts.NotNow", value: "Not Now", comment: "label for Not Now button")
+    public static let AppStoreString = NSLocalizedString("Toasts.OpenAppStore", value: "Open App Store", comment: "Open App Store button")
 }
 
 // Table date section titles.
@@ -189,7 +189,7 @@ extension Strings {
     public static let FxASettingsDeviceName = NSLocalizedString("Settings.FxA.DeviceName", value: "Device Name", comment: "Label used for the device name settings section.")
     public static let FxAOpenSyncPreferences = NSLocalizedString("FxA.OpenSyncPreferences", value: "Open Sync Preferences", comment: "Button label to open Sync preferences")
     public static let FxAConnectAnotherDevice = NSLocalizedString("FxA.ConnectAnotherDevice", value: "Connect Another Device", comment: "Button label to connect another device to Sync")
-    
+
     // Surface error strings
     public static let FxAAccountVerificationRequiredSurface = NSLocalizedString("FxA.AccountVerificationRequiredSurface", value: "You need to verify %@. Check your email for the verification link from Firefox.", comment: "Message explaining that user needs to check email for Firefox Account verfication link.")
     public static let FxAResendEmail = NSLocalizedString("FxA.ResendEmail", value: "Resend Email", comment: "Button label to resend email")
@@ -206,6 +206,8 @@ extension Strings {
 
     public static let FindTitle = NSLocalizedString("Hotkeys.Find.DiscoveryTitle", value: "Find", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     public static let SelectLocationBarTitle = NSLocalizedString("Hotkeys.SelectLocationBar.DiscoveryTitle", value: "Select Location Bar", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
+    public static let privateBrowsingModeTitle = NSLocalizedString("Hotkeys.PrivateMode.DiscoveryTitle", value: "Private Browsing Mode", comment: "Label to switch to private browsing mode")
+    public static let normalBrowsingModeTitle = NSLocalizedString("Hotkeys.NormalMode.DiscoveryTitle", value: "Normal Browsing Mode", comment: "Label to switch to normal browsing mode")
     public static let NewTabTitle = NSLocalizedString("Hotkeys.NewTab.DiscoveryTitle", value: "New Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     public static let NewPrivateTabTitle = NSLocalizedString("Hotkeys.NewPrivateTab.DiscoveryTitle", value: "New Private Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     public static let CloseTabTitle = NSLocalizedString("Hotkeys.CloseTab.DiscoveryTitle", value: "Close Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
@@ -232,16 +234,20 @@ extension Strings {
 // New tab choice settings
 extension Strings {
     public static let SettingsNewTabSectionName = NSLocalizedString("Settings.NewTab.SectionName", value: "New Tab", comment: "Label used as an item in Settings. When touched it will open a dialog to configure the new tab behaviour.")
-    public static let SettingsNewTabTitle = NSLocalizedString("Settings.NewTab.Title", value: "New Tab Settings", comment: "Title displayed in header of the setting panel.")
-    public static let SettingsNewTabTopSites = NSLocalizedString("Settings.NewTab.Option.TopSites", value: "Show your Top Sites", comment: "Option in settings to show top sites when you open a new tab")
-    public static let SettingsNewTabBookmarks = NSLocalizedString("Settings.NewTab.Option.Bookmarks", value: "Show your Bookmarks", comment: "Option in settings to show bookmarks when you open a new tab")
-    public static let SettingsNewTabHistory = NSLocalizedString("Settings.NewTab.Option.History", value: "Show your History", comment: "Option in settings to show history when you open a new tab")
+    public static let NewTabSectionName =
+        NSLocalizedString("Settings.NewTab.TopSectionName", value: "Show", comment: "Label at the top of the New Tab screen after entering New Tab in settings")
+    public static let SettingsNewTabTitle = NSLocalizedString("Settings.NewTab.Title", value: "New Tab", comment: "Title displayed in header of the setting panel.")
+    public static let NewTabSectionNameFooter =
+        NSLocalizedString("Settings.NewTab.TopSectionNameFooter", value: "Choose what to load when opening a new tab", comment: "Footer at the bottom of the New Tab screen after entering New Tab in settings")
+    public static let SettingsNewTabTopSites = NSLocalizedString("Settings.NewTab.Option.TopSites", value: "Top Sites", comment: "Option in settings to show top sites when you open a new tab")
+    public static let SettingsNewTabBookmarks = NSLocalizedString("Settings.NewTab.Option.Bookmarks", value: "Bookmarks", comment: "Option in settings to show bookmarks when you open a new tab")
+    public static let SettingsNewTabHistory = NSLocalizedString("Settings.NewTab.Option.History", value: "History", comment: "Option in settings to show history when you open a new tab")
     public static let SettingsNewTabReadingList = NSLocalizedString("Settings.NewTab.Option.ReadingList", value: "Show your Reading List", comment: "Option in settings to show reading list when you open a new tab")
-    public static let SettingsNewTabBlankPage = NSLocalizedString("Settings.NewTab.Option.BlankPage", value: "Show a Blank Page", comment: "Option in settings to show a blank page when you open a new tab")
-    public static let SettingsNewTabHomePage = NSLocalizedString("Settings.NewTab.Option.HomePage", value: "Show your Homepage", comment: "Option in settings to show your homepage when you open a new tab")
+    public static let SettingsNewTabBlankPage = NSLocalizedString("Settings.NewTab.Option.BlankPage", value: "Blank Page", comment: "Option in settings to show a blank page when you open a new tab")
+    public static let SettingsNewTabHomePage = NSLocalizedString("Settings.NewTab.Option.HomePage", value: "Homepage", comment: "Option in settings to show your homepage when you open a new tab")
     public static let SettingsNewTabDescription = NSLocalizedString("Settings.NewTab.Description", value: "When you open a New Tab:", comment: "A description in settings of what the new tab choice means")
     // AS Panel settings
-    public static let SettingsNewTabASTitle = NSLocalizedString("Settings.NewTab.Option.ASTitle", value: "Additional Content", comment: "The title of the section in newtab that lets you modify the topsites panel")
+    public static let SettingsNewTabASTitle = NSLocalizedString("Settings.NewTab.Option.ASTitle", value: "Customize Top Sites", comment: "The title of the section in newtab that lets you modify the topsites panel")
     public static let SettingsNewTabPocket = NSLocalizedString("Settings.NewTab.Option.Pocket", value: "Recommended by Pocket", comment: "Option in settings to turn on off pocket recommendations")
     public static let SettingsNewTabHiglightsHistory = NSLocalizedString("Settings.NewTab.Option.HighlightsHistory", value: "Visited", comment: "Option in settings to turn off history in the highlights section")
     public static let SettingsNewTabHighlightsBookmarks = NSLocalizedString("Settings.NewTab.Option.HighlightsBookmarks", value: "Recent Bookmarks", comment: "Option in the settings to turn off recent bookmarks in the Highlights section")
@@ -330,6 +336,7 @@ extension Strings {
 extension Strings {
     public static let TabsDeleteAllUndoTitle = NSLocalizedString("Tabs.DeleteAllUndo.Title", value: "%d tab(s) closed", comment: "The label indicating that all the tabs were closed")
     public static let TabsDeleteAllUndoAction = NSLocalizedString("Tabs.DeleteAllUndo.Button", value: "Undo", comment: "The button to undo the delete all tabs")
+    public static let TabSearchPlaceholderText = NSLocalizedString("Tabs.Search.PlaceholderText", value: "Search Tabs", comment: "The placeholder text for the tab search bar")
 }
 
 //Clipboard Toast
@@ -581,6 +588,17 @@ extension Strings {
 
     public static let ShareLoadInBackground = NSLocalizedString("ShareExtension.LoadInBackgroundAction.Title", value: "Load in Background", comment: "Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground.")
     public static let ShareLoadInBackgroundDone = NSLocalizedString("ShareExtension.LoadInBackgroundActionDone.Title", value: "Loading in Firefox", comment: "Share extension label shown after user has performed 'Load in Background' action.")
+}
+
+// Display Theme
+extension Strings {
+    public static let SettingsDisplayThemeTitle = NSLocalizedString("Settings.DisplayTheme.Title", value: "Display", comment: "Title in main app settings for Display (theme) settings")
+    public static let DisplayThemeSectionHeader = NSLocalizedString("Settings.DisplayTheme.SectionHeader", value: "Theme", comment: "Display (theme) settings section title")
+    public static let DisplayThemeSectionFooter = NSLocalizedString("Settings.DisplayTheme.SectionFooter", value: "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display's current brightness.", comment: "Display (theme) settings footer describing how the brightness slider works.")
+    public static let DisplayThemeAutomaticSwitchTitle = NSLocalizedString("Settings.DisplayTheme.SwitchTitle", value: "Automatically", comment: "Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider.")
+    public static let DisplayThemeAutomaticSwitchSubtitle = NSLocalizedString("Settings.DisplayTheme.SwitchSubtitle", value: "Switch automatically based on screen brightness", comment: "Display (theme) settings switch subtitle, explaining the title 'Automatically'.")
+    public static let DisplayThemeOptionLight = NSLocalizedString("Settings.DisplayTheme.OptionLight", value: "Light", comment: "Option choice in display theme settings for light theme")
+    public static let DisplayThemeOptionDark = NSLocalizedString("Settings.DisplayTheme.OptionDark", value: "Dark", comment: "Option choice in display theme settings for dark theme")
 }
 
 // MARK: Deprecated Strings (to be removed in next version)

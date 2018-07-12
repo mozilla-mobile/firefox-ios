@@ -7,16 +7,18 @@ import Shared
 import UIKit
 
 struct SettingsUX {
-    static let TableViewHeaderBackgroundColor = UIConstants.AppBackgroundColor
-    static let TableViewHeaderTextColor = UIColor.Photon.Grey50
-    static let TableViewRowTextColor = UIColor.Photon.Grey90
-    static let TableViewDisabledRowTextColor = UIColor.Photon.Grey40
-    static let TableViewSeparatorColor = UIColor.Photon.Grey30
     static let TableViewHeaderFooterHeight = CGFloat(44)
-    static let TableViewRowErrorTextColor = UIColor.Photon.Red50
-    static let TableViewRowWarningTextColor = UIColor.Photon.Orange50
-    static let TableViewRowActionAccessoryColor = UIColor.Photon.Blue50
-    static let TableViewRowSyncTextColor = UIColor.Photon.Grey80
+
+}
+
+extension UILabel {
+    // iOS bug: NSAttributed string color is ignored without setting font/color to nil
+    func assign(attributed: NSAttributedString?) {
+        guard let attributed = attributed else { return }
+        textColor = nil
+        font = nil
+        attributedText = attributed
+    }
 }
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
@@ -48,16 +50,17 @@ class Setting: NSObject {
     var accessoryType: UITableViewCellAccessoryType { return .none }
 
     var textAlignment: NSTextAlignment { return .natural }
-    
+
     var image: UIImage? { return _image }
-    
+
     fileprivate(set) var enabled: Bool = true
 
     // Called when the cell is setup. Call if you need the default behaviour.
     func onConfigureCell(_ cell: UITableViewCell) {
+        cell.detailTextLabel?.assign(attributed: status)
         cell.detailTextLabel?.attributedText = status
         cell.detailTextLabel?.numberOfLines = 0
-        cell.textLabel?.attributedText = title
+        cell.textLabel?.assign(attributed: title)
         cell.textLabel?.textAlignment = textAlignment
         cell.textLabel?.numberOfLines = 1
         cell.textLabel?.lineBreakMode = .byTruncatingTail
@@ -172,9 +175,9 @@ class BoolSetting: Setting {
     convenience init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
-            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewHeaderTextColor])
+            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerText])
         }
-        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.foregroundColor: SettingsUX.TableViewRowTextColor]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
+        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
@@ -188,7 +191,7 @@ class BoolSetting: Setting {
         control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
-        
+
         displayBool(control)
         if let title = title {
             if let status = status {
@@ -324,7 +327,7 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
-        let color = isValid(textField.text) ? SettingsUX.TableViewRowTextColor : UIConstants.DestructiveRed
+        let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIColor.theme.general.destructiveRed
         textField.textColor = color
     }
 
@@ -363,7 +366,7 @@ class CheckmarkSetting: Setting {
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
         cell.accessoryType = .checkmark
-        cell.tintColor = isEnabled() ? SettingsUX.TableViewRowActionAccessoryColor : UIColor.white
+        cell.tintColor = isEnabled() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -396,9 +399,9 @@ class ButtonSetting: Setting {
         super.onConfigureCell(cell)
 
         if isEnabled?() ?? true {
-            cell.textLabel?.textColor = destructive ? UIConstants.DestructiveRed : UIConstants.HighlightBlue
+            cell.textLabel?.textColor = destructive ? UIColor.theme.general.destructiveRed : UIColor.theme.general.highlightBlue
         } else {
-            cell.textLabel?.textColor = SettingsUX.TableViewDisabledRowTextColor
+            cell.textLabel?.textColor = UIColor.theme.tableView.disabledRowText
         }
         cell.textLabel?.textAlignment = .center
         cell.accessibilityTraits = UIAccessibilityTraitButton
@@ -471,12 +474,12 @@ class WithoutAccountSetting: AccountSetting {
 }
 
 @objc
-protocol SettingsDelegate: class {
+protocol SettingsDelegate: AnyObject {
     func settingsOpenURLInNewTab(_ url: URL)
 }
 
 // The base settings view controller.
-class SettingsTableViewController: UITableViewController {
+class SettingsTableViewController: ThemedTableViewController {
 
     typealias SettingsGenerator = (SettingsTableViewController, SettingsDelegate?) -> [SettingSection]
 
@@ -500,11 +503,9 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier)
-        tableView.register(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
-        tableView.separatorColor = SettingsUX.TableViewSeparatorColor
-        tableView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
@@ -518,7 +519,7 @@ class SettingsTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(syncDidChangeState), name: .ProfileDidFinishSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(firefoxAccountDidChange), name: .FirefoxAccountChanged, object: nil)
 
-        tableView.reloadData()
+        applyTheme()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -575,6 +576,7 @@ class SettingsTableViewController: UITableViewController {
                 cell = tableView.dequeueReusableCell(withIdentifier: Identifier, for: indexPath)
             }
             setting.onConfigureCell(cell)
+            cell.backgroundColor = UIColor.theme.tableView.rowBackground
             return cell
         }
         return tableView.dequeueReusableCell(withIdentifier: Identifier, for: indexPath)
@@ -590,7 +592,7 @@ class SettingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle.uppercased()
@@ -602,18 +604,20 @@ class SettingsTableViewController: UITableViewController {
             headerView.showTopBorder = true
         }
 
+        headerView.applyTheme()
         return headerView
     }
-    
+
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
         guard let sectionFooter = sectionSetting.footerTitle?.string else {
             return nil
         }
-        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
+        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
         footerView.showBottomBorder = false
+        footerView.applyTheme()
         return footerView
     }
 
@@ -672,109 +676,3 @@ class SettingsTableViewController: UITableViewController {
         return boundingRect.height
     }
 }
-
-private struct SettingsTableSectionHeaderFooterViewUX {
-    static let titleHorizontalPadding: CGFloat = 15
-    static let titleVerticalPadding: CGFloat = 6
-    static let titleVerticalLongPadding: CGFloat = 20
-}
-
-class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
-
-    enum TitleAlignment {
-        case top
-        case bottom
-    }
-
-    var titleAlignment: TitleAlignment = .bottom {
-        didSet {
-            remakeTitleAlignmentConstraints()
-        }
-    }
-
-    var showTopBorder: Bool = true {
-        didSet {
-            topBorder.isHidden = !showTopBorder
-        }
-    }
-
-    var showBottomBorder: Bool = true {
-        didSet {
-            bottomBorder.isHidden = !showBottomBorder
-        }
-    }
-
-    lazy var titleLabel: UILabel = {
-        var headerLabel = UILabel()
-        headerLabel.textColor = SettingsUX.TableViewHeaderTextColor
-        headerLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
-        headerLabel.numberOfLines = 0
-        return headerLabel
-    }()
-
-    fileprivate lazy var topBorder: UIView = {
-        let topBorder = UIView()
-        topBorder.backgroundColor = UIConstants.SeparatorColor
-        return topBorder
-    }()
-
-    fileprivate lazy var bottomBorder: UIView = {
-        let bottomBorder = UIView()
-        bottomBorder.backgroundColor = UIConstants.SeparatorColor
-        return bottomBorder
-    }()
-
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = SettingsUX.TableViewHeaderBackgroundColor
-        addSubview(titleLabel)
-        addSubview(topBorder)
-        addSubview(bottomBorder)
-
-        setupInitialConstraints()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func setupInitialConstraints() {
-        bottomBorder.snp.makeConstraints { make in
-            make.bottom.left.right.equalTo(self)
-            make.height.equalTo(0.5)
-        }
-
-        topBorder.snp.makeConstraints { make in
-            make.top.left.right.equalTo(self)
-            make.height.equalTo(0.5)
-        }
-
-        remakeTitleAlignmentConstraints()
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        showTopBorder = true
-        showBottomBorder = true
-        titleLabel.text = nil
-        titleAlignment = .bottom
-    }
-
-    fileprivate func remakeTitleAlignmentConstraints() {
-        switch titleAlignment {
-        case .top:
-            titleLabel.snp.remakeConstraints { make in
-                make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-                make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-                make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
-            }
-        case .bottom:
-            titleLabel.snp.remakeConstraints { make in
-                make.left.right.equalTo(self).inset(SettingsTableSectionHeaderFooterViewUX.titleHorizontalPadding)
-                make.bottom.equalTo(self).offset(-SettingsTableSectionHeaderFooterViewUX.titleVerticalPadding)
-                make.top.equalTo(self).offset(SettingsTableSectionHeaderFooterViewUX.titleVerticalLongPadding)
-            }
-        }
-    }
-}
-

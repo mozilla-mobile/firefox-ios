@@ -4,7 +4,7 @@
 
 import UIKit
 
-public protocol AccessibilityActionsSource: class {
+public protocol AccessibilityActionsSource: AnyObject {
     func accessibilityCustomActionsForView(_ view: UIView) -> [UIAccessibilityCustomAction]?
 }
 

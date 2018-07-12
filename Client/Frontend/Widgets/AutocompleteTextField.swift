@@ -9,21 +9,21 @@ import Shared
 
 /// Delegate for the text field events. Since AutocompleteTextField owns the UITextFieldDelegate,
 /// callers must use this instead.
-protocol AutocompleteTextFieldDelegate: class {
+protocol AutocompleteTextFieldDelegate: AnyObject {
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String)
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField)
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField)
+    func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField)
 }
 
 private struct AutocompleteTextFieldUX {
-       static let HighlightColor = UIColor.Defaults.iOSHighlightBlue
+       static let HighlightColor = UIColor.Defaults.iOSTextHighlightBlue
 }
 
 class AutocompleteTextField: UITextField, UITextFieldDelegate {
     var autocompleteDelegate: AutocompleteTextFieldDelegate?
-
     // AutocompleteTextLabel repersents the actual autocomplete text.
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
     // This makes sure that the autocomplete doesnt mess with keyboard suggestions provided by third party keyboards.
@@ -35,7 +35,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     // This variable is a solution to get the right behavior for refocusing
-    // the AutocompleteTextField. The initial transition into Overlay Mode 
+    // the AutocompleteTextField. The initial transition into Overlay Mode
     // doesn't involve the user interacting with AutocompleteTextField.
     // Thus, we update shouldApplyCompletion in touchesBegin() to reflect whether
     // the highlight is active and then the text field is updated accordingly
@@ -98,32 +98,32 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-left-arrow"])
             if isSelectionActive {
                 applyCompletion()
-                
+
                 // Set the current position to the beginning of the text.
                 selectedTextRange = textRange(from: beginningOfDocument, to: beginningOfDocument)
             } else if let range = selectedTextRange {
                 if range.start == beginningOfDocument {
                     break
                 }
-                
+
                 guard let cursorPosition = position(from: range.start, offset: -1) else {
                     break
                 }
-                
+
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
         case UIKeyInputRightArrow:
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-right-arrow"])
             if isSelectionActive {
                 applyCompletion()
-                
+
                 // Set the current position to the end of the text.
                 selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
             } else if let range = selectedTextRange {
                 if range.end == endOfDocument {
                     break
                 }
-                
+
                 guard let cursorPosition = position(from: range.end, offset: 1) else {
                     break
                 }
@@ -137,7 +137,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             break
         }
     }
-    
+
     func highlightAll() {
         let text = self.text
         self.text = ""
@@ -290,6 +290,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         applyCompletion()
         super.touchesBegan(touches, with: event)
+    }
+
+}
+
+extension AutocompleteTextField: MenuHelperInterface {
+
+    @objc func menuHelperPasteAndGo() {
+        autocompleteDelegate?.autocompletePasteAndGo(self)
     }
 
 }

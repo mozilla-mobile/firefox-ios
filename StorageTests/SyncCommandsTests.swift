@@ -84,9 +84,9 @@ class SyncCommandsTests: XCTestCase {
                 let select = "SELECT count(*) FROM commands"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            
+
             let commandCursor = commandCursorDeferred.value.successValue!
-            
+
             XCTAssertNotNil(commandCursor[0])
             XCTAssertEqual(3, commandCursor[0]!)
             e.fulfill()
@@ -195,7 +195,7 @@ class SyncCommandsTests: XCTestCase {
                 let select = "SELECT count(*) FROM commands WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            
+
             let commandCursor2 = commandCursor2Deferred.value.successValue!
 
             XCTAssertNotNil(commandCursor2[0])
@@ -231,7 +231,7 @@ class SyncCommandsTests: XCTestCase {
                 b.fulfill()
             })
         }
-        
+
         self.waitForExpectations(timeout: 5, handler: nil)
     }
 }

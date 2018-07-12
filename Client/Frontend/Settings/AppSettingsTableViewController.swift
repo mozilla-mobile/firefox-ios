@@ -8,8 +8,6 @@ import Account
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {
-    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,7 +19,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
         tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
-        
+
         // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
         // display name, etc.
         profile.getAccount()?.updateProfile()
@@ -46,12 +44,13 @@ class AppSettingsTableViewController: SettingsTableViewController {
             NewTabPageSetting(settings: self),
             HomePageSetting(settings: self),
             OpenWithSetting(settings: self),
+            ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
             BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
                         titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
-            ]        
-        
+            ]
+
         let accountChinaSyncSetting: [Setting]
         if !profile.isChinaEdition {
             accountChinaSyncSetting = []
@@ -130,7 +129,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! SettingsTableSectionHeaderFooterView
+        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
         // Prevent the top border from showing for the General section.
         if !profile.hasAccount() {
             switch section {

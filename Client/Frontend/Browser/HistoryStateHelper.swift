@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-protocol HistoryStateHelperDelegate: class {
+protocol HistoryStateHelperDelegate: AnyObject {
     func historyStateHelper(_ historyStateHelper: HistoryStateHelper, didPushOrReplaceStateInTab tab: Tab)
 }
 
@@ -16,15 +16,15 @@ protocol HistoryStateHelperDelegate: class {
 class HistoryStateHelper: TabContentScript {
     weak var delegate: HistoryStateHelperDelegate?
     fileprivate weak var tab: Tab?
-    
+
     required init(tab: Tab) {
         self.tab = tab
     }
-    
+
     func scriptMessageHandlerName() -> String? {
         return "historyStateHelper"
     }
-    
+
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         if let tab = tab {
             DispatchQueue.main.async {
@@ -32,7 +32,7 @@ class HistoryStateHelper: TabContentScript {
             }
         }
     }
-    
+
     class func name() -> String {
         return "HistoryStateHelper"
     }

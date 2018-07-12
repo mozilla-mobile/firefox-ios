@@ -22,17 +22,17 @@ private let DefaultParameters =
         minExitVelocity: 800,
         recenterAnimationDuration: 0.15)
 
-protocol SwipeAnimatorDelegate: class {
+protocol SwipeAnimatorDelegate: AnyObject {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView)
 }
 
 class SwipeAnimator: NSObject {
     weak var delegate: SwipeAnimatorDelegate?
     weak var animatingView: UIView?
-    
+
     fileprivate var prevOffset: CGPoint?
     fileprivate let params: SwipeAnimationParameters
-    
+
     fileprivate var panGestureRecogniser: UIPanGestureRecognizer!
 
     var containerCenter: CGPoint {
