@@ -686,17 +686,25 @@ private class PhotonActionSheetCell: UITableViewCell {
                 if tabButton == nil {
                     tabButton = TabsButton()
                 }
+                let renderer = UIGraphicsImageRenderer(size: (tabButton?.bounds.size)!)
+                let image = renderer.image { ctx in
+                    tabButton?.drawHierarchy(in: (tabButton?.bounds)!, afterScreenUpdates: true)
+                }
+                statusIcon.image = image
+                self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
+                statusIcon.tintColor = self.tintColor
+                /*
                 tabButton?.setTitle("8", for: .normal)
                 self.statusIcon.addSubview(tabButton!)
                 stackView.addArrangedSubview(tabButton!)
                 tabButton?.contentHorizontalAlignment = .left
-//                tabButton?.snp.makeConstraints { make in
-//                    make.size.equalTo(20)
-//                }
+                tabButton?.snp.makeConstraints { make in
+                    make.size.equalTo(20)
+                }
                 let padding = PhotonActionSheetCell.Padding
                 stackView.snp.remakeConstraints { make in
                     make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding))
-                }
+                } */
             default:
                 break
             }
