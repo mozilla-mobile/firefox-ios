@@ -222,9 +222,6 @@ class BrowserViewController: UIViewController {
     }
     
     private func setupBiometrics() {
-        self.context.localizedReason = UIConstants.strings.biometricReason
-        self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
-
         // Register for foreground notification to check biometric authentication
         NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
             var biometricError: NSError?
@@ -237,7 +234,7 @@ class BrowserViewController: UIViewController {
             AppDelegate.needsAuthenticated = false
 
             self.context = LAContext()
-            self.context.localizedReason = String(format: UIConstants.strings.biometricReason, AppInfo.productName)
+            self.context.localizedReason = String(format: UIConstants.strings.touchIdReason, AppInfo.productName)
             self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
             if self.context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &biometricError) {
