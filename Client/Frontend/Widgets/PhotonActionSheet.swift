@@ -39,6 +39,7 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var text: String?
     public fileprivate(set) var iconString: String?
     public fileprivate(set) var iconURL: URL?
+    public fileprivate(set) var iconType: PhotonActionSheetIconType
     public fileprivate(set) var iconAlignment: IconAlignment
 
     public var isEnabled: Bool // Used by toggles like nightmode to switch tint color
@@ -47,10 +48,11 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
     
-    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .URL, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
         self.iconURL = iconURL
+        self.iconType = iconType
         self.iconAlignment = iconAlignment
         self.isEnabled = isEnabled
         self.accessory = accessory
@@ -516,6 +518,13 @@ public enum PhotonActionSheetCellAccessoryType {
     case None
 }
 
+public enum PhotonActionSheetIconType {
+    case Image
+    case URL
+    case TabsButton
+    case None
+}
+
 private class PhotonActionSheetCell: UITableViewCell {
     static let Padding: CGFloat = 16
     static let HorizontalPadding: CGFloat = 10
@@ -523,6 +532,7 @@ private class PhotonActionSheetCell: UITableViewCell {
     static let IconSize = 16
 
     var syncButton: SyncMenuButton?
+    var tabButton: TabsButton?
 
     private func createLabel() -> UILabel {
         let label = UILabel()
@@ -658,6 +668,13 @@ private class PhotonActionSheetCell: UITableViewCell {
         selectionStyle = action.handler != nil ? .default : .none
 
         if let iconName = action.iconString {
+            switch action.iconType {
+            case .Image:
+                let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+                statusIcon.image = image
+                self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
+                statusIcon.tintColor = self.tintColor
+            case .URL:
                 let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
                 statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: []) { (img, err, _, _) in
                     if let img = img {
@@ -665,13 +682,23 @@ private class PhotonActionSheetCell: UITableViewCell {
                         self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
                     }
                 }
-            // When the iconURL is not nil we are most likely showing a profile picture.
-            // In that case we do not need a tint color. And make sure the image is sized correctly
-            // This is for the sync profile button in the menu
-            if action.iconURL == nil {
-                statusIcon.tintColor = self.tintColor
-            } else {
-                self.statusIcon.image = self.statusIcon.image?.createScaled(PhotonActionSheetUX.IconSize)
+            case .TabsButton:
+                if tabButton == nil {
+                    tabButton = TabsButton()
+                }
+                tabButton?.setTitle("8", for: .normal)
+                self.statusIcon.addSubview(tabButton!)
+                stackView.addArrangedSubview(tabButton!)
+                tabButton?.contentHorizontalAlignment = .left
+//                tabButton?.snp.makeConstraints { make in
+//                    make.size.equalTo(20)
+//                }
+                let padding = PhotonActionSheetCell.Padding
+                stackView.snp.remakeConstraints { make in
+                    make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding))
+                }
+            default:
+                break
             }
             if statusIcon.superview == nil {
                 if action.iconAlignment == .right {

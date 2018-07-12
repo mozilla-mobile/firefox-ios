@@ -1537,14 +1537,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func getTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
-        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter") { action in
+        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton) { action in
             if let tab = self.tabManager.selectedTab {
                 if self.tabManager.switchTabMode(tab) {
                     let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
                     self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
                 }
             }}
-        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter") { action in
+        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton) { action in
             if let tab = self.tabManager.selectedTab {
                 _ = self.tabManager.switchTabMode(tab)
             }}
@@ -1554,13 +1554,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         return [privateBrowsingMode]
     }
     func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
-        let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "quick_action_new_tab") { action in
+        let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)}
-        let newPrivateTab = PhotonActionSheetItem(title: Strings.NewPrivateTabTitle, iconString: "quick_action_new_tab") { action in
+        let newPrivateTab = PhotonActionSheetItem(title: Strings.NewPrivateTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)}
-        let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "tab_close") { action in
+        let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "tab_close", iconType: .Image) { action in
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
             }}
