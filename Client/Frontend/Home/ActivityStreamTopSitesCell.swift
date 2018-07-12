@@ -257,7 +257,7 @@ class ASHorizontalScrollCell: UICollectionViewCell {
         pageControl.addGestureRecognizer(self.pageControlPress)
 
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
+            make.edges.equalTo(contentView.safeArea.edges)
         }
 
         pageControl.snp.makeConstraints { make in

@@ -114,24 +114,25 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
         siteImageView.snp.makeConstraints { make in
             make.top.equalTo(contentView)
-            make.leading.trailing.equalTo(contentView)
+            make.leading.equalTo(contentView.safeArea.leading)
+            make.trailing.equalTo(contentView.safeArea.trailing)
             make.centerX.equalTo(contentView)
             make.height.equalTo(ActivityStreamHighlightCellUX.SiteImageViewSize)
         }
 
         selectedOverlay.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
+            make.edges.equalTo(contentView.safeArea.edges)
         }
 
         domainLabel.snp.makeConstraints { make in
             make.leading.equalTo(siteImageView)
-            make.trailing.equalTo(contentView)
+            make.trailing.equalTo(contentView.safeArea.trailing)
             make.top.equalTo(siteImageView.snp.bottom).offset(5)
         }
 
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(siteImageView)
-            make.trailing.equalTo(contentView)
+            make.trailing.equalTo(contentView.safeArea.trailing)
             make.top.equalTo(domainLabel.snp.bottom).offset(5)
         }
 
