@@ -112,7 +112,7 @@ class IntroViewController: UIViewController {
             make.left.right.top.equalTo(self.view)
             make.bottom.equalTo(startBrowsingButton.snp.top)
         }
-      
+
         pageControl.snp.makeConstraints { make in
             make.centerX.equalTo(self.scrollView)
             make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroUX.PagerCenterOffsetFromScrollViewBottom)

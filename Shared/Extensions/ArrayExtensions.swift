@@ -26,7 +26,7 @@ public extension Array {
         }
         return nil
     }
-    
+
     func contains(_ x: Element, f: (Element, Element) -> Bool) -> Bool {
         for y in self {
             if f(x, y) {

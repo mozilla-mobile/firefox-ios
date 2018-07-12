@@ -13,7 +13,7 @@ class DomainAutocompleteTests: KIFTestCase {
         BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
-    
+
     func testAutocomplete() {
         BrowserUtils.addHistoryEntry("Foo bar baz", url: URL(string: "https://foo.bar.baz.org/dingbat")!)
 

@@ -14,7 +14,7 @@ class FaviconManager: TabContentScript {
 
     let profile: Profile!
     weak var tab: Tab?
-    
+
     static let maximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
 
     init(tab: Tab, profile: Profile) {
@@ -36,7 +36,7 @@ class FaviconManager: TabContentScript {
     func scriptMessageHandlerName() -> String? {
         return "faviconsMessageHandler"
     }
-    
+
     fileprivate func loadFavicons(_ tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<[Maybe<Favicon>]> {
         var deferreds: [() -> Deferred<Maybe<Favicon>>]
         deferreds = favicons.map { favicon in
@@ -52,7 +52,7 @@ class FaviconManager: TabContentScript {
         }
         return all(deferreds.map({$0()}))
     }
-    
+
     func getFavicon(_ tab: Tab, iconUrl: URL, currentURL: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let manager = SDWebImageManager.shared()

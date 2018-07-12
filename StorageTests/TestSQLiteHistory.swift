@@ -33,7 +33,7 @@ extension Site {
 class BaseHistoricalBrowserSchema: Schema {
     var name: String { return "BROWSER" }
     var version: Int { return -1 }
-    
+
     func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
         fatalError("Should never be called.")
     }
@@ -41,7 +41,7 @@ class BaseHistoricalBrowserSchema: Schema {
     func create(_ db: SQLiteDBConnection) -> Bool {
         return false
     }
-    
+
     func drop(_ db: SQLiteDBConnection) -> Bool {
         return false
     }
@@ -1099,7 +1099,7 @@ class TestSQLiteHistory: XCTestCase {
             let args: Args = [Bytes.generateGUID(), site.url, site.title, Date.now(), 0, 0, -1]
             try connection.executeChange(insert, withArgs: args)
         }
-        
+
         XCTAssertTrue(insertDeferred.value.isSuccess)
 
         // Now insert it again. This should update the domain.
@@ -1111,7 +1111,7 @@ class TestSQLiteHistory: XCTestCase {
             let args: Args = [site.url]
             return connection.executeQuery(sql, factory: { $0[0] as? Int }, withArgs: args)
         }
-        
+
         let results = resultsDeferred.value.successValue!
         let domain = results[0]!         // Unwrap to get the first item from the cursor.
         XCTAssertNil(domain)
@@ -1314,7 +1314,7 @@ class TestSQLiteHistory: XCTestCase {
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
-        
+
         let expectation = self.expectation(description: "First.")
         func done() -> Success {
             expectation.fulfill()

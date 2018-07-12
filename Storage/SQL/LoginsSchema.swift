@@ -20,7 +20,7 @@ private let log = Logger.syncLogger
 
 open class LoginsSchema: Schema {
     static let DefaultVersion = 3
-    
+
     public var name: String { return "LOGINS" }
     public var version: Int { return LoginsSchema.DefaultVersion }
 
@@ -37,7 +37,7 @@ open class LoginsSchema: Schema {
 
         return true
     }
-    
+
     // TODO: transaction.
     func run(_ db: SQLiteDBConnection, queries: [String]) -> Bool {
         for sql in queries {
@@ -47,13 +47,13 @@ open class LoginsSchema: Schema {
         }
         return true
     }
-    
+
     let indexIsOverriddenHostname =
         "CREATE INDEX IF NOT EXISTS idx_loginsM_is_overridden_hostname ON loginsM (is_overridden, hostname)"
-    
+
     let indexIsDeletedHostname =
         "CREATE INDEX IF NOT EXISTS idx_loginsL_is_deleted_hostname ON loginsL (is_deleted, hostname)"
-    
+
     public func create(_ db: SQLiteDBConnection) -> Bool {
         let common = """
               id INTEGER PRIMARY KEY AUTOINCREMENT
@@ -96,30 +96,30 @@ open class LoginsSchema: Schema {
 
         return self.run(db, queries: [mirror, local, indexIsOverriddenHostname, indexIsDeletedHostname])
     }
-    
+
     public func update(_ db: SQLiteDBConnection, from: Int) -> Bool {
         let to = self.version
         if from == to {
             log.debug("Skipping update from \(from) to \(to).")
             return true
         }
-        
+
         if from == 0 {
             // This is likely an upgrade from before Bug 1160399.
             log.debug("Updating logins tables from zero. Assuming drop and recreate.")
             return drop(db) && create(db)
         }
-        
+
         if from < 3 && to >= 3 {
             log.debug("Updating logins tables to include version 3 indices")
             return self.run(db, queries: [indexIsOverriddenHostname, indexIsDeletedHostname])
         }
-        
+
         // TODO: real update!
         log.debug("Updating logins table from \(from) to \(to).")
         return drop(db) && create(db)
     }
-    
+
     public func drop(_ db: SQLiteDBConnection) -> Bool {
         log.debug("Dropping logins table.")
         do {

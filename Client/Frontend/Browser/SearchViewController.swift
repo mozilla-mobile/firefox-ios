@@ -28,7 +28,7 @@ private struct SearchViewControllerUX {
     static let SearchImageWidth: Float = 24
 
     static let SuggestionBackgroundColor = UIColor.Photon.White100
-    static let SuggestionBorderColor = UIConstants.HighlightBlue
+    static let SuggestionBorderColor = UIColor.theme.general.highlightBlue
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
     static let SuggestionInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -80,7 +80,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.PanelBackgroundColor
+        view.backgroundColor = UIColor.theme.homePanel.panelBackground
         let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         view.addSubview(blur)
 
@@ -272,7 +272,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     @objc func didClickSearchButton() {
-        self.searchDelegate?.presentSearchSettingsController()  
+        self.searchDelegate?.presentSearchSettingsController()
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
@@ -686,7 +686,7 @@ fileprivate class SuggestionButton: InsetButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        setTitleColor(UIConstants.HighlightBlue, for: [])
+        setTitleColor(UIColor.theme.general.highlightBlue, for: [])
         setTitleColor(UIColor.Photon.White100, for: .highlighted)
         titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         backgroundColor = SearchViewControllerUX.SuggestionBackgroundColor
@@ -705,7 +705,7 @@ fileprivate class SuggestionButton: InsetButton {
     @objc
     override var isHighlighted: Bool {
         didSet {
-            backgroundColor = isHighlighted ? UIConstants.HighlightBlue : SearchViewControllerUX.SuggestionBackgroundColor
+            backgroundColor = isHighlighted ? UIColor.theme.general.highlightBlue : SearchViewControllerUX.SuggestionBackgroundColor
         }
     }
 }

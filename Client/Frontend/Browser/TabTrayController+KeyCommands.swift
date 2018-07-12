@@ -68,7 +68,7 @@ extension TabTrayController {
             step = 0
         }
 
-        let tabs = self.tabs
+        let tabs = tabDisplayManager.tabStore
         let currentIndex: Int
         if let selected = tabManager.selectedTab {
             currentIndex = tabs.index(of: selected) ?? 0
@@ -77,7 +77,8 @@ extension TabTrayController {
         }
 
         let nextIndex = max(0, min(currentIndex + step, tabs.count - 1))
-        let nextTab = tabs[nextIndex]
-        tabManager.selectTab(nextTab)
+        if let nextTab = tabs[safe: nextIndex] {
+            tabManager.selectTab(nextTab)
+        }
     }
 }

@@ -114,7 +114,7 @@ class RequirePasscodeSetting: Setting {
                    delegate: delegate,
                    enabled: enabled)
     }
-    
+
     func deselectRow () {
         if let selectedRow = self.settings?.tableView.indexPathForSelectedRow {
             self.settings?.tableView.deselectRow(at: selectedRow, animated: true)
@@ -187,7 +187,7 @@ class TouchIDSetting: Setting {
         // the switch is wrapped in a UIView which has a tap gesture recognizer. This way
         // we can disable interaction of the switch and still handle tap events.
         let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
+        control.onTintColor = UIColor.theme.tableView.controlTint
         control.isOn = authInfo?.useTouchID ?? false
         control.isUserInteractionEnabled = false
         switchControl = control

@@ -76,7 +76,7 @@ class TwoLineTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         imageView?.backgroundColor = color
     }
-    
+
     func setRightBadge(_ badge: UIImage?) {
         if let badge = badge {
             self.accessoryView = UIImageView(image: badge)
