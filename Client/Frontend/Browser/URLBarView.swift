@@ -170,6 +170,12 @@ class URLBarView: UIView {
         }
     }
 
+    private let privateModeBadge = ToolbarPrivateModeBadge()
+
+    func privateModeBadge(visible: Bool) {
+            privateModeBadge.isHidden = !visible
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -183,8 +189,10 @@ class URLBarView: UIView {
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
 
-        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton].forEach { addSubview($0) }
-        [menuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach { addSubview($0) }
+        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
+         menuButton, forwardButton, backButton, stopReloadButton, locationContainer, privateModeBadge].forEach {
+            addSubview($0)
+        }
 
         helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
@@ -256,6 +264,8 @@ class URLBarView: UIView {
             make.centerY.equalTo(self.locationContainer)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
+
+        privateModeBadge.layout(forTabsButton: tabsButton)
     }
 
     override func updateConstraints() {
@@ -481,6 +491,9 @@ class URLBarView: UIView {
         backButton.isHidden = !toolbarIsShowing || inOverlayMode
         tabsButton.isHidden = !toolbarIsShowing || inOverlayMode || topTabsIsShowing
         stopReloadButton.isHidden = !toolbarIsShowing || inOverlayMode
+
+        // badge isHidden is tied to private mode on/off, use alpha to hide in this case
+        privateModeBadge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
     }
 
     func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
@@ -680,6 +693,12 @@ extension URLBarView: Themeable {
         backgroundColor = UIColor.theme.browser.background
         line.backgroundColor = UIColor.theme.browser.urlBarDivider
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
+    }
+}
+
+extension URLBarView: PrivateModeUI {
+    func applyUIMode(isPrivate: Bool) {
+        privateModeBadge(visible: isPrivate)
     }
 }
 
