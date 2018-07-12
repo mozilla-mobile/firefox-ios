@@ -52,8 +52,8 @@ public class FxACommandsClient {
         }
     }
 
-    public func consumeRemoteCommand(index: Int) {
-        fetchRemoteCommands(index: index, limit: 1) >>== { response in
+    public func consumeRemoteCommand(index: Int) -> Deferred<Maybe<[FxACommandSendTabItem]>> {
+        return fetchRemoteCommands(index: index, limit: 1) >>== { response in
             let commands = response.commands
             if commands.count != 1 {
                 log.warning("Should have retrieved 1 and only 1 message, got \(commands.count)")
@@ -65,31 +65,33 @@ public class FxACommandsClient {
 
             prefs?.setObject(handledCommands, forKey: PrefsKeys.KeyFxAHandledCommands)
 
-            self.handleCommands(commands)
-
-            // Once the `handledCommands` array length passes a threshold, check the
-            // potentially missed remote commands in order to clear it.
-            if handledCommands.count > 20 {
-                self.fetchMissedRemoteCommands()
+            return self.handleCommands(commands) >>== { items in
+                // Once the `handledCommands` array length passes a threshold, check the
+                // potentially missed remote commands in order to clear it.
+                if handledCommands.count > 20 {
+                    return self.fetchMissedRemoteCommands() >>== { missedItems in
+                        return deferMaybe(items + missedItems)
+                    }
+                } else {
+                    return deferMaybe(items)
+                }
             }
         }
     }
 
-    public func fetchMissedRemoteCommands() {
+    public func fetchMissedRemoteCommands() -> Deferred<Maybe<[FxACommandSendTabItem]>> {
         let prefs = account.configuration.prefs
         let lastCommandIndex = Int(prefs?.intForKey(PrefsKeys.KeyFxALastCommandIndex) ?? 0)
         var handledCommands = prefs?.arrayForKey(PrefsKeys.KeyFxAHandledCommands) as? [Int] ?? []
 
         handledCommands.append(lastCommandIndex)
 
-        fetchRemoteCommands(index: lastCommandIndex) >>== { response in
+        return fetchRemoteCommands(index: lastCommandIndex) >>== { response in
             let missedCommands = response.commands.filter({ !handledCommands.contains($0.index) })
             prefs?.setInt(Int32(lastCommandIndex), forKey: PrefsKeys.KeyFxALastCommandIndex)
             prefs?.setObject([], forKey: PrefsKeys.KeyFxAHandledCommands)
 
-            if !missedCommands.isEmpty {
-                self.handleCommands(missedCommands)
-            }
+            return self.handleCommands(missedCommands)
         }
     }
 
@@ -101,16 +103,17 @@ public class FxACommandsClient {
         }
     }
 
-    func handleCommands(_ commands: [FxACommand]) {
+    func handleCommands(_ commands: [FxACommand]) -> Deferred<Maybe<[FxACommandSendTabItem]>> {
         return account.marriedState() >>== { marriedState in
             let sessionToken = marriedState.sessionToken as NSData
             let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL)
-            client.devices(withSessionToken: sessionToken) >>== { response in
+            return client.devices(withSessionToken: sessionToken) >>== { response in
                 let devices = response.devices
+                var items: [FxACommandSendTabItem] = []
 
                 for command in commands {
                     guard let commandName = command.data["command"].string,
-                        let payload = command.data["payload"].string,
+                        let encrypted = command.data["payload"]["encrypted"].string,
                         let senderDeviceID = command.data["sender"].string,
                         let sender = devices.find({ $0.id == senderDeviceID }) else {
                             continue
@@ -118,14 +121,29 @@ public class FxACommandsClient {
 
                     switch commandName {
                     case FxACommandSendTab.Name:
-                        self.sendTab.handle(sender: sender, encrypted: payload)
+                        if let item = self.sendTab.handle(sender: sender, encrypted: encrypted) {
+                            items.append(item)
+                        }
                     default:
                         log.info("Unknown command: \(commandName)")
                     }
                 }
+
+                return deferMaybe(items)
             }
         }
     }
+}
+
+public class FxACommandSendTabError: MaybeErrorType {
+    public var description: String {
+        return "Error receiving sent tab"
+    }
+}
+
+public struct FxACommandSendTabItem {
+    public let title: String
+    public let url: String
 }
 
 open class FxACommandSendTabKeys: JSONLiteralConvertible {
@@ -158,7 +176,15 @@ open class FxACommandSendTab {
     init(commandsClient: FxACommandsClient, account: FirefoxAccount) {
         self.commandsClient = commandsClient
         self.account = account
-        self.sendTabKeysCache = KeychainCache(branch: "account.sendTabKeys", label: account.stateCache.label, value: nil)
+        self.sendTabKeysCache = KeychainCache.fromBranch("account.sendTabKeys", withLabel: account.stateCache.label, factory: { json in
+            if let publicKey = json["publicKey"].string,
+                let privateKey = json["privateKey"].string,
+                let authSecret = json["authSecret"].string {
+                return FxACommandSendTabKeys(publicKey: publicKey, privateKey: privateKey, authSecret: authSecret)
+            }
+
+            return nil
+        })
     }
 
     public func send(to devices: [RemoteDevice], url: String, title: String) {
@@ -200,15 +226,15 @@ open class FxACommandSendTab {
         return theirKid == marriedState.kXCS
     }
 
-    public func handle(sender: FxADevice, encrypted: String) {
+    public func handle(sender: FxADevice, encrypted: String) -> FxACommandSendTabItem? {
         guard let decrypted = decrypt(ciphertext: encrypted) else {
-            return
+            return nil
         }
 
         let json = JSON(parseJSON: decrypted)
 
         guard let entries = json["entries"].array else {
-            return
+            return nil
         }
 
         let current = json["current"].int ?? entries.count - 1
@@ -216,11 +242,10 @@ open class FxACommandSendTab {
         guard let tab = entries[safe: current],
             let title = tab["title"].string,
             let url = tab["uri"].string else {
-            return
+            return nil
         }
 
-        print("Received tab: \(title)(\(url))")
-        // TODO: Maybe use NotificationCenter to alert the app that this tab was received?
+        return FxACommandSendTabItem(title: title, url: url)
     }
 
     func encrypt(message: String, device: RemoteDevice) -> Deferred<Maybe<String>> {
@@ -263,6 +288,7 @@ open class FxACommandSendTab {
             let authSecret = sendTabKeys.authSecret.base64urlSafeDecodedData,
             let cipherdata = ciphertext.base64urlSafeDecodedData,
             let decrypted = try? PushCrypto.sharedInstance.aes128gcm(payload: cipherdata, decryptWith: publicKey, authenticateWith: authSecret) else {
+                print("UNABLE TO DECRYPT!!")
                 return nil
         }
 

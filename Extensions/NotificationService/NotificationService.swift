@@ -38,6 +38,7 @@ class NotificationService: UNNotificationServiceExtension {
         self.display = display
         profile.syncDelegate = display
 
+        sleep(5)
         let handler = FxAPushMessageHandler(with: profile)
 
         handler.handle(userInfo: userInfo).upon { res in
@@ -91,12 +92,8 @@ class SyncDataDisplay {
         }
 
         switch message {
-        case .commandReceived(let commandIndex):
-            guard let profile = profile, let account = profile.getAccount() else {
-                return displayUnknownMessageNotification()
-            }
-
-            displayNewSentTabNotification(commandIndex: commandIndex, account: account)
+        case .commandReceived(let tab):
+            displayNewSentTabNotification(tab: tab)
         case .accountVerified:
             displayAccountVerifiedNotification()
         case .deviceConnected(let deviceName):
@@ -158,9 +155,8 @@ extension SyncDataDisplay {
 }
 
 extension SyncDataDisplay {
-    func displayNewSentTabNotification(commandIndex: Int, account: FirefoxAccount) {
-        // TODO: Handle some result from `consumeRemoteCommand()`
-        account.commandsClient.consumeRemoteCommand(index: commandIndex)
+    func displayNewSentTabNotification(tab: [String : String]) {
+        presentNotification(title: "GOT A NEW TAB!!", body: "TAB \(tab.debugDescription)")
     }
 }
 

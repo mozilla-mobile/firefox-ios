@@ -118,11 +118,21 @@ extension FxAPushMessageHandler {
 /// An extension to handle each of the messages.
 extension FxAPushMessageHandler {
     func handleCommandReceived(_ data: JSON?) -> PushMessageResult {
-        guard let index = data?["index"].int else {
+        guard let index = data?["index"].int,
+            let account = profile.getAccount() else {
             return messageIncomplete(.commandReceived)
         }
-        let message = PushMessage.commandReceived(index)
-        return deferMaybe(message)
+
+        // TODO: consume here before resolving
+        return account.commandsClient.consumeRemoteCommand(index: index) >>== { items in
+            guard let item = items.first else {
+                return deferMaybe(PushMessage.commandReceived(tab: ["title": "MISSING", "url": "MISSING"]))
+//                return self.messageIncomplete(.commandReceived)
+            }
+
+            let message = PushMessage.commandReceived(tab: ["title": item.title, "url": item.url])
+            return deferMaybe(message)
+        }
     }
 }
 
@@ -236,7 +246,7 @@ enum PushMessageType: String {
 }
 
 enum PushMessage: Equatable {
-    case commandReceived(Int)
+    case commandReceived(tab: [String : String])
     case deviceConnected(String)
     case deviceDisconnected(String?)
     case profileUpdated
