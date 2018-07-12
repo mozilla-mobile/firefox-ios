@@ -206,8 +206,8 @@ extension Strings {
 
     public static let FindTitle = NSLocalizedString("Hotkeys.Find.DiscoveryTitle", value: "Find", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     public static let SelectLocationBarTitle = NSLocalizedString("Hotkeys.SelectLocationBar.DiscoveryTitle", value: "Select Location Bar", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
-    public static let privateBrowsingModeTitle = NSLocalizedString("Hotkeys.NewPrivateTab.DiscoveryTitle", value: "Private Browsing Mode", comment: "Label to switch to private browsing mode")
-    public static let normalBrowsingModeTitle = NSLocalizedString("Hotkeys.NewTab.DiscoveryTitle", value: "Normal Browsing Mode", comment: "Label to switch to normal browsing mode")
+    public static let privateBrowsingModeTitle = NSLocalizedString("Hotkeys.PrivateMode.DiscoveryTitle", value: "Private Browsing Mode", comment: "Label to switch to private browsing mode")
+    public static let normalBrowsingModeTitle = NSLocalizedString("Hotkeys.NormalMode.DiscoveryTitle", value: "Normal Browsing Mode", comment: "Label to switch to normal browsing mode")
     public static let NewTabTitle = NSLocalizedString("Hotkeys.NewTab.DiscoveryTitle", value: "New Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     public static let NewPrivateTabTitle = NSLocalizedString("Hotkeys.NewPrivateTab.DiscoveryTitle", value: "New Private Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
     public static let CloseTabTitle = NSLocalizedString("Hotkeys.CloseTab.DiscoveryTitle", value: "Close Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
@@ -592,13 +592,13 @@ extension Strings {
 
 // Display Theme
 extension Strings {
-    public static let SettingsDisplayThemeTitle = NSLocalizedString("Settings.DisplayTheme", value: "Display", comment: "Title in main app settings for Display (theme) settings")
-    public static let DisplayThemeSectionHeader = NSLocalizedString("Settings.DisplayThemeSectionHeader", value: "Theme", comment: "Display (theme) settings section title")
-    public static let DisplayThemeSectionFooter = NSLocalizedString("Settings.DisplayThemeSectionFooter", value: "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display's current brightness.", comment: "Display (theme) settings footer describing how the brightness slider works.")
-    public static let DisplayThemeAutomaticSwitchTitle = NSLocalizedString("Settings.DisplayThemeSwitchTitle", value: "Automatically", comment: "Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider.")
-    public static let DisplayThemeAutomaticSwitchSubtitle = NSLocalizedString("Settings.DisplayThemeSwitchSubtitle", value: "Switch automatically based on screen brightness", comment: "Display (theme) settings switch subtitle, explaining the title 'Automatically'.")
-    public static let DisplayThemeOptionLight = NSLocalizedString("Settings.DisplayThemeOptionLight", value: "Light", comment: "Option choice in display theme settings for light theme")
-    public static let DisplayThemeOptionDark = NSLocalizedString("Settings.DisplayThemeOptionDark", value: "Dark", comment: "Option choice in display theme settings for dark theme")
+    public static let SettingsDisplayThemeTitle = NSLocalizedString("Settings.DisplayTheme.Title", value: "Display", comment: "Title in main app settings for Display (theme) settings")
+    public static let DisplayThemeSectionHeader = NSLocalizedString("Settings.DisplayTheme.SectionHeader", value: "Theme", comment: "Display (theme) settings section title")
+    public static let DisplayThemeSectionFooter = NSLocalizedString("Settings.DisplayTheme.SectionFooter", value: "The theme will automatically change based on your display brightness. You can set the threshold where the theme changes. The circle indicates your display's current brightness.", comment: "Display (theme) settings footer describing how the brightness slider works.")
+    public static let DisplayThemeAutomaticSwitchTitle = NSLocalizedString("Settings.DisplayTheme.SwitchTitle", value: "Automatically", comment: "Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider.")
+    public static let DisplayThemeAutomaticSwitchSubtitle = NSLocalizedString("Settings.DisplayTheme.SwitchSubtitle", value: "Switch automatically based on screen brightness", comment: "Display (theme) settings switch subtitle, explaining the title 'Automatically'.")
+    public static let DisplayThemeOptionLight = NSLocalizedString("Settings.DisplayTheme.OptionLight", value: "Light", comment: "Option choice in display theme settings for light theme")
+    public static let DisplayThemeOptionDark = NSLocalizedString("Settings.DisplayTheme.OptionDark", value: "Dark", comment: "Option choice in display theme settings for dark theme")
 }
 
 // MARK: Deprecated Strings (to be removed in next version)
