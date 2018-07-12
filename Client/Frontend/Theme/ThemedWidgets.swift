@@ -141,13 +141,15 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
         switch titleAlignment {
         case .top:
             titleLabel.snp.remakeConstraints { make in
-                make.left.right.equalTo(self).inset(UX.titleHorizontalPadding)
+                make.left.equalTo(safeArea.left).inset(UX.titleHorizontalPadding)
+                make.right.equalTo(safeArea.right).inset(UX.titleHorizontalPadding)
                 make.top.equalTo(self).offset(UX.titleVerticalPadding)
                 make.bottom.equalTo(self).offset(-UX.titleVerticalLongPadding)
             }
         case .bottom:
             titleLabel.snp.remakeConstraints { make in
-                make.left.right.equalTo(self).inset(UX.titleHorizontalPadding)
+                make.left.equalTo(safeArea.left).inset(UX.titleHorizontalPadding)
+                make.right.equalTo(safeArea.right).inset(UX.titleHorizontalPadding)
                 make.bottom.equalTo(self).offset(-UX.titleVerticalPadding)
                 make.top.equalTo(self).offset(UX.titleVerticalLongPadding)
             }
