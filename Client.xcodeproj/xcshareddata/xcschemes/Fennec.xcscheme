@@ -157,6 +157,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "ActivityStreamTest">
+               </Test>
+               <Test
                   Identifier = "AuthenticationTest">
                </Test>
                <Test
@@ -166,10 +169,31 @@
                   Identifier = "BookmarkingTests">
                </Test>
                <Test
+                  Identifier = "BrowsingPDFTests">
+               </Test>
+               <Test
                   Identifier = "ClipBoardTests">
                </Test>
                <Test
                   Identifier = "CopiedLinksTests">
+               </Test>
+               <Test
+                  Identifier = "DatabaseFixtureTest">
+               </Test>
+               <Test
+                  Identifier = "DomainAutocompleteTest">
+               </Test>
+               <Test
+                  Identifier = "DownloadFilesTests">
+               </Test>
+               <Test
+                  Identifier = "DragAndDropTests">
+               </Test>
+               <Test
+                  Identifier = "FirstRunTourTests">
+               </Test>
+               <Test
+                  Identifier = "FxScreenGraphTests">
                </Test>
                <Test
                   Identifier = "HistoryTests">
@@ -182,6 +206,12 @@
                </Test>
                <Test
                   Identifier = "HomePageUITest">
+               </Test>
+               <Test
+                  Identifier = "IntegrationTests">
+               </Test>
+               <Test
+                  Identifier = "MailAppSettingsTests">
                </Test>
                <Test
                   Identifier = "NavigationTest">
@@ -199,10 +229,16 @@
                   Identifier = "PhotonActionSheetTest">
                </Test>
                <Test
+                  Identifier = "PocketTest">
+               </Test>
+               <Test
                   Identifier = "PrivateBrowsingTest">
                </Test>
                <Test
                   Identifier = "ReaderViewTest">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest">
                </Test>
                <Test
                   Identifier = "ScreenGraphTest">
@@ -220,6 +256,9 @@
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
+                  Identifier = "SyncUITests">
+               </Test>
+               <Test
                   Identifier = "ThirdPartySearchTest">
                </Test>
                <Test
@@ -227,6 +266,63 @@
                </Test>
                <Test
                   Identifier = "TopTabsTest">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D39FA15E1A83E0EC00EE869C"
+               BuildableName = "UITests.xctest"
+               BlueprintName = "UITests"
+               ReferencedContainer = "container:Client.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "AuthenticationTests">
+               </Test>
+               <Test
+                  Identifier = "BrowserTests">
+               </Test>
+               <Test
+                  Identifier = "ClearPrivateDataTests">
+               </Test>
+               <Test
+                  Identifier = "DomainAutocompleteTests">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests">
+               </Test>
+               <Test
+                  Identifier = "KIFTestCase">
+               </Test>
+               <Test
+                  Identifier = "LoginInputTests">
+               </Test>
+               <Test
+                  Identifier = "LoginManagerTests">
+               </Test>
+               <Test
+                  Identifier = "NavigationDelegateTests">
+               </Test>
+               <Test
+                  Identifier = "NoImageModeTests">
+               </Test>
+               <Test
+                  Identifier = "ReadingListTests">
+               </Test>
+               <Test
+                  Identifier = "SecurityTests">
+               </Test>
+               <Test
+                  Identifier = "SessionRestoreTests">
+               </Test>
+               <Test
+                  Identifier = "ToolbarTests">
                </Test>
                <Test
                   Identifier = "TrackingProtectionTests">
@@ -250,7 +346,6 @@
       buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
