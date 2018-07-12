@@ -38,7 +38,6 @@ class NotificationService: UNNotificationServiceExtension {
         self.display = display
         profile.syncDelegate = display
 
-        sleep(5)
         let handler = FxAPushMessageHandler(with: profile)
 
         handler.handle(userInfo: userInfo).upon { res in
@@ -156,7 +155,7 @@ extension SyncDataDisplay {
 
 extension SyncDataDisplay {
     func displayNewSentTabNotification(tab: [String : String]) {
-        presentNotification(title: "GOT A NEW TAB!!", body: "TAB \(tab.debugDescription)")
+        presentNotification(title: Strings.SentTab_TabArrivingNotification_NoDevice_title, body: tab["url"] ?? Strings.SentTab_TabArrivingNotification_NoDevice_body)
     }
 }
 

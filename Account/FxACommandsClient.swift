@@ -241,7 +241,7 @@ open class FxACommandSendTab {
 
         guard let tab = entries[safe: current],
             let title = tab["title"].string,
-            let url = tab["uri"].string else {
+            let url = tab["url"].string else {
             return nil
         }
 
@@ -284,15 +284,11 @@ open class FxACommandSendTab {
     // TODO: Check this
     func decrypt(ciphertext: String) -> String? {
         guard let sendTabKeys = self.sendTabKeysCache.value,
-            let publicKey = sendTabKeys.publicKey.base64urlSafeDecodedData,
-            let authSecret = sendTabKeys.authSecret.base64urlSafeDecodedData,
-            let cipherdata = ciphertext.base64urlSafeDecodedData,
-            let decrypted = try? PushCrypto.sharedInstance.aes128gcm(payload: cipherdata, decryptWith: publicKey, authenticateWith: authSecret) else {
-                print("UNABLE TO DECRYPT!!")
+            let decrypted = try? PushCrypto.sharedInstance.aes128gcm(payload: ciphertext, decryptWith: sendTabKeys.privateKey, authenticateWith: sendTabKeys.authSecret) else {
                 return nil
         }
 
-        return decrypted.utf8EncodedString
+        return decrypted
     }
 
     func generateAndPersistKeys() -> FxACommandSendTabKeys? {
