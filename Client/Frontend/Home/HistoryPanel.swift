@@ -223,7 +223,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     private func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.Photon.White100
+        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
@@ -328,13 +328,13 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func configureRecentlyClosed(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
         cell.accessoryType = .disclosureIndicator
-        cell.textLabel!.text = Strings.RecentlyClosedTabsButtonTitle
-        cell.detailTextLabel!.text = ""
-        cell.imageView!.image = UIImage(named: "recently_closed")
+        cell.textLabel?.text = Strings.RecentlyClosedTabsButtonTitle
+        cell.detailTextLabel?.text = ""
+        cell.imageView?.image = UIImage(named: "recently_closed")
         cell.imageView?.backgroundColor = UIColor.Photon.White100
         if !hasRecentlyClosed {
             cell.textLabel?.alpha = 0.5
-            cell.imageView!.alpha = 0.5
+            cell.imageView?.alpha = 0.5
             cell.selectionStyle = .none
         }
         cell.accessibilityIdentifier = "HistoryPanel.recentlyClosedCell"
@@ -343,9 +343,9 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func configureSyncedTabs(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
         cell.accessoryType = .disclosureIndicator
-        cell.textLabel!.text = Strings.SyncedTabsTableViewCellTitle
-        cell.detailTextLabel!.text = self.syncDetailText
-        cell.imageView!.image = UIImage(named: "synced_devices")
+        cell.textLabel?.text = Strings.SyncedTabsTableViewCellTitle
+        cell.detailTextLabel?.text = self.syncDetailText
+        cell.imageView?.image = UIImage(named: "synced_devices")
         cell.imageView?.backgroundColor = .white
         cell.accessibilityIdentifier = "HistoryPanel.syncedDevicesCell"
         return cell
@@ -355,8 +355,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         if let site = siteForIndexPath(indexPath), let cell = cell as? TwoLineTableViewCell {
             cell.setLines(site.title, detailText: site.url)
 
-            cell.imageView!.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
-            cell.imageView!.layer.borderWidth = HistoryPanelUX.IconBorderWidth
+            cell.imageView?.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
+            cell.imageView?.layer.borderWidth = HistoryPanelUX.IconBorderWidth
             cell.imageView?.setIcon(site.icon, forURL: site.tileURL, completed: { (color, url) in
                 if site.tileURL == url {
                     cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))

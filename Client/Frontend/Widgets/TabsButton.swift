@@ -7,8 +7,6 @@ import SnapKit
 import Shared
 
 private struct TabsButtonUX {
-    static let TitleColor: UIColor = UIColor.Photon.Grey80
-    static let TitleBackgroundColor: UIColor = UIColor.Photon.White100
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 3

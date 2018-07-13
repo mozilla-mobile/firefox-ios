@@ -35,8 +35,6 @@ class SearchInputView: UIView {
     lazy var inputField: UITextField = {
         let textField = UITextField()
         textField.delegate = self
-        textField.textColor = UIColor.theme.searchInput.input
-        textField.tintColor = UIColor.theme.searchInput.input
         textField.addTarget(self, action: #selector(inputTextDidChange), for: .editingChanged)
         textField.accessibilityLabel = NSLocalizedString("Search Input Field", tableName: "LoginManager", comment: "Accessibility label for the search input field in the Logins list")
         textField.autocorrectionType = .no
@@ -48,7 +46,6 @@ class SearchInputView: UIView {
         let label = UILabel()
         label.text = NSLocalizedString("Search", tableName: "LoginManager", comment: "Title for the search field at the top of the Logins list screen")
         label.font = SearchInputViewUX.titleFont
-        label.textColor = UIColor.theme.searchInput.title
         return label
     }()
 
@@ -69,7 +66,6 @@ class SearchInputView: UIView {
 
     fileprivate lazy var bottomBorder: UIView = {
         let border = UIView()
-        border.backgroundColor = UIColor.theme.searchInput.border
         return border
     }()
 

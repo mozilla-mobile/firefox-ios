@@ -18,10 +18,6 @@ protocol AutocompleteTextFieldDelegate: AnyObject {
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField)
 }
 
-private struct AutocompleteTextFieldUX {
-       static let HighlightColor = UIColor.Defaults.iOSTextHighlightBlue
-}
-
 class AutocompleteTextField: UITextField, UITextFieldDelegate {
     var autocompleteDelegate: AutocompleteTextFieldDelegate?
     // AutocompleteTextLabel repersents the actual autocomplete text.
@@ -43,7 +39,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
-    var highlightColor = AutocompleteTextFieldUX.HighlightColor
+    var textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight
 
     override var text: String? {
         didSet {
@@ -191,7 +187,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
         let suggestionText = suggestion.substring(from: suggestion.index(suggestion.startIndex, offsetBy: normalized.count))
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
-        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: highlightColor, range: NSRange(location: 0, length: suggestionText.count))
+        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: textSelectionColor, range: NSRange(location: 0, length: suggestionText.count))
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
         autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
         if let l = autocompleteTextLabel {

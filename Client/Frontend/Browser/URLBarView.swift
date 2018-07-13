@@ -806,6 +806,6 @@ extension ToolbarTextField: Themeable {
         backgroundColor = UIColor.theme.textField.background
         textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
-        highlightColor = UIColor.theme.textField.highlight
+        textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight
     }
 }

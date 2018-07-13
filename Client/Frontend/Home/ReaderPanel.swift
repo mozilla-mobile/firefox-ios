@@ -13,9 +13,6 @@ private let log = Logger.browserLogger
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
-    static let ActiveTextColor = UIColor.Photon.Grey70
-    static let DimmedTextColor = UIColor.Photon.Grey40
-
     static let ReadIndicatorWidth: CGFloat =  12  // image width
     static let ReadIndicatorHeight: CGFloat = 12 // image height
     static let ReadIndicatorLeftOffset: CGFloat = 18
@@ -74,8 +71,8 @@ class ReadingListTableViewCell: UITableViewCell {
     var unread: Bool = true {
         didSet {
             readStatusImageView.image = UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread")
-            titleLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
-            hostnameLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
+            titleLabel.textColor = unread ? UIColor.theme.homePanel.readingListActive : UIColor.theme.homePanel.readingListDimmed
+            hostnameLabel.textColor = unread ? UIColor.theme.homePanel.readingListActive : UIColor.theme.homePanel.readingListDimmed
             updateAccessibilityLabel()
         }
     }
@@ -109,7 +106,7 @@ class ReadingListTableViewCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(hostnameLabel)
 
-        titleLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
+        titleLabel.textColor = UIColor.theme.homePanel.readingListActive
         titleLabel.numberOfLines = 2
         titleLabel.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelTopOffset)
@@ -118,7 +115,7 @@ class ReadingListTableViewCell: UITableViewCell {
             make.bottom.lessThanOrEqualTo(hostnameLabel.snp.top).priority(1000)
         }
 
-        hostnameLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
+        hostnameLabel.textColor = UIColor.theme.homePanel.readingListActive
         hostnameLabel.numberOfLines = 1
         hostnameLabel.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(self.contentView).offset(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)
@@ -273,7 +270,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     fileprivate func createEmptyStateOverview() -> UIView {
         let overlayView = UIScrollView(frame: tableView.bounds)
-        overlayView.backgroundColor = UIColor.Photon.White100
+        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
         // Unknown why this does not work with autolayout
         overlayView.autoresizingMask = [UIViewAutoresizing.flexibleHeight, UIViewAutoresizing.flexibleWidth]
 
