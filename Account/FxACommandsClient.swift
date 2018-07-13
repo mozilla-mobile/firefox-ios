@@ -281,7 +281,6 @@ open class FxACommandSendTab {
         }
     }
 
-    // TODO: Check this
     func decrypt(ciphertext: String) -> String? {
         guard let sendTabKeys = self.sendTabKeysCache.value,
             let decrypted = try? PushCrypto.sharedInstance.aes128gcm(payload: ciphertext, decryptWith: sendTabKeys.privateKey, authenticateWith: sendTabKeys.authSecret) else {

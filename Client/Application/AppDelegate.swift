@@ -502,10 +502,12 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
+    // Called when the user taps on a sent-tab notification from the background.
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         openURLsInNewTabs(response.notification)
     }
 
+    // Called when the user receives a tab while in foreground.
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         openURLsInNewTabs(notification)
     }
@@ -541,10 +543,10 @@ extension AppDelegate {
         // NotificationService will have decrypted the push message, and done some syncing
         // activity. If the `client` collection was synced, and there are `displayURI` commands (i.e. sent tabs)
         // NotificationService will have collected them for us in the userInfo.
-        if let serializedTabs = userInfo["sentTabs"] as? [[String: String]] {
+        if let serializedTabs = userInfo["sentTabs"] as? [NSDictionary] {
             // Let's go ahead and open those.
             for item in serializedTabs {
-                if let tabURL = item["url"], let url = URL(string: tabURL) {
+                if let urlString = item["url"] as? String, let url = URL(string: urlString) {
                     receivedURLs.append(url)
                 }
             }

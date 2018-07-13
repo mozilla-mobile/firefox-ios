@@ -46,16 +46,19 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     func didFinish(_ what: PushMessage? = nil, with error: PushMessageError? = nil) {
-        profile?.shutdown()
+        defer {
+            // We cannot use tabqueue after the profile has shutdown;
+            // however, we can't use weak references, because TabQueue isn't a class.
+            // Rather than changing tabQueue, we manually nil it out here.
+            self.display?.tabQueue = nil
+
+            profile?.shutdown()
+        }
 
         guard let display = self.display else {
             return
         }
 
-        // We cannot use tabqueue after the profile has shutdown;
-        // however, we can't use weak references, because TabQueue isn't a class.
-        // Rather than changing tabQueue, we manually nil it out here.
-        display.tabQueue = nil
         display.messageDelivered = false
         display.displayNotification(what, profile: profile, with: error)
         if !display.messageDelivered {
@@ -155,7 +158,22 @@ extension SyncDataDisplay {
 
 extension SyncDataDisplay {
     func displayNewSentTabNotification(tab: [String : String]) {
-        presentNotification(title: Strings.SentTab_TabArrivingNotification_NoDevice_title, body: tab["url"] ?? Strings.SentTab_TabArrivingNotification_NoDevice_body)
+        if let urlString = tab["url"], let url = URL(string: urlString), url.isWebPage(), let title = tab["title"] {
+            let tab = [
+                "title": title,
+                "url": url.absoluteString,
+                "displayURL": url.absoluteDisplayExternalString,
+                "deviceName": nil
+            ] as NSDictionary
+
+            notificationContent.userInfo["sentTabs"] = [tab] as NSArray
+
+            // Add tab to the queue.
+            let item = ShareItem(url: urlString, title: title, favicon: nil)
+            _ = tabQueue?.addToQueue(item).value // Force synchronous.
+
+            presentNotification(title: Strings.SentTab_TabArrivingNotification_NoDevice_title, body: url.absoluteDisplayExternalString)
+        }
     }
 }
 
@@ -271,7 +289,7 @@ extension SyncDataDisplay: SyncDelegate {
             sentTabs.append(SentTab(url: url, title: title, deviceName: deviceName))
 
             let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
-            _ = tabQueue?.addToQueue(item)
+            _ = tabQueue?.addToQueue(item).value // Force synchronous.
         }
     }
 }

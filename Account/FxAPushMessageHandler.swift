@@ -123,11 +123,9 @@ extension FxAPushMessageHandler {
             return messageIncomplete(.commandReceived)
         }
 
-        // TODO: consume here before resolving
         return account.commandsClient.consumeRemoteCommand(index: index) >>== { items in
             guard let item = items.first else {
-                return deferMaybe(PushMessage.commandReceived(tab: ["title": "MISSING", "url": "MISSING"]))
-//                return self.messageIncomplete(.commandReceived)
+                return self.messageIncomplete(.commandReceived)
             }
 
             let message = PushMessage.commandReceived(tab: ["title": item.title, "url": item.url])
