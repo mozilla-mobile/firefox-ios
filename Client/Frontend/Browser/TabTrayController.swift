@@ -183,7 +183,7 @@ class TabTrayController: UIViewController {
         let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
         let newOffset = CGPoint(x: 0.0, y: collectionView.contentOffset.y)
-        collectionView.setContentOffset(self.otherBrowsingModeOffset, animated:false)
+        collectionView.setContentOffset(self.otherBrowsingModeOffset, animated: false)
         self.otherBrowsingModeOffset = newOffset
         let fromView: UIView
         if !privateTabsAreEmpty(), let snapshot = collectionView.snapshotView(afterScreenUpdates: false) {
@@ -537,9 +537,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 }
 
 private struct EmptyPrivateTabsViewUX {
-    static let TitleColor = UIColor.Photon.White100
     static let TitleFont = UIFont.systemFont(ofSize: 22, weight: UIFont.Weight.medium)
-    static let DescriptionColor = UIColor.Photon.White100
     static let DescriptionFont = UIFont.systemFont(ofSize: 17)
     static let LearnMoreFont = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
     static let TextMargin: CGFloat = 18
@@ -552,7 +550,7 @@ private struct EmptyPrivateTabsViewUX {
 fileprivate class EmptyPrivateTabsView: UIView {
     fileprivate lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = EmptyPrivateTabsViewUX.TitleColor
+        label.textColor = UIColor.theme.tabTray.tabTitleText
         label.font = EmptyPrivateTabsViewUX.TitleFont
         label.textAlignment = .center
         return label
@@ -560,7 +558,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
 
     fileprivate var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.textColor = EmptyPrivateTabsViewUX.DescriptionColor
+        label.textColor = UIColor.theme.tabTray.tabTitleText
         label.font = EmptyPrivateTabsViewUX.DescriptionFont
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -721,7 +719,6 @@ class TabCell: UICollectionViewCell {
 
     let backgroundHolder: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.Photon.White100
         view.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         view.clipsToBounds = true
         view.backgroundColor = UIColor.theme.tabTray.cellBackground
@@ -761,12 +758,12 @@ class TabCell: UICollectionViewCell {
         button.setImage(UIImage.templateImageNamed("tab_close"), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
-        button.tintColor = UIColor.Photon.Grey40
+        button.tintColor = UIColor.theme.tabTray.cellCloseButton
         button.imageEdgeInsets = UIEdgeInsets(equalInset: TabTrayControllerUX.CloseButtonEdgeInset)
         return button
     }()
 
-    var title = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
+    var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur))
     var animator: SwipeAnimator!
 
     weak var delegate: TabCellDelegate?
@@ -843,7 +840,6 @@ class TabCell: UICollectionViewCell {
 
     func configureWith(tab: Tab, is selected: Bool) {
         titleText.text = tab.displayTitle
-        closeButton.tintColor = tab.isPrivate ? UIColor.Photon.White100 : UIColor.Photon.Grey50
 
         if !tab.displayTitle.isEmpty {
             accessibilityLabel = tab.displayTitle
@@ -859,7 +855,7 @@ class TabCell: UICollectionViewCell {
             let defaultFavicon = UIImage(named: "defaultFavicon")
             if tab.isPrivate {
                 favicon.image = defaultFavicon
-                favicon.tintColor = UIColor.Photon.White100
+                favicon.tintColor = UIColor.theme.tabTray.faviconTint
             } else {
                 favicon.image = defaultFavicon
             }
@@ -898,3 +894,4 @@ class TabCell: UICollectionViewCell {
         delegate?.tabCellDidClose(self)
     }
 }
+

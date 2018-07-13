@@ -145,7 +145,6 @@ class TopTabsViewController: UIViewController {
             make.edges.equalTo(topTabFader)
         }
 
-        view.backgroundColor = UIColor.Photon.Grey80
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
@@ -254,6 +253,7 @@ extension TopTabsViewController: Themeable, PrivateModeUI {
     func applyTheme() {
         tabsButton.applyTheme()
         newTab.tintColor = UIColor.theme.topTabs.buttonTint
+        view.backgroundColor = UIColor.theme.topTabs.background
         collectionView.backgroundColor = view.backgroundColor
     }
 }

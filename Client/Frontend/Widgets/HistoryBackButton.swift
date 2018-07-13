@@ -60,7 +60,7 @@ class HistoryBackButton: UIButton {
 
     fileprivate func createBorderView() -> UIView {
         let view = UIView()
-        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        view.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
         return view
     }
 

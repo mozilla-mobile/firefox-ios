@@ -15,7 +15,7 @@ private let log = Logger.browserLogger
 
 private let HistoryClearableIndex = 0
 
-class ClearPrivateDataTableViewController: UITableViewController {
+class ClearPrivateDataTableViewController: ThemedTableViewController {
     fileprivate var clearButton: UITableViewCell?
 
     var profile: Profile!
@@ -64,15 +64,13 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        let cell = ThemedTableViewCell()
 
         if indexPath.section == SectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
