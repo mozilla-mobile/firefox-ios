@@ -2679,6 +2679,8 @@ extension BrowserViewController: Themeable {
         ui.forEach { $0?.applyTheme() }
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
         setNeedsStatusBarAppearanceUpdate()
+
+        homePanelController?.applyTheme()
     }
 }
 

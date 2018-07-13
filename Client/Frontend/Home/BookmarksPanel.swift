@@ -127,7 +127,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
 
         let logoImageView = UIImageView(image: UIImage(named: "emptyBookmarks"))
         overlayView.addSubview(logoImageView)
@@ -146,7 +145,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         welcomeLabel.text = emptyBookmarksText
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
 
@@ -155,6 +153,9 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             make.top.equalTo(logoImageView.snp.bottom).offset(BookmarksPanelUX.WelcomeScreenPadding)
             make.width.equalTo(BookmarksPanelUX.WelcomeScreenItemWidth)
         }
+
+        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
+        welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
 
         return overlayView
     }
@@ -580,5 +581,15 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
 
     @objc fileprivate func viewWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         delegate?.didSelectHeader()
+    }
+}
+
+extension BookmarksPanel: Themeable {
+    func applyTheme() {
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
+
+        reloadData()
     }
 }

@@ -609,3 +609,9 @@ extension RemoteTabsTableViewController: HomePanelContextMenu {
         return getDefaultContextMenuActions(for: site, homePanelDelegate: remoteTabsPanel?.homePanelDelegate)
     }
 }
+
+extension RemoteTabsPanel: Themeable {
+    func applyTheme() {
+        tableViewController.tableView.reloadData()
+    }
+}

@@ -22,8 +22,8 @@ protocol HomePanelViewControllerDelegate: AnyObject {
     func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
 }
 
-protocol HomePanel: AnyObject {
-    weak var homePanelDelegate: HomePanelDelegate? { get set }
+protocol HomePanel: AnyObject, Themeable {
+    var homePanelDelegate: HomePanelDelegate? { get set }
 }
 
 struct HomePanelUX {
@@ -291,6 +291,19 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 // MARK: UIAppearance
 extension HomePanelViewController: Themeable {
     func applyTheme() {
+        func apply(_ vc: UIViewController) -> Bool {
+            guard let vc = vc as? Themeable else { return false }
+            vc.applyTheme()
+            return true
+        }
+
+        childViewControllers.forEach {
+            if !apply($0) {
+                // BookmarksPanel is nested in a UINavigationController, go one layer deeper
+                $0.childViewControllers.forEach { _ = apply($0) }
+            }
+        }
+
         buttonContainerView.backgroundColor = UIColor.theme.homePanel.toolbarBackground
         view.backgroundColor = UIColor.theme.homePanel.toolbarBackground
         buttonTintColor = UIColor.theme.homePanel.toolbarTint

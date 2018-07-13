@@ -176,3 +176,9 @@ extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
         return getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate)
     }
 }
+
+extension RecentlyClosedTabsPanel: Themeable {
+    func applyTheme() {
+        tableViewController.tableView.reloadData()
+    }
+}

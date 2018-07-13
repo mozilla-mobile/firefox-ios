@@ -42,9 +42,7 @@ private struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenTopPadding: CGFloat = 16
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenHeaderTextColor = UIColor.Photon.Grey60
 
-    static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 220
     static let WelcomeScreenItemOffset = -20
 
@@ -282,7 +280,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
-        welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
         welcomeLabel.adjustsFontSizeToFitWidth = true
         welcomeLabel.snp.makeConstraints { make in
             make.centerX.equalTo(containerView)
@@ -296,7 +293,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         containerView.addSubview(readerModeLabel)
         readerModeLabel.text = NSLocalizedString("Open articles in Reader View by tapping the book icon when it appears in the title bar.", comment: "See http://mzl.la/1LXbDOL")
         readerModeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        readerModeLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readerModeLabel.numberOfLines = 0
         readerModeLabel.snp.makeConstraints { make in
             make.top.equalTo(welcomeLabel.snp.bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
@@ -315,7 +311,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         containerView.addSubview(readingListLabel)
         readingListLabel.text = NSLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
         readingListLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        readingListLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readingListLabel.numberOfLines = 0
         readingListLabel.snp.makeConstraints { make in
             make.top.equalTo(readerModeLabel.snp.bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
@@ -338,6 +333,10 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
             // And then center it in the overlay view that sits on top of the UITableView
             make.centerX.equalTo(overlayView)
+        }
+
+        [welcomeLabel, readerModeLabel, readingListLabel].forEach {
+            $0.textColor = UIColor.theme.homePanel.welcomeScreenText
         }
 
         return overlayView
@@ -468,5 +467,14 @@ extension ReadingListPanel: UITableViewDragDelegate {
 
     func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
         presentedViewController?.dismiss(animated: true)
+    }
+}
+
+extension ReadingListPanel: Themeable {
+    func applyTheme() {
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverview()
+
+        refreshReadingList()
     }
 }

@@ -106,7 +106,7 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var buttonContainerBorder: UIColor { return separator }
     override var backgroundColorPrivateMode: UIColor { return UIColor.Photon.Grey50 }
 
-    override var welcomeScreenText: UIColor { return UIColor.Photon.Grey50 }
+    override var welcomeScreenText: UIColor { return UIColor.Photon.Grey30 }
     override var bookmarkIconBorder: UIColor { return UIColor.Photon.Grey30 }
     override var bookmarkFolderBackground: UIColor { return UIColor.Photon.Ink80 }
     override var bookmarkFolderText: UIColor { return UIColor.Photon.White100 }

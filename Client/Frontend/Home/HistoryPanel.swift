@@ -571,3 +571,9 @@ extension HistoryPanel: HomePanelContextMenu {
         return actions
     }
 }
+
+extension HistoryPanel: Themeable {
+    func applyTheme() {
+        tableView.reloadData()
+    }
+}

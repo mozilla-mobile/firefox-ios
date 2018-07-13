@@ -107,10 +107,11 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         Section.allValues.forEach { self.collectionView?.register(Section($0.rawValue).cellType, forCellWithReuseIdentifier: Section($0.rawValue).cellIdentifier) }
         self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header")
         self.collectionView?.register(ASFooterView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer")
-        collectionView?.backgroundColor = UIColor.theme.browser.background
         collectionView?.keyboardDismissMode = .onDrag
 
         self.profile.panelDataObservers.activityStream.delegate = self
+
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -143,6 +144,12 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     }
 
     @objc func reload(notification: Notification) {
+        reloadAll()
+    }
+
+    func applyTheme() {
+        collectionView?.backgroundColor = UIColor.theme.browser.background
+        topSiteCell.collectionView.reloadData()
         reloadAll()
     }
 }

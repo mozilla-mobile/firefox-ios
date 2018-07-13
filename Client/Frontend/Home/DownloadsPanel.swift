@@ -421,3 +421,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return [delete, share]
     }
 }
+
+extension DownloadsPanel: Themeable {
+    func applyTheme() {
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
+
+        tableView.reloadData()
+    }
+}
