@@ -509,7 +509,22 @@
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
-                  Identifier = "SyncUITests">
+                  Identifier = "SyncUITests/testCreateAnAccountLink()">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testPlaceholderValues()">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testShowPassword()">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testSyncUIFromBrowserTabMenu()">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testTypeOnGivenFields()">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testUIFromSettings()">
                </Test>
                <Test
                   Identifier = "ThirdPartySearchTest">

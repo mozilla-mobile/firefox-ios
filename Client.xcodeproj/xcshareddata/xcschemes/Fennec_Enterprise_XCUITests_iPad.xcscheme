@@ -287,6 +287,9 @@
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
+                  Identifier = "SyncUITests/testAccountManagmentPage()">
+               </Test>
+               <Test
                   Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingLandscape()">
                </Test>
                <Test
