@@ -142,7 +142,7 @@ class SnackBar: UIView {
             make.top.equalTo(self).offset(UIConstants.DefaultPadding)
             make.height.equalTo(UIConstants.SnackbarButtonHeight - 2 * UIConstants.DefaultPadding)
             make.centerX.equalTo(self).priority(500)
-            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 6).priority(1000)
+            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 2).priority(1000)
         }
 
         backgroundColor = UIColor.clear
