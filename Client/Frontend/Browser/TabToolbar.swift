@@ -7,7 +7,7 @@ import SnapKit
 import Shared
 
 protocol TabToolbarProtocol: AnyObject {
-    weak var tabToolbarDelegate: TabToolbarDelegate? { get set }
+    var tabToolbarDelegate: TabToolbarDelegate? { get set }
     var tabsButton: TabsButton { get }
     var menuButton: ToolbarButton { get }
     var forwardButton: ToolbarButton { get }
@@ -20,6 +20,7 @@ protocol TabToolbarProtocol: AnyObject {
     func updateReloadStatus(_ isLoading: Bool)
     func updatePageStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
+    func privateModeBadge(visible: Bool)
 }
 
 protocol TabToolbarDelegate: AnyObject {
@@ -33,6 +34,27 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+}
+
+class ToolbarPrivateModeBadge: UIImageView {
+    let privateModeBadgeSize = CGFloat(16)
+    let privateModeBadgeOffset = CGFloat(10)
+
+    init() {
+        super.init(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    func layout(forTabsButton button: UIButton) {
+        snp.remakeConstraints { make in
+            make.size.equalTo(privateModeBadgeSize)
+            make.centerX.equalTo(button).offset(privateModeBadgeOffset)
+            make.centerY.equalTo(button).offset(-privateModeBadgeOffset)
+        }
+    }
 }
 
 @objcMembers
@@ -200,6 +222,12 @@ class TabToolbar: UIView {
     let stopReloadButton = ToolbarButton()
     let actionButtons: [Themeable & UIButton]
 
+    private let privateModeBadge = ToolbarPrivateModeBadge()
+    
+    func privateModeBadge(visible: Bool) {
+        privateModeBadge.isHidden = !visible
+    }
+
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
 
@@ -211,11 +239,15 @@ class TabToolbar: UIView {
         addSubview(contentView)
         helper = TabToolbarHelper(toolbar: self)
         addButtons(actionButtons)
+        contentView.addSubview(privateModeBadge)
+
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
     }
 
     override func updateConstraints() {
+        privateModeBadge.layout(forTabsButton: tabsButton)
+
         contentView.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self)
             make.bottom.equalTo(self.safeArea.bottom)
@@ -285,6 +317,6 @@ extension TabToolbar: Themeable, PrivateModeUI {
     }
 
     func applyUIMode(isPrivate: Bool) {
-        tabsButton.applyUIMode(isPrivate: isPrivate)
+        privateModeBadge(visible: isPrivate)
     }
 }
