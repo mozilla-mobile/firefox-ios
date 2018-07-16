@@ -360,6 +360,11 @@ class URLBar: UIView {
         urlText.becomeFirstResponder()
     }
     
+    public func dismissTextField() {
+        urlText.isUserInteractionEnabled = false
+        urlText.endEditing(true)
+    }
+    
     @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             self.becomeFirstResponder()

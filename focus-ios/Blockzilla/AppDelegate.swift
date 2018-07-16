@@ -5,20 +5,30 @@
 import UIKit
 import Telemetry
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
+protocol AppSplashController {
+    var splashView: UIView { get }
 
-    static var splashView: UIView?
+    func toggleSplashView(hide: Bool)
+}
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
-    private let browserViewController = BrowserViewController()
-    private var queuedUrl: URL?
-    private var queuedString: String?
     static let prefWhatsNewDone = "WhatsNewDone"
     static let prefWhatsNewCounter = "WhatsNewCounter"
-
     static var needsAuthenticated = false
+
+    var window: UIWindow?
+
+    var splashView: UIView = UIView()
+    private lazy var browserViewController = {
+        BrowserViewController(appSplashController: self)
+    }()
+
+    private var queuedUrl: URL?
+    private var queuedString: String?
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
             if let bundleID = Bundle.main.bundleIdentifier {
@@ -171,7 +181,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     fileprivate func displaySplashAnimation() {
-        let splashView = UIView()
+        let splashView = self.splashView
         splashView.backgroundColor = UIConstants.colors.background
         window!.addSubview(splashView)
 
@@ -196,13 +206,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }, completion: { success in
                 splashView.isHidden = true
                 logoImage.layer.transform = CATransform3DIdentity
-                AppDelegate.splashView = splashView
             })
         })
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        AppDelegate.splashView?.animateHidden(false, duration: 0)
+        toggleSplashView(hide: false)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -232,6 +241,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
+    }
+    
+    func toggleSplashView(hide: Bool) {
+        let duration = 0.25
+        splashView.animateHidden(hide, duration: duration)
+        
+        if !hide {
+            browserViewController.deactivateUrlBarOnHomeView()
+        } else {
+            browserViewController.activateUrlBarOnHomeView()
+        }
     }
 }
 
