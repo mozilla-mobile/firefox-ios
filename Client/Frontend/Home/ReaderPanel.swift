@@ -173,7 +173,7 @@ class ReadingListTableViewCell: UITableViewCell {
 
 class ReadingListPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
-    var profile: Profile!
+    let profile: Profile
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
@@ -183,10 +183,13 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     fileprivate var records: [ReadingListItem]?
 
-    init() {
+    init(profile: Profile) {
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .DynamicFontChanged, object: nil)
+
+        applyTheme()
     }
 
     required init!(coder aDecoder: NSCoder) {

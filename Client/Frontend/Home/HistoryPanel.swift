@@ -53,8 +53,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     // MARK: - Lifecycle
-    init() {
-        super.init(nibName: nil, bundle: nil)
+    override init(profile: Profile) {
+        super.init(profile: profile)
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
 
@@ -407,9 +407,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         guard hasRecentlyClosed else {
             return
         }
-        let nextController = RecentlyClosedTabsPanel()
+        let nextController = RecentlyClosedTabsPanel(profile: profile)
         nextController.homePanelDelegate = self.homePanelDelegate
-        nextController.profile = self.profile
         self.refreshControl?.endRefreshing()
         self.navigationController?.pushViewController(nextController, animated: true)
     }

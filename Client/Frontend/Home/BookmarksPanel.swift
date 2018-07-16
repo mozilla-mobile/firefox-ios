@@ -48,8 +48,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     fileprivate let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorIdentifier"
     fileprivate let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
 
-    init() {
-        super.init(nibName: nil, bundle: nil)
+    override init(profile: Profile) {
+        super.init(profile: profile)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
 
         self.tableView.register(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
@@ -334,11 +334,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         case let folder as BookmarkFolder:
             log.debug("Selected \(folder.guid)")
-            let nextController = BookmarksPanel()
+            let nextController = BookmarksPanel(profile: profile)
             nextController.parentFolders = parentFolders + [source.current]
             nextController.bookmarkFolder = folder
             nextController.homePanelDelegate = self.homePanelDelegate
-            nextController.profile = self.profile
             source.modelFactory.uponQueue(.main) { maybe in
                 guard let factory = maybe.successValue else {
                     // Nothing we can do.

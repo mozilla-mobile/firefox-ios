@@ -70,13 +70,24 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
 class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     fileprivate let CellIdentifier = "CellIdentifier"
     fileprivate let HeaderIdentifier = "HeaderIdentifier"
-    var profile: Profile! {
-        didSet {
-            reloadData()
-        }
-    }
+    let profile: Profile!
+
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
     var tableView = UITableView()
+
+    private override init(nibName: String?, bundle: Bundle?) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(profile: Profile) {
+        self.profile = profile
+        super.init(nibName: nil, bundle: nil)
+        applyTheme()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -19,7 +19,7 @@ private struct RecentlyClosedPanelUX {
 
 class RecentlyClosedTabsPanel: UIViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
-    var profile: Profile!
+    let profile: Profile
 
     fileprivate lazy var recentlyClosedHeader: UILabel = {
         let headerLabel = UILabel()
@@ -30,7 +30,7 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
         return headerLabel
     }()
 
-    fileprivate var tableViewController = RecentlyClosedTabsPanelSiteTableViewController()
+    fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController(profile: profile)
 
     fileprivate lazy var historyBackButton: HistoryBackButton = {
         let button = HistoryBackButton()
@@ -38,12 +38,20 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
         return button
     }()
 
+    init(profile: Profile) {
+        self.profile = profile
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.theme.tableView.headerBackground
 
-        tableViewController.profile = self.profile
         tableViewController.homePanelDelegate = homePanelDelegate
         tableViewController.recentlyClosedTabsPanel = self
 
@@ -87,19 +95,11 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         return UILongPressGestureRecognizer(target: self, action: #selector(RecentlyClosedTabsPanelSiteTableViewController.longPress))
     }()
 
-    init() {
-        super.init(nibName: nil, bundle: nil)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "Recently Closed Tabs List"
         self.recentlyClosedTabs = profile.recentlyClosedTabs.tabs
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {

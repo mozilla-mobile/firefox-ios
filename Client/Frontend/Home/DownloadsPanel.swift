@@ -98,7 +98,7 @@ struct DateGroupedTableData<T : Equatable> {
 
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
-    var profile: Profile!
+    let profile: Profile
     var tableView = UITableView()
 
     private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged]
@@ -109,7 +109,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var fileExtensionIcons: [String : UIImage] = [:]
 
     // MARK: - Lifecycle
-    init() {
+    init(profile: Profile) {
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
