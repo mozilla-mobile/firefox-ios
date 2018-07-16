@@ -16,6 +16,7 @@ class WebsiteDataManagement: UITableViewController {
     fileprivate typealias DefaultCheckedState = Bool
     let searchController = UISearchController(searchResultsController: nil)
 
+    var websites: [String] = ["abcde.com", "abcde.org", "abcde.gov"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +41,9 @@ class WebsiteDataManagement: UITableViewController {
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
+
+        //edit feature
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -47,8 +51,7 @@ class WebsiteDataManagement: UITableViewController {
 
         if indexPath.section == SectionSites {
             assert(indexPath.section == SectionSites)
-            cell.textLabel?.text = "abcde.com"
-            clearButton = cell
+            cell.textLabel?.text = websites[indexPath.item]
         }else {
             assert(indexPath.section == SectionButton)
             cell.textLabel?.text = Strings.SettingsClearPrivateDataClearButton
@@ -68,7 +71,7 @@ class WebsiteDataManagement: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionSites {
-            return 1
+            return websites.count
         }
         assert(section == SectionButton)
         return 1
