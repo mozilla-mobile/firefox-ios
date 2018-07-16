@@ -217,7 +217,7 @@ function getMatchingNodeReplacements(regExp, callback) {
   let highlights = [];
   let isMaximumHighlightCount = false;
   let operation = asyncTextNodeWalker(function(originalNode) {
-    if (!isTextNodeVisible(originalNode)) {
+    if (!isTextNodeVisible(originalNode) || originalNode.parentElement.nodeName === "IFRAME") {
       return;
     }
 
@@ -335,6 +335,9 @@ function scrollToElement(element, duration) {
 
 function isTextNodeVisible(textNode) {
   let element = textNode.parentElement;
+  if (!element) {
+    return false;
+  }
   return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
 }
 
