@@ -143,24 +143,13 @@ public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration
     public let label = FirefoxAccountConfigurationLabel.production
 
     // From https://accounts.firefox.com/.well-known/fxa-client-configuration
-//    public let authEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
-//    public let oauthEndpointURL = URL(string: "https://oauth.accounts.firefox.com/v1")!
-//    public let profileEndpointURL = URL(string: "https://profile.accounts.firefox.com/v1")!
-//
-//    public let signInURL = URL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1")!
-//    public let settingsURL = URL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1")!
-//    public let forceAuthURL = URL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
+    public let authEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
+    public let oauthEndpointURL = URL(string: "https://oauth.accounts.firefox.com/v1")!
+    public let profileEndpointURL = URL(string: "https://profile.accounts.firefox.com/v1")!
 
-    // XXX: TEMP -- From https://pushbox3.dev.lcip.org/.well-known/fxa-client-configuration
-    // On Desktop, set `identity.fxaccounts.autoconfig.uri` in `about:config` to
-    // `https://pushbox3.dev.lcip.org`
-    public let authEndpointURL = URL(string: "https://pushbox3.dev.lcip.org/auth/v1")!
-    public let oauthEndpointURL = URL(string: "https://oauth-pushbox3.dev.lcip.org/v1")!
-    public let profileEndpointURL = URL(string: "https://pushbox3.dev.lcip.org/profile/v1")!
-
-    public let signInURL = URL(string: "https://pushbox3.dev.lcip.org/signin?service=sync&context=fx_ios_v1")!
-    public let settingsURL = URL(string: "https://pushbox3.dev.lcip.org/settings?context=fx_ios_v1")!
-    public let forceAuthURL = URL(string: "https://pushbox3.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
+    public let signInURL = URL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1")!
+    public let settingsURL = URL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1")!
+    public let forceAuthURL = URL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = ProductionSync15Configuration()
 
@@ -272,7 +261,7 @@ public struct ChinaEditionSync15Configuration: Sync15Configuration {
 }
 
 public struct ProductionSync15Configuration: Sync15Configuration {
-    public let tokenServerEndpointURL = URL(string: "https://pushbox3.dev.lcip.org/syncserver/token/1.0/sync/1.5")!
+    public let tokenServerEndpointURL = URL(string: "https://token.services.mozilla.com/1.0/sync/1.5")!
 }
 
 public struct StageSync15Configuration: Sync15Configuration {
