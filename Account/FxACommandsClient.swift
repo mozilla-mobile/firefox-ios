@@ -166,6 +166,11 @@ open class FxACommandSendTabKeys: JSONLiteralConvertible {
     }
 }
 
+public struct FxACommandSendTabReport {
+    fileprivate(set) public var succeeded: [RemoteDevice]
+    fileprivate(set) public var failed: [RemoteDevice]
+}
+
 open class FxACommandSendTab {
     public static let Name = "https://identity.mozilla.com/cmd/open-uri"
 
@@ -187,24 +192,41 @@ open class FxACommandSendTab {
         })
     }
 
-    public func send(to devices: [RemoteDevice], url: String, title: String) {
+    public func send(to devices: [RemoteDevice], url: String, title: String) -> Deferred<Maybe<FxACommandSendTabReport>> {
         let json = JSON([
             "entries": [["title": title, "url": url]]
         ])
 
         guard let jsonString = json.stringify() else {
-            return
+            return deferMaybe(FxACommandsClientError())
         }
 
-        for device in devices {
-            encrypt(message: jsonString, device: device) >>== { encryptedPayload in
+        let deferreds = devices.map { device in
+            return encrypt(message: jsonString, device: device) >>== { encryptedPayload in
                 self.commandsClient.invoke(commandName: FxACommandSendTab.Name, toDevice: device, withPayload: encryptedPayload).bind { result in
-                    return deferMaybe(result.isSuccess)
+                    return deferMaybe((device: device, success: result.isSuccess))
                 }
             }
         }
 
-        // TODO: gather stats here about success/failures
+        let result = all(deferreds).bind { results -> Deferred<Maybe<FxACommandSendTabReport>> in
+            var succeeded: [RemoteDevice] = []
+            var failed: [RemoteDevice] = []
+
+            for result in results {
+                if let tuple = result.successValue {
+                    if tuple.success {
+                        succeeded.append(tuple.device)
+                    } else {
+                        failed.append(tuple.device)
+                    }
+                }
+            }
+
+            return deferMaybe(FxACommandSendTabReport(succeeded: succeeded, failed: failed))
+        }
+
+        return result
     }
 
     public func isDeviceCompatible(_ device: RemoteDevice) -> Bool {

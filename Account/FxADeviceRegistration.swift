@@ -77,12 +77,13 @@ open class FxADeviceRegistration: NSObject, NSCoding {
 
 open class FxADeviceRegistrator {
     open static func registerOrUpdateDevice(_ account: FirefoxAccount, sessionToken: NSData, client: FxAClient10? = nil) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
-        // TODO: Bypass this check the first time through after updating the app?
-
-        // If we've already registered, the registration version is up-to-date, *and* we've (re-)registered
-        // within the last week, do nothing. We re-register weekly as a sanity check.
-        if let registration = account.deviceRegistration, registration.version == DeviceRegistrationVersion &&
-            Date.now() < registration.lastRegistered + OneWeekInMilliseconds {
+        // If we've already registered, the registration version is up-to-date,
+        // we've (re-)registered within the last week, *and* we have send-tab keys,
+        // do nothing. We re-register weekly as a sanity check.
+        if let registration = account.deviceRegistration,
+            registration.version == DeviceRegistrationVersion,
+            Date.now() < registration.lastRegistered + OneWeekInMilliseconds,
+            account.commandsClient.sendTab.sendTabKeysCache.value != nil {
                 return deferMaybe(.alreadyRegistered)
         }
 

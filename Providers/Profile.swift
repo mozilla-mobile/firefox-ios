@@ -463,9 +463,6 @@ open class BrowserProfile: Profile {
             }
         }
 
-        // TODO: If the RemoteDevice has the FxA Messages "availableCommands",
-        // send the tab via that instead.
-        // (e.g. https://hg.mozilla.org/mozilla-central/rev/8ef95c56df04#l2.16)
         let deferredRemoteDevices = fxaDeviceIds.map { fxaDeviceId in
             return self.remoteClientsAndTabs.getRemoteDevice(fxaDeviceId: fxaDeviceId)
         }
@@ -487,20 +484,32 @@ open class BrowserProfile: Profile {
                 }
             }
 
-            if !newRemoteDevices.isEmpty {
-                // TODO: Check result and fallback to old API if necessary
-                account.commandsClient.sendTab.send(to: newRemoteDevices, url: item.url, title: item.title ?? "")
-            }
-
-            if oldRemoteClients.isEmpty {
-                result.fill(Maybe(success: ()))
-            } else {
-                self.remoteClientsAndTabs.insertCommands([command], forClients: oldRemoteClients) >>> {
-                    self.syncManager.syncClients() >>> {
-                        account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
-                        result.fill(Maybe(success: ()))
+            func sendViaSyncFallback() {
+                if oldRemoteClients.isEmpty {
+                    result.fill(Maybe(success: ()))
+                } else {
+                    self.remoteClientsAndTabs.insertCommands([command], forClients: oldRemoteClients) >>> {
+                        self.syncManager.syncClients() >>> {
+                            account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
+                            result.fill(Maybe(success: ()))
+                        }
                     }
                 }
+            }
+
+            if !newRemoteDevices.isEmpty {
+                account.commandsClient.sendTab.send(to: newRemoteDevices, url: item.url, title: item.title ?? "") >>== { report in
+                    for failedRemoteDevice in report.failed {
+                        log.debug("Failed to send a tab with FxA commands for \(failedRemoteDevice.name). Falling back on the Sync back-end")
+                        if let oldRemoteClient = clients.find({ $0.fxaDeviceId == failedRemoteDevice.id }) {
+                            oldRemoteClients.append(oldRemoteClient)
+                        }
+                    }
+
+                    sendViaSyncFallback()
+                }
+            } else {
+                sendViaSyncFallback()
             }
         }
 
@@ -1097,7 +1106,7 @@ open class BrowserProfile: Profile {
             }
 
             // TODO: Invoke `account.commandsClient.fetchMissedRemoteCommands()` to
-            // catch any missed FxA commands at time of Sync.
+            // catch any missed FxA commands at time of Sync?
 
             if !isSyncing {
                 // A sync isn't already going on, so start another one.
