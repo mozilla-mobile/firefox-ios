@@ -113,7 +113,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, 1)
     }
 
-    func testLogin() {
+    func testSavedLoginAutofilled() {
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         app.webViews.links["Sign in"].tap()
