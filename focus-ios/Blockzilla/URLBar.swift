@@ -348,6 +348,22 @@ class URLBar: UIView {
         urlText.becomeFirstResponder()
     }
     
+    public func dismissTextField() {
+        urlText.isUserInteractionEnabled = false
+        urlText.endEditing(true)
+    }
+    
+    @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            self.becomeFirstResponder()
+            let customURLItem = UIMenuItem(title: UIConstants.strings.customURLMenuButton, action: #selector(addCustomURL))
+            let copyItem = UIMenuItem(title: UIConstants.strings.copyMenuButton, action: #selector(copyToClipboard))
+            UIMenuController.shared.setTargetRect(self.bounds, in: self)
+            UIMenuController.shared.menuItems = [copyItem, customURLItem]
+            UIMenuController.shared.setMenuVisible(true, animated: true)
+        }
+    }
+    
     @objc func addCustomURL() {
         guard let url = self.url else { return }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.quickAddCustomDomainButton)
