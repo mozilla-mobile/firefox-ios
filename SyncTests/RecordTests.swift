@@ -23,11 +23,11 @@ class RecordTests: XCTestCase {
         let json = JSON(parseJSON: input)
         XCTAssertNil(json.error)
         XCTAssertNil(json.null)
-        XCTAssertEqual(input, json.stringValue())
+        XCTAssertEqual(input, json.stringify())
 
         let pairs: [String: Any] = ["foo": "help \(Character(UnicodeScalar(11))) this"]
         let built = JSON(pairs)
-        XCTAssertEqual(input, built.stringValue())
+        XCTAssertEqual(input, built.stringify())
     }
 
     func testEnvelopeNullTTL() {
@@ -100,27 +100,27 @@ class RecordTests: XCTestCase {
         // This one is invalid because the payload "id" isn't a string.
         // (It'll also fail implicitly because the guid doesn't match the envelope.)
         let badPayloadGUIDPayload: [String: Any] = ["id": 0]
-        let badPayloadGUIDPayloadString = JSON(badPayloadGUIDPayload).stringValue()!
+        let badPayloadGUIDPayloadString = JSON(badPayloadGUIDPayload).stringify()!
         let badPayloadGUIDRecord: [String: Any] = ["id": "abcdefghijkl",
                                                    "collection": "clients",
                                                    "payload": badPayloadGUIDPayloadString]
-        let badPayloadGUIDRecordString = JSON(badPayloadGUIDRecord).stringValue()!
+        let badPayloadGUIDRecordString = JSON(badPayloadGUIDRecord).stringify()!
 
         // This one is invalid because the payload doesn't contain an "id" at all, but it's non-empty.
         // See also `emptyPayload` above.
         // (It'll also fail implicitly because the guid doesn't match the envelope.)
         let noPayloadGUIDPayload: [String: Any] = ["some": "thing"]
-        let noPayloadGUIDPayloadString = JSON(noPayloadGUIDPayload).stringValue()!
+        let noPayloadGUIDPayloadString = JSON(noPayloadGUIDPayload).stringify()!
         let noPayloadGUIDRecord: [String: Any] = ["id": "abcdefghijkl",
                                                   "collection": "clients",
                                                   "payload": noPayloadGUIDPayloadString]
-        let noPayloadGUIDRecordString = JSON(noPayloadGUIDRecord).stringValue()!
+        let noPayloadGUIDRecordString = JSON(noPayloadGUIDRecord).stringify()!
 
         // And this is a valid record.
         let clientBody: [String: Any] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [], "type": "mobile"]
-        let clientBodyString = JSON(clientBody).stringValue()!
+        let clientBodyString = JSON(clientBody).stringify()!
         let clientRecord: [String: Any] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
-        let clientPayload = JSON(clientRecord).stringValue()!
+        let clientPayload = JSON(clientRecord).stringify()!
 
         let cleartextClientsFactory: (String) -> ClientPayload? = {
             (s: String) -> ClientPayload? in

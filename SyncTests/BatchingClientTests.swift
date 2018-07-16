@@ -22,7 +22,7 @@ private func basicSerializer<T>(record: Record<T>) -> String {
     return JSON([
         "id": record.id,
         "payload": record.payload.json.dictionaryObject as Any
-        ]).stringValue()!
+        ]).stringify()!
 }
 
 // Create a basic record with an ID and a title that is the `Site$ID`.
@@ -69,7 +69,7 @@ class Sync15BatchClientTests: XCTestCase {
 
     func testAddLargeRecordFails() {
         let uploader: BatchUploadFunction = { _,_,_  in deferEmptyResponse(lastModified: 10_000) }
-        let serializeRecord = { massivify($0)?.stringValue() }
+        let serializeRecord = { massivify($0)?.stringify() }
 
         let batch = Sync15BatchClient(config: miniConfig,
                                       ifUnmodifiedSince: nil,
