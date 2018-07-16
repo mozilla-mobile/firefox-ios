@@ -184,7 +184,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         self.refreshControl?.endRefreshing()
 
         // Remove the refresh control if the user has logged out in the meantime
-        if !self.profile.hasSyncableAccount() {
+        if self.profile.hasSyncableAccount() {
             self.removeRefreshControl()
         }
     }
@@ -331,7 +331,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.textLabel?.text = Strings.RecentlyClosedTabsButtonTitle
         cell.detailTextLabel?.text = ""
         cell.imageView?.image = UIImage(named: "recently_closed")
-        cell.imageView?.backgroundColor = UIColor.Photon.White100
+        cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         if !hasRecentlyClosed {
             cell.textLabel?.alpha = 0.5
             cell.imageView?.alpha = 0.5
@@ -346,7 +346,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.textLabel?.text = Strings.SyncedTabsTableViewCellTitle
         cell.detailTextLabel?.text = self.syncDetailText
         cell.imageView?.image = UIImage(named: "synced_devices")
-        cell.imageView?.backgroundColor = .white
+        cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         cell.accessibilityIdentifier = "HistoryPanel.syncedDevicesCell"
         return cell
     }
@@ -543,6 +543,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         })
         return [delete]
     }
+
+    override func applyTheme() {
+        super.applyTheme()
+    }
 }
 
 extension HistoryPanel: HomePanelContextMenu {
@@ -568,11 +572,5 @@ extension HistoryPanel: HomePanelContextMenu {
         actions.append(pinTopSite)
         actions.append(removeAction)
         return actions
-    }
-}
-
-extension HistoryPanel: Themeable {
-    func applyTheme() {
-        tableView.reloadData()
     }
 }

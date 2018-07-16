@@ -7,7 +7,6 @@ import Shared
 import Storage
 
 private struct ActivityStreamHighlightCellUX {
-    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey70
     static let BorderWidth: CGFloat = 0.5
     static let CellSideOffset = 20
     static let TitleLabelOffset = 2
@@ -15,7 +14,6 @@ private struct ActivityStreamHighlightCellUX {
     static let SiteImageViewSize = CGSize(width: 99, height: UIDevice.current.userInterfaceIdiom == .pad ? 120 : 90)
     static let StatusIconSize = 12
     static let FaviconSize = CGSize(width: 45, height: 45)
-    static let DescriptionLabelColor = UIColor.Photon.Grey50
     static let SelectedOverlayColor = UIColor(white: 0.0, alpha: 0.25)
     static let CornerRadius: CGFloat = 3
     static let BorderColor = UIColor.Photon.Grey30
@@ -26,7 +24,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
     fileprivate lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeHeavyWeightAS
-        titleLabel.textColor = ActivityStreamHighlightCellUX.LabelColor
+        titleLabel.textColor = UIColor.theme.homePanel.activityStreamCellTitle
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 3
         return titleLabel
@@ -35,7 +33,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
     fileprivate lazy var descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
         descriptionLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
+        descriptionLabel.textColor = UIColor.theme.homePanel.activityStreamCellDescription
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
         return descriptionLabel
@@ -44,7 +42,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
     fileprivate lazy var domainLabel: UILabel = {
         let descriptionLabel = UILabel()
         descriptionLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        descriptionLabel.textColor = ActivityStreamHighlightCellUX.DescriptionLabelColor
+        descriptionLabel.textColor = UIColor.theme.homePanel.activityStreamCellDescription
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 1
         descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
@@ -218,7 +216,7 @@ class HighlightIntroCell: UICollectionViewCell {
     lazy var titleLabel: UILabel = {
         let textLabel = UILabel()
         textLabel.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
-        textLabel.textColor = UIColor.black
+        textLabel.textColor = UIColor.theme.homePanel.activityStreamCellTitle
         textLabel.numberOfLines = 1
         textLabel.adjustsFontSizeToFitWidth = true
         textLabel.minimumScaleFactor = 0.8
@@ -228,7 +226,7 @@ class HighlightIntroCell: UICollectionViewCell {
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
-        label.textColor = UIColor.Photon.Grey60
+        label.textColor = UIColor.theme.homePanel.activityStreamCellDescription
         label.numberOfLines = 0
         return label
     }()

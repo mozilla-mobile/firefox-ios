@@ -11,8 +11,6 @@ struct TwoLineCellUX {
     static let BadgeSize: CGFloat = 16
     static let BadgeMargin: CGFloat = 16
     static let BorderFrameSize: CGFloat = 32
-    static let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey80
-    static let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.Photon.Grey60 : UIColor.Photon.Grey50
     static let DetailTextTopMargin: CGFloat = 0
 }
 
@@ -157,7 +155,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        twoLineHelper.setupDynamicFonts()
+        twoLineHelper.setUpViews(self, textLabel: _textLabel, detailTextLabel: _detailTextLabel, imageView: imageView)
     }
 
     func mergeAccessibilityLabels(_ views: [AnyObject?]? = nil) {
@@ -185,8 +183,8 @@ private class TwoLineCellHelper {
             self.container?.backgroundColor = UIColor.clear
         }
 
-        textLabel.textColor = TwoLineCellUX.TextColor
-        detailTextLabel.textColor = TwoLineCellUX.DetailTextColor
+        textLabel.textColor = UIColor.theme.tableView.rowText
+        detailTextLabel.textColor = UIColor.theme.tableView.rowDetailText
         setupDynamicFonts()
 
         imageView.contentMode = .scaleAspectFill

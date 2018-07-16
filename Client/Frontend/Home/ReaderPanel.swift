@@ -24,7 +24,6 @@ private struct ReadingListTableViewCellUX {
 
     static let HostnameLabelBottomOffset: CGFloat = 11
 
-//    static let DeleteButtonBackgroundColor = UIColor.Photon.Red60
     static let DeleteButtonTitleColor = UIColor.Photon.White100
     static let DeleteButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
@@ -51,7 +50,7 @@ private struct ReadingListPanelUX {
     static let WelcomeScreenCircleSpacer = 10
 }
 
-class ReadingListTableViewCell: UITableViewCell {
+class ReadingListTableViewCell: UITableViewCell, Themeable {
     var title: String = "Example" {
         didSet {
             titleLabel.text = title
@@ -104,7 +103,6 @@ class ReadingListTableViewCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(hostnameLabel)
 
-        titleLabel.textColor = UIColor.theme.homePanel.readingListActive
         titleLabel.numberOfLines = 2
         titleLabel.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelTopOffset)
@@ -113,14 +111,13 @@ class ReadingListTableViewCell: UITableViewCell {
             make.bottom.lessThanOrEqualTo(hostnameLabel.snp.top).priority(1000)
         }
 
-        hostnameLabel.textColor = UIColor.theme.homePanel.readingListActive
         hostnameLabel.numberOfLines = 1
         hostnameLabel.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(self.contentView).offset(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)
             make.leading.trailing.equalTo(self.titleLabel)
         }
 
-        setupDynamicFonts()
+        applyTheme()
     }
 
     func setupDynamicFonts() {
@@ -128,8 +125,14 @@ class ReadingListTableViewCell: UITableViewCell {
         hostnameLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
     }
 
+    func applyTheme() {
+        titleLabel.textColor = UIColor.theme.homePanel.readingListActive
+        hostnameLabel.textColor = UIColor.theme.homePanel.readingListActive
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
+        applyTheme()
         setupDynamicFonts()
     }
 
@@ -206,7 +209,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.separatorInset = .zero
         tableView.layoutMargins = .zero
-        tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.register(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
 
         // Set an empty footer to prevent empty cells from appearing in the list.
@@ -215,8 +217,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         if #available(iOS 11.0, *) {
             tableView.dragDelegate = self
         }
-
-        view.backgroundColor = UIColor.theme.tableView.rowBackground
 
         if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
             records = newRecords
@@ -378,7 +378,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         let delete = UITableViewRowAction(style: .default, title: ReadingListTableViewCellUX.DeleteButtonTitleText) { [weak self] action, index in
             self?.deleteItem(atIndex: index)
         }
-//        delete.backgroundColor = ReadingListTableViewCellUX.DeleteButtonBackgroundColor
 
         let toggleText = record.unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText
         let unreadToggle = UITableViewRowAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (action, index) in
@@ -475,6 +474,9 @@ extension ReadingListPanel: UITableViewDragDelegate {
 
 extension ReadingListPanel: Themeable {
     func applyTheme() {
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        view.backgroundColor = UIColor.theme.tableView.rowBackground
+
         emptyStateOverlayView.removeFromSuperview()
         emptyStateOverlayView = createEmptyStateOverview()
 

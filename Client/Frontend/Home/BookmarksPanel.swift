@@ -435,6 +435,13 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         self.tableView.endUpdates()
         self.updateEmptyPanelState()
     }
+
+    override func applyTheme() {
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
+        super.applyTheme()
+    }
 }
 
 extension BookmarksPanel: HomePanelContextMenu {
@@ -507,29 +514,15 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
 fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
     var delegate: BookmarkFolderTableViewHeaderDelegate?
 
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.theme.homePanel.bookmarkCurrentFolderText
-        return label
-    }()
+    let titleLabel = UILabel()
+    let topBorder = UIView()
+    let bottomBorder = UIView()
 
     lazy var chevron: ChevronView = {
         let chevron = ChevronView(direction: .left)
         chevron.tintColor = UIColor.theme.general.highlightBlue
         chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
         return chevron
-    }()
-
-    lazy var topBorder: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
-        return view
-    }()
-
-    lazy var bottomBorder: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
-        return view
     }()
 
     override var textLabel: UILabel? {
@@ -572,6 +565,8 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
             make.left.right.bottom.equalTo(self)
             make.height.equalTo(0.5)
         }
+
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -581,14 +576,15 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
     @objc fileprivate func viewWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         delegate?.didSelectHeader()
     }
-}
 
-extension BookmarksPanel: Themeable {
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        applyTheme()
+    }
+
     func applyTheme() {
-        emptyStateOverlayView.removeFromSuperview()
-        emptyStateOverlayView = createEmptyStateOverlayView()
-        updateEmptyPanelState()
-
-        reloadData()
+        titleLabel.textColor = UIColor.theme.homePanel.bookmarkCurrentFolderText
+        topBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
+        bottomBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
     }
 }

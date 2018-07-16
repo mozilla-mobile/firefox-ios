@@ -24,9 +24,10 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
     fileprivate lazy var recentlyClosedHeader: UILabel = {
         let headerLabel = UILabel()
         headerLabel.text = Strings.RecentlyClosedTabsPanelTitle
+        headerLabel.textColor = UIColor.theme.tableView.headerTextDark
         headerLabel.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
         headerLabel.textAlignment = .center
-        headerLabel.backgroundColor = .white
+        headerLabel.backgroundColor = UIColor.theme.tableView.headerBackground
         return headerLabel
     }()
 

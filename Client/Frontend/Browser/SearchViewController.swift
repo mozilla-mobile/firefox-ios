@@ -70,9 +70,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     static var userAgent: String?
 
-    init(isPrivate: Bool) {
+    init(profile: Profile, isPrivate: Bool) {
         self.isPrivate = isPrivate
-        super.init(nibName: nil, bundle: nil)
+        super.init(profile: profile)
     }
 
     required init?(coder aDecoder: NSCoder) {

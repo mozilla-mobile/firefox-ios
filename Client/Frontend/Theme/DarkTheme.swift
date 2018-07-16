@@ -12,13 +12,15 @@ fileprivate let defaultTextAndTint = UIColor.Photon.Grey10
 fileprivate class DarkTableViewColor: TableViewColor {
     override var rowBackground: UIColor { return UIColor.Photon.Ink70 }
     override var rowText: UIColor { return defaultTextAndTint }
+    override var rowDetailText: UIColor { return UIColor.Photon.Grey30 }
     override var disabledRowText: UIColor { return UIColor.Photon.Grey40 }
     override var separator: UIColor { return UIColor.Photon.Grey60 }
     override var headerBackground: UIColor { return UIColor.Photon.Ink80 }
-    override var headerText: UIColor { return UIColor.Photon.Grey30 }
+    override var headerTextLight: UIColor { return UIColor.Photon.Grey30 }
+    override var headerTextDark: UIColor { return UIColor.Photon.Grey30 }
 //    override var rowActionAccessory: UIColor { return UIColor.Photon.Blue50 }
 //    override var controlTint: UIColor { return rowActionAccessory }
-//    override var syncText: UIColor { return defaultTextAndTint }
+    override var syncText: UIColor { return defaultTextAndTint }
 //    override var errorText: UIColor { return UIColor.Photon.Red50 }
 //    override var warningText: UIColor { return UIColor.Photon.Orange50 }
 }
@@ -28,6 +30,7 @@ fileprivate class DarkActionMenuColor: ActionMenuColor {
     override var iPhoneBackground: UIColor { return UIColor.Photon.Ink90.withAlphaComponent(0.7) }
     override var iPhoneBackgroundBlurStyle: UIBlurEffectStyle { return UIBlurEffectStyle.light }
     override var closeButtonBackground: UIColor { return defaultBackground }
+
 }
 
 fileprivate class DarkURLBarColor: URLBarColor {
@@ -116,15 +119,19 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     // var siteTableHeaderText: UIColor { return UIColor.Photon.Grey80 }
    // var siteTableHeaderBackground: UIColor { return UIColor.Photon.Grey10 }
 
-    override var topSiteDomain: UIColor { return defaultTextAndTint }
+    override var activityStreamHeaderText: UIColor { return UIColor.Photon.Grey30 }
+    override var activityStreamCellTitle: UIColor { return UIColor.Photon.Grey20 }
+    override var activityStreamCellDescription: UIColor { return UIColor.Photon.Grey30 }
 
+    override var topSiteDomain: UIColor { return defaultTextAndTint }
+    
+    override var downloadedFileIcon: UIColor { return UIColor.Photon.Grey30 }
+
+    override var historyHeaderIconsBackground: UIColor { return UIColor.clear }
 }
 
 fileprivate class DarkSnackBarColor: SnackBarColor {
-//    override var highlight: UIColor { return UIColor.Defaults.iOSTextHighlightBlue.withAlphaComponent(0.9) }
-//    override var highlightText: UIColor { return UIColor.Photon.Blue60 }
-//    override var border: UIColor { return UIColor.Photon.Grey30 }
-//    override var title: UIColor { return UIColor.Photon.Blue50 }
+// Use defaults
 }
 
 fileprivate class DarkGeneralColor: GeneralColor {
