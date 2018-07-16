@@ -6,6 +6,8 @@ import XCTest
 
 let testLoginPage = "http://wopr.norad.org/~sarentz/fxios/testpages/password.html"
 let savedLoginEntry = "test@example.com, https://wopr.norad.org"
+let urlLogin = "linkedin.com"
+let mailLogin = "iosmztest@mailinator.com"
 
 class SaveLoginTest: BaseTestCase {
 
@@ -109,5 +111,30 @@ class SaveLoginTest: BaseTestCase {
         // Clear Text
         app.buttons["Clear Search"].tap()
         XCTAssertEqual(app.tables["Login List"].cells.count, 1)
+    }
+
+    func testLogin() {
+        navigator.openURL(urlLogin)
+        waitUntilPageLoad()
+        app.webViews.links["Sign in"].tap()
+        waitforExistence(app.webViews.textFields["Email"])
+        app.webViews.textFields["Email"].tap()
+        app.webViews.textFields["Email"].typeText(mailLogin)
+
+        app.webViews.secureTextFields["Password"].tap()
+        app.webViews.secureTextFields["Password"].typeText("test15mz")
+
+        app.webViews.buttons["Sign in"].tap()
+        app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
+
+        // Clear Data and go to linkedin, fields should be filled in
+        navigator.goto(SettingsScreen)
+        navigator.performAction(Action.AcceptClearPrivateData)
+        navigator.openNewURL(urlString: urlLogin)
+        waitUntilPageLoad()
+        let emailValue = app.webViews.textFields["Email"].value!
+        XCTAssertEqual(emailValue as! String, mailLogin)
+        let passwordValue = app.webViews.secureTextFields["Password"].value!
+        XCTAssertEqual(passwordValue as! String, "••••••••")
     }
 }
