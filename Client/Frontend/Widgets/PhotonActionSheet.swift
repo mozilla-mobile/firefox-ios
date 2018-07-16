@@ -217,7 +217,13 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let maxHeight = self.view.frame.height - (style == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0)
+        var frameHeight: CGFloat
+        if #available(iOS 11.0, *) {
+            frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
+        } else {
+            frameHeight = self.view.frame.height
+        }
+        let maxHeight = frameHeight - (style == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0)
         tableView.snp.makeConstraints { make in
             heightConstraint?.deactivate()
             // The height of the menu should be no more than 85 percent of the screen
