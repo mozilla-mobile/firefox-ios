@@ -78,7 +78,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     fileprivate let CellIdentifier = "CellIdentifier"
     fileprivate let HeaderIdentifier = "HeaderIdentifier"
-    let profile: Profile!
+    let profile: Profile
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
     var tableView = UITableView()
