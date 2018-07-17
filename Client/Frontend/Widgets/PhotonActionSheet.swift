@@ -358,7 +358,7 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         titleLabel.numberOfLines = 1
-        titleLabel.textColor = UIColor.theme.tableView.headerText
+        titleLabel.textColor = UIColor.theme.tableView.headerTextLight
         return titleLabel
     }()
 

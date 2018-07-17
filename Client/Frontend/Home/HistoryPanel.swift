@@ -53,8 +53,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     // MARK: - Lifecycle
-    init() {
-        super.init(nibName: nil, bundle: nil)
+    override init(profile: Profile) {
+        super.init(profile: profile)
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
 
@@ -184,7 +184,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         self.refreshControl?.endRefreshing()
 
         // Remove the refresh control if the user has logged out in the meantime
-        if !self.profile.hasSyncableAccount() {
+        if self.profile.hasSyncableAccount() {
             self.removeRefreshControl()
         }
     }
@@ -331,7 +331,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.textLabel?.text = Strings.RecentlyClosedTabsButtonTitle
         cell.detailTextLabel?.text = ""
         cell.imageView?.image = UIImage(named: "recently_closed")
-        cell.imageView?.backgroundColor = UIColor.Photon.White100
+        cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         if !hasRecentlyClosed {
             cell.textLabel?.alpha = 0.5
             cell.imageView?.alpha = 0.5
@@ -346,7 +346,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.textLabel?.text = Strings.SyncedTabsTableViewCellTitle
         cell.detailTextLabel?.text = self.syncDetailText
         cell.imageView?.image = UIImage(named: "synced_devices")
-        cell.imageView?.backgroundColor = .white
+        cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         cell.accessibilityIdentifier = "HistoryPanel.syncedDevicesCell"
         return cell
     }
@@ -407,9 +407,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         guard hasRecentlyClosed else {
             return
         }
-        let nextController = RecentlyClosedTabsPanel()
+        let nextController = RecentlyClosedTabsPanel(profile: profile)
         nextController.homePanelDelegate = self.homePanelDelegate
-        nextController.profile = self.profile
         self.refreshControl?.endRefreshing()
         self.navigationController?.pushViewController(nextController, animated: true)
     }
@@ -543,6 +542,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
         })
         return [delete]
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
     }
 }
 

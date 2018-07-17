@@ -12,7 +12,7 @@ struct SiteTableViewControllerUX {
     static let HeaderTextMargin = CGFloat(16)
 }
 
-class SiteTableViewHeader: UITableViewHeaderFooterView {
+class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
     // I can't get drawRect to play nicely with the glass background. As a fallback
     // we just use views for the top and bottom borders.
     let topBorder = UIView()
@@ -25,13 +25,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-
-        topBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
-        bottomBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
-        contentView.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBackground
-
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
-        titleLabel.textColor = UIColor.theme.homePanel.siteTableHeaderText
 
         addSubview(topBorder)
         addSubview(bottomBorder)
@@ -57,10 +51,24 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
             make.right.lessThanOrEqualTo(contentView) // Fallback for when the right space constraint breaks
             make.centerY.equalTo(contentView)
         }
+
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        applyTheme()
+    }
+
+    func applyTheme() {
+        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
+        topBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
+        bottomBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
+        contentView.backgroundColor = UIColor.theme.tableView.headerBackground
     }
 }
 
@@ -70,13 +78,24 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
 class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     fileprivate let CellIdentifier = "CellIdentifier"
     fileprivate let HeaderIdentifier = "HeaderIdentifier"
-    var profile: Profile! {
-        didSet {
-            reloadData()
-        }
-    }
+    let profile: Profile
+
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
     var tableView = UITableView()
+
+    private override init(nibName: String?, bundle: Bundle?) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(profile: Profile) {
+        self.profile = profile
+        super.init(nibName: nil, bundle: nil)
+        applyTheme()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,8 +112,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag
-        tableView.backgroundColor = UIColor.theme.tableView.rowBackground
-        tableView.separatorColor = UIColor.theme.tableView.separator
+
         tableView.accessibilityIdentifier = "SiteTable"
         tableView.cellLayoutMarginsFollowReadableWidth = false
 
@@ -149,7 +167,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel?.textColor = UIColor.theme.tableView.headerText
+            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
             header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
         }
     }
@@ -164,6 +182,12 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
         return false
+    }
+
+    func applyTheme() {
+        tableView.backgroundColor = UIColor.theme.tableView.rowBackground
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        reloadData()
     }
 }
 

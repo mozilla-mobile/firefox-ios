@@ -772,10 +772,9 @@ class BrowserViewController: UIViewController {
         }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        searchController = SearchViewController(isPrivate: isPrivate)
+        searchController = SearchViewController(profile: profile, isPrivate: isPrivate)
         searchController!.searchEngines = profile.searchEngines
         searchController!.searchDelegate = self
-        searchController!.profile = self.profile
 
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
         searchLoader?.addListener(searchController!)
@@ -2679,6 +2678,8 @@ extension BrowserViewController: Themeable {
         ui.forEach { $0?.applyTheme() }
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
         setNeedsStatusBarAppearanceUpdate()
+
+        homePanelController?.applyTheme()
     }
 }
 

@@ -98,7 +98,7 @@ struct DateGroupedTableData<T : Equatable> {
 
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
-    var profile: Profile!
+    let profile: Profile
     var tableView = UITableView()
 
     private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged]
@@ -109,7 +109,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var fileExtensionIcons: [String : UIImage] = [:]
 
     // MARK: - Lifecycle
-    init() {
+    init(profile: Profile) {
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
@@ -250,7 +251,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return icon
     }
 
-    private func roundRectImageWithLabel(_ label: String, width: CGFloat, height: CGFloat, radius: CGFloat = 5.0, strokeWidth: CGFloat = 1.0, strokeColor: UIColor = UIColor.Photon.Grey60, fontSize: CGFloat = 9.0) -> UIImage? {
+    private func roundRectImageWithLabel(_ label: String, width: CGFloat, height: CGFloat, radius: CGFloat = 5.0, strokeWidth: CGFloat = 1.0, strokeColor: UIColor = UIColor.theme.homePanel.downloadedFileIcon, fontSize: CGFloat = 9.0) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0.0)
         let context = UIGraphicsGetCurrentContext()
         context?.setStrokeColor(strokeColor.cgColor)
@@ -419,5 +420,15 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         })
         share.backgroundColor = view.tintColor
         return [delete, share]
+    }
+}
+
+extension DownloadsPanel: Themeable {
+    func applyTheme() {
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
+
+        tableView.reloadData()
     }
 }

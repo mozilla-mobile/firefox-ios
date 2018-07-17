@@ -24,7 +24,7 @@ private struct TopSiteCellUX {
 /*
  *  The TopSite cell that appears in the ASHorizontalScrollView.
  */
-class TopSiteItemCell: UICollectionViewCell {
+class TopSiteItemCell: UICollectionViewCell, Themeable {
 
     var url: URL?
 
@@ -37,7 +37,6 @@ class TopSiteItemCell: UICollectionViewCell {
     lazy var pinImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage.templateImageNamed("pin_small")
-        imageView.tintColor = TopSiteCellUX.PinColor
         return imageView
     }()
 
@@ -46,8 +45,6 @@ class TopSiteItemCell: UICollectionViewCell {
         titleLabel.layer.masksToBounds = true
         titleLabel.textAlignment = .center
         titleLabel.font = TopSiteCellUX.TitleFont
-        titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
-        titleLabel.backgroundColor = UIColor.clear
         return titleLabel
     }()
 
@@ -56,20 +53,17 @@ class TopSiteItemCell: UICollectionViewCell {
         view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
         view.layer.masksToBounds = true
         view.layer.borderWidth = TopSiteCellUX.BorderWidth
-        view.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
         return view
     }()
 
     lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
-        selectedOverlay.backgroundColor = TopSiteCellUX.OverlayColor
         selectedOverlay.isHidden = true
         return selectedOverlay
     }()
 
     lazy var titleBorder: CALayer = {
         let border = CALayer()
-        border.backgroundColor = TopSiteCellUX.BorderColor.cgColor
         return border
     }()
 
@@ -170,8 +164,18 @@ class TopSiteItemCell: UICollectionViewCell {
                 self?.imageView.backgroundColor = color
             }
         })
+
+        applyTheme()
     }
 
+    func applyTheme() {
+        imageView.tintColor = TopSiteCellUX.PinColor
+        faviconBG.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
+        selectedOverlay.backgroundColor = TopSiteCellUX.OverlayColor
+        titleBorder.backgroundColor = TopSiteCellUX.BorderColor.cgColor
+        titleLabel.backgroundColor = UIColor.clear
+        titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
+    }
 }
 
 // An empty cell to show when a row is incomplete

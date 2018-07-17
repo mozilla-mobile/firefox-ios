@@ -24,7 +24,6 @@ private struct ReadingListTableViewCellUX {
 
     static let HostnameLabelBottomOffset: CGFloat = 11
 
-//    static let DeleteButtonBackgroundColor = UIColor.Photon.Red60
     static let DeleteButtonTitleColor = UIColor.Photon.White100
     static let DeleteButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
@@ -42,9 +41,7 @@ private struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenTopPadding: CGFloat = 16
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenHeaderTextColor = UIColor.Photon.Grey60
 
-    static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 220
     static let WelcomeScreenItemOffset = -20
 
@@ -53,7 +50,7 @@ private struct ReadingListPanelUX {
     static let WelcomeScreenCircleSpacer = 10
 }
 
-class ReadingListTableViewCell: UITableViewCell {
+class ReadingListTableViewCell: UITableViewCell, Themeable {
     var title: String = "Example" {
         didSet {
             titleLabel.text = title
@@ -106,7 +103,6 @@ class ReadingListTableViewCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(hostnameLabel)
 
-        titleLabel.textColor = UIColor.theme.homePanel.readingListActive
         titleLabel.numberOfLines = 2
         titleLabel.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelTopOffset)
@@ -115,14 +111,13 @@ class ReadingListTableViewCell: UITableViewCell {
             make.bottom.lessThanOrEqualTo(hostnameLabel.snp.top).priority(1000)
         }
 
-        hostnameLabel.textColor = UIColor.theme.homePanel.readingListActive
         hostnameLabel.numberOfLines = 1
         hostnameLabel.snp.makeConstraints { (make) -> Void in
             make.bottom.equalTo(self.contentView).offset(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)
             make.leading.trailing.equalTo(self.titleLabel)
         }
 
-        setupDynamicFonts()
+        applyTheme()
     }
 
     func setupDynamicFonts() {
@@ -130,8 +125,14 @@ class ReadingListTableViewCell: UITableViewCell {
         hostnameLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
     }
 
+    func applyTheme() {
+        titleLabel.textColor = UIColor.theme.homePanel.readingListActive
+        hostnameLabel.textColor = UIColor.theme.homePanel.readingListActive
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
+        applyTheme()
         setupDynamicFonts()
     }
 
@@ -175,7 +176,7 @@ class ReadingListTableViewCell: UITableViewCell {
 
 class ReadingListPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
-    var profile: Profile!
+    let profile: Profile
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
@@ -185,10 +186,13 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     fileprivate var records: [ReadingListItem]?
 
-    init() {
+    init(profile: Profile) {
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .DynamicFontChanged, object: nil)
+
+        applyTheme()
     }
 
     required init!(coder aDecoder: NSCoder) {
@@ -205,7 +209,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.separatorInset = .zero
         tableView.layoutMargins = .zero
-        tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.register(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
 
         // Set an empty footer to prevent empty cells from appearing in the list.
@@ -214,8 +217,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         if #available(iOS 11.0, *) {
             tableView.dragDelegate = self
         }
-
-        view.backgroundColor = UIColor.theme.tableView.rowBackground
 
         if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
             records = newRecords
@@ -282,7 +283,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
-        welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
         welcomeLabel.adjustsFontSizeToFitWidth = true
         welcomeLabel.snp.makeConstraints { make in
             make.centerX.equalTo(containerView)
@@ -296,7 +296,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         containerView.addSubview(readerModeLabel)
         readerModeLabel.text = NSLocalizedString("Open articles in Reader View by tapping the book icon when it appears in the title bar.", comment: "See http://mzl.la/1LXbDOL")
         readerModeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        readerModeLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readerModeLabel.numberOfLines = 0
         readerModeLabel.snp.makeConstraints { make in
             make.top.equalTo(welcomeLabel.snp.bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
@@ -315,7 +314,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         containerView.addSubview(readingListLabel)
         readingListLabel.text = NSLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
         readingListLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        readingListLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readingListLabel.numberOfLines = 0
         readingListLabel.snp.makeConstraints { make in
             make.top.equalTo(readerModeLabel.snp.bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
@@ -338,6 +336,10 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
             // And then center it in the overlay view that sits on top of the UITableView
             make.centerX.equalTo(overlayView)
+        }
+
+        [welcomeLabel, readerModeLabel, readingListLabel].forEach {
+            $0.textColor = UIColor.theme.homePanel.welcomeScreenText
         }
 
         return overlayView
@@ -376,7 +378,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         let delete = UITableViewRowAction(style: .default, title: ReadingListTableViewCellUX.DeleteButtonTitleText) { [weak self] action, index in
             self?.deleteItem(atIndex: index)
         }
-//        delete.backgroundColor = ReadingListTableViewCellUX.DeleteButtonBackgroundColor
 
         let toggleText = record.unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText
         let unreadToggle = UITableViewRowAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (action, index) in
@@ -468,5 +469,17 @@ extension ReadingListPanel: UITableViewDragDelegate {
 
     func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
         presentedViewController?.dismiss(animated: true)
+    }
+}
+
+extension ReadingListPanel: Themeable {
+    func applyTheme() {
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        view.backgroundColor = UIColor.theme.tableView.rowBackground
+
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverview()
+
+        refreshReadingList()
     }
 }

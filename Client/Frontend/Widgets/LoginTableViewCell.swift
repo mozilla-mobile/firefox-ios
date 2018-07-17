@@ -15,7 +15,7 @@ protocol LoginTableViewCellDelegate: AnyObject {
 private struct LoginTableViewCellUX {
     static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
     static let highlightedLabelTextColor = UIConstants.SystemBlueColor
-    static let highlightedLabelEditingTextColor = UIColor.theme.tableView.headerText
+    static let highlightedLabelEditingTextColor = UIColor.theme.tableView.headerTextLight
 
     static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
     static let descriptionLabelTextColor = UIColor.black

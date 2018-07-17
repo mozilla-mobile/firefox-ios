@@ -30,10 +30,14 @@ fileprivate let defaultTextAndTint = UIColor.Photon.Grey80
 class TableViewColor {
     var rowBackground: UIColor { return UIColor.Photon.White100 }
     var rowText: UIColor { return UIColor.Photon.Grey90 }
+    var rowDetailText: UIColor { return UIColor.Photon.Grey60 }
     var disabledRowText: UIColor { return UIColor.Photon.Grey40 }
     var separator: UIColor { return defaultSeparator }
     var headerBackground: UIColor { return defaultBackground }
-    var headerText: UIColor { return UIColor.Photon.Grey50 }
+    // Used for table headers in Settings and Photon menus
+    var headerTextLight: UIColor { return UIColor.Photon.Grey50 }
+    // Used for table headers in home panel tables
+    var headerTextDark: UIColor { return UIColor.Photon.Grey90 }
     var rowActionAccessory: UIColor { return UIColor.Photon.Blue50 }
     var controlTint: UIColor { return rowActionAccessory }
     var syncText: UIColor { return defaultTextAndTint }
@@ -128,17 +132,24 @@ class HomePanelColor {
     var welcomeScreenText: UIColor { return UIColor.Photon.Grey50 }
     var bookmarkIconBorder: UIColor { return UIColor.Photon.Grey30 }
     var bookmarkFolderBackground: UIColor { return UIColor.Photon.Grey10.withAlphaComponent(0.3) } 
-    var bookmarkFolderText: UIColor { return UIColor.Photon.Grey50 } 
+    var bookmarkFolderText: UIColor { return UIColor.Photon.Grey80 } 
     var bookmarkCurrentFolderText: UIColor { return UIColor.theme.general.highlightBlue }
+    var bookmarkBackNavCellBackground: UIColor { return UIColor.clear }
     
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
-    var siteTableHeaderText: UIColor { return UIColor.Photon.Grey80 }
-    var siteTableHeaderBackground: UIColor { return UIColor.Photon.Grey10 }
 
     var topSiteDomain: UIColor { return UIColor.black }
-    
-    var readingListActive: UIColor { return UIColor.Photon.Grey70 }
+
+    var activityStreamHeaderText: UIColor { return UIColor.Photon.Grey50 }
+    var activityStreamCellTitle: UIColor { return UIColor.black }
+    var activityStreamCellDescription: UIColor { return UIColor.Photon.Grey60 }
+
+    var readingListActive: UIColor { return defaultTextAndTint }
     var readingListDimmed: UIColor { return UIColor.Photon.Grey40 }
+    
+    var downloadedFileIcon: UIColor { return UIColor.Photon.Grey60 }
+    
+    var historyHeaderIconsBackground: UIColor { return UIColor.Photon.White100 }
 }
 
 class SnackBarColor {

@@ -72,7 +72,7 @@ class ThemeSettingsController: ThemedTableViewController {
             make.left.right.equalToSuperview().inset(16)
         }
         label.font = UIFont.systemFont(ofSize: UX.footerFontSize)
-        label.textColor = UIColor.theme.tableView.headerText
+        label.textColor = UIColor.theme.tableView.headerTextLight
         return footer
     }
 

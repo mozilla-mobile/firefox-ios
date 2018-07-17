@@ -11,12 +11,10 @@ struct TwoLineCellUX {
     static let BadgeSize: CGFloat = 16
     static let BadgeMargin: CGFloat = 16
     static let BorderFrameSize: CGFloat = 32
-    static let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey80
-    static let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.Photon.Grey60 : UIColor.Photon.Grey50
     static let DetailTextTopMargin: CGFloat = 0
 }
 
-class TwoLineTableViewCell: UITableViewCell {
+class TwoLineTableViewCell: UITableViewCell, Themeable {
     fileprivate let twoLineHelper = TwoLineCellHelper()
 
     let _textLabel = UILabel()
@@ -43,6 +41,8 @@ class TwoLineTableViewCell: UITableViewCell {
         layoutMargins = .zero
 
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
+
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -61,6 +61,11 @@ class TwoLineTableViewCell: UITableViewCell {
         self.selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0, left: TwoLineCellUX.ImageSize + 2 * TwoLineCellUX.BorderViewMargin, bottom: 0, right: 0)
         twoLineHelper.setupDynamicFonts()
+        applyTheme()
+    }
+
+    func applyTheme() {
+        twoLineHelper.applyTheme()
     }
 
     // Save background color on UITableViewCell "select" because it disappears in the default behavior
@@ -96,24 +101,13 @@ class TwoLineTableViewCell: UITableViewCell {
 }
 
 class SiteTableViewCell: TwoLineTableViewCell {
-    let borderView = UIView()
-
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-        twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
         twoLineHelper.layoutSubviews(accessoryWidth: self.contentView.frame.origin.x)
     }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
-class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
+class TwoLineHeaderFooterView: UITableViewHeaderFooterView, Themeable {
     fileprivate let twoLineHelper = TwoLineCellHelper()
 
     // UITableViewHeaderFooterView includes textLabel and detailTextLabel, so we can't override
@@ -144,10 +138,16 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
         contentView.addSubview(imageView)
 
         layoutMargins = .zero
+
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme() {
+        twoLineHelper.applyTheme()
     }
 
     override func layoutSubviews() {
@@ -157,7 +157,8 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        twoLineHelper.setupDynamicFonts()
+        twoLineHelper.setUpViews(self, textLabel: _textLabel, detailTextLabel: _detailTextLabel, imageView: imageView)
+        applyTheme()
     }
 
     func mergeAccessibilityLabels(_ views: [AnyObject?]? = nil) {
@@ -179,19 +180,22 @@ private class TwoLineCellHelper {
         self.detailTextLabel = detailTextLabel
         self.imageView = imageView
 
+        setupDynamicFonts()
+
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 6 //hmm
+        imageView.layer.masksToBounds = true
+    }
+
+    func applyTheme() {
         if let headerView = self.container as? UITableViewHeaderFooterView {
             headerView.contentView.backgroundColor = UIColor.clear
         } else {
             self.container?.backgroundColor = UIColor.clear
         }
 
-        textLabel.textColor = TwoLineCellUX.TextColor
-        detailTextLabel.textColor = TwoLineCellUX.DetailTextColor
-        setupDynamicFonts()
-
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 6 //hmm
-        imageView.layer.masksToBounds = true
+        textLabel.textColor = UIColor.theme.tableView.rowText
+        detailTextLabel.textColor = UIColor.theme.tableView.rowDetailText
     }
 
     func setupDynamicFonts() {

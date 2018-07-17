@@ -27,8 +27,7 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
-                let bookmarks = BookmarksPanel()
-                bookmarks.profile = profile
+                let bookmarks = BookmarksPanel(profile: profile)
                 let controller = UINavigationController(rootViewController: bookmarks)
                 controller.setNavigationBarHidden(true, animated: false)
                 // this re-enables the native swipe to pop gesture on UINavigationController for embedded, navigation bar-less UINavigationControllers
@@ -44,8 +43,7 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
-                let history = HistoryPanel()
-                history.profile = profile
+                let history = HistoryPanel(profile: profile)
                 let controller = UINavigationController(rootViewController: history)
                 controller.setNavigationBarHidden(true, animated: false)
                 controller.interactivePopGestureRecognizer?.delegate = nil
@@ -57,8 +55,7 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
-                let controller = ReadingListPanel()
-                controller.profile = profile
+                let controller = ReadingListPanel(profile: profile)
                 return controller
             },
             imageName: "ReadingList",
@@ -67,8 +64,7 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
-                let controller = DownloadsPanel()
-                controller.profile = profile
+                let controller = DownloadsPanel(profile: profile)
                 return controller
             },
             imageName: "Downloads",

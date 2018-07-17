@@ -15,15 +15,9 @@ private let log = Logger.browserLogger
 private struct RemoteTabsPanelUX {
     static let HeaderHeight = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
     static let RowHeight = SiteTableViewControllerUX.RowHeight
-    static let HeaderBackgroundColor = UIColor.Photon.Grey10
-
-    static let EmptyStateTitleTextColor = UIColor.Photon.Grey60
-
-    static let EmptyStateInstructionsTextColor = UIColor.Photon.Grey50
     static let EmptyStateInstructionsWidth = 170
     static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
     static let EmptyStateSignInButtonColor = UIColor.Photon.Blue40
-    static let EmptyStateSignInButtonTitleColor = UIColor.Photon.White100
     static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
     static let EmptyStateSignInButtonHeight = 44
     static let EmptyStateSignInButtonWidth = 200
@@ -69,8 +63,8 @@ class RemoteTabsPanel: UIViewController, HomePanel {
         tableViewController.profile = profile
         tableViewController.remoteTabsPanel = self
 
-        view.backgroundColor = UIColor.theme.homePanel.panelBackground
-
+        view.backgroundColor = UIColor.theme.tableView.rowBackground
+        tableViewController.tableView.backgroundColor = .clear
         addChildViewController(tableViewController)
         self.view.addSubview(tableViewController.view)
         self.view.addSubview(historyBackButton)
@@ -159,7 +153,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! TwoLineHeaderFooterView
         view.frame = CGRect(width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
         view.textLabel?.text = client.name
-        view.contentView.backgroundColor = RemoteTabsPanelUX.HeaderBackgroundColor
+        view.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
 
         /*
         * A note on timestamps.
@@ -292,14 +286,14 @@ class RemoteTabsErrorCell: UITableViewCell {
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
         titleLabel.textAlignment = .center
-        titleLabel.textColor = RemoteTabsPanelUX.EmptyStateTitleTextColor
+        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
         containerView.addSubview(titleLabel)
 
         let instructionsLabel = UILabel()
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         instructionsLabel.text = error.localizedString()
         instructionsLabel.textAlignment = .center
-        instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
+        instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
         instructionsLabel.numberOfLines = 0
         containerView.addSubview(instructionsLabel)
 
@@ -366,19 +360,19 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
         titleLabel.textAlignment = .center
-        titleLabel.textColor = RemoteTabsPanelUX.EmptyStateTitleTextColor
+        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
         contentView.addSubview(titleLabel)
 
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         instructionsLabel.text = Strings.EmptySyncedTabsPanelNotSignedInStateDescription
         instructionsLabel.textAlignment = .center
-        instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
+        instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
         instructionsLabel.numberOfLines = 0
         contentView.addSubview(instructionsLabel)
 
         signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
         signInButton.setTitle(Strings.FxASignInToSync, for: [])
-        signInButton.setTitleColor(RemoteTabsPanelUX.EmptyStateSignInButtonTitleColor, for: [])
+        signInButton.setTitleColor(UIColor.theme.tableView.headerTextDark, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
@@ -607,5 +601,11 @@ extension RemoteTabsTableViewController: HomePanelContextMenu {
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         return getDefaultContextMenuActions(for: site, homePanelDelegate: remoteTabsPanel?.homePanelDelegate)
+    }
+}
+
+extension RemoteTabsPanel: Themeable {
+    func applyTheme() {
+        tableViewController.tableView.reloadData()
     }
 }
