@@ -177,4 +177,22 @@ class SearchTests: BaseTestCase {
         navigator.goto(SearchSettings)
         XCTAssert(app.tables.staticTexts["Google"].exists)
     }
+
+    func testSearchWithFirefoxOption() {
+        navigator.openURL("mozilla.org/en-US/book")
+        waitUntilPageLoad()
+        // Select some text and long press to find the option
+        app.webViews.staticTexts["cloud"].press(forDuration: 1)
+        if !iPad() {
+            waitforExistence(app.menuItems["Show more items"])
+            app.menuItems["Show more items"].tap()
+        }
+        waitforExistence(app.menuItems["Search with Firefox"])
+        app.menuItems["Search with Firefox"].tap()
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: "google")
+        // Now there should be two tabs open
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numTab)
+    }
 }
