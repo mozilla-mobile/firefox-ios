@@ -114,6 +114,7 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var bookmarkFolderBackground: UIColor { return UIColor.Photon.Ink80 }
     override var bookmarkFolderText: UIColor { return UIColor.Photon.White100 }
     override var bookmarkCurrentFolderText: UIColor { return UIColor.Photon.White100 }
+    override var bookmarkBackNavCellBackground: UIColor { return UIColor.Photon.Ink70 }
     
    //  var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
     // var siteTableHeaderText: UIColor { return UIColor.Photon.Grey80 }
@@ -128,6 +129,9 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var downloadedFileIcon: UIColor { return UIColor.Photon.Grey30 }
 
     override var historyHeaderIconsBackground: UIColor { return UIColor.clear }
+
+    override var readingListActive: UIColor { return UIColor.Photon.Grey10 }
+    override var readingListDimmed: UIColor { return UIColor.Photon.Grey40 }
 }
 
 fileprivate class DarkSnackBarColor: SnackBarColor {

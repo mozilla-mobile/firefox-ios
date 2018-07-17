@@ -493,9 +493,6 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = UIColor.theme.homePanel.bookmarkFolderBackground
-        textLabel?.backgroundColor = UIColor.clear
-        textLabel?.textColor = UIColor.theme.homePanel.bookmarkFolderText
 
         imageView?.image = UIImage(named: "bookmarkFolder")
         accessoryType = .disclosureIndicator
@@ -508,6 +505,14 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        
+        self.backgroundColor = UIColor.theme.homePanel.bookmarkFolderBackground
+        textLabel?.backgroundColor = UIColor.clear
+        textLabel?.textColor = UIColor.theme.homePanel.bookmarkFolderText
     }
 }
 
@@ -586,5 +591,6 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
         titleLabel.textColor = UIColor.theme.homePanel.bookmarkCurrentFolderText
         topBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
         bottomBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
+        contentView.backgroundColor = UIColor.theme.homePanel.bookmarkBackNavCellBackground
     }
 }

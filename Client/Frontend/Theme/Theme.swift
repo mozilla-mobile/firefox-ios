@@ -134,6 +134,7 @@ class HomePanelColor {
     var bookmarkFolderBackground: UIColor { return UIColor.Photon.Grey10.withAlphaComponent(0.3) } 
     var bookmarkFolderText: UIColor { return UIColor.Photon.Grey80 } 
     var bookmarkCurrentFolderText: UIColor { return UIColor.theme.general.highlightBlue }
+    var bookmarkBackNavCellBackground: UIColor { return UIColor.clear }
     
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
 
@@ -143,7 +144,7 @@ class HomePanelColor {
     var activityStreamCellTitle: UIColor { return UIColor.black }
     var activityStreamCellDescription: UIColor { return UIColor.Photon.Grey60 }
 
-    var readingListActive: UIColor { return UIColor.Photon.Grey70 }
+    var readingListActive: UIColor { return defaultTextAndTint }
     var readingListDimmed: UIColor { return UIColor.Photon.Grey40 }
     
     var downloadedFileIcon: UIColor { return UIColor.Photon.Grey60 }
