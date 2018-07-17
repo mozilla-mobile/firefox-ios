@@ -48,7 +48,7 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
     
-    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .URL, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
         self.iconURL = iconURL
@@ -686,6 +686,7 @@ private class PhotonActionSheetCell: UITableViewCell {
                 if tabButton == nil {
                     tabButton = TabsButton()
                 }
+                /*
                 let renderer = UIGraphicsImageRenderer(size: (tabButton?.bounds.size)!)
                 let image = renderer.image { ctx in
                     tabButton?.drawHierarchy(in: (tabButton?.bounds)!, afterScreenUpdates: true)
@@ -693,7 +694,7 @@ private class PhotonActionSheetCell: UITableViewCell {
                 statusIcon.image = image
                 self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
                 statusIcon.tintColor = self.tintColor
-                /*
+                */
                 tabButton?.setTitle("8", for: .normal)
                 self.statusIcon.addSubview(tabButton!)
                 stackView.addArrangedSubview(tabButton!)
@@ -704,7 +705,7 @@ private class PhotonActionSheetCell: UITableViewCell {
                 let padding = PhotonActionSheetCell.Padding
                 stackView.snp.remakeConstraints { make in
                     make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding))
-                } */
+                } 
             default:
                 break
             }
