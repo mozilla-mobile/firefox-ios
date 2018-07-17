@@ -261,25 +261,29 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
         let sixMonthsAgo = Date.nowMicroseconds() - sixMonthsInMicroseconds
 
         let args: Args
-        let whereClause: String
+        let ftsWhereClause: String
+        let bookmarksWhereClause: String
         let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
 
         if let urlFilter = urlFilter?.trimmingCharacters(in: .whitespaces), !urlFilter.isEmpty {
+            let ftsArgs = ["*\(urlFilter)*"]
             let perWordFragment = "((url LIKE ?) OR (title LIKE ?))"
             let perWordArgs: (String) -> Args = { ["%\($0)%", "%\($0)%"] }
             let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(urlFilter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
 
             // No deleted item has a URL, so there is no need to explicitly add that here.
-            whereClause = "WHERE (\(filterFragment))\(whereFragment)"
+            ftsWhereClause = " WHERE (history_fts MATCH ?)\(whereFragment)"
+            bookmarksWhereClause = " WHERE (\(filterFragment))\(whereFragment)"
 
             if includeBookmarks {
                 // We'll need them twice: once to filter history, and once to filter bookmarks.
-                args = filterArgs + filterArgs
+                args = ftsArgs + filterArgs
             } else {
-                args = filterArgs
+                args = ftsArgs
             }
         } else {
-            whereClause = " WHERE (history.is_deleted = 0)\(whereFragment)"
+            ftsWhereClause = " WHERE (history.is_deleted = 0)\(whereFragment)"
+            bookmarksWhereClause = " WHERE (history.is_deleted = 0)\(whereFragment)"
             args = []
         }
 
@@ -296,13 +300,15 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
                     domains.id = history.domain_id
                 INNER JOIN visits ON
                     visits.siteID = history.id
+                INNER JOIN history_fts ON
+                    history_fts.rowid = history.rowid
             """
 
         if includeBookmarks {
             ungroupedSQL.append(" LEFT JOIN view_all_bookmarks ON view_all_bookmarks.url = history.url")
         }
 
-        ungroupedSQL.append(" " + whereClause.replacingOccurrences(of: "url", with: "history.url").replacingOccurrences(of: "title", with: "history.title"))
+        ungroupedSQL.append(ftsWhereClause)
 
         if includeBookmarks {
             ungroupedSQL.append(" AND view_all_bookmarks.url IS NULL")
@@ -360,8 +366,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
                 0 as maxFrecency,
                 1 AS is_bookmarked
             FROM \(TempTableAwesomebarBookmarks)
-            -- The columns match, so we can reuse this.
-            \(whereClause)
+            \(bookmarksWhereClause)
             GROUP BY url
             ORDER BY visitDate DESC LIMIT \(bookmarksLimit)
             """
