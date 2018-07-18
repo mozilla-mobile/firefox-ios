@@ -39,6 +39,12 @@ class ActivityStreamTest: BaseTestCase {
     func testDefaultSites() {
         // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
+        // Check their names so that test is added to Smoketest
+        XCTAssertTrue(TopSiteCellgroup.cells["twitter"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["amazon"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["wikipedia"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["youtube"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["facebook"].exists)
     }
 
     func testTopSitesAdd() {
