@@ -104,8 +104,23 @@ class WebsiteDataManagement: UITableViewController {
         if indexPath.section == SectionSites {
             print("hi")
         }
+        if indexPath.section == SectionButton {
+            clearprivatedata()
+        }
 
         tableView.deselectRow(at: indexPath, animated: false)
+    }
+
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        guard indexPath.section == SectionSites else { return false }
+        return true
+    }
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            websites.remove(at: indexPath.item)
+            tableView.reloadData()
+        }
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -123,6 +138,30 @@ class WebsiteDataManagement: UITableViewController {
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return SettingsUX.TableViewHeaderFooterHeight
+    }
+
+    func clearprivatedata() {
+        guard self.presentedViewController == nil else {
+            return
+        }
+        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: "Clear All", style: .destructive, handler: { _ in
+            print("Clear All")
+        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newTab")
+        controller.addAction(UIAlertAction(title: "Clear Last Week", style: .destructive, handler: { _ in
+            print("Clear Last Week")
+        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newPrivateTab")
+        controller.addAction(UIAlertAction(title: "Clear Last Day", style: .destructive, handler: { _ in
+            print("Clear Last Day")
+        }), accessibilityIdentifier: "toolbarTabButtonLongPress.closeTab")
+        controller.addAction(UIAlertAction(title: "Clear Last Hour", style: .destructive, handler: { _ in
+            print("Clear Last Hour")
+        }), accessibilityIdentifier: "toolbarTabButtonLongPress.closeTab")
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "toolbarTabButtonLongPress.cancel")
+        //controller.popoverPresentationController?.sourceRect = button.frame
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+        present(controller, animated: true, completion: nil)
     }
 
 }
