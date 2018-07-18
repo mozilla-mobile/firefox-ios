@@ -33,6 +33,9 @@ class TabDisplayManager: NSObject {
     private var tabObservers: TabObservers!
     fileprivate weak var tabDisplayer: TabDisplayer?
 
+    var searchedTabs: [Tab] = []
+    var searchActive: Bool = false
+
     var tabStore: [Tab] = [] //the actual datastore
     fileprivate var pendingUpdatesToTabs: [Tab] = [] //the datastore we are transitioning to
     fileprivate var needReloads: [Tab?] = [] // Tabs that need to be reloaded
@@ -47,6 +50,9 @@ class TabDisplayManager: NSObject {
     }
 
     private var tabsToDisplay: [Tab] {
+        if searchActive {
+            return searchedTabs
+        }
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
 
@@ -236,8 +242,6 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
 }
-
-
 
 extension TabDisplayManager: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
@@ -465,7 +469,6 @@ extension TabDisplayManager: TabManagerDelegate {
             }
         }
     }
-
 
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         if isRestoring {
