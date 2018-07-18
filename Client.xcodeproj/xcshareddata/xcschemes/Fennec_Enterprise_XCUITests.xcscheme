@@ -218,6 +218,9 @@
                   Identifier = "DragAndDropTests">
                </Test>
                <Test
+                  Identifier = "FindInPageTests/testFindFromMenu()">
+               </Test>
+               <Test
                   Identifier = "FirstRunTourTests/testFirstRunTour()">
                </Test>
                <Test
