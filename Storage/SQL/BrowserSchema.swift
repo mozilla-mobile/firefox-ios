@@ -360,6 +360,11 @@ open class BrowserSchema: Schema {
         )
         """
 
+    // We create an external content FTS4 table here that essentially creates
+    // an FTS index of the existing content in the `history` table. This table
+    // does not duplicate the content already in `history`, but it does need to
+    // be incrementally updated after the initial "rebuild" using triggers in
+    // order to stay in sync.
     let historyFTSCreate =
         "CREATE VIRTUAL TABLE \(TableHistoryFTS) USING fts4(content=\"\(TableHistory)\", url, title);" + "\n" +
         "INSERT INTO \(TableHistoryFTS)(\(TableHistoryFTS)) VALUES ('rebuild');"
@@ -640,24 +645,26 @@ open class BrowserSchema: Schema {
         FROM view_awesomebar_bookmarks b LEFT JOIN favicons f ON f.id = b.faviconID
         """
 
+    // These triggers are used to keep the FTS index of the `history` table
+    // in-sync after the initial "rebuild". The source for these triggers comes
+    // directly from the SQLite documentation on maintaining external content FTS4
+    // tables:
+    // https://www.sqlite.org/fts3.html#_external_content_fts4_tables_
     fileprivate let historyBeforeUpdateTrigger = """
         CREATE TRIGGER \(TriggerHistoryBeforeUpdate) BEFORE UPDATE ON \(TableHistory) BEGIN
           DELETE FROM \(TableHistoryFTS) WHERE docid=old.rowid;
         END
         """
-
     fileprivate let historyBeforeDeleteTrigger = """
         CREATE TRIGGER \(TriggerHistoryBeforeDelete) BEFORE DELETE ON \(TableHistory) BEGIN
           DELETE FROM \(TableHistoryFTS) WHERE docid=old.rowid;
         END
         """
-
     fileprivate let historyAfterUpdateTrigger = """
         CREATE TRIGGER \(TriggerHistoryAfterUpdate) AFTER UPDATE ON \(TableHistory) BEGIN
           INSERT INTO \(TableHistoryFTS)(docid, url, title) VALUES (new.rowid, new.url, new.title);
         END
         """
-
     fileprivate let historyAfterInsertTrigger = """
         CREATE TRIGGER \(TriggerHistoryAfterInsert) AFTER INSERT ON \(TableHistory) BEGIN
           INSERT INTO \(TableHistoryFTS)(docid, url, title) VALUES (new.rowid, new.url, new.title);

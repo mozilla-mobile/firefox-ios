@@ -74,6 +74,15 @@ func getLocalFrecencySQL() -> String {
     return "\(visitCountExpression) * max(2, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
+fileprivate func escapeFTSSearchString(_ search: String) -> String {
+    // Remove double-quotes and split search string on whitespace.
+    let words = search.replacingOccurrences(of: "\"", with: "").components(separatedBy: .whitespaces)
+
+    // Remove empty strings, wrap each word in "*", then join it
+    // all back together with spaces inside of double-quotes.
+    return "\"" + words.filter({ !$0.isEmpty }).map({ "*\($0)*" }).joined(separator: " ") + "\""
+}
+
 fileprivate func computeWordsWithFilter(_ filter: String) -> [String] {
     // Split filter on whitespace.
     let words = filter.components(separatedBy: .whitespaces)
@@ -405,7 +414,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
         let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
 
         if let urlFilter = urlFilter?.trimmingCharacters(in: .whitespaces), !urlFilter.isEmpty {
-            let ftsArgs = ["*\(urlFilter)*"]
+            let ftsArgs = [escapeFTSSearchString(urlFilter)]
             let perWordFragment = "((url LIKE ?) OR (title LIKE ?))"
             let perWordArgs: (String) -> Args = { ["%\($0)%", "%\($0)%"] }
             let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(urlFilter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
