@@ -4,6 +4,7 @@
 
 import UIKit
 import Shared
+import WebKit
 
 private let SectionSites = 0
 private let SectionButton = 1
@@ -16,7 +17,7 @@ class WebsiteDataManagement: UITableViewController {
     fileprivate typealias DefaultCheckedState = Bool
     let searchController = UISearchController(searchResultsController: nil)
 
-    var websites: [String] = ["abcde.com", "abcde.org", "abcde.gov"]
+    var websites: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,21 @@ class WebsiteDataManagement: UITableViewController {
         definesPresentationContext = true
 
         //title = Strings.SettingsDataManagementTitle
+
+        //get websites
+        let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases])
+        let dataStore = WKWebsiteDataStore.default()
+        dataStore.fetchDataRecords(ofTypes: dataTypes) { (records) in
+            for record in records {
+                self.websites.append(record.displayName)
+//                if record.displayName.contains("cnn") {
+//                    dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: [record], completionHandler: {
+//                        print("Deleted: " + record.displayName);
+//                    })
+//                }
+            }
+            self.tableView.reloadData()
+        }
 
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
