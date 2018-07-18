@@ -218,7 +218,7 @@ class TabTrayController: UIViewController {
         searchBarHolder.snp.makeConstraints { make in
             make.leading.equalTo(view.safeArea.leading)
             make.trailing.equalTo(view.safeArea.trailing)
-            make.height.equalTo(64)
+            make.height.equalTo(TabTrayControllerUX.SearchBarHeight)
             self.tabLayoutDelegate.searchHeightConstraint = make.bottom.equalTo(self.topLayoutGuide.snp.bottom).constraint
         }
         searchBar.snp.makeConstraints { make in
@@ -359,7 +359,6 @@ extension TabTrayController: UITextFieldDelegate {
         }
     }
 }
-
 
 extension TabTrayController: TabDisplayer {
 
@@ -561,7 +560,6 @@ extension TabTrayController: ClientPickerViewControllerDelegate {
     }
 }
 
-
 extension TabTrayController {
     func removeTab(tab: Tab) {
         // when removing the last tab (only in normal mode) we will automatically open a new tab.
@@ -656,7 +654,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
         }
         if checkRubberbandingForDelta(delta, for: scrollView) {
 
-            let offset = clamp(abs(scrollView.contentOffset.y), min:0, max:TabTrayControllerUX.SearchBarHeight)
+            let offset = clamp(abs(scrollView.contentOffset.y), min: 0, max: TabTrayControllerUX.SearchBarHeight)
             searchHeightConstraint?.update(offset: offset)
             scrollView.contentInset = UIEdgeInsets(top: offset, left: 0, bottom: UIConstants.BottomToolbarHeight, right: 0)
         } else {
@@ -1069,7 +1067,6 @@ class TabCell: UICollectionViewCell {
         delegate?.tabCellDidClose(self)
     }
 }
-
 
 class SearchBarTextField: UITextField {
     static let leftInset = CGFloat(18)

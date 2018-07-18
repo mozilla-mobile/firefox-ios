@@ -243,8 +243,6 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 }
 
-
-
 extension TabDisplayManager: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
         assertIsMainThread("UICollectionView changes can only be performed from the main thread")
@@ -471,7 +469,6 @@ extension TabDisplayManager: TabManagerDelegate {
             }
         }
     }
-
 
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         if isRestoring {
