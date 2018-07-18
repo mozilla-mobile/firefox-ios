@@ -212,6 +212,9 @@
                   Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
                </Test>
                <Test
+                  Identifier = "FindInPageTests/testFindFromMenu()">
+               </Test>
+               <Test
                   Identifier = "FirstRunTourTests/testFirstRunTour()">
                </Test>
                <Test
