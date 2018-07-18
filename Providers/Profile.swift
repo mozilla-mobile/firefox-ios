@@ -443,6 +443,10 @@ open class BrowserProfile: Profile {
     }
 
     public func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success {
+        func clientForRemoteDevice(_ remoteDevice: RemoteDevice) -> RemoteClient? {
+            return clients.find({ $0.fxaDeviceId == remoteDevice.id })
+        }
+
         guard let account = self.getAccount() else {
             return deferMaybe(NoAccountError())
         }
@@ -463,26 +467,11 @@ open class BrowserProfile: Profile {
             }
         }
 
-        let deferredRemoteDevices = fxaDeviceIds.map { fxaDeviceId in
-            return self.remoteClientsAndTabs.getRemoteDevice(fxaDeviceId: fxaDeviceId)
-        }
-
         let result = Success()
 
-        all(deferredRemoteDevices).upon { maybeRemoteDevices in
-            var newRemoteDevices: [RemoteDevice] = []
-            var oldRemoteClients: [RemoteClient] = []
-            let remoteDevices = maybeRemoteDevices.compactMap({ $0.successValue as? RemoteDevice })
-
-            for remoteDevice in remoteDevices {
-                if account.commandsClient.sendTab.isDeviceCompatible(remoteDevice) {
-                    newRemoteDevices.append(remoteDevice)
-                } else {
-                    if let oldRemoteClient = clients.find({ $0.fxaDeviceId == remoteDevice.id }) {
-                        oldRemoteClients.append(oldRemoteClient)
-                    }
-                }
-            }
+        self.remoteClientsAndTabs.getRemoteDevices() >>== { remoteDevices in
+            let newRemoteDevices = remoteDevices.filter({ account.commandsClient.sendTab.isDeviceCompatible($0) })
+            var oldRemoteClients = remoteDevices.filter({ !account.commandsClient.sendTab.isDeviceCompatible($0) }).compactMap({ clientForRemoteDevice($0) })
 
             func sendViaSyncFallback() {
                 if oldRemoteClients.isEmpty {
@@ -501,7 +490,7 @@ open class BrowserProfile: Profile {
                 account.commandsClient.sendTab.send(to: newRemoteDevices, url: item.url, title: item.title ?? "") >>== { report in
                     for failedRemoteDevice in report.failed {
                         log.debug("Failed to send a tab with FxA commands for \(failedRemoteDevice.name). Falling back on the Sync back-end")
-                        if let oldRemoteClient = clients.find({ $0.fxaDeviceId == failedRemoteDevice.id }) {
+                        if let oldRemoteClient = clientForRemoteDevice(failedRemoteDevice) {
                             oldRemoteClients.append(oldRemoteClient)
                         }
                     }

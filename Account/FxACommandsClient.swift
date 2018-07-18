@@ -109,26 +109,25 @@ public class FxACommandsClient {
             let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL)
             return client.devices(withSessionToken: sessionToken) >>== { response in
                 let devices = response.devices
-                var items: [FxACommandSendTabItem] = []
 
-                for command in commands {
+                func handleCommand(_ command: FxACommand) -> FxACommandSendTabItem? {
                     guard let commandName = command.data["command"].string,
                         let encrypted = command.data["payload"]["encrypted"].string,
                         let senderDeviceID = command.data["sender"].string,
                         let sender = devices.find({ $0.id == senderDeviceID }) else {
-                            continue
+                        return nil
                     }
 
                     switch commandName {
                     case FxACommandSendTab.Name:
-                        if let item = self.sendTab.handle(sender: sender, encrypted: encrypted) {
-                            items.append(item)
-                        }
+                        return self.sendTab.handle(sender: sender, encrypted: encrypted)
                     default:
                         log.info("Unknown command: \(commandName)")
+                        return nil
                     }
                 }
 
+                let items = commands.compactMap({ handleCommand($0) })
                 return deferMaybe(items)
             }
         }
@@ -209,24 +208,12 @@ open class FxACommandSendTab {
             }
         }
 
-        let result = all(deferreds).bind { results -> Deferred<Maybe<FxACommandSendTabReport>> in
-            var succeeded: [RemoteDevice] = []
-            var failed: [RemoteDevice] = []
-
-            for result in results {
-                if let tuple = result.successValue {
-                    if tuple.success {
-                        succeeded.append(tuple.device)
-                    } else {
-                        failed.append(tuple.device)
-                    }
-                }
-            }
-
+        return all(deferreds).bind { results in
+            let tuples = results.compactMap({ $0.successValue })
+            let succeeded = tuples.filter({ $0.success }).map({ $0.device })
+            let failed = tuples.filter({ !$0.success }).map({ $0.device })
             return deferMaybe(FxACommandSendTabReport(succeeded: succeeded, failed: failed))
         }
-
-        return result
     }
 
     public func isDeviceCompatible(_ device: RemoteDevice) -> Bool {

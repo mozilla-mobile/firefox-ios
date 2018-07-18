@@ -75,8 +75,8 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferMaybe(-1)
     }
 
-    open func getRemoteDevice(fxaDeviceId: String) -> Deferred<Maybe<RemoteDevice?>> {
-        return deferMaybe(nil)
+    open func getRemoteDevices() -> Deferred<Maybe<[RemoteDevice]>> {
+        return deferMaybe([])
     }
 
     open func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {

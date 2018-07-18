@@ -392,7 +392,7 @@ open class FirefoxAccount {
     }
 
     open func availableCommands() -> JSON {
-        guard let sendTabKey = commandsClient.sendTab.getEncryptedKey() else {
+        guard AppConstants.MOZ_FXA_MESSAGES, let sendTabKey = commandsClient.sendTab.getEncryptedKey() else {
             return JSON()
         }
 
