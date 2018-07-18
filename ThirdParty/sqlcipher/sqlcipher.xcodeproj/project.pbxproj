@@ -154,6 +154,8 @@
 					"-DSQLITE_TEMP_STORE=2",
 					"-DSQLITE_THREADSAFE=2",
 					"-DSQLCIPHER_CRYPTO_CC",
+					"-DSQLITE_ENABLE_FTS3",
+					"-DSQLITE_ENABLE_FTS3_PARENTHESIS",
 				);
 				"OTHER_CFLAGS[arch=armv6]" = (
 					"-mno-thumb",
@@ -161,6 +163,8 @@
 					"-DSQLITE_TEMP_STORE=2",
 					"-DSQLITE_THREADSAFE=2",
 					"-DSQLCIPHER_CRYPTO_CC",
+					"-DSQLITE_ENABLE_FTS3",
+					"-DSQLITE_ENABLE_FTS3_PARENTHESIS",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = sqlcipher;
@@ -191,6 +195,8 @@
 					"-DSQLITE_TEMP_STORE=2",
 					"-DSQLITE_THREADSAFE=2",
 					"-DSQLCIPHER_CRYPTO_CC",
+					"-DSQLITE_ENABLE_FTS3",
+					"-DSQLITE_ENABLE_FTS3_PARENTHESIS",
 				);
 				"OTHER_CFLAGS[arch=armv6]" = (
 					"-mno-thumb",
@@ -200,6 +206,8 @@
 					"-DSQLITE_TEMP_STORE=2",
 					"-DSQLITE_THREADSAFE=2",
 					"-DSQLCIPHER_CRYPTO_CC",
+					"-DSQLITE_ENABLE_FTS3",
+					"-DSQLITE_ENABLE_FTS3_PARENTHESIS",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = sqlcipher;

@@ -24,6 +24,7 @@ let TablePendingBookmarksDeletions = "pending_deletions"               // Added 
 
 let TableFavicons = "favicons"
 let TableHistory = "history"
+let TableHistoryFTS = "history_fts"                                    // Added in v35.
 let TableCachedTopSites = "cached_top_sites"
 let TablePinnedTopSites = "pinned_top_sites"
 let TableDomains = "domains"
@@ -65,12 +66,18 @@ let IndexBookmarksMirrorStructureChild = "idx_bookmarksMirrorStructure_child"   
 let IndexPageMetadataCacheKey = "idx_page_metadata_cache_key_uniqueindex" // Added in v19
 let IndexPageMetadataSiteURL = "idx_page_metadata_site_url_uniqueindex" // Added in v21
 
+let TriggerHistoryBeforeUpdate = "t_history_beforeupdate" // Added in v35
+let TriggerHistoryBeforeDelete = "t_history_beforedelete" // Added in v35
+let TriggerHistoryAfterUpdate = "t_history_afterupdate" // Added in v35
+let TriggerHistoryAfterInsert = "t_history_afterinsert" // Added in v35
+
 private let AllTables: [String] = [
     TableDomains,
     TableFavicons,
     TableFaviconSites,
 
     TableHistory,
+    TableHistoryFTS,
     TableVisits,
     TableCachedTopSites,
 
@@ -120,7 +127,14 @@ private let AllIndices: [String] = [
     IndexPageMetadataSiteURL,
 ]
 
-private let AllTablesIndicesAndViews: [String] = AllViews + AllIndices + AllTables
+private let AllTriggers: [String] = [
+    TriggerHistoryBeforeUpdate,
+    TriggerHistoryBeforeDelete,
+    TriggerHistoryAfterUpdate,
+    TriggerHistoryAfterInsert,
+]
+
+private let AllTablesIndicesTriggersAndViews: [String] = AllViews + AllTriggers + AllIndices + AllTables
 
 private let log = Logger.syncLogger
 
@@ -129,7 +143,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 34    // Bug 1409777.
+    static let DefaultVersion = 35    // Bug 1173164.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -345,6 +359,15 @@ open class BrowserSchema: Schema {
             is_bookmarked INTEGER
         )
         """
+
+    // We create an external content FTS4 table here that essentially creates
+    // an FTS index of the existing content in the `history` table. This table
+    // does not duplicate the content already in `history`, but it does need to
+    // be incrementally updated after the initial "rebuild" using triggers in
+    // order to stay in sync.
+    let historyFTSCreate =
+        "CREATE VIRTUAL TABLE \(TableHistoryFTS) USING fts4(content=\"\(TableHistory)\", url, title);" + "\n" +
+        "INSERT INTO \(TableHistoryFTS)(\(TableHistoryFTS)) VALUES ('rebuild');"
 
     let indexPageMetadataCacheKeyCreate =
         "CREATE UNIQUE INDEX IF NOT EXISTS idx_page_metadata_cache_key_uniqueindex ON page_metadata (cache_key)"
@@ -622,6 +645,32 @@ open class BrowserSchema: Schema {
         FROM view_awesomebar_bookmarks b LEFT JOIN favicons f ON f.id = b.faviconID
         """
 
+    // These triggers are used to keep the FTS index of the `history` table
+    // in-sync after the initial "rebuild". The source for these triggers comes
+    // directly from the SQLite documentation on maintaining external content FTS4
+    // tables:
+    // https://www.sqlite.org/fts3.html#_external_content_fts4_tables_
+    fileprivate let historyBeforeUpdateTrigger = """
+        CREATE TRIGGER \(TriggerHistoryBeforeUpdate) BEFORE UPDATE ON \(TableHistory) BEGIN
+          DELETE FROM \(TableHistoryFTS) WHERE docid=old.rowid;
+        END
+        """
+    fileprivate let historyBeforeDeleteTrigger = """
+        CREATE TRIGGER \(TriggerHistoryBeforeDelete) BEFORE DELETE ON \(TableHistory) BEGIN
+          DELETE FROM \(TableHistoryFTS) WHERE docid=old.rowid;
+        END
+        """
+    fileprivate let historyAfterUpdateTrigger = """
+        CREATE TRIGGER \(TriggerHistoryAfterUpdate) AFTER UPDATE ON \(TableHistory) BEGIN
+          INSERT INTO \(TableHistoryFTS)(docid, url, title) VALUES (new.rowid, new.url, new.title);
+        END
+        """
+    fileprivate let historyAfterInsertTrigger = """
+        CREATE TRIGGER \(TriggerHistoryAfterInsert) AFTER INSERT ON \(TableHistory) BEGIN
+          INSERT INTO \(TableHistoryFTS)(docid, url, title) VALUES (new.rowid, new.url, new.title);
+        END
+        """
+
     fileprivate let pendingBookmarksDeletions = """
         CREATE TABLE IF NOT EXISTS pending_deletions (
             id TEXT PRIMARY KEY REFERENCES bookmarksBuffer(guid) ON DELETE CASCADE
@@ -805,6 +854,7 @@ open class BrowserSchema: Schema {
             syncCommandsTableCreate,
             clientsTableCreate,
             tabsTableCreate,
+            historyFTSCreate,
 
             // Indices.
             indexBufferStructureParentIdx,
@@ -813,6 +863,12 @@ open class BrowserSchema: Schema {
             indexMirrorStructureChild,
             indexShouldUpload,
             indexSiteIDDate,
+
+            // Triggers.
+            historyBeforeUpdateTrigger,
+            historyBeforeDeleteTrigger,
+            historyAfterUpdateTrigger,
+            historyAfterInsertTrigger,
 
             // Views.
             self.localBookmarksView,
@@ -826,9 +882,9 @@ open class BrowserSchema: Schema {
             awesomebarBookmarksWithIconsView,
         ]
 
-        assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
+        assert(queries.count == AllTablesIndicesTriggersAndViews.count, "Did you forget to add your table, index, trigger, or view to the list?")
 
-        log.debug("Creating \(queries.count) tables, views, and indices.")
+        log.debug("Creating \(queries.count) tables, views, triggers, and indices.")
 
         return self.run(db, queries: queries) &&
                self.prepopulateRootFolders(db)
@@ -1256,6 +1312,21 @@ open class BrowserSchema: Schema {
                 "DELETE FROM page_metadata WHERE length(site_url) > 65536",
                 "DELETE FROM bookmarksLocal WHERE is_deleted = 0 AND length(bmkUri) > 65536",
                 "UPDATE bookmarksLocal SET title = substr(title, 1, 4096) WHERE is_deleted = 0 AND length(title) > 4096",
+                ]) {
+                return false
+            }
+        }
+
+        if from < 35 && to >= 35 {
+            // Create a full-text search index from the `history` table and
+            // triggers for keeping the FTS index in-sync with INSERTs, UPDATEs,
+            // and DELETEs to the `history` table.
+            if !self.run(db, queries: [
+                historyFTSCreate,
+                historyBeforeUpdateTrigger,
+                historyBeforeDeleteTrigger,
+                historyAfterUpdateTrigger,
+                historyAfterInsertTrigger,
                 ]) {
                 return false
             }

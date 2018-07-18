@@ -114,4 +114,17 @@ public struct AppConstants {
             return false
         #endif
     }()
+
+    ///  Toggle full-text search for Awesomebar
+    public static let MOZ_ENABLE_HISTORY_FTS: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+        return false
+        #elseif MOZ_CHANNEL_BETA
+        return true
+        #elseif MOZ_CHANNEL_FENNEC
+        return true
+        #else
+        return true
+        #endif
+    }()
 }
