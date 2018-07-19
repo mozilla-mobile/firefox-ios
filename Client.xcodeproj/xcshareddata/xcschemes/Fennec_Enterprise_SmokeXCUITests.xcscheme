@@ -311,28 +311,7 @@
                   Identifier = "DragAndDropTests">
                </Test>
                <Test
-                  Identifier = "FindInPageTests/testBarDissapearsWhenOpeningTabsTray()">
-               </Test>
-               <Test
-                  Identifier = "FindInPageTests/testBarDissapearsWhenReloading()">
-               </Test>
-               <Test
-                  Identifier = "FindInPageTests/testFindFromSelection()">
-               </Test>
-               <Test
-                  Identifier = "FindInPageTests/testFindInLargeDoc()">
-               </Test>
-               <Test
-                  Identifier = "FindInPageTests/testFindInPageResultsPageShowHideContent()">
-               </Test>
-               <Test
-                  Identifier = "FindInPageTests/testFindInPageTwoWordsSearch()">
-               </Test>
-               <Test
-                  Identifier = "FindInPageTests/testFindInPageTwoWordsSearchLargeDoc()">
-               </Test>
-               <Test
-                  Identifier = "FindInPageTests/testQueryWithNoMatches()">
+                  Identifier = "FindInPageTests">
                </Test>
                <Test
                   Identifier = "FirstRunTourTests/testShowTourFromSettings()">
@@ -543,6 +522,9 @@
                </Test>
                <Test
                   Identifier = "SyncUITests/testUIFromSettings()">
+               </Test>
+               <Test
+                  Identifier = "TabTraySearchTabsTests">
                </Test>
                <Test
                   Identifier = "ThirdPartySearchTest">
