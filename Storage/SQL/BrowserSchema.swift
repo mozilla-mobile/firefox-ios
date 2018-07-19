@@ -143,7 +143,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 35    // Bug 1173164.
+    static let DefaultVersion = 36    // Bug 1476881.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -366,8 +366,11 @@ open class BrowserSchema: Schema {
     // be incrementally updated after the initial "rebuild" using triggers in
     // order to stay in sync.
     let historyFTSCreate =
-        "CREATE VIRTUAL TABLE \(TableHistoryFTS) USING fts4(content=\"\(TableHistory)\", url, title);" + "\n" +
-        "INSERT INTO \(TableHistoryFTS)(\(TableHistoryFTS)) VALUES ('rebuild');"
+        "CREATE VIRTUAL TABLE \(TableHistoryFTS) USING fts4(content=\"\(TableHistory)\", url, title)"
+
+    // This query rebuilds the FTS index of the `history_fts` table.
+    let historyFTSRebuild =
+        "INSERT INTO \(TableHistoryFTS)(\(TableHistoryFTS)) VALUES ('rebuild')"
 
     let indexPageMetadataCacheKeyCreate =
         "CREATE UNIQUE INDEX IF NOT EXISTS idx_page_metadata_cache_key_uniqueindex ON page_metadata (cache_key)"
@@ -1327,6 +1330,15 @@ open class BrowserSchema: Schema {
                 historyBeforeDeleteTrigger,
                 historyAfterUpdateTrigger,
                 historyAfterInsertTrigger,
+                ]) {
+                return false
+            }
+        }
+
+        if from < 36 && to >= 36 {
+            // Rebuild the FTS index for the `history_fts` table.
+            if !self.run(db, queries: [
+                historyFTSRebuild,
                 ]) {
                 return false
             }
