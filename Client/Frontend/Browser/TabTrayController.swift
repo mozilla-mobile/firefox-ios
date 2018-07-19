@@ -59,7 +59,6 @@ class TabTrayController: UIViewController {
         let searchBar = SearchBarTextField()
         searchBar.backgroundColor = UIColor.Photon.Grey60
         searchBar.layer.cornerRadius = 4
-
         searchBar.layer.masksToBounds = true
         searchBar.leftView = UIImageView(image: UIImage(named: "quickSearch"))
         searchBar.leftViewMode = .unlessEditing
@@ -144,14 +143,9 @@ class TabTrayController: UIViewController {
         guard notification.name == .DynamicFontChanged else { return }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
 // MARK: View Controller Callbacks
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viwdidload")
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
         collectionView.alwaysBounceVertical = true
@@ -168,7 +162,6 @@ class TabTrayController: UIViewController {
         searchBarHolder.backgroundColor = UIColor.Photon.Grey70
         [collectionView, toolbar, searchBarHolder, cancelButton].forEach { view.addSubview($0) }
         makeConstraints()
-
 
         // The statusBar needs a background color
         let statusBarBG = UIView()
