@@ -180,11 +180,11 @@ class TabManagerTests: XCTestCase {
         manager.addDelegate(delegate)
 
         let didSelect = MethodSpy(functionName: "tabManager(_:didSelectedTabChange:previous:)") { tabs in
-            let next = tabs[0]!
-            let previous = tabs[1]!
+            let next = tabs[0]
+            let previous = tabs[1]
             XCTAssertTrue(previous != next)
-            XCTAssertTrue(previous == tab)
-            XCTAssertFalse(next.isPrivate)
+            XCTAssertTrue(previous == nil)
+            XCTAssertFalse(next!.isPrivate)
         }
         delegate.expect([willRemove, didRemove, willAdd, didAdd, didSelect])
         manager.removeTab(tab)
