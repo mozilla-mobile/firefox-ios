@@ -83,6 +83,9 @@ extension UIColor {
         static let Grey90A80 = UIColor(rgba: 0x0c0c0dcc)
         static let Grey90A90 = UIColor(rgba: 0x0c0c0de5)
 
+        static let Ink40 = UIColor(rgb: 0x7075A8)
+        static let Ink50 = UIColor(rgb: 0x595E91)
+        static let Ink60 = UIColor(rgb: 0x464B76)
         static let Ink70 = UIColor(rgb: 0x363959)
         static let Ink80 = UIColor(rgb: 0x202340)
         static let Ink90 = UIColor(rgb: 0x0f1126)
