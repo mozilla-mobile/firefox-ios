@@ -78,9 +78,10 @@ fileprivate func escapeFTSSearchString(_ search: String) -> String {
     // Remove double-quotes and split search string on whitespace.
     let words = search.replacingOccurrences(of: "\"", with: "").components(separatedBy: .whitespaces)
 
-    // Remove empty strings, wrap each word in "*", then join it
-    // all back together with spaces inside of double-quotes.
-    return "\"" + words.filter({ !$0.isEmpty }).map({ "*\($0)*" }).joined(separator: " ") + "\""
+    // Remove empty strings, wrap each word in double-quotes and "*",
+    // then join it all back together.
+    // Example: "foo bar baz" -> "\"*foo*\"\"*bar*\"\"*baz*\""
+    return words.filter({ !$0.isEmpty }).map({ "\"*\($0)*\"" }).joined()
 }
 
 fileprivate func computeWordsWithFilter(_ filter: String) -> [String] {
