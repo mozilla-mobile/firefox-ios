@@ -465,12 +465,11 @@ class TabManager: NSObject {
             TabEvent.post(.didClose, for: tab)
         }
 
+        // If the removed tab was last tab - add new and select
+        // otherwise find the new tab to select.
         if !tab.isPrivate && viableTabs.isEmpty {
-            addTab()
-        }
-
-        // If the removed tab was selected, find the new tab to select.
-        if selectedTab != nil {
+            addTabAndSelect()
+        } else if selectedTab != nil {
             selectTab(selectedTab, previous: oldSelectedTab)
         } else {
             selectTab(tabs.last, previous: oldSelectedTab)
@@ -847,7 +846,7 @@ extension TabManager {
         }
 
         if tabToSelect == nil {
-            tabToSelect = tabs.first
+            tabToSelect = tabs.first(where: { $0.isPrivate == false })
         }
 
         // Only tell our delegates that we restored tabs if we actually restored a tab(s)
