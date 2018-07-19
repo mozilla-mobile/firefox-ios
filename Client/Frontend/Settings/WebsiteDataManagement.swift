@@ -33,7 +33,7 @@ class WebsiteDataManagement: UITableViewController {
         }
         definesPresentationContext = true
 
-        //title = Strings.SettingsDataManagementTitle
+        title = Strings.SettingsWebsiteDataTitle
 
         //get websites
         let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases])
@@ -70,11 +70,11 @@ class WebsiteDataManagement: UITableViewController {
             cell.textLabel?.text = websites[indexPath.item]
         }else {
             assert(indexPath.section == SectionButton)
-            cell.textLabel?.text = Strings.SettingsClearPrivateDataClearButton
+            cell.textLabel?.text = Strings.SettingsClearAllWebsiteDataButton
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             cell.accessibilityTraits = UIAccessibilityTraitButton
-            cell.accessibilityIdentifier = "ClearPrivateData"
+            cell.accessibilityIdentifier = "ClearAllWebsiteData"
             clearButton = cell
         }
 

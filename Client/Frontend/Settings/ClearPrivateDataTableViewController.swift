@@ -119,7 +119,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-  //      guard indexPath.section == SectionButton else { return false }
         if indexPath.section == SectionButton {
             // Highlight the button only if it's enabled.
             return clearButtonEnabled
@@ -192,7 +191,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         headerView.showTopBorder = false
         var sectionTitle: String?
         if section == SectionToggles {
-            sectionTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
+            sectionTitle = NSLocalizedString("CLEAR PRIVATE DATA", comment: "Title for clearing private data in the data management section.")
         } else {
             sectionTitle = nil
         }
