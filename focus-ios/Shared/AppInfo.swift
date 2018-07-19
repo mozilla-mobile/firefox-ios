@@ -64,6 +64,6 @@ class AppInfo {
     }
     
     open class func testRequestsReset() -> Bool {
-        return ProcessInfo.processInfo.arguments.contains("RESET_PREFS")
+        return ProcessInfo.processInfo.arguments.contains("testMode")
     }
 }

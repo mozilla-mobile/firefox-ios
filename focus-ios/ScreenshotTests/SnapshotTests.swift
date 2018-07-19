@@ -9,6 +9,7 @@ class SnapshotTests: XCTestCase {
         super.setUp()
         continueAfterFailure = false
         let app = XCUIApplication()
+        app.launchArguments = ["testMode"]
         setupSnapshot(app)
         app.launch()
     }
@@ -25,6 +26,7 @@ class SnapshotTests: XCTestCase {
         snapshot("03Home")
 
         snapshot("04LocationBarEmptyState")
+        app.textFields["URLBar.urlText"].tap()
         app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org")
         snapshot("05SearchFor")
         
@@ -45,6 +47,7 @@ class SnapshotTests: XCTestCase {
 
     func test02Settings() {
         let app = XCUIApplication()
+        dismissFirstRunUI()
         app.buttons["HomeView.settingsButton"].tap()
         snapshot("09Settings")
         app.swipeUp()
@@ -60,6 +63,7 @@ class SnapshotTests: XCTestCase {
     
     func test03About() {
         let app = XCUIApplication()
+        dismissFirstRunUI()
         app.buttons["HomeView.settingsButton"].tap()
         app.cells["settingsViewController.about"].tap()
         snapshot("13About")
@@ -69,6 +73,8 @@ class SnapshotTests: XCTestCase {
 
     func test04ShareMenu() {
         let app = XCUIApplication()
+        dismissFirstRunUI()
+        app.textFields["URLBar.urlText"].tap()
         app.textFields["URLBar.urlText"].typeText("bugzilla.mozilla.org\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "https://bugzilla.mozilla.org/")
         app.buttons["BrowserToolset.sendButton"].tap()
@@ -77,6 +83,7 @@ class SnapshotTests: XCTestCase {
 
     func test05SafariIntegration() {
         let app = XCUIApplication()
+        dismissFirstRunUI()
         app.buttons["HomeView.settingsButton"].tap()
         app.tables.switches["BlockerToggle.Safari"].tap()
         snapshot("16SafariIntegrationInstructions")
@@ -84,6 +91,8 @@ class SnapshotTests: XCTestCase {
 
     func test06OpenMaps() {
         let app = XCUIApplication()
+        dismissFirstRunUI()
+        app.textFields["URLBar.urlText"].tap()
         app.textFields["URLBar.urlText"].typeText("maps.apple.com\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "http://maps.apple.com")
         snapshot("17OpenMaps")
@@ -91,6 +100,8 @@ class SnapshotTests: XCTestCase {
 
     func test07OpenAppStore() {
         let app = XCUIApplication()
+        dismissFirstRunUI()
+        app.textFields["URLBar.urlText"].tap()
         app.textFields["URLBar.urlText"].typeText("itunes.apple.com\n")
         waitForValueContains(element: app.textFields["URLBar.urlText"], value: "http://itunes.apple.com")
         snapshot("18OpenAppStore")
@@ -98,16 +109,18 @@ class SnapshotTests: XCTestCase {
 
     func test08PasteAndGo() {
         let app = XCUIApplication()
+        dismissFirstRunUI()
         // Inject a string into clipboard
         let clipboardString = "Hello world"
         UIPasteboard.general.string = clipboardString
 
-        // Enter 'mozilla' on the search field
+        // Enter 'bugzilla.mozilla.org' on the search field as its URL does not change for locale.
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-        searchOrEnterAddressTextField.typeText("mozilla.org\n")
+        searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.typeText("bugzilla.mozilla.org\n")
 
         // Check the correct site is reached
-        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.mozilla.org/")
+        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://bugzilla.mozilla.org/")
 
         // Tap URL field, check for paste & go menu
         searchOrEnterAddressTextField.tap()
@@ -122,23 +135,26 @@ class SnapshotTests: XCTestCase {
     
     func test09TrackingProtection() {
         let app = XCUIApplication()
+        dismissFirstRunUI()
 
         // Inject a string into clipboard
         let clipboardString = "Hello world"
         UIPasteboard.general.string = clipboardString
 
-        // Enter 'mozilla' on the search field
+        // Enter 'bugzilla.mozilla.org' on the search field as its URL does not change for locale.
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-        searchOrEnterAddressTextField.typeText("mozilla.org\n")
-
+        searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.typeText("bugzilla.mozilla.org\n")
+        
         // Check the correct site is reached
-        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://www.mozilla.org/")
+        waitForValueContains(element: searchOrEnterAddressTextField, value: "https://bugzilla.mozilla.org/")
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
         snapshot("20TrackingProtection")
     }
     
     func test10CustomSearchEngines() {
         let app = XCUIApplication()
+        dismissFirstRunUI()
 
         app.buttons["HomeView.settingsButton"].tap()
         app.cells["SettingsViewController.searchCell"].tap()
@@ -148,6 +164,7 @@ class SnapshotTests: XCTestCase {
     
     func test11AutocompleteURLs() {
         let app = XCUIApplication()
+        dismissFirstRunUI()
 
         app.buttons["HomeView.settingsButton"].tap()
         app.cells["SettingsViewController.autocompleteCell"].tap()
@@ -178,6 +195,13 @@ class SnapshotTests: XCTestCase {
                 self.recordFailure(withDescription: message,
                                    inFile: file, atLine: line, expected: true)
             }
+        }
+    }
+    
+    func dismissFirstRunUI() {
+        let firstRunUI = XCUIApplication().buttons["IntroViewController.button"]
+        if (firstRunUI.exists) {
+            firstRunUI.tap()
         }
     }
 }
