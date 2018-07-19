@@ -130,8 +130,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-//    guard indexPath.section == SectionButton else { return }
         if indexPath.section == SectionArrow {
             let view = WebsiteDataManagement()
             navigationController?.pushViewController(view, animated: true)

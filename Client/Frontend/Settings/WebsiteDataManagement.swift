@@ -17,13 +17,21 @@ class WebsiteDataManagement: UITableViewController {
     fileprivate typealias DefaultCheckedState = Bool
     let searchController = UISearchController(searchResultsController: nil)
 
-    var websites: [String] = []
+    struct siteData {
+        let dataOfSite:  WKWebsiteDataRecord
+        let nameOfSite: String
+
+        init(dataOfSite: WKWebsiteDataRecord, nameOfSite: String){
+            self.dataOfSite = dataOfSite
+            self.nameOfSite = nameOfSite
+        }
+    }
+    var siteRecords = [siteData]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Setup the Search Controller
-        // searchController.searchResultsUpdater = self as! UISearchResultsUpdating
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Filter Sites"
         if #available(iOS 11.0, *) {
@@ -36,16 +44,10 @@ class WebsiteDataManagement: UITableViewController {
         title = Strings.SettingsWebsiteDataTitle
 
         //get websites
-        let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases])
         let dataStore = WKWebsiteDataStore.default()
-        dataStore.fetchDataRecords(ofTypes: dataTypes) { (records) in
+        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
             for record in records {
-                self.websites.append(record.displayName)
-//                if record.displayName.contains("cnn") {
-//                    dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: [record], completionHandler: {
-//                        print("Deleted: " + record.displayName);
-//                    })
-//                }
+                self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
             }
             self.tableView.reloadData()
         }
@@ -67,7 +69,8 @@ class WebsiteDataManagement: UITableViewController {
 
         if indexPath.section == SectionSites {
             assert(indexPath.section == SectionSites)
-            cell.textLabel?.text = websites[indexPath.item]
+            let site = siteRecords[indexPath.item]
+            cell.textLabel?.text = site.nameOfSite
         }else {
             assert(indexPath.section == SectionButton)
             cell.textLabel?.text = Strings.SettingsClearAllWebsiteDataButton
@@ -77,7 +80,6 @@ class WebsiteDataManagement: UITableViewController {
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
             clearButton = cell
         }
-
         return cell
     }
 
@@ -87,27 +89,23 @@ class WebsiteDataManagement: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionSites {
-            return websites.count
+            return siteRecords.count
         }
         assert(section == SectionButton)
         return 1
-
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        guard indexPath.section == SectionButton else { return false }
         return true
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        //    guard indexPath.section == SectionButton else { return }
-        if indexPath.section == SectionSites {
-            print("hi")
-        }
+        guard indexPath.section == SectionButton else { return }
         if indexPath.section == SectionButton {
             clearprivatedata()
         }
-
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
@@ -118,7 +116,10 @@ class WebsiteDataManagement: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.delete) {
-            websites.remove(at: indexPath.item)
+            let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases])
+            let dataStore = WKWebsiteDataStore.default()
+            dataStore.removeData(ofTypes: dataTypes, for: [siteRecords[indexPath.item].dataOfSite], completionHandler: { return })
+            siteRecords.remove(at: indexPath.item)
             tableView.reloadData()
         }
     }
@@ -132,7 +133,6 @@ class WebsiteDataManagement: UITableViewController {
             sectionTitle = nil
         }
         headerView.titleLabel.text = sectionTitle
-
         return headerView
     }
 
