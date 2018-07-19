@@ -81,6 +81,7 @@ func main() {
 	fileMappings := map[string]string{
 		"Blockzilla/Info.plist":                   "Blockzilla/InfoPlist.strings",
 		"Blockzilla/en.lproj/Localizable.strings": "Blockzilla/Localizable.strings",
+		"Blockzilla/Intro.strings":                "Blockzilla/Intro.strings",
 	}
 
 	skipTransUnits := []string{
