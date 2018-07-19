@@ -180,7 +180,7 @@ class RequestDesktopActivity: UIActivity {
 /// Note that not all applications use the Subject. For example OmniFocus ignores it, so we need to do both.
 
 class TitleActivityItemProvider: UIActivityItemProvider {
-    static let activityTypesToIgnore = [UIActivityType.copyToPasteboard, UIActivityType.message, UIActivityType.mail]
+    static let activityTypesToIgnore: [UIActivity.ActivityType] = [.copyToPasteboard, .message, .mail]
     
     init(title: String) {
         super.init(placeholderItem: title)
@@ -195,7 +195,7 @@ class TitleActivityItemProvider: UIActivityItemProvider {
         return placeholderItem! as AnyObject
     }
     
-    override func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivityType?) -> String {
+    override func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
         return placeholderItem as! String
     }
 }

@@ -10,17 +10,17 @@ import Foundation
  */
 public struct KeyboardState {
     public let animationDuration: Double
-    public let animationCurve: UIViewAnimationCurve
+    public let animationCurve: UIView.AnimationCurve
     private let userInfo: [AnyHashable: Any]
 
     fileprivate init(_ userInfo: [AnyHashable: Any]) {
         self.userInfo = userInfo
-        animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! Double
+        animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
         // HACK: UIViewAnimationCurve doesn't expose the keyboard animation used (curveValue = 7),
         // so UIViewAnimationCurve(rawValue: curveValue) returns nil. As a workaround, get a
         // reference to an EaseIn curve, then change the underlying pointer data with that ref.
-        var curve = UIViewAnimationCurve.easeIn
-        if let curveValue = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? Int {
+        var curve = UIView.AnimationCurve.easeIn
+        if let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int {
             NSNumber(value: curveValue).getValue(&curve)
         }
         self.animationCurve = curve
@@ -31,7 +31,7 @@ public struct KeyboardState {
     /// on iPad the overlap may be partial or if an external keyboard is attached, the intersection
     /// height will be zero. (Even if the height of the *invisible* keyboard will look normal!)
     public func intersectionHeightForView(view: UIView) -> CGFloat {
-        if let keyboardFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        if let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardFrame = keyboardFrameValue.cgRectValue
             let convertedKeyboardFrame = view.convert(keyboardFrame, from: nil)
             let intersection = convertedKeyboardFrame.intersection(view.bounds)
@@ -67,10 +67,10 @@ public class KeyboardHelper: NSObject {
      * Starts monitoring the keyboard state.
      */
     public func startObserving() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
 
     deinit {

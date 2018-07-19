@@ -133,7 +133,7 @@ class SearchSettingsViewController: UITableViewController {
                 
                 if tableView.isEditing {
                     cell.textLabel?.textColor = UIConstants.colors.settingsDisabled.withAlphaComponent(0.5)
-                    cell.separatorInset = UIEdgeInsetsMake(0, 93, 0, 0)
+                    cell.separatorInset = UIEdgeInsets.init(top: 0, left: 93, bottom: 0, right: 0)
                     cell.tintColor = tableView.tintColor.withAlphaComponent(0.5)
                     cell.imageView?.alpha = 0.5
                 }
@@ -184,7 +184,7 @@ class SearchSettingsViewController: UITableViewController {
         return engine != searchEngineManager.activeEngine
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             searchEngineManager.removeEngine(engine:searchEngineManager.engines[indexPath.row])
             tableView.reloadData()

@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
     static let prefWhatsNewCounter = "WhatsNewCounter"
 
     static var needsAuthenticated = false
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -98,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         return true
     }
 
-    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return false
         }
@@ -187,10 +187,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
         }
 
         let animationDuration = 0.25
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
             logoImage.layer.transform = CATransform3DMakeScale(0.8, 0.8, 1.0)
         }, completion: { success in
-            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
+            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
                 splashView.alpha = 0
                 logoImage.layer.transform = CATransform3DMakeScale(2.0, 2.0, 1.0)
             }, completion: { success in

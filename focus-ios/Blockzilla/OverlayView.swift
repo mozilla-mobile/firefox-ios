@@ -137,9 +137,9 @@ class OverlayView: UIView {
      */
     func getAttributedButtonTitle(phrase: String,
                                   localizedStringFormat: String) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [NSAttributedStringKey.foregroundColor: UIColor.white])
-        let phraseString = NSAttributedString(string: phrase, attributes: [NSAttributedStringKey.font: UIConstants.fonts.copyButtonQuery,
-                                                                           NSAttributedStringKey.foregroundColor: UIColor.white])
+        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIColor.white])
+        let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
+                                                                           .foregroundColor: UIColor.white])
 
         guard let range = attributedString.string.range(of: "%@") else { return phraseString }
 
@@ -166,7 +166,7 @@ class OverlayView: UIView {
         UIPasteboard.general.urlAsync() { handoffUrl in
             DispatchQueue.main.async {
                 if let url = handoffUrl, url.isWebPage() {
-                    self.copyButton.setAttributedTitle(NSAttributedString(string: String(format: UIConstants.strings.linkYouCopied, url.absoluteString), attributes: [NSAttributedStringKey.foregroundColor: UIColor.white]), for: .normal)
+                    self.copyButton.setAttributedTitle(NSAttributedString(string: String(format: UIConstants.strings.linkYouCopied, url.absoluteString), attributes: [.foregroundColor: UIColor.white]), for: .normal)
                     showCopyButton = url.isWebPage()
                 }
                 

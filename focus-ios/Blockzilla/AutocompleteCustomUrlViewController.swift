@@ -102,7 +102,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         footer.backgroundColor = UIConstants.colors.background
 
         cell.addSubview(footer)
-        cell.sendSubview(toBack: footer)
+        cell.sendSubviewToBack(footer)
 
         footer.snp.makeConstraints { make in
             make.height.equalTo(1)
@@ -154,7 +154,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
         }
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             tableView.beginUpdates()
             _ = customAutocompleteSource.remove(at: indexPath.row)

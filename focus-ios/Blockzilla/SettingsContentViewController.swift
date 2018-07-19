@@ -26,7 +26,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
                 DispatchQueue.main.asyncAfter(deadline: delayTime) {
                     UIView.transition(from: self.interstitialView, to: self.webView,
                                       duration: 0.5,
-                                      options: UIViewAnimationOptions.transitionCrossDissolve,
+                                      options: .transitionCrossDissolve,
                                       completion: { finished in
                                         self.interstitialView.removeFromSuperview()
                                         self.interstitialSpinnerView.stopAnimating()
@@ -45,7 +45,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
                 DispatchQueue.main.asyncAfter(deadline: delayTime) {
                     UIView.transition(from: self.interstitialSpinnerView, to: self.interstitialErrorView,
                                       duration: 0.5,
-                                      options: UIViewAnimationOptions.transitionCrossDissolve,
+                                      options: .transitionCrossDissolve,
                                       completion: { finished in
                                         self.interstitialSpinnerView.removeFromSuperview()
                                         self.interstitialSpinnerView.stopAnimating()
@@ -138,7 +138,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         // Keeping the background constant prevents a pop of mismatched color.
         view.backgroundColor = interstitialBackgroundColor
         
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+        let spinner = UIActivityIndicatorView(style: .whiteLarge)
         view.addSubview(spinner)
         
         let error = SmartLabel()
@@ -188,7 +188,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
 
         guard !isLicensePage else {
             decisionHandler(.cancel)
-            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else { return }
+            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
             UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
             return
         }

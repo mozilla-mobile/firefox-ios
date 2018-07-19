@@ -4,6 +4,6 @@
 
 extension ClosedRange {
     func clamp(_ value: Bound) -> Bound {
-        return min(self.upperBound, max(self.lowerBound, value))
+        return Swift.min(self.upperBound, Swift.max(self.lowerBound, value))
     }
 }

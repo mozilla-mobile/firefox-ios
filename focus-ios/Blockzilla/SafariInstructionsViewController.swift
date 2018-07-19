@@ -17,7 +17,7 @@ class SafariInstructionsViewController: UIViewController {
             make.leading.trailing.centerY.equalTo(view)
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(updateEnabledState), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateEnabledState), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     @objc func updateEnabledState() {
@@ -36,7 +36,7 @@ private class DisabledStateView: UIView {
         let label = SmartLabel()
         label.text = UIConstants.strings.safariInstructionsNotEnabled
         label.textColor = UIConstants.colors.focusRed
-        label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         addSubview(label)
 
         let instructionsView = InstructionsView()

@@ -98,7 +98,7 @@ extension OpenUtils: UIActivityItemSource {
     // IMPORTANT: This method needs Swift compiler optimization DISABLED to prevent a nasty
     // crash from happening in release builds. It seems as though the check for `nil` may
     // get removed by the optimizer which leads to a crash when that happens.
-    @_semantics("optimize.sil.never") func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType?) -> Any? {
+    @_semantics("optimize.sil.never") func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         // activityType actually is nil sometimes (in the simulator at least)
         if activityType != nil && isPasswordManagerActivityType(activityType?.rawValue) {
             return webViewController.onePasswordExtensionItem
@@ -107,7 +107,7 @@ extension OpenUtils: UIActivityItemSource {
         }
     }
     
-    func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivityType?) -> String {
+    func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivity.ActivityType?) -> String {
         if let type = activityType, isPasswordManagerActivityType(type.rawValue) {
             return browserFillIdentifier
         }

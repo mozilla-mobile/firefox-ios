@@ -154,7 +154,7 @@ class TrackingProtectionBreakdownItem: UIView {
             make.width.equalTo(8)
         }
 
-        let counterWidth = NSString(string: "1000").size(withAttributes: [NSAttributedStringKey.font: counterLabel.font]).width
+        let counterWidth = NSString(string: "1000").size(withAttributes: [.font: counterLabel.font]).width
 
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(indicatorView.snp.centerY)
@@ -454,7 +454,7 @@ class TrackingProtectionSummaryViewController: UIViewController {
         navigationBar.isTranslucent = false
         navigationBar.barTintColor = UIConstants.colors.background
         navigationBar.tintColor = UIConstants.colors.navigationButton
-        navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIConstants.colors.navigationTitle]
+        navigationBar.titleTextAttributes = [.foregroundColor: UIConstants.colors.navigationTitle]
 
         let button = UIBarButtonItem(image: #imageLiteral(resourceName: "icon_stop_menu"), landscapeImagePhone: #imageLiteral(resourceName: "icon_stop_menu"), style: .done, target: self, action: #selector(closeModal))
 

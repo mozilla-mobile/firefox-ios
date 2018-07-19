@@ -76,7 +76,7 @@ class OpenSearchParser {
                 let paramIndexers = urlElem.children(tag: "Param")
 
                 if !paramIndexers.isEmpty {
-                    let params: [String] = paramIndexers.flatMap { indexer in
+                    let params: [String] = paramIndexers.compactMap { indexer in
                         guard let name = indexer.attr("name"), let value = indexer.attr("value") else {
                             print("Param element must have name and value attributes", terminator: "\n")
                             return nil

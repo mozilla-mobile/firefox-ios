@@ -249,7 +249,7 @@ class BrowserViewController: UIViewController {
         self.context.localizedCancelTitle = UIConstants.strings.newSessionFromBiometricFailure
 
         // Register for foreground notification to check biometric authentication
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
             var biometricError: NSError?
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
@@ -286,9 +286,9 @@ class BrowserViewController: UIViewController {
     }
 
     private func containWebView() {
-        addChildViewController(webViewController)
+        addChild(webViewController)
         webViewContainer.addSubview(webViewController.view)
-        webViewController.didMove(toParentViewController: self)
+        webViewController.didMove(toParent: self)
 
         webViewController.view.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer.snp.edges)
@@ -296,9 +296,9 @@ class BrowserViewController: UIViewController {
     }
 
     private func containTrackingProtectionSummary() {
-        addChildViewController(trackingProtectionSummaryController)
+        addChild(trackingProtectionSummaryController)
         drawerContainerView.addSubview(trackingProtectionSummaryController.view)
-        trackingProtectionSummaryController.didMove(toParentViewController: self)
+        trackingProtectionSummaryController.didMove(toParent: self)
 
         trackingProtectionSummaryController.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()

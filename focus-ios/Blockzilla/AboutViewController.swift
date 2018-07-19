@@ -87,7 +87,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             // so we can calculate the view's height.
             headerView.layoutIfNeeded()
 
-            return headerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+            return headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         default: break
         }
 
@@ -143,7 +143,7 @@ private class AboutHeaderView: UIView {
         let bulletStyle = NSMutableParagraphStyle()
         bulletStyle.firstLineHeadIndent = 15
         bulletStyle.headIndent = 29.5
-        let bulletAttributes = [NSAttributedStringKey.paragraphStyle: bulletStyle]
+        let bulletAttributes: [NSAttributedString.Key: Any] = [.paragraphStyle: bulletStyle]
         let bulletFormat = "•  %@\n"
 
         let paragraph = [
