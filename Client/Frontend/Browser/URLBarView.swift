@@ -173,7 +173,9 @@ class URLBarView: UIView {
     private let privateModeBadge = ToolbarPrivateModeBadge()
 
     func privateModeBadge(visible: Bool) {
+        if UIDevice.current.userInterfaceIdiom != .pad {
             privateModeBadge.isHidden = !visible
+        }
     }
 
     override init(frame: CGRect) {
@@ -193,6 +195,8 @@ class URLBarView: UIView {
          menuButton, forwardButton, backButton, stopReloadButton, locationContainer, privateModeBadge].forEach {
             addSubview($0)
         }
+
+        privateModeBadge.isHidden = true
 
         helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
