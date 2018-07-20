@@ -37,7 +37,7 @@ extension BrowserViewController: WKNavigationDelegate {
             }
         }
 
-        Profiler.begin(bookend: .load_url)
+        Profiler.shared?.begin(bookend: .load_url)
     }
 
     // Recognize an Apple Maps URL. This will trigger the native app. But only if a search query is present. Otherwise
