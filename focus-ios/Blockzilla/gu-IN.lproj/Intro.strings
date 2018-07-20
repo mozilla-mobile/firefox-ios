@@ -1,0 +1,12 @@
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "આગળ";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "કંઈક અલગ શોધી રહ્યાં છો? કોઈ અલગ શોધ એન્જિન પસંદ કરો.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "તમારી શોધ, તમારી રીત";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "છોડો";
+
