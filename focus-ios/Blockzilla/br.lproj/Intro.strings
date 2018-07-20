@@ -1,1 +1,24 @@
-/* No Localized Strings */
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Skarzhit ho roll istor estez merdeiñ a-bezh, ho kerioù-tremen, ho toupinoù en ur stokadenn.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Kenavo d'ar roll istor";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Da-heul";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Klask a rit un dra disheñvel? Dibabit ur c'heflusker enklask all.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Ho klask, ho toare";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Tremen";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Kasit ar merdeiñ prevez d'ul live uheloc'h. Stankit ar bruderezhioù hag an endalc'hadoù all a c'hell heuliañ ac'hanoc'h ha gorrekaat kargadenn ar bajenn.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Kreñvait ho puhez prevez";
+

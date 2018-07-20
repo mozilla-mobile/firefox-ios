@@ -4,11 +4,17 @@
 /* Title for the third  panel 'History' in the First Run tour. */
 "Intro.Slides.History.Title" = "आपका इतिहास अब इतिहास है";
 
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "अगला";
+
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
 "Intro.Slides.Search.Description" = "कुछ अलग खोज रहे हैं? एक दूसरा खोज इंजन चुनें.";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "आपकी खोज, आपका तरीका";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "छोड़ें";
 
 /* Description for the 'Welcome' panel in the First Run tour. */
 "Intro.Slides.Welcome.Description" = "निजी ब्राउज़िंग को अगले स्तर पर ले जाएँ. उन विज्ञापनों और अन्य तत्वों को रोकें जो आपको साइटों पर पीछा करते हैं और पृष्ट लोड समय को बढ़ाते हैं.";

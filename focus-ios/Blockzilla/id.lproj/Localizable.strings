@@ -74,13 +74,13 @@
 "Autocomplete.customUrlAdded" = "URL ubahsuai baru ditambahkan.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "Aktifkan agar %@ melengkapi otomatis lebih dari 450 URLs populer di bilah alamat.";
+"Autocomplete.defaultDescriptoin" = "Aktifkan agar %@ melengkapi otomatis lebih dari 450 URL populer di bilah alamat.";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "Lengkapi-otomatis";
 
 /* Title for the default URL list section */
-"Autocomplete.defaultTitle" = "DAFTAR URL BAKU";
+"Autocomplete.defaultTitle" = "DAFTAR URL BAWAAN";
 
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Dinonaktifkan";
@@ -239,7 +239,7 @@
 "Settings.Search.NewSearchEngineAdded" = "Mesin Pencari Baru Ditambahkan.";
 
 /* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Pulihkan Mesin Pencari Baku";
+"Settings.Search.RestoreEngine" = "Pulihkan Mesin Pencari Bawaan";
 
 /* Placeholder text for input of new search engine name */
 "Settings.Search.SearchEngineName" = "Nama mesin pencari";
@@ -299,7 +299,7 @@
 "Settings.toggleBlockAds" = "Blokir pelacak iklan";
 
 /* Description for 'Block ad Trackers' */
-"Settings.toggleBlockAdsDescription" = "Beberapa iklan melacak kunjungan situs, meski Anda tidak mengklik iklan";
+"Settings.toggleBlockAdsDescription" = "Beberapa iklan melacak kunjungan situs, meski Anda tidak mengeklik iklan";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Blokir pelacak analitis";
@@ -314,7 +314,7 @@
 "Settings.toggleBlockOther" = "Blokir pelacak konten lainnya";
 
 /* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Mengaktifkan fitur ini mungkin menyebabkan beberapa laman bertindak tidak terduga";
+"Settings.toggleBlockOtherDescription" = "Mengaktifkan fitur ini mungkin menyebabkan beberapa laman berfungsi tidak seperti yang diharapkan";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "Blokir pelacak sosial";
@@ -425,7 +425,7 @@
 "trackingProtection.adTrackersLabel" = "Pelacak iklan";
 
 /* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Pelacak analitik";
+"trackingProtection.analyticTrackerLabel" = "Pelacak analitis";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "Pelacak konten";
@@ -440,11 +440,11 @@
 "trackingProtection.socialTrackerLabel" = "Pelacak sosial";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Nonaktifkan sampai Anda menutup %@ atau mengetuk ERASE.";
+"trackingProtection.toggleDescription1" = "Nonaktifkan hingga Anda menutup %@ atau mengetuk HAPUS.";
 
 /* Text for the toggle that temporarily disables tracking protection. */
 "trackingProtection.toggleLabel" = "Perlindungan Pelacakan";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Pilih apakah %@ memblokir iklan, pelacak analitik, sosial, dan lainnya.";
+"trackingProtection.trackerDescriptionLabel" = "Pilih apakah %@ memblokir iklan, pelacak analitis, sosial, dan lainnya.";
 

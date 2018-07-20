@@ -74,7 +74,7 @@
 "Autocomplete.customUrlAdded" = "已添加新的自定义网址。";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "开启后，可在 %@ 地址栏自动补全超过 450 个流行网址。";
+"Autocomplete.defaultDescriptoin" = "开启之后，%@ 地址栏可以自动补全超过 450 个热门网站。";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "自动补全";
@@ -248,7 +248,7 @@
 "Settings.Search.SearchTemplate" = "搜索字符串";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "主角或输入搜索字符串。如果必要，用 %s 表示搜索关键词。";
+"Settings.Search.SearchTemplatePlaceholder" = "粘贴或输入搜索字符串。如果必要，用 %s 表示搜索关键词。";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "网址自动补全";

@@ -1,1 +1,24 @@
-/* No Localized Strings */
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "ניתן בכל עת לנקות את כל היסטורית הגלישה שלך, הסיסמאות והעוגיות בהקשה אחת.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "ההיסטוריה שלך שייכת לעבר";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "הבא";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "חיפשת משהו אחר? ניתן לבחור במנוע חיפוש אחר.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "החיפוש שלך, בדרך שלך";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "דילוג";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "ניתן לקחת את הגלישה הפרטית לשלב הבא. לחסום פרסומות ותוכן אחר שיכול לעקוב אחריך בין אתרים שונים ולהאט את מהירות טעינת האתרים.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "פרטיות מוגברת";
+

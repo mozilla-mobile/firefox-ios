@@ -1,1 +1,18 @@
-/* No Localized Strings */
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "اپنے تمام برائوزنگ سیشن،سابقات، پاس ورڈ، کوکیاں کسی بھی وقت ایک دبانے سے صاف کریں۔";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "آپ کے سابقات سابقات ہیں";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "آگے";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "کچھ مختلف ڈھونڈ رہے ہیں؟ دوسرے تلاش انجن کا انتخاب کریں۔";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "آپ کی تلاش، آپ کی طرز پر";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "چھوڈیں";
+

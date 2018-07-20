@@ -17,7 +17,7 @@
 "Intro.Slides.Skip.Button" = "ข้าม";
 
 /* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description" = "นำการท่องเว็บแบบส่วนตัวไปสู่ระดับถัดไป ปิดกั้นโฆษณาและเนื้อหาอื่น ๆ ที่สามารถติดตามคุณระหว่างไซต์และลดเวลาในการโหลดหน้า";
+"Intro.Slides.Welcome.Description" = "นำการท่องเว็บแบบส่วนตัวไปสู่ระดับถัดไป ปิดกั้นโฆษณาและเนื้อหาอื่น ๆ ที่สามารถติดตามคุณในไซต์ต่าง ๆ และลดเวลาในการโหลดหน้า";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title" = "เพิ่มความเป็นส่วนตัวของคุณ";

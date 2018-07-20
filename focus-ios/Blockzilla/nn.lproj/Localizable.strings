@@ -94,6 +94,9 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Ny økt";
 
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Lås %@ opp for å forhindra uautoriseret tilgang, når du opnar appen igjen.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Tilbake";
 
