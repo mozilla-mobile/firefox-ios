@@ -137,6 +137,7 @@ class TabTrayController: UIViewController {
 // MARK: View Controller Callbacks
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabManager.addDelegate(self)
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
         collectionView.dataSource = tabDisplayManager
@@ -230,7 +231,9 @@ class TabTrayController: UIViewController {
         let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
         let newOffset = CGPoint(x: 0.0, y: collectionView.contentOffset.y)
-        collectionView.setContentOffset(self.otherBrowsingModeOffset, animated: false)
+        if self.otherBrowsingModeOffset.y > 0 {
+            collectionView.setContentOffset(self.otherBrowsingModeOffset, animated: false)
+        }
         self.otherBrowsingModeOffset = newOffset
         let fromView: UIView
         if !privateTabsAreEmpty(), let snapshot = collectionView.snapshotView(afterScreenUpdates: false) {
@@ -302,6 +305,35 @@ class TabTrayController: UIViewController {
         LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray"])
     }
 
+}
+
+extension TabTrayController: TabManagerDelegate {
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {}
+
+    func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {}
+
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab) {}
+
+    func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {}
+
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab) {}
+
+    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+    }
+
+    func tabManagerDidAddTabs(_ tabManager: TabManager) {}
+
+    func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
+        guard let toast = toast, privateMode else {
+            return
+        }
+        view.addSubview(toast)
+        toast.showToast(makeConstraints: { make in
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.toolbar.snp.top)
+        })
+    }
 }
 
 extension TabTrayController: UITextFieldDelegate {
@@ -724,7 +756,7 @@ private struct EmptyPrivateTabsViewUX {
 fileprivate class EmptyPrivateTabsView: UIView {
     fileprivate lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.theme.tabTray.tabTitleText
+        label.textColor = UIColor.Photon.White100
         label.font = EmptyPrivateTabsViewUX.TitleFont
         label.textAlignment = .center
         return label
@@ -732,7 +764,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
 
     fileprivate var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.theme.tabTray.tabTitleText
+        label.textColor = UIColor.Photon.White100
         label.font = EmptyPrivateTabsViewUX.DescriptionFont
         label.textAlignment = .center
         label.numberOfLines = 0
