@@ -18,7 +18,7 @@ class WebsiteDataManagement: UITableViewController {
     let searchController = UISearchController(searchResultsController: nil)
 
     struct siteData {
-        let dataOfSite:  WKWebsiteDataRecord
+        let dataOfSite: WKWebsiteDataRecord
         let nameOfSite: String
 
         init(dataOfSite: WKWebsiteDataRecord, nameOfSite: String){
@@ -27,6 +27,9 @@ class WebsiteDataManagement: UITableViewController {
         }
     }
     var siteRecords = [siteData]()
+    let dataStore = WKWebsiteDataStore.default()
+    let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +47,6 @@ class WebsiteDataManagement: UITableViewController {
         title = Strings.SettingsWebsiteDataTitle
 
         //get websites
-        let dataStore = WKWebsiteDataStore.default()
         dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
             for record in records {
                 self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
@@ -104,7 +106,9 @@ class WebsiteDataManagement: UITableViewController {
 
         guard indexPath.section == SectionButton else { return }
         if indexPath.section == SectionButton {
-            clearprivatedata()
+            WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
+            siteRecords.removeAll()
+            tableView.reloadData()
         }
         tableView.deselectRow(at: indexPath, animated: false)
     }
@@ -116,8 +120,6 @@ class WebsiteDataManagement: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.delete) {
-            let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases])
-            let dataStore = WKWebsiteDataStore.default()
             dataStore.removeData(ofTypes: dataTypes, for: [siteRecords[indexPath.item].dataOfSite], completionHandler: { return })
             siteRecords.remove(at: indexPath.item)
             tableView.reloadData()
