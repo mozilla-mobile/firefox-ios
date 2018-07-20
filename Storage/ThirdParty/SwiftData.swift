@@ -423,6 +423,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     fileprivate let debug_enabled = false
 
+    private var didAttemptToMoveToBackup = false
+
     init?(filename: String, flags: Int32, key: String? = nil, prevKey: String? = nil, schema: Schema, files: FileAccessor) {
         log.debug("Opening connection to \(filename).")
 
@@ -446,6 +448,11 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 do {
                     try self.prepareEncrypted(flags, key: key, prevKey: prevKey)
                 } catch {
+                    if !didAttemptToMoveToBackup {
+                        self.moveDatabaseFileToBackupLocation()
+                        return doOpen()
+                    }
+
                     return false
                 }
             }
@@ -842,6 +849,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     fileprivate func moveDatabaseFileToBackupLocation() {
+        didAttemptToMoveToBackup = true
+
         let baseFilename = URL(fileURLWithPath: filename).lastPathComponent
 
         // Attempt to make a backup as long as the database file still exists.

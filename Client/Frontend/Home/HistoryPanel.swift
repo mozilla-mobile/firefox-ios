@@ -114,6 +114,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func updateSyncedDevicesCount() -> Success {
+        guard self.profile.hasSyncableAccount() else {
+            self.currentSyncedDevicesCount = 0
+            return succeed()
+        }
+
         return chainDeferred(self.profile.getCachedClientsAndTabs()) { tabsAndClients in
             self.currentSyncedDevicesCount = tabsAndClients.count
             return succeed()
