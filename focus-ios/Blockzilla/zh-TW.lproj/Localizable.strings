@@ -380,7 +380,7 @@
 "URL.searchLabel" = "搜尋 %@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "追蹤器已封鎖";
+"URL.trackersBlockedLabel" = "已封鎖追蹤器數";
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "使用 %@ 開啟";

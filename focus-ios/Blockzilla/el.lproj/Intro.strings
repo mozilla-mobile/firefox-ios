@@ -1,1 +1,15 @@
-/* No Localized Strings */
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Το ιστορικό σας είναι παρελθόν";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Επόμενο";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Η αναζήτησή σας, με το δικό σας τρόπο";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Παράλειψη";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Ενισχύστε το απόρρητό σας";
+
