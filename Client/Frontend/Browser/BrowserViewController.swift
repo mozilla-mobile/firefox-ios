@@ -573,9 +573,7 @@ class BrowserViewController: UIViewController {
         }
         showQueuedAlertIfAvailable()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
-            Profiler.end(bookend: .bvc_did_appear)
-        }
+        Profiler.shared?.end(bookend: .bvc_did_appear, delay: 0.005)
     }
 
     // THe logic for shouldShowWhatsNewTab is as follows: If we do not have the LatestAppVersionProfileKey in
@@ -865,9 +863,7 @@ class BrowserViewController: UIViewController {
                 // Profiler.end triggers a screenshot, and a delay is needed here to capture the correct screen
                 // (otherwise the screen prior to this step completing is captured).
                 if progress > 0.9 {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.200) {
-                        Profiler.end(bookend: .load_url)
-                    }
+                    Profiler.shared?.end(bookend: .load_url, delay: 0.200)
                 }
             } else {
                 urlBar.hideProgressBar()

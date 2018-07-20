@@ -6,7 +6,7 @@ import Foundation
 
 // Wraps NimbleDroid to ensure it is disabled in release
 // Use underscores between words, as these constants are stringified for reporting.
-public struct Profiler {
+public class Profiler {
     public enum Bookend {
         case bvc_did_appear
         case url_autocomplete
@@ -16,26 +16,47 @@ public struct Profiler {
         case find_in_page
     }
 
-    public static func setup() {
-        if AppConstants.BuildChannel != .release {
-            NDScenario.setup()
+    public static var shared: Profiler?
+
+    private init() {}
+
+    public static func appDidFinishLaunching() {
+        assert(shared == nil)
+        let args = ProcessInfo.processInfo.arguments
+        if args.contains("nimbledroid") {
+            shared = Profiler()
         }
     }
 
-    public static func coldStartupEnd() {
-        if AppConstants.BuildChannel != .release {
-            NDScenario.coldStartupEnd()
+    public func appIsActive() {
+        // Workaround: delay for a few ms so that ND profiler doesn't hang up
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
+            Profiler.shared?.coldStartupEnd()
+            Profiler.shared?.begin(bookend: .bvc_did_appear)
+            Profiler.shared?.begin(bookend: .intro_did_appear)
         }
     }
 
-    public static func begin(bookend: Bookend) {
-        if AppConstants.BuildChannel != .release {
-            NDScenario.begin(bookendID: "\(bookend)")
-        }
+    public func setup() {
+        NDScenario.setup()
     }
 
-    public static func end(bookend: Bookend) {
-        if AppConstants.BuildChannel != .release {
+    public func coldStartupEnd() {
+        NDScenario.coldStartupEnd()
+    }
+
+    public func begin(bookend: Bookend) {
+        NDScenario.begin(bookendID: "\(bookend)")
+    }
+
+    // This triggers a screenshot, and a delay is needed here in some cases to capture the correct screen
+    // (otherwise the screen prior to this step completing is captured).
+    public func end(bookend: Bookend, delay: TimeInterval = 0.0) {
+        if delay > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                NDScenario.end(bookendID: "\(bookend)")
+            }
+        } else {
             NDScenario.end(bookendID: "\(bookend)")
         }
     }
