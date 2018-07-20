@@ -1,0 +1,201 @@
+/* Button on About screen */
+"About.learnMoreButton" = "વધુ શીખો";
+
+/* Label for row in About screen */
+"About.rowHelp" = "મદદ";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "ગોપનીયતા સૂચના";
+
+/* Label for row in About screen */
+"About.rowRights" = "તમારા અધિકારો";
+
+/* (No Comment) */
+"About.screenTitle" = "વિશે";
+
+/* Label on About screen */
+"About.topLabel" = "%@ તમને નિયંત્રણમાં મૂકે છે.";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "પોતાનું URL ઉમેરો";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL ઉમેરવુ";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ પોતાનું URL ઉમેરો";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "પોતાના URLs";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "સ્વત: પૂર્ણ";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "નિષ્ક્રિય";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "સક્રિય";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "પાછળ";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "આગળ";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "પુન:લાવો";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "સેટિંગ્સ";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "વહેંચો";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "અટકાવો";
+
+/* Label on button to cancel edits */
+"Cancel" = "રદ કરો";
+
+/* Label on button to complete edits */
+"Done" = "પૂર્ણ થયું";
+
+/* Label on button to allow edits */
+"Edit" = "ફેરફાર";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "ફરીથી પ્રયત્ન કરો";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "રદ કરો";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "ખોલો";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "રદ કરો";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "ઇમેઇલ";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "નકશા ખોલો";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "OK, સમજાઇ ગયું!";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "આપમેળે ખાનગી બ્રાઉઝિંગ.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "રદ કરો";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (ખાનગી બ્રાઉઝિંગ)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "વધુ";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ સક્ષમ કરો";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ સક્ષમ નથી.";
+
+/* Save button label */
+"Save" = "સંગ્રહો";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "પ્રદર્શિત કરવા માટેનું નામ";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "નવું શોધ એંજીન ઉમેર્યું.";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "શોધ એન્જિન નામ";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "વાપરવા માટે શોધ શબ્દમાળા";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL સ્વતઃપૂર્ણ";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "ના, આભાર";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "હુ સમજયો";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "વધુ શીખો.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "સેટિંગ્સ";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "શોધ એન્જિન";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "નવું શું છે";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Firefox એપ મેળવો";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "રદ કરો";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ચોંટાડો અને જાઓ";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "ની શોધ માં %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ટ્રેકર્સ અવરોધિત";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ માં ખોલો";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "સ્થાન બાર પસંદ કરો";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "ચિત્રની નકલ કરો";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Linkની નકલ કરો";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Link વહેંચો";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "સેટિંગ્સ ખોલો";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "જાહેરાત ટ્રેકર્સ";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "વિશ્લેષણાત્મક ટ્રેકર્સ";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "સામગ્રી ટ્રેકર્સ";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "ટ્રેકિંગ રક્ષણ બંધ";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "વધુ શીખો";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "સામાજિક ટ્રેકર્સ";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "ટ્રેકિંગ રક્ષણ";
+

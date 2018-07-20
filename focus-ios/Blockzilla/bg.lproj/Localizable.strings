@@ -1,0 +1,393 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Научете повече";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ се произвежда от Mozilla. Нашата мисия е да насърчаваме една здрава и отворена световна мрежа.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Търсете и четете направо в приложението";
+
+/* Label on About screen */
+"About.privateBullet2" = "Спрете проследяването (или го позволете в настройките)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Изчистете, за да изтриете бисквитките, както и историята на търсене и четене";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Използвайте като поверителен четец:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Помощ";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Политика на поверителност";
+
+/* Label for row in About screen */
+"About.rowRights" = "Вашите права";
+
+/* Label on About screen */
+"About.safariBullet1" = "Спирайте проследяването за подобрена поверителност";
+
+/* Label on About screen */
+"About.safariBullet2" = "Спирайте зареждането на шрифтове за по-малък мрежов трафик";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Използвайте като разширение на Safari:";
+
+/* (No Comment) */
+"About.screenTitle" = "Относно";
+
+/* Label on About screen */
+"About.topLabel" = "%@ ви дава контрол.";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Добавяне на потребителски адрес";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Проверете пак адреса, който въведохте.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Пример: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Адрес за добавяне";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Поставете или въведете адрес";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Добавяне на потребителски адрес";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Добавяне и управление на автоматичното довършване на потребителски адреси.";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Потребителски адреси";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "СПИСЪК НА ПОТРЕБИТЕЛСКИ АДРЕСИ";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Добавен е нов потребителски адрес.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Включете, за да имате в лентата за адреси на %@ автоматично довършване на повече от 450 популярни адреси.";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Автоматично довършване";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "СПИСЪК НА ФАБРИЧНИ АДРЕСИ";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Изключено";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Няма потребителски адреси за показване";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Включено";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Назад";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Напред";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Презареждане";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Настройки";
+
+/* Accessibility label for the share button */
+"Browser.shareLabel" = "Споделяне";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Спиране";
+
+/* Label on button to cancel edits */
+"Cancel" = "Отказ";
+
+/* Label on button to complete edits */
+"Done" = "Готово";
+
+/* Label on button to allow edits */
+"Edit" = "Редактиране";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Повторен опит";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Отказ";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ иска да отвори друго приложение";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Отваряне";
+
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Обаждане";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Отказ";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Ел. адрес";
+
+/* Dialog title used for Maps/App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.messageTitleWithPlaceholder" = "Сега излизате от %@.";
+
+/* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openAppStoreButton" = "Отваряне на App Store";
+
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ иска да отвори App Store.";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Отваряне на Карти (Maps)";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Добре, разбрах!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelDescription" = "Автоматично спиране на проследяването онлайн, докато разглеждате. След това докоснете, за да изтриете посетените страници, търсения, бисквитки и пароли от устройството.";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Разглеждайте без да ви следят.";
+
+/* Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681 */
+"Focus.handoffSyncing" = "Apple Handoff се синхронизира";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Автоматично поверително разглеждане.";
+
+/* Second label for product description on the home screen */
+"Home.descriptionLabel2" = "Разглеждане. Изчистване. Повтаряне.";
+
+/* Label in share alert to cancel the alert */
+"Open.Cancel" = "Отказ";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (поверително разглеждане)";
+
+/* Label in share alert to open the full system share menu */
+"Open.More" = "Повече";
+
+/* Label in share alert to open the URL in Safari */
+"Open.Safari" = "Safari";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Натиснете на Safari, после изберете Content Blockers";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Включване на %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ не е включен.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Отваряне на приложението за настройки";
+
+/* Save button label */
+"Save" = "Запазване";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Добавяне на друга търсачка";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Добавяне на друга търсачка";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Добавяне на търсачка";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "ИНСТАЛИРАНИ ТЪРСАЧКИ";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Име, което да се показва";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Добавена е нова търсачка.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Връщане на стандартните търсещи машини";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Име на търсачката";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Низ за търсене, който да се използва";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Поставете или въведете низа за търсене. Ако е необходимо, заменете думата за търсене с „%s“.";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Автоматично довършване на адреси";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Спирането на други проследяващи елементи може да развали показването на някои видеота и уеб страници.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo" = "Не, благодаря";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes" = "Разбирам";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla се старае да събира само нужните данни за подобряване на %@ за всички.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Научете повече.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Настройки";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Търсачка";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "ТЪРСЕНЕ";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "ИНТЕГРАЦИЯ";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "ПРОИЗВОДИТЕЛНОСТ";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "ПОВЕРИТЕЛНОСТ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "Спиране на проследяването от реклами";
+
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Някои реклами проследяват посещенията, даже и да не натискате върху тях";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "Спиране на проследяването за анализи";
+
+/* Description for 'Block analytics Trackers' */
+"Settings.toggleBlockAnalyticsDescription" = "Използва се, за да се събират, анализират и измерват дейности като докосване и плъзгане";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Спиране на уеб шрифтовете";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockOther" = "Спиране на следене през друго съдържание";
+
+/* Description for 'Block other content Trackers' */
+"Settings.toggleBlockOtherDescription" = "Активирането може да предизвика неочаквано поведение на някои страници";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockSocial" = "Спиране на проследяването от социалните мрежи";
+
+/* Description for 'Block social Trackers' */
+"Settings.toggleBlockSocialDescription" = "Вградени в сайтове, за да ви проследява и да показва функционални елементи, като например бутони за споделяне";
+
+/* Label subtitle for toggle on main screen */
+"Settings.toggleOtherSubtitle" = "Видео и някои уеб страници може да не работят";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Изпращане данни за използването";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Новото в това издание";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Изтегляне на приложението Firefox";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Отваряне в %@";
+
+/* Label for cancel button shown when entering a URL or search */
+"URL.cancelLabel" = "Отказ";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Поставяне и посещаване";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ИЗЧИСТВАНЕ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "Историята на разглеждане е изчистена.";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Търсене или въвеждане на адрес";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Търсене на %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Спрени проследявания";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Отваряне в %@";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Избиране на лентата за местоположение";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.clipboardLink" = "Копирана препратка: %@";
+
+/* Text for the context menu when a user wants to copy an image after long pressing it. */
+"contextMenu.copyImageTitle" = "Копиране на изображението";
+
+/* Text for the context menu when a user wants to copy a link after long pressing it. */
+"contextMenu.copyLink" = "Копиране на препратката";
+
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "Запазване на изображението";
+
+/* Text for the context menu when a user wants to share a link after long pressing it. */
+"contextMenu.shareLinkTitle" = "Споделяне на препратката";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ иска да отвори %2$@";
+
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "Така ще можете да запазите изображението в Camera Roll";
+
+/* Title for button that takes the user to system settings */
+"photosPermission.openSettings" = "Към Настройки";
+
+/* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
+"photosPermission.title" = "„%@“ би желал да има достъп до вашите снимки";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Пример: searchengineexample.com/search/?q=%s";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "Проследяващи рекламни елементи";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "Проследяващи аналитични елементи";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "Проследяващи видимостта елементи";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "Изключване на защитата от проследяване";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Научете повече";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "Проследяващи елементи на социални мрежи";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "Изключване до затварянето на %@ или докосването на ИЗЧИСТВАНЕ.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "Защита от проследяване";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "Избиране дали %@ да спира проследяването от реклами, анализи, социални мрежи или други.";
+

@@ -1,0 +1,6 @@
+/* (No Comment) */
+"CFBundleDisplayName" = "$(DISPLAY_NAME)";
+
+/* (No Comment) */
+"CFBundleName" = "$(PRODUCT_NAME)";
+

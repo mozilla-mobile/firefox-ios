@@ -1,0 +1,18 @@
+/* (No Comment) */
+"NSCameraUsageDescription" = "याद्वारे आपण फोटो घेऊ व अपलोड करू शकता.";
+
+/* (No Comment) */
+"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+
+/* (No Comment) */
+"NSLocationWhenInUseUsageDescription" = "आपण ज्या संकेतस्थळांना भेट देता ते आपल्या स्थानाची मागणी करू शकतात.";
+
+/* (No Comment) */
+"NSMicrophoneUsageDescription" = "याद्वारे आपण व्हिडिओ घेऊ व अपलोड करू शकता.";
+
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "याद्वारे आपण फोटो साठवू व अपलोड करू शकता.";
+
+/* (No Comment) */
+"NSPhotoLibraryUsageDescription" = "याद्वारे आपण फोटो साठवू व अपलोड करू शकता.";
+
