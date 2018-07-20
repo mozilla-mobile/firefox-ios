@@ -45,9 +45,11 @@ class RemoteTabsPanel: UIViewController, HomePanel {
         button.addTarget(self, action: #selector(historyBackButtonWasTapped), for: .touchUpInside)
         return button
     }()
-    var profile: Profile!
 
-    init() {
+    let profile: Profile
+
+    init(profile: Profile) {
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .ProfileDidFinishSyncing, object: nil)
@@ -261,10 +263,16 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
 
 }
 
+fileprivate let emptySyncImageName = "emptySync"
+
 // MARK: -
 
 class RemoteTabsErrorCell: UITableViewCell {
     static let Identifier = "RemoteTabsErrorCell"
+
+    let titleLabel = UILabel()
+    let emptyStateImageView = UIImageView()
+    let instructionsLabel = UILabel()
 
     init(error: RemoteTabsError) {
         super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.Identifier)
@@ -274,32 +282,27 @@ class RemoteTabsErrorCell: UITableViewCell {
         let containerView = UIView()
         contentView.addSubview(containerView)
 
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "emptySync")
-        containerView.addSubview(imageView)
-        imageView.snp.makeConstraints { (make) -> Void in
+        emptyStateImageView.image = UIImage.templateImageNamed(emptySyncImageName)
+        containerView.addSubview(emptyStateImageView)
+        emptyStateImageView.snp.makeConstraints { (make) -> Void in
             make.top.equalTo(containerView)
             make.centerX.equalTo(containerView)
         }
 
-        let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
         titleLabel.textAlignment = .center
-        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
         containerView.addSubview(titleLabel)
 
-        let instructionsLabel = UILabel()
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         instructionsLabel.text = error.localizedString()
         instructionsLabel.textAlignment = .center
-        instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
         instructionsLabel.numberOfLines = 0
         containerView.addSubview(instructionsLabel)
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
-            make.centerX.equalTo(imageView)
+            make.top.equalTo(emptyStateImageView.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+            make.centerX.equalTo(emptyStateImageView)
         }
 
         instructionsLabel.snp.makeConstraints { make in
@@ -310,7 +313,7 @@ class RemoteTabsErrorCell: UITableViewCell {
 
         containerView.snp.makeConstraints { make in
             // Let the container wrap around the content
-            make.top.equalTo(imageView.snp.top)
+            make.top.equalTo(emptyStateImageView.snp.top)
             make.left.bottom.right.equalTo(instructionsLabel)
             // And then center it in the overlay view that sits on top of the UITableView
             make.centerX.equalTo(contentView)
@@ -321,10 +324,21 @@ class RemoteTabsErrorCell: UITableViewCell {
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(contentView.snp.top).offset(20).priority(1000)
         }
+
+        containerView.backgroundColor = .clear
+
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme() {
+        emptyStateImageView.tintColor = UIColor.theme.tableView.rowText
+        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
+        instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
+        backgroundColor = UIColor.theme.homePanel.panelBackground
     }
 }
 
@@ -333,46 +347,32 @@ class RemoteTabsErrorCell: UITableViewCell {
 class RemoteTabsNotLoggedInCell: UITableViewCell {
     static let Identifier = "RemoteTabsNotLoggedInCell"
     var homePanel: HomePanel?
-    var instructionsLabel: UILabel
-    var signInButton: UIButton
-    var titleLabel: UILabel
-    var emptyStateImageView: UIImageView
+    let instructionsLabel = UILabel()
+    let signInButton = UIButton()
+    let titleLabel = UILabel()
+    let emptyStateImageView = UIImageView()
 
     init(homePanel: HomePanel?) {
-        let titleLabel = UILabel()
-        let instructionsLabel = UILabel()
-        let signInButton = UIButton()
-        let imageView = UIImageView()
-
-        self.instructionsLabel = instructionsLabel
-        self.signInButton = signInButton
-        self.titleLabel = titleLabel
-        self.emptyStateImageView = imageView
-
         super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.Identifier)
 
         self.homePanel = homePanel
         let createAnAccountButton = UIButton(type: .system)
 
-        imageView.image = UIImage(named: "emptySync")
-        contentView.addSubview(imageView)
+        emptyStateImageView.image = UIImage.templateImageNamed(emptySyncImageName)
+        contentView.addSubview(emptyStateImageView)
 
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.text = Strings.EmptySyncedTabsPanelStateTitle
         titleLabel.textAlignment = .center
-        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
         contentView.addSubview(titleLabel)
 
         instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         instructionsLabel.text = Strings.EmptySyncedTabsPanelNotSignedInStateDescription
         instructionsLabel.textAlignment = .center
-        instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
         instructionsLabel.numberOfLines = 0
         contentView.addSubview(instructionsLabel)
 
-        signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
         signInButton.setTitle(Strings.FxASignInToSync, for: [])
-        signInButton.setTitleColor(UIColor.theme.tableView.headerTextDark, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
@@ -384,7 +384,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         createAnAccountButton.addTarget(self, action: #selector(createAnAccount), for: .touchUpInside)
         contentView.addSubview(createAnAccountButton)
 
-        imageView.snp.makeConstraints { (make) -> Void in
+        emptyStateImageView.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(instructionsLabel)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
@@ -395,18 +395,29 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
-            make.centerX.equalTo(imageView)
+            make.top.equalTo(emptyStateImageView.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+            make.centerX.equalTo(emptyStateImageView)
         }
 
         createAnAccountButton.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(signInButton)
             make.top.equalTo(signInButton.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
         }
+
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme() {
+        emptyStateImageView.tintColor = UIColor.theme.tableView.rowText
+        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
+        instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
+        signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
+        signInButton.setTitleColor(UIColor.theme.tableView.headerTextDark, for: [])
+        backgroundColor = UIColor.theme.homePanel.panelBackground
     }
 
     @objc fileprivate func signIn() {
@@ -606,6 +617,8 @@ extension RemoteTabsTableViewController: HomePanelContextMenu {
 
 extension RemoteTabsPanel: Themeable {
     func applyTheme() {
+        historyBackButton.applyTheme()
         tableViewController.tableView.reloadData()
+        tableViewController.refreshTabs()
     }
 }

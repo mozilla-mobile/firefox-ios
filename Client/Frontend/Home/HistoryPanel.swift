@@ -396,9 +396,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func showSyncedTabs() {
-        let nextController = RemoteTabsPanel()
+        let nextController = RemoteTabsPanel(profile: profile)
         nextController.homePanelDelegate = self.homePanelDelegate
-        nextController.profile = self.profile
         self.refreshControl?.endRefreshing()
         self.navigationController?.pushViewController(nextController, animated: true)
     }
@@ -545,6 +544,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     override func applyTheme() {
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
+
         super.applyTheme()
     }
 }

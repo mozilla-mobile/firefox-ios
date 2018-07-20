@@ -103,7 +103,7 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var toolbarBackground: UIColor { return defaultBackground }
     override var toolbarHighlight: UIColor { return UIColor.Photon.Blue50 }
     override var toolbarTint: UIColor { return UIColor.Photon.Grey30 }
-    override var panelBackground: UIColor { return UIColor.black }
+    override var panelBackground: UIColor { return UIColor.Photon.Ink90 }
     override var separator: UIColor { return defaultSeparator }
     override var border: UIColor { return UIColor.Photon.Grey60 }
     override var buttonContainerBorder: UIColor { return separator }
