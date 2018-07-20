@@ -200,9 +200,6 @@
                   Identifier = "ActivityStreamTest/testContextMenuInLandscape()">
                </Test>
                <Test
-                  Identifier = "ActivityStreamTest/testDefaultSites()">
-               </Test>
-               <Test
                   Identifier = "ActivityStreamTest/testOpenTopSitesFromContextMenu()">
                </Test>
                <Test
