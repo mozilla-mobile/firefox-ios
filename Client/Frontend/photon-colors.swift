@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-/* Photon Colors iOS Variables v3.1.0
- From https://github.com/FirefoxUX/design-tokens/tree/master/photon-colors#readme */
+/* Photon Colors iOS Variables v3.3.1
+ From https://github.com/FirefoxUX/photon-colors/#readme */
 import UIKit
 
 extension UIColor {
@@ -14,6 +14,8 @@ extension UIColor {
         static let Magenta80 = UIColor(rgb: 0x7d004f)
         static let Magenta90 = UIColor(rgb: 0x440027)
 
+        static let Purple30 = UIColor(rgb: 0xc069ff)
+        static let Purple40 = UIColor(rgb: 0xad3bff)
         static let Purple50 = UIColor(rgb: 0x9400ff)
         static let Purple60 = UIColor(rgb: 0x8000d7)
         static let Purple70 = UIColor(rgb: 0x6200a4)
@@ -83,6 +85,9 @@ extension UIColor {
         static let Grey90A80 = UIColor(rgba: 0x0c0c0dcc)
         static let Grey90A90 = UIColor(rgba: 0x0c0c0de5)
 
+        static let Ink40 = UIColor(rgb: 0x7175A8)
+        static let Ink50 = UIColor(rgb: 0x595E91)
+        static let Ink60 = UIColor(rgb: 0x464B76)
         static let Ink70 = UIColor(rgb: 0x363959)
         static let Ink80 = UIColor(rgb: 0x202340)
         static let Ink90 = UIColor(rgb: 0x0f1126)
