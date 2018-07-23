@@ -171,15 +171,52 @@ extension SQLiteHistory: HistoryRecommendations {
         return [(clearHighlightsQuery, nil), (sql, args)]
     }
 
+    // Checks if there are more than 100k items in the `visits` table.
+    // This is used as an indicator that we should clean up old history.
+    private func checkIfCleanupIsNeeded() -> Deferred<Maybe<Bool>> {
+        let sql = "SELECT COUNT(*) FROM \(TableVisits)"
+        return self.db.runQuery(sql, args: nil, factory: IntFactory) >>== { cursor in
+            guard let visitCount = cursor[0], visitCount > 100000 else {
+                return deferMaybe(false)
+            }
+
+            return deferMaybe(true)
+        }
+    }
+
+    // Deletes the oldest 50k items from the `visits` table and their
+    // corresponding items in the `history` table. This only gets run when
+    // there are more than 100k items in the `visits` table. Because of
+    // this, we may need to clean up several times until we've crossed
+    // below the 100k-item threshold.
+    private func cleanupOldHistory() -> [(String, Args?)] {
+        let visitsSQL = """
+            DELETE FROM \(TableVisits) WHERE id IN (
+                SELECT id FROM \(TableVisits) ORDER BY \(TableVisits).date ASC LIMIT 50000
+            )
+            """
+        let historySQL = """
+            DELETE FROM \(TableHistory) WHERE NOT EXISTS (
+                SELECT 1 FROM \(TableVisits) WHERE \(TableVisits).siteID = \(TableHistory).id
+            )
+            """
+        return [(visitsSQL, nil), (historySQL, nil)]
+    }
+
     public func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success {
-        var queries: [(String, Args?)] = []
-        if shouldInvalidateTopSites {
-            queries.append(contentsOf: self.refreshTopSitesQuery())
+        return checkIfCleanupIsNeeded() >>== { doCleanup in
+            var queries: [(String, Args?)] = []
+            if doCleanup {
+                queries.append(contentsOf: self.cleanupOldHistory())
+            }
+            if shouldInvalidateTopSites {
+                queries.append(contentsOf: self.refreshTopSitesQuery())
+            }
+            if shouldInvalidateHighlights {
+                queries.append(contentsOf: self.repopulateHighlightsQuery())
+            }
+            return self.db.run(queries)
         }
-        if shouldInvalidateHighlights {
-            queries.append(contentsOf: self.repopulateHighlightsQuery())
-        }
-        return self.db.run(queries)
     }
 
     public func getRecentBookmarks(_ limit: Int = 3) -> Deferred<Maybe<Cursor<Site>>> {
