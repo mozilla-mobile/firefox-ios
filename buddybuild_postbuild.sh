@@ -9,7 +9,7 @@ bash <(curl -s https://codecov.io/bash)
 test_runner="XCUITests-Runner"
 branch_name=`git rev-parse --abbrev-ref HEAD`
 
-if [ "$BUDDYBUILD_SCHEME" = "Fennec"  ] && [ $branch_name == "master" ]; then
+if [ "$BUDDYBUILD_SCHEME" = "Fennec" ]; then
   cd  $BUDDYBUILD_PRODUCT_DIR
   find . -name "*.dSYM" -print | zip /tmp/dsyms.zip -@
   curl -F ipa=@$BUDDYBUILD_IPA_PATH  -u $NIMBLEDROID_API_KEY: https://nimbledroid.com/api/v2/ipas \
