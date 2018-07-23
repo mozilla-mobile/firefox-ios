@@ -311,7 +311,28 @@
                   Identifier = "DragAndDropTests">
                </Test>
                <Test
-                  Identifier = "FindInPageTests">
+                  Identifier = "FindInPageTests/testBarDissapearsWhenOpeningTabsTray()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testBarDissapearsWhenReloading()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindFromSelection()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindInLargeDoc()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindInPageResultsPageShowHideContent()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindInPageTwoWordsSearch()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindInPageTwoWordsSearchLargeDoc()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testQueryWithNoMatches()">
                </Test>
                <Test
                   Identifier = "FirstRunTourTests/testShowTourFromSettings()">
