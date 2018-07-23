@@ -112,6 +112,15 @@ class TabTrayController: UIViewController {
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self)
+        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
+        collectionView.dataSource = tabDisplayManager
+        collectionView.delegate = tabLayoutDelegate
+        collectionView.contentInset = UIEdgeInsets(top: TabTrayControllerUX.SearchBarHeight, left: 0, bottom: 0, right: 0)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.layoutIfNeeded()
     }
 
     deinit {
@@ -120,10 +129,10 @@ class TabTrayController: UIViewController {
     }
 
     func focusTab() {
-        guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.tabStore.index(of: currentTab), !self.collectionView.frame.isEmpty else {
+        guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.tabStore.index(of: currentTab) else {
             return
         }
-        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredVertically, animated: false)
+        self.collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .bottom, animated: false)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -140,11 +149,7 @@ class TabTrayController: UIViewController {
         tabManager.addDelegate(self)
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
-        collectionView.dataSource = tabDisplayManager
-        collectionView.delegate = tabLayoutDelegate
         collectionView.alwaysBounceVertical = true
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.BottomToolbarHeight, right: 0)
-        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.backgroundColor = UIColor.theme.tabTray.background
         collectionView.keyboardDismissMode = .onDrag
 
@@ -203,7 +208,7 @@ class TabTrayController: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.left.equalTo(view.safeArea.left)
             make.right.equalTo(view.safeArea.right)
-            make.bottom.equalTo(view.safeArea.bottom)
+            make.bottom.equalTo(toolbar.snp.top)
             make.top.equalTo(self.topLayoutGuide.snp.bottom)
         }
 
@@ -688,7 +693,7 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 
             let offset = clamp(abs(scrollView.contentOffset.y), min: 0, max: TabTrayControllerUX.SearchBarHeight)
             searchHeightConstraint?.update(offset: offset)
-            scrollView.contentInset = UIEdgeInsets(top: offset, left: 0, bottom: UIConstants.BottomToolbarHeight, right: 0)
+            scrollView.contentInset = UIEdgeInsets(top: offset, left: 0, bottom: 0, right: 0)
         } else {
             self.hideSearch()
         }
@@ -696,12 +701,12 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 
     func showSearch() {
         searchHeightConstraint?.update(offset: TabTrayControllerUX.SearchBarHeight)
-        scrollView.contentInset = UIEdgeInsets(top: TabTrayControllerUX.SearchBarHeight, left: 0, bottom: UIConstants.BottomToolbarHeight, right: 0)
+        scrollView.contentInset = UIEdgeInsets(top: TabTrayControllerUX.SearchBarHeight, left: 0, bottom: 0, right: 0)
     }
 
     func hideSearch() {
         searchHeightConstraint?.update(offset: 0)
-        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: UIConstants.BottomToolbarHeight, right: 0)
+        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 
     fileprivate func cellHeightForCurrentDevice() -> CGFloat {
