@@ -9,11 +9,11 @@
     <meta charset="UTF-8">
     <style>
       body, html {
-        background: #221F1F;
-        color: #E1E5EA;
+        background: #FFFFFF;
+        color: #000000;
         font: -apple-system-body;
-        font-size: 14px;
-        font-weight: medium;
+        font-size: 16px;
+        font-weight: 1.5;
         margin: 0;
         padding: 0;
         height: 100%;
@@ -34,29 +34,24 @@
         width: 80%;
         max-width: 300px;
         border: none;
-        padding: 1rem;
-        background: #135EA4;
-        font-size: 14px;
+        height: 48px;
+        background: #0a84ff;
+        font-size: 16px;
+        font-weight: 600;
         color: white;
-        border-radius: 6px;
-        margin: 10px 0 0;
+        border-radius: 12px;
+        margin-top: 40px;
       }
 
       .message {
         width: 80%;
         max-width: 300px;
-        text-align: center;
-      }
-
-      .short {
-        color: rgba(255,255,255,0.5);
-        margin: 10px 0 10px;
+        text-align: left;
       }
     </style>
   </head>
   <body>
     <div class="message long">%messageLong%</div>
-    <div class="message short">%messageShort%</div>
     <button onclick="window.location.reload()">%button%</div>
   </body>
 </html>
