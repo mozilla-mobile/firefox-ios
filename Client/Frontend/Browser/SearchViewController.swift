@@ -499,14 +499,8 @@ extension SearchViewController: SuggestionCellDelegate {
         // Assume that only the default search engine can provide search suggestions.
         let engine = searchEngines.defaultEngine
 
-        var url = URIFixup.getURL(suggestion)
-        if url == nil {
-            url = engine.searchURLForQuery(suggestion)
-        }
-
-        Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
-
-        if let url = url {
+        if let url = engine.searchURLForQuery(suggestion) {
+            Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
             searchDelegate?.searchViewController(self, didSelectURL: url)
         }
     }
