@@ -208,6 +208,7 @@ struct UIConstants {
         static let aboutTopLabel = NSLocalizedString("About.topLabel", value: "%@ puts you in control.", comment: "Label on About screen")
         static let biometricReason = NSLocalizedString("BiometricPrompt.reason", value: "Unlock %@ when re-opening in order to prevent unauthorized access.", comment: "%@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app.")
         static let touchIdReason = NSLocalizedString("touchId.reason", value: "Use Touch ID to return to %@", comment: "%@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app.")
+        static let authenticationReason = NSLocalizedString("Authentication.reason", value: "Authenticate to return to %@", comment: "%@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app.")
         static let newSessionFromBiometricFailure = NSLocalizedString("BiometricPrompt.newSession", value: "New Session", comment: "Create a new session after failing a biometric check")
         static let browserBack = NSLocalizedString("Browser.backLabel", value: "Back", comment: "Accessibility label for the back button")
         static let browserForward = NSLocalizedString("Browser.forwardLabel", value: "Forward", comment: "Accessibility label for the forward button")
