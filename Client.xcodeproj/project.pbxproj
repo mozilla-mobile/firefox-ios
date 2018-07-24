@@ -667,7 +667,6 @@
 		E6D7C32B1CF4E86C00E746BA /* TestBookmarkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7C31C1CF4E68D00E746BA /* TestBookmarkModel.swift */; };
 		E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */; };
 		E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */; };
-		E6EC6EED1E53548A0067985D /* EarlGrey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B21E8051E26CCB7000C8779 /* EarlGrey.framework */; };
 		E6ECF2381C974E0F00B0DC93 /* KIF.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D30EBB6A1C75503800105AE9 /* KIF.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6EDE82C1D5244AF007A0732 /* BatchingClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EDE81D1D524475007A0732 /* BatchingClientTests.swift */; };
 		E6F368291D7F594F008CDD67 /* SQLiteHistoryRecommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F368281D7F594F008CDD67 /* SQLiteHistoryRecommendations.swift */; };
@@ -2009,7 +2008,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				392E18031FEC4D7B00EBA79C /* MappaMundi.framework in Frameworks */,
-				E6EC6EED1E53548A0067985D /* EarlGrey.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4594,7 +4592,6 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/EarlGrey.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/MappaMundi.framework",
 			);
 			name = "Copy Carthage Frameworks";
