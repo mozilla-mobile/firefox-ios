@@ -545,6 +545,9 @@
                   Identifier = "SyncUITests/testUIFromSettings()">
                </Test>
                <Test
+                  Identifier = "TabTraySearchTabsTests">
+               </Test>
+               <Test
                   Identifier = "ThirdPartySearchTest">
                </Test>
                <Test
