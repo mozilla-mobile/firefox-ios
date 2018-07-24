@@ -7,12 +7,14 @@ import Shared
 import WebKit
 
 private let SectionSites = 0
-private let SectionButton = 1
-private let NumberOfSections = 2
+private let SectionShowMore = 1
+private let SectionButton = 2
+private let NumberOfSections = 3
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
 class WebsiteDataManagement: UITableViewController {
     fileprivate var clearButton: UITableViewCell?
+    fileprivate var showMoreButton: UITableViewCell?
 
     fileprivate typealias DefaultCheckedState = Bool
     let searchController = UISearchController(searchResultsController: nil)
@@ -51,6 +53,10 @@ class WebsiteDataManagement: UITableViewController {
             for record in records {
                 self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
             }
+            self.siteRecords.sort { $0.nameOfSite < $1.nameOfSite }
+            if self.siteRecords.count >= 5 {
+                self.siteRecords.removeLast(self.siteRecords.count - 5)
+            }
             self.tableView.reloadData()
         }
 
@@ -73,7 +79,15 @@ class WebsiteDataManagement: UITableViewController {
             assert(indexPath.section == SectionSites)
             let site = siteRecords[indexPath.item]
             cell.textLabel?.text = site.nameOfSite
-        }else {
+        } else if indexPath.section == SectionShowMore {
+            assert(indexPath.section == SectionShowMore)
+            cell.textLabel?.text = "Show More"
+            cell.textLabel?.textColor = UIColor.theme.general.highlightBlue
+            cell.accessibilityTraits = UIAccessibilityTraitButton
+            cell.accessibilityIdentifier = "ShowMoreWebsiteData"
+            showMoreButton = cell
+
+        } else {
             assert(indexPath.section == SectionButton)
             cell.textLabel?.text = Strings.SettingsClearAllWebsiteDataButton
             cell.textLabel?.textAlignment = .center
@@ -92,18 +106,32 @@ class WebsiteDataManagement: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionSites {
             return siteRecords.count
+        } else if section == SectionShowMore {
+            return 1
         }
         assert(section == SectionButton)
         return 1
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        guard indexPath.section == SectionButton else { return false }
-        return true
+        if indexPath.section == SectionShowMore || indexPath.section == SectionButton {
+            return true
+        }
+        return false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        if indexPath.section == SectionShowMore {
+            //get websites
+            siteRecords.removeAll()
+            dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
+                for record in records {
+                        self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
+                }
+                self.siteRecords.sort { $0.nameOfSite < $1.nameOfSite }
+                self.tableView.reloadData()
+            }
+        }
         guard indexPath.section == SectionButton else { return }
         if indexPath.section == SectionButton {
             WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
@@ -139,7 +167,10 @@ class WebsiteDataManagement: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return SettingsUX.TableViewHeaderFooterHeight
+        if section != SectionShowMore {
+            return SettingsUX.TableViewHeaderFooterHeight
+        }
+        return 0
     }
 
     func clearprivatedata() {
