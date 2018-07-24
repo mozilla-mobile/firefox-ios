@@ -37,6 +37,7 @@ class SnackButton: UIButton {
         } else {
             titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         }
+        titleLabel?.adjustsFontForContentSizeCategory = false
         setTitle(title, for: .normal)
         setTitleColor(UIColor.theme.snackbar.highlightText, for: .highlighted)
         setTitleColor(UIColor.theme.snackbar.title, for: .normal)
