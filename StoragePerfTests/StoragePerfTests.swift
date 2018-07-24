@@ -53,6 +53,31 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
     }
 }
 
+class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
+    func testCheckIfCleanupIsNeeded() {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        history.clearHistory().succeeded()
+        let doCleanup1 = history.checkIfCleanupIsNeeded().value.successValue!
+        XCTAssertFalse(doCleanup1, "We should not need to perform clean-up")
+
+        // Each history item inserted will produce 20 visits. Since clean-up is triggered
+        // once we exceed 100,000 visits, inserting 5,001 history items here will result in
+        // exactly 100,020 visits which should trigger a clean-up.
+        populateHistoryForFrecencyCalculations(history, siteCount: 5001)
+        let doCleanup2 = history.checkIfCleanupIsNeeded().value.successValue!
+        XCTAssertTrue(doCleanup2, "We should not need to perform clean-up")
+
+        // This should trigger the actual clean-up operation to happen.
+        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
+        let doCleanup3 = history.checkIfCleanupIsNeeded().value.successValue!
+        XCTAssertFalse(doCleanup3, "We should not need to perform clean-up")
+    }
+}
+
 class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
     func testCachePerf() {
         let files = MockFiles()
@@ -81,14 +106,14 @@ private enum VisitOrigin {
 }
 
 private func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, siteCount count: Int) {
-    for i in 0...count {
+    for i in 0..<count {
         let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")
         site.guid = "abc\(i)def"
 
         let baseMillis: UInt64 = baseInstantInMillis - 20000
         history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).succeeded()
 
-        for j in 0...20 {
+        for j in 1...20 {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
             addVisitForSite(site, intoHistory: history, from: .local, atTime: visitTime)
             addVisitForSite(site, intoHistory: history, from: .remote, atTime: visitTime)
