@@ -173,7 +173,7 @@ extension SQLiteHistory: HistoryRecommendations {
 
     // Checks if there are more than 100k items in the `visits` table.
     // This is used as an indicator that we should clean up old history.
-    private func checkIfCleanupIsNeeded() -> Deferred<Maybe<Bool>> {
+    func checkIfCleanupIsNeeded() -> Deferred<Maybe<Bool>> {
         let sql = "SELECT COUNT(*) FROM \(TableVisits)"
         return self.db.runQuery(sql, args: nil, factory: IntFactory) >>== { cursor in
             guard let visitCount = cursor[0], visitCount > 100000 else {
