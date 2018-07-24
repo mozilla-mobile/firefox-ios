@@ -250,9 +250,14 @@ class TabTrayController: UIViewController {
         }
 
         tabDisplayManager.isPrivate = !tabDisplayManager.isPrivate
-        tabDisplayManager.reloadData()
         tabManager.willSwitchTabMode(leavingPBM: privateMode)
         privateMode = !privateMode
+
+        if tabDisplayManager.searchActive {
+            self.didPressCancel()
+        } else {
+            self.tabDisplayManager.reloadData()
+        }
 
         tabDisplayManager.isPrivate = privateMode
         // If we are exiting private mode and we have the close private tabs option selected, make sure
