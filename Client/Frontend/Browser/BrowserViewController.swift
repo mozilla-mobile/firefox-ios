@@ -1151,6 +1151,10 @@ class BrowserViewController: UIViewController {
             // To Screenshot a tab that is hidden we must add the webView,
             // then wait enough time for the webview to render.
             view.insertSubview(webView, at: 0)
+            // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
+            // touch-screen keyboard from the background even though they shouldn't be able to.
+            webView.resignFirstResponder()
+
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
                 self.screenshotHelper.takeScreenshot(tab)
                 if webView.superview == self.view {
