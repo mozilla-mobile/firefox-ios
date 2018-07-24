@@ -452,6 +452,7 @@ extension TabTrayController {
     @objc func appWillResignActiveNotification() {
         if privateMode {
             collectionView.alpha = 0
+            searchBarHolder.alpha = 0
         }
     }
 
@@ -460,6 +461,7 @@ extension TabTrayController {
         // as part of a private mode tab
         UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: {
             self.collectionView.alpha = 1
+            self.searchBarHolder.alpha = 1
         },
         completion: nil)
     }
