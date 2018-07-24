@@ -15,6 +15,7 @@ private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 class WebsiteDataManagement: UITableViewController {
     fileprivate var clearButton: UITableViewCell?
     fileprivate var showMoreButton: UITableViewCell?
+    var showMoreButtonEnabled = true
 
     fileprivate typealias DefaultCheckedState = Bool
     let searchController = UISearchController(searchResultsController: nil)
@@ -56,6 +57,8 @@ class WebsiteDataManagement: UITableViewController {
             self.siteRecords.sort { $0.nameOfSite < $1.nameOfSite }
             if self.siteRecords.count >= 5 {
                 self.siteRecords.removeLast(self.siteRecords.count - 5)
+            } else {
+                self.showMoreButtonEnabled = false
             }
             self.tableView.reloadData()
         }
@@ -82,7 +85,7 @@ class WebsiteDataManagement: UITableViewController {
         } else if indexPath.section == SectionShowMore {
             assert(indexPath.section == SectionShowMore)
             cell.textLabel?.text = "Show More"
-            cell.textLabel?.textColor = UIColor.theme.general.highlightBlue
+            cell.textLabel?.textColor = showMoreButtonEnabled ? UIColor.theme.general.highlightBlue : UIColor.gray
             cell.accessibilityTraits = UIAccessibilityTraitButton
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
             showMoreButton = cell
@@ -114,7 +117,7 @@ class WebsiteDataManagement: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == SectionShowMore || indexPath.section == SectionButton {
+        if (indexPath.section == SectionShowMore && showMoreButtonEnabled) || indexPath.section == SectionButton {
             return true
         }
         return false
@@ -129,6 +132,7 @@ class WebsiteDataManagement: UITableViewController {
                         self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
                 }
                 self.siteRecords.sort { $0.nameOfSite < $1.nameOfSite }
+                self.showMoreButtonEnabled = false
                 self.tableView.reloadData()
             }
         }
@@ -136,6 +140,7 @@ class WebsiteDataManagement: UITableViewController {
         if indexPath.section == SectionButton {
             WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
             siteRecords.removeAll()
+            showMoreButtonEnabled = false
             tableView.reloadData()
         }
         tableView.deselectRow(at: indexPath, animated: false)
