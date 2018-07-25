@@ -51,7 +51,8 @@ class TabDisplayManager: NSObject {
 
     private var tabsToDisplay: [Tab] {
         if searchActive {
-            return searchedTabs
+            // tabs can be deleted while a search is active. Make sure the tab still exists in the tabmanager before displaying
+            return searchedTabs.filter({ tabManager.tabs.contains($0) })
         }
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
