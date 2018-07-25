@@ -57,13 +57,13 @@ class TabTrayController: UIViewController {
 
     lazy var searchBar: UITextField = {
         let searchBar = SearchBarTextField()
-        searchBar.backgroundColor = UIColor.Photon.Grey60
+        searchBar.backgroundColor = UIColor.theme.tabTray.searchBackground
         searchBar.layer.cornerRadius = 4
         searchBar.layer.masksToBounds = true
         searchBar.leftView = UIImageView(image: UIImage(named: "quickSearch"))
         searchBar.leftViewMode = .unlessEditing
-        searchBar.textColor = UIColor.Photon.White100
-        searchBar.attributedPlaceholder = NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.Photon.White100.withAlphaComponent(0.7)])
+        searchBar.textColor = UIColor.theme.tabTray.tabTitleText
+        searchBar.attributedPlaceholder = NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7)])
         searchBar.clearButtonMode = .never
         searchBar.delegate = self
         searchBar.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
@@ -76,7 +76,7 @@ class TabTrayController: UIViewController {
         let cancelButton = UIButton()
         cancelButton.setImage(UIImage.templateImageNamed("close-medium"), for: .normal)
         cancelButton.addTarget(self, action: #selector(didPressCancel), for: .touchUpInside)
-        cancelButton.tintColor = UIColor.Photon.White100
+        cancelButton.tintColor = UIColor.theme.tabTray.tabTitleText
         cancelButton.isHidden = true
         return cancelButton
     }()
@@ -160,13 +160,13 @@ class TabTrayController: UIViewController {
         }
 
         searchBarHolder.addSubview(searchBar)
-        searchBarHolder.backgroundColor = UIColor.Photon.Grey70
+        searchBarHolder.backgroundColor = UIColor.theme.tabTray.toolbar
         [collectionView, toolbar, searchBarHolder, cancelButton].forEach { view.addSubview($0) }
         makeConstraints()
 
         // The statusBar needs a background color
         let statusBarBG = UIView()
-        statusBarBG.backgroundColor = UIColor.Photon.Grey70
+        statusBarBG.backgroundColor = UIColor.theme.tabTray.toolbar
         view.addSubview(statusBarBG)
         statusBarBG.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self.view)
@@ -201,7 +201,7 @@ class TabTrayController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent //this will need to be fixed
+        return ThemeManager.instance.statusBarStyle
     }
 
     fileprivate func makeConstraints() {
