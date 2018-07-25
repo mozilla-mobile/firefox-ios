@@ -852,13 +852,8 @@ extension SQLiteHistory: Favicons {
 
     public func clearAllFavicons() -> Success {
         return db.transaction { conn -> Void in
-            try conn.executeChange("DELETE FROM favicon_sites")
             try conn.executeChange("DELETE FROM favicons")
         }
-    }
-
-    public func addFavicon(_ icon: Favicon) -> Deferred<Maybe<Int>> {
-        return self.favicons.insertOrUpdateFavicon(icon)
     }
 
     /**
@@ -869,58 +864,27 @@ extension SQLiteHistory: Favicons {
         if Logger.logPII {
             log.verbose("Adding favicon \(icon.url) for site \(site.url).")
         }
-        func doChange(_ query: String, args: Args?) -> Deferred<Maybe<Int>> {
-            return db.withConnection { conn -> Int in
-                // Blind! We don't see failure here.
-                let id = self.favicons.insertOrUpdateFaviconInTransaction(icon, conn: conn)
 
-                // Now set up the mapping.
-                try conn.executeChange(query, withArgs: args)
+        return db.withConnection { conn -> Int in
+            // Blind! We don't see failure here.
+            let id = self.favicons.insertOrUpdateFaviconInTransaction(icon, forSite: site, conn: conn)
 
-                // Try to update the favicon ID column in each bookmarks table. There can be
-                // multiple bookmarks with a particular URI, and a mirror bookmark can be
-                // locally changed, so either or both of these statements can update multiple rows.
-                if let id = id {
-                    icon.id = id
+            // Try to update the favicon ID column in each bookmarks table. There can be
+            // multiple bookmarks with a particular URI, and a mirror bookmark can be
+            // locally changed, so either or both of these statements can update multiple rows.
+            if let id = id {
+                icon.id = id
 
-                    try? conn.executeChange("UPDATE bookmarksLocal SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-                    try? conn.executeChange("UPDATE bookmarksMirror SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                try? conn.executeChange("UPDATE bookmarksLocal SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
+                try? conn.executeChange("UPDATE bookmarksMirror SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
 
-                    return id
-                }
-
-                let err = DatabaseError(description: "Error adding favicon. ID = 0")
-                log.error("addFavicon(_:, forSite:) encountered an error: \(err.localizedDescription)")
-                throw err
-            }
-        }
-
-        let siteSubselect = "(SELECT id FROM history WHERE url = ?)"
-        let iconSubselect = "(SELECT id FROM favicons WHERE url = ?)"
-        let insertOrIgnore = "INSERT OR IGNORE INTO favicon_sites (siteID, faviconID) VALUES "
-        if let iconID = icon.id {
-            // Easy!
-            if let siteID = site.id {
-                // So easy!
-                let args: Args? = [siteID, iconID]
-                return doChange("\(insertOrIgnore) (?, ?)", args: args)
+                return id
             }
 
-            // Nearly easy.
-            let args: Args? = [site.url, iconID]
-            return doChange("\(insertOrIgnore) (\(siteSubselect), ?)", args: args)
-
+            let err = DatabaseError(description: "Error adding favicon. ID = 0")
+            log.error("addFavicon(_:, forSite:) encountered an error: \(err.localizedDescription)")
+            throw err
         }
-
-        // Sigh.
-        if let siteID = site.id {
-            let args: Args? = [siteID, icon.url]
-            return doChange("\(insertOrIgnore) (?, \(iconSubselect))", args: args)
-        }
-
-        // The worst.
-        let args: Args? = [site.url, icon.url]
-        return doChange("\(insertOrIgnore) (\(siteSubselect), \(iconSubselect))", args: args)
     }
 }
 

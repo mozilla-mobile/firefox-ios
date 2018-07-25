@@ -19,30 +19,41 @@ open class SQLiteFavicons {
         return (sql: "SELECT id FROM favicons WHERE url = ? LIMIT 1", args: args)
     }
 
-    public func getInsertFaviconQuery(favicon: Favicon) -> (sql: String, args: Args?) {
+    public func getInsertFaviconQuery(favicon: Favicon, siteID: Int?) -> (sql: String, args: Args?) {
         var args: Args = []
         args.append(favicon.url)
         args.append(favicon.width)
         args.append(favicon.height)
         args.append(favicon.date)
-        return (sql: "INSERT INTO favicons (url, width, height, type, date) VALUES (?,?,?,0,?)", args: args)
+
+        if let siteID = siteID {
+            args.append(siteID)
+            return (sql: "INSERT INTO favicons (url, width, height, type, date, siteID) VALUES (?,?,?,0,?,?)", args: args)
+        } else {
+            return (sql: "INSERT INTO favicons (url, width, height, type, date) VALUES (?,?,?,0,?)", args: args)
+        }
     }
 
-    public func getUpdateFaviconQuery(favicon: Favicon) -> (sql: String, args: Args?) {
+    public func getUpdateFaviconQuery(favicon: Favicon, siteID: Int?) -> (sql: String, args: Args?) {
         var args = Args()
         args.append(favicon.width)
         args.append(favicon.height)
         args.append(favicon.date)
-        args.append(favicon.url)
-        return (sql: "UPDATE favicons SET width = ?, height = ?, date = ? WHERE url = ?", args: args)
+
+        if let siteID = siteID {
+            args.append(siteID)
+            args.append(favicon.url)
+            return (sql: "UPDATE favicons SET width = ?, height = ?, date = ?, siteID = ? WHERE url = ?", args: args)
+        } else {
+            args.append(favicon.url)
+            return (sql: "UPDATE favicons SET width = ?, height = ?, date = ? WHERE url = ?", args: args)
+        }
     }
 
     public func getCleanupFaviconsQuery() -> (sql: String, args: Args?) {
         let sql = """
             DELETE FROM favicons
             WHERE favicons.id NOT IN (
-                SELECT faviconID FROM favicon_sites
-                UNION ALL
                 SELECT faviconID FROM bookmarksLocal WHERE faviconID IS NOT NULL
                 UNION ALL
                 SELECT faviconID FROM bookmarksMirror WHERE faviconID IS NOT NULL
@@ -52,18 +63,20 @@ open class SQLiteFavicons {
         return (sql: sql, args: nil)
     }
 
-    public func insertOrUpdateFavicon(_ favicon: Favicon) -> Deferred<Maybe<Int>> {
+    public func insertOrUpdateFavicon(_ favicon: Favicon, forSite site: Site) -> Deferred<Maybe<Int>> {
         return db.withConnection { conn -> Int in
-            self.insertOrUpdateFaviconInTransaction(favicon, conn: conn) ?? 0
+            self.insertOrUpdateFaviconInTransaction(favicon, forSite: site, conn: conn) ?? 0
         }
     }
 
-    func insertOrUpdateFaviconInTransaction(_ favicon: Favicon, conn: SQLiteDBConnection) -> Int? {
+    func insertOrUpdateFaviconInTransaction(_ favicon: Favicon, forSite site: Site, conn: SQLiteDBConnection) -> Int? {
         let query = self.getFaviconIDQuery(url: favicon.url)
         let cursor = conn.executeQuery(query.sql, factory: IntFactory, withArgs: query.args)
 
+        let siteID = conn.executeQuery("SELECT id FROM history WHERE url = ?", factory: IntFactory, withArgs: [site.url])[0]
+
         if let id = cursor[0] {
-            let updateQuery = self.getUpdateFaviconQuery(favicon: favicon)
+            let updateQuery = self.getUpdateFaviconQuery(favicon: favicon, siteID: siteID)
             do {
                 try conn.executeChange(updateQuery.sql, withArgs: updateQuery.args)
             } catch {
@@ -73,7 +86,7 @@ open class SQLiteFavicons {
             return id
         }
 
-        let insertQuery = self.getInsertFaviconQuery(favicon: favicon)
+        let insertQuery = self.getInsertFaviconQuery(favicon: favicon, siteID: siteID)
         do {
             try conn.executeChange(insertQuery.sql, withArgs: insertQuery.args)
         } catch {

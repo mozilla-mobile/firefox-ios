@@ -29,7 +29,6 @@ let TableCachedTopSites = "cached_top_sites"
 let TablePinnedTopSites = "pinned_top_sites"
 let TableDomains = "domains"
 let TableVisits = "visits"
-let TableFaviconSites = "favicon_sites"
 let TableQueuedTabs = "queue"
 let TableSyncCommands = "commands"
 let TableClients = "clients"
@@ -74,7 +73,6 @@ let TriggerHistoryAfterInsert = "t_history_afterinsert" // Added in v35
 private let AllTables: [String] = [
     TableDomains,
     TableFavicons,
-    TableFaviconSites,
 
     TableHistory,
     TableHistoryFTS,
@@ -143,7 +141,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 36    // Bug 1476881.
+    static let DefaultVersion = 37    // Bug 1476881.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -648,6 +646,18 @@ open class BrowserSchema: Schema {
         FROM view_awesomebar_bookmarks b LEFT JOIN favicons f ON f.id = b.faviconID
         """
 
+    fileprivate let widestFaviconsView = """
+            CREATE VIEW IF NOT EXISTS view_favicons_widest AS
+            SELECT
+                favicons.siteID AS siteID,
+                favicons.id AS iconID,
+                favicons.url AS iconURL,
+                favicons.date AS iconDate,
+                favicons.type AS iconType,
+                favicons.width AS iconWidth
+            FROM favicons
+            """
+
     // These triggers are used to keep the FTS index of the `history` table
     // in-sync after the initial "rebuild". The source for these triggers comes
     // directly from the SQLite documentation on maintaining external content FTS4
@@ -702,7 +712,8 @@ open class BrowserSchema: Schema {
                 width INTEGER,
                 height INTEGER,
                 type INTEGER NOT NULL,
-                date REAL NOT NULL
+                date REAL NOT NULL,
+                siteID INTEGER REFERENCES history(id) ON DELETE CASCADE
             )
             """
 
@@ -764,29 +775,6 @@ open class BrowserSchema: Schema {
             ON visits (siteID, is_local, date)
             """
 
-        let faviconSites = """
-            CREATE TABLE IF NOT EXISTS favicon_sites (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                siteID INTEGER NOT NULL REFERENCES history(id) ON DELETE CASCADE,
-                faviconID INTEGER NOT NULL REFERENCES favicons(id) ON DELETE CASCADE,
-                UNIQUE (siteID, faviconID)
-            )
-            """
-
-        let widestFavicons = """
-            CREATE VIEW IF NOT EXISTS view_favicons_widest AS
-            SELECT
-                favicon_sites.siteID AS siteID,
-                favicons.id AS iconID,
-                favicons.url AS iconURL,
-                favicons.date AS iconDate,
-                favicons.type AS iconType,
-                max(favicons.width) AS iconWidth
-            FROM favicon_sites, favicons
-            WHERE favicon_sites.faviconID = favicons.id
-            GROUP BY siteID
-            """
-
         let historyIDsWithIcon = """
             CREATE VIEW IF NOT EXISTS view_history_id_favicon AS
             SELECT history.id AS id, iconID, iconURL, iconDate, iconType, iconWidth
@@ -841,8 +829,7 @@ open class BrowserSchema: Schema {
             bookmarksMirror,
             bookmarksMirrorStructure,
             self.pendingBookmarksDeletions,
-            faviconSites,
-            widestFavicons,
+            widestFaviconsView,
             historyIDsWithIcon,
             iconForURL,
             pageMetadataCreate,
@@ -1344,6 +1331,23 @@ open class BrowserSchema: Schema {
             }
         }
 
+        if from < 37 && to >= 37 {
+            // If we're not rebuilding the DB from scratch, then assume that
+            // we need to fix the `favicons` table
+            if from > 12 {
+                if !self.run(db, queries: [
+                    "DELETE FROM favicons WHERE id NOT IN (SELECT iconID FROM view_favicons_widest)",
+                    "ALTER TABLE favicons ADD siteID INTEGER REFERENCES history(id) ON DELETE CASCADE",
+                    "UPDATE favicons SET siteID = (SELECT siteID FROM favicon_sites WHERE favicon_sites.faviconID = favicons.id)",
+                    "DROP VIEW IF EXISTS view_favicons_widest",
+                    widestFaviconsView, // Re-create the view to get the updated query
+                    "DROP TABLE IF EXISTS favicon_sites",
+                    ]) {
+                    return false
+                }
+            }
+        }
+
         return true
     }
 
@@ -1528,7 +1532,7 @@ open class BrowserSchema: Schema {
     public func drop(_ db: SQLiteDBConnection) -> Bool {
         log.debug("Dropping all browser tables.")
         let additional = [
-            "DROP TABLE IF EXISTS faviconSites" // We renamed it to match naming convention.
+            "DROP TABLE IF EXISTS faviconSites", // We renamed it to match naming convention.
         ]
 
         let views = AllViews.map { "DROP VIEW IF EXISTS \($0)" }
