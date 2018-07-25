@@ -94,6 +94,7 @@ class TabTrayColor {
     var cellCloseButton: UIColor { return UIColor.Photon.Grey50 }
     var cellTitleBackground: UIColor { return UIColor.clear }
     var faviconTint: UIColor { return UIColor.Photon.White100 }
+    var searchBackground: UIColor { return UIColor.Photon.Grey30 }
 }
 
 class TopTabsColor {
