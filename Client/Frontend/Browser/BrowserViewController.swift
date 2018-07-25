@@ -1696,8 +1696,11 @@ extension BrowserViewController: TabDelegate {
     }
 
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
+        let currentChoice = NewTabAccessors.getNewTabPage(self.profile.prefs)
+        self.profile.prefs.setString(NewTabPage.blankPage.rawValue, forKey: NewTabAccessors.PrefKey)
         openBlankNewTab(focusLocationField: false, isPrivate: tab.isPrivate)
         submitSearchText(selection)
+        self.profile.prefs.setString(currentChoice.rawValue, forKey: NewTabAccessors.PrefKey)
     }
 }
 
