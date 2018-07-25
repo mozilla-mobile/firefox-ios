@@ -37,6 +37,7 @@ class SnackButton: UIButton {
         } else {
             titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         }
+        titleLabel?.adjustsFontForContentSizeCategory = false
         setTitle(title, for: .normal)
         setTitleColor(UIColor.theme.snackbar.highlightText, for: .highlighted)
         setTitleColor(UIColor.theme.snackbar.title, for: .normal)
@@ -140,7 +141,7 @@ class SnackBar: UIView {
 
         titleView.snp.makeConstraints { make in
             make.top.equalTo(self).offset(UIConstants.DefaultPadding)
-            make.height.equalTo(UIConstants.SnackbarButtonHeight - 2 * UIConstants.DefaultPadding)
+            make.height.greaterThanOrEqualTo(UIConstants.SnackbarButtonHeight - 2 * UIConstants.DefaultPadding)
             make.centerX.equalTo(self).priority(500)
             make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 2).priority(1000)
         }
