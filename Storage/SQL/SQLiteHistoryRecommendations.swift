@@ -10,6 +10,9 @@ import Deferred
 fileprivate let log = Logger.syncLogger
 
 extension SQLiteHistory: HistoryRecommendations {
+    static let MaxHistoryRowCount   = AppConstants.IsRunningTest ? 2500 : 250000
+    static let PruneHistoryRowCount = AppConstants.IsRunningTest ?  250 :  25000
+
     // Bookmarks Query
     static let removeMultipleDomainsSubquery = """
         INNER JOIN (SELECT view_history_visits.domain_id AS domain_id
@@ -171,12 +174,12 @@ extension SQLiteHistory: HistoryRecommendations {
         return [(clearHighlightsQuery, nil), (sql, args)]
     }
 
-    // Checks if there are more than 100k items in the `visits` table.
+    // Checks if there are more than 250k items in the `history` table.
     // This is used as an indicator that we should clean up old history.
     func checkIfCleanupIsNeeded() -> Deferred<Maybe<Bool>> {
-        let sql = "SELECT COUNT(*) FROM \(TableVisits)"
+        let sql = "SELECT COUNT(*) FROM \(TableHistory)"
         return self.db.runQuery(sql, args: nil, factory: IntFactory) >>== { cursor in
-            guard let visitCount = cursor[0], visitCount > 100000 else {
+            guard let historyCount = cursor[0], historyCount > SQLiteHistory.MaxHistoryRowCount else {
                 return deferMaybe(false)
             }
 
@@ -184,23 +187,22 @@ extension SQLiteHistory: HistoryRecommendations {
         }
     }
 
-    // Deletes the oldest 50k items from the `visits` table and their
-    // corresponding items in the `history` table. This only gets run when
-    // there are more than 100k items in the `visits` table. Because of
+    // Deletes the oldest 25k items from the `history` table and their
+    // corresponding items in the `visits` table. This only gets run when
+    // there are more than 250k items in the `history` table. Because of
     // this, we may need to clean up several times until we've crossed
-    // below the 100k-item threshold.
+    // below the 250k-item threshold.
     private func cleanupOldHistory() -> [(String, Args?)] {
-        let visitsSQL = """
-            DELETE FROM \(TableVisits) WHERE id IN (
-                SELECT id FROM \(TableVisits) ORDER BY \(TableVisits).date ASC LIMIT 50000
+        let sql = """
+            DELETE FROM \(TableHistory) WHERE id IN (
+                SELECT \(TableHistory).id FROM \(TableHistory)
+                INNER JOIN \(TableVisits) ON \(TableHistory).id = \(TableVisits).siteID
+                GROUP BY \(TableHistory).id
+                ORDER BY max(\(TableVisits).date) ASC
+                LIMIT \(SQLiteHistory.PruneHistoryRowCount)
             )
             """
-        let historySQL = """
-            DELETE FROM \(TableHistory) WHERE NOT EXISTS (
-                SELECT 1 FROM \(TableVisits) WHERE \(TableVisits).siteID = \(TableHistory).id
-            )
-            """
-        return [(visitsSQL, nil), (historySQL, nil)]
+        return [(sql, nil)]
     }
 
     public func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success {
