@@ -683,9 +683,15 @@ private class PhotonActionSheetCell: UITableViewCell {
                     }
                 }
             case .TabsButton:
-                if tabButton == nil {
-                    tabButton = TabsButton()
-                }
+                let label = UILabel(frame: CGRect(x: 9, y: 2, width: 2, height: 2))
+                label.text = "1"
+                label.sizeToFit()
+                label.font = UIFont.boldSystemFont(ofSize: UIConstants.DefaultChromeSmallSize)
+
+                let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+                statusIcon.image = image
+                statusIcon.addSubview(label)
+
                 /*
                 let renderer = UIGraphicsImageRenderer(size: (tabButton?.bounds.size)!)
                 let image = renderer.image { ctx in
@@ -694,7 +700,7 @@ private class PhotonActionSheetCell: UITableViewCell {
                 statusIcon.image = image
                 self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
                 statusIcon.tintColor = self.tintColor
-                */
+
                 tabButton?.setTitle("8", for: .normal)
                 self.statusIcon.addSubview(tabButton!)
                 stackView.addArrangedSubview(tabButton!)
@@ -705,7 +711,8 @@ private class PhotonActionSheetCell: UITableViewCell {
                 let padding = PhotonActionSheetCell.Padding
                 stackView.snp.remakeConstraints { make in
                     make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding))
-                } 
+                }
+                */
             default:
                 break
             }
