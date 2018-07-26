@@ -21,7 +21,6 @@ extension UILabel {
             textColor = UIColor.theme.tableView.rowText
         } else {
             textColor = nil
-            font = nil
         }
         attributedText = attributed
     }
