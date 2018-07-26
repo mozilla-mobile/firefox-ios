@@ -10,8 +10,14 @@ import Deferred
 fileprivate let log = Logger.syncLogger
 
 extension SQLiteHistory: HistoryRecommendations {
-    static let MaxHistoryRowCount: UInt = 250000
-    static let PruneHistoryRowCount: UInt = 25000
+    // These numbers will likely need additional tweaking in the future.
+    // They are currently based on a best-guess as to where performance
+    // starts to suffer in a large browser.db. A database with 200,001
+    // unique history items with 20 visits each produces a 340MB file.
+    // We limit the number of history items to prune at once to 5,000
+    // rows to ensure the pruning completes in a timely manner.
+    static let MaxHistoryRowCount: UInt = 200000
+    static let PruneHistoryRowCount: UInt = 5000
 
     // Bookmarks Query
     static let removeMultipleDomainsSubquery = """
@@ -197,10 +203,8 @@ extension SQLiteHistory: HistoryRecommendations {
     func cleanupOldHistory(numberOfRowsToPrune: UInt) -> [(String, Args?)] {
         let sql = """
             DELETE FROM \(TableHistory) WHERE id IN (
-                SELECT \(TableHistory).id FROM \(TableHistory)
-                INNER JOIN \(TableVisits) ON \(TableHistory).id = \(TableVisits).siteID
-                GROUP BY \(TableHistory).id
-                ORDER BY max(\(TableVisits).date) ASC
+                SELECT id FROM \(TableHistory)
+                ORDER BY CASE WHEN local_modified THEN local_modified ELSE server_modified END ASC
                 LIMIT \(numberOfRowsToPrune)
             )
             """
