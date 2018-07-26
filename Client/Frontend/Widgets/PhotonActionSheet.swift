@@ -46,9 +46,10 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var accessory: PhotonActionSheetCellAccessoryType
     public fileprivate(set) var accessoryText: String?
     public fileprivate(set) var bold: Bool = false
+    public fileprivate(set) var tabCount: String?
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
     
-    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, tabCount: String? = nil, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
         self.iconURL = iconURL
@@ -60,6 +61,7 @@ public struct PhotonActionSheetItem {
         self.text = text
         self.accessoryText = accessoryText
         self.bold = bold ?? false
+        self.tabCount = tabCount
     }
 }
 
@@ -532,7 +534,6 @@ private class PhotonActionSheetCell: UITableViewCell {
     static let IconSize = 16
 
     var syncButton: SyncMenuButton?
-    var tabButton: TabsButton?
 
     private func createLabel() -> UILabel {
         let label = UILabel()
@@ -683,36 +684,16 @@ private class PhotonActionSheetCell: UITableViewCell {
                     }
                 }
             case .TabsButton:
-                let label = UILabel(frame: CGRect(x: 9, y: 2, width: 2, height: 2))
-                label.text = "1"
-                label.sizeToFit()
+                let label = UILabel(frame: CGRect())
+                label.text = action.tabCount
                 label.font = UIFont.boldSystemFont(ofSize: UIConstants.DefaultChromeSmallSize)
-
                 let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
                 statusIcon.image = image
                 statusIcon.addSubview(label)
-
-                /*
-                let renderer = UIGraphicsImageRenderer(size: (tabButton?.bounds.size)!)
-                let image = renderer.image { ctx in
-                    tabButton?.drawHierarchy(in: (tabButton?.bounds)!, afterScreenUpdates: true)
+                label.snp.makeConstraints { (make) in
+                    make.centerX.equalTo(statusIcon)
+                    make.centerY.equalTo(statusIcon)
                 }
-                statusIcon.image = image
-                self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
-                statusIcon.tintColor = self.tintColor
-
-                tabButton?.setTitle("8", for: .normal)
-                self.statusIcon.addSubview(tabButton!)
-                stackView.addArrangedSubview(tabButton!)
-                tabButton?.contentHorizontalAlignment = .left
-                tabButton?.snp.makeConstraints { make in
-                    make.size.equalTo(20)
-                }
-                let padding = PhotonActionSheetCell.Padding
-                stackView.snp.remakeConstraints { make in
-                    make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding))
-                }
-                */
             default:
                 break
             }

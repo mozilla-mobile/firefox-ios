@@ -1538,14 +1538,21 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func getTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
-        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton) { action in
+        var count = 1
+        let infinity = "\u{221E}"
+        if let selectedTab = tabManager.selectedTab {
+            count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
+        }
+        let tabCount = (count < 100) ? count.description : infinity
+
+        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { action in
             if let tab = self.tabManager.selectedTab {
                 if self.tabManager.switchTabMode(tab) {
                     let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
                     self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
                 }
             }}
-        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton) { action in
+        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { action in
             if let tab = self.tabManager.selectedTab {
                 _ = self.tabManager.switchTabMode(tab)
             }}
