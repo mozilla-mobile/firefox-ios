@@ -30,6 +30,7 @@ class WebsiteDataManagement: UITableViewController {
         }
     }
     var siteRecords = [siteData]()
+    var filteredSiteRecords = [siteData]()
     let dataStore = WKWebsiteDataStore.default()
     let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
 
@@ -38,6 +39,7 @@ class WebsiteDataManagement: UITableViewController {
         super.viewDidLoad()
 
         // Setup the Search Controller
+        searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Filter Sites"
         if #available(iOS 11.0, *) {
@@ -80,8 +82,14 @@ class WebsiteDataManagement: UITableViewController {
 
         if indexPath.section == SectionSites {
             assert(indexPath.section == SectionSites)
-            let site = siteRecords[indexPath.item]
-            cell.textLabel?.text = site.nameOfSite
+            if isFiltering() {
+                let site = filteredSiteRecords[indexPath.item]
+                cell.textLabel?.text = site.nameOfSite
+            } else {
+                let site = siteRecords[indexPath.item]
+                cell.textLabel?.text = site.nameOfSite
+            }
+
         } else if indexPath.section == SectionShowMore {
             assert(indexPath.section == SectionShowMore)
             cell.textLabel?.text = "Show More"
@@ -108,6 +116,9 @@ class WebsiteDataManagement: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionSites {
+            if isFiltering() {
+                return filteredSiteRecords.count
+            }
             return siteRecords.count
         } else if section == SectionShowMore {
             return 1
@@ -202,4 +213,26 @@ class WebsiteDataManagement: UITableViewController {
         present(controller, animated: true, completion: nil)
     }
 
+    func searchBarIsEmpty() -> Bool {
+        // Returns true if the text is empty or nil
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+
+    func filterContentForSearchText(_ searchText: String) {
+        filteredSiteRecords = siteRecords.filter({( siteRecord : siteData) -> Bool in
+            return siteRecord.nameOfSite.lowercased().contains(searchText.lowercased())
+        })
+        tableView.reloadData()
+    }
+
+    func isFiltering() -> Bool {
+        return searchController.isActive && !searchBarIsEmpty()
+    }
+}
+
+extension WebsiteDataManagement: UISearchResultsUpdating {
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
 }
