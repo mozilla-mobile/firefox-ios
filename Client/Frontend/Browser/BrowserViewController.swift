@@ -1002,6 +1002,18 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
+        popToBVC()
+        let engine = profile.searchEngines.defaultEngine
+        if let searchURL = engine.searchURLForQuery(text) {
+            openURLInNewTab(searchURL, isPrivate: isPrivate, isPrivileged: true)
+        } else {
+            // We still don't have a valid URL, so something is broken. Give up.
+            print("Error handling URL entry: \"\(text)\".")
+            assertionFailure("Couldn't generate search URL: \(text)")
+        }
+    }
+
     fileprivate func popToBVC() {
         guard let currentViewController = navigationController?.topViewController else {
                 return
@@ -1696,11 +1708,7 @@ extension BrowserViewController: TabDelegate {
     }
 
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
-        let currentChoice = NewTabAccessors.getNewTabPage(self.profile.prefs)
-        self.profile.prefs.setString(NewTabPage.blankPage.rawValue, forKey: NewTabAccessors.PrefKey)
-        openBlankNewTab(focusLocationField: false, isPrivate: tab.isPrivate)
-        submitSearchText(selection)
-        self.profile.prefs.setString(currentChoice.rawValue, forKey: NewTabAccessors.PrefKey)
+        openSearchNewTab(isPrivate: tab.isPrivate, selection)
     }
 }
 
