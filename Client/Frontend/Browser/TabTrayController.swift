@@ -201,6 +201,10 @@ class TabTrayController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
+        //special case for iPad
+        if UIDevice.current.userInterfaceIdiom == .pad && ThemeManager.instance.currentName == .normal {
+            return .default
+        }
         return ThemeManager.instance.statusBarStyle
     }
 
