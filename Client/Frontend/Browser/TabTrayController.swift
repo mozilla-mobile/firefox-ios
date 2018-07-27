@@ -614,6 +614,7 @@ extension TabTrayController {
         // When that happens focus it by dismissing the tab tray
         let isLastTab = tabDisplayManager.tabStore.count == 1
         tabManager.removeTab(tab)
+        guard !tabDisplayManager.searchActive else { return }
         self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
         if isLastTab, !tabDisplayManager.isPrivate {
             self.tabDisplayManager.performTabUpdates {
