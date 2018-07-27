@@ -61,19 +61,17 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
         let history = SQLiteHistory(db: db, prefs: prefs)
 
         history.clearHistory().succeeded()
-        let doCleanup1 = history.checkIfCleanupIsNeeded().value.successValue!
+        let doCleanup1 = history.checkIfCleanupIsNeeded(maxHistoryRows: 2500).value.successValue!
         XCTAssertFalse(doCleanup1, "We should not need to perform clean-up")
 
-        // Each history item inserted will produce 20 visits. Since clean-up is triggered
-        // once we exceed 100,000 visits, inserting 5,001 history items here will result in
-        // exactly 100,020 visits which should trigger a clean-up.
-        populateHistoryForFrecencyCalculations(history, siteCount: 5001)
-        let doCleanup2 = history.checkIfCleanupIsNeeded().value.successValue!
+        // Clean-up is triggered once we exceed 2,500 history items in a test environment.
+        populateHistoryForFrecencyCalculations(history, siteCount: 2501)
+        let doCleanup2 = history.checkIfCleanupIsNeeded(maxHistoryRows: 2500).value.successValue!
         XCTAssertTrue(doCleanup2, "We should not need to perform clean-up")
 
-        // This should trigger the actual clean-up operation to happen.
-        history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
-        let doCleanup3 = history.checkIfCleanupIsNeeded().value.successValue!
+        // Trigger the actual clean-up operation to happen and re-check.
+        let _ = db.run(history.cleanupOldHistory(numberOfRowsToPrune: 250)).value.successValue
+        let doCleanup3 = history.checkIfCleanupIsNeeded(maxHistoryRows: 2500).value.successValue!
         XCTAssertFalse(doCleanup3, "We should not need to perform clean-up")
     }
 }
