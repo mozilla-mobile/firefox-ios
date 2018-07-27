@@ -21,7 +21,7 @@ class BrowserViewController: UIViewController {
     private let drawerContainerView = DrawerView(frame: .zero)
     private let drawerOverlayView = UIView()
     
-    private let webViewController = WebViewController()
+    private let webViewController = WebViewController(userAgent: UserAgent.shared)
     private let webViewContainer = UIView()
 
     private let trackingProtectionSummaryController = TrackingProtectionSummaryViewController()

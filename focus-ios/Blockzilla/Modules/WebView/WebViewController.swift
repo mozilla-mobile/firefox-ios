@@ -53,6 +53,7 @@ class WebViewController: UIViewController, WebController {
     private var browserView = WKWebView()
     var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
+    private var userAgent: UserAgent?
     private var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
             delegate?.webController(self, didUpdateTrackingProtectionStatus: trackingProtectionStatus)
@@ -70,8 +71,10 @@ class WebViewController: UIViewController, WebController {
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
-    convenience init() {
+    convenience init(userAgent: UserAgent = UserAgent.shared) {
         self.init(nibName: nil, bundle: nil)
+
+        self.userAgent = userAgent
 
         setupWebview()
         ContentBlockerHelper.shared.handler = reloadBlockers(_:)
@@ -108,7 +111,7 @@ class WebViewController: UIViewController, WebController {
         }
         
         // Unset the desktopUserAgent
-        browserView.customUserAgent = UserAgent.browserUserAgent
+        browserView.customUserAgent = userAgent?.browserUserAgent
     }
     
     func stop() { browserView.stopLoading() }
