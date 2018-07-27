@@ -60,9 +60,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         // localStorage in-memory (bug 1319208), so we just disable it altogether.
         UserDefaults.standard.set(false, forKey: "WebKitLocalStorageEnabledPreferenceKey")
 
-        // Set up our custom user agent.
-        UserAgent.setup()
-
         // Re-register the blocking lists at startup in case they've changed.
         Utils.reloadSafariContentBlocker()
 

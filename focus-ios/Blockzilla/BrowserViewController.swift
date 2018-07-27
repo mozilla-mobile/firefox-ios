@@ -16,7 +16,7 @@ class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
     
-    private let webViewController = WebViewController()
+    private let webViewController = WebViewController(userAgent: UserAgent.shared)
     private let webViewContainer = UIView()
     
     var modalDelegate: ModalDelegate?

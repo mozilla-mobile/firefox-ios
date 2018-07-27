@@ -5,12 +5,19 @@
 import Foundation
 
 class UserAgent {
-    static var browserUserAgent: String?
+    static let shared = UserAgent()
 
-    static func setup() {
-        assert(Thread.current.isMainThread, "UserAgent.setup() must be called on the main thread")
+    private var userDefaults: UserDefaults
 
-        if let cachedUserAgent = UserAgent.cachedUserAgent() {
+    var browserUserAgent: String?
+
+    init(userDefaults: UserDefaults = UserDefaults.standard) {
+        self.userDefaults = userDefaults
+        setup()
+    }
+
+    func setup() {
+        if let cachedUserAgent = cachedUserAgent() {
             setUserAgent(userAgent: cachedUserAgent)
             return
         }
@@ -19,15 +26,15 @@ class UserAgent {
             return
         }
 
-        UserDefaults.standard.set(userAgent, forKey: "UserAgent")
-        UserDefaults.standard.set(UIDevice.current.systemVersion, forKey: "LastSeenSystemVersion")
-        UserDefaults.standard.synchronize()
+        userDefaults.set(userAgent, forKey: "UserAgent")
+        userDefaults.set(UIDevice.current.systemVersion, forKey: "LastSeenSystemVersion")
+        userDefaults.synchronize()
 
         setUserAgent(userAgent: userAgent)
     }
 
-    private static func cachedUserAgent() -> String? {
-        guard let lastSeenSystemVersion = UserDefaults.standard.string(forKey: "LastSeenSystemVersion") else {
+    private func cachedUserAgent() -> String? {
+        guard let lastSeenSystemVersion = userDefaults.string(forKey: "LastSeenSystemVersion") else {
             return nil
         }
 
@@ -35,7 +42,7 @@ class UserAgent {
             return nil
         }
 
-        return UserDefaults.standard.string(forKey: "UserAgent")
+        return userDefaults.string(forKey: "UserAgent")
     }
 
     private static func generateUserAgent() -> String? {
@@ -59,8 +66,8 @@ class UserAgent {
         return String(userAgent)
     }
 
-    private static func setUserAgent(userAgent: String) {
-        UserDefaults.standard.register(defaults: ["UserAgent": userAgent])
-        UserDefaults.standard.synchronize()
+    private func setUserAgent(userAgent: String) {
+        userDefaults.register(defaults: ["UserAgent": userAgent])
+        userDefaults.synchronize()
     }
 }
