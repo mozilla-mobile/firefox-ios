@@ -44,10 +44,13 @@ public class Sentry {
             return
         }
 
-        guard let dsn = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
-            Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
-            return
-        }
+//        guard let dsn = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
+//            Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
+//            return
+//        }
+
+        // Hardcoded DSN For testing
+        let dsn = "https://255628f3c37a4d94b719be150c2cd63e:5a926d78cbaa4ca7a531ce0770db8118@sentry-fm.prod.mozaws.net/7"
 
         Logger.browserLogger.debug("Enabling Sentry crash handler")
 
