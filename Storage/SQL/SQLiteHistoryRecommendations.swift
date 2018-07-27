@@ -184,7 +184,7 @@ extension SQLiteHistory: HistoryRecommendations {
     // `history` table. This is used as an indicator that `cleanupOldHistory()`
     // needs to run.
     func checkIfCleanupIsNeeded(maxHistoryRows: UInt) -> Deferred<Maybe<Bool>> {
-        let sql = "SELECT CASE WHEN COUNT(rowid) > \(maxHistoryRows) THEN 1 ELSE 0 END AS cleanup FROM \(TableHistory)"
+        let sql = "SELECT COUNT(rowid) > \(maxHistoryRows) AS cleanup FROM \(TableHistory)"
         return self.db.runQuery(sql, args: nil, factory: IntFactory) >>== { cursor in
             guard let cleanup = cursor[0], cleanup > 0 else {
                 return deferMaybe(false)
@@ -204,7 +204,7 @@ extension SQLiteHistory: HistoryRecommendations {
         let sql = """
             DELETE FROM \(TableHistory) WHERE id IN (
                 SELECT id FROM \(TableHistory)
-                ORDER BY CASE WHEN local_modified THEN local_modified ELSE server_modified END ASC
+                ORDER BY max(ifnull(local_modified, 0), ifnull(server_modified, 0)) ASC
                 LIMIT \(numberOfRowsToPrune)
             )
             """
