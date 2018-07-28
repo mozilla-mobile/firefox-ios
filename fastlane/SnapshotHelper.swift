@@ -3,7 +3,6 @@
 //  Example
 //
 //  Created by Felix Krause on 10/8/15.
-//  Copyright © 2015 Felix Krause. All rights reserved.
 //
 
 // -----------------------------------------------------
@@ -70,7 +69,7 @@ open class Snapshot: NSObject {
     }
 
     open class func setupSnapshot(_ app: XCUIApplication) {
-
+        
         Snapshot.app = app
 
         do {
@@ -89,7 +88,7 @@ open class Snapshot: NSObject {
             print("CacheDirectory is not set - probably running on a physical device?")
             return
         }
-
+        
         let path = cacheDirectory.appendingPathComponent("language.txt")
 
         do {
@@ -106,7 +105,7 @@ open class Snapshot: NSObject {
             print("CacheDirectory is not set - probably running on a physical device?")
             return
         }
-
+        
         let path = cacheDirectory.appendingPathComponent("locale.txt")
 
         do {
@@ -126,7 +125,7 @@ open class Snapshot: NSObject {
             print("CacheDirectory is not set - probably running on a physical device?")
             return
         }
-
+        
         let path = cacheDirectory.appendingPathComponent("snapshot-launch_arguments.txt")
         app.launchArguments += ["-FASTLANE_SNAPSHOT", "YES", "-ui_testing"]
 
@@ -155,13 +154,18 @@ open class Snapshot: NSObject {
         #if os(OSX)
             XCUIApplication().typeKey(XCUIKeyboardKeySecondaryFn, modifierFlags: [])
         #else
-
+            
             guard let app = self.app else {
                 print("XCUIApplication is not set. Please call setupSnapshot(app) before snapshot().")
                 return
             }
+            
+            guard let window = app.windows.allElementsBoundByIndex.first(where: { $0.frame.isEmpty == false }) else {
+                print("Couldn't find an element window in XCUIApplication with a non-empty frame.")
+                return
+            }
 
-            let screenshot = app.windows.firstMatch.screenshot()
+            let screenshot = window.screenshot()
             guard let simulator = ProcessInfo().environment["SIMULATOR_DEVICE_NAME"], let screenshotsDir = screenshotsDirectory else { return }
             let path = screenshotsDir.appendingPathComponent("\(simulator)-\(name).png")
             do {
@@ -253,7 +257,7 @@ private extension XCUIElementQuery {
     }
 
     var deviceStatusBars: XCUIElementQuery {
-        let deviceWidth = XCUIApplication().frame.width
+        let deviceWidth = XCUIApplication().windows.firstMatch.frame.width
 
         let isStatusBar = NSPredicate { (evaluatedObject, _) in
             guard let element = evaluatedObject as? XCUIElementAttributes else { return false }
@@ -273,4 +277,4 @@ private extension CGFloat {
 
 // Please don't remove the lines below
 // They are used to detect outdated configuration files
-// SnapshotHelperVersion [1.9]
+// SnapshotHelperVersion [1.11]
