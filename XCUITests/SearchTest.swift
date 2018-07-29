@@ -190,7 +190,7 @@ class SearchTests: BaseTestCase {
         waitforExistence(app.menuItems["Search with Firefox"])
         app.menuItems["Search with Firefox"].tap()
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "google")
+        waitForValueContains(app.textFields["url"], value: "google", timeout: 10)
         // Now there should be two tabs open
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
