@@ -10,7 +10,7 @@ protocol BrowserToolsetDelegate: class {
     func browserToolsetDidPressReload(_ browserToolbar: BrowserToolset)
     func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset)
     func browserToolsetDidPressStop(_ browserToolbar: BrowserToolset)
-    func browserToolsetDidPressSend(_ browserToolbar: BrowserToolset)
+    func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset)
 }
 
 class BrowserToolset {
@@ -19,42 +19,40 @@ class BrowserToolset {
     let backButton = InsetButton()
     let forwardButton = InsetButton()
     let stopReloadButton = InsetButton()
-    let sendButton = InsetButton()
+    let settingsButton = InsetButton()
 
     init() {
         backButton.tintColor = UIConstants.colors.toolbarButtonNormal
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.3), for: .disabled)
+        backButton.setImage(#imageLiteral(resourceName: "icon_back_active").alpha(0.4), for: .disabled)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
-        backButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
 
         forwardButton.tintColor = UIConstants.colors.toolbarButtonNormal
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(0.3), for: .disabled)
+        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active").alpha(0.4), for: .disabled)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
-        forwardButton.alpha = UIConstants.layout.browserToolbarDisabledOpacity
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
 
         stopReloadButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
+        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
+        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu").alpha(0.4), for: .disabled)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressReload))
         stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
-
-        sendButton.tintColor = UIConstants.colors.toolbarButtonNormal
-        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active"), for: .normal)
-        sendButton.setImage(#imageLiteral(resourceName: "icon_openwith_active").alpha(0.3), for: .disabled)
-        sendButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
-        sendButton.addTarget(self, action: #selector(didPressSend), for: .touchUpInside)
-        sendButton.accessibilityLabel = UIConstants.strings.browserShare
-        sendButton.accessibilityIdentifier = "BrowserToolset.sendButton"
+        
+        settingsButton.tintColor = UIConstants.colors.toolbarButtonNormal
+        settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
+        settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
+        settingsButton.accessibilityIdentifier = "HomeView.settingsButton"
+        settingsButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
+        setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
     }
 
     var canGoBack: Bool = false {
@@ -106,8 +104,28 @@ class BrowserToolset {
         }
     }
 
-    @objc private func didPressSend() {
-        delegate?.browserToolsetDidPressSend(self)
+    @objc private func didPressSettings() {
+        delegate?.browserToolsetDidPressSettings(self)
+    }
+    
+    func setHighlightWhatsNew(shouldHighlight: Bool) {
+        if shouldHighlight {
+            settingsButton.setImage(UIImage(named: "preferences_updated"), for: .normal)
+        } else {
+            settingsButton.setImage(#imageLiteral(resourceName: "icon_settings"), for: .normal)
+        }
+    }
+}
+
+extension BrowserToolset: WhatsNewDelegate {
+    func shouldShowWhatsNew() -> Bool {
+        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
+        return counter != 0
+    }
+    
+    func didShowWhatsNew() {
+        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
+        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
     }
 }
 

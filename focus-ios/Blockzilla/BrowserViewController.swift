@@ -228,7 +228,12 @@ class BrowserViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
         
-        homeView?.setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
+        if let homeViewToolset = homeView?.toolbar.toolset {
+            homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
+            homeView?.toolbar.layoutIfNeeded()
+        }
+        browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
+        browserToolbar.layoutIfNeeded()
         
         super.viewWillAppear(animated)
     }
@@ -308,6 +313,7 @@ class BrowserViewController: UIViewController {
     private func createHomeView() {
         let homeView = HomeView()
         homeView.delegate = self
+        homeView.toolbar.toolset.delegate = self
         homeViewContainer.addSubview(homeView)
 
         homeView.snp.makeConstraints { make in
@@ -355,11 +361,10 @@ class BrowserViewController: UIViewController {
 
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
-            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(500)
+            make.centerX.equalToSuperview().priority(.required)
+            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).offset(8).priority(.medium)
+            make.trailing.equalTo(mainContainerView.safeAreaLayoutGuide).offset(-8).priority(.medium)
             make.top.equalTo(homeView).priority(500)
-
-            // Note: this padding here is in addition to the 8px that’s already applied for the Cancel action
-            make.trailing.equalTo(homeView.settingsButton.snp.leading).offset(-8).priority(500)
         }
         topURLBarConstraints.forEach { $0.deactivate() }
     }
@@ -557,7 +562,7 @@ class BrowserViewController: UIViewController {
         
         urlBar.shouldPresent = false
         
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: self)
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
         
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
@@ -991,16 +996,6 @@ extension BrowserViewController: BrowserToolsetDelegate {
         webViewController.stop()
     }
 
-    func browserToolsetDidPressSend(_ browserToolset: BrowserToolset) {
-        guard let url = webViewController.url else { return }
-        
-        let shareExtensionHelper = OpenUtils(url: url, webViewController: webViewController)
-        let controller = shareExtensionHelper.buildShareViewController(url: url, title: webViewController.title, printFormatter: webViewController.printFormatter, anchor: browserToolset.sendButton)
-
-        updateFindInPageVisibility(visible: false)
-        present(controller, animated: true, completion: nil)
-    }
-
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
         updateFindInPageVisibility(visible: false)
         showSettings()
@@ -1008,9 +1003,6 @@ extension BrowserViewController: BrowserToolsetDelegate {
 }
 
 extension BrowserViewController: HomeViewDelegate {
-    func homeViewDidPressSettings(homeView: HomeView) {
-        showSettings()
-    }
     
     func shareTrackerStatsButtonTapped() {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
@@ -1291,18 +1283,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
 protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew() -> Void
-}
-
-extension BrowserViewController: WhatsNewDelegate {
-    func shouldShowWhatsNew() -> Bool {
-        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-        return counter != 0
-    }
-    
-    func didShowWhatsNew() {
-        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
-    }
 }
 
 extension BrowserViewController: TrackingProtectionSummaryDelegate {

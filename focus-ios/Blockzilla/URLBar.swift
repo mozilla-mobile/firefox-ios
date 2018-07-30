@@ -41,6 +41,7 @@ class URLBar: UIView {
     private let shieldIcon = TrackingProtectionBadge()
     private let lockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https"))
     private let smallLockIcon = UIImageView(image: #imageLiteral(resourceName: "icon_https_small"))
+    private let urlBarBorderView = UIView()
     private let urlBarBackgroundView = UIView()
     private let textAndLockContainer = UIView()
     private let collapsedUrlAndLockWrapper = UIView()
@@ -74,9 +75,13 @@ class URLBar: UIView {
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
         addSubview(toolset.stopReloadButton)
-        addSubview(toolset.sendButton)
+        addSubview(toolset.settingsButton)
+        
+        urlBarBorderView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.1)
+        urlBarBorderView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
+        addSubview(urlBarBorderView)
 
-        urlBarBackgroundView.backgroundColor = UIConstants.colors.urlTextBackground
+        urlBarBackgroundView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
         addSubview(urlBarBackgroundView)
 
@@ -225,13 +230,18 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
+        
+        urlBarBorderView.snp.makeConstraints { make in
+            make.edges.equalTo(urlTextContainer)
+        }
 
         urlBarBackgroundView.snp.makeConstraints { make in
-            make.edges.equalTo(urlTextContainer)
+            make.edges.equalTo(urlBarBorderView).inset(UIConstants.layout.urlBarBorderInset)
         }
 
         urlTextContainer.snp.makeConstraints { make in
             make.leading.equalTo(toolset.stopReloadButton.snp.trailing).inset(-UIConstants.layout.urlBarMargin)
+            make.height.equalTo(48).priority(.required)
             make.top.bottom.equalTo(self).inset(UIConstants.layout.urlBarMargin)
 
             // Stretch the URL bar as much as we can without breaking constraints.
@@ -276,7 +286,7 @@ class URLBar: UIView {
             make.top.bottom.trailing.equalTo(textAndLockContainer)
         }
 
-        toolset.sendButton.snp.makeConstraints { make in
+        toolset.settingsButton.snp.makeConstraints { make in
             make.trailing.equalTo(safeAreaLayoutGuide)
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
@@ -288,15 +298,15 @@ class URLBar: UIView {
             preActivationConstraints.append(contentsOf: [
                 make.size.equalTo(0).constraint,
                 make.leading.equalTo(urlTextContainer.snp.trailing).inset(-UIConstants.layout.urlBarMargin).constraint,
-                make.trailing.equalTo(toolset.sendButton.snp.leading).constraint,
+                make.trailing.equalTo(toolset.settingsButton.snp.leading).constraint,
             ])
 
             postActivationConstraints.append(contentsOf: [
                 make.width.greaterThanOrEqualTo(hiddenDeleteButton).constraint,
                 make.width.greaterThanOrEqualTo(cancelButton).constraint,
                 make.width.greaterThanOrEqualTo(self).multipliedBy(toolsetButtonWidthMultiplier).constraint,
-                make.leading.equalTo(urlTextContainer.snp.trailing).inset(-12).constraint,
-                make.trailing.equalTo(toolset.sendButton.snp.leading).inset(-12).constraint,
+                make.leading.equalTo(urlTextContainer.snp.trailing).inset(UIConstants.layout.deleteButtonInset).constraint,
+                make.trailing.equalTo(toolset.settingsButton.snp.leading).inset(UIConstants.layout.deleteButtonInset).constraint,
             ])
         }
 
@@ -520,7 +530,7 @@ class URLBar: UIView {
         shouldPresent = false
         updateLockIcon()
         updateShieldIcon()
-        toolset.sendButton.isEnabled = false
+        toolset.settingsButton.isEnabled = true
         delegate?.urlBarDidFocus(self)
 
         cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
@@ -537,7 +547,7 @@ class URLBar: UIView {
                 // Shrink the URL text background in from the outer URL bar.
                 self.urlBarBackgroundView.alpha = 1
                 self.urlBarBackgroundView.snp.remakeConstraints { make in
-                    make.edges.equalTo(self.urlTextContainer)
+                    make.edges.equalTo(self.urlTextContainer).inset(UIConstants.layout.urlBarBorderInset)
                 }
             }
 
@@ -553,7 +563,6 @@ class URLBar: UIView {
         updateShieldIcon()
         let _ = urlText.resignFirstResponder()
         setTextToURL()
-        self.toolset.sendButton.isEnabled = true
         delegate?.urlBarDidDismiss(self)
 
         cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
@@ -594,7 +603,7 @@ class URLBar: UIView {
         toolset.backButton.animateHidden(isHidden, duration: 0.3)
         toolset.forwardButton.animateHidden(isHidden, duration: 0.3)
         toolset.stopReloadButton.animateHidden(isHidden, duration: 0.3)
-        toolset.sendButton.animateHidden(isHidden, duration: 0.3)
+        toolset.settingsButton.animateHidden(isHidden, duration: 0.3)
 
         if isHidden {
             centeredURLConstraints.forEach { $0.deactivate() }
@@ -673,7 +682,7 @@ class URLBar: UIView {
         toolset.backButton.alpha = expandAlpha
         toolset.forwardButton.alpha = expandAlpha
         toolset.stopReloadButton.alpha = expandAlpha
-        toolset.sendButton.alpha = expandAlpha
+        toolset.settingsButton.alpha = expandAlpha
         collapsedTrackingProtectionBadge.alpha = collapseAlpha
         // updating the small lock icon status here in order to prevent the icon from flashing on start up
         let visible = !isEditing && (url?.scheme == "https")
