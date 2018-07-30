@@ -255,5 +255,6 @@ extension TopTabsViewController: Themeable, PrivateModeUI {
         newTab.tintColor = UIColor.theme.topTabs.buttonTint
         view.backgroundColor = UIColor.theme.topTabs.background
         collectionView.backgroundColor = view.backgroundColor
+        collectionView.reloadData()
     }
 }
