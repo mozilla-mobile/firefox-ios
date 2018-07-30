@@ -176,12 +176,13 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 
         let image: UIImage?
         if client.type == "desktop" {
-            image = UIImage(named: "deviceTypeDesktop")
+            image = UIImage.templateImageNamed("deviceTypeDesktop")
             image?.accessibilityLabel = NSLocalizedString("computer", comment: "Accessibility label for Desktop Computer (PC) image in remote tabs list")
         } else {
-            image = UIImage(named: "deviceTypeMobile")
+            image = UIImage.templateImageNamed("deviceTypeMobile")
             image?.accessibilityLabel = NSLocalizedString("mobile device", comment: "Accessibility label for Mobile Device image in remote tabs list")
         }
+        view.imageView.tintColor = UIColor.theme.tableView.rowText
         view.imageView.image = image
         view.imageView.contentMode = .center
 
