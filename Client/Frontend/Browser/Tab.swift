@@ -287,6 +287,25 @@ class Tab: NSObject {
         webView = nil
     }
 
+    func closeAndRemovePrivateBrowsingData() {
+        close()
+        if isPrivate {
+            removeAllBrowsingData()
+        }
+    }
+
+    func removeAllBrowsingData(completionHandler: @escaping () -> Void = {}) {
+        let dataTypes = Set([WKWebsiteDataTypeCookies,
+                             WKWebsiteDataTypeLocalStorage,
+                             WKWebsiteDataTypeSessionStorage,
+                             WKWebsiteDataTypeWebSQLDatabases,
+                             WKWebsiteDataTypeIndexedDBDatabases])
+
+        webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
+                                                     modifiedSince: Date.distantPast,
+                                                 completionHandler: completionHandler)
+    }
+
     var loading: Bool {
         return webView?.isLoading ?? false
     }

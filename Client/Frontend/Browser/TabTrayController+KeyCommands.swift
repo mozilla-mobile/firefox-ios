@@ -38,7 +38,7 @@ extension TabTrayController {
     @objc func didCloseTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-tab"])
         if let tab = tabManager.selectedTab {
-            tabManager.removeTab(tab)
+            tabManager.removeTabAndUpdateSelectedIndex(tab)
         }
     }
 
