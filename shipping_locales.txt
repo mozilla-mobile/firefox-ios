@@ -49,6 +49,7 @@ lo
 lt
 lv
 ml
+mr
 ms
 my
 nb-NO
