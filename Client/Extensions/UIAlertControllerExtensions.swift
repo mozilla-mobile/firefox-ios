@@ -111,6 +111,30 @@ extension UIAlertController {
         return alert
     }
 
+    class func clearWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+        let alert = UIAlertController(
+            title: "",
+            message: NSLocalizedString("This action will clear all of your website data. It cannot be undone.", tableName: "ClearPrivateDataConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear their private data."),
+            preferredStyle: .alert
+        )
+
+        let noOption = UIAlertAction(
+            title: NSLocalizedString("Cancel", tableName: "ClearPrivateDataConfirm", comment: "The cancel button when confirming clear private data."),
+            style: .cancel,
+            handler: nil
+        )
+
+        let okayOption = UIAlertAction(
+            title: NSLocalizedString("OK", tableName: "ClearPrivateDataConfirm", comment: "The button that clears private data."),
+            style: .destructive,
+            handler: okayCallback
+        )
+
+        alert.addAction(okayOption)
+        alert.addAction(noOption)
+        return alert
+    }
+
     /**
      Builds the Alert view that asks if the users wants to also delete history stored on their other devices.
 

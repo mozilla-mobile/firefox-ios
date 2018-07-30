@@ -55,9 +55,10 @@ class WebsiteDataManagement: UITableViewController {
 
         //toolbar setup
         self.navigationController?.setToolbarHidden(false, animated: false)
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
         let editButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style: .plain, target: self, action: nil)
         let doneButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style:.plain, target: self, action: nil)
-        self.toolbarItems = [editButton]
+        self.toolbarItems = [flexible, editButton]
         self.navigationController?.toolbar.barTintColor = UIColor.white
 
 
@@ -159,10 +160,16 @@ class WebsiteDataManagement: UITableViewController {
         }
         guard indexPath.section == SectionButton else { return }
         if indexPath.section == SectionButton {
-            WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
-            siteRecords.removeAll()
-            showMoreButtonEnabled = false
-            tableView.reloadData()
+            func clearwebsitedata(_ action: UIAlertAction) {
+                WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
+                siteRecords.removeAll()
+                showMoreButtonEnabled = false
+                tableView.reloadData()
+            }
+            let alert =  UIAlertController.clearWebsiteDataAlert(okayCallback: clearwebsitedata)
+            let generator = UIImpactFeedbackGenerator(style: .heavy)
+            generator.impactOccurred()
+            self.present(alert, animated: true, completion: nil)
         }
         tableView.deselectRow(at: indexPath, animated: false)
     }
@@ -179,6 +186,11 @@ class WebsiteDataManagement: UITableViewController {
             tableView.reloadData()
         }
     }
+
+//    override func tableView(_ tableView: UITableView,editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+//        return .3
+//    }
+
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! ThemedTableSectionHeaderFooterView
@@ -197,30 +209,6 @@ class WebsiteDataManagement: UITableViewController {
             return SettingsUX.TableViewHeaderFooterHeight
         }
         return 0
-    }
-
-    func clearprivatedata() {
-        guard self.presentedViewController == nil else {
-            return
-        }
-        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: "Clear All", style: .destructive, handler: { _ in
-            print("Clear All")
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newTab")
-        controller.addAction(UIAlertAction(title: "Clear Last Week", style: .destructive, handler: { _ in
-            print("Clear Last Week")
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newPrivateTab")
-        controller.addAction(UIAlertAction(title: "Clear Last Day", style: .destructive, handler: { _ in
-            print("Clear Last Day")
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.closeTab")
-        controller.addAction(UIAlertAction(title: "Clear Last Hour", style: .destructive, handler: { _ in
-            print("Clear Last Hour")
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.closeTab")
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "toolbarTabButtonLongPress.cancel")
-        //controller.popoverPresentationController?.sourceRect = button.frame
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        present(controller, animated: true, completion: nil)
     }
 
     func searchBarIsEmpty() -> Bool {
