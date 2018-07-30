@@ -49,10 +49,10 @@ class ThemeManager {
 
         let screenLessThanPref = Float(UIScreen.main.brightness) < prefValue
 
-        if screenLessThanPref, self.currentName == .dark {
-            self.current = NormalTheme()
-        } else if !screenLessThanPref, self.currentName == .normal {
+        if screenLessThanPref, self.currentName == .normal {
             self.current = DarkTheme()
+        } else if !screenLessThanPref, self.currentName == .dark {
+            self.current = NormalTheme()
         }
     }
 
