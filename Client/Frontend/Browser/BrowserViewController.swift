@@ -175,7 +175,6 @@ class BrowserViewController: UIViewController {
 
     @objc func displayThemeChanged(notification: Notification) {
         applyTheme()
-        setNeedsStatusBarAppearanceUpdate()
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
