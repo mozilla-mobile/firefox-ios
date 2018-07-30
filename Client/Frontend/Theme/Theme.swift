@@ -151,6 +151,9 @@ class HomePanelColor {
     var downloadedFileIcon: UIColor { return UIColor.Photon.Grey60 }
     
     var historyHeaderIconsBackground: UIColor { return UIColor.Photon.White100 }
+
+    var searchSuggestionPilBackground: UIColor { return UIColor.Photon.White100 }
+    var searchSuggestionPillForeground: UIColor { return UIColor.theme.general.highlightBlue }
 }
 
 class SnackBarColor {

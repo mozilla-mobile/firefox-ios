@@ -133,6 +133,9 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
 
     override var readingListActive: UIColor { return UIColor.Photon.Grey10 }
     override var readingListDimmed: UIColor { return UIColor.Photon.Grey40 }
+
+    override var searchSuggestionPilBackground: UIColor { return UIColor.Photon.Ink80 }
+    override var searchSuggestionPillForeground: UIColor { return defaultTextAndTint }
 }
 
 fileprivate class DarkSnackBarColor: SnackBarColor {
