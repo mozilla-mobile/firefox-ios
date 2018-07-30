@@ -15,6 +15,8 @@ private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 class WebsiteDataManagement: UITableViewController {
     fileprivate var clearButton: UITableViewCell?
     fileprivate var showMoreButton: UITableViewCell?
+    //fileprivate var editButton: UIBarButtonItem?
+    //fileprivate var doneButton: UIBarButtonItem?
     var showMoreButtonEnabled = true
 
     fileprivate typealias DefaultCheckedState = Bool
@@ -50,6 +52,14 @@ class WebsiteDataManagement: UITableViewController {
         definesPresentationContext = true
 
         title = Strings.SettingsWebsiteDataTitle
+
+        //toolbar setup
+        self.navigationController?.setToolbarHidden(false, animated: false)
+        let editButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style: .plain, target: self, action: nil)
+        let doneButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style:.plain, target: self, action: nil)
+        self.toolbarItems = [editButton]
+        self.navigationController?.toolbar.barTintColor = UIColor.white
+
 
         //get websites
         dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
