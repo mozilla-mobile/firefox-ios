@@ -343,6 +343,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return configureDownloadedFile(cell, for: indexPath)
     }
 
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let header = view as? UITableViewHeaderFooterView {
+            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
+            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        }
+    }
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         guard groupedDownloadedFiles.itemsForSection(section).count > 0 else { return nil }
 
