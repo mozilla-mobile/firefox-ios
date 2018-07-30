@@ -7,6 +7,18 @@ import Telemetry
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
+    
+    // This enum can be expanded to support all new shortcuts added to menu.
+    enum ShortcutIdentifier: String {
+        case EraseAndOpen
+        init?(fullIdentifier: String) {
+            guard let shortIdentifier = fullIdentifier.components(separatedBy: ".").last else {
+                return nil
+            }
+            self.init(rawValue: shortIdentifier)
+        }
+    }
+    
     var window: UIWindow?
 
     static var splashView: UIView?
@@ -141,6 +153,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
             }
         }
 
+        return true
+    }
+    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
+        
+        completionHandler(handleShortcut(shortcutItem: shortcutItem))
+    }
+    
+    private func handleShortcut(shortcutItem: UIApplicationShortcutItem) -> Bool {
+        let shortcutType = shortcutItem.type
+        guard let shortcutIdentifier = ShortcutIdentifier(fullIdentifier: shortcutType) else {
+            return false
+        }
+        switch shortcutIdentifier {
+        case .EraseAndOpen:
+            browserViewController.resetBrowser(hidePreviousSession: true)
+        }
         return true
     }
 

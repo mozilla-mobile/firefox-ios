@@ -452,7 +452,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func resetBrowser(hidePreviousSession: Bool = false) {
+    func resetBrowser(hidePreviousSession: Bool = false) {
         
         // Used when biometrics fail and the previous session should be obscured
         if hidePreviousSession {
