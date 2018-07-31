@@ -39,8 +39,8 @@ struct ContentBlockingConfig {
     }
 
     struct Defaults {
-        static let NormalBrowsing = true
-        static let PrivateBrowsing = true
+        static let NormalBrowsing = !BrowserProfile.isChinaEdition
+        static let PrivateBrowsing = !BrowserProfile.isChinaEdition
     }
 }
 
