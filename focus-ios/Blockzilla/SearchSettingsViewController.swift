@@ -126,6 +126,13 @@ class SearchSettingsViewController: UITableViewController {
                     make.leading.equalTo(50)
                     make.centerY.equalTo(cell)
                 })
+                
+                if let imageView = cell.imageView {
+                    cell.textLabel?.snp.makeConstraints({ (make) in
+                        make.centerY.equalTo(imageView.snp.centerY)
+                        make.leading.equalTo(imageView.snp.trailing).offset(10)
+                    })
+                }
             }
 
             if engine === searchEngineManager.activeEngine {
