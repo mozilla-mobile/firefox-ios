@@ -197,6 +197,7 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
+        waitforExistence(app.collectionViews.cells.element(boundBy: 0))
         if !app.collectionViews["Apple"].exists {
             app.collectionViews.cells.element(boundBy: 0).tap()
             waitForValueContains(app.textFields["url"], value: "apple")
