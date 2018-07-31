@@ -22,7 +22,7 @@ pipeline {
             steps {
                 dir('SyncIntegrationTests') {
                     sh 'pipenv install'
-                    sh 'pipenv check -i 36351'
+                    sh 'pipenv check -i 36351' // Ignoring vulnerability due to https://github.com/pyupio/safety-db/issues/2272
                     sh 'pipenv run pytest ' +
                         '--color=yes ' +
                         '--junit-xml=results/junit.xml ' +
