@@ -15,8 +15,6 @@ private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 class WebsiteDataManagement: UITableViewController {
     fileprivate var clearButton: UITableViewCell?
     fileprivate var showMoreButton: UITableViewCell?
-    //fileprivate var editButton: UIBarButtonItem?
-    //fileprivate var doneButton: UIBarButtonItem?
     var showMoreButtonEnabled = true
 
     fileprivate typealias DefaultCheckedState = Bool
@@ -25,10 +23,12 @@ class WebsiteDataManagement: UITableViewController {
     struct siteData {
         let dataOfSite: WKWebsiteDataRecord
         let nameOfSite: String
+        var isSelected: Bool
 
-        init(dataOfSite: WKWebsiteDataRecord, nameOfSite: String){
+        init(dataOfSite: WKWebsiteDataRecord, nameOfSite: String, isSelected: Bool = false){
             self.dataOfSite = dataOfSite
             self.nameOfSite = nameOfSite
+            self.isSelected = isSelected
         }
     }
     var siteRecords = [siteData]()
@@ -40,6 +40,7 @@ class WebsiteDataManagement: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.tableView.allowsMultipleSelectionDuringEditing = true
         // Setup the Search Controller
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -56,9 +57,9 @@ class WebsiteDataManagement: UITableViewController {
         //toolbar setup
         self.navigationController?.setToolbarHidden(false, animated: false)
         let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-        let editButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style: .plain, target: self, action: nil)
-        let doneButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style:.plain, target: self, action: nil)
-        self.toolbarItems = [flexible, editButton]
+        let editButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style: .plain, target: self, action: #selector(didPressEdit))
+        let doneButton: UIBarButtonItem = UIBarButtonItem(title: "done", style:.plain, target: self, action: nil)
+        self.toolbarItems = [doneButton, flexible, editButton]
         self.navigationController?.toolbar.barTintColor = UIColor.white
 
 
@@ -139,7 +140,7 @@ class WebsiteDataManagement: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        if (indexPath.section == SectionShowMore && showMoreButtonEnabled) || indexPath.section == SectionButton {
+        if (indexPath.section == SectionShowMore && showMoreButtonEnabled) || indexPath.section == SectionButton || (indexPath.section == SectionSites && self.tableView.isEditing) {
             return true
         }
         return false
@@ -187,11 +188,6 @@ class WebsiteDataManagement: UITableViewController {
         }
     }
 
-//    override func tableView(_ tableView: UITableView,editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-//        return .3
-//    }
-
-
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! ThemedTableSectionHeaderFooterView
         var sectionTitle: String?
@@ -226,6 +222,10 @@ class WebsiteDataManagement: UITableViewController {
     func isFiltering() -> Bool {
         return searchController.isActive && !searchBarIsEmpty()
     }
+
+    @objc func didPressEdit() {
+        self.tableView.setEditing(true, animated: true)
+    }
 }
 
 extension WebsiteDataManagement: UISearchResultsUpdating {
@@ -234,3 +234,5 @@ extension WebsiteDataManagement: UISearchResultsUpdating {
         filterContentForSearchText(searchController.searchBar.text!)
     }
 }
+
+
