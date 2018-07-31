@@ -145,7 +145,6 @@ protocol Profile: AnyObject {
     func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>>
 
     var syncManager: SyncManager! { get }
-    var isChinaEdition: Bool { get }
 }
 
 fileprivate let PrefKeyClientID = "PrefKeyClientID"
@@ -252,7 +251,7 @@ open class BrowserProfile: Profile {
         // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
-        if isChinaEdition {
+        if BrowserProfile.isChinaEdition {
             // Set the default homepage.
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
 
@@ -470,7 +469,7 @@ open class BrowserProfile: Profile {
         return SQLiteLogins(db: self.loginsDB)
     }()
 
-    lazy var isChinaEdition: Bool = {
+    static var isChinaEdition: Bool = {
         return Locale.current.identifier == "zh_CN"
     }()
 
@@ -478,7 +477,7 @@ open class BrowserProfile: Profile {
         if prefs.boolForKey("useCustomSyncService") ?? false {
             return CustomFirefoxAccountConfiguration(prefs: self.prefs)
         }
-        if prefs.boolForKey("useChinaSyncService") ?? isChinaEdition {
+        if prefs.boolForKey("useChinaSyncService") ?? BrowserProfile.isChinaEdition {
             return ChinaEditionFirefoxAccountConfiguration()
         }
         if prefs.boolForKey("useStageSyncService") ?? false {

@@ -900,7 +900,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
         let control = UISwitch()
         control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-        control.isOn = prefs.boolForKey(prefKey) ?? self.profile.isChinaEdition
+        control.isOn = prefs.boolForKey(prefKey) ?? BrowserProfile.isChinaEdition
         cell.accessoryView = control
         cell.selectionStyle = .none
     }
