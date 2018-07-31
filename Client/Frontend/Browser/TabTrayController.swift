@@ -58,8 +58,6 @@ class TabTrayController: UIViewController {
     lazy var searchBar: UITextField = {
         let searchBar = SearchBarTextField()
         searchBar.backgroundColor = UIColor.theme.tabTray.searchBackground
-        searchBar.layer.cornerRadius = 4
-        searchBar.layer.masksToBounds = true
         searchBar.leftView = UIImageView(image: UIImage(named: "quickSearch"))
         searchBar.leftViewMode = .unlessEditing
         searchBar.textColor = UIColor.theme.tabTray.tabTitleText
@@ -71,6 +69,14 @@ class TabTrayController: UIViewController {
     }()
 
     var searchBarHolder = UIView()
+
+    var roundedSearchBarHolder: UIView = {
+        let roundedView = UIView()
+        roundedView.backgroundColor = UIColor.theme.tabTray.searchBackground
+        roundedView.layer.cornerRadius = 4
+        roundedView.layer.masksToBounds = true
+        return roundedView
+    }()
 
     lazy var cancelButton: UIButton = {
         let cancelButton = UIButton()
@@ -159,6 +165,8 @@ class TabTrayController: UIViewController {
             collectionView.dropDelegate = tabDisplayManager
         }
 
+
+        searchBarHolder.addSubview(roundedSearchBarHolder)
         searchBarHolder.addSubview(searchBar)
         searchBarHolder.backgroundColor = UIColor.theme.tabTray.toolbar
         [collectionView, toolbar, searchBarHolder, cancelButton].forEach { view.addSubview($0) }
@@ -221,8 +229,8 @@ class TabTrayController: UIViewController {
             make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
         cancelButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self.searchBar.snp.centerY)
-            make.trailing.equalTo(self.searchBar.snp.trailing).offset(-8)
+            make.centerY.equalTo(self.roundedSearchBarHolder.snp.centerY)
+            make.trailing.equalTo(self.roundedSearchBarHolder.snp.trailing).offset(-8)
         }
 
         searchBarHolder.snp.makeConstraints { make in
@@ -232,6 +240,10 @@ class TabTrayController: UIViewController {
             self.tabLayoutDelegate.searchHeightConstraint = make.bottom.equalTo(self.topLayoutGuide.snp.bottom).constraint
         }
         searchBar.snp.makeConstraints { make in
+            make.edges.equalTo(searchBarHolder).inset(UIEdgeInsetsMake(15, 20, 10, 40))
+        }
+
+        roundedSearchBarHolder.snp.makeConstraints { make in
             make.edges.equalTo(searchBarHolder).inset(UIEdgeInsetsMake(15, 10, 10, 10))
         }
     }
