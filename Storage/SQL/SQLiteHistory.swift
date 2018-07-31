@@ -206,7 +206,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
         return db.runQuery(query, args: args, factory: factory)
     }
 
-    func updateTopSitesCacheQuery() -> (String, Args?) {
+    private func updateTopSitesCacheQueryOld() -> (String, Args?) {
         let limit = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? TopSiteCacheSize)
 
         let (whereData, groupBy) = topSiteClauses()
@@ -230,8 +230,32 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
 
         // @TODO: remove the LEFT JOIN to fill in the icon columns, it is just there because the code has been doing this historically.
         // Those favicon data columns are not used, and view_history_id_favicon appears to only contain null data.
+        return (insertQuery, args)
+    }
+
+    private func updateTopSitesCacheQueryNew() -> (String, Args?) {
+        let limit = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? TopSiteCacheSize)
+        let (topSitesQuery, args) = getTopSitesQuery(historyLimit: limit)
+
+        let insertQuery = """
+            WITH siteFrecency AS (\(topSitesQuery))
+            INSERT INTO cached_top_sites
+            SELECT
+                historyID, url, title, guid, domain_id, domain,
+                localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,
+                NULL AS iconID, NULL AS iconURL, NULL AS iconDate, NULL AS iconType, NULL AS iconWidth, frecencies
+            FROM siteFrecency
+            """
 
         return (insertQuery, args)
+    }
+
+    func updateTopSitesCacheQuery() -> (String, Args?) {
+        if AppConstants.MOZ_ENABLE_HISTORY_FTS {
+            return updateTopSitesCacheQueryNew()
+        } else {
+            return updateTopSitesCacheQueryOld()
+        }
     }
 
     private func topSiteClauses() -> (String, String) {
@@ -534,6 +558,58 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
         } else {
             return getFrecencyQueryOld(historyLimit: historyLimit, params: params)
         }
+    }
+
+    private func getTopSitesQuery(historyLimit: Int) -> (String, Args?) {
+        let localFrecencySQL = getLocalFrecencySQL()
+        let remoteFrecencySQL = getRemoteFrecencySQL()
+
+        // Innermost: grab history items and basic visit/domain metadata.
+        let ungroupedSQL = """
+            SELECT history.id AS historyID, history.url AS url,
+                history.title AS title, history.guid AS guid, domain_id, domain,
+                coalesce(max(CASE visits.is_local WHEN 1 THEN visits.date ELSE 0 END), 0) AS localVisitDate,
+                coalesce(max(CASE visits.is_local WHEN 0 THEN visits.date ELSE 0 END), 0) AS remoteVisitDate,
+                coalesce(sum(visits.is_local), 0) AS localVisitCount,
+                coalesce(sum(CASE visits.is_local WHEN 1 THEN 0 ELSE 1 END), 0) AS remoteVisitCount
+            FROM history
+                INNER JOIN (
+                    SELECT COUNT(rowid) AS visitCount, siteID
+                    FROM visits
+                    GROUP BY siteID
+                    ORDER BY visitCount DESC
+                    LIMIT 5000
+                ) AS groupedVisits ON
+                    groupedVisits.siteID = history.id
+                INNER JOIN domains ON
+                    domains.id = history.domain_id
+                INNER JOIN visits ON
+                    visits.siteID = history.id
+            WHERE (history.is_deleted = 0) AND ((domains.showOnTopSites IS 1) AND (domains.domain NOT LIKE 'r.%') AND (domains.domain NOT LIKE 'google.%') )
+            GROUP BY historyID
+            """
+
+        let frecenciedSQL = """
+            SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency
+            FROM (\(ungroupedSQL))
+            """
+
+        let historySQL = """
+            SELECT historyID, url, title, guid, domain_id, domain,
+                max(localVisitDate) AS localVisitDate,
+                max(remoteVisitDate) AS remoteVisitDate,
+                sum(localVisitCount) AS localVisitCount,
+                sum(remoteVisitCount) AS remoteVisitCount,
+                max(frecency) AS maxFrecency,
+                sum(frecency) AS frecencies,
+                0 AS is_bookmarked
+            FROM (\(frecenciedSQL))
+            GROUP BY domain_id
+            ORDER BY frecencies DESC
+            LIMIT \(historyLimit)
+            """
+
+        return (historySQL, nil)
     }
 }
 
