@@ -22,7 +22,7 @@ pipeline {
             steps {
                 dir('SyncIntegrationTests') {
                     sh 'pipenv install'
-                    sh 'pipenv check'
+                    sh 'pipenv check -i 36351'
                     sh 'pipenv run pytest ' +
                         '--color=yes ' +
                         '--junit-xml=results/junit.xml ' +
