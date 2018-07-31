@@ -616,8 +616,8 @@ extension TabTrayController {
         tabManager.removeTab(tab)
         guard !tabDisplayManager.searchActive else { return }
         self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
-        if isLastTab, !tabDisplayManager.isPrivate {
-            self.tabDisplayManager.performTabUpdates {
+        self.tabDisplayManager.performTabUpdates {
+            if isLastTab, !self.tabDisplayManager.isPrivate {
                 self.dismissTabTray()
             }
         }
