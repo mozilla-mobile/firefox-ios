@@ -62,6 +62,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
         let intervalTitle = NSAttributedString.tableRowTitle(option.settingTitle, enabled: true)
         cell.textLabel?.attributedText = intervalTitle
         cell.accessoryType = authenticationInfo?.requiredPasscodeInterval == option ? .checkmark : .none
+        cell.backgroundColor = UIColor.theme.tableView.rowBackground
         return cell
     }
 
