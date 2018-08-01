@@ -574,11 +574,21 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
                 coalesce(sum(CASE visits.is_local WHEN 1 THEN 0 ELSE 1 END), 0) AS remoteVisitCount
             FROM history
                 INNER JOIN (
-                    SELECT COUNT(rowid) AS visitCount, siteID
-                    FROM visits
-                    GROUP BY siteID
-                    ORDER BY visitCount DESC
-                    LIMIT 5000
+                    SELECT siteID FROM (
+                        SELECT COUNT(rowid) AS visitCount, siteID
+                        FROM visits
+                        GROUP BY siteID
+                        ORDER BY visitCount DESC
+                        LIMIT 5000
+                    )
+                    UNION ALL
+                    SELECT siteID FROM (
+                        SELECT siteID
+                        FROM visits
+                        GROUP BY siteID
+                        ORDER BY max(date) DESC
+                        LIMIT 1000
+                    )
                 ) AS groupedVisits ON
                     groupedVisits.siteID = history.id
                 INNER JOIN domains ON

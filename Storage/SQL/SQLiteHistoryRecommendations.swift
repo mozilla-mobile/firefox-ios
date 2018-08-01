@@ -203,8 +203,10 @@ extension SQLiteHistory: HistoryRecommendations {
     func cleanupOldHistory(numberOfRowsToPrune: UInt) -> [(String, Args?)] {
         let sql = """
             DELETE FROM \(TableHistory) WHERE id IN (
-                SELECT id FROM \(TableHistory)
-                ORDER BY max(ifnull(local_modified, 0), ifnull(server_modified, 0)) ASC
+                SELECT siteID
+                FROM \(TableVisits)
+                GROUP BY siteID
+                ORDER BY max(date) ASC
                 LIMIT \(numberOfRowsToPrune)
             )
             """
@@ -212,18 +214,29 @@ extension SQLiteHistory: HistoryRecommendations {
     }
 
     public func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success {
-        return checkIfCleanupIsNeeded(maxHistoryRows: SQLiteHistory.MaxHistoryRowCount) >>== { doCleanup in
-            var queries: [(String, Args?)] = []
-            if doCleanup {
-                queries.append(contentsOf: self.cleanupOldHistory(numberOfRowsToPrune: SQLiteHistory.PruneHistoryRowCount))
-            }
+        var queries: [(String, Args?)] = []
+
+        func runQueries() -> Success {
             if shouldInvalidateTopSites {
                 queries.append(contentsOf: self.refreshTopSitesQuery())
             }
             if shouldInvalidateHighlights {
                 queries.append(contentsOf: self.repopulateHighlightsQuery())
             }
+
             return self.db.run(queries)
+        }
+
+        // Only check for and perform cleanup operation if we're already invalidating a cache.
+        if shouldInvalidateTopSites || shouldInvalidateHighlights {
+            return checkIfCleanupIsNeeded(maxHistoryRows: SQLiteHistory.MaxHistoryRowCount) >>== { doCleanup in
+                if doCleanup {
+                    queries.append(contentsOf: self.cleanupOldHistory(numberOfRowsToPrune: SQLiteHistory.PruneHistoryRowCount))
+                }
+                return runQueries()
+            }
+        } else {
+            return runQueries()
         }
     }
 
