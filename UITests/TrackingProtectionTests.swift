@@ -123,7 +123,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
         // Scroll to Tracking Protection Menu
         EarlGrey.selectElement(with:grey_accessibilityLabel("Tracking Protection"))
-            .using(searchAction: grey_scrollInDirection(GREYDirection.down, 200),
+            .using(searchAction: grey_scrollInDirection(GREYDirection.down, 400),
                    onElementWithMatcher: grey_kindOfClass(UITableView.self))
             .assert(grey_notNil())
             .perform(grey_tap())
