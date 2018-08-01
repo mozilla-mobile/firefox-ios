@@ -18,7 +18,7 @@ class WebsiteDataManagement: UITableViewController {
     var showMoreButtonEnabled = true
 
     fileprivate typealias DefaultCheckedState = Bool
-    let searchController = UISearchController(searchResultsController: nil)
+    let searchController = UISearchController(searchResultsController: websiteSearchResults())
 
     struct siteData {
         let dataOfSite: WKWebsiteDataRecord
@@ -36,11 +36,13 @@ class WebsiteDataManagement: UITableViewController {
     let dataStore = WKWebsiteDataStore.default()
     let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
 
+    let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+    let editButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style: .plain, target: self, action: #selector(didPressEdit))
+    let doneButton: UIBarButtonItem = UIBarButtonItem(title: "done", style:.plain, target: self, action: nil)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.allowsMultipleSelectionDuringEditing = true
         // Setup the Search Controller
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -55,13 +57,12 @@ class WebsiteDataManagement: UITableViewController {
         title = Strings.SettingsWebsiteDataTitle
 
         //toolbar setup
+        self.tableView.allowsMultipleSelectionDuringEditing = true
         self.navigationController?.setToolbarHidden(false, animated: false)
-        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-        let editButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style: .plain, target: self, action: #selector(didPressEdit))
-        let doneButton: UIBarButtonItem = UIBarButtonItem(title: "done", style:.plain, target: self, action: nil)
-        self.toolbarItems = [doneButton, flexible, editButton]
-        self.navigationController?.toolbar.barTintColor = UIColor.white
 
+
+        //self.navigationController?.toolbar.barTintColor = UIColor.white
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
 
         //get websites
         dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
@@ -226,13 +227,84 @@ class WebsiteDataManagement: UITableViewController {
     @objc func didPressEdit() {
         self.tableView.setEditing(true, animated: true)
     }
+
+    class websiteSearchResults: UITableViewController {
+
+        override func viewDidLoad() {
+            super.viewDidLoad()
+        }
+
+        override func didReceiveMemoryWarning() {
+            super.didReceiveMemoryWarning()
+            // Dispose of any resources that can be recreated.
+        }
+
+        // MARK: - Table view data source
+
+        override func numberOfSections(in tableView: UITableView) -> Int {
+            // #warning Incomplete implementation, return the number of sections
+            return 0
+        }
+
+        override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            // #warning Incomplete implementation, return the number of rows
+            return 5
+        }
+
+        @objc func didPressEdit() {
+            self.tableView.setEditing(true, animated: true)
+        }
+    }
 }
 
 extension WebsiteDataManagement: UISearchResultsUpdating {
     // MARK: - UISearchResultsUpdating Delegate
+    
     func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchController.searchBar.text!)
     }
 }
+
+
+
+
+/*
+class websiteSearchResults: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
+    let tableView = UITableView()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addSubview(tableView)
+
+        //constraints
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo:view.topAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo:view.rightAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo:view.bottomAnchor).isActive = true
+
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+
+        return cell
+    }
+
+}
+ */
 
 
