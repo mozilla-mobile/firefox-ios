@@ -72,17 +72,21 @@ class ActivityStreamDataObserver: DataObserver {
             return
         }
 
+        // Flip the `KeyTopSitesCacheIsValid` flag now to prevent subsequent calls to refresh
+        // from re-invalidating the cache.
+        if shouldInvalidateTopSites {
+            self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+        }
+
+        // Set the `ASLastInvalidation` timestamp now to prevent subsequent calls to refresh
+        // from re-invalidating the cache.
+        if shouldInvalidateHighlights {
+            let newInvalidationTime = shouldInvalidateHighlights ? Date.now() : lastInvalidationTime
+            self.profile.prefs.setLong(newInvalidationTime, forKey: PrefsKeys.ASLastInvalidation)
+        }
+
         self.delegate?.willInvalidateDataSources(forceHighlights: highlights, forceTopSites: topSites)
         self.profile.recommendations.repopulate(invalidateTopSites: shouldInvalidateTopSites, invalidateHighlights: shouldInvalidateHighlights).uponQueue(.main) { _ in
-            if shouldInvalidateTopSites {
-                self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
-            }
-
-            if shouldInvalidateHighlights {
-                let newInvalidationTime = shouldInvalidateHighlights ? Date.now() : lastInvalidationTime
-                self.profile.prefs.setLong(newInvalidationTime, forKey: PrefsKeys.ASLastInvalidation)
-            }
-
             self.delegate?.didInvalidateDataSources(refresh: highlights || topSites, highlightsRefreshed: shouldInvalidateHighlights, topSitesRefreshed: shouldInvalidateTopSites)
         }
     }
