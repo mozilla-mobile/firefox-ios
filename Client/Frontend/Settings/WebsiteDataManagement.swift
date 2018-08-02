@@ -12,27 +12,19 @@ private let SectionButton = 2
 private let NumberOfSections = 3
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
+
 class WebsiteDataManagement: UITableViewController {
     fileprivate var clearButton: UITableViewCell?
     fileprivate var showMoreButton: UITableViewCell?
+    var searchResults: UITableViewController!
+    var searchController: UISearchController!
     var showMoreButtonEnabled = true
 
+    private var filteredSiteRecords = [siteData]()
+    private var siteRecords = [siteData]()
+
     fileprivate typealias DefaultCheckedState = Bool
-    let searchController = UISearchController(searchResultsController: websiteSearchResults())
 
-    struct siteData {
-        let dataOfSite: WKWebsiteDataRecord
-        let nameOfSite: String
-        var isSelected: Bool
-
-        init(dataOfSite: WKWebsiteDataRecord, nameOfSite: String, isSelected: Bool = false){
-            self.dataOfSite = dataOfSite
-            self.nameOfSite = nameOfSite
-            self.isSelected = isSelected
-        }
-    }
-    var siteRecords = [siteData]()
-    var filteredSiteRecords = [siteData]()
     let dataStore = WKWebsiteDataStore.default()
     let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
 
@@ -42,18 +34,6 @@ class WebsiteDataManagement: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Setup the Search Controller
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Filter Sites"
-        if #available(iOS 11.0, *) {
-            navigationItem.searchController = searchController
-        } else {
-            // Fallback on earlier versions
-        }
-        definesPresentationContext = true
-
         title = Strings.SettingsWebsiteDataTitle
 
         //toolbar setup
@@ -77,6 +57,19 @@ class WebsiteDataManagement: UITableViewController {
             }
             self.tableView.reloadData()
         }
+
+        // Setup the Search Controller
+        let searchResults = websiteSearchResults(data: self.siteRecords)
+        searchController = UISearchController(searchResultsController: searchResults)
+        searchController.searchResultsUpdater = searchResults
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Filter Sites"
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController = searchController
+        } else {
+            // Fallback on earlier versions
+        }
+        definesPresentationContext = true
 
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
@@ -150,7 +143,7 @@ class WebsiteDataManagement: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == SectionShowMore {
             //get websites
-            siteRecords.removeAll()
+            self.siteRecords.removeAll()
             dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
                 for record in records {
                         self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
@@ -227,84 +220,61 @@ class WebsiteDataManagement: UITableViewController {
     @objc func didPressEdit() {
         self.tableView.setEditing(true, animated: true)
     }
-
-    class websiteSearchResults: UITableViewController {
-
-        override func viewDidLoad() {
-            super.viewDidLoad()
-        }
-
-        override func didReceiveMemoryWarning() {
-            super.didReceiveMemoryWarning()
-            // Dispose of any resources that can be recreated.
-        }
-
-        // MARK: - Table view data source
-
-        override func numberOfSections(in tableView: UITableView) -> Int {
-            // #warning Incomplete implementation, return the number of sections
-            return 0
-        }
-
-        override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            // #warning Incomplete implementation, return the number of rows
-            return 5
-        }
-
-        @objc func didPressEdit() {
-            self.tableView.setEditing(true, animated: true)
-        }
-    }
 }
 
-extension WebsiteDataManagement: UISearchResultsUpdating {
-    // MARK: - UISearchResultsUpdating Delegate
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!)
+class websiteSearchResults: UITableViewController {
+    private var filteredSiteRecords = [siteData]()
+    private var siteRecords : [siteData]
+    let test = ["1", "2", "3"]
+    init(data:[siteData]) {
+        self.siteRecords = data
+        super.init(nibName: nil, bundle: nil)
     }
-}
 
-
-
-
-/*
-class websiteSearchResults: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-    let tableView = UITableView()
+    required init(coder: NSCoder) {
+        fatalError("NSCoding not supported")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(tableView)
-
-        //constraints
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo:view.topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo:view.rightAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo:view.bottomAnchor).isActive = true
-
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredSiteRecords.count
+    }
 
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let site = filteredSiteRecords[indexPath.item]
+        cell.textLabel?.text = site.nameOfSite
         return cell
     }
 
+    func filterContentForSearchText(_ searchText: String) {
+        filteredSiteRecords = siteRecords.filter({( siteRecord : siteData) -> Bool in
+            return siteRecord.nameOfSite.lowercased().contains(searchText.lowercased())
+        })
+        tableView.reloadData()
+    }
+
+    @objc func didPressEdit() {
+        self.tableView.setEditing(true, animated: true)
+    }
 }
- */
+
+extension websiteSearchResults: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+}
 
 
