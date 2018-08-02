@@ -846,8 +846,33 @@ extension SQLiteHistory: BrowserHistory {
         }
     }
 
-    public func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return self.getFilteredSitesByVisitDateWithLimit(limit, whereURLContains: nil, includeIcon: true)
+    public func getSitesByLastVisit(limit: Int, offset: Int) -> Deferred<Maybe<Cursor<Site>>> {
+        let sql = """
+            SELECT
+                history.id AS historyID, history.url, title, guid, domain_id, domain,
+                coalesce(max(CASE visits.is_local WHEN 1 THEN visits.date ELSE 0 END), 0) AS localVisitDate,
+                coalesce(max(CASE visits.is_local WHEN 0 THEN visits.date ELSE 0 END), 0) AS remoteVisitDate,
+                coalesce(count(visits.is_local), 0) AS visitCount
+                , iconID, iconURL, iconDate, iconType, iconWidth
+            FROM history
+                INNER JOIN (
+                    SELECT siteID, max(date) AS latestVisitDate
+                    FROM visits
+                    GROUP BY siteID
+                    ORDER BY latestVisitDate DESC
+                    LIMIT \(limit)
+                    OFFSET \(offset)
+                ) AS latestVisits ON
+                    latestVisits.siteID = history.id
+                INNER JOIN domains ON domains.id = history.domain_id
+                INNER JOIN visits ON visits.siteID = history.id
+                LEFT OUTER JOIN view_history_id_favicon ON view_history_id_favicon.id = history.id
+            WHERE (history.is_deleted = 0)
+            GROUP BY history.id
+            ORDER BY latestVisits.latestVisitDate DESC
+            """
+
+        return db.runQuery(sql, args: nil, factory: SQLiteHistory.iconHistoryColumnFactory)
     }
 
     fileprivate func getFilteredSitesByVisitDateWithLimit(_ limit: Int,

@@ -1078,7 +1078,7 @@ class TestSQLiteHistory: XCTestCase {
 
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
-        let results = history.getSitesByLastVisit(10).value.successValue
+        let results = history.getSitesByLastVisit(limit: 10, offset: 0).value.successValue
         XCTAssertNotNil(results)
         XCTAssertEqual(results![0]?.url, "http://www.example.com")
 
@@ -1217,7 +1217,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func checkSitesByDate(_ f: @escaping (Cursor<Site>) -> Success) -> () -> Success {
             return {
-                history.getSitesByLastVisit(10)
+                history.getSitesByLastVisit(limit: 10, offset: 0)
                 >>== f
             }
         }

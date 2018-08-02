@@ -25,7 +25,7 @@ class MockableHistory: BrowserHistory, SyncableHistory, ResettableSyncStorage {
     func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>> { fatalError()}
     func addPinnedTopSite(_ site: Site) -> Success { fatalError() }
     func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
-    func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
+    func getSitesByLastVisit(limit: Int, offset: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func setTopSitesNeedsInvalidation() { fatalError() }
     func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> { fatalError() }
     func setTopSitesCacheSize(_ size: Int32) { fatalError() }

@@ -25,7 +25,7 @@ public protocol BrowserHistory {
     func removeSiteFromTopSites(_ site: Site) -> Success
     func removeHostFromTopSites(_ host: String) -> Success
     func getFrecentHistory() -> FrecentHistory
-    func getSitesByLastVisit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
+    func getSitesByLastVisit(limit: Int, offset: Int) -> Deferred<Maybe<Cursor<Site>>>
     func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
     func setTopSitesNeedsInvalidation()
     func setTopSitesCacheSize(_ size: Int32)
