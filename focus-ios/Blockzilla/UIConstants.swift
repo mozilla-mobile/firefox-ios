@@ -167,6 +167,8 @@ struct UIConstants {
         static let browserToolbarHeight: CGFloat = 44
         static let copyButtonAnimationDuration: TimeInterval = 0.1
         static let deleteAnimationDuration: TimeInterval = 0.15
+        static let alphaToZeroDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (2 / 3)
+        static let displayKeyboardDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (1 / 3)
         static let lockIconInset: Float = 4
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
