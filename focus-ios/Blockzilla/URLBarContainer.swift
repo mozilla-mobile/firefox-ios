@@ -5,9 +5,9 @@
 import Foundation
 
 class URLBarContainer: UIView {
-    private let backgroundDark = GradientBackgroundView()
-    private let backgroundBright = GradientBackgroundView(alpha: 0.8)
-
+    private let backgroundDark = GradientBackgroundView(background: UIConstants.Photon.Ink80)
+    private let backgroundBright = GradientBackgroundView(alpha: 0.8, background: UIConstants.Photon.Ink80)
+    
     init() {
         super.init(frame: CGRect.zero)
 

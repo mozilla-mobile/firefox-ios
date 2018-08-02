@@ -53,8 +53,6 @@ class URLBar: UIView {
     private var hideToolsetConstraints = [Constraint]()
     private var showToolsetConstraints = [Constraint]()
     private var isEditingConstraints = [Constraint]()
-    private var preActivationConstraints = [Constraint]()
-    private var postActivationConstraints = [Constraint]()
 
     override var canBecomeFirstResponder: Bool {
         return true
@@ -312,7 +310,6 @@ class URLBar: UIView {
 
         centeredURLConstraints.forEach { $0.deactivate() }
         showToolsetConstraints.forEach { $0.deactivate() }
-        postActivationConstraints.forEach { $0.deactivate() }
         
     }
     
@@ -422,8 +419,6 @@ class URLBar: UIView {
         isEditing = true
         inBrowsingMode = true
         dismiss()
-        postActivationConstraints.forEach { $0.activate() }
-        preActivationConstraints.forEach { $0.deactivate() }
     }
 
     func fillUrlBar(text: String) {
@@ -472,8 +467,6 @@ class URLBar: UIView {
         guard !isEditing else { return }
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
-            self.preActivationConstraints.forEach { $0.deactivate() }
-            self.postActivationConstraints.forEach { $0.activate() }
             self.layoutIfNeeded()
         }
 
@@ -603,8 +596,6 @@ class URLBar: UIView {
         urlText.rightView?.isHidden = true
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
-            self.postActivationConstraints.forEach { $0.deactivate() }
-            self.preActivationConstraints.forEach { $0.activate() }
             self.layoutIfNeeded()
         })
 

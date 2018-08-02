@@ -362,8 +362,8 @@ class BrowserViewController: UIViewController {
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
             make.centerX.equalToSuperview().priority(.required)
-            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).offset(8).priority(.medium)
-            make.trailing.equalTo(mainContainerView.safeAreaLayoutGuide).offset(-8).priority(.medium)
+            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
+            make.trailing.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
             make.top.equalTo(homeView).priority(500)
         }
         topURLBarConstraints.forEach { $0.deactivate() }
