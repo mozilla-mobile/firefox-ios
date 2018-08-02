@@ -91,6 +91,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
         applyTheme()
+        reloadData()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -187,7 +188,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func applyTheme() {
         tableView.backgroundColor = UIColor.theme.tableView.rowBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
-        reloadData()
+        if let rows = tableView.indexPathsForVisibleRows {
+            tableView.reloadRows(at: rows, with: .none)
+            tableView.reloadSections(IndexSet(rows.map { $0.section }), with: .none)
+        }
     }
 }
 
