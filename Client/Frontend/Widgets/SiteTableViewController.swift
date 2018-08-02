@@ -190,6 +190,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.separatorColor = UIColor.theme.tableView.separator
         if let rows = tableView.indexPathsForVisibleRows {
             tableView.reloadRows(at: rows, with: .none)
+            tableView.reloadSections(IndexSet(rows.map { $0.section }), with: .none)
         }
     }
 }
