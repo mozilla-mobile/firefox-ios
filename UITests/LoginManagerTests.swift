@@ -287,12 +287,12 @@ class LoginManagerTests: KIFTestCase {
         }
 
         if BrowserUtils.iPad() {
-            EarlGrey.selectElement(with: grey_accessibilityLabel("Logins"))
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Tracking Protection"))
                 .using(searchAction: grey_scrollInDirection(.down, 200),
                        onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
                 .assert(grey_notNil())
         }
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Logins")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("Logins")).perform(grey_tap())
 
         tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
         tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
