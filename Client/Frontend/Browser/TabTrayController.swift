@@ -47,6 +47,8 @@ class TabTrayController: UIViewController {
     var otherBrowsingModeOffset = CGPoint.zero
     var collectionView: UICollectionView!
 
+    let statusBarBG = UIView()
+
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(openTab), for: .touchUpInside)
@@ -122,6 +124,10 @@ class TabTrayController: UIViewController {
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
         collectionView.contentInset = UIEdgeInsets(top: TabTrayControllerUX.SearchBarHeight, left: 0, bottom: 0, right: 0)
+
+        // these will be animated during view show/hide transition
+        statusBarBG.alpha = 0
+        searchBarHolder.alpha = 0
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -173,7 +179,6 @@ class TabTrayController: UIViewController {
         makeConstraints()
 
         // The statusBar needs a background color
-        let statusBarBG = UIView()
         statusBarBG.backgroundColor = UIColor.theme.tabTray.toolbar
         view.addSubview(statusBarBG)
         statusBarBG.snp.makeConstraints { make in

@@ -43,7 +43,6 @@ private extension TrayToBrowserAnimator {
         // Take a snapshot of the collection view that we can scale/fade out. We don't need to wait for screen updates since it's already rendered on the screen
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotView(afterScreenUpdates: false)!
         tabTray.collectionView.alpha = 0
-        tabTray.searchBarHolder.isHidden = true
         tabCollectionViewSnapshot.frame = tabTray.collectionView.frame
         container.insertSubview(tabCollectionViewSnapshot, at: 0)
 
@@ -82,6 +81,8 @@ private extension TrayToBrowserAnimator {
             tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
             tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             tabCollectionViewSnapshot.alpha = 0
+            tabTray.statusBarBG.alpha = 0
+            tabTray.searchBarHolder.alpha = 0
         }, completion: { finished in
             // Remove any of the views we used for the animation
             cell.removeFromSuperview()
@@ -156,6 +157,13 @@ private extension BrowserToTrayAnimator {
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.urlBar.isTransitioning = true
 
+        // On iPhone, fading these in produces a darkening at the top of the screen, and then
+        // it brightens back to full white as they fade in. Setting these to not fade in produces a better effect.
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            tabTray.statusBarBG.alpha = 1
+            tabTray.searchBarHolder.alpha = 1
+        }
+
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
         // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens.
         // To work around this, we dispatch the setting of collection view to hidden after the screen update is completed.
@@ -184,6 +192,8 @@ private extension BrowserToTrayAnimator {
                 bvc.footer.alpha = 0
                 tabCollectionViewSnapshot.alpha = 1
 
+                tabTray.statusBarBG.alpha = 1
+                tabTray.searchBarHolder.alpha = 1
                 tabTray.toolbar.transform = .identity
                 resetTransformsForViews([tabCollectionViewSnapshot])
             }, completion: { finished in
@@ -285,18 +295,6 @@ private func resetTransformsForViews(_ views: [UIView?]) {
     for view in views {
         // Reset back to origin
         view?.transform = .identity
-    }
-}
-
-private func transformToolbarsToFrame(_ toolbars: [UIView?], toRect endRect: CGRect) {
-    for toolbar in toolbars {
-        // Reset back to origin
-        toolbar?.transform = .identity
-
-        // Transform from origin to where we want them to end up
-        if let toolbarFrame = toolbar?.frame {
-            toolbar?.transform = CGAffineTransformMakeRectToRect(toolbarFrame, toFrame: endRect)
-        }
     }
 }
 
