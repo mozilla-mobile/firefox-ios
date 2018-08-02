@@ -188,7 +188,9 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func applyTheme() {
         tableView.backgroundColor = UIColor.theme.tableView.rowBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.reloadData()
+        if let rows = tableView.indexPathsForVisibleRows {
+            tableView.reloadRows(at: rows, with: .none)
+        }
     }
 }
 
