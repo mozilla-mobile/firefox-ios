@@ -36,17 +36,10 @@ class LoginManagerTests: KIFTestCase {
             return success
         })
 
-        if BrowserUtils.iPad() {
-            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
-            let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
-                                              grey_accessibilityID("menu-Settings")])
-            EarlGrey.selectElement(with: settings_button).perform(grey_tap())
-        } else {
-            let menu_button = grey_allOf([grey_accessibilityLabel("Menu"),
+        let menu_button = grey_allOf([grey_accessibilityLabel("Menu"),
                                           grey_accessibilityID("TabToolbar.menuButton")])
-            EarlGrey.selectElement(with: menu_button).perform(grey_tap())
-            EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())
-        }
+        EarlGrey.selectElement(with: menu_button).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())
 
         let success = menuAppeared.wait(withTimeout: 20)
         GREYAssertTrue(success, reason: "Failed to display settings dialog")
@@ -57,7 +50,12 @@ class LoginManagerTests: KIFTestCase {
                 .assert(grey_notNil())
         }
 
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Logins")).perform(grey_tap())
+        EarlGrey.selectElement(with:grey_accessibilityLabel("Tracking Protection"))
+            .using(searchAction: grey_scrollInDirection(GREYDirection.down, 400),
+                   onElementWithMatcher: grey_kindOfClass(UITableView.self))
+            .assert(grey_notNil())
+
+        EarlGrey.selectElement(with: grey_accessibilityID("Logins")).perform(grey_tap())
     }
 
     fileprivate func closeLoginManager() {
