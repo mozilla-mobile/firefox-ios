@@ -481,7 +481,6 @@ extension TabDisplayManager: TabManagerDelegate {
             self.needReloads.append(selected)
             self.needReloads.append(previous)
             performTabUpdates()
-            // delegate?.topTabsDidChangeTab()
         }
     }
 
