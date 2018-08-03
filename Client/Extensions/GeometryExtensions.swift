@@ -17,10 +17,7 @@ extension CGRect {
 
 extension UIEdgeInsets {
     init(equalInset inset: CGFloat) {
-        top = inset
-        left = inset
-        right = inset
-        bottom = inset
+        self.init(top: inset, left: inset, bottom: inset, right: inset)
     }
 }
 

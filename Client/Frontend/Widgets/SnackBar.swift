@@ -226,7 +226,7 @@ class TimerSnackBar: SnackBar {
         let bar = TimerSnackBar(text: Strings.ExternalLinkAppStoreConfirmationTitle, img: UIImage(named: "defaultFavicon"))
         let openAppStore = SnackButton(title: Strings.AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore", bold: true) { bar in
             tab.removeSnackbar(bar)
-            UIApplication.shared.openURL(appStoreURL)
+            UIApplication.shared.open(appStoreURL, options: [:])
         }
         let cancelButton = SnackButton(title: Strings.NotNowString, accessibilityIdentifier: "CancelOpenInAppStore", bold: false) { bar in
             tab.removeSnackbar(bar)

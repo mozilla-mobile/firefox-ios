@@ -131,7 +131,7 @@ class SearchTests: XCTestCase {
     fileprivate func startMockSuggestServer() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
-        webServer.addHandler(forMethod: "GET", path: "/", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandler(forMethod: "GET", path: "/", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var suggestions: [String]!
             let query = request?.query["q"] as! String
             switch query {
