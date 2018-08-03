@@ -68,7 +68,7 @@ class URLBar: UIView {
         singleTap.numberOfTapsRequired = 1
         addGestureRecognizer(singleTap)
 
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPressUrl))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPress))
         self.addGestureRecognizer(longPress)
         
         addSubview(toolset.backButton)
