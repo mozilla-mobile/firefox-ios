@@ -193,6 +193,7 @@ struct UIConstants {
         static let urlBarWidthInset: CGFloat = 8
         static let urlBarBorderInset: CGFloat = 4
         static let deleteButtonInset: CGFloat = -12
+        static let urlBarIconInset: CGFloat = 8
     }
 
     struct strings {

@@ -710,10 +710,21 @@ class BrowserViewController: UIViewController {
     }
 
     private func toggleURLBarBackground(isBright: Bool) {
-        if case .on = trackingProtectionStatus {
-            urlBarContainer.isBright = isBright
+        if urlBar.isEditing {
+            urlBarContainer.color = .editing
+        } else if case .on = trackingProtectionStatus {
+            urlBarContainer.color = .bright
         } else {
-            urlBarContainer.isBright = false
+            urlBarContainer.color = .dark
+        }
+    }
+    
+    private func toggleToolbarBackground() {
+        switch trackingProtectionStatus {
+        case .off:
+            browserToolbar.color = .dark
+        case .on:
+            browserToolbar.color = .bright
         }
     }
     
@@ -1118,7 +1129,7 @@ extension BrowserViewController: WebControllerDelegate {
     
     func webControllerDidStartNavigation(_ controller: WebController) {
         urlBar.isLoading = true
-        browserToolbar.isLoading = true
+        browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         showToolbars()
         
@@ -1132,7 +1143,7 @@ extension BrowserViewController: WebControllerDelegate {
             urlBar.url = webViewController.url
         }
         urlBar.isLoading = false
-        browserToolbar.isLoading = false
+        toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
     }
@@ -1140,8 +1151,8 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
-        browserToolbar.isLoading = false
         toggleURLBarBackground(isBright: true)
+        toggleToolbarBackground()
         urlBar.progressBar.hideProgressBar()
     }
 
