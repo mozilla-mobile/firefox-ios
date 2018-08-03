@@ -19,6 +19,7 @@ class BrowserViewController: UIViewController {
     private let mainContainerView = UIView(frame: .zero)
     private let drawerContainerView = DrawerView(frame: .zero)
     private let drawerOverlayView = UIView()
+    let darkView = UIView()
     
     private let webViewController = WebViewController()
     private let webViewContainer = UIView()
@@ -95,6 +96,14 @@ class BrowserViewController: UIViewController {
         setupBiometrics()
         view.addSubview(mainContainerView)
         view.addSubview(drawerContainerView)
+        
+        darkView.isHidden = true
+        darkView.backgroundColor = UIConstants.Photon.Ink80
+        darkView.alpha = 0.4
+        view.addSubview(darkView)
+        darkView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
 
         drawerOverlayView.backgroundColor = UIColor(white: 0, alpha: 0.8)
         drawerOverlayView.layer.opacity = 0
@@ -957,6 +966,32 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidTapShield(_ urlBar: URLBar) {
         showDrawer()
+    }
+    
+    func urlBarDidLongPress(_ urlBar: URLBar) {
+        let customURLItem = PhotonActionSheetItem(title: UIConstants.strings.customURLMenuButton, iconString: "icon_link") { action in
+            urlBar.addCustomURL()
+        }
+        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyMenuButton, iconString: "icon_link") { action in
+            urlBar.copyToClipboard()
+        }
+        let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
+            urlBar.paste()
+        }
+        let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste") { action in
+            urlBar.pasteAndGo()
+        }
+        let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], [pasteAndGoItem, pasteItem, copyItem]], style: .overCurrentContext)
+        urlContextMenu.modalPresentationStyle = .overCurrentContext
+        urlContextMenu.delegate = self
+        darkView.isHidden = false
+        present(urlContextMenu, animated: true, completion: nil)
+    }
+}
+
+extension BrowserViewController: PhotonActionSheetTransitionDelegate {
+    func photonActionSheetDidDismiss() {
+        darkView.isHidden = true
     }
 }
 

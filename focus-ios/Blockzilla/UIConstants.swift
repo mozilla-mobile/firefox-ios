@@ -160,6 +160,8 @@ struct UIConstants {
         static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
         static let settingsDescriptionText = UIFont.systemFont(ofSize: 12)
         static let shareTrackerStatsLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
+        static let closeButtonTitle = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
+        static let actionMenuItem = UIFont.systemFont(ofSize: 16)
     }
 
     struct layout {
@@ -282,6 +284,7 @@ struct UIConstants {
         static let shareMenuRequestDesktop = NSLocalizedString("ShareMenu.RequestDesktop", value: "Request Desktop Site", comment: "Text for the share menu option when a user wants to reload the site as a desktop")
         static let shareMenuFindInPage = NSLocalizedString("ShareMenu.FindInPage", value: "Find in Page", comment: "Text for the share menu option when a user wants to open the find in page menu")
         static let shareMenuGetTheFirefoxApp = NSLocalizedString("ShareMenu.GetFirefox", value: "Get the Firefox App", comment: "Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string.")
+        static let urlPaste = NSLocalizedString("URL.paste", value: "Paste", comment: "Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents.")
         static let urlPasteAndGo = NSLocalizedString("URL.contextMenu", value: "Paste & Go", comment: "Text for the URL context menu when a user long presses on the URL bar with clipboard contents.")
         static let saveImage = NSLocalizedString("contextMenu.saveImageTitle", value: "Save Image", comment: "Text for the context menu when a user wants to save an image after long pressing it.")
         static let copyImage = NSLocalizedString("contextMenu.copyImageTitle", value: "Copy Image", comment: "Text for the context menu when a user wants to copy an image after long pressing it.")
@@ -293,6 +296,7 @@ struct UIConstants {
         static let externalAppLinkWithAppName = NSLocalizedString("externalAppLinkWithAppName.messageTitle", value: "%@ wants to open %@", comment: "Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open.")
         static let open = NSLocalizedString("ExternalAppLink.openTitle", value: "Open", comment: "Button label for opening another app from Focus")
         static let cancel = NSLocalizedString("ExternalAppLink.cancelTitle", value: "Cancel", comment: "Button label used for cancelling to open another app from Focus")
+        static let close = NSLocalizedString("Menu.Close", value: "Close", comment: "Button label used to close a menu that displays as a popup.")
         static let photosPermissionTitle = NSLocalizedString("photosPermission.title", value: "“%@” Would Like to Access Your Photos", comment: "Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar")
         static let photosPermissionDescription = NSLocalizedString("photosPermission.description", value: "This lets you save images to your Camera Roll", comment: "Description for dialog used for requesting a user to enable access to Photos.")
         static let openSettingsButtonTitle = NSLocalizedString("photosPermission.openSettings", value: "Open Settings", comment: "Title for button that takes the user to system settings")
