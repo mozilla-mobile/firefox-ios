@@ -313,7 +313,7 @@ class TrackingProtectionToggleView: UIView {
         addSubview(icon)
 
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.text = UIConstants.strings.trackingProtectionToggleLabel
+        label.text = UIConstants.strings.trackingProtectionLabel
         label.textColor = UIConstants.colors.trackingProtectionPrimary
         addSubview(label)
 
