@@ -32,15 +32,16 @@ class WebsiteDataManagement: UITableViewController {
     let editButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style: .plain, target: self, action: #selector(didPressEdit))
     let doneButton: UIBarButtonItem = UIBarButtonItem(title: "done", style:.plain, target: self, action: nil)
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = Strings.SettingsWebsiteDataTitle
 
         //toolbar setup
-        self.tableView.allowsMultipleSelectionDuringEditing = true
-        self.navigationController?.setToolbarHidden(false, animated: false)
+        //self.tableView.allowsMultipleSelectionDuringEditing = true
+        self.navigationController?.setToolbarHidden(true, animated: false)
 
-
+        
         //self.navigationController?.toolbar.barTintColor = UIColor.white
         self.navigationItem.rightBarButtonItem = self.editButtonItem
 
@@ -81,6 +82,10 @@ class WebsiteDataManagement: UITableViewController {
 
         //edit feature
         self.navigationItem.rightBarButtonItem = self.editButtonItem
+
+//        if !isFiltering() {
+//            self.toolbarItems = [flexible, editButton]
+//        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -221,60 +226,3 @@ class WebsiteDataManagement: UITableViewController {
         self.tableView.setEditing(true, animated: true)
     }
 }
-
-class websiteSearchResults: UITableViewController {
-    private var filteredSiteRecords = [siteData]()
-    private var siteRecords : [siteData]
-    let test = ["1", "2", "3"]
-    init(data:[siteData]) {
-        self.siteRecords = data
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init(coder: NSCoder) {
-        fatalError("NSCoding not supported")
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredSiteRecords.count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let site = filteredSiteRecords[indexPath.item]
-        cell.textLabel?.text = site.nameOfSite
-        return cell
-    }
-
-    func filterContentForSearchText(_ searchText: String) {
-        filteredSiteRecords = siteRecords.filter({( siteRecord : siteData) -> Bool in
-            return siteRecord.nameOfSite.lowercased().contains(searchText.lowercased())
-        })
-        tableView.reloadData()
-    }
-
-    @objc func didPressEdit() {
-        self.tableView.setEditing(true, animated: true)
-    }
-}
-
-extension websiteSearchResults: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!)
-    }
-}
-
-

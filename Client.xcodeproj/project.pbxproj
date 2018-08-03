@@ -294,6 +294,7 @@
 		63306D432110B3CD00F25400 /* TabManagerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D422110B3CD00F25400 /* TabManagerStore.swift */; };
 		63306D452110BAF000F25400 /* TabManagerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D442110BAF000F25400 /* TabManagerStoreTests.swift */; };
 		6669B5D82113702F00CA117B /* websiteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6669B5D72113702F00CA117B /* websiteData.swift */; };
+		6669B5E2211418A200CA117B /* websiteSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6669B5E1211418A200CA117B /* websiteSearchResults.swift */; };
 		66CE54A820FCF6CF00CC310B /* WebsiteDataManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CE54A720FCF6CF00CC310B /* WebsiteDataManagement.swift */; };
 		742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */; };
 		744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B0FFD1B4F172E00100422 /* ToolbarTests.swift */; };
@@ -1461,7 +1462,11 @@
 =======
 =======
 		6669B5D72113702F00CA117B /* websiteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = websiteData.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
 >>>>>>> searchresults shows on new tableview
+=======
+		6669B5E1211418A200CA117B /* websiteSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = websiteSearchResults.swift; sourceTree = "<group>"; };
+>>>>>>> added toolbar with edit and delete option
 		66CE54A720FCF6CF00CC310B /* WebsiteDataManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteDataManagement.swift; sourceTree = "<group>"; };
 >>>>>>> added new tableviewcontroller
 		742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheet.swift; sourceTree = "<group>"; };
@@ -2356,6 +2361,7 @@
 				7B4980A71CE363ED0017547C /* Settings.xcassets */,
 				66CE54A720FCF6CF00CC310B /* WebsiteDataManagement.swift */,
 				6669B5D72113702F00CA117B /* websiteData.swift */,
+				6669B5E1211418A200CA117B /* websiteSearchResults.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -5175,6 +5181,7 @@
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
+				6669B5E2211418A200CA117B /* websiteSearchResults.swift in Sources */,
 				E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */,
 				DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
 				E65075611E37F77D006961AC /* MenuHelper.swift in Sources */,
