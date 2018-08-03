@@ -58,6 +58,10 @@ struct DateGroupedTableData<T : Equatable> {
     var lastWeek: [(T, TimeInterval)] = []
     var older: [(T, TimeInterval)] = []
 
+    var isEmpty: Bool {
+        return today.isEmpty && yesterday.isEmpty && lastWeek.isEmpty && older.isEmpty
+    }
+
     mutating func add(_ item: T, timestamp: TimeInterval) {
         if timestamp > todayTimestamp {
             today.append((item, timestamp))
@@ -79,6 +83,19 @@ struct DateGroupedTableData<T : Equatable> {
             lastWeek.remove(at: index)
         } else if let index = older.index(where: { item == $0.0 }) {
             older.remove(at: index)
+        }
+    }
+
+    func numberOfItemsForSection(_ section: Int) -> Int {
+        switch section {
+        case 0:
+            return today.count
+        case 1:
+            return yesterday.count
+        case 2:
+            return lastWeek.count
+        default:
+            return older.count
         }
     }
 
@@ -278,13 +295,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     // MARK: - Empty State
     private func updateEmptyPanelState() {
-        var count = 0;
-        count += groupedDownloadedFiles.today.count
-        count += groupedDownloadedFiles.yesterday.count
-        count += groupedDownloadedFiles.lastWeek.count
-        count += groupedDownloadedFiles.older.count
-
-        if count == 0 {
+        if groupedDownloadedFiles.isEmpty {
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubview(toFront: emptyStateOverlayView)
@@ -351,7 +362,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard groupedDownloadedFiles.itemsForSection(section).count > 0 else { return nil }
+        guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return nil }
 
         switch section {
         case 0:
@@ -397,7 +408,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groupedDownloadedFiles.itemsForSection(section).count
+        return groupedDownloadedFiles.numberOfItemsForSection(section)
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
