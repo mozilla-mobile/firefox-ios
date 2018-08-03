@@ -395,7 +395,7 @@ extension URL {
             return nil
         }
         if scheme == "http" && host == "localhost" && path.hasPrefix(aboutPath) {
-            return path.substring(from: aboutPath.endIndex)
+            return String(path[aboutPath.endIndex...])
         }
         return nil
     }

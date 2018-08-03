@@ -196,7 +196,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             return
         }
 
-        let suggestionText = suggestion.substring(from: suggestion.index(suggestion.startIndex, offsetBy: normalized.count))
+        let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
         autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: textSelectionColor, range: NSRange(location: 0, length: suggestionText.count))
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case

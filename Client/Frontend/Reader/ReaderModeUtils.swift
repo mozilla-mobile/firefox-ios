@@ -10,7 +10,7 @@ struct ReaderModeUtils {
 
     static func simplifyDomain(_ domain: String) -> String {
         return DomainPrefixesToSimplify.first { domain.hasPrefix($0) }.map {
-            $0.substring(from: $0.index($0.startIndex, offsetBy: $0.count))
+            String($0[$0.index($0.startIndex, offsetBy: $0.count)...])
         } ?? domain
     }
 
