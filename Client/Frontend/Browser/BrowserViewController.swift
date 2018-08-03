@@ -1847,6 +1847,10 @@ extension BrowserViewController: TabManagerDelegate {
             urlBar.updateReaderModeState(ReaderModeState.unavailable)
         }
 
+        if topTabsVisible {
+            topTabsDidChangeTab()
+        }
+
         updateInContentHomePanel(selected?.url as URL?)
         if let tab = selected, tab.url == nil, !tab.restoring, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
             self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
