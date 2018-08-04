@@ -158,6 +158,7 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesOpenInNewTab() {
         navigator.goto(HomePanelsScreen)
+        waitforExistence(TopSiteCellgroup.cells["apple"])
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Tab"].tap()
         XCTAssert(TopSiteCellgroup.exists)
