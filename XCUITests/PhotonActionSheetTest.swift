@@ -15,8 +15,8 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.goto(NewTabScreen)
 
         // Verify that the site is pinned to top
-        let cell = app.cells["TopSite"].firstMatch
-        XCTAssertEqual(cell.label, "example")
+        let cell = app.cells["example"]
+        waitforExistence(cell)
 
         // Remove pin
         cell.press(forDuration: 2)
