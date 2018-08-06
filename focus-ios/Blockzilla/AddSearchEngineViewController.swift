@@ -44,7 +44,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
     
     private func setupUI() {
-        view.backgroundColor = UIConstants.colors.background
+        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
         
         let container = UIView()
         view.addSubview(container)
@@ -55,7 +55,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         container.addSubview(nameLabel)
         
         nameInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.AddSearchEngineName, attributes: [.foregroundColor: UIConstants.colors.settingsDetailLabel])
-        nameInput.backgroundColor = UIConstants.colors.cellSelected
+        nameInput.backgroundColor = UIConstants.colors.cellBackground
         nameInput.textColor = UIConstants.colors.settingsTextLabel
         nameInput.leftView = UIView(frame: CGRect(x: 0, y: 0, width: leftMargin, height: rowHeight))
         nameInput.leftViewMode = .always
@@ -65,10 +65,10 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         container.addSubview(nameInput)
 
         let templateContainer = UIView()
-        templateContainer.backgroundColor = UIConstants.colors.cellSelected
+        templateContainer.backgroundColor = UIConstants.colors.cellBackground
         container.addSubview(templateContainer)
 
-        templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
+        templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellBackground
         templatePlaceholderLabel.textColor = UIConstants.colors.settingsDetailLabel
         templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
         templatePlaceholderLabel.font = UIFont.systemFont(ofSize: 15)

@@ -28,7 +28,7 @@ class SearchSettingsViewController: UITableViewController {
         super.viewDidLoad()
 
         navigationItem.title = UIConstants.strings.settingsSearchLabel
-        view.backgroundColor = UIConstants.colors.background
+        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.selectRow(at: IndexPath(row: 0, section: 1), animated: false, scrollPosition: .none)
         tableView.tableFooterView = UIView()
@@ -39,7 +39,7 @@ class SearchSettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
         
         let label = SmartLabel()
         label.text = UIConstants.strings.InstalledSearchEngines
@@ -70,7 +70,7 @@ class SearchSettingsViewController: UITableViewController {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "addSearchEngine")
             cell.textLabel?.text = UIConstants.strings.AddSearchEngineButton
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
-            cell.backgroundColor = UIConstants.colors.background
+            cell.backgroundColor = UIConstants.colors.cellBackground
             cell.accessibilityIdentifier = "addSearchEngine"
             cell.selectedBackgroundView = getBackgroundView()
             return cell
@@ -84,7 +84,7 @@ class SearchSettingsViewController: UITableViewController {
             label.lineBreakMode = .byWordWrapping
 
             cell.textLabel?.text = " "
-            cell.backgroundColor = UIConstants.colors.background
+            cell.backgroundColor = UIConstants.colors.cellBackground
             cell.accessibilityIdentifier = "restoreDefaults"
             cell.selectedBackgroundView = getBackgroundView()
             cell.addSubview(label)
@@ -114,7 +114,7 @@ class SearchSettingsViewController: UITableViewController {
             cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
             cell.imageView?.image = engine.image?.createScaled(size: CGSize(width: 24, height: 24))
             cell.selectedBackgroundView = getBackgroundView()
-            cell.backgroundColor = UIConstants.colors.background
+            cell.backgroundColor = UIConstants.colors.cellBackground
             cell.accessibilityIdentifier = engine.name
             
             if tableView.isEditing {

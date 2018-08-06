@@ -219,16 +219,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.colors.background
+        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
 
         title = UIConstants.strings.settingsTitle
 
         let navigationBar = navigationController!.navigationBar
         navigationBar.isTranslucent = false
-        navigationBar.barTintColor = UIConstants.colors.background
+        navigationBar.barTintColor = UIConstants.colors.settingsBackgroundColor
         navigationBar.tintColor = UIConstants.colors.navigationButton
         navigationBar.titleTextAttributes = [.foregroundColor: UIConstants.colors.navigationTitle]
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSettings))
+        
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSettings))
+        doneButton.tintColor = UIConstants.Photon.Magenta60
+        navigationItem.leftBarButtonItem = doneButton
 
         highlightsButton = UIBarButtonItem(title: UIConstants.strings.whatsNewTitle, style: .plain, target: self, action: #selector(whatsNewClicked))
         highlightsButton?.image = UIImage(named: "highlight")
@@ -246,7 +249,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.colors.background
+        tableView.backgroundColor = UIConstants.colors.settingsBackgroundColor
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.allowsSelection = true
@@ -377,7 +380,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
 
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = UIConstants.colors.cellBackground
         cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
         cell.layoutMargins = UIEdgeInsets.zero
         cell.detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
@@ -439,7 +442,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         // constraints for our custom label based on the cell's label.
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
 
         let label = SmartLabel()
         label.text = sections[section].headerText

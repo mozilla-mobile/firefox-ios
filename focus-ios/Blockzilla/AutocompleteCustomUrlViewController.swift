@@ -47,13 +47,13 @@ class AutocompleteCustomUrlViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.colors.background
+        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
 
         title = UIConstants.strings.autocompleteCustomSectionLabel
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.colors.background
+        tableView.backgroundColor = UIConstants.colors.settingsBackgroundColor
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIConstants.colors.settingsSeparator
     }
@@ -95,11 +95,11 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
 
         // Hack to cover header separator line
         let footer = UIView()
-        footer.backgroundColor = UIConstants.colors.background
+        footer.backgroundColor = UIConstants.colors.settingsBackgroundColor
 
         cell.addSubview(footer)
         cell.sendSubviewToBack(footer)
@@ -133,7 +133,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
             cell.accessibilityIdentifier = domains[indexPath.row]
         }
 
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = UIConstants.colors.cellBackground
         cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
         cell.layoutMargins = UIEdgeInsets.zero
 

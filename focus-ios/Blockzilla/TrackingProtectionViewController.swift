@@ -19,11 +19,11 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIConstants.colors.background
+        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = UIConstants.colors.background
+        tableView.backgroundColor = UIConstants.colors.settingsBackgroundColor
         tableView.tableFooterView = UIView()
         view.addSubview(tableView)
         
@@ -92,7 +92,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         cell.detailTextLabel?.text = toggle.subtitle
         cell.detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
         cell.detailTextLabel?.numberOfLines = 0
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = UIConstants.colors.cellBackground
         cell.selectionStyle = .none
         
         return cell
@@ -111,7 +111,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         cell.detailTextLabel?.numberOfLines = 0
         cell.accessibilityIdentifier = "SettingsViewController.trackingProtectionLearnMoreCell"
         cell.selectionStyle = .none
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
         cell.layoutMargins = UIEdgeInsets.zero
         
         let selector = #selector(tappedTrackingProtectionLearnMoreFooter)
