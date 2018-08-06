@@ -19,6 +19,7 @@ protocol URLBarDelegate: class {
     func urlBarDidPressDelete(_ urlBar: URLBar)
     func urlBarDidTapShield(_ urlBar: URLBar)
     func urlBarDidLongPress(_ urlBar: URLBar)
+    func urlBarDidPressPageActions(_ urlBar: URLBar)
 }
 
 class URLBar: UIView {
@@ -640,7 +641,7 @@ class URLBar: UIView {
     }
     
     @objc private func didPressPageActions() {
-        // TODO
+        delegate?.urlBarDidPressPageActions(self)
     }
 
     fileprivate func setTextToURL() {

@@ -993,14 +993,45 @@ extension BrowserViewController: URLBarDelegate {
             urlBar.pasteAndGo()
         }
         let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], [pasteAndGoItem, pasteItem, copyItem]], style: .overCurrentContext)
-        urlContextMenu.modalPresentationStyle = .overCurrentContext
-        urlContextMenu.delegate = self
-        darkView.isHidden = false
-        present(urlContextMenu, animated: true, completion: nil)
+        presentPhotonActionSheet(urlContextMenu)
+    }
+    
+    func urlBarDidPressPageActions(_ urlBar: URLBar) {
+        guard let url = urlBar.url else { return }
+        let utils = OpenUtils(url: url, webViewController: webViewController)
+        let items = PageActionSheetItems(url: url)
+        let titleItem = PhotonActionSheetItem(title: UIConstants.strings.pageActionsTitle)
+        let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
+            let shareVC = utils.buildShareViewController(url: url)
+            shareVC.becomeFirstResponder()
+            self.present(shareVC, animated: true, completion: nil)
+        }
+        var shareItems = [sharePageItem]
+        if items.canOpenInFirefox {
+            shareItems.append(items.openInFireFoxItem)
+        }
+        if items.canOpenInChrome {
+            shareItems.append(items.openInChromeItem)
+        }
+        shareItems.append(items.openInSafariItem)
+        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddress, iconString: "icon_link") { action in
+            urlBar.copyToClipboard()
+        }
+        shareItems.append(copyItem)
+        
+        let actionItems = [items.findInPageItem, items.requestDesktopItem]
+        let pageActionsMenu = PhotonActionSheet(actions: [[titleItem], shareItems, actionItems], style: .overCurrentContext)
+        presentPhotonActionSheet(pageActionsMenu)
     }
 }
 
 extension BrowserViewController: PhotonActionSheetTransitionDelegate {
+    func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet) {
+        actionSheet.modalPresentationStyle = .overCurrentContext
+        actionSheet.delegate = self
+        darkView.isHidden = false
+        present(actionSheet, animated: true, completion: nil)
+    }
     func photonActionSheetDidDismiss() {
         darkView.isHidden = true
     }

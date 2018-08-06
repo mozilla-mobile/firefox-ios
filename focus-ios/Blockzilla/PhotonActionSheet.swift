@@ -233,6 +233,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         delegate?.photonActionSheetDidDismiss()
         self.dismiss(animated: true, completion: nil)
     }
+
+    func dismissWithCallback(callback: @escaping () -> ()) {
+        delegate?.photonActionSheetDidDismiss()
+        self.dismiss(animated: true) { callback() }
+    }
     
     deinit {
         tableView.dataSource = nil
@@ -278,11 +283,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             actions[indexPath.section][indexPath.row] = action
             self.tableView.deselectRow(at: indexPath, animated: true)
             self.tableView.reloadData()
+            handler(action)
         } else {
-            self.dismiss(nil)
+            self.dismissWithCallback {
+                handler(action)
+            }
         }
-        
-        return handler(action)
     }
     
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {

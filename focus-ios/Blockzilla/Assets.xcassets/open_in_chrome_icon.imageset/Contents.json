@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "ios-app-extension-chrome.png",
+      "filename" : "Chrome.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "ios-app-extension-chrome@2x.png",
+      "filename" : "Chrome@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "ios-app-extension-chrome@3x.png",
+      "filename" : "Chrome@3x.png",
       "scale" : "3x"
     }
   ],
