@@ -12,7 +12,6 @@ private let SectionButton = 2
 private let NumberOfSections = 3
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
-
 class WebsiteDataManagement: UITableViewController {
     fileprivate var clearButton: UITableViewCell?
     fileprivate var showMoreButton: UITableViewCell?
@@ -23,26 +22,14 @@ class WebsiteDataManagement: UITableViewController {
     private var filteredSiteRecords = [siteData]()
     private var siteRecords = [siteData]()
 
-    fileprivate typealias DefaultCheckedState = Bool
-
     let dataStore = WKWebsiteDataStore.default()
     let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
-
-    let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-    let editButton: UIBarButtonItem = UIBarButtonItem(title: "edit", style: .plain, target: self, action: #selector(didPressEdit))
-    let doneButton: UIBarButtonItem = UIBarButtonItem(title: "done", style:.plain, target: self, action: nil)
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = Strings.SettingsWebsiteDataTitle
 
-        //toolbar setup
-        //self.tableView.allowsMultipleSelectionDuringEditing = true
         self.navigationController?.setToolbarHidden(true, animated: false)
-
-        
-        //self.navigationController?.toolbar.barTintColor = UIColor.white
         self.navigationItem.rightBarButtonItem = self.editButtonItem
 
         //get websites
@@ -59,33 +46,23 @@ class WebsiteDataManagement: UITableViewController {
             self.tableView.reloadData()
         }
 
-        // Setup the Search Controller
-        let searchResults = websiteSearchResults(data: self.siteRecords)
+        //Search Controller setup
+        let searchResults = websiteSearchResults(data: siteRecords)
         searchController = UISearchController(searchResultsController: searchResults)
         searchController.searchResultsUpdater = searchResults
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Filter Sites"
         if #available(iOS 11.0, *) {
             navigationItem.searchController = searchController
-        } else {
-            // Fallback on earlier versions
         }
         definesPresentationContext = true
 
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
-
         tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
-
-        //edit feature
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
-
-//        if !isFiltering() {
-//            self.toolbarItems = [flexible, editButton]
-//        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -93,14 +70,8 @@ class WebsiteDataManagement: UITableViewController {
 
         if indexPath.section == SectionSites {
             assert(indexPath.section == SectionSites)
-            if isFiltering() {
-                let site = filteredSiteRecords[indexPath.item]
-                cell.textLabel?.text = site.nameOfSite
-            } else {
-                let site = siteRecords[indexPath.item]
-                cell.textLabel?.text = site.nameOfSite
-            }
-
+            let site = siteRecords[indexPath.item]
+            cell.textLabel?.text = site.nameOfSite
         } else if indexPath.section == SectionShowMore {
             assert(indexPath.section == SectionShowMore)
             cell.textLabel?.text = "Show More"
@@ -108,7 +79,6 @@ class WebsiteDataManagement: UITableViewController {
             cell.accessibilityTraits = UIAccessibilityTraitButton
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
             showMoreButton = cell
-
         } else {
             assert(indexPath.section == SectionButton)
             cell.textLabel?.text = Strings.SettingsClearAllWebsiteDataButton
@@ -127,9 +97,6 @@ class WebsiteDataManagement: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionSites {
-            if isFiltering() {
-                return filteredSiteRecords.count
-            }
             return siteRecords.count
         } else if section == SectionShowMore {
             return 1
@@ -204,25 +171,5 @@ class WebsiteDataManagement: UITableViewController {
             return SettingsUX.TableViewHeaderFooterHeight
         }
         return 0
-    }
-
-    func searchBarIsEmpty() -> Bool {
-        // Returns true if the text is empty or nil
-        return searchController.searchBar.text?.isEmpty ?? true
-    }
-
-    func filterContentForSearchText(_ searchText: String) {
-        filteredSiteRecords = siteRecords.filter({( siteRecord : siteData) -> Bool in
-            return siteRecord.nameOfSite.lowercased().contains(searchText.lowercased())
-        })
-        tableView.reloadData()
-    }
-
-    func isFiltering() -> Bool {
-        return searchController.isActive && !searchBarIsEmpty()
-    }
-
-    @objc func didPressEdit() {
-        self.tableView.setEditing(true, animated: true)
     }
 }

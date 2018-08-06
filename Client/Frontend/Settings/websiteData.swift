@@ -12,11 +12,9 @@ import WebKit
 struct siteData {
     let dataOfSite: WKWebsiteDataRecord
     let nameOfSite: String
-    var isSelected: Bool
 
-    init(dataOfSite: WKWebsiteDataRecord, nameOfSite: String, isSelected: Bool = false){
+    init(dataOfSite: WKWebsiteDataRecord, nameOfSite: String){
         self.dataOfSite = dataOfSite
         self.nameOfSite = nameOfSite
-        self.isSelected = isSelected
     }
 }

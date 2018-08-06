@@ -16,11 +16,12 @@ class websiteSearchResults: UITableViewController {
     let editButton: UIBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(didPressEdit))
     let doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDone))
     let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(didPressDelete))
-    private var myToolbar: UIToolbar!
+    private var toolBar: UIToolbar!
     
     private var filteredSiteRecords = [String]()
     private var siteRecords : [siteData]
     var test = ["1", "2", "3"]
+
     init(data:[siteData]) {
         self.siteRecords = data
         super.init(nibName: nil, bundle: nil)
@@ -34,15 +35,14 @@ class websiteSearchResults: UITableViewController {
         super.viewDidLoad()
         self.tableView.allowsMultipleSelectionDuringEditing = true
         //toolbar
-        let border = CGRect(x: 0, y: 10.0, width: self.view.bounds.size.width, height: 40.0)
-        myToolbar = UIToolbar(frame: border)
-        myToolbar.layer.position = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height-80.0)
-        myToolbar.barStyle = .default
-        myToolbar.items = [flexible, editButton]
-        self.view.addSubview(myToolbar)
+        let border = CGRect(x: 0, y: 10.0, width: self.view.bounds.size.width, height: 44.0)
+        toolBar = UIToolbar(frame: border)
+        toolBar.layer.position = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height-88.0)
+        toolBar.barStyle = .default
+        toolBar.items = [flexible, editButton]
+        self.view.addSubview(toolBar)
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
         tableView.separatorColor = UIColor.theme.tableView.separator
@@ -71,12 +71,12 @@ class websiteSearchResults: UITableViewController {
         return cell
     }
 
-//    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-//        if self.isEditing {
-//            return true
-//        }
-//        return false
-//    }
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        if self.isEditing {
+            return true
+        }
+        return false
+    }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.delete) {
@@ -103,12 +103,13 @@ class websiteSearchResults: UITableViewController {
 
     @objc func didPressEdit() {
         self.tableView.setEditing(true, animated: true)
-        myToolbar.items = [deleteButton, flexible, doneButton]
+        print("hi")
+        toolBar.items = [deleteButton, flexible, doneButton]
     }
 
     @objc func didPressDone() {
         self.tableView.setEditing(false, animated: true)
-        myToolbar.items = [flexible, editButton]
+        toolBar.items = [flexible, editButton]
     }
 
     @objc func didPressDelete() {
