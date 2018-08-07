@@ -951,7 +951,7 @@ extension BrowserViewController: URLBarDelegate {
         let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
             urlBar.paste()
         }
-        let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste") { action in
+        let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste_and_go") { action in
             urlBar.pasteAndGo()
         }
         let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], [pasteAndGoItem, pasteItem, copyItem]], style: .overCurrentContext)
