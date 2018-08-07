@@ -931,16 +931,22 @@ extension BrowserViewController: URLBarDelegate {
         let customURLItem = PhotonActionSheetItem(title: UIConstants.strings.customURLMenuButton, iconString: "icon_link") { action in
             urlBar.addCustomURL()
         }
+        var actions = [PhotonActionSheetItem]()
+        if let clipboardString = UIPasteboard.general.string {
+            let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
+                urlBar.paste(clipboardString: clipboardString)
+            }
+            actions.append(pasteItem)
+            let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste") { action in
+                urlBar.pasteAndGo(clipboardString: clipboardString)
+            }
+            actions.append(pasteAndGoItem)
+        }
         let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyMenuButton, iconString: "icon_link") { action in
             urlBar.copyToClipboard()
         }
-        let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
-            urlBar.paste()
-        }
-        let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste_and_go") { action in
-            urlBar.pasteAndGo()
-        }
-        let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], [pasteAndGoItem, pasteItem, copyItem]], style: .overCurrentContext)
+        actions.append(copyItem)
+        let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], actions], style: .overCurrentContext)
         presentPhotonActionSheet(urlContextMenu)
     }
     

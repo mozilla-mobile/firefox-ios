@@ -374,22 +374,18 @@ class URLBar: UIView {
         UIPasteboard.general.string = self.urlText.text ?? ""
     }
     
-    @objc func paste() {
-        if let clipboardString = UIPasteboard.general.string {
-            present()
-            urlText.text = clipboardString
-            activateTextField()
-        }
+    @objc func paste(clipboardString: String) {
+        present()
+        urlText.text = clipboardString
+        activateTextField()
     }
     
-    @objc func pasteAndGo() {
-        if let clipboardString = UIPasteboard.general.string {
-            present()
-            delegate?.urlBarDidActivate(self)
-            delegate?.urlBar(self, didSubmitText: clipboardString)
+    @objc func pasteAndGo(clipboardString: String) {
+        present()
+        delegate?.urlBarDidActivate(self)
+        delegate?.urlBar(self, didSubmitText: clipboardString)
             
-            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
-        }
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
     }
 
     //Adds Menu Item
