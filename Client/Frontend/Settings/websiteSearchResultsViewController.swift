@@ -1,5 +1,5 @@
 //
-//  websiteSearchResults.swift
+//  websiteSearchResultsViewController.swift
 //  Client
 //
 //  Created by Meera Rachamallu on 8/2/18.
@@ -10,7 +10,7 @@ import UIKit
 
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
-class websiteSearchResults: UITableViewController {
+class websiteSearchResultsViewController: UITableViewController {
 
     let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
     let editButton: UIBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(didPressEdit))
@@ -18,9 +18,8 @@ class websiteSearchResults: UITableViewController {
     let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(didPressDelete))
     private var toolBar: UIToolbar!
     
-    private var filteredSiteRecords = [String]()
-    private var siteRecords : [siteData]
-    var test = ["1", "2", "3"]
+    private var filteredSiteRecords = [siteData]()
+    var siteRecords : [siteData]
 
     init(data:[siteData]) {
         self.siteRecords = data
@@ -33,13 +32,14 @@ class websiteSearchResults: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.tableView.allowsMultipleSelectionDuringEditing = true
         //toolbar
         let border = CGRect(x: 0, y: 10.0, width: self.view.bounds.size.width, height: 44.0)
         toolBar = UIToolbar(frame: border)
         toolBar.layer.position = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height-88.0)
         toolBar.barStyle = .default
-        toolBar.items = [flexible, editButton]
+        toolBar.items = [deleteButton, flexible, editButton]
         self.view.addSubview(toolBar)
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
@@ -61,18 +61,18 @@ class websiteSearchResults: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return test.count//filteredSiteRecords.count
+        return filteredSiteRecords.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let site = filteredSiteRecords[indexPath.item]
-        cell.textLabel?.text = site//site.nameOfSite
+        cell.textLabel?.text = site.nameOfSite
         return cell
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        if self.isEditing {
+        if self.tableView.isEditing {
             return true
         }
         return false
@@ -80,7 +80,8 @@ class websiteSearchResults: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.delete) {
-            test.remove(at: indexPath.item)
+            dataStore.removeData(ofTypes: dataTypes, for: [filteredSiteRecords[indexPath.item].dataOfSite], completionHandler: { return })
+            filteredSiteRecords.remove(at: indexPath.item)
             tableView.reloadData()
         }
     }
@@ -95,15 +96,14 @@ class websiteSearchResults: UITableViewController {
     }
 
     func filterContentForSearchText(_ searchText: String) {
-        filteredSiteRecords = test//siteRecords.filter({( siteRecord : siteData) -> Bool in
-            //return siteRecord.nameOfSite.lowercased().contains(searchText.lowercased())
-       // })
+        filteredSiteRecords = siteRecords.filter({( siteRecord : siteData) -> Bool in
+            return siteRecord.nameOfSite.lowercased().contains(searchText.lowercased())
+        })
         tableView.reloadData()
     }
 
     @objc func didPressEdit() {
         self.tableView.setEditing(true, animated: true)
-        print("hi")
         toolBar.items = [deleteButton, flexible, doneButton]
     }
 
@@ -116,7 +116,7 @@ class websiteSearchResults: UITableViewController {
         let selectedRows = self.tableView.indexPathsForSelectedRows
         if selectedRows != nil {
             for var selectionIndex in selectedRows! {
-                while selectionIndex.item >= test.count {
+                while selectionIndex.item >= filteredSiteRecords.count {
                     selectionIndex.item -= 1
                 }
                 tableView(tableView, commit: .delete, forRowAt: selectionIndex)
@@ -125,7 +125,7 @@ class websiteSearchResults: UITableViewController {
     }
 }
 
-extension websiteSearchResults: UISearchResultsUpdating {
+extension websiteSearchResultsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchController.searchBar.text!)
     }

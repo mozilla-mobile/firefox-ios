@@ -12,18 +12,14 @@ private let SectionButton = 2
 private let NumberOfSections = 3
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
-class WebsiteDataManagement: UITableViewController {
+class WebsiteDataManagementViewController: UITableViewController {
     fileprivate var clearButton: UITableViewCell?
     fileprivate var showMoreButton: UITableViewCell?
     var searchResults: UITableViewController!
     var searchController: UISearchController!
     var showMoreButtonEnabled = true
 
-    private var filteredSiteRecords = [siteData]()
     private var siteRecords = [siteData]()
-
-    let dataStore = WKWebsiteDataStore.default()
-    let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,11 +39,15 @@ class WebsiteDataManagement: UITableViewController {
             } else {
                 self.showMoreButtonEnabled = false
             }
+            if let searchResults = self.searchController.searchResultsUpdater  as? websiteSearchResultsViewController {
+                searchResults.siteRecords = self.siteRecords
+            }
             self.tableView.reloadData()
         }
 
         //Search Controller setup
-        let searchResults = websiteSearchResults(data: siteRecords)
+        let searchResults = websiteSearchResultsViewController(data: siteRecords)
+
         searchController = UISearchController(searchResultsController: searchResults)
         searchController.searchResultsUpdater = searchResults
         searchController.obscuresBackgroundDuringPresentation = false

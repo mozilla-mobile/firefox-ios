@@ -131,7 +131,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == SectionArrow {
-            let view = WebsiteDataManagement()
+            let view = WebsiteDataManagementViewController()
             navigationController?.pushViewController(view, animated: true)
         }
         if indexPath.section == SectionButton {

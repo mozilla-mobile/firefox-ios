@@ -9,6 +9,9 @@
 import Foundation
 import WebKit
 
+let dataStore = WKWebsiteDataStore.default()
+let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+
 struct siteData {
     let dataOfSite: WKWebsiteDataRecord
     let nameOfSite: String
