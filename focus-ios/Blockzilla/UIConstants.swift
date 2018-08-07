@@ -164,6 +164,7 @@ struct UIConstants {
         static let shareTrackerStatsLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
         static let closeButtonTitle = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
         static let actionMenuItem = UIFont.systemFont(ofSize: 16)
+        static let actionMenuItemBold = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold)
     }
 
     struct layout {

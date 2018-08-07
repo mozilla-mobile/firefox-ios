@@ -43,7 +43,7 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var iconURL: URL?
     public fileprivate(set) var iconAlignment: IconAlignment
     
-    public var isEnabled: Bool // Used by toggles like nightmode to switch tint color
+    public var isEnabled: Bool
     public fileprivate(set) var accessory: PhotonActionSheetCellAccessoryType
     public fileprivate(set) var accessoryText: String?
     public fileprivate(set) var bold: Bool = false
@@ -68,12 +68,13 @@ private enum PresentationStyle {
     case popover // when displayed on the iPad
 }
 
-protocol PhotonActionSheetTransitionDelegate: class {
+protocol PhotonActionSheetDelegate: class {
     func photonActionSheetDidDismiss()
+    func photonActionSheetDidToggleProtection(enabled: Bool)
 }
 
 class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
-    weak var delegate: PhotonActionSheetTransitionDelegate?
+    weak var delegate: PhotonActionSheetDelegate?
     fileprivate(set) var actions: [[PhotonActionSheetItem]]
     
     private let style: PresentationStyle
@@ -229,7 +230,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
+    @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer? = nil) {
         delegate?.photonActionSheetDidDismiss()
         self.dismiss(animated: true, completion: nil)
     }
@@ -237,6 +238,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     func dismissWithCallback(callback: @escaping () -> ()) {
         delegate?.photonActionSheetDidDismiss()
         self.dismiss(animated: true) { callback() }
+    }
+    
+    @objc func didToggle(enabled: Bool) {
+        delegate?.photonActionSheetDidToggleProtection(enabled: enabled)
+        dismiss()
+        delegate?.photonActionSheetDidDismiss()
     }
     
     deinit {
@@ -271,18 +278,16 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var action = actions[indexPath.section][indexPath.row]
         guard let handler = action.handler else {
-            self.dismiss(nil)
+            self.dismiss()
             return
         }
         
-        // Switches can be toggled on/off without dismissing the menu
         if action.accessory == .Switch {
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
             action.isEnabled = !action.isEnabled
             actions[indexPath.section][indexPath.row] = action
             self.tableView.deselectRow(at: indexPath, animated: true)
             self.tableView.reloadData()
+            delegate?.photonActionSheetDidToggleProtection(enabled: action.isEnabled)
             handler(action)
         } else {
             self.dismissWithCallback {
@@ -299,6 +304,9 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
         let action = actions[indexPath.section][indexPath.row]
         cell.tintColor = self.tintColor
+        if action.accessory == .Switch {
+            cell.actionSheet = self
+        }
         cell.configure(with: action)
         return cell
     }
@@ -421,7 +429,6 @@ private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
 }
 
 public enum PhotonActionSheetCellAccessoryType {
-    case Disclosure
     case Switch
     case Text
     case None
@@ -432,6 +439,7 @@ private class PhotonActionSheetCell: UITableViewCell {
     static let HorizontalPadding: CGFloat = 10
     static let VerticalPadding: CGFloat = 2
     static let IconSize = 16
+    var actionSheet: PhotonActionSheet?
     
     private func createLabel() -> UILabel {
         let label = UILabel()
@@ -475,12 +483,6 @@ private class PhotonActionSheetCell: UITableViewCell {
         return label
     }()
     
-    lazy var toggleSwitch: UIImageView = {
-        let toggle = UIImageView(image: UIImage(named: "menu-Toggle-Off"))
-        toggle.contentMode = .scaleAspectFit
-        return toggle
-    }()
-    
     lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
         selectedOverlay.backgroundColor = PhotonActionSheetCellUX.SelectedOverlayColor
@@ -512,7 +514,6 @@ private class PhotonActionSheetCell: UITableViewCell {
         self.statusIcon.image = nil
         disclosureIndicator.removeFromSuperview()
         disclosureLabel.removeFromSuperview()
-        toggleSwitch.removeFromSuperview()
         statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
     }
     
@@ -561,7 +562,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         subtitleLabel.text = action.text
         subtitleLabel.textColor = self.tintColor
         subtitleLabel.isHidden = action.text == nil
-        titleLabel.font = UIConstants.fonts.actionMenuItem
+        titleLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
         accessibilityIdentifier = action.iconString
         accessibilityLabel = action.title
         selectionStyle = action.handler != nil ? .default : .none
@@ -586,20 +587,22 @@ private class PhotonActionSheetCell: UITableViewCell {
         
         switch action.accessory {
         case .Text:
-            disclosureLabel.font = UIConstants.fonts.actionMenuItem
+            disclosureLabel.font  = action.bold ? UIConstants.fonts.actionMenuItemBold : UIConstants.fonts.actionMenuItem
             disclosureLabel.text = action.accessoryText
             disclosureLabel.textColor = titleLabel.textColor
             stackView.addArrangedSubview(disclosureLabel)
-        case .Disclosure:
-            stackView.addArrangedSubview(disclosureIndicator)
         case .Switch:
-            let image = action.isEnabled ? UIImage(named: "menu-Toggle-On") : UIImage(named: "menu-Toggle-Off")
-            toggleSwitch.isAccessibilityElement = true
-            toggleSwitch.accessibilityIdentifier = action.isEnabled ? "enabled" : "disabled"
-            toggleSwitch.image = image
-            stackView.addArrangedSubview(toggleSwitch)
+            let toggle = UISwitch()
+            toggle.isOn = action.isEnabled
+            toggle.onTintColor = UIConstants.colors.toggleOn
+            toggle.tintColor = UIConstants.colors.toggleOff
+            toggle.addTarget(self, action: #selector(valueChanged(sender:)), for: .valueChanged)
+            stackView.addArrangedSubview(toggle)
         default:
-            break // Do nothing. The rest are not supported yet.
+            break
         }
+    }
+    @objc func valueChanged(sender: UISwitch) {
+        actionSheet?.didToggle(enabled: sender.isOn)
     }
 }

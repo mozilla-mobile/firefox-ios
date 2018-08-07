@@ -16,9 +16,9 @@
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
 		16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16074B6C2114364C003B671F /* PhotonActionSheet.swift */; };
 		161D90312108085F00C2A74A /* HomeViewToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161D90302108085F00C2A74A /* HomeViewToolbar.swift */; };
-		16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */; };
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
 		16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */; };
+		16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */; };
 		1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D199EF120D813D300CDF976 /* DragAndDropTest.swift */; };
 		1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */ = {isa = PBXBuildFile; fileRef = 1D3BEDF820C5E6C70019B722 /* FindInPage.js */; };
 		1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */; };
@@ -134,7 +134,6 @@
 		D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */; };
 		D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */; };
 		D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */; };
-		D5F72FB31FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */; };
 		D831FEE2205247A400EAE19A /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */; };
 		D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */; };
 		D8E0155F1FCF409F00CA3B9F /* SearchEngineManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0155E1FCF409F00CA3B9F /* SearchEngineManagerTests.swift */; };
@@ -235,9 +234,9 @@
 		0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsianLocaleTest.swift; sourceTree = "<group>"; };
 		16074B6C2114364C003B671F /* PhotonActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheet.swift; sourceTree = "<group>"; };
 		161D90302108085F00C2A74A /* HomeViewToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewToolbar.swift; sourceTree = "<group>"; };
-		16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageActionSheetItems.swift; sourceTree = "<group>"; };
 		16D7169B2114EF72000C8A66 /* BlockerToggle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerToggle.swift; sourceTree = "<group>"; };
 		16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionViewController.swift; sourceTree = "<group>"; };
+		16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageActionSheetItems.swift; sourceTree = "<group>"; };
 		1D051AC1857A0EEEBB833D15 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		1D199EF120D813D300CDF976 /* DragAndDropTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragAndDropTest.swift; sourceTree = "<group>"; };
 		1D3BEDF820C5E6C70019B722 /* FindInPage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FindInPage.js; sourceTree = "<group>"; };
@@ -513,7 +512,6 @@
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
 		D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCustomDomainViewController.swift; sourceTree = "<group>"; };
 		D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteSettingViewController.swift; sourceTree = "<group>"; };
-		D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionSummaryViewController.swift; sourceTree = "<group>"; };
 		D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerTests.swift; sourceTree = "<group>"; };
 		D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSearchEngineViewController.swift; sourceTree = "<group>"; };
 		D8E0155C1FCF409F00CA3B9F /* ClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1011,7 +1009,6 @@
 			children = (
 				B338B5701FAD39730084960D /* Assets */,
 				D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */,
-				D5F72FB21FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift */,
 			);
 			path = TrackingProtection;
 			sourceTree = "<group>";
@@ -1612,7 +1609,6 @@
 				E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */,
 				EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */,
 				74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */,
-				D5F72FB31FA7D1C50071DD9B /* TrackingProtectionSummaryViewController.swift in Sources */,
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */,

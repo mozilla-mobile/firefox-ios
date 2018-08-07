@@ -10,23 +10,16 @@ import LocalAuthentication
 import StoreKit
 
 class BrowserViewController: UIViewController {
-    private class DrawerView: UIView {
-        override var intrinsicContentSize: CGSize { return CGSize(width: 320, height: 0) }
-    }
 
     private var splashScreen: UIView?
     private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
-    private let drawerContainerView = DrawerView(frame: .zero)
-    private let drawerOverlayView = UIView()
     let darkView = UIView()
     
     private let webViewController = WebViewController()
     private let webViewContainer = UIView()
     
     var modalDelegate: ModalDelegate?
-
-    private let trackingProtectionSummaryController = TrackingProtectionSummaryViewController()
 
     fileprivate var keyboardState: KeyboardState?
     fileprivate let browserToolbar = BrowserToolbar()
@@ -41,7 +34,6 @@ class BrowserViewController: UIViewController {
     fileprivate var fillerView: UIView?
     fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
 
-    fileprivate var drawerConstraint: Constraint!
     fileprivate var toolbarBottomConstraint: Constraint!
     fileprivate var urlBarTopConstraint: Constraint!
     fileprivate var homeViewBottomConstraint: Constraint!
@@ -60,7 +52,6 @@ class BrowserViewController: UIViewController {
 
     private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
-            trackingProtectionSummaryController.trackingProtectionStatus = trackingProtectionStatus
             urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus)
         }
     }
@@ -86,7 +77,6 @@ class BrowserViewController: UIViewController {
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
-        drawerContainerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
     }
     
@@ -95,7 +85,6 @@ class BrowserViewController: UIViewController {
 
         setupBiometrics()
         view.addSubview(mainContainerView)
-        view.addSubview(drawerContainerView)
         
         darkView.isHidden = true
         darkView.backgroundColor = UIConstants.Photon.Ink80
@@ -105,35 +94,9 @@ class BrowserViewController: UIViewController {
             make.edges.equalToSuperview()
         }
 
-        drawerOverlayView.backgroundColor = UIColor(white: 0, alpha: 0.8)
-        drawerOverlayView.layer.opacity = 0
-        drawerOverlayView.isHidden = true
-        drawerOverlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideDrawer)))
-        view.addSubview(drawerOverlayView)
-        drawerOverlayView.snp.makeConstraints { make in
-            make.edges.equalTo(mainContainerView.snp.edges)
-        }
-
         mainContainerView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.width.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.leading.equalTo(drawerContainerView.snp.trailing)
+            make.top.bottom.leading.width.equalToSuperview()
         }
-
-        drawerContainerView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.width.lessThanOrEqualTo(320)
-            make.trailing.lessThanOrEqualToSuperview().offset(-55)
-            make.trailing.equalTo(view.snp.leading).priority(500)
-
-            self.drawerConstraint = make.leading.equalToSuperview().constraint
-        }
-        self.drawerConstraint.deactivate()
-
-        trackingProtectionSummaryController.delegate = self
-        containTrackingProtectionSummary()
 
         webViewController.delegate = self
 
@@ -314,16 +277,6 @@ class BrowserViewController: UIViewController {
         webViewController.evaluate(js, completion: nil)
     }
 
-    private func containTrackingProtectionSummary() {
-        addChild(trackingProtectionSummaryController)
-        drawerContainerView.addSubview(trackingProtectionSummaryController.view)
-        trackingProtectionSummaryController.didMove(toParent: self)
-
-        trackingProtectionSummaryController.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-    }
-
     private func createHomeView() {
         let homeView = HomeView()
         homeView.delegate = self
@@ -383,29 +336,24 @@ class BrowserViewController: UIViewController {
         topURLBarConstraints.forEach { $0.deactivate() }
     }
 
-    @objc fileprivate func hideDrawer() {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
-            self.drawerConstraint.deactivate()
-            self.drawerOverlayView.layer.opacity = 0
-            self.view.layoutIfNeeded()
-        }, completion: { completed in
-            self.drawerOverlayView.isHidden = true
-        })
-
-        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.trackingProtectionDrawer))
+    private func buildTrackingProtectionMenu(info: TPPageStats?) -> PhotonActionSheet {
+        var actions = [[PhotonActionSheetItem]]()
+        if info != nil {
+            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection", isEnabled: true, accessory: .Switch)
+            actions.append([titleItem])
+        } else {
+            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection_off", isEnabled: false, accessory: .Switch)
+            actions.append([titleItem])
+        }
+        let totalCount = PhotonActionSheetItem(title: UIConstants.strings.trackersBlocked, accessory: .Text, accessoryText: String(info?.total ?? 0), bold: true)
+        let adCount = PhotonActionSheetItem(title: UIConstants.strings.adTrackerLabel, accessory: .Text, accessoryText: String(info?.adCount ?? 0))
+        let analyticCount = PhotonActionSheetItem(title: UIConstants.strings.analyticTrackerLabel, accessory: .Text, accessoryText: String(info?.analyticCount ?? 0))
+        let socialCount = PhotonActionSheetItem(title: UIConstants.strings.socialTrackerLabel, accessory: .Text, accessoryText: String(info?.socialCount ?? 0))
+        let contentCount = PhotonActionSheetItem(title: UIConstants.strings.contentTrackerLabel, accessory: .Text, accessoryText: String(info?.contentCount ?? 0))
+        actions.append([totalCount, adCount, analyticCount, socialCount, contentCount])
+        return PhotonActionSheet(actions: actions, style: .overCurrentContext)
     }
 
-    fileprivate func showDrawer() {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
-            self.drawerConstraint.activate()
-            self.drawerOverlayView.isHidden = false
-            self.drawerOverlayView.layer.opacity = 1
-            self.view.layoutIfNeeded()
-        }, completion: nil)
-
-        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
-    }
-    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         alertStackView.snp.remakeConstraints { make in
@@ -981,7 +929,16 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidTapShield(_ urlBar: URLBar) {
-        showDrawer()
+        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
+        
+        switch trackingProtectionStatus {
+        case .on(let info):
+            let menuOn = buildTrackingProtectionMenu(info: info)
+            presentPhotonActionSheet(menuOn)
+        case .off:
+            let menuOff = buildTrackingProtectionMenu(info: nil)
+            presentPhotonActionSheet(menuOff)
+        }
     }
     
     func urlBarDidLongPress(_ urlBar: URLBar) {
@@ -1030,7 +987,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 }
 
-extension BrowserViewController: PhotonActionSheetTransitionDelegate {
+extension BrowserViewController: PhotonActionSheetDelegate {
     func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet) {
         actionSheet.modalPresentationStyle = .overCurrentContext
         actionSheet.delegate = self
@@ -1039,6 +996,15 @@ extension BrowserViewController: PhotonActionSheetTransitionDelegate {
     }
     func photonActionSheetDidDismiss() {
         darkView.isHidden = true
+    }
+    func photonActionSheetDidToggleProtection(enabled: Bool) {
+        enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
+        
+        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
+        telemetryEvent.addExtra(key: "to", value: enabled)
+        Telemetry.default.recordEvent(telemetryEvent)
+        
+        webViewController.reload()
     }
 }
 
@@ -1365,27 +1331,5 @@ extension BrowserViewController: KeyboardHelperDelegate {
 protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew() -> Void
-}
-
-extension BrowserViewController: TrackingProtectionSummaryDelegate {
-    func trackingProtectionSummaryControllerDidTapClose(_ controller: TrackingProtectionSummaryViewController) {
-        hideDrawer()
-    }
-
-    func trackingProtectionSummaryControllerDidToggleTrackingProtection(_ enabled: Bool) {
-        if enabled {
-            webViewController.enableTrackingProtection()
-        } else {
-            webViewController.disableTrackingProtection()
-        }
-
-
-        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
-        telemetryEvent.addExtra(key: "to", value: enabled)
-        Telemetry.default.recordEvent(telemetryEvent)
-
-        webViewController.reload()
-        hideDrawer()
-    }
 }
 
