@@ -126,6 +126,9 @@ class ThemeSettingsController: ThemedTableViewController {
             if indexPath.row == 0 {
                 cell.textLabel?.text = Strings.DisplayThemeAutomaticSwitchTitle
                 cell.detailTextLabel?.text = Strings.DisplayThemeAutomaticSwitchSubtitle
+                cell.detailTextLabel?.numberOfLines = 2
+                cell.detailTextLabel?.minimumScaleFactor = 0.5
+                cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
 
                 let control = UISwitch()
                 control.onTintColor = UIColor.theme.tableView.controlTint
