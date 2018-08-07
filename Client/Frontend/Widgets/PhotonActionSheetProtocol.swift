@@ -118,7 +118,12 @@ extension PhotonActionSheetProtocol {
             let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
             controller.popoverDelegate = vcDelegate
             controller.modalPresentationStyle = .formSheet
-            vcDelegate.present(controller, animated: true, completion: nil)
+
+            // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+            // of this popover on iPad seems to block the presentation of the modal VC.
+            DispatchQueue.main.async {
+                vcDelegate.present(controller, animated: true, completion: nil)
+            }
         }
         items.append(openSettings)
 
