@@ -630,7 +630,7 @@ extension TabTrayController {
         // when removing the last tab (only in normal mode) we will automatically open a new tab.
         // When that happens focus it by dismissing the tab tray
         let isLastTab = tabDisplayManager.tabStore.count == 1
-        tabManager.removeTab(tab)
+        tabManager.removeTabAndUpdateSelectedIndex(tab)
         guard !tabDisplayManager.searchActive else { return }
         self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
         self.tabDisplayManager.performTabUpdates {

@@ -1566,7 +1566,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }), accessibilityIdentifier: "toolbarTabButtonLongPress.newPrivateTab")
         controller.addAction(UIAlertAction(title: Strings.CloseTabTitle, style: .destructive, handler: { _ in
             if let tab = self.tabManager.selectedTab {
-                self.tabManager.removeTab(tab)
+                self.tabManager.removeTabAndUpdateSelectedIndex(tab)
             }
         }), accessibilityIdentifier: "toolbarTabButtonLongPress.closeTab")
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "toolbarTabButtonLongPress.cancel")
@@ -1999,7 +1999,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func webViewDidClose(_ webView: WKWebView) {
         if let tab = tabManager[webView] {
-            self.tabManager.removeTab(tab)
+            self.tabManager.removeTabAndUpdateSelectedIndex(tab)
         }
     }
 }

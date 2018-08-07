@@ -235,7 +235,7 @@ extension TopTabsViewController: TopTabCellDelegate {
             return
         }
         if let tab = self.tabDisplayManager.tabStore[safe: index] {
-            tabManager.removeTab(tab)
+            tabManager.removeTabAndUpdateSelectedIndex(tab)
         }
 
     }
