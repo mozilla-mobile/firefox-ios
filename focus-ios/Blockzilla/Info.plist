@@ -31,7 +31,7 @@
         <key>CFBundleDevelopmentRegion</key>
         <string>en</string>
         <key>CFBundleVersion</key>
-        <string>2</string>
+        <string>1</string>
         <key>NSCameraUsageDescription</key>
         <string>This lets you take and upload photos.</string>
         <key>UIStatusBarStyle</key>
@@ -39,7 +39,7 @@
         <key>CFBundlePackageType</key>
         <string>APPL</string>
         <key>CFBundleShortVersionString</key>
-        <string>6.0</string>
+        <string>7.0</string>
         <key>NSFaceIDUsageDescription</key>
         <string>This lets you unlock the app.</string>
         <key>NSMicrophoneUsageDescription</key>
@@ -50,7 +50,7 @@
             <true/>
         </dict>
         <key>CFBundleInfoDictionaryVersion</key>
-        <string>6.0</string>
+        <string>7.0</string>
         <key>CFBundleExecutable</key>
         <string>$(EXECUTABLE_NAME)</string>
         <key>UIRequiredDeviceCapabilities</key>
