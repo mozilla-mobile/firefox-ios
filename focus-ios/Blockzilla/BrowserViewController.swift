@@ -308,6 +308,11 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(webViewContainer.snp.edges)
         }
     }
+    
+    public func exitFullScreenVideo() {
+        let js = "document.getElementsByTagName('video')[0].webkitExitFullScreen()"
+        webViewController.evaluate(js, completion: nil)
+    }
 
     private func containTrackingProtectionSummary() {
         addChild(trackingProtectionSummaryController)

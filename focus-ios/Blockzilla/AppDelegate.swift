@@ -232,6 +232,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate {
 
     func applicationWillResignActive(_ application: UIApplication) {
         AppDelegate.splashView?.animateHidden(false, duration: 0)
+        browserViewController.exitFullScreenVideo()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
