@@ -216,7 +216,7 @@ class TopTabsViewController: UIViewController {
 extension TopTabsViewController: TabDisplayer {
 
     func focusSelectedTab() {
-        self.scrollToCurrentTab(true, centerCell: true)
+        self.scrollToCurrentTab(true)
     }
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
