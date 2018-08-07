@@ -467,7 +467,6 @@ class BrowserViewController: UIViewController {
                 make.top.equalTo(self.mainContainerView.snp.bottom)
                 make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
             }
-            screenshotView.alpha = 0
             self.mainContainerView.layoutIfNeeded()
         }, completion: { _ in
             self.urlBar.activateTextField()
