@@ -515,23 +515,26 @@ extension HistoryPanel: UITableViewDataSourcePrefetching {
 
         fetchData().uponQueue(.main) { result in
             if let sites = result.successValue {
-                for site in sites {
-                    if let site = site, let latestVisit = site.latestVisit {
-                        self.groupedSites.add(site, timestamp: TimeInterval(latestVisit.date) / 1000000)
+                let indexPaths: [IndexPath] = sites.compactMap({ site in
+                    guard let site = site, let latestVisit = site.latestVisit else {
+                        return nil
                     }
-                }
 
-                self.tableView.reloadData()
+                    let indexPath = self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                    return IndexPath(row: indexPath.row, section: indexPath.section + 1)
+                })
+
+                self.tableView.insertRows(at: indexPaths, with: .automatic)
             }
         }
     }
 
     func isLoadingCell(for indexPath: IndexPath) -> Bool {
-        guard indexPath.section > 0, indexPath.row > 10 else {
+        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
             return false
         }
 
-        return indexPath.row > groupedSites.numberOfItemsForSection(indexPath.section - 1) - 10
+        return indexPath.row >= groupedSites.numberOfItemsForSection(indexPath.section - 1) - 1
     }
 }
 
