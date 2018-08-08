@@ -7,45 +7,40 @@
 //
 
 import UIKit
+import SnapKit
 
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
-class websiteSearchResultsViewController: UITableViewController {
+class websiteSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
     let editButton: UIBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(didPressEdit))
     let doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDone))
     let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(didPressDelete))
+    let tableView = UITableView()
     private var toolBar: UIToolbar!
     
     private var filteredSiteRecords = [siteData]()
     var siteRecords = [siteData]()
 
-//    init(data:[siteData]) {
-//        self.siteRecords = data
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//
-//    required init(coder: NSCoder) {
-//        fatalError("NSCoding not supported")
-//    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.allowsMultipleSelectionDuringEditing = true
-        self.navigationController?.setToolbarHidden(false, animated: false)
+        view.addSubview(tableView)
+        tableView.allowsMultipleSelectionDuringEditing = true
+
         //toolbar
         let border = CGRect(x: 0, y: 10.0, width: self.view.bounds.size.width, height: 44.0)
         toolBar = UIToolbar(frame: border)
-        toolBar.layer.position = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height-88.0)
-        toolBar.barStyle = .default
         toolBar.items = [flexible, editButton]
-        self.view.addSubview(toolBar)
+        view.addSubview(toolBar)
+        updateConstraints()
 
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
         tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
@@ -56,43 +51,43 @@ class websiteSearchResultsViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredSiteRecords.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let site = filteredSiteRecords[indexPath.item]
         cell.textLabel?.text = site.nameOfSite
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         if self.tableView.isEditing {
             return true
         }
         return false
     }
 
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.delete) {
             dataStore.removeData(ofTypes: dataTypes, for: [filteredSiteRecords[indexPath.item].dataOfSite], completionHandler: { return })
             filteredSiteRecords.remove(at: indexPath.item)
             tableView.reloadData()
+            
         }
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! ThemedTableSectionHeaderFooterView
+        var sectionTitle: String?
+        sectionTitle = NSLocalizedString("WEBSITE DATA", comment: "Title for website data section.")
+        headerView.titleLabel.text = sectionTitle
         return headerView
     }
 
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
             return SettingsUX.TableViewHeaderFooterHeight
     }
 
@@ -122,6 +117,17 @@ class websiteSearchResultsViewController: UITableViewController {
                 }
                 tableView(tableView, commit: .delete, forRowAt: selectionIndex)
             }
+        }
+    }
+
+    private func updateConstraints() {
+        tableView.snp.makeConstraints { (make) -> Void in
+            make.edges.equalTo(view)
+        }
+        toolBar.snp.makeConstraints { (make) -> Void in
+            make.left.equalTo(view)
+            make.right.equalTo(view)
+            make.bottom.equalTo(view)
         }
     }
 }

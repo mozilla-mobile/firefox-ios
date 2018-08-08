@@ -12,7 +12,7 @@ private let SectionButton = 2
 private let NumberOfSections = 3
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
-class WebsiteDataManagementViewController: UITableViewController {
+class WebsiteDataManagementViewController: UITableViewController, UISearchBarDelegate {
     fileprivate var clearButton: UITableViewCell?
     fileprivate var showMoreButton: UITableViewCell?
     var searchResults: UITableViewController!
@@ -51,6 +51,7 @@ class WebsiteDataManagementViewController: UITableViewController {
         searchController.searchResultsUpdater = searchResults
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Filter Sites"
+        searchController.searchBar.delegate = self
         if #available(iOS 11.0, *) {
             navigationItem.searchController = searchController
         }
@@ -113,16 +114,7 @@ class WebsiteDataManagementViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == SectionShowMore {
-            //get websites
-            self.siteRecords.removeAll()
-            dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
-                for record in records {
-                        self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
-                }
-                self.siteRecords.sort { $0.nameOfSite < $1.nameOfSite }
-                self.showMoreButtonEnabled = false
-                self.tableView.reloadData()
-            }
+            getAllWebsiteData()
         }
         guard indexPath.section == SectionButton else { return }
         if indexPath.section == SectionButton {
@@ -170,5 +162,22 @@ class WebsiteDataManagementViewController: UITableViewController {
             return SettingsUX.TableViewHeaderFooterHeight
         }
         return 0
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        getAllWebsiteData()
+    }
+
+    func getAllWebsiteData() {
+        //get websites
+        self.siteRecords.removeAll()
+        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
+            for record in records {
+                self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
+            }
+            self.siteRecords.sort { $0.nameOfSite < $1.nameOfSite }
+            self.showMoreButtonEnabled = false
+            self.tableView.reloadData()
+        }
     }
 }
