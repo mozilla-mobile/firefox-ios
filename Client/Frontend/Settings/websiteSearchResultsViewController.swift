@@ -19,27 +19,28 @@ class websiteSearchResultsViewController: UITableViewController {
     private var toolBar: UIToolbar!
     
     private var filteredSiteRecords = [siteData]()
-    var siteRecords : [siteData]
+    var siteRecords = [siteData]()
 
-    init(data:[siteData]) {
-        self.siteRecords = data
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init(coder: NSCoder) {
-        fatalError("NSCoding not supported")
-    }
+//    init(data:[siteData]) {
+//        self.siteRecords = data
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//
+//    required init(coder: NSCoder) {
+//        fatalError("NSCoding not supported")
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.tableView.allowsMultipleSelectionDuringEditing = true
+        self.navigationController?.setToolbarHidden(false, animated: false)
         //toolbar
         let border = CGRect(x: 0, y: 10.0, width: self.view.bounds.size.width, height: 44.0)
         toolBar = UIToolbar(frame: border)
         toolBar.layer.position = CGPoint(x: self.view.bounds.width/2, y: self.view.bounds.height-88.0)
         toolBar.barStyle = .default
-        toolBar.items = [deleteButton, flexible, editButton]
+        toolBar.items = [flexible, editButton]
         self.view.addSubview(toolBar)
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")

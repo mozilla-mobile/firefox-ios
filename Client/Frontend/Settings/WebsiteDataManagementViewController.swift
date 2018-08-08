@@ -34,20 +34,19 @@ class WebsiteDataManagementViewController: UITableViewController {
                 self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
             }
             self.siteRecords.sort { $0.nameOfSite < $1.nameOfSite }
+            if let searchResults = self.searchController.searchResultsUpdater  as? websiteSearchResultsViewController {
+                searchResults.siteRecords = self.siteRecords
+            }
             if self.siteRecords.count >= 5 {
                 self.siteRecords.removeLast(self.siteRecords.count - 5)
             } else {
                 self.showMoreButtonEnabled = false
             }
-            if let searchResults = self.searchController.searchResultsUpdater  as? websiteSearchResultsViewController {
-                searchResults.siteRecords = self.siteRecords
-            }
             self.tableView.reloadData()
         }
 
         //Search Controller setup
-        let searchResults = websiteSearchResultsViewController(data: siteRecords)
-
+        let searchResults = websiteSearchResultsViewController()
         searchController = UISearchController(searchResultsController: searchResults)
         searchController.searchResultsUpdater = searchResults
         searchController.obscuresBackgroundDuringPresentation = false
