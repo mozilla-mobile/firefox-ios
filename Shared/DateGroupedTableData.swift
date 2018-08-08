@@ -11,7 +11,7 @@ fileprivate func getDate(dayOffset: Int) -> Date {
     return calendar.date(byAdding: .day, value: dayOffset, to: today)!
 }
 
-public struct DateGroupedTableData<T : Equatable> {
+public struct DateGroupedTableData<T: Equatable> {
     let todayTimestamp = getDate(dayOffset: 0).timeIntervalSince1970
     let yesterdayTimestamp = getDate(dayOffset: -1).timeIntervalSince1970
     let lastWeekTimestamp = getDate(dayOffset: -7).timeIntervalSince1970
