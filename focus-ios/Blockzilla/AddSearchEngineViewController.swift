@@ -97,9 +97,11 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         subtitle.append(space)
         subtitle.append(learnMore)
 
-        exampleLabel.numberOfLines = 0
+        exampleLabel.numberOfLines = 1
         exampleLabel.attributedText = subtitle
         exampleLabel.font = UIFont.systemFont(ofSize: 12)
+        exampleLabel.adjustsFontSizeToFitWidth = true
+        exampleLabel.minimumScaleFactor = 0.5
         exampleLabel.isUserInteractionEnabled = true
 
 
