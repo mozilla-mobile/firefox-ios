@@ -606,7 +606,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					28F951FA19D0F9FA00DCE892 = {

@@ -155,7 +155,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
             // Show the default search engine first.
             if !isPrivate {
-                let ua = SearchViewController.userAgent as String! ?? "FxSearch"
+                let ua = SearchViewController.userAgent ?? "FxSearch"
                 suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine, userAgent: ua)
             }
 

@@ -74,7 +74,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: UITableViewCell = ThemedTableViewCell()
+        let cell = ThemedTableViewCell()
         var engine: OpenSearchEngine!
 
         if indexPath.section == SectionDefault {

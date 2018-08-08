@@ -100,7 +100,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0940;
 			};
 			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "sqlcipher" */;
 			compatibilityVersion = "Xcode 3.2";

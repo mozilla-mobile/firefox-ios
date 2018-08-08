@@ -132,7 +132,7 @@ class ErrorPageHelper {
     class func register(_ server: WebServer, certStore: CertStore?) {
         self.certStore = certStore
 
-        server.registerHandlerForMethod("GET", module: "errors", resource: "error.html", handler: { (request) -> GCDWebServerResponse! in
+        server.registerHandlerForMethod("GET", module: "errors", resource: "error.html", handler: { (request) -> GCDWebServerResponse? in
             guard let url = request?.url.originalURLFromErrorURL else {
                 return GCDWebServerResponse(statusCode: 404)
             }
@@ -201,12 +201,12 @@ class ErrorPageHelper {
             return response
         })
 
-        server.registerHandlerForMethod("GET", module: "errors", resource: "NetError.css", handler: { (request) -> GCDWebServerResponse! in
+        server.registerHandlerForMethod("GET", module: "errors", resource: "NetError.css", handler: { (request) -> GCDWebServerResponse? in
             let path = Bundle(for: self).path(forResource: "NetError", ofType: "css")!
             return GCDWebServerDataResponse(data: try? Data(contentsOf: URL(fileURLWithPath: path)), contentType: "text/css")
         })
 
-        server.registerHandlerForMethod("GET", module: "errors", resource: "CertError.css", handler: { (request) -> GCDWebServerResponse! in
+        server.registerHandlerForMethod("GET", module: "errors", resource: "CertError.css", handler: { (request) -> GCDWebServerResponse? in
             let path = Bundle(for: self).path(forResource: "CertError", ofType: "css")!
             return GCDWebServerDataResponse(data: try? Data(contentsOf: URL(fileURLWithPath: path)), contentType: "text/css")
         })

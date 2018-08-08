@@ -157,7 +157,7 @@ open class FxAClient10 {
         var salt = KW("quickStretch")
         salt.append(":".utf8EncodedData)
         salt.append(email)
-        return (password as NSData).derivePBKDF2HMACSHA256Key(withSalt: salt as Data!, iterations: 1000, length: 32)
+        return (password as NSData).derivePBKDF2HMACSHA256Key(withSalt: salt as Data, iterations: 1000, length: 32)
     }
 
     open class func computeUnwrapKey(_ stretchedPW: Data) -> Data {

@@ -12,7 +12,7 @@ private let log = Logger.browserLogger
 
 protocol DataObserver {
     var profile: Profile { get }
-    weak var delegate: DataObserverDelegate? { get set }
+    var delegate: DataObserverDelegate? { get set }
 
     func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topSites: Bool)
 }

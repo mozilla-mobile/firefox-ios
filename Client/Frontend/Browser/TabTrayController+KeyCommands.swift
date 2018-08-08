@@ -18,7 +18,7 @@ extension TabTrayController {
             UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
         ]
-        if !(searchBar.isFirstResponder ?? false) {
+        if !searchBar.isFirstResponder {
             let extraCommands = [
                 UIKeyCommand(input: "\u{8}", modifierFlags: [], action: #selector(didCloseTabKeyCommand), discoverabilityTitle: Strings.CloseTabFromTabTrayKeyCodeTitle),
                 UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [], action: #selector(didChangeSelectedTabKeyCommand(sender:))),
