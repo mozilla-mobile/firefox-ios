@@ -11,7 +11,7 @@ fileprivate func getDate(dayOffset: Int) -> Date {
     return calendar.date(byAdding: .day, value: dayOffset, to: today)!
 }
 
-public struct DateGroupedTableData<T : Equatable> {
+public struct DateGroupedTableData<T: Equatable> {
     let todayTimestamp = getDate(dayOffset: 0).timeIntervalSince1970
     let yesterdayTimestamp = getDate(dayOffset: -1).timeIntervalSince1970
     let lastWeekTimestamp = getDate(dayOffset: -7).timeIntervalSince1970
@@ -27,15 +27,19 @@ public struct DateGroupedTableData<T : Equatable> {
 
     public init() {}
 
-    mutating public func add(_ item: T, timestamp: TimeInterval) {
+    @discardableResult mutating public func add(_ item: T, timestamp: TimeInterval) -> IndexPath {
         if timestamp > todayTimestamp {
             today.append((item, timestamp))
+            return IndexPath(row: today.count - 1, section: 0)
         } else if timestamp > yesterdayTimestamp {
             yesterday.append((item, timestamp))
+            return IndexPath(row: yesterday.count - 1, section: 1)
         } else if timestamp > lastWeekTimestamp {
             lastWeek.append((item, timestamp))
+            return IndexPath(row: lastWeek.count - 1, section: 2)
         } else {
             older.append((item, timestamp))
+            return IndexPath(row: older.count - 1, section: 3)
         }
     }
 

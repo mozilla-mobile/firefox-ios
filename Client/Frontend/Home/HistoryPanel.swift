@@ -16,6 +16,12 @@ private struct HistoryPanelUX {
     static let IconBorderWidth: CGFloat = 0.5
 }
 
+private class FetchInProgressError: MaybeErrorType {
+    internal var description: String {
+        return "Fetch is already in-progress"
+    }
+}
+
 class HistoryPanel: SiteTableViewController, HomePanel {
     enum Section: Int {
         case syncAndRecentlyClosed
@@ -42,7 +48,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    let QueryLimit = 100
+    let QueryLimitPerFetch = 100
 
     var homePanelDelegate: HomePanelDelegate?
 
@@ -52,6 +58,9 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     var syncDetailText = ""
     var currentSyncedDevicesCount = 0
+
+    var currentFetchOffset = 0
+    var isFetchInProgress = false
 
     var hasRecentlyClosed: Bool {
         return profile.recentlyClosedTabs.tabs.count > 0
@@ -82,6 +91,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         super.viewDidLoad()
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "History List"
+        tableView.prefetchDataSource = self
         updateSyncedDevicesCount().uponQueue(.main) { result in
             self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
         }
@@ -138,6 +148,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     override func reloadData() {
         groupedSites = DateGroupedTableData<Site>()
 
+        currentFetchOffset = 0
         fetchData().uponQueue(.main) { result in
             if let sites = result.successValue {
                 for site in sites {
@@ -153,15 +164,30 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
-        return profile.history.getSitesByLastVisit(limit: QueryLimit, offset: 0)
+        guard !isFetchInProgress else {
+            return deferMaybe(FetchInProgressError())
+        }
+
+        isFetchInProgress = true
+
+        return profile.history.getSitesByLastVisit(limit: QueryLimitPerFetch, offset: currentFetchOffset) >>== { result in
+            // Force 100ms delay between resolution of the last batch of results
+            // and the next time `fetchData()` can be called.
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                self.currentFetchOffset += self.QueryLimitPerFetch
+                self.isFetchInProgress = false
+            }
+
+            return deferMaybe(result)
+        }
     }
 
     func resyncHistory() {
         profile.syncManager.syncHistory().uponQueue(.main) { result in
+            self.endRefreshing()
+
             if result.isSuccess {
                 self.reloadData()
-            } else {
-                self.endRefreshing()
             }
 
             self.updateSyncedDevicesCount().uponQueue(.main) { result in
@@ -478,6 +504,37 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         updateEmptyPanelState()
 
         super.applyTheme()
+    }
+}
+
+extension HistoryPanel: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard !isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else {
+            return
+        }
+
+        fetchData().uponQueue(.main) { result in
+            if let sites = result.successValue {
+                let indexPaths: [IndexPath] = sites.compactMap({ site in
+                    guard let site = site, let latestVisit = site.latestVisit else {
+                        return nil
+                    }
+
+                    let indexPath = self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                    return IndexPath(row: indexPath.row, section: indexPath.section + 1)
+                })
+
+                self.tableView.insertRows(at: indexPaths, with: .automatic)
+            }
+        }
+    }
+
+    func shouldLoadRow(for indexPath: IndexPath) -> Bool {
+        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
+            return false
+        }
+
+        return indexPath.row >= groupedSites.numberOfItemsForSection(indexPath.section - 1) - 1
     }
 }
 
