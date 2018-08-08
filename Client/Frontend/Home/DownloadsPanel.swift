@@ -41,61 +41,6 @@ struct DownloadedFile: Equatable {
     }
 }
 
-private func getDate(dayOffset: Int) -> Date {
-    let calendar = Calendar(identifier: .gregorian)
-    let components = calendar.dateComponents([.year, .month, .day], from: Date())
-    let today = calendar.date(from: components)!
-    return calendar.date(byAdding: .day, value: dayOffset, to: today)!
-}
-
-struct DateGroupedTableData<T : Equatable> {
-    let todayTimestamp = getDate(dayOffset: 0).timeIntervalSince1970
-    let yesterdayTimestamp = getDate(dayOffset: -1).timeIntervalSince1970
-    let lastWeekTimestamp = getDate(dayOffset: -7).timeIntervalSince1970
-
-    var today: [(T, TimeInterval)] = []
-    var yesterday: [(T, TimeInterval)] = []
-    var lastWeek: [(T, TimeInterval)] = []
-    var older: [(T, TimeInterval)] = []
-
-    mutating func add(_ item: T, timestamp: TimeInterval) {
-        if timestamp > todayTimestamp {
-            today.append((item, timestamp))
-        } else if timestamp > yesterdayTimestamp {
-            yesterday.append((item, timestamp))
-        } else if timestamp > lastWeekTimestamp {
-            lastWeek.append((item, timestamp))
-        } else {
-            older.append((item, timestamp))
-        }
-    }
-
-    mutating func remove(_ item: T) {
-        if let index = today.index(where: { item == $0.0 }) {
-            today.remove(at: index)
-        } else if let index = yesterday.index(where: { item == $0.0 }) {
-            yesterday.remove(at: index)
-        } else if let index = lastWeek.index(where: { item == $0.0 }) {
-            lastWeek.remove(at: index)
-        } else if let index = older.index(where: { item == $0.0 }) {
-            older.remove(at: index)
-        }
-    }
-
-    func itemsForSection(_ section: Int) -> [T] {
-        switch section {
-        case 0:
-            return today.map({ $0.0 })
-        case 1:
-            return yesterday.map({ $0.0 })
-        case 2:
-            return lastWeek.map({ $0.0 })
-        default:
-            return older.map({ $0.0 })
-        }
-    }
-}
-
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     let profile: Profile
@@ -278,13 +223,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     // MARK: - Empty State
     private func updateEmptyPanelState() {
-        var count = 0;
-        count += groupedDownloadedFiles.today.count
-        count += groupedDownloadedFiles.yesterday.count
-        count += groupedDownloadedFiles.lastWeek.count
-        count += groupedDownloadedFiles.older.count
-
-        if count == 0 {
+        if groupedDownloadedFiles.isEmpty {
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubview(toFront: emptyStateOverlayView)
@@ -351,7 +290,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard groupedDownloadedFiles.itemsForSection(section).count > 0 else { return nil }
+        guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return nil }
 
         switch section {
         case 0:
@@ -397,7 +336,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groupedDownloadedFiles.itemsForSection(section).count
+        return groupedDownloadedFiles.numberOfItemsForSection(section)
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
