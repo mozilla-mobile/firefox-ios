@@ -25,6 +25,12 @@ fileprivate let rfc822DateFormatter: DateFormatter = {
     return dateFormatter
 }()
 
+extension TimeInterval {
+    public static func fromMicrosecondTimestamp(_ microsecondTimestamp: MicrosecondTimestamp) -> TimeInterval {
+        return Double(microsecondTimestamp) / 1000000
+    }
+}
+
 extension Timestamp {
     public static func uptimeInMilliseconds() -> Timestamp {
         return Timestamp(DispatchTime.now().uptimeNanoseconds) / 1000000

@@ -17,6 +17,31 @@ private struct HistoryPanelUX {
 }
 
 class HistoryPanel: SiteTableViewController, HomePanel {
+    enum Section: Int {
+        case syncAndRecentlyClosed
+        case today
+        case yesterday
+        case lastWeek
+        case lastMonth
+
+        static let count = 5
+
+        var title: String? {
+            switch self {
+            case .today:
+                return Strings.TableDateSectionTitleToday
+            case .yesterday:
+                return Strings.TableDateSectionTitleYesterday
+            case .lastWeek:
+                return Strings.TableDateSectionTitleLastWeek
+            case .lastMonth:
+                return Strings.TableDateSectionTitleLastMonth
+            default:
+                return nil
+            }
+        }
+    }
+
     let QueryLimit = 100
 
     var homePanelDelegate: HomePanelDelegate?
@@ -103,7 +128,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         refreshControl?.endRefreshing()
 
         // Remove the refresh control if the user has logged out in the meantime
-        if profile.hasSyncableAccount() {
+        if !profile.hasSyncableAccount() {
             removeRefreshControl()
         }
     }
@@ -117,7 +142,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             if let sites = result.successValue {
                 for site in sites {
                     if let site = site, let latestVisit = site.latestVisit {
-                        self.groupedSites.add(site, timestamp: TimeInterval(latestVisit.date) / 1000000)
+                        self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
                     }
                 }
 
@@ -151,7 +176,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         } else {
             syncDetailText = ""
         }
-        tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
+        tableView.reloadRows(at: [IndexPath(row: 1, section: Section.syncAndRecentlyClosed.rawValue)], with: .automatic)
     }
 
     func updateSyncedDevicesCount() -> Success {
@@ -208,7 +233,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
         // First section is reserved for Sync.
-        guard indexPath.section > 0 else {
+        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
             return nil
         }
 
@@ -288,7 +313,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
 
-        if indexPath.section != 0 {
+        if indexPath.section != Section.syncAndRecentlyClosed.rawValue {
             presentContextMenu(for: indexPath)
         }
     }
@@ -300,12 +325,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     // MARK: - UITableViewDataSource
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return Section.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // First section is for Sync/recently closed and always has 2 rows.
-        guard section > 0 else {
+        guard section > Section.syncAndRecentlyClosed.rawValue else {
             return 2
         }
 
@@ -314,7 +339,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // First section is for Sync/recently closed and has no title.
-        guard section > 0 else {
+        guard section > Section.syncAndRecentlyClosed.rawValue else {
             return nil
         }
 
@@ -323,20 +348,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             return nil
         }
 
-        switch section - 1 {
-        case 0:
-            return Strings.TableDateSectionTitleToday
-        case 1:
-            return Strings.TableDateSectionTitleYesterday
-        case 2:
-            return Strings.TableDateSectionTitleLastWeek
-        case 3:
-            return Strings.TableDateSectionTitleLastMonth
-        default:
-            assertionFailure("Invalid History section \(section)")
-        }
-
-        return nil
+        return Section(rawValue: section)?.title
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -344,7 +356,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.accessoryType = .none
 
         // First section is reserved for Sync/recently closed.
-        guard indexPath.section > 0 else {
+        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
             cell.imageView?.layer.borderWidth = 0
             return indexPath.row == 0 ? configureRecentlyClosed(cell, for: indexPath) : configureSyncedTabs(cell, for: indexPath)
         }
@@ -355,7 +367,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // First section is reserved for Sync/recently closed.
-        guard indexPath.section > 0 else {
+        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
             tableView.deselectRow(at: indexPath, animated: true)
             return indexPath.row == 0 ? navigateToRecentlyClosed() : navigateToSyncedTabs()
         }
@@ -378,7 +390,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // First section is for Sync/recently closed and its header has no view.
-        guard section > 0 else {
+        guard section > Section.syncAndRecentlyClosed.rawValue else {
             return nil
         }
 
@@ -392,7 +404,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // First section is for Sync/recently closed and its header has no height.
-        guard section > 0 else {
+        guard section > Section.syncAndRecentlyClosed.rawValue else {
             return 0
         }
 
@@ -409,7 +421,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        if indexPath.section == 0 {
+        if indexPath.section == Section.syncAndRecentlyClosed.rawValue {
             return []
         }
         let title = NSLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
@@ -465,7 +477,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         emptyStateOverlayView = createEmptyStateOverlayView()
         updateEmptyPanelState()
 
-        tableView.reloadData()
+        super.applyTheme()
     }
 }
 
