@@ -509,7 +509,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
 extension HistoryPanel: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        guard !isFetchInProgress, indexPaths.contains(where: isLoadingCell) else {
+        guard !isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else {
             return
         }
 
@@ -529,7 +529,7 @@ extension HistoryPanel: UITableViewDataSourcePrefetching {
         }
     }
 
-    func isLoadingCell(for indexPath: IndexPath) -> Bool {
+    func shouldLoadRow(for indexPath: IndexPath) -> Bool {
         guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
             return false
         }
