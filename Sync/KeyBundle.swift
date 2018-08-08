@@ -57,8 +57,8 @@ open class KeyBundle: Hashable {
         let (result, digestLen) = _hmac(ciphertext)
         let data = NSMutableData(bytes: result, length: digestLen)
 
-        result.deinitialize()
-        result.deallocate(capacity: digestLen)
+        result.deinitialize(count: digestLen)
+        result.deallocate()
         return data as Data
     }
 
@@ -72,8 +72,8 @@ open class KeyBundle: Hashable {
             hash.appendFormat("%02x", result[i])
         }
 
-        result.deinitialize()
-        result.deallocate(capacity: digestLen)
+        result.deinitialize(count: digestLen)
+        result.deallocate()
         return String(hash)
     }
 
@@ -81,38 +81,36 @@ open class KeyBundle: Hashable {
         let iv = iv ?? Bytes.generateRandomBytes(16)
 
         let (success, b, copied) = self.crypt(cleartext, iv: iv, op: CCOperation(kCCEncrypt))
-        let byteCount = cleartext.count + kCCBlockSizeAES128
         if success == CCCryptorStatus(kCCSuccess) {
             // Hooray!
             let d = Data(bytes: b, count: Int(copied))
-            b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)
+            b.deallocate()
             return (d, iv)
         }
 
-        b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)
+        b.deallocate()
         return nil
     }
 
     // You *must* verify HMAC before calling this.
     open func decrypt(_ ciphertext: Data, iv: Data) -> String? {
         let (success, b, copied) = self.crypt(ciphertext, iv: iv, op: CCOperation(kCCDecrypt))
-        let byteCount = ciphertext.count + kCCBlockSizeAES128
         if success == CCCryptorStatus(kCCSuccess) {
             // Hooray!
             let d = Data(bytes: b, count: Int(copied))
             let s = String(data: d, encoding: .utf8)
-            b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)
+            b.deallocate()
             return s
         }
 
-        b.deallocate(bytes: byteCount, alignedTo: MemoryLayout<Void>.size)
+        b.deallocate()
         return nil
     }
 
     fileprivate func crypt(_ input: Data, iv: Data, op: CCOperation) -> (status: CCCryptorStatus, buffer: UnsafeMutableRawPointer, count: Int) {
         let resultSize = input.count + kCCBlockSizeAES128
         var copied: Int = 0
-        let result = UnsafeMutableRawPointer.allocate(bytes: resultSize, alignedTo: MemoryLayout<Void>.size)
+        let result = UnsafeMutableRawPointer.allocate(byteCount: resultSize, alignment: MemoryLayout<Void>.size)
 
         let success: CCCryptorStatus =
         CCCrypt(op,
