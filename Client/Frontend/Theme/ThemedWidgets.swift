@@ -45,9 +45,6 @@ class ThemedTableViewController: UITableViewController, Themeable {
         tableView.reloadData()
 
         (tableView.tableHeaderView as? Themeable)?.applyTheme()
-
-        // Update the settings navigation bar
-        (navigationController as? Themeable)?.applyTheme()
     }
 }
 

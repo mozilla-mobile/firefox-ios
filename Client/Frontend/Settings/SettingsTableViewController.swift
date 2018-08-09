@@ -532,6 +532,11 @@ class SettingsTableViewController: ThemedTableViewController {
         applyTheme()
     }
 
+    override func applyTheme() {
+        settings = generateSettings()
+        super.applyTheme()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         refresh()
@@ -574,22 +579,14 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
-            var cell: UITableViewCell!
-            if let _ = setting.status {
-                // Work around http://stackoverflow.com/a/9999821 and http://stackoverflow.com/a/25901083 by using a new cell.
-                // I could not make any setNeedsLayout solution work in the case where we disconnect and then connect a new account.
-                // Be aware that dequeing and then ignoring a cell appears to cause issues; only deque a cell if you're going to return it.
-                cell = UITableViewCell(style: setting.style, reuseIdentifier: nil)
-            } else {
-                cell = tableView.dequeueReusableCell(withIdentifier: Identifier, for: indexPath)
-            }
             setting.onConfigureCell(cell)
             cell.backgroundColor = UIColor.theme.tableView.rowBackground
             return cell
         }
-        return tableView.dequeueReusableCell(withIdentifier: Identifier, for: indexPath)
+        return cell
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
