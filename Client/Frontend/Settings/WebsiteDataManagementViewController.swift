@@ -6,15 +6,16 @@ import UIKit
 import Shared
 import WebKit
 
-private let SectionSites = 0
-private let SectionShowMore = 1
-private let SectionButton = 2
 private let NumberOfSections = 3
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
+enum Section: Int {
+    case sites = 0, showMore, button
+}
+
 class WebsiteDataManagementViewController: UITableViewController, UISearchBarDelegate {
-    fileprivate var clearButton: UITableViewCell?
-    fileprivate var showMoreButton: UITableViewCell?
+    fileprivate var clearButton, showMoreButton : UITableViewCell?
+    //fileprivate var showMoreButton: UITableViewCell?
     var searchResults: UITableViewController!
     var searchController: UISearchController!
     var showMoreButtonEnabled = true
@@ -24,7 +25,6 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
     override func viewDidLoad() {
         super.viewDidLoad()
         title = Strings.SettingsWebsiteDataTitle
-
         self.navigationController?.setToolbarHidden(true, animated: false)
         self.navigationItem.rightBarButtonItem = self.editButtonItem
 
@@ -68,19 +68,18 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
 
-        if indexPath.section == SectionSites {
-            assert(indexPath.section == SectionSites)
+        let section = Section(rawValue: indexPath.section)!
+        switch section {
+        case .sites:
             let site = siteRecords[indexPath.item]
             cell.textLabel?.text = site.nameOfSite
-        } else if indexPath.section == SectionShowMore {
-            assert(indexPath.section == SectionShowMore)
+        case .showMore:
             cell.textLabel?.text = "Show More"
             cell.textLabel?.textColor = showMoreButtonEnabled ? UIColor.theme.general.highlightBlue : UIColor.gray
             cell.accessibilityTraits = UIAccessibilityTraitButton
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
             showMoreButton = cell
-        } else {
-            assert(indexPath.section == SectionButton)
+        case .button:
             cell.textLabel?.text = Strings.SettingsClearAllWebsiteDataButton
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
@@ -88,6 +87,7 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
             clearButton = cell
         }
+
         return cell
     }
 
@@ -96,28 +96,40 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == SectionSites {
+        let section = Section(rawValue: section)!
+        switch section {
+        case .sites:
             return siteRecords.count
-        } else if section == SectionShowMore {
+        case .showMore, .button:
             return 1
         }
-        assert(section == SectionButton)
-        return 1
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        if (indexPath.section == SectionShowMore && showMoreButtonEnabled) || indexPath.section == SectionButton || (indexPath.section == SectionSites && self.tableView.isEditing) {
+        let section = Section(rawValue: indexPath.section)!
+        switch section {
+        case .sites:
+            if self.tableView.isEditing {
+                return true
+            }
+        case .showMore:
+            if showMoreButtonEnabled {
+                return true
+            }
+        case .button:
             return true
         }
         return false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == SectionShowMore {
+        let section = Section(rawValue: indexPath.section)!
+        switch section {
+        case .sites:
+            break
+        case .showMore:
             getAllWebsiteData()
-        }
-        guard indexPath.section == SectionButton else { return }
-        if indexPath.section == SectionButton {
+        case .button:
             func clearwebsitedata(_ action: UIAlertAction) {
                 WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
                 siteRecords.removeAll()
@@ -133,12 +145,17 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        guard indexPath.section == SectionSites else { return false }
-        return true
+        let section = Section(rawValue: indexPath.section)!
+        switch section {
+        case .sites:
+            return true
+        case .showMore, .button:
+            return false
+        }
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == UITableViewCellEditingStyle.delete) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
             dataStore.removeData(ofTypes: dataTypes, for: [siteRecords[indexPath.item].dataOfSite], completionHandler: { return })
             siteRecords.remove(at: indexPath.item)
             tableView.reloadData()
@@ -146,22 +163,28 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! ThemedTableSectionHeaderFooterView
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         var sectionTitle: String?
-        if section == SectionSites {
-            sectionTitle = NSLocalizedString("WEBSITE DATA", comment: "Title for website data section.")
-        } else {
+
+        let section = Section(rawValue: section)!
+        switch section {
+        case .sites:
+            sectionTitle = Strings.SettingsWebsiteDataTitle
+        case .showMore, .button:
             sectionTitle = nil
         }
-        headerView.titleLabel.text = sectionTitle
+        headerView?.titleLabel.text = sectionTitle
         return headerView
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section != SectionShowMore {
+        let section = Section(rawValue: section)!
+        switch section {
+        case .sites, .button:
             return SettingsUX.TableViewHeaderFooterHeight
+        case .showMore:
+            return 0
         }
-        return 0
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

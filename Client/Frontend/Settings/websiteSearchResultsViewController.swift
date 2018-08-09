@@ -1,13 +1,10 @@
-//
-//  websiteSearchResultsViewController.swift
-//  Client
-//
-//  Created by Meera Rachamallu on 8/2/18.
-//  Copyright © 2018 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 import SnapKit
+import Shared
 
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
@@ -71,7 +68,7 @@ class websiteSearchResultsViewController: UIViewController, UITableViewDataSourc
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == UITableViewCellEditingStyle.delete) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
             dataStore.removeData(ofTypes: dataTypes, for: [filteredSiteRecords[indexPath.item].dataOfSite], completionHandler: { return })
             filteredSiteRecords.remove(at: indexPath.item)
             tableView.reloadData()
@@ -80,10 +77,10 @@ class websiteSearchResultsViewController: UIViewController, UITableViewDataSourc
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! ThemedTableSectionHeaderFooterView
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         var sectionTitle: String?
-        sectionTitle = NSLocalizedString("WEBSITE DATA", comment: "Title for website data section.")
-        headerView.titleLabel.text = sectionTitle
+        sectionTitle = Strings.SettingsWebsiteDataTitle
+        headerView?.titleLabel.text = sectionTitle
         return headerView
     }
 
@@ -92,7 +89,7 @@ class websiteSearchResultsViewController: UIViewController, UITableViewDataSourc
     }
 
     func filterContentForSearchText(_ searchText: String) {
-        filteredSiteRecords = siteRecords.filter({( siteRecord : siteData) -> Bool in
+        filteredSiteRecords = siteRecords.filter({( siteRecord: siteData) -> Bool in
             return siteRecord.nameOfSite.lowercased().contains(searchText.lowercased())
         })
         tableView.reloadData()
@@ -137,6 +134,3 @@ extension websiteSearchResultsViewController: UISearchResultsUpdating {
         filterContentForSearchText(searchController.searchBar.text!)
     }
 }
-
-
-

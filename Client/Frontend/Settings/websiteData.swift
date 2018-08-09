@@ -1,10 +1,6 @@
-//
-//  websiteData.swift
-//  Client
-//
-//  Created by Meera Rachamallu on 8/2/18.
-//  Copyright © 2018 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import WebKit
@@ -16,7 +12,7 @@ struct siteData {
     let dataOfSite: WKWebsiteDataRecord
     let nameOfSite: String
 
-    init(dataOfSite: WKWebsiteDataRecord, nameOfSite: String){
+    init(dataOfSite: WKWebsiteDataRecord, nameOfSite: String) {
         self.dataOfSite = dataOfSite
         self.nameOfSite = nameOfSite
     }

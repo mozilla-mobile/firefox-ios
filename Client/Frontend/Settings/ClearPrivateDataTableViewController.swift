@@ -75,12 +75,10 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         let cell = ThemedTableViewCell()
 
         if indexPath.section == SectionArrow {
-            assert(indexPath.section == SectionArrow)
             cell.accessoryType = .disclosureIndicator
-            cell.textLabel?.text = "Website Data"
+            cell.textLabel?.text = Strings.SettingsWebsiteDataTitle
             clearButton = cell
-        }
-        else if indexPath.section == SectionToggles {
+        } else if indexPath.section == SectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
             let control = UISwitch()
             control.onTintColor = UIColor.theme.tableView.controlTint
@@ -109,8 +107,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionArrow {
             return 1
-        }
-        else if section == SectionToggles {
+        } else if section == SectionToggles {
             return clearables.count
         }
         assert(section == SectionButton)
@@ -134,7 +131,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             let view = WebsiteDataManagementViewController()
             navigationController?.pushViewController(view, animated: true)
         }
-        if indexPath.section == SectionButton {
+        else if indexPath.section == SectionButton {
             func clearPrivateData(_ action: UIAlertAction) {
                 let toggles = self.toggles
                 self.clearables
@@ -185,15 +182,15 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as! ThemedTableSectionHeaderFooterView
-        headerView.showTopBorder = false
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
+        headerView?.showTopBorder = false
         var sectionTitle: String?
         if section == SectionToggles {
-            sectionTitle = NSLocalizedString("CLEAR PRIVATE DATA", comment: "Title for clearing private data in the data management section.")
+            sectionTitle = Strings.SettingsClearPrivateDataTitle
         } else {
             sectionTitle = nil
         }
-        headerView.titleLabel.text = sectionTitle
+        headerView?.titleLabel.text = sectionTitle
         return headerView
     }
 
