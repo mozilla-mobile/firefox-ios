@@ -45,11 +45,9 @@ class ContextMenuHelper: NSObject {
             return
         }
 
-        guard sender.state == .began, let elements = self.elements else {
+        guard sender.state == .began else {
             return
         }
-
-        delegate?.contextMenuHelper(self, didLongPressElements: elements, gestureRecognizer: sender)
 
         // To prevent the tapped link from proceeding with navigation, "cancel" the native WKWebView
         // `_highlightLongPressRecognizer`. This preserves the original behavior as seen here:
@@ -60,7 +58,11 @@ class ContextMenuHelper: NSObject {
             nativeHighlightLongPressRecognizer.isEnabled = true
         }
 
-        self.elements = nil
+        if let elements = self.elements {
+            delegate?.contextMenuHelper(self, didLongPressElements: elements, gestureRecognizer: sender)
+
+            self.elements = nil
+        }
     }
 }
 
