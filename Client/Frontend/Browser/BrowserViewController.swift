@@ -2698,6 +2698,8 @@ extension BrowserViewController: Themeable {
         setNeedsStatusBarAppearanceUpdate()
 
         homePanelController?.applyTheme()
+
+        (presentedViewController as? Themeable)?.applyTheme()
     }
 }
 
