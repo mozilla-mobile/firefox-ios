@@ -17,7 +17,7 @@ private func isSmallScreen() -> Bool {
 private struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
     static let Padding: CGFloat = 10
-    static let HeaderFooterHeight: CGFloat = 20
+    static let HeaderFooterHeight: CGFloat = 0
     static let RowHeight: CGFloat = 50
     static let BorderWidth: CGFloat = 0.5
     static let BorderColor = UIConstants.Photon.Grey30
@@ -189,13 +189,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.dataSource = self
         tableView.keyboardDismissMode = .onDrag
         tableView.register(PhotonActionSheetCell.self, forCellReuseIdentifier: PhotonActionSheetUX.CellName)
-        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
         tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
         tableView.estimatedSectionFooterHeight = PhotonActionSheetUX.HeaderFooterHeight
-        // When the menu style is centered the header is much bigger than default. Set a larger estimated height to make sure autolayout sizes the view correctly
-        tableView.estimatedSectionHeaderHeight = (style == .centered) ? PhotonActionSheetUX.RowHeight : PhotonActionSheetUX.HeaderFooterHeight
+        tableView.estimatedSectionHeaderHeight = PhotonActionSheetUX.HeaderFooterHeight
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
         tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
@@ -316,82 +314,24 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         if section > 0 {
             return tableView.dequeueReusableHeaderFooterView(withIdentifier: "SeparatorSectionHeader")
         }
-
-        if let title = title {
-            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetUX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
-            header.tintColor = self.tintColor
-            header.configure(with: title)
-            return header
-        }
         
-        // A header height of at least 1 is required to make sure the default header size isnt used when laying out with AutoLayout
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
-        view?.snp.makeConstraints { make in
-            make.height.equalTo(1)
-        }
         return view
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
+        return view
+    }
+    
+    // A header height of at least 1 is required to make sure the default header size isnt used when laying out with AutoLayout
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 1
     }
     
     // A footer height of at least 1 is required to make sure the default footer size isnt used when laying out with AutoLayout
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
-        view?.snp.makeConstraints { make in
-            make.height.equalTo(1)
-        }
-        return view
-    }
-}
-
-private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
-    static let Padding: CGFloat = 12
-    
-    lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.font = UIConstants.fonts.actionMenuItem
-        titleLabel.numberOfLines = 1
-        titleLabel.textColor = UIColor.black
-        return titleLabel
-    }()
-    
-    lazy var separatorView: UIView = {
-        let separatorLine = UIView()
-        separatorLine.backgroundColor = UIConstants.Photon.Grey40
-        return separatorLine
-    }()
-    
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        
-        self.backgroundView = UIView()
-        self.backgroundView?.backgroundColor = UIColor.black
-        contentView.addSubview(titleLabel)
-        
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).offset(PhotonActionSheetTitleHeaderView.Padding)
-            make.trailing.equalTo(contentView)
-            make.top.equalTo(contentView).offset(PhotonActionSheetUX.TablePadding)
-        }
-        
-        contentView.addSubview(separatorView)
-        
-        separatorView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
-            make.top.equalTo(titleLabel.snp.bottom).offset(PhotonActionSheetUX.TablePadding)
-            make.bottom.equalTo(contentView).inset(PhotonActionSheetUX.TablePadding)
-            make.height.equalTo(0.5)
-        }
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configure(with title: String) {
-        self.titleLabel.text = title
-    }
-    
-    override func prepareForReuse() {
-        self.titleLabel.text = nil
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 1
     }
 }
 
