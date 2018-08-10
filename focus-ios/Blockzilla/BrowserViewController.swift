@@ -1282,7 +1282,7 @@ extension BrowserViewController: WebControllerDelegate {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
             self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
-            self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight)
+            self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight + self.view.safeAreaInsets.bottom)
             scrollView.bounds.origin.y += (self.scrollBarOffsetAlpha - 1) * UIConstants.layout.urlBarHeight
             self.scrollBarOffsetAlpha = 1
             self.view.layoutIfNeeded()
