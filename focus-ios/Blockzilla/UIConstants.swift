@@ -197,6 +197,8 @@ struct UIConstants {
         static let urlBarBorderInset: CGFloat = 4
         static let deleteButtonInset: CGFloat = -12
         static let urlBarIconInset: CGFloat = 8
+        static let settingsDefaultTitleOffset = 3
+        static let settingsFirstTitleOffset = 16
     }
 
     struct strings {
@@ -375,6 +377,12 @@ struct UIConstants {
         static let findInPagePreviousLabel = NSLocalizedString("FindInPage.PreviousResult", value: "Find previous in page", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
         static let findInPageNextLabel = NSLocalizedString("FindInPage.NextResult", value: "Find next in page", comment: "Accessibility label for next result button in Find in Page Toolbar.")
         static let findInPageDoneLabel = NSLocalizedString("FindInPage.Done", value: "Find in page done", comment: "Accessibility label for done button in Find in Page Toolbar.")
+        
+        static let siriShortcutsTitle = NSLocalizedString("Settinsg.siriShortcutsTitle", value: "SIRI SHORTCUTS", comment: "Title for settings section to enable different Siri Shortcuts.")
+        static let eraseSiri = NSLocalizedString("Siri.erase", value: "Erase", comment: "Title of option in settings to set up Siri to erase")
+        static let eraseAndOpenSiri = NSLocalizedString("Siri.eraseAndOpen", value: "Erase then Open %@", comment: "Title of option in settings to set up Siri to erase and then open Focus/Klar. %@ is the application name.")
+        static let openUrlsSiri = NSLocalizedString("Siri.openURLs", value: "Open URLs", comment: "Title of option in settings to set up Siri to open specified URLs in Focus/Klar.")
+        static let addToSiri = NSLocalizedString("Siri.addTo", value: "Add to Siri", comment: "Button to add a specified shortcut option to Siri.")
         
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"

@@ -4,7 +4,7 @@
 
 import Foundation
 
-class BlockerToggle {
+class BlockerToggle: Equatable {
     let toggle = UISwitch()
     let label: String
     let setting: SettingsToggle
@@ -17,5 +17,9 @@ class BlockerToggle {
         toggle.accessibilityIdentifier = "BlockerToggle.\(setting.rawValue)"
         toggle.onTintColor = UIConstants.colors.toggleOn
         toggle.tintColor = UIConstants.colors.toggleOff
+    }
+    
+    static func == (lhs: BlockerToggle, rhs: BlockerToggle) -> Bool {
+        return lhs.toggle == rhs.toggle && lhs.label == rhs.label && lhs.setting == rhs.setting
     }
 }

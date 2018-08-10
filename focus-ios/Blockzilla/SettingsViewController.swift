@@ -22,7 +22,7 @@ class SettingsTableViewCell: UITableViewCell {
     }
 }
 
-class SettingsTableViewSearchCell: SettingsTableViewCell {
+class SettingsTableViewAccessoryCell: SettingsTableViewCell {
     private let newLabel = SmartLabel()
     private let accessoryLabel = SmartLabel()
     private let spacerView = UIView()
@@ -88,30 +88,37 @@ class SettingsTableViewSearchCell: SettingsTableViewCell {
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     enum Section: String {
-        case search, integration, privacy, mozilla
+        case privacy, search, siri, integration, mozilla
         
         var numberOfRows: Int {
             switch self {
-            case .search: return 2
-            case .integration: return 1
             case .privacy:
                 if BiometryType(context: LAContext()).hasBiometry { return 4 }
                 return 3
+            case .search: return 2
+            case .siri: return 3
+            case .integration: return 1
             case .mozilla: return 2
             }
         }
         
         var headerText: String? {
             switch self {
-            case .search: return UIConstants.strings.settingsSearchTitle
             case .privacy: return UIConstants.strings.toggleSectionPrivacy
+            case .search: return UIConstants.strings.settingsSearchTitle
+            case .siri: return UIConstants.strings.siriShortcutsTitle
             case .mozilla: return UIConstants.strings.toggleSectionMozilla
             default: return nil
             }
         }
 
         static func getSections() -> [Section] {
-            return [.privacy, .search, integration, .mozilla]
+            if #available(iOS 12.0, *) {
+                return [.privacy, .search, .siri, integration, .mozilla]
+            }
+            else {
+                return [.privacy, .search, integration, .mozilla]
+            }
         }
     }
     
@@ -182,8 +189,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
         let usageDataToggle = BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: usageDataSubtitle)
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
+        var toggles = [Int : BlockerToggle]()
         if let biometricToggle = createBiometricLoginToggleIfAvailable() {
-            return [
+            toggles = [
                 1: blockFontsToggle,
                 2: biometricToggle,
                 3: usageDataToggle,
@@ -191,12 +199,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             ]
         }
         else {
-            return [
+            toggles = [
                 1: blockFontsToggle,
                 2: usageDataToggle,
                 5: safariToggle
             ]
         }
+        if #available(iOS 12.0, *) {
+            if let safariRow = toggles.first(where: { $1 == safariToggle })?.key {
+                toggles.removeValue(forKey: safariRow)
+                toggles[(safariRow +  Section.siri.numberOfRows)] = safariToggle
+            }
+        }
+        return toggles
     }
 
     /// Used to calculate cell heights.
@@ -211,7 +226,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.whatsNew = whatsNew
         super.init(nibName: nil, bundle: nil)
 
-        tableView.register(SettingsTableViewSearchCell.self, forCellReuseIdentifier: "searchCell")
+        tableView.register(SettingsTableViewAccessoryCell.self, forCellReuseIdentifier: "accessoryCell")
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -328,7 +343,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         var cell: UITableViewCell
         switch sections[indexPath.section] {
         case .search:
-            guard let searchCell = tableView.dequeueReusableCell(withIdentifier: "searchCell") as? SettingsTableViewSearchCell else { fatalError("No Search Cells!") }
+            guard let searchCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("Accessory cells do not exist") }
 
             let label = indexPath.row == 0 ? UIConstants.strings.settingsSearchLabel : UIConstants.strings.settingsAutocompleteSection
             let autocompleteLabel = Settings.getToggle(.enableDomainAutocomplete) || Settings.getToggle(.enableCustomDomainAutocomplete) ? UIConstants.strings.autocompleteCustomEnabled : UIConstants.strings.autocompleteCustomDisabled
@@ -340,6 +355,21 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             searchCell.accessibilityIdentifier = identifier
 
             cell = searchCell
+        case .siri:
+            guard let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No Search Cells!") }
+            if indexPath.row == 0 {
+                siriCell.label = UIConstants.strings.eraseSiri
+                siriCell.accessoryLabelText = UIConstants.strings.addToSiri
+                siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
+            } else if indexPath.row == 1 {
+                siriCell.label = String(format: UIConstants.strings.eraseAndOpenSiri, AppInfo.productName)
+                siriCell.accessoryLabelText = UIConstants.strings.addToSiri
+                siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
+            } else {
+                siriCell.label = UIConstants.strings.openUrlsSiri
+                siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLsCell"
+            }
+            cell = siriCell
         case .mozilla:
             if indexPath.row == 0 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
@@ -431,10 +461,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var groupingOffset = 16
+        var groupingOffset = UIConstants.layout.settingsDefaultTitleOffset
         
-        if sections[section] == .search || sections[section] == .mozilla {
-            groupingOffset = 3
+        if sections[section] == .privacy {
+            groupingOffset = UIConstants.layout.settingsFirstTitleOffset
         }
 
         // Hack: We want the header view's margin to match the cells, so we create an empty
@@ -477,6 +507,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             } else if indexPath.row == 1 {
                 let autcompleteSettingViewController = AutocompleteSettingViewController()
                 navigationController?.pushViewController(autcompleteSettingViewController, animated: true)
+            }
+        case .siri:
+            if indexPath.row == 0 {
+                // TODO: Issue #1049
+            }
+            else if indexPath.row == 1 {
+                // TODO: Issue #1199
+            }
+            else {
+                // TODO: Issue #1097
             }
         case .mozilla:
             if indexPath.row == 0 {
@@ -545,6 +585,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
 extension SettingsViewController: SearchSettingsViewControllerDelegate {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine) {
-        (tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingsTableViewSearchCell)?.accessoryLabelText = engine.name
+        (tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingsTableViewAccessoryCell)?.accessoryLabelText = engine.name
     }
 }
