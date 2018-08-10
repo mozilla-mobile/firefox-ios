@@ -26,7 +26,7 @@ class TabDisplayManager: NSObject {
 
     fileprivate let tabManager: TabManager
     var isPrivate = false
-    fileprivate var isDragging = false
+    var isDragging = false
     fileprivate let collectionView: UICollectionView
     typealias CompletionBlock = () -> Void
 
