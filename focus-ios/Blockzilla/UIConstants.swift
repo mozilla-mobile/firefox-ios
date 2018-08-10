@@ -199,6 +199,7 @@ struct UIConstants {
         static let urlBarIconInset: CGFloat = 8
         static let settingsDefaultTitleOffset = 3
         static let settingsFirstTitleOffset = 16
+        static let urlBarToolsetOffset: CGFloat = 60
     }
 
     struct strings {
