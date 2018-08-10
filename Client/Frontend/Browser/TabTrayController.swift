@@ -254,6 +254,10 @@ class TabTrayController: UIViewController {
     }
 
     @objc func didTogglePrivateMode() {
+        if tabDisplayManager.isDragging {
+            return
+        }
+
         let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
         let newOffset = CGPoint(x: 0.0, y: collectionView.contentOffset.y)
@@ -328,6 +332,10 @@ class TabTrayController: UIViewController {
     }
 
     func openNewTab(_ request: URLRequest? = nil) {
+        if tabDisplayManager.isDragging {
+            return
+        }
+
         self.tabManager.addTabAndSelect(request, isPrivate: tabDisplayManager.isPrivate)
         self.tabDisplayManager.performTabUpdates {
             self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
