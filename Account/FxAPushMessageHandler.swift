@@ -6,6 +6,8 @@ import Deferred
 import Shared
 import SwiftyJSON
 
+private let log = Logger.syncLogger
+
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
 /// This class provides handles push messages from FxA.
@@ -118,13 +120,17 @@ extension FxAPushMessageHandler {
 /// An extension to handle each of the messages.
 extension FxAPushMessageHandler {
     func handleCommandReceived(_ data: JSON?) -> PushMessageResult {
+        log.info("[FxA Commands] Push notification received: \(data?.stringify() ?? "nil")")
+
         guard let index = data?["index"].int,
             let account = profile.getAccount() else {
+            log.error("[FxA Commands] Push notification JSON is missing required 'index' value")
             return messageIncomplete(.commandReceived)
         }
 
         return account.commandsClient.consumeRemoteCommand(index: index) >>== { items in
             guard let item = items.first else {
+                log.error("[FxA Commands] Unable to consume remote command for index \(index)")
                 return self.messageIncomplete(.commandReceived)
             }
 

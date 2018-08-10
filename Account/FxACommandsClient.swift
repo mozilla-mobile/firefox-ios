@@ -56,7 +56,7 @@ public class FxACommandsClient {
         return fetchRemoteCommands(index: index, limit: 1) >>== { response in
             let commands = response.commands
             if commands.count != 1 {
-                log.warning("Should have retrieved 1 and only 1 message, got \(commands.count)")
+                log.warning("[FxA Commands] Should have retrieved 1 and only 1 message, got \(commands.count)")
             }
 
             let prefs = self.account.configuration.prefs
@@ -115,6 +115,7 @@ public class FxACommandsClient {
                         let encrypted = command.data["payload"]["encrypted"].string,
                         let senderDeviceID = command.data["sender"].string,
                         let sender = devices.find({ $0.id == senderDeviceID }) else {
+                        log.error("[FxA Commands] Invalid payload received for command \(command.index)")
                         return nil
                     }
 
@@ -122,7 +123,7 @@ public class FxACommandsClient {
                     case FxACommandSendTab.Name:
                         return self.sendTab.handle(sender: sender, encrypted: encrypted)
                     default:
-                        log.info("Unknown command: \(commandName)")
+                        log.info("[FxA Commands] Unknown command: \(commandName)")
                         return nil
                     }
                 }
@@ -131,12 +132,6 @@ public class FxACommandsClient {
                 return deferMaybe(items)
             }
         }
-    }
-}
-
-public class FxACommandSendTabError: MaybeErrorType {
-    public var description: String {
-        return "Error receiving sent tab"
     }
 }
 
@@ -187,6 +182,7 @@ open class FxACommandSendTab {
                 return FxACommandSendTabKeys(publicKey: publicKey, privateKey: privateKey, authSecret: authSecret)
             }
 
+            log.error("[FxA Commands] No sendTabKeys found in Keychain")
             return nil
         })
     }
@@ -212,6 +208,11 @@ open class FxACommandSendTab {
             let tuples = results.compactMap({ $0.successValue })
             let succeeded = tuples.filter({ $0.success }).map({ $0.device })
             let failed = tuples.filter({ !$0.success }).map({ $0.device })
+
+            if failed.count > 0 {
+                log.warning("[FxA Commands] Failed to send tab to \(failed.count) device(s); Falling back to old Sync backend")
+            }
+
             return deferMaybe(FxACommandSendTabReport(succeeded: succeeded, failed: failed))
         }
     }
@@ -237,12 +238,14 @@ open class FxACommandSendTab {
 
     public func handle(sender: FxADevice, encrypted: String) -> FxACommandSendTabItem? {
         guard let decrypted = decrypt(ciphertext: encrypted) else {
+            log.error("[FxA Commands] Unable to decrypt command received from device '\(sender.name)' (\(sender.id ?? "nil"))")
             return nil
         }
 
         let json = JSON(parseJSON: decrypted)
 
         guard let entries = json["entries"].array else {
+            log.error("[FxA Commands] No 'entries' array in JSON received from device '\(sender.name)' (\(sender.id ?? "nil"))")
             return nil
         }
 
@@ -251,6 +254,7 @@ open class FxACommandSendTab {
         guard let tab = entries[safe: current],
             let title = tab["title"].string,
             let url = tab["url"].string else {
+            log.error("[FxA Commands] No tab for entry \(current) in JSON received from device '\(sender.name)' (\(sender.id ?? "nil"))")
             return nil
         }
 
