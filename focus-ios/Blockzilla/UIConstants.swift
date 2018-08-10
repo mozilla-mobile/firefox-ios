@@ -187,6 +187,7 @@ struct UIConstants {
         static let urlBarShadowRadius: CGFloat = 2
         static let urlBarShadowOffset = CGSize(width: 0, height: 2)
         static let urlBarWidthInset: CGFloat = 8
+        static let urlBarBorderInset: CGFloat = 4
     }
 
     struct strings {

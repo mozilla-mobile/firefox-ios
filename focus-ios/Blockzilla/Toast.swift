@@ -31,8 +31,8 @@ class Toast {
         toast.addSubview(label)
 
         toast.snp.makeConstraints { make in
-            let bottomOffset = -(KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(view: window.rootViewController!.view) ?? 0.0)
-            make.bottom.equalTo(window).offset(-24 + bottomOffset)
+            let topOffset = UIConstants.layout.urlBarHeightInset + (UIConstants.layout.urlBarBorderInset * 2) + UIConstants.layout.urlBarHeight
+            make.top.equalTo(window.safeAreaLayoutGuide).offset(topOffset)
             make.centerX.equalTo(window)
             make.leading.greaterThanOrEqualTo(window)
             make.trailing.lessThanOrEqualTo(window)
