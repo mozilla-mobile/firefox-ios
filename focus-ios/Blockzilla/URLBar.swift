@@ -29,11 +29,7 @@ class URLBar: UIView {
     let progressBar = GradientProgressBar(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false
     var shouldPresent = false
-    fileprivate(set) var isEditing = false {
-        didSet {
-            setTextToURL()
-        }
-    }
+    fileprivate(set) var isEditing = false
     
     fileprivate let deleteButton = InsetButton()
     fileprivate let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
@@ -702,6 +698,8 @@ class URLBar: UIView {
 
 extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
+        
+        setTextToURL()
 
         autocompleteTextField.highlightAll()
         
