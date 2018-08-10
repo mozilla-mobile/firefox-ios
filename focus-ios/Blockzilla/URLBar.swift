@@ -568,9 +568,9 @@ class URLBar: UIView {
 
         self.layoutIfNeeded()
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
-            self.isEditingConstraints.forEach { $0.deactivate() }
 
             if self.inBrowsingMode {
+                self.isEditingConstraints.forEach { $0.deactivate() }
                 // Reveal the URL bar buttons on iPad/landscape.
                 self.updateToolsetConstraints()
 
