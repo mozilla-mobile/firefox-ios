@@ -337,7 +337,7 @@ private class SQLiteDBStatement {
 }
 
 public protocol SQLiteDBConnection {
-    var lastInsertedRowID: Int { get }
+    var lastInsertedRowID: Int64 { get }
     var numberOfRowsModified: Int { get }
     var version: Int { get }
 
@@ -359,7 +359,7 @@ public protocol SQLiteDBConnection {
 
 // Represents a failure to open.
 class FailedSQLiteDBConnection: SQLiteDBConnection {
-    var lastInsertedRowID: Int = 0
+    var lastInsertedRowID: Int64 = 0
     var numberOfRowsModified: Int = 0
     var version: Int = 0
 
@@ -400,8 +400,8 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
 }
 
 open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
-    open var lastInsertedRowID: Int {
-        return Int(sqlite3_last_insert_rowid(sqliteDB))
+    open var lastInsertedRowID: Int64 {
+        return Int64(sqlite3_last_insert_rowid(sqliteDB))
     }
 
     open var numberOfRowsModified: Int {
