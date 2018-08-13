@@ -183,9 +183,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     private var initialToggles : [Int : BlockerToggle]  {
         let blockFontsToggle = BlockerToggle(label: UIConstants.strings.labelBlockFonts, setting: SettingsToggle.blockFonts)
-        let toggle = blockFontsToggle.toggle
-        toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
-        toggle.isOn = Settings.getToggle(blockFontsToggle.setting)
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
         let usageDataToggle = BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: usageDataSubtitle)
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
@@ -532,7 +529,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     private func updateSafariEnabledState() {
-        guard let safariToggle = self.toggles[3]?.toggle else { return }
+        guard let safariIndex = toggles.first(where: { $1.setting ==  SettingsToggle.safari})?.key,
+            let safariToggle = toggles[safariIndex]?.toggle else { return }
         safariToggle.isEnabled = false
 
         detector.detectEnabled(view) { [weak self] enabled in
@@ -570,6 +568,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             Settings.set(sender.isOn, forToggle: toggle.setting)
             ContentBlockerHelper.shared.reload()
             Utils.reloadSafariContentBlocker()
+        }
+        
+        // First check if the user changed the anonymous usage data setting and follow that choice right
+        // here. Otherwise it will be delayed until the application restarts.
+        if toggle.setting == .sendAnonymousUsageData {
+            Telemetry.default.configuration.isCollectionEnabled = sender.isOn
+            Telemetry.default.configuration.isUploadEnabled = sender.isOn
         }
 
         switch toggle.setting {

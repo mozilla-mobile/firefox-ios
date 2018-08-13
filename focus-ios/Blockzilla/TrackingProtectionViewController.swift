@@ -44,13 +44,6 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     @objc private func toggleChanged(_ sender: UISwitch) {
         let toggle = toggles.filter { $0.toggle == sender }.first!
         
-        // First check if the user changed the anonymous usage data setting and follow that choice right
-        // here. Otherwise it will be delayed until the application restarts.
-        if toggle.setting == .sendAnonymousUsageData {
-            Telemetry.default.configuration.isCollectionEnabled = sender.isOn
-            Telemetry.default.configuration.isUploadEnabled = sender.isOn
-        }
-        
         func updateSetting() {
             let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: "setting", value: toggle.setting.rawValue)
             telemetryEvent.addExtra(key: "to", value: sender.isOn)
