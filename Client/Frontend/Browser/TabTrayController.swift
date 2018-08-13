@@ -360,7 +360,7 @@ extension TabTrayController: TabManagerDelegate {
             return
         }
         view.addSubview(toast)
-        toast.showToast(makeConstraints: { make in
+        toast.showToast(delay: SimpleToastUX.ToastPrivateModeDelayBefore, makeConstraints: { make in
             make.left.right.equalTo(self.view)
             make.bottom.equalTo(self.toolbar.snp.top)
         })
