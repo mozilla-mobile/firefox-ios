@@ -22,6 +22,7 @@ class TestFavicons: ProfileTest {
         self.waitForExpectations(timeout: 100, handler: nil)
     }
 
+    // XXX: Temporarily disabling this due to intermittent failures on BuddyBuild.
     func testFaviconFetcherParse() {
         let expectation = self.expectation(description: "Wait for Favicons to be fetched")
 
