@@ -68,6 +68,9 @@
                <Test
                   Identifier = "SearchTests/testURIFixupPunyCode()">
                </Test>
+               <Test
+                  Identifier = "TestFavicons/testFaviconFetcherParse()">
+               </Test>
             </SkippedTests>
          </TestableReference>
          <TestableReference
