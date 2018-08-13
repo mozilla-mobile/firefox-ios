@@ -295,6 +295,8 @@ private class SQLiteDBStatement {
             // Doubles also pass obj as Int, so order is important here.
             if obj is Double {
                 status = sqlite3_bind_double(pointer, Int32(index+1), obj as! Double)
+            } else if obj is Int64 {
+                status = sqlite3_bind_int64(pointer, Int32(index+1), Int64(obj as! Int64))
             } else if obj is Int {
                 status = sqlite3_bind_int(pointer, Int32(index+1), Int32(obj as! Int))
             } else if obj is Bool {
