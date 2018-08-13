@@ -64,6 +64,11 @@
                BlueprintName = "ClientTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "TestFavicons/testFaviconFetcherParse()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">

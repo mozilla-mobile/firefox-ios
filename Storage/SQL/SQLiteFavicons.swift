@@ -80,7 +80,7 @@ open class SQLiteFavicons {
             return nil
         }
 
-        return conn.lastInsertedRowID
+        return Int(conn.lastInsertedRowID)
     }
 
     public func cleanupFavicons() -> Success {
