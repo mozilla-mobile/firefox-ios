@@ -432,6 +432,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             searchDelegate?.searchViewController(self, didHighlightText: suggestion.url, search: false)
         }
     }
+
+    override func applyTheme() {
+        super.applyTheme()
+
+        reloadData()
+    }
 }
 
 extension SearchViewController {
