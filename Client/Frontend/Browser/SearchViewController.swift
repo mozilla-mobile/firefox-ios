@@ -27,8 +27,8 @@ private struct SearchViewControllerUX {
     static let SearchImageHeight: Float = 44
     static let SearchImageWidth: Float = 24
 
-    static let SuggestionBackgroundColor = UIColor.theme.homePanel.searchSuggestionPilBackground
-    static let SuggestionBorderColor = UIColor.theme.homePanel.searchSuggestionPillForeground
+    static var SuggestionBackgroundColor: UIColor { return UIColor.theme.homePanel.searchSuggestionPillBackground }
+    static var SuggestionBorderColor: UIColor { return UIColor.theme.homePanel.searchSuggestionPillForeground }
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
     static let SuggestionInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)

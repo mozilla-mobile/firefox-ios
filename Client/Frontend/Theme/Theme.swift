@@ -152,7 +152,7 @@ class HomePanelColor {
     
     var historyHeaderIconsBackground: UIColor { return UIColor.Photon.White100 }
 
-    var searchSuggestionPilBackground: UIColor { return UIColor.Photon.White100 }
+    var searchSuggestionPillBackground: UIColor { return UIColor.Photon.White100 }
     var searchSuggestionPillForeground: UIColor { return UIColor.theme.general.highlightBlue }
 }
 
