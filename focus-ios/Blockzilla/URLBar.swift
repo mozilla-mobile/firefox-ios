@@ -122,6 +122,7 @@ class URLBar: UIView {
         pageActionsButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         pageActionsButton.addTarget(self, action: #selector(didPressPageActions), for: .touchUpInside)
         pageActionsButton.accessibilityIdentifier = "URLBar.pageActionsButton"
+        pageActionsButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 8, bottom: 8 ,right: 10)
         textAndLockContainer.addSubview(pageActionsButton)
 
         smallLockIcon.alpha = 0
@@ -180,6 +181,10 @@ class URLBar: UIView {
         deleteButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         deleteButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
+        deleteButton.contentEdgeInsets = UIEdgeInsets(top: UIConstants.layout.urlBarMargin,
+                                                      left: UIConstants.layout.urlBarMargin,
+                                                      bottom: UIConstants.layout.urlBarMargin,
+                                                      right: UIConstants.layout.urlBarMargin)
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         addSubview(deleteButton)
 
@@ -226,14 +231,14 @@ class URLBar: UIView {
         }
         
         urlBarBorderView.snp.makeConstraints { make in
-            make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlBarMargin).priority(.medium)
-            make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).priority(.medium)
+            make.leading.equalTo(shieldIcon.snp.trailing).priority(.medium)
+            make.trailing.equalTo(deleteButton.snp.leading).priority(.medium)
             make.height.equalTo(42).priority(.medium)
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
             
             isEditingConstraints.append(make.height.equalTo(48).priority(.high).constraint)
-            isEditingConstraints.append(make.leading.equalTo(shieldIcon.snp.trailing).constraint)
-            isEditingConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).constraint)
+            isEditingConstraints.append(make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlBarMargin).constraint)
+            isEditingConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
         }
 
         urlBarBackgroundView.snp.makeConstraints { make in
@@ -241,10 +246,11 @@ class URLBar: UIView {
         }
 
         shieldIcon.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            hideToolsetConstraints.append(make.leading.equalToSuperview().inset(UIConstants.layout.urlBarMargin).constraint)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
+            hideToolsetConstraints.append(make.leading.equalToSuperview().constraint)
             showToolsetConstraints.append(make.leading.equalTo(toolset.stopReloadButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
-            make.width.equalTo(24).priority(900)
+            make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
 
             isEditingConstraints.append(make.width.equalTo(0).constraint)
         }
@@ -260,8 +266,8 @@ class URLBar: UIView {
         
         pageActionsButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.trailing.equalTo(textAndLockContainer).inset(UIConstants.layout.urlBarIconInset).priority(.required)
-            make.width.equalTo(24).priority(900)
+            make.trailing.equalTo(textAndLockContainer).priority(.required)
+            make.width.equalTo(UIConstants.layout.urlBarButtonTargetSize).priority(900)
             
             hidePageActionsConstraints.append(contentsOf:[
                 make.size.equalTo(0).constraint
@@ -296,10 +302,11 @@ class URLBar: UIView {
         }
 
         deleteButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(UIConstants.layout.urlBarButtonTargetSize)
 
             isEditingConstraints.append(make.width.equalTo(0).constraint)
-            hideToolsetConstraints.append(make.trailing.equalToSuperview().inset(UIConstants.layout.urlBarMargin).constraint)
+            hideToolsetConstraints.append(make.trailing.equalToSuperview().constraint)
             showToolsetConstraints.append(make.trailing.greaterThanOrEqualTo(toolset.settingsButton.snp.leading).offset(-UIConstants.layout.urlBarToolsetOffset).constraint)
         }
 
@@ -798,16 +805,14 @@ class TrackingProtectionBadge: UIView {
 
         trackingProtectionOn.setContentHuggingPriority(.required, for: .horizontal)
         trackingProtectionOn.snp.makeConstraints { make in
-            make.leading.equalToSuperview().priority(1000)
-            make.centerY.equalToSuperview().priority(500)
-            make.width.equalTo(24).priority(500)
-            make.trailing.equalToSuperview()
+            make.centerX.centerY.equalToSuperview()
+            make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
         }
 
         trackingProtectionOff.setContentHuggingPriority(.required, for: .horizontal)
         trackingProtectionOff.snp.makeConstraints { make in
-            make.leading.equalToSuperview().priority(1000)
-            make.centerY.equalToSuperview().priority(500)
+            make.centerX.centerY.equalToSuperview()
+            make.width.equalTo(UIConstants.layout.urlBarButtonImageSize)
         }
     }
     
