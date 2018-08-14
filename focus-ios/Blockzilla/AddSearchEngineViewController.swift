@@ -227,7 +227,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
 
     private func presentRetryError() {
-        let controller = UIAlertController(title: UIConstants.strings.autocompleteAddCustomUrlError, message: nil, preferredStyle: .alert)
+        let controller = UIAlertController(title: UIConstants.strings.addSearchEngineError, message: nil, preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: UIConstants.strings.errorTryAgain, style: .default, handler: { _ in
 
         }))
