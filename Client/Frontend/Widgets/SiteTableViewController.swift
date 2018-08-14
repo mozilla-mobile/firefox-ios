@@ -75,7 +75,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 /**
  * Provides base shared functionality for site rows and headers.
  */
-class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Themeable {
     fileprivate let CellIdentifier = "CellIdentifier"
     fileprivate let HeaderIdentifier = "HeaderIdentifier"
     let profile: Profile
