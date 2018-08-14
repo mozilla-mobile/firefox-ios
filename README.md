@@ -6,15 +6,15 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch (master)
 -----------
 
-This branch is for mainline development that will ship in *v11.0*.
+This branch is for mainline development that will ship in *v14.0*.
 
-This branch only works with Xcode 9.3 and supports iOS 10, and 11.
+This branch only works with Xcode 9.4 and supports iOS 10.3, and 11.x.
 
 This branch is written in Swift 4
 
 Please make sure you aim your pull requests in the right direction.
 
-For bug fixes and features for the upcoming v12.0 release, please see the *v12.x* branch. (Which may not exist yet)
+For bug fixes and features for the upcoming v13.0 release, please see the *v13.x* branch.
 
 Getting involved
 ----------------
