@@ -8,13 +8,13 @@ import UIKit
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
 
     fileprivate lazy var tableView : UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = UIConstants.colors.settingsBackgroundColor
         tableView.layoutMargins = UIEdgeInsets.zero
-        tableView.separatorColor = UIColor(rgb: 0x333333)
         tableView.estimatedRowHeight = 44
+        tableView.separatorColor = UIConstants.colors.settingsSeparator
 
         // Don't show trailing rows.
         tableView.tableFooterView = UIView(frame: CGRect.zero)
@@ -78,6 +78,25 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.textLabel?.textColor = UIConstants.colors.defaultFont
         cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsets.zero
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {
+            let cell = UITableViewCell()
+            cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+            // Hack to cover header separator line
+            let footer = UIView()
+            footer.backgroundColor = UIConstants.colors.settingsBackgroundColor
+            cell.addSubview(footer)
+            cell.sendSubviewToBack(footer)
+            footer.snp.makeConstraints { make in
+                make.height.equalTo(1)
+                make.bottom.equalToSuperview().offset(1)
+                make.leading.trailing.equalToSuperview()
+            }
+            return cell
+        }
+        return nil
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

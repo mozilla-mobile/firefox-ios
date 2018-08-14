@@ -8,7 +8,7 @@ import UIKit
 import Telemetry
 
 class TrackingProtectionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    fileprivate let tableView = UITableView(frame: .zero, style: .plain)
+    fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
     
     private let toggles = [
         BlockerToggle(label: UIConstants.strings.labelBlockAds, setting: SettingsToggle.blockAds, subtitle: UIConstants.strings.labelBlockAdsDescription),
@@ -24,6 +24,7 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        tableView.separatorColor = UIConstants.colors.settingsSeparator
         tableView.tableFooterView = UIView()
         view.addSubview(tableView)
         
@@ -95,8 +96,8 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
         
         let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.trackersDescriptionLabel, AppInfo.productName), attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
-        let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
-        let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+        let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
+        let space = NSAttributedString(string: " ", attributes: [:])
         subtitle.append(space)
         subtitle.append(learnMore)
         

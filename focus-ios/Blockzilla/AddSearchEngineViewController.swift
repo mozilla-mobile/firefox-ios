@@ -91,9 +91,9 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateContainer.addSubview(templateInput)
 
         let exampleLabel = SmartLabel()
-        let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+        let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
         let subtitle = NSMutableAttributedString(string: UIConstants.strings.AddSearchEngineTemplateExample, attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
-        let space = NSAttributedString(string: " ", attributes: [.foregroundColor : UIConstants.colors.toggleOn])
+        let space = NSAttributedString(string: " ", attributes: [:])
         subtitle.append(space)
         subtitle.append(learnMore)
 
