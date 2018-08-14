@@ -51,7 +51,6 @@ class URLBar: UIView {
 
     private var fullWidthURLTextConstraints = [Constraint]()
     private var centeredURLConstraints = [Constraint]()
-    private var hideShieldConstraints = [Constraint]()
     private var hideLockConstraints = [Constraint]()
     private var hideSmallLockConstraints = [Constraint]()
     private var hidePageActionsConstraints = [Constraint]()
@@ -227,15 +226,14 @@ class URLBar: UIView {
         }
         
         urlBarBorderView.snp.makeConstraints { make in
-            make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlBarMargin)
-
-            make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin)
-
+            make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlBarMargin).priority(.medium)
+            make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).priority(.medium)
             make.height.equalTo(42).priority(.medium)
-
-            self.isEditingConstraints.append(make.height.equalTo(48).priority(.high).constraint)
-
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
+            
+            isEditingConstraints.append(make.height.equalTo(48).priority(.high).constraint)
+            isEditingConstraints.append(make.leading.equalTo(shieldIcon.snp.trailing).constraint)
+            isEditingConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).constraint)
         }
 
         urlBarBackgroundView.snp.makeConstraints { make in
@@ -248,9 +246,7 @@ class URLBar: UIView {
             showToolsetConstraints.append(make.leading.equalTo(toolset.stopReloadButton.snp.trailing).offset(UIConstants.layout.urlBarToolsetOffset).constraint)
             make.width.equalTo(24).priority(900)
 
-            hideShieldConstraints.append(contentsOf:[
-                make.width.equalTo(0).constraint
-            ])
+            isEditingConstraints.append(make.width.equalTo(0).constraint)
         }
 
         textAndLockContainer.snp.makeConstraints { make in
@@ -502,10 +498,8 @@ class URLBar: UIView {
         UIView.animate(withDuration: duration) {
             if visible {
                 self.hidePageActionsConstraints.forEach { $0.deactivate() }
-                self.hideShieldConstraints.forEach { $0.deactivate() }
             } else {
                 self.hidePageActionsConstraints.forEach { $0.activate() }
-                self.hideShieldConstraints.forEach { $0.activate() }
             }
             self.layoutIfNeeded()
         }
