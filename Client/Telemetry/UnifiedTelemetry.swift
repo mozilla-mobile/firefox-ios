@@ -55,6 +55,10 @@ class UnifiedTelemetry {
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.normalbrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.privatebrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.strength", withDefaultValue: "basic")
+        telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue, withDefaultValue: false)
+        telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.automaticSliderValue.rawValue, withDefaultValue: 0)
+        telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.themeName.rawValue, withDefaultValue: "normal")
+
 
         let prefs = profile.prefs
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
