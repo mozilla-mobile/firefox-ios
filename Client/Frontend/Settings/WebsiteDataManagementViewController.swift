@@ -6,17 +6,15 @@ import UIKit
 import Shared
 import WebKit
 
-private let NumberOfSections = 3
-private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
-
 enum Section: Int {
     case sites = 0, showMore, button
 }
+private let NumberOfSections = 3
+private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
 class WebsiteDataManagementViewController: UITableViewController, UISearchBarDelegate {
     fileprivate var clearButton, showMoreButton : UITableViewCell?
-    //fileprivate var showMoreButton: UITableViewCell?
-    var searchResults: UITableViewController!
+    var searchResults : UITableViewController!
     var searchController: UISearchController!
     var showMoreButtonEnabled = true
 
@@ -27,23 +25,7 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
         title = Strings.SettingsWebsiteDataTitle
         self.navigationController?.setToolbarHidden(true, animated: false)
         self.navigationItem.rightBarButtonItem = self.editButtonItem
-
-        //get websites
-        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
-            for record in records {
-                self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
-            }
-            self.siteRecords.sort { $0.nameOfSite < $1.nameOfSite }
-            if let searchResults = self.searchController.searchResultsUpdater  as? websiteSearchResultsViewController {
-                searchResults.siteRecords = self.siteRecords
-            }
-            if self.siteRecords.count >= 5 {
-                self.siteRecords.removeLast(self.siteRecords.count - 5)
-            } else {
-                self.showMoreButtonEnabled = false
-            }
-            self.tableView.reloadData()
-        }
+        getAllWebsiteData(shouldDisableShowMoreButton: false, shouldUpdateSearchResults: true)
 
         //Search Controller setup
         let searchResults = websiteSearchResultsViewController()
@@ -87,7 +69,6 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
             clearButton = cell
         }
-
         return cell
     }
 
@@ -131,7 +112,7 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
             getAllWebsiteData()
         case .button:
             func clearwebsitedata(_ action: UIAlertAction) {
-                WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: {})
+                WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: { return })
                 siteRecords.removeAll()
                 showMoreButtonEnabled = false
                 tableView.reloadData()
@@ -191,16 +172,25 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
         getAllWebsiteData()
     }
 
-    func getAllWebsiteData() {
-        //get websites
+    func getAllWebsiteData(shouldDisableShowMoreButton : Bool = true, shouldUpdateSearchResults : Bool = false) {
         self.siteRecords.removeAll()
         dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { (records) in
-            for record in records {
-                self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
+        for record in records {
+        self.siteRecords.append(siteData(dataOfSite: record, nameOfSite: record.displayName))
+        }
+        self.siteRecords.sort { $0.nameOfSite < $1.nameOfSite }
+        if shouldUpdateSearchResults {
+            if let searchResults = self.searchController.searchResultsUpdater  as? websiteSearchResultsViewController {
+                searchResults.siteRecords = self.siteRecords
             }
-            self.siteRecords.sort { $0.nameOfSite < $1.nameOfSite }
+        }
+        if shouldDisableShowMoreButton || self.siteRecords.count < 10 {
             self.showMoreButtonEnabled = false
-            self.tableView.reloadData()
+        } else {
+            self.siteRecords.removeLast(self.siteRecords.count - 10)
+        }
+        self.tableView.reloadData()
         }
     }
+
 }

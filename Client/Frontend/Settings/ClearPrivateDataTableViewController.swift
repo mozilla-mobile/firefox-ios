@@ -130,8 +130,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         if indexPath.section == SectionArrow {
             let view = WebsiteDataManagementViewController()
             navigationController?.pushViewController(view, animated: true)
-        }
-        else if indexPath.section == SectionButton {
+        } else if indexPath.section == SectionButton {
             func clearPrivateData(_ action: UIAlertAction) {
                 let toggles = self.toggles
                 self.clearables
