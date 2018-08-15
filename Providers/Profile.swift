@@ -1139,15 +1139,25 @@ open class BrowserProfile: Profile {
                 return accumulate(thunks)
             }
 
-            return readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
-                let updateEnginePref: ((String, Bool) -> Void) = { engine, enabled in
-                    self.prefsForSync.setBool(enabled, forKey: "engine.\(engine).enabled")
+            return readyDeferred.bind { readyResult in
+                guard let success = readyResult.successValue else {
+                    if let tokenServerError = readyResult.failureValue as? TokenServerError,
+                        case let TokenServerError.remote(code, _, _) = tokenServerError,
+                        code == 401 {
+                        self.profile.getAccount()?.makeSeparated()
+                    }
+                    return deferMaybe(readyResult.failureValue!)
                 }
-                ready.engineConfiguration?.enabled.forEach { updateEnginePref($0, true) }
-                ready.engineConfiguration?.declined.forEach { updateEnginePref($0, false) }
+                return self.takeActionsOnEngineStateChanges(success) >>== { ready in
+                    let updateEnginePref: ((String, Bool) -> Void) = { engine, enabled in
+                        self.prefsForSync.setBool(enabled, forKey: "engine.\(engine).enabled")
+                    }
+                    ready.engineConfiguration?.enabled.forEach { updateEnginePref($0, true) }
+                    ready.engineConfiguration?.declined.forEach { updateEnginePref($0, false) }
 
-                statsSession.start()
-                return function(delegate, self.prefsForSync, ready)
+                    statsSession.start()
+                    return function(delegate, self.prefsForSync, ready)
+                }
             }
         }
 
