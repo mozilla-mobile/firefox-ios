@@ -26,6 +26,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         case canLinkAccount = "can_link_account"
         case loaded = "loaded"
         case login = "login"
+        case changePassword = "change_password"
         case sessionStatus = "session_status"
         case signOut = "sign_out"
     }
@@ -172,7 +173,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             switch command {
             case .loaded:
                 onLoaded()
-            case .login:
+            case .login, .changePassword:
                 onLogin(data)
             case .canLinkAccount:
                 onCanLinkAccount(data)
