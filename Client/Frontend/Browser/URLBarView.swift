@@ -24,7 +24,7 @@ private struct URLBarViewUX {
     static let ToolbarButtonInsets = UIEdgeInsets(equalInset: Padding)
 }
 
-protocol URLBarDelegate: class {
+protocol URLBarDelegate: AnyObject {
     func urlBarDidPressTabs(_ urlBar: URLBarView)
     func urlBarDidPressReaderMode(_ urlBar: URLBarView)
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
@@ -170,6 +170,14 @@ class URLBarView: UIView {
         }
     }
 
+    private let privateModeBadge = ToolbarPrivateModeBadge()
+
+    func privateModeBadge(visible: Bool) {
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            privateModeBadge.isHidden = !visible
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -183,8 +191,12 @@ class URLBarView: UIView {
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
 
-        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton].forEach { addSubview($0) }
-        [menuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach { addSubview($0) }
+        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
+         menuButton, forwardButton, backButton, stopReloadButton, locationContainer, privateModeBadge].forEach {
+            addSubview($0)
+        }
+
+        privateModeBadge.isHidden = true
 
         helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
@@ -256,6 +268,8 @@ class URLBarView: UIView {
             make.centerY.equalTo(self.locationContainer)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
+
+        privateModeBadge.layout(forTabsButton: tabsButton)
     }
 
     override func updateConstraints() {
@@ -481,6 +495,9 @@ class URLBarView: UIView {
         backButton.isHidden = !toolbarIsShowing || inOverlayMode
         tabsButton.isHidden = !toolbarIsShowing || inOverlayMode || topTabsIsShowing
         stopReloadButton.isHidden = !toolbarIsShowing || inOverlayMode
+
+        // badge isHidden is tied to private mode on/off, use alpha to hide in this case
+        privateModeBadge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
     }
 
     func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
@@ -683,6 +700,12 @@ extension URLBarView: Themeable {
     }
 }
 
+extension URLBarView: PrivateModeUI {
+    func applyUIMode(isPrivate: Bool) {
+        privateModeBadge(visible: isPrivate)
+    }
+}
+
 // We need a subclass so we can setup the shadows correctly
 // This subclass creates a strong shadow on the URLBar
 class TabLocationContainerView: UIView {
@@ -787,6 +810,6 @@ extension ToolbarTextField: Themeable {
         backgroundColor = UIColor.theme.textField.background
         textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
-        highlightColor = UIColor.theme.textField.highlight
+        textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight
     }
 }

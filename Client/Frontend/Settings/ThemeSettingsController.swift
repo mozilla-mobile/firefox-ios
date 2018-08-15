@@ -72,6 +72,7 @@ class ThemeSettingsController: ThemedTableViewController {
             make.left.right.equalToSuperview().inset(16)
         }
         label.font = UIFont.systemFont(ofSize: UX.footerFontSize)
+        label.textColor = UIColor.theme.tableView.headerTextLight
         return footer
     }
 
@@ -92,9 +93,12 @@ class ThemeSettingsController: ThemedTableViewController {
         }
     }
 
-    @objc func sliderValueChanged(control: UISlider) {
-        ThemeManager.instance.automaticBrightnessValue = control.value
+    @objc func sliderValueChanged(control: UISlider, event: UIEvent) {
+        guard let touch = event.allTouches?.first, touch.phase == .ended else {
+            return
+        }
 
+        ThemeManager.instance.automaticBrightnessValue = control.value
         brightnessChanged()
     }
 
@@ -122,6 +126,9 @@ class ThemeSettingsController: ThemedTableViewController {
             if indexPath.row == 0 {
                 cell.textLabel?.text = Strings.DisplayThemeAutomaticSwitchTitle
                 cell.detailTextLabel?.text = Strings.DisplayThemeAutomaticSwitchSubtitle
+                cell.detailTextLabel?.numberOfLines = 2
+                cell.detailTextLabel?.minimumScaleFactor = 0.5
+                cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
 
                 let control = UISwitch()
                 control.onTintColor = UIColor.theme.tableView.controlTint

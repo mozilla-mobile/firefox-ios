@@ -7,14 +7,13 @@ import Shared
 
 struct TopTabsSeparatorUX {
     static let Identifier = "Separator"
-    static let Color = UIColor.Photon.Grey70
     static let Width: CGFloat = 1
 }
 
 class TopTabsSeparator: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = TopTabsSeparatorUX.Color
+        self.backgroundColor = UIColor.theme.topTabs.separator
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -28,7 +27,7 @@ class TopTabsHeaderFooter: UICollectionReusableView {
         super.init(frame: frame)
         line.semanticContentAttribute = .forceLeftToRight
         addSubview(line)
-        line.backgroundColor = TopTabsSeparatorUX.Color
+        line.backgroundColor = UIColor.theme.topTabs.separator
     }
 
     func arrangeLine(_ kind: String) {
@@ -68,10 +67,10 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
 
     var selectedTab = false {
         didSet {
-            backgroundColor = selectedTab ? UIColor.Photon.Grey10 : UIColor.Photon.Grey80
-            titleText.textColor = selectedTab ? UIColor.Photon.Grey90 : UIColor.Photon.Grey40
+            backgroundColor = selectedTab ? UIColor.theme.topTabs.tabBackgroundSelected : UIColor.theme.topTabs.tabBackgroundUnselected
+            titleText.textColor = selectedTab ? UIColor.theme.topTabs.tabForegroundSelected : UIColor.theme.topTabs.tabForegroundUnselected
             highlightLine.isHidden = !selectedTab
-            closeButton.tintColor = selectedTab ? UIColor.Photon.Grey80 : UIColor.Photon.Grey40
+            closeButton.tintColor = selectedTab ? UIColor.theme.topTabs.closeButtonSelectedTab : UIColor.theme.topTabs.closeButtonUnselectedTab
             closeButton.backgroundColor = backgroundColor
             closeButton.layer.shadowColor = backgroundColor?.cgColor
             if selectedTab {

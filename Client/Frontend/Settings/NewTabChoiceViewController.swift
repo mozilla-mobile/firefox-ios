@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 /// Screen presented to the user when selecting the page that is displayed when the user goes to a new tab.
-class NewTabChoiceViewController: UITableViewController {
+class NewTabChoiceViewController: ThemedTableViewController {
 
     let newTabOptions: [NewTabPage] = [.blankPage, .topSites, .bookmarks, .history, .homePage]
 
@@ -14,12 +14,11 @@ class NewTabChoiceViewController: UITableViewController {
     var currentChoice: NewTabPage!
     var hasHomePage: Bool!
 
-    fileprivate let BasicCheckmarkCell = "BasicCheckmarkCell"
     fileprivate var authenticationInfo: AuthenticationKeychainInfo?
 
     init(prefs: Prefs) {
         self.prefs = prefs
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -31,9 +30,6 @@ class NewTabChoiceViewController: UITableViewController {
         title = Strings.SettingsNewTabTitle
 
         tableView.accessibilityIdentifier = "NewTabPage.Setting.Options"
-
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
         let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
@@ -61,7 +57,7 @@ class NewTabChoiceViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BasicCheckmarkCell, for: indexPath)
+        let cell = ThemedTableViewCell()
 
         let option = newTabOptions[indexPath.row]
         let enabled = (option != .homePage) || hasHomePage

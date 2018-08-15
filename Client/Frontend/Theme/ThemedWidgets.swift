@@ -112,7 +112,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
         topBorder.backgroundColor = UIColor.theme.tableView.separator
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
         contentView.backgroundColor = UIColor.theme.tableView.headerBackground
-        titleLabel.textColor = UIColor.theme.tableView.headerText
+        titleLabel.textColor = UIColor.theme.tableView.headerTextLight
     }
 
     func setupInitialConstraints() {
@@ -135,19 +135,21 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
         showBottomBorder = true
         titleLabel.text = nil
         titleAlignment = .bottom
+
+        applyTheme()
     }
 
     fileprivate func remakeTitleAlignmentConstraints() {
         switch titleAlignment {
         case .top:
             titleLabel.snp.remakeConstraints { make in
-                make.left.right.equalTo(self).inset(UX.titleHorizontalPadding)
+                make.left.right.equalTo(self.contentView).inset(UX.titleHorizontalPadding)
                 make.top.equalTo(self).offset(UX.titleVerticalPadding)
                 make.bottom.equalTo(self).offset(-UX.titleVerticalLongPadding)
             }
         case .bottom:
             titleLabel.snp.remakeConstraints { make in
-                make.left.right.equalTo(self).inset(UX.titleHorizontalPadding)
+                make.left.right.equalTo(self.contentView).inset(UX.titleHorizontalPadding)
                 make.bottom.equalTo(self).offset(-UX.titleVerticalPadding)
                 make.top.equalTo(self).offset(UX.titleVerticalLongPadding)
             }

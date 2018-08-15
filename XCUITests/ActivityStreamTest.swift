@@ -39,6 +39,12 @@ class ActivityStreamTest: BaseTestCase {
     func testDefaultSites() {
         // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
+        // Check their names so that test is added to Smoketest
+        XCTAssertTrue(TopSiteCellgroup.cells["twitter"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["amazon"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["wikipedia"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["youtube"].exists)
+        XCTAssertTrue(TopSiteCellgroup.cells["facebook"].exists)
     }
 
     func testTopSitesAdd() {
@@ -152,6 +158,7 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesOpenInNewTab() {
         navigator.goto(HomePanelsScreen)
+        waitforExistence(TopSiteCellgroup.cells["apple"])
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Tab"].tap()
         XCTAssert(TopSiteCellgroup.exists)
@@ -191,13 +198,15 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
-        if !app.cells["Apple"].exists {
-            app.cells.element(boundBy: 0).tap()
+        waitforExistence(app.collectionViews.cells.element(boundBy: 0))
+        if !app.collectionViews["Apple"].exists {
+            app.collectionViews.cells.element(boundBy: 0).tap()
             waitForValueContains(app.textFields["url"], value: "apple")
             app.buttons["Show Tabs"].tap()
         }
+        navigator.nowAt(TabTray)
         waitforExistence(app.cells["Apple"])
-        app.cells["Apple"].tap()
+        app.collectionViews.cells["Apple"].tap()
 
         // The website is open
         XCTAssertFalse(TopSiteCellgroup.exists)

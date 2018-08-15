@@ -11,23 +11,21 @@ private struct HistoryBackButtonUX {
     static let HistoryHistoryBackButtonHeaderChevronLineWidth: CGFloat = 3.0
 }
 
-class HistoryBackButton: UIButton {
+class HistoryBackButton: UIButton, Themeable {
     lazy var title: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.theme.general.highlightBlue
         label.text = Strings.HistoryBackButtonTitle
         return label
     }()
 
     lazy var chevron: ChevronView = {
         let chevron = ChevronView(direction: .left)
-        chevron.tintColor = UIColor.theme.general.highlightBlue
         chevron.lineWidth = HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronLineWidth
         return chevron
     }()
 
-    lazy var topBorder: UIView = self.createBorderView()
-    lazy var bottomBorder: UIView = self.createBorderView()
+    let topBorder = UIView()
+    let bottomBorder = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,8 +34,6 @@ class HistoryBackButton: UIButton {
         addSubview(topBorder)
         addSubview(chevron)
         addSubview(title)
-
-        backgroundColor = UIColor.Photon.White100
 
         chevron.snp.makeConstraints { make in
             make.leading.equalTo(self.safeArea.leading).offset(HistoryBackButtonUX.HistoryHistoryBackButtonHeaderChevronInset)
@@ -56,15 +52,18 @@ class HistoryBackButton: UIButton {
             make.top.equalTo(self).offset(-0.5)
             make.height.equalTo(0.5)
         }
-    }
 
-    fileprivate func createBorderView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        return view
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme() {
+        title.textColor = UIColor.theme.general.highlightBlue
+        chevron.tintColor = UIColor.theme.general.highlightBlue
+        backgroundColor = UIColor.theme.tableView.headerBackground
+        [topBorder, bottomBorder].forEach { $0.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder }
     }
 }

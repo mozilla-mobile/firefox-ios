@@ -8,5 +8,5 @@ public struct SyncConstants {
     // Suitable for use in dispatch_time().
     public static let SyncDelayTriggered: Int = 3000
     public static let SyncOnForegroundMinimumDelayMillis: UInt64 = 5 * 60 * 1000
-    public static let SyncOnForegroundAfterMillis: Int64 = 5000
+    public static let SyncOnForegroundAfterMillis: Int64 = 10000
 }

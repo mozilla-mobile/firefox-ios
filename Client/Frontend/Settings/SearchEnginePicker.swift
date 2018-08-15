@@ -4,7 +4,7 @@
 
 import UIKit
 
-class SearchEnginePicker: UITableViewController {
+class SearchEnginePicker: ThemedTableViewController {
     weak var delegate: SearchEnginePickerDelegate?
     var engines: [OpenSearchEngine]!
     var selectedSearchEngineName: String?
@@ -22,7 +22,7 @@ class SearchEnginePicker: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let engine = engines[indexPath.item]
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        let cell = ThemedTableViewCell()
         cell.textLabel?.text = engine.shortName
         cell.imageView?.image = engine.image.createScaled(CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize))
         if engine.shortName == selectedSearchEngineName {

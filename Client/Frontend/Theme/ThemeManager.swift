@@ -3,16 +3,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import Foundation
 
-fileprivate let prefKeyAutomaticSwitchIsOn = "prefKeyAutomaticSwitchOnOff"
-fileprivate let prefKeyAutomaticSliderValue = "prefKeyAutomaticSliderValue"
-fileprivate let prefKeyThemeName = "prefKeyThemeName"
+enum ThemeManagerPrefs: String {
+    case automaticSwitchIsOn = "prefKeyAutomaticSwitchOnOff"
+    case automaticSliderValue = "prefKeyAutomaticSliderValue"
+    case themeName = "prefKeyThemeName"
+}
 
 class ThemeManager {
     static let instance = ThemeManager()
 
-    var current: Theme = themeFrom(name: UserDefaults.standard.string(forKey: prefKeyThemeName)) {
+    var current: Theme = themeFrom(name: UserDefaults.standard.string(forKey: ThemeManagerPrefs.themeName.rawValue)) {
         didSet {
-            UserDefaults.standard.set(current.name, forKey: prefKeyThemeName)
+            UserDefaults.standard.set(current.name, forKey: ThemeManagerPrefs.themeName.rawValue)
             NotificationCenter.default.post(name: .DisplayThemeChanged, object: nil)
         }
     }
@@ -21,15 +23,15 @@ class ThemeManager {
         return BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
     }
 
-    var automaticBrightnessValue: Float = UserDefaults.standard.float(forKey: prefKeyAutomaticSliderValue) {
+    var automaticBrightnessValue: Float = UserDefaults.standard.float(forKey: ThemeManagerPrefs.automaticSliderValue.rawValue) {
         didSet {
-            UserDefaults.standard.set(automaticBrightnessValue, forKey: prefKeyAutomaticSliderValue)
+            UserDefaults.standard.set(automaticBrightnessValue, forKey: ThemeManagerPrefs.automaticSliderValue.rawValue)
         }
     }
 
-    var automaticBrightnessIsOn: Bool = UserDefaults.standard.bool(forKey: prefKeyAutomaticSwitchIsOn) {
+    var automaticBrightnessIsOn: Bool = UserDefaults.standard.bool(forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue) {
         didSet {
-            UserDefaults.standard.set(automaticBrightnessIsOn, forKey: prefKeyAutomaticSwitchIsOn)
+            UserDefaults.standard.set(automaticBrightnessIsOn, forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue)
         }
     }
 
@@ -45,14 +47,14 @@ class ThemeManager {
     }
 
     func updateCurrentThemeBasedOnScreenBrightness() {
-        let prefValue = UserDefaults.standard.float(forKey: prefKeyAutomaticSliderValue)
+        let prefValue = UserDefaults.standard.float(forKey: ThemeManagerPrefs.automaticSliderValue.rawValue)
 
         let screenLessThanPref = Float(UIScreen.main.brightness) < prefValue
 
-        if screenLessThanPref, self.currentName == .dark {
-            self.current = NormalTheme()
-        } else if !screenLessThanPref, self.currentName == .normal {
+        if screenLessThanPref, self.currentName == .normal {
             self.current = DarkTheme()
+        } else if !screenLessThanPref, self.currentName == .dark {
+            self.current = NormalTheme()
         }
     }
 

@@ -9,17 +9,13 @@ import Shared
 
 /// Delegate for the text field events. Since AutocompleteTextField owns the UITextFieldDelegate,
 /// callers must use this instead.
-protocol AutocompleteTextFieldDelegate: class {
+protocol AutocompleteTextFieldDelegate: AnyObject {
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String)
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField)
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField)
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField)
-}
-
-private struct AutocompleteTextFieldUX {
-       static let HighlightColor = UIColor.Defaults.iOSTextHighlightBlue
 }
 
 class AutocompleteTextField: UITextField, UITextFieldDelegate {
@@ -29,6 +25,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // This makes sure that the autocomplete doesnt mess with keyboard suggestions provided by third party keyboards.
     private var autocompleteTextLabel: UILabel?
     private var hideCursor: Bool = false
+
+    private let copyShortcutKey = "c"
 
     var isSelectionActive: Bool {
         return autocompleteTextLabel != nil
@@ -43,7 +41,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
-    var highlightColor = AutocompleteTextFieldUX.HighlightColor
+    var textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight
 
     override var text: String? {
         didSet {
@@ -86,6 +84,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
             UIKeyCommand(input: UIKeyInputEscape, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(input: copyShortcutKey, modifierFlags: .command, action: #selector(self.handleKeyCommand(sender:)))
         ]
     }
 
@@ -133,6 +132,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         case UIKeyInputEscape:
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-cancel"])
             autocompleteDelegate?.autocompleteTextFieldDidCancel(self)
+        case copyShortcutKey:
+            if isSelectionActive {
+                UIPasteboard.general.string = self.autocompleteTextLabel?.text
+            } else {
+                if let selectedTextRange = self.selectedTextRange {
+                    UIPasteboard.general.string = self.text(in: selectedTextRange)
+                }
+            }
         default:
             break
         }
@@ -189,9 +196,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             return
         }
 
-        let suggestionText = suggestion.substring(from: suggestion.index(suggestion.startIndex, offsetBy: normalized.count))
+        let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
-        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: highlightColor, range: NSRange(location: 0, length: suggestionText.count))
+        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: textSelectionColor, range: NSRange(location: 0, length: suggestionText.count))
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
         autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
         if let l = autocompleteTextLabel {

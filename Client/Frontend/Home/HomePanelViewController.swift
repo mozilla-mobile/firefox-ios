@@ -14,7 +14,7 @@ private struct HomePanelViewControllerUX {
     static let ButtonSelectionAnimationDuration = 0.2
 }
 
-protocol HomePanelViewControllerDelegate: class {
+protocol HomePanelViewControllerDelegate: AnyObject {
     func homePanelViewController(_ homePanelViewController: HomePanelViewController, didSelectURL url: URL, visitType: VisitType)
     func homePanelViewController(_ HomePanelViewController: HomePanelViewController, didSelectPanel panel: Int)
     func homePanelViewControllerDidRequestToSignIn(_ homePanelViewController: HomePanelViewController)
@@ -22,15 +22,15 @@ protocol HomePanelViewControllerDelegate: class {
     func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
 }
 
-protocol HomePanel: class {
-    weak var homePanelDelegate: HomePanelDelegate? { get set }
+protocol HomePanel: AnyObject, Themeable {
+    var homePanelDelegate: HomePanelDelegate? { get set }
 }
 
 struct HomePanelUX {
     static let EmptyTabContentOffset = -180
 }
 
-protocol HomePanelDelegate: class {
+protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToSignIn(_ homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(_ homePanel: HomePanel)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
@@ -291,6 +291,19 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 // MARK: UIAppearance
 extension HomePanelViewController: Themeable {
     func applyTheme() {
+        func apply(_ vc: UIViewController) -> Bool {
+            guard let vc = vc as? Themeable else { return false }
+            vc.applyTheme()
+            return true
+        }
+
+        childViewControllers.forEach {
+            if !apply($0) {
+                // BookmarksPanel is nested in a UINavigationController, go one layer deeper
+                $0.childViewControllers.forEach { _ = apply($0) }
+            }
+        }
+
         buttonContainerView.backgroundColor = UIColor.theme.homePanel.toolbarBackground
         view.backgroundColor = UIColor.theme.homePanel.toolbarBackground
         buttonTintColor = UIColor.theme.homePanel.toolbarTint

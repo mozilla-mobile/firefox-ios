@@ -10,6 +10,15 @@ import Deferred
 fileprivate let log = Logger.syncLogger
 
 extension SQLiteHistory: HistoryRecommendations {
+    // These numbers will likely need additional tweaking in the future.
+    // They are currently based on a best-guess as to where performance
+    // starts to suffer in a large browser.db. A database with 200,001
+    // unique history items with 20 visits each produces a 340MB file.
+    // We limit the number of history items to prune at once to 5,000
+    // rows to ensure the pruning completes in a timely manner.
+    static let MaxHistoryRowCount: UInt = 200000
+    static let PruneHistoryRowCount: UInt = 5000
+
     // Bookmarks Query
     static let removeMultipleDomainsSubquery = """
         INNER JOIN (SELECT view_history_visits.domain_id AS domain_id
@@ -171,15 +180,64 @@ extension SQLiteHistory: HistoryRecommendations {
         return [(clearHighlightsQuery, nil), (sql, args)]
     }
 
+    // Checks if there are more than the specified number of rows in the
+    // `history` table. This is used as an indicator that `cleanupOldHistory()`
+    // needs to run.
+    func checkIfCleanupIsNeeded(maxHistoryRows: UInt) -> Deferred<Maybe<Bool>> {
+        let sql = "SELECT COUNT(rowid) > \(maxHistoryRows) AS cleanup FROM \(TableHistory)"
+        return self.db.runQuery(sql, args: nil, factory: IntFactory) >>== { cursor in
+            guard let cleanup = cursor[0], cleanup > 0 else {
+                return deferMaybe(false)
+            }
+
+            return deferMaybe(true)
+        }
+    }
+
+    // Deletes the specified number of items from the `history` table and
+    // their corresponding items in the `visits` table. This only gets run
+    // when the `checkIfCleanupIsNeeded()` method returns `true`. It is possible
+    // that a single clean-up operation may not remove enough rows to drop below
+    // the threshold used in `checkIfCleanupIsNeeded()` and therefore, this may
+    // end up running several times until that threshold is crossed.
+    func cleanupOldHistory(numberOfRowsToPrune: UInt) -> [(String, Args?)] {
+        let sql = """
+            DELETE FROM \(TableHistory) WHERE id IN (
+                SELECT siteID
+                FROM \(TableVisits)
+                GROUP BY siteID
+                ORDER BY max(date) ASC
+                LIMIT \(numberOfRowsToPrune)
+            )
+            """
+        return [(sql, nil)]
+    }
+
     public func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success {
         var queries: [(String, Args?)] = []
-        if shouldInvalidateTopSites {
-            queries.append(contentsOf: self.refreshTopSitesQuery())
+
+        func runQueries() -> Success {
+            if shouldInvalidateTopSites {
+                queries.append(contentsOf: self.refreshTopSitesQuery())
+            }
+            if shouldInvalidateHighlights {
+                queries.append(contentsOf: self.repopulateHighlightsQuery())
+            }
+
+            return self.db.run(queries)
         }
-        if shouldInvalidateHighlights {
-            queries.append(contentsOf: self.repopulateHighlightsQuery())
+
+        // Only check for and perform cleanup operation if we're already invalidating a cache.
+        if shouldInvalidateTopSites || shouldInvalidateHighlights {
+            return checkIfCleanupIsNeeded(maxHistoryRows: SQLiteHistory.MaxHistoryRowCount) >>== { doCleanup in
+                if doCleanup {
+                    queries.append(contentsOf: self.cleanupOldHistory(numberOfRowsToPrune: SQLiteHistory.PruneHistoryRowCount))
+                }
+                return runQueries()
+            }
+        } else {
+            return runQueries()
         }
-        return self.db.run(queries)
     }
 
     public func getRecentBookmarks(_ limit: Int = 3) -> Deferred<Maybe<Cursor<Site>>> {

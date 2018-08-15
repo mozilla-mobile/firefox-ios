@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-protocol HistoryStateHelperDelegate: class {
+protocol HistoryStateHelperDelegate: AnyObject {
     func historyStateHelper(_ historyStateHelper: HistoryStateHelper, didPushOrReplaceStateInTab tab: Tab)
 }
 

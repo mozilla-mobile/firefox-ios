@@ -295,6 +295,8 @@ private class SQLiteDBStatement {
             // Doubles also pass obj as Int, so order is important here.
             if obj is Double {
                 status = sqlite3_bind_double(pointer, Int32(index+1), obj as! Double)
+            } else if obj is Int64 {
+                status = sqlite3_bind_int64(pointer, Int32(index+1), Int64(obj as! Int64))
             } else if obj is Int {
                 status = sqlite3_bind_int(pointer, Int32(index+1), Int32(obj as! Int))
             } else if obj is Bool {
@@ -337,7 +339,7 @@ private class SQLiteDBStatement {
 }
 
 public protocol SQLiteDBConnection {
-    var lastInsertedRowID: Int { get }
+    var lastInsertedRowID: Int64 { get }
     var numberOfRowsModified: Int { get }
     var version: Int { get }
 
@@ -359,7 +361,7 @@ public protocol SQLiteDBConnection {
 
 // Represents a failure to open.
 class FailedSQLiteDBConnection: SQLiteDBConnection {
-    var lastInsertedRowID: Int = 0
+    var lastInsertedRowID: Int64 = 0
     var numberOfRowsModified: Int = 0
     var version: Int = 0
 
@@ -400,8 +402,8 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
 }
 
 open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
-    open var lastInsertedRowID: Int {
-        return Int(sqlite3_last_insert_rowid(sqliteDB))
+    open var lastInsertedRowID: Int64 {
+        return Int64(sqlite3_last_insert_rowid(sqliteDB))
     }
 
     open var numberOfRowsModified: Int {
@@ -422,6 +424,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     fileprivate let files: FileAccessor
 
     fileprivate let debug_enabled = false
+
+    private var didAttemptToMoveToBackup = false
 
     init?(filename: String, flags: Int32, key: String? = nil, prevKey: String? = nil, schema: Schema, files: FileAccessor) {
         log.debug("Opening connection to \(filename).")
@@ -446,6 +450,11 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 do {
                     try self.prepareEncrypted(flags, key: key, prevKey: prevKey)
                 } catch {
+                    if !didAttemptToMoveToBackup {
+                        self.moveDatabaseFileToBackupLocation()
+                        return doOpen()
+                    }
+
                     return false
                 }
             }
@@ -842,6 +851,8 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     }
 
     fileprivate func moveDatabaseFileToBackupLocation() {
+        didAttemptToMoveToBackup = true
+
         let baseFilename = URL(fileURLWithPath: filename).lastPathComponent
 
         // Attempt to make a backup as long as the database file still exists.

@@ -6,16 +6,15 @@ import Foundation
 import Shared
 import Storage
 
-@objc protocol TabSelectionDelegate: class {
+@objc protocol TabSelectionDelegate: AnyObject {
     func didSelectTabAtIndex(_ index: Int)
 }
 
-protocol TopTabCellDelegate: class {
+protocol TopTabCellDelegate: AnyObject {
     func tabCellDidClose(_ cell: UICollectionViewCell)
 }
 
-
-protocol TabDisplayer: class {
+protocol TabDisplayer: AnyObject {
     typealias TabCellIdentifer = String
     var tabCellIdentifer: TabCellIdentifer { get set }
 
@@ -27,12 +26,15 @@ class TabDisplayManager: NSObject {
 
     fileprivate let tabManager: TabManager
     var isPrivate = false
-    fileprivate var isDragging = false
+    var isDragging = false
     fileprivate let collectionView: UICollectionView
     typealias CompletionBlock = () -> Void
 
     private var tabObservers: TabObservers!
     fileprivate weak var tabDisplayer: TabDisplayer?
+
+    var searchedTabs: [Tab] = []
+    var searchActive: Bool = false
 
     var tabStore: [Tab] = [] //the actual datastore
     fileprivate var pendingUpdatesToTabs: [Tab] = [] //the datastore we are transitioning to
@@ -48,6 +50,10 @@ class TabDisplayManager: NSObject {
     }
 
     private var tabsToDisplay: [Tab] {
+        if searchActive {
+            // tabs can be deleted while a search is active. Make sure the tab still exists in the tabmanager before displaying
+            return searchedTabs.filter({ tabManager.tabs.contains($0) })
+        }
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
 
@@ -237,8 +243,6 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
 }
-
-
 
 extension TabDisplayManager: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
@@ -467,7 +471,6 @@ extension TabDisplayManager: TabManagerDelegate {
         }
     }
 
-
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         if isRestoring {
             return
@@ -478,7 +481,6 @@ extension TabDisplayManager: TabManagerDelegate {
             self.needReloads.append(selected)
             self.needReloads.append(previous)
             performTabUpdates()
-            // delegate?.topTabsDidChangeTab()
         }
     }
 

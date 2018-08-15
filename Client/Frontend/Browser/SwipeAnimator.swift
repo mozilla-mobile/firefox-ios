@@ -22,7 +22,7 @@ private let DefaultParameters =
         minExitVelocity: 800,
         recenterAnimationDuration: 0.15)
 
-protocol SwipeAnimatorDelegate: class {
+protocol SwipeAnimatorDelegate: AnyObject {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView)
 }
 
@@ -148,7 +148,7 @@ extension SwipeAnimator {
 
 extension SwipeAnimator: UIGestureRecognizerDelegate {
     @objc func gestureRecognizerShouldBegin(_ recognizer: UIGestureRecognizer) -> Bool {
-        let cellView = recognizer.view as UIView!
+        let cellView = recognizer.view
         let panGesture = recognizer as! UIPanGestureRecognizer
         let translation = panGesture.translation(in: cellView?.superview)
         return fabs(translation.x) > fabs(translation.y)

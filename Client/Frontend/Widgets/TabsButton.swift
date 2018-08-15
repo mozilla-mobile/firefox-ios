@@ -7,19 +7,12 @@ import SnapKit
 import Shared
 
 private struct TabsButtonUX {
-    static let TitleColor: UIColor = UIColor.Photon.Grey80
-    static let TitleBackgroundColor: UIColor = UIColor.Photon.White100
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 3
 }
 
 class TabsButton: UIButton {
-    var privateModeBadge = UIImageView.init(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
-
-    let privateModeBadgeSize = CGFloat(16)
-    let privateModeBadgeOffset = CGFloat(10)
-
     var textColor = UIColor.clear {
         didSet {
             countLabel.textColor = textColor
@@ -90,8 +83,6 @@ class TabsButton: UIButton {
         insideButton.addSubview(borderView)
         insideButton.addSubview(countLabel)
         addSubview(insideButton)
-        addSubview(privateModeBadge)
-        privateModeBadge.isHidden = true
         isAccessibilityElement = true
         accessibilityTraits |= UIAccessibilityTraitButton
     }
@@ -110,12 +101,6 @@ class TabsButton: UIButton {
         insideButton.snp.remakeConstraints { (make) -> Void in
             make.size.equalTo(24)
             make.center.equalTo(self)
-        }
-
-        privateModeBadge.snp.remakeConstraints { make in
-            make.size.equalTo(privateModeBadgeSize)
-            make.centerX.equalToSuperview().offset(privateModeBadgeOffset)
-            make.centerY.equalToSuperview().offset(-privateModeBadgeOffset)
         }
     }
 
@@ -218,7 +203,7 @@ class TabsButton: UIButton {
     }
 }
 
-extension TabsButton: Themeable, PrivateModeUI {
+extension TabsButton: Themeable {
     func applyTheme() {
         if UIDevice.current.userInterfaceIdiom == .pad {
             titleBackgroundColor = UIColor.theme.topTabs.background
@@ -227,10 +212,6 @@ extension TabsButton: Themeable, PrivateModeUI {
             titleBackgroundColor = UIColor.theme.browser.background
             textColor = UIColor.theme.browser.tint
         }
-    }
-
-    func applyUIMode(isPrivate: Bool) {
-        privateModeBadge.isHidden = !isPrivate
     }
 }
 

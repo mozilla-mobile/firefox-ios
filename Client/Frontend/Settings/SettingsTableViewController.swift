@@ -15,8 +15,13 @@ extension UILabel {
     // iOS bug: NSAttributed string color is ignored without setting font/color to nil
     func assign(attributed: NSAttributedString?) {
         guard let attributed = attributed else { return }
-        textColor = nil
-        font = nil
+        let attribs = attributed.attributes(at: 0, effectiveRange: nil)
+        if attribs[NSAttributedStringKey.foregroundColor] == nil {
+            // If the text color attribute isn't set, use the table view row text color.
+            textColor = UIColor.theme.tableView.rowText
+        } else {
+            textColor = nil
+        }
         attributedText = attributed
     }
 }
@@ -175,7 +180,7 @@ class BoolSetting: Setting {
     convenience init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
-            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerText])
+            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerTextLight])
         }
         self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
@@ -291,7 +296,12 @@ class StringSetting: Setting, UITextFieldDelegate {
         if let id = accessibilityIdentifier {
             textField.accessibilityIdentifier = id + "TextField"
         }
-        textField.placeholder = placeholder
+        if let placeholderColor = UIColor.theme.general.settingsTextPlaceholder {
+            textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedStringKey.foregroundColor: placeholderColor])
+        } else {
+            textField.placeholder = placeholder
+        }
+
         textField.textAlignment = .center
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -474,7 +484,7 @@ class WithoutAccountSetting: AccountSetting {
 }
 
 @objc
-protocol SettingsDelegate: class {
+protocol SettingsDelegate: AnyObject {
     func settingsOpenURLInNewTab(_ url: URL)
 }
 
@@ -522,6 +532,11 @@ class SettingsTableViewController: ThemedTableViewController {
         applyTheme()
     }
 
+    override func applyTheme() {
+        settings = generateSettings()
+        super.applyTheme()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         refresh()
@@ -564,22 +579,14 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
-            var cell: UITableViewCell!
-            if let _ = setting.status {
-                // Work around http://stackoverflow.com/a/9999821 and http://stackoverflow.com/a/25901083 by using a new cell.
-                // I could not make any setNeedsLayout solution work in the case where we disconnect and then connect a new account.
-                // Be aware that dequeing and then ignoring a cell appears to cause issues; only deque a cell if you're going to return it.
-                cell = UITableViewCell(style: setting.style, reuseIdentifier: nil)
-            } else {
-                cell = tableView.dequeueReusableCell(withIdentifier: Identifier, for: indexPath)
-            }
             setting.onConfigureCell(cell)
             cell.backgroundColor = UIColor.theme.tableView.rowBackground
             return cell
         }
-        return tableView.dequeueReusableCell(withIdentifier: Identifier, for: indexPath)
+        return cell
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -592,7 +599,10 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
+            return nil
+        }
+
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle.uppercased()
@@ -610,10 +620,10 @@ class SettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
-        guard let sectionFooter = sectionSetting.footerTitle?.string else {
-            return nil
+        guard let sectionFooter = sectionSetting.footerTitle?.string,
+            let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
+                return nil
         }
-        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
         footerView.showBottomBorder = false

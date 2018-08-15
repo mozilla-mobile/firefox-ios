@@ -47,7 +47,7 @@ class WebServer {
     }
 
     /// Convenience method to register a dynamic handler. Will be mounted at $base/$module/$resource
-    func registerHandlerForMethod(_ method: String, module: String, resource: String, handler: @escaping (_ request: GCDWebServerRequest?) -> GCDWebServerResponse!) {
+    func registerHandlerForMethod(_ method: String, module: String, resource: String, handler: @escaping (_ request: GCDWebServerRequest?) -> GCDWebServerResponse?) {
         // Prevent serving content if the requested host isn't a whitelisted local host.
         let wrappedHandler = {(request: GCDWebServerRequest?) -> GCDWebServerResponse? in
             guard let request = request, request.url.isLocal else {

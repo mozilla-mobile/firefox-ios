@@ -376,7 +376,7 @@ class MergeApplier {
  * (e.g., an in-memory monotonic counter) or locking to prevent bookmark operations from
  * racing. Later!
  */
-protocol BookmarksStorageMerger: class {
+protocol BookmarksStorageMerger: AnyObject {
     init(buffer: BookmarkBufferStorage & BufferItemSource, storage: SyncableBookmarks & LocalItemSource & MirrorItemSource)
     func merge() -> Deferred<Maybe<BookmarksMergeResult>>
 }

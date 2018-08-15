@@ -25,14 +25,10 @@ private struct BookmarksPanelUX {
     static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
     static let BookmarkFolderChevronSize: CGFloat = 20
     static let BookmarkFolderChevronLineWidth: CGFloat = 2.0
-    static let BookmarkFolderTextColor = UIColor.Photon.Grey50
-    static let BookmarkFolderBGColor = UIColor.Photon.Grey10.withAlphaComponent(0.3)
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 170
     static let SeparatorRowHeight: CGFloat = 0.5
     static let IconSize: CGFloat = 23
-    static let IconBorderColor = UIColor.Photon.Grey30
     static let IconBorderWidth: CGFloat = 0.5
 }
 
@@ -52,8 +48,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     fileprivate let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorIdentifier"
     fileprivate let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
 
-    init() {
-        super.init(nibName: nil, bundle: nil)
+    override init(profile: Profile) {
+        super.init(profile: profile)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
 
         self.tableView.register(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
@@ -131,7 +127,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.Photon.White100
 
         let logoImageView = UIImageView(image: UIImage(named: "emptyBookmarks"))
         overlayView.addSubview(logoImageView)
@@ -150,7 +145,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         welcomeLabel.text = emptyBookmarksText
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        welcomeLabel.textColor = BookmarksPanelUX.WelcomeScreenItemTextColor
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
 
@@ -159,6 +153,9 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             make.top.equalTo(logoImageView.snp.bottom).offset(BookmarksPanelUX.WelcomeScreenPadding)
             make.width.equalTo(BookmarksPanelUX.WelcomeScreenItemWidth)
         }
+
+        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
+        welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
 
         return overlayView
     }
@@ -231,7 +228,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             if let url = bookmark.favicon?.url.asURL, url.scheme == "asset" {
                 cell.imageView?.image = UIImage(named: url.host!)
             } else {
-                cell.imageView?.layer.borderColor = BookmarksPanelUX.IconBorderColor.cgColor
+                cell.imageView?.layer.borderColor = UIColor.theme.homePanel.bookmarkIconBorder.cgColor
                 cell.imageView?.layer.borderWidth = BookmarksPanelUX.IconBorderWidth
                 let bookmarkURL = URL(string: item.url)
                 cell.imageView?.setIcon(bookmark.favicon, forURL: bookmarkURL, completed: { (color, url) in
@@ -299,7 +296,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return SiteTableViewControllerUX.RowHeight
     }
 
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? BookmarkFolderTableViewHeader {
             // for some reason specifying the font in header view init is being ignored, so setting it here
             header.textLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
@@ -337,11 +334,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         case let folder as BookmarkFolder:
             log.debug("Selected \(folder.guid)")
-            let nextController = BookmarksPanel()
+            let nextController = BookmarksPanel(profile: profile)
             nextController.parentFolders = parentFolders + [source.current]
             nextController.bookmarkFolder = folder
             nextController.homePanelDelegate = self.homePanelDelegate
-            nextController.profile = self.profile
             source.modelFactory.uponQueue(.main) { maybe in
                 guard let factory = maybe.successValue else {
                     // Nothing we can do.
@@ -439,6 +435,13 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         self.tableView.endUpdates()
         self.updateEmptyPanelState()
     }
+
+    override func applyTheme() {
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
+        super.applyTheme()
+    }
 }
 
 extension BookmarksPanel: HomePanelContextMenu {
@@ -490,9 +493,6 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = BookmarksPanelUX.BookmarkFolderBGColor
-        textLabel?.backgroundColor = UIColor.clear
-        textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
 
         imageView?.image = UIImage(named: "bookmarkFolder")
         accessoryType = .disclosureIndicator
@@ -506,34 +506,28 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func applyTheme() {
+        super.applyTheme()
+        
+        self.backgroundColor = UIColor.theme.homePanel.bookmarkFolderBackground
+        textLabel?.backgroundColor = UIColor.clear
+        textLabel?.textColor = UIColor.theme.homePanel.bookmarkFolderText
+    }
 }
 
 fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
     var delegate: BookmarkFolderTableViewHeaderDelegate?
 
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.theme.general.highlightBlue
-        return label
-    }()
+    let titleLabel = UILabel()
+    let topBorder = UIView()
+    let bottomBorder = UIView()
 
     lazy var chevron: ChevronView = {
         let chevron = ChevronView(direction: .left)
         chevron.tintColor = UIColor.theme.general.highlightBlue
         chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
         return chevron
-    }()
-
-    lazy var topBorder: UIView = {
-        let view = UIView()
-        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        return view
-    }()
-
-    lazy var bottomBorder: UIView = {
-        let view = UIView()
-        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        return view
     }()
 
     override var textLabel: UILabel? {
@@ -576,6 +570,8 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
             make.left.right.bottom.equalTo(self)
             make.height.equalTo(0.5)
         }
+
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -584,5 +580,17 @@ fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
 
     @objc fileprivate func viewWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         delegate?.didSelectHeader()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        applyTheme()
+    }
+
+    func applyTheme() {
+        titleLabel.textColor = UIColor.theme.homePanel.bookmarkCurrentFolderText
+        topBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
+        bottomBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
+        contentView.backgroundColor = UIColor.theme.homePanel.bookmarkBackNavCellBackground
     }
 }

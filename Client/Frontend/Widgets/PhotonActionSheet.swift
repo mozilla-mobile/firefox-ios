@@ -78,7 +78,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     private var site: Site?
     private let style: PresentationStyle
-    private var tintColor = UIColor.Photon.Grey80
+    private var tintColor = UIColor.theme.actionMenu.foreground
     private var heightConstraint: Constraint?
     var tableView = UITableView(frame: .zero, style: .grouped)
 
@@ -94,7 +94,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setTitle(Strings.CloseButtonTitle, for: .normal)
-        button.backgroundColor = UIColor.theme.browser.background
+        button.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
@@ -141,17 +141,17 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         view.addSubview(tableView)
         view.accessibilityIdentifier = "Action Sheet"
 
+        tableView.backgroundColor = .clear
+
         // In a popover the popover provides the blur background
         // Not using a background color allows the view to style correctly with the popover arrow
         if self.popoverPresentationController == nil {
-            tableView.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
-            let blurEffect = UIBlurEffect(style: .light)
+            let blurEffect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
             let blurEffectView = UIVisualEffectView(effect: blurEffect)
+            blurEffectView.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
             tableView.backgroundView = blurEffectView
-        } else {
-            tableView.backgroundColor = .clear
         }
-
+        
         let width = min(self.view.frame.size.width, PhotonActionSheetUX.MaxWidth) - (PhotonActionSheetUX.Padding * 2)
 
         if style == .bottom {
@@ -221,7 +221,13 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let maxHeight = self.view.frame.height - (style == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0)
+        var frameHeight: CGFloat
+        if #available(iOS 11.0, *) {
+            frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
+        } else {
+            frameHeight = self.view.frame.height
+        }
+        let maxHeight = frameHeight - (style == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0)
         tableView.snp.makeConstraints { make in
             heightConstraint?.deactivate()
             // The height of the menu should be no more than 85 percent of the screen
@@ -356,7 +362,7 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         titleLabel.numberOfLines = 1
-        titleLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor.Photon.Grey50
+        titleLabel.textColor = UIColor.theme.tableView.headerTextLight
         return titleLabel
     }()
 
@@ -538,7 +544,6 @@ private class PhotonActionSheetCell: UITableViewCell {
     private func createLabel() -> UILabel {
         let label = UILabel()
         label.minimumScaleFactor = 0.75 // Scale the font if we run out of space
-        label.textColor = PhotonActionSheetCellUX.LabelColor
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         label.adjustsFontSizeToFitWidth = true
         return label

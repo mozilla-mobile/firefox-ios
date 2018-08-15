@@ -58,7 +58,7 @@ extension BrowserViewController {
         guard let currentTab = tabManager.selectedTab else {
             return
         }
-        tabManager.removeTab(currentTab)
+        tabManager.removeTabAndUpdateSelectedIndex(currentTab)
     }
 
     @objc private func nextTabKeyCommand() {

@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 
-protocol SessionRestoreHelperDelegate: class {
+protocol SessionRestoreHelperDelegate: AnyObject {
     func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab)
 }
 

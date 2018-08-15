@@ -88,7 +88,7 @@ class SyncNowSetting: WithAccountSetting {
         return NSAttributedString(
             string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
             attributes: [
-                NSAttributedStringKey.foregroundColor: self.enabled ? UIColor.theme.tableView.syncText : UIColor.theme.tableView.headerText,
+                NSAttributedStringKey.foregroundColor: self.enabled ? UIColor.theme.tableView.syncText : UIColor.theme.tableView.headerTextLight,
                 NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFont
             ]
         )
@@ -150,7 +150,7 @@ class SyncNowSetting: WithAccountSetting {
 
         let formattedLabel = timestampFormatter.string(from: Date.fromTimestamp(timestamp))
         let attributedString = NSMutableAttributedString(string: formattedLabel)
-        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerText, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)]
+        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerTextLight, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)]
         let range = NSRange(location: 0, length: attributedString.length)
         attributedString.setAttributes(attributes, range: range)
         return attributedString
@@ -668,7 +668,7 @@ class SendFeedbackSetting: Setting {
 class SendAnonymousUsageDataSetting: BoolSetting {
     init(prefs: Prefs, delegate: SettingsDelegate?) {
         let statusText = NSMutableAttributedString()
-        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerText]))
+        statusText.append(NSAttributedString(string: Strings.SendUsageSettingMessage, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerTextLight]))
         statusText.append(NSAttributedString(string: " "))
         statusText.append(NSAttributedString(string: Strings.SendUsageSettingLink, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.general.highlightBlue]))
 
@@ -892,7 +892,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        return NSAttributedString(string: "禁用后使用全球服务同步数据", attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerText])
+        return NSAttributedString(string: "禁用后使用全球服务同步数据", attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerTextLight])
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -900,7 +900,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
         let control = UISwitch()
         control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-        control.isOn = prefs.boolForKey(prefKey) ?? self.profile.isChinaEdition
+        control.isOn = prefs.boolForKey(prefKey) ?? BrowserProfile.isChinaEdition
         cell.accessoryView = control
         cell.selectionStyle = .none
     }
@@ -945,7 +945,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
             configurationURL = StageFirefoxAccountConfiguration().authEndpointURL
         }
 
-        return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerText])
+        return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerTextLight])
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {

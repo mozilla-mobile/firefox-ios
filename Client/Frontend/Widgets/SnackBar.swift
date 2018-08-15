@@ -37,6 +37,7 @@ class SnackButton: UIButton {
         } else {
             titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         }
+        titleLabel?.adjustsFontForContentSizeCategory = false
         setTitle(title, for: .normal)
         setTitleColor(UIColor.theme.snackbar.highlightText, for: .highlighted)
         setTitleColor(UIColor.theme.snackbar.title, for: .normal)
@@ -84,7 +85,7 @@ class SnackBar: UIView {
         label.lineBreakMode = .byWordWrapping
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.numberOfLines = 0
-        label.textColor = UIColor.theme.tableView.rowText
+        label.textColor = UIColor.Photon.Grey90 // If making themeable, change to UIColor.theme.tableView.rowText
         label.backgroundColor = UIColor.clear
         return label
     }()
@@ -140,9 +141,9 @@ class SnackBar: UIView {
 
         titleView.snp.makeConstraints { make in
             make.top.equalTo(self).offset(UIConstants.DefaultPadding)
-            make.height.equalTo(UIConstants.SnackbarButtonHeight - 2 * UIConstants.DefaultPadding)
+            make.height.greaterThanOrEqualTo(UIConstants.SnackbarButtonHeight - 2 * UIConstants.DefaultPadding)
             make.centerX.equalTo(self).priority(500)
-            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 6).priority(1000)
+            make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 2).priority(1000)
         }
 
         backgroundColor = UIColor.clear
@@ -225,7 +226,7 @@ class TimerSnackBar: SnackBar {
         let bar = TimerSnackBar(text: Strings.ExternalLinkAppStoreConfirmationTitle, img: UIImage(named: "defaultFavicon"))
         let openAppStore = SnackButton(title: Strings.AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore", bold: true) { bar in
             tab.removeSnackbar(bar)
-            UIApplication.shared.openURL(appStoreURL)
+            UIApplication.shared.open(appStoreURL, options: [:])
         }
         let cancelButton = SnackButton(title: Strings.NotNowString, accessibilityIdentifier: "CancelOpenInAppStore", bold: false) { bar in
             tab.removeSnackbar(bar)

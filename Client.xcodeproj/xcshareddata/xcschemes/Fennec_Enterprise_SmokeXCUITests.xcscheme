@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0820"
+   LastUpgradeVersion = "0940"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -200,9 +200,6 @@
                   Identifier = "ActivityStreamTest/testContextMenuInLandscape()">
                </Test>
                <Test
-                  Identifier = "ActivityStreamTest/testDefaultSites()">
-               </Test>
-               <Test
                   Identifier = "ActivityStreamTest/testOpenTopSitesFromContextMenu()">
                </Test>
                <Test
@@ -314,7 +311,28 @@
                   Identifier = "DragAndDropTests">
                </Test>
                <Test
-                  Identifier = "FindInPageTests">
+                  Identifier = "FindInPageTests/testBarDissapearsWhenOpeningTabsTray()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testBarDissapearsWhenReloading()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindFromSelection()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindInLargeDoc()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindInPageResultsPageShowHideContent()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindInPageTwoWordsSearch()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindInPageTwoWordsSearchLargeDoc()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testQueryWithNoMatches()">
                </Test>
                <Test
                   Identifier = "FirstRunTourTests/testShowTourFromSettings()">
@@ -509,7 +527,25 @@
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
-                  Identifier = "SyncUITests">
+                  Identifier = "SyncUITests/testCreateAnAccountLink()">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testPlaceholderValues()">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testShowPassword()">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testSyncUIFromBrowserTabMenu()">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testTypeOnGivenFields()">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testUIFromSettings()">
+               </Test>
+               <Test
+                  Identifier = "TabTraySearchTabsTests">
                </Test>
                <Test
                   Identifier = "ThirdPartySearchTest">

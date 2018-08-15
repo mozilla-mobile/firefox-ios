@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0820"
+   LastUpgradeVersion = "0940"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -194,6 +194,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "ActivityStreamTest/testDefaultSites()">
+               </Test>
+               <Test
                   Identifier = "ActivityStreamTest/testTopSitesOpenInNewPrivateTab()">
                </Test>
                <Test
@@ -210,6 +213,9 @@
                </Test>
                <Test
                   Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
+               </Test>
+               <Test
+                  Identifier = "FindInPageTests/testFindFromMenu()">
                </Test>
                <Test
                   Identifier = "FirstRunTourTests/testFirstRunTour()">
@@ -285,6 +291,9 @@
                </Test>
                <Test
                   Identifier = "SiteLoadTest">
+               </Test>
+               <Test
+                  Identifier = "SyncUITests/testAccountManagmentPage()">
                </Test>
                <Test
                   Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingLandscape()">

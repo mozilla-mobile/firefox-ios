@@ -29,14 +29,15 @@ public extension URL {
         let toStart = urlString.index(urlString.startIndex, offsetBy: "mailto:".count)
         let toEnd = urlString.index(of: "?") ?? urlString.endIndex
 
-        let to = urlString.substring(with: toStart..<toEnd)
+        let to = String(urlString[toStart..<toEnd])
 
         guard toEnd != urlString.endIndex else {
             return MailToMetadata(to: to, headers: [String: String]())
         }
 
         // Extract headers
-        let headersString = urlString.substring(with: urlString.index(toEnd, offsetBy: 1)..<urlString.endIndex)
+
+        let headersString = String(urlString[urlString.index(toEnd, offsetBy: 1)..<urlString.endIndex])
         var headers = [String: String]()
         let headerComponents = headersString.components(separatedBy: "&")
 

@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Storage
 
-protocol LoginTableViewCellDelegate: class {
+protocol LoginTableViewCellDelegate: AnyObject {
     func didSelectOpenAndFillForCell(_ cell: LoginTableViewCell)
     func shouldReturnAfterEditingDescription(_ cell: LoginTableViewCell) -> Bool
     func infoItemForCell(_ cell: LoginTableViewCell) -> InfoItem?
@@ -15,7 +15,7 @@ protocol LoginTableViewCellDelegate: class {
 private struct LoginTableViewCellUX {
     static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
     static let highlightedLabelTextColor = UIConstants.SystemBlueColor
-    static let highlightedLabelEditingTextColor = UIColor.theme.tableView.headerText
+    static let highlightedLabelEditingTextColor = UIColor.theme.tableView.headerTextLight
 
     static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
     static let descriptionLabelTextColor = UIColor.black

@@ -5,6 +5,8 @@
 import XCTest
 
 private let testingURL = "example.com"
+private let userName = "iosmztest"
+private let userPassword = "test15mz"
 
 class IntegrationTests: BaseTestCase {
 
@@ -87,5 +89,30 @@ class IntegrationTests: BaseTestCase {
         app.buttons["Settings"].tap()
         app.tables.cells.element(boundBy: 1).tap()
         waitforExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
+    }
+
+    func testFxASyncLogins () {
+        navigator.openURL("gmail.com")
+        waitUntilPageLoad()
+
+        // Log in in order to save it
+        waitforExistence(app.webViews.textFields["Email or phone"])
+        app.webViews.textFields["Email or phone"].tap()
+        app.webViews.textFields["Email or phone"].typeText(userName)
+        app.webViews.buttons["Next"].tap()
+        waitforExistence(app.webViews.secureTextFields["Password"])
+        app.webViews.secureTextFields["Password"].tap()
+        app.webViews.secureTextFields["Password"].typeText(userPassword)
+
+        app.webViews.buttons["Sign in"].tap()
+
+        // Save the login
+        waitforExistence(app.buttons["SaveLoginPrompt.saveLoginButton"])
+        app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
+
+        // Sign in with FxAccount
+        signInFxAccounts()
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
     }
 }

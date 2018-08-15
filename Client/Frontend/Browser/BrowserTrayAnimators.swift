@@ -27,12 +27,16 @@ private extension TrayToBrowserAnimator {
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let expandFromIndex = displayedTabs.index(of: selectedTab) else { return }
 
+        //Disable toolbar until animation completes
+        tabTray.toolbar.isUserInteractionEnabled = false
+
         bvc.view.frame = transitionContext.finalFrame(for: bvc)
 
         // Hide browser components
         bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.homePanelController?.view.isHidden = true
+
         bvc.webViewContainerBackdrop.isHidden = true
         bvc.statusBarOverlay.isHidden = false
         if let url = selectedTab.url, !url.isReaderModeURL {
@@ -80,6 +84,8 @@ private extension TrayToBrowserAnimator {
             tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
             tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             tabCollectionViewSnapshot.alpha = 0
+            tabTray.statusBarBG.alpha = 0
+            tabTray.searchBarHolder.alpha = 0
         }, completion: { finished in
             // Remove any of the views we used for the animation
             cell.removeFromSuperview()
@@ -90,6 +96,7 @@ private extension TrayToBrowserAnimator {
             bvc.webViewContainerBackdrop.isHidden = false
             bvc.homePanelController?.view.isHidden = false
             bvc.urlBar.isTransitioning = false
+            tabTray.toolbar.isUserInteractionEnabled = true
             transitionContext.completeTransition(true)
         })
     }
@@ -117,6 +124,9 @@ private extension BrowserToTrayAnimator {
         let tabManager = bvc.tabManager
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let scrollToIndex = displayedTabs.index(of: selectedTab) else { return }
+
+        //Disable toolbar until animation completes
+        tabTray.toolbar.isUserInteractionEnabled = false
 
         tabTray.view.frame = transitionContext.finalFrame(for: tabTray)
 
@@ -154,6 +164,13 @@ private extension BrowserToTrayAnimator {
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
         bvc.urlBar.isTransitioning = true
 
+        // On iPhone, fading these in produces a darkening at the top of the screen, and then
+        // it brightens back to full white as they fade in. Setting these to not fade in produces a better effect.
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            tabTray.statusBarBG.alpha = 1
+            tabTray.searchBarHolder.alpha = 1
+        }
+
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
         // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens.
         // To work around this, we dispatch the setting of collection view to hidden after the screen update is completed.
@@ -182,6 +199,8 @@ private extension BrowserToTrayAnimator {
                 bvc.footer.alpha = 0
                 tabCollectionViewSnapshot.alpha = 1
 
+                tabTray.statusBarBG.alpha = 1
+                tabTray.searchBarHolder.alpha = 1
                 tabTray.toolbar.transform = .identity
                 resetTransformsForViews([tabCollectionViewSnapshot])
             }, completion: { finished in
@@ -196,6 +215,7 @@ private extension BrowserToTrayAnimator {
 
                 resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
                 bvc.urlBar.isTransitioning = false
+                tabTray.toolbar.isUserInteractionEnabled = true
                 transitionContext.completeTransition(true)
             })
         }
@@ -283,18 +303,6 @@ private func resetTransformsForViews(_ views: [UIView?]) {
     for view in views {
         // Reset back to origin
         view?.transform = .identity
-    }
-}
-
-private func transformToolbarsToFrame(_ toolbars: [UIView?], toRect endRect: CGRect) {
-    for toolbar in toolbars {
-        // Reset back to origin
-        toolbar?.transform = .identity
-
-        // Transform from origin to where we want them to end up
-        if let toolbarFrame = toolbar?.frame {
-            toolbar?.transform = CGAffineTransformMakeRectToRect(toolbarFrame, toFrame: endRect)
-        }
     }
 }
 

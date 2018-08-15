@@ -22,6 +22,7 @@ if (path.basename(AllFramesAtDocumentEnd[0]) !== "__firefox__.js") {
 }
 
 module.exports = {
+  mode: "production",
   entry: {
     AllFramesAtDocumentStart: AllFramesAtDocumentStart,
     AllFramesAtDocumentEnd: AllFramesAtDocumentEnd,

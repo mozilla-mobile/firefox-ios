@@ -49,8 +49,8 @@ class BrowserViewController: UIViewController {
     fileprivate var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
     fileprivate var searchLoader: SearchLoader?
-    fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
-    fileprivate var findInPageBar: FindInPageBar?
+    let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
+    var findInPageBar: FindInPageBar?
 
     lazy var mailtoLinkHandler: MailtoLinkHandler = MailtoLinkHandler()
 
@@ -175,7 +175,6 @@ class BrowserViewController: UIViewController {
 
     @objc func displayThemeChanged(notification: Notification) {
         applyTheme()
-        setNeedsStatusBarAppearanceUpdate()
     }
 
     func shouldShowFooterForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -772,10 +771,9 @@ class BrowserViewController: UIViewController {
         }
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        searchController = SearchViewController(isPrivate: isPrivate)
+        searchController = SearchViewController(profile: profile, isPrivate: isPrivate)
         searchController!.searchEngines = profile.searchEngines
         searchController!.searchDelegate = self
-        searchController!.profile = self.profile
 
         searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
         searchLoader?.addListener(searchController!)
@@ -1003,6 +1001,18 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
+        popToBVC()
+        let engine = profile.searchEngines.defaultEngine
+        if let searchURL = engine.searchURLForQuery(text) {
+            openURLInNewTab(searchURL, isPrivate: isPrivate, isPrivileged: true)
+        } else {
+            // We still don't have a valid URL, so something is broken. Give up.
+            print("Error handling URL entry: \"\(text)\".")
+            assertionFailure("Couldn't generate search URL: \(text)")
+        }
+    }
+
     fileprivate func popToBVC() {
         guard let currentViewController = navigationController?.topViewController else {
                 return
@@ -1053,41 +1063,6 @@ class BrowserViewController: UIViewController {
 
         present(controller, animated: true, completion: nil)
         LeanPlumClient.shared.track(event: .userSharedWebpage)
-    }
-
-    func updateFindInPageVisibility(visible: Bool, tab: Tab? = nil) {
-        if visible {
-            if findInPageBar == nil {
-                let findInPageBar = FindInPageBar()
-                self.findInPageBar = findInPageBar
-                findInPageBar.delegate = self
-                alertStackView.addArrangedSubview(findInPageBar)
-
-                findInPageBar.snp.makeConstraints { make in
-                    make.height.equalTo(UIConstants.ToolbarHeight)
-                    make.leading.trailing.equalTo(alertStackView)
-                }
-
-                updateViewConstraints()
-
-                // We make the find-in-page bar the first responder below, causing the keyboard delegates
-                // to fire. This, in turn, will animate the Find in Page container since we use the same
-                // delegate to slide the bar up and down with the keyboard. We don't want to animate the
-                // constraints added above, however, so force a layout now to prevent these constraints
-                // from being lumped in with the keyboard animation.
-                findInPageBar.layoutIfNeeded()
-            }
-
-            self.findInPageBar?.becomeFirstResponder()
-        } else if let findInPageBar = self.findInPageBar {
-            findInPageBar.endEditing(true)
-            let tab = tab ?? tabManager.selectedTab
-            guard let webView = tab?.webView else { return }
-            webView.evaluateJavaScript("__firefox__.findDone()", completionHandler: nil)
-            findInPageBar.removeFromSuperview()
-            self.findInPageBar = nil
-            updateViewConstraints()
-        }
     }
 
     @objc fileprivate func openSettings() {
@@ -1152,6 +1127,10 @@ class BrowserViewController: UIViewController {
             // To Screenshot a tab that is hidden we must add the webView,
             // then wait enough time for the webview to render.
             view.insertSubview(webView, at: 0)
+            // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
+            // touch-screen keyboard from the background even though they shouldn't be able to.
+            webView.resignFirstResponder()
+
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
                 self.screenshotHelper.takeScreenshot(tab)
                 if webView.superview == self.view {
@@ -1601,7 +1580,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }), accessibilityIdentifier: "toolbarTabButtonLongPress.newPrivateTab")
         controller.addAction(UIAlertAction(title: Strings.CloseTabTitle, style: .destructive, handler: { _ in
             if let tab = self.tabManager.selectedTab {
-                self.tabManager.removeTab(tab)
+                self.tabManager.removeTabAndUpdateSelectedIndex(tab)
             }
         }), accessibilityIdentifier: "toolbarTabButtonLongPress.closeTab")
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "toolbarTabButtonLongPress.cancel")
@@ -1743,8 +1722,7 @@ extension BrowserViewController: TabDelegate {
     }
 
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String) {
-        openBlankNewTab(focusLocationField: false, isPrivate: tab.isPrivate)
-        submitSearchText(selection)
+        openSearchNewTab(isPrivate: tab.isPrivate, selection)
     }
 }
 
@@ -1827,7 +1805,7 @@ extension BrowserViewController: TabManagerDelegate {
             if tab.isPrivate != previous?.isPrivate {
                 applyTheme()
 
-                let ui: [PrivateModeUI?] = [toolbar, topTabsViewController]
+                let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
                 ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate) }
             }
 
@@ -1882,6 +1860,10 @@ extension BrowserViewController: TabManagerDelegate {
             }
         } else {
             urlBar.updateReaderModeState(ReaderModeState.unavailable)
+        }
+
+        if topTabsVisible {
+            topTabsDidChangeTab()
         }
 
         updateInContentHomePanel(selected?.url as URL?)
@@ -2032,7 +2014,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func webViewDidClose(_ webView: WKWebView) {
         if let tab = tabManager[webView] {
-            self.tabManager.removeTab(tab)
+            self.tabManager.removeTabAndUpdateSelectedIndex(tab)
         }
     }
 }
@@ -2725,44 +2707,12 @@ extension BrowserViewController: TabTrayDelegate {
 // MARK: Browser Chrome Theming
 extension BrowserViewController: Themeable {
     func applyTheme() {
-        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController]
+        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, homePanelController, searchController]
         ui.forEach { $0?.applyTheme() }
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
         setNeedsStatusBarAppearanceUpdate()
-    }
-}
 
-extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate {
-    func findInPage(_ findInPage: FindInPageBar, didTextChange text: String) {
-        find(text, function: "find")
-    }
-
-    func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
-        findInPageBar?.endEditing(true)
-        find(text, function: "findNext")
-    }
-
-    func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
-        findInPageBar?.endEditing(true)
-        find(text, function: "findPrevious")
-    }
-
-    func findInPageDidPressClose(_ findInPage: FindInPageBar) {
-        updateFindInPageVisibility(visible: false)
-    }
-
-    fileprivate func find(_ text: String, function: String) {
-        guard let webView = tabManager.selectedTab?.webView else { return }
-        let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
-        webView.evaluateJavaScript("__firefox__.\(function)(\"\(escaped)\")", completionHandler: nil)
-    }
-
-    func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int) {
-        findInPageBar?.currentResult = currentResult
-    }
-
-    func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int) {
-        findInPageBar?.totalResults = totalResults
+        (presentedViewController as? Themeable)?.applyTheme()
     }
 }
 

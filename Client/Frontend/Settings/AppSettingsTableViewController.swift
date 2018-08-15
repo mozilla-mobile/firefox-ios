@@ -52,7 +52,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ]
 
         let accountChinaSyncSetting: [Setting]
-        if !profile.isChinaEdition {
+        if !BrowserProfile.isChinaEdition {
             accountChinaSyncSetting = []
         } else {
             accountChinaSyncSetting = [
@@ -70,7 +70,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         statusText: Strings.SettingsOfferClipboardBarStatus)
         ]
 
-        var accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
+        let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
 
         let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
         settings += [

@@ -21,7 +21,7 @@ struct TopTabsUX {
     static let SeparatorHeight: CGFloat = 32
 }
 
-protocol TopTabsDelegate: class {
+protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab(_ isPrivate: Bool)
     func topTabsDidTogglePrivateMode()
@@ -145,7 +145,6 @@ class TopTabsViewController: UIViewController {
             make.edges.equalTo(topTabFader)
         }
 
-        view.backgroundColor = UIColor.Photon.Grey80
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
@@ -217,7 +216,7 @@ class TopTabsViewController: UIViewController {
 extension TopTabsViewController: TabDisplayer {
 
     func focusSelectedTab() {
-        self.scrollToCurrentTab(true, centerCell: true)
+        self.scrollToCurrentTab(true)
     }
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
@@ -236,7 +235,7 @@ extension TopTabsViewController: TopTabCellDelegate {
             return
         }
         if let tab = self.tabDisplayManager.tabStore[safe: index] {
-            tabManager.removeTab(tab)
+            tabManager.removeTabAndUpdateSelectedIndex(tab)
         }
 
     }
@@ -254,6 +253,8 @@ extension TopTabsViewController: Themeable, PrivateModeUI {
     func applyTheme() {
         tabsButton.applyTheme()
         newTab.tintColor = UIColor.theme.topTabs.buttonTint
+        view.backgroundColor = UIColor.theme.topTabs.background
         collectionView.backgroundColor = view.backgroundColor
+        tabDisplayManager.reloadData()
     }
 }

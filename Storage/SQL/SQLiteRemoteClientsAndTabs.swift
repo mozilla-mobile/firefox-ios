@@ -320,7 +320,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return syncCommands
     }
 
-    func insert(_ db: SQLiteDBConnection, sql: String, args: Args?) throws -> Int? {
+    func insert(_ db: SQLiteDBConnection, sql: String, args: Args?) throws -> Int64? {
         let lastID = db.lastInsertedRowID
         try db.executeChange(sql, withArgs: args)
 

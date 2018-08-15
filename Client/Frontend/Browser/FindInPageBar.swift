@@ -4,7 +4,7 @@
 
 import UIKit
 
-protocol FindInPageBarDelegate: class {
+protocol FindInPageBarDelegate: AnyObject {
     func findInPage(_ findInPage: FindInPageBar, didTextChange text: String)
     func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String)
     func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String)
@@ -75,6 +75,7 @@ class FindInPageBar: UIView {
         searchText.enablesReturnKeyAutomatically = true
         searchText.returnKeyType = .search
         searchText.accessibilityIdentifier = "FindInPage.searchField"
+        searchText.delegate = self
         addSubview(searchText)
 
         matchCountView.textColor = FindInPageUX.MatchCountColor
@@ -170,5 +171,16 @@ class FindInPageBar: UIView {
 
     @objc fileprivate func didPressClose(_ sender: UIButton) {
         delegate?.findInPageDidPressClose(self)
+    }
+}
+
+extension FindInPageBar: UITextFieldDelegate {
+    // Keyboard with a .search returnKeyType doesn't dismiss when return pressed. Handle this manually.
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if string == "\n" {
+            textField.resignFirstResponder()
+            return false
+        }
+        return true
     }
 }

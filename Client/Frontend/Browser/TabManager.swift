@@ -10,7 +10,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-protocol TabManagerDelegate: class {
+protocol TabManagerDelegate: AnyObject {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?)
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab)
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab)
@@ -22,7 +22,7 @@ protocol TabManagerDelegate: class {
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?)
 }
 
-protocol TabManagerStateDelegate: class {
+protocol TabManagerStateDelegate: AnyObject {
     func tabManagerWillStoreTabs(_ tabs: [Tab])
 }
 
@@ -254,25 +254,14 @@ class TabManager: NSObject {
         return popup
     }
 
-    @discardableResult func addTab(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
+    @discardableResult func addTab(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool = false) -> Tab {
         return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
-    @discardableResult func addTabAndSelect(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool) -> Tab {
+    @discardableResult func addTabAndSelect(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool = false) -> Tab {
         let tab = addTab(request, configuration: configuration, afterTab: afterTab, isPrivate: isPrivate)
         selectTab(tab)
         return tab
-    }
-
-    @discardableResult func addTabAndSelect(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
-        let tab = addTab(request, configuration: configuration, afterTab: afterTab)
-        selectTab(tab)
-        return tab
-    }
-
-    // This method is duplicated to hide the flushToDisk option from consumers.
-    @discardableResult func addTab(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil) -> Tab {
-        return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false)
     }
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool) {
@@ -296,21 +285,13 @@ class TabManager: NSObject {
         delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
     }
 
-    fileprivate func addTab(_ request: URLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool) -> Tab {
+    fileprivate func addTab(_ request: URLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool = false) -> Tab {
         assert(Thread.isMainThread)
 
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
 
         let tab = Tab(configuration: configuration, isPrivate: isPrivate)
-        configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
-        return tab
-    }
-
-    fileprivate func addTab(_ request: URLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool) -> Tab {
-        assert(Thread.isMainThread)
-
-        let tab = Tab(configuration: configuration ?? self.configuration)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
@@ -411,10 +392,30 @@ class TabManager: NSObject {
         return false
     }
 
-    // This method is duplicated to hide the flushToDisk option from consumers.
-    func removeTab(_ tab: Tab) {
-        self.removeTab(tab, flushToDisk: true, notify: true)
+    func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
+        removeTab(tab, flushToDisk: true, notify: true)
+        updateIndexAfterRemovalOf(tab)
         hideNetworkActivitySpinner()
+    }
+
+    func updateIndexAfterRemovalOf(_ tab: Tab) {
+        let closedLastNormalTab = !tab.isPrivate && normalTabs.isEmpty
+        let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
+
+        if closedLastNormalTab {
+            addTabAndSelect()
+        } else if closedLastPrivateTab {
+            selectTab(tabs.last, previous: tab)
+        } else if !isSelectedParentTab(afterRemoving: tab) {
+            let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
+            if let tabOnTheRight = viableTabs[safe: _selectedIndex] {
+                selectTab(tabOnTheRight, previous: tab)
+            } else if let tabOnTheLeft = viableTabs[safe: _selectedIndex-1] {
+                selectTab(tabOnTheLeft, previous: tab)
+            } else {
+                selectTab(viableTabs.last, previous: tab)
+            }
+        }
     }
 
     /// - Parameter notify: if set to true, will call the delegate after the tab
@@ -427,77 +428,19 @@ class TabManager: NSObject {
             return
         }
 
-        if tab.isPrivate {
-            removeAllBrowsingDataForTab(tab)
-        }
-
-        let oldSelectedTab = selectedTab
-
         if notify {
             delegates.forEach { $0.get()?.tabManager(self, willRemoveTab: tab) }
         }
 
-        // The index of the tab in its respective tab grouping. Used to figure out which tab is next
-        var tabIndex: Int = -1
-        if let oldTab = oldSelectedTab {
-            tabIndex = (tab.isPrivate ? privateTabs.index(of: oldTab) : normalTabs.index(of: oldTab)) ?? -1
-        }
-
         let prevCount = count
         tabs.remove(at: removalIndex)
-
-        let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
-
-        // Let's select the tab to be selected next.
-        if let oldTab = oldSelectedTab, tab !== oldTab {
-            // If it wasn't the selected tab we removed, then keep it like that.
-            // It might have changed index, so we look it up again.
-            _selectedIndex = tabs.index(of: oldTab) ?? -1
-        } else if let parentTab = tab.parent,
-            let newTab = viableTabs.reduce(viableTabs.first, { currentBestTab, tab2 in
-            if let tab1 = currentBestTab, let time1 = tab1.lastExecutedTime {
-                if let time2 = tab2.lastExecutedTime {
-                    return time1 <= time2 ? tab2 : tab1
-                }
-                return tab1
-            } else {
-                return tab2
-            }
-        }), parentTab == newTab, tab !== newTab, newTab.lastExecutedTime != nil {
-            // We select the most recently visited tab, only if it is also the parent tab of the closed tab.
-            _selectedIndex = tabs.index(of: newTab) ?? -1
-        } else {
-            // By now, we've just removed the selected one, and no previously loaded
-            // tabs. So let's load the final one in the tab tray.
-            if tabIndex == viableTabs.count {
-                tabIndex -= 1
-            }
-
-            if let currentTab = viableTabs[safe: tabIndex] {
-                _selectedIndex = tabs.index(of: currentTab) ?? -1
-            } else {
-                _selectedIndex = -1
-            }
-        }
-
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")
 
-        tab.close()
+        tab.closeAndRemovePrivateBrowsingData()
 
         if notify {
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab) }
             TabEvent.post(.didClose, for: tab)
-        }
-
-        if !tab.isPrivate && viableTabs.isEmpty {
-            addTab()
-        }
-
-        // If the removed tab was selected, find the new tab to select.
-        if selectedTab != nil {
-            selectTab(selectedTab, previous: oldSelectedTab)
-        } else {
-            selectTab(tabs.last, previous: oldSelectedTab)
         }
 
         if flushToDisk {
@@ -505,31 +448,38 @@ class TabManager: NSObject {
         }
     }
 
-    /// Removes all private tabs from the manager without notifying delegates.
+    func isSelectedParentTab(afterRemoving tab: Tab) -> Bool {
+        let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
+
+        if let parentTab = tab.parent,
+            let newTab = viableTabs.reduce(viableTabs.first, { currentBestTab, tab2 in
+                if let tab1 = currentBestTab, let time1 = tab1.lastExecutedTime {
+                    if let time2 = tab2.lastExecutedTime {
+                        return time1 <= time2 ? tab2 : tab1
+                    }
+                    return tab1
+                } else {
+                    return tab2
+                }
+            }), parentTab == newTab, tab !== newTab, newTab.lastExecutedTime != nil {
+            // We select the most recently visited tab, only if it is also the parent tab of the closed tab.
+            _selectedIndex = tabs.index(of: newTab) ?? -1
+            return true
+        }
+        return false
+    }
+
     private func removeAllPrivateTabs() {
         // reset the selectedTabIndex if we are on a private tab because we will be removing it.
         if selectedTab?.isPrivate ?? false {
             _selectedIndex = -1
         }
-        tabs.forEach { tab in
-            if tab.isPrivate {
-                tab.webView?.removeFromSuperview()
-                removeAllBrowsingDataForTab(tab)
-            }
+
+        tabs.filter { $0.isPrivate }.forEach { tab in
+                tab.closeAndRemovePrivateBrowsingData()
         }
 
         tabs = tabs.filter { !$0.isPrivate }
-    }
-
-    func removeAllBrowsingDataForTab(_ tab: Tab, completionHandler: @escaping () -> Void = {}) {
-        let dataTypes = Set([WKWebsiteDataTypeCookies,
-                             WKWebsiteDataTypeLocalStorage,
-                             WKWebsiteDataTypeSessionStorage,
-                             WKWebsiteDataTypeWebSQLDatabases,
-                             WKWebsiteDataTypeIndexedDBDatabases])
-        tab.webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
-                                                               modifiedSince: Date.distantPast,
-                                                               completionHandler: completionHandler)
     }
 
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
@@ -544,7 +494,7 @@ class TabManager: NSObject {
             if let selectedIndex = tabsCopy.index(of: selectedTab) {
                 let removed = tabsCopy.remove(at: selectedIndex)
                 removeTabs(tabsCopy)
-                removeTab(removed)
+                removeTabAndUpdateSelectedIndex(removed)
             } else {
                 removeTabs(tabsCopy)
             }
@@ -585,8 +535,8 @@ class TabManager: NSObject {
         }
 
         // In non-private mode, delete all tabs will automatically create a tab
-        if !tabs[0].isPrivate {
-            removeTab(tabs[0])
+        if let tab = tabs.first, !tab.isPrivate {
+            removeTabAndUpdateSelectedIndex(tab)
         }
 
         self.isRestoring = false
@@ -871,7 +821,7 @@ extension TabManager {
         }
 
         if tabToSelect == nil {
-            tabToSelect = tabs.first
+            tabToSelect = tabs.first(where: { $0.isPrivate == false })
         }
 
         // Only tell our delegates that we restored tabs if we actually restored a tab(s)

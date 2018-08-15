@@ -8,7 +8,6 @@ import Storage
 
 private struct DownloadsPanelUX {
     static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenItemTextColor = UIColor.Photon.Grey50
     static let WelcomeScreenItemWidth = 170
 }
 
@@ -42,64 +41,9 @@ struct DownloadedFile: Equatable {
     }
 }
 
-private func getDate(dayOffset: Int) -> Date {
-    let calendar = Calendar(identifier: .gregorian)
-    let components = calendar.dateComponents([.year, .month, .day], from: Date())
-    let today = calendar.date(from: components)!
-    return calendar.date(byAdding: .day, value: dayOffset, to: today)!
-}
-
-struct DateGroupedTableData<T : Equatable> {
-    let todayTimestamp = getDate(dayOffset: 0).timeIntervalSince1970
-    let yesterdayTimestamp = getDate(dayOffset: -1).timeIntervalSince1970
-    let lastWeekTimestamp = getDate(dayOffset: -7).timeIntervalSince1970
-
-    var today: [(T, TimeInterval)] = []
-    var yesterday: [(T, TimeInterval)] = []
-    var lastWeek: [(T, TimeInterval)] = []
-    var older: [(T, TimeInterval)] = []
-
-    mutating func add(_ item: T, timestamp: TimeInterval) {
-        if timestamp > todayTimestamp {
-            today.append((item, timestamp))
-        } else if timestamp > yesterdayTimestamp {
-            yesterday.append((item, timestamp))
-        } else if timestamp > lastWeekTimestamp {
-            lastWeek.append((item, timestamp))
-        } else {
-            older.append((item, timestamp))
-        }
-    }
-
-    mutating func remove(_ item: T) {
-        if let index = today.index(where: { item == $0.0 }) {
-            today.remove(at: index)
-        } else if let index = yesterday.index(where: { item == $0.0 }) {
-            yesterday.remove(at: index)
-        } else if let index = lastWeek.index(where: { item == $0.0 }) {
-            lastWeek.remove(at: index)
-        } else if let index = older.index(where: { item == $0.0 }) {
-            older.remove(at: index)
-        }
-    }
-
-    func itemsForSection(_ section: Int) -> [T] {
-        switch section {
-        case 0:
-            return today.map({ $0.0 })
-        case 1:
-            return yesterday.map({ $0.0 })
-        case 2:
-            return lastWeek.map({ $0.0 })
-        default:
-            return older.map({ $0.0 })
-        }
-    }
-}
-
 class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
-    var profile: Profile!
+    let profile: Profile
     var tableView = UITableView()
 
     private let events: [Notification.Name] = [.FileDidDownload, .PrivateDataClearedDownloadedFiles, .DynamicFontChanged]
@@ -110,7 +54,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var fileExtensionIcons: [String : UIImage] = [:]
 
     // MARK: - Lifecycle
-    init() {
+    init(profile: Profile) {
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
     }
@@ -251,7 +196,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return icon
     }
 
-    private func roundRectImageWithLabel(_ label: String, width: CGFloat, height: CGFloat, radius: CGFloat = 5.0, strokeWidth: CGFloat = 1.0, strokeColor: UIColor = UIColor.Photon.Grey60, fontSize: CGFloat = 9.0) -> UIImage? {
+    private func roundRectImageWithLabel(_ label: String, width: CGFloat, height: CGFloat, radius: CGFloat = 5.0, strokeWidth: CGFloat = 1.0, strokeColor: UIColor = UIColor.theme.homePanel.downloadedFileIcon, fontSize: CGFloat = 9.0) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0.0)
         let context = UIGraphicsGetCurrentContext()
         context?.setStrokeColor(strokeColor.cgColor)
@@ -278,13 +223,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     // MARK: - Empty State
     private func updateEmptyPanelState() {
-        var count = 0;
-        count += groupedDownloadedFiles.today.count
-        count += groupedDownloadedFiles.yesterday.count
-        count += groupedDownloadedFiles.lastWeek.count
-        count += groupedDownloadedFiles.older.count
-
-        if count == 0 {
+        if groupedDownloadedFiles.isEmpty {
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubview(toFront: emptyStateOverlayView)
@@ -299,7 +238,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.white
+        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
 
         let logoImageView = UIImageView(image: UIImage(named: "emptyDownloads"))
         overlayView.addSubview(logoImageView)
@@ -318,7 +257,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         welcomeLabel.text = Strings.DownloadsPanelEmptyStateTitle
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        welcomeLabel.textColor = DownloadsPanelUX.WelcomeScreenItemTextColor
+        welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
         welcomeLabel.numberOfLines = 0
         welcomeLabel.adjustsFontSizeToFitWidth = true
 
@@ -343,8 +282,15 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return configureDownloadedFile(cell, for: indexPath)
     }
 
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let header = view as? UITableViewHeaderFooterView {
+            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
+            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        }
+    }
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard groupedDownloadedFiles.itemsForSection(section).count > 0 else { return nil }
+        guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return nil }
 
         switch section {
         case 0:
@@ -390,7 +336,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groupedDownloadedFiles.itemsForSection(section).count
+        return groupedDownloadedFiles.numberOfItemsForSection(section)
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -420,5 +366,15 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         })
         share.backgroundColor = view.tintColor
         return [delete, share]
+    }
+}
+
+extension DownloadsPanel: Themeable {
+    func applyTheme() {
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
+
+        tableView.reloadData()
     }
 }
