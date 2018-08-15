@@ -523,7 +523,7 @@ open class BrowserProfile: Profile {
         if prefs.boolForKey("useStageSyncService") ?? false {
             return StageFirefoxAccountConfiguration()
         }
-        return StageFirefoxAccountConfiguration()
+        return ProductionFirefoxAccountConfiguration()
     }
 
     fileprivate lazy var account: FirefoxAccount? = {
