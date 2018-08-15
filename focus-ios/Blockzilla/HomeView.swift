@@ -66,7 +66,7 @@ class HomeView: UIView {
 
         textLogo.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalTo(snp.centerY).offset(-10)
+            make.top.equalTo(snp.centerY).offset(UIConstants.layout.textLogoOffset)
         }
 
         description1.snp.makeConstraints { make in
