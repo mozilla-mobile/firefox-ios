@@ -86,7 +86,6 @@ private extension TrayToBrowserAnimator {
             tabCollectionViewSnapshot.alpha = 0
             tabTray.statusBarBG.alpha = 0
             tabTray.searchBarHolder.alpha = 0
-            tabTray.toolbar.isUserInteractionEnabled = true
         }, completion: { finished in
             // Remove any of the views we used for the animation
             cell.removeFromSuperview()
@@ -97,6 +96,7 @@ private extension TrayToBrowserAnimator {
             bvc.webViewContainerBackdrop.isHidden = false
             bvc.homePanelController?.view.isHidden = false
             bvc.urlBar.isTransitioning = false
+            tabTray.toolbar.isUserInteractionEnabled = true
             transitionContext.completeTransition(true)
         })
     }
