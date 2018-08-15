@@ -1541,7 +1541,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         var count = 1
         let infinity = "\u{221E}"
         if let selectedTab = tabManager.selectedTab {
-            count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
+            count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
         }
         let tabCount = (count < 100) ? count.description : infinity
 
