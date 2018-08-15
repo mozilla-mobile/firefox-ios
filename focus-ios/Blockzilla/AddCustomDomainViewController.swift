@@ -36,7 +36,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func setupUI() {
-        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        view.backgroundColor = UIConstants.colors.background
 
         inputLabel.text = UIConstants.strings.autocompleteAddCustomUrlLabel
         inputLabel.font = UIConstants.fonts.settingsInputLabel

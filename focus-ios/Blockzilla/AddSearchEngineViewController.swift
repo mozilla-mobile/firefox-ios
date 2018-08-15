@@ -44,7 +44,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
     
     private func setupUI() {
-        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        view.backgroundColor = UIConstants.colors.background
         
         let container = UIView()
         view.addSubview(container)

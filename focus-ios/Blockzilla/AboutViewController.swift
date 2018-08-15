@@ -11,7 +11,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.estimatedRowHeight = 44
         tableView.separatorColor = UIConstants.colors.settingsSeparator
@@ -69,7 +69,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         default: break
         }
 
-        cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        cell.backgroundColor = UIConstants.colors.background
 
         let cellBG = UIView()
         cellBG.backgroundColor = UIConstants.colors.cellSelected

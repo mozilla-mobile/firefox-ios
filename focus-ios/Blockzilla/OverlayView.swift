@@ -32,9 +32,9 @@ class OverlayView: UIView {
         searchButton.alpha = 0
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .normal)
         searchButton.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
-        searchButton.backgroundColor = UIConstants.Photon.Ink80
+        searchButton.backgroundColor = UIConstants.colors.background
         searchButton.titleLabel?.font = UIConstants.fonts.searchButton
-        searchButton.backgroundColor = UIConstants.Photon.Ink80
+        searchButton.backgroundColor = UIConstants.colors.background
         setUpOverlayButton(button: searchButton)
         searchButton.addTarget(self, action: #selector(didPressSearch), for: .touchUpInside)
         addSubview(searchButton)
@@ -60,7 +60,7 @@ class OverlayView: UIView {
         findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
         findInPageButton.addTarget(self, action: #selector(didPressFindOnPage), for: .touchUpInside)
         findInPageButton.accessibilityIdentifier = "FindInPageBar.button"
-        findInPageButton.backgroundColor = UIConstants.Photon.Ink80
+        findInPageButton.backgroundColor = UIConstants.colors.background
         if UIView.userInterfaceLayoutDirection(for: findInPageButton.semanticContentAttribute) == .rightToLeft {
             findInPageButton.contentHorizontalAlignment = .right
         } else {
@@ -77,7 +77,7 @@ class OverlayView: UIView {
         copyButton.titleLabel?.font = UIConstants.fonts.copyButton
         copyButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         copyButton.titleLabel?.lineBreakMode = .byTruncatingTail
-        copyButton.backgroundColor = UIConstants.Photon.Ink80
+        copyButton.backgroundColor = UIConstants.colors.background
         if UIView.userInterfaceLayoutDirection(for: copyButton.semanticContentAttribute) == .rightToLeft {
             copyButton.contentHorizontalAlignment = .right
         } else {

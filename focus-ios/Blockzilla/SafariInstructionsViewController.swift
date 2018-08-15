@@ -9,7 +9,7 @@ class SafariInstructionsViewController: UIViewController {
     private let disabledStateView = DisabledStateView()
 
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        view.backgroundColor = UIConstants.colors.background
 
         view.addSubview(disabledStateView)
 

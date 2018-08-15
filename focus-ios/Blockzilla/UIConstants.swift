@@ -10,7 +10,7 @@ struct UIConstants {
     static var ToolbarHeight: CGFloat = 46
 
     struct colors {
-        static let background = UIColor(rgb: 0x272727)
+        static let background = UIConstants.Photon.Ink80
         static let buttonHighlight = UIColor(rgb: 0x333333)
         static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let cellBackground = UIConstants.Photon.Ink70
@@ -41,7 +41,6 @@ struct UIConstants {
         static let navigationTitle = UIConstants.Photon.Grey10
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
         static let progressBar = UIColor(rgb: 0xC86DD7)
-        static let settingsBackgroundColor = UIConstants.Photon.Ink80
         static let settingsButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let settingsTextLabel = UIConstants.Photon.Grey10
         static let settingsDetailLabel = UIColor(rgb: 0xD8D8D8)

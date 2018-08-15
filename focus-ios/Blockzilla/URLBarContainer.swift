@@ -5,16 +5,16 @@
 import Foundation
 
 class URLBarContainer: UIView {
-    private let backgroundEditing = GradientBackgroundView(background: UIConstants.Photon.Ink80)
+    private let backgroundEditing = GradientBackgroundView(background: UIConstants.colors.background)
     private let backgroundDark = UIView()
-    private let backgroundBright = GradientBackgroundView(alpha: 0.8, background: UIConstants.Photon.Ink80)
+    private let backgroundBright = GradientBackgroundView(alpha: 0.8, background: UIConstants.colors.background)
     
     init() {
         super.init(frame: CGRect.zero)
 
         addSubview(backgroundEditing)
 
-        backgroundDark.backgroundColor = UIConstants.Photon.Ink80
+        backgroundDark.backgroundColor = UIConstants.colors.background
         backgroundDark.isHidden = true
         backgroundDark.alpha = 0
         addSubview(backgroundDark)

@@ -21,7 +21,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        view.backgroundColor = UIConstants.colors.background
         
         title = UIConstants.strings.settingsAutocompleteSection
 
@@ -32,7 +32,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        tableView.backgroundColor = UIConstants.colors.background
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorColor = UIConstants.colors.settingsSeparator
     }
@@ -54,7 +54,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         // constraints for our custom label based on the cell's label.
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
-        cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+        cell.backgroundColor = UIConstants.colors.background
 
         let label = SmartLabel()
         label.text = labelText
@@ -138,7 +138,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             cell.detailTextLabel?.numberOfLines = 0
             cell.accessibilityIdentifier = "SettingsViewController.autocompleteLearnMore"
             cell.selectionStyle = .none
-            cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+            cell.backgroundColor = UIConstants.colors.background
             cell.layoutMargins = UIEdgeInsets.zero
 
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreDefaultTapped))
@@ -156,7 +156,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             cell.detailTextLabel?.numberOfLines = 0
             cell.accessibilityIdentifier = "SettingsViewController.customAutocompleteLearnMore"
             cell.selectionStyle = .none
-            cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+            cell.backgroundColor = UIConstants.colors.background
             cell.layoutMargins = UIEdgeInsets.zero
 
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(learnMoreCustomapped))
