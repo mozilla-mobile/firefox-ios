@@ -257,6 +257,7 @@ class TabTrayController: UIViewController {
         if tabDisplayManager.isDragging {
             return
         }
+        toolbar.isUserInteractionEnabled = false
 
         let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
@@ -320,6 +321,7 @@ class TabTrayController: UIViewController {
                 toView.removeFromSuperview()
             }
             self.collectionView.alpha = 1
+            self.toolbar.isUserInteractionEnabled = true
         }
     }
 
@@ -335,6 +337,8 @@ class TabTrayController: UIViewController {
         if tabDisplayManager.isDragging {
             return
         }
+        // We dismiss the tab tray once we are done. So no need to re-enable the toolbar
+        toolbar.isUserInteractionEnabled = false
 
         self.tabManager.addTabAndSelect(request, isPrivate: tabDisplayManager.isPrivate)
         self.tabDisplayManager.performTabUpdates {
