@@ -322,7 +322,6 @@ class TabTrayController: UIViewController {
             }
             self.collectionView.alpha = 1
             self.toolbar.isUserInteractionEnabled = true
-
         }
     }
 
