@@ -932,14 +932,14 @@ extension BrowserViewController: URLBarDelegate {
         }
         var actions = [PhotonActionSheetItem]()
         if let clipboardString = UIPasteboard.general.string {
-            let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
-                urlBar.paste(clipboardString: clipboardString)
-            }
-            actions.append(pasteItem)
             let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste") { action in
                 urlBar.pasteAndGo(clipboardString: clipboardString)
             }
             actions.append(pasteAndGoItem)
+            let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
+                urlBar.paste(clipboardString: clipboardString)
+            }
+            actions.append(pasteItem)
         }
         let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyMenuButton, iconString: "icon_link") { action in
             urlBar.copyToClipboard()

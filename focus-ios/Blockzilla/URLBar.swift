@@ -364,10 +364,7 @@ class URLBar: UIView {
     @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             self.becomeFirstResponder()
-            let customURLItem = UIMenuItem(title: UIConstants.strings.customURLMenuButton, action: #selector(addCustomURL))
-            let copyItem = UIMenuItem(title: UIConstants.strings.copyMenuButton, action: #selector(copyToClipboard))
             UIMenuController.shared.setTargetRect(self.bounds, in: self)
-            UIMenuController.shared.menuItems = [copyItem, customURLItem]
             UIMenuController.shared.setMenuVisible(true, animated: true)
         }
     }
