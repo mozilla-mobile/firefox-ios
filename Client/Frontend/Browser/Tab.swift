@@ -274,7 +274,7 @@ class Tab: NSObject {
         #endif
     }
 
-    func close() {
+    func closeAndRemovePrivateBrowsingData() {
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
 
         if let webView = webView {
@@ -285,10 +285,7 @@ class Tab: NSObject {
         webView?.navigationDelegate = nil
         webView?.removeFromSuperview()
         webView = nil
-    }
 
-    func closeAndRemovePrivateBrowsingData() {
-        close()
         if isPrivate {
             removeAllBrowsingData()
         }
