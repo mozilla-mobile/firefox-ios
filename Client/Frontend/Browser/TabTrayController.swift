@@ -465,7 +465,14 @@ extension TabTrayController {
                 self.dismissTabTray()
             }
         } else {
-            self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+            emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+            if !emptyPrivateTabsView.isHidden {
+                // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
+                emptyPrivateTabsView.alpha = 0
+                UIView.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseIn, animations: {
+                    self.emptyPrivateTabsView.alpha = 1
+                }, completion: nil)
+            }
         }
     }
 
