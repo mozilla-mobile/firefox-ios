@@ -452,21 +452,14 @@ class BrowserViewController: UIViewController {
         }
 
         clearBrowser()
-        
-        UIView.animate(withDuration: UIConstants.layout.alphaToZeroDeleteAnimationDuration, animations: {
-            screenshotView.alpha = 0
-        }, completion: nil)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + UIConstants.layout.displayKeyboardDeleteAnimationDuration) {
-            self.urlBar.activateTextField()
-        }
-        
+
         UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
             screenshotView.snp.remakeConstraints { make in
                 make.centerX.equalTo(self.mainContainerView)
                 make.top.equalTo(self.mainContainerView.snp.bottom)
                 make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
             }
+            screenshotView.alpha = 0
             self.mainContainerView.layoutIfNeeded()
         }, completion: { _ in
             self.urlBar.activateTextField()
