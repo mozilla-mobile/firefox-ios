@@ -31,6 +31,7 @@ class URLBar: UIView {
     var shouldPresent = false
     fileprivate(set) var isEditing = false
     
+    private let cancelButton = InsetButton()
     fileprivate let deleteButton = InsetButton()
     fileprivate let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
@@ -54,6 +55,7 @@ class URLBar: UIView {
     private var hideLockConstraints = [Constraint]()
     private var hideSmallLockConstraints = [Constraint]()
     private var hidePageActionsConstraints = [Constraint]()
+    private var hideCancelConstraints = [Constraint]()
     private var hideToolsetConstraints = [Constraint]()
     private var showToolsetConstraints = [Constraint]()
     private var isEditingConstraints = [Constraint]()
@@ -175,6 +177,20 @@ class URLBar: UIView {
         urlText.placeholder = UIConstants.strings.urlTextPlaceholder
         textAndLockContainer.addSubview(urlText)
         
+        cancelButton.isHidden = true
+        cancelButton.alpha = 0
+        let myImage = UIImage(named: "icon_cancel")
+        cancelButton.setImage(myImage, for: .normal)
+        
+        cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        cancelButton.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
+        cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
+        cancelButton.contentEdgeInsets = UIEdgeInsets(top: UIConstants.layout.urlBarMargin,
+                                                      left: UIConstants.layout.urlBarMargin,
+                                                      bottom: UIConstants.layout.urlBarMargin,
+                                                      right: UIConstants.layout.urlBarMargin)
+        addSubview(cancelButton)
+        
         deleteButton.isHidden = true
         deleteButton.alpha = 0
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
@@ -237,7 +253,8 @@ class URLBar: UIView {
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
             
             isEditingConstraints.append(make.height.equalTo(48).priority(.high).constraint)
-            isEditingConstraints.append(make.leading.equalTo(shieldIcon.snp.trailing).offset(UIConstants.layout.urlBarMargin).constraint)
+            isEditingConstraints.append(make.leading.greaterThanOrEqualToSuperview().offset(UIConstants.layout.urlBarMargin).constraint)
+            isEditingConstraints.append(make.leading.greaterThanOrEqualTo(cancelButton.snp.trailing).constraint)
             isEditingConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
         }
 
@@ -300,6 +317,13 @@ class URLBar: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(toolset.backButton)
         }
+        
+        cancelButton.snp.makeConstraints { make in
+            make.centerY.equalTo(self)
+            make.leading.equalToSuperview()
+            hideCancelConstraints.append(make.width.equalTo(0).priority(.required).constraint)
+        }
+        hideCancelConstraints.forEach { $0.activate() }
 
         deleteButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -524,6 +548,8 @@ class URLBar: UIView {
         toolset.settingsButton.isEnabled = true
         delegate?.urlBarDidFocus(self)
 
+        cancelButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        hideCancelConstraints.forEach { $0.deactivate() }
         deleteButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
 
         self.layoutIfNeeded()
@@ -558,6 +584,9 @@ class URLBar: UIView {
         let _ = urlText.resignFirstResponder()
         setTextToURL()
         delegate?.urlBarDidDismiss(self)
+        
+        cancelButton.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+        hideCancelConstraints.forEach { $0.activate() }
 
         if inBrowsingMode {
             deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
