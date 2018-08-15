@@ -27,6 +27,9 @@ private extension TrayToBrowserAnimator {
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let expandFromIndex = displayedTabs.index(of: selectedTab) else { return }
 
+        //Disable toolbar until animation completes
+        tabTray.toolbar.isUserInteractionEnabled = false
+
         bvc.view.frame = transitionContext.finalFrame(for: bvc)
 
         // Hide browser components
@@ -83,6 +86,7 @@ private extension TrayToBrowserAnimator {
             tabCollectionViewSnapshot.alpha = 0
             tabTray.statusBarBG.alpha = 0
             tabTray.searchBarHolder.alpha = 0
+            tabTray.toolbar.isUserInteractionEnabled = true
         }, completion: { finished in
             // Remove any of the views we used for the animation
             cell.removeFromSuperview()
@@ -120,6 +124,9 @@ private extension BrowserToTrayAnimator {
         let tabManager = bvc.tabManager
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         guard let scrollToIndex = displayedTabs.index(of: selectedTab) else { return }
+
+        //Disable toolbar until animation completes
+        tabTray.toolbar.isUserInteractionEnabled = false
 
         tabTray.view.frame = transitionContext.finalFrame(for: tabTray)
 
@@ -208,6 +215,7 @@ private extension BrowserToTrayAnimator {
 
                 resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
                 bvc.urlBar.isTransitioning = false
+                tabTray.toolbar.isUserInteractionEnabled = true
                 transitionContext.completeTransition(true)
             })
         }
