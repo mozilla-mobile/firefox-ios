@@ -83,10 +83,10 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let cell = UITableViewCell()
-            cell.backgroundColor = UIConstants.colors.settingsBackgroundColor
+            cell.backgroundColor = UIConstants.colors.background
             // Hack to cover header separator line
             let footer = UIView()
-            footer.backgroundColor = UIConstants.colors.settingsBackgroundColor
+            footer.backgroundColor = UIConstants.colors.background
             cell.addSubview(footer)
             cell.sendSubviewToBack(footer)
             footer.snp.makeConstraints { make in
