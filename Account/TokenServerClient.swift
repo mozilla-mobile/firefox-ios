@@ -61,7 +61,7 @@ public struct TokenServerToken {
     }
 }
 
-enum TokenServerError {
+public enum TokenServerError {
     // A Remote error definitely has a status code, but we may not have a well-formed JSON response
     // with a status; and we could have an unhealthy server that is not reporting its timestamp.
     case remote(code: Int32, status: String?, remoteTimestamp: Timestamp?)
@@ -69,7 +69,7 @@ enum TokenServerError {
 }
 
 extension TokenServerError: MaybeErrorType {
-    var description: String {
+    public var description: String {
         switch self {
         case let .remote(code: code, status: status, remoteTimestamp: _):
             if let status = status {
