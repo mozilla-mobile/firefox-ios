@@ -856,10 +856,9 @@ class BrowserViewController: UIViewController {
 
         switch path {
         case .estimatedProgress:
-            guard webView == tabManager.selectedTab?.webView,
-                let progress = change?[.newKey] as? Float else { break }
+            guard webView == tabManager.selectedTab?.webView else { break }
             if !(webView.url?.isLocalUtility ?? false) {
-                urlBar.updateProgressBar(progress)
+                urlBar.updateProgressBar(Float(webView.estimatedProgress))
             } else {
                 urlBar.hideProgressBar()
             }
