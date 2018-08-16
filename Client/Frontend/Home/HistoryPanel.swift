@@ -189,7 +189,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         self.refreshControl?.endRefreshing()
 
         // Remove the refresh control if the user has logged out in the meantime
-        if self.profile.hasSyncableAccount() {
+        if !self.profile.hasSyncableAccount() {
             self.removeRefreshControl()
         }
     }
