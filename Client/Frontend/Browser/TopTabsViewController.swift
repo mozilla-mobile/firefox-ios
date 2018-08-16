@@ -97,6 +97,10 @@ class TopTabsViewController: UIViewController {
         self.tabDisplayManager.performTabUpdates()
     }
 
+    deinit {
+        tabManager.removeDelegate(self.tabDisplayManager)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
