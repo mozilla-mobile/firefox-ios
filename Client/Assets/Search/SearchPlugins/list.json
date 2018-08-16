@@ -2,7 +2,7 @@
   "default": {
     "searchDefault": "Google",
     "visibleDefaultEngines": [
-      "google", "bing", "amazondotcom", "ddg", "twitter", "wikipedia"
+      "google", "bing", "amazondotcom", "ddg", "twitter", "wikipedia", "qwant"
     ]
   },
   "regionOverrides": {
@@ -188,7 +188,7 @@
     "en-US": {
       "default": {
         "visibleDefaultEngines": [
-          "google", "bing", "amazondotcom", "ddg", "twitter", "wikipedia"
+          "google", "bing", "amazondotcom", "ddg", "twitter", "wikipedia", "qwant"
         ]
       },
       "experimental-hidden": {
