@@ -75,7 +75,7 @@ class BrowserViewController: UIViewController {
     fileprivate var pasteAction: AccessibleAction!
     fileprivate var copyAddressAction: AccessibleAction!
 
-    fileprivate weak var tabTrayController: TabTrayController!
+    fileprivate weak var tabTrayController: TabTrayController?
     let profile: Profile
     let tabManager: TabManager
 
@@ -224,6 +224,7 @@ class BrowserViewController: UIViewController {
                     make.height.equalTo(TopTabsUX.TopTabsViewHeight)
                 }
                 self.topTabsViewController = topTabsViewController
+                topTabsViewController.applyTheme()
             }
             topTabsContainer.snp.updateConstraints { make in
                 make.height.equalTo(TopTabsUX.TopTabsViewHeight)
@@ -949,12 +950,9 @@ class BrowserViewController: UIViewController {
 
     // MARK: Opening New Tabs
     func switchToPrivacyMode(isPrivate: Bool) {
-        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
-        if tabTrayController.privateMode != isPrivate {
+         if let tabTrayController = self.tabTrayController, tabTrayController.privateMode != isPrivate {
             tabTrayController.changePrivacyMode(isPrivate)
         }
-        self.tabTrayController = tabTrayController
-
         topTabsViewController?.applyUIMode(isPrivate: isPrivate)
     }
 
@@ -1869,7 +1867,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        guard let toast = toast, !tabTrayController.privateMode else {
+        guard let toast = toast, !(tabTrayController?.privateMode  ?? false) else {
             return
         }
         show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
