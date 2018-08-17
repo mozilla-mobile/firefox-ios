@@ -632,20 +632,6 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
     }
 }
 
-extension TabTrayController: ClientPickerViewControllerDelegate {
-
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
-        if let item = clientPickerViewController.shareItem {
-            _ = self.profile.sendItems([item], toClients: clients)
-        }
-        clientPickerViewController.dismiss(animated: true, completion: nil)
-    }
-
-    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
-        clientPickerViewController.dismiss(animated: true, completion: nil)
-    }
-}
-
 extension TabTrayController {
     func removeTab(tab: Tab) {
         // when removing the last tab (only in normal mode) we will automatically open a new tab.
@@ -878,6 +864,19 @@ fileprivate class EmptyPrivateTabsView: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension TabTrayController: ClientPickerViewControllerDelegate {
+    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+        if let item = clientPickerViewController.shareItem {
+            _ = self.profile.sendItem(item, toClients: clients)
+        }
+        clientPickerViewController.dismiss(animated: true, completion: nil)
+    }
+
+    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
+        clientPickerViewController.dismiss(animated: true, completion: nil)
     }
 }
 

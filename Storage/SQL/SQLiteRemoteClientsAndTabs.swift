@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 import Deferred
+import SwiftyJSON
 
 private let log = Logger.syncLogger
 
@@ -26,6 +27,17 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let version = row["version"] as? String
         let fxaDeviceId = row["fxaDeviceId"] as? String
         return RemoteClient(guid: guid, name: name, modified: mod, type: type, formfactor: form, os: os, version: version, fxaDeviceId: fxaDeviceId)
+    }
+
+    class func remoteDeviceFactory(_ row: SDRow) -> RemoteDevice {
+        let availableCommands = JSON(parseJSON: (row["availableCommands"] as? String) ?? "{}")
+        return RemoteDevice(
+            id: row["guid"] as? String,
+            name: row["name"] as! String,
+            type: row["type"] as? String,
+            isCurrentDevice: row["is_current_device"] as! Int > 0,
+            lastAccessTime: row["last_access_time"] as? Timestamp,
+            availableCommands: availableCommands)
     }
 
     class func remoteTabFactory(_ row: SDRow) -> RemoteTab {
@@ -179,6 +191,17 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     open func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
         let factory = SQLiteRemoteClientsAndTabs.remoteClientFactory
         return self.db.runQuery("SELECT * FROM clients WHERE fxaDeviceId = ?", args: [fxaDeviceId], factory: factory) >>== { deferMaybe($0[0]) }
+    }
+
+    open func getRemoteDevices() -> Deferred<Maybe<[RemoteDevice]>> {
+        return db.withConnection { connection -> [RemoteDevice] in
+            let cursor = connection.executeQuery("SELECT * FROM remote_devices", factory: SQLiteRemoteClientsAndTabs.remoteDeviceFactory)
+            defer {
+                cursor.close()
+            }
+
+            return cursor.asArray()
+        }
     }
 
     open func getClients() -> Deferred<Maybe<[RemoteClient]>> {
@@ -347,11 +370,12 @@ extension SQLiteRemoteClientsAndTabs: RemoteDevices {
             for device in remoteDevices {
                 let sql = """
                     INSERT INTO remote_devices (
-                        guid, name, type, is_current_device, date_created, date_modified, last_access_time
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                        guid, name, type, is_current_device, date_created, date_modified, last_access_time, availableCommands
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     """
 
-                let args: Args = [device.id, device.name, device.type, device.isCurrentDevice, now, now, device.lastAccessTime]
+                let availableCommands = device.availableCommands?.rawString(options: []) ?? "{}"
+                let args: Args = [device.id, device.name, device.type, device.isCurrentDevice, now, now, device.lastAccessTime, availableCommands]
                 try conn.executeChange(sql, withArgs: args)
             }
         }

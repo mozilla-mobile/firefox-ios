@@ -142,7 +142,7 @@ protocol Profile: AnyObject {
 
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
-    func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>>
+    func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success
 
     var syncManager: SyncManager! { get }
 }
@@ -442,27 +442,67 @@ open class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
 
-    public func sendItems(_ items: [ShareItem], toClients clients: [RemoteClient]) -> Deferred<Maybe<SyncStatus>> {
+    public func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success {
+        func clientForRemoteDevice(_ remoteDevice: RemoteDevice) -> RemoteClient? {
+            return clients.find({ $0.fxaDeviceId == remoteDevice.id })
+        }
+
+        guard let account = self.getAccount() else {
+            return deferMaybe(NoAccountError())
+        }
+
         let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
         let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
-        let commands = items.map { item in
-            SyncCommand.displayURIFromShareItem(item, asClient: id)
+        let command = SyncCommand.displayURIFromShareItem(item, asClient: id)
+        let fxaDeviceIds = clients.compactMap { $0.fxaDeviceId }
+
+        // If FxA Messages (Pushbox) is not enabled for this build, simply send the
+        // tabs using the old mechanism via Sync.
+        guard AppConstants.MOZ_FXA_MESSAGES else {
+            return self.remoteClientsAndTabs.insertCommands([command], forClients: clients) >>> {
+                self.syncManager.syncClients() >>> {
+                    account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
+                    return succeed()
+                }
+            }
         }
 
-        func notifyClients() {
-            let deviceIDs = clients.compactMap { $0.fxaDeviceId }
-            guard let account = self.getAccount() else {
-                return
+        let result = Success()
+
+        self.remoteClientsAndTabs.getRemoteDevices() >>== { remoteDevices in
+            let newRemoteDevices = remoteDevices.filter({ account.commandsClient.sendTab.isDeviceCompatible($0) })
+            var oldRemoteClients = remoteDevices.filter({ !account.commandsClient.sendTab.isDeviceCompatible($0) }).compactMap({ clientForRemoteDevice($0) })
+
+            func sendViaSyncFallback() {
+                if oldRemoteClients.isEmpty {
+                    result.fill(Maybe(success: ()))
+                } else {
+                    self.remoteClientsAndTabs.insertCommands([command], forClients: oldRemoteClients) >>> {
+                        self.syncManager.syncClients() >>> {
+                            account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
+                            result.fill(Maybe(success: ()))
+                        }
+                    }
+                }
             }
 
-            account.notify(deviceIDs: deviceIDs, collectionsChanged: ["clients"], reason: "sendtab")
+            if !newRemoteDevices.isEmpty {
+                account.commandsClient.sendTab.send(to: newRemoteDevices, url: item.url, title: item.title ?? "") >>== { report in
+                    for failedRemoteDevice in report.failed {
+                        log.debug("Failed to send a tab with FxA commands for \(failedRemoteDevice.name). Falling back on the Sync back-end")
+                        if let oldRemoteClient = clientForRemoteDevice(failedRemoteDevice) {
+                            oldRemoteClients.append(oldRemoteClient)
+                        }
+                    }
+
+                    sendViaSyncFallback()
+                }
+            } else {
+                sendViaSyncFallback()
+            }
         }
 
-        return self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> {
-            let syncStatus = self.syncManager.syncClients()
-            syncStatus >>> notifyClients
-            return syncStatus
-        }
+        return result
     }
 
     lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
@@ -559,6 +599,10 @@ open class BrowserProfile: Profile {
         if let account = account {
             self.keychain.set(account.dictionary() as NSCoding, forKey: name + ".account", withAccessibility: .afterFirstUnlock)
         }
+    }
+
+    class NoAccountError: MaybeErrorType {
+        var description = "No account."
     }
 
     // Extends NSObject so we can use timers.
@@ -1050,6 +1094,9 @@ open class BrowserProfile: Profile {
                 return deferMaybe(statuses)
             }
 
+            // TODO: Invoke `account.commandsClient.fetchMissedRemoteCommands()` to
+            // catch any missed FxA commands at time of Sync?
+
             if !isSyncing {
                 // A sync isn't already going on, so start another one.
                 let statsSession = SyncOperationStatsSession(why: why, uid: account.uid, deviceID: account.deviceRegistration?.id)
@@ -1268,10 +1315,6 @@ open class BrowserProfile: Profile {
                 Date.now() < stopBy &&
                 self.profile.hasSyncableAccount()
             }
-        }
-
-        class NoAccountError: MaybeErrorType {
-            var description = "No account."
         }
 
         public func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success {

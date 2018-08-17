@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import Account
 import Storage
 @testable import Sync
 import XCGLogger
@@ -218,9 +219,9 @@ class HistorySynchronizerTests: XCTestCase {
         let payload = HistoryPayload(json)
         let record = Record<HistoryPayload>(id: id, payload: payload, modified: modified, sortindex: sortindex, ttl: ttl)
         let k = KeyBundle.random()
-        let s = k.serializer({ (x: HistoryPayload) -> JSON in x.json })
+        let s = keysPayloadSerializer(keyBundle: k, { (x: HistoryPayload) -> JSON in x.json })
         let converter = { (x: JSON) -> HistoryPayload in HistoryPayload(x) }
-        let f = k.factory(converter)
+        let f = keysPayloadFactory(keyBundle: k, converter)
         let serialized = s(record)!
         let envelope = EnvelopeJSON(serialized)
 

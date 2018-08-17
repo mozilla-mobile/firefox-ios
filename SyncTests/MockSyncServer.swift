@@ -169,14 +169,14 @@ class MockSyncServer {
             "commands": [],
             "type": "mobile",
         ]
-        let clientBodyString = JSON(clientBody).stringValue()!
+        let clientBodyString = JSON(clientBody).stringify()!
         let clientRecord: [String : Any] = [
             "id": guid,
             "collection": "clients",
             "payload": clientBodyString,
             "modified": Double(modified) / 1000,
         ]
-        return EnvelopeJSON(JSON(clientRecord).stringValue()!)
+        return EnvelopeJSON(JSON(clientRecord).stringify()!)
     }
 
     class func withHeaders(response: GCDWebServerResponse, lastModified: Timestamp? = nil, records: Int? = nil, timestamp: Timestamp? = nil) -> GCDWebServerResponse {
@@ -280,14 +280,14 @@ class MockSyncServer {
     }
 
     private func recordResponse(record: EnvelopeJSON) -> GCDWebServerResponse {
-        let body = record.asJSON().stringValue()!
+        let body = record.asJSON().stringify()!
         let bodyData = body.utf8EncodedData
         let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
         return MockSyncServer.withHeaders(response: response!, lastModified: record.modified)
     }
 
     private func modifiedResponse(timestamp: Timestamp) -> GCDWebServerResponse {
-        let body = JSON(["modified": timestamp]).stringValue()
+        let body = JSON(["modified": timestamp]).stringify()
         let bodyData = body?.utf8EncodedData
         let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")!
         return MockSyncServer.withHeaders(response: response)
@@ -318,7 +318,7 @@ class MockSyncServer {
                 }
 
             }
-            let body = JSON(ic).stringValue()
+            let body = JSON(ic).stringify()
             let bodyData = body?.utf8EncodedData
 
             let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")!
@@ -430,7 +430,7 @@ class MockSyncServer {
             // TODO: TTL
             // TODO: X-I-U-S
 
-            let body = JSON(items.map { $0.asJSON() }).stringValue()
+            let body = JSON(items.map { $0.asJSON() }).stringify()
             let bodyData = body?.utf8EncodedData
             let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
 

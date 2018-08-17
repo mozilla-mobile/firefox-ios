@@ -33,7 +33,7 @@ class SendToDevice: ClientPickerViewControllerDelegate, InstructionsViewControll
         }
 
         let profile = BrowserProfile(localName: "profile")
-        profile.sendItems([item], toClients: clients).uponQueue(.main) { result in
+        profile.sendItem(item, toClients: clients).uponQueue(.main) { _ in
             profile.shutdown()
             self.finish()
 

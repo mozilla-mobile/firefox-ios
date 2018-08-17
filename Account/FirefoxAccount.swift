@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 import Deferred
+import SwiftKeychainWrapper
 import SwiftyJSON
 import FxA
 import SDWebImage
@@ -46,7 +47,10 @@ open class FirefoxAccount {
 
     open var pushRegistration: PushRegistration?
 
-    fileprivate let stateCache: KeychainCache<FxAState>
+    private(set) open var commandsClient: FxACommandsClient!
+
+    let stateCache: KeychainCache<FxAState>
+
     open var syncAuthState: SyncAuthState! // We can't give a reference to self if this is a let.
 
     // To prevent advance() consumers racing, we maintain a shared advance() deferred (`advanceDeferred`).  If an
@@ -75,6 +79,8 @@ open class FirefoxAccount {
         self.stateCache.checkpoint()
         self.fxaProfile = nil
         self.deviceName = deviceName
+
+        self.commandsClient = FxACommandsClient(account: self)
         self.syncAuthState = FirefoxAccountSyncAuthState(account: self,
             cache: KeychainCache.fromBranch("account.syncAuthState", withLabel: self.stateCache.label, factory: syncAuthStateCachefromJSON))
     }
@@ -367,8 +373,11 @@ open class FirefoxAccount {
         guard let ownDeviceId = self.deviceRegistration?.id else {
             return deferMaybe(FxAClientError.local(NSError()))
         }
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
 
+        // Clear Send Tab keys from Keychain.
+        commandsClient.sendTab.sendTabKeysCache.value = nil
+
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
         return client.destroyDevice(ownDeviceId: ownDeviceId, withSessionToken: session.sessionToken as NSData) >>> succeed
     }
 
@@ -380,6 +389,15 @@ open class FirefoxAccount {
             }
         }
         return d >>> succeed
+    }
+
+    open func availableCommands() -> JSON {
+        guard AppConstants.MOZ_FXA_MESSAGES, let sendTabKey = commandsClient.sendTab.getEncryptedKey() else {
+            return JSON()
+        }
+
+        let commands = [FxACommandSendTab.Name: sendTabKey]
+        return JSON(commands)
     }
 
     @discardableResult open func advance() -> Deferred<FxAState> {

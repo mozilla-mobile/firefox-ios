@@ -239,7 +239,7 @@ class Tab: NSObject {
             var jsonDict = [String: AnyObject]()
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
-            guard let json = JSON(jsonDict).stringValue() else {
+            guard let json = JSON(jsonDict).stringify() else {
                 return
             }
             let escapedJSON = json.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!

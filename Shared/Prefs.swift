@@ -32,6 +32,8 @@ public struct PrefsKeys {
     public static let KeyCustomSyncAuth = "customSyncAuthServer"
     public static let KeyCustomSyncWeb = "customSyncWebServer"
     public static let UseStageServer = "useStageSyncService"
+    public static let KeyFxALastCommandIndex = "FxALastCommandIndex"
+    public static let KeyFxAHandledCommands = "FxAHandledCommands"
 
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"

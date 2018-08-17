@@ -15,11 +15,11 @@ public enum FirefoxAccountConfigurationLabel: String {
 
     public func toConfiguration(prefs: Prefs? = nil) -> FirefoxAccountConfiguration {
         switch self {
-        case .latestDev: return LatestDevFirefoxAccountConfiguration()
-        case .stableDev: return StableDevFirefoxAccountConfiguration()
-        case .stage: return StageFirefoxAccountConfiguration()
-        case .production: return ProductionFirefoxAccountConfiguration()
-        case .chinaEdition: return ChinaEditionFirefoxAccountConfiguration()
+        case .latestDev: return LatestDevFirefoxAccountConfiguration(prefs: prefs)
+        case .stableDev: return StableDevFirefoxAccountConfiguration(prefs: prefs)
+        case .stage: return StageFirefoxAccountConfiguration(prefs: prefs)
+        case .production: return ProductionFirefoxAccountConfiguration(prefs: prefs)
+        case .chinaEdition: return ChinaEditionFirefoxAccountConfiguration(prefs: prefs)
         case .custom: return CustomFirefoxAccountConfiguration(prefs: prefs)
         }
     }
@@ -51,11 +51,18 @@ public protocol FirefoxAccountConfiguration {
     var sync15Configuration: Sync15Configuration { get }
 
     var pushConfiguration: PushConfiguration { get }
+
+    var prefs: Prefs? { get }
+
+    init(prefs: Prefs?)
 }
 
 public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration {
-    public init() {
+    public init(prefs: Prefs? = nil) {
+        self.prefs = prefs
     }
+
+    public var prefs: Prefs?
 
     public let label = FirefoxAccountConfigurationLabel.latestDev
 
@@ -73,8 +80,11 @@ public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
 }
 
 public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration {
-    public init() {
+    public init(prefs: Prefs? = nil) {
+        self.prefs = prefs
     }
+
+    public var prefs: Prefs?
 
     public let label = FirefoxAccountConfigurationLabel.stableDev
 
@@ -92,8 +102,11 @@ public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
 }
 
 public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
-    public init() {
+    public init(prefs: Prefs? = nil) {
+        self.prefs = prefs
     }
+
+    public var prefs: Prefs?
 
     public let label = FirefoxAccountConfigurationLabel.stage
 
@@ -121,11 +134,15 @@ public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
 }
 
 public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
-    public init() {
+    public init(prefs: Prefs? = nil) {
+        self.prefs = prefs
     }
+
+    public var prefs: Prefs?
 
     public let label = FirefoxAccountConfigurationLabel.production
 
+    // From https://accounts.firefox.com/.well-known/fxa-client-configuration
     public let authEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
     public let oauthEndpointURL = URL(string: "https://oauth.accounts.firefox.com/v1")!
     public let profileEndpointURL = URL(string: "https://profile.accounts.firefox.com/v1")!
@@ -214,8 +231,11 @@ public struct CustomFirefoxAccountConfiguration: FirefoxAccountConfiguration {
 }
 
 public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
-    public init() {
+    public init(prefs: Prefs? = nil) {
+        self.prefs = prefs
     }
+
+    public var prefs: Prefs?
 
     public let label = FirefoxAccountConfigurationLabel.chinaEdition
 

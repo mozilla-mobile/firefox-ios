@@ -143,7 +143,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 36    // Bug 1476881.
+    static let DefaultVersion = 37    // Bug 1463826.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -690,7 +690,8 @@ open class BrowserSchema: Schema {
             -- Timestamps in ms.
             date_created INTEGER NOT NULL,
             date_modified INTEGER NOT NULL,
-            last_access_time INTEGER
+            last_access_time INTEGER,
+            availableCommands TEXT
         )
         """
 
@@ -1341,6 +1342,19 @@ open class BrowserSchema: Schema {
                 historyFTSRebuild,
                 ]) {
                 return false
+            }
+        }
+
+        if from < 37 && to >= 37 {
+            // Only need to add this column if we're coming from *after* v29.
+            // Otherwise, this column would already have been created during
+            // v29.
+            if from > 29 {
+                if !self.run(db, queries: [
+                    "ALTER TABLE remote_devices ADD availableCommands TEXT",
+                    ]) {
+                    return false
+                }
             }
         }
 

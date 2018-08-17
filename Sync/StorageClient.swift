@@ -476,11 +476,11 @@ open class Sync15StorageClient {
     }
 
     func requestPUT(_ url: URL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestWrite(url, method: URLRequest.Method.put.rawValue, body: body.stringValue()!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.requestWrite(url, method: URLRequest.Method.put.rawValue, body: body.stringify()!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     func requestPOST(_ url: URL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestWrite(url, method: URLRequest.Method.post.rawValue, body: body.stringValue()!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.requestWrite(url, method: URLRequest.Method.post.rawValue, body: body.stringify()!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     func requestPOST(_ url: URL, body: [String], ifUnmodifiedSince: Timestamp?) -> Request {
@@ -489,7 +489,7 @@ open class Sync15StorageClient {
     }
 
     func requestPOST(_ url: URL, body: [JSON], ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestPOST(url, body: body.map { $0.stringValue()! }, ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.requestPOST(url, body: body.map { $0.stringify()! }, ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     /**
@@ -612,7 +612,7 @@ open class Sync15StorageClient {
             return Deferred(value: Maybe(failure: MalformedMetaGlobalError()))
         }
 
-        let record: JSON = JSON(["payload": payload.json.stringValue() ?? JSON.null as Any, "id": "global"])
+        let record: JSON = JSON(["payload": payload.json.stringify() ?? JSON.null as Any, "id": "global"])
         return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
     }
 
@@ -679,7 +679,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
     // Exposed so we can batch by size.
     open func serializeRecord(_ record: Record<T>) -> String? {
-        return self.encrypter.serializer(record)?.stringValue()
+        return self.encrypter.serializer(record)?.stringify()
     }
 
     open func post(_ lines: [String], ifUnmodifiedSince: Timestamp?, queryParams: [URLQueryItem]? = nil) -> Deferred<Maybe<StorageResponse<POSTResult>>> {

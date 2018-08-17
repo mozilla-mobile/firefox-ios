@@ -518,6 +518,17 @@ class ExportBrowserDataSetting: HiddenSetting {
     }
 }
 
+class ExportLogDataSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        // Not localized for now.
+        return NSAttributedString(string: "Debug: copy log files to app container", attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        Logger.copyPreviousLogsToDocuments();
+    }
+}
+
 /*
  FeatureSwitchSetting is a boolean switch for features that are enabled via a FeatureSwitch.
  These are usually features behind a partial release and not features released to the entire population.

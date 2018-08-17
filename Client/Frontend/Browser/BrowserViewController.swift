@@ -482,9 +482,7 @@ class BrowserViewController: UIViewController {
             // Then, open any received URLs from push notifications.
             if !receivedURLs.isEmpty {
                 DispatchQueue.main.async {
-                    let unopenedReceivedURLs = receivedURLs.filter { self.tabManager.getTabForURL($0) == nil }
-
-                    self.tabManager.addTabsForURLs(unopenedReceivedURLs, zombie: false)
+                    self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
 
                     if let lastURL = receivedURLs.last, let tab = self.tabManager.getTabForURL(lastURL) {
                         self.tabManager.selectTab(tab)
@@ -2709,7 +2707,7 @@ extension BrowserViewController: ClientPickerViewControllerDelegate, Instruction
             present(alert, animated: true, completion: nil)
             return
         }
-        profile.sendItems([shareItem], toClients: clients).uponQueue(.main) { _ in
+        profile.sendItem(shareItem, toClients: clients).uponQueue(.main) { _ in
             self.popToBVC()
         }
     }

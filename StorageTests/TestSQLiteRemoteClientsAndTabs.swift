@@ -6,6 +6,7 @@ import Foundation
 import Shared
 @testable import Storage
 import Deferred
+import SwiftyJSON
 
 import XCTest
 
@@ -72,6 +73,10 @@ open class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     open func insertOrUpdateTabsForClientGUID(_ clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return deferMaybe(-1)
+    }
+
+    open func getRemoteDevices() -> Deferred<Maybe<[RemoteDevice]>> {
+        return deferMaybe([])
     }
 
     open func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
@@ -153,7 +158,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
                 XCTAssertTrue($0.isSuccess)
                 e.fulfill()
             }
-            let remoteDevice = RemoteDevice(id: c.client.fxaDeviceId!, name: "FxA Device", type: "desktop", isCurrentDevice: false, lastAccessTime: 12345678)
+            let remoteDevice = RemoteDevice(id: c.client.fxaDeviceId!, name: "FxA Device", type: "desktop", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
             remoteDevicesToInsert.append(remoteDevice)
             clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs).succeeded()
         }
@@ -270,30 +275,21 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         self.waitForExpectations(timeout: 10, handler: nil)
     }
 
-    func remoteDeviceFactory(_ row: SDRow) -> RemoteDevice {
-        return RemoteDevice(
-            id: row["guid"] as? String,
-            name: row["name"] as! String,
-            type: row["type"] as? String,
-            isCurrentDevice: row["is_current_device"] as! Int > 0,
-            lastAccessTime: row["last_access_time"] as? Timestamp)
-    }
-
     func testReplaceRemoteDevices() {
-        let device1 = RemoteDevice(id: "fx1", name: "Device 1", type: "mobile", isCurrentDevice: false, lastAccessTime: 12345678)
-        let device2 = RemoteDevice(id: "fx2", name: "Device 2 (local)", type: "desktop", isCurrentDevice: true, lastAccessTime: nil)
-        let device3 = RemoteDevice(id: nil, name: "Device 3 (fauly)", type: "desktop", isCurrentDevice: false, lastAccessTime: 12345678)
-        let device4 = RemoteDevice(id: "fx4", name: "Device 4 (fauly)", type: nil, isCurrentDevice: false, lastAccessTime: 12345678)
+        let device1 = RemoteDevice(id: "fx1", name: "Device 1", type: "mobile", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
+        let device2 = RemoteDevice(id: "fx2", name: "Device 2 (local)", type: "desktop", isCurrentDevice: true, lastAccessTime: nil, availableCommands: [:])
+        let device3 = RemoteDevice(id: nil, name: "Device 3 (fauly)", type: "desktop", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
+        let device4 = RemoteDevice(id: "fx4", name: "Device 4 (fauly)", type: nil, isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
 
         _ = clientsAndTabs.replaceRemoteDevices([device1, device2, device3, device4]).succeeded()
 
-        let devices = clientsAndTabs.db.runQuery("SELECT * FROM remote_devices", args: nil, factory: remoteDeviceFactory).value.successValue!.asArray()
+        let devices = clientsAndTabs.db.runQuery("SELECT * FROM remote_devices", args: nil, factory: SQLiteRemoteClientsAndTabs.remoteDeviceFactory).value.successValue!.asArray()
         XCTAssertEqual(devices.count, 1) // Fauly devices + local device were not inserted.
 
-        let device5 = RemoteDevice(id: "fx5", name: "Device 5", type: "mobile", isCurrentDevice: false, lastAccessTime: 12345678)
+        let device5 = RemoteDevice(id: "fx5", name: "Device 5", type: "mobile", isCurrentDevice: false, lastAccessTime: 12345678, availableCommands: [:])
         _ = clientsAndTabs.replaceRemoteDevices([device5]).succeeded()
 
-        let newDevices = clientsAndTabs.db.runQuery("SELECT * FROM remote_devices", args: nil, factory: remoteDeviceFactory).value.successValue!.asArray()
+        let newDevices = clientsAndTabs.db.runQuery("SELECT * FROM remote_devices", args: nil, factory: SQLiteRemoteClientsAndTabs.remoteDeviceFactory).value.successValue!.asArray()
         XCTAssertEqual(newDevices.count, 1) // replaceRemoteDevices wipes the whole list before inserting.
     }
 }

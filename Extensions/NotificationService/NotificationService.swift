@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Account
 import Shared
 import Storage
 import Sync
@@ -45,18 +46,21 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     func didFinish(_ what: PushMessage? = nil, with error: PushMessageError? = nil) {
-        profile?.shutdown()
+        defer {
+            // We cannot use tabqueue after the profile has shutdown;
+            // however, we can't use weak references, because TabQueue isn't a class.
+            // Rather than changing tabQueue, we manually nil it out here.
+            self.display?.tabQueue = nil
+
+            profile?.shutdown()
+        }
 
         guard let display = self.display else {
             return
         }
 
-        // We cannot use tabqueue after the profile has shutdown;
-        // however, we can't use weak references, because TabQueue isn't a class.
-        // Rather than changing tabQueue, we manually nil it out here.
-        display.tabQueue = nil
         display.messageDelivered = false
-        display.displayNotification(what, with: error)
+        display.displayNotification(what, profile: profile, with: error)
         if !display.messageDelivered {
             display.displayUnknownMessageNotification()
         }
@@ -84,12 +88,14 @@ class SyncDataDisplay {
         self.tabQueue = tabQueue
     }
 
-    func displayNotification(_ message: PushMessage? = nil, with error: PushMessageError? = nil) {
+    func displayNotification(_ message: PushMessage? = nil, profile: ExtensionProfile?, with error: PushMessageError? = nil) {
         guard let message = message, error == nil else {
             return displayUnknownMessageNotification()
         }
 
         switch message {
+        case .commandReceived(let tab):
+            displayNewSentTabNotification(tab: tab)
         case .accountVerified:
             displayAccountVerifiedNotification()
         case .deviceConnected(let deviceName):
@@ -100,7 +106,7 @@ class SyncDataDisplay {
             displayThisDeviceDisconnectedNotification()
         case .collectionChanged(let collections):
             if collections.contains("clients") {
-                displaySentTabNotification()
+                displayOldSentTabNotification()
             } else {
                 displayUnknownMessageNotification()
             }
@@ -143,7 +149,7 @@ extension SyncDataDisplay {
         // if, by any change we haven't dealt with the message, then perhaps we
         // can recycle it as a sent tab message.
         if sentTabs.count > 0 {
-            displaySentTabNotification()
+            displayOldSentTabNotification()
         } else {
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
         }
@@ -151,7 +157,28 @@ extension SyncDataDisplay {
 }
 
 extension SyncDataDisplay {
-    func displaySentTabNotification() {
+    func displayNewSentTabNotification(tab: [String : String]) {
+        if let urlString = tab["url"], let url = URL(string: urlString), url.isWebPage(), let title = tab["title"] {
+            let tab = [
+                "title": title,
+                "url": url.absoluteString,
+                "displayURL": url.absoluteDisplayExternalString,
+                "deviceName": nil
+            ] as NSDictionary
+
+            notificationContent.userInfo["sentTabs"] = [tab] as NSArray
+
+            // Add tab to the queue.
+            let item = ShareItem(url: urlString, title: title, favicon: nil)
+            _ = tabQueue?.addToQueue(item).value // Force synchronous.
+
+            presentNotification(title: Strings.SentTab_TabArrivingNotification_NoDevice_title, body: url.absoluteDisplayExternalString)
+        }
+    }
+}
+
+extension SyncDataDisplay {
+    func displayOldSentTabNotification() {
         // We will need to be more precise about calling these SentTab alerts
         // once we are a) detecting different types of notifications and b) adding actions.
         // For now, we need to add them so we can handle zero-tab sent-tab-notifications.
@@ -262,7 +289,7 @@ extension SyncDataDisplay: SyncDelegate {
             sentTabs.append(SentTab(url: url, title: title, deviceName: deviceName))
 
             let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
-            _ = tabQueue?.addToQueue(item)
+            _ = tabQueue?.addToQueue(item).value // Force synchronous.
         }
     }
 }
