@@ -11,9 +11,9 @@ private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 class websiteSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-    let editButton: UIBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(didPressEdit))
-    let doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didPressDone))
-    let deleteButton: UIBarButtonItem = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(didPressDelete))
+    let editButton: UIBarButtonItem = UIBarButtonItem(title: Strings.SettingsEditWebsiteSearchButton, style: .plain, target: self, action: #selector(didPressEdit))
+    let doneButton: UIBarButtonItem = UIBarButtonItem(title: Strings.SettingsDoneWebsiteSearchButton, style: .done, target: self, action: #selector(didPressDone))
+    let deleteButton: UIBarButtonItem = UIBarButtonItem(title: Strings.SettingsDeleteWebsiteSearchButton, style: .plain, target: self, action: #selector(didPressDelete))
     let tableView = UITableView()
     private var toolBar: UIToolbar!
     

@@ -13,8 +13,8 @@ private let NumberOfSections = 3
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
 class WebsiteDataManagementViewController: UITableViewController, UISearchBarDelegate {
-    fileprivate var clearButton, showMoreButton : UITableViewCell?
-    var searchResults : UITableViewController!
+    fileprivate var clearButton, showMoreButton: UITableViewCell?
+    var searchResults: UITableViewController!
     var searchController: UISearchController!
     var showMoreButtonEnabled = true
 
@@ -32,10 +32,12 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
         searchController = UISearchController(searchResultsController: searchResults)
         searchController.searchResultsUpdater = searchResults
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Filter Sites"
+        searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
         searchController.searchBar.delegate = self
         if #available(iOS 11.0, *) {
             navigationItem.searchController = searchController
+        } else {
+            navigationItem.titleView = searchController?.searchBar
         }
         definesPresentationContext = true
 
@@ -56,7 +58,7 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
             let site = siteRecords[indexPath.item]
             cell.textLabel?.text = site.nameOfSite
         case .showMore:
-            cell.textLabel?.text = "Show More"
+            cell.textLabel?.text = Strings.SettingsWebsiteDataShowMoreButton
             cell.textLabel?.textColor = showMoreButtonEnabled ? UIColor.theme.general.highlightBlue : UIColor.gray
             cell.accessibilityTraits = UIAccessibilityTraitButton
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
@@ -111,12 +113,6 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
         case .showMore:
             getAllWebsiteData()
         case .button:
-            func clearwebsitedata(_ action: UIAlertAction) {
-                WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: { return })
-                siteRecords.removeAll()
-                showMoreButtonEnabled = false
-                tableView.reloadData()
-            }
             let alert =  UIAlertController.clearWebsiteDataAlert(okayCallback: clearwebsitedata)
             let generator = UIImpactFeedbackGenerator(style: .heavy)
             generator.impactOccurred()
@@ -191,6 +187,13 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
         }
         self.tableView.reloadData()
         }
+    }
+
+    func clearwebsitedata(_ action: UIAlertAction) {
+        WKWebsiteDataStore.default().removeData(ofTypes: dataTypes, modifiedSince: .distantPast, completionHandler: { return })
+        siteRecords.removeAll()
+        showMoreButtonEnabled = false
+        tableView.reloadData()
     }
 
 }

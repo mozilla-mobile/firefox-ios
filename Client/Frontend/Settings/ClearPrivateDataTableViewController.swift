@@ -131,6 +131,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             let view = WebsiteDataManagementViewController()
             navigationController?.pushViewController(view, animated: true)
         } else if indexPath.section == SectionButton {
+            // We have been asked to clear history and we have an account.
+            // (Whether or not it's in a good state is irrelevant.)
             func clearPrivateData(_ action: UIAlertAction) {
                 let toggles = self.toggles
                 self.clearables
@@ -153,11 +155,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
                         // Disable the Clear Private Data button after it's clicked.
                         self.clearButtonEnabled = false
                         self.tableView.deselectRow(at: indexPath, animated: true)
-                    }
+                }
             }
-
-            // We have been asked to clear history and we have an account.
-            // (Whether or not it's in a good state is irrelevant.)
             if self.toggles[HistoryClearableIndex] && profile.hasAccount() {
                 profile.syncManager.hasSyncedHistory().uponQueue(.main) { yes in
                     // Err on the side of warning, but this shouldn't fail.

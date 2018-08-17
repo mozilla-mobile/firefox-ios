@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 
 typealias UIAlertActionCallback = (UIAlertAction) -> Void
 
@@ -114,7 +115,7 @@ extension UIAlertController {
     class func clearWebsiteDataAlert(okayCallback: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(
             title: "",
-            message: NSLocalizedString("This action will clear all of your website data. It cannot be undone.", tableName: "ClearPrivateDataConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear their private data."),
+            message: Strings.SettingsClearWebsiteDataMessage,
             preferredStyle: .alert
         )
 
