@@ -18,7 +18,9 @@ public class Profiler {
 
     public static var shared: Profiler?
 
-    private init() {}
+    private init() {
+        NDScenario.setup()
+    }
 
     public static func appDidFinishLaunching() {
         assert(shared == nil)
@@ -35,10 +37,6 @@ public class Profiler {
             Profiler.shared?.begin(bookend: .bvc_did_appear)
             Profiler.shared?.begin(bookend: .intro_did_appear)
         }
-    }
-
-    public func setup() {
-        NDScenario.setup()
     }
 
     public func coldStartupEnd() {
