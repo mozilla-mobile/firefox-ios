@@ -379,7 +379,7 @@ class TabManager: NSObject {
         let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
 
         if closedLastNormalTab {
-            addTabAndSelect()
+            selectTab(addTab(), previous: tab)
         } else if closedLastPrivateTab {
             selectTab(tabs.last, previous: tab)
         } else if !isSelectedParentTab(afterRemoving: tab) {
