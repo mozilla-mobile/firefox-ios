@@ -185,8 +185,7 @@ class TabManagerTests: XCTestCase {
     func testAddTabAndSelect() {
         let profile = TabManagerMockProfile()
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)
-
-        manager.addTabAndSelect()
+        manager.selectTab(manager.addTab())
         XCTAssertEqual(manager.selectedIndex, 0, "There should be selected first tab")
     }
 
@@ -194,8 +193,7 @@ class TabManagerTests: XCTestCase {
         let profile = TabManagerMockProfile()
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)
         // add two tabs, last one will be selected
-        manager.addTab()
-        manager.addTabAndSelect()
+        manager.selectTab(manager.addTab())
         manager.moveTab(isPrivate: false, fromIndex: 1, toIndex: 0)
         XCTAssertEqual(manager.selectedIndex, 0, "There should be selected second tab")
     }
