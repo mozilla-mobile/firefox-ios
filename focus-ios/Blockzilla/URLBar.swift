@@ -247,7 +247,9 @@ class URLBar: UIView {
         }
         
         urlBarBorderView.snp.makeConstraints { make in
+            make.leading.greaterThanOrEqualTo(shieldIcon.snp.trailing).priority(.required)
             make.leading.equalTo(shieldIcon.snp.trailing).priority(.medium)
+            make.trailing.lessThanOrEqualTo(deleteButton.snp.leading).priority(.required)
             make.trailing.equalTo(deleteButton.snp.leading).priority(.medium)
             make.height.equalTo(42).priority(.medium)
             make.top.bottom.equalToSuperview().inset(UIConstants.layout.urlBarMargin)
