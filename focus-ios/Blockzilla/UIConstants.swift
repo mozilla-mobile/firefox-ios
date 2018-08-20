@@ -386,7 +386,7 @@ struct UIConstants {
         
         static let siriShortcutsTitle = NSLocalizedString("Settinsg.siriShortcutsTitle", value: "SIRI SHORTCUTS", comment: "Title for settings section to enable different Siri Shortcuts.")
         static let eraseSiri = NSLocalizedString("Siri.erase", value: "Erase", comment: "Title of option in settings to set up Siri to erase")
-        static let eraseAndOpenSiri = NSLocalizedString("Siri.eraseAndOpen", value: "Erase then Open %@", comment: "Title of option in settings to set up Siri to erase and then open Focus/Klar. %@ is the application name.")
+        static let eraseAndOpenSiri = NSLocalizedString("Siri.eraseAndOpen", value: "Erase & Open", comment: "Title of option in settings to set up Siri to erase and then open Focus/Klar. %@ is the application name.")
         static let openUrlsSiri = NSLocalizedString("Siri.openURLs", value: "Open URLs", comment: "Title of option in settings to set up Siri to open specified URLs in Focus/Klar.")
         static let addToSiri = NSLocalizedString("Siri.addTo", value: "Add to Siri", comment: "Button to add a specified shortcut option to Siri.")
         

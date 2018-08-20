@@ -468,6 +468,8 @@ class BrowserViewController: UIViewController {
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
+        
+        userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
     }
     
     private func clearBrowser() {

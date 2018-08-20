@@ -7,6 +7,8 @@ import SnapKit
 import UIKit
 import Telemetry
 import LocalAuthentication
+import Intents
+import IntentsUI
 
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -24,7 +26,7 @@ class SettingsTableViewCell: UITableViewCell {
 
 class SettingsTableViewAccessoryCell: SettingsTableViewCell {
     private let newLabel = SmartLabel()
-    private let accessoryLabel = SmartLabel()
+    let accessoryLabel = SmartLabel()
     private let spacerView = UIView()
 
     var accessoryLabelText: String? {
@@ -35,7 +37,7 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
         }
     }
 
-    var label: String? {
+    var labelText: String? {
         get { return newLabel.text }
         set {
             newLabel.text = newValue
@@ -348,22 +350,25 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let identifier = indexPath.row == 0 ? "SettingsViewController.searchCell" : "SettingsViewController.autocompleteCell"
 
             searchCell.accessoryLabelText = accessoryLabel
-            searchCell.label = label
+            searchCell.labelText = label
             searchCell.accessibilityIdentifier = identifier
 
             cell = searchCell
         case .siri:
-            guard let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No Search Cells!") }
+            guard let siriCell = tableView.dequeueReusableCell(withIdentifier: "accessoryCell") as? SettingsTableViewAccessoryCell else { fatalError("No accessory cells") }
             if indexPath.row == 0 {
-                siriCell.label = UIConstants.strings.eraseSiri
-                siriCell.accessoryLabelText = UIConstants.strings.addToSiri
+                siriCell.labelText = UIConstants.strings.eraseSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
             } else if indexPath.row == 1 {
-                siriCell.label = String(format: UIConstants.strings.eraseAndOpenSiri, AppInfo.productName)
-                siriCell.accessoryLabelText = UIConstants.strings.addToSiri
-                siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
+                if #available(iOS 12.0, *) {
+                    siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
+                    siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
+                    hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
+                        siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                    }
+                }
             } else {
-                siriCell.label = UIConstants.strings.openUrlsSiri
+                siriCell.labelText = UIConstants.strings.openUrlsSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLsCell"
             }
             cell = siriCell
@@ -510,7 +515,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 // TODO: Issue #1049
             }
             else if indexPath.row == 1 {
-                // TODO: Issue #1199
+                if #available(iOS 12.0, *) {
+                    manageSiri(for: SiriShortcuts.activityType.eraseAndOpen)
+                }
             }
             else {
                 // TODO: Issue #1097
@@ -591,5 +598,70 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 extension SettingsViewController: SearchSettingsViewControllerDelegate {
     func searchSettingsViewController(_ searchSettingsViewController: SearchSettingsViewController, didSelectEngine engine: SearchEngine) {
         (tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingsTableViewAccessoryCell)?.accessoryLabelText = engine.name
+    }
+}
+
+extension SettingsViewController: INUIAddVoiceShortcutViewControllerDelegate {
+    @available(iOS 12.0, *)
+    func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    @available(iOS 12.0, *)
+    func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    @available(iOS 12.0, *)
+    func manageSiri(for activityType: SiriShortcuts.activityType) {
+        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
+            DispatchQueue.main.async {
+                guard let voiceShortcuts = voiceShortcuts else { return }
+                let foundShortcut = voiceShortcuts.filter { (attempt) in
+                    attempt.shortcut.userActivity?.activityType == activityType.rawValue
+                    }.first
+                if let foundShortcut = foundShortcut {
+                    let viewController = INUIEditVoiceShortcutViewController(voiceShortcut: foundShortcut)
+                    viewController.modalPresentationStyle = .formSheet
+                    viewController.delegate = self
+                    self.present(viewController, animated: true, completion: nil)
+                } else {
+                    guard let activity = SiriShortcuts().getActivity(for: activityType) else { return }
+                    let shortcut = INShortcut(userActivity: activity)
+                    let viewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
+                    viewController.modalPresentationStyle = .formSheet
+                    viewController.delegate = self
+                    self.present(viewController, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+    
+    @available(iOS 12.0, *)
+    func hasAddedActivity(type: SiriShortcuts.activityType, _ completion: @escaping (_ result: Bool) -> Void) {
+        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
+            DispatchQueue.main.async {
+                guard let voiceShortcuts = voiceShortcuts else { return }
+                let foundShortcut = voiceShortcuts.filter { (attempt) in
+                    attempt.shortcut.userActivity?.activityType == type.rawValue
+                    }.first
+                completion(foundShortcut != nil)
+            }
+        }
+    }
+}
+
+@available(iOS 12.0, *)
+extension SettingsViewController: INUIEditVoiceShortcutViewControllerDelegate {
+    func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didUpdate voiceShortcut: INVoiceShortcut?, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didDeleteVoiceShortcutWithIdentifier deletedVoiceShortcutIdentifier: UUID) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func editVoiceShortcutViewControllerDidCancel(_ controller: INUIEditVoiceShortcutViewController) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
