@@ -20,6 +20,8 @@ class TrackingProtectionViewController: UIViewController, UITableViewDataSource,
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIConstants.colors.background
+
+        title = UIConstants.strings.trackingProtectionLabel
         
         tableView.delegate = self
         tableView.dataSource = self
