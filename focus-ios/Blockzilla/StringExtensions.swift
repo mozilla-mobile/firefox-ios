@@ -11,6 +11,15 @@ extension String {
         case tail
     }
 
+    var isUrl: Bool {
+        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        guard let match = detector.firstMatch(in: self, range: NSRange(location: 0, length: self.count)), match.range.length == self.count else {
+            return false
+        }
+
+        return true
+    }
+
     func truncated(limit: Int, position: TruncationPosition = .tail, leader: String = "...") -> String {
         guard self.count > limit else { return self }
 

@@ -693,7 +693,8 @@ class URLBar: UIView {
     fileprivate func setTextToURL(displayFullUrl: Bool = false) {
         var fullUrl: String? = nil
         var truncatedURL: String? = nil
-
+        var displayText: String? = nil
+        
         if let url = url {
             // Strip the username/password to prevent domain spoofing.
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
@@ -701,7 +702,14 @@ class URLBar: UIView {
             components?.password = nil
             fullUrl = components?.url?.absoluteString
             truncatedURL = components?.host
-            urlText.text = displayFullUrl ? fullUrl : truncatedURL
+
+            if let stackValue = SearchHistoryUtils.pullSearchFromStack(), !stackValue.isUrl {
+                displayText = stackValue
+            } else {
+                displayText = truncatedURL
+            }
+
+            urlText.text = displayFullUrl ? fullUrl : displayText
             truncatedUrlText.text = truncatedURL
         }
     }

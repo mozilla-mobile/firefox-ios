@@ -436,6 +436,8 @@ class BrowserViewController: UIViewController {
 
     func resetBrowser(hidePreviousSession: Bool = false) {
         
+        UserDefaults.standard.set(nil, forKey: "searchedHistory")
+        
         // Used when biometrics fail and the previous session should be obscured
         if hidePreviousSession {
             clearBrowser()
@@ -855,7 +857,10 @@ extension BrowserViewController: URLBarDelegate {
             urlBar.url = webViewController.url
             return
         }
-
+        
+        SearchHistoryUtils.pushSearchToStack(with: text)
+        SearchHistoryUtils.isFromURLBar = true
+        
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -1021,10 +1026,12 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
     
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
+        SearchHistoryUtils.goBack()
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
+        SearchHistoryUtils.goForward()
         webViewController.goForward()
     }
 
@@ -1122,6 +1129,11 @@ extension BrowserViewController: WebControllerDelegate {
     }
     
     func webControllerDidStartNavigation(_ controller: WebController) {
+        if (!SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating) {
+            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
+        }
+        SearchHistoryUtils.isNavigating = false
+        SearchHistoryUtils.isFromURLBar = false
         urlBar.isLoading = true
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
