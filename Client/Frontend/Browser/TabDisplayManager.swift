@@ -32,6 +32,7 @@ class TabDisplayManager: NSObject {
 
     private var tabObservers: TabObservers!
     fileprivate weak var tabDisplayer: TabDisplayer?
+    let tabReuseIdentifer: String
 
     var searchedTabs: [Tab] = []
     var searchActive: Bool = false
@@ -62,11 +63,12 @@ class TabDisplayManager: NSObject {
         return self.tabManager.isRestoring || self.collectionView.frame == CGRect.zero
     }
 
-    init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer) {
+    init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String) {
         self.collectionView = collectionView
         self.tabDisplayer = tabDisplayer
         self.tabManager = tabManager
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        self.tabReuseIdentifer = reuseID
         super.init()
 
         tabManager.addDelegate(self)
@@ -112,11 +114,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let tab = tabStore[indexPath.row]
-        guard let identifer = tabDisplayer?.tabCellIdentifer else {
-            assertionFailure("tabCellIdentifer is required")
-            return UICollectionViewCell()
-        }
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifer, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
         if let tabCell = tabDisplayer?.cellFactory(for: cell, using: tab) {
             return tabCell
         } else {

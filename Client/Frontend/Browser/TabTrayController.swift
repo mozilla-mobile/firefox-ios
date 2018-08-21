@@ -120,7 +120,7 @@ class TabTrayController: UIViewController {
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self)
+        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TabCell.Identifier)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
         collectionView.contentInset = UIEdgeInsets(top: TabTrayControllerUX.SearchBarHeight, left: 0, bottom: 0, right: 0)
