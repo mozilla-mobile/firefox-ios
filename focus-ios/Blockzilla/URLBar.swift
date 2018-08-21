@@ -715,10 +715,8 @@ class URLBar: UIView {
     }
 
     func collapseUrlBar(expandAlpha: CGFloat, collapseAlpha: CGFloat) {
-        deleteButton.alpha = expandAlpha
         urlBarBorderView.alpha = expandAlpha
         urlBarBackgroundView.alpha = expandAlpha
-        shieldIcon.alpha = expandAlpha
         truncatedUrlText.alpha = collapseAlpha
         collapsedUrlAndLockWrapper.alpha = collapseAlpha
         toolset.backButton.alpha = expandAlpha
@@ -726,6 +724,13 @@ class URLBar: UIView {
         toolset.stopReloadButton.alpha = expandAlpha
         toolset.settingsButton.alpha = expandAlpha
         collapsedTrackingProtectionBadge.alpha = collapseAlpha
+        if isEditing {
+            deleteButton.alpha = collapseAlpha
+            shieldIcon.alpha = collapseAlpha
+        } else {
+            deleteButton.alpha = expandAlpha
+            shieldIcon.alpha = expandAlpha
+        }
         // updating the small lock icon status here in order to prevent the icon from flashing on start up
         let visible = !isEditing && (url?.scheme == "https")
         smallLockIcon.alpha = visible ? collapseAlpha : 0
