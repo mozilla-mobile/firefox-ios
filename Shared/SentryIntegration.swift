@@ -153,6 +153,16 @@ public class Sentry {
         self.attributes.merge(with: attributes)
     }
 
+    public func breadcrumb(category: String, message: String) {
+        let b = Breadcrumb(level: .info, category: category)
+        b.message = message
+        Client.shared?.breadcrumbs.add(b)
+    }
+
+    public func clearBreadcrumbs() {
+        Client.shared?.breadcrumbs.clear()
+    }
+
     private func printMessage(message: String, extra: [String: Any]? = nil) {
         let string = extra?.reduce("") { (result: String, arg1) in
             let (key, value) = arg1
