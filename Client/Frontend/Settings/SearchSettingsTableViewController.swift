@@ -53,6 +53,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         }
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: 44))
+        footer.showTopBorder = false
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
 

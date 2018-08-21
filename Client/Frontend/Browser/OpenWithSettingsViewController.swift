@@ -34,7 +34,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         headerView.showBottomBorder = true
 
         let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
-        footerView.showTopBorder = true
+        footerView.showTopBorder = false
         footerView.showBottomBorder = false
 
         tableView.tableHeaderView = headerView
