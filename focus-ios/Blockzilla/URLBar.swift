@@ -747,7 +747,8 @@ extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
 
         setTextToURL(displayFullUrl: true)
-        
+        autocompleteTextField.highlightAll()
+
         if !isEditing && inBrowsingMode {
             present()
             delegate?.urlBarDidActivate(self)
@@ -823,11 +824,6 @@ private class URLTextField: AutocompleteTextField {
 
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        guard let autocompleteTextField = textField as? AutocompleteTextField else { return }
-        autocompleteTextField.highlightAll()
     }
 }
 
