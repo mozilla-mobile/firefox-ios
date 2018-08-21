@@ -126,6 +126,7 @@ extension UnifiedTelemetry {
         case cancel = "cancel"
         case change = "change"
         case delete = "delete"
+        case deleteAll = "deleteAll"
         case drag = "drag"
         case drop = "drop"
         case foreground = "foreground"
