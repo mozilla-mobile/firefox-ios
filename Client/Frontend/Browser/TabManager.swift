@@ -257,12 +257,6 @@ class TabManager: NSObject {
         return self.addTab(request, configuration: configuration, afterTab: afterTab, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
-    @discardableResult func addTabAndSelect(_ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil, afterTab: Tab? = nil, isPrivate: Bool = false) -> Tab {
-        let tab = addTab(request, configuration: configuration, afterTab: afterTab, isPrivate: isPrivate)
-        selectTab(tab)
-        return tab
-    }
-
     func addTabsForURLs(_ urls: [URL], zombie: Bool) {
         assert(Thread.isMainThread)
 
@@ -379,7 +373,7 @@ class TabManager: NSObject {
         let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
 
         if closedLastNormalTab {
-            addTabAndSelect()
+            selectTab(addTab(), previous: tab)
         } else if closedLastPrivateTab {
             selectTab(tabs.last, previous: tab)
         } else if !isSelectedParentTab(afterRemoving: tab) {

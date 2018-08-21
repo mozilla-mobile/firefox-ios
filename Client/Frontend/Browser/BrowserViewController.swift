@@ -530,7 +530,7 @@ class BrowserViewController: UIViewController {
 
     fileprivate func showRestoreTabsAlert() {
         guard canRestoreTabs() else {
-            self.tabManager.addTabAndSelect()
+            tabManager.selectTab(tabManager.addTab())
             return
         }
         let alert = UIAlertController.restoreTabsAlert(
@@ -538,7 +538,7 @@ class BrowserViewController: UIViewController {
                 self.tabManager.restoreTabs()
             },
             noCallback: { _ in
-                self.tabManager.addTabAndSelect()
+                self.tabManager.selectTab(self.tabManager.addTab())
             }
         )
         self.present(alert, animated: true, completion: nil)
@@ -974,7 +974,7 @@ class BrowserViewController: UIViewController {
         }
 
         switchToPrivacyMode(isPrivate: isPrivate)
-        _ = tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+        tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
 
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
