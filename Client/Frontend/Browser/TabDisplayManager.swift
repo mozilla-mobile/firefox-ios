@@ -339,6 +339,8 @@ extension TabDisplayManager {
             return IndexPath(row: newTabs.index(of: tab)!, section: 0)
             }.filter { return inserts.index(of: $0) == nil && deletes.index(of: $0) == nil }
 
+        Sentry.shared.breadcrumb(category: "Tab Diff", message: "reloads: \(reloads.count), inserts: \(inserts.count), deletes: \(deletes.count), moves: \(moves.count)")
+
         return TopTabChangeSet(reloadArr: reloads, insertArr: inserts, deleteArr: deletes, moveArr: moves)
     }
 
