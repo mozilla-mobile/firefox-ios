@@ -159,6 +159,10 @@ public class Sentry {
         Client.shared?.breadcrumbs.add(b)
     }
 
+    public func clearBreadcrumbs() {
+        Client.shared?.breadcrumbs.clear()
+    }
+
     private func printMessage(message: String, extra: [String: Any]? = nil) {
         let string = extra?.reduce("") { (result: String, arg1) in
             let (key, value) = arg1
