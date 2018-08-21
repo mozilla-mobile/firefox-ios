@@ -119,8 +119,8 @@ class TabTrayController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self)
         collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
+        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
         collectionView.contentInset = UIEdgeInsets(top: TabTrayControllerUX.SearchBarHeight, left: 0, bottom: 0, right: 0)
@@ -444,7 +444,7 @@ extension TabTrayController: TabDisplayer {
     }
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
-        guard let tabCell = cell as? TabCell else { return UICollectionViewCell() }
+        guard let tabCell = cell as? TabCell else { return cell }
         tabCell.animator.delegate = self
         tabCell.delegate = self
         let selected = tab == tabManager.selectedTab

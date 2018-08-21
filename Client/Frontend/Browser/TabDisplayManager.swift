@@ -113,13 +113,14 @@ extension TabDisplayManager: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let tab = tabStore[indexPath.row]
         guard let identifer = tabDisplayer?.tabCellIdentifer else {
+            assertionFailure("tabCellIdentifer is required")
             return UICollectionViewCell()
         }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifer, for: indexPath)
         if let tabCell = tabDisplayer?.cellFactory(for: cell, using: tab) {
             return tabCell
         } else {
-            return UICollectionViewCell()
+            return cell
         }
     }
 
@@ -356,7 +357,7 @@ extension TabDisplayManager {
             self.tabStore = newTabs
 
             // Only consider moves if no other operations are pending.
-            if update.deletes.count == 0, update.inserts.count == 0, update.reloads.count == 0 {
+            if update.deletes.count == 0, update.inserts.count == 0 {
                 for move in update.moves {
                     self.collectionView.moveItem(at: move.from, to: move.to)
                 }
@@ -393,7 +394,7 @@ extension TabDisplayManager {
 
         // The actual update. Only animate the changes if no tabs have moved
         // as a result of drag-and-drop.
-        if update.moves.count == 0 {
+        if update.moves.count == 0, tabDisplayer is TopTabsViewController {
             UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
                 self.collectionView.performBatchUpdates(updateBlock)
             }) { (_) in
