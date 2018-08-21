@@ -459,7 +459,7 @@ class TabManager: NSObject {
     }
 
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
-        recentlyClosedForUndo = tabs.compactMap { tab in
+        recentlyClosedForUndo = tabs.filter { !$0.isPrivate }.compactMap { tab in
             return SavedTab(tab: tab, isSelected: false)
         }
 
