@@ -1203,6 +1203,8 @@ extension BrowserViewController {
 
 extension BrowserViewController: URLBarDelegate {
     func showTabTray() {
+        Sentry.shared.clearBreadcrumbs()
+        
         updateFindInPageVisibility(visible: false)
 
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)

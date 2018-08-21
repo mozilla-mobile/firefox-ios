@@ -80,6 +80,13 @@ class TabDisplayManager: NSObject {
         tabObservers = nil
     }
 
+    private func recordEventAndBreadcrumb(object: UnifiedTelemetry.EventObject, method: UnifiedTelemetry.EventMethod) {
+        let isTabTray = tabDisplayer as? TabTrayController != nil
+        let eventValue = isTabTray ? UnifiedTelemetry.EventValue.tabTray : UnifiedTelemetry.EventValue.topTabs
+        UnifiedTelemetry.recordEvent(category: .action, method: method, object: object, value: eventValue)
+        Sentry.shared.breadcrumb(category: "Tab Action", message: "object: \(object), action: \(method.rawValue), \(eventValue.rawValue), tab count: \(tabStore.count) ")
+    }
+
     func togglePBM() {
         if isUpdating || pendingReloadData {
             return
@@ -155,7 +162,7 @@ extension TabDisplayManager: UIDropInteractionDelegate {
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        UnifiedTelemetry.recordEvent(category: .action, method: .drop, object: .url, value: .topTabs)
+        recordEventAndBreadcrumb(object: .url, method: .drop)
 
         _ = session.loadObjects(ofClass: URL.self) { urls in
             guard let url = urls.first else {
@@ -205,7 +212,7 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
             itemProvider = NSItemProvider()
         }
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .tab, value: .topTabs)
+        recordEventAndBreadcrumb(object: .tab, method: .drag)
 
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = tab
@@ -220,7 +227,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
             return
         }
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .drop, object: .tab, value: .topTabs)
+        recordEventAndBreadcrumb(object: .tab, method: .drop)
 
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
         isDragging = false
@@ -503,6 +510,7 @@ extension TabDisplayManager: TabManagerDelegate {
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab) {
+        recordEventAndBreadcrumb(object: .tab, method: .delete)
         if isRestoring {
             return
         }
@@ -525,10 +533,12 @@ extension TabDisplayManager: TabManagerDelegate {
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
+        recordEventAndBreadcrumb(object: .tab, method: .add)
         self.reloadData()
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
+        recordEventAndBreadcrumb(object: .tab, method: .deleteAll)
         self.reloadData()
     }
 }
