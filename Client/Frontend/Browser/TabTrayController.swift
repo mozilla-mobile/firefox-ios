@@ -167,12 +167,12 @@ class TabTrayController: UIViewController {
         collectionView.backgroundColor = UIColor.theme.tabTray.background
         collectionView.keyboardDismissMode = .onDrag
 
-        if #available(iOS 11.0, *) {
-            collectionView.dragInteractionEnabled = true
-            collectionView.dragDelegate = tabDisplayManager
-            collectionView.dropDelegate = tabDisplayManager
-        }
-
+        // XXX: Bug 1485064 - Temporarily disable drag-and-drop in tabs tray
+        // if #available(iOS 11.0, *) {
+        //     collectionView.dragInteractionEnabled = true
+        //     collectionView.dragDelegate = tabDisplayManager
+        //     collectionView.dropDelegate = tabDisplayManager
+        // }
 
         searchBarHolder.addSubview(roundedSearchBarHolder)
         searchBarHolder.addSubview(searchBar)
