@@ -160,6 +160,9 @@ extension UnifiedTelemetry {
         case trackingProtectionWhitelist = "tracking-protection-whitelist"
         case url = "url"
         case searchText = "searchText"
+        case websiteDataButton = "website-data-button"
+        case clearWebsiteDataButton = "clear-website-data-button"
+        case searchWebsiteData = "search-website-data"
     }
 
     public enum EventValue: String {

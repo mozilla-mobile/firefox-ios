@@ -112,6 +112,7 @@ class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBa
         case .showMore:
             getAllWebsiteData()
         case .button:
+            UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .clearWebsiteDataButton)
             let alert =  UIAlertController.clearWebsiteDataAlert(okayCallback: clearwebsitedata)
             let generator = UIImpactFeedbackGenerator(style: .heavy)
             generator.impactOccurred()
@@ -174,6 +175,10 @@ class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBa
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         getAllWebsiteData()
+    }
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .searchWebsiteData)
     }
 
     func getAllWebsiteData(shouldDisableShowMoreButton : Bool = true, shouldUpdateSearchResults : Bool = false) {

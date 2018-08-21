@@ -128,6 +128,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == SectionArrow {
+            UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .websiteDataButton)
             let view = WebsiteDataManagementViewController()
             navigationController?.pushViewController(view, animated: true)
         } else if indexPath.section == SectionButton {
