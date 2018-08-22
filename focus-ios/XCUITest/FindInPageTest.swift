@@ -50,12 +50,12 @@ class FindInPageTest: BaseTestCase {
     func testActivityMenuFindInPageAction(){
         // Navigate to website
         loadWebPage("http://localhost:6573/licenses.html\n")
-        waitforExistence(element:  app.buttons["BrowserToolset.sendButton"])
-        app.buttons["BrowserToolset.sendButton"].tap()
+        waitforExistence(element:  app.buttons["URLBar.pageActionsButton"])
+        app.buttons["URLBar.pageActionsButton"].tap()
         
         // Activate find in page activity item and search for a keyword
-        waitforHittable(element: app.buttons["Find in Page"])
-        app.buttons["Find in Page"].tap()
+        waitforHittable(element: app.cells["Find in Page"])
+        app.cells["Find in Page"].tap()
         app.typeText("Moz")
         
         // Try all functions of find in page bar

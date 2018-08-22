@@ -285,6 +285,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let cell = tableView.dequeueReusableCell(withIdentifier: PhotonActionSheetUX.CellName, for: indexPath) as! PhotonActionSheetCell
         let action = actions[indexPath.section][indexPath.row]
         cell.tintColor = self.tintColor
+        cell.accessibilityIdentifier = action.title
         if action.accessory == .Switch {
             cell.actionSheet = self
         }
