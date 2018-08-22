@@ -44,11 +44,11 @@ class RequestDesktopTest: BaseTestCase {
         // Wait for existence rather than hittable because the textfield is technically disabled
         loadWebPage("facebook.com")
         
-        waitforExistence(element:  app.buttons["BrowserToolset.sendButton"])
-        app.buttons["BrowserToolset.sendButton"].tap()
+        waitforExistence(element:  app.buttons["URLBar.pageActionsButton"])
+        app.buttons["URLBar.pageActionsButton"].tap()
         
-        waitforHittable(element: app.buttons["Request Desktop Site"])
-        app.buttons["Request Desktop Site"].tap()
+        waitforHittable(element: app.cells["Request Desktop Site"])
+        app.cells["Request Desktop Site"].tap()
         
         waitForWebPageLoad()
         
