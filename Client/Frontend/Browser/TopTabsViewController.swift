@@ -80,7 +80,7 @@ class TopTabsViewController: UIViewController {
         self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
 
-        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self)
+        tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TopTabCell.Identifier)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
         [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
