@@ -44,7 +44,7 @@ class WebsiteMemoryTest: BaseTestCase {
         waitforExistence(element: app.links["Mozilla"].staticTexts["Mozilla"])
 
         // revisit google site
-        app.buttons["ERASE"].tap()
+        app.buttons["URLBar.deleteButton"].tap()
         // Disabling this check since BB seem to intermittently miss this popup which disappears after 1~2 seconds
         // The popup is also checked in PastenGOTest
         //waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
