@@ -109,8 +109,9 @@ class WebViewController: UIViewController, WebController {
         } else {
             reload() // Reload the current URL. We cannot use loadRequest in this case because it seems to leverage caching.
         }
-        
-        // Unset the desktopUserAgent
+    }
+
+    func resetUA() {
         browserView.customUserAgent = userAgent?.browserUserAgent
     }
     
@@ -226,6 +227,7 @@ extension WebViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         delegate?.webControllerDidFinishNavigation(self)
+        self.resetUA()
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
