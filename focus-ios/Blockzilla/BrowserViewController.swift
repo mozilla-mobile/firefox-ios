@@ -943,6 +943,7 @@ extension BrowserViewController: URLBarDelegate {
         }
         let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyMenuButton, iconString: "icon_link") { action in
             urlBar.copyToClipboard()
+            Toast(text: UIConstants.strings.copyURLToast).show()
         }
         actions.append(copyItem)
         let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], actions], style: .overCurrentContext)
@@ -968,6 +969,7 @@ extension BrowserViewController: URLBarDelegate {
         shareItems.append(items.openInSafariItem)
         let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddress, iconString: "icon_link") { action in
             urlBar.copyToClipboard()
+            Toast(text: UIConstants.strings.copyURLToast).show()
         }
         shareItems.append(copyItem)
         

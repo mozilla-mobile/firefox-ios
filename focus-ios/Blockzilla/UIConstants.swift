@@ -235,6 +235,7 @@ struct UIConstants {
         static let browserStop = NSLocalizedString("Browser.stopLabel", value: "Stop", comment: "Accessibility label for the stop button")
         static let customURLMenuButton = NSLocalizedString("Browser.customURLMenuLabel", value: "Add Custom URL", comment: "Custom URL button in URL long press menu")
         static let copyMenuButton = NSLocalizedString("Browser.copyAddressLabel", value: "Copy Address", comment: "Copy URL button in URL long press menu")
+        static let copyURLToast = NSLocalizedString("browser.copyAddressToast", value: "URL Copied To Clipboard", comment: "Toast displayed after a URL has been copied to the clipboard")
         static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
         static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "Your browsing history has been erased.", comment: "Message shown after pressing the Erase button")
         static let errorTryAgain = NSLocalizedString("Error.tryAgainButton", value: "Try again", comment: "Button label to reload the error page")
