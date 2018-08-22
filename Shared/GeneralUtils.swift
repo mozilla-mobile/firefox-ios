@@ -8,7 +8,6 @@ import Foundation
 // Use underscores between words, as these constants are stringified for reporting.
 public class Profiler {
     public enum Bookend {
-        case bvc_did_appear
         case url_autocomplete
         case intro_did_appear
         case history_panel_fetch
@@ -34,7 +33,6 @@ public class Profiler {
         // Workaround: delay for a few ms so that ND profiler doesn't hang up
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
             Profiler.shared?.coldStartupEnd()
-            Profiler.shared?.begin(bookend: .bvc_did_appear)
             Profiler.shared?.begin(bookend: .intro_did_appear)
         }
     }
