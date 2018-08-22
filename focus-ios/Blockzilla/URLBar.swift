@@ -418,11 +418,20 @@ class URLBar: UIView {
             
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
     }
+    
+    @objc func pasteAndGoFromContextMenu() {
+        guard let clipboardString = UIPasteboard.general.string else { return }
+        present()
+        delegate?.urlBarDidActivate(self)
+        delegate?.urlBar(self, didSubmitText: clipboardString)
+        
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
+    }
 
     //Adds Menu Item
     func addCustomMenu() {
         if UIPasteboard.general.string != nil && urlText.isFirstResponder {
-            let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGo))
+            let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGoFromContextMenu))
             UIMenuController.shared.menuItems = [lookupMenu]
         }
     }
