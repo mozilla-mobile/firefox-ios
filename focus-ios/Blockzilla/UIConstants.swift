@@ -47,6 +47,7 @@ struct UIConstants {
         static let settingsSeparator = UIConstants.Photon.Grey50
         static let settingsLink = UIConstants.Photon.Magenta60
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
+        static let siriTint = UIConstants.Photon.Magenta60
         static let tableSectionHeader = UIColor(rgb: 0x6D6D72)
         static let toastBackground = UIColor(rgb: 0x414146)
         static let toastText = UIColor.white
@@ -204,6 +205,10 @@ struct UIConstants {
         static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
         static let urlBarButtonImageSize: CGFloat = 24
         static let urlBarButtonTargetSize: CGFloat = 40
+        static let settingsTextPadding: CGFloat = 10
+        static let siriUrlSectionPadding: CGFloat = 40
+        static let settingsSectionHeight: CGFloat = 44
+        static let separatorHeight: CGFloat = 0.5
     }
 
     struct strings {
@@ -388,8 +393,12 @@ struct UIConstants {
         static let siriShortcutsTitle = NSLocalizedString("Settinsg.siriShortcutsTitle", value: "SIRI SHORTCUTS", comment: "Title for settings section to enable different Siri Shortcuts.")
         static let eraseSiri = NSLocalizedString("Siri.erase", value: "Erase", comment: "Title of option in settings to set up Siri to erase")
         static let eraseAndOpenSiri = NSLocalizedString("Siri.eraseAndOpen", value: "Erase & Open", comment: "Title of option in settings to set up Siri to erase and then open Focus/Klar. %@ is the application name.")
-        static let openUrlsSiri = NSLocalizedString("Siri.openURLs", value: "Open URLs", comment: "Title of option in settings to set up Siri to open specified URLs in Focus/Klar.")
+        static let openUrlSiri = NSLocalizedString("Siri.openURL", value: "Open Favorite Site", comment: "Title of option in settings to set up Siri to open a specified URL in Focus/Klar.")
         static let addToSiri = NSLocalizedString("Siri.addTo", value: "Add to Siri", comment: "Button to add a specified shortcut option to Siri.")
+        static let favoriteUrlTitle = NSLocalizedString("Siri.favoriteUrl", value: "Open Favorite Site", comment: "Title for screen to add a favorite URL to Siri.")
+        static let urlToOpen = NSLocalizedString("Siri.favoriteUrl", value: "URL to open", comment: "Label for input to set a favorite URL to be opened by Siri.")
+        static let editOpenUrl = NSLocalizedString("Siri.editOpenUrl", value: "Re-Record or Delete Shortcut", comment: "Label for button to edit the Siri phrase or delete the Siri functionality.")
+        static let add = NSLocalizedString("Siri.add", value: "Add", comment: "Button to add a favorite URL to Siri.")
         
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"

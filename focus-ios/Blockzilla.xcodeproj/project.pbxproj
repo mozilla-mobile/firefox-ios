@@ -20,6 +20,7 @@
 		163BFFE42124F8E10007CEBC /* IntentsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 163BFFE32124F8E10007CEBC /* IntentsUI.framework */; };
 		163BFFE62125EE260007CEBC /* SiriShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163BFFE52125EE260007CEBC /* SiriShortcuts.swift */; };
 		16938C0121010C2D00DCD489 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 16938C0321010C2D00DCD489 /* InfoPlist.strings */; };
+		16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */; };
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
 		16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */; };
 		16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */; };
@@ -256,6 +257,7 @@
 		16938C0F21012A0200DCD489 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		16938C1021012A0300DCD489 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		16938C1121012A0300DCD489 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriFavoriteViewController.swift; sourceTree = "<group>"; };
 		16D7169B2114EF72000C8A66 /* BlockerToggle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerToggle.swift; sourceTree = "<group>"; };
 		16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionViewController.swift; sourceTree = "<group>"; };
 		16D716A4211503CD000C8A66 /* PageActionSheetItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageActionSheetItems.swift; sourceTree = "<group>"; };
@@ -1185,6 +1187,7 @@
 				D3E54FD01DEFB063003E1AFF /* SearchEngineManager.swift */,
 				D3E54FDF1DF0E221003E1AFF /* SearchSettingsViewController.swift */,
 				D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */,
+				16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */,
 				163BFFE52125EE260007CEBC /* SiriShortcuts.swift */,
 				EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */,
 				D34E70341DA874AA00BABDCC /* StringExtensions.swift */,
@@ -1643,6 +1646,7 @@
 				D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
 				746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */,
+				16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */,
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,
 				E40AFB101DC9014700DA5651 /* UserAgent.swift in Sources */,
 				EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */,

@@ -270,9 +270,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        guard #available(iOS 12.0, *) else { return false }
+        
         switch userActivity.activityType {
         case "org.mozilla.ios.Klar.eraseAndOpen":
             browserViewController.resetBrowser(hidePreviousSession: true)
+        case "org.mozilla.ios.Klar.openUrl":
+            guard let urlString = userActivity.userInfo?["url"] as? String,
+                let url = URL(string: urlString) else { return false }
+            browserViewController.resetBrowser(hidePreviousSession: true)
+            browserViewController.ensureBrowsingMode()
+            browserViewController.submit(url: url)
         default: break
         }
         return true

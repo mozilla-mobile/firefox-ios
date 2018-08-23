@@ -91,8 +91,10 @@
         <string>Websites you visit may request your location.</string>
         <key>NSUserActivityTypes</key>
         <dict>
-            <key>Item</key>
+            <key>eraseAndOpen</key>
             <string>org.mozilla.ios.Klar.eraseAndOpen</string>
+            <key>openUrl</key>
+            <string>org.mozilla.ios.Klar.openUrl</string>
         </dict>
     </dict>
 </plist>
