@@ -31,7 +31,7 @@
         <key>CFBundleDevelopmentRegion</key>
         <string>en</string>
         <key>CFBundleVersion</key>
-        <string>1</string>
+        <string>2</string>
         <key>NSCameraUsageDescription</key>
         <string>This lets you take and upload photos.</string>
         <key>UIStatusBarStyle</key>
