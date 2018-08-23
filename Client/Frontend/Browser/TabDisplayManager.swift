@@ -371,8 +371,8 @@ extension TabDisplayManager {
             } else {
                 self.collectionView.deleteItems(at: Array(update.deletes))
                 self.collectionView.insertItems(at: Array(update.inserts))
-                self.collectionView.reloadItems(at: Array(update.reloads))
             }
+            self.collectionView.reloadItems(at: Array(update.reloads))
         }
 
         //Lets lock any other updates from happening.
