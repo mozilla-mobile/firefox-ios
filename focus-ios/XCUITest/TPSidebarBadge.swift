@@ -4,7 +4,7 @@
 
 import XCTest
 
-class TrackingProtectionSidebar: BaseTestCase {
+class TrackingProtectionMenu: BaseTestCase {
 
     override func setUp() {
         super.setUp()
@@ -24,58 +24,57 @@ class TrackingProtectionSidebar: BaseTestCase {
         // Check the correct site is reached
         waitForWebPageLoad()
 
-        // Check for the presence of the shield
-        // Currently, Mozilla has one (1) analytical tracker
-        XCTAssertEqual(app.staticTexts["TrackingProtectionBadge.counterLabel"].label, "1")
-
         // Open the tracking protection sidebar
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
 
-        // Wait for the sidebar to open
+        // Wait for menu to open
         waitforExistence(element: app.staticTexts["Tracking Protection"])
-
-        // Check for the tracker count in the sidebar
-        var counters = app.staticTexts.matching(identifier: "TrackingProtectionBreakdownItem.counterLabel")
-
+        
         // Check for the existence of one (1) analytical tracker on Mozilla
-        XCTAssertEqual(counters.element(boundBy: 0).label, "0") // Ad Trackers
-        XCTAssertEqual(counters.element(boundBy: 1).label, "1") // Analytical trackers
-        XCTAssertEqual(counters.element(boundBy: 2).label, "0") // Social trackers
-        XCTAssertEqual(counters.element(boundBy: 3).label, "0") // Content trackers
-
-        // Close the sidebar
-        app.buttons["TrackingProtectionView.closeButton"].tap()
-
+        waitforExistence(element: app.staticTexts["Trackers blocked.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "1")
+        
+        waitforExistence(element: app.staticTexts["Ad trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Ad trackers.Subtitle"].label, "0")
+        
+        waitforExistence(element: app.staticTexts["Analytic trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Analytic trackers.Subtitle"].label, "1")
+        
+        waitforExistence(element: app.staticTexts["Social trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Social trackers.Subtitle"].label, "0")
+        
+        waitforExistence(element: app.staticTexts["Content trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Content trackers.Subtitle"].label, "0")
+        
+        // Close the menu
+        waitforHittable(element: app.buttons["PhotonMenu.close"])
+        app.buttons["PhotonMenu.close"].tap()
+        
         // Erase the history
-        app.buttons["ERASE"].tap()
+        waitforHittable(element: app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
 
         // Load another website known for zero (0) trackers
         loadWebPage("http://localhost:6573/licenses.html\n")
         waitForWebPageLoad()
 
-        // Check for the presence of the shield
-        // Check for the presence of zero (0) trackers
-        XCTAssertEqual(app.staticTexts["TrackingProtectionBadge.counterLabel"].label, "0")
-
-        // Open the tracking protection sidebar
+        // Open the tracking protection menu
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
 
-        // Wait for the sidebar to open
+        // Wait for the menu to open
         waitforExistence(element: app.staticTexts["Tracking Protection"])
 
-        // Check for the tracker count in the sidebar
-        counters = app.staticTexts.matching(identifier: "TrackingProtectionBreakdownItem.counterLabel")
-        for i in 0..<counters.staticTexts.count {
-            XCTAssertEqual(counters.element(boundBy: i).label, "0")
-        }
+        // Check tracker values
+        waitForZeroTrackers()
 
-        // Close the sidebar
-        app.buttons["TrackingProtectionView.closeButton"].tap()
+        // Close the menu
+        waitforHittable(element: app.buttons["PhotonMenu.close"])
+        app.buttons["PhotonMenu.close"].tap()
 
         // Erase the history
-        waitforExistence(element: app.buttons["ERASE"])
-        app.buttons["ERASE"].tap()
+        waitforHittable(element: app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
     }
 
@@ -94,8 +93,8 @@ class TrackingProtectionSidebar: BaseTestCase {
         waitforExistence(element: app.staticTexts["Tracking Protection"])
 
         // Disable tracking protection
-        waitforExistence(element: app.switches["TrackingProtectionToggleView.toggleTrackingProtection"])
-        app.switches["TrackingProtectionToggleView.toggleTrackingProtection"].tap()
+        waitforExistence(element: app.switches["Tracking Protection.Toggle"])
+        app.switches["Tracking Protection.Toggle"].tap()
 
         // Reopen the tracking protection sidebar
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
@@ -103,23 +102,34 @@ class TrackingProtectionSidebar: BaseTestCase {
         // Wait for the sidebar to open
         waitforExistence(element: app.staticTexts["Tracking Protection"])
 
-        // Check for the tracker count in the sidebar
-        let counters = app.staticTexts.matching(identifier: "TrackingProtectionBreakdownItem.counterLabel")
+        // Check tracker values
+        waitForZeroTrackers()
 
-        for i in 0..<counters.staticTexts.count {
-            XCTAssertEqual(counters.element(boundBy: i).label, "--")
-        }
-
-        // Close the sidebar
-        app.buttons["TrackingProtectionView.closeButton"].tap()
-        waitforNoExistence(element: app.staticTexts["TrackingProtectionToggleView.toggleTrackingProtection"])
-
-        // Check that no counter exists (tracking protection: disabled)
-        XCTAssertEqual(app.staticTexts["TrackingProtectionBadge.counterLabel"].exists, false)
-
+        // Close the menu
+        waitforHittable(element: app.buttons["PhotonMenu.close"])
+        app.buttons["PhotonMenu.close"].tap()
+        
         // Erase the history
-        waitforExistence(element: app.buttons["ERASE"])
-        app.buttons["ERASE"].tap()
+        waitforHittable(element: app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
+    }
+    
+    private func waitForZeroTrackers() {
+        // Check for all 0 tracker count values in menu
+        waitforExistence(element: app.staticTexts["Trackers blocked.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "0")
+        
+        waitforExistence(element: app.staticTexts["Ad trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Ad trackers.Subtitle"].label, "0")
+        
+        waitforExistence(element: app.staticTexts["Analytic trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Analytic trackers.Subtitle"].label, "0")
+        
+        waitforExistence(element: app.staticTexts["Social trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Social trackers.Subtitle"].label, "0")
+        
+        waitforExistence(element: app.staticTexts["Content trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Content trackers.Subtitle"].label, "0")
     }
 }

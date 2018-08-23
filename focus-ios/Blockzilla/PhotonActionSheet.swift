@@ -581,6 +581,7 @@ private class PhotonActionSheetCell: UITableViewCell {
             toggle.onTintColor = UIConstants.colors.toggleOn
             toggle.tintColor = UIConstants.colors.toggleOff
             toggle.addTarget(self, action: #selector(valueChanged(sender:)), for: .valueChanged)
+            toggle.accessibilityIdentifier = "\(action.title).Toggle"
             stackView.addArrangedSubview(toggle)
         default:
             break
