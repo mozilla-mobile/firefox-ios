@@ -462,7 +462,7 @@ extension TabDisplayManager: TabManagerDelegate {
         if let block = completionBlock {
             completionBlocks.append(block)
         }
-        guard !isUpdating, collectionView.window != nil else {
+        guard !isUpdating else {
             return
         }
 
