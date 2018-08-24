@@ -20,6 +20,7 @@
 		163BFFE42124F8E10007CEBC /* IntentsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 163BFFE32124F8E10007CEBC /* IntentsUI.framework */; };
 		163BFFE62125EE260007CEBC /* SiriShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163BFFE52125EE260007CEBC /* SiriShortcuts.swift */; };
 		16938C0121010C2D00DCD489 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 16938C0321010C2D00DCD489 /* InfoPlist.strings */; };
+		166E4BFB212F7DEC0029E2A5 /* UserAgentTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166E4BFA212F7DEC0029E2A5 /* UserAgentTest.swift */; };
 		16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D465B02127891000FEC226 /* SiriFavoriteViewController.swift */; };
 		16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169B2114EF72000C8A66 /* BlockerToggle.swift */; };
 		16D7169E2114F00E000C8A66 /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D7169D2114F00E000C8A66 /* TrackingProtectionViewController.swift */; };
@@ -245,6 +246,7 @@
 		163BFFE12124EBAF0007CEBC /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		163BFFE32124F8E10007CEBC /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		163BFFE52125EE260007CEBC /* SiriShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriShortcuts.swift; sourceTree = "<group>"; };
+		166E4BFA212F7DEC0029E2A5 /* UserAgentTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTest.swift; sourceTree = "<group>"; };
 		16938BFB21010C2B00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		16938BFC21010C2C00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Localizable.strings; sourceTree = "<group>"; };
 		16938BFD21010C2C00DCD489 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/Intro.strings; sourceTree = "<group>"; };
@@ -902,6 +904,7 @@
 				4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */,
 				4FE4E6F51FBB5E2C001BB779 /* TPSidebarBadge.swift */,
 				4F1284851FC5E242001A775B /* TPSettingsTest.swift */,
+				166E4BFA212F7DEC0029E2A5 /* UserAgentTest.swift */,
 			);
 			path = XCUITest;
 			sourceTree = "<group>";
@@ -1579,6 +1582,7 @@
 				1D47758820C1E66000C074AE /* CopyTest.swift in Sources */,
 				0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */,
 				1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */,
+				166E4BFB212F7DEC0029E2A5 /* UserAgentTest.swift in Sources */,
 				0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */,
 				4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */,
 				0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */,
