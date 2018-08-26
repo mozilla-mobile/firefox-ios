@@ -267,8 +267,8 @@ class LoginManagerTests: KIFTestCase {
         tester().wait(forTimeInterval: 10)
         tester().waitForViewWithAccessibilityValue("a0.com/")
     }
-
-    func testOpenAndFillFromPrivateContext() {
+    // This test is disabled until bug 1486243 is fixed
+    /*func testOpenAndFillFromPrivateContext() {
         if BrowserUtils.iPad() {
             EarlGrey.selectElement(with: grey_accessibilityID("TopTabsViewController.tabsButton"))
                 .perform(grey_tap())
@@ -305,7 +305,7 @@ class LoginManagerTests: KIFTestCase {
 
         tester().wait(forTimeInterval: 10)
         tester().waitForViewWithAccessibilityValue("a0.com/")
-    }
+    }*/
 
     func testDetailUsernameMenuOptions() {
         openLoginManager()
