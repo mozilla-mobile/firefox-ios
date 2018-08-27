@@ -698,6 +698,7 @@ extension URLBarView: Themeable {
 extension URLBarView: PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         privateModeBadge(visible: isPrivate)
+        ToolbarTextField.applyUIMode(isPrivate: isPrivate)
 
         let progress = isPrivate ? (UIColor.theme.loadingBar.privateStart, UIColor.theme.loadingBar.privateEnd) :  (UIColor.theme.loadingBar.start, UIColor.theme.loadingBar.end)
         progressBar.setGradientColors(startColor: progress.0, endColor: progress.1)
@@ -806,11 +807,15 @@ class ToolbarTextField: AutocompleteTextField {
 }
 
 extension ToolbarTextField: Themeable {
-
     func applyTheme() {
         backgroundColor = UIColor.theme.textField.background
         textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
-        textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight
+        tintColor = AutocompleteTextField.textSelectionColor
+    }
+
+    // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
+    static func applyUIMode(isPrivate: Bool) {
+        textSelectionColor = isPrivate ?  UIColor.theme.urlbar.privateActiveBorder :  UIColor.theme.urlbar.textSelectionHighlight
     }
 }

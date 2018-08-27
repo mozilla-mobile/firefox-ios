@@ -56,13 +56,24 @@ class URLBarColor {
     var border: UIColor { return UIColor.Photon.Grey50 }
     var activeBorder: UIColor { return UIColor.Photon.Blue40A30 }
     var tint: UIColor { return UIColor.Photon.Blue40A30 }
-    var textSelectionHighlight: UIColor { return UIColor.Photon.Blue40A30 }
-    var privateBorder: UIColor { return UIColor.Defaults.MobilePrivatePurple }
-    var activeBorderPrivate: UIColor { return UIColor.Defaults.MobilePrivatePurple }
+
+    // This text selection color is used in two ways:
+    // 1) <UILabel>.background = textSelectionHighlight.withAlphaComponent(textSelectionHighlightAlpha)
+    // To simulate text highlighting when the URL bar is tapped once, this is a background color to create a simulated selected text effect. The color will have an alpha of 0.27 applied when assigning it to the background.
+    // 2) <UITextField>.tintColor = textSelectionHighlight.
+    // When the text is in edit mode (tapping URL bar second time), this is assigned to the to set the selection (and cursor) color. The color is assigned directly to the tintColor.
+    // The built-in tintColor property changes the alpha of the assigned color to ~0.27, so textSelectionHighlight.withAlphaComponent(textSelectionHighlightAlpha) should produce a very similar color.
+    var textSelectionHighlight: UIColor { return UIColor(rgb: 0x3d89cc) }
+    var textSelectionHighlightAlpha = CGFloat(0.27)
+
     var readerModeButtonSelected: UIColor { return UIColor.Photon.Blue40 }
     var readerModeButtonUnselected: UIColor { return UIColor.Photon.Grey50 }
     var pageOptionsSelected: UIColor { return readerModeButtonSelected }
     var pageOptionsUnselected: UIColor { return UIColor.theme.browser.tint }
+
+    var privateBorder: UIColor { return UIColor.Defaults.MobilePrivatePurple }
+    var privateActiveBorder: UIColor { return UIColor.Defaults.MobilePrivatePurple }
+    var privateTextSelectionHighlight: UIColor { return UIColor.Defaults.MobilePrivatePurple }
 }
 
 class BrowserColor {

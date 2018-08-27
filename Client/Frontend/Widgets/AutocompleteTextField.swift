@@ -42,7 +42,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
-    var textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight
+    static var textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight
 
     override var text: String? {
         didSet {
@@ -200,7 +200,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
         let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
-        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: textSelectionColor, range: NSRange(location: 0, length: suggestionText.count))
+        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: AutocompleteTextField.textSelectionColor.withAlphaComponent(UIColor.theme.urlbar.textSelectionHighlightAlpha), range: NSRange(location: 0, length: suggestionText.count))
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
         autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
         if let l = autocompleteTextLabel {
@@ -317,13 +317,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         applyCompletion()
         super.touchesBegan(touches, with: event)
     }
-
 }
 
 extension AutocompleteTextField: MenuHelperInterface {
-
     @objc func menuHelperPasteAndGo() {
         autocompleteDelegate?.autocompletePasteAndGo(self)
     }
-
 }
