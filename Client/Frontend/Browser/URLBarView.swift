@@ -688,7 +688,6 @@ extension URLBarView: Themeable {
         actionButtons.forEach { $0.applyTheme() }
         tabsButton.applyTheme()
 
-        progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start, endColor: UIColor.theme.loadingBar.end)
         cancelTintColor = UIColor.theme.browser.tint
         showQRButtonTintColor = UIColor.theme.browser.tint
         backgroundColor = UIColor.theme.browser.background
@@ -700,6 +699,8 @@ extension URLBarView: PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         privateModeBadge(visible: isPrivate)
 
+        let progress = isPrivate ? (UIColor.theme.loadingBar.privateStart, UIColor.theme.loadingBar.privateEnd) :  (UIColor.theme.loadingBar.start, UIColor.theme.loadingBar.end)
+        progressBar.setGradientColors(startColor: progress.0, endColor: progress.1)
         locationBorderColor = isPrivate ? UIColor.theme.urlbar.privateBorder : UIColor.theme.urlbar.border
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
         locationActiveBorderColor = isPrivate ? UIColor.theme.urlbar.privateBorder : UIColor.theme.urlbar.activeBorder

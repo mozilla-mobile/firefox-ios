@@ -80,11 +80,8 @@ class ToolbarButtonColor {
 class LoadingBarColor {
     var start: UIColor { return UIColor.Photon.Blue40A30 }
     var end: UIColor { return UIColor.Photon.Teal60 }
-}
-
-class PrivateLoadingBarColor {
-    var start: UIColor { return UIColor.Photon.Magenta60A30 }
-    var end: UIColor { return UIColor.Photon.Purple60 }
+    var privateStart: UIColor { return  UIColor.Photon.Magenta60A30  }
+    var privateEnd: UIColor { return UIColor.Photon.Purple60  }
 }
 
 class TabTrayColor {
