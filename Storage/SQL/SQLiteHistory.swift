@@ -172,26 +172,17 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
         self.db = db
         self.prefs = prefs
 
-        let empty = "DELETE FROM \(TempTableAwesomebarBookmarks)"
-        let create = """
-            CREATE TEMP TABLE IF NOT EXISTS \(TempTableAwesomebarBookmarks) (
-                guid TEXT, url TEXT, title TEXT, description TEXT,
-                faviconID INT, visitDate DATE
-            )
-            """
+        let empty = "DELETE FROM \(MatViewAwesomebarBookmarksWithFavicons)"
 
         let insert = """
-            INSERT INTO \(TempTableAwesomebarBookmarks)
+            INSERT INTO \(MatViewAwesomebarBookmarksWithFavicons)
             SELECT
-                b.guid AS guid, b.url AS url, b.title AS title,
-                b.description AS description, b.faviconID AS faviconID,
-                h.visitDate AS visitDate
-            FROM view_awesomebar_bookmarks b LEFT JOIN view_history_visits h ON
-                b.url = h.url
+                guid, url, title, description, visitDate,
+                iconID, iconURL, iconDate, iconType, iconWidth
+            FROM \(ViewAwesomebarBookmarksWithFavicons)
             """
 
         _ = db.transaction { connection in
-            try connection.executeChange(create)
             try connection.executeChange(empty)
             try connection.executeChange(insert)
         }
@@ -296,6 +287,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
 
         let args: Args
         let whereClause: String
+        let bookmarksWhereClause: String
         let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
 
         if let urlFilter = urlFilter?.trimmingCharacters(in: .whitespaces), !urlFilter.isEmpty {
@@ -304,7 +296,8 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
             let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(urlFilter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
 
             // No deleted item has a URL, so there is no need to explicitly add that here.
-            whereClause = "WHERE (\(filterFragment))\(whereFragment)"
+            whereClause = " WHERE (\(filterFragment))\(whereFragment)"
+            bookmarksWhereClause = " WHERE (\(filterFragment))\(whereFragment)"
 
             if includeBookmarks {
                 // We'll need them twice: once to filter history, and once to filter bookmarks.
@@ -314,6 +307,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
             }
         } else {
             whereClause = " WHERE (history.is_deleted = 0)\(whereFragment)"
+            bookmarksWhereClause = " WHERE (1 = 1)\(whereFragment)"
             args = []
         }
 
@@ -393,9 +387,8 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
                 -- Need this column for UNION
                 0 as maxFrecency,
                 1 AS is_bookmarked
-            FROM \(TempTableAwesomebarBookmarks)
-            -- The columns match, so we can reuse this.
-            \(whereClause)
+            FROM \(MatViewAwesomebarBookmarksWithFavicons)
+            \(bookmarksWhereClause)
             GROUP BY url
             ORDER BY visitDate DESC LIMIT \(bookmarksLimit)
             """
@@ -456,7 +449,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
             }
         } else {
             ftsWhereClause = " WHERE (history.is_deleted = 0)\(whereFragment)"
-            bookmarksWhereClause = " WHERE (history.is_deleted = 0)\(whereFragment)"
+            bookmarksWhereClause = " WHERE (1 = 1)\(whereFragment)"
             args = []
         }
 
@@ -538,7 +531,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
                 -- Need this column for UNION
                 0 as maxFrecency,
                 1 AS is_bookmarked
-            FROM \(TempTableAwesomebarBookmarks)
+            FROM \(MatViewAwesomebarBookmarksWithFavicons)
             \(bookmarksWhereClause)
             GROUP BY url
             ORDER BY visitDate DESC LIMIT \(bookmarksLimit)

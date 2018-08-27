@@ -41,6 +41,8 @@ let TableHighlights = "highlights"
 
 let TableRemoteDevices = "remote_devices" // Added in v29.
 
+let MatViewAwesomebarBookmarksWithFavicons = "matview_awesomebar_bookmarks_with_favicons"
+
 let ViewBookmarksBufferOnMirror = "view_bookmarksBuffer_on_mirror"
 let ViewBookmarksBufferWithDeletionsOnMirror = "view_bookmarksBuffer_with_deletions_on_mirror"
 let ViewBookmarksBufferStructureOnMirror = "view_bookmarksBufferStructure_on_mirror"
@@ -48,8 +50,7 @@ let ViewBookmarksLocalOnMirror = "view_bookmarksLocal_on_mirror"
 let ViewBookmarksLocalStructureOnMirror = "view_bookmarksLocalStructure_on_mirror"
 let ViewAllBookmarks = "view_all_bookmarks"
 let ViewAwesomebarBookmarks = "view_awesomebar_bookmarks"
-let TempTableAwesomebarBookmarks = "awesomebar_bookmarks_temp_table"
-let ViewAwesomebarBookmarksWithIcons = "view_awesomebar_bookmarks_with_favicons"
+let ViewAwesomebarBookmarksWithFavicons = "view_awesomebar_bookmarks_with_favicons"
 
 let ViewHistoryVisits = "view_history_visits"
 let ViewWidestFaviconsForSites = "view_favicons_widest"
@@ -99,6 +100,8 @@ private let AllTables: [String] = [
     TableSyncCommands,
     TableClients,
     TableTabs,
+
+    MatViewAwesomebarBookmarksWithFavicons,
 ]
 
 private let AllViews: [String] = [
@@ -112,7 +115,7 @@ private let AllViews: [String] = [
     ViewBookmarksLocalStructureOnMirror,
     ViewAllBookmarks,
     ViewAwesomebarBookmarks,
-    ViewAwesomebarBookmarksWithIcons,
+    ViewAwesomebarBookmarksWithFavicons,
     ViewHistoryVisits,
 ]
 
@@ -143,7 +146,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 37    // Bug 1463826.
+    static let DefaultVersion = 38    // Bug 1486583.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -357,6 +360,21 @@ open class BrowserSchema: Schema {
             visitCount INTEGER,
             visitDate DATETIME,
             is_bookmarked INTEGER
+        )
+        """
+
+    let awesomebarBookmarksWithFaviconsCreate = """
+        CREATE TABLE IF NOT EXISTS matview_awesomebar_bookmarks_with_favicons (
+            guid TEXT,
+            url TEXT,
+            title TEXT,
+            description TEXT,
+            visitDate DATETIME,
+            iconID INTEGER,
+            iconURL TEXT,
+            iconDate REAL,
+            iconType INTEGER,
+            iconWidth INTEGER
         )
         """
 
@@ -860,6 +878,9 @@ open class BrowserSchema: Schema {
             tabsTableCreate,
             historyFTSCreate,
 
+            // "Materialized Views" (Tables)
+            awesomebarBookmarksWithFaviconsCreate,
+
             // Indices.
             indexBufferStructureParentIdx,
             indexLocalStructureParentIdx,
@@ -1355,6 +1376,15 @@ open class BrowserSchema: Schema {
                     ]) {
                     return false
                 }
+            }
+        }
+
+        if from < 38 && to >= 38 {
+            // Create the "materialized view" table `matview_awesomebar_bookmarks_with_favicons`.
+            if !self.run(db, queries: [
+                awesomebarBookmarksWithFaviconsCreate,
+                ]) {
+                return false
             }
         }
 
