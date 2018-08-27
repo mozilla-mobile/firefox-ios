@@ -149,6 +149,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         groupedSites = DateGroupedTableData<Site>()
 
         currentFetchOffset = 0
+        Profiler.shared?.begin(bookend: .history_panel_fetch)
         fetchData().uponQueue(.main) { result in
             if let sites = result.successValue {
                 for site in sites {
@@ -159,6 +160,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
                 self.tableView.reloadData()
                 self.updateEmptyPanelState()
+                Profiler.shared?.end(bookend: .history_panel_fetch)
             }
         }
     }

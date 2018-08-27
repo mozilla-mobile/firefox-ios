@@ -4,6 +4,60 @@
 
 import Foundation
 
+// Wraps NimbleDroid to ensure it is disabled in release
+// Use underscores between words, as these constants are stringified for reporting.
+public class Profiler {
+    public enum Bookend {
+        case url_autocomplete
+        case intro_did_appear
+        case history_panel_fetch
+        case load_url
+        case find_in_page
+    }
+
+    public static var shared: Profiler?
+
+    private init() {
+        NDScenario.setup()
+    }
+
+    public static func appDidFinishLaunching() {
+        assert(shared == nil)
+        let args = ProcessInfo.processInfo.arguments
+        if args.contains("nimbledroid") {
+            shared = Profiler()
+        }
+    }
+
+    public func appIsActive() {
+        // Workaround: delay for a few ms so that ND profiler doesn't hang up
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
+            Profiler.shared?.coldStartupEnd()
+            Profiler.shared?.begin(bookend: .intro_did_appear)
+        }
+    }
+
+    public func coldStartupEnd() {
+        NDScenario.coldStartupEnd()
+    }
+
+    public func begin(bookend: Bookend) {
+        NDScenario.begin(bookendID: "\(bookend)")
+    }
+
+    // This triggers a screenshot, and a delay is needed here in some cases to capture the correct screen
+    // (otherwise the screen prior to this step completing is captured).
+    public func end(bookend: Bookend, delay: TimeInterval = 0.0) {
+        if delay > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                NDScenario.end(bookendID: "\(bookend)")
+            }
+        } else {
+            NDScenario.end(bookendID: "\(bookend)")
+        }
+    }
+}
+
 /**
  Assertion for checking that the call is being made on the main thread.
 
