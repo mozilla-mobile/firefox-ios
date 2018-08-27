@@ -57,6 +57,8 @@ class URLBarColor {
     var activeBorder: UIColor { return UIColor.Photon.Blue40A30 }
     var tint: UIColor { return UIColor.Photon.Blue40A30 }
     var textSelectionHighlight: UIColor { return UIColor.Photon.Blue40A30 }
+    var privateBorder: UIColor { return UIColor.Defaults.MobilePrivatePurple }
+    var activeBorderPrivate: UIColor { return UIColor.Defaults.MobilePrivatePurple }
     var readerModeButtonSelected: UIColor { return UIColor.Photon.Blue40 }
     var readerModeButtonUnselected: UIColor { return UIColor.Photon.Grey50 }
     var pageOptionsSelected: UIColor { return readerModeButtonSelected }

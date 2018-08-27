@@ -682,7 +682,6 @@ extension URLBarView {
 }
 
 extension URLBarView: Themeable {
-
     func applyTheme() {
         locationView.applyTheme()
         locationTextField?.applyTheme()
@@ -690,19 +689,20 @@ extension URLBarView: Themeable {
         tabsButton.applyTheme()
 
         progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start, endColor: UIColor.theme.loadingBar.end)
-        locationBorderColor = UIColor.theme.urlbar.border.withAlphaComponent(0.3)
-        locationActiveBorderColor = UIColor.theme.urlbar.activeBorder
         cancelTintColor = UIColor.theme.browser.tint
         showQRButtonTintColor = UIColor.theme.browser.tint
         backgroundColor = UIColor.theme.browser.background
         line.backgroundColor = UIColor.theme.browser.urlBarDivider
-        locationContainer.layer.shadowColor = locationBorderColor.cgColor
     }
 }
 
 extension URLBarView: PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         privateModeBadge(visible: isPrivate)
+
+        locationBorderColor = isPrivate ? UIColor.theme.urlbar.privateBorder : UIColor.theme.urlbar.border
+        locationContainer.layer.shadowColor = locationBorderColor.cgColor
+        locationActiveBorderColor = isPrivate ? UIColor.theme.urlbar.privateBorder : UIColor.theme.urlbar.activeBorder
     }
 }
 
