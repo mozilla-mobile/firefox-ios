@@ -519,7 +519,7 @@ class TabManagerTests: XCTestCase {
         delegate.verify("Not all delegate methods were called")
     }
 
-    func testIsSelectedParentTabAfterRemovingTheTab() {
+    func testRemoveTabAndUpdateSelectedIndexIsSelectedParentTabAfterRemoval() {
         let profile = TabManagerMockProfile()
         let manager = TabManager(prefs: profile.prefs, imageStore: nil)
 
