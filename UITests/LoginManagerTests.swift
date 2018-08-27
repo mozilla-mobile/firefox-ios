@@ -447,6 +447,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "Settings")
         tester().wait(forTimeInterval: 2) // Wait for the list to be updated
         list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
+        tester().wait(forTimeInterval: 1)
         var newLoginCount = countOfRowsInTableView(list)
         XCTAssertEqual(oldLoginCount - 1, newLoginCount)
 
@@ -468,7 +469,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
 
         tester().waitForView(withAccessibilityLabel: "Edit")
-
+        tester().wait(forTimeInterval: 1)
         newLoginCount = countOfRowsInTableView(list)
         XCTAssertEqual(oldLoginCount - 4, newLoginCount)
         closeLoginManager()
