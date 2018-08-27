@@ -11,7 +11,7 @@ extension UIColor {
         static let MobileGreyF = UIColor(rgb: 0x636369)
         static let iOSTextHighlightBlue = UIColor(rgb: 0xccdded) // This color should exactly match the ios text highlight
         static let Purple60A30 = UIColor(rgba: 0x8000d74c)
-        static let MobilePrivatePurple = UIColor(rgb: 0x8000d74)
+        static let MobilePrivatePurple = UIColor.Photon.Purple60
     // Reader Mode Sepia
         static let LightBeige = UIColor(rgb: 0xf0e6dc)
     }
