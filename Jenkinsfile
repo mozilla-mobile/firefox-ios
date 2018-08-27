@@ -45,10 +45,8 @@ pipeline {
         }
         failure {
             slackSend(
-				if (${BRANCH} == 'master') {
-                	color: 'danger',
-                	message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-                }
+                color: 'danger',
+                message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
         fixed {
             slackSend(
