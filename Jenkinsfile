@@ -44,9 +44,13 @@ pipeline {
                 reportName: 'HTML Report'])
         }
         failure {
-            slackSend(
-                color: 'danger',
-                message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            script {
+                if (env.BRANCH_NAME == 'master') {
+                    slackSend(
+                        color: 'danger',
+                        message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+                }
+            }
         }
         fixed {
             slackSend(
