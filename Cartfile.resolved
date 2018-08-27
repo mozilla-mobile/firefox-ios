@@ -15,3 +15,4 @@ github "mozilla-mobile/telemetry-ios" "v1.1.0"
 github "rs/SDWebImage" "4.1.0"
 github "sleroux/Deferred" "35b8927c1b94ce074e10793c57e1f80d0e2227fa"
 github "swisspol/GCDWebServer" "3.3.2"
+
