@@ -271,6 +271,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         guard #available(iOS 12.0, *) else { return false }
+        browserViewController.photonActionSheetDidDismiss()
+        browserViewController.dismiss(animated: true, completion: nil)
+        browserViewController.navigationController?.popViewController(animated: true)
         
         switch userActivity.activityType {
         case "org.mozilla.ios.Klar.eraseAndOpen":
