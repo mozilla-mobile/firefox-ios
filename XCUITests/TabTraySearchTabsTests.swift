@@ -47,7 +47,7 @@ class TabTraySearchTabsTests: BaseTestCase {
         XCTAssertEqual(app.collectionViews.cells.count, 1)
     }
 
-    func testDragAndDropTabToSearchTabField() {
+    /*func testDragAndDropTabToSearchTabField() {
         navigator.openURL(firstURL)
         navigator.goto(TabTray)
         waitforExistence(app.textFields["Search Tabs"])
@@ -55,7 +55,7 @@ class TabTraySearchTabsTests: BaseTestCase {
         waitForValueContains(app.textFields["Search Tabs"], value: "mozilla.org")
         let searchValue = app.textFields["Search Tabs"].value
         XCTAssertEqual(searchValue as! String, fullFirstURL)
-    }
+    }*/
 
     func testSearchFieldClearedAfterVisingWebsite() {
         navigator.openURL(firstURL)

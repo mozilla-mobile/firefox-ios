@@ -83,7 +83,7 @@ class DragAndDropTests: BaseTestCase {
         XCTAssertEqual(app.textFields["url"].value! as? String, "mobile.twitter.com/", "The tab has not been dropped correctly")
     }
 
-    func testRearrangeTabsTabTray() {
+    /*func testRearrangeTabsTabTray() {
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
@@ -124,7 +124,7 @@ class DragAndDropTests: BaseTestCase {
         dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite["tabName"]!], dropOnElement: app.collectionViews.cells[secondWebsite["tabName"]!])
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]!, secondTab: firstWebsite["tabName"]!)
-    }
+    }*/
 
     func testDragDropToInvalidArea() {
         openTwoWebsites()
@@ -153,7 +153,7 @@ class DragAndDropTests: BaseTestCase {
         XCTAssertEqual(app.textFields["url"].value! as? String, "mobile.twitter.com/", "The tab has not been dropped correctly")
     }
 
-    func testDragAndDropHomeTabTabsTray() {
+    /*func testDragAndDropHomeTabTabsTray() {
         navigator.openNewURL(urlString: secondWebsite["url"]!)
         waitUntilPageLoad()
         navigator.goto(TabTray)
@@ -163,7 +163,7 @@ class DragAndDropTests: BaseTestCase {
         dragAndDrop(dragElement: app.collectionViews.cells["home"], dropOnElement: app.collectionViews.cells[secondWebsite["tabName"]!])
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]! , secondTab: homeTab["tabName"]!)
-    }
+    }*/
 
     func testRearrangeTabsPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -177,7 +177,7 @@ class DragAndDropTests: BaseTestCase {
         XCTAssertEqual(app.textFields["url"].value! as? String, "mobile.twitter.com/", "The tab has not been dropped correctly")
     }
 
-    func testRearrangeTabsPrivateModeTabTray() {
+    /*func testRearrangeTabsPrivateModeTabTray() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         openTwoWebsites()
         navigator.goto(TabTray)
@@ -186,7 +186,7 @@ class DragAndDropTests: BaseTestCase {
         dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite["tabName"]!], dropOnElement: app.collectionViews.cells[secondWebsite["tabName"]!])
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]!, secondTab: firstWebsite["tabName"]!)
-    }
+    }*/
 
     // This test drags the address bar and since it is not possible to drop it on another app, lets do it in a search box
     func testDragAddressBarIntoSearchBox() {
@@ -200,7 +200,7 @@ class DragAndDropTests: BaseTestCase {
         XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField["urlSearchField"]!].value as? String, websiteWithSearchField["url"]!)
     }
 
-    func testRearrangeTabsTabTrayIsKeptinTopTabs() {
+    /*func testRearrangeTabsTabTrayIsKeptinTopTabs() {
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
         navigator.goto(TabTray)
@@ -212,7 +212,7 @@ class DragAndDropTests: BaseTestCase {
         // Leave Tab Tray and check order in Top Tabs
         app.collectionViews.cells[firstWebsite["tabName"]!].tap()
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite["tabName"]!, secondTab: firstWebsite["tabName"]!)
-    }
+    }*/
 
     func testDragAndDropHistoryEntry() {
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
