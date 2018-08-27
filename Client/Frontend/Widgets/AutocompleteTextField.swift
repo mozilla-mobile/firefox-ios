@@ -24,6 +24,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
     // This makes sure that the autocomplete doesnt mess with keyboard suggestions provided by third party keyboards.
     private var autocompleteTextLabel: UILabel?
+    private var clearButton: UIButton?
     private var hideCursor: Bool = false
 
     private let copyShortcutKey = "c"
@@ -169,8 +170,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     /// Removes the autocomplete-highlighted
-    fileprivate func removeCompletion() {
+    @objc fileprivate func removeCompletion() {
         autocompleteTextLabel?.removeFromSuperview()
+        clearButton?.removeFromSuperview()
         autocompleteTextLabel = nil
     }
 
@@ -206,6 +208,11 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             hideCursor = true
             forceResetCursor()
         }
+
+        self.clearButton?.removeFromSuperview()
+        let clearButton = createClearButton()
+        self.clearButton = clearButton
+        addSubview(clearButton)
     }
 
     override func caretRect(for position: UITextPosition) -> CGRect {
@@ -228,6 +235,18 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         frame.size.height = self.frame.size.height - 1
         label.frame = frame
         return label
+    }
+
+    private func createClearButton() -> UIButton {
+        let button = UIButton()
+        button.setImage(UIImage.templateImageNamed("topTabs-closeTabs"), for: .normal)
+        button.tintColor = self.textColor
+        button.backgroundColor = self.backgroundColor
+        let frame = CGRect(x: self.frame.width - 30, y: 0, width: 40, height: self.frame.height)
+        button.frame = frame
+        button.addTarget(self, action: #selector(removeCompletion), for: .touchUpInside)
+        button.clipsToBounds = false
+        return button
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
