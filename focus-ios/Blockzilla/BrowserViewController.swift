@@ -917,7 +917,6 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidDeactivate(_ urlBar: URLBar) {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
-            self.topURLBarConstraints.forEach { $0.deactivate() }
             self.urlBarContainer.alpha = 0
             self.view.layoutIfNeeded()
         }
