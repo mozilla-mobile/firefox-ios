@@ -13,7 +13,7 @@ We encourage you to participate in this open source project. We love Pull Reques
 
 * IRC:            See [#focus](https://wiki.mozilla.org/IRC) for general discussion; logs: https://mozilla.logbot.info/focus/; we're available Monday-Friday, PST working hours
 * Mailing List:   [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
-* Bugs:           [File a new bug](https://github.com/mozilla-mobile/focus-ios/issues/new) • [Existing bugs](https://github.com/mozilla-mobile/focus-ios/issues)
+* Bugs:           [File a new bug](https://github.com/mozilla-mobile/focus-ios/issues/new) • [Existing bugs](https://github.com/mozilla-mobile/focus-ios/issues) • [File a security bug][sec bug]
 
 If you're looking for a good way to get started contributing, check out out some [good first issues](https://github.com/mozilla-mobile/focus-ios/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
@@ -96,3 +96,5 @@ cd focus
 
 8. Open `Blockzilla.xcodeproj` in Xcode.
 9. Build the `Focus` scheme in Xcode.
+
+[sec bug]: https://bugzilla.mozilla.org/enter_bug.cgi?assigned_to=nobody%40mozilla.org&bug_file_loc=http%3A%2F%2F&bug_ignored=0&bug_severity=normal&bug_status=NEW&cf_fx_iteration=---&cf_fx_points=---&component=Security%3A%20iOS&contenttypemethod=autodetect&contenttypeselection=text%2Fplain&defined_groups=1&flag_type-4=X&flag_type-607=X&flag_type-791=X&flag_type-800=X&flag_type-803=X&form_name=enter_bug&groups=firefox-core-security&maketemplate=Remember%20values%20as%20bookmarkable%20template&op_sys=Unspecified&priority=--&product=Focus&rep_platform=Unspecified&target_milestone=---&version=---
