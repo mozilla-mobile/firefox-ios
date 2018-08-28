@@ -954,7 +954,7 @@ extension BrowserViewController: URLBarDelegate {
             }
             actions.append(pasteItem)
         }
-        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyMenuButton, iconString: "icon_link") { action in
+        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddressButton, iconString: "icon_link") { action in
             urlBar.copyToClipboard()
             Toast(text: UIConstants.strings.copyURLToast).show()
         }
