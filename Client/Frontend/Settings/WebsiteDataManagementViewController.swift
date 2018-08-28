@@ -12,12 +12,12 @@ enum Section: Int {
 private let NumberOfSections = 3
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
-class WebsiteDataManagementViewController: UITableViewController, UISearchBarDelegate {
-    fileprivate var clearButton, showMoreButton: UITableViewCell?
+class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBarDelegate {
+    fileprivate var clearButton, showMoreButton: ThemedTableViewCell?
     var searchResults: UITableViewController!
     var searchController: UISearchController!
     var showMoreButtonEnabled = true
-
+    let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
     private var siteRecords = [siteData]()
 
     override func viewDidLoad() {
@@ -34,6 +34,9 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
         searchController.searchBar.delegate = self
+        if theme == .dark {
+            searchController.searchBar.barStyle = .black
+        }
         if #available(iOS 11.0, *) {
             navigationItem.searchController = searchController
         } else {
@@ -41,17 +44,13 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
         }
         definesPresentationContext = true
 
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
-        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.showBottomBorder = false
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
+        let footer = UITableViewHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
         tableView.tableFooterView = footer
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-
+        let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -62,7 +61,7 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
             cell.textLabel?.textColor = showMoreButtonEnabled ? UIColor.theme.general.highlightBlue : UIColor.gray
             cell.accessibilityTraits = UIAccessibilityTraitButton
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
-            showMoreButton = cell
+            showMoreButton = cell 
         case .button:
             cell.textLabel?.text = Strings.SettingsClearAllWebsiteDataButton
             cell.textLabel?.textAlignment = .center
@@ -151,6 +150,7 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
             sectionTitle = nil
         }
         headerView?.titleLabel.text = sectionTitle
+        headerView?.showBottomBorder = false
         return headerView
     }
 
@@ -162,6 +162,14 @@ class WebsiteDataManagementViewController: UITableViewController, UISearchBarDel
         case .showMore:
             return 0
         }
+    }
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
+        footerView?.showBottomBorder = false
+        return footerView
+    }
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

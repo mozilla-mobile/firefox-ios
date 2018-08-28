@@ -30,12 +30,13 @@ class websiteSearchResultsViewController: UIViewController, UITableViewDataSourc
         let border = CGRect(x: 0, y: 10.0, width: self.view.bounds.size.width, height: 44.0)
         toolBar = UIToolbar(frame: border)
         toolBar.items = [flexible, editButton]
+        toolBar.barTintColor = UIColor.theme.tableView.headerBackground
         view.addSubview(toolBar)
         updateConstraints()
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: "Cell")
 
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
         tableView.separatorColor = UIColor.theme.tableView.separator
