@@ -25,7 +25,7 @@ extension UIColor {
 
         static let Blue40 = UIColor(rgb: 0x45a1ff)
         static let Blue40A30 = UIColor(rgba: 0x45a1ff4c)
-        static let Blue50 = UIColor(rgb: 0x0a84ff4)
+        static let Blue50 = UIColor(rgb: 0x0a84ff)
         static let Blue60 = UIColor(rgb: 0x0060df)
         static let Blue70 = UIColor(rgb: 0x003eaa)
         static let Blue80 = UIColor(rgb: 0x002275)
