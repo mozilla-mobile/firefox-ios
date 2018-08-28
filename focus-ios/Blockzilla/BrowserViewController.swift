@@ -575,12 +575,12 @@ class BrowserViewController: UIViewController {
         }
 
         webViewController.load(URLRequest(url: url))
+        if urlBar.url == nil {
+            urlBar.url = url
+        }
         guard #available(iOS 12.0, *), let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if url.baseURL == URL(string: savedUrl)?.baseURL {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
-        }
-        if urlBar.url == nil {
-            urlBar.url = url
         }
     }
 
