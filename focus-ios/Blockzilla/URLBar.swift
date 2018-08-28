@@ -257,7 +257,7 @@ class URLBar: UIView {
             isEditingConstraints.append(make.height.equalTo(48).priority(.high).constraint)
             isEditingConstraints.append(make.leading.greaterThanOrEqualToSuperview().offset(UIConstants.layout.urlBarMargin).constraint)
             isEditingConstraints.append(make.leading.greaterThanOrEqualTo(cancelButton.snp.trailing).constraint)
-            isEditingConstraints.append(make.trailing.equalTo(deleteButton.snp.leading).offset(-UIConstants.layout.urlBarMargin).constraint)
+            isEditingConstraints.append(make.trailing.lessThanOrEqualTo(safeAreaLayoutGuide.snp.trailing).offset(-UIConstants.layout.urlBarMargin).constraint)
         }
 
         urlBarBackgroundView.snp.makeConstraints { make in
@@ -322,7 +322,7 @@ class URLBar: UIView {
         
         cancelButton.snp.makeConstraints { make in
             make.centerY.equalTo(self)
-            make.leading.equalToSuperview()
+            make.leading.equalTo(safeAreaLayoutGuide.snp.leading)
             hideCancelConstraints.append(make.width.equalTo(0).priority(.required).constraint)
         }
         hideCancelConstraints.forEach { $0.activate() }
@@ -632,7 +632,7 @@ class URLBar: UIView {
     /// Show the URL toolset buttons if we're on iPad/landscape and not editing; hide them otherwise.
     /// This method is intended to be called inside `UIView.animate` block.
     private func updateToolsetConstraints() {
-        let isHidden = !inBrowsingMode || !showToolset
+        let isHidden = !inBrowsingMode || !showToolset || isEditing
         toolset.backButton.animateHidden(isHidden, duration: 0.3)
         toolset.forwardButton.animateHidden(isHidden, duration: 0.3)
         toolset.stopReloadButton.animateHidden(isHidden, duration: 0.3)
