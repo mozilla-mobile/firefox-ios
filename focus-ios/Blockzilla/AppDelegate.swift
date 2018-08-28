@@ -241,6 +241,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        if Settings.siriRequestsErase() {
+            browserViewController.photonActionSheetDidDismiss()
+            browserViewController.dismiss(animated: true, completion: nil)
+            browserViewController.navigationController?.popViewController(animated: true)
+            browserViewController.resetBrowser(hidePreviousSession: true)
+            Settings.setSiriRequestErase(to: false)
+        }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
 
         if let url = queuedUrl {
@@ -284,6 +291,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             browserViewController.resetBrowser(hidePreviousSession: true)
             browserViewController.ensureBrowsingMode()
             browserViewController.submit(url: url)
+        case "EraseIntent":
+            guard userActivity.interaction?.intent as? EraseIntent != nil else { return false }
+            browserViewController.resetBrowser()
+            return true
         default: break
         }
         return true

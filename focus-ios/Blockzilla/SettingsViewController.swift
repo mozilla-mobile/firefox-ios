@@ -359,6 +359,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if indexPath.row == 0 {
                 siriCell.labelText = UIConstants.strings.eraseSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriEraseCell"
+                SiriShortcuts().hasAddedActivity(type: .erase) { (result: Bool) in
+                    siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                }
             } else if indexPath.row == 1 {
                     siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
                     siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
@@ -514,7 +517,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .siri:
             guard #available(iOS 12.0, *) else { return }
             if indexPath.row == 0 {
-                // TODO: Issue #1049
+                SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.erase, in: self)
             }
             else if indexPath.row == 1 {
                 SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.eraseAndOpen, in: self)

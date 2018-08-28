@@ -9,7 +9,7 @@ import IntentsUI
 @available(iOS 12.0, *)
 class SiriShortcuts {
     enum activityType: String {
-        case erase
+        case erase = "EraseIntent"
         case eraseAndOpen = "org.mozilla.ios.Klar.eraseAndOpen"
         case openURL = "org.mozilla.ios.Klar.openUrl"
     }
@@ -21,9 +21,19 @@ class SiriShortcuts {
         case .openURL:
             return openUrlActivity
         default:
-            break
+            return nil
         }
-        return nil
+    }
+    
+    func getIntent(for type: activityType) -> INIntent? {
+        switch type {
+        case .erase:
+            let intent = EraseIntent()
+            intent.suggestedInvocationPhrase = "Erase"
+            return intent
+        default:
+            return nil
+        }
     }
     
     private var eraseAndOpenActivity: NSUserActivity = {
@@ -53,18 +63,31 @@ class SiriShortcuts {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             DispatchQueue.main.async {
                 guard let voiceShortcuts = voiceShortcuts else { return }
-                let foundShortcut = voiceShortcuts.filter { (attempt) in
+                // First, check for userActivity, which is for shortcuts that work in the foreground
+                var foundShortcut = voiceShortcuts.filter { (attempt) in
                     attempt.shortcut.userActivity?.activityType == type.rawValue
                     }.first
+                // Next, check for intent, which is used for shortcuts that work in the background
+                if foundShortcut == nil {
+                    foundShortcut = voiceShortcuts.filter { (attempt) in
+                        attempt.shortcut.intent as? EraseIntent != nil
+                        }.first
+                }
                 completion(foundShortcut != nil)
             }
         }
     }
     
     func displayAddToSiri(for activityType: activityType, in viewController: UIViewController) {
-        guard let activity = SiriShortcuts().getActivity(for: activityType) else { return }
-        let shortcut = INShortcut(userActivity: activity)
-        let addViewController = INUIAddVoiceShortcutViewController(shortcut: shortcut)
+        var shortcut: INShortcut?
+        if let activity = SiriShortcuts().getActivity(for: activityType) {
+            shortcut = INShortcut(userActivity: activity)
+        } else if let intent = SiriShortcuts().getIntent(for: activityType) {
+            shortcut = INShortcut(intent: intent)
+        }
+        guard let foundShortcut = shortcut else { return }
+        
+        let addViewController = INUIAddVoiceShortcutViewController(shortcut: foundShortcut)
         addViewController.modalPresentationStyle = .formSheet
         addViewController.delegate = viewController as? INUIAddVoiceShortcutViewControllerDelegate
         viewController.present(addViewController, animated: true, completion: nil)
@@ -81,9 +104,14 @@ class SiriShortcuts {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             DispatchQueue.main.async {
                 guard let voiceShortcuts = voiceShortcuts else { return }
-                let foundShortcut = voiceShortcuts.filter { (attempt) in
+                var foundShortcut = voiceShortcuts.filter { (attempt) in
                     attempt.shortcut.userActivity?.activityType == activityType.rawValue
                     }.first
+                if foundShortcut == nil {
+                    foundShortcut = voiceShortcuts.filter { (attempt) in
+                        attempt.shortcut.intent as? EraseIntent != nil
+                        }.first
+                }
                 if let foundShortcut = foundShortcut {
                     self.displayEditSiri(for: foundShortcut, in: viewController)
                 } else {

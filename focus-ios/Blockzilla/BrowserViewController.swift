@@ -474,6 +474,10 @@ class BrowserViewController: UIViewController {
         
         if #available(iOS 12.0, *) {
             userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
+            let interaction = INInteraction(intent: eraseIntent, response: nil)
+            interaction.donate { (error) in
+                if let error = error { print(error.localizedDescription) }
+            }
         }
     }
     
@@ -1347,6 +1351,15 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
     
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         darkView.isHidden = true
+    }
+}
+
+@available(iOS 12.0, *)
+extension BrowserViewController {
+    public var eraseIntent: EraseIntent {
+        let intent = EraseIntent()
+        intent.suggestedInvocationPhrase = "Erase"
+        return intent
     }
 }
 
