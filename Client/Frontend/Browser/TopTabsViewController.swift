@@ -92,9 +92,17 @@ class TopTabsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabDisplayManager.performTabUpdates()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tabDisplayManager.performTabUpdates()
+        // Will only be done once, on first appearance, due to the check
+        if isBeingPresented || isMovingToParentViewController {
+            tabDisplayManager.performTabUpdates()
+        }
     }
 
     deinit {
