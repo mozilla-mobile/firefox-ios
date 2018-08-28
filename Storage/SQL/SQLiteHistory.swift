@@ -307,7 +307,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
             }
         } else {
             whereClause = " WHERE (history.is_deleted = 0)\(whereFragment)"
-            bookmarksWhereClause = " WHERE (1 = 1)\(whereFragment)"
+            bookmarksWhereClause = (whereData == nil) ? "" : " WHERE (\(whereData!))"
             args = []
         }
 
@@ -449,7 +449,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
             }
         } else {
             ftsWhereClause = " WHERE (history.is_deleted = 0)\(whereFragment)"
-            bookmarksWhereClause = " WHERE (1 = 1)\(whereFragment)"
+            bookmarksWhereClause = (whereData == nil) ? "" : " WHERE (\(whereData!))"
             args = []
         }
 
