@@ -682,27 +682,29 @@ extension URLBarView {
 }
 
 extension URLBarView: Themeable {
-
     func applyTheme() {
         locationView.applyTheme()
         locationTextField?.applyTheme()
         actionButtons.forEach { $0.applyTheme() }
         tabsButton.applyTheme()
 
-        progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start, endColor: UIColor.theme.loadingBar.end)
-        locationBorderColor = UIColor.theme.urlbar.border.withAlphaComponent(0.3)
-        locationActiveBorderColor = UIColor.theme.urlbar.activeBorder
         cancelTintColor = UIColor.theme.browser.tint
         showQRButtonTintColor = UIColor.theme.browser.tint
         backgroundColor = UIColor.theme.browser.background
         line.backgroundColor = UIColor.theme.browser.urlBarDivider
-        locationContainer.layer.shadowColor = locationBorderColor.cgColor
     }
 }
 
 extension URLBarView: PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         privateModeBadge(visible: isPrivate)
+        ToolbarTextField.applyUIMode(isPrivate: isPrivate)
+
+        let progress = isPrivate ? (UIColor.theme.loadingBar.privateStart, UIColor.theme.loadingBar.privateEnd) :  (UIColor.theme.loadingBar.start, UIColor.theme.loadingBar.end)
+        progressBar.setGradientColors(startColor: progress.0, endColor: progress.1)
+        locationBorderColor = isPrivate ? UIColor.theme.urlbar.privateBorder : UIColor.theme.urlbar.border
+        locationContainer.layer.shadowColor = locationBorderColor.cgColor
+        locationActiveBorderColor = isPrivate ? UIColor.theme.urlbar.privateBorder : UIColor.theme.urlbar.activeBorder
     }
 }
 
@@ -805,11 +807,15 @@ class ToolbarTextField: AutocompleteTextField {
 }
 
 extension ToolbarTextField: Themeable {
-
     func applyTheme() {
         backgroundColor = UIColor.theme.textField.background
         textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
-        textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight
+        tintColor = AutocompleteTextField.textSelectionColor
+    }
+
+    // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
+    static func applyUIMode(isPrivate: Bool) {
+        textSelectionColor = isPrivate ?  UIColor.theme.urlbar.privateActiveBorder :  UIColor.theme.urlbar.textSelectionHighlight
     }
 }
