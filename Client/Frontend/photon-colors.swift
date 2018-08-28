@@ -10,7 +10,7 @@ extension UIColor {
     struct Photon {
         static let Magenta50 = UIColor(rgb: 0xff1ad9)
         static let Magenta60 = UIColor(rgb: 0xed00b5)
-        static let Magenta60A30 = UIColor(rgb: 0x0aed00b5)
+        static let Magenta60A30 = UIColor(rgba: 0xed00b54c)
         static let Magenta70 = UIColor(rgb: 0xb5007f)
         static let Magenta80 = UIColor(rgb: 0x7d004f)
         static let Magenta90 = UIColor(rgb: 0x440027)
@@ -24,7 +24,7 @@ extension UIColor {
         static let Purple90 = UIColor(rgb: 0x25003e)
 
         static let Blue40 = UIColor(rgb: 0x45a1ff)
-        static let Blue40A30 = UIColor(rgb: 0x0a45a1ff)
+        static let Blue40A30 = UIColor(rgba: 0x45a1ff4c)
         static let Blue50 = UIColor(rgb: 0x0a84ff4)
         static let Blue60 = UIColor(rgb: 0x0060df)
         static let Blue70 = UIColor(rgb: 0x003eaa)
