@@ -209,6 +209,8 @@ struct UIConstants {
         static let siriUrlSectionPadding: CGFloat = 40
         static let settingsSectionHeight: CGFloat = 44
         static let separatorHeight: CGFloat = 0.5
+        static let shareTrackersBottomOffset: CGFloat = -20
+        static let shareTrackersHeight: CGFloat = 36
     }
 
     struct strings {

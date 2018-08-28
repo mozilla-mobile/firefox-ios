@@ -15,6 +15,7 @@ class HomeView: UIView {
     private let trackerStatsView = UIView()
     private let trackerStatsLabel = SmartLabel()
     let toolbar = HomeViewToolbar()
+    let trackerStatsShareButton = UIButton()
     
     init() {
         super.init(frame: CGRect.zero)
@@ -52,7 +53,6 @@ class HomeView: UIView {
         trackerStatsLabel.minimumScaleFactor = 0.65
         trackerStatsView.addSubview(trackerStatsLabel)
         
-        let trackerStatsShareButton = UIButton()
         trackerStatsShareButton.setTitleColor(UIConstants.colors.defaultFont, for: .normal)
         trackerStatsShareButton.titleLabel?.font = UIConstants.fonts.shareTrackerStatsLabel
         trackerStatsShareButton.titleLabel?.textAlignment = .center
@@ -80,8 +80,8 @@ class HomeView: UIView {
         }
         
         trackerStatsView.snp.makeConstraints { make in
-            make.bottom.equalTo(self).offset(-24)
-            make.height.equalTo(20)
+            make.bottom.equalTo(toolbar.snp.top).offset(UIConstants.layout.shareTrackersBottomOffset)
+            make.height.equalTo(UIConstants.layout.shareTrackersHeight)
             make.centerX.equalToSuperview()
             make.width.greaterThanOrEqualTo(280)
             make.width.lessThanOrEqualToSuperview().offset(-32)
@@ -93,11 +93,11 @@ class HomeView: UIView {
         }
         
         trackerStatsShareButton.snp.makeConstraints { make in
-            make.bottom.equalTo(toolbar.snp.top).offset(-20)
+            make.bottom.equalToSuperview()
             make.right.equalToSuperview()
             make.width.equalTo(80).priority(500)
             make.width.greaterThanOrEqualTo(50)
-            make.height.equalTo(36)
+            make.height.equalToSuperview()
         }
         
         trackerStatsLabel.snp.makeConstraints { make in
