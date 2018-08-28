@@ -7,7 +7,7 @@ import SnapKit
 
 private struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor.Photon.Grey40
-    static let TextFieldActiveBorderColor = UIColor.Defaults.PaleBlue
+    static let TextFieldActiveBorderColor = UIColor.Photon.Blue40
 
     static let LocationLeftPadding: CGFloat = 8
     static let Padding: CGFloat = 10
