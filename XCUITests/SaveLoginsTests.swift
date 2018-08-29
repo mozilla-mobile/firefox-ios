@@ -4,6 +4,7 @@
 
 import XCTest
 
+let domain = "http://localhost:6571"
 let testLoginPage = "http://localhost:6571/test-password.html"
 let savedLoginEntry = "test@example.com, http://localhost:6571"
 let urlLogin = "linkedin.com"
@@ -85,7 +86,7 @@ class SaveLoginTest: BaseTestCase {
 
         app.tables.cells[savedLoginEntry].tap()
         waitforExistence(app.tables["Login Detail List"])
-        XCTAssertTrue(app.tables.cells["website, https://wopr.norad.org"].exists)
+        XCTAssertTrue(app.tables.cells["website, \(domain)"].exists)
         XCTAssertTrue(app.tables.cells["username, test@example.com"].exists)
         XCTAssertTrue(app.tables.cells["password"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts["Delete"].exists)
