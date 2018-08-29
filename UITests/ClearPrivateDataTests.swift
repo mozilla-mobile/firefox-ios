@@ -32,6 +32,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
             EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
 
+            tester().waitForAnimationsToFinish()
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
             let dom = URL(string: url)!.normalizedHost!
             let index = dom.index(dom.startIndex, offsetBy: 7)
