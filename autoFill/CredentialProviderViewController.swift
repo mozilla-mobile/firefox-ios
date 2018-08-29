@@ -14,6 +14,7 @@ private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 class CredentialProviderViewController: ASCredentialProviderViewController, UITableViewDelegate, UITableViewDataSource {
 
     let tableView = UITableView()
+    var webAuthSession: ASWebAuthenticationSession?
     private var navBar: UINavigationBar!
     override func viewDidLoad() {
         super.viewDidLoad()
