@@ -78,7 +78,7 @@ class TabDisplayManager: NSObject {
     }
 
      // Make sure animations don't happen before the view is loaded.
-    fileprivate func shouldAnimate(isRestoringTabs: Bool) ->Bool {
+    fileprivate func shouldAnimate(isRestoringTabs: Bool) -> Bool {
         return isRestoringTabs || collectionView.frame == CGRect.zero
     }
 

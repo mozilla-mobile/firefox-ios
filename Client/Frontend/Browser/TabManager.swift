@@ -194,7 +194,7 @@ class TabManager: NSObject {
             _selectedIndex = -1
         }
 
-        preserveTabs()
+        store.preserveTabs(tabs, selectedTab: selectedTab)
 
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
@@ -257,19 +257,19 @@ class TabManager: NSObject {
         if urls.isEmpty {
             return
         }
-        // When bulk adding tabs don't notify delegates until we are done
-        store.isRestoring = true
+
         var tab: Tab!
         for url in urls {
             tab = self.addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie)
         }
-        // Flush.
-        storeChanges()
+
         // Select the most recent.
-        self.selectTab(tab)
-        store.isRestoring = false
+        selectTab(tab)
         // Okay now notify that we bulk-loaded so we can adjust counts and animate changes.
         delegates.forEach { $0.get()?.tabManagerDidAddTabs(self) }
+
+        // Flush.
+        storeChanges()
     }
 
     func addTab(_ request: URLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool = false) -> Tab {
@@ -489,9 +489,8 @@ class TabManager: NSObject {
             return
         }
 
-        store.isRestoring = true
+        _ = store.restoreTabs(savedTabs: recentlyClosedForUndo, clearPrivateTabs: false, tabManager: self)
 
-        restoreInternal(savedTabs: recentlyClosedForUndo, clearPrivateTabs: false)
         recentlyClosedForUndo.removeAll()
 
         tabs.forEach { tab in
@@ -502,8 +501,6 @@ class TabManager: NSObject {
         if let tab = tabs.first, !tab.isPrivate {
             removeTabAndUpdateSelectedIndex(tab)
         }
-
-        store.isRestoring = false
 
         delegates.forEach { $0.get()?.tabManagerDidRestoreTabs(self) }
     }
@@ -527,13 +524,6 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
 
         return tabs.filter { $0.webView?.url == url } .first
-    }
-
-    func storeChanges() {
-        stateDelegate?.tabManagerWillStoreTabs(normalTabs)
-
-        // Also save (full) tab state to disk.
-        preserveTabs()
     }
 
     @objc func prefsDidChange() {
@@ -568,13 +558,18 @@ extension TabManager {
             profile.storeTabs(storedTabs)
         }
     }
+
+    @discardableResult func storeChanges() -> Success {
+        saveTabs(toProfile: profile, normalTabs)
+        return store.preserveTabs(tabs, selectedTab: selectedTab)
+    }
+
+    func hasTabsToRestoreAtStartup() -> Bool {
+        return store.hasTabsToRestoreAtStartup
     }
 
     func restoreTabs() {
-        store.isRestoring = true
         defer {
-            store.isRestoring = false
-
             // Always make sure there is a single normal tab.
             if normalTabs.isEmpty {
                 let tab = addTab()
@@ -583,35 +578,17 @@ extension TabManager {
                 }
             }
         }
-        guard count == 0
-            && !AppConstants.IsRunningTest
-            && !DebugSettingsBundleOptions.skipSessionRestore,
-            let savedTabs = tabsToRestore() else {
-                return
-        }
-
-        self.restoreInternal(savedTabs: savedTabs, clearPrivateTabs: self.shouldClearPrivateTabs())
-    }
-
-    func tabsToRestore() -> [SavedTab]? {
-        return store.tabsToRestore(fromData: store.tabArchiveData())
-    }
-
-    fileprivate func restoreInternal(savedTabs: [SavedTab], clearPrivateTabs: Bool) {
-        guard !savedTabs.isEmpty else {
+        guard count == 0, !AppConstants.IsRunningTest, !DebugSettingsBundleOptions.skipSessionRestore, store.hasTabsToRestoreAtStartup else {
             return
         }
 
-        let tabToSelect = store.restoreInternal(savedTabs: savedTabs, clearPrivateTabs: clearPrivateTabs, tabManager: self)
+        let tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(), tabManager: self)
 
         for delegate in self.delegates {
             delegate.get()?.tabManagerDidRestoreTabs(self)
         }
 
-        if let tab = tabToSelect {
-            self.selectTab(tab)
-            tab.createWebview()
-        }
+        selectTab(tabToSelect)
     }
 }
 

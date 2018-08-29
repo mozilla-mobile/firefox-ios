@@ -11,70 +11,43 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 class TabManagerStore {
-    var isRestoring = false
+    fileprivate var lockedForReading = false
     fileprivate let imageStore: DiskImageStore?
-    fileprivate var fileManager: FileManager!
+    fileprivate var fileManager = FileManager.default
+
+    // Init this at startup with the tabs on disk, and then on each save, update the in-memory tab state.
+    fileprivate lazy var archivedStartupTabs = { return tabsToRestore() }()
 
     init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default) {
         self.fileManager = fileManager
         self.imageStore = imageStore
     }
 
-    fileprivate func tabsStateArchivePath() -> String {
+    var isRestoringTabs: Bool {
+        return lockedForReading
+    }
+
+    var hasTabsToRestoreAtStartup: Bool {
+        return archivedStartupTabs.count > 0
+    }
+
+    fileprivate func tabsStateArchivePath() -> String? {
         guard let profilePath = fileManager.containerURL(
             forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?
             .appendingPathComponent("profile.profile").path else {
-                let documentsPath =
-                    NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-                return URL(fileURLWithPath: documentsPath).appendingPathComponent("tabsState.archive").path
+                return nil
         }
-        
+
         return URL(fileURLWithPath: profilePath).appendingPathComponent("tabsState.archive").path
     }
-    
-    fileprivate func migrateTabsStateArchive() {
-        guard let oldPath = try? fileManager.url(
-            for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent("tabsState.archive").path,
-            fileManager.fileExists(atPath: oldPath) else {
-                return
+
+    fileprivate func tabsToRestore() -> [SavedTab] {
+        guard let tabStateArchivePath = tabsStateArchivePath(),
+            fileManager.fileExists(atPath: tabStateArchivePath),
+            let tabData = try? Data(contentsOf: URL(fileURLWithPath: tabStateArchivePath)) else {
+                return [SavedTab]()
         }
-        
-        log.info("Migrating tabsState.archive from ~/Documents to shared container")
-        
-        guard let profilePath = fileManager.containerURL(
-            forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?
-            .appendingPathComponent("profile.profile").path else {
-                log.error("Unable to get profile path in shared container to move tabsState.archive")
-                return
-        }
-        
-        let newPath = URL(fileURLWithPath: profilePath).appendingPathComponent("tabsState.archive").path
-        
-        do {
-            try fileManager.createDirectory(atPath: profilePath, withIntermediateDirectories: true, attributes: nil)
-            try fileManager.moveItem(atPath: oldPath, toPath: newPath)
-            
-            log.info("Migrated tabsState.archive to shared container successfully")
-        } catch let error as NSError {
-            log.error("Unable to move tabsState.archive to shared container: \(error.localizedDescription)")
-        }
-    }
-    
-    func tabArchiveData() -> Data? {
-        migrateTabsStateArchive()
-        
-        let tabStateArchivePath = tabsStateArchivePath()
-        return
-            fileManager.fileExists(atPath: tabStateArchivePath)
-                ? try? Data(contentsOf: URL(fileURLWithPath: tabStateArchivePath))
-                : nil
-    }
-    
-    func tabsToRestore(fromData data: Data?) -> [SavedTab]? {
-        guard let tabData = data else {
-            return nil
-        }
+
         let unarchiver = NSKeyedUnarchiver(forReadingWith: tabData)
         unarchiver.decodingFailurePolicy = .setErrorAndReturn
         guard let tabs = unarchiver.decodeObject(forKey: "tabs") as? [SavedTab] else {
@@ -83,18 +56,18 @@ class TabManagerStore {
                 tag: SentryTag.tabManager,
                 severity: .error,
                 description: "\(unarchiver.error ??? "nil")")
-            return nil
+            return [SavedTab]()
         }
         return tabs
     }
-    
-    func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
+
+    fileprivate func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
         var savedTabs = [SavedTab]()
         var savedUUIDs = Set<String>()
         for tab in tabs {
             if let savedTab = SavedTab(tab: tab, isSelected: tab === selectedTab) {
                 savedTabs.append(savedTab)
-                
+
                 if let screenshot = tab.screenshot,
                     let screenshotUUID = tab.screenshotUUID {
                     savedUUIDs.insert(screenshotUUID.uuidString)
@@ -106,32 +79,49 @@ class TabManagerStore {
         _ = imageStore?.clearExcluding(savedUUIDs)
         return savedTabs.isEmpty ? nil : savedTabs
     }
-    
-    func preserveTabsInternal(_ tabs: [Tab], selectedTab: Tab?) {
-        assert(Thread.isMainThread)
-        guard !isRestoring, let savedTabs = prepareSavedTabs(
-            fromTabs: tabs, selectedTab: selectedTab) else { return }
-        preserveTabsToFile(savedTabs)
-    }
-    
-    func preserveTabsToFile(_ savedTabs: [SavedTab]) {
-        let path = tabsStateArchivePath()
-        let tabStateData = NSMutableData()
 
+    // Async write of the tab state. In most cases, code doesn't care about performing an operation
+    // after this completes. Deferred completion is called always, regardless of Data.write return value.
+    // Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
+    @discardableResult func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) -> Success {
+        assert(Thread.isMainThread)
+        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
+            let path = tabsStateArchivePath() else {
+                return succeed()
+        }
+
+        let tabStateData = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
         archiver.encode(savedTabs, forKey: "tabs")
         archiver.finishEncoding()
-        tabStateData.write(toFile: path, atomically: true)
+        let result = Success()
+        DispatchQueue.global().async {
+            let written = tabStateData.write(toFile: path, atomically: true)
+            print("PreserveTabs: \(written)") // Ignore write failure (could be restoring).
+            result.fill(Maybe(success: ()))
+        }
+        return result
     }
 
-    func restoreInternal(savedTabs: [SavedTab], clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
-        guard savedTabs.count > 0 else { return nil }
+    func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
+        let selectedTab = restoreTabs(savedTabs: archivedStartupTabs, clearPrivateTabs: clearPrivateTabs, tabManager: tabManager)
+        archivedStartupTabs.removeAll()
+        return selectedTab
+    }
+
+    func restoreTabs(savedTabs: [SavedTab], clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
+        assertIsMainThread("Restoration is a main-only operation")
+        guard !lockedForReading, savedTabs.count > 0 else { return nil }
+        lockedForReading = true
+        defer {
+            lockedForReading = false
+        }
         var savedTabs = savedTabs
         // Make sure to wipe the private tabs if the user has the pref turned on
         if clearPrivateTabs {
             savedTabs = savedTabs.filter { !$0.isPrivate }
         }
-        
+
         var tabToSelect: Tab?
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
@@ -142,7 +132,7 @@ class TabManagerStore {
                 tabToSelect = tab
             }
         }
-        
+
         if tabToSelect == nil {
             tabToSelect = tabManager.tabs.first(where: { $0.isPrivate == false })
         }

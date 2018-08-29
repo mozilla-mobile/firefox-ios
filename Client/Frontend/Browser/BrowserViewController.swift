@@ -529,7 +529,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showRestoreTabsAlert() {
-        guard canRestoreTabs() else {
+        guard tabManager.hasTabsToRestoreAtStartup() else {
             tabManager.selectTab(tabManager.addTab())
             return
         }
@@ -542,11 +542,6 @@ class BrowserViewController: UIViewController {
             }
         )
         self.present(alert, animated: true, completion: nil)
-    }
-
-    fileprivate func canRestoreTabs() -> Bool {
-        guard let tabsToRestore = tabManager.tabsToRestore() else { return false }
-        return !tabsToRestore.isEmpty
     }
 
     override func viewDidAppear(_ animated: Bool) {
