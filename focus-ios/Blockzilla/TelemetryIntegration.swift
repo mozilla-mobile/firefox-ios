@@ -32,6 +32,7 @@ class TelemetryEventMethod {
     public static let customDomainReordered = "reordered"
     public static let drag = "drag"
     public static let drop = "drop"
+    public static let siri = "siri"
 }
 
 class TelemetryEventObject {
@@ -56,4 +57,7 @@ class TelemetryEventObject {
     public static let trackerStatsShareButton = "tracker_stats_share_button"
     public static let quickAddCustomDomainButton = "quick_add_custom_domain_button"
     public static let requestDesktop = "request_desktop"
+    public static let openFavoriteSite = "open_favorite_site"
+    public static let eraseAndOpen = "erase_and_open"
+    public static let eraseInBackground = "erase_in_background"
 }
