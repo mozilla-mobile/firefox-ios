@@ -11,11 +11,11 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 protocol TabManagerDelegate: AnyObject {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?)
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab)
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab)
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab)
-    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab)
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool)
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager)
     func tabManagerDidAddTabs(_ tabManager: TabManager)
@@ -84,11 +84,6 @@ class TabManager: NSObject {
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         return configuration
     }()
-
-    fileprivate let store: TabManagerStore
-    var isRestoring: Bool {
-        get { return store.isRestoring }
-    }
 
     var selectedIndex: Int { return _selectedIndex }
 
@@ -205,7 +200,7 @@ class TabManager: NSObject {
         selectedTab?.createWebview()
         selectedTab?.lastExecutedTime = Date.now()
 
-        delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous) }
+        delegates.forEach { $0.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous, isRestoring: store.isRestoringTabs) }
         if let tab = previous {
             TabEvent.post(.didLoseFocus, for: tab)
         }
@@ -327,7 +322,7 @@ class TabManager: NSObject {
             tabs.insert(tab, at: insertIndex)
         }
 
-        delegates.forEach { $0.get()?.tabManager(self, didAddTab: tab) }
+        delegates.forEach { $0.get()?.tabManager(self, didAddTab: tab, isRestoring: store.isRestoringTabs) }
 
         if !zombie {
             tab.createWebview()
@@ -408,7 +403,7 @@ class TabManager: NSObject {
         tab.closeAndRemovePrivateBrowsingData()
 
         if notify {
-            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab) }
+            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
             TabEvent.post(.didClose, for: tab)
         }
 
