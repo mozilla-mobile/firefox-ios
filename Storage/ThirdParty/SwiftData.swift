@@ -109,14 +109,13 @@ open class SwiftData {
     /// Used to keep track of the corrupted databases we've logged.
     static var corruptionLogsWritten = Set<String>()
 
-    /// Used for testing.
-    static var ReuseConnections = true
-
-    /// For thread-safe access to the shared connection.
-    fileprivate let sharedConnectionQueue: DispatchQueue
+    /// For thread-safe access to the shared write connection.
+    fileprivate let writeConnectionQueue: DispatchQueue
 
     /// Shared connection to this database.
-    fileprivate var sharedConnection: ConcreteSQLiteDBConnection?
+    fileprivate var writeConnection: ConcreteSQLiteDBConnection?
+
+    /// SQLCipher keys for encrypted databases.
     fileprivate var key: String?
     fileprivate var prevKey: String?
 
@@ -132,7 +131,7 @@ open class SwiftData {
         self.schema = schema
         self.files = files
 
-        self.sharedConnectionQueue = DispatchQueue(label: "SwiftData queue: \(filename)", attributes: [])
+        self.writeConnectionQueue = DispatchQueue(label: "SwiftData write queue: \(filename)", attributes: [])
 
         // Ensure that multi-thread mode is enabled by default.
         // See https://www.sqlite.org/threadsafe.html
@@ -146,7 +145,7 @@ open class SwiftData {
     func withConnection<T>(_ flags: SwiftData.Flags, synchronous: Bool = false, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
         let deferred = DeferredDBOperation<Maybe<T>>()
 
-        let queue = self.sharedConnectionQueue
+        let queue = self.writeConnectionQueue
 
         func doWork() {
             if deferred.cancelled {
@@ -159,20 +158,19 @@ open class SwiftData {
                 deferred.running = false
             }
 
-            if !self.closed && self.sharedConnection == nil {
-                self.sharedConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
+            if !self.closed && self.writeConnection == nil {
+                self.writeConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
             }
 
-            guard let connection = SwiftData.ReuseConnections ? self.sharedConnection :
-                ConcreteSQLiteDBConnection(filename: self.filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files) else {
-                    do {
-                        _ = try callback(FailedSQLiteDBConnection())
+            guard let connection = self.writeConnection else {
+                do {
+                    _ = try callback(FailedSQLiteDBConnection())
 
-                        deferred.fill(Maybe(failure: NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])))
-                    } catch let err as NSError {
-                        deferred.fill(Maybe(failure: DatabaseError(err: err)))
-                    }
-                    return
+                    deferred.fill(Maybe(failure: NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])))
+                } catch let err as NSError {
+                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                }
+                return
             }
 
             do {
@@ -209,32 +207,32 @@ open class SwiftData {
     /// The shutdown is *sync*, meaning the queue will complete the current db operations before closing.
     /// If an operation is queued with an open connection, it will execute before this runs.
     func forceClose() {
-        sharedConnectionQueue.sync {
+        writeConnectionQueue.sync {
             self.closed = true
-            self.sharedConnection = nil
+            self.writeConnection = nil
         }
     }
 
     /// Reopens a database that had previously been force-closed.
     /// Does nothing if this database is already open.
     func reopenIfClosed() {
-        sharedConnectionQueue.sync {
+        writeConnectionQueue.sync {
             self.closed = false
         }
     }
 
     public func cancel() {
-        if let db = sharedConnection?.sqliteDB, !closed {
+        if let db = writeConnection?.sqliteDB, !closed {
             sqlite3_interrupt(db)
         }
     }
 
     public func suspendQueue() {
-        sharedConnectionQueue.suspend()
+        writeConnectionQueue.suspend()
     }
 
     public func resumeQueue() {
-        sharedConnectionQueue.resume()
+        writeConnectionQueue.resume()
     }
 
     public enum Flags {
