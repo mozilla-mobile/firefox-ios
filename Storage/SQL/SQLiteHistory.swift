@@ -234,8 +234,9 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
             SELECT
                 historyID, url, title, guid, domain_id, domain,
                 localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount,
-                NULL AS iconID, NULL AS iconURL, NULL AS iconDate, NULL AS iconType, NULL AS iconWidth, frecencies
-            FROM siteFrecency
+                iconID, iconURL, iconDate, iconType, iconWidth, frecencies
+            FROM siteFrecency LEFT JOIN view_history_id_favicon ON
+                siteFrecency.historyID = view_history_id_favicon.id
             """
 
         return (insertQuery, args)
