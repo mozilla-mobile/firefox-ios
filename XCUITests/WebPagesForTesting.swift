@@ -16,5 +16,16 @@ func registerHandlersForTestMethods(server: GCDWebServer) {
         let textNodes = [String](repeating: node, count: repeatCount).reduce("", +)
         return GCDWebServerDataResponse(html: "<html><body>\(textNodes)</body></html>")
     }
+
+    ["test-password", "test-password-submit"].forEach {
+        addHTMLFixture(name: $0, server: server)
+    }
+}
+
+// Make sure to add files to '/test-fixtures' directory in the source tree
+fileprivate func addHTMLFixture(name: String, server: GCDWebServer) {
+    if let path = Bundle.main.path(forResource: "test-fixtures/\(name)", ofType: "html") {
+        server.addGETHandler(forPath: "/\(name).html", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+    }
 }
 

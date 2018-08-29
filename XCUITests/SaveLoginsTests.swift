@@ -4,8 +4,8 @@
 
 import XCTest
 
-let testLoginPage = "http://wopr.norad.org/~sarentz/fxios/testpages/password.html"
-let savedLoginEntry = "test@example.com, https://wopr.norad.org"
+let testLoginPage = "http://localhost:6571/test-password.html"
+let savedLoginEntry = "test@example.com, http://localhost:6571"
 let urlLogin = "linkedin.com"
 let mailLogin = "iosmztest@mailinator.com"
 
