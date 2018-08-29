@@ -22,10 +22,6 @@ protocol TabManagerDelegate: AnyObject {
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?)
 }
 
-protocol TabManagerStateDelegate: AnyObject {
-    func tabManagerWillStoreTabs(_ tabs: [Tab])
-}
-
 // We can't use a WeakList here because this is a protocol.
 class WeakTabManagerDelegate {
     weak var value: TabManagerDelegate?
@@ -43,8 +39,9 @@ class WeakTabManagerDelegate {
 class TabManager: NSObject {
     fileprivate var delegates = [WeakTabManagerDelegate]()
     fileprivate let tabEventHandlers: [TabEventHandler]
-    weak var stateDelegate: TabManagerStateDelegate?
-
+    fileprivate let store: TabManagerStore
+    fileprivate let profile: Profile
+    
     func addDelegate(_ delegate: TabManagerDelegate) {
         assert(Thread.isMainThread)
         delegates.append(WeakTabManagerDelegate(value: delegate))
@@ -69,7 +66,7 @@ class TabManager: NSObject {
     lazy fileprivate var configuration: WKWebViewConfiguration = {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
-        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(profile.prefs.boolForKey("blockPopups") ?? true)
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
@@ -80,7 +77,7 @@ class TabManager: NSObject {
     lazy fileprivate var privateConfiguration: WKWebViewConfiguration = {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
-        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(profile.prefs.boolForKey("blockPopups") ?? true)
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
@@ -93,7 +90,6 @@ class TabManager: NSObject {
         get { return store.isRestoring }
     }
 
-    fileprivate let prefs: Prefs
     var selectedIndex: Int { return _selectedIndex }
 
     // Enables undo of recently closed tabs
@@ -110,12 +106,13 @@ class TabManager: NSObject {
         return tabs.filter { $0.isPrivate }
     }
 
-    init(prefs: Prefs, imageStore: DiskImageStore?) {
+    init(profile: Profile, imageStore: DiskImageStore?) {
         assert(Thread.isMainThread)
 
-        self.prefs = prefs
+        self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
-        self.tabEventHandlers = TabEventHandlers.create(with: prefs)
+        self.tabEventHandlers = TabEventHandlers.create(with: profile.prefs)
+
         self.store = TabManagerStore(imageStore: imageStore)
         super.init()
 
@@ -219,7 +216,7 @@ class TabManager: NSObject {
     }
 
     func shouldClearPrivateTabs() -> Bool {
-        return prefs.boolForKey("settings.closePrivateTabs") ?? false
+        return profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
     }
 
     //Called by other classes to signal that they are entering/exiting private mode
@@ -340,12 +337,12 @@ class TabManager: NSObject {
         if let request = request {
             tab.loadRequest(request)
         } else if !isPopup {
-            let newTabChoice = NewTabAccessors.getNewTabPage(prefs)
+            let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
             switch newTabChoice {
             case .homePage:
                 // We definitely have a homepage if we've got here
                 // (so we can safely dereference it).
-                let url = HomePageAccessors.getHomePage(prefs)!
+                let url = HomePageAccessors.getHomePage(profile.prefs)!
                 tab.loadRequest(URLRequest(url: url))
             case .blankPage:
                 // Do nothing: we're already seeing a blank page.
@@ -546,7 +543,7 @@ class TabManager: NSObject {
 
     @objc func prefsDidChange() {
         DispatchQueue.main.async {
-            let allowPopups = !(self.prefs.boolForKey("blockPopups") ?? true)
+            let allowPopups = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
             // Each tab may have its own configuration, so we should tell each of them in turn.
             for tab in self.tabs {
                 tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
@@ -565,8 +562,17 @@ class TabManager: NSObject {
 }
 
 extension TabManager {
-    func preserveTabs() {
-        store.preserveTabsInternal(tabs, selectedTab: selectedTab)
+    fileprivate func saveTabs(toProfile profile: Profile, _ tabs: [Tab]) {
+        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
+        let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toRemoteTab )
+
+        // Don't insert into the DB immediately. We tend to contend with more important
+        // work like querying for top sites.
+        let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
+        queue.asyncAfter(deadline: DispatchTime.now() + Double(Int64(ProfileRemoteTabsSyncDelay * Double(NSEC_PER_MSEC))) / Double(NSEC_PER_SEC)) {
+            profile.storeTabs(storedTabs)
+        }
+    }
     }
 
     func restoreTabs() {
@@ -629,11 +635,11 @@ extension TabManager: WKNavigationDelegate {
     // Do not excute JS at this point that requires running prior to DOM parsing.
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = self[webView] else { return }
-        let isNightMode = NightModeAccessors.isNightMode(self.prefs)
+        let isNightMode = NightModeAccessors.isNightMode(profile.prefs)
         tab.setNightMode(isNightMode)
 
         if #available(iOS 11, *) {
-            let isNoImageMode = self.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
+            let isNoImageMode = profile.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
             tab.noImageMode = isNoImageMode
 
             if let tpHelper = tab.contentBlocker as? ContentBlockerHelper, !tpHelper.isEnabled {
