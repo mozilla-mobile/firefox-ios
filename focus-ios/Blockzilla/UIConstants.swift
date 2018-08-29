@@ -384,7 +384,7 @@ struct UIConstants {
         static let autocompleteAddCustomUrlWithPlus = NSLocalizedString("Autocomplete.addCustomUrlWithPlus", value: "+ Add Custom URL", comment: "Label for button to add a custom URL with the + prefix")
         static let autocompleteAddCustomUrl = NSLocalizedString("Autocomplete.addCustomUrl", value: "Add Custom URL", comment: "Label for button to add a custom URL")
         static let autocompleteAddCustomUrlError = NSLocalizedString("Autocomplete.addCustomUrlError", value: "Double-check the URL you entered.", comment: "Label for error state when entering an invalid URL")
-        static let addSearchEngineError = NSLocalizedString("SearchEngine.addEngineError", value: "That didn't work. Try replacing the search term with this: %s.", comment: "Label for error state when entering an invalid search engine URL.")
+        static let addSearchEngineError = NSLocalizedString("SearchEngine.addEngineError", value: "That didn't work. Try replacing the search term with this: %s.", comment: "Label for error state when entering an invalid search engine URL. %s is a search term in a URL.")
 
         static let autocompleteAddCustomUrlPlaceholder = NSLocalizedString("Autocomplete.addCustomUrlPlaceholder", value: "Paste or enter URL", comment: "Placeholder for the input field to add a custom URL")
         static let autocompleteAddCustomUrlLabel = NSLocalizedString("Autocomplete.addCustomUrlLabel", value: "URL to add", comment: "Label for the input to add a custom URL")
@@ -398,7 +398,7 @@ struct UIConstants {
         
         static let siriShortcutsTitle = NSLocalizedString("Settinsg.siriShortcutsTitle", value: "SIRI SHORTCUTS", comment: "Title for settings section to enable different Siri Shortcuts.")
         static let eraseSiri = NSLocalizedString("Siri.erase", value: "Erase", comment: "Title of option in settings to set up Siri to erase")
-        static let eraseAndOpenSiri = NSLocalizedString("Siri.eraseAndOpen", value: "Erase & Open", comment: "Title of option in settings to set up Siri to erase and then open Focus/Klar. %@ is the application name.")
+        static let eraseAndOpenSiri = NSLocalizedString("Siri.eraseAndOpen", value: "Erase & Open", comment: "Title of option in settings to set up Siri to erase and then open the app.")
         static let openUrlSiri = NSLocalizedString("Siri.openURL", value: "Open Favorite Site", comment: "Title of option in settings to set up Siri to open a specified URL in Focus/Klar.")
         static let addToSiri = NSLocalizedString("Siri.addTo", value: "Add to Siri", comment: "Button to add a specified shortcut option to Siri.")
         static let favoriteUrlTitle = NSLocalizedString("Siri.favoriteUrl", value: "Open Favorite Site", comment: "Title for screen to add a favorite URL to Siri.")
