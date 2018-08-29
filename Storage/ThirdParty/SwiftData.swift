@@ -50,10 +50,26 @@ class DeferredDBOperation<T>: Deferred<T>, Cancellable {
     fileprivate var dispatchWorkItem: DispatchWorkItem?
     private var _running = false
 
+    fileprivate let queue: DispatchQueue
+
+    fileprivate weak var connection: ConcreteSQLiteDBConnection?
+
+    init(queue: DispatchQueue) {
+        self.queue = queue
+    }
+
     func cancel() {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
+
+        queue.suspend()
+        defer { queue.resume() }
+
         dispatchWorkItem?.cancel()
+
+        if _running {
+            connection?.interrupt()
+        }
     }
 
     var cancelled: Bool {
@@ -143,9 +159,9 @@ open class SwiftData {
      * close a database connection and run a block of code inside it.
      */
     func withConnection<T>(_ flags: SwiftData.Flags, synchronous: Bool = false, _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T) -> Deferred<Maybe<T>> {
-        let deferred = DeferredDBOperation<Maybe<T>>()
-
         let queue = self.writeConnectionQueue
+
+        let deferred = DeferredDBOperation<Maybe<T>>(queue: queue)
 
         func doWork() {
             if deferred.cancelled {
@@ -156,10 +172,12 @@ open class SwiftData {
             deferred.running = true
             defer {
                 deferred.running = false
+                deferred.connection = nil
             }
 
             if !self.closed && self.writeConnection == nil {
                 self.writeConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
+                deferred.connection = self.writeConnection
             }
 
             guard let connection = self.writeConnection else {
@@ -218,12 +236,6 @@ open class SwiftData {
     func reopenIfClosed() {
         writeConnectionQueue.sync {
             self.closed = false
-        }
-    }
-
-    public func cancel() {
-        if let db = writeConnection?.sqliteDB, !closed {
-            sqlite3_interrupt(db)
         }
     }
 

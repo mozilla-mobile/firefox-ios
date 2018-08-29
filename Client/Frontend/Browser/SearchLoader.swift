@@ -56,7 +56,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             Profiler.shared?.begin(bookend: .url_autocomplete)
 
             if let currentDbQuery = currentDbQuery {
-                profile.db.cancel(databaseOperation: WeakRef(currentDbQuery))
+                currentDbQuery.cancel()
             }
 
             let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
