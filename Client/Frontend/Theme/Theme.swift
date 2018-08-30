@@ -53,7 +53,7 @@ class ActionMenuColor {
 }
 
 class URLBarColor {
-    var border: UIColor { return UIColor.Photon.Grey50 }
+    var border: UIColor { return UIColor.Photon.Grey90A10 }
     var activeBorder: UIColor { return UIColor.Photon.Blue40A30 }
     var tint: UIColor { return UIColor.Photon.Blue40A30 }
 
@@ -71,7 +71,7 @@ class URLBarColor {
     var pageOptionsSelected: UIColor { return readerModeButtonSelected }
     var pageOptionsUnselected: UIColor { return UIColor.theme.browser.tint }
 
-    var privateBorder: UIColor { return UIColor.Defaults.MobilePrivatePurple }
+    var privateBorder: UIColor { return border }
     var privateActiveBorder: UIColor { return UIColor.Defaults.MobilePrivatePurple }
     var privateTextSelectionHighlight: UIColor { return UIColor.Defaults.MobilePrivatePurple }
 }

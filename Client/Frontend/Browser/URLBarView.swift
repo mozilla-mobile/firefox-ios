@@ -704,7 +704,7 @@ extension URLBarView: PrivateModeUI {
         progressBar.setGradientColors(startColor: progress.0, endColor: progress.1)
         locationBorderColor = isPrivate ? UIColor.theme.urlbar.privateBorder : UIColor.theme.urlbar.border
         locationContainer.layer.shadowColor = locationBorderColor.cgColor
-        locationActiveBorderColor = isPrivate ? UIColor.theme.urlbar.privateBorder : UIColor.theme.urlbar.activeBorder
+        locationActiveBorderColor = isPrivate ? UIColor.theme.urlbar.privateActiveBorder : UIColor.theme.urlbar.activeBorder
     }
 }
 
