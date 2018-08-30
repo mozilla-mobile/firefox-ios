@@ -11,139 +11,85 @@ import Deferred
 
 import XCTest
 
-
-
 class TabManagerStoreTests: XCTestCase {
+    let profile = TabManagerMockProfile()
+    var manager: TabManager!
+    let configuration = WKWebViewConfiguration()
 
     override func setUp() {
         super.setUp()
+
+        manager = TabManager(profile: profile, imageStore: nil)
+        configuration.processPool = WKProcessPool()
+
+        manager.testClearArchive()
+
     }
 
     override func tearDown() {
         super.tearDown()
     }
 
-    func testTabsToRestoreWithNoData() {
-        let manager = TabManagerStore(imageStore: nil)
-        let result = manager.tabsToRestore(fromData: nil)
-        XCTAssertEqual(result, nil)
+    // Without session data, a Tab can't become a SavedTab and get archived
+    func addTabWithSessionData(isPrivate: Bool = false) {
+        let tab = Tab(configuration: configuration, isPrivate: isPrivate)
+        tab.url = URL(string: "http://yahoo.com")!
+        manager.configureTab(tab, request: URLRequest(url: tab.url!), flushToDisk: false, zombie: false)
+        tab.sessionData = SessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
     }
 
-    func testTabsToRestoreWithData() {
-        let manager = TabManagerStore(imageStore: nil)
-        let dataSize = 3
-        let data = SavedTab.generateDummyData(size: dataSize)
-        let result = manager.tabsToRestore(fromData: data)
-        XCTAssertEqual(result?.count, dataSize)
+    func testNoData() {
+        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
+        XCTAssertEqual(manager.testCountRestoredTabs(), 0)
     }
 
-    func testTabArchiveDataFileManagerCalled() {
-        let mock = FileManagerMock()
-        let manager = TabManagerStore(imageStore: nil, mock)
-        let _ = manager.tabArchiveData()
-
-        XCTAssertTrue(mock.fileExistsAtPathCalled)
-    }
-
-    func testPrepareSavedTabsEmptyTabArrayReturnNil() {
-        let mock = FileManagerMock()
-        let manager = TabManagerStore(imageStore: nil, mock)
-        let tabs = [Tab]()
-        let result = manager.prepareSavedTabs(fromTabs: tabs, selectedTab: nil)
-        
-        XCTAssertEqual(result, nil)
-    }
-
-    func testPrepareSavedTabsEmptyTabArrayReturnSavedTabs() {
-        let mock = FileManagerMock()
-        let manager = TabManagerStore(imageStore: nil, mock)
-        let tabs = Tab.generateTabs(size: 3)
-        let result = manager.prepareSavedTabs(fromTabs: tabs, selectedTab: nil)
-
-        XCTAssertNotNil(result, "Expected to return SavedTabs")
-        XCTAssertEqual(result?.count, tabs.count)
-    }
-    
-    func testRestoreInternal() {
-        let mock = FileManagerMock()
-        let managerStore = TabManagerStore(imageStore: nil, mock)
-        let profile = TabManagerMockProfile()
-        let managerMock = TabManagerMock(prefs: profile.prefs, imageStore: nil)
-        let savedTabsToRestore = SavedTab.generateDummySavedTabs(size: 3)
-
-        let _ = managerStore.restoreInternal(savedTabs: savedTabsToRestore, clearPrivateTabs: false, tabManager: managerMock)
-        XCTAssertEqual(managerMock.addTabCalledCounter, savedTabsToRestore.count)
-    }
-}
-
-class FileManagerMock: FileManager {
-    var fileExistsAtPathCalled: Bool = false
-
-    override func fileExists(atPath path: String) -> Bool {
-        fileExistsAtPathCalled = true
-        return true
-    }
-}
-
-class TabManagerMock: TabManager {
-    var addTabCalledCounter: Int = 0
-    override func addTab(_ request: URLRequest!, configuration: WKWebViewConfiguration!, afterTab: Tab?, isPrivate: Bool) -> Tab {
-        addTabCalledCounter += 1
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-        return Tab(configuration: configuration)
-    }
-    override func addTab(_ request: URLRequest? = nil, configuration: WKWebViewConfiguration? = nil, afterTab: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPrivate: Bool = false) -> Tab {
-        addTabCalledCounter += 1
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-        return Tab(configuration: configuration)
-    }
-
-}
-
-extension Tab {
-    static func generateTabs(size: Int) -> [Tab] {
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-        
-        var tabs = [Tab]()
-        for _ in 0..<size {
-            let tab = Tab(configuration: configuration)
-            tab.sessionData = SessionData(currentPage: 0, urls: [URL(string: "url")!], lastUsedTime: Date.now())
-            tabs.append(tab)
+    func testPrivateTabsAreArchived() {
+        for _ in 0..<2 {
+            addTabWithSessionData(isPrivate: true)
         }
-        return tabs
+        let e = expectation(description: "saved")
+        manager.storeChanges().uponQueue(.main) {_ in
+            XCTAssertEqual(self.manager.testTabCountOnDisk(), 2)
+            e.fulfill()
+        }
+        waitForExpectations(timeout: 2, handler: nil)
+    }
+
+    func testAddedTabsAreStored() {
+        // Add 2 tabs
+        for _ in 0..<2 {
+            addTabWithSessionData()
+        }
+
+        var e = expectation(description: "saved")
+        manager.storeChanges().uponQueue(.main) { _ in
+            XCTAssertEqual(self.manager.testTabCountOnDisk(), 2)
+            e.fulfill()
+        }
+        waitForExpectations(timeout: 2, handler: nil)
+
+        // Add 2 more
+        for _ in 0..<2 {
+            addTabWithSessionData()
+        }
+
+        e = expectation(description: "saved")
+        manager.storeChanges().uponQueue(.main) { _ in
+            XCTAssertEqual(self.manager.testTabCountOnDisk(), 4)
+            e.fulfill()
+        }
+        waitForExpectations(timeout: 2, handler: nil)
+
+        // Remove all tabs, and add just 1 tab
+        manager.removeAll()
+        addTabWithSessionData()
+
+        e = expectation(description: "saved")
+        manager.storeChanges().uponQueue(.main) {_ in
+            XCTAssertEqual(self.manager.testTabCountOnDisk(), 1)
+            e.fulfill()
+        }
+        waitForExpectations(timeout: 2, handler: nil)
     }
 }
 
-extension SavedTab {
-    static func generateDummyData(size: Int, correctKey: Bool = true) -> Data? {
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-        
-        let savedTabs = SavedTab.generateDummySavedTabs(size: size, correctKey: correctKey)
-        
-        let tabStateData = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
-        correctKey ? archiver.encode(savedTabs, forKey: "tabs") : archiver.encode(savedTabs, forKey: "incorrectKey")
-        archiver.finishEncoding()
-        
-        return archiver.encodedData
-    }
-    static func generateDummySavedTabs(size: Int, correctKey: Bool = true) -> [SavedTab] {
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-        
-        var savedTabs = [SavedTab]()
-        for _ in 0..<size {
-            let tab = Tab(configuration: configuration)
-            tab.sessionData = SessionData(currentPage: 0, urls: [URL(string: "url")!], lastUsedTime: Date.now())
-            if let savedTab = SavedTab(tab: tab, isSelected: false) {
-                savedTabs.append(savedTab)
-            }
-        }
-        
-        return savedTabs
-    }
-}

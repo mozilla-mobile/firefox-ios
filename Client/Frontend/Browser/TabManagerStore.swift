@@ -32,13 +32,14 @@ class TabManagerStore {
     }
 
     fileprivate func tabsStateArchivePath() -> String? {
-        guard let profilePath = fileManager.containerURL(
-            forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?
-            .appendingPathComponent("profile.profile").path else {
-                return nil
+        let profilePath: String?
+        if  AppConstants.IsRunningTest {
+            profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
+        } else {
+            profilePath = fileManager.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
         }
-
-        return URL(fileURLWithPath: profilePath).appendingPathComponent("tabsState.archive").path
+        guard let path = profilePath else { return nil }
+        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
     }
 
     fileprivate func tabsToRestore() -> [SavedTab] {
@@ -138,5 +139,20 @@ class TabManagerStore {
         }
 
         return tabToSelect
+    }
+}
+
+// Functions for testing
+extension TabManagerStore {
+    func testTabCountOnDisk() -> Int {
+        assert(AppConstants.IsRunningTest)
+        return tabsToRestore().count
+    }
+
+    func testClearArchive() {
+        assert(AppConstants.IsRunningTest)
+        if let path = tabsStateArchivePath() {
+            try? FileManager.default.removeItem(atPath: path)
+        }
     }
 }

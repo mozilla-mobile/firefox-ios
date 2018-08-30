@@ -752,3 +752,22 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         decisionHandler(res)
     }
 }
+
+// Helper functions for test cases
+extension TabManager {
+    func testTabCountOnDisk() -> Int {
+        assert(AppConstants.IsRunningTest)
+        return store.testTabCountOnDisk()
+    }
+
+    func testCountRestoredTabs() -> Int {
+        assert(AppConstants.IsRunningTest)
+        _ = store.restoreStartupTabs(clearPrivateTabs: true, tabManager: self)
+        return count
+    }
+
+    func testClearArchive() {
+        assert(AppConstants.IsRunningTest)
+        store.testClearArchive()
+    }
+}
