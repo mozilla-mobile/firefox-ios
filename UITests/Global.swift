@@ -328,11 +328,11 @@ class BrowserUtils {
                 .perform(grey_swipeFastInDirection(GREYDirection.left))
         }
         EarlGrey.selectElement(with: settings_button).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Clear Private Data"))
+        EarlGrey.selectElement(with: grey_accessibilityID("ClearPrivateData"))
             .using(searchAction: grey_scrollInDirection(.down, 200),
                    onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
             .assert(grey_notNil())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Clear Private Data")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("ClearPrivateData")).perform(grey_tap())
     }
 
     class func closeClearPrivateDataDialog() {
