@@ -46,7 +46,7 @@ class TabTraySearchTabsTests: BaseTestCase {
         searchTabs(tabTitleOrUrl: "internet")
         XCTAssertEqual(app.collectionViews.cells.count, 1)
     }
-
+    // Test disabled because the DragAndDrop is off due to a non repro crash bug 1486269
     /*func testDragAndDropTabToSearchTabField() {
         navigator.openURL(firstURL)
         navigator.goto(TabTray)

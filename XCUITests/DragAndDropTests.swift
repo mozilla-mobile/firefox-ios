@@ -82,7 +82,7 @@ class DragAndDropTests: BaseTestCase {
         // Check that focus is kept on last website open
         XCTAssertEqual(app.textFields["url"].value! as? String, "mobile.twitter.com/", "The tab has not been dropped correctly")
     }
-
+    // Tests disabled because the feature is off due to a non repro crash bug 1486269
     /*func testRearrangeTabsTabTray() {
         openTwoWebsites()
         navigator.goto(TabTray)
