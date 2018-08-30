@@ -224,13 +224,10 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
+        waitforExistence(app.buttons["Undo"])
         app.buttons["Undo"].tap()
-        // User is taken to TabTray now (bug 1477658)
-        navigator.nowAt(TabTray)
-        app.collectionViews.cells[urlLabel].tap()
-        navigator.nowAt(BrowserTab)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
-        waitforExistence(app.collectionViews.cells[urlLabel])
+        // Nothing should happens starting on v13.x see bug 1487106
+        waitforExistence(app.staticTexts["Private Browsing"])
     }
 
     func testCloseAllTabs() {
