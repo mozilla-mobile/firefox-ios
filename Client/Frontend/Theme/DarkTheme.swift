@@ -29,14 +29,7 @@ fileprivate class DarkActionMenuColor: ActionMenuColor {
 }
 
 fileprivate class DarkURLBarColor: URLBarColor {
-    override var border: UIColor { return UIColor.Photon.Grey50 }
-    override var activeBorder: UIColor { return UIColor.Photon.Blue40A30 }
-    override var tint: UIColor { return UIColor.Photon.Blue40A30 }
-    override var textSelectionHighlight: UIColor { return UIColor.Photon.Blue40 }
-    override var readerModeButtonSelected: UIColor { return UIColor.Photon.Blue40 }
-    override var readerModeButtonUnselected: UIColor { return UIColor.Photon.Grey20 }
-    override var pageOptionsSelected: UIColor { return readerModeButtonSelected }
-    override var pageOptionsUnselected: UIColor { return UIColor.theme.browser.tint }
+    // use defaults
 }
 
 fileprivate class DarkBrowserColor: BrowserColor {
@@ -86,7 +79,6 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var separator: UIColor { return defaultSeparator }
     override var border: UIColor { return UIColor.Photon.Grey60 }
     override var buttonContainerBorder: UIColor { return separator }
-    override var backgroundColorPrivateMode: UIColor { return UIColor.Photon.Grey50 }
 
     override var welcomeScreenText: UIColor { return UIColor.Photon.Grey30 }
     override var bookmarkIconBorder: UIColor { return UIColor.Photon.Grey30 }
