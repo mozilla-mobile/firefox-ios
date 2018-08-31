@@ -125,7 +125,7 @@ class TabsButton: UIButton {
         button.borderView.strokeWidth = borderView.strokeWidth
         button.borderView.color = borderView.color
         button.borderView.cornerRadius = borderView.cornerRadius
-
+        
         return button
     }
 

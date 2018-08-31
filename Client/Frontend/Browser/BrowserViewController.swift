@@ -1518,10 +1518,59 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         showTabTray()
     }
 
+    func getTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
+        var count = 1
+        let infinity = "\u{221E}"
+        if let selectedTab = tabManager.selectedTab {
+            count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
+        }
+        let tabCount = (count < 100) ? count.description : infinity
+
+        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { action in
+            if let tab = self.tabManager.selectedTab {
+                if self.tabManager.switchTabMode(tab) {
+                    let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+                    self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
+                }
+            }}
+        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { action in
+            if let tab = self.tabManager.selectedTab {
+                _ = self.tabManager.switchTabMode(tab)
+            }}
+        if let tab = self.tabManager.selectedTab {
+            return tab.isPrivate ? [normalBrowsingMode] : [privateBrowsingMode]
+        }
+        return [privateBrowsingMode]
+    }
+    func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
+        let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
+            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)}
+        let newPrivateTab = PhotonActionSheetItem(title: Strings.NewPrivateTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
+            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)}
+        let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "tab_close", iconType: .Image) { action in
+            if let tab = self.tabManager.selectedTab {
+                self.tabManager.removeTab(tab)
+            }}
+        if let tab = self.tabManager.selectedTab {
+            return tab.isPrivate ? [newPrivateTab, closeTab] : [newTab, closeTab]
+        }
+        return [newTab, closeTab]
+    }
+  
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         guard self.presentedViewController == nil else {
             return
         }
+        var actions: [[PhotonActionSheetItem]] = []
+        actions.append(getTabToolbarLongPressActions())
+        actions.append(getMoreTabToolbarLongPressActions())
+
+        // force a modal if the menu is being displayed in compact split screen
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
+/*
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
@@ -1542,6 +1591,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         present(controller, animated: true, completion: nil)
+*/
     }
 
     func showBackForwardList() {
