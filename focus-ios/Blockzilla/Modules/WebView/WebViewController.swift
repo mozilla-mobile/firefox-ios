@@ -109,6 +109,7 @@ class WebViewController: UIViewController, WebController {
         } else {
             reload() // Reload the current URL. We cannot use loadRequest in this case because it seems to leverage caching.
         }
+        UserDefaults.standard.set(false, forKey: TipManager.TipKey.requestDesktopTip)
     }
 
     func resetUA() {

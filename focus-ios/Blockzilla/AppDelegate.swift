@@ -54,6 +54,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         // Count number of app launches for requesting a review
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
         UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        
+        // Set original default values for showing tips
+        let tipDefaults = [TipManager.TipKey.autocompleteTip: true,
+                           TipManager.TipKey.sitesNotWorkingTip: true,
+                           TipManager.TipKey.siriFavoriteTip: true,
+                           TipManager.TipKey.biometricTip: true,
+                           TipManager.TipKey.shareTrackersTip: true,
+                           TipManager.TipKey.siriEraseTip: true,
+                           TipManager.TipKey.requestDesktopTip: true]
+        UserDefaults.standard.register(defaults: tipDefaults)
     
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
@@ -366,7 +376,7 @@ extension AppDelegate {
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
             var outputDict = inputDict // make a mutable copy
 
-            if self.browserViewController.canShowTrackerStatsShareButton() { // Klar users are not included in this experiment
+            if self.browserViewController.canShowTips() { // Klar users are not included in this experiment
                 self.browserViewController.flipCoinForShowTrackerButton() // Force a coin flip if one has not been flipped yet
                 outputDict["showTrackerStatsSharePhase2"] = UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
             }

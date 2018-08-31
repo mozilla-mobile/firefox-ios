@@ -71,13 +71,15 @@ class BrowserViewController: UIViewController {
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
+    var tipManager: TipManager?
     
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
     static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
     static let userDefaultsShareTrackerStatsKeyNEW = "shareTrackerStatsNew"
 
-    init(appSplashController: AppSplashController) {
+    init(appSplashController: AppSplashController, tipManager: TipManager = TipManager.shared) {
         self.appSplashController = appSplashController
+        self.tipManager = tipManager
         
         super.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
@@ -294,7 +296,13 @@ class BrowserViewController: UIViewController {
     }
 
     private func createHomeView() {
-        let homeView = HomeView()
+        let homeView: HomeView
+        if canShowTips() && shouldShowTips() {
+            homeView = HomeView(tipManager: tipManager)
+        }
+        else {
+            homeView = HomeView()
+        }
         homeView.delegate = self
         homeView.toolbar.toolset.delegate = self
         homeViewContainer.addSubview(homeView)
@@ -308,15 +316,7 @@ class BrowserViewController: UIViewController {
         }
         self.homeView = homeView
         
-        if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
-            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-            
-            // Since this is only English locale for now, don't worry about localizing for now
-            let shareTrackerStatsLabel = "%@ trackers blocked so far"
-            homeView.showTrackerStatsShareButton(text: String(format: shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
-        } else {
-            homeView.hideTrackerStatsShareButton()
-        }
+
     }
 
     private func createURLBar() {
@@ -537,19 +537,30 @@ class BrowserViewController: UIViewController {
         SKStoreReviewController.requestReview()
     }
 
-    fileprivate func showSettings() {
+    fileprivate func showSettings(shouldScrollToSiri: Bool = false) {
         guard let modalDelegate = modalDelegate else { return }
         
         urlBar.shouldPresent = false
         
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset)
-        
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
         
         modalDelegate.presentModal(viewController: settingsNavController, animated: true)
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
+    }
+    
+    @available(iOS 12.0, *)
+    private func showSiriFavoriteSettings() {
+        guard let modalDelegate = modalDelegate else { return }
+        
+        urlBar.shouldPresent = false
+        let siriFavoriteViewController = SiriFavoriteViewController()
+        let siriFavoriteNavController = UINavigationController(rootViewController: siriFavoriteViewController)
+        siriFavoriteNavController.modalPresentationStyle = .formSheet
+        
+        modalDelegate.presentModal(viewController: siriFavoriteNavController, animated: true)
     }
 
     func ensureBrowsingMode() {
@@ -686,31 +697,31 @@ class BrowserViewController: UIViewController {
         ]
     }
 
-    func canShowTrackerStatsShareButton() -> Bool {
+    func canShowTips() -> Bool {
         return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
     }
 
     var showTrackerSemaphore = DispatchSemaphore(value: 1)
-    func flipCoinForShowTrackerButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) {
+    func flipCoinForShowTrackerButton(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) {
         showTrackerSemaphore.wait()
 
-        var shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+        var shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
 
-        if shouldShowTrackerStatsToUser == nil {
+        if shouldShowTipsToUser == nil {
             // Check to see if the user was previously opted into the experiment
-            shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
+            shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
 
-            if shouldShowTrackerStatsToUser != nil {
+            if shouldShowTipsToUser != nil {
                 // Remove the old flag
                 userDefaults.removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
             }
 
-            if shouldShowTrackerStatsToUser == true {
+            if shouldShowTipsToUser == true {
                 // User has already been opted into the experiment, continue showing the share button
                 userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
             } else {
                 // User has not been put into a bucket for determining if it should be shown
-                // 30% chance they get put into the group that sees the share button
+                // 50% chance they get put into the group that sees the share button
                 // arc4random_uniform(100) returns an integer 0 through 99 (inclusive)
                 if arc4random_uniform(100) < percent {
                     userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
@@ -723,13 +734,10 @@ class BrowserViewController: UIViewController {
         showTrackerSemaphore.signal()
     }
 
-    func shouldShowTrackerStatsShareButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
+    func shouldShowTips(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
         flipCoinForShowTrackerButton(percent:percent, userDefaults:userDefaults)
-
-        let shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
-
-        return shouldShowTrackerStatsToUser == true &&
-            getNumberOfLifetimeTrackersBlocked(userDefaults: userDefaults) >= 10
+        let shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+        return shouldShowTipsToUser == true
     }
     
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
@@ -942,6 +950,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLongPress(_ urlBar: URLBar) {
         let customURLItem = PhotonActionSheetItem(title: UIConstants.strings.customURLMenuButton, iconString: "icon_link") { action in
             urlBar.addCustomURL()
+            UserDefaults.standard.set(false, forKey: TipManager.TipKey.autocompleteTip)
         }
         var actions = [PhotonActionSheetItem]()
         if let clipboardString = UIPasteboard.general.string {
@@ -1015,6 +1024,7 @@ extension BrowserViewController: PhotonActionSheetDelegate {
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
         telemetryEvent.addExtra(key: "to", value: enabled)
         Telemetry.default.recordEvent(telemetryEvent)
+        UserDefaults.standard.set(false, forKey: TipManager.TipKey.sitesNotWorkingTip)
         
         webViewController.reload()
     }
@@ -1076,6 +1086,25 @@ extension BrowserViewController: HomeViewDelegate {
         let text = String(format: shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
         present(shareController, animated: true)
+    }
+    
+    func tipTapped() {
+        guard let tip = tipManager?.currentTip, tip.showVc else { return }
+        switch tip.identifier {
+        case TipManager.TipKey.biometricTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
+            showSettings()
+        case TipManager.TipKey.siriEraseTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.siriEraseTip)
+            showSettings(shouldScrollToSiri: true)
+        case TipManager.TipKey.siriFavoriteTip:
+            if #available(iOS 12.0, *) {
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriFavoriteTip)
+                showSiriFavoriteSettings()
+            }
+        default:
+            break
+        }
     }
 }
 

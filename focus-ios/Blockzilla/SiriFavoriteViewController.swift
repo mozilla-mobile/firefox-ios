@@ -27,12 +27,16 @@ class SiriFavoriteViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        self.edgesForExtendedLayout = []
         setUpInputUI()
         setUpEditUI()
     }
     
     private func setUpInputUI() {
         title = UIConstants.strings.favoriteUrlTitle
+        navigationController?.navigationBar.barTintColor = UIConstants.colors.background
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIConstants.colors.defaultFont]
+        navigationController?.navigationBar.isTranslucent = false
         view.backgroundColor = UIConstants.colors.background
         
         inputLabel.text = UIConstants.strings.urlToOpen
@@ -135,11 +139,13 @@ class SiriFavoriteViewController: UIViewController {
     
     @objc func cancelTapped() {
         self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func doneTapped() {
         if saveFavorite() {
             self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -177,6 +183,7 @@ class SiriFavoriteViewController: UIViewController {
             return false
         }
         UserDefaults.standard.set(url.absoluteString, forKey: "favoriteUrl")
+        UserDefaults.standard.set(false, forKey: TipManager.TipKey.siriFavoriteTip)
         return true
     }
 }

@@ -211,6 +211,8 @@ struct UIConstants {
         static let separatorHeight: CGFloat = 0.5
         static let shareTrackersBottomOffset: CGFloat = -20
         static let shareTrackersHeight: CGFloat = 36
+        static let homeViewTextOffset: CGFloat = 5
+        static let homeViewLabelMinimumScale: CGFloat = 0.65
     }
 
     struct strings {
@@ -411,5 +413,19 @@ struct UIConstants {
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"
         static let requestDesktopNotification = "Notification.requestDesktop"
         static let findInPageNotification = "Notification.findInPage"
+        static let autocompleteTipTitle = "Autocomplete URLs for the sites you use most:"
+        static let autocompleteTipDescription = "Long-press any URL in the address bar"
+        static let sitesNotWorkingTipTitle = "Site acting strange?"
+        static let sitesNotWorkingTipDescription = "Try turning off Tracking Protection"
+        static let biometricTipTitle = String(format: "Lock %@ even when a site is open:", AppInfo.productName)
+        static let biometricTipFaceIdDescription = "Turn on Face ID"
+        static let biometricTipTouchIdDescription = "Turn on Touch ID"
+        static let requestDesktopTipTitle = "Get the full desktop site instead:"
+        static let requestDesktopTipDescription = "Page Actions > Request Desktop Site"
+        static let siriFavoriteTipTitle = "Ask Siri to open a favorite site:"
+        static let siriFavoriteTipDescription = "Add a site"
+        static let siriEraseTipTitle = String(format: "Ask Siri to erase %@ history:", AppInfo.productName)
+        static let siriEraseTipDescription = "Add Siri shortcut"
+        static let shareTrackersTipTitle = "%@ trackers blocked so far"
     }
 }

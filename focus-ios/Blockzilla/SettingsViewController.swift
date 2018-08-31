@@ -220,9 +220,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return cell
     }()
 
-    init(searchEngineManager: SearchEngineManager, whatsNew: WhatsNewDelegate) {
+    private var shouldScrollToSiri: Bool
+    init(searchEngineManager: SearchEngineManager, whatsNew: WhatsNewDelegate, shouldScrollToSiri: Bool = false) {
         self.searchEngineManager = searchEngineManager
         self.whatsNew = whatsNew
+        self.shouldScrollToSiri = shouldScrollToSiri
         super.init(nibName: nil, bundle: nil)
 
         tableView.register(SettingsTableViewAccessoryCell.self, forCellReuseIdentifier: "accessoryCell")
@@ -285,6 +287,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         super.viewWillAppear(animated)
         updateSafariEnabledState()
         tableView.reloadData()
+        if shouldScrollToSiri {
+            guard let siriSection = sections.index(where: {$0 == Section.siri}) else {
+                shouldScrollToSiri = false
+                return
+            }
+            let siriIndexPath = IndexPath(row: 0, section: siriSection)
+            tableView.scrollToRow(at: siriIndexPath, at: .none , animated: false)
+            shouldScrollToSiri = false
+        }
     }
 
     @objc private func applicationDidBecomeActive() {
@@ -518,9 +529,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             guard #available(iOS 12.0, *) else { return }
             if indexPath.row == 0 {
                 SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.erase, in: self)
+                UserDefaults.standard.set(false, forKey: TipManager.TipKey.siriEraseTip)
             }
             else if indexPath.row == 1 {
                 SiriShortcuts().manageSiri(for: SiriShortcuts.activityType.eraseAndOpen, in: self)
+                UserDefaults.standard.set(false, forKey: TipManager.TipKey.siriEraseTip)
             }
             else {
                 let siriFavoriteVC = SiriFavoriteViewController()
@@ -586,6 +599,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if toggle.setting == .sendAnonymousUsageData {
             Telemetry.default.configuration.isCollectionEnabled = sender.isOn
             Telemetry.default.configuration.isUploadEnabled = sender.isOn
+        } else if toggle.setting == .biometricLogin {
+            UserDefaults.standard.set(false, forKey: TipManager.TipKey.biometricTip)
         }
 
         switch toggle.setting {
