@@ -210,9 +210,11 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
 
         self.clearButton?.removeFromSuperview()
-        let clearButton = createClearButton()
-        self.clearButton = clearButton
-        addSubview(clearButton)
+        if text.isEmpty {
+            let clearButton = createClearButton()
+            self.clearButton = clearButton
+            addSubview(clearButton)
+        }
     }
 
     override func caretRect(for position: UITextPosition) -> CGRect {
