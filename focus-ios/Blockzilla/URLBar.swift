@@ -834,6 +834,10 @@ private class URLTextField: AutocompleteTextField {
     override fileprivate func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         return super.rightViewRect(forBounds: bounds).offsetBy(dx: -UIConstants.layout.urlBarWidthInset, dy: 0)
     }
+    
+    private func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layoutIfNeeded()
+    }
 }
 
 class TrackingProtectionBadge: UIView {
