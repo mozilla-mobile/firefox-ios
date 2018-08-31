@@ -269,7 +269,7 @@
 "Settings.learnMore" = "மேலும் அறிய.";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = " %@ உலாவியை மதிப்பிடு";
+"Settings.rate" = "%@ உலாவியை மதிப்பிடு";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "அமைவுகள்";
@@ -420,6 +420,9 @@
 
 /* Text for a share button */
 "share" = "பகிர்";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "%@ செயலிக்கு திரும்ப தொடு அடையாளத்தைப் பயன்படுத்துக";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "விளம்பர பின்தொடரிகள்";

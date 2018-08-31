@@ -421,6 +421,9 @@
 /* Text for a share button */
 "share" = "Bagikan";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Gunakan Touch ID untuk kembali ke %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Pelacak iklan";
 

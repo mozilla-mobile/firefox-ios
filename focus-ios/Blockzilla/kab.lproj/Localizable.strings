@@ -421,6 +421,9 @@
 /* Text for a share button */
 "share" = "Bḍu";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Seqdec Touch ID akken ad tuɣaleḍ ar %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Ineḍfaṛen n udellel";
 

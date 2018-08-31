@@ -37,17 +37,32 @@
 /* (No Comment) */
 "About.screenTitle" = "အကြောင်း";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@ အကြောင်း";
+
 /* Label on About screen */
 "About.topLabel" = "%@ က သင့်ကို ထိန်းချုပ်နိုင်စွမ်း ရှိစေသည်။";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "စိတ်ကြိုက် URLs တိုးရန်";
 
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "မိမိ ဝင်ထားသော URL ကို ပြန်လည်စစ်ဆေးပါ";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "ဥပမာ. example.com";
+
 /* Label for the input to add a custom URL */
 "Autocomplete.addCustomUrlLabel" = "တိုးမဲ့ URL";
 
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "URLကို ကူးယူ သို့မဟုတ် ဝင်ရောက်ပါ";
+
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ စိတ်ကြိုက် URLs တိုးရန်";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "URLs ကို မိမိနည်းမိမိဟန်ဖြင့် ပေါင်းထည့် စီမံမည်";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "စိတ်ကြိုက် URLs";

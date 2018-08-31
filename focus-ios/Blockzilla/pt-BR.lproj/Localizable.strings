@@ -1,8 +1,8 @@
 /* Button on About screen */
-"About.learnMoreButton" = "Saber mais";
+"About.learnMoreButton" = "Saiba mais";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ é produzido pela Mozilla. Nossa missão é promover uma Internet saudável e aberta.";
+"About.missionLabel" = "O %@ é produzido pela Mozilla. Nossa missão é promover uma Internet saudável e aberta.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Pesquisar e navegar direto no aplicativo";
@@ -47,31 +47,31 @@
 "Autocomplete.addCustomUrl" = "Adicionar URL personalizada";
 
 /* Label for error state when entering an invalid URL */
-"Autocomplete.addCustomUrlError" = "Verifique novamente o URL digitado.";
+"Autocomplete.addCustomUrlError" = "Verifique novamente a URL digitada.";
 
 /* A label displaying an example URL */
-"Autocomplete.addCustomUrlExample" = "Exemplo: exemplo.com";
+"Autocomplete.addCustomUrlExample" = "Exemplo: example.com";
 
 /* Label for the input to add a custom URL */
 "Autocomplete.addCustomUrlLabel" = "URL a adicionar";
 
 /* Placeholder for the input field to add a custom URL */
-"Autocomplete.addCustomUrlPlaceholder" = "Cole ou digite o URL";
+"Autocomplete.addCustomUrlPlaceholder" = "Cole ou digite a URL";
 
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Adicionar URL personalizada";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Adicione e gerencie URLs personalizados de preenchimento automático.";
+"Autocomplete.customDescriptoin" = "Adicione e gerencie URLs personalizadas de preenchimento automático.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "URLs personalizadas";
 
 /* Title for the default URL list section */
-"Autocomplete.customTitle" = "LISTA DE URLs PERSONALIZADOS";
+"Autocomplete.customTitle" = "LISTA DE URLs PERSONALIZADAS";
 
 /* Label for toast alerting a custom URL has been added */
-"Autocomplete.customUrlAdded" = "Novo URL personalizado adicionado.";
+"Autocomplete.customUrlAdded" = "Nova URL personalizada adicionada.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Habilite o %@ para ter preenchimento automático de mais de 450 URLs populares na barra de endereços.";
@@ -86,7 +86,7 @@
 "Autocomplete.disabled" = "Desativado";
 
 /* Label for button to add a custom URL */
-"Autocomplete.emptyState" = "Não há URLs personalizados para mostrar";
+"Autocomplete.emptyState" = "Não há URLs personalizadas para mostrar";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Ativado";
@@ -137,7 +137,7 @@
 "ExternalAppLink.cancelTitle" = "Cancelar";
 
 /* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
-"ExternalAppLink.messageTitle" = "%@ quer abrir outro App";
+"ExternalAppLink.messageTitle" = "%@ quer abrir outro aplicativo";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Abrir";
@@ -158,7 +158,7 @@
 "ExternalLink.openAppStoreButton" = "Abrir App Store";
 
 /* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"ExternalLink.openAppStoreTitle" = "%@ deseja abrir o App Store.";
+"ExternalLink.openAppStoreTitle" = "%@ deseja abrir a App Store.";
 
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Abrir Maps";
@@ -209,7 +209,7 @@
 "Safari.instructionsContentBlockers" = "Tocar em Safari e selecionar Bloqueadores de conteúdo";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsEnable" = "Habilitar %@";
+"Safari.instructionsEnable" = "Habilitar o %@";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ não está habilitado.";
@@ -421,6 +421,9 @@
 /* Text for a share button */
 "share" = "Compartilhar";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Utilizar o Touch ID para retornar para o %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Rastreadores de anúncios";
 
@@ -440,7 +443,7 @@
 "trackingProtection.socialTrackerLabel" = "Rastreadores sociais";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Desabilitar até você fechar o %@ ou tocar em ERASE.";
+"trackingProtection.toggleDescription1" = "Desabilitar até você fechar o %@ ou tocar em APAGAR.";
 
 /* Text for the toggle that temporarily disables tracking protection. */
 "trackingProtection.toggleLabel" = "Proteção contra rastreamento";

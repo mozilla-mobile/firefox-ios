@@ -37,6 +37,9 @@
 /* (No Comment) */
 "About.screenTitle" = "Um";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Um %@";
+
 /* Label on About screen */
 "About.topLabel" = "%@ gefur þér stjórn.";
 
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Virkt";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Nýtt innlit";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Aflæsa %@ til að koma í veg fyrir óleyfilegan aðgang þegar smáforrit er enduropnað.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Til baka";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Afrita";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Bæta við sérsniðnu URL";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Áfram";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Opna landakort";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Finna á síðu búið";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Finna næst á síðu";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Finna fyrra á síðu";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Í lagi, ég skil";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Fá borðtölvu vefsvæði";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Snertu Safari, veldu síðan lokun á efni";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Fræðast meira.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Gefa %@ einkunn";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Stillingar";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "FRIÐHELGI";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "ÖRYGGI";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Loka á auglýsinga rekjara";
@@ -287,7 +320,13 @@
 "Settings.toggleBlockSocial" = "Loka á félagsrekjara";
 
 /* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Innifalið í vefsvæðum til að fylgjast með heimsóknum þínum og sýna virkni eins og miðlunartökkum";
+"Settings.toggleBlockSocialDescription" = "Innbyggt í vefsvæðum til að fylgjast með heimsóknum þínum og sýna virkni eins og deilihnappar";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Nota andlitsauðkenningu til að aflæsa smáforrit";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Andlitsauðkenning getur aflæst %@ ef URL er nú þegar opið í smáforritinu";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Gæti haft áhrif á sum myndbönd og vefsíður";
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Senda notkunarupplýsingar";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Nota fingrafara auðkenningu til að aflæsa smáforrit";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Fingrafara auðkenning getur aflæst %@ ef URL er nú þegar opið í smáforritinu";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Hvað er nýtt";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Finna á síðu";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Sækja Firefox smáforritið";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Opna í %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Fá borðtölvu vefsvæði";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Hætta við";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Vafra ferilnum þínum hefur verið eytt.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Finna á síðu: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Leitaðu eða sláðu inn vistfang";
@@ -363,6 +417,12 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Til dæmis: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Deila";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Nota fingrafara auðkenningu til að fara aftur í %@";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Auglýsinga rekjarar";

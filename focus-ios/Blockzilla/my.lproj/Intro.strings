@@ -7,6 +7,12 @@
 /* Button to go to the next card in Focus onboarding. */
 "Intro.Slides.Next.Button" = "ရှေ့သို့";
 
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "အခြား မူသေရှာဖွေရေးယန္တရားကို အသုံးပြုလိုပါသလား။ အပြင်အဆင်များတွင် နှစ်သက်ရာကို ရွေးပါ။";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "ကိုယ့်နည်းကိုယ့်ဟန် အသုံးပြုမည်";
+
 /* Button to skip onboarding in Focus */
 "Intro.Slides.Skip.Button" = "ကျော်ပါ";
 

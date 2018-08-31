@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ басқаруды қолыңызға береді.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@ ішіне оралу үшін аутентификация";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Таңдауыңызша URL қосу";
 
@@ -420,6 +423,9 @@
 
 /* Text for a share button */
 "share" = "Бөлісу";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "%@ оралу үшін Touch ID қолданыңыз";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Жарнамалық трекерлер";

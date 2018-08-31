@@ -154,6 +154,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "نقشہ جات کھولیں";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "صفحہ میں تلاش کریں ہو گیا";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "اگلے صفحہ میں ڈھونڈیں";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "پچھلے صفحہ میں تلاش کریں";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "ٹھیک ہے مجھے سمجھ آگئی ہے!";
 
@@ -334,6 +343,9 @@
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "آپ کے برائوزنگ سابقات مٹا دیئے گئے ہیں۔";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "صفحہ میں ڈھونڈیں: %@";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "پتہ تلاش یا داخل کریں";
 
@@ -375,6 +387,9 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” آپ کی تصاویر تک رسائی حاصل کرنا چاھے گا";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "مثلاٰ : searchengineexample.com/search/?q=%s";
 
 /* Text for a share button */
 "share" = "شیئر کریں";

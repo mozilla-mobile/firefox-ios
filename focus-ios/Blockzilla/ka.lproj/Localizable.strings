@@ -44,7 +44,7 @@
 "About.topLabel" = "%@ გიბრუნებთ მართვის სადავეებს.";
 
 /* Label for button to add a custom URL */
-"Autocomplete.addCustomUrl" = "საკუთარი URL მისამართის დამატება";
+"Autocomplete.addCustomUrl" = "საკუთარი URL-ს დამატება";
 
 /* Label for error state when entering an invalid URL */
 "Autocomplete.addCustomUrlError" = "გადაამოწმეთ შეყვანილი URL.";
@@ -59,13 +59,13 @@
 "Autocomplete.addCustomUrlPlaceholder" = "ჩასვით ან შეიყვანეთ URL";
 
 /* Label for button to add a custom URL with the + prefix */
-"Autocomplete.addCustomUrlWithPlus" = "+ საკუთარი URL მისამართის დამატება";
+"Autocomplete.addCustomUrlWithPlus" = "+ საკუთარი URL-ს დამატება";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "დაამატეთ და მართეთ საკუთარი URL მისამართები.";
+"Autocomplete.customDescriptoin" = "დაამატეთ და მართეთ საკუთარი URL-ები თვითშევსებისთვის.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "საკუთარი URL მისამართები";
+"Autocomplete.customLabel" = "საკუთარი URL-ები";
 
 /* Title for the default URL list section */
 "Autocomplete.customTitle" = "საკუთარი URL ჩამონათვალი";
@@ -74,7 +74,7 @@
 "Autocomplete.customUrlAdded" = "ახალი საკუთარი URL დაემატა.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "ჩართეთ და %@ თავად დაასრულებს 450-ზე მეტ ცნობილ URL ბმულს, მისამართების ველში აკრეფისას.";
+"Autocomplete.defaultDescriptoin" = "ჩართეთ და %@ თავად დაასრულებს 450-ზე მეტ ცნობილ URL-ბმულს, მისამართების ველში აკრეფისას.";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "თვითშევსება";
@@ -86,7 +86,7 @@
 "Autocomplete.disabled" = "გამორთულია";
 
 /* Label for button to add a custom URL */
-"Autocomplete.emptyState" = "საკუთარი URL მისამართები არაა დამატებული";
+"Autocomplete.emptyState" = "საკუთარი URL-ები არაა დამატებული";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "ჩართულია";
@@ -104,7 +104,7 @@
 "Browser.copyMenuLabel" = "დაკოპირება";
 
 /* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "საკუთარი URL მისამართის დამატება";
+"Browser.customURLMenuLabel" = "საკუთარი URL-ს დამატება";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "წინ";
@@ -251,7 +251,7 @@
 "Settings.Search.SearchTemplatePlaceholder" = "ჩასვით ან შეიყვანეთ საძიებო ფრაზა. თუ საჭიროა, შეცვალეთ სიტყვა %s-ით.";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL თვითშევსება";
+"Settings.autocompleteSection" = "URL-ს თვითშევსება";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "შიგთავსის სხვა მეთვალყურე ელემენტების შეზღუდვის შედეგად, შესაძლოა ვიდეოებმა გამართულად ვერ იმუშაოს ვებგვერდებზე.";
@@ -326,7 +326,7 @@
 "Settings.toggleFaceID" = "გამოიყენეთ სახის ამომცნობი, პროგრამის გასახსნელად";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "სახის ამომცნობით შესაძლებელია გაიხსნას %@ თუ URL ბმული უკვე გახსნილია პროგრამაში";
+"Settings.toggleFaceIDDescription" = "სახის ამომცნობით შესაძლებელია გაიხსნას %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "შესაძლოა ზოგიერთმა საიტმა, ან ვიდეომ არ იმუშაოს გამართულად";
@@ -341,7 +341,7 @@
 "Settings.toggleTouchID" = "გამოიყენეთ თითის ანაბეჭდი, პროგრამის გასახსნელად";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "თითის ანაბეჭდით შესაძლებელია გაიხსნას %@ თუ URL ბმული უკვე გახსნილია პროგრამაში";
+"Settings.toggleTouchIDDescription" = "თითის ანაბეჭდით შესაძლებელია გაიხსნას %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "რა სიახლეებია";
@@ -420,6 +420,9 @@
 
 /* Text for a share button */
 "share" = "გაზიარება";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "გამოიყენეთ თითის ანაბეჭდი, %@-ზე დასაბრუნებლად";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "სარეკლამო მეთვალყურე";

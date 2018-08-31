@@ -268,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Saper plus.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Valuta %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Parametros";
 
@@ -417,6 +420,9 @@
 
 /* Text for a share button */
 "share" = "Compartir";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Usa ID de tocco pro retornar a %@";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Traciatores publicitari";

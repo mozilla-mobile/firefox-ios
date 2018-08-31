@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ ให้คุณได้ควบคุม";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "รับรองความถูกต้องเพื่อกลับสู่ %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "เพิ่ม URL ที่กำหนดเอง";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ย้อนกลับ";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "คัดลอกที่อยู่";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "คัดลอก";
@@ -185,10 +191,13 @@
 "Focus.handoffSyncing" = "Apple Handoff กำลังซิงค์";
 
 /* First label for product description on the home screen */
-"Home.descriptionLabel1" = "การท่องเว็บแบบส่วนตัวอัตโนมัติ";
+"Home.descriptionLabel1" = "ท่องเว็บแบบส่วนตัวโดยอัตโนมัติ";
 
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "ท่องเว็บ ล้าง ทำซ้ำ";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "ปิด";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ยกเลิก";
@@ -206,7 +215,7 @@
 "Request Desktop Site" = "ขอไซต์สำหรับเดสก์ท็อป";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "แตะที่ Safari จากนั้นเลือก ตัวปิดกั้นเนื้อหา";
+"Safari.instructionsContentBlockers" = "แตะ Safari จากนั้นเลือก ตัวปิดกั้นเนื้อหา";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "เปิดใช้งาน %@";
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "บันทึก";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "ไม่ได้ผล ลองแทนที่คำค้นหาด้วยสิ่งนี้: %s";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "เพิ่มเครื่องมือค้นหาอื่น";
@@ -263,13 +275,16 @@
 "Settings.blockOtherYes" = "ฉันเข้าใจ";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "Mozilla มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องจัดหาและปรับปรุง %@ สำหรับทุกคน";
+"Settings.detailTextSendUsageData" = "Mozilla มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องให้บริการและปรับปรุง %@ สำหรับทุกคน";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "เรียนรู้เพิ่มเติม";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "ให้คะแนน %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "การผนวกรวม SAFARI";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "การตั้งค่า";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "มีอะไรใหม่";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "ทางลัด SIRI";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "ค้นหาในหน้า";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "เปิดใน %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "การกระทำของหน้า";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "ขอไซต์สำหรับเดสก์ท็อป";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "เปิดใน Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "เปิดใน Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "เปิดใน Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "แบ่งปันหน้าด้วย...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "เพิ่ม";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "เพิ่มไปยัง Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "บันทึกใหม่หรือลบทางลัด";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "ล้าง";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "ล้างแล้วเปิด";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "เปิดไซต์โปรด";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "เปิดไซต์โปรด";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL ที่จะเปิด";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ยกเลิก";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "ค้นหาในหน้า: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "วาง";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "ค้นหาหรือป้อนที่อยู่";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "เปิดใน %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "คัดลอก URL ไปยังคลิปบอร์ดแล้ว";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "เลือกแถบตำแหน่งที่ตั้ง";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "คัดลอกลิงก์";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "ลิงก์ที่คุณคัดลอก:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "บันทึกภาพ";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "แบ่งปัน";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "คัดลอกที่อยู่";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "ใช้ Touch ID เพื่อกลับสู่ %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "ตัวติดตามของโฆษณา";
 
@@ -433,6 +505,9 @@
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "การป้องกันการติดตามปิดอยู่";
 
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "การป้องกันการติดตาม";
+
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "เรียนรู้เพิ่มเติม";
 
@@ -440,7 +515,7 @@
 "trackingProtection.socialTrackerLabel" = "ตัวติดตามทางสังคม";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "ปิดใช้งานจนกระทั่งคุณปิด %@ หรือแตะที่ ล้าง";
+"trackingProtection.toggleDescription1" = "ปิดใช้งานจนกระทั่งคุณปิด %@ หรือแตะ ล้าง";
 
 /* Text for the toggle that temporarily disables tracking protection. */
 "trackingProtection.toggleLabel" = "การป้องกันการติดตาม";
