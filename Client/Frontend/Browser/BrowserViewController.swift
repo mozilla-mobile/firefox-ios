@@ -1551,7 +1551,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)}
         let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "tab_close", iconType: .Image) { action in
             if let tab = self.tabManager.selectedTab {
-                self.tabManager.removeTab(tab)
+                self.tabManager.removeTabAndUpdateSelectedIndex(tab)
             }}
         if let tab = self.tabManager.selectedTab {
             return tab.isPrivate ? [newPrivateTab, closeTab] : [newTab, closeTab]
