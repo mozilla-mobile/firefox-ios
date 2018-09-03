@@ -296,7 +296,25 @@
                   Identifier = "ReaderViewTest/testLoadReaderContent()">
                </Test>
                <Test
+                  Identifier = "SaveLoginTest/testDeleteLogin()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testDoNotSaveLogin()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testEditOneLoginEntry()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testSaveLogin()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testSavedLoginAutofilled()">
+               </Test>
+               <Test
                   Identifier = "SaveLoginTest/testSavedLoginSelectUnselect()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testSearchLogin()">
                </Test>
                <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">

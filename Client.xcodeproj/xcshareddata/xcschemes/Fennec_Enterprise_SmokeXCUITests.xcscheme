@@ -497,6 +497,9 @@
                   Identifier = "SaveLoginTest/testSaveLogin()">
                </Test>
                <Test
+                  Identifier = "SaveLoginTest/testSavedLoginSelectUnselect()">
+               </Test>
+               <Test
                   Identifier = "SaveLoginTest/testSearchLogin()">
                </Test>
                <Test
