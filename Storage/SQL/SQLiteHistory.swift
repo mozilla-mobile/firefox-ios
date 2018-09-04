@@ -189,7 +189,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
     }
 
     func getSites(whereURLContains filter: String?, historyLimit limit: Int, bookmarksLimit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        let factory = SQLiteHistory.basicHistoryColumnFactory
+        let factory = SQLiteHistory.iconHistoryColumnFactory
 
         let params = FrecencyQueryParams.urlCompletion(bookmarksLimit: bookmarksLimit, whereURLContains: filter ?? "", groupClause: "GROUP BY historyID ")
         let (query, args) = getFrecencyQuery(historyLimit: limit, params: params)
@@ -398,7 +398,17 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
             return (historySQL, args)
         }
 
-        let allSQL = "SELECT * FROM (SELECT * FROM (\(historySQL)) UNION SELECT * FROM (\(bookmarksSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
+        let allSQL = """
+            SELECT *
+            FROM (
+                SELECT * FROM (\(historySQL))
+                UNION
+                SELECT * FROM (\(bookmarksSQL))
+            ) AS hb
+            LEFT OUTER JOIN view_favicons_widest ON view_favicons_widest.siteID = hb.historyID
+            ORDER BY is_bookmarked DESC, frecencies DESC
+            """
+
         return (allSQL, args)
     }
 
@@ -542,7 +552,16 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
             return (historySQL, args)
         }
 
-        let allSQL = "SELECT * FROM (SELECT * FROM (\(historySQL)) UNION SELECT * FROM (\(bookmarksSQL))) ORDER BY is_bookmarked DESC, frecencies DESC"
+        let allSQL = """
+            SELECT *
+            FROM (
+                SELECT * FROM (\(historySQL))
+                UNION
+                SELECT * FROM (\(bookmarksSQL))
+            ) AS hb
+            LEFT OUTER JOIN view_favicons_widest ON view_favicons_widest.siteID = hb.historyID
+            ORDER BY is_bookmarked DESC, frecencies DESC
+            """
         return (allSQL, args)
     }
 
