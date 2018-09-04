@@ -77,6 +77,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         if indexPath.section == SectionArrow {
             cell.accessoryType = .disclosureIndicator
             cell.textLabel?.text = Strings.SettingsWebsiteDataTitle
+            cell.accessibilityIdentifier = "WebsiteData"
             clearButton = cell
         } else if indexPath.section == SectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label

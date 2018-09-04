@@ -30,6 +30,7 @@ let PasscodeIntervalSettings = "PasscodeIntervalSettings"
 let SearchSettings = "SearchSettings"
 let NewTabSettings = "NewTabSettings"
 let ClearPrivateDataSettings = "ClearPrivateDataSettings"
+let WebsiteDataSettings = "WebsiteDataSettings"
 let LoginsSettings = "LoginsSettings"
 let OpenWithSettings = "OpenWithSettings"
 let ShowTourInSettings = "ShowTourInSettings"
@@ -152,6 +153,7 @@ class Action {
     static let SelectNewTabAsHistoryPage = "SelectNewTabAsHistoryPage"
 
     static let AcceptClearPrivateData = "AcceptClearPrivateData"
+    static let AcceptClearAllWebsiteData = "AcceptClearAllWebsiteData"
 
     static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
     static let ToggleTrackingProtectionSettingOnNormalMode = "ToggleTrackingProtectionSettingAlwaysOn"
@@ -542,6 +544,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
+    map.addScreenState(WebsiteDataSettings) { screenState in
+        let table = app.tables.element(boundBy: 0)
+
+        screenState.gesture(forAction: Action.AcceptClearAllWebsiteData) { userState in
+            app.tables.cells["ClearAllWebsiteData"].tap()
+            app.alerts.buttons["OK"].tap()
+        }
+        screenState.backAction = navigationControllerBackAction
+    }
     map.addScreenState(NewTabSettings) { screenState in
         let table = app.tables.element(boundBy: 0)
 
@@ -666,6 +677,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(ClearPrivateDataSettings) { screenState in
+        let table = app.tables.element(boundBy: 0)
+
+        screenState.tap(table.cells["WebsiteData"], to: WebsiteDataSettings)
         screenState.gesture(forAction: Action.AcceptClearPrivateData) { userState in
             app.tables.cells["ClearPrivateData"].tap()
             app.alerts.buttons["OK"].tap()
