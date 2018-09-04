@@ -150,8 +150,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     func applyTheme() {
         collectionView?.backgroundColor = UIColor.theme.browser.background
         topSiteCell.collectionView.reloadData()
-        if let collectionView = self.collectionView {
-            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+        if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
             collectionView.reloadData()
         }
     }
