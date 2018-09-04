@@ -10,6 +10,9 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 class TestAppDelegate: AppDelegate {
+
+    lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
+
     override func getProfile(_ application: UIApplication) -> Profile {
         if let profile = self.profile {
             return profile
@@ -27,14 +30,13 @@ class TestAppDelegate: AppDelegate {
                 // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
                 let filename = arg.replacingOccurrences(of: LaunchArguments.LoadDatabasePrefix, with: "")
                 let input = URL(fileURLWithPath: Bundle(for: TestAppDelegate.self).path(forResource: filename, ofType: nil, inDirectory: "test-fixtures")!)
-                let profileDir = "\(appRootDir())/profile.testProfile"
-                try? FileManager.default.createDirectory(atPath: profileDir, withIntermediateDirectories: false, attributes: nil)
-                let output = URL(fileURLWithPath: "\(profileDir)/browser.db")
+                try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
+                let output = URL(fileURLWithPath: "\(dirForTestProfile)/browser.db")
 
-                let enumerator = FileManager.default.enumerator(atPath: profileDir)
+                let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
                 let filePaths = enumerator?.allObjects as! [String]
                 filePaths.filter{ $0.contains(".db") }.forEach { item in
-                    try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(profileDir)/\(item)"))
+                    try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
                 }
 
                 try! FileManager.default.copyItem(at: input, to: output)
