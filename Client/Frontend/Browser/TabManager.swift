@@ -62,6 +62,7 @@ class TabManager: NSObject {
     }
 
     fileprivate(set) var tabs = [Tab]()
+    fileprivate var previousTab: Tab?
     fileprivate var _selectedIndex = -1
     fileprivate let navDelegate: TabManagerNavDelegate
 
@@ -362,6 +363,29 @@ class TabManager: NSObject {
         if flushToDisk {
         	storeChanges()
         }
+    }
+
+    //Switch between private browsing tab and normal tab
+    func switchTabMode (_ tab: Tab) -> Bool {
+        assert(Thread.isMainThread)
+        var nextTab: Tab
+
+        if privateTabs.last != nil {
+            //if a user switches modes and switches back, it should go back to the tab they were on
+            if previousTab != nil {
+                nextTab = previousTab!
+            } else {
+                //normalTabs should never be nil
+                tab.isPrivate ? (nextTab = normalTabs.last!) : (nextTab = privateTabs.last!)
+            }
+            selectTab(nextTab, previous: nil)
+        } else {
+                //this means currently on a normal tab and will need to open new blank private page
+                previousTab = tab
+                return true
+        }
+        previousTab = tab
+        return false
     }
 
     func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
