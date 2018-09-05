@@ -711,7 +711,8 @@
 		EBA31D7B1F79990C0055463D /* SyncTelemetryEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7A1F79990C0055463D /* SyncTelemetryEvents.swift */; };
 		EBA31D7D1F79996E0055463D /* SyncTelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */; };
 		EBA31D861F799BE20055463D /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBA31D7E1F799BE20055463D /* Telemetry.framework */; };
-		EBB6CA622140823900077CFA /* blobURL.html in Resources */ = {isa = PBXBuildFile; fileRef = EBB6CA592140823900077CFA /* blobURL.html */; };
+		EBB6CA622140823900077CFA /* firefoxScheme.html in Resources */ = {isa = PBXBuildFile; fileRef = EBB6CA592140823900077CFA /* firefoxScheme.html */; };
+		EBB6CAA1214197DB00077CFA /* blobURL.html in Resources */ = {isa = PBXBuildFile; fileRef = EBB6CA98214197DA00077CFA /* blobURL.html */; };
 		EBE7635820ADCB7600E27F2D /* SendTo.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBE7634F20ADCB7500E27F2D /* SendTo.xcassets */; };
 		EBE7635920ADCB7600E27F2D /* SendTo.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBE7634F20ADCB7500E27F2D /* SendTo.xcassets */; };
 		EBF47E701F7979DF00899189 /* UnifiedTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF47E6F1F7979DF00899189 /* UnifiedTelemetry.swift */; };
@@ -1870,7 +1871,8 @@
 		EBA31D7A1F79990C0055463D /* SyncTelemetryEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncTelemetryEvents.swift; sourceTree = "<group>"; };
 		EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncTelemetryUtils.swift; sourceTree = "<group>"; };
 		EBA31D7E1F799BE20055463D /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
-		EBB6CA592140823900077CFA /* blobURL.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = blobURL.html; sourceTree = "<group>"; };
+		EBB6CA592140823900077CFA /* firefoxScheme.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = firefoxScheme.html; sourceTree = "<group>"; };
+		EBB6CA98214197DA00077CFA /* blobURL.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = blobURL.html; sourceTree = "<group>"; };
 		EBE7634F20ADCB7500E27F2D /* SendTo.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SendTo.xcassets; sourceTree = "<group>"; };
 		EBF47E6F1F7979DF00899189 /* UnifiedTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedTelemetry.swift; sourceTree = "<group>"; };
 		EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+FindInPage.swift"; sourceTree = "<group>"; };
@@ -2896,7 +2898,8 @@
 				D343DCFD1C446BDB00D7EEE8 /* findPage.html */,
 				E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */,
 				D31EC05E1CC57ED80096F4AB /* localhostLoad.html */,
-				EBB6CA592140823900077CFA /* blobURL.html */,
+				EBB6CA592140823900077CFA /* firefoxScheme.html */,
+				EBB6CA98214197DA00077CFA /* blobURL.html */,
 				D34E33021BA793C2006135F0 /* loginForm.html */,
 				C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */,
 				0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */,
@@ -4441,9 +4444,10 @@
 				D343DCFE1C446BDB00D7EEE8 /* findPage.html in Resources */,
 				0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */,
 				E67422C51CFF2D39009E8373 /* youtube.ico in Resources */,
-				EBB6CA622140823900077CFA /* blobURL.html in Resources */,
+				EBB6CA622140823900077CFA /* firefoxScheme.html in Resources */,
 				D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */,
 				C8EB60C41F1FB12500F9B5B3 /* navigationDelegate.html in Resources */,
+				EBB6CAA1214197DB00077CFA /* blobURL.html in Resources */,
 				D31EC05F1CC57ED80096F4AB /* localhostLoad.html in Resources */,
 				4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */,
 			);
