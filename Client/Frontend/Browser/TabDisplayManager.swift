@@ -79,7 +79,7 @@ class TabDisplayManager: NSObject {
 
      // Make sure animations don't happen before the view is loaded.
     fileprivate func shouldAnimate(isRestoringTabs: Bool) -> Bool {
-        return isRestoringTabs || collectionView.frame == CGRect.zero
+        return !isRestoringTabs && collectionView.frame != CGRect.zero
     }
 
     private func recordEventAndBreadcrumb(object: UnifiedTelemetry.EventObject, method: UnifiedTelemetry.EventMethod) {
