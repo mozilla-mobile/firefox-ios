@@ -286,13 +286,14 @@ class Tab: NSObject {
         }
 
         contentScriptManager.helpers.removeAll()
-        webView?.navigationDelegate = nil
-        webView?.removeFromSuperview()
-        webView = nil
 
         if isPrivate {
             removeAllBrowsingData()
         }
+
+        webView?.navigationDelegate = nil
+        webView?.removeFromSuperview()
+        webView = nil
     }
 
     func removeAllBrowsingData(completionHandler: @escaping () -> Void = {}) {
