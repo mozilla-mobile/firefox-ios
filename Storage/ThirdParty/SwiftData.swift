@@ -50,20 +50,15 @@ class DeferredDBOperation<T>: Deferred<T>, Cancellable {
     fileprivate var dispatchWorkItem: DispatchWorkItem?
     private var _running = false
 
-    fileprivate let queue: DispatchQueue
-
     fileprivate weak var connection: ConcreteSQLiteDBConnection?
-
-    init(queue: DispatchQueue) {
-        self.queue = queue
-    }
 
     func cancel() {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
 
-        queue.suspend()
-        defer { queue.resume() }
+        let queue = OperationQueue.current?.underlyingQueue
+        queue?.suspend()
+        defer { queue?.resume() }
 
         dispatchWorkItem?.cancel()
 
@@ -183,7 +178,7 @@ open class SwiftData {
             useSecondaryConnection = false
         }
 
-        let deferred = DeferredDBOperation<Maybe<T>>(queue: queue)
+        let deferred = DeferredDBOperation<Maybe<T>>()
 
         func doWork() {
             if deferred.cancelled {
