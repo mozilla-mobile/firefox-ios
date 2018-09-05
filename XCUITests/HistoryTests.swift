@@ -178,14 +178,14 @@ class HistoryTests: BaseTestCase {
         app.collectionViews.cells[webpage["label"]!].swipeRight()
 
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(HomePanelsScreen)
         navigator.goto(HomePanel_History)
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitforNoExistence(app.tables["Recently Closed Tabs List"])
 
         // Now verify that on regular mode the recently closed list is empty too
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.goto(HomePanelsScreen)
+        navigator.goto(NewTabScreen)
         navigator.goto(HomePanel_History)
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitforNoExistence(app.tables["Recently Closed Tabs List"])
