@@ -53,8 +53,10 @@ class ActionMenuColor {
 }
 
 class URLBarColor {
-    var border: UIColor { return UIColor.Photon.Grey50 }
-    var activeBorder: UIColor { return UIColor.Photon.Blue40A30 }
+    var border: UIColor { return UIColor.Photon.Grey90A10 }
+    func activeBorder(_ isPrivate: Bool) -> UIColor { 
+        return !isPrivate ? UIColor.Photon.Blue40A30 : UIColor.Defaults.MobilePrivatePurple
+    }
     var tint: UIColor { return UIColor.Photon.Blue40A30 }
 
     // This text selection color is used in two ways:
@@ -63,17 +65,15 @@ class URLBarColor {
     // 2) <UITextField>.tintColor = textSelectionHighlight.
     // When the text is in edit mode (tapping URL bar second time), this is assigned to the to set the selection (and cursor) color. The color is assigned directly to the tintColor.
     // The built-in tintColor property changes the alpha of the assigned color to ~0.27, so textSelectionHighlight.withAlphaComponent(textSelectionHighlightAlpha) should produce a very similar color.
-    var textSelectionHighlight: UIColor { return UIColor(rgb: 0x3d89cc) }
+    func textSelectionHighlight(_ isPrivate: Bool) -> UIColor {
+        return !isPrivate ? UIColor(rgb: 0x3d89cc) : UIColor.Defaults.MobilePrivatePurple
+    }
     var textSelectionHighlightAlpha = CGFloat(0.27)
 
     var readerModeButtonSelected: UIColor { return UIColor.Photon.Blue40 }
     var readerModeButtonUnselected: UIColor { return UIColor.Photon.Grey50 }
     var pageOptionsSelected: UIColor { return readerModeButtonSelected }
     var pageOptionsUnselected: UIColor { return UIColor.theme.browser.tint }
-
-    var privateBorder: UIColor { return UIColor.Defaults.MobilePrivatePurple }
-    var privateActiveBorder: UIColor { return UIColor.Defaults.MobilePrivatePurple }
-    var privateTextSelectionHighlight: UIColor { return UIColor.Defaults.MobilePrivatePurple }
 }
 
 class BrowserColor {
@@ -89,10 +89,13 @@ class ToolbarButtonColor {
 }
 
 class LoadingBarColor {
-    var start: UIColor { return UIColor.Photon.Blue40A30 }
-    var end: UIColor { return UIColor.Photon.Teal60 }
-    var privateStart: UIColor { return  UIColor.Photon.Magenta60A30  }
-    var privateEnd: UIColor { return UIColor.Photon.Purple60  }
+    func start(_ isPrivate: Bool) -> UIColor {
+        return !isPrivate ? UIColor.Photon.Blue40A30 : UIColor.Photon.Magenta60A30
+    }
+
+    func end(_ isPrivate: Bool) -> UIColor {
+        return !isPrivate ? UIColor.Photon.Teal60 : UIColor.Photon.Purple60
+    }
 }
 
 class TabTrayColor {
@@ -118,8 +121,9 @@ class TopTabsColor {
     var tabBackgroundUnselected: UIColor { return UIColor.Photon.Grey80 }
     var tabForegroundSelected: UIColor { return UIColor.Photon.Grey90 }
     var tabForegroundUnselected: UIColor { return UIColor.Photon.Grey40 }
-    var selectedLineNormalMode: UIColor { return UIColor.Photon.Blue40 }
-    var selectedLinePrivateMode: UIColor { return UIColor.Photon.Purple60 }
+    func tabSelectedIndicatorBar(_ isPrivate: Bool) -> UIColor {
+        return !isPrivate ? UIColor.Photon.Blue40 : UIColor.Photon.Purple60
+    }
     var buttonTint: UIColor { return UIColor.Photon.Grey40 }
     var privateModeButtonOffTint: UIColor { return buttonTint }
     var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
@@ -140,10 +144,10 @@ class HomePanelColor {
     var toolbarTint: UIColor { return UIColor.Photon.Grey50 }
 
     var panelBackground: UIColor { return UIColor.Photon.White100 }
+
     var separator: UIColor { return defaultSeparator }
     var border: UIColor { return UIColor.Photon.Grey60 }
     var buttonContainerBorder: UIColor { return separator }
-    var backgroundColorPrivateMode: UIColor { return UIColor.Photon.Grey50 }
     
     var welcomeScreenText: UIColor { return UIColor.Photon.Grey50 }
     var bookmarkIconBorder: UIColor { return UIColor.Photon.Grey30 }

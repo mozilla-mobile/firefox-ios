@@ -160,7 +160,7 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
     }
 
     func applyUIMode(isPrivate: Bool) {
-        highlightLine.backgroundColor = isPrivate ?  UIColor.theme.topTabs.selectedLinePrivateMode : UIColor.theme.topTabs.selectedLineNormalMode
+        highlightLine.backgroundColor = UIColor.theme.topTabs.tabSelectedIndicatorBar(isPrivate)
     }
 
     func configureWith(tab: Tab, isSelected: Bool) {

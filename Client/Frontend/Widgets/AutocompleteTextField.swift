@@ -42,7 +42,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
-    static var textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight
+    static var textSelectionColor = UIColor()
 
     override var text: String? {
         didSet {
