@@ -159,11 +159,7 @@ class Tab: NSObject {
         debugTabCount += 1
     }
 
-    class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
-        if tab.isPrivate {
-            return nil
-        }
-
+    class func toTab(_ tab: Tab) -> RemoteTab? {
         if let displayURL = tab.url?.displayURL, RemoteTab.shouldIncludeURL(displayURL) {
             let history = Array(tab.historyList.filter(RemoteTab.shouldIncludeURL).reversed())
             return RemoteTab(clientGUID: nil,

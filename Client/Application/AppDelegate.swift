@@ -117,7 +117,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
         }
 
-        self.tabManager = TabManager(profile: profile, imageStore: imageStore)
+        self.tabManager = TabManager(prefs: profile.prefs, imageStore: imageStore)
+        self.tabManager.stateDelegate = self
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
@@ -478,6 +479,20 @@ extension AppDelegate: UINavigationControllerDelegate {
             return TrayToBrowserAnimator()
         default:
             return nil
+        }
+    }
+}
+
+extension AppDelegate: TabManagerStateDelegate {
+    func tabManagerWillStoreTabs(_ tabs: [Tab]) {
+        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
+        let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toTab )
+
+        // Don't insert into the DB immediately. We tend to contend with more important
+        // work like querying for top sites.
+        let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
+        queue.asyncAfter(deadline: DispatchTime.now() + Double(Int64(ProfileRemoteTabsSyncDelay * Double(NSEC_PER_MSEC))) / Double(NSEC_PER_SEC)) {
+            self.profile?.storeTabs(storedTabs)
         }
     }
 }

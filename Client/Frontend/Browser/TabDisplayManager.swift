@@ -58,6 +58,11 @@ class TabDisplayManager: NSObject {
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
 
+    // This helps make sure animations don't happen before the view is loaded.
+    fileprivate var isRestoring: Bool {
+        return self.tabManager.isRestoring || self.collectionView.frame == CGRect.zero
+    }
+
     init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String) {
         self.collectionView = collectionView
         self.tabDisplayer = tabDisplayer
@@ -75,11 +80,6 @@ class TabDisplayManager: NSObject {
     func removeObservers() {
         unregister(tabObservers)
         tabObservers = nil
-    }
-
-     // Make sure animations don't happen before the view is loaded.
-    fileprivate func shouldAnimate(isRestoringTabs: Bool) -> Bool {
-        return isRestoringTabs || collectionView.frame == CGRect.zero
     }
 
     private func recordEventAndBreadcrumb(object: UnifiedTelemetry.EventObject, method: UnifiedTelemetry.EventMethod) {
@@ -480,8 +480,8 @@ extension TabDisplayManager: TabManagerDelegate {
         }
     }
 
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
-        if !shouldAnimate(isRestoringTabs: isRestoring) {
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
+        if isRestoring {
             return
         }
         if !tabsMatchDisplayGroup(selected, b: previous) {
@@ -498,8 +498,8 @@ extension TabDisplayManager: TabManagerDelegate {
         self.oldTabs = self.oldTabs ?? tabStore
     }
 
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
-        if !shouldAnimate(isRestoringTabs: isRestoring) || (tabManager.selectedTab != nil && !tabsMatchDisplayGroup(tab, b: tabManager.selectedTab)) {
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab) {
+        if isRestoring || (tabManager.selectedTab != nil && !tabsMatchDisplayGroup(tab, b: tabManager.selectedTab)) {
             return
         }
         performTabUpdates()
@@ -510,9 +510,9 @@ extension TabDisplayManager: TabManagerDelegate {
         self.oldTabs = self.oldTabs ?? tabStore
     }
 
-    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab) {
         recordEventAndBreadcrumb(object: .tab, method: .delete)
-        if !shouldAnimate(isRestoringTabs: isRestoring) {
+        if isRestoring {
             return
         }
         // If we deleted the last private tab. We'll be switching back to normal browsing. Pause updates till then

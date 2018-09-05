@@ -353,11 +353,15 @@ class TabTrayController: UIViewController {
 }
 
 extension TabTrayController: TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {}
-    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {}
+
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {}
+
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab) {}
+
     func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {}
+
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab) {}
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
