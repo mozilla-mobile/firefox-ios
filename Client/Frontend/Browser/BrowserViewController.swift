@@ -529,7 +529,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func showRestoreTabsAlert() {
-        guard tabManager.hasTabsToRestoreAtStartup() else {
+        guard canRestoreTabs() else {
             tabManager.selectTab(tabManager.addTab())
             return
         }
@@ -542,6 +542,11 @@ class BrowserViewController: UIViewController {
             }
         )
         self.present(alert, animated: true, completion: nil)
+    }
+
+    fileprivate func canRestoreTabs() -> Bool {
+        guard let tabsToRestore = tabManager.tabsToRestore() else { return false }
+        return !tabsToRestore.isEmpty
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1785,7 +1790,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
 }
 
 extension BrowserViewController: TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?) {
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
         if let wv = previous?.webView {
@@ -1872,9 +1877,9 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
     }
 
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab) {
         // If we are restoring tabs then we update the count once at the end
-        if !isRestoring {
+        if !tabManager.isRestoring {
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self
@@ -1886,7 +1891,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
-    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab) {
         updateTabCountUsingTabManager(tabManager)
     }
 
