@@ -195,10 +195,8 @@ open class SwiftData {
             if !self.closed {
                 if useSecondaryConnection && self.secondaryConnection == nil {
                     self.secondaryConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readOnly, key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
-                    deferred.connection = self.secondaryConnection
                 } else if self.primaryConnection == nil {
                     self.primaryConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate, key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
-                    deferred.connection = self.primaryConnection
                 }
             }
 
@@ -212,6 +210,8 @@ open class SwiftData {
                 }
                 return
             }
+
+            deferred.connection = connection
 
             do {
                 let result = try callback(connection)
