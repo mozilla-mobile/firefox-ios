@@ -21,6 +21,7 @@ struct MIMEType {
     static let PlainText = "text/plain"
     static let PNG = "image/png"
     static let WebP = "image/webp"
+    static let Calendar = "text/calendar"
 
     private static let webViewViewableTypes: [String] = [MIMEType.Bitmap, MIMEType.GIF, MIMEType.JPEG, MIMEType.HTML, MIMEType.PDF, MIMEType.PlainText, MIMEType.PNG, MIMEType.WebP]
 
