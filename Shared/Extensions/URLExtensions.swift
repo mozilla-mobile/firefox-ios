@@ -186,6 +186,10 @@ extension URL {
     }
 
     public var displayURL: URL? {
+        if self.absoluteString.starts(with: "blob:") {
+            return URL(string: "blob:")
+        }
+
         if self.isFileURL {
             return URL(string: "file://\(self.lastPathComponent)")
         }
