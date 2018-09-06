@@ -610,7 +610,7 @@ class VersionSetting: Setting {
     }
 }
 
-// Opens the the license page in a new tab
+// Opens the license page in a new tab
 class LicenseAndAcknowledgementsSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG"), attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText])
@@ -704,7 +704,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
     }
 }
 
-// Opens the the SUMO page in a new tab
+// Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
     init(delegate: SettingsDelegate?) {
         super.init(title: NSAttributedString(string: NSLocalizedString("Help", comment: "Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ"), attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]),
