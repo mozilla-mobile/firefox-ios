@@ -428,7 +428,7 @@ class SimplePageServer {
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
-        for page in ["findPage", "noTitle", "readablePage", "JSPrompt"] {
+        for page in ["findPage", "noTitle", "readablePage", "JSPrompt", "blobURL"] {
             webServer.addHandler(forMethod: "GET", path: "/\(page).html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
                 return GCDWebServerDataResponse(html: self.getPageData(page))
             }
