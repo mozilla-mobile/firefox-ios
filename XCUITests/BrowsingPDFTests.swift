@@ -115,6 +115,7 @@ class BrowsingPDFTests: BaseTestCase {
     func testBookmarkPDF() {
         navigator.openURL(PDF_website["url"]!)
         navigator.performAction(Action.BookmarkThreeDots)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Bookmarks)
         waitforExistence(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!].exists)

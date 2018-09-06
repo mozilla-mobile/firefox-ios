@@ -103,6 +103,7 @@ class ReaderViewTest: BaseTestCase {
         waitforExistence(app.buttons["Add to Reading List"])
 
         // Go to reader list view to check that there is not any item there
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_ReadingList)
         waitforExistence(app.buttons["HomePanels.ReadingList"])
         navigator.goto(HomePanel_ReadingList)
