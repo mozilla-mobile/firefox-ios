@@ -43,16 +43,16 @@ struct UIConstants {
         static let progressBar = UIColor(rgb: 0xC86DD7)
         static let settingsButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let settingsTextLabel = UIConstants.Photon.Grey10
-        static let settingsDetailLabel = UIColor(rgb: 0xD8D8D8)
-        static let settingsSeparator = UIConstants.Photon.Grey50
+        static let settingsDetailLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
+        static let settingsSeparator = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let settingsLink = UIConstants.Photon.Magenta60
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
         static let siriTint = UIConstants.Photon.Magenta60
-        static let tableSectionHeader = UIColor(rgb: 0x6D6D72)
+        static let tableSectionHeader = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let toastBackground = UIColor(rgb: 0x414146)
         static let toastText = UIColor.white
         static let toggleOn = UIConstants.Photon.Magenta70
-        static let toggleOff = UIConstants.Photon.Ink80
+        static let toggleOff = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let toolbarBorder = UIColor(rgb: 0x5F6368)
         static let toolbarButtonNormal = UIColor.darkGray
         static let urlTextBackground = UIColor(white: 1, alpha: 0.2)
@@ -61,6 +61,8 @@ struct UIConstants {
         static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
         static let urlTextShadow = UIColor.black
         static let whatsNew = UIConstants.Photon.Teal50
+        static let settingsNavBar = UIConstants.Photon.Ink70.withAlphaComponent(0.9)
+        static let settingsNavBorder = UIConstants.Photon.Grey10.withAlphaComponent(0.5)
 
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
 
@@ -156,7 +158,7 @@ struct UIConstants {
         static let searchButtonQuery = UIFont.boldSystemFont(ofSize: 16)
         static let settingsHomeButton = UIFont.systemFont(ofSize: 15)
         static let settingsOverlayButton = UIFont.systemFont(ofSize: 13)
-        static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.semibold)
+        static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         static let toast = UIFont.systemFont(ofSize: 12)
         static let urlText = UIFont.systemFont(ofSize: 16)
         static let truncatedUrlText = UIFont.systemFont(ofSize: 12)

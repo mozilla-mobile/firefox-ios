@@ -241,9 +241,18 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         let navigationBar = navigationController!.navigationBar
         navigationBar.isTranslucent = false
-        navigationBar.barTintColor = UIConstants.colors.background
+        navigationBar.barTintColor = UIConstants.colors.settingsNavBar
         navigationBar.tintColor = UIConstants.colors.navigationButton
         navigationBar.titleTextAttributes = [.foregroundColor: UIConstants.colors.navigationTitle]
+        
+        let navBarBorderRect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 0.25)
+        UIGraphicsBeginImageContextWithOptions(navBarBorderRect.size, false, 0.0)
+        UIConstants.colors.settingsNavBorder.setFill()
+        UIRectFill(navBarBorderRect)
+        if let borderImage = UIGraphicsGetImageFromCurrentImageContext() {
+            UIGraphicsEndImageContext()
+            navigationController?.navigationBar.shadowImage = borderImage
+        }
         
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSettings))
         doneButton.tintColor = UIConstants.Photon.Magenta60
