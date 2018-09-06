@@ -39,17 +39,6 @@ class TopTabsTest: BaseTestCase {
         waitforExistence(app.collectionViews.cells[urlLabel])
     }
 
-    private func checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: Int) {
-        navigator.goto(TabTray)
-        let numTabsOpen = userState.numTabs
-        XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")
-    }
-
-    private func closeTabTrayView(goBackToBrowserTab: String) {
-        app.collectionViews.cells[goBackToBrowserTab].firstMatch.tap()
-        navigator.nowAt(BrowserTab)
-    }
-
     func testAddTabFromContext() {
         navigator.openURL(urlExample)
         // Initially there is only one tab open
@@ -75,21 +64,6 @@ class TopTabsTest: BaseTestCase {
         }
     }
 
-    // This test only runs for iPhone see bug 1409750
-    func testAddTabByLongPressTabsButton() {
-        navigator.performAction(Action.OpenNewTabLongPressTabsButton)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-    }
-
-    // This test only runs for iPhone see bug 1409750
-    func testAddPrivateTabByLongPressTabsButton() {
-        navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        waitforExistence(app.buttons["TabTrayController.maskButton"])
-        XCTAssertTrue(app.buttons["TabTrayController.maskButton"].isEnabled)
-        XCTAssertTrue(userState.isPrivate)
-    }
-
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
         navigator.openURL(url)
@@ -107,68 +81,6 @@ class TopTabsTest: BaseTestCase {
         waitforExistence(app.collectionViews.cells[urlLabelExample])
         app.collectionViews.cells[urlLabelExample].tap()
         waitForValueContains(app.textFields["url"], value: urlValueExample)
-    }
-
-    // This test is disabled for iPad because the toast menu is not shown there
-    func testSwitchBetweenTabsToastButton() {
-        if !iPad() {
-        navigator.openURL(toastUrl["url"]!)
-        waitUntilPageLoad()
-
-        app.webViews.links.staticTexts[toastUrl["link"]!].press(forDuration: 1)
-        waitforExistence(app.sheets.buttons["Open in New Tab"])
-        app.sheets.buttons["Open in New Tab"].press(forDuration: 1)
-        waitforExistence(app.buttons["Switch"])
-        app.buttons["Switch"].tap()
-
-        // Check that the tab has changed
-        waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
-        XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
-        let numTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual("2", numTab)
-
-
-        // Go to Private mode and do the same
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(toastUrl["url"]!)
-        waitUntilPageLoad()
-        app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
-        waitforExistence(app.sheets.buttons["Open in New Private Tab"])
-        app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
-        waitforExistence(app.buttons["Switch"])
-        app.buttons["Switch"].tap()
-
-        // Check that the tab has changed
-        waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
-        XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
-        let numPrivTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual("2", numPrivTab)
-        }
-    }
-
-    // This test is disabled for iPad because the toast menu is not shown there
-    func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
-        if !iPad() {
-        navigator.openURL(toastUrl["url"]!)
-
-        navigator.openURL(url)
-        waitUntilPageLoad()
-
-        app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
-        waitforExistence(app.sheets.buttons["Open in New Tab"])
-        app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
-        waitforExistence(app.buttons["Switch"])
-        app.buttons["Switch"].tap()
-
-        // Check that the tab has changed to the new open one and that the user is in private mode
-        waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
-        XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
-        navigator.goto(TabTray)
-        XCTAssertTrue(app.buttons["TabTrayController.maskButton"].isEnabled)
-        }
     }
 
     func testCloseOneTab() {
@@ -326,5 +238,99 @@ class TopTabsTest: BaseTestCase {
             app.buttons["toolbarTabButtonLongPress.closeTab"].tap()
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         }
+    }
+}
+
+fileprivate extension BaseTestCase {
+    func checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: Int) {
+        navigator.goto(TabTray)
+        let numTabsOpen = userState.numTabs
+        XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")
+    }
+
+    func closeTabTrayView(goBackToBrowserTab: String) {
+        app.collectionViews.cells[goBackToBrowserTab].firstMatch.tap()
+        navigator.nowAt(BrowserTab)
+    }
+}
+
+class TopTabsTestIphone: IphoneOnlyTestCase {
+    // This test only runs for iPhone see bug 1409750
+    func testAddTabByLongPressTabsButton() {
+        if skipPlatform { return }
+        navigator.performAction(Action.OpenNewTabLongPressTabsButton)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+    }
+
+    // This test only runs for iPhone see bug 1409750
+    func testAddPrivateTabByLongPressTabsButton() {
+        if skipPlatform { return }
+        navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        waitforExistence(app.buttons["TabTrayController.maskButton"])
+        XCTAssertTrue(app.buttons["TabTrayController.maskButton"].isEnabled)
+        XCTAssertTrue(userState.isPrivate)
+    }
+
+    // This test is disabled for iPad because the toast menu is not shown there
+    func testSwitchBetweenTabsToastButton() {
+        if skipPlatform { return }
+
+        navigator.openURL(toastUrl["url"]!)
+        waitUntilPageLoad()
+
+        app.webViews.links.staticTexts[toastUrl["link"]!].press(forDuration: 1)
+        waitforExistence(app.sheets.buttons["Open in New Tab"])
+        app.sheets.buttons["Open in New Tab"].press(forDuration: 1)
+        waitforExistence(app.buttons["Switch"])
+        app.buttons["Switch"].tap()
+
+        // Check that the tab has changed
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
+        XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numTab)
+
+
+        // Go to Private mode and do the same
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(toastUrl["url"]!)
+        waitUntilPageLoad()
+        app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
+        waitforExistence(app.sheets.buttons["Open in New Private Tab"])
+        app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
+        waitforExistence(app.buttons["Switch"])
+        app.buttons["Switch"].tap()
+
+        // Check that the tab has changed
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
+        XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
+        let numPrivTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numPrivTab)
+    }
+
+    // This test is disabled for iPad because the toast menu is not shown there
+    func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
+        if skipPlatform { return }
+
+        navigator.openURL(toastUrl["url"]!)
+
+        navigator.openURL(url)
+        waitUntilPageLoad()
+
+        app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
+        waitforExistence(app.sheets.buttons["Open in New Tab"])
+        app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
+        waitforExistence(app.buttons["Switch"])
+        app.buttons["Switch"].tap()
+
+        // Check that the tab has changed to the new open one and that the user is in private mode
+        waitUntilPageLoad()
+        waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
+        XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
+        navigator.goto(TabTray)
+        XCTAssertTrue(app.buttons["TabTrayController.maskButton"].isEnabled)
     }
 }

@@ -40,7 +40,7 @@ class BaseTestCase: XCTestCase {
     }
 
     var skipPlatform: Bool {
-        guard platform = specificForPlatform else { return false }
+        guard let platform = specificForPlatform else { return false }
         return UIDevice.current.userInterfaceIdiom != platform
     }
 
@@ -119,16 +119,16 @@ class BaseTestCase: XCTestCase {
 }
 
 class IpadOnlyTestCase: BaseTestCase {
-    override init() {
-        super.init()
-        specificForPlatform = .ipad
+    override func setUp() {
+        specificForPlatform = .pad
+        super.setUp()
     }
 }
 
 class IphoneOnlyTestCase: BaseTestCase {
-    override init() {
-        super.init()
-        specificForPlatform = .iphone
+    override func setUp() {
+        specificForPlatform = .phone
+        super.setUp()
     }
 }
 
