@@ -261,6 +261,9 @@ private func headerTransform(_ frame: CGRect, toFrame finalFrame: CGRect, contai
 
 //MARK: Private Helper Methods
 private func calculateCollapsedCellFrameUsingCollectionView(_ collectionView: UICollectionView, atIndex index: Int) -> CGRect {
+    guard index < collectionView.numberOfItems(inSection: 0) else {
+        return .zero
+    }
     if let attr = collectionView.collectionViewLayout.layoutAttributesForItem(at: IndexPath(item: index, section: 0)) {
         return collectionView.convert(attr.frame, to: collectionView.superview)
     } else {
