@@ -200,7 +200,7 @@ class TabManagerTests: XCTestCase {
         let removeAllTabs = MethodSpy(functionName: "tabManagerDidRemoveAllTabs(_:toast:)")
 
         let profile = TabManagerMockProfile()
-        let manager = TabManager(prefs: profile.prefs, imageStore: nil)
+        let manager = TabManager(profile: profile, imageStore: nil)
         let delegate = MockTabManagerDelegate()
 
         //create the tab before adding the mock delegate. So we don't have to check delegate calls we dont care about
