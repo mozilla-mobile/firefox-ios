@@ -31,6 +31,7 @@ let SearchSettings = "SearchSettings"
 let NewTabSettings = "NewTabSettings"
 let ClearPrivateDataSettings = "ClearPrivateDataSettings"
 let WebsiteDataSettings = "WebsiteDataSettings"
+let WebsiteSearchDataSettings = "WebsiteSearchDataSettings"
 let LoginsSettings = "LoginsSettings"
 let OpenWithSettings = "OpenWithSettings"
 let ShowTourInSettings = "ShowTourInSettings"
@@ -545,7 +546,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(WebsiteDataSettings) { screenState in
-        let table = app.tables.element(boundBy: 0)
 
         screenState.gesture(forAction: Action.AcceptClearAllWebsiteData) { userState in
             app.tables.cells["ClearAllWebsiteData"].tap()
