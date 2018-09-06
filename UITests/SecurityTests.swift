@@ -113,6 +113,18 @@ class SecurityTests: KIFTestCase {
         XCTAssertEqual(bvc.urlBar.locationView.urlTextField.text, "blob:") // only display "blob:"
     }
 
+    // Web pages can't have firefox: urls, these should be used external to the app only (see bug 1447853)
+    func testFirefoxSchemeBlockedOnWebpages() {
+        let url = "\(webRoot!)/firefoxScheme.html"
+        enterUrl(url: url)
+        tester().tapWebViewElementWithAccessibilityLabel("go")
+
+        tester().wait(forTimeInterval: 1)
+        let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
+        // Make sure the URL doesn't change.
+        XCTAssertEqual(webView.url!.absoluteString, url)
+    }
+
     override func tearDown() {
         BrowserUtils.resetToAboutHome()
         BrowserUtils.clearPrivateData()

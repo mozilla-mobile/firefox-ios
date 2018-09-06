@@ -226,12 +226,14 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        UIApplication.shared.open(url, options: [:]) { openedURL in
-            // Do not show error message for JS navigated links or redirect as it's not the result of a user action.
-            if !openedURL, navigationAction.navigationType == .linkActivated {
-                let alert = UIAlertController(title: Strings.UnableToOpenURLErrorTitle, message: Strings.UnableToOpenURLError, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: Strings.OKString, style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+        if !(url.scheme?.contains("firefox") ?? true) {
+            UIApplication.shared.open(url, options: [:]) { openedURL in
+                // Do not show error message for JS navigated links or redirect as it's not the result of a user action.
+                if !openedURL, navigationAction.navigationType == .linkActivated {
+                    let alert = UIAlertController(title: Strings.UnableToOpenURLErrorTitle, message: Strings.UnableToOpenURLError, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: Strings.OKString, style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
             }
         }
         decisionHandler(.cancel)
