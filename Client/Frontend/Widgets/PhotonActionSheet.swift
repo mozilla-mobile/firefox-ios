@@ -678,10 +678,10 @@ private class PhotonActionSheetCell: UITableViewCell {
             case .Image:
                 let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
                 statusIcon.image = image
-                self.statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
                 statusIcon.tintColor = self.tintColor
             case .URL:
-                let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
+                let image = UIImage(named: iconName)?.createScaled(PhotonActionSheetUX.IconSize)
+                statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
                 statusIcon.sd_setImage(with: action.iconURL, placeholderImage: image, options: []) { (img, err, _, _) in
                     if let img = img {
                         self.statusIcon.image = img.createScaled(PhotonActionSheetUX.IconSize)
