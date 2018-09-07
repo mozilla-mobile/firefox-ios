@@ -40,7 +40,7 @@ public struct PrefsKeys {
 }
 
 public struct PrefsDefaults {
-    public static let ChineseHomePageURL = "http://mobile.firefoxchina.cn/"
+    public static let ChineseHomePageURL = "https://mobile.firefoxchina.cn/?ios"
     public static let ChineseNewTabDefault = "HomePage"
 }
 
