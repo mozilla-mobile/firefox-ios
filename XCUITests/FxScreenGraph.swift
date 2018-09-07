@@ -155,6 +155,7 @@ class Action {
 
     static let AcceptClearPrivateData = "AcceptClearPrivateData"
     static let AcceptClearAllWebsiteData = "AcceptClearAllWebsiteData"
+    static let SearchWebsites = "SearchWebsites"
 
     static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
     static let ToggleTrackingProtectionSettingOnNormalMode = "ToggleTrackingProtectionSettingAlwaysOn"
@@ -550,6 +551,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.AcceptClearAllWebsiteData) { userState in
             app.tables.cells["ClearAllWebsiteData"].tap()
             app.alerts.buttons["OK"].tap()
+        }
+
+        screenState.gesture(forAction: Action.SearchWebsites) { userState in
+            app.swipeDown()
+            app.textFields["Filter Sites"].tap()
+            app.textFields["Filter Sites"].typeText("localhost")
+            
         }
         screenState.backAction = navigationControllerBackAction
     }
