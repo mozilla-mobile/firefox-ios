@@ -32,7 +32,7 @@ pipeline {
         }
     }
     post {
-        always {
+        //always {
             //archiveArtifacts 'SyncIntegrationTests/results/*'
             //junit 'SyncIntegrationTests/results/*.xml'
             //publishHTML(target: [
@@ -42,7 +42,7 @@ pipeline {
                 //reportDir: 'SyncIntegrationTests/results',
                 //reportFiles: 'index.html',
                 //reportName: 'HTML Report'])
-        }
+        //}
         failure {
             script {
                 if (env.BRANCH_NAME == 'master') {
