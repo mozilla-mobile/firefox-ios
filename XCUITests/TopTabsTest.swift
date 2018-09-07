@@ -194,21 +194,6 @@ class TopTabsTest: BaseTestCase {
         waitforNoExistence(app.collectionViews.cells[urlLabel])
     }
 
-    func testCloseTabFromLongPressTabsButton() {
-        // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        closeTabTrayView(goBackToBrowserTab: "home")
-
-        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        closeTabTrayView(goBackToBrowserTab: "home")
-
-        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        closeTabTrayView(goBackToBrowserTab: "home")
-        }
-
     func testLongTapTabCounter() {
         if !iPad() {
             // Long tap on Tab Counter should show the correct options
@@ -255,6 +240,22 @@ fileprivate extension BaseTestCase {
 }
 
 class TopTabsTestIphone: IphoneOnlyTestCase {
+    func testCloseTabFromLongPressTabsButton() {
+        if skipPlatform { return }
+        // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        closeTabTrayView(goBackToBrowserTab: "home")
+
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        closeTabTrayView(goBackToBrowserTab: "home")
+
+        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        closeTabTrayView(goBackToBrowserTab: "home")
+    }
+
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
