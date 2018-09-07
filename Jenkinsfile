@@ -33,15 +33,15 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts 'SyncIntegrationTests/results/*'
-            junit 'SyncIntegrationTests/results/*.xml'
-            publishHTML(target: [
-                allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'SyncIntegrationTests/results',
-                reportFiles: 'index.html',
-                reportName: 'HTML Report'])
+            //archiveArtifacts 'SyncIntegrationTests/results/*'
+            //junit 'SyncIntegrationTests/results/*.xml'
+            //publishHTML(target: [
+                //allowMissing: false,
+                //alwaysLinkToLastBuild: true,
+                //keepAll: true,
+                //reportDir: 'SyncIntegrationTests/results',
+                //reportFiles: 'index.html',
+                //reportName: 'HTML Report'])
         }
         failure {
             script {
