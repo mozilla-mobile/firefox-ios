@@ -461,7 +461,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         cachedAttributes = nil
         // Sometimes when the topsiteCell isnt on the screen the newbounds that it tries to layout in is 0
         // Resulting in incorrect layouts. Only layout when a valid width is given
-        return newBounds.width > 0
+        return newBounds.width > 0 && newBounds.width != self.collectionView?.frame.width
     }
 
     func computeLayoutAttributesForCellAtIndexPath(_ indexPath: IndexPath) -> UICollectionViewLayoutAttributes {
