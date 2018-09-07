@@ -23,10 +23,10 @@ pipeline {
                 dir('SyncIntegrationTests') {
                     sh 'pipenv install'
                     sh 'pipenv check'
-                    # sh 'pipenv run pytest ' +
-                        #'--color=yes ' +
-                        #'--junit-xml=results/junit.xml ' +
-                        #'--html=results/index.html'
+                    // sh 'pipenv run pytest ' +
+                        //'--color=yes ' +
+                        //'--junit-xml=results/junit.xml ' +
+                        //'--html=results/index.html'
                 }
             }
         }
