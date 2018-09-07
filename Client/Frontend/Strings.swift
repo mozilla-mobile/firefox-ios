@@ -600,6 +600,13 @@ extension Strings {
     public static let ShareLoadInBackgroundDone = NSLocalizedString("ShareExtension.LoadInBackgroundActionDone.Title", value: "Loading in Firefox", comment: "Share extension label shown after user has performed 'Load in Background' action.")
 }
 
+//passwordAutofill extension
+extension Strings {
+    public static let PasswordAutofillTitle = NSLocalizedString("Firefox Credentials", tableName: "firefoxcredentials", comment: "Title of the extension that shows firefox passwords")
+    public static let CredentialProviderNoCredentialError = NSLocalizedString("You don’t have any credentials synced from your Firefox Account", tableName: "firefoxcredentials", comment: "Error message shown in the remote tabs panel")
+    public static let AvailableCredentialsHeader = NSLocalizedString("Available Credentials:", tableName: "firefoxcredentials", comment: "Header for the list of credentials table")
+}
+
 // Display Theme
 extension Strings {
     public static let SettingsDisplayThemeTitle = NSLocalizedString("Settings.DisplayTheme.Title", value: "Display", comment: "Title in main app settings for Display (theme) settings")
