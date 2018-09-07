@@ -218,9 +218,6 @@
                   Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
                </Test>
                <Test
-                  Identifier = "DragAndDropTests">
-               </Test>
-               <Test
                   Identifier = "FindInPageTests/testFindFromMenu()">
                </Test>
                <Test
