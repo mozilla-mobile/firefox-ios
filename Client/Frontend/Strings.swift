@@ -538,6 +538,9 @@ extension Strings {
     public static let SendUsageSettingTitle = NSLocalizedString("Settings.SendUsage.Title", value: "Send Usage Data", comment: "The title for the setting to send usage data.")
     public static let SendUsageSettingLink = NSLocalizedString("Settings.SendUsage.Link", value: "Learn More.", comment: "title for a link that explains how mozilla collects telemetry")
     public static let SendUsageSettingMessage = NSLocalizedString("Settings.SendUsage.Message", value: "Mozilla strives to only collect what we need to provide and improve Firefox for everyone.", comment: "A short description that explains why mozilla collects usage data.")
+    public static let SettingsSiriSectionName = NSLocalizedString("Settings.Siri.SectionName", value: "Siri Shortcuts", comment: "The option that takes you to the siri shortcuts settings page")
+    public static let SettingsSiriSectionDescription = NSLocalizedString("Settings.Siri.SectionDescription", value: "Use Siri shortcuts to quickly open Firefox via Siri", comment: "The description that describes what siri shortcuts are")
+    public static let SettingsSiriOpenURL = NSLocalizedString("Settings.Siri.OpenTabShortcut", value: "Open New Tab", comment: "The description of the open new tab siri shortcut")
 }
 
 // Do not track
@@ -602,9 +605,9 @@ extension Strings {
 
 //passwordAutofill extension
 extension Strings {
-    public static let PasswordAutofillTitle = NSLocalizedString("Firefox Credentials", tableName: "firefoxcredentials", comment: "Title of the extension that shows firefox passwords")
-    public static let CredentialProviderNoCredentialError = NSLocalizedString("You don’t have any credentials synced from your Firefox Account", tableName: "firefoxcredentials", comment: "Error message shown in the remote tabs panel")
-    public static let AvailableCredentialsHeader = NSLocalizedString("Available Credentials:", tableName: "firefoxcredentials", comment: "Header for the list of credentials table")
+    public static let PasswordAutofillTitle = NSLocalizedString("PasswordAutoFill.SectionTitle", value: "Firefox Credentials", comment: "Title of the extension that shows firefox passwords")
+    public static let CredentialProviderNoCredentialError = NSLocalizedString("PasswordAutoFill.NoPasswordsFoundTitle", value: "You don’t have any credentials synced from your Firefox Account", comment: "Error message shown in the remote tabs panel")
+    public static let AvailableCredentialsHeader = NSLocalizedString("PasswordAutoFill.PasswordsListTitle", value: "Available Credentials:",  comment: "Header for the list of credentials table")
 }
 
 // Display Theme
