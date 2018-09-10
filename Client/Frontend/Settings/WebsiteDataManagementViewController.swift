@@ -33,6 +33,8 @@ class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBa
         searchController.searchResultsUpdater = searchResults
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
+        searchController.searchBar.isAccessibilityElement = true
+        searchController.searchBar.accessibilityIdentifier = "website-search-bar"
         searchController.searchBar.delegate = self
         if theme == .dark {
             searchController.searchBar.barStyle = .black
