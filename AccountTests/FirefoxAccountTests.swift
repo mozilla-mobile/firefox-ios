@@ -21,7 +21,7 @@ class FirefoxAccountTests: XCTestCase {
                                        p256dhPublicKey: "public-key",
                                        authKey: "auth-key")
 
-        let d: [String: Any] = [
+        let dictionary: [String: Any] = [
             "version": 1,
             "configurationLabel": FirefoxAccountConfigurationLabel.production.rawValue,
             "email": "testtest@test.com",
@@ -32,27 +32,27 @@ class FirefoxAccountTests: XCTestCase {
 
         let account1 = FirefoxAccount(
                 configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(),
-                email: d["email"] as! String,
-                uid: d["uid"] as! String,
-                deviceRegistration: (d["deviceRegistration"] as! FxADeviceRegistration),
+                email: dictionary["email"] as! String,
+                uid: dictionary["uid"] as! String,
+                deviceRegistration: (dictionary["deviceRegistration"] as! FxADeviceRegistration),
                 declinedEngines: nil,
                 stateKeyLabel: Bytes.generateGUID(),
                 state: SeparatedState(),
                 deviceName: "my iphone")
 
-        account1.pushRegistration = d["pushRegistration"] as? PushRegistration
+        account1.pushRegistration = dictionary["pushRegistration"] as? PushRegistration
 
-        let d1 = account1.dictionary()
+        let dictionary1 = account1.dictionary()
 
-        let account2 = FirefoxAccount.fromDictionary(d1)
+        let account2 = FirefoxAccount.fromDictionary(dictionary1)
         XCTAssertNotNil(account2)
-        let d2 = account2!.dictionary()
+        let dictionary2 = account2!.dictionary()
 
-        for (k, v) in d {
+        for (key, value) in dictionary {
             // Skip version, which is an Int.
-            if let s = v as? String {
-                XCTAssertEqual(s, d1[k] as? String, "Value for '\(k)' does not agree for manually created account.")
-                XCTAssertEqual(s, d2[k] as? String, "Value for '\(k)' does not agree for deserialized account.")
+            if let string = value as? String {
+                XCTAssertEqual(string, dictionary1[key] as? String, "Value for '\(key)' does not agree for manually created account.")
+                XCTAssertEqual(string, dictionary2[key] as? String, "Value for '\(key)' does not agree for deserialized account.")
             }
         }
 
