@@ -10,7 +10,7 @@ let exampleWebsite = ["url": "www.example.com", "tabName": "Example Domain"]
 let homeTab = ["tabName": "home"]
 let websiteWithSearchField = ["url": "https://developer.mozilla.org/en-US/search", "urlSearchField": "Search the docs"]
 
-class DragAndDropTests: BaseTestCase {
+class DragAndDropTests: IpadOnlyTestCase {
 
     let testWithDB = ["testTryDragAndDropHistoryToURLBar","testTryDragAndDropBookmarkyToURLBar","testDragAndDropBookmarkEntry","testDragAndDropHistoryEntry"]
 
@@ -60,6 +60,8 @@ class DragAndDropTests: BaseTestCase {
 
     // This feature is working only on iPad so far and so tests enabled only on that schema
     func testRearrangeTabs() {
+        if skipPlatform { return }
+
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
         // Drag first tab on the second one
@@ -70,6 +72,8 @@ class DragAndDropTests: BaseTestCase {
     }
 
     func testRearrangeTabsLandscape() {
+        if skipPlatform { return }
+
         // Set the device in landscape mode
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         openTwoWebsites()
@@ -127,6 +131,8 @@ class DragAndDropTests: BaseTestCase {
     }*/
 
     func testDragDropToInvalidArea() {
+        if skipPlatform { return }
+
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
         // Rearrange the tabs via drag home tab and drop it to the tabs button
@@ -139,6 +145,8 @@ class DragAndDropTests: BaseTestCase {
     }
 
     func testDragAndDropHomeTab() {
+        if skipPlatform { return }
+
         // Home tab is open and then a new website
         navigator.openNewURL(urlString: secondWebsite["url"]!)
         waitUntilPageLoad()
@@ -166,6 +174,8 @@ class DragAndDropTests: BaseTestCase {
     }*/
 
     func testRearrangeTabsPrivateMode() {
+        if skipPlatform { return }
+
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         openTwoWebsites()
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite["tabName"]!, secondTab: secondWebsite["tabName"]!)
@@ -190,6 +200,8 @@ class DragAndDropTests: BaseTestCase {
 
     // This test drags the address bar and since it is not possible to drop it on another app, lets do it in a search box
     func testDragAddressBarIntoSearchBox() {
+        if skipPlatform { return }
+
         navigator.openURL("developer.mozilla.org/en-US/search")
         waitUntilPageLoad()
         // Check the text in the search field before dragging and dropping the url text field
@@ -215,6 +227,8 @@ class DragAndDropTests: BaseTestCase {
     }*/
 
     func testDragAndDropHistoryEntry() {
+        if skipPlatform { return }
+
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
         navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_History)
@@ -234,6 +248,8 @@ class DragAndDropTests: BaseTestCase {
     }
 
     func testDragAndDropBookmarkEntry() {
+        if skipPlatform { return }
+
         //navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Bookmarks)
         waitforExistence(app.tables["Bookmarks List"])
@@ -252,6 +268,8 @@ class DragAndDropTests: BaseTestCase {
     }
 
     func testTryDragAndDropHistoryToURLBar() {
+        if skipPlatform { return }
+
         navigator.goto(HomePanel_History)
         waitforExistence(app.tables["History List"].cells.staticTexts[secondWebsite["tabName"]!])
 
@@ -262,7 +280,9 @@ class DragAndDropTests: BaseTestCase {
         XCTAssertEqual(urlBarValue, "Search or enter address")
     }
 
-    func testTryDragAndDropBookmarkyToURLBar() {
+    func testTryDragAndDropBookmarkToURLBar() {
+        if skipPlatform { return }
+
         navigator.goto(HomePanel_Bookmarks)
         waitforExistence(app.tables["Bookmarks List"])
 
