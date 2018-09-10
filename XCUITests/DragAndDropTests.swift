@@ -10,7 +10,7 @@ let exampleWebsite = ["url": "www.example.com", "tabName": "Example Domain"]
 let homeTab = ["tabName": "home"]
 let websiteWithSearchField = ["url": "https://developer.mozilla.org/en-US/search", "urlSearchField": "Search the docs"]
 
-class DragAndDropTests: IphoneOnlyTestCase {
+class DragAndDropTests: IpadOnlyTestCase {
 
     let testWithDB = ["testTryDragAndDropHistoryToURLBar","testTryDragAndDropBookmarkyToURLBar","testDragAndDropBookmarkEntry","testDragAndDropHistoryEntry"]
 
