@@ -29,7 +29,7 @@ class FxADeepLinkingTests: XCTestCase {
         let query = url!.getQuery()
         let fxaOptions = FxALaunchParams(query: query)
         let testUrl = self.vc.createFxAURLWith(fxaOptions, profile: self.profile)
-        XCTAssertEqual(testUrl, expectUrl!)
+        XCTAssertEqual(testUrl.getQuery(), expectUrl!.getQuery())
     }
 
     func testDoesntOverrideServiceContext() {
@@ -37,6 +37,6 @@ class FxADeepLinkingTests: XCTestCase {
         let query = url!.getQuery()
         let fxaOptions = FxALaunchParams(query: query)
         let testUrl = self.vc.createFxAURLWith(fxaOptions, profile: self.profile)
-        XCTAssertEqual(testUrl, expectUrl!)
+        XCTAssertEqual(testUrl.getQuery(), expectUrl!.getQuery())
     }
 }
