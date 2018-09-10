@@ -84,7 +84,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.spacing = 14
         buttonContainerView.clipsToBounds = true
         buttonContainerView.accessibilityNavigationStyle = .combined
-        buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).")
+        buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarks, history, remote tabs, reading list).")
         view.addSubview(buttonContainerView)
         buttonContainerView.addSubview(highlightLine)
 
