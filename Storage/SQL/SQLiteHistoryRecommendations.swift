@@ -20,12 +20,6 @@ extension SQLiteHistory: HistoryRecommendations {
     static let PruneHistoryRowCount: UInt = 5000
 
     // Bookmarks Query
-    static let removeMultipleDomainsSubquery = """
-        INNER JOIN (SELECT view_history_visits.domain_id AS domain_id
-        FROM view_history_visits
-        GROUP BY view_history_visits.domain_id) AS domains ON domains.domain_id = history.domain_id
-        """
-
     static let urisForSimpleSyncedBookmarks = """
         SELECT bmkUri FROM bookmarksBuffer WHERE server_modified > ? AND is_deleted = 0
         UNION ALL
@@ -44,7 +38,6 @@ extension SQLiteHistory: HistoryRecommendations {
             SELECT history.id AS historyID, history.url AS url, history.title AS siteTitle, guid, history.domain_id, NULL AS visitDate, 1 AS is_bookmarked
             FROM (\(urisForSimpleSyncedBookmarks))
                 LEFT JOIN history ON history.url = bmkUri
-                \(removeMultipleDomainsSubquery)
             WHERE
                 history.title NOT NULL AND
                 history.title != '' AND
@@ -56,8 +49,8 @@ extension SQLiteHistory: HistoryRecommendations {
     static let bookmarksQuery = """
         SELECT historyID, url, siteTitle AS title, guid, is_bookmarked, iconID, iconURL, iconType, iconDate, iconWidth, page_metadata.title AS metadata_title, media_url, type, description, provider_name
         FROM (\(bookmarkHighlights))
-            LEFT JOIN view_history_id_favicon ON
-                view_history_id_favicon.id = historyID
+            LEFT JOIN view_favicons_widest ON
+                view_favicons_widest.siteID = historyID
             LEFT OUTER JOIN page_metadata ON
                 page_metadata.cache_key = url
         GROUP BY url
@@ -149,13 +142,13 @@ extension SQLiteHistory: HistoryRecommendations {
         // Search the history/favicon view with our limited set of highlight IDs
         // to avoid doing a full table scan on history
         let faviconSearch =
-            "SELECT * FROM view_history_id_favicon WHERE id IN (\(highlightsHistoryIDs))"
+            "SELECT * FROM view_favicons_widest WHERE siteID IN (\(highlightsHistoryIDs))"
 
         let sql = """
             SELECT \(allProjection.joined(separator: ","))
             FROM highlights
             LEFT JOIN (\(faviconSearch)) AS f1 ON
-                f1.id = historyID
+                f1.siteID = historyID
             LEFT OUTER JOIN page_metadata ON
                 page_metadata.cache_key = highlights.cache_key
             """
