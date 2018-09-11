@@ -1018,6 +1018,27 @@ class NewTabPageSetting: Setting {
     }
 }
 
+@available(iOS 12.0, *)
+class SiriPageSetting: Setting {
+    let profile: Profile
+
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return "SiriSettings" }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+
+        super.init(title: NSAttributedString(string: Strings.SettingsSiriSectionName, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = SiriSettingsViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 class OpenWithSetting: Setting {
     let profile: Profile
 
