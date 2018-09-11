@@ -394,7 +394,7 @@ class TabManager: NSObject {
             selectTab(addTab(), previous: tab)
         } else if closedLastPrivateTab {
             selectTab(tabs.last, previous: tab)
-        } else if !isSelectedParentTab(afterRemoving: tab) {
+        } else if !selectParentTab(afterRemoving: tab) {
             let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
             if let tabOnTheRight = viableTabs[safe: _selectedIndex] {
                 selectTab(tabOnTheRight, previous: tab)
@@ -436,22 +436,21 @@ class TabManager: NSObject {
         }
     }
 
-    func isSelectedParentTab(afterRemoving tab: Tab) -> Bool {
-        let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
+    // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
+    func selectParentTab(afterRemoving tab: Tab) -> Bool {
+        let viableTabs = tab.isPrivate ? privateTabs : normalTabs
+        guard let parentTab = tab.parent, parentTab != tab, !viableTabs.isEmpty else { return false }
 
-        if let parentTab = tab.parent,
-            let newTab = viableTabs.reduce(viableTabs.first, { currentBestTab, tab2 in
-                if let tab1 = currentBestTab, let time1 = tab1.lastExecutedTime {
-                    if let time2 = tab2.lastExecutedTime {
-                        return time1 <= time2 ? tab2 : tab1
-                    }
-                    return tab1
-                } else {
-                    return tab2
-                }
-            }), parentTab == newTab, tab !== newTab, newTab.lastExecutedTime != nil {
-            // We select the most recently visited tab, only if it is also the parent tab of the closed tab.
-            _selectedIndex = tabs.index(of: newTab) ?? -1
+        var parentTabIsMostRecentUsed = true
+        for candidate in viableTabs {
+            if let time = candidate.lastExecutedTime, time < (tab.lastExecutedTime ?? 0) {
+                parentTabIsMostRecentUsed = false
+                break
+            }
+        }
+
+        if parentTabIsMostRecentUsed, parentTab.lastExecutedTime != nil {
+            selectTab(parentTab, previous: tab)
             return true
         }
         return false
