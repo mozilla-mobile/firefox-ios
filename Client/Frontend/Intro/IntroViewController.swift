@@ -89,8 +89,8 @@ class IntroViewController: UIViewController {
         view.backgroundColor = UIColor.Photon.White100
 
         // Add Views
-        view.addSubview(pageControl)
         view.addSubview(scrollView)
+        view.addSubview(pageControl)
         view.addSubview(startBrowsingButton)
         scrollView.addSubview(imagesBackgroundView)
         scrollView.addSubview(imageViewContainer)
@@ -119,8 +119,6 @@ class IntroViewController: UIViewController {
         }
 
         createSlides()
-        //To show pageControl over cardViews and available for user interaction
-        view.bringSubview(toFront: pageControl)
         pageControl.addTarget(self, action: #selector(changePage), for: .valueChanged)
     }
 
@@ -317,13 +315,6 @@ extension IntroViewController: UIScrollViewDelegate {
         }
         if page != 0 {
             startBrowsingButton.isHidden = false
-        }
-        if page == cardViews.count - 1{
-            //To show last card's SignIn button above pageControl
-            self.view.sendSubview(toBack: pageControl)
-        } else {
-            //To show pageControl over cardViews and available for user interaction
-            self.view.bringSubview(toFront: pageControl)
         }
     }
 
