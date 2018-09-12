@@ -124,6 +124,8 @@ class TestBrowserDB: XCTestCase {
     }
 
     func testConcurrentQueries() {
+        let expectation = self.expectation(description: "Got all DB results")
+
         var db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
         db.run("CREATE TABLE foo (id INTEGER PRIMARY KEY AUTOINCREMENT, bar TEXT)").succeeded() // Just so we have writes in the WAL.
 
@@ -176,7 +178,10 @@ class TestBrowserDB: XCTestCase {
 
         _ = all([longQueryResult, shortConcurrentQueryResult]).bind { results -> Success in
             XCTAssert(longQueryRuntimeDuration > shortConcurrentQueryRuntimeDuration, "Long query runtime duration should be greater than short concurrent query runtime duration")
+            expectation.fulfill()
             return succeed()
         }
+
+        waitForExpectations(timeout: 10, handler: nil)
     }
 }
