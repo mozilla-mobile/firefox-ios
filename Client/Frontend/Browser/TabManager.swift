@@ -443,7 +443,8 @@ class TabManager: NSObject {
 
         var parentTabIsMostRecentUsed = true
         for candidate in viableTabs {
-            if let time = candidate.lastExecutedTime, time < (tab.lastExecutedTime ?? 0) {
+            if let time = candidate.lastExecutedTime, time > (tab.lastExecutedTime ?? 0) {
+                // Found more-recent tab than the parent
                 parentTabIsMostRecentUsed = false
                 break
             }
