@@ -19,7 +19,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitforExistence(cell)
 
         // Remove pin
-        cell.press(forDuration: 2)
+        app.cells["example"].press(forDuration: 2)
         app.cells["action_unpin"].tap()
 
         // Check that it has been unpinned
