@@ -503,7 +503,7 @@
 "trackingProtection.contentTrackerLabel" = "内容跟踪器";
 
 /* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "关闭追踪保护";
+"trackingProtection.disabledLabel" = "关闭跟踪保护";
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "跟踪保护";

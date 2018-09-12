@@ -17,6 +17,9 @@
 "About.safariBullet1" = "Estä seuraimet ja paranna yksityisyyttäsi";
 
 /* Label on About screen */
+"About.safariBullet2" = "Estä web-fontit vähentääksesi sivujen kokoa";
+
+/* Label on About screen */
 "About.safariBulletHeader" = "Käytä sitä Safari-laajennuksena:";
 
 /* (No Comment) */
@@ -63,6 +66,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Edellinen";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopioi osoite";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopioi";
@@ -118,6 +124,9 @@
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "Avaa App Store";
 
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ haluaa avata App Storen.";
+
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Avaa Kartat";
 
@@ -132,6 +141,9 @@
 
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Selaa. Tyhjennä. Toista.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Sulje";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Kumoa";
@@ -262,6 +274,21 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Pyydä työpöytäversio";
 
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Avaa Chromessa";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Avaa Firefoxissa";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Avaa Safarissa";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Lisää";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Lisää Siriin";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Kumoa";
 
@@ -277,6 +304,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Etsi sivulta: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Liitä";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Kirjoita osoite tai hakusana";
 
@@ -285,6 +315,9 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Seuraimia estetty";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Osoite kopioitu leikepöydälle";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Valitse sijaintipalkki";
@@ -297,6 +330,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Kopioi linkki";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Kopioimasi linkki:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Tallenna kuva";
@@ -313,6 +349,9 @@
 /* Text for a share button */
 "share" = "Jaa";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopioi osoite";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Mainosseuraimet";
 
@@ -324,6 +363,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Seurannan suojaus pois päältä";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Seurannan suojaus";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Lue lisää";

@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ daje nadzor v vaše roke.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Za vrnitev v %@ je zahtevana overitev";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Dodaj URL po meri";
 
@@ -226,6 +229,9 @@
 /* Save button label */
 "Save" = "Shrani";
 
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "To ni delovalo. Poskusite iskalno poizvedbo zamenjati z: %s.";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Dodaj drug iskalnik";
 
@@ -276,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Ocenite %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "INTEGRACIJA S SAFARIJEM";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Nastavitve";
@@ -352,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novosti";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "BLIŽNJICE ZA SIRI";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Najdi na strani";
 
@@ -385,11 +397,23 @@
 /* Button to add a specified shortcut option to Siri. */
 "Siri.addTo" = "Dodaj v Siri";
 
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Posnemite znova ali izbrišite bližnjico";
+
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "Izbriši";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
 "Siri.eraseAndOpen" = "Izbriši in odpri";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Odpri priljubljeno stran";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Odpri priljubljeno stran";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Spletni naslov za odprtje";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Prekliči";

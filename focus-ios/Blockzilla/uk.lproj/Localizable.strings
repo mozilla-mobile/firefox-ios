@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ надає вам контроль.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Зареєструйтеся для повернення до %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Додати власну URL-адресу";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Назад";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Копіювати адресу";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Копіювати";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Переглядайте. Стирайте. Повторюйте знову.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Закрити";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Скасувати";
 
@@ -206,7 +215,7 @@
 "Request Desktop Site" = "Повна версія сайту";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "Оберіть Safari, потім оберіть Блокування вмісту";
+"Safari.instructionsContentBlockers" = "Оберіть Safari, потім оберіть Блокувальники вмісту";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "Увімкніть %@";
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Зберегти";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Це не спрацювало. Спробуйте змінити пошуковий запит цим: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Додати інший засіб пошуку";
@@ -254,7 +266,7 @@
 "Settings.autocompleteSection" = "Автозавершення URL";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Блокування інших елементів стеження може пошкодити деякі відео або веб-сторінки.";
+"Settings.blockOtherMessage" = "Блокування інших елементів стеження може пошкодити деякі відео і веб-сторінки.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Ні, дякую";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Оцінити %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "ІНТЕГРАЦІЯ SAFARI";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Параметри";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Що нового";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "ШВИДКІ КОМАНДИ SIRI";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Знайти на сторінці";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Відкрити в %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Дії сторінки";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Повна версія сайту";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Відкрити в Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Відкрити в Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Відкрити в Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Поділитися сторінкою...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Додати";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Додати до Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Перезаписати чи видалити швидку команду";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Стерти";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Стерти і відкрити";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Відкрити улюблений сайт";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Відкрити улюблений сайт";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Відкрити URL";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Скасувати";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Знайти на сторінці: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Вставити";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Введіть запит чи адресу";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Відкрити в %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL скопійовано в буфер обміну";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Виберіть панель адреси";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Копіювати посилання";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Ваше скопійоване посилання:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Зберегти зображення";
@@ -421,6 +487,9 @@
 /* Text for a share button */
 "share" = "Поділитися";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Копіювати адресу";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Використовувати Touch ID для повернення до %@";
 
@@ -435,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Захист від стеження вимкнено";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Захист від стеження";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Докладніше";

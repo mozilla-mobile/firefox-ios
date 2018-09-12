@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "Το %@ σάς δίνει τον έλεγχο.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Πιστοποίηση για επιστροφή στο %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Προσθήκη προσαρμοσμένου URL";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Πίσω";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Αντιγραφή διεύθυνσης";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Αντιγραφή";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Περιηγηθείτε. Διαγράψτε. Επαναλάβετε.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Κλείσιμο";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Ακύρωση";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Αποθήκευση";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Δεν λειτούργησε. Δοκιμάστε να αντικαταστήσετε τον όρο αναζήτησης με αυτό: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Προσθήκη άλλης μηχανής αναζήτησης";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Αξιολόγηση του %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "ΕΝΣΩΜΑΤΩΣΗ SAFARI";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Ρυθμίσεις";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Τι νέο υπάρχει";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "ΣΥΝΤΟΜΕΥΣΕΙΣ SIRI";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Εύρεση στη σελίδα";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Άνοιγμα στο %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Ενέργειες σελίδας";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Έκδοση για υπολογιστές";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Άνοιγμα σε Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Άνοιγμα σε Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Άνοιγμα σε Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Κοινή χρήση σελίδας με...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Προσθήκη";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Προσθήκη στο Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Νέα ηχογράφηση ή διαγραφή συντόμευσης";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Διαγραφή";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Διαγραφή & Άνοιγμα";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Άνοιγμα αγαπημένης ιστοσελίδας";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Άνοιγμα αγαπημένης ιστοσελίδας";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL για άνοιγμα";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Ακύρωση";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Εύρεση στη σελίδα: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Επικόλληση";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Αναζήτηση ή εισαγωγή διεύθυνσης";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Άνοιγμα σε %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Το URL αντιγράφηκε στο πρόχειρο";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Επιλέξτε γραμμή τοποθεσίας";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Αντιγραφή συνδέσμου";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Αντιγραμμένος σύνδεσμος:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Αποθήκευση εικόνας";
@@ -421,6 +487,9 @@
 /* Text for a share button */
 "share" = "Κοινή χρήση";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Αντιγραφή διεύθυνσης";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Χρήση Touch ID για επιστροφή στο %@";
 
@@ -435,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Προστασία από παρακολούθηση ανενεργή";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Προστασία από καταγραφή";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Μάθετε περισσότερα";

@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "Toto vám dovolí pořizovat a nahrávat fotografie.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+"NSFaceIDUsageDescription" = "Toto vám umožní odemknout aplikaci.";
 
 /* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Servery, které navštěvujete, mohou chtít znát vaše umístění.";

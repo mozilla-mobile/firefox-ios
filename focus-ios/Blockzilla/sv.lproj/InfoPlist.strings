@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "Detta gör det möjligt att ta och ladda upp bilder.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+"NSFaceIDUsageDescription" = "Detta gör det möjligt att låsa upp appen.";
 
 /* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Webbsidor du besöker kan be om din plats.";

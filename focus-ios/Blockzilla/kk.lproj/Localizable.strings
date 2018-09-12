@@ -358,8 +358,17 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "%@ көмегімен ашу";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Бет әрекеттері";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Сайттың толық нұсқасы";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Өшіру";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Өшіру және ашу";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Бас тарту";

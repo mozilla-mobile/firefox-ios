@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ kontrolü size verir.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@’a dönmek için kimliğinizi doğrulayın";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Özel adres ekle";
 
@@ -226,6 +229,9 @@
 /* Save button label */
 "Save" = "Kaydet";
 
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Olmadı. Arama teriminin yerine şunu yazmayı deneyin: %s.";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Başka bir arama motoru ekle";
 
@@ -276,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@’a puan verin";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI ENTEGRASYONU";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Ayarlar";
@@ -379,11 +388,29 @@
 /* Text for the share menu option when a user wants to open the current website in the Safari app. */
 "ShareMenu.ShareOpenSafari" = "Safari’de Aç";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Sayfayı Paylaş...";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Add";
 
 /* Button to add a specified shortcut option to Siri. */
 "Siri.addTo" = "Siri’ye Ekle";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Yeniden kaydet veya kısayolu sil";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Sil";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Sil ve aç";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Favori siteyi aç";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Favori siteyi aç";
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Açılacak adres";

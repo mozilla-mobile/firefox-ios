@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "Maaari kang kumuha at mag-upload ng mga larawan dito.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+"NSFaceIDUsageDescription" = "Hinahayaan ka nito na i-unlock ang app.";
 
 /* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Maaaring hingin ng mga website na binibisita mo ang iyon lokasyon.";

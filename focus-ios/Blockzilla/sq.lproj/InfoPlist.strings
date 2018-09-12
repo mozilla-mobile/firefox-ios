@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "Kjo ju lejon të bëni dhe ngarkoni foto.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+"NSFaceIDUsageDescription" = "Kjo ju lejon të shkyçni aplikacionin.";
 
 /* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Sajtet që vizitoni mund të kërkojmë të dinë vendndodhjen tuaj.";

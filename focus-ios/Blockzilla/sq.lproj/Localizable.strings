@@ -37,8 +37,14 @@
 /* (No Comment) */
 "About.screenTitle" = "Rreth";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Mbi %@";
+
 /* Label on About screen */
 "About.topLabel" = "%@ jua lë juve kontrollin.";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Bëni mirëfilltësimin që të ktheheni te %@";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Shtoni URL Vetjake";
@@ -88,8 +94,23 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "E aktivizuar";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Sesion i Ri";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Shkyçeni %@ kur rihapet, që të parandalohen hyrje të pa-autorizuara.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Mbrapsht";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopjoje Adresën";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopjoje";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Shtoni URL Vetjake";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Përpara";
@@ -148,6 +169,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Hapni Harta";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Gjetja në faqe u krye";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Gjej pasuesin në faqe";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Gjej të mëparshmin në faqe";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "OK, e mora vesh!";
 
@@ -166,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Shfletoni. Fshini. Nga e para.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Mbylle";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Anuloje";
 
@@ -177,6 +210,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Kërko Sajtin për Desktop";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Prekni Safari-n, mandej përzgjidhni Bllokues Lënde";
@@ -192,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Ruaje";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Kjo nuk bëri punë. Provoni të zëvendësoni termin e kërkimit me këtë: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Shtoni Motor Tjetër Kërkimesh";
@@ -241,6 +280,12 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Mësoni më tepër.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Vlerësojeni %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "INTEGRIM ME SAFARI-N";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Rregullime";
 
@@ -261,6 +306,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVATËSI";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SIGURI";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blloko gjurmues reklamash";
@@ -289,6 +337,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Të trupëzuara në sajte për të gjurmuar vizitat tuaja dhe për të shfaqur funksione, të tillë si butona ndarjeje me të tjerët";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Përdorni Face ID që të shkyçni aplikacionin";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID mund të shkyçë %@ nëse ka tashmë të hapur një URL te aplikacioni";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Mund të pengojë funksionimin e disa videove dhe faqeve Web";
 
@@ -298,14 +352,68 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Dërgo të dhëna përdorimi";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Përdorni Touch ID që të shkyçni aplikacionin";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID mund të shkyçë %@ nëse ka tashmë të hapur një URL te aplikacioni";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Ç’ka të Re";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SHKURTORE SIRI";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Gjej në Faqe";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Merrni Aplikacionin Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Hape në %@";
+
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Veprime Faqeje";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Kërko Sajtin për Desktop";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Hape në Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Hape në Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Hape në Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Ndajeni Faqen Me…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Shtoje";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Shtoje në Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Riregjistroni ose Fshini Shkurtore";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Fshije";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Fshije & Hape";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Hap Sajt të Parapëlqyer";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Hap Sajt të Parapëlqyer";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL për hapje";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Anuloje";
@@ -319,6 +427,12 @@
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Historiku juaj i shfletimit u fshi.";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Gjej në faqe: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Ngjite";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Kërkoni ose jepni një adresë";
 
@@ -331,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Hape në %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL-ja u Kopjua Te e Papastra";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Përzgjidhni Shtyllë Vendesh";
 
@@ -342,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Kopjoji Lidhjen";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Lidhja që kopjuat:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Ruajeni Figurën";
@@ -364,6 +484,15 @@
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Shembull: searchengineexample.com/search/?q=%s";
 
+/* Text for a share button */
+"share" = "Ndajeni me të tjerët";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopjoje Adresën";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Përdorni Touch ID që të ktheheni te %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Gjurmues reklamash";
 
@@ -375,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Pa Mbrojtje Nga Gjurmimet";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Mbrojtje Nga Gjurmimet";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Mësoni Më Tepër";

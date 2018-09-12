@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "يعطيك %@ الدفة.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "أجرِ الاستيثاق للعودة إلى %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "أضِف مسارا مخصصا";
 
@@ -391,6 +394,9 @@
 /* Button to add a specified shortcut option to Siri. */
 "Siri.addTo" = "أضِف إلى سيري";
 
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "أعِد التسجيل أو احذف الاختصار";
+
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "امسح";
 
@@ -441,6 +447,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "انسخ الرابط";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "الرابط الذي نسخته:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "احفظ الصورة";

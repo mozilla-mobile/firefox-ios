@@ -1,5 +1,5 @@
 /* Button on About screen */
-"About.learnMoreButton" = "अधिक जाणून घ्या";
+"About.learnMoreButton" = "अधिक जाणा";
 
 /* Label on About screen */
 "About.missionLabel" = "%@ Mozilla द्वारा उत्पादित केले आहे. एक निरोगी, ओपन इंटरनेट जोपासणे हे आमचे कार्य आहे.";
@@ -278,7 +278,7 @@
 "Settings.detailTextSendUsageData" = "सर्वांसाठी %@ उपलब्ध करण्यासाठी व सुधारण्यास जी गरजेची आहे फक्त तीच माहिती जमा करण्यास Mozilla तत्पर आहे.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
-"Settings.learnMore" = "अधिक जाणून घ्या.";
+"Settings.learnMore" = "अधिक जाणा.";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ ला गुण द्या";
@@ -434,7 +434,7 @@
 "URL.paste" = "चिकटवा";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "पत्ता शोधा किंवा द्या";
+"URL.placeholderText" = "शोधा किंवा पत्ता द्या";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "याकरिता शोधा %@";
@@ -509,7 +509,7 @@
 "trackingProtection.label" = "मागोवा सुरक्षा";
 
 /* Text for the button to learn more about Tracking Protection. */
-"trackingProtection.learnMore" = "अधिक जाणून घ्या";
+"trackingProtection.learnMore" = "अधिक जाणा";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "सामाजिक ट्रॅकर्स";

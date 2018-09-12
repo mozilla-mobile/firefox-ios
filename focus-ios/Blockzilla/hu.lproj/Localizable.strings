@@ -361,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Újdonságok";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI GYORS PARANCSOK";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Keresés az oldalon";
 
@@ -393,6 +396,9 @@
 
 /* Button to add a specified shortcut option to Siri. */
 "Siri.addTo" = "Hozzáadása a Sirihez";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Gyors parancs újrarögzítése vagy törlése";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "Törlés";

@@ -2,7 +2,7 @@
 "Intro.Slides.History.Description" = "Vyčistěte kdykoli celou vaši historii prohlížení, hesla a soubory cookie jedním klepnutím.";
 
 /* Title for the third  panel 'History' in the First Run tour. */
-"Intro.Slides.History.Title" = "Vaše historie je historie";
+"Intro.Slides.History.Title" = "Historie vašeho prohlížení je minulostí";
 
 /* Button to go to the next card in Focus onboarding. */
 "Intro.Slides.Next.Button" = "Další";
