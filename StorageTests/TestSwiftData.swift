@@ -25,7 +25,6 @@ class TestSwiftData: XCTestCase {
         let table = BrowserSchema()
 
         // Ensure static flags match expected values.
-        XCTAssert(SwiftData.ReuseConnections, "Reusing database connections")
         XCTAssert(SwiftData.EnableWAL, "WAL enabled")
 
         XCTAssertNil(addSite(table, url: "http://url0", title: "title0"), "Added url0.")
@@ -33,51 +32,28 @@ class TestSwiftData: XCTestCase {
 
     override func tearDown() {
         // Restore static flags to their default values.
-        SwiftData.ReuseConnections = true
         SwiftData.EnableWAL = true
     }
-
-    /*
-    // These two tests broke after pull #427.
-    func testNoWALOrConnectionReuse() {
-    SwiftData.EnableWAL = false
-        SwiftData.ReuseConnections = false
-        var error = writeDuringRead()
-        XCTAssertEqual(error!.code, 5, "Got 'database is locked' error")
-    }
-
-    func testNoConnectionReuse() {
-        SwiftData.EnableWAL = true
-        SwiftData.ReuseConnections = false
-        var error = writeDuringRead()
-        XCTAssertNotNil(error, "Expected error during write.")
-        XCTAssertEqual(error?.code ?? 0, 8, "Got 'attempt to write to read-only database' error")
-    }
-    */
 
     func testNoWAL() {
         SwiftData.EnableWAL = false
-        SwiftData.ReuseConnections = true
         let error = writeDuringRead()
         XCTAssertNil(error, "Insertion succeeded")
     }
 
     func testDefaultSettings() {
         SwiftData.EnableWAL = true
-        SwiftData.ReuseConnections = true
         let error = writeDuringRead()
         XCTAssertNil(error, "Insertion succeeded")
     }
 
     func testBusyTimeout() {
         SwiftData.EnableWAL = false
-        SwiftData.ReuseConnections = false
         let error = writeDuringRead(closeTimeout: 1)
         XCTAssertNil(error, "Insertion succeeded")
     }
 
     func testFilledCursor() {
-        SwiftData.ReuseConnections = false
         SwiftData.EnableWAL = false
         XCTAssertNil(writeDuringRead(true), "Insertion succeeded")
     }

@@ -153,7 +153,7 @@ extension SQLiteHistory: HistoryRecommendations {
                 page_metadata.cache_key = highlights.cache_key
             """
 
-        return self.db.runQuery(sql, args: nil, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
+        return self.db.runQueryConcurrently(sql, args: nil, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
 
     public func removeHighlightForURL(_ url: String) -> Success {
@@ -178,7 +178,7 @@ extension SQLiteHistory: HistoryRecommendations {
     // needs to run.
     func checkIfCleanupIsNeeded(maxHistoryRows: UInt) -> Deferred<Maybe<Bool>> {
         let sql = "SELECT COUNT(rowid) > \(maxHistoryRows) AS cleanup FROM \(TableHistory)"
-        return self.db.runQuery(sql, args: nil, factory: IntFactory) >>== { cursor in
+        return self.db.runQueryConcurrently(sql, args: nil, factory: IntFactory) >>== { cursor in
             guard let cleanup = cursor[0], cleanup > 0 else {
                 return deferMaybe(false)
             }
@@ -236,7 +236,7 @@ extension SQLiteHistory: HistoryRecommendations {
     public func getRecentBookmarks(_ limit: Int = 3) -> Deferred<Maybe<Cursor<Site>>> {
         let fiveDaysAgo: UInt64 = Date.now() - (OneDayInMilliseconds * 5) // The data is joined with a millisecond not a microsecond one. (History)
         let args = [fiveDaysAgo, fiveDaysAgo, limit] as Args
-        return self.db.runQuery(SQLiteHistory.bookmarksQuery, args: args, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
+        return self.db.runQueryConcurrently(SQLiteHistory.bookmarksQuery, args: args, factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
     }
 
     private func computeHighlightsQuery() -> (String, Args) {

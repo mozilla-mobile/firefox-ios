@@ -194,7 +194,7 @@ fileprivate struct SQLiteFrecentHistory: FrecentHistory {
         let params = FrecencyQueryParams.urlCompletion(bookmarksLimit: bookmarksLimit, whereURLContains: filter ?? "", groupClause: "GROUP BY historyID ")
         let (query, args) = getFrecencyQuery(historyLimit: limit, params: params)
 
-        return db.runQuery(query, args: args, factory: factory)
+        return db.runQueryConcurrently(query, args: args, factory: factory)
     }
 
     private func updateTopSitesCacheQueryOld() -> (String, Args?) {
@@ -885,7 +885,7 @@ extension SQLiteHistory: BrowserHistory {
             ORDER BY latestVisits.latestVisitDate DESC
             """
 
-        return db.runQuery(sql, args: nil, factory: SQLiteHistory.iconHistoryColumnFactory)
+        return db.runQueryConcurrently(sql, args: nil, factory: SQLiteHistory.iconHistoryColumnFactory)
     }
 
     fileprivate func getFilteredSitesByVisitDateWithLimit(_ limit: Int,
@@ -928,7 +928,7 @@ extension SQLiteHistory: BrowserHistory {
             """
 
         let factory = includeIcon ? SQLiteHistory.iconHistoryColumnFactory : SQLiteHistory.basicHistoryColumnFactory
-        return db.runQuery(sql, args: args, factory: factory)
+        return db.runQueryConcurrently(sql, args: args, factory: factory)
     }
 
 }
@@ -943,7 +943,7 @@ extension SQLiteHistory: Favicons {
             """
 
         let args: Args = [url]
-        return db.runQuery(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
+        return db.runQueryConcurrently(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
     }
 
     func getFaviconsForBookmarkedURL(_ url: String) -> Deferred<Maybe<Cursor<Favicon?>>> {
@@ -959,7 +959,7 @@ extension SQLiteHistory: Favicons {
             """
 
         let args: Args = [url]
-        return db.runQuery(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
+        return db.runQueryConcurrently(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
     }
 
     public func getSitesForURLs(_ urls: [String]) -> Deferred<Maybe<Cursor<Site?>>> {
@@ -971,7 +971,7 @@ extension SQLiteHistory: Favicons {
             """
 
         let args: Args = []
-        return db.runQuery(sql, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
+        return db.runQueryConcurrently(sql, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
     }
 
     public func clearAllFavicons() -> Success {
@@ -1075,7 +1075,7 @@ extension SQLiteHistory: SyncableHistory {
         let query = "SELECT id FROM history WHERE guid = ?"
         let factory: (SDRow) -> Int = { return $0["id"] as! Int }
 
-        return db.runQuery(query, args: args, factory: factory)
+        return db.runQueryConcurrently(query, args: args, factory: factory)
             >>== { cursor in
                 if cursor.count == 0 {
                     return deferMaybe(NoSuchRecordError(guid: guid))
@@ -1124,7 +1124,7 @@ extension SQLiteHistory: SyncableHistory {
                 title: row["title"] as! String
             )
         }
-        return db.runQuery(select, args: args, factory: factory) >>== { cursor in
+        return db.runQueryConcurrently(select, args: args, factory: factory) >>== { cursor in
             return deferMaybe(cursor[0])
         }
     }
@@ -1257,7 +1257,7 @@ extension SQLiteHistory: SyncableHistory {
         }
 
         let args: Args = [limit]
-        return db.runQuery(sql, args: args, factory: placeFactory) >>> { deferMaybe(places) }
+        return db.runQueryConcurrently(sql, args: args, factory: placeFactory) >>> { deferMaybe(places) }
     }
 
     private func attachVisitsTo(places: [Int: Place], visitLimit: Int) -> Deferred<Maybe<[(Place, [Visit])]>> {
