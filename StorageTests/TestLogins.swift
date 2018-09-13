@@ -6,7 +6,7 @@ import Foundation
 import Shared
 @testable import Storage
 import XCGLogger
-
+import Deferred
 import XCTest
 
 private let log = XCGLogger.default
@@ -375,9 +375,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
 
         // Measure time to find all matching results
         self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
-            for _ in 0...5 {
-                self.logins.getAllLogins().succeeded()
-            }
+            self.logins.getAllLogins().succeeded()
             self.stopMeasuring()
         }
 
@@ -385,10 +383,12 @@ class TestSQLiteLoginsPerf: XCTestCase {
     }
 
     func populateTestLogins() {
+        var results = [Success]()
         for i in 0..<1000 {
             let login = Login.createWithHostname("website\(i).com", username: "username\(i)", password: "password\(i)", formSubmitURL: "test")
-            addLogin(login).succeeded()
+            results.append(addLogin(login))
         }
+        _ = all(results).value
     }
 
     func addLogin(_ login: LoginData) -> Success {
