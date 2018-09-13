@@ -293,9 +293,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
         history.clearHistory().succeeded()
         populateForRecommendationCalculations(history, bookmarks: bookmarks, metadata: metadata, historyCount: count, bookmarkCount: count)
         self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
-            for _ in 0...5 {
-                history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
-            }
+            history.repopulate(invalidateTopSites: true, invalidateHighlights: true).succeeded()
             self.stopMeasuring()
         }
     }
