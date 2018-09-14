@@ -295,14 +295,11 @@
 		63306D452110BAF000F25400 /* TabManagerStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D442110BAF000F25400 /* TabManagerStoreTests.swift */; };
 		6669B5D82113702F00CA117B /* websiteData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6669B5D72113702F00CA117B /* websiteData.swift */; };
 		6669B5E2211418A200CA117B /* websiteSearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6669B5E1211418A200CA117B /* websiteSearchResultsViewController.swift */; };
-		66CE54A820FCF6CF00CC310B /* WebsiteDataManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CE54A720FCF6CF00CC310B /* WebsiteDataManagementViewController.swift */; };
-        6669B5E2211418A200CA117B /* websiteSearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6669B5E1211418A200CA117B /* websiteSearchResultsViewController.swift */; };
-        66CE54A820FCF6CF00CC310B /* WebsiteDataManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CE54A720FCF6CF00CC310B /* WebsiteDataManagementViewController.swift */; };
 		66C68C9821345DF900863E33 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66C68C9721345DF900863E33 /* AuthenticationServices.framework */; };
 		66C68C9E21345F5800863E33 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66C68C9721345DF900863E33 /* AuthenticationServices.framework */; };
-		66C68CA121345F5800863E33 /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C68CA021345F5800863E33 /* CredentialProviderViewController.swift */; };
 		66C68CA421345F5800863E33 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66C68CA221345F5800863E33 /* MainInterface.storyboard */; };
 		66C68CA921345F5800863E33 /* firefoxAutoFillExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 66C68C9D21345F5800863E33 /* firefoxAutoFillExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		66CE54A820FCF6CF00CC310B /* WebsiteDataManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CE54A720FCF6CF00CC310B /* WebsiteDataManagementViewController.swift */; };
 		742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */; };
 		744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B0FFD1B4F172E00100422 /* ToolbarTests.swift */; };
 		744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */; };
@@ -500,8 +497,21 @@
 		D8BA1791206D47A80023AC00 /* DeferredTestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BA1783206D3FB70023AC00 /* DeferredTestUtils.swift */; };
 		D8C75DF3207584C400BB8AD0 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C75DF2207584C300BB8AD0 /* UIImageViewAligned.m */; };
 		D8D33A7D1FBD080300A20A28 /* SnapKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D33A7C1FBD080300A20A28 /* SnapKitExtensions.swift */; };
+		D8D91F4C214854B80034A767 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
+		D8D91F4D214854D00034A767 /* SyncStatusResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */; };
+		D8D91F4F214854F10034A767 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
+		D8D91F50214859FE0034A767 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
+		D8D91F5121485A090034A767 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68F36971EA694000048CF44 /* PanelDataObservers.swift */; };
+		D8D91F5221485A290034A767 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
+		D8D91F5321485A370034A767 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
+		D8D91F5C214869660034A767 /* Account.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA435FB1ABB83B4008031D1 /* Account.framework */; };
+		D8D91F5D214869660034A767 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		D8D91F5E214869660034A767 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
+		D8D91F5F214869660034A767 /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
+		D8D91F60214869660034A767 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA0B1FF5B1FA001D3A09 /* NavigationRouter.swift */; };
 		D8EFFA261FF702A8001D3A09 /* NavigationRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */; };
+		D8F69218214C36E100BA048B /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F69217214C36E000BA048B /* CredentialProviderViewController.swift */; };
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
@@ -1044,6 +1054,34 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
+		D8D91F5421485A9D0034A767 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2827315D1ABC9BE600AA1954;
+			remoteInfo = Sync;
+		};
+		D8D91F5621485AA20034A767 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
+			remoteInfo = Storage;
+		};
+		D8D91F5821485AB30034A767 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 28F951FA19D0F9FA00DCE892;
+			remoteInfo = FxA;
+		};
+		D8D91F5A21485AC90034A767 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
+		};
 		E4A888181A95679500CDC337 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
@@ -1478,13 +1516,12 @@
 		63306D442110BAF000F25400 /* TabManagerStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerStoreTests.swift; sourceTree = "<group>"; };
 		6669B5D72113702F00CA117B /* websiteData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = websiteData.swift; sourceTree = "<group>"; };
 		6669B5E1211418A200CA117B /* websiteSearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = websiteSearchResultsViewController.swift; sourceTree = "<group>"; };
-		66CE54A720FCF6CF00CC310B /* WebsiteDataManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteDataManagementViewController.swift; sourceTree = "<group>"; };
 		66C68C9721345DF900863E33 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		66C68C9D21345F5800863E33 /* firefoxAutoFillExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = firefoxAutoFillExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		66C68CA021345F5800863E33 /* CredentialProviderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderViewController.swift; sourceTree = "<group>"; };
 		66C68CA321345F5800863E33 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		66C68CA521345F5800863E33 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66C68CA621345F5800863E33 /* firefoxAutoFillExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = firefoxAutoFillExtension.entitlements; sourceTree = "<group>"; };
+		66CE54A720FCF6CF00CC310B /* WebsiteDataManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteDataManagementViewController.swift; sourceTree = "<group>"; };
 		742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheet.swift; sourceTree = "<group>"; };
 		744B0FFD1B4F172E00100422 /* ToolbarTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTests.swift; sourceTree = "<group>"; };
 		744ED5601DBFEB8D00A2B5BE /* MailtoLinkHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailtoLinkHandler.swift; sourceTree = "<group>"; };
@@ -1680,6 +1717,7 @@
 		D8D33A7C1FBD080300A20A28 /* SnapKitExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapKitExtensions.swift; path = Extensions/SnapKitExtensions.swift; sourceTree = "<group>"; };
 		D8EFFA0B1FF5B1FA001D3A09 /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
 		D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouterTests.swift; sourceTree = "<group>"; };
+		D8F69217214C36E000BA048B /* CredentialProviderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialProviderViewController.swift; sourceTree = "<group>"; };
 		DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabPrintPageRenderer.swift; sourceTree = "<group>"; };
 		DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSearchPrefs.swift; sourceTree = "<group>"; };
 		E40A18F71EDC73D5006B7F28 /* Fennec.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Fennec.entitlements; sourceTree = "<group>"; };
@@ -2067,6 +2105,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				66C68C9E21345F5800863E33 /* AuthenticationServices.framework in Frameworks */,
+				D8D91F5C214869660034A767 /* Account.framework in Frameworks */,
+				D8D91F5D214869660034A767 /* Shared.framework in Frameworks */,
+				D8D91F5E214869660034A767 /* Storage.framework in Frameworks */,
+				D8D91F5F214869660034A767 /* Sync.framework in Frameworks */,
+				D8D91F60214869660034A767 /* FxA.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2692,15 +2735,15 @@
 			path = XCUITests;
 			sourceTree = "<group>";
 		};
-		66C68C9F21345F5800863E33 /* firefoxAutoFillExtension */ = {
+		66C68C9F21345F5800863E33 /* AutoFill */ = {
 			isa = PBXGroup;
 			children = (
-				66C68CA021345F5800863E33 /* CredentialProviderViewController.swift */,
+				D8F69217214C36E000BA048B /* CredentialProviderViewController.swift */,
 				66C68CA221345F5800863E33 /* MainInterface.storyboard */,
 				66C68CA521345F5800863E33 /* Info.plist */,
 				66C68CA621345F5800863E33 /* firefoxAutoFillExtension.entitlements */,
 			);
-			path = firefoxAutoFillExtension;
+			path = AutoFill;
 			sourceTree = "<group>";
 		};
 		7B0B1B9C1C1B69F500DF4AB5 /* Extensions */ = {
@@ -3387,7 +3430,6 @@
 				F84B21C01A090F8100AAB793 /* Client */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
-				66C68C9F21345F5800863E33 /* firefoxAutoFillExtension */,
 				7B604FC11C496005006EEEC3 /* Frameworks */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
@@ -3637,6 +3679,7 @@
 		F8708D1E1A0970990051AB07 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				66C68C9F21345F5800863E33 /* AutoFill */,
 				E40A18F61EDC73D5006B7F28 /* Entitlements */,
 				397848DC1ED86605004C0C0B /* NotificationService */,
 				3905274D1C874D35007E0BB7 /* Today */,
@@ -3932,6 +3975,10 @@
 			buildRules = (
 			);
 			dependencies = (
+				D8D91F5B21485AC90034A767 /* PBXTargetDependency */,
+				D8D91F5921485AB30034A767 /* PBXTargetDependency */,
+				D8D91F5721485AA20034A767 /* PBXTargetDependency */,
+				D8D91F5521485A9D0034A767 /* PBXTargetDependency */,
 			);
 			name = firefoxAutoFillExtension;
 			productName = firefoxAutoFillExtension;
@@ -4207,7 +4254,15 @@
 					66C68C9C21345F5800863E33 = {
 						CreatedOnToolsVersion = 10.0;
 						DevelopmentTeam = 43AQ936H96;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					7BEB64401C7345600092C02E = {
 						DevelopmentTeam = 43AQ936H96;
@@ -5064,7 +5119,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66C68CA121345F5800863E33 /* CredentialProviderViewController.swift in Sources */,
+				D8D91F5121485A090034A767 /* PanelDataObservers.swift in Sources */,
+				D8D91F4C214854B80034A767 /* Profile.swift in Sources */,
+				D8D91F50214859FE0034A767 /* SearchEngines.swift in Sources */,
+				D8D91F4F214854F10034A767 /* NSUserDefaultsPrefs.swift in Sources */,
+				D8D91F4D214854D00034A767 /* SyncStatusResolver.swift in Sources */,
+				D8D91F5321485A370034A767 /* DefaultSearchPrefs.swift in Sources */,
+				D8F69218214C36E100BA048B /* CredentialProviderViewController.swift in Sources */,
+				D8D91F5221485A290034A767 /* OpenSearch.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5615,6 +5677,26 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = D39FA1651A83E0EC00EE869C /* PBXContainerItemProxy */;
+		};
+		D8D91F5521485A9D0034A767 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2827315D1ABC9BE600AA1954 /* Sync */;
+			targetProxy = D8D91F5421485A9D0034A767 /* PBXContainerItemProxy */;
+		};
+		D8D91F5721485AA20034A767 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2FCAE2191ABB51F800877008 /* Storage */;
+			targetProxy = D8D91F5621485AA20034A767 /* PBXContainerItemProxy */;
+		};
+		D8D91F5921485AB30034A767 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FxA;
+			targetProxy = D8D91F5821485AB30034A767 /* PBXContainerItemProxy */;
+		};
+		D8D91F5B21485AC90034A767 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = D8D91F5A21485AC90034A767 /* PBXContainerItemProxy */;
 		};
 		E4A888191A95679500CDC337 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -6416,6 +6498,7 @@
 		66C68CAB21345F5900863E33 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -6445,12 +6528,13 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = firefoxAutoFillExtension/firefoxAutoFillExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/Entitlements/Fennec.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -6475,6 +6559,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.firefoxAutoFillExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Fennec Autofill Development";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -6487,6 +6572,7 @@
 		66C68CAC21345F5900863E33 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -6516,12 +6602,13 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = firefoxAutoFillExtension/firefoxAutoFillExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/Entitlements/Fennec.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -6539,6 +6626,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.firefoxAutoFillExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -6551,6 +6639,7 @@
 		66C68CAD21345F5900863E33 /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -6580,12 +6669,13 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = firefoxAutoFillExtension/firefoxAutoFillExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/Entitlements/Fennec.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -6603,6 +6693,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.firefoxAutoFillExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -6615,6 +6706,7 @@
 		66C68CAE21345F5900863E33 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -6644,12 +6736,13 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = firefoxAutoFillExtension/firefoxAutoFillExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Extensions/Entitlements/Fennec.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -6667,6 +6760,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.firefoxAutoFillExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
