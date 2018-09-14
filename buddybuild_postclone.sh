@@ -48,3 +48,9 @@ if [ "$BUDDYBUILD_SCHEME" = "Fennec_Enterprise" ] && [ "$BUDDYBUILD_PULL_REQUEST
   setup_virtualenv
   ./ios-l10n-scripts/import-locales-firefox.sh
 fi
+
+# workaround, earlgrey needs to have dependencies downloaded before setup 
+# https://github.com/google/EarlGrey/issues/732
+carthage checkout
+./Carthage/Checkouts/EarlGrey/Scripts/setup-earlgrey.sh
+
