@@ -122,6 +122,7 @@ class SearchTests: BaseTestCase {
         app.textFields["address"].press(forDuration: 5)
         app.menuItems["Select All"].tap()
         app.menuItems["Copy"].tap()
+        waitforExistence(app.buttons["goBack"])
         app.buttons["goBack"].tap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
@@ -179,13 +180,13 @@ class SearchTests: BaseTestCase {
     }
 
     func testSearchWithFirefoxOption() {
-        navigator.openURL("mozilla.org/en-US/book")
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
         if !iPad() {
-            waitforExistence(app.menuItems["Show more items"])
-            app.menuItems["Show more items"].tap()
+            waitforExistence(app.menus.children(matching: .menuItem).element(boundBy: 3))
+            app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
         }
         waitforExistence(app.menuItems["Search with Firefox"])
         app.menuItems["Search with Firefox"].tap()

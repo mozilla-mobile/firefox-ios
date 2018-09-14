@@ -17,7 +17,7 @@ func registerHandlersForTestMethods(server: GCDWebServer) {
         return GCDWebServerDataResponse(html: "<html><body>\(textNodes)</body></html>")
     }
 
-    ["test-password", "test-password-submit"].forEach {
+    ["test-password", "test-password-submit", "test-example", "test-example-link", "test-mozilla-book", "test-mozilla-org"].forEach {
         addHTMLFixture(name: $0, server: server)
     }
 }
