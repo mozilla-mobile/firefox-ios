@@ -162,18 +162,22 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
         // Clear the current completion, then set the text without the attributed style.
         let text = (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
-        removeCompletion()
+        let didRemoveCompletion = removeCompletion()
         self.text = text
         hideCursor = false
         // Move the cursor to the end of the completion.
-        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
+        if didRemoveCompletion {
+            selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
+        }
     }
 
-    /// Removes the autocomplete-highlighted
-    @objc fileprivate func removeCompletion() {
+    /// Removes the autocomplete-highlighted. Returns true if a completion was actually removed
+    @objc @discardableResult fileprivate func removeCompletion() -> Bool {
+        let hasActiveCompletion = isSelectionActive
         autocompleteTextLabel?.removeFromSuperview()
         clearButton?.removeFromSuperview()
         autocompleteTextLabel = nil
+        return hasActiveCompletion
     }
 
     // `shouldChangeCharactersInRange` is called before the text changes, and textDidChange is called after.
