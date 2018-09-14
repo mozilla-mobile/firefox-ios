@@ -130,7 +130,7 @@ class ThemeSettingsController: ThemedTableViewController {
                 cell.detailTextLabel?.minimumScaleFactor = 0.5
                 cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
 
-                let control = UISwitch()
+                let control = UISwitchThemed()
                 control.onTintColor = UIColor.theme.tableView.controlTint
                 control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
                 control.isOn = ThemeManager.instance.automaticBrightnessIsOn

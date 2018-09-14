@@ -582,11 +582,32 @@ private class PhotonActionSheetCell: UITableViewCell {
         return label
     }()
 
-    lazy var toggleSwitch: UIImageView = {
-        let toggle = UIImageView(image: UIImage(named: "menu-Toggle-Off"))
-        toggle.contentMode = .scaleAspectFit
-        return toggle
-    }()
+    struct ToggleSwitch {
+        let mainView: UIImageView = {
+            let background = UIImageView(image: UIImage.templateImageNamed("menu-customswitch-background"))
+            background.contentMode = .scaleAspectFit
+            return background
+        }()
+
+        private let foreground = UIImageView()
+
+        init() {
+            foreground.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            foreground.contentMode = .scaleAspectFit
+            foreground.frame = mainView.frame
+            mainView.isAccessibilityElement = true
+            mainView.addSubview(foreground)
+            setOn(false)
+        }
+
+        func setOn(_ on: Bool) {
+            foreground.image = on ? UIImage(named: "menu-customswitch-on") : UIImage(named: "menu-customswitch-off")
+            mainView.accessibilityIdentifier = on ? "enabled" : "disabled"
+            mainView.tintColor = on ? UIColor.theme.general.controlTint : UIColor.Photon.Grey90A40
+        }
+    }
+
+    let toggleSwitch = ToggleSwitch()
 
     lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
@@ -619,7 +640,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         self.statusIcon.image = nil
         disclosureIndicator.removeFromSuperview()
         disclosureLabel.removeFromSuperview()
-        toggleSwitch.removeFromSuperview()
+        toggleSwitch.mainView.removeFromSuperview()
         statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
     }
 
@@ -731,11 +752,8 @@ private class PhotonActionSheetCell: UITableViewCell {
         case .Disclosure:
             stackView.addArrangedSubview(disclosureIndicator)
         case .Switch:
-            let image = action.isEnabled ? UIImage(named: "menu-Toggle-On") : UIImage(named: "menu-Toggle-Off")
-            toggleSwitch.isAccessibilityElement = true
-            toggleSwitch.accessibilityIdentifier = action.isEnabled ? "enabled" : "disabled"
-            toggleSwitch.image = image
-            stackView.addArrangedSubview(toggleSwitch)
+            toggleSwitch.setOn(action.isEnabled)
+            stackView.addArrangedSubview(toggleSwitch.mainView)
         case .Sync:
             if let manager = syncManager {
                 if syncButton == nil {

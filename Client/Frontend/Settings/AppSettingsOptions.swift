@@ -908,7 +908,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        let control = UISwitch()
+        let control = UISwitchThemed()
         control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? BrowserProfile.isChinaEdition
@@ -961,7 +961,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        let control = UISwitch()
+        let control = UISwitchThemed()
         control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? false
