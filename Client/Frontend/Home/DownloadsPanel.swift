@@ -41,7 +41,7 @@ struct DownloadedFile: Equatable {
     }
 }
 
-class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, HomePanel {
+class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, HomePanel, UIDocumentInteractionControllerDelegate {
     weak var homePanelDelegate: HomePanelDelegate?
     let profile: Profile
     var tableView = UITableView()
@@ -274,7 +274,6 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         let downloadedFilesInSection = groupedDownloadedFiles.itemsForSection(indexPath.section)
         return downloadedFilesInSection[safe: indexPath.row]
     }
-
     // MARK: - TableView Delegate / DataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TwoLineTableViewCell", for: indexPath) as! TwoLineTableViewCell
@@ -322,6 +321,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         if let downloadedFile = downloadedFileForIndexPath(indexPath) {
             UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .download, value: .downloadsPanel)
 
+            if downloadedFile.mimeType == MIMEType.Calendar {
+                let dc = UIDocumentInteractionController(url: downloadedFile.path)
+                dc.delegate = self
+                dc.presentPreview(animated: true)
+                return
+            }
+
             guard downloadedFile.canShowInWebView else {
                 shareDownloadedFile(downloadedFile, indexPath: indexPath)
                 return
@@ -366,6 +372,11 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         })
         share.backgroundColor = view.tintColor
         return [delete, share]
+    }
+    // MARK: - UIDocumentInteractionControllerDelegate
+
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self
     }
 }
 
