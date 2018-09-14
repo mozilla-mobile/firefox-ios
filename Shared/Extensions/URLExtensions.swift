@@ -296,6 +296,10 @@ extension URL {
             return true
         }
 
+        if AppConstants.IsRunningTest, path.contains("test-fixture/") {
+            return false
+        }
+
         return host.lowercased() == "localhost" || host == "127.0.0.1"
     }
 

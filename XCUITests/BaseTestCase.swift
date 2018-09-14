@@ -5,6 +5,10 @@
 import MappaMundi
 import XCTest
 
+func path(forTestPage page: String) -> String {
+    return "http://localhost:6571/test-fixture/\(page)"
+}
+
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
     let app =  XCUIApplication()
