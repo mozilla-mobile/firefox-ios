@@ -25,12 +25,6 @@ if [ ! -z "$XCS_BOT_ID"  ]; then
   CARTHAGE_VERBOSE="--verbose"
 fi
 
-# workaround, earlgrey needs to have dependencies downloaded before setup 
-# https://github.com/google/EarlGrey/issues/732
-carthage checkout
-./Carthage/Checkouts/EarlGrey/Scripts/setup-earlgrey.sh
-
-
 carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
 
 # Install Node.js dependencies and build user scripts
