@@ -794,6 +794,6 @@ extension TabManager {
 
     func testClearArchive() {
         assert(AppConstants.IsRunningTest)
-        store.testClearArchive()
+        store.clearArchive()
     }
 }
