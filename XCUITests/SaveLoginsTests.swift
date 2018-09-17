@@ -5,7 +5,7 @@
 import XCTest
 
 let domain = "http://localhost:6571"
-let testLoginPage = "http://localhost:6571/test-password.html"
+let testLoginPage = path(forTestPage: "test-password.html")
 let savedLoginEntry = "test@example.com, http://localhost:6571"
 let urlLogin = "linkedin.com"
 let mailLogin = "iosmztest@mailinator.com"
