@@ -366,14 +366,9 @@ extension TabTrayController: TabManagerDelegate {
     func tabManagerDidAddTabs(_ tabManager: TabManager) {}
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        guard let toast = toast, privateMode else {
-            return
-        }
-        view.addSubview(toast)
-        toast.showToast(delay: SimpleToastUX.ToastPrivateModeDelayBefore, makeConstraints: { make in
-            make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.toolbar.snp.top)
-        })
+        // No need to handle removeAll toast in TabTray.
+        // When closing all normal tabs we automatically focus a tab and show the BVC. Which will handle the Toast.
+        // We don't show the removeAll toast in PBM
     }
 }
 
