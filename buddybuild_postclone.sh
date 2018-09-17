@@ -54,3 +54,5 @@ fi
 carthage checkout
 ./Carthage/Checkouts/EarlGrey/Scripts/setup-earlgrey.sh
 
+# This scheme is used for Nimbledroid only, tests are not needed (this is the only way to skip tests in BB)
+sed -i '' 's/skipped = "NO"/skipped = "YES"/g' Client.xcodeproj/xcshareddata/xcschemes/Fennec.xcscheme
