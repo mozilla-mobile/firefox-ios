@@ -131,7 +131,7 @@ public struct AppConstants {
     ///  Toggle use of FxA Messages (Pushbox) for "Send Tab"
     public static let MOZ_FXA_MESSAGES: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
