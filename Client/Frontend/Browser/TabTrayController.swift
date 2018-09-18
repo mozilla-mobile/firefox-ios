@@ -168,7 +168,7 @@ class TabTrayController: UIViewController {
         collectionView.keyboardDismissMode = .onDrag
 
         // XXX: Bug 1485064 - Temporarily disable drag-and-drop in tabs tray
-         if #available(iOS 11.0, *), LeanPlumClient.shared.enableDragDrop.boolValue() {
+         if #available(iOS 11.0, *) {
              collectionView.dragInteractionEnabled = true
              collectionView.dragDelegate = tabDisplayManager
              collectionView.dropDelegate = tabDisplayManager
