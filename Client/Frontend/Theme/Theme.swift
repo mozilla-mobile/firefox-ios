@@ -184,7 +184,7 @@ class SnackBarColor {
 
 class GeneralColor {
     var passcodeDot: UIColor { return UIColor.Photon.Grey60 }
-    var highlightBlue: UIColor { return UIColor.Photon.Blue40A30 }
+    var highlightBlue: UIColor { return UIColor.Photon.Blue40 }
     var destructiveRed: UIColor { return UIColor.Photon.Red50 }
     var separator: UIColor { return defaultSeparator }
     var settingsTextPlaceholder: UIColor? { return nil }
