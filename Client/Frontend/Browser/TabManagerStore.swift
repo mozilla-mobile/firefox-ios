@@ -9,11 +9,12 @@ import Shared
 import XCGLogger
 
 private let log = Logger.browserLogger
-
 class TabManagerStore {
     fileprivate var lockedForReading = false
     fileprivate let imageStore: DiskImageStore?
     fileprivate var fileManager = FileManager.default
+    fileprivate let serialQueue = DispatchQueue(label: "tab-manager-write-queue")
+    fileprivate var writeOperation = DispatchWorkItem {}
 
     // Init this at startup with the tabs on disk, and then on each save, update the in-memory tab state.
     fileprivate lazy var archivedStartupTabs = { return tabsToRestore() }()
@@ -88,19 +89,28 @@ class TabManagerStore {
         assert(Thread.isMainThread)
         guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
             let path = tabsStateArchivePath() else {
+                clearArchive()
                 return succeed()
         }
+
+        writeOperation.cancel()
 
         let tabStateData = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
         archiver.encode(savedTabs, forKey: "tabs")
         archiver.finishEncoding()
+
         let result = Success()
-        DispatchQueue.global().async {
+        writeOperation = DispatchWorkItem {
             let written = tabStateData.write(toFile: path, atomically: true)
-            print("PreserveTabs: \(written)") // Ignore write failure (could be restoring).
+            log.debug("PreserveTabs write ok: \(written)") // Ignore write failure (could be restoring).
             result.fill(Maybe(success: ()))
         }
+
+        // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
+        // Notice above that a repeated 'preserveTabs' call will 'cancel()' a pending write operation.
+        serialQueue.asyncAfter(deadline: .now() + 0.100, execute: writeOperation)
+
         return result
     }
 
@@ -140,6 +150,12 @@ class TabManagerStore {
 
         return tabToSelect
     }
+
+    func clearArchive() {
+        if let path = tabsStateArchivePath() {
+            try? FileManager.default.removeItem(atPath: path)
+        }
+    }
 }
 
 // Functions for testing
@@ -147,12 +163,5 @@ extension TabManagerStore {
     func testTabCountOnDisk() -> Int {
         assert(AppConstants.IsRunningTest)
         return tabsToRestore().count
-    }
-
-    func testClearArchive() {
-        assert(AppConstants.IsRunningTest)
-        if let path = tabsStateArchivePath() {
-            try? FileManager.default.removeItem(atPath: path)
-        }
     }
 }
