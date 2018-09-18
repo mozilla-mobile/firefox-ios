@@ -151,7 +151,6 @@ class TabManagerStore {
         return tabToSelect
     }
 
-
     func clearArchive() {
         if let path = tabsStateArchivePath() {
             try? FileManager.default.removeItem(atPath: path)
