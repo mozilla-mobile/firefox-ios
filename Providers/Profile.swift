@@ -470,8 +470,8 @@ open class BrowserProfile: Profile {
         let result = Success()
 
         self.remoteClientsAndTabs.getRemoteDevices() >>== { remoteDevices in
-            let newRemoteDevices = remoteDevices.filter({ account.commandsClient.sendTab.isDeviceCompatible($0) })
-            var oldRemoteClients = remoteDevices.filter({ !account.commandsClient.sendTab.isDeviceCompatible($0) }).compactMap({ clientForRemoteDevice($0) })
+            let newRemoteDevices = remoteDevices.filter({ fxaDeviceIds.contains($0.id ?? "") && account.commandsClient.sendTab.isDeviceCompatible($0) })
+            var oldRemoteClients = remoteDevices.filter({ fxaDeviceIds.contains($0.id ?? "") && !account.commandsClient.sendTab.isDeviceCompatible($0) }).compactMap({ clientForRemoteDevice($0) })
 
             func sendViaSyncFallback() {
                 if oldRemoteClients.isEmpty {
