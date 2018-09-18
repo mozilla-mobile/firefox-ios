@@ -425,7 +425,7 @@ extension TabDisplayManager {
             completionBlocks.append(block)
         }
 
-        if self.isUpdating || self.collectionView.frame == CGRect.zero {
+        if self.isUpdating || self.collectionView.superview == nil {
             self.pendingReloadData = true
             return
         }
