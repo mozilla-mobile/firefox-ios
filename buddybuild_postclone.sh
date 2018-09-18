@@ -53,4 +53,3 @@ fi
 # https://github.com/google/EarlGrey/issues/732
 carthage checkout
 ./Carthage/Checkouts/EarlGrey/Scripts/setup-earlgrey.sh
-

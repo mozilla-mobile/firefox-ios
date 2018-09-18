@@ -147,7 +147,7 @@
       </PreActions>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
@@ -157,37 +157,13 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "AuthenticationTest">
-               </Test>
-               <Test
                   Identifier = "BaseTestCase">
                </Test>
                <Test
-                  Identifier = "BookmarkingTests">
-               </Test>
-               <Test
-                  Identifier = "ClipBoardTests">
-               </Test>
-               <Test
-                  Identifier = "CopiedLinksTests">
-               </Test>
-               <Test
-                  Identifier = "DownloadFilesTests">
+                  Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
                </Test>
                <Test
                   Identifier = "DragAndDropTests">
-               </Test>
-               <Test
-                  Identifier = "FxScreenGraphTests">
-               </Test>
-               <Test
-                  Identifier = "HistoryTests">
-               </Test>
-               <Test
-                  Identifier = "HomePageSettingsTest">
-               </Test>
-               <Test
-                  Identifier = "HomePageSettingsUITests">
                </Test>
                <Test
                   Identifier = "HomePageUITest">
@@ -196,64 +172,37 @@
                   Identifier = "IntegrationTests">
                </Test>
                <Test
-                  Identifier = "MailAppSettingsTests">
+                  Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
                </Test>
                <Test
-                  Identifier = "NavigationTest">
+                  Identifier = "NavigationTest/testReloadPreservesMobileOrDesktopSite()">
                </Test>
                <Test
-                  Identifier = "NewTabSettingsTest">
+                  Identifier = "NavigationTest/testScrollsToTopWithMultipleTabs()">
                </Test>
                <Test
-                  Identifier = "NightModeTests">
+                  Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
                </Test>
                <Test
-                  Identifier = "NoImageTests">
-               </Test>
-               <Test
-                  Identifier = "PhotonActionSheetTest">
-               </Test>
-               <Test
-                  Identifier = "PocketTest">
-               </Test>
-               <Test
-                  Identifier = "PrivateBrowsingTest">
-               </Test>
-               <Test
-                  Identifier = "ReaderViewTest">
+                  Identifier = "PhotonActionSheetTest/testSendToDeviceFromShareOption()">
                </Test>
                <Test
                   Identifier = "SaveLoginTest">
                </Test>
                <Test
-                  Identifier = "ScreenGraphTest">
-               </Test>
-               <Test
-                  Identifier = "SearchSettingsUITests">
-               </Test>
-               <Test
-                  Identifier = "SearchTests">
-               </Test>
-               <Test
-                  Identifier = "SettingsTest">
-               </Test>
-               <Test
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
-                  Identifier = "SyncUITests">
+                  Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingLandscape()">
                </Test>
                <Test
-                  Identifier = "ThirdPartySearchTest">
+                  Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingPortrait()">
                </Test>
                <Test
-                  Identifier = "ToolbarTests">
+                  Identifier = "ToolbarTests/testShowToolbarWhenScrollingDefaultOption()">
                </Test>
                <Test
-                  Identifier = "TopTabsTest">
-               </Test>
-               <Test
-                  Identifier = "TrackingProtectionTests">
+                  Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
                </Test>
             </SkippedTests>
          </TestableReference>
