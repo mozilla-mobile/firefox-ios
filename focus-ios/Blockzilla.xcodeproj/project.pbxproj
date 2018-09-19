@@ -1033,6 +1033,7 @@
 		745DC5DB1F39221100661635 /* OpenInFocus */ = {
 			isa = PBXGroup;
 			children = (
+				16938C0321010C2D00DCD489 /* InfoPlist.strings */,
 				745DC5DC1F39221100661635 /* ActionViewController.swift */,
 				745DC5E11F39221100661635 /* Info.plist */,
 				742C99D31F3A3AD200717D69 /* Assets.xcassets */,
@@ -1671,6 +1672,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				742C99D41F3A3AD200717D69 /* Assets.xcassets in Resources */,
+				16938C0121010C2D00DCD489 /* InfoPlist.strings in Resources */,
 				A89766DA1F57DCA9008183C5 /* (null) in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
