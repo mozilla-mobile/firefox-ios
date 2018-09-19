@@ -106,8 +106,11 @@ class ThemeSettingsController: ThemedTableViewController {
         let slider = UISlider()
         parent.addSubview(slider)
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
-        slider.minimumValueImage = UIImage(imageLiteralResourceName: "menu-NightMode").createScaled(size)
-        slider.maximumValueImage = UIImage(imageLiteralResourceName: "themeBrightness").createScaled(size)
+        let images = ["menu-NightMode", "themeBrightness"].map { name in
+            UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: UIColor.theme.browser.tint)
+        }
+        slider.minimumValueImage = images[0]
+        slider.maximumValueImage = images[1]
 
         slider.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
