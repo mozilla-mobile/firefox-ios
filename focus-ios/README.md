@@ -42,7 +42,7 @@ Build Instructions for Master
 4. Pull in the project dependencies:
 
   ```shell
-  cd focus
+  cd focus-ios
   ./checkout.sh
   ```
 
@@ -90,7 +90,7 @@ Alternatively, you can select the command line tools from Xcode-beta -> Preferen
 7. Pull in the project dependencies:
 
 ```shell
-cd focus
+cd focus-ios
 ./checkout.sh
 ```
 
