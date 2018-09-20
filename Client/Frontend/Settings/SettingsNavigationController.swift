@@ -28,6 +28,7 @@ class SettingsNavigationController: UINavigationController {
 extension SettingsNavigationController: Themeable {
     func applyTheme() {
         navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
+        navigationBar.tintColor = UIColor.theme.general.controlTint
         navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerTextDark]
         setNeedsStatusBarAppearanceUpdate()
         viewControllers.forEach {

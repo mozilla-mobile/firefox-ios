@@ -188,6 +188,7 @@ class GeneralColor {
     var destructiveRed: UIColor { return UIColor.Photon.Red50 }
     var separator: UIColor { return defaultSeparator }
     var settingsTextPlaceholder: UIColor? { return nil }
+    var controlTint: UIColor { return UIColor.Photon.Blue40 }
 }
 
 protocol Theme {

@@ -186,7 +186,7 @@ class TouchIDSetting: Setting {
         // In order for us to recognize a tap gesture without toggling the switch,
         // the switch is wrapped in a UIView which has a tap gesture recognizer. This way
         // we can disable interaction of the switch and still handle tap events.
-        let control = UISwitch()
+        let control = UISwitchThemed()
         control.onTintColor = UIColor.theme.tableView.controlTint
         control.isOn = authInfo?.useTouchID ?? false
         control.isUserInteractionEnabled = false
