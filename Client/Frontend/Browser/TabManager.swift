@@ -478,16 +478,14 @@ class TabManager: NSObject {
         var tabsCopy = tabs
 
         // Remove the current tab last to prevent switching tabs while removing tabs
-        if let selectedTab = selectedTab {
-            if let selectedIndex = tabsCopy.index(of: selectedTab) {
-                let removed = tabsCopy.remove(at: selectedIndex)
-                removeTabs(tabsCopy)
-                removeTabAndUpdateSelectedIndex(removed)
-            } else {
-                removeTabs(tabsCopy)
-                if normalTabs.isEmpty {
-                    selectTab(addTab())
-                }
+        if let selectedTab = selectedTab, let selectedIndex = tabsCopy.index(of: selectedTab) {
+            let removed = tabsCopy.remove(at: selectedIndex)
+            removeTabs(tabsCopy)
+            removeTabAndUpdateSelectedIndex(removed)
+        } else {
+            removeTabs(tabsCopy)
+            if normalTabs.isEmpty {
+                selectTab(addTab())
             }
         }
         for tab in tabs {
