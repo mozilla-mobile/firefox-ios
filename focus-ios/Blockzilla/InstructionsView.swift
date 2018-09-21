@@ -51,7 +51,7 @@ private class InstructionView: UIView {
         label.textColor = UIConstants.colors.defaultFont
         label.numberOfLines = 0
         label.font = UIConstants.fonts.safariInstruction
-        label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: UILayoutConstraintAxis.vertical)
+        label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         addSubview(label)
 
         imageView.snp.makeConstraints { make in

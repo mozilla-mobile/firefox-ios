@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ vám dáva kontrolu.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Pre návrat do aplikácie %@ sa vyžaduje overenie";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Pridať vlastnú URL";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Naspäť";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopírovať adresu";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopírovať";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Prehliadajte. Vymažte históriu. Opakujte.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Zavrieť";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Zrušiť";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Uložiť";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "To nefungovalo. Skúste nahradiť vyhľadávaný výraz s: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Pridať ďalší vyhľadávací modul";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Ohodnoťte %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "INTEGRÁCIA SO SAFARI";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Nastavenia";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Čo je nové";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SKRATKY PRE SIRI";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Hľadať na stránke";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Otvoriť v aplikácii %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Akcie stránky";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Verzia stránky pre počítače";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Otvoriť v Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Otvoriť vo Firefoxe";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Otvoriť v Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Zdieľať stránku s…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Pridať";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Pridať do Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Znova nahrať alebo odstrániť skratku";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Vymazať";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Vymazať a otvoriť";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Otvorenie obľúbenej stránky";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Otvorenie obľúbenej stránky";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Adresa na otvorenie";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Zrušiť";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Hľadať na stránke: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Prilepiť";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Zadajte vyhľadávanie alebo adresu";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Otvoriť pomocou %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Skopírované do schránky";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Zvoliť panel s adresou";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Kopírovať odkaz";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Skopírovaný odkaz:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Uložiť obrázok";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "Zdieľať";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopírovať adresu";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Pre návrat do aplikácie %@ použite Touch ID";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Reklamné sledovacie prvky";
 
@@ -432,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Ochrana pred sledovaním je vypnutá";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Ochrana pred sledovaním";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Ďalšie informácie";

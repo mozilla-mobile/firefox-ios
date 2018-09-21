@@ -37,11 +37,38 @@
 /* (No Comment) */
 "About.screenTitle" = "‍ಬಗ್ಗೆ";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "ಬಗ್ಗೆ %@";
+
 /* Label on About screen */
 "About.topLabel" = "%@ ನಿಮ್ಮನ್ನು ನಿಯಂತ್ರಣದಲ್ಲಿರಿಸುತ್ತದೆ.";
 
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "ಸೇರಿಸಲು URL";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "ಸ್ವಯಂಪೂರ್ಣಗೊಳಿಸು";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "DEFAULT URL LIST";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸು";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "ಸಕ್ರಿಯಗೊಳಿಸು";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "ಹೊಸ ಅಧಿವೇಶನ";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ಹಿಂದಕ್ಕೆ";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "ವಿಳಾಸವನ್ನು ನಕಲಿಸು";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "ನಕಲಿಸು";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "ಮುಂದಕ್ಕೆ";
@@ -57,6 +84,15 @@
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "ನಿಲ್ಲಿಸು";
+
+/* Label on button to cancel edits */
+"Cancel" = "ರದ್ದು ಮಾಡು";
+
+/* Label on button to complete edits */
+"Done" = "ಆಯಿತು";
+
+/* Label on button to allow edits */
+"Edit" = "ಸಂಪಾದಿಸಿ";
 
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "ಇನ್ನೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸು";
@@ -91,6 +127,18 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "ನಕ್ಷೆಗಳನ್ನು ತೆರೆ";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "ಪುಟದಲ್ಲಿ ಹುಡುಕು ಮುಗಿದಿದೆ";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "ಪುಟದಲ್ಲಿ ಮುಂದೆ ಹುಡುಕು";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "ಪುಟದಲ್ಲಿ ಹಿಂದೆ ಹುಡುಕು";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "ಸರಿ, ಗೊತ್ತಾಯಿತು!";
+
 /* Message label on the first run screen */
 "FirstRun.messageLabelDescription" = "ನೀವು ಬ್ರೌಸ್ ಮಾಡುವಾಗ ಆನ್ಲೈನ್ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ನಿರ್ಬಂಧಿಸಿ. ನಂತರ ನಿಮ್ಮ ಸಾಧನದಿಂದ ಭೇಟಿ ನೀಡಿದ ಪುಟಗಳು, ಹುಡುಕಾಟಗಳು, ಕುಕೀಗಳು ಮತ್ತು ಗುಪ್ತಪದಗಳನ್ನು ಅಳಿಸಲು ಮೆಲ್ಲ ತಟ್ಟಿ.";
 
@@ -106,6 +154,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "ಜಾಲಾಡು. ಅಳಿಸು. ಮರುಕಳಿಸು.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "ಮುಚ್ಚು";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ರದ್ದು ಮಾಡು‍";
 
@@ -118,6 +169,9 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "ಸಫಾರಿ‍";
 
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "ಡೆಸ್ಕ್ಟಾಪ್ ತಾಣವನ್ನು ಕೇಳಿ";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari ತಟ್ಟಿ, ವಿಷಯ ನಿರ್ಭಂದಕಗಳನ್ನು ಆಯ್ಕೆಮಾಡು";
 
@@ -129,6 +183,18 @@
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "‍ಸಿದ್ದತೆಗಳು‍ ಆಫ್ ತೆರೆ";
+
+/* Save button label */
+"Save" = "ಉಳಿಸು";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "ಹುಡುಕು ಸಾಧನವನ್ನು ಸೇರಿಸಿ";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL ಸ್ವಯಂಪೂರ್ಣಗೊಳಿಸು";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "ಇತರೆ ಮಾಹಿತಿ ಜಾಡುಹಿಡಿಯುವವರನ್ನು ನಿರ್ಬಂಧಿಸುವುದರಿಂದ ಕೆಲವು ವಿಡಿಯೋ ಮತ್ತು ಜಾಲ ಪುಟಗಳು ಕೆಡಬಹುದು.";
@@ -145,8 +211,20 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "ಬೆಲೆ %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "ಸಿದ್ಧತೆಗಳು";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "ಹುಡುಕು ಸಾಧನ";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SEARCH";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
@@ -159,6 +237,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "ಗೌಪ್ಯತೆ";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SECURITY";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "ಜಾಹೀರಾತು ಜಾಡುಹಿಡಿಯುವರನ್ನು ನಿರ್ಬಂಧಿಸು";
@@ -184,11 +265,53 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ಬಳಕೆಯ ದತ್ತಾಂಶ ಕಳುಹಿಸಿ";
 
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "ಹೊಸತೇನಿದೆ";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "ಪುಟದಲ್ಲಿ ಹುಡುಕು";
+
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox ಅನ್ವಯ ಪಡೆಯಿರಿ";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "ಇದರಲ್ಲಿ ತೆರೆ %@";
+
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "ಪುಟದ ಕಾರ್ಯಗಳು";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "ಡೆಸ್ಕ್ಟಾಪ್ ತಾಣವನ್ನು ಕೇಳಿ";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "ಕ್ರೋಮ್ನಲ್ಲಿ ತೆರೆ";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox ನಲ್ಲಿ ತೆರೆ";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Safariಯಲ್ಲಿ ತೆರೆ";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "ಸೇರಿಸು";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "ಸಿರಿಗೆ ಸೇರಿಸು";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "ಅಳಿಸು";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "ಅಳಿಸು & ತೆರೆ";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "ಮೆಚ್ಚಿನ ತಾಣ ತೆರೆ";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "ಮೆಚ್ಚಿನ ತಾಣ ತೆರೆ";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ರದ್ದು ಮಾಡು";
@@ -202,6 +325,12 @@
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "ನಿಮ್ಮ ಜಾಲಾಟದ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಲಾಗಿದೆ.";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "ಪುಟದಲ್ಲಿ ಹುಡುಕು: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "ಅಂಟಿಸು";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "ಹುಡುಕಿ ಅಥವ ವಿಳಾಸ ನಮೂದಿಸಿ";
 
@@ -214,6 +343,12 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "ಇದರಲ್ಲಿ ತೆರೆ %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL ಕ್ಲಿಪ್‌ಬೋರ್ಡಿಗೆ ಪ್ರತಿ ಮಾಡಲಾಗಿದೆ";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "ಸ್ಥಳ ಪಟ್ಟಿ ಆಯ್ಕೆಮಾಡು";
+
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "ನೀವು ನಕಲಿಸಿದ ಕೊಂಡಿ: %@";
 
@@ -222,6 +357,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "ಕೊಂಡಿ ನಕಲಿಸು‍";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "ನೀವು ನಕಲಿಸಿದ ಕೊಂಡಿ:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "ಚಿತ್ರವನ್ನು ಉಳಿಸು";
@@ -240,4 +378,25 @@
 
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ನಿಮ್ಮ ಚಿತ್ರಗಳನ್ನು ಪ್ರವೇಶಿಸಲು ಬಯಸುತ್ತಿದೆ";
+
+/* Text for a share button */
+"share" = "ಹಂಚು";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "ವಿಳಾಸವನ್ನು ನಕಲಿಸು";
+
+/* Label for ad trackers. */
+"trackingProtection.adTrackersLabel" = "ಜಾಹಿರಾತುಗಳ ಜಾಡುಹಿಡಿಯುವವರು";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "ಜಾಡು ಇರಿಸುವಿಕೆಗೆ ರಕ್ಷಣೆ ಸ್ಥಗಿತಗೊಳಿಸಲಾಗಿದೆ";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "ಜಾಡು ಇರಿಸುವಿಕೆಗೆ ರಕ್ಷಣೆ";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ";
+
+/* label for social trackers. */
+"trackingProtection.socialTrackerLabel" = "ಸಾಮಾಜಿಕ ಜಾಡುಹಿಡಿಯುವವರು";
 

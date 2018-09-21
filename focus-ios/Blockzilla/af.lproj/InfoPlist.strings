@@ -2,16 +2,10 @@
 "NSCameraUsageDescription" = "Hierdie laat mens foto’s neem en oplaai.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
-
-/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Webwerwe wat u besoek kan dalk u ligging vra.";
 
 /* (No Comment) */
 "NSMicrophoneUsageDescription" = "Hierdie laat mens video’s neem en oplaai.";
-
-/* (No Comment) */
-"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
 
 /* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Hierdie laat mens foto’s stoor en oplaai.";

@@ -42,7 +42,6 @@ class SettingAppearanceTest: BaseTestCase {
         
         //Check the initial state of the switch values
         let safariSwitch = app.tables.switches["Safari"]
-        let otherContentSwitch = app.tables.switches["BlockerToggle.BlockOther"]
         
         XCTAssertEqual(safariSwitch.value as! String, "0")
         safariSwitch.tap()
@@ -53,27 +52,31 @@ class SettingAppearanceTest: BaseTestCase {
         if app.label == "Firefox Focus" {
             XCTAssert(app.staticTexts["Firefox Focus is not enabled."].exists)
             XCTAssert(app.staticTexts["Enable Firefox Focus"].exists)
-            app.navigationBars["Firefox_Focus.SafariInstructionsView"].buttons["Settings"].tap()
+            app.navigationBars.buttons.element(boundBy: 0).tap()
         } else {
             XCTAssert(app.staticTexts["Firefox Klar is not enabled."].exists)
             XCTAssert(app.staticTexts["Enable Firefox Klar"].exists)
-            app.navigationBars["Firefox_Klar.SafariInstructionsView"].buttons["Settings"].tap()
+            app.navigationBars.buttons.element(boundBy: 0).tap()
         }
         
-        // Swipe up
-        waitforExistence(element: app.tables.switches["BlockerToggle.BlockAds"])
-        app.tables.firstMatch.swipeUp()
+        XCTAssertEqual(app.tables.switches["BlockerToggle.BlockFonts"].value as! String, "0")
+        if app.label == "Firefox Focus" {
+            XCTAssertEqual(app.tables.switches["BlockerToggle.SendAnonymousUsageData"].value as! String, "1")
+        } else {
+            XCTAssertEqual(app.tables.switches["BlockerToggle.SendAnonymousUsageData"].value as! String, "0")
+        }
+        
+        // Check Tracking Protection Settings page
+        app.tables.firstMatch.swipeDown()
+        let trackingProtectionCell = app.cells["settingsViewController.trackingCell"]
+        waitforHittable(element: trackingProtectionCell)
+        trackingProtectionCell.tap()
         
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAds"].value as! String, "1")
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAnalytics"].value as! String, "1")
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockSocial"].value as! String, "1")
+        let otherContentSwitch = app.tables.switches["BlockerToggle.BlockOther"]
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
-        XCTAssertEqual(app.tables.switches["BlockerToggle.BlockFonts"].value as! String, "0")
-        if app.label == "Firefox Focus" {
-            XCTAssertEqual(app.tables.switches["Send usage data"].value as! String, "1")
-        } else {
-            XCTAssertEqual(app.tables.switches["Send usage data"].value as! String, "0")
-        }
         
         otherContentSwitch.tap()
         let alertsQuery = app.alerts
@@ -87,6 +90,9 @@ class SettingAppearanceTest: BaseTestCase {
         otherContentSwitch.tap()
         alertsQuery.buttons["No, Thanks"].tap()
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
+        
+        // Go back to settings
+        app.navigationBars.buttons.element(boundBy: 0).tap()
         
         // Check navigate to app store review and back
         let reviewCell = app.cells["settingsViewController.rateFocus"]
@@ -103,13 +109,10 @@ class SettingAppearanceTest: BaseTestCase {
         let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         loadWebPage("https://www.google.com", waitForLoadToFinish: true)
         
-        waitforHittable(element: app.buttons["Share"])
-        app.buttons["Share"].tap()
-        let findInPage = app.buttons["Find in Page"]
-        waitforHittable(element: findInPage)
-        findInPage.swipeLeft()
+        waitforHittable(element: app.buttons["URLBar.pageActionsButton"])
+        app.buttons["URLBar.pageActionsButton"].tap()
         
-        let safariButton = app.buttons["Open in Safari"]
+        let safariButton = app.cells["Open in Safari"]
         waitforHittable(element: safariButton)
         safariButton.tap()
         
@@ -122,7 +125,7 @@ class SettingAppearanceTest: BaseTestCase {
         
         // Now back to Focus
         waitForWebPageLoad()
-        app.buttons["ERASE"].tap()
+        app.buttons["URLBar.deleteButton"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
     }
     

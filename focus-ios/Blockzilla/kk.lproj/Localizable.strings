@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ басқаруды қолыңызға береді.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@ ішіне оралу үшін аутентификация";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Таңдауыңызша URL қосу";
 
@@ -355,8 +358,17 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "%@ көмегімен ашу";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Бет әрекеттері";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Сайттың толық нұсқасы";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Өшіру";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Өшіру және ашу";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Бас тарту";
@@ -420,6 +432,9 @@
 
 /* Text for a share button */
 "share" = "Бөлісу";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "%@ оралу үшін Touch ID қолданыңыз";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Жарнамалық трекерлер";

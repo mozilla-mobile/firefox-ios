@@ -7,18 +7,29 @@ import Telemetry
 
 protocol AppSplashController {
     var splashView: UIView { get }
-
+    
     func toggleSplashView(hide: Bool)
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
+class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashController {
     static let prefIntroDone = "IntroDone"
     static let prefIntroVersion = 2
     static let prefWhatsNewDone = "WhatsNewDone"
     static let prefWhatsNewCounter = "WhatsNewCounter"
     static var needsAuthenticated = false
-
+    
+    // This enum can be expanded to support all new shortcuts added to menu.
+    enum ShortcutIdentifier: String {
+        case EraseAndOpen
+        init?(fullIdentifier: String) {
+            guard let shortIdentifier = fullIdentifier.components(separatedBy: ".").last else {
+                return nil
+            }
+            self.init(rawValue: shortIdentifier)
+        }
+    }
+    
     var window: UIWindow?
 
     var splashView: UIView = UIView()
@@ -29,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
     private var queuedUrl: URL?
     private var queuedString: String?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if AppInfo.testRequestsReset() {
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -43,6 +54,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
         // Count number of app launches for requesting a review
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
         UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
+        
+        // Set original default values for showing tips
+        let tipDefaults = [TipManager.TipKey.autocompleteTip: true,
+                           TipManager.TipKey.sitesNotWorkingTip: true,
+                           TipManager.TipKey.siriFavoriteTip: true,
+                           TipManager.TipKey.biometricTip: true,
+                           TipManager.TipKey.shareTrackersTip: true,
+                           TipManager.TipKey.siriEraseTip: true,
+                           TipManager.TipKey.requestDesktopTip: true]
+        UserDefaults.standard.register(defaults: tipDefaults)
     
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
@@ -56,8 +77,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
 
         window = UIWindow(frame: UIScreen.main.bounds)
 
-        let rootViewController = UINavigationController(rootViewController: browserViewController)
-        window?.rootViewController = rootViewController
+        browserViewController.modalDelegate = self
+        window?.rootViewController = browserViewController
         window?.makeKeyAndVisible()
 
         WebCacheUtils.reset()
@@ -72,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
 
         if AppInfo.isTesting() {
             let firstRunViewController = IntroViewController()
-            rootViewController.present(firstRunViewController, animated: false, completion: nil)
+            self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
             return true
         }
         
@@ -83,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
                 // Set the prefIntroVersion viewed number in the same context as the presentation.
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                rootViewController.present(IntroViewController(), animated: false, completion: nil)
+                self.browserViewController.present(IntroViewController(), animated: false, completion: nil)
             }
         }
         
@@ -105,7 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
         return true
     }
 
-    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return false
         }
@@ -148,6 +169,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
             }
         }
 
+        return true
+    }
+    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
+        
+        completionHandler(handleShortcut(shortcutItem: shortcutItem))
+    }
+    
+    private func handleShortcut(shortcutItem: UIApplicationShortcutItem) -> Bool {
+        let shortcutType = shortcutItem.type
+        guard let shortcutIdentifier = ShortcutIdentifier(fullIdentifier: shortcutType) else {
+            return false
+        }
+        switch shortcutIdentifier {
+        case .EraseAndOpen:
+            browserViewController.resetBrowser(hidePreviousSession: true)
+        }
         return true
     }
 
@@ -194,10 +232,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
         }
 
         let animationDuration = 0.25
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
             logoImage.layer.transform = CATransform3DMakeScale(0.8, 0.8, 1.0)
         }, completion: { success in
-            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIViewAnimationOptions(), animations: {
+            UIView.animate(withDuration: animationDuration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
                 splashView.alpha = 0
                 logoImage.layer.transform = CATransform3DMakeScale(2.0, 2.0, 1.0)
             }, completion: { success in
@@ -209,9 +247,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
 
     func applicationWillResignActive(_ application: UIApplication) {
         toggleSplashView(hide: false)
+        browserViewController.exitFullScreenVideo()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        if Settings.siriRequestsErase() {
+            browserViewController.photonActionSheetDidDismiss()
+            browserViewController.dismiss(animated: true, completion: nil)
+            browserViewController.navigationController?.popViewController(animated: true)
+            browserViewController.resetBrowser(hidePreviousSession: true)
+            Settings.setSiriRequestErase(to: false)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseInBackground)
+        }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
 
         if let url = queuedUrl {
@@ -238,6 +285,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppSplashController {
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
+    }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        guard #available(iOS 12.0, *) else { return false }
+        browserViewController.photonActionSheetDidDismiss()
+        browserViewController.dismiss(animated: true, completion: nil)
+        browserViewController.navigationController?.popViewController(animated: true)
+        
+        switch userActivity.activityType {
+        case "org.mozilla.ios.Klar.eraseAndOpen":
+            browserViewController.resetBrowser(hidePreviousSession: true)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseAndOpen)
+        case "org.mozilla.ios.Klar.openUrl":
+            guard let urlString = userActivity.userInfo?["url"] as? String,
+                let url = URL(string: urlString) else { return false }
+            browserViewController.resetBrowser(hidePreviousSession: true)
+            browserViewController.ensureBrowsingMode()
+            browserViewController.submit(url: url)
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.openFavoriteSite)
+        case "EraseIntent":
+            guard userActivity.interaction?.intent as? EraseIntent != nil else { return false }
+            browserViewController.resetBrowser()
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.eraseInBackground)
+        default: break
+        }
+        return true
     }
     
     func toggleSplashView(hide: Bool) {
@@ -303,7 +376,7 @@ extension AppDelegate {
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String : Any?] in
             var outputDict = inputDict // make a mutable copy
 
-            if self.browserViewController.canShowTrackerStatsShareButton() { // Klar users are not included in this experiment
+            if self.browserViewController.canShowTips() { // Klar users are not included in this experiment
                 self.browserViewController.flipCoinForShowTrackerButton() // Force a coin flip if one has not been flipped yet
                 outputDict["showTrackerStatsSharePhase2"] = UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
             }
@@ -328,6 +401,13 @@ extension AppDelegate {
         #endif
     }
     
+    func presentModal(viewController: UIViewController, animated: Bool) {
+        window?.rootViewController?.present(viewController, animated: animated, completion: nil)
+    }
+}
+
+protocol ModalDelegate {
+    func presentModal(viewController: UIViewController, animated: Bool)
 }
 
 extension UINavigationController {

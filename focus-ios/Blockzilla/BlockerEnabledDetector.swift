@@ -33,7 +33,7 @@ private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewContr
     override init() {
         super.init()
 
-        server?.addHandler(forMethod: "GET", path: "/enabled-detector", request: GCDWebServerRequest.self) { [weak self] request -> GCDWebServerResponse! in
+        server?.addHandler(forMethod: "GET", path: "/enabled-detector", request: GCDWebServerRequest.self) { [weak self] request -> GCDWebServerResponse? in
             if let loadedBlockedPage = request?.query["blocked"] as? String , loadedBlockedPage == "1" {
                 // Second page loaded, so we aren't blocked.
                 self?.enabled = false

@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ te pone al commando.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Authenticar se pro retornar a %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Adder URL personalisate";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Retro";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Copiar le adresse";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Copiar";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Naviga. Elimina. Repete.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Clauder";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Cancellar";
 
@@ -267,6 +276,9 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Saper plus.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Valuta %@";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Parametros";
@@ -355,6 +367,30 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Requirer le version scriptorio del sito";
 
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Aperir in Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Aperir in Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Aperir in Safari";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Adder";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Adder a Siri";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Eliminar";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Eliminar e aperir";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL a aperir";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancellar";
 
@@ -370,6 +406,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Trovar in le pagina: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Collar";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Insere un adresse o face un recerca";
 
@@ -382,6 +421,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Aperir in %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL copiate in le planchetta";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Seliger le barra de adresse";
 
@@ -393,6 +435,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Copiar le ligamine";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Ligamine que tu ha copiate:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Salvar le imagine";
@@ -418,6 +463,12 @@
 /* Text for a share button */
 "share" = "Compartir";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Copiar le adresse";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Usa ID de tocco pro retornar a %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Traciatores publicitari";
 
@@ -429,6 +480,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Protection contra le traciamento disactivate";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Protection contra le traciamento";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Saper plus";

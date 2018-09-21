@@ -421,6 +421,9 @@
 /* Text for a share button */
 "share" = "Rannañ";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Implijit Touch ID evit distreiñ da %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Heulieroù bruderezh";
 

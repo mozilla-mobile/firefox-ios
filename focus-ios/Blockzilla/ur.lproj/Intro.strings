@@ -16,3 +16,6 @@
 /* Button to skip onboarding in Focus */
 "Intro.Slides.Skip.Button" = "چھوڈیں";
 
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "نجی برائوزنگ کو اگلی سطح پر لے کر جائیں۔ اشتہارات اور دیگر مواد جو آپ کی مختلف سائٹ پر سراغ راہ کاری کر کے صفحہ کہ لوڈ ہوبے کے وقت کو سست کر سکتا ہے۔";
+

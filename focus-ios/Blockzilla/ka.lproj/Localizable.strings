@@ -43,8 +43,11 @@
 /* Label on About screen */
 "About.topLabel" = "%@ გიბრუნებთ მართვის სადავეებს.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "ვინაობის დამოწმება, %@-ზე დასაბრუნებლად";
+
 /* Label for button to add a custom URL */
-"Autocomplete.addCustomUrl" = "საკუთარი URL მისამართის დამატება";
+"Autocomplete.addCustomUrl" = "საკუთარი URL-ს დამატება";
 
 /* Label for error state when entering an invalid URL */
 "Autocomplete.addCustomUrlError" = "გადაამოწმეთ შეყვანილი URL.";
@@ -59,13 +62,13 @@
 "Autocomplete.addCustomUrlPlaceholder" = "ჩასვით ან შეიყვანეთ URL";
 
 /* Label for button to add a custom URL with the + prefix */
-"Autocomplete.addCustomUrlWithPlus" = "+ საკუთარი URL მისამართის დამატება";
+"Autocomplete.addCustomUrlWithPlus" = "+ საკუთარი URL-ს დამატება";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "დაამატეთ და მართეთ საკუთარი URL მისამართები.";
+"Autocomplete.customDescriptoin" = "დაამატეთ და მართეთ საკუთარი URL-ები თვითშევსებისთვის.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
-"Autocomplete.customLabel" = "საკუთარი URL მისამართები";
+"Autocomplete.customLabel" = "საკუთარი URL-ები";
 
 /* Title for the default URL list section */
 "Autocomplete.customTitle" = "საკუთარი URL ჩამონათვალი";
@@ -74,7 +77,7 @@
 "Autocomplete.customUrlAdded" = "ახალი საკუთარი URL დაემატა.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "ჩართეთ და %@ თავად დაასრულებს 450-ზე მეტ ცნობილ URL ბმულს, მისამართების ველში აკრეფისას.";
+"Autocomplete.defaultDescriptoin" = "ჩართეთ და %@ თავად დაასრულებს 450-ზე მეტ ცნობილ URL-ბმულს, მისამართების ველში აკრეფისას.";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "თვითშევსება";
@@ -86,7 +89,7 @@
 "Autocomplete.disabled" = "გამორთულია";
 
 /* Label for button to add a custom URL */
-"Autocomplete.emptyState" = "საკუთარი URL მისამართები არაა დამატებული";
+"Autocomplete.emptyState" = "საკუთარი URL-ები არაა დამატებული";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "ჩართულია";
@@ -101,10 +104,13 @@
 "Browser.backLabel" = "უკან";
 
 /* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "მისამართის დაკოპირება";
+
+/* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "დაკოპირება";
 
 /* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "საკუთარი URL მისამართის დამატება";
+"Browser.customURLMenuLabel" = "საკუთარი URL-ს დამატება";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "წინ";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "მონახულება. წაშლა. თავიდან დაწყება.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "დახურვა";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "გაუქმება";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "შენახვა";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "არ იმუშავა. სცადეთ საძიებო ფრაზის ამ სიმბოლოთი ჩანაცვლება: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "სხვა საძიებო სისტემის დამატება";
@@ -251,7 +263,7 @@
 "Settings.Search.SearchTemplatePlaceholder" = "ჩასვით ან შეიყვანეთ საძიებო ფრაზა. თუ საჭიროა, შეცვალეთ სიტყვა %s-ით.";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL თვითშევსება";
+"Settings.autocompleteSection" = "URL-ს თვითშევსება";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "შიგთავსის სხვა მეთვალყურე ელემენტების შეზღუდვის შედეგად, შესაძლოა ვიდეოებმა გამართულად ვერ იმუშაოს ვებგვერდებზე.";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "შეაფასეთ %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI შეთავსება";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "პარამეტრები";
@@ -326,7 +341,7 @@
 "Settings.toggleFaceID" = "გამოიყენეთ სახის ამომცნობი, პროგრამის გასახსნელად";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "სახის ამომცნობით შესაძლებელია გაიხსნას %@ თუ URL ბმული უკვე გახსნილია პროგრამაში";
+"Settings.toggleFaceIDDescription" = "სახის ამომცნობით შესაძლებელია გაიხსნას %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "შესაძლოა ზოგიერთმა საიტმა, ან ვიდეომ არ იმუშაოს გამართულად";
@@ -341,10 +356,13 @@
 "Settings.toggleTouchID" = "გამოიყენეთ თითის ანაბეჭდი, პროგრამის გასახსნელად";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "თითის ანაბეჭდით შესაძლებელია გაიხსნას %@ თუ URL ბმული უკვე გახსნილია პროგრამაში";
+"Settings.toggleTouchIDDescription" = "თითის ანაბეჭდით შესაძლებელია გაიხსნას %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "რა სიახლეებია";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI მალსახმობები";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "პოვნა გვერდზე";
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "გახსნა %@-ით";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "ვებგვერდზე მოქმედებები";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "სრული საიტის მოთხოვნა";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome-ში გახსნა";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox-ში გახსნა";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Safari-ში გახსნა";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "გვერდის გაზიარება…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "დამატება";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri-ში დამატება";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "ხელახლა ჩაწერა ან მალსახმობის წაშლა";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "გასუფთავება";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "გასუფთავება და გახსნა";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "რჩეული საიტის გახსნა";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "რჩეული საიტის გახსნა";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL-მისამართი გასახსნელად";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "გაუქმება";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "პოვნა გვერდზე: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "ჩასმა";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "მოძებნეთ ან შეიყვანეთ მისამართი";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "გახსნა %@-ით";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL-მისამართი დაკოპირებულია";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "მისამართების ველზე გადასვლა";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "ბმულის დაკოპირება";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "დაკოპირებული ბმული:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "სურათის შენახვა";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "გაზიარება";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "მისამართის დაკოპირება";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "გამოიყენეთ თითის ანაბეჭდი, %@-ზე დასაბრუნებლად";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "სარეკლამო მეთვალყურე";
 
@@ -432,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "დაცვა გამორთულია";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "თვალთვალისგან დაცვა";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "ვრცლად";

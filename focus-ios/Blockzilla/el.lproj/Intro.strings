@@ -1,14 +1,23 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Εκκαθάριση ιστορικού συνεδρίας περιήγησης, κωδικών πρόσβασης, cookies οποτεδήποτε με ένα πάτημα.";
+
 /* Title for the third  panel 'History' in the First Run tour. */
 "Intro.Slides.History.Title" = "Το ιστορικό σας είναι παρελθόν";
 
 /* Button to go to the next card in Focus onboarding. */
 "Intro.Slides.Next.Button" = "Επόμενο";
 
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Ψάχνετε κάτι διαφορετικό; Επιλέξτε μια διαφορετική μηχανή αναζήτησης.";
+
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "Η αναζήτησή σας, με το δικό σας τρόπο";
 
 /* Button to skip onboarding in Focus */
 "Intro.Slides.Skip.Button" = "Παράλειψη";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Αυτό είναι το επόμενο επίπεδο ιδιωτικής περιήγησης. Αποκλείστε διαφημίσεις και περιεχόμενο που μπορεί να καταγράψει τη δραστηριότητά σας και να επιβραδύνει τη φόρτωση σελίδων.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title" = "Ενισχύστε το απόρρητό σας";

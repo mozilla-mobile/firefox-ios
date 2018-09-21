@@ -1,14 +1,23 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "ఎప్పుడైనా కేవలం ఒకే నొక్కుతో మీ విహరణ సెషను చరిత్ర అంతా, సంకేతపదాలు, కుకీలు తుడిచివేసుకోండి.";
+
 /* Title for the third  panel 'History' in the First Run tour. */
 "Intro.Slides.History.Title" = "మీ చరిత్ర ఇక చరిత్రే";
 
 /* Button to go to the next card in Focus onboarding. */
 "Intro.Slides.Next.Button" = "తరువాత";
 
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "వేరే దానికోసం వెతుకుతున్నారా? మరో సెర్చింజనుని ఎంచుకోండి.";
+
 /* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "మీ శోధన, మీ లాగే";
+"Intro.Slides.Search.Title" = "మీ శోధన, మీకు తగ్గట్టు";
 
 /* Button to skip onboarding in Focus */
 "Intro.Slides.Skip.Button" = "దాటవేయి";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "అంతరంగిక విహారణను కొత్త స్థాయికి తీసుకెళ్ళండి. ప్రకటనలను, సైట్లన్నింటిలో మీ జాడ తెలుసుకుంటూ పేజీలు తెరుచుకునే సమయాన్ని పెంచే ఇతర విషయాలను నిరోధించండి.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title" = "మీ గోప్యతను శక్తిమంతం చేసుకోండి";

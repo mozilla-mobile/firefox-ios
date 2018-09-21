@@ -5,14 +5,18 @@
 import Foundation
 
 class URLBarContainer: UIView {
-    private let backgroundDark = GradientBackgroundView()
-    private let backgroundBright = GradientBackgroundView(alpha: 0.8)
-
+    private let backgroundEditing = GradientBackgroundView(background: UIConstants.colors.background)
+    private let backgroundDark = UIView()
+    private let backgroundBright = GradientBackgroundView(alpha: 0.8, background: UIConstants.colors.background)
+    
     init() {
         super.init(frame: CGRect.zero)
 
-        backgroundColor = .black
+        addSubview(backgroundEditing)
 
+        backgroundDark.backgroundColor = UIConstants.colors.background
+        backgroundDark.isHidden = true
+        backgroundDark.alpha = 0
         addSubview(backgroundDark)
 
         backgroundBright.isHidden = true
@@ -26,12 +30,23 @@ class URLBarContainer: UIView {
         backgroundBright.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
+        
+        backgroundEditing.snp.makeConstraints { make in
+            make.edges.equalTo(self)
+        }
     }
 
-    var isBright: Bool = false {
+    enum barState {
+        case bright
+        case dark
+        case editing
+    }
+    
+    var color: barState = .editing {
         didSet {
-            backgroundDark.animateHidden(isBright, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            backgroundBright.animateHidden(!isBright, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            backgroundDark.animateHidden(color != .dark, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            backgroundBright.animateHidden(color != .bright, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            backgroundEditing.animateHidden(color != .editing, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         }
     }
 

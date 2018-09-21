@@ -421,6 +421,9 @@
 /* Text for a share button */
 "share" = "Partekatu";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Erabili Touch ID %@ aplikaziora itzultzeko";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Iragarkien jarraipen-elementuak";
 

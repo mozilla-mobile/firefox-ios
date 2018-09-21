@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "يعطيك %@ الدفة.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "أجرِ الاستيثاق للعودة إلى %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "أضِف مسارا مخصصا";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "السابق";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "انسخ العنوان";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "انسخ";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "تصفح. امسح. كرر.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "أغلِق";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ألغِ";
 
@@ -271,6 +280,9 @@
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "قيِّم %@";
 
+/* Label for Safari integration section */
+"Settings.safariTitle" = "التكامل مع سفاري";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "الإعدادات";
 
@@ -346,6 +358,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "ما الجديد";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "اختصارات سيري";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "ابحث في الصفحة";
 
@@ -355,8 +370,38 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "افتح في %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "إجراءات الصفحة";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "اطلب موقع سطح مكتب";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "افتح في كروم";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "افتح في فَيَرفُكس";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "افتح في سفاري";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "شارِك الصفحة مع…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "أضِف";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "أضِف إلى سيري";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "أعِد التسجيل أو احذف الاختصار";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "امسح";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "امسح وافتح";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ألغِ";
@@ -373,6 +418,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "ابحث في الصفحة: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "ألصِق";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "ابحث أو أدخل عنوانا";
 
@@ -385,6 +433,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "افتح في %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "نُسخ المسار إلى الحافظة";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "اختر شريط المكان";
 
@@ -396,6 +447,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "انسخ الرابط";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "الرابط الذي نسخته:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "احفظ الصورة";
@@ -421,6 +475,12 @@
 /* Text for a share button */
 "share" = "شارِك";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "انسخ العنوان";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "استخدم معرّف اللمس لتعود إلى %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "متعقبات الإعلانات";
 
@@ -432,6 +492,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "الحماية من التعقّب معطّلة";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "الحماية من التعقّب";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "اطّلع على المزيد";

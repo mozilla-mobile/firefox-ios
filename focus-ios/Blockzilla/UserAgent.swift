@@ -27,40 +27,65 @@ class UserAgent {
         }
 
         userDefaults.set(userAgent, forKey: "UserAgent")
-        userDefaults.set(UIDevice.current.systemVersion, forKey: "LastSeenSystemVersion")
-        userDefaults.synchronize()
+        userDefaults.set(AppInfo.shortVersion, forKey: "LastFocusVersionNumber")
+        userDefaults.set(AppInfo.buildNumber, forKey: "LastFocusBuildNumber")
+        userDefaults.set(UIDevice.current.systemVersion, forKey: "LastDeviceSystemVersionNumber")
 
         setUserAgent(userAgent: userAgent)
     }
 
     private func cachedUserAgent() -> String? {
-        guard let lastSeenSystemVersion = userDefaults.string(forKey: "LastSeenSystemVersion") else {
-            return nil
-        }
+        let currentiOSVersion = UIDevice.current.systemVersion
+        let lastiOSVersion = userDefaults.string(forKey: "LastDeviceSystemVersionNumber")
+        let currentFocusVersion = AppInfo.shortVersion
+        let lastFocusVersion = userDefaults.string(forKey: "LastFocusVersionNumber")
+        let currentFocusBuild = AppInfo.buildNumber
+        let lastFocusBuild = userDefaults.string(forKey: "LastFocusBuildNumber")
 
-        if lastSeenSystemVersion != UIDevice.current.systemVersion {
-            return nil
+        if let focusUA = userDefaults.string(forKey: "UserAgent") {
+            if (lastiOSVersion == currentiOSVersion
+                && lastFocusVersion == currentFocusVersion
+                && lastFocusBuild == currentFocusBuild) {
+                return focusUA
+            }
         }
-
-        return userDefaults.string(forKey: "UserAgent")
+        return nil
     }
 
     private static func generateUserAgent() -> String? {
         let webView = UIWebView()
-        guard var webViewUserAgent = webView.stringByEvaluatingJavaScript(from: "navigator.userAgent") else {
-            return nil
+
+        let userAgent = webView.stringByEvaluatingJavaScript(from: "navigator.userAgent")!
+
+        // Extract the WebKit version and use it as the Safari version.
+        let webKitVersionRegex = try! NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: [])
+
+        let match = webKitVersionRegex.firstMatch(in: userAgent, options: [],
+                                                  range: NSRange(location: 0, length: userAgent.count))
+
+        if match == nil {
+            print("Error: Unable to determine WebKit version in UA.")
+            return userAgent     // Fall back to Safari's.
         }
 
-        // Insert our product/version identifier before the Mobile identifier.
-        if let range = webViewUserAgent.range(of: "Mobile/") {
-            let identifier = "\(AppInfo.config.productName)/\(AppInfo.shortVersion) "
-            webViewUserAgent.insert(contentsOf: identifier.characters, at: range.lowerBound)
+        let webKitVersion = (userAgent as NSString).substring(with: match!.range(at: 1))
+
+        // Insert version before the Mobile/ section.
+        let mobileRange = (userAgent as NSString).range(of: "Mobile/")
+        if mobileRange.location == NSNotFound {
+            print("Error: Unable to find Mobile section in UA.")
+            return userAgent     // Fall back to Safari's.
         }
 
-        return webViewUserAgent
+        let mutableUA = NSMutableString(string: userAgent)
+        mutableUA.insert("FocusiOS/\(AppInfo.shortVersion) ", at: mobileRange.location)
+
+        let focusUA = "\(mutableUA) Safari/\(webKitVersion)"
+
+        return focusUA
     }
     
-    open static func getDesktopUserAgent() -> String {
+    public static func getDesktopUserAgent() -> String {
         // TODO: check if this is suffficient. Chose this user agent instead of Firefox's method as Firefox fails to load desktop on several sites (i.e. Facebook)
         let userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.12 (KHTML, like Gecko) Version/11.1 Safari/605.1.12"
         return String(userAgent)

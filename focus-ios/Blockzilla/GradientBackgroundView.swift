@@ -5,10 +5,10 @@
 import Foundation
 
 class GradientBackgroundView: UIView {
-    init(alpha: Float = 0.1, startPoint: CGPoint = CGPoint(x: -0.2, y: 0), endPoint: CGPoint = CGPoint(x: 1.2, y: 1)) {
+    init(alpha: Float = 0.1, startPoint: CGPoint = CGPoint(x: -0.2, y: 0), endPoint: CGPoint = CGPoint(x: 1.2, y: 1), background: UIColor = UIConstants.colors.gradientBackground) {
         super.init(frame: CGRect.zero)
 
-        backgroundColor = UIConstants.colors.gradientBackground
+        backgroundColor = background
 
         configureGradientLayerWithPoints(start: startPoint, end: endPoint, alpha: alpha)
     }

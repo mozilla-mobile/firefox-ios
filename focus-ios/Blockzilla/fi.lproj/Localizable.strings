@@ -1,6 +1,9 @@
 /* Button on About screen */
 "About.learnMoreButton" = "Lue lisää";
 
+/* Label on About screen */
+"About.privateBulletHeader" = "Käytä sitä yksityisenä selaimena:";
+
 /* Label for row in About screen */
 "About.rowHelp" = "Ohje";
 
@@ -10,11 +13,68 @@
 /* Label for row in About screen */
 "About.rowRights" = "Oikeutesi";
 
+/* Label on About screen */
+"About.safariBullet1" = "Estä seuraimet ja paranna yksityisyyttäsi";
+
+/* Label on About screen */
+"About.safariBullet2" = "Estä web-fontit vähentääksesi sivujen kokoa";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Käytä sitä Safari-laajennuksena:";
+
 /* (No Comment) */
 "About.screenTitle" = "Tietoja";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Tietoja: %@";
+
+/* Label on About screen */
+"About.topLabel" = "%@ asettaa sinut hallintaan.";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Lisää mukautettu osoite";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Esimerkki: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Lisättävä osoite";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Liitä tai kirjoita osoite";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Lisää mukautettu osoite";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "Mukautetut osoitteet";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "MUKAUTETTUJEN OSOITTEIDEN LISTA";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Uusi mukautettu osoite lisätty.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Pois käytöstä";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Käytössä";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Uusi istunto";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Edellinen";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopioi osoite";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopioi";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Lisää mukautettu osoite";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Seuraava";
@@ -31,26 +91,65 @@
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Pysäytä";
 
+/* Label on button to cancel edits */
+"Cancel" = "Kumoa";
+
+/* Label on button to complete edits */
+"Done" = "Valmis";
+
+/* Label on button to allow edits */
+"Edit" = "Muokkaa";
+
 /* Button label to reload the error page */
 "Error.tryAgainButton" = "Yritä uudestaan";
 
 /* Button label used for cancelling to open another app from Focus */
-"ExternalAppLink.cancelTitle" = "Peruuta";
+"ExternalAppLink.cancelTitle" = "Kumoa";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ haluaa avata toisen sovelluksen";
 
 /* Button label for opening another app from Focus */
 "ExternalAppLink.openTitle" = "Avaa";
 
+/* Button label in tel: dialog to call a phone number. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.callButton" = "Puhelu";
+
 /* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.cancelButton" = "Peruuta";
+"ExternalLink.cancelButton" = "Kumoa";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Sähköposti";
 
 /* Button label in App Store URL dialog to open the App Store. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openAppStoreButton" = "Avaa App Store";
 
+/* Dialog title used to open App Store links. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"ExternalLink.openAppStoreTitle" = "%@ haluaa avata App Storen.";
+
+/* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.openMapsButton" = "Avaa Kartat";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Selvä!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Selaa kuin kukaan ei katselisi.";
+
+/* First label for product description on the home screen */
+"Home.descriptionLabel1" = "Automaattista yksityistä selausta.";
+
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Selaa. Tyhjennä. Toista.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Sulje";
+
 /* Label in share alert to cancel the alert */
-"Open.Cancel" = "Peruuta";
+"Open.Cancel" = "Kumoa";
+
+/* Label in share alert to open the URL in Firefox */
+"Open.Firefox" = "Firefox (Yksityinen selaus)";
 
 /* Label in share alert to open the full system share menu */
 "Open.More" = "Lisää";
@@ -58,11 +157,41 @@
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
 
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Pyydä työpöytäversio";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Valitse Safari ja sen jälkeen Sisällönestäjät";
 
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ ei ole käytössä.";
+
+/* Save button label */
+"Save" = "Tallenna";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Lisää toinen hakukone";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ Lisää toinen hakukone";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Lisää hakukone";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "ASENNETUT HAKUKONEET";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Näyttönimi";
+
 /* Toast displayed after adding a search engine */
 "Settings.Search.NewSearchEngineAdded" = "Uusi hakukone lisätty.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Palauta oletushakukoneet";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Hakukoneen nimi";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Ei kiitos";
@@ -76,8 +205,17 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Lue lisää.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Arvostele %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Asetukset";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Hakukone";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "HAKU";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGROINTI";
@@ -91,8 +229,14 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "YKSITYISYYS";
 
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "TURVALLISUUS";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Estä mainosseuraimet";
+
+/* Description for 'Block ad Trackers' */
+"Settings.toggleBlockAdsDescription" = "Jotkin mainokset seuraavat sivulatauksia, vaikka et napsauttaisi mainoksia";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAnalytics" = "Estä analytiikkaseuraimet";
@@ -115,8 +259,38 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Lähetä käyttötilastoja";
 
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "Mitä uutta";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Etsi sivulta";
+
+/* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
+"ShareMenu.GetFirefox" = "Hanki Firefox-sovellus";
+
+/* Text for the share menu option when a user wants to open a page in Focus. */
+"ShareMenu.OpenInFocus" = "Avaa sovelluksella %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Pyydä työpöytäversio";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Avaa Chromessa";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Avaa Firefoxissa";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Avaa Safarissa";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Lisää";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Lisää Siriin";
+
 /* Label for cancel button shown when entering a URL or search */
-"URL.cancelLabel" = "Peruuta";
+"URL.cancelLabel" = "Kumoa";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "Liitä ja avaa";
@@ -127,6 +301,12 @@
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Selaushistoria tyhjennetty.";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Etsi sivulta: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Liitä";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Kirjoita osoite tai hakusana";
 
@@ -135,6 +315,12 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Seuraimia estetty";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Osoite kopioitu leikepöydälle";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Valitse sijaintipalkki";
 
 /* Text for the context menu when a user has a link on their clipboard. */
 "contextMenu.clipboardLink" = "Kopioitu linkki: %@";
@@ -145,6 +331,9 @@
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Kopioi linkki";
 
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Kopioimasi linkki:";
+
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Tallenna kuva";
 
@@ -153,6 +342,15 @@
 
 /* Title for button that takes the user to system settings */
 "photosPermission.openSettings" = "Avaa asetukset";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Esimerkki: esimerkkihakukone.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Jaa";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopioi osoite";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Mainosseuraimet";
@@ -165,6 +363,12 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Seurannan suojaus pois päältä";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Seurannan suojaus";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "Lue lisää";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "Sosiaaliset seuraimet";

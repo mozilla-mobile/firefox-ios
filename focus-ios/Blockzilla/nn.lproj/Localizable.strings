@@ -164,7 +164,7 @@
 "ExternalLink.openMapsButton" = "Opna kart";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
-"FindInPage.Done" = "Søk på sida ferdiig";
+"FindInPage.Done" = "Søk på sida ferdig";
 
 /* Accessibility label for next result button in Find in Page Toolbar. */
 "FindInPage.NextResult" = "Søk etter neste på sida";
@@ -420,6 +420,9 @@
 
 /* Text for a share button */
 "share" = "Del";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Bruk «Touch ID» for å gå tilbake til %@";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Annonse-sporfølgjarar";

@@ -1,0 +1,12 @@
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "ಮುಂದೆ";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "ನಿಮ್ಮ ಹುಡುಕು, ನಿಮ್ಮದೇ ದಾರಿ";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "ಬಿಟ್ಟುಬಿಡು";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "ನಿಮ್ಮ ಖಾಸಗಿತನವನ್ನು ಶಕ್ತಿಯುತಗೊಳಿಸಿ";
+

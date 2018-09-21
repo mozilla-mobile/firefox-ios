@@ -2,16 +2,10 @@
 "NSCameraUsageDescription" = "ಇದು ನಿಮ್ಮನ್ನು ಫೋಟೊ ತೆಗೆಯಲು ಮತ್ತು ಅಪ್ಲೋಡ್ ಮಾಡಲು ಬಿಡುತ್ತದೆ.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
-
-/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "‍ನೀವು ಭೇಟಿ ನೀಡುವ ಜಾಲತಾಣಗಳು ನಿಮ್ಮ ಸ್ಥಳ ಮಾಹಿತಿಯನ್ನು ಕೇಳಬಹುದು.";
 
 /* (No Comment) */
 "NSMicrophoneUsageDescription" = "ಇದು ನಿಮ್ಮನ್ನು ಫೋಟೊ ತೆಗೆಯಲು ಮತ್ತು ಅಪ್ಲೋಡ್ ಮಾಡಲು ಬಿಡುತ್ತದೆ.‍";
-
-/* (No Comment) */
-"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
 
 /* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "ಇದು ನಿಮ್ಮನ್ನು ಫೋಟೊ‌ಗಳನ್ನು ಉಳಿಸಲು ಮತ್ತು ಅಪ್ಲೋಡ್ ಮಾಡಲು ಬಿಡುತ್ತದೆ.‍";

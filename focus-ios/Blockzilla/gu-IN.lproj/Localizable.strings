@@ -133,11 +133,20 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "વધુ શીખો.";
 
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "સેટિંગ્સ";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "શોધ એન્જિન";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SEARCH";
+
+/* Label for Safari integration section */
+"Settings.sectionIntegration" = "INTEGRATION";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";

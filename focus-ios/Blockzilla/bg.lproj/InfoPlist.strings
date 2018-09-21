@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "От тук може да правите и качвате снимки.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+"NSFaceIDUsageDescription" = "Това позволява да отключвате приложението.";
 
 /* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Страниците, които посещавате, може да поискат вашето местоположение.";

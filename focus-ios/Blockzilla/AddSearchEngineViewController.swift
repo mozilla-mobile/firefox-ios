@@ -54,8 +54,8 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameLabel.textColor = UIConstants.colors.settingsTextLabel
         container.addSubview(nameLabel)
         
-        nameInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.AddSearchEngineName, attributes: [NSAttributedStringKey.foregroundColor: UIConstants.colors.settingsDetailLabel])
-        nameInput.backgroundColor = UIConstants.colors.cellSelected
+        nameInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.AddSearchEngineName, attributes: [.foregroundColor: UIConstants.colors.settingsDetailLabel])
+        nameInput.backgroundColor = UIConstants.colors.cellBackground
         nameInput.textColor = UIConstants.colors.settingsTextLabel
         nameInput.leftView = UIView(frame: CGRect(x: 0, y: 0, width: leftMargin, height: rowHeight))
         nameInput.leftViewMode = .always
@@ -65,10 +65,10 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         container.addSubview(nameInput)
 
         let templateContainer = UIView()
-        templateContainer.backgroundColor = UIConstants.colors.cellSelected
+        templateContainer.backgroundColor = UIConstants.colors.cellBackground
         container.addSubview(templateContainer)
 
-        templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellSelected
+        templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellBackground
         templatePlaceholderLabel.textColor = UIConstants.colors.settingsDetailLabel
         templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
         templatePlaceholderLabel.font = UIFont.systemFont(ofSize: 15)
@@ -91,9 +91,9 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateContainer.addSubview(templateInput)
 
         let exampleLabel = SmartLabel()
-        let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
-        let subtitle = NSMutableAttributedString(string: UIConstants.strings.AddSearchEngineTemplateExample, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
-        let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+        let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
+        let subtitle = NSMutableAttributedString(string: UIConstants.strings.AddSearchEngineTemplateExample, attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
+        let space = NSAttributedString(string: " ", attributes: [:])
         subtitle.append(space)
         subtitle.append(learnMore)
 
@@ -227,7 +227,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
 
     private func presentRetryError() {
-        let controller = UIAlertController(title: UIConstants.strings.autocompleteAddCustomUrlError, message: nil, preferredStyle: .alert)
+        let controller = UIAlertController(title: UIConstants.strings.addSearchEngineError, message: nil, preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: UIConstants.strings.errorTryAgain, style: .default, handler: { _ in
 
         }))
@@ -237,7 +237,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     func showIndicator(_ shouldShow: Bool) {
         guard shouldShow else { self.navigationItem.rightBarButtonItem = self.saveButton; return }
 
-        let indicatorView = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        let indicatorView = UIActivityIndicatorView(style: .white)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: indicatorView)
         indicatorView.startAnimating()
     }

@@ -37,6 +37,9 @@
 /* (No Comment) */
 "About.screenTitle" = "Om";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Om %@";
+
 /* Label on About screen */
 "About.topLabel" = "%@ gir deg kontroll.";
 
@@ -88,8 +91,20 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Påslått";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Ny programøkt";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Låser %@ opp for å forhindre uautoriseret tilgang, når du åpner appen igjen.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Tilbake";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopier";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Legg til tilpasset nettadresse";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Frem";
@@ -148,6 +163,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Åpne kart";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Søk på siden ferdig";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Søk etter neste på siden";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Søk etter forrige på siden";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "OK, jeg skjønner!";
 
@@ -177,6 +201,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Vis skrivebords­versjon";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Trykk Safari, velg så Innholdssperringer";
@@ -241,6 +268,9 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Les mer.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Vurder %@";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Innstillinger";
 
@@ -261,6 +291,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PERSONVERN";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SIKKERHET";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blokker reklamesporere";
@@ -289,6 +322,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Innebygd på nettsteder for å spore besøkene dine og å vise funksjonalitet som dele-knapper";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Bruk «Face ID» for å låse opp appen";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "«Face ID» kan låse opp %@ om en adresse allerede er åpen i appen";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Kan ødelegge noen videoer og nettsider";
 
@@ -298,14 +337,26 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Send bruksdata";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Bruk «Touch ID» for å låse opp appen";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "«Touch ID» kan låse opp %@ om en adresse allerede er åpen i appen";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Hva er nytt";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Søk på siden";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Hent Firefox-appen";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Åpne i %@";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Vis skrivebords­versjon";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Avbryt";
@@ -318,6 +369,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Din nettleserhistorikk har blitt slettet.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Søk på siden: %@";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Søk eller oppgi adresse";
@@ -363,6 +417,12 @@
 
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Eksempel: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "Del";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Bruk «Touch ID» for å gå tilbake til %@";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Annonse-sporere";

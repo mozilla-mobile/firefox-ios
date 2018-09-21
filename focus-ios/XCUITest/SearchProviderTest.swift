@@ -24,8 +24,8 @@ class SearchProviderTest: BaseTestCase {
 		for searchEngine in searchEngines {
 			changeSearchProvider(provider: searchEngine)
 			doSearch(searchWord: "mozilla", provider: searchEngine)
-            waitforEnable(element: app.buttons["ERASE"])
-			app.buttons["ERASE"].tap()
+            waitforEnable(element: app.buttons["URLBar.deleteButton"])
+			app.buttons["URLBar.deleteButton"].tap()
             checkForHomeScreen()
 		}
 	}
@@ -78,7 +78,7 @@ class SearchProviderTest: BaseTestCase {
 		app.tables.cells["SettingsViewController.searchCell"].tap()
 		
 		app.tables.staticTexts[provider].tap()
-		app.navigationBars["Settings"].children(matching: .button).matching(identifier: "Back").element(boundBy: 0).tap()
+		app.navigationBars.buttons.element(boundBy: 0).tap()
 		
 	}
 	
@@ -95,19 +95,19 @@ class SearchProviderTest: BaseTestCase {
 		// Check the correct site is reached
 		switch provider {
 			case "Google":
-                waitForValueContains(element: urlbarUrltextTextField, value: "https://www.google")
+                waitForValueContains(element: urlbarUrltextTextField, value: "google.com")
                 if app.webViews.textFields["Search"].exists {
                     waitForValueContains(element: app.webViews.textFields["Search"], value: searchWord)
                 } else if app.webViews.otherElements["Search"].exists {
                     waitForValueContains(element: app.webViews.otherElements["Search"], value: searchWord)
                 }
            case "DuckDuckGo":
-				waitForValueContains(element: urlbarUrltextTextField, value: "https://duckduckgo.com/?q=mozilla")
+				waitForValueContains(element: urlbarUrltextTextField, value: "duckduckgo.com")
 				waitforExistence(element: app.otherElements["mozilla at DuckDuckGo"])
 			case "Wikipedia":
-				waitForValueContains(element: urlbarUrltextTextField, value: "https://en.m.wikipedia.org/wiki/Mozilla")
+				waitForValueContains(element: urlbarUrltextTextField, value: "wikipedia.org")
             case "Amazon.com":
-				waitForValueContains(element: urlbarUrltextTextField, value: "https://www.amazon")
+				waitForValueContains(element: urlbarUrltextTextField, value: "amazon.com")
                 waitForValueContains(element: app.webViews.textFields["Type search keywords"],
                     value: searchWord)
             

@@ -39,7 +39,7 @@ class WebsiteAccessTests: BaseTestCase {
         waitForValueContains(element: label, value: "localhost")
         
         // Erase the history
-        app.buttons["ERASE"].tap()
+        app.buttons["URLBar.deleteButton"].tap()
 
         // Disabling this check since BB seem to intermittently miss this popup which disappears after 1~2 seconds
         // The popup is also checked in PastenGOTest

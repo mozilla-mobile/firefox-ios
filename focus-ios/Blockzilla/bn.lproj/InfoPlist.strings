@@ -2,9 +2,6 @@
 "NSCameraUsageDescription" = "এটা আপনাকে ছবি তোলা এবং আপলোড করার সুযোগ দেবে।";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
-
-/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "যেসকল ওয়েবসাইটগুলি আপনি দেখছেন, সেগুলো আপনার অবস্থান জানতে চাইতে পারে।";
 
 /* (No Comment) */

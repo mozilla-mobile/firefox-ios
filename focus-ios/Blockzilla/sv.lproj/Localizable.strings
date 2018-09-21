@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ sätter dig i kontroll.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Autentisera för att återgå till %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Lägg till anpassad webbadress";
 
@@ -94,8 +97,14 @@
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Ny Session";
 
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Lås upp %@ vid återöppnande för att förhindra obehörig åtkomst.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Tillbaka";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopiera adress";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopiera";
@@ -160,6 +169,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Öppna Kartor";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Hitta på sidan klar";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Hitta nästa på sidan";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Hitta föregående på sidan";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "OK, jag förstår!";
 
@@ -177,6 +195,9 @@
 
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Surfa. Radera. Upprepa.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Stäng";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Avbryt";
@@ -207,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Spara";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Det fungerade inte. Försök att ersätta sökordet med detta: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Lägg till en annan sökmotor";
@@ -259,6 +283,9 @@
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Betygsätt %@";
 
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Inställningar";
 
@@ -281,7 +308,7 @@
 "Settings.sectionPrivacy" = "SEKRETESS";
 
 /* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "Säkerhet";
+"Settings.sectionSecurity" = "SÄKERHET";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blockera annonstrackers";
@@ -310,6 +337,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Inbäddad på webbplatser för att spåra dina besök och visa funktionalitet som dela-knappar";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Använd Face ID för att låsa upp appen";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID kan låsa upp %@ om en webbadress redan är öppen i appen";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Kan få vissa videor och webbsidor att sluta fungera";
 
@@ -319,8 +352,17 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Skicka användningsdata";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Använd Touch ID för att låsa upp appen";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID kan låsa upp %@ om en webbadress redan är öppen i appen";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Vad är nytt";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI GENVÄGAR";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Hitta på sidan";
@@ -331,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Öppna i %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Åtgärder för sida";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Begär datorwebbplats";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Öppna i Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Öppna i Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Öppna i Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Dela sida med...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Lägg till";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Lägg till i Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Spela in igen eller ta bort genväg";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Radera";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Radera & öppna";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Öppna favoritwebbplatsen";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Öppna favoritwebbplatsen";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Öppna URL";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Avbryt";
@@ -349,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Hitta på sidan: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Klistra in";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Sök eller ange adress";
 
@@ -361,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Öppna i %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL kopierad till urklipp";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Välj adressfältet";
 
@@ -372,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Kopiera länk";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Länk du kopierade:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Spara bild";
@@ -397,6 +487,12 @@
 /* Text for a share button */
 "share" = "Dela";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopiera adress";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Använd Touch ID för att återgå till %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Annons trackers";
 
@@ -408,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Spårningsskydd av";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Spårningsskydd";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Läs mer";

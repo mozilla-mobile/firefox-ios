@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ kontrolü size verir.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@’a dönmek için kimliğinizi doğrulayın";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Özel adres ekle";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Geri";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Adresi kopyala";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopyala";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Gez ve sil. Hepsi bu kadar.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Kapat";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "İptal";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Kaydet";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Olmadı. Arama teriminin yerine şunu yazmayı deneyin: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Başka bir arama motoru ekle";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@’a puan verin";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI ENTEGRASYONU";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Ayarlar";
@@ -346,8 +361,11 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Yeni neler var?";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI KISAYOLLARI";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
-"ShareMenu.FindInPage" = "Sayfada bul";
+"ShareMenu.FindInPage" = "Sayfada Bul";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox’u indir";
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "%@’ta aç";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Sayfa eylemleri";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Masaüstü sitesini iste";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome’da Aç";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox’ta Aç";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Safari’de Aç";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Sayfayı Paylaş...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Add";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri’ye Ekle";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Yeniden kaydet veya kısayolu sil";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Sil";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Sil ve aç";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Favori siteyi aç";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Favori siteyi aç";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Açılacak adres";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "İptal";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Sayfada bul: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Yapıştır";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Arama yapın veya adres yazın";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ ile aç";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Adres panoya kopyalandı";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Konum çubuğunu seç";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Bağlantıyı kopyala";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Kopyaladığınız bağlantı:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Resmi kaydet";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "Paylaş";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Adresi kopyala";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "%@’a dönmek için Touch ID’yi kullanın";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Reklam takipçileri";
 
@@ -432,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "İzlenme Koruması kapalı";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "İzlenme Koruması";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Daha fazla bilgi al";

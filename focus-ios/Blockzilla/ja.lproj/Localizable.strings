@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ でプライバシー保護。";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "認証して %@ へ戻る";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "カスタム URL を追加";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "戻る";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "アドレスをコピー";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "コピー";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "ブラウズ、消去の繰り返し。";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "閉じる";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "キャンセル";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "保存";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "動作しませんでした。次の検索語に置き換えてみてください: %s";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "別の検索エンジンを追加";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ の評価";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI 統合";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "環境設定";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "新機能";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI ショートカット";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "ページ内検索";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "%@ で開く";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "ページ操作";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "デスクトップ版を見る";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome で開く";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox で開く";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Safari で開く";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "ページを共有...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "追加";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri に追加";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "ショートカットを再記録または削除";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "消去";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "消去して開く";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "お気に入りのサイトを開く";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "お気に入りのサイトを開く";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "開く URL";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "キャンセル";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "ページ内検索: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "ペースト";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "検索語またはアドレスを入力";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ で開く";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL をクリップボードにコピーしました";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "ロケーションバーを選択";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "リンクアドレスをコピー";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "コピーしたリンク:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "画像を保存";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "共有";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "アドレスをコピー";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Touch ID を使って %@ へ戻る";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "追跡広告";
 
@@ -432,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "トラッキング防止はオフです";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "トラッキング防止";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "詳細情報";

@@ -22,7 +22,9 @@ class UserAgentTests: XCTestCase {
     }
 
     func testSetsCachedUserAgent() {
-        mockUserDefaults.set(UIDevice.current.systemVersion, forKey: "LastSeenSystemVersion")
+        mockUserDefaults.set(UIDevice.current.systemVersion, forKey: "LastDeviceSystemVersionNumber")
+        mockUserDefaults.set(AppInfo.shortVersion, forKey: "LastFocusVersionNumber")
+        mockUserDefaults.set(AppInfo.buildNumber, forKey: "LastFocusBuildNumber")
         mockUserDefaults.set(fakeUserAgent, forKey: "UserAgent")
 
         _ = UserAgent(userDefaults: mockUserDefaults)
@@ -32,13 +34,15 @@ class UserAgentTests: XCTestCase {
     }
 
     func testSetsGeneratedUserAgent() {
-        mockUserDefaults.removeObject(forKey: "LastSeenSystemVersion")
+        mockUserDefaults.removeObject(forKey: "LastDeviceSystemVersionNumber")
+        mockUserDefaults.removeObject(forKey: "LastFocusVersionNumber")
+        mockUserDefaults.removeObject(forKey: "LastFocusBuildNumber")
         mockUserDefaults.removeObject(forKey: "UserAgent")
 
         _ = UserAgent(userDefaults: mockUserDefaults)
         XCTAssertTrue(mockUserDefaults.synchronizeCalled)
         XCTAssertNotNil(mockUserDefaults.registerValue)
-        XCTAssertNotNil(mockUserDefaults.string(forKey: "LastSeenSystemVersion"))
+        XCTAssertNotNil(mockUserDefaults.string(forKey: "LastFocusVersionNumber"))
         XCTAssertTrue(((mockUserDefaults.registerValue!["UserAgent"] as? String)?.contains(AppInfo.config.productName))!)
     }
 
@@ -52,7 +56,9 @@ fileprivate class MockUserDefaults: UserDefaults {
     var registerValue: [String : Any]?
 
     func clear() {
-        removeObject(forKey: "LastSeenSystemVersion")
+        removeObject(forKey: "LastFocusVersionNumber")
+        removeObject(forKey: "LastFocusBuildNumber")
+        removeObject(forKey: "LastDeviceSystemVersionNumber")
         removeObject(forKey: "UserAgent")
         synchronizeCalled = false
         registerValue = nil

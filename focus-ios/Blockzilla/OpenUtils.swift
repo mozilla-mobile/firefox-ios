@@ -16,56 +16,29 @@ class OpenUtils: NSObject {
         self.selectedURL = url
         self.webViewController = webViewController
     }
-    
-    private var canOpenInFirefox: Bool {
-        return app.canOpenURL(URL(string: "firefox://")!)
-    }
 
-    private var canOpenInChrome: Bool {
-        return app.canOpenURL(URL(string: "googlechrome://")!)
-    }
-
-    func buildShareViewController(url: URL, title: String? = nil, printFormatter: UIPrintFormatter?, anchor: UIView) -> UIActivityViewController {
-        var activities = [UIActivity]()
+    func buildShareViewController(url: URL) -> UIActivityViewController {
         var activityItems: [Any] = [url]
-        activities.append(FindInPageActivity())
-        activities.append(RequestDesktopActivity(url: url))
         
-        if canOpenInFirefox {
-            activities.append(OpenInFirefoxActivity(url: url))
-        }
-
-        if canOpenInChrome {
-            activities.append(OpenInChromeActivity(url: url))
-        }
-
-        activities.append(OpenInSafariActivity(url: url))
         activityItems.append(self)
 
-        if let printFormatter = printFormatter {
-            let printInfo = UIPrintInfo(dictionary: nil)
-            printInfo.jobName = url.absoluteString
-            printInfo.outputType = .general
-            activityItems.append(printInfo)
-            
-            let renderer = UIPrintPageRenderer()
-            renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
-            activityItems.append(renderer)
-        }
+        let printFormatter = UIPrintFormatter()
+        let printInfo = UIPrintInfo(dictionary: nil)
+        printInfo.jobName = url.absoluteString
+        printInfo.outputType = .general
+        activityItems.append(printInfo)
+        
+        let renderer = UIPrintPageRenderer()
+        renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
+        activityItems.append(renderer)
 
-        if let title = title {
-            activityItems.append(TitleActivityItemProvider(title: title))
-        }
-
-        let shareController = UIActivityViewController(activityItems: activityItems, applicationActivities: activities)
+        let shareController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
 
         // This needs to be ready by the time the share menu has been displayed and
         // activityViewController(activityViewController:, activityType:) is called,
         // which is after the user taps the button. So a million cycles away.
         findLoginExtensionItem()
-        
-        shareController.popoverPresentationController?.sourceView = anchor
-        shareController.popoverPresentationController?.sourceRect = anchor.bounds
+
         shareController.popoverPresentationController?.permittedArrowDirections = .up
         shareController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             if !completed {
@@ -98,7 +71,7 @@ extension OpenUtils: UIActivityItemSource {
     // IMPORTANT: This method needs Swift compiler optimization DISABLED to prevent a nasty
     // crash from happening in release builds. It seems as though the check for `nil` may
     // get removed by the optimizer which leads to a crash when that happens.
-    @_semantics("optimize.sil.never") func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType?) -> Any? {
+    @_semantics("optimize.sil.never") func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         // activityType actually is nil sometimes (in the simulator at least)
         if activityType != nil && isPasswordManagerActivityType(activityType?.rawValue) {
             return webViewController.onePasswordExtensionItem
@@ -107,7 +80,7 @@ extension OpenUtils: UIActivityItemSource {
         }
     }
     
-    func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivityType?) -> String {
+    func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivity.ActivityType?) -> String {
         if let type = activityType, isPasswordManagerActivityType(type.rawValue) {
             return browserFillIdentifier
         }
@@ -121,7 +94,8 @@ private extension OpenUtils {
         // com.agilebits.onepassword-ios.extension
         // com.app77.ios.pwsafe2.find-login-action-password-actionExtension
         // If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle identifier.
-        return (activityType?.range(of: "password") != nil)
+        guard let activityType = activityType else { return false }
+        return (activityType.range(of: "password") != nil)
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
             || (activityType == "in.sinew.Walletx.WalletxExt")
             || (activityType == "com.8bit.bitwarden.find-login-action-extension")

@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "Tio ĉi permesas al vi preni fotojn.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
+"NSFaceIDUsageDescription" = "Tio ĉi permesas al vi malbloki la programon.";
 
 /* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Vizititaj retejoj povas peti vian pozicion.";

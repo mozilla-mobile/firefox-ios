@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ 让您掌控线上生活。";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "验证身份以返回 %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "添加自定义网址";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "后退";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "复制地址";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "复制";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "无痕浏览，不必劳心。";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "关闭";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "取消";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "保存";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "网址无效。尝试用这个替换搜索关键词：%s。";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "添加其他搜索引擎";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "为 %@ 打分";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "Safari 整合";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "设置";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "新版变化";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "Siri 快捷方式";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "在页面中查找";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "在 %@ 中打开";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "页面动作";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "要求桌面版网站";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "在 Chrome 中打开";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "在 Firefox 中打开";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "在 Safari 中打开";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "分享页面…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "添加";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "添加到 Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "重新录音或删除快捷方式";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "清除";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "清除并打开";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "打开喜爱的网站";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "打开喜爱的网站";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "要打开的网址";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "取消";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "在页面中查找：%@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "粘贴";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "搜索或输入网址";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "在 %@ 中打开";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "网址已复制到剪贴板";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "选择地址栏";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "复制链接";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "已复制链接：";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "保存图像";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "分享";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "复制地址";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "使用触控 ID 返回 %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "广告跟踪器";
 
@@ -431,7 +503,10 @@
 "trackingProtection.contentTrackerLabel" = "内容跟踪器";
 
 /* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "关闭追踪保护";
+"trackingProtection.disabledLabel" = "关闭跟踪保护";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "跟踪保护";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "详细了解";

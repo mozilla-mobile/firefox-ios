@@ -60,7 +60,7 @@ class BrowserViewControllerTests: XCTestCase {
         mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         mockUserDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
         
-        let shouldShow = bvc.shouldShowTrackerStatsShareButton(percent: 100, userDefaults: mockUserDefaults)
+        let shouldShow = bvc.shouldShowTips(percent: 100, userDefaults: mockUserDefaults)
         XCTAssertTrue(shouldShow)
         
     }
@@ -71,17 +71,8 @@ class BrowserViewControllerTests: XCTestCase {
         mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         mockUserDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
         
-        let shouldShow = bvc.shouldShowTrackerStatsShareButton(percent: 100, userDefaults: mockUserDefaults)
+        let shouldShow = bvc.shouldShowTips(percent: 100, userDefaults: mockUserDefaults)
         XCTAssertTrue(shouldShow)
-    }
-    
-    func testShareButtonHasNotHitEnoughTrackers() {
-        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
-        mockUserDefaults.clear()
-        mockUserDefaults.set(9, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-        
-        let shouldShow = bvc.shouldShowTrackerStatsShareButton(percent: 100, userDefaults: mockUserDefaults)
-        XCTAssertFalse(shouldShow)
     }
     
     func testShareButtonInGroup() {
@@ -90,7 +81,7 @@ class BrowserViewControllerTests: XCTestCase {
         mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         mockUserDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
         
-        let shouldShow = bvc.shouldShowTrackerStatsShareButton(percent: 100, userDefaults: mockUserDefaults)
+        let shouldShow = bvc.shouldShowTips(percent: 100, userDefaults: mockUserDefaults)
         XCTAssertTrue(shouldShow)
     }
     
@@ -100,7 +91,7 @@ class BrowserViewControllerTests: XCTestCase {
         mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         mockUserDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
         
-        let shouldShow = bvc.shouldShowTrackerStatsShareButton(percent: 100, userDefaults: mockUserDefaults)
+        let shouldShow = bvc.shouldShowTips(percent: 100, userDefaults: mockUserDefaults)
         XCTAssertFalse(shouldShow)
     }
 }

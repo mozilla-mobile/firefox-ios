@@ -2,16 +2,10 @@
 "NSCameraUsageDescription" = "Woo ga naŋ war ma biyey zaa k'i zijandi.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "This lets you unlock the app.";
-
-/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Interneti nungey kaŋ war g'i naaru ga hin ka war gorodogoo hãa.";
 
 /* (No Comment) */
 "NSMicrophoneUsageDescription" = "Woo nda war ga widewo zaa k'a zijandi.";
-
-/* (No Comment) */
-"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
 
 /* (No Comment) */
 "NSPhotoLibraryUsageDescription" = "Woo nda war ga biyey gaabu nd'i zijandi.";

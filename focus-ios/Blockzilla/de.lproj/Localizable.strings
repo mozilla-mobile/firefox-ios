@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "Mit %@ haben Sie die Kontrolle.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Zur Rückkehr zu %@ authentifizieren";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Benutzerdefinierte Adresse hinzufügen";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Zurück";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Adresse kopieren";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopieren";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Surfen. Löschen. Wiederholen.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Schließen";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Abbrechen";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Speichern";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Das hat nicht funktioniert. Versuchen Sie, den Suchbegriff durch Folgendes zu ersetzen: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Weitere Suchmaschine hinzufügen";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ bewerten";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI-INTEGRATION";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Einstellungen";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Was ist neu";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI-TASTATURKÜRZEL";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "In Seite suchen";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "In %@ öffnen";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Aktionen für Seite";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Desktop-Website anfordern";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "In Chrome öffnen";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "In Firefox öffnen";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "In Safari öffnen";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Seite teilen mit…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Hinzufügen";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Zu Siri hinzufügen";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Erneut aufzeichnen oder Tastaturkürzel löschen";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Löschen";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Löschen & öffnen";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Favoriten-Website öffnen";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Favoriten-Website öffnen";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Zu öffnende URL";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Abbrechen";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "In Seite suchen: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Einfügen";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Suche oder Adresse eingeben";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "In %@ öffnen";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL in Zwischenablage kopiert";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Adressleiste auswählen";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Link kopieren";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Von Ihnen kopierter Link:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Grafik speichern";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "Teilen";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Adresse kopieren";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Verwenden Sie Touch ID, um zu %@ zurückzukehren";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Werbe-Tracker";
 
@@ -432,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Schutz vor Aktivitätenverfolgung aus";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Schutz vor Aktivitätenverfolgung";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Weitere Informationen";

@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ ad ak-d-yefk afus ad teqqimeḍ d aqeṛṛu.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Asesteb akken ad tuɣaleḍ ɣer %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Rnu URL aganan";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Γer deffir";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Nɣel tansa";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Nɣel";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Snirem, Kkes, Ales.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Mdel";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Sefsex";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Sekles";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Ur iteddu ara, Ԑreḍ abeddel n iferdisen n unadi s waya: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Rnu amsedday n unadi nniḍen";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Rnu tazmilt i %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "AMSIDEF SAFARI";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Iɣewwaṛen";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Amaynut";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "INEGZUMEN SIRI";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Nadi deg usebter";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Ldi di %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Tigawin i usebter";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Suter asmel n tnarit";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Ldi deg Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Ldi deg Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Ldi deg Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Bḍu asebter d…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Rnu";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Rnu ɣer Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Ales asekles neɣ kkes anegzum";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Sfeḍ";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Sfeḍ & Ldi";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Ldi asmel asmenyif";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Ldi asmel asmenyif";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL ad teldiḍ";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Sefsex";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Nadi deg usebter: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Senteḍ";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Nadi neɣ sekcem tansa";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Ldi di %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL Ittwanɣel ɣef afus";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Fren afeggag n tansa";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Nγel aseγwen";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Aseγwen i tneγleḍ:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Sekles tugna";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "Bḍu";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Nɣel tansa";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Seqdec Touch ID akken ad tuɣaleḍ ar %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Ineḍfaṛen n udellel";
 
@@ -432,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Ammesten mgal asfuɣel yensa";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Ammesten mgal asfuɣel";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Issin ugar";

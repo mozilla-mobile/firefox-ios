@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ meletakkan anda dalam kawalan.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Pengesahan untuk kembali ke %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Tambah URL Penyesuaian";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Undur";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Salin Alamat";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Salin";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Layar. Buang. Ulang.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Tutup";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Batal";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Simpan";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Tidak berjaya. Cuba ganti terma carian dengan: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Tambah Enjin Carian Lain";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Kadar %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Tetapan";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Yang Terbaru";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Cari dalam Halaman";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Buka dalam %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Tindakan Halaman";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Pinta Laman Desktop";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Buka dalam Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Buka dalam Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Buka dalam Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Kongsi Halaman Dengan...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Tambah";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Tambah ke Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Rakam Semula atau Buang Pintasan";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Buang";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Buang & Buka";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Buka Laman Kegemaran";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Buka Laman Kegemaran";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL untuk dibuka";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Batal";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Cari dalam halaman: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Tampal";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Cari atau masukkan alamat web";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Buka dalam %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL Disalin Ke Klipbod";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Pilih Bar Lokasi";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Salin Pautan";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Pautan yang disalin:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Simpan Imej";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "Kongsi";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Salin Alamat";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Guna Touch ID untuk kembali ke %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Penjejak iklan";
 
@@ -432,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Perlindungan Penjejakan dinyahaktifkan";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Perlindungan Penjejakan";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Ketahui Selanjutnya";

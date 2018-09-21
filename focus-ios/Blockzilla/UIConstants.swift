@@ -10,9 +10,10 @@ struct UIConstants {
     static var ToolbarHeight: CGFloat = 46
 
     struct colors {
-        static let background = UIColor(rgb: 0x272727)
+        static let background = UIConstants.Photon.Ink80
         static let buttonHighlight = UIColor(rgb: 0x333333)
-        static let cellSelected = UIColor(rgb: 0x38383D)
+        static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
+        static let cellBackground = UIConstants.Photon.Ink70
         static let copyButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
         static let deleteButtonBackground = UIColor(white: 1, alpha: 0.2)
@@ -36,28 +37,32 @@ struct UIConstants {
         static let gradientLeft = UIColor(rgb: 0xD70022)
         static let gradientMiddle = UIColor(rgb: 0xB5007F)
         static let gradientRight = UIColor(rgb: 0x440071)
-        static let navigationButton = UIColor(rgb: 0xFFFFFF)
-        static let navigationTitle = UIColor(rgb: 0xFFFFFF)
+        static let navigationButton = UIConstants.Photon.Grey10
+        static let navigationTitle = UIConstants.Photon.Grey10
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
         static let progressBar = UIColor(rgb: 0xC86DD7)
         static let settingsButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
-        static let settingsTextLabel = UIColor(rgb: 0xFFFFFF)
-        static let settingsDetailLabel = UIColor(rgb: 0xB2B2B2)
-        static let settingsSeparator = UIColor(rgb: 0x414146)
-        static let settingsLink = UIColor(rgb: 0x0A84FF)
+        static let settingsTextLabel = UIConstants.Photon.Grey10
+        static let settingsDetailLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
+        static let settingsSeparator = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
+        static let settingsLink = UIConstants.Photon.Magenta60
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
-        static let tableSectionHeader = UIColor(rgb: 0xFFFFFF)
+        static let siriTint = UIConstants.Photon.Magenta60
+        static let tableSectionHeader = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let toastBackground = UIColor(rgb: 0x414146)
         static let toastText = UIColor.white
-        static let toggleOn = UIColor(rgb: 0x0080FF)
-        static let toggleOff = UIColor(rgb: 0x585E64)
+        static let toggleOn = UIConstants.Photon.Magenta70
+        static let toggleOff = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let toolbarBorder = UIColor(rgb: 0x5F6368)
         static let toolbarButtonNormal = UIColor.darkGray
         static let urlTextBackground = UIColor(white: 1, alpha: 0.2)
-        static let urlTextFont = UIColor.white
+        static let urlTextFont = UIConstants.Photon.Grey10
         static let urlTextHighlight = UIColor(rgb: 0xB5007F)
-        static let urlTextPlaceholder = UIColor(white: 1, alpha: 0.4)
+        static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
         static let urlTextShadow = UIColor.black
+        static let whatsNew = UIConstants.Photon.Teal50
+        static let settingsNavBar = UIConstants.Photon.Ink70.withAlphaComponent(0.9)
+        static let settingsNavBorder = UIConstants.Photon.Grey10.withAlphaComponent(0.5)
 
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
 
@@ -140,8 +145,8 @@ struct UIConstants {
     struct fonts {
         static let aboutText = UIFont.systemFont(ofSize: 14)
         static let cancelButton = UIFont.systemFont(ofSize: 15)
-        static let copyButton = UIFont.systemFont(ofSize: 15)
-        static let copyButtonQuery = UIFont.boldSystemFont(ofSize: 15)
+        static let copyButton = UIFont.systemFont(ofSize: 16)
+        static let copyButtonQuery = UIFont.boldSystemFont(ofSize: 16)
         static let deleteButton = UIFont.systemFont(ofSize: 11)
         static let firstRunDisclaimer = UIFont.systemFont(ofSize: 14)
         static let firstRunMessage = UIFont.systemFont(ofSize: 14)
@@ -149,24 +154,30 @@ struct UIConstants {
         static let firstRunButton = UIFont.systemFont(ofSize: 16)
         static let homeLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.ultraLight)
         static let safariInstruction = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
-        static let searchButton = UIFont.systemFont(ofSize: 15)
-        static let searchButtonQuery = UIFont.boldSystemFont(ofSize: 15)
+        static let searchButton = UIFont.systemFont(ofSize: 16)
+        static let searchButtonQuery = UIFont.boldSystemFont(ofSize: 16)
         static let settingsHomeButton = UIFont.systemFont(ofSize: 15)
         static let settingsOverlayButton = UIFont.systemFont(ofSize: 13)
-        static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.semibold)
+        static let tableSectionHeader = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         static let toast = UIFont.systemFont(ofSize: 12)
-        static let urlText = UIFont.systemFont(ofSize: 15)
+        static let urlText = UIFont.systemFont(ofSize: 16)
         static let truncatedUrlText = UIFont.systemFont(ofSize: 12)
         static let settingsInputLabel = UIFont.systemFont(ofSize: 18)
         static let settingsDescriptionText = UIFont.systemFont(ofSize: 12)
         static let shareTrackerStatsLabel = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.light)
+        static let closeButtonTitle = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
+        static let actionMenuItem = UIFont.systemFont(ofSize: 16)
+        static let actionMenuTitle = UIFont.systemFont(ofSize: 12)
+        static let actionMenuItemBold = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold)
     }
 
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.3
         static let browserToolbarHeight: CGFloat = 44
         static let copyButtonAnimationDuration: TimeInterval = 0.1
-        static let deleteAnimationDuration: TimeInterval = 0.15
+        static let deleteAnimationDuration: TimeInterval = 0.25
+        static let alphaToZeroDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (2 / 3)
+        static let displayKeyboardDeleteAnimationDuration: TimeInterval = deleteAnimationDuration * (1 / 3)
         static let lockIconInset: Float = 4
         static let navigationDoneOffset: Float = -10
         static let overlayAnimationDuration: TimeInterval = 0.25
@@ -177,7 +188,7 @@ struct UIConstants {
         static let toastDuration: TimeInterval = 1.5
         static let toolbarFadeAnimationDuration = 0.25
         static let toolbarButtonInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
-        static let urlBarCornerRadius: CGFloat = 2
+        static let urlBarCornerRadius: CGFloat = 4
         static let urlBarHeight: CGFloat = 54
         static let collapsedUrlBarHeight: CGFloat = 22
         static let urlBarTransitionAnimationDuration: TimeInterval = 0.2
@@ -188,6 +199,22 @@ struct UIConstants {
         static let urlBarShadowOffset = CGSize(width: 0, height: 2)
         static let urlBarWidthInset: CGFloat = 8
         static let urlBarBorderInset: CGFloat = 4
+        static let deleteButtonInset: CGFloat = -12
+        static let urlBarIconInset: CGFloat = 8
+        static let settingsDefaultTitleOffset = 3
+        static let settingsFirstTitleOffset = 16
+        static let urlBarToolsetOffset: CGFloat = 60
+        static let textLogoOffset: CGFloat = -10 - browserToolbarHeight / 2
+        static let urlBarButtonImageSize: CGFloat = 24
+        static let urlBarButtonTargetSize: CGFloat = 40
+        static let settingsTextPadding: CGFloat = 10
+        static let siriUrlSectionPadding: CGFloat = 40
+        static let settingsSectionHeight: CGFloat = 44
+        static let separatorHeight: CGFloat = 0.5
+        static let shareTrackersBottomOffset: CGFloat = -20
+        static let shareTrackersHeight: CGFloat = 36
+        static let homeViewTextOffset: CGFloat = 5
+        static let homeViewLabelMinimumScale: CGFloat = 0.65
     }
 
     struct strings {
@@ -218,6 +245,8 @@ struct UIConstants {
         static let browserShare = NSLocalizedString("Browser.shareLabel", value: "Share", comment: "Accessibility label for the share button")
         static let browserStop = NSLocalizedString("Browser.stopLabel", value: "Stop", comment: "Accessibility label for the stop button")
         static let customURLMenuButton = NSLocalizedString("Browser.customURLMenuLabel", value: "Add Custom URL", comment: "Custom URL button in URL long press menu")
+        static let copyAddressButton = NSLocalizedString("Browser.copyAddressLabel", value: "Copy Address", comment: "Copy URL button in URL long press menu")
+        static let copyURLToast = NSLocalizedString("browser.copyAddressToast", value: "URL Copied To Clipboard", comment: "Toast displayed after a URL has been copied to the clipboard")
         static let copyMenuButton = NSLocalizedString("Browser.copyMenuLabel", value: "Copy", comment: "Copy URL button in URL long press menu")
         static let eraseButton = NSLocalizedString("URL.eraseButtonLabel", value: "ERASE", comment: "Erase button in the URL bar")
         static let eraseMessage = NSLocalizedString("URL.eraseMessageLabel", value: "Your browsing history has been erased.", comment: "Message shown after pressing the Erase button")
@@ -269,7 +298,8 @@ struct UIConstants {
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
         static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
         static let learnMore = NSLocalizedString("Settings.learnMore", value: "Learn more.", comment: "Subtitle for Send Anonymous Usage Data toggle on main screen")
-        static let toggleSectionIntegration = NSLocalizedString("Settings.sectionIntegration", value: "INTEGRATION", comment: "Label for Safari integration section")
+        static let toggleSectionIntegration = NSLocalizedString("Settings.sectionIntegration", value: "INTEGRATION", comment: "Label for Safari integration section") // deprecated
+        static let toggleSectionSafari = NSLocalizedString("Settings.safariTitle", value: "SAFARI INTEGRATION", comment: "Label for Safari integration section")
         static let toggleSectionMozilla = NSLocalizedString("Settings.sectionMozilla", value: "MOZILLA", comment: "Section label for Mozilla toggles")
         static let toggleSectionPerformance = NSLocalizedString("Settings.sectionPerformance", value: "PERFORMANCE", comment: "Section label for performance toggles")
         static let toggleSectionPrivacy = NSLocalizedString("Settings.sectionPrivacy", value: "PRIVACY", comment: "Section label for privacy toggles")
@@ -277,13 +307,20 @@ struct UIConstants {
         static let toggleSafari = NSLocalizedString("Settings.toggleSafari", value: "Safari", comment: "Safari toggle label on settings screen")
         static let urlBarCancel = NSLocalizedString("URL.cancelLabel", value: "Cancel", comment: "Label for cancel button shown when entering a URL or search")
         static let urlTextPlaceholder = NSLocalizedString("URL.placeholderText", value: "Search or enter address", comment: "Placeholder text shown in the URL bar before the user navigates to a page")
+        static let pageActionsTitle = NSLocalizedString("ShareMenu.PageActions", value: "Page Actions", comment: "Title for the share menu where users can take actions for the current website they are on.")
+        static let sharePage = NSLocalizedString("ShareMenu.SharePage", value: "Share Page With...", comment: "Text for the share menu option when a user wants to share the current website they are on through another app.")
+        static let shareOpenInFirefox = NSLocalizedString("ShareMenu.ShareOpenFirefox", value: "Open in Firefox", comment: "Text for the share menu option when a user wants to open the current website in the Firefox app.")
+        static let shareOpenInChrome = NSLocalizedString("ShareMenu.ShareOpenChrome", value: "Open in Chrome", comment: "Text for the share menu option when a user wants to open the current website in the Chrome app.")
+        static let shareOpenInSafari = NSLocalizedString("ShareMenu.ShareOpenSafari", value: "Open in Safari", comment: "Text for the share menu option when a user wants to open the current website in the Safari app.")
         static let shareMenuOpenInFocus = NSLocalizedString("ShareMenu.OpenInFocus", value: "Open in %@", comment: "Text for the share menu option when a user wants to open a page in Focus.")
         static let shareMenuRequestDesktop = NSLocalizedString("ShareMenu.RequestDesktop", value: "Request Desktop Site", comment: "Text for the share menu option when a user wants to reload the site as a desktop")
         static let shareMenuFindInPage = NSLocalizedString("ShareMenu.FindInPage", value: "Find in Page", comment: "Text for the share menu option when a user wants to open the find in page menu")
         static let shareMenuGetTheFirefoxApp = NSLocalizedString("ShareMenu.GetFirefox", value: "Get the Firefox App", comment: "Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string.")
+        static let urlPaste = NSLocalizedString("URL.paste", value: "Paste", comment: "Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents.")
         static let urlPasteAndGo = NSLocalizedString("URL.contextMenu", value: "Paste & Go", comment: "Text for the URL context menu when a user long presses on the URL bar with clipboard contents.")
         static let saveImage = NSLocalizedString("contextMenu.saveImageTitle", value: "Save Image", comment: "Text for the context menu when a user wants to save an image after long pressing it.")
         static let copyImage = NSLocalizedString("contextMenu.copyImageTitle", value: "Copy Image", comment: "Text for the context menu when a user wants to copy an image after long pressing it.")
+        static let copyAddress = NSLocalizedString("shareMenu.copyAddress", value: "Copy Address", comment: "Text for the share menu when a user wants to copy a URL.")
         static let shareLink = NSLocalizedString("contextMenu.shareLinkTitle", value: "Share Link", comment: "Text for the context menu when a user wants to share a link after long pressing it.")
         static let share = NSLocalizedString("share", value: "Share", comment: "Text for a share button")
         static let copyLink = NSLocalizedString("contextMenu.copyLink", value: "Copy Link", comment: "Text for the context menu when a user wants to copy a link after long pressing it.")
@@ -292,13 +329,16 @@ struct UIConstants {
         static let externalAppLinkWithAppName = NSLocalizedString("externalAppLinkWithAppName.messageTitle", value: "%@ wants to open %@", comment: "Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open.")
         static let open = NSLocalizedString("ExternalAppLink.openTitle", value: "Open", comment: "Button label for opening another app from Focus")
         static let cancel = NSLocalizedString("ExternalAppLink.cancelTitle", value: "Cancel", comment: "Button label used for cancelling to open another app from Focus")
+        static let close = NSLocalizedString("Menu.Close", value: "Close", comment: "Button label used to close a menu that displays as a popup.")
         static let photosPermissionTitle = NSLocalizedString("photosPermission.title", value: "“%@” Would Like to Access Your Photos", comment: "Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar")
         static let photosPermissionDescription = NSLocalizedString("photosPermission.description", value: "This lets you save images to your Camera Roll", comment: "Description for dialog used for requesting a user to enable access to Photos.")
         static let openSettingsButtonTitle = NSLocalizedString("photosPermission.openSettings", value: "Open Settings", comment: "Title for button that takes the user to system settings")
         static let openIn = NSLocalizedString("actionSheet.openIn", value: "Open in %@", comment: "Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page.")
         static let handoffSyncing = NSLocalizedString("Focus.handoffSyncing", value: "Apple Handoff is syncing", comment: "Title for the loading screen when the handoff of clipboard delays Focus launch. “Handoff” should not be localized, see https://support.apple.com/HT204681")
-        static let linkYouCopied = NSLocalizedString("contextMenu.clipboardLink", value: "Link you copied: %@", comment: "Text for the context menu when a user has a link on their clipboard.")
-        static let trackingProtectionToggleLabel = NSLocalizedString("trackingProtection.toggleLabel", value: "Tracking Protection", comment: "Text for the toggle that temporarily disables tracking protection.")
+        static let linkYouCopied = NSLocalizedString("contextMenu.clipboardLink", value: "Link you copied: %@", comment: "Text for the context menu when a user has a link on their clipboard.") // deprecated
+        static let copiedLink = NSLocalizedString("contextMenu.linkCopied", value: "Link you copied: ", comment: "Text for the context menu when a user has a link on their clipboard.")
+        static let trackingProtectionLabel = NSLocalizedString("trackingProtection.label", value: "Tracking Protection", comment: "Title for the tracking settings page to change what trackers are blocked.")
+        static let trackingProtectionToggleLabel = NSLocalizedString("trackingProtection.toggleLabel", value: "Tracking Protection", comment: "Text for the toggle that temporarily disables tracking protection.") // deprecated
         static let trackingProtectionToggleDescription = NSLocalizedString("trackingProtection.toggleDescription1", value: "Disable until you close %@ or tap ERASE.", comment: "Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar")
         static let trackingProtectionDisabledLabel = NSLocalizedString("trackingProtection.disabledLabel", value: "Tracking Protection off", comment: "text showing the tracking protection is disabled.")
         static let adTrackerLabel = NSLocalizedString("trackingProtection.adTrackersLabel", value: "Ad trackers", comment: "Label for ad trackers.")
@@ -348,6 +388,7 @@ struct UIConstants {
         static let autocompleteAddCustomUrlWithPlus = NSLocalizedString("Autocomplete.addCustomUrlWithPlus", value: "+ Add Custom URL", comment: "Label for button to add a custom URL with the + prefix")
         static let autocompleteAddCustomUrl = NSLocalizedString("Autocomplete.addCustomUrl", value: "Add Custom URL", comment: "Label for button to add a custom URL")
         static let autocompleteAddCustomUrlError = NSLocalizedString("Autocomplete.addCustomUrlError", value: "Double-check the URL you entered.", comment: "Label for error state when entering an invalid URL")
+        static let addSearchEngineError = NSLocalizedString("SearchEngine.addEngineError", value: "That didn't work. Try replacing the search term with this: %s.", comment: "Label for error state when entering an invalid search engine URL. %s is a search term in a URL.")
 
         static let autocompleteAddCustomUrlPlaceholder = NSLocalizedString("Autocomplete.addCustomUrlPlaceholder", value: "Paste or enter URL", comment: "Placeholder for the input field to add a custom URL")
         static let autocompleteAddCustomUrlLabel = NSLocalizedString("Autocomplete.addCustomUrlLabel", value: "URL to add", comment: "Label for the input to add a custom URL")
@@ -359,10 +400,34 @@ struct UIConstants {
         static let findInPageNextLabel = NSLocalizedString("FindInPage.NextResult", value: "Find next in page", comment: "Accessibility label for next result button in Find in Page Toolbar.")
         static let findInPageDoneLabel = NSLocalizedString("FindInPage.Done", value: "Find in page done", comment: "Accessibility label for done button in Find in Page Toolbar.")
         
+        static let siriShortcutsTitle = NSLocalizedString("Settinsg.siriShortcutsTitle", value: "SIRI SHORTCUTS", comment: "Title for settings section to enable different Siri Shortcuts.")
+        static let eraseSiri = NSLocalizedString("Siri.erase", value: "Erase", comment: "Title of option in settings to set up Siri to erase")
+        static let eraseAndOpenSiri = NSLocalizedString("Siri.eraseAndOpen", value: "Erase & Open", comment: "Title of option in settings to set up Siri to erase and then open the app.")
+        static let openUrlSiri = NSLocalizedString("Siri.openURL", value: "Open Favorite Site", comment: "Title of option in settings to set up Siri to open a specified URL in Focus/Klar.")
+        static let addToSiri = NSLocalizedString("Siri.addTo", value: "Add to Siri", comment: "Button to add a specified shortcut option to Siri.")
+        static let favoriteUrlTitle = NSLocalizedString("Siri.favoriteUrl", value: "Open Favorite Site", comment: "Title for screen to add a favorite URL to Siri.")
+        static let urlToOpen = NSLocalizedString("Siri.urlToOpen", value: "URL to open", comment: "Label for input to set a favorite URL to be opened by Siri.")
+        static let editOpenUrl = NSLocalizedString("Siri.editOpenUrl", value: "Re-Record or Delete Shortcut", comment: "Label for button to edit the Siri phrase or delete the Siri functionality.")
+        static let add = NSLocalizedString("Siri.add", value: "Add", comment: "Button to add a favorite URL to Siri.")
+        
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"
         static let requestDesktopNotification = "Notification.requestDesktop"
         static let findInPageNotification = "Notification.findInPage"
+        static let autocompleteTipTitle = "Autocomplete URLs for the sites you use most:"
+        static let autocompleteTipDescription = "Long-press any URL in the address bar"
+        static let sitesNotWorkingTipTitle = "Site acting strange?"
+        static let sitesNotWorkingTipDescription = "Try turning off Tracking Protection"
+        static let biometricTipTitle = String(format: "Lock %@ even when a site is open:", AppInfo.productName)
+        static let biometricTipFaceIdDescription = "Turn on Face ID"
+        static let biometricTipTouchIdDescription = "Turn on Touch ID"
+        static let requestDesktopTipTitle = "Get the full desktop site instead:"
+        static let requestDesktopTipDescription = "Page Actions > Request Desktop Site"
+        static let siriFavoriteTipTitle = "Ask Siri to open a favorite site:"
+        static let siriFavoriteTipDescription = "Add a site"
+        static let siriEraseTipTitle = String(format: "Ask Siri to erase %@ history:", AppInfo.productName)
+        static let siriEraseTipDescription = "Add Siri shortcut"
+        static let shareTrackersTipTitle = "%@ trackers blocked so far"
     }
 }

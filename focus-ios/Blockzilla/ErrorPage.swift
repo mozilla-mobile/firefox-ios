@@ -16,7 +16,6 @@ class ErrorPage {
 
         let page = try! String(contentsOfFile: file)
             .replacingOccurrences(of: "%messageLong%", with: error.localizedDescription)
-            .replacingOccurrences(of: "%messageShort%", with: error.domain)
             .replacingOccurrences(of: "%button%", with: UIConstants.strings.errorTryAgain)
         return page.data(using: .utf8)!
     }

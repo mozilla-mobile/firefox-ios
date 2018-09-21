@@ -21,6 +21,8 @@ class TrackingProtectionSettings: BaseTestCase {
         // Go to in-app settings
         waitforHittable(element: app.buttons["Settings"])
         app.buttons["Settings"].tap()
+        waitforHittable(element: app.tables.cells["settingsViewController.trackingCell"])
+        app.tables.cells["settingsViewController.trackingCell"].tap()
         waitforExistence(element: app.tables.switches["BlockerToggle.BlockAnalytics"])
 
         // Disable 'block analytic trackers'
@@ -28,7 +30,8 @@ class TrackingProtectionSettings: BaseTestCase {
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAnalytics"].value as! String, "0")
 
         // Exit in-app settings
-        app.navigationBars["Settings"].children(matching: .button).matching(identifier: "Back").element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
 
         // Visit https://www.mozilla.org
         loadWebPage("mozilla.org")
@@ -36,36 +39,42 @@ class TrackingProtectionSettings: BaseTestCase {
         // Check the correct site is reached
         waitForWebPageLoad()
 
-        // Check for the presence of the shield
-        // Currently, Mozilla has one (1) analytical tracker that is un-blocked
-        XCTAssertEqual(app.staticTexts["TrackingProtectionBadge.counterLabel"].label, "0")
-
-        // Open the tracking protection sidebar
+        // Open the tracking protection menu
         waitforHittable(element: app.otherElements["URLBar.trackingProtectionIcon"])
         app.otherElements["URLBar.trackingProtectionIcon"].tap()
 
-        // Wait for the sidebar to open
+        // Wait for the menu to open
         waitforExistence(element: app.staticTexts["Tracking Protection"])
 
         // Check for the existence of one (1) analytical tracker on Mozilla
-        let counters = app.staticTexts.matching(identifier: "TrackingProtectionBreakdownItem.counterLabel")
+        waitforExistence(element: app.staticTexts["Trackers blocked.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "0")
+        
+        waitforExistence(element: app.staticTexts["Ad trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Ad trackers.Subtitle"].label, "0")
+        
+        waitforExistence(element: app.staticTexts["Analytic trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Analytic trackers.Subtitle"].label, "0")
+        
+        waitforExistence(element: app.staticTexts["Social trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Social trackers.Subtitle"].label, "0")
+        
+        waitforExistence(element: app.staticTexts["Content trackers.Subtitle"])
+        XCTAssertEqual(app.staticTexts["Content trackers.Subtitle"].label, "0")
 
-        XCTAssertEqual(counters.element(boundBy: 0).label, "0") // Ad Trackers
-        XCTAssertEqual(counters.element(boundBy: 1).label, "0") // Analytical trackers
-        XCTAssertEqual(counters.element(boundBy: 2).label, "0") // Social trackers
-        XCTAssertEqual(counters.element(boundBy: 3).label, "0") // Content trackers
-
-        // Close the sidebar
-        waitforHittable(element: app.buttons["TrackingProtectionView.closeButton"])
-        app.buttons["TrackingProtectionView.closeButton"].tap()
+        // Close the menu
+        waitforHittable(element: app.buttons["PhotonMenu.close"])
+        app.buttons["PhotonMenu.close"].tap()
 
         // Erase the history
-        waitforHittable(element: app.buttons["ERASE"])
-        app.buttons["ERASE"].tap()
+        waitforHittable(element: app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].tap()
 
         // Reset in-app settings (work-around until issue: #731)
         waitforHittable(element: app.buttons["Settings"])
         app.buttons["Settings"].tap()
+        waitforHittable(element: app.tables.cells["settingsViewController.trackingCell"])
+        app.tables.cells["settingsViewController.trackingCell"].tap()
         waitforExistence(element: app.tables.switches["BlockerToggle.BlockAnalytics"])
 
         // Re-enable 'block analytic trackers'

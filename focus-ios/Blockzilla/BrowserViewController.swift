@@ -8,23 +8,19 @@ import SnapKit
 import Telemetry
 import LocalAuthentication
 import StoreKit
+import Intents
 
 class BrowserViewController: UIViewController {
-    private class DrawerView: UIView {
-        override var intrinsicContentSize: CGSize { return CGSize(width: 320, height: 0) }
-    }
-    
     let appSplashController: AppSplashController
 
     private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
-    private let drawerContainerView = DrawerView(frame: .zero)
-    private let drawerOverlayView = UIView()
+    let darkView = UIView()
     
     private let webViewController = WebViewController(userAgent: UserAgent.shared)
     private let webViewContainer = UIView()
-
-    private let trackingProtectionSummaryController = TrackingProtectionSummaryViewController()
+    
+    var modalDelegate: ModalDelegate?
 
     fileprivate var keyboardState: KeyboardState?
     fileprivate let browserToolbar = BrowserToolbar()
@@ -39,7 +35,6 @@ class BrowserViewController: UIViewController {
     fileprivate var fillerView: UIView?
     fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
 
-    fileprivate var drawerConstraint: Constraint!
     fileprivate var toolbarBottomConstraint: Constraint!
     fileprivate var urlBarTopConstraint: Constraint!
     fileprivate var homeViewBottomConstraint: Constraint!
@@ -58,7 +53,6 @@ class BrowserViewController: UIViewController {
 
     private var trackingProtectionStatus: TrackingProtectionStatus = .on(TPPageStats()) {
         didSet {
-            trackingProtectionSummaryController.trackingProtectionStatus = trackingProtectionStatus
             urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus)
         }
     }
@@ -77,16 +71,17 @@ class BrowserViewController: UIViewController {
 
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
+    var tipManager: TipManager?
     
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
     static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
     static let userDefaultsShareTrackerStatsKeyNEW = "shareTrackerStatsNew"
 
-    init(appSplashController: AppSplashController) {
+    init(appSplashController: AppSplashController, tipManager: TipManager = TipManager.shared) {
         self.appSplashController = appSplashController
+        self.tipManager = tipManager
         
         super.init(nibName: nil, bundle: nil)
-        drawerContainerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
     }
     
@@ -99,37 +94,18 @@ class BrowserViewController: UIViewController {
 
         setupBiometrics()
         view.addSubview(mainContainerView)
-        view.addSubview(drawerContainerView)
-
-        drawerOverlayView.backgroundColor = UIColor(white: 0, alpha: 0.8)
-        drawerOverlayView.layer.opacity = 0
-        drawerOverlayView.isHidden = true
-        drawerOverlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideDrawer)))
-        view.addSubview(drawerOverlayView)
-        drawerOverlayView.snp.makeConstraints { make in
-            make.edges.equalTo(mainContainerView.snp.edges)
+        
+        darkView.isHidden = true
+        darkView.backgroundColor = UIConstants.colors.background
+        darkView.alpha = 0.4
+        view.addSubview(darkView)
+        darkView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
 
         mainContainerView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.width.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.leading.equalTo(drawerContainerView.snp.trailing)
+            make.top.bottom.leading.width.equalToSuperview()
         }
-
-        drawerContainerView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.width.lessThanOrEqualTo(320)
-            make.trailing.lessThanOrEqualToSuperview().offset(-55)
-            make.trailing.equalTo(view.snp.leading).priority(500)
-
-            self.drawerConstraint = make.leading.equalToSuperview().constraint
-        }
-        self.drawerConstraint.deactivate()
-
-        trackingProtectionSummaryController.delegate = self
-        containTrackingProtectionSummary()
 
         webViewController.delegate = self
 
@@ -233,7 +209,12 @@ class BrowserViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
         
-        homeView?.setHighlightWhatsNew(shouldHighlight: shouldShowWhatsNew())
+        if let homeViewToolset = homeView?.toolbar.toolset {
+            homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
+            homeView?.toolbar.layoutIfNeeded()
+        }
+        browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
+        browserToolbar.layoutIfNeeded()
         
         super.viewWillAppear(animated)
     }
@@ -251,7 +232,7 @@ class BrowserViewController: UIViewController {
     
     private func setupBiometrics() {
         // Register for foreground notification to check biometric authentication
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
             var biometricError: NSError?
 
             // Check if user is already in a cleared session, or doesn't have biometrics enabled in settings
@@ -300,28 +281,30 @@ class BrowserViewController: UIViewController {
     }
 
     private func containWebView() {
-        addChildViewController(webViewController)
+        addChild(webViewController)
         webViewContainer.addSubview(webViewController.view)
-        webViewController.didMove(toParentViewController: self)
+        webViewController.didMove(toParent: self)
 
         webViewController.view.snp.makeConstraints { make in
             make.edges.equalTo(webViewContainer.snp.edges)
         }
     }
-
-    private func containTrackingProtectionSummary() {
-        addChildViewController(trackingProtectionSummaryController)
-        drawerContainerView.addSubview(trackingProtectionSummaryController.view)
-        trackingProtectionSummaryController.didMove(toParentViewController: self)
-
-        trackingProtectionSummaryController.view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+    
+    public func exitFullScreenVideo() {
+        let js = "document.getElementsByTagName('video')[0].webkitExitFullScreen()"
+        webViewController.evaluate(js, completion: nil)
     }
 
     private func createHomeView() {
-        let homeView = HomeView()
+        let homeView: HomeView
+        if canShowTips() && shouldShowTips() {
+            homeView = HomeView(tipManager: tipManager)
+        }
+        else {
+            homeView = HomeView()
+        }
         homeView.delegate = self
+        homeView.toolbar.toolset.delegate = self
         homeViewContainer.addSubview(homeView)
 
         homeView.snp.makeConstraints { make in
@@ -333,15 +316,7 @@ class BrowserViewController: UIViewController {
         }
         self.homeView = homeView
         
-        if canShowTrackerStatsShareButton() && shouldShowTrackerStatsShareButton() {
-            let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-            
-            // Since this is only English locale for now, don't worry about localizing for now
-            let shareTrackerStatsLabel = "%@ trackers blocked so far"
-            homeView.showTrackerStatsShareButton(text: String(format: shareTrackerStatsLabel, String(numberOfTrackersBlocked)))
-        } else {
-            homeView.hideTrackerStatsShareButton()
-        }
+
     }
 
     private func createURLBar() {
@@ -369,38 +344,32 @@ class BrowserViewController: UIViewController {
 
             // Initial centered constraints, which will effectively be deactivated when
             // the top constraints are active because of their reduced priorities.
-            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(500)
+            make.centerX.equalToSuperview().priority(.required)
+            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
+            make.trailing.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
             make.top.equalTo(homeView).priority(500)
-
-            // Note: this padding here is in addition to the 8px that’s already applied for the Cancel action
-            make.trailing.equalTo(homeView.settingsButton.snp.leading).offset(-8).priority(500)
         }
         topURLBarConstraints.forEach { $0.deactivate() }
     }
 
-    @objc fileprivate func hideDrawer() {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
-            self.drawerConstraint.deactivate()
-            self.drawerOverlayView.layer.opacity = 0
-            self.view.layoutIfNeeded()
-        }, completion: { completed in
-            self.drawerOverlayView.isHidden = true
-        })
-
-        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.trackingProtectionDrawer))
+    private func buildTrackingProtectionMenu(info: TPPageStats?) -> PhotonActionSheet {
+        var actions = [[PhotonActionSheetItem]]()
+        if info != nil {
+            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection", isEnabled: true, accessory: .Switch)
+            actions.append([titleItem])
+        } else {
+            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection_off", isEnabled: false, accessory: .Switch)
+            actions.append([titleItem])
+        }
+        let totalCount = PhotonActionSheetItem(title: UIConstants.strings.trackersBlocked, accessory: .Text, accessoryText: String(info?.total ?? 0), bold: true)
+        let adCount = PhotonActionSheetItem(title: UIConstants.strings.adTrackerLabel, accessory: .Text, accessoryText: String(info?.adCount ?? 0))
+        let analyticCount = PhotonActionSheetItem(title: UIConstants.strings.analyticTrackerLabel, accessory: .Text, accessoryText: String(info?.analyticCount ?? 0))
+        let socialCount = PhotonActionSheetItem(title: UIConstants.strings.socialTrackerLabel, accessory: .Text, accessoryText: String(info?.socialCount ?? 0))
+        let contentCount = PhotonActionSheetItem(title: UIConstants.strings.contentTrackerLabel, accessory: .Text, accessoryText: String(info?.contentCount ?? 0))
+        actions.append([totalCount, adCount, analyticCount, socialCount, contentCount])
+        return PhotonActionSheet(actions: actions, style: .overCurrentContext)
     }
 
-    fileprivate func showDrawer() {
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .curveEaseIn, animations: {
-            self.drawerConstraint.activate()
-            self.drawerOverlayView.isHidden = false
-            self.drawerOverlayView.layer.opacity = 1
-            self.view.layoutIfNeeded()
-        }, completion: nil)
-
-        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
-    }
-    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         alertStackView.snp.remakeConstraints { make in
@@ -466,7 +435,9 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func resetBrowser(hidePreviousSession: Bool = false) {
+    func resetBrowser(hidePreviousSession: Bool = false) {
+        
+        UserDefaults.standard.set(nil, forKey: "searchedHistory")
         
         // Used when biometrics fail and the previous session should be obscured
         if hidePreviousSession {
@@ -476,38 +447,38 @@ class BrowserViewController: UIViewController {
         }
         
         // Screenshot the browser, showing the screenshot on top.
-        let image = mainContainerView.screenshot()
-        let screenshotView = UIImageView(image: image)
+        let screenshotView = view.snapshotView(afterScreenUpdates: true) ?? UIView()
+        
         mainContainerView.addSubview(screenshotView)
         screenshotView.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView)
         }
 
         clearBrowser()
-        
-        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, delay: 0, options: .curveEaseInOut, animations: {
+
+        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
             screenshotView.snp.remakeConstraints { make in
-                make.center.equalTo(self.mainContainerView)
+                make.centerX.equalTo(self.mainContainerView)
+                make.top.equalTo(self.mainContainerView.snp.bottom)
                 make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
             }
+            screenshotView.alpha = 0
             self.mainContainerView.layoutIfNeeded()
         }, completion: { _ in
-            UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
-                screenshotView.snp.remakeConstraints { make in
-                    make.centerX.equalTo(self.mainContainerView)
-                    make.top.equalTo(self.mainContainerView.snp.bottom)
-                    make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
-                }
-                screenshotView.alpha = 0
-                self.mainContainerView.layoutIfNeeded()
-            }, completion: { _ in
-                self.urlBar.activateTextField()
-                Toast(text: UIConstants.strings.eraseMessage).show()
-                screenshotView.removeFromSuperview()
-            })
+            self.urlBar.activateTextField()
+            Toast(text: UIConstants.strings.eraseMessage).show()
+            screenshotView.removeFromSuperview()
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
+        
+        if #available(iOS 12.0, *) {
+            userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
+            let interaction = INInteraction(intent: eraseIntent, response: nil)
+            interaction.donate { (error) in
+                if let error = error { print(error.localizedDescription) }
+            }
+        }
     }
     
     private func clearBrowser() {
@@ -566,13 +537,30 @@ class BrowserViewController: UIViewController {
         SKStoreReviewController.requestReview()
     }
 
-    fileprivate func showSettings() {
+    fileprivate func showSettings(shouldScrollToSiri: Bool = false) {
+        guard let modalDelegate = modalDelegate else { return }
+        
         urlBar.shouldPresent = false
-        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: self)
-        navigationController!.pushViewController(settingsViewController, animated: true)
-        navigationController!.setNavigationBarHidden(false, animated: true)
+        
+        let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
+        let settingsNavController = UINavigationController(rootViewController: settingsViewController)
+        settingsNavController.modalPresentationStyle = .formSheet
+        
+        modalDelegate.presentModal(viewController: settingsNavController, animated: true)
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
+    }
+    
+    @available(iOS 12.0, *)
+    private func showSiriFavoriteSettings() {
+        guard let modalDelegate = modalDelegate else { return }
+        
+        urlBar.shouldPresent = false
+        let siriFavoriteViewController = SiriFavoriteViewController()
+        let siriFavoriteNavController = UINavigationController(rootViewController: siriFavoriteViewController)
+        siriFavoriteNavController.modalPresentationStyle = .formSheet
+        
+        modalDelegate.presentModal(viewController: siriFavoriteNavController, animated: true)
     }
 
     func ensureBrowsingMode() {
@@ -602,6 +590,13 @@ class BrowserViewController: UIViewController {
         }
 
         webViewController.load(URLRequest(url: url))
+        if urlBar.url == nil {
+            urlBar.url = url
+        }
+        guard #available(iOS 12.0, *), let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
+        if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
+            userActivity = SiriShortcuts().getActivity(for: .openURL)
+        }
     }
 
     func openOverylay(text: String) {
@@ -675,10 +670,21 @@ class BrowserViewController: UIViewController {
     }
 
     private func toggleURLBarBackground(isBright: Bool) {
-        if case .on = trackingProtectionStatus {
-            urlBarContainer.isBright = isBright
+        if urlBar.isEditing {
+            urlBarContainer.color = .editing
+        } else if case .on = trackingProtectionStatus {
+            urlBarContainer.color = .bright
         } else {
-            urlBarContainer.isBright = false
+            urlBarContainer.color = .dark
+        }
+    }
+    
+    private func toggleToolbarBackground() {
+        switch trackingProtectionStatus {
+        case .off:
+            browserToolbar.color = .dark
+        case .on:
+            browserToolbar.color = .bright
         }
     }
     
@@ -691,31 +697,31 @@ class BrowserViewController: UIViewController {
         ]
     }
 
-    func canShowTrackerStatsShareButton() -> Bool {
+    func canShowTips() -> Bool {
         return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
     }
 
     var showTrackerSemaphore = DispatchSemaphore(value: 1)
-    func flipCoinForShowTrackerButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) {
+    func flipCoinForShowTrackerButton(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) {
         showTrackerSemaphore.wait()
 
-        var shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+        var shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
 
-        if shouldShowTrackerStatsToUser == nil {
+        if shouldShowTipsToUser == nil {
             // Check to see if the user was previously opted into the experiment
-            shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
+            shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
 
-            if shouldShowTrackerStatsToUser != nil {
+            if shouldShowTipsToUser != nil {
                 // Remove the old flag
                 userDefaults.removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
             }
 
-            if shouldShowTrackerStatsToUser == true {
+            if shouldShowTipsToUser == true {
                 // User has already been opted into the experiment, continue showing the share button
                 userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
             } else {
                 // User has not been put into a bucket for determining if it should be shown
-                // 30% chance they get put into the group that sees the share button
+                // 50% chance they get put into the group that sees the share button
                 // arc4random_uniform(100) returns an integer 0 through 99 (inclusive)
                 if arc4random_uniform(100) < percent {
                     userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
@@ -728,13 +734,10 @@ class BrowserViewController: UIViewController {
         showTrackerSemaphore.signal()
     }
 
-    func shouldShowTrackerStatsShareButton(percent: Int = 30, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
+    func shouldShowTips(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
         flipCoinForShowTrackerButton(percent:percent, userDefaults:userDefaults)
-
-        let shouldShowTrackerStatsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
-
-        return shouldShowTrackerStatsToUser == true &&
-            getNumberOfLifetimeTrackersBlocked(userDefaults: userDefaults) >= 10
+        let shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
+        return shouldShowTipsToUser == true
     }
     
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
@@ -876,7 +879,10 @@ extension BrowserViewController: URLBarDelegate {
             urlBar.url = webViewController.url
             return
         }
-
+        
+        SearchHistoryUtils.pushSearchToStack(with: text)
+        SearchHistoryUtils.isFromURLBar = true
+        
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -923,14 +929,104 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidDeactivate(_ urlBar: URLBar) {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
-            self.topURLBarConstraints.forEach { $0.deactivate() }
             self.urlBarContainer.alpha = 0
             self.view.layoutIfNeeded()
         }
     }
 
     func urlBarDidTapShield(_ urlBar: URLBar) {
-        showDrawer()
+        Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
+        
+        switch trackingProtectionStatus {
+        case .on(let info):
+            let menuOn = buildTrackingProtectionMenu(info: info)
+            presentPhotonActionSheet(menuOn, from: urlBar.shieldIcon)
+        case .off:
+            let menuOff = buildTrackingProtectionMenu(info: nil)
+            presentPhotonActionSheet(menuOff, from: urlBar.shieldIcon)
+        }
+    }
+    
+    func urlBarDidLongPress(_ urlBar: URLBar) {
+        let customURLItem = PhotonActionSheetItem(title: UIConstants.strings.customURLMenuButton, iconString: "icon_link") { action in
+            urlBar.addCustomURL()
+            UserDefaults.standard.set(false, forKey: TipManager.TipKey.autocompleteTip)
+        }
+        var actions = [PhotonActionSheetItem]()
+        if let clipboardString = UIPasteboard.general.string {
+            let pasteAndGoItem = PhotonActionSheetItem(title: UIConstants.strings.urlPasteAndGo, iconString: "icon_paste_and_go") { action in
+                urlBar.pasteAndGo(clipboardString: clipboardString)
+            }
+            actions.append(pasteAndGoItem)
+            let pasteItem = PhotonActionSheetItem(title: UIConstants.strings.urlPaste, iconString: "icon_paste") { action in
+                urlBar.paste(clipboardString: clipboardString)
+            }
+            actions.append(pasteItem)
+        }
+        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddressButton, iconString: "icon_link") { action in
+            urlBar.copyToClipboard()
+            Toast(text: UIConstants.strings.copyURLToast).show()
+        }
+        actions.append(copyItem)
+        let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], actions], style: .overCurrentContext)
+        presentPhotonActionSheet(urlContextMenu, from: urlBar)
+    }
+    
+    func urlBarDidPressPageActions(_ urlBar: URLBar) {
+        guard let url = urlBar.url else { return }
+        let utils = OpenUtils(url: url, webViewController: webViewController)
+        let items = PageActionSheetItems(url: url)
+        let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
+            let shareVC = utils.buildShareViewController(url: url)
+            shareVC.becomeFirstResponder()
+            self.present(shareVC, animated: true, completion: nil)
+        }
+        var shareItems = [sharePageItem]
+        if items.canOpenInFirefox {
+            shareItems.append(items.openInFireFoxItem)
+        }
+        if items.canOpenInChrome {
+            shareItems.append(items.openInChromeItem)
+        }
+        shareItems.append(items.openInSafariItem)
+        let copyItem = PhotonActionSheetItem(title: UIConstants.strings.copyAddress, iconString: "icon_link") { action in
+            urlBar.copyToClipboard()
+            Toast(text: UIConstants.strings.copyURLToast).show()
+        }
+        shareItems.append(copyItem)
+        
+        let actionItems = [items.findInPageItem, items.requestDesktopItem]
+        let pageActionsMenu = PhotonActionSheet(title: UIConstants.strings.pageActionsTitle, actions: [shareItems, actionItems], style: .overCurrentContext)
+        presentPhotonActionSheet(pageActionsMenu, from: urlBar.pageActionsButton)
+    }
+}
+
+extension BrowserViewController: PhotonActionSheetDelegate {
+    func presentPhotonActionSheet(_ actionSheet: PhotonActionSheet, from sender: UIView) {
+        actionSheet.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .pad ? .popover : .overCurrentContext
+        actionSheet.delegate = self
+        darkView.isHidden = false
+        if let popoverVC = actionSheet.popoverPresentationController, actionSheet.modalPresentationStyle == .popover {
+            popoverVC.delegate = self
+            popoverVC.sourceView = sender
+            popoverVC.sourceRect = CGRect(x: sender.frame.width/2, y: sender.frame.size.height * 0.75, width: 1, height: 1)
+            popoverVC.permittedArrowDirections = .up
+            popoverVC.backgroundColor = UIConstants.colors.background
+        }
+        present(actionSheet, animated: true, completion: nil)
+    }
+    func photonActionSheetDidDismiss() {
+        darkView.isHidden = true
+    }
+    func photonActionSheetDidToggleProtection(enabled: Bool) {
+        enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
+        
+        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
+        telemetryEvent.addExtra(key: "to", value: enabled)
+        Telemetry.default.recordEvent(telemetryEvent)
+        UserDefaults.standard.set(false, forKey: TipManager.TipKey.sitesNotWorkingTip)
+        
+        webViewController.reload()
     }
 }
 
@@ -955,10 +1051,12 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
     
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
+        SearchHistoryUtils.goBack()
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
+        SearchHistoryUtils.goForward()
         webViewController.goForward()
     }
 
@@ -970,16 +1068,6 @@ extension BrowserViewController: BrowserToolsetDelegate {
         webViewController.stop()
     }
 
-    func browserToolsetDidPressSend(_ browserToolset: BrowserToolset) {
-        guard let url = webViewController.url else { return }
-        
-        let shareExtensionHelper = OpenUtils(url: url, webViewController: webViewController)
-        let controller = shareExtensionHelper.buildShareViewController(url: url, title: webViewController.title, printFormatter: webViewController.printFormatter, anchor: browserToolset.sendButton)
-
-        updateFindInPageVisibility(visible: false)
-        present(controller, animated: true, completion: nil)
-    }
-
     func browserToolsetDidPressSettings(_ browserToolbar: BrowserToolset) {
         updateFindInPageVisibility(visible: false)
         showSettings()
@@ -987,9 +1075,6 @@ extension BrowserViewController: BrowserToolsetDelegate {
 }
 
 extension BrowserViewController: HomeViewDelegate {
-    func homeViewDidPressSettings(homeView: HomeView) {
-        showSettings()
-    }
     
     func shareTrackerStatsButtonTapped() {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
@@ -1001,6 +1086,25 @@ extension BrowserViewController: HomeViewDelegate {
         let text = String(format: shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
         present(shareController, animated: true)
+    }
+    
+    func tipTapped() {
+        guard let tip = tipManager?.currentTip, tip.showVc else { return }
+        switch tip.identifier {
+        case TipManager.TipKey.biometricTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.biometricTip)
+            showSettings()
+        case TipManager.TipKey.siriEraseTip:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.siriEraseTip)
+            showSettings(shouldScrollToSiri: true)
+        case TipManager.TipKey.siriFavoriteTip:
+            if #available(iOS 12.0, *) {
+                Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.show, object: TelemetryEventObject.siriFavoriteTip)
+                showSiriFavoriteSettings()
+            }
+        default:
+            break
+        }
     }
 }
 
@@ -1069,8 +1173,13 @@ extension BrowserViewController: WebControllerDelegate {
     }
     
     func webControllerDidStartNavigation(_ controller: WebController) {
+        if (!SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating) {
+            SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
+        }
+        SearchHistoryUtils.isNavigating = false
+        SearchHistoryUtils.isFromURLBar = false
         urlBar.isLoading = true
-        browserToolbar.isLoading = true
+        browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         showToolbars()
         
@@ -1084,7 +1193,7 @@ extension BrowserViewController: WebControllerDelegate {
             urlBar.url = webViewController.url
         }
         urlBar.isLoading = false
-        browserToolbar.isLoading = false
+        toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
     }
@@ -1092,8 +1201,8 @@ extension BrowserViewController: WebControllerDelegate {
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
         urlBar.url = webViewController.url
         urlBar.isLoading = false
-        browserToolbar.isLoading = false
         toggleURLBarBackground(isBright: true)
+        toggleToolbarBackground()
         urlBar.progressBar.hideProgressBar()
     }
 
@@ -1223,7 +1332,7 @@ extension BrowserViewController: WebControllerDelegate {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
             self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
-            self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight)
+            self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight + self.view.safeAreaInsets.bottom)
             scrollView.bounds.origin.y += (self.scrollBarOffsetAlpha - 1) * UIConstants.layout.urlBarHeight
             self.scrollBarOffsetAlpha = 1
             self.view.layoutIfNeeded()
@@ -1267,42 +1376,24 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
 }
 
+extension BrowserViewController: UIPopoverPresentationControllerDelegate {
+    
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        darkView.isHidden = true
+    }
+}
+
+@available(iOS 12.0, *)
+extension BrowserViewController {
+    public var eraseIntent: EraseIntent {
+        let intent = EraseIntent()
+        intent.suggestedInvocationPhrase = "Erase"
+        return intent
+    }
+}
+
 protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
     func didShowWhatsNew() -> Void
-}
-
-extension BrowserViewController: WhatsNewDelegate {
-    func shouldShowWhatsNew() -> Bool {
-        let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-        return counter != 0
-    }
-    
-    func didShowWhatsNew() {
-        UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-        UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
-    }
-}
-
-extension BrowserViewController: TrackingProtectionSummaryDelegate {
-    func trackingProtectionSummaryControllerDidTapClose(_ controller: TrackingProtectionSummaryViewController) {
-        hideDrawer()
-    }
-
-    func trackingProtectionSummaryControllerDidToggleTrackingProtection(_ enabled: Bool) {
-        if enabled {
-            webViewController.enableTrackingProtection()
-        } else {
-            webViewController.disableTrackingProtection()
-        }
-
-
-        let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
-        telemetryEvent.addExtra(key: "to", value: enabled)
-        Telemetry.default.recordEvent(telemetryEvent)
-
-        webViewController.reload()
-        hideDrawer()
-    }
 }
 

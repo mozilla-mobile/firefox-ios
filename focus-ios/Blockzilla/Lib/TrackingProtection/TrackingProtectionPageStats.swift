@@ -159,7 +159,7 @@ fileprivate class TPStatsBlocklists {
                     assert(false, "url-filter code needs updating for new list format")
                     return
                 }
-                let baseDomain = filter.substring(from: loc.upperBound).replacingOccurrences(of: "\\.", with: ".")
+                let baseDomain = filter[loc.upperBound...].replacingOccurrences(of: "\\.", with: ".")
                 assert(!baseDomain.isEmpty)
 
                 // Sanity check for the lists.

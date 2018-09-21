@@ -37,8 +37,14 @@
 /* (No Comment) */
 "About.screenTitle" = "Despre";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Despre %@";
+
 /* Label on About screen */
 "About.topLabel" = "%@ îți oferă controlul.";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Autentifică-te pentru a reveni la %@";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Adaugă URL personalizat";
@@ -88,8 +94,23 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Activat";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Sesiune nouă";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Deblochează %@ la redeschidere pentru a preveni accesul neautorizat.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Înapoi";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Copiază adresa";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Copiază";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Adaugă adresă particularizată";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Înainte";
@@ -148,6 +169,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Deschide Hărți";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Caută în pagina actuală";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Caută în pagina următoare";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Caută în pagina anterioară";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Ok, am înțeles!";
 
@@ -166,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Navighează. Șterge. Repetă.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Închide";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Renunță";
 
@@ -177,6 +210,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Solicită site de desktop";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Apasă pe Safari, apoi selectează Sisteme de blocare a conținutului";
@@ -192,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Salvează";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Nu a funcționat. Încearcă să înlocuiești termenul  de căutare cu: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Adaugă alt motor de căutare";
@@ -241,6 +280,12 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Află mai multe.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Acordă o recenzie pentru %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "INTEGRARE CU SAFARI";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Setări";
 
@@ -261,6 +306,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "CONFIDENȚIALITATE";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SECURITATE";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Blochează urmăritorii publicitari";
@@ -289,6 +337,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Încorporat pe site-uri pentru a urmări vizitele tale şi a afişa funcţii precum butoanele de partajare";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Folosește Face ID pentru a debloca aplicația";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID poate debloca %@ dacă o adresă este deja deschisă în aplicație";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Ar putea afecta funcționalitatea unor videouri sau pagini web";
 
@@ -298,14 +352,68 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Trimite date privind utilizarea";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Folosește Touch ID pentru a debloca aplicația";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID poate debloca %@ dacă o adresă este deja deschisă în aplicație";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Ce este nou";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SCURTĂTURI SIRI";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Caută în pagină";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Obține aplicația Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Deschide în %@";
+
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Acțiuni pagină";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Solicită site de desktop";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Deschide în Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Deschide în Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Deschide în Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Partajează pagina cu...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Adaugă";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Adaugă la Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Re-înregistrează sau șterge scurtătura";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Șterge";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Șterge și deschide";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Deschide site-ul favorit";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Deschide site-ul favorit";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Adresa de deschis";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Renunță";
@@ -319,6 +427,12 @@
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Istoricul de navigare a fost șters.";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Caută în pagină: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Lipește";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Caută sau introdu adresa";
 
@@ -331,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Deschide în %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Adresa a fost copiată în clipboard";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Selectează bara adresei";
 
@@ -342,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Copiază linkul";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Linkul copiat:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Salvează imaginea";
@@ -364,6 +484,15 @@
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Exemplu: motor-de-căutare-exemplu.com/search/?q=%s";
 
+/* Text for a share button */
+"share" = "Împărtășește";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Copiază adresa";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Folosește Touch ID pentru a reveni la %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Urmăritori publicitari";
 
@@ -375,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Protecție față de urmărire dezactivată";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Protecție față de urmărire";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Află mai multe";

@@ -37,6 +37,9 @@
 /* (No Comment) */
 "About.screenTitle" = "గురించి";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@ గురించి";
+
 /* Label on About screen */
 "About.topLabel" = "%@ మిమ్మల్ని నియంత్రణలో ఉంచును.";
 
@@ -70,8 +73,14 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "చేతనం";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "కొత్త సెషన్";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "వెనక్కి";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "కాపీచేయి";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "ముందుకు";
@@ -217,6 +226,9 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
 
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "భద్రత";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "యాడ్ ట్రాకర్లను నిరోధించండి";
 
@@ -304,11 +316,20 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” మీ ఫోటోలను యాక్సెస్ చేయాలని అనుకుంటున్నారు";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ఉదాహరణ: searchengineexample.com/search/?q=%s";
+
+/* Text for a share button */
+"share" = "పంచుకోండి";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "యాడ్ ట్రాకర్లు";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "కంటెంట్ ట్రాకర్లు";
+
+/* text showing the tracking protection is disabled. */
+"trackingProtection.disabledLabel" = "ట్రాకింగ్ సంరక్షణ ఆఫ్";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "ఇంకా తెలుసుకోండి";

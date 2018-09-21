@@ -37,8 +37,14 @@
 /* (No Comment) */
 "About.screenTitle" = "Относно";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Относно %@";
+
 /* Label on About screen */
 "About.topLabel" = "%@ ви дава контрол.";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Удостоверете се, за да се върнете към %@";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Добавяне на потребителски адрес";
@@ -88,8 +94,23 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Включено";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Нова сесия";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Отключване на %@ при повторно отваряне, за да се предотврати неудостоверен достъп.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Назад";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Копиране на адреса";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Копиране";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Добавяне на потребителски адрес";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Напред";
@@ -148,6 +169,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Отваряне на Карти (Maps)";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Търсенето в страницата е завършено";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Търсене на следващото съвпадение в страницата";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Търсене на предишното съвпадение в страницата";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Добре, разбрах!";
 
@@ -166,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Разглеждане. Изчистване. Повтаряне.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Затваряне";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Отказ";
 
@@ -177,6 +210,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Настолна версия на сайта";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Натиснете на Safari, после изберете Content Blockers";
@@ -192,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Запазване";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Това няма да работи. Опитайте да замените думите за търсене със следното: „%s“.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Добавяне на друга търсачка";
@@ -241,6 +280,12 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Научете повече.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Оценете %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "ИНТЕГРАЦИЯ СЪС SAFARI";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Настройки";
 
@@ -261,6 +306,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "ПОВЕРИТЕЛНОСТ";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "ЗАЩИТА";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Спиране на проследяването от реклами";
@@ -289,6 +337,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Вградени в сайтове, за да ви проследява и да показва функционални елементи, като например бутони за споделяне";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Използване на лицево разпознаване за отключване на приложението";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Лицевото разпознаване може да отключва %@, ако вече е отворен адрес в приложението";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Видео и някои уеб страници може да не работят";
 
@@ -298,14 +352,68 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Изпращане данни за използването";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Използване на пръстово разпознаване за отключване на приложението";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Пръстовото разпознаване може да отключва %@, ако вече е отворен адрес в приложението";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Новото в това издание";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "ДЕЙСТВИЯ ЧРЕЗ SIRI";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Търсене в страницата";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Изтегляне на приложението Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Отваряне в %@";
+
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Действия със страницата";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Настолна версия на сайта";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Отваряне в Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Отваряне във  Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Отваряне в Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Споделяне на страницата с…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Добавяне";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Добавяне към Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Презаписване или изтриване на действие";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Изчистване";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Изчистване и отваряне";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Отваряне на отбелязан сайт";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Отваряне на отбелязан сайт";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Адрес за отваряне";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Отказ";
@@ -319,6 +427,12 @@
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Историята на разглеждане е изчистена.";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Търсене в страницата: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Поставяне";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Търсене или въвеждане на адрес";
 
@@ -331,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Отваряне в %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Адресът е копиран в системния буфер";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Избиране на лентата за местоположение";
 
@@ -342,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Копиране на препратката";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Копирана препратка:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Запазване на изображението";
@@ -364,6 +484,15 @@
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Пример: searchengineexample.com/search/?q=%s";
 
+/* Text for a share button */
+"share" = "Споделяне";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Копиране на адреса";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Използвайте пръстово разпознаване, за да се върнете в %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Проследяващи рекламни елементи";
 
@@ -375,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Изключване на защитата от проследяване";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Защита от проследяване";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Научете повече";

@@ -1,6 +1,6 @@
 github "swisspol/GCDWebServer" ~> 3.3.3
 github "SnapKit/SnapKit" "4.0.0"
-github "adjust/ios_sdk" "v4.13.0"
+github "adjust/ios_sdk" "v4.14.2"
 github "cezheng/Fuzi" "2.0.2"
 github "mozilla-mobile/AutocompleteTextField" "master"
 github "mozilla-mobile/telemetry-ios" ~> 1.1.0

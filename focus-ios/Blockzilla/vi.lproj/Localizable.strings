@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ giúp bạn kiểm soát.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Xác thực để quay lại %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Thêm URL tùy chỉnh";
 
@@ -91,8 +94,17 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Đã bật";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Phiên mới";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "Mở khóa %@ khi mở lại để ngăn chặn truy cập trái phép.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Quay lại";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Sao chép địa chỉ liên kết";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Sao chép";
@@ -175,6 +187,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Duyệt. Xóa. Lặp lại.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Đóng";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Hủy bỏ";
 
@@ -204,6 +219,9 @@
 
 /* Save button label */
 "Save" = "Lưu";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Điều đó không hoạt động. Hãy thử thay thế cụm từ tìm kiếm bằng cái này: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Thêm công cụ tìm kiếm khác";
@@ -253,6 +271,12 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Tìm hiểu thêm.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Đánh giá %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Cài đặt";
 
@@ -273,6 +297,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SECURITY";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Chặn trình theo dõi quảng cáo";
@@ -304,6 +331,9 @@
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Sử dụng nhận dạng khuôn mặt để mở ứng dụng";
 
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID có thể mở khóa %@ nếu một URL đã được mở trong ứng dụng";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Có thể không phát được một số video và trang Web";
 
@@ -313,8 +343,17 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Gửi dữ liệu sử dụng";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Sử dụng Touch ID để mở ứng dụng";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID có thể mở khóa %@ nếu một URL đã được mở trong ứng dụng";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Có gì mới";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Tìm trong trang";
@@ -327,6 +366,36 @@
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Yêu cầu giao diện máy tính";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Mở trong Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Mở trong Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Mở trong Safafi";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Chia sẻ trang Với...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Thêm";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Thêm vào Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Ghi lại hoặc xóa phím tắt";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Xóa";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Xóa & mở";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL để mở";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Hủy bỏ";
@@ -343,6 +412,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Tìm trong trang: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Dán";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Tìm kiếm hoặc nhập địa chỉ";
 
@@ -355,6 +427,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Mở trong %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL đã được sao chép vào Clipboard";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Chọn thanh địa chỉ";
 
@@ -366,6 +441,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Sao chép liên kết";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Liên kết bạn đã sao chép:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Lưu ảnh";
@@ -391,6 +469,12 @@
 /* Text for a share button */
 "share" = "Chia sẻ";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Sao chép địa chỉ liên kết";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Sử dụng Touch ID để quay lại %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Trình theo dõi quảng cáo";
 
@@ -402,6 +486,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Chống theo dõi tắt";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Trình chống theo dõi";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Tìm hiểu thêm";

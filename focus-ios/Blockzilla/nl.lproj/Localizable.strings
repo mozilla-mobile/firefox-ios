@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ geeft u de controle.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Authenticeer om naar %@ terug te keren";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Aangepaste URL toevoegen";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Terug";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Adres kopiëren";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopiëren";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Surfen. Wissen. Herhalen.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Sluiten";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Annuleren";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Opslaan";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Dat werkte niet. Probeer de zoekterm te vervangen door %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Nog een zoekmachine toevoegen";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ waarderen";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI-INTEGRATIE";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Instellingen";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Wat is er nieuw";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI-SNELTOETSEN";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Zoeken op pagina";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Openen in Focus";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Pagina-acties";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Desktop­website opvragen";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Openen in Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Openen in Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Openen in Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Pagina delen met…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Toevoegen";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Toevoegen aan Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Sneltoets opnieuw vastleggen of verwijderen";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Wissen";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Wissen en openen";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Favoriete website openen";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Favoriete website openen";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Te openen URL";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Annuleren";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Zoeken op pagina: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Plakken";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Voer zoekterm of adres in";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Openen in %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL naar klembord gekopieerd";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Locatiebalk selecteren";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Koppeling kopiëren";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Gekopieerde koppeling:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Afbeelding opslaan";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "Delen";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Adres kopiëren";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Gebruik Touch ID om naar %@ terug te keren";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Advertentietrackers";
 
@@ -432,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Bescherming tegen volgen uitgeschakeld";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Bescherming tegen volgen";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Meer info";

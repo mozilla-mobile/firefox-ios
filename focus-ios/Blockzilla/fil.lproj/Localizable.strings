@@ -37,8 +37,14 @@
 /* (No Comment) */
 "About.screenTitle" = "Tungkol sa";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Tungkol %@";
+
 /* Label on About screen */
 "About.topLabel" = "%@ binibigyan ka ng kontrol.";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Patunayan na bumalik sa %@";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Dagdagan ang Custom URL";
@@ -88,8 +94,23 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Pinagana";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Bagong Session";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "I-unlock ang %@ kapag nagbukas muli upang maiwasan ang hindi awtorisadong pag-access.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Balikan";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopyahin ang Address";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopyahin";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "Dagdagan ang Custom URL";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Pasulong";
@@ -148,6 +169,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Buksan ang Mapa";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Hanapin sa pahina na tapos na";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Hanapin sa susunod na pahina";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Hanapin sa nakaraang pahina";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "OK, nakuha ko na!";
 
@@ -166,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Magtingin. Burahin. Ulitin.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Isarado";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "I-cancel";
 
@@ -177,6 +210,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "Humiling ng Desktop Site";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tap Safari, pagkatapos ay piliin ang Nilalaman ng Blockers";
@@ -192,6 +228,9 @@
 
 /* Save button label */
 "Save" = "I-save";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Hindi iyon gumana. Subukang palitan ang termino sa paghahanap na may ganitong: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Magdagdag ng Panibagong Search Engine";
@@ -241,6 +280,12 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Matuto ng higit pa.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Rate %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Mga Setting";
 
@@ -261,6 +306,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SECURITY";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Harangan ang ad trackers";
@@ -289,6 +337,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "Naka-embed sa mga site upang subaybayan ang iyong mga pagbisita at upang ipakita ang pag-andar tulad ng mga pindutan ng magbahagi";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Gamitin ang Face ID upang i-unlock ang app";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Maaaring i-unlock ng Face ID ang %@ kung may bukas na URL sa app";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Maaaring masira ang ilang mga video at mga pahina ng Web pages";
 
@@ -298,14 +352,68 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Ipadala ang data ng paggamit";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Gamitin ang Touch ID upang i-unlock ang app";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Maaaring i-unlock ng Touch ID ang %@ kung bukas ang isang URL sa app";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Ano ang Bago";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Hanapin sa Pahina";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Kumuha ng Firefox App";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Buksan sa %@";
+
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Mga Pagkilos ng Pahina";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Humiling ng Desktop Site";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Buksan sa Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Buksan sa Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Buksan sa Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Ibahagi ang Pahina Sa...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Magdagdag";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Idagdag sa Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Muling I-record o Tanggalin ang Shortcut";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Burahin";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Burahin at Buksan";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Buksan ang Paboritong Site";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Buksan ang Paboritong Site";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL na buksan";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "I-cancel";
@@ -319,6 +427,12 @@
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Ang iyong kasaysayan sa pag-browse ay nabura na.";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Hanapin sa pahina: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "I-paste";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Maghanap o ipasok ang address";
 
@@ -331,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Buksan sa %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL Kinopya Sa Clipboard";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Piliin ang Lokasyon Bar";
 
@@ -342,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Kopyahin ang Link";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "I-link mo ang kinopya:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "I-save ang Larawan";
@@ -364,6 +484,15 @@
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Halimbawa: searchengineexample.com/search/?q=%s";
 
+/* Text for a share button */
+"share" = "Ibahagi";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopyahin ang Address";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Gamitin ang Touch ID upang bumalik sa %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Mga tagasubaybay ng ad";
 
@@ -375,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Ang pagsubaybay na proteksyon ay sarado";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Proteksyon sa Pagsubaybay";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Matuto ng Higit pa";

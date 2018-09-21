@@ -110,10 +110,10 @@ class SearchEngineManager {
         let pluginsPath = Bundle.main.url(forResource: "SearchPlugins", withExtension: nil)!
         let enginesPath = Bundle.main.path(forResource: "SearchEngines", ofType: "plist")!
         let engineMap = NSDictionary(contentsOfFile: enginesPath) as! [String: [String]]
-        let engines = searchPaths.flatMap { engineMap[$0] }.first!
+        let engines = searchPaths.compactMap { engineMap[$0] }.first!
         
         // Find and parse the engines for this locale.
-        self.engines = engines.flatMap { name in
+        self.engines = engines.compactMap { name in
             let path = searchPaths
                 .map({ pluginsPath.appendingPathComponent($0).appendingPathComponent(name + ".xml") })
                 .first { FileManager.default.fileExists(atPath: $0.path) }!

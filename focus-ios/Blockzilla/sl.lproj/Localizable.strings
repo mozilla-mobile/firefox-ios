@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ daje nadzor v vaše roke.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Za vrnitev v %@ je zahtevana overitev";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Dodaj URL po meri";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Nazaj";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopiraj naslov";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopiraj";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Brskajte. Izbrišite. Ponovite.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Zapri";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Prekliči";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Shrani";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "To ni delovalo. Poskusite iskalno poizvedbo zamenjati z: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Dodaj drug iskalnik";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Ocenite %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "INTEGRACIJA S SAFARIJEM";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Nastavitve";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novosti";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "BLIŽNJICE ZA SIRI";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Najdi na strani";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Odpri v %@u";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Dejanja strani";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Zahtevaj stran za namizja";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Odpri v Chromu";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Odpri v Firefoxu";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Odpri v Safariju";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Deli stran z …";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Dodaj";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Dodaj v Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Posnemite znova ali izbrišite bližnjico";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Izbriši";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Izbriši in odpri";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Odpri priljubljeno stran";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Odpri priljubljeno stran";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Spletni naslov za odprtje";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Prekliči";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Najdi na strani: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Prilepi";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Iskanje ali naslov strani";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Odpri v %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Spletni naslov kopiran v odložišče";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Izberi naslovno vrstico";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Kopiraj povezavo";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Povezava, ki ste jo kopirali:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Shrani sliko";
@@ -421,6 +487,12 @@
 /* Text for a share button */
 "share" = "Deli";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopiraj naslov";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Uporabi Touch ID za vrnitev v %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "Oglaševalski sledilci";
 
@@ -432,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Zaščita pred sledenjem je izključena";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Zaščita pred sledenjem";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Več o tem";

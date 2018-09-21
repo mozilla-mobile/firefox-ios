@@ -66,20 +66,6 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             make.leading.trailing.equalTo(cell.textLabel!)
             make.centerY.equalTo(cell.textLabel!).offset(groupingOffset)
         }
-
-        // Hack to cover header separator line
-        let footer = UIView()
-        footer.backgroundColor = UIConstants.colors.background
-
-        cell.addSubview(footer)
-        cell.sendSubview(toBack: footer)
-
-        footer.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.bottom.equalToSuperview().offset(1)
-            make.leading.trailing.equalToSuperview()
-        }
-
         return cell
     }
     
@@ -102,7 +88,6 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             toggle.accessibilityIdentifier = "toggleAutocompleteSwitch"
             toggle.isOn = Settings.getToggle(.enableDomainAutocomplete)
             toggle.onTintColor = UIConstants.colors.toggleOn
-            toggle.tintColor = UIConstants.colors.toggleOff
             cell.accessoryView = PaddedSwitch(switchView: toggle)
             
         } else {
@@ -115,17 +100,16 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
                 toggle.accessibilityIdentifier = "toggleCustomAutocompleteSwitch"
                 toggle.isOn = Settings.getToggle(.enableCustomDomainAutocomplete)
                 toggle.onTintColor = UIConstants.colors.toggleOn
-                toggle.tintColor = UIConstants.colors.toggleOff
                 cell.accessoryView = PaddedSwitch(switchView: toggle)
             } else {
-                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "newDomainCell")
+                cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "newDomainCell")
                 cell.accessoryType = .disclosureIndicator
                 cell.accessibilityIdentifier = "customURLS"
                 cell.textLabel?.text = UIConstants.strings.autocompleteCustomSectionLabel
             }
         }
         
-        cell.backgroundColor = UIConstants.colors.background
+        cell.backgroundColor = UIConstants.colors.cellBackground
         cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
         cell.layoutMargins = UIEdgeInsets.zero
         
@@ -145,9 +129,9 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         switch section {
         case 0:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
-            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteDefaultDescription, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
-            let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteDefaultDescription, AppInfo.productName), attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
+            let space = NSAttributedString(string: " ", attributes: [:])
             subtitle.append(space)
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle
@@ -163,9 +147,9 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             return cell
         case 1:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
-            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteCustomDescription, AppInfo.productName), attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.settingsDetailLabel])
-            let space = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor : UIConstants.colors.toggleOn])
+            let learnMore = NSAttributedString(string: UIConstants.strings.learnMore, attributes: [.foregroundColor : UIConstants.colors.settingsLink])
+            let subtitle = NSMutableAttributedString(string: String(format: UIConstants.strings.autocompleteCustomDescription, AppInfo.productName), attributes: [.foregroundColor : UIConstants.colors.settingsDetailLabel])
+            let space = NSAttributedString(string: " ", attributes: [:])
             subtitle.append(space)
             subtitle.append(learnMore)
             cell.detailTextLabel?.attributedText = subtitle

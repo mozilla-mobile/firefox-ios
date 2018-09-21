@@ -22,19 +22,19 @@ class AsianLocaleTest: BaseTestCase {
 		app.tables.cells["SettingsViewController.searchCell"].tap()
 	
 		app.tables.staticTexts["Google"].tap()
-		app.navigationBars["Settings"].children(matching: .button).matching(identifier: "Back").element(boundBy: 0).tap()
+		app.navigationBars["Settings"].children(matching: .button).matching(identifier: "Done").element(boundBy: 0).tap()
         
 		// Enter 'mozilla' on the search field
 		search(searchWord: "모질라")
-        app.buttons["ERASE"].tap()
+        app.buttons["URLBar.deleteButton"].tap()
         checkForHomeScreen()
         
 		search(searchWord: "モジラ")
-        app.buttons["ERASE"].tap()
+        app.buttons["URLBar.deleteButton"].tap()
         checkForHomeScreen()
         
 		search(searchWord: "因特網")
-        app.buttons["ERASE"].tap()
+        app.buttons["URLBar.deleteButton"].tap()
         checkForHomeScreen()
 	}
 	

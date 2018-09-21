@@ -21,8 +21,8 @@ class QuickAddAutocompleteURLTest: BaseTestCase {
         loadWebPage("fast.com")
 
         urlBarTextField.press(forDuration: 1.0)
-        waitforHittable(element: app.menuItems["Add Custom URL"])
-        app.menuItems["Add Custom URL"].tap()
+        waitforHittable(element: app.cells["Add Custom URL"])
+        app.cells["Add Custom URL"].tap()
         
         waitforHittable(element: app.textFields["URLBar.urlText"])
         urlBarTextField.tap()
@@ -33,6 +33,6 @@ class QuickAddAutocompleteURLTest: BaseTestCase {
             return
         }
         
-        XCTAssert(text == "https://fast.com/")
+        XCTAssert(text == "fast.com")
     }
 }
