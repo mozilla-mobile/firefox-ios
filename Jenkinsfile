@@ -15,7 +15,9 @@ pipeline {
         }
         stage('bootstrap') {
             steps {
-                sh './bootstrap.sh'
+                sh '''
+                 carthage bootstrap --platform ios
+                '''
             }
         }
         stage('test') {
