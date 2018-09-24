@@ -8,7 +8,7 @@ let url = "www.mozilla.org"
 let urlLabel = "Internet for people, not profit — Mozilla"
 let urlValue = "mozilla.org"
 
-let urlExample = "example.com"
+let urlExample = path(forTestPage: "test-example.html")
 let urlLabelExample = "Example Domain"
 let urlValueExample = "example"
 
@@ -46,7 +46,7 @@ class TopTabsTest: BaseTestCase {
         XCTAssertEqual("1", tabsOpenInitially as? String)
 
         // Open link in a different tab and switch to it
-        waitforExistence(app.webViews.links.staticTexts["More information..."])
+        waitforExistence(app.webViews.links.staticTexts["More information..."], timeout: 5)
         app.webViews.links.staticTexts["More information..."].press(forDuration: 5)
         app.buttons["Open in New Tab"].tap()
         waitUntilPageLoad()
@@ -106,55 +106,61 @@ class TopTabsTest: BaseTestCase {
 
     func testCloseAllTabsUndo() {
         // A different tab than home is open to do the proper checks
-        navigator.openURL(url)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        openNtabsFromTabTray(numTabs: 3)
-        navigator.goto(TabTray)
-
-        waitforExistence(app.collectionViews.cells[urlLabel])
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
+        openNtabsFromTabTray(numTabs: 1)
+        if !iPad() {
+            waitforExistence(app.buttons["TabToolbar.tabsButton"])
+        }
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         app.buttons["Undo"].tap()
         navigator.nowAt(BrowserTab)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
+        if !iPad() {
+            waitforExistence(app.buttons["TabToolbar.tabsButton"])
+        }
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         waitforExistence(app.collectionViews.cells[urlLabel])
     }
 
     func testCloseAllTabsPrivateModeUndo() {
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(url)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        openNtabsFromTabTray(numTabs: 3)
+        openNtabsFromTabTray(numTabs: 1)
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
-        waitforExistence(app.buttons["Undo"])
-        app.buttons["Undo"].tap()
-        // Nothing should happens starting on v13.x see bug 1487106
+        // New behaviour on v14, there is no Undo in Private mode
         waitforExistence(app.staticTexts["Private Browsing"])
     }
 
     func testCloseAllTabs() {
         // A different tab than home is open to do the proper checks
-        navigator.openURL(url)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
-        openNtabsFromTabTray(numTabs: 3)
-        navigator.goto(TabTray)
-
-        waitforExistence(app.collectionViews.cells[urlLabel])
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            waitforExistence(app.buttons["TabToolbar.tabsButton"])
+        }
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            waitforExistence(app.buttons["TabToolbar.tabsButton"])
+        }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         waitforNoExistence(app.collectionViews.cells[urlLabel])
     }
@@ -162,20 +168,19 @@ class TopTabsTest: BaseTestCase {
     func testCloseAllTabsPrivateMode() {
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(url)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
-        openNtabsFromTabTray(numTabs: 3)
-        navigator.goto(TabTray)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
 
-        waitforExistence(app.collectionViews.cells[urlLabel])
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 4)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
     }
-
+    // This test is disabled, this option is not shown now
     func testCloseTabFromPageOptionsMenu() {
         // Open two websites so that there are two tabs open and the page options menu is available
         navigator.openURL(urlValue)
@@ -244,14 +249,26 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         if skipPlatform { return }
         // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            waitforExistence(app.buttons["TabToolbar.tabsButton"])
+        }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         closeTabTrayView(goBackToBrowserTab: "home")
 
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            waitforExistence(app.buttons["TabToolbar.tabsButton"])
+        }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         closeTabTrayView(goBackToBrowserTab: "home")
 
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            waitforExistence(app.buttons["TabToolbar.tabsButton"])
+        }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         closeTabTrayView(goBackToBrowserTab: "home")
     }
@@ -317,14 +334,12 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         if skipPlatform { return }
 
         navigator.openURL(toastUrl["url"]!)
-
-        navigator.openURL(url)
         waitUntilPageLoad()
 
         app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
         waitforExistence(app.sheets.buttons["Open in New Tab"])
         app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
-        waitforExistence(app.buttons["Switch"])
+        waitforExistence(app.buttons["Switch"], timeout: 5)
         app.buttons["Switch"].tap()
 
         // Check that the tab has changed to the new open one and that the user is in private mode
