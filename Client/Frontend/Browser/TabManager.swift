@@ -439,7 +439,7 @@ class TabManager: NSObject {
     // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
     func selectParentTab(afterRemoving tab: Tab) -> Bool {
         let viableTabs = tab.isPrivate ? privateTabs : normalTabs
-        guard let parentTab = tab.parent, parentTab != tab, !viableTabs.isEmpty else { return false }
+        guard let parentTab = tab.parent, parentTab != tab, !viableTabs.isEmpty, viableTabs.contains(parentTab) else { return false }
 
         var parentTabIsMostRecentUsed = true
         for candidate in viableTabs {
