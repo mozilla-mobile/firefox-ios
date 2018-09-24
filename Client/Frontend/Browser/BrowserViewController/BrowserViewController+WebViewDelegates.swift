@@ -281,7 +281,10 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // If the content type is not HTML, create a temporary document so it can be downloaded and
         // shared to external applications later. Otherwise, clear the old temporary document.
-        if let tab = tabManager[webView] {
+        // NOTE: This should only happen if the request/response came from the main frame, otherwise
+        // we may end up overriding the "Share Page With..." action to share a temp file that is not
+        // representative of the contents of the web view.
+        if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
             if response.mimeType != MIMEType.HTML, let request = request {
                 tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
             } else {
