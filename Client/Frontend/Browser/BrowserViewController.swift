@@ -1537,6 +1537,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         return [privateBrowsingMode]
     }
+
     func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
         let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
@@ -1563,31 +1564,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         actions.append(getTabToolbarLongPressActions())
         actions.append(getMoreTabToolbarLongPressActions())
 
-        // force a modal if the menu is being displayed in compact split screen
+        // Force a modal if the menu is being displayed in compact split screen.
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
-/*
-        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newTab")
-        controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newPrivateTab")
-        controller.addAction(UIAlertAction(title: Strings.CloseTabTitle, style: .destructive, handler: { _ in
-            if let tab = self.tabManager.selectedTab {
-                self.tabManager.removeTabAndUpdateSelectedIndex(tab)
-            }
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.closeTab")
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "toolbarTabButtonLongPress.cancel")
-        controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
-        controller.popoverPresentationController?.sourceRect = button.frame
+
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        present(controller, animated: true, completion: nil)
-*/
+
+        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
     }
 
     func showBackForwardList() {
