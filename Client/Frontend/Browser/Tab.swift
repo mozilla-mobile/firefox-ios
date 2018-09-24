@@ -134,7 +134,7 @@ class Tab: NSObject {
     var screenshotUUID: UUID?
 
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
-    var parent: Tab?
+    weak var parent: Tab?
 
     fileprivate var contentScriptManager = TabContentScriptManager()
     private(set) var userScriptManager: UserScriptManager?
