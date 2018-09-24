@@ -160,7 +160,7 @@ class TopTabsViewController: UIViewController {
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
-        updateTabCount(tabDisplayManager.tabCount, animated: false)
+        updateTabCount(tabDisplayManager.tabsToDisplay.count, animated: false)
     }
 
     func switchForegroundStatus(isInForeground reveal: Bool) {
@@ -203,7 +203,7 @@ class TopTabsViewController: UIViewController {
     func scrollToCurrentTab(_ animated: Bool = true, centerCell: Bool = false) {
         assertIsMainThread("Only animate on the main thread")
 
-        guard let currentTab = tabManager.selectedTab, let index = tabDisplayManager.tabStore.index(of: currentTab), !collectionView.frame.isEmpty else {
+        guard let currentTab = tabManager.selectedTab, let index = tabDisplayManager.tabsToDisplay.index(of: currentTab), !collectionView.frame.isEmpty else {
             return
         }
         if let frame = collectionView.layoutAttributesForItem(at: IndexPath(row: index, section: 0))?.frame {
@@ -246,7 +246,7 @@ extension TopTabsViewController: TopTabCellDelegate {
         guard let index = collectionView.indexPath(for: cell)?.item else {
             return
         }
-        if let tab = self.tabDisplayManager.tabStore[safe: index] {
+        if let tab = self.tabDisplayManager.tabsToDisplay[safe: index] {
             tabManager.removeTabAndUpdateSelectedIndex(tab)
         }
 
