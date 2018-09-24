@@ -16,7 +16,7 @@ pipeline {
         stage('bootstrap') {
             steps {
                 sh '''
-                 carthage update --platform iOS
+                 carthage bootstrap --platform ios
                 '''
             }
         }
