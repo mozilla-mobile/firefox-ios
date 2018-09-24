@@ -531,7 +531,7 @@ class URLBar: UIView {
         let duration = UIConstants.layout.urlBarTransitionAnimationDuration / 2
 
         pageActionsButton.animateHidden(!visible, duration: duration)
-        shieldIcon.animateHidden(!visible, duration: duration)
+        
         self.layoutIfNeeded()
 
         UIView.animate(withDuration: duration) {
@@ -556,6 +556,7 @@ class URLBar: UIView {
         shouldPresent = false
         updateLockIcon()
         updateUrlIcons()
+        shieldIcon.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         toolset.settingsButton.isEnabled = true
         delegate?.urlBarDidFocus(self)
 
@@ -603,6 +604,7 @@ class URLBar: UIView {
         hideCancelConstraints.forEach { $0.activate() }
 
         if inBrowsingMode {
+            shieldIcon.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
             deleteButton.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         } else {
             deactivate()
