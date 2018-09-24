@@ -176,12 +176,19 @@ class TabManager: NSObject {
         return nil
     }
 
-    func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+    public func selectTab(_ tab: Tab?) {
+        _selectTab(tab, previous: nil)
+    }
+
+    private func _selectTab(_ tab: Tab?, previous: Tab?) {
         assert(Thread.isMainThread)
         let previous = previous ?? selectedTab
 
+        // It is incorrect to be in this state, but don't abort on release for this.
         if previous === tab {
-            return
+            let err = "selectTab called with next === previous tab."
+            Sentry.shared.send(message: err, severity: .fatal) // .fatal will report on release
+            assertionFailure(err)
         }
 
         // Make sure to wipe the private tabs if the user has the pref turned on
@@ -370,7 +377,7 @@ class TabManager: NSObject {
                 //normalTabs should never be nil
                 tab.isPrivate ? (nextTab = normalTabs.last!) : (nextTab = privateTabs.last!)
             }
-            selectTab(nextTab, previous: nil)
+            selectTab(nextTab)
         } else {
                 //this means currently on a normal tab and will need to open new blank private page
                 previousTab = tab
@@ -391,17 +398,17 @@ class TabManager: NSObject {
         let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
 
         if closedLastNormalTab {
-            selectTab(addTab(), previous: tab)
+            _selectTab(addTab(), previous: tab)
         } else if closedLastPrivateTab {
-            selectTab(tabs.last, previous: tab)
+            _selectTab(tabs.last, previous: tab)
         } else if !selectParentTab(afterRemoving: tab) {
             let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
             if let tabOnTheRight = viableTabs[safe: _selectedIndex] {
-                selectTab(tabOnTheRight, previous: tab)
+                _selectTab(tabOnTheRight, previous: tab)
             } else if let tabOnTheLeft = viableTabs[safe: _selectedIndex-1] {
-                selectTab(tabOnTheLeft, previous: tab)
+                _selectTab(tabOnTheLeft, previous: tab)
             } else {
-                selectTab(viableTabs.last, previous: tab)
+                _selectTab(viableTabs.last, previous: tab)
             }
         }
     }
@@ -451,7 +458,7 @@ class TabManager: NSObject {
         }
 
         if parentTabIsMostRecentUsed, parentTab.lastExecutedTime != nil {
-            selectTab(parentTab, previous: tab)
+            _selectTab(parentTab, previous: tab)
             return true
         }
         return false
