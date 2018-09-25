@@ -977,22 +977,25 @@ class BrowserViewController: UIViewController {
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
 
+    func focusLocationTextField(forTab tab: Tab?, setSearchText searchText: String? = nil) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
+            // Without a delay, the text field fails to become first responder
+            // Check that the newly created tab is still selected.
+            // This let's the user spam the Cmd+T button without lots of responder changes.
+            guard tab == self.tabManager.selectedTab else { return }
+            self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+            if let text = searchText {
+                self.urlBar.setLocation(text, search: true)
+            }
+        }
+    }
+
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
         let freshTab = tabManager.selectedTab
-
         if focusLocationField {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
-                // Without a delay, the text field fails to become first responder
-                // Check that the newly created tab is still selected.
-                // This let's the user spam the Cmd+T button without lots of responder changes.
-                guard freshTab == self.tabManager.selectedTab else { return }
-                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
-                if let text = searchText {
-                    self.urlBar.setLocation(text, search: true)
-                }
-            }
+            focusLocationTextField(forTab: freshTab, setSearchText: searchText)
         }
     }
 
@@ -1513,25 +1516,26 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         showTabTray()
     }
 
-    func getTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
-        var count = 1
+    func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonActionSheetItem] {
+        guard let selectedTab = tabManager.selectedTab else { return [] }
+        let count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
         let infinity = "\u{221E}"
-        if let selectedTab = tabManager.selectedTab {
-            count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
-        }
         let tabCount = (count < 100) ? count.description : infinity
 
-        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { action in
-            if let tab = self.tabManager.selectedTab {
-                if self.tabManager.switchTabMode(tab) {
-                    let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-                    self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
-                }
-            }}
-        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { action in
-            if let tab = self.tabManager.selectedTab {
-                _ = self.tabManager.switchTabMode(tab)
-            }}
+        func action() {
+            let result = tabManager.switchPrivacyMode()
+            if result == .createdNewTab, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
+                focusLocationTextField(forTab: tabManager.selectedTab)
+            }
+        }
+
+        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _ in
+                action()
+            }
+        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _ in
+                action()
+        }
+
         if let tab = self.tabManager.selectedTab {
             return tab.isPrivate ? [normalBrowsingMode] : [privateBrowsingMode]
         }
@@ -1561,7 +1565,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             return
         }
         var actions: [[PhotonActionSheetItem]] = []
-        actions.append(getTabToolbarLongPressActions())
+        actions.append(getTabToolbarLongPressActionsForModeSwitching())
         actions.append(getMoreTabToolbarLongPressActions())
 
         // Force a modal if the menu is being displayed in compact split screen.
@@ -1783,7 +1787,7 @@ extension BrowserViewController: TabManagerDelegate {
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
 
-            if tab.isPrivate != previous?.isPrivate {
+            if previous == nil || tab.isPrivate != previous?.isPrivate {
                 applyTheme()
 
                 let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
