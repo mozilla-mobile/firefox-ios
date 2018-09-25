@@ -1229,6 +1229,8 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
+        guard let tab = tabManager.selectedTab, let urlString = tab.url?.absoluteString, !urlBar.inOverlayMode else { return }
+
         let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
             self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
         }
@@ -1240,8 +1242,6 @@ extension BrowserViewController: URLBarDelegate {
         let successCallback: (String) -> Void = { (successMessage) in
             SimpleToast().showAlertWithText(successMessage, bottomContainer: self.webViewContainer)
         }
-
-        guard let tab = tabManager.selectedTab, let urlString = tab.url?.absoluteString else { return }
 
         let deferredBookmarkStatus: Deferred<Maybe<Bool>> = fetchBookmarkStatus(for: urlString)
         let deferredPinnedTopSiteStatus: Deferred<Maybe<Bool>> = fetchPinnedTopSiteStatus(for: urlString)
