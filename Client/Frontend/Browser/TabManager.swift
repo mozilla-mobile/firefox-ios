@@ -59,8 +59,8 @@ class TabManager: NSObject {
     }
 
     fileprivate(set) var tabs = [Tab]()
-    fileprivate var previousTab: Tab?
     fileprivate var _selectedIndex = -1
+
     fileprivate let navDelegate: TabManagerNavDelegate
 
     // A WKWebViewConfiguration used for normal tabs
@@ -358,27 +358,25 @@ class TabManager: NSObject {
         }
     }
 
-    //Switch between private browsing tab and normal tab
-    func switchTabMode (_ tab: Tab) -> Bool {
-        assert(Thread.isMainThread)
-        var nextTab: Tab
+    enum SwitchPrivacyModeResult { case createdNewTab; case usedExistingTab }
+    func switchPrivacyMode() -> SwitchPrivacyModeResult {
+        var result = SwitchPrivacyModeResult.usedExistingTab
+        guard let selectedTab = selectedTab else { return result }
+        let nextSelectedTab: Tab?
 
-        if privateTabs.last != nil {
-            //if a user switches modes and switches back, it should go back to the tab they were on
-            if previousTab != nil {
-                nextTab = previousTab!
-            } else {
-                //normalTabs should never be nil
-                tab.isPrivate ? (nextTab = normalTabs.last!) : (nextTab = privateTabs.last!)
-            }
-            selectTab(nextTab, previous: nil)
+        if selectedTab.isPrivate {
+            nextSelectedTab = mostRecentTab(inTabs: normalTabs)
         } else {
-                //this means currently on a normal tab and will need to open new blank private page
-                previousTab = tab
-                return true
+            if privateTabs.isEmpty {
+                nextSelectedTab = addTab(isPrivate: true)
+                result = .createdNewTab
+            } else {
+                nextSelectedTab = mostRecentTab(inTabs: privateTabs)
+            }
         }
-        previousTab = tab
-        return false
+
+        selectTab(nextSelectedTab)
+        return result
     }
 
     func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
@@ -439,17 +437,10 @@ class TabManager: NSObject {
 
     // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
     func selectParentTab(afterRemoving tab: Tab) -> Bool {
-        let viableTabs = tab.isPrivate ? privateTabs : normalTabs
+        let viableTabs = (tab.isPrivate ? privateTabs : normalTabs).filter { $0 != tab }
         guard let parentTab = tab.parent, parentTab != tab, !viableTabs.isEmpty, viableTabs.contains(parentTab) else { return false }
 
-        var parentTabIsMostRecentUsed = true
-        for candidate in viableTabs {
-            if let time = candidate.lastExecutedTime, time > (tab.lastExecutedTime ?? 0) {
-                // Found more-recent tab than the parent
-                parentTabIsMostRecentUsed = false
-                break
-            }
-        }
+        let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
 
         if parentTabIsMostRecentUsed, parentTab.lastExecutedTime != nil {
             selectTab(parentTab, previous: tab)
@@ -464,11 +455,11 @@ class TabManager: NSObject {
             _selectedIndex = -1
         }
 
-        tabs.filter { $0.isPrivate }.forEach { tab in
-                tab.closeAndRemovePrivateBrowsingData()
+        privateTabs.forEach { tab in
+            tab.closeAndRemovePrivateBrowsingData()
         }
 
-        tabs = tabs.filter { !$0.isPrivate }
+        tabs = normalTabs
     }
 
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
