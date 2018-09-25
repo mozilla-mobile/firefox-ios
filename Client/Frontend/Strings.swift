@@ -601,6 +601,8 @@ extension Strings {
 
     public static let ShareLoadInBackground = NSLocalizedString("ShareExtension.LoadInBackgroundAction.Title", value: "Load in Background", comment: "Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground.")
     public static let ShareLoadInBackgroundDone = NSLocalizedString("ShareExtension.LoadInBackgroundActionDone.Title", value: "Loading in Firefox", comment: "Share extension label shown after user has performed 'Load in Background' action.")
+
+    public static let ShareSendTabDialogTitle = NSLocalizedString("ShareExtension.SendTab.Title", value: "Send Tab", comment: "Title of the dialog that allows you to send a tab to a different device")
 }
 
 //passwordAutofill extension
