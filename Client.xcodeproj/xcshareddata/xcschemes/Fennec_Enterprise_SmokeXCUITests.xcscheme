@@ -461,6 +461,9 @@
                   Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
+                  Identifier = "PrivateBrowsingTestIpad">
+               </Test>
+               <Test
                   Identifier = "ReaderViewTest/testAddToReadingListFromPageOptionsMenu()">
                </Test>
                <Test

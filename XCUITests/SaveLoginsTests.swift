@@ -15,6 +15,7 @@ class SaveLoginTest: BaseTestCase {
     private func saveLogin() {
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
+        waitforExistence(app.buttons["submit"], timeout: 3)
         app.buttons["submit"].tap()
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
     }
@@ -48,7 +49,6 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, 0)
     }
 
-    // Test(smoketeset) disabled on iPhone schema due to bug 1488215
     func testSavedLoginSelectUnselect() {
         saveLogin()
         openLoginsSettings()

@@ -63,7 +63,8 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
         navigator.performAction(Action.Bookmark)
-        navigator.goto(NewTabScreen)
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         waitforExistence(app.tables["Bookmarks List"].cells.staticTexts["The Book of Mozilla"])
         waitforNoExistence(app.staticTexts["Highlights"])
     }
@@ -77,7 +78,8 @@ class NewTabSettingsTest: BaseTestCase {
 
         // Add one history item and check the new tab screen
         navigator.openURL("example.com")
-        navigator.goto(NewTabScreen)
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         waitforExistence(app.tables["History List"].cells.staticTexts["Example Domain"])
     }
 }
