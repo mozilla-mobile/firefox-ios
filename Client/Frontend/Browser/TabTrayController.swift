@@ -143,7 +143,7 @@ class TabTrayController: UIViewController {
     }
 
     func focusTab() {
-        guard let currentTab = tabManager.selectedTab, let index = tabDisplayManager.tabsToDisplay.index(of: currentTab), let rect = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame else {
+        guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.tabStore.index(of: currentTab), let rect = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame else {
             return
         }
         self.collectionView.scrollRectToVisible(rect, animated: false)
@@ -413,11 +413,13 @@ extension TabTrayController: UITextFieldDelegate {
             }
             return false
         }
-        tabDisplayManager.searchedTabs = filteredTabs
-        tabDisplayManager.performTabUpdates()
+        self.tabDisplayManager.searchActive = true
+        self.tabDisplayManager.searchedTabs = filteredTabs
+        self.tabDisplayManager.performTabUpdates()
     }
 
     func clearSearch() {
+        tabDisplayManager.searchActive = false
         tabDisplayManager.searchedTabs = []
         searchBar.text = ""
         ensureMainThread {
@@ -453,7 +455,7 @@ extension TabTrayController {
     }
 
     func closeTabsForCurrentTray() {
-        tabManager.removeTabsWithUndoToast(tabDisplayManager.tabsToDisplay)
+        tabManager.removeTabsWithUndoToast(tabDisplayManager.tabStore)
         if !tabDisplayManager.isPrivate {
             // when closing all tabs in normal mode we automatically open a new tab and focus it
             self.tabDisplayManager.performTabUpdates {
@@ -505,7 +507,7 @@ extension TabTrayController {
 
 extension TabTrayController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
-        if let tab = tabDisplayManager.tabsToDisplay[safe: index] {
+        if let tab = tabDisplayManager.tabStore[safe: index] {
             tabManager.selectTab(tab)
             dismissTabTray()
         }
@@ -554,7 +556,7 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
 extension TabTrayController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
         guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
-        if let tab = tabDisplayManager.tabsToDisplay[safe: indexPath.item] {
+        if let tab = tabDisplayManager.tabStore[safe: indexPath.item] {
             self.removeTab(tab: tab)
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
         }
@@ -563,7 +565,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
 
 extension TabTrayController: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
-        if let indexPath = collectionView.indexPath(for: cell), let tab = tabDisplayManager.tabsToDisplay[safe: indexPath.item] {
+        if let indexPath = collectionView.indexPath(for: cell), let tab = tabDisplayManager.tabStore[safe: indexPath.item] {
             self.removeTab(tab: tab)
         }
     }
@@ -580,7 +582,7 @@ extension TabTrayController: TabPeekDelegate {
     }
 
     func tabPeekDidCloseTab(_ tab: Tab) {
-        if let index = tabDisplayManager.tabsToDisplay.index(of: tab),
+        if let index = tabDisplayManager.tabStore.index(of: tab),
             let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: 0)) as? TabCell {
             cell.close()
         }
@@ -601,7 +603,7 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
         guard let indexPath = collectionView.indexPathForItem(at: convertedLocation),
             let cell = collectionView.cellForItem(at: indexPath) else { return nil }
 
-        guard let tab = tabDisplayManager.tabsToDisplay[safe: indexPath.row] else {
+        guard let tab = tabDisplayManager.tabStore[safe: indexPath.row] else {
             return nil
         }
         let tabVC = TabPeekViewController(tab: tab, delegate: self)
@@ -625,7 +627,7 @@ extension TabTrayController {
     func removeTab(tab: Tab) {
         // when removing the last tab (only in normal mode) we will automatically open a new tab.
         // When that happens focus it by dismissing the tab tray
-        let isLastTab = tabDisplayManager.tabsToDisplay.count == 1
+        let isLastTab = tabDisplayManager.tabStore.count == 1
         tabManager.removeTabAndUpdateSelectedIndex(tab)
         guard !tabDisplayManager.searchActive else { return }
         self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
