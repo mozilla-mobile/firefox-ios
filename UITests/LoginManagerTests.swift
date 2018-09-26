@@ -407,7 +407,8 @@ class LoginManagerTests: KIFTestCase {
         tester().scrollView(withAccessibilityIdentifier: "Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
         tester().scrollView(withAccessibilityIdentifier: "Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
         tester().scrollView(withAccessibilityIdentifier: "Login List", byFractionOfSizeHorizontal: 0, vertical: 1)
-
+        tester().wait(forTimeInterval: 1)
+        tester().waitForAnimationsToFinish()
         XCTAssertTrue(list.cellForRow(at: firstInEachSection[0])!.isSelected)
 
         firstInEachSection.forEach { path in
@@ -591,7 +592,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "password")
 
         let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
-
+        tester().waitForAnimationsToFinish()
         tester().tapView(withAccessibilityLabel: "Edit")
 
         // Check that we've selected the username field
@@ -666,6 +667,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "password")
 
         XCTAssertTrue(tester().viewExistsWithLabelPrefixedBy("Last modified"))
+        tester().wait(forTimeInterval: 1)
         tester().tapView(withAccessibilityLabel: "Logins")
         closeLoginManager()
     }
@@ -679,7 +681,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForView(withAccessibilityLabel: "password")
 
         let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
-
+        tester().wait(forTimeInterval: 1)
         tester().tapView(withAccessibilityLabel: "Edit")
 
         // Check that we've selected the username field
