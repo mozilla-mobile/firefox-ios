@@ -54,7 +54,7 @@ class ClientPickerViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("Send Tab", tableName: "SendTo", comment: "Title of the dialog that allows you to send a tab to a different device")
+        title = Strings.ShareSendTabDialogTitle
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(
