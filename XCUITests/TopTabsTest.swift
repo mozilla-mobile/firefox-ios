@@ -17,8 +17,8 @@ let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 class TopTabsTest: BaseTestCase {
     func testAddTabFromSettings() {
         navigator.createNewTab()
-        navigator.openURL(url)
-        waitForValueContains(app.textFields["url"], value: urlValue)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitForValueContains(app.textFields["url"], value: "localhost")
         waitforExistence(app.buttons["Show Tabs"])
         let numTab = app.buttons["Show Tabs"].value as? String
 
@@ -27,9 +27,9 @@ class TopTabsTest: BaseTestCase {
 
     func testAddTabFromTabTray() {
         navigator.goto(TabTray)
-        navigator.openURL(url)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: urlValue)
+        waitForValueContains(app.textFields["url"], value: "localhost")
         // The tabs counter shows the correct number
         let tabsOpen = app.buttons["Show Tabs"].value
         XCTAssertEqual("2", tabsOpen as? String)
@@ -66,14 +66,14 @@ class TopTabsTest: BaseTestCase {
 
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
-        navigator.openURL(url)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         navigator.goto(TabTray)
         navigator.openURL(urlExample)
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabel])
         app.collectionViews.cells[urlLabel].tap()
-        waitForValueContains(app.textFields["url"], value: urlValue)
+        waitForValueContains(app.textFields["url"], value: "localhost")
 
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
@@ -84,7 +84,7 @@ class TopTabsTest: BaseTestCase {
     }
 
     func testCloseOneTab() {
-        navigator.openURL(url)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.goto(TabTray)
 
@@ -245,6 +245,7 @@ fileprivate extension BaseTestCase {
 }
 
 class TopTabsTestIphone: IphoneOnlyTestCase {
+
     func testCloseTabFromLongPressTabsButton() {
         if skipPlatform { return }
         // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
