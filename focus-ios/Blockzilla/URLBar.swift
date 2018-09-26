@@ -586,8 +586,11 @@ class URLBar: UIView {
         }
     }
 
-    @objc func dismiss() {
-        guard isEditing else { return }
+    @objc func dismiss(completion: (() -> ())? = nil) {
+        guard isEditing else {
+            completion?()
+            return
+        }
 
         isEditing = false
         updateLockIcon()
@@ -606,8 +609,8 @@ class URLBar: UIView {
         }
 
         self.layoutIfNeeded()
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
 
+        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             if self.inBrowsingMode {
                 self.isEditingConstraints.forEach { $0.deactivate() }
                 // Reveal the URL bar buttons on iPad/landscape.
@@ -622,6 +625,8 @@ class URLBar: UIView {
             }
 
             self.layoutIfNeeded()
+        }) { ( _ ) in
+            completion?()
         }
     }
 

@@ -394,36 +394,34 @@ class BrowserViewController: UIViewController {
             if findInPageBar == nil {
                 Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.findInPageBar)
                 
-                urlBar.dismiss()
-                let findInPageBar = FindInPageBar()
-                self.findInPageBar = findInPageBar
-                let fillerView = UIView()
-                self.fillerView = fillerView
-                fillerView.backgroundColor = UIConstants.Photon.Grey70
-                findInPageBar.text = text
-                findInPageBar.delegate = self
-                
-                alertStackView.addArrangedSubview(findInPageBar)
-                mainContainerView.insertSubview(fillerView, belowSubview: browserToolbar)
-
-                updateViewConstraints()
-                
-                UIView.animate(withDuration: 2.0, animations: {
-                    findInPageBar.snp.makeConstraints { make in
+                urlBar.dismiss {
+                    // Start our animation after urlBar dismisses
+                    let findInPageBar = FindInPageBar()
+                    self.findInPageBar = findInPageBar
+                    let fillerView = UIView()
+                    self.fillerView = fillerView
+                    fillerView.backgroundColor = UIConstants.Photon.Grey70
+                    findInPageBar.text = text
+                    findInPageBar.delegate = self
+                    
+                    self.alertStackView.addArrangedSubview(findInPageBar)
+                    self.mainContainerView.insertSubview(fillerView, belowSubview: self.browserToolbar)
+                    
+                    findInPageBar.snp.makeConstraints{ make in
                         make.height.equalTo(UIConstants.ToolbarHeight)
                         make.leading.trailing.equalTo(self.alertStackView)
                         make.bottom.equalTo(self.alertStackView.snp.bottom)
                     }
-                }) { (_) in
                     fillerView.snp.makeConstraints { make in
                         make.top.equalTo(self.alertStackView.snp.bottom)
                         make.bottom.equalTo(self.view)
                         make.leading.trailing.equalTo(self.alertStackView)
                     }
+
+                    self.view.layoutIfNeeded()
+                    self.findInPageBar?.becomeFirstResponder()
                 }
             }
-            
-            self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
             findInPageBar.endEditing(true)
             webViewController.evaluate("__firefox__.findDone()", completion: nil)
