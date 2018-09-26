@@ -42,7 +42,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
-    static var textSelectionColor = UIColor()
+    static var textSelectionColor = URLBarColor.TextSelectionHighlight(labelMode: UIColor(), textFieldMode: nil)
 
     override var text: String? {
         didSet {
@@ -204,7 +204,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
         let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
-        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: AutocompleteTextField.textSelectionColor.withAlphaComponent(UIColor.theme.urlbar.textSelectionHighlightAlpha), range: NSRange(location: 0, length: suggestionText.count))
+
+        let color = AutocompleteTextField.textSelectionColor.labelMode
+        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: color, range: NSRange(location: 0, length: suggestionText.count))
+
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
         autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
         if let l = autocompleteTextLabel {

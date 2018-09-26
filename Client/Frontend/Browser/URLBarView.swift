@@ -810,11 +810,11 @@ extension ToolbarTextField: Themeable {
         backgroundColor = UIColor.theme.textField.background
         textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
-        tintColor = AutocompleteTextField.textSelectionColor
+        tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
     }
 
     // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
     static func applyUIMode(isPrivate: Bool) {
-       textSelectionColor = UIColor.theme.urlbar.activeBorder(isPrivate)
+       textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate)
     }
 }

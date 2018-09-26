@@ -61,14 +61,18 @@ class URLBarColor {
 
     // This text selection color is used in two ways:
     // 1) <UILabel>.background = textSelectionHighlight.withAlphaComponent(textSelectionHighlightAlpha)
-    // To simulate text highlighting when the URL bar is tapped once, this is a background color to create a simulated selected text effect. The color will have an alpha of 0.27 applied when assigning it to the background.
+    // To simulate text highlighting when the URL bar is tapped once, this is a background color to create a simulated selected text effect. The color will have an alpha applied when assigning it to the background.
     // 2) <UITextField>.tintColor = textSelectionHighlight.
     // When the text is in edit mode (tapping URL bar second time), this is assigned to the to set the selection (and cursor) color. The color is assigned directly to the tintColor.
-    // The built-in tintColor property changes the alpha of the assigned color to ~0.27, so textSelectionHighlight.withAlphaComponent(textSelectionHighlightAlpha) should produce a very similar color.
-    func textSelectionHighlight(_ isPrivate: Bool) -> UIColor {
-        return !isPrivate ? UIColor(rgb: 0x3d89cc) : UIColor.Defaults.MobilePrivatePurple
+    typealias TextSelectionHighlight = (labelMode: UIColor, textFieldMode: UIColor?)
+    func textSelectionHighlight(_ isPrivate: Bool) -> TextSelectionHighlight {
+        if isPrivate {
+            let color = UIColor.Defaults.MobilePrivatePurple
+            return (labelMode: color.withAlphaComponent(0.25), textFieldMode: color)
+        } else {
+            return (labelMode: UIColor.Defaults.iOSTextHighlightBlue, textFieldMode: nil)
+        }
     }
-    var textSelectionHighlightAlpha = CGFloat(0.27)
 
     var readerModeButtonSelected: UIColor { return UIColor.Photon.Blue40 }
     var readerModeButtonUnselected: UIColor { return UIColor.Photon.Grey50 }
