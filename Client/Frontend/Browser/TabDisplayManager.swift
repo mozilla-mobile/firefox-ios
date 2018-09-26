@@ -35,9 +35,8 @@ class TabDisplayManager: NSObject {
     let tabReuseIdentifer: String
 
     var searchedTabs: [Tab] = []
-    var searchActive: Bool = false
+    var searchActive: Bool { return !searchedTabs.isEmpty }
 
-    var tabStore: [Tab] = [] //the actual datastore
     fileprivate var pendingUpdatesToTabs: [Tab] = [] //the datastore we are transitioning to
     fileprivate var needReloads: [Tab?] = [] // Tabs that need to be reloaded
     fileprivate var completionBlocks: [CompletionBlock] = [] //blocks are performed once animations finish
@@ -46,11 +45,7 @@ class TabDisplayManager: NSObject {
     fileprivate var oldTabs: [Tab]? // The last state of the tabs before an animation
     fileprivate weak var oldSelectedTab: Tab? // Used to select the right tab when transitioning between private/normal tabs
 
-    var tabCount: Int {
-        return self.tabStore.count
-    }
-
-    private var tabsToDisplay: [Tab] {
+    var tabsToDisplay: [Tab] {
         if searchActive {
             // tabs can be deleted while a search is active. Make sure the tab still exists in the tabmanager before displaying
             return searchedTabs.filter({ tabManager.tabs.contains($0) })
@@ -68,7 +63,6 @@ class TabDisplayManager: NSObject {
 
         tabManager.addDelegate(self)
         self.tabObservers = registerFor(.didLoadFavicon, .didChangeURL, queue: .main)
-        self.tabStore = self.tabsToDisplay
     }
 
     // Once we are done with TabManager we need to call removeObservers to avoid a retain cycle with the observers
@@ -86,7 +80,7 @@ class TabDisplayManager: NSObject {
         let isTabTray = tabDisplayer as? TabTrayController != nil
         let eventValue = isTabTray ? UnifiedTelemetry.EventValue.tabTray : UnifiedTelemetry.EventValue.topTabs
         UnifiedTelemetry.recordEvent(category: .action, method: method, object: object, value: eventValue)
-        Sentry.shared.breadcrumb(category: "Tab Action", message: "object: \(object), action: \(method.rawValue), \(eventValue.rawValue), tab count: \(tabStore.count) ")
+        Sentry.shared.breadcrumb(category: "Tab Action", message: "object: \(object), action: \(method.rawValue), \(eventValue.rawValue), tab count: \(tabsToDisplay.count) ")
     }
 
     func togglePBM() {
@@ -116,11 +110,11 @@ class TabDisplayManager: NSObject {
 
 extension TabDisplayManager: UICollectionViewDataSource {
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return tabStore.count
+        return tabsToDisplay.count
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let tab = tabStore[indexPath.row]
+        let tab = tabsToDisplay[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
         if let tabCell = tabDisplayer?.cellFactory(for: cell, using: tab) {
             return tabCell
@@ -138,7 +132,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
 
 extension TabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
-        let tab = tabStore[index]
+        let tab = tabsToDisplay[index]
         if tabsToDisplay.index(of: tab) != nil {
             tabManager.selectTab(tab)
         }
@@ -186,9 +180,9 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
 
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         // We need to store the earliest oldTabs. So if one already exists use that.
-        self.oldTabs = self.oldTabs ?? tabStore
+        self.oldTabs = self.oldTabs ?? tabsToDisplay
 
-        let tab = tabStore[indexPath.item]
+        let tab = tabsToDisplay[indexPath.item]
 
         // Get the tab's current URL. If it is `nil`, check the `sessionData` since
         // it may be a tab that has not been restored yet.
@@ -222,7 +216,7 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
 @available(iOS 11.0, *)
 extension TabDisplayManager: UICollectionViewDropDelegate {
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = tabStore.index(of: tab) else {
+        guard let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = tabsToDisplay.index(of: tab) else {
             return
         }
 
@@ -243,7 +237,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
         // If the `isDragging` is not `true` by the time we get here, we've had other
         // add/remove operations happen while the drag was going on. We must return a
         // `.cancel` operation continuously until `isDragging` can be reset.
-        guard tabStore.index(of: tab) != nil, isDragging else {
+        guard tabsToDisplay.index(of: tab) != nil, isDragging else {
             return UICollectionViewDropProposal(operation: .cancel)
         }
 
@@ -255,7 +249,7 @@ extension TabDisplayManager: TabEventHandler {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
         assertIsMainThread("UICollectionView changes can only be performed from the main thread")
 
-        if tabStore.index(of: tab) != nil {
+        if tabsToDisplay.index(of: tab) != nil {
             needReloads.append(tab)
             performTabUpdates()
         }
@@ -264,7 +258,7 @@ extension TabDisplayManager: TabEventHandler {
     func tab(_ tab: Tab, didChangeURL url: URL) {
         assertIsMainThread("UICollectionView changes can only be performed from the main thread")
 
-        if tabStore.index(of: tab) != nil {
+        if tabsToDisplay.index(of: tab) != nil {
             needReloads.append(tab)
             performTabUpdates()
         }
@@ -361,8 +355,6 @@ extension TabDisplayManager {
 
         // The actual update block. We update the dataStore right before we do the UI updates.
         let updateBlock = {
-            self.tabStore = newTabs
-
             // Only consider moves if no other operations are pending.
             if update.deletes.count == 0, update.inserts.count == 0 {
                 for move in update.moves {
@@ -391,7 +383,7 @@ extension TabDisplayManager {
             }
 
             // There can be pending animations. Run update again to clear them.
-            let tabs = self.oldTabs ?? self.tabStore
+            let tabs = self.oldTabs ?? self.tabsToDisplay
             self.updateTabsFrom(tabs, to: self.tabsToDisplay, on: {
                 if !update.inserts.isEmpty || !update.reloads.isEmpty {
                     self.tabDisplayer?.focusSelectedTab()
@@ -432,7 +424,7 @@ extension TabDisplayManager {
 
         isUpdating = true
         isDragging = false
-        self.tabStore = self.tabsToDisplay
+
         self.flushPendingChanges()
         UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
             self.collectionView.reloadData()
@@ -467,7 +459,7 @@ extension TabDisplayManager: TabManagerDelegate {
         }
 
         let fromTabs = !self.pendingUpdatesToTabs.isEmpty ? self.pendingUpdatesToTabs : self.oldTabs
-        self.oldTabs = fromTabs ?? self.tabStore
+        oldTabs = fromTabs ?? tabsToDisplay
         if self.pendingReloadData && !isUpdating {
             self.reloadData()
         } else {
@@ -495,7 +487,7 @@ extension TabDisplayManager: TabManagerDelegate {
 
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
         // We need to store the earliest oldTabs. So if one already exists use that.
-        self.oldTabs = self.oldTabs ?? tabStore
+        oldTabs = oldTabs ?? tabsToDisplay
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
@@ -507,7 +499,7 @@ extension TabDisplayManager: TabManagerDelegate {
 
     func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {
         // We need to store the earliest oldTabs. So if one already exists use that.
-        self.oldTabs = self.oldTabs ?? tabStore
+        self.oldTabs = self.oldTabs ?? tabsToDisplay
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
