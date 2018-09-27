@@ -15,7 +15,8 @@ struct IntroUX {
     static let StartBrowsingButtonHeight = 56
     static let SignInButtonColor = UIColor.Photon.Blue40
     static let SignInButtonHeight = 60
-    static let PageControlHeight = 40
+    static let PageControlHeight = 50
+    static let PageControlWidth = 150
     static let SignInButtonWidth = 290
     static let CardTextWidth = UIScreen.main.bounds.width <= 320 ? 240 : 280
     static let FadeDuration = 0.25
@@ -116,6 +117,8 @@ class IntroViewController: UIViewController {
         pageControl.snp.makeConstraints { make in
             make.centerX.equalTo(self.scrollView)
             make.centerY.equalTo(self.startBrowsingButton.snp.top).offset(-IntroUX.PagerCenterOffsetFromScrollViewBottom)
+            make.height.equalTo(IntroUX.PageControlHeight)
+            make.width.equalTo(IntroUX.PageControlWidth)
         }
 
         createSlides()
