@@ -218,6 +218,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             let clearButton = createClearButton()
             self.clearButton = clearButton
             addSubview(clearButton)
+            clearButton.snp.makeConstraints { make in
+                make.height.centerY.equalToSuperview()
+                make.width.equalTo(40)
+                // Without this offset, the button moves 5 pixels when switching from UILabel mode to UITextField mode
+                make.right.equalToSuperview().offset(5)
+            }
         }
     }
 
@@ -247,11 +253,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let button = UIButton()
         button.setImage(UIImage.templateImageNamed("topTabs-closeTabs"), for: .normal)
         button.tintColor = self.textColor
-        button.backgroundColor = self.backgroundColor
-        let frame = CGRect(x: self.frame.width - 30, y: 0, width: 40, height: self.frame.height)
-        button.frame = frame
+        button.backgroundColor = backgroundColor
         button.addTarget(self, action: #selector(removeCompletion), for: .touchUpInside)
-        button.clipsToBounds = false
         return button
     }
 
