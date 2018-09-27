@@ -125,14 +125,21 @@ class BaseTestCase: XCTestCase {
 class IpadOnlyTestCase: BaseTestCase {
     override func setUp() {
         specificForPlatform = .pad
-        super.setUp()
+        if iPad() {
+            super.setUp()
+        }
+        else {return}
+
     }
 }
 
 class IphoneOnlyTestCase: BaseTestCase {
     override func setUp() {
         specificForPlatform = .phone
-        super.setUp()
+        if !iPad() {
+            super.setUp()
+        }
+        else {return}
     }
 }
 
