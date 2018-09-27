@@ -42,7 +42,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
-    static var textSelectionColor = UIColor()
+    static var textSelectionColor = URLBarColor.TextSelectionHighlight(labelMode: UIColor(), textFieldMode: nil)
 
     override var text: String? {
         didSet {
@@ -204,7 +204,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
         let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
-        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: AutocompleteTextField.textSelectionColor.withAlphaComponent(UIColor.theme.urlbar.textSelectionHighlightAlpha), range: NSRange(location: 0, length: suggestionText.count))
+
+        let color = AutocompleteTextField.textSelectionColor.labelMode
+        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: color, range: NSRange(location: 0, length: suggestionText.count))
+
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
         autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
         if let l = autocompleteTextLabel {
@@ -218,6 +221,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             let clearButton = createClearButton()
             self.clearButton = clearButton
             addSubview(clearButton)
+            clearButton.snp.makeConstraints { make in
+                make.height.centerY.equalToSuperview()
+                make.width.equalTo(40)
+                // Without this offset, the button moves 5 pixels when switching from UILabel mode to UITextField mode
+                make.right.equalToSuperview().offset(5)
+            }
         }
     }
 
@@ -247,11 +256,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let button = UIButton()
         button.setImage(UIImage.templateImageNamed("topTabs-closeTabs"), for: .normal)
         button.tintColor = self.textColor
-        button.backgroundColor = self.backgroundColor
-        let frame = CGRect(x: self.frame.width - 30, y: 0, width: 40, height: self.frame.height)
-        button.frame = frame
+        button.backgroundColor = backgroundColor
         button.addTarget(self, action: #selector(removeCompletion), for: .touchUpInside)
-        button.clipsToBounds = false
         return button
     }
 
