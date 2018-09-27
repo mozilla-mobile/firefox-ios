@@ -6,6 +6,7 @@ import XCTest
 
 class ReaderViewTest: BaseTestCase {
     func testLoadReaderContent() {
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         app.buttons["Reader View"].tap()
         app.buttons["Reload"].tap()
@@ -15,6 +16,7 @@ class ReaderViewTest: BaseTestCase {
     }
 
     private func addContentToReaderView() {
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
         app.buttons["Reader View"].tap()
@@ -56,6 +58,8 @@ class ReaderViewTest: BaseTestCase {
     func testAddToReadingListPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         // Initially reading list is empty
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_ReadingList)
 
         // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
@@ -154,6 +158,7 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
 
         // Add item to Reading List from Page Options Menu
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
         navigator.browserPerformAction(.addReadingListOption)

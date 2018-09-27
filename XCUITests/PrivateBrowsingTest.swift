@@ -120,6 +120,7 @@ class PrivateBrowsingTest: BaseTestCase {
         // See scenario described in bug 1434545 for more info about this scenario
         enableClosePrivateBrowsingOptionWhenLeaving()
         navigator.openURL(urlExample)
+        waitUntilPageLoad()
         app.webViews.links.staticTexts["More information..."].press(forDuration: 3)
         app.buttons["Open in New Private Tab"].tap()
         waitUntilPageLoad()

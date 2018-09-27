@@ -60,9 +60,8 @@ class NewTabSettingsTest: BaseTestCase {
         waitforExistence(app.otherElements.images["emptyBookmarks"])
 
         // Add one bookmark and check the new tab screen
-        navigator.openURL("mozilla.org/en-US/book")
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
-        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.Bookmark)
         navigator.goto(NewTabScreen)
         waitforExistence(app.tables["Bookmarks List"].cells.staticTexts["The Book of Mozilla"])

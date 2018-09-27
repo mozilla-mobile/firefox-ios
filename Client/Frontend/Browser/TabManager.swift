@@ -59,8 +59,8 @@ class TabManager: NSObject {
     }
 
     fileprivate(set) var tabs = [Tab]()
-    fileprivate var previousTab: Tab?
     fileprivate var _selectedIndex = -1
+
     fileprivate let navDelegate: TabManagerNavDelegate
 
     // A WKWebViewConfiguration used for normal tabs
@@ -194,6 +194,7 @@ class TabManager: NSObject {
         } else {
             _selectedIndex = -1
         }
+        assert(_selectedIndex > -1, "Tab expected to be in `tabs`")
 
         store.preserveTabs(tabs, selectedTab: selectedTab)
 
@@ -357,27 +358,25 @@ class TabManager: NSObject {
         }
     }
 
-    //Switch between private browsing tab and normal tab
-    func switchTabMode (_ tab: Tab) -> Bool {
-        assert(Thread.isMainThread)
-        var nextTab: Tab
+    enum SwitchPrivacyModeResult { case createdNewTab; case usedExistingTab }
+    func switchPrivacyMode() -> SwitchPrivacyModeResult {
+        var result = SwitchPrivacyModeResult.usedExistingTab
+        guard let selectedTab = selectedTab else { return result }
+        let nextSelectedTab: Tab?
 
-        if privateTabs.last != nil {
-            //if a user switches modes and switches back, it should go back to the tab they were on
-            if previousTab != nil {
-                nextTab = previousTab!
-            } else {
-                //normalTabs should never be nil
-                tab.isPrivate ? (nextTab = normalTabs.last!) : (nextTab = privateTabs.last!)
-            }
-            selectTab(nextTab, previous: nil)
+        if selectedTab.isPrivate {
+            nextSelectedTab = mostRecentTab(inTabs: normalTabs)
         } else {
-                //this means currently on a normal tab and will need to open new blank private page
-                previousTab = tab
-                return true
+            if privateTabs.isEmpty {
+                nextSelectedTab = addTab(isPrivate: true)
+                result = .createdNewTab
+            } else {
+                nextSelectedTab = mostRecentTab(inTabs: privateTabs)
+            }
         }
-        previousTab = tab
-        return false
+
+        selectTab(nextSelectedTab)
+        return result
     }
 
     func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
@@ -438,17 +437,10 @@ class TabManager: NSObject {
 
     // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
     func selectParentTab(afterRemoving tab: Tab) -> Bool {
-        let viableTabs = tab.isPrivate ? privateTabs : normalTabs
-        guard let parentTab = tab.parent, parentTab != tab, !viableTabs.isEmpty else { return false }
+        let viableTabs = (tab.isPrivate ? privateTabs : normalTabs).filter { $0 != tab }
+        guard let parentTab = tab.parent, parentTab != tab, !viableTabs.isEmpty, viableTabs.contains(parentTab) else { return false }
 
-        var parentTabIsMostRecentUsed = true
-        for candidate in viableTabs {
-            if let time = candidate.lastExecutedTime, time > (tab.lastExecutedTime ?? 0) {
-                // Found more-recent tab than the parent
-                parentTabIsMostRecentUsed = false
-                break
-            }
-        }
+        let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
 
         if parentTabIsMostRecentUsed, parentTab.lastExecutedTime != nil {
             selectTab(parentTab, previous: tab)
@@ -463,11 +455,11 @@ class TabManager: NSObject {
             _selectedIndex = -1
         }
 
-        tabs.filter { $0.isPrivate }.forEach { tab in
-                tab.closeAndRemovePrivateBrowsingData()
+        privateTabs.forEach { tab in
+            tab.closeAndRemovePrivateBrowsingData()
         }
 
-        tabs = tabs.filter { !$0.isPrivate }
+        tabs = normalTabs
     }
 
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
@@ -478,16 +470,14 @@ class TabManager: NSObject {
         var tabsCopy = tabs
 
         // Remove the current tab last to prevent switching tabs while removing tabs
-        if let selectedTab = selectedTab {
-            if let selectedIndex = tabsCopy.index(of: selectedTab) {
-                let removed = tabsCopy.remove(at: selectedIndex)
-                removeTabs(tabsCopy)
-                removeTabAndUpdateSelectedIndex(removed)
-            } else {
-                removeTabs(tabsCopy)
-                if normalTabs.isEmpty {
-                    selectTab(addTab())
-                }
+        if let selectedTab = selectedTab, let selectedIndex = tabsCopy.index(of: selectedTab) {
+            let removed = tabsCopy.remove(at: selectedIndex)
+            removeTabs(tabsCopy)
+            removeTabAndUpdateSelectedIndex(removed)
+        } else {
+            removeTabs(tabsCopy)
+            if normalTabs.isEmpty {
+                selectTab(addTab())
             }
         }
         for tab in tabs {
@@ -595,8 +585,6 @@ extension TabManager {
     }
 
     func restoreTabs() {
-        guard !AppConstants.IsRunningTest else { return }
-
         defer {
             // Always make sure there is a single normal tab.
             if normalTabs.isEmpty {
@@ -606,7 +594,7 @@ extension TabManager {
                 }
             }
         }
-        guard count == 0, !DebugSettingsBundleOptions.skipSessionRestore, store.hasTabsToRestoreAtStartup else {
+        guard count == 0, !AppConstants.IsRunningTest, !DebugSettingsBundleOptions.skipSessionRestore, store.hasTabsToRestoreAtStartup else {
             return
         }
 

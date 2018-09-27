@@ -66,6 +66,18 @@ extension UIImage {
         return UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
     }
 
+    // Uses compositor blending to apply color to an image.
+    public func tinted(withColor: UIColor) -> UIImage {
+        let img2 = UIImage.createWithColor(size, color: withColor)
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let result = renderer.image { ctx in
+            img2.draw(in: rect, blendMode: .normal, alpha: 1)
+            draw(in: rect, blendMode: .destinationIn, alpha: 1)
+        }
+        return result
+    }
+
     // TESTING ONLY: not for use in release/production code.
     // PNG comparison can return false negatives, be very careful using for non-equal comparison.
     // PNG comparison requires UIImages to be constructed the same way in order for the metadata block to match,

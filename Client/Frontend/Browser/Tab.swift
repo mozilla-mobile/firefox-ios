@@ -11,6 +11,16 @@ import XCGLogger
 
 fileprivate var debugTabCount = 0
 
+func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
+    var recent = tabs.first
+    tabs.forEach { tab in
+        if let time = tab.lastExecutedTime, time > (recent?.lastExecutedTime ?? 0) {
+            recent = tab
+        }
+    }
+    return recent
+}
+
 protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
@@ -134,7 +144,7 @@ class Tab: NSObject {
     var screenshotUUID: UUID?
 
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
-    var parent: Tab?
+    weak var parent: Tab?
 
     fileprivate var contentScriptManager = TabContentScriptManager()
     private(set) var userScriptManager: UserScriptManager?

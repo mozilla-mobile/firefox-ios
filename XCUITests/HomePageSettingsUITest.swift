@@ -44,11 +44,13 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(SettingsScreen)
         // Check that it is not saved
         navigator.goto(HomePageSettings)
+        waitforExistence(app.textFields["HomePageSettingTextField"])
         let valueAfter = app.textFields["HomePageSettingTextField"].value
         XCTAssertEqual("Enter a webpage", valueAfter as! String)
 
         // There is no option to go to Home, instead the website open has the option to be set as HomePageSettings
-        navigator.openURL(websiteUrl1)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         let homePageMenuItem = app.tables["Context Menu"].cells["Open Homepage"]
         XCTAssertFalse(homePageMenuItem.exists)
@@ -83,6 +85,7 @@ class HomePageSettingsUITests: BaseTestCase {
         app.textFields["address"].press(forDuration: 5)
         app.menuItems["Select All"].tap()
         app.menuItems["Copy"].tap()
+        waitforExistence(app.buttons["goBack"])
         app.buttons["goBack"].tap()
 
         // Go to HomePage settings and check that it is not possible to copy it into the set webpage field

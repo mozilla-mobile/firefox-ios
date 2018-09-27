@@ -977,22 +977,25 @@ class BrowserViewController: UIViewController {
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
 
+    func focusLocationTextField(forTab tab: Tab?, setSearchText searchText: String? = nil) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
+            // Without a delay, the text field fails to become first responder
+            // Check that the newly created tab is still selected.
+            // This let's the user spam the Cmd+T button without lots of responder changes.
+            guard tab == self.tabManager.selectedTab else { return }
+            self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+            if let text = searchText {
+                self.urlBar.setLocation(text, search: true)
+            }
+        }
+    }
+
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
         popToBVC()
         openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
         let freshTab = tabManager.selectedTab
-
         if focusLocationField {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
-                // Without a delay, the text field fails to become first responder
-                // Check that the newly created tab is still selected.
-                // This let's the user spam the Cmd+T button without lots of responder changes.
-                guard freshTab == self.tabManager.selectedTab else { return }
-                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
-                if let text = searchText {
-                    self.urlBar.setLocation(text, search: true)
-                }
-            }
+            focusLocationTextField(forTab: freshTab, setSearchText: searchText)
         }
     }
 
@@ -1229,6 +1232,8 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton) {
+        guard let tab = tabManager.selectedTab, let urlString = tab.url?.absoluteString, !urlBar.inOverlayMode else { return }
+
         let actionMenuPresenter: (URL, Tab, UIView, UIPopoverArrowDirection) -> Void  = { (url, tab, view, _) in
             self.presentActivityViewController(url, tab: tab, sourceView: view, sourceRect: view.bounds, arrowDirection: .up)
         }
@@ -1240,8 +1245,6 @@ extension BrowserViewController: URLBarDelegate {
         let successCallback: (String) -> Void = { (successMessage) in
             SimpleToast().showAlertWithText(successMessage, bottomContainer: self.webViewContainer)
         }
-
-        guard let tab = tabManager.selectedTab, let urlString = tab.url?.absoluteString else { return }
 
         let deferredBookmarkStatus: Deferred<Maybe<Bool>> = fetchBookmarkStatus(for: urlString)
         let deferredPinnedTopSiteStatus: Deferred<Maybe<Bool>> = fetchPinnedTopSiteStatus(for: urlString)
@@ -1513,30 +1516,32 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         showTabTray()
     }
 
-    func getTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
-        var count = 1
+    func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonActionSheetItem] {
+        guard let selectedTab = tabManager.selectedTab else { return [] }
+        let count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
         let infinity = "\u{221E}"
-        if let selectedTab = tabManager.selectedTab {
-            count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
-        }
         let tabCount = (count < 100) ? count.description : infinity
 
-        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { action in
-            if let tab = self.tabManager.selectedTab {
-                if self.tabManager.switchTabMode(tab) {
-                    let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-                    self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
-                }
-            }}
-        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { action in
-            if let tab = self.tabManager.selectedTab {
-                _ = self.tabManager.switchTabMode(tab)
-            }}
+        func action() {
+            let result = tabManager.switchPrivacyMode()
+            if result == .createdNewTab, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
+                focusLocationTextField(forTab: tabManager.selectedTab)
+            }
+        }
+
+        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _ in
+                action()
+            }
+        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _ in
+                action()
+        }
+
         if let tab = self.tabManager.selectedTab {
             return tab.isPrivate ? [normalBrowsingMode] : [privateBrowsingMode]
         }
         return [privateBrowsingMode]
     }
+
     func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
         let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
@@ -1560,34 +1565,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             return
         }
         var actions: [[PhotonActionSheetItem]] = []
-        actions.append(getTabToolbarLongPressActions())
+        actions.append(getTabToolbarLongPressActionsForModeSwitching())
         actions.append(getMoreTabToolbarLongPressActions())
 
-        // force a modal if the menu is being displayed in compact split screen
+        // Force a modal if the menu is being displayed in compact split screen.
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
-/*
-        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: Strings.NewTabTitle, style: .default, handler: { _ in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newTab")
-        controller.addAction(UIAlertAction(title: Strings.NewPrivateTabTitle, style: .default, handler: { _ in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.newPrivateTab")
-        controller.addAction(UIAlertAction(title: Strings.CloseTabTitle, style: .destructive, handler: { _ in
-            if let tab = self.tabManager.selectedTab {
-                self.tabManager.removeTabAndUpdateSelectedIndex(tab)
-            }
-        }), accessibilityIdentifier: "toolbarTabButtonLongPress.closeTab")
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "toolbarTabButtonLongPress.cancel")
-        controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
-        controller.popoverPresentationController?.sourceRect = button.frame
+
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        present(controller, animated: true, completion: nil)
-*/
+
+        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
     }
 
     func showBackForwardList() {
@@ -1800,7 +1787,7 @@ extension BrowserViewController: TabManagerDelegate {
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
 
-            if tab.isPrivate != previous?.isPrivate {
+            if previous == nil || tab.isPrivate != previous?.isPrivate {
                 applyTheme()
 
                 let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]

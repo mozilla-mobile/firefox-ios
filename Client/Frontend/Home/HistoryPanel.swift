@@ -185,15 +185,15 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func resyncHistory() {
-        profile.syncManager.syncHistory().uponQueue(.main) { result in
-            self.endRefreshing()
-
-            if result.isSuccess {
-                self.reloadData()
-            }
-
+        profile.syncManager.syncHistory().uponQueue(.main) { syncResult in
             self.updateSyncedDevicesCount().uponQueue(.main) { result in
+                self.endRefreshing()
+
                 self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
+
+                if syncResult.isSuccess {
+                    self.reloadData()
+                }
             }
         }
     }

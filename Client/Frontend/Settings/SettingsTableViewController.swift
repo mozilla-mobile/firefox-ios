@@ -192,7 +192,7 @@ class BoolSetting: Setting {
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
 
-        let control = UISwitch()
+        let control = UISwitchThemed()
         control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
@@ -507,7 +507,7 @@ class SettingsTableViewController: ThemedTableViewController {
     /// Used to calculate cell heights.
     fileprivate lazy var dummyToggleCell: UITableViewCell = {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "dummyCell")
-        cell.accessoryView = UISwitch()
+        cell.accessoryView = UISwitchThemed()
         return cell
     }()
 
