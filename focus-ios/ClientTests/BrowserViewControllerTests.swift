@@ -53,47 +53,6 @@ class BrowserViewControllerTests: XCTestCase {
         bvc.requestReviewIfNecessary()
         XCTAssert(mockUserDefaults.integer(forKey: UIConstants.strings.userDefaultsLaunchThresholdKey) == 114)
     }
-
-    func testShareButtonPreviouslyInGroup() {
-        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
-        mockUserDefaults.clear()
-        mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-        mockUserDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
-        
-        let shouldShow = bvc.shouldShowTips(percent: 100, userDefaults: mockUserDefaults)
-        XCTAssertTrue(shouldShow)
-        
-    }
-    
-    func testShareButtonPreviouslyOutGroup() {
-        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
-        mockUserDefaults.clear()
-        mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-        mockUserDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
-        
-        let shouldShow = bvc.shouldShowTips(percent: 100, userDefaults: mockUserDefaults)
-        XCTAssertTrue(shouldShow)
-    }
-    
-    func testShareButtonInGroup() {
-        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
-        mockUserDefaults.clear()
-        mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-        mockUserDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-        
-        let shouldShow = bvc.shouldShowTips(percent: 100, userDefaults: mockUserDefaults)
-        XCTAssertTrue(shouldShow)
-    }
-    
-    func testShareButtonOutGroup() {
-        let bvc = BrowserViewController(appSplashController: TestAppSplashController())
-        mockUserDefaults.clear()
-        mockUserDefaults.set(10, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
-        mockUserDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-        
-        let shouldShow = bvc.shouldShowTips(percent: 100, userDefaults: mockUserDefaults)
-        XCTAssertFalse(shouldShow)
-    }
 }
 
 fileprivate class MockUserDefaults: UserDefaults {

@@ -297,7 +297,7 @@ class BrowserViewController: UIViewController {
 
     private func createHomeView() {
         let homeView: HomeView
-        if canShowTips() && shouldShowTips() {
+        if canShowTips() {
             homeView = HomeView(tipManager: tipManager)
         }
         else {
@@ -697,45 +697,6 @@ class BrowserViewController: UIViewController {
 
     func canShowTips() -> Bool {
         return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
-    }
-
-    var showTrackerSemaphore = DispatchSemaphore(value: 1)
-    func flipCoinForShowTrackerButton(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) {
-        showTrackerSemaphore.wait()
-
-        var shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
-
-        if shouldShowTipsToUser == nil {
-            // Check to see if the user was previously opted into the experiment
-            shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD) as! Bool?
-
-            if shouldShowTipsToUser != nil {
-                // Remove the old flag
-                userDefaults.removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
-            }
-
-            if shouldShowTipsToUser == true {
-                // User has already been opted into the experiment, continue showing the share button
-                userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-            } else {
-                // User has not been put into a bucket for determining if it should be shown
-                // 50% chance they get put into the group that sees the share button
-                // arc4random_uniform(100) returns an integer 0 through 99 (inclusive)
-                if arc4random_uniform(100) < percent {
-                    userDefaults.set(true, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-                } else {
-                    userDefaults.set(false, forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-                }
-            }
-        }
-
-        showTrackerSemaphore.signal()
-    }
-
-    func shouldShowTips(percent: Int = 50, userDefaults:UserDefaults = UserDefaults.standard) -> Bool {
-        flipCoinForShowTrackerButton(percent:percent, userDefaults:userDefaults)
-        let shouldShowTipsToUser = userDefaults.object(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) as! Bool?
-        return shouldShowTipsToUser == true
     }
     
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
