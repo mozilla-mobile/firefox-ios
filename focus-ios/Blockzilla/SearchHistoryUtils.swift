@@ -71,6 +71,7 @@ class SearchHistoryUtils {
             
             for index in 0..<currentStack.count {
                 if (currentStack[index].isCurrentSearch && index + 1 < currentStack.count) {
+                  
                     currentStack[index + 1].isCurrentSearch = true
                     currentStack[index].isCurrentSearch = false
                     break
@@ -93,6 +94,7 @@ class SearchHistoryUtils {
                     
                     currentStack[index - 1].isCurrentSearch = true
                     currentStack[index].isCurrentSearch = false
+                    break
                 }
             }
             let propertylistSearchesWrite = currentStack.map{ $0.propertyListRepresentation }
