@@ -128,8 +128,6 @@ class IpadOnlyTestCase: BaseTestCase {
         if iPad() {
             super.setUp()
         }
-        else {return}
-
     }
 }
 
@@ -139,7 +137,6 @@ class IphoneOnlyTestCase: BaseTestCase {
         if !iPad() {
             super.setUp()
         }
-        else {return}
     }
 }
 
