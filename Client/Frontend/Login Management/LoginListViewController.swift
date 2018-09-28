@@ -47,7 +47,7 @@ class LoginListViewController: SensitiveViewController {
 
     fileprivate var activeLoginQuery: Deferred<Maybe<[Login]>>?
 
-    fileprivate let loadingStateView = LoadingLoginsView()
+    fileprivate let loadingView = SettingsLoadingView()
 
     fileprivate var deleteAlert: UIAlertController?
 
@@ -100,10 +100,10 @@ class LoginListViewController: SensitiveViewController {
 
         view.addSubview(searchView)
         view.addSubview(tableView)
-        view.addSubview(loadingStateView)
+        view.addSubview(loadingView)
         view.addSubview(selectionButton)
 
-        loadingStateView.isHidden = true
+        loadingView.isHidden = true
 
         searchView.snp.makeConstraints { make in
             make.top.equalTo(self.topLayoutGuide.snp.bottom)
@@ -124,7 +124,7 @@ class LoginListViewController: SensitiveViewController {
             selectionButtonHeightConstraint = make.height.equalTo(0).constraint
         }
 
-        loadingStateView.snp.makeConstraints { make in
+        loadingView.snp.makeConstraints { make in
             make.edges.equalTo(tableView)
         }
     }
@@ -144,8 +144,8 @@ class LoginListViewController: SensitiveViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.loginDataSource.emptyStateView.searchBarHeight = searchView.frame.height
-        self.loadingStateView.searchBarHeight = searchView.frame.height
+        loginDataSource.emptyStateView.searchBarHeight = searchView.frame.height
+        loadingView.searchBarHeight = searchView.frame.height
     }
 
     deinit {
@@ -196,12 +196,12 @@ private extension LoginListViewController {
     }
 
     func loadLogins(_ query: String? = nil) {
-        loadingStateView.isHidden = false
+        loadingView.isHidden = false
 
         // Fill in an in-flight query and re-query
         activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
         activeLoginQuery = queryLogins(query ?? "")
-        activeLoginQuery! >>== self.loginDataSource.setLogins
+        activeLoginQuery! >>== loginDataSource.setLogins
     }
 
     @objc func beginEditing() {
@@ -271,7 +271,8 @@ private extension LoginListViewController {
 // MARK: - LoginDataSourceObserver
 extension LoginListViewController: LoginDataSourceObserver {
     func loginSectionsDidUpdate() {
-        loadingStateView.isHidden = true
+        sleep(5)
+        loadingView.isHidden = true
         tableView.reloadData()
         activeLoginQuery = nil
         navigationItem.rightBarButtonItem?.isEnabled = loginDataSource.count > 0
@@ -598,37 +599,4 @@ fileprivate class NoLoginsView: UIView {
     }
 }
 
-/// View to display to the user while we are loading the logins
-fileprivate class LoadingLoginsView: UIView {
 
-    var searchBarHeight: CGFloat = 0 {
-        didSet {
-            setNeedsUpdateConstraints()
-        }
-    }
-
-    lazy var indicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-        indicator.hidesWhenStopped = false
-        return indicator
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSubview(indicator)
-        backgroundColor = UIColor.Photon.White100
-        indicator.startAnimating()
-    }
-
-    fileprivate override func updateConstraints() {
-        super.updateConstraints()
-        indicator.snp.remakeConstraints { make in
-            make.centerX.equalTo(self)
-            make.centerY.equalTo(self).offset(-(searchBarHeight / 2))
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
