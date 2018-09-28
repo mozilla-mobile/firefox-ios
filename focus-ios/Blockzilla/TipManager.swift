@@ -84,6 +84,8 @@ class TipManager {
         }
         if canShowTip(with: tip.identifier) {
             return tip
+        } else if possibleTips.count == 1 {
+            return nil
         } else {
             return fetchTip()
         }
