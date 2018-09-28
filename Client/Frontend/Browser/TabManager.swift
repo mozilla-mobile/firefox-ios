@@ -380,8 +380,12 @@ class TabManager: NSObject {
     }
 
     func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
-        removeTab(tab, flushToDisk: true, notify: true)
+        removeTab(tab, flushToDisk: true)
         updateIndexAfterRemovalOf(tab)
+
+        delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
+        TabEvent.post(.didClose, for: tab)
+
         hideNetworkActivitySpinner()
     }
 
@@ -405,9 +409,7 @@ class TabManager: NSObject {
         }
     }
 
-    /// - Parameter notify: if set to true, will call the delegate after the tab
-    ///   is removed.
-    fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool, notify: Bool) {
+    fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool) {
         assert(Thread.isMainThread)
 
         guard let removalIndex = tabs.index(where: { $0 === tab }) else {
@@ -415,20 +417,13 @@ class TabManager: NSObject {
             return
         }
 
-        if notify {
-            delegates.forEach { $0.get()?.tabManager(self, willRemoveTab: tab) }
-        }
+        delegates.forEach { $0.get()?.tabManager(self, willRemoveTab: tab) }
 
         let prevCount = count
         tabs.remove(at: removalIndex)
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")
 
         tab.closeAndRemovePrivateBrowsingData()
-
-        if notify {
-            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
-            TabEvent.post(.didClose, for: tab)
-        }
 
         if flushToDisk {
             storeChanges()
@@ -528,7 +523,7 @@ class TabManager: NSObject {
 
     func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false, notify: true)
+            self.removeTab(tab, flushToDisk: false)
         }
         storeChanges()
     }
