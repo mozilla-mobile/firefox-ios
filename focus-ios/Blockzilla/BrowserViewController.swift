@@ -1041,6 +1041,8 @@ extension BrowserViewController: BrowserToolsetDelegate {
 extension BrowserViewController: HomeViewDelegate {
     
     func shareTrackerStatsButtonTapped() {
+        guard let trackerStatsShareButton = homeView?.trackerStatsShareButton else { return }
+        
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
         
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
@@ -1049,6 +1051,10 @@ extension BrowserViewController: HomeViewDelegate {
         let shareTrackerStatsText = "%@, the privacy browser from Mozilla, has already blocked %@ trackers for me. Fewer ads and trackers following me around means faster browsing! Get Focus for yourself here"
         let text = String(format: shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
         let shareController = UIActivityViewController(activityItems: [text, appStoreUrl as Any], applicationActivities: nil)
+        // Exact frame dimensions taken from presentPhotonActionSheet
+        shareController.popoverPresentationController?.sourceView = trackerStatsShareButton
+        shareController.popoverPresentationController?.sourceRect = CGRect(x: trackerStatsShareButton.frame.width/2, y: 0, width: 1, height: 1)
+        
         present(shareController, animated: true)
     }
     
