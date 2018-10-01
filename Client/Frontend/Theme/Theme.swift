@@ -187,6 +187,7 @@ class SnackBarColor {
 }
 
 class GeneralColor {
+    var faviconBackground: UIColor { return UIColor.clear }
     var passcodeDot: UIColor { return UIColor.Photon.Grey60 }
     var highlightBlue: UIColor { return UIColor.Photon.Blue40 }
     var destructiveRed: UIColor { return UIColor.Photon.Red50 }
