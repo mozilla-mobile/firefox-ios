@@ -32,7 +32,9 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         footer.showBottomBorder = false
         tableView.tableFooterView = footer
 
-        updateConstraints()
+        tableView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -45,10 +47,6 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
             cell.textLabel?.text = record.displayName
         }
         return cell
-    }
-
-    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        return true
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -79,12 +77,6 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         })
 
         tableView.reloadData()
-    }
-
-    private func updateConstraints() {
-        tableView.snp.makeConstraints { make in
-            make.edges.equalTo(view)
-        }
     }
 }
 
