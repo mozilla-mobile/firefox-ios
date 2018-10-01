@@ -522,7 +522,13 @@ extension ActivityStreamPanel: DataObserverDelegate {
         accumulate([self.getHighlights, self.getTopSites]).uponQueue(.main) { _ in
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
             self.showHighlightIntro = self.highlights.isEmpty
+
+            self.collectionViewLayout.invalidateLayout()
+            self.collectionView?.layoutIfNeeded()
+
             self.collectionView?.reloadData()
+
+            self.collectionViewLayout.invalidateLayout()
 
             // Refresh the AS data in the background so we'll have fresh data next time we show.
             self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceHighlights: false, forceTopSites: false)
