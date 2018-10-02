@@ -191,7 +191,7 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesOpenInNewPrivateTab() {
         navigator.goto(HomePanelsScreen)
-        waitforExistence(app.collectionViews.cells["TopSitesCell"].cells["apple"])
+        waitforExistence(app.cells["apple"])
         app.collectionViews.cells["TopSitesCell"].cells["apple"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
 
