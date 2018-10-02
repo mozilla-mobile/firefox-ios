@@ -297,7 +297,7 @@ class NavigationTest: BaseTestCase {
      }
      */
     func testLongPressLinkOptions() {
-        navigator.openURL(website_2["url"]!)
+        navigator.openURL(path(forTestPage: "test-example.html"))
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         waitforExistence(app.sheets[website_2["moreLinkLongPressUrl"]!])
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
@@ -309,7 +309,7 @@ class NavigationTest: BaseTestCase {
 
     func testLongPressLinkOptionsPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(website_2["url"]!)
+        navigator.openURL(path(forTestPage: "test-example.html"))
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         waitforExistence(app.sheets[website_2["moreLinkLongPressUrl"]!])
         XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
@@ -344,7 +344,7 @@ class NavigationTest: BaseTestCase {
     }
 
     private func longPressLinkOptions(optionSelected: String) {
-        navigator.openURL(website_2["url"]!)
+        navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         app.buttons[optionSelected].tap()

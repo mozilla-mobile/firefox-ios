@@ -45,7 +45,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
         // Open two tabs in normal browsing and check the number of tabs open
-        navigator.openNewURL(urlString: url1)
+        navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.goto(TabTray)
 
@@ -89,7 +89,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         //  Open a Private tab
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(url1)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
 
         // Go back to regular browser
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -119,7 +119,7 @@ class PrivateBrowsingTest: BaseTestCase {
     func testClosePrivateTabsOptionClosesPrivateTabsDirectlyFromTabTray() {
         // See scenario described in bug 1434545 for more info about this scenario
         enableClosePrivateBrowsingOptionWhenLeaving()
-        navigator.openURL(urlExample)
+        navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         app.webViews.links.staticTexts["More information..."].press(forDuration: 3)
         app.buttons["Open in New Private Tab"].tap()
@@ -190,7 +190,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
     func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
         if skipPlatform { return }
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(url1)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         enableClosePrivateBrowsingOptionWhenLeaving()
         // Leave PM by tapping on PM shourt cut
         navigator.goto(NewTabScreen)
