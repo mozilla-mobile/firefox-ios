@@ -272,6 +272,9 @@
                   Identifier = "NewTabSettingsTest/testCheckNewTabSettingsByDefault()">
                </Test>
                <Test
+                  Identifier = "NoImageTests">
+               </Test>
+               <Test
                   Identifier = "PhotonActionSheetTest/testPinToTop()">
                </Test>
                <Test
@@ -297,6 +300,9 @@
                </Test>
                <Test
                   Identifier = "ReaderViewTest/testLoadReaderContent()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testSavedLoginAutofilled()">
                </Test>
                <Test
                   Identifier = "SaveLoginTest/testSavedLoginSelectUnselect()">

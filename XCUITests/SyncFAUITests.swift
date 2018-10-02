@@ -41,12 +41,7 @@ class SyncUITests: BaseTestCase {
         XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
         XCTAssertTrue(app.webViews.secureTextFields["Password"].exists)
-        XCTAssertTrue(app.webViews.buttons["Sign in"].exists)
-    }
-
-    func testPlaceholderValues () {
-        navigator.goto(FxASigninScreen)
-        waitforExistence(app.webViews.staticTexts["Sign in"])
+        // Verify the placeholdervalues here for the textFields
         let mailPlaceholder = "Email"
         let passwordPlaceholder = "Password"
 
@@ -54,6 +49,7 @@ class SyncUITests: BaseTestCase {
         let defaultPasswordPlaceholder = app.webViews.secureTextFields["Password"].placeholderValue!
         XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
         XCTAssertEqual(passwordPlaceholder, defaultPasswordPlaceholder, "The password placeholder does not show the correct value")
+        XCTAssertTrue(app.webViews.buttons["Sign in"].exists)
     }
 
     func testTypeOnGivenFields() {
