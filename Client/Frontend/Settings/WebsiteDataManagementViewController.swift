@@ -121,7 +121,11 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         switch section {
         case .sites:
             let numberOfRecords = siteRecords?.count ?? 0
-            return showMoreButtonEnabled ? min(numberOfRecords, 10) : numberOfRecords
+
+            // Show either 10, 8 or 6 records initially depending on the screen size.
+            let height = max(self.view.frame.width, self.view.frame.height)
+            let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
+            return showMoreButtonEnabled ? min(numberOfRecords, numberOfInitialRecords) : numberOfRecords
         case .showMore:
             return showMoreButtonEnabled ? 1 : 0
         case .clearAllButton:
@@ -206,7 +210,10 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
                 searchResultsViewController.siteRecords = records
             }
 
-            self.showMoreButtonEnabled = records.count > 10
+            // Show either 10, 8 or 6 records initially depending on the screen size.
+            let height = max(self.view.frame.width, self.view.frame.height)
+            let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
+            self.showMoreButtonEnabled = records.count > numberOfInitialRecords
 
             self.loadingView.isHidden = true
             self.tableView.reloadData()
