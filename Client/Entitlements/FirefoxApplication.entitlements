@@ -4,8 +4,8 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:accounts.firefox.com</string>
-		<string>applinks:accounts.stage.mozaws.net</string>
+		<string>applinks:confirm.accounts.firefox.com</string>
+		<string>applinks:confirm.accounts.stage.mozaws.net</string>
 		<string>applinks:latest.dev.lcip.org</string>
 		<string>applinks:nightly.dev.lcip.org</string>
 		<string>applinks:rzte.adj.st</string>
