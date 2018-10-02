@@ -12,9 +12,11 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.performAction(Action.PinToTopSitesPAM)
 
         // Navigate to topsites to verify that the site has been pinned
-        navigator.goto(NewTabScreen)
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
 
         // Verify that the site is pinned to top
+        waitforExistence(app.cells["example"])
         let cell = app.cells["example"]
         waitforExistence(cell)
 

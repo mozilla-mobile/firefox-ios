@@ -787,6 +787,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.press(tabsButton, to: TabTrayLongPressMenu)
         }
 
+        if !isTablet {
+            let tabsButton = app.buttons["TabToolbar.tabsButton"]
+            screenState.tap(tabsButton, to: TabTray)
+        }
+
         screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarBrowserTab) { userState in
             userState.isPrivate = !userState.isPrivate
         }
