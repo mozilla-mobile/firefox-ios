@@ -221,6 +221,9 @@
                   Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
                </Test>
                <Test
+                  Identifier = "DomainAutocompleteTest/testDeletingCharsUpdateTheResults()">
+               </Test>
+               <Test
                   Identifier = "FindInPageTests/testFindFromMenu()">
                </Test>
                <Test
