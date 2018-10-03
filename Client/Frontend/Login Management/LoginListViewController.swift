@@ -271,7 +271,6 @@ private extension LoginListViewController {
 // MARK: - LoginDataSourceObserver
 extension LoginListViewController: LoginDataSourceObserver {
     func loginSectionsDidUpdate() {
-        sleep(5)
         loadingView.isHidden = true
         tableView.reloadData()
         activeLoginQuery = nil
