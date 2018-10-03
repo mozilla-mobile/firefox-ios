@@ -281,6 +281,16 @@ class TabTrayController: UIViewController {
         tabManager.willSwitchTabMode(leavingPBM: privateMode)
         privateMode = !privateMode
 
+        if privateMode, privateTabsAreEmpty() {
+            UIView.animate(withDuration: 0.2) {
+                self.searchBarHolder.alpha = 0
+            }
+        } else {
+            UIView.animate(withDuration: 0.2) {
+                self.searchBarHolder.alpha = 1
+            }
+        }
+
         if tabDisplayManager.searchActive {
             self.didPressCancel()
         } else {
@@ -355,7 +365,13 @@ class TabTrayController: UIViewController {
 extension TabTrayController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {}
-    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
+        if privateMode, privateTabsAreEmpty() {
+            UIView.animate(withDuration: 0.2) {
+                self.searchBarHolder.alpha = 0
+            }
+        }
+    }
     func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {}
     func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {}
 
@@ -363,7 +379,13 @@ extension TabTrayController: TabManagerDelegate {
         self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
     }
 
-    func tabManagerDidAddTabs(_ tabManager: TabManager) {}
+    func tabManagerDidAddTabs(_ tabManager: TabManager) {
+        if privateMode {
+            UIView.animate(withDuration: 0.2) {
+                self.searchBarHolder.alpha = 1
+            }
+        }
+    }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         // No need to handle removeAll toast in TabTray.
@@ -497,11 +519,13 @@ extension TabTrayController {
     @objc func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
-        UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.2) {
             self.collectionView.alpha = 1
-            self.searchBarHolder.alpha = 1
-        },
-        completion: nil)
+
+            if self.privateMode, !self.privateTabsAreEmpty() {
+                self.searchBarHolder.alpha = 1
+            }
+        }
     }
 }
 
