@@ -380,28 +380,32 @@ class TabManager: NSObject {
     }
 
     func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
+        guard let index = tabs.index(where: { $0 === tab }) else { return }
         removeTab(tab, flushToDisk: true, notify: true)
-        updateIndexAfterRemovalOf(tab)
+        updateIndexAfterRemovalOf(tab, deletedIndex: index)
         hideNetworkActivitySpinner()
     }
 
-    func updateIndexAfterRemovalOf(_ tab: Tab) {
+    private func updateIndexAfterRemovalOf(_ tab: Tab, deletedIndex: Int) {
         let closedLastNormalTab = !tab.isPrivate && normalTabs.isEmpty
         let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
+
+        let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
 
         if closedLastNormalTab {
             selectTab(addTab(), previous: tab)
         } else if closedLastPrivateTab {
             selectTab(tabs.last, previous: tab)
-        } else if !selectParentTab(afterRemoving: tab) {
-            let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
-            if let tabOnTheRight = viableTabs[safe: _selectedIndex] {
-                selectTab(tabOnTheRight, previous: tab)
-            } else if let tabOnTheLeft = viableTabs[safe: _selectedIndex-1] {
-                selectTab(tabOnTheLeft, previous: tab)
-            } else {
-                selectTab(viableTabs.last, previous: tab)
+        } else if deletedIndex == _selectedIndex {
+            if !selectParentTab(afterRemoving: tab) {
+                if let rightOrLeftTab = viableTabs[safe: _selectedIndex] ?? viableTabs[safe: _selectedIndex - 1] {
+                    selectTab(rightOrLeftTab, previous: tab)
+                } else {
+                    selectTab(viableTabs.last, previous: tab)
+                }
             }
+        } else if deletedIndex < _selectedIndex {
+            selectTab(viableTabs[safe: _selectedIndex - 1], previous: tab)
         }
     }
 
