@@ -22,7 +22,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     fileprivate var showMoreButton: ThemedTableViewCell?
 
     var tableView: UITableView!
-    var searchController: UISearchController!
+    var searchController: UISearchController?
     var showMoreButtonEnabled = true
     let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
 
@@ -61,20 +61,22 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
         // Search Controller setup
         let searchResultsViewController = WebsiteDataSearchResultsViewController()
-        searchController = UISearchController(searchResultsController: searchResultsViewController)
-        searchController.searchResultsUpdater = searchResultsViewController
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
-        searchController.searchBar.delegate = self
-        if theme == .dark {
-            searchController.searchBar.barStyle = .black
-        }
+
         if #available(iOS 11.0, *) {
+            let searchController = UISearchController(searchResultsController: searchResultsViewController)
+            searchController.searchResultsUpdater = searchResultsViewController
+            searchController.obscuresBackgroundDuringPresentation = false
+            searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
+            searchController.searchBar.delegate = self
+
+            if theme == .dark {
+                searchController.searchBar.barStyle = .black
+            }
             navigationItem.searchController = searchController
             navigationItem.hidesSearchBarWhenScrolling = false
-        } else {
-            navigationItem.titleView = searchController?.searchBar
+            self.searchController = searchController
         }
+
         definesPresentationContext = true
     }
 
@@ -206,7 +208,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         WKWebsiteDataStore.default().fetchDataRecords(ofTypes: types) { records in
             self.siteRecords = records.sorted { $0.displayName < $1.displayName }
 
-            if let searchResultsViewController = self.searchController.searchResultsUpdater as? WebsiteDataSearchResultsViewController {
+            if let searchResultsViewController = self.searchController?.searchResultsUpdater as? WebsiteDataSearchResultsViewController {
                 searchResultsViewController.siteRecords = records
             }
 
