@@ -429,5 +429,6 @@ struct UIConstants {
         static let siriEraseTipTitle = String(format: "Ask Siri to erase %@ history:", AppInfo.productName)
         static let siriEraseTipDescription = "Add Siri shortcut"
         static let shareTrackersTipTitle = "%@ trackers blocked so far"
+        static let encodingNameUTF8 = "utf-8"
     }
 }

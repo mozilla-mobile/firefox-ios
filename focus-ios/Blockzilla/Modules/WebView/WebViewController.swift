@@ -239,7 +239,7 @@ extension WebViewController: WKNavigationDelegate {
         let error = error as NSError
         guard error.code != Int(CFNetworkErrors.cfurlErrorCancelled.rawValue), let errorUrl = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL else { return }
         let errorPageData = ErrorPage(error: error).data
-        webView.load(errorPageData, mimeType: "", characterEncodingName: "", baseURL: errorUrl)
+        webView.load(errorPageData, mimeType: "", characterEncodingName: UIConstants.strings.encodingNameUTF8, baseURL: errorUrl)
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
