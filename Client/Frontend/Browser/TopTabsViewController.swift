@@ -112,7 +112,7 @@ class TopTabsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(iOS 11.0, *) {
+        if #available(iOS 11.0, *), LeanPlumClient.shared.enableTabBarReorder.boolValue() {
             collectionView.dragDelegate = tabDisplayManager
             collectionView.dropDelegate = tabDisplayManager
         }
