@@ -756,6 +756,8 @@ class BrowserViewController: UIViewController {
             } else if url.isErrorPageURL || !url.isLocalUtility || url.isReaderModeURL {
                 hideHomePanelController()
             }
+        } else if url?.isAboutHomeURL ?? false {
+            showHomePanelController(inline: false)
         }
     }
 
@@ -1816,9 +1818,7 @@ extension BrowserViewController: TabManagerDelegate {
             }
         }
 
-        if let selected = selected, let previous = previous, selected.isPrivate != previous.isPrivate {
-            updateTabCountUsingTabManager(tabManager)
-        }
+        updateTabCountUsingTabManager(tabManager)
 
         removeAllBars()
         if let bars = selected?.bars {

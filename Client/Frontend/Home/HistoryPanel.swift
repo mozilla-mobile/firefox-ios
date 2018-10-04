@@ -204,7 +204,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         } else {
             syncDetailText = ""
         }
-        tableView.reloadRows(at: [IndexPath(row: 1, section: Section.syncAndRecentlyClosed.rawValue)], with: .automatic)
+
+        tableView.reloadData()
     }
 
     func updateSyncedDevicesCount() -> Success {

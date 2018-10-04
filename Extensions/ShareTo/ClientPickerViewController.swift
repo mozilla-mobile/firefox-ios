@@ -218,7 +218,13 @@ class ClientPickerViewController: UITableViewController {
     }
 
     fileprivate func updateClients(clients: [RemoteClient], endRefreshing: Bool) {
-        guard self.clients != clients else {
+        // Sort the lists, and compare guids and modified, to see if the list has changed and tableview needs reloading.
+        let isSame = clients.sorted(by: { $0.guid ?? "" > $1.guid ?? "" }).elementsEqual(self.clients.sorted(by: { $0.guid ?? "" > $1.guid ?? "" })) {
+            guard let g0 = $0.guid, let g1 = $1.guid else { return false }
+            return g0 == g1 && $0.modified == $1.modified
+        }
+
+        guard !isSame else {
             if endRefreshing {
                 DispatchQueue.main.async {
                     self.refreshControl?.endRefreshing()

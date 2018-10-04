@@ -15,11 +15,14 @@ enum Section: Int {
 private let NumberOfSections = 3
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
 
-class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBarDelegate {
+class WebsiteDataManagementViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+    fileprivate let loadingView = SettingsLoadingView()
+
     fileprivate var clearButton: ThemedTableViewCell?
     fileprivate var showMoreButton: ThemedTableViewCell?
 
-    var searchController: UISearchController!
+    var tableView: UITableView!
+    var searchController: UISearchController?
     var showMoreButtonEnabled = true
     let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
 
@@ -30,32 +33,63 @@ class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBa
         title = Strings.SettingsWebsiteDataTitle
         navigationController?.setToolbarHidden(true, animated: false)
 
-        getAllWebsiteData(shouldDisableShowMoreButton: false)
+        tableView = UITableView()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        tableView.isEditing = true
+        tableView.allowsSelectionDuringEditing = true
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
+
+        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
+        footer.showBottomBorder = false
+        tableView.tableFooterView = footer
+
+        view.addSubview(tableView)
+        view.addSubview(loadingView)
+
+        tableView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
+
+        loadingView.snp.makeConstraints { make in
+            make.edges.equalTo(tableView)
+        }
+
+        getAllWebsiteData()
 
         // Search Controller setup
         let searchResultsViewController = WebsiteDataSearchResultsViewController()
-        searchController = UISearchController(searchResultsController: searchResultsViewController)
-        searchController.searchResultsUpdater = searchResultsViewController
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
-        searchController.searchBar.delegate = self
-        if theme == .dark {
-            searchController.searchBar.barStyle = .black
-        }
-        if #available(iOS 11.0, *) {
-            navigationItem.searchController = searchController
-        } else {
-            navigationItem.titleView = searchController?.searchBar
-        }
-        definesPresentationContext = true
 
-        tableView.isEditing = true
-        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
-        let footer = UITableViewHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
-        tableView.tableFooterView = footer
+        if #available(iOS 11.0, *) {
+            let searchController = UISearchController(searchResultsController: searchResultsViewController)
+            searchController.searchResultsUpdater = searchResultsViewController
+            searchController.obscuresBackgroundDuringPresentation = false
+            searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
+            searchController.searchBar.delegate = self
+
+            if theme == .dark {
+                searchController.searchBar.barStyle = .black
+            }
+            navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
+            self.searchController = searchController
+        }
+
+        definesPresentationContext = true
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // Allows the search bar to be scrolled away even though we initially show it.
+        if #available(iOS 11.0, *) {
+            navigationItem.hidesSearchBarWhenScrolling = true
+        }
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
         let section = Section(rawValue: indexPath.section)!
         switch section {
@@ -80,16 +114,20 @@ class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBa
         return cell
     }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return NumberOfSections
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let section = Section(rawValue: section)!
         switch section {
         case .sites:
             let numberOfRecords = siteRecords?.count ?? 0
-            return showMoreButtonEnabled ? min(numberOfRecords, 10) : numberOfRecords
+
+            // Show either 10, 8 or 6 records initially depending on the screen size.
+            let height = max(self.view.frame.width, self.view.frame.height)
+            let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
+            return showMoreButtonEnabled ? min(numberOfRecords, numberOfInitialRecords) : numberOfRecords
         case .showMore:
             return showMoreButtonEnabled ? 1 : 0
         case .clearAllButton:
@@ -97,25 +135,14 @@ class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBa
         }
     }
 
-    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        let section = Section(rawValue: indexPath.section)!
-        switch section {
-        case .sites:
-            return true
-        case .showMore:
-            return showMoreButtonEnabled
-        case .clearAllButton:
-            return true
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
             break
         case .showMore:
-            getAllWebsiteData(shouldDisableShowMoreButton: true)
+            showMoreButtonEnabled = false
+            tableView.reloadData()
         case .clearAllButton:
             let alert =  UIAlertController.clearWebsiteDataAlert(okayCallback: clearWebsiteData)
             let generator = UIImpactFeedbackGenerator(style: .heavy)
@@ -125,7 +152,7 @@ class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBa
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -135,7 +162,7 @@ class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBa
         }
     }
 
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == UITableViewCellEditingStyle.delete, let record = siteRecords?[safe: indexPath.row] else {
             return
         }
@@ -147,14 +174,14 @@ class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBa
         }
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         headerView?.titleLabel.text = section == Section.sites.rawValue ? Strings.SettingsWebsiteDataTitle : nil
         headerView?.showBottomBorder = false
         return headerView
     }
 
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let section = Section(rawValue: section)!
         switch section {
         case .sites, .clearAllButton:
@@ -164,33 +191,33 @@ class WebsiteDataManagementViewController: ThemedTableViewController, UISearchBa
         }
     }
 
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         footerView?.showBottomBorder = false
         return footerView
     }
 
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0
     }
 
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        getAllWebsiteData(shouldDisableShowMoreButton: !showMoreButtonEnabled)
-    }
+    func getAllWebsiteData() {
+        loadingView.isHidden = false
 
-    func getAllWebsiteData(shouldDisableShowMoreButton: Bool) {
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
         WKWebsiteDataStore.default().fetchDataRecords(ofTypes: types) { records in
             self.siteRecords = records.sorted { $0.displayName < $1.displayName }
 
-            if let searchResultsViewController = self.searchController.searchResultsUpdater as? WebsiteDataSearchResultsViewController {
+            if let searchResultsViewController = self.searchController?.searchResultsUpdater as? WebsiteDataSearchResultsViewController {
                 searchResultsViewController.siteRecords = records
             }
 
-            if shouldDisableShowMoreButton || records.count <= 10 {
-                self.showMoreButtonEnabled = false
-            }
+            // Show either 10, 8 or 6 records initially depending on the screen size.
+            let height = max(self.view.frame.width, self.view.frame.height)
+            let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
+            self.showMoreButtonEnabled = records.count > numberOfInitialRecords
 
+            self.loadingView.isHidden = true
             self.tableView.reloadData()
         }
     }

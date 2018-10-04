@@ -457,7 +457,7 @@ func == (lhs: IntroCard, rhs: IntroCard) -> Bool {
 }
 
 extension UIColor {
-    var components:(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+    var components: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         var r: CGFloat = 0
         var g: CGFloat = 0
         var b: CGFloat = 0
