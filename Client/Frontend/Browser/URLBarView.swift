@@ -328,6 +328,7 @@ class URLBarView: UIView {
 
         guard let locationTextField = locationTextField else { return }
 
+        locationTextField.clipsToBounds = true
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.autocompleteDelegate = self
         locationTextField.keyboardType = .webSearch
