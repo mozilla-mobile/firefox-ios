@@ -94,16 +94,10 @@ class TopTabsViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tabDisplayManager.performTabUpdates()
+
+        tabDisplayManager.refreshStore()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        // Will only be done once, on first appearance, due to the check
-        if isBeingPresented || isMovingToParentViewController {
-            tabDisplayManager.performTabUpdates()
-        }
-    }
 
     deinit {
         tabManager.removeDelegate(self.tabDisplayManager)
@@ -160,7 +154,7 @@ class TopTabsViewController: UIViewController {
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
-        updateTabCount(tabDisplayManager.tabCount, animated: false)
+        updateTabCount(tabDisplayManager.dataStore.count, animated: false)
     }
 
     func switchForegroundStatus(isInForeground reveal: Bool) {
@@ -183,27 +177,20 @@ class TopTabsViewController: UIViewController {
     }
 
     @objc func newTabTapped() {
-        if tabDisplayManager.pendingReloadData {
-            return
-        }
         self.delegate?.topTabsDidPressNewTab(self.tabDisplayManager.isPrivate)
         LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Add tab button in the URL Bar on iPad"])
     }
 
     @objc func togglePrivateModeTapped() {
-        let currentMode = tabDisplayManager.isPrivate
-
-        tabDisplayManager.togglePBM()
-        if currentMode != tabDisplayManager.isPrivate {
-            delegate?.topTabsDidTogglePrivateMode()
-        }
+        tabDisplayManager.isPrivate = !tabDisplayManager.isPrivate
+        delegate?.topTabsDidTogglePrivateMode()
         self.privateModeButton.setSelected(tabDisplayManager.isPrivate, animated: true)
     }
 
     func scrollToCurrentTab(_ animated: Bool = true, centerCell: Bool = false) {
         assertIsMainThread("Only animate on the main thread")
 
-        guard let currentTab = tabManager.selectedTab, let index = tabDisplayManager.tabStore.index(of: currentTab), !collectionView.frame.isEmpty else {
+        guard let currentTab = tabManager.selectedTab, let index = tabDisplayManager.dataStore.index(of: currentTab), !collectionView.frame.isEmpty else {
             return
         }
         if let frame = collectionView.layoutAttributesForItem(at: IndexPath(row: index, section: 0))?.frame {
@@ -242,14 +229,7 @@ extension TopTabsViewController: TabDisplayer {
 
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
-        // Trying to remove tabs while animating can lead to crashes as indexes change. If updates are happening don't allow tabs to be removed.
-        guard let index = collectionView.indexPath(for: cell)?.item else {
-            return
-        }
-        if let tab = self.tabDisplayManager.tabStore[safe: index] {
-            tabManager.removeTabAndUpdateSelectedIndex(tab)
-        }
-
+        tabDisplayManager.close(cell: cell)
     }
 }
 
@@ -267,6 +247,6 @@ extension TopTabsViewController: Themeable, PrivateModeUI {
         newTab.tintColor = UIColor.theme.topTabs.buttonTint
         view.backgroundColor = UIColor.theme.topTabs.background
         collectionView.backgroundColor = view.backgroundColor
-        tabDisplayManager.reloadData()
+        tabDisplayManager.refreshStore()
     }
 }
