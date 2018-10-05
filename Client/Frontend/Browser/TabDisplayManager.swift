@@ -535,7 +535,9 @@ extension TabDisplayManager: TabManagerDelegate {
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
         recordEventAndBreadcrumb(object: .tab, method: .add)
-        self.reloadData()
+        DispatchQueue.main.async {
+            self.reloadData()
+        }
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
