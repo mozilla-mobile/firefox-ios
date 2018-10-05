@@ -101,11 +101,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         super.viewWillAppear(animated)
 
         // Add a refresh control if the user is logged in and the control was not added before. If the user is not
-        // logged in, remove any existing control but only when it is not currently refreshing. Otherwise, wait for
-        // the refresh to finish before removing the control.
+        // logged in, remove any existing control.
         if profile.hasSyncableAccount() && refreshControl == nil {
             addRefreshControl()
-        } else if refreshControl?.isRefreshing == false {
+        } else if !profile.hasSyncableAccount() && refreshControl != nil {
             removeRefreshControl()
         }
 
