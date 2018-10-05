@@ -351,3 +351,24 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         XCTAssertTrue(app.buttons["TabTrayController.maskButton"].isEnabled)
     }
 }
+
+    // Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button and closing the tabs by tapping 'x' button
+class TopTabsTestIpad: IpadOnlyTestCase {
+    func testUpdateTabCounter(){
+        if skipPlatform {return}
+        // Open three tabs by tapping on '+' button
+        app/*@START_MENU_TOKEN@*/.buttons["New Tab"]/*[[".buttons[\"New Tab\"]",".buttons[\"TopTabsViewController.newTabButton\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
+        app/*@START_MENU_TOKEN@*/.buttons["New Tab"]/*[[".buttons[\"New Tab\"]",".buttons[\"TopTabsViewController.newTabButton\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("3", numTab)
+        // Remove one tab by tapping on 'x' button
+        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "home").element(boundBy: 1).buttons["Remove page — Open New Tab"].tap()
+        waitforExistence(app.buttons["Show Tabs"])
+        let numTabAfterRemovingThirdTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numTabAfterRemovingThirdTab)
+        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "home").element(boundBy: 1).buttons["Remove page — Open New Tab"].tap()
+        waitforExistence(app.buttons["Show Tabs"])
+        let numTabAfterRemovingSecondTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("1", numTabAfterRemovingSecondTab)
+    }
+}
