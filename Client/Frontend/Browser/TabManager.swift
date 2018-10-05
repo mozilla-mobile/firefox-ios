@@ -405,7 +405,7 @@ class TabManager: NSObject {
                 }
             }
         } else if deletedIndex < _selectedIndex {
-            selectTab(viableTabs[safe: _selectedIndex - 1], previous: tab)
+            selectTab(tabs[safe: _selectedIndex - 1], previous: tab)
         }
     }
 
