@@ -22,11 +22,11 @@ We also tag recommended bugs for contributions with [help wanted](https://github
 Master Branch
 ----------------
 
-This branch works with Xcode 9.4 and supports iOS 11.
+This branch works with Xcode 10.0 and supports iOS 11.0+.
 
-This branch is written in Swift 4.
+This branch is written in Swift 4.2.
 
-For current development, see the V7.0 Development Branch section.
+For current development, see the V8.0 Development Branch section.
 
 Build Instructions for Master
 ------------------
@@ -49,50 +49,11 @@ Build Instructions for Master
 5. Open `Blockzilla.xcodeproj` in Xcode.
 6. Build the `Focus` scheme in Xcode.
 
-V7.0 Development Branch
+V8.0 Development Branch
 ----------------
 
-For version 7.0 of Focus, we are working off of the v7.0-dev branch.
-
-This branch only works with Xcode 10 and supports iOS 11 & 12. This means you will need the Xcode 10 beta (beta 3+ recommended).
+For version 8.0 of Focus, we are working off of the v8.0-dev branch.
 
 This branch is written in Swift 4.2. Pull requests for this branch must also be written in Swift 4.2. 
 
-In order to compile with Swift 4.2 & Xcode 10, you will need to follow separate build instructions (described below).
-
-For bugs and features for the upcoming v7.0 release, please see the V7.0 milestone within the GitHub Issues.
-
-Build Instructions for V7.0 Development
-------------------
-
-1. Quit Xcode
-2. Install the latest [Xcode 10 beta developer tools](https://developer.apple.com/downloads/) from Apple. You should install it in your Applications folder with the default name 'Xcode-beta.app'.
-3. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage).
-4. Clone the repository:
-
-```shell
-git clone https://github.com/mozilla-mobile/focus-ios.git
-```
-
-5. Checkout the development branch
-
-```shell
-git checkout v7.0-dev
-```
-
-6. Select the Xcode 10 command line tools.
-
-```shell
-sudo xcode-select -s /Applications/Xcode-beta.app
-```
-Alternatively, you can select the command line tools from Xcode-beta -> Preferences -> Locations -> Command Line Tools
-
-7. Pull in the project dependencies:
-
-```shell
-cd focus-ios
-./checkout.sh
-```
-
-8. Open `Blockzilla.xcodeproj` in Xcode.
-9. Build the `Focus` scheme in Xcode.
+For bugs and features for the upcoming v8.0 release, please see the V8.0 milestone within the GitHub Issues.
