@@ -72,7 +72,10 @@ class URLBar: UIView {
         addGestureRecognizer(singleTap)
 
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPress))
-        self.addGestureRecognizer(longPress)
+        textAndLockContainer.addGestureRecognizer(longPress)
+
+        let dragInteraction = UIDragInteraction(delegate: self)
+        textAndLockContainer.addInteraction(dragInteraction)
         
         addSubview(toolset.backButton)
         addSubview(toolset.forwardButton)
@@ -807,6 +810,33 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
         delegate?.urlBar(self, didEnterText: text)
     }
+}
+
+extension URLBar: UIDragInteractionDelegate {
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        guard let url = url, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drag, object: TelemetryEventObject.searchBar)
+        return [dragItem]
+    }
+    
+    func dragInteraction(_ interaction: UIDragInteraction, previewForLifting item: UIDragItem, session: UIDragSession) -> UITargetedDragPreview? {
+        let params = UIDragPreviewParameters()
+        params.backgroundColor = UIColor.clear
+        return UITargetedDragPreview(view: draggableUrlTextView, parameters: params)
+    }
+    
+    func dragInteraction(_ interaction: UIDragInteraction, sessionDidMove session: UIDragSession) {
+        for item in session.items {
+            item.previewProvider = {
+                guard let url = self.url else {
+                    return UIDragPreview(view: UIView())
+                }
+                return UIDragPreview(for: url)
+            }
+        }
+    }
+
 }
 
 private class URLTextField: AutocompleteTextField {
