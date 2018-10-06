@@ -309,6 +309,7 @@ extension HomePanelViewController: Themeable {
         buttonTintColor = UIColor.theme.homePanel.toolbarTint
         buttonSelectedTintColor = UIColor.theme.homePanel.toolbarHighlight
         highlightLine.backgroundColor = UIColor.theme.homePanel.toolbarHighlight
+        buttonContainerBottomBorderView.backgroundColor = UIColor.theme.homePanel.buttonContainerBorder
         updateButtonTints()
     }
 }
