@@ -111,6 +111,7 @@ fileprivate class DarkSnackBarColor: SnackBarColor {
 fileprivate class DarkGeneralColor: GeneralColor {
     override var settingsTextPlaceholder: UIColor? { return UIColor.black }
     override var faviconBackground: UIColor { return UIColor.Photon.White100 }
+    override var passcodeDot: UIColor { return UIColor.Photon.Grey40 }
 }
 
 class DarkTheme: NormalTheme {
