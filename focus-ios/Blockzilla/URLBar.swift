@@ -69,7 +69,7 @@ class URLBar: UIView {
 
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(didSingleTap(sender:)))
         singleTap.numberOfTapsRequired = 1
-        addGestureRecognizer(singleTap)
+        textAndLockContainer.addGestureRecognizer(singleTap)
 
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(urlBarDidLongPress))
         textAndLockContainer.addGestureRecognizer(longPress)
