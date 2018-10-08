@@ -509,6 +509,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
     // Called when the user receives a tab while in foreground.
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // If this notification doesn't contain sent tabs, show it immediately
+        // even if the app is in the foreground.
+        guard let _ = notification.request.content.userInfo["sentTabs"] as? [NSDictionary] else {
+            completionHandler([.alert, .badge, .sound])
+            return
+        }
         openURLsInNewTabs(notification)
     }
 }

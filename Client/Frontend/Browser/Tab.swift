@@ -63,6 +63,8 @@ class Tab: NSObject {
         }
     }
 
+    fileprivate(set) var id: String
+
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, url: url, title: displayTitle, favicon: displayFavicon)
     }
@@ -156,7 +158,6 @@ class Tab: NSObject {
     weak var parent: Tab?
 
     fileprivate var contentScriptManager = TabContentScriptManager()
-    private(set) var userScriptManager: UserScriptManager?
 
     fileprivate let configuration: WKWebViewConfiguration
 
@@ -165,6 +166,7 @@ class Tab: NSObject {
     fileprivate var alertQueue = [JSAlertInfo]()
 
     init(configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
+        self.id = UUID().uuidString
         self.configuration = configuration
         super.init()
         self.isPrivate = isPrivate
@@ -231,7 +233,7 @@ class Tab: NSObject {
 
             self.webView = webView
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
-            self.userScriptManager = UserScriptManager(tab: self)
+            UserScriptManager.default.injectUserScripts(tab: self)
             tabDelegate?.tab?(self, didCreateWebView: webView)
         }
     }

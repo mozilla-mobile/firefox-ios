@@ -75,6 +75,34 @@ extension PhotonActionSheetProtocol {
         return [openHomePage, openLibrary]
     }
 
+    func getWebExtensionsBrowserActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
+        var actions: [PhotonActionSheetItem] = []
+
+        WebExtensionManager.default.webExtensions.forEach { webExtension in
+            if let browserAction = webExtension.browserAction {
+                let item = PhotonActionSheetItem(title: browserAction.defaultTitle, iconString: "placeholder-avatar", iconURL: browserAction.defaultIcon, iconType: .URL) { _ in
+                    if let browserActionViewController = WebExtensionBrowserActionWebViewController(browserAction: browserAction) {
+                        let controller = SettingsNavigationController(rootViewController: browserActionViewController)
+                        controller.popoverDelegate = vcDelegate
+                        controller.modalPresentationStyle = .formSheet
+
+                        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+                        // of this popover on iPad seems to block the presentation of the modal VC.
+                        DispatchQueue.main.async {
+                            vcDelegate.present(controller, animated: true, completion: nil)
+                        }
+                    }
+
+                    browserAction.didClick()
+                }
+
+                actions.append(item)
+            }
+        }
+
+        return actions
+    }
+
     /*
      Returns a list of actions which is used to build the general browser menu
      These items repersent global options that are presented in the menu

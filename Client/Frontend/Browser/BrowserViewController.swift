@@ -1511,7 +1511,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         if let syncAction = syncMenuButton(showFxA: presentSignInViewController) {
             actions.append(syncAction)
         }
+
         actions.append(getLibraryActions(vcDelegate: self))
+
+        let webExtensionsBrowserActions = getWebExtensionsBrowserActions(vcDelegate: self)
+        if webExtensionsBrowserActions.count > 0 {
+            actions.append(webExtensionsBrowserActions)
+        }
+
         actions.append(getOtherPanelActions(vcDelegate: self))
         // force a modal if the menu is being displayed in compact split screen
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
@@ -1603,6 +1610,9 @@ extension BrowserViewController: TabDelegate {
         KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
         webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOConstants.contentSize.rawValue, options: .new, context: nil)
         webView.uiDelegate = self
+
+        let webExtensionHelper = WebExtensionHelper(tab: tab)
+        tab.addContentScript(webExtensionHelper, name: WebExtensionHelper.name())
 
         let formPostHelper = FormPostHelper(tab: tab)
         tab.addContentScript(formPostHelper, name: FormPostHelper.name())

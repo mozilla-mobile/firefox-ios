@@ -278,6 +278,11 @@ open class BrowserProfile: Profile {
         if let downloadsPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads").path {
             try? FileManager.default.createDirectory(atPath: downloadsPath, withIntermediateDirectories: true, attributes: nil)
         }
+
+        // Create the "WebExtensions" folder in the documents directory.
+        if let webExtensionsPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("WebExtensions").path {
+            try? FileManager.default.createDirectory(atPath: webExtensionsPath, withIntermediateDirectories: true, attributes: nil)
+        }
     }
 
     func reopen() {

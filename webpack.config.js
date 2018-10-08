@@ -7,7 +7,9 @@ const AllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserSc
 const AllFramesAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentEnd/*.js");
 const MainFrameAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentStart/*.js");
 const MainFrameAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentEnd/*.js");
+
 const DocumentServices = glob.sync("./Client/Frontend/UserContent/UserScripts/DocumentServices/src/*.js");
+const WebExtensionAPI = glob.sync("./Client/Frontend/WebExtensions/UserScripts/API/*.js");
 
 // Ensure the first script loaded at document start is __firefox__.js
 // since it defines the `window.__firefox__` global.
@@ -29,6 +31,12 @@ for (let [name, files] of Object.entries(needsFirefoxFile)) {
   }
 }
 
+// Ensure the first script in WebExtensionAPI.js is __browser__.js
+// since it defines the `window.browser` global.
+if (path.basename(WebExtensionAPI[0]) !== "__browser__.js") {
+  throw "ERROR: __browser__.js is expected to be the first script in WebExtensionAPI.js";
+}
+
 module.exports = {
   mode: "production",
   entry: {
@@ -37,6 +45,7 @@ module.exports = {
     MainFrameAtDocumentStart,
     MainFrameAtDocumentEnd,
     DocumentServices,
+    WebExtensionAPI
   },
   output: {
     filename: "[name].js",

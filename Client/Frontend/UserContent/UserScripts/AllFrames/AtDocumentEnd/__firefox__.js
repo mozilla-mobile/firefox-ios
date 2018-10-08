@@ -20,7 +20,6 @@ if (!window.__firefox__) {
           }
           return false;
         }
-
         return true;
       }
     }

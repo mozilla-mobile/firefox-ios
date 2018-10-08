@@ -67,7 +67,7 @@ function checkReadability() {
 
       var doc = new DOMParser().parseFromString(docStr, "text/html");
       var readability = new Readability(uri, doc, { debug: DEBUG });
-      readabilityResult = readability.parse();
+      readabilityResult = readability.parse() || { title: document.title };
 
       // Sanitize the title to prevent a malicious page from inserting HTML in the `<title>`.
       readabilityResult.title = escapeHTML(readabilityResult.title);
