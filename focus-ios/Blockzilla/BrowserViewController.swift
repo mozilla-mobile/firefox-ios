@@ -618,7 +618,7 @@ class BrowserViewController: UIViewController {
             self.urlBar.showToolset = self.showsToolsetInURLBar
 
             if self.homeView == nil && self.scrollBarState != .expanded {
-                self.urlBar.collapseUrlBar(expandAlpha: 0, collapseAlpha: 1)
+                self.hideToolbars()
             }
 
             self.browserToolbar.animateHidden(self.homeView != nil || self.showsToolsetInURLBar, duration: coordinator.transitionDuration, completion: {
