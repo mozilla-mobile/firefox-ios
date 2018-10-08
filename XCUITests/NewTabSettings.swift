@@ -7,7 +7,6 @@ import XCTest
 class NewTabSettingsTest: BaseTestCase {
     func testCheckNewTabSettingsByDefault() {
         navigator.goto(NewTabSettings)
-        print(app.debugDescription)
         waitforExistence(app.navigationBars["New Tab"])
         XCTAssertTrue(app.tables.cells["Top Sites"].exists)
         XCTAssertTrue(app.tables.cells["Blank Page"].exists)

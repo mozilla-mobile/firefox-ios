@@ -20,6 +20,7 @@ class NoImageTests: BaseTestCase {
     }
 
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
+    // Since it is tested in UI let's disable. Keeping here just in case it needs to be re-enabled
     func testImageOnOff() {
         // Go to a webpage, and select no images or hide images, check it's hidden or not
         navigator.openNewURL(urlString: "www.google.com")

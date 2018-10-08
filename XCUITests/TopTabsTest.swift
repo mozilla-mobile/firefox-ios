@@ -15,16 +15,6 @@ let urlValueExample = "example"
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
 class TopTabsTest: BaseTestCase {
-    func testAddTabFromSettings() {
-        navigator.createNewTab()
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitForValueContains(app.textFields["url"], value: "localhost")
-        waitforExistence(app.buttons["Show Tabs"])
-        let numTab = app.buttons["Show Tabs"].value as? String
-
-        XCTAssertEqual("2", numTab)
-    }
-
     func testAddTabFromTabTray() {
         navigator.goto(TabTray)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -173,7 +163,9 @@ class TopTabsTest: BaseTestCase {
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
-
+        if !iPad() {
+            waitforExistence(app.buttons["TabToolbar.tabsButton"])
+        }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs and check that the number of tabs is correct
@@ -199,6 +191,7 @@ class TopTabsTest: BaseTestCase {
         waitforNoExistence(app.collectionViews.cells[urlLabel])
     }
 
+    // Smoketest
     func testLongTapTabCounter() {
         if !iPad() {
             // Long tap on Tab Counter should show the correct options

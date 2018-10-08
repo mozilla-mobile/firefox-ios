@@ -174,7 +174,6 @@ fileprivate extension BaseTestCase {
 
     func enableClosePrivateBrowsingOptionWhenLeaving() {
         navigator.goto(SettingsScreen)
-        print(app.debugDescription)
         let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
 
         while settingsTableView.staticTexts["Close Private Tabs"].exists == false {
@@ -193,7 +192,6 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         enableClosePrivateBrowsingOptionWhenLeaving()
         // Leave PM by tapping on PM shourt cut
-        navigator.goto(NewTabScreen)
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)

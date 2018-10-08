@@ -787,9 +787,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.press(tabsButton, to: TabTrayLongPressMenu)
         }
 
-        if !isTablet {
-            let tabsButton = app.buttons["TabToolbar.tabsButton"]
-            screenState.tap(tabsButton, to: TabTray)
+        if isTablet {
+            screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
+        } else {
+            screenState.gesture(to: TabTray) {
+                if (app.buttons["TabToolbar.tabsButton"].exists) {
+                    app.buttons["TabToolbar.tabsButton"].tap()
+                } else {
+                    app.buttons["URLBarView.tabsButton"].tap()
+                }
+            }
         }
 
         screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarBrowserTab) { userState in
