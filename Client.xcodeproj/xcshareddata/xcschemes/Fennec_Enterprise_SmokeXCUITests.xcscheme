@@ -524,6 +524,9 @@
                   Identifier = "SearchTests/testPromptPresence()">
                </Test>
                <Test
+                  Identifier = "SearchTests/testSearchWithFirefoxOption()">
+               </Test>
+               <Test
                   Identifier = "SettingsTest">
                </Test>
                <Test
@@ -594,6 +597,18 @@
                </Test>
                <Test
                   Identifier = "TopTabsTest/testSwitchBetweenTabs()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTestIpad/testUpdateTabCounter()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTestIphone/testAddPrivateTabByLongPressTabsButton()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTestIphone/testAddTabByLongPressTabsButton()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTestIphone/testCloseTabFromLongPressTabsButton()">
                </Test>
                <Test
                   Identifier = "TrackingProtectionTests/testDisableForSiteDoesNotDisableForOthersDifferentTab()">

@@ -104,6 +104,7 @@ class TopTabsTest: BaseTestCase {
         }
     }
 
+    // Smoketest
     func testCloseAllTabsUndo() {
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -199,6 +200,7 @@ class TopTabsTest: BaseTestCase {
         waitforNoExistence(app.collectionViews.cells[urlLabel])
     }
 
+    // Smoketest
     func testLongTapTabCounter() {
         if !iPad() {
             // Long tap on Tab Counter should show the correct options
@@ -294,6 +296,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
+    // Smoketest
     func testSwitchBetweenTabsToastButton() {
         if skipPlatform { return }
 
@@ -331,6 +334,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
+    // Smoketest
     func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
         if skipPlatform { return }
 

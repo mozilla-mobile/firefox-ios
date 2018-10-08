@@ -97,6 +97,7 @@ class BookmarkingTests: BaseTestCase {
         checkItemInBookmarkList()
     }
 
+    // Smoketest
     func testBookmarksAwesomeBar() {
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.ebay")

@@ -5,6 +5,7 @@
 import XCTest
 
 class PhotonActionSheetTest: BaseTestCase {
+    // Smoketest
     func testPinToTop() {
         navigator.openURL("http://example.com")
         waitUntilPageLoad()
@@ -36,6 +37,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitforExistence(app.buttons["Copy"])
     }
 
+    // Smoketest
     func testShareOptionIsShownFromShortCut() {
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
@@ -109,6 +111,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitforExistence(app.buttons["Copy"])
     }
 
+    // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
         XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)

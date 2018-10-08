@@ -49,6 +49,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, 0)
     }
 
+    // Smoketest
     func testSavedLoginSelectUnselect() {
         saveLogin()
         openLoginsSettings()
