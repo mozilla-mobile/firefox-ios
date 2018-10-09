@@ -110,8 +110,6 @@ class SyncNowSetting: WithAccountSetting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .none }
 
-    override var style: UITableViewCellStyle { return .value1 }
-
     override var image: UIImage? {
         guard let syncStatus = profile.syncManager.syncDisplayState else {
             return syncIcon
