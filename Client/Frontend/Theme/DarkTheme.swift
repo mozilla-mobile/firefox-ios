@@ -6,7 +6,7 @@ import Foundation
 
 // Convenience reference to these normal mode colors which are used in a few color classes.
 fileprivate let defaultBackground = UIColor.Photon.Grey80
-fileprivate let defaultSeparator = UIColor.Photon.Grey30
+fileprivate let defaultSeparator = UIColor.Photon.Grey60
 fileprivate let defaultTextAndTint = UIColor.Photon.Grey10
 
 fileprivate class DarkTableViewColor: TableViewColor {
