@@ -337,6 +337,9 @@ extension HomePanelContextMenu {
         contextMenu.modalPresentationStyle = .overFullScreen
         contextMenu.modalTransitionStyle = .crossDissolve
 
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+
         return contextMenu
     }
 
