@@ -25,7 +25,7 @@ class BasePasscodeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.theme.tableView.headerBackground
+        applyTheme()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.dismissAnimated))
         automaticallyAdjustsScrollViewInsets = false
     }
@@ -88,5 +88,17 @@ extension BasePasscodeViewController {
 
         // Store mutations on authentication info object
         KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
+    }
+}
+
+extension BasePasscodeViewController: Themeable {
+    func applyTheme() {
+        view.backgroundColor = UIColor.theme.tableView.headerBackground
+        let navigationBar = navigationController?.navigationBar
+        navigationBar?.barTintColor = UIColor.theme.tableView.headerBackground
+        navigationBar?.barStyle = ThemeManager.instance.currentName == .dark ? .black : .default
+        navigationBar?.tintColor = UIColor.theme.general.controlTint
+        navigationBar?.titleTextAttributes = [.foregroundColor: UIColor.theme.tableView.headerTextDark]
+        setNeedsStatusBarAppearanceUpdate()
     }
 }
