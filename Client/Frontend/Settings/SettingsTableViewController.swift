@@ -269,7 +269,6 @@ protocol SettingValuePersister {
 /// This takes an optional settingIsValid and settingDidChange callback
 /// If settingIsValid returns false, the Setting will not change and the text remains red.
 class StringSetting: Setting, UITextFieldDelegate {
-
     var Padding: CGFloat = 8
 
     fileprivate let defaultValue: String?
@@ -393,6 +392,8 @@ class CheckmarkSetting: Setting {
 /// isEnabled is called on each tableview.reloadData. If it returns
 /// false then the 'button' appears disabled.
 class ButtonSetting: Setting {
+    var Padding: CGFloat = 8
+
     let onButtonClick: (UINavigationController?) -> Void
     let destructive: Bool
     let isEnabled: (() -> Bool)?
@@ -413,6 +414,11 @@ class ButtonSetting: Setting {
         } else {
             cell.textLabel?.textColor = UIColor.theme.tableView.disabledRowText
         }
+        cell.textLabel?.snp.makeConstraints({ make in
+            make.height.equalTo(44)
+            make.trailing.equalTo(cell.contentView).offset(-Padding)
+            make.leading.equalTo(cell.contentView).offset(Padding)
+        })
         cell.textLabel?.textAlignment = .center
         cell.accessibilityTraits = UIAccessibilityTraitButton
         cell.selectionStyle = .none
