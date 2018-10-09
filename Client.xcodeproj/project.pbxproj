@@ -391,6 +391,11 @@
 		D03F8F23200EAC1F003C2224 /* AllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = D03F8F22200EAC1E003C2224 /* AllFramesAtDocumentStart.js */; };
 		D047C55620E1640B001A3C07 /* KeyBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047C55520E1640B001A3C07 /* KeyBundle.swift */; };
 		D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD717215EBD85004FF5B0 /* SettingsLoadingView.swift */; };
+		D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD747216CF86A004FF5B0 /* SiriShortcuts.swift */; };
+		D04CD74B216CF86B004FF5B0 /* ClientPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD748216CF86B004FF5B0 /* ClientPickerViewController.swift */; };
+		D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */; };
+		D04CD74D216CF86F004FF5B0 /* ClientPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD748216CF86B004FF5B0 /* ClientPickerViewController.swift */; };
+		D04CD74E216CF86F004FF5B0 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */; };
 		D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04D1B852097859B0074B35F /* DownloadToast.swift */; };
 		D04D1B92209790B60074B35F /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04D1B91209790B60074B35F /* Toast.swift */; };
 		D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625C97208E87F10081F3B2 /* DownloadQueue.swift */; };
@@ -479,7 +484,6 @@
 		D81127D81F84023B0050841D /* PhotonActionSheetTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81127D71F84023B0050841D /* PhotonActionSheetTest.swift */; };
 		D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */; };
 		D821E90E2141B71C00452C55 /* SiriSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D821E9052141B71C00452C55 /* SiriSettingsViewController.swift */; };
-		D821E9102141B72B00452C55 /* SiriShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D821E90F2141B72B00452C55 /* SiriShortcuts.swift */; };
 		D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */; };
 		D83822001FC7961D00303C12 /* DispatchQueueExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueExtensions.swift */; };
 		D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */; };
@@ -683,10 +687,6 @@
 		E6F965121B2F1CF20034B023 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
-		EB07ADBB207FB3E10048D794 /* ClientPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07ADBA207FB3E00048D794 /* ClientPickerViewController.swift */; };
-		EB07ADBC207FB3E10048D794 /* ClientPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07ADBA207FB3E00048D794 /* ClientPickerViewController.swift */; };
-		EB07ADBE207FB3E80048D794 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07ADBD207FB3E80048D794 /* InstructionsViewController.swift */; };
-		EB07ADBF207FB3E80048D794 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB07ADBD207FB3E80048D794 /* InstructionsViewController.swift */; };
 		EB11A1042044A90E0018F749 /* ContentBlockerHelper+Whitelist.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11A1012044A90D0018F749 /* ContentBlockerHelper+Whitelist.swift */; };
 		EB11A1052044A90E0018F749 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11A1022044A90D0018F749 /* TrackingProtectionPageStats.swift */; };
 		EB11A1062044A90E0018F749 /* ContentBlockerHelper+TabContentScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB11A1032044A90E0018F749 /* ContentBlockerHelper+TabContentScript.swift */; };
@@ -1552,6 +1552,9 @@
 		D03F8F24200EACD8003C2224 /* ContextMenu.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ContextMenu.js; sourceTree = "<group>"; };
 		D047C55520E1640B001A3C07 /* KeyBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyBundle.swift; sourceTree = "<group>"; };
 		D04CD717215EBD85004FF5B0 /* SettingsLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLoadingView.swift; sourceTree = "<group>"; };
+		D04CD747216CF86A004FF5B0 /* SiriShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SiriShortcuts.swift; path = Extensions/SiriShortcuts.swift; sourceTree = "<group>"; };
+		D04CD748216CF86B004FF5B0 /* ClientPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientPickerViewController.swift; path = Extensions/ClientPickerViewController.swift; sourceTree = "<group>"; };
+		D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsViewController.swift; path = Extensions/InstructionsViewController.swift; sourceTree = "<group>"; };
 		D04D1B852097859B0074B35F /* DownloadToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadToast.swift; sourceTree = "<group>"; };
 		D04D1B91209790B60074B35F /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D0625C97208E87F10081F3B2 /* DownloadQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueue.swift; sourceTree = "<group>"; };
@@ -1645,7 +1648,6 @@
 		D81127D71F84023B0050841D /* PhotonActionSheetTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetTest.swift; sourceTree = "<group>"; };
 		D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabContentSettingsViewController.swift; sourceTree = "<group>"; };
 		D821E9052141B71C00452C55 /* SiriSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiriSettingsViewController.swift; sourceTree = "<group>"; };
-		D821E90F2141B72B00452C55 /* SiriShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiriShortcuts.swift; sourceTree = "<group>"; };
 		D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSearchPrefsTests.swift; sourceTree = "<group>"; };
 		D83821FF1FC7961D00303C12 /* DispatchQueueExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueExtensions.swift; sourceTree = "<group>"; };
 		D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientProgressBar.swift; sourceTree = "<group>"; };
@@ -1850,8 +1852,6 @@
 		E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLExtensionsTests.swift; sourceTree = "<group>"; };
 		E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FirefoxBeta.xcconfig; path = Configuration/FirefoxBeta.xcconfig; sourceTree = "<group>"; };
 		E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageMetadata.swift; sourceTree = "<group>"; };
-		EB07ADBA207FB3E00048D794 /* ClientPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ClientPickerViewController.swift; path = Extensions/ShareTo/ClientPickerViewController.swift; sourceTree = SOURCE_ROOT; };
-		EB07ADBD207FB3E80048D794 /* InstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsViewController.swift; path = Extensions/ShareTo/InstructionsViewController.swift; sourceTree = SOURCE_ROOT; };
 		EB11A1012044A90D0018F749 /* ContentBlockerHelper+Whitelist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContentBlockerHelper+Whitelist.swift"; sourceTree = "<group>"; };
 		EB11A1022044A90D0018F749 /* TrackingProtectionPageStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionPageStats.swift; sourceTree = "<group>"; };
 		EB11A1032044A90E0018F749 /* ContentBlockerHelper+TabContentScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContentBlockerHelper+TabContentScript.swift"; sourceTree = "<group>"; };
@@ -2665,9 +2665,9 @@
 		7B0B1B9C1C1B69F500DF4AB5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				D821E90F2141B72B00452C55 /* SiriShortcuts.swift */,
-				EB07ADBD207FB3E80048D794 /* InstructionsViewController.swift */,
-				EB07ADBA207FB3E00048D794 /* ClientPickerViewController.swift */,
+				D04CD748216CF86B004FF5B0 /* ClientPickerViewController.swift */,
+				D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */,
+				D04CD747216CF86A004FF5B0 /* SiriShortcuts.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -5068,6 +5068,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
 				EB9A179F20E6C1A200B12184 /* ThemedWidgets.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
@@ -5083,7 +5084,6 @@
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				EBF47E701F7979DF00899189 /* UnifiedTelemetry.swift in Sources */,
 				E68F36981EA694000048CF44 /* PanelDataObservers.swift in Sources */,
-				EB07ADBE207FB3E80048D794 /* InstructionsViewController.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */,
@@ -5161,6 +5161,7 @@
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
 				F35B8D2F1D638408008E3D61 /* SessionRestoreHandler.swift in Sources */,
+				D04CD74B216CF86B004FF5B0 /* ClientPickerViewController.swift in Sources */,
 				E63ED8E11BFD25580097D08E /* LoginListViewController.swift in Sources */,
 				D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
@@ -5216,13 +5217,11 @@
 				E65075541E37F6FC006961AC /* DynamicFontHelper.swift in Sources */,
 				C4E3984C1D21F2FD004E89BA /* TabTrayButtonExtensions.swift in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
-				D821E9102141B72B00452C55 /* SiriShortcuts.swift in Sources */,
 				0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
 				E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */,
-				EB07ADBB207FB3E10048D794 /* ClientPickerViewController.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
@@ -5275,6 +5274,7 @@
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */,
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
+				D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */,
 				E49943F51AE6879C00BF9DE4 /* IntroViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5326,13 +5326,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB07ADBF207FB3E80048D794 /* InstructionsViewController.swift in Sources */,
 				FA6B2AC41D41F02D00429414 /* Punycode.swift in Sources */,
 				D38B2D8A1A8D98D00040E6B5 /* SearchEngines.swift in Sources */,
 				EB6E0C60207E6C3100FBFF7E /* SendToDevice.swift in Sources */,
 				D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				EB94075320850C9F00702E05 /* photon-colors.swift in Sources */,
 				D38B2D8C1A8D98D90040E6B5 /* OpenSearch.swift in Sources */,
+				D04CD74D216CF86F004FF5B0 /* ClientPickerViewController.swift in Sources */,
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
 				DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
@@ -5340,7 +5340,7 @@
 				E68F36AD1EA698650048CF44 /* PanelDataObservers.swift in Sources */,
 				28CDA55C1A43C37C005C318C /* NSUserDefaultsPrefs.swift in Sources */,
 				E60D03271D511554002FE3F6 /* SyncStatusResolver.swift in Sources */,
-				EB07ADBC207FB3E10048D794 /* ClientPickerViewController.swift in Sources */,
+				D04CD74E216CF86F004FF5B0 /* InstructionsViewController.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
