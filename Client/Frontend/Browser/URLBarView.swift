@@ -771,7 +771,7 @@ class ToolbarTextField: AutocompleteTextField {
         // http://stackoverflow.com/questions/27944781/how-to-change-the-tint-color-of-the-clear-button-on-a-uitextfield
         for view in subviews as [UIView] {
             if let button = view as? UIButton {
-                if let image = button.image(for: []) {
+                if let image = UIImage.templateImageNamed("topTabs-closeTabs") {
                     if tintedClearImage == nil {
                         tintedClearImage = tintImage(image, color: clearButtonTintColor)
                     }
