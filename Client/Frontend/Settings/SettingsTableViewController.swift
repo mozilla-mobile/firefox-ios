@@ -579,14 +579,14 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
+            let cell = ThemedTableViewCell(style: setting.style, reuseIdentifier: nil)
             setting.onConfigureCell(cell)
             cell.backgroundColor = UIColor.theme.tableView.rowBackground
             return cell
         }
-        return cell
+        return super.tableView(tableView, cellForRowAt: indexPath)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
