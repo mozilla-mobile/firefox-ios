@@ -772,7 +772,11 @@ class ToolbarTextField: AutocompleteTextField {
        for case let button as UIButton in subviews {
             if let image = UIImage.templateImageNamed("topTabs-closeTabs") {
                 if tintedClearImage == nil {
-                    tintedClearImage = tintImage(image, color: clearButtonTintColor)
+                    if let clearButtonTintColor = clearButtonTintColor {
+                        tintedClearImage = image.tinted(withColor: clearButtonTintColor)
+                    } else {
+                        tintedClearImage = image
+                    }
                 }
 
                 if button.imageView?.image != tintedClearImage {
@@ -780,27 +784,6 @@ class ToolbarTextField: AutocompleteTextField {
                 }
             }
         }
-    }
-
-    fileprivate func tintImage(_ image: UIImage, color: UIColor?) -> UIImage {
-        guard let color = color else { return image }
-
-        let size = image.size
-
-        UIGraphicsBeginImageContextWithOptions(size, false, 2)
-        let context = UIGraphicsGetCurrentContext()!
-        image.draw(at: .zero, blendMode: .normal, alpha: 1.0)
-
-        context.setFillColor(color.cgColor)
-        context.setBlendMode(.sourceIn)
-        context.setAlpha(1.0)
-
-        let rect = CGRect(size: image.size)
-        context.fill(rect)
-        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-
-        return tintedImage
     }
 }
 

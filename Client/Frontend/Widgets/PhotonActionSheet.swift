@@ -778,12 +778,18 @@ private class PhotonActionSheetCell: UITableViewCell {
 }
 
 private class SyncMenuButton: UIButton {
-
     let syncManager: SyncManager
     let iconSize = CGSize(width: 24, height: 24)
+    let normalImage: UIImage
+    let syncingImage: UIImage
 
     init(with syncManager: SyncManager) {
         self.syncManager = syncManager
+
+        let image = UIImage(named: "FxA-Sync")!.createScaled(iconSize)
+        self.normalImage = ThemeManager.instance.currentName == .dark ? image.tinted(withColor: .white) : image
+        self.syncingImage = UIImage(named: "FxA-Sync-Blue")!.createScaled(iconSize)
+
         super.init(frame: .zero)
 
         self.addTarget(self, action: #selector(startSync), for: .touchUpInside)
@@ -798,15 +804,15 @@ private class SyncMenuButton: UIButton {
         }
 
         guard let syncStatus = syncManager.syncDisplayState else {
-            self.setImage(UIImage(named: "FxA-Sync")?.createScaled(iconSize), for: .normal)
+            setImage(self.normalImage, for: [])
             return
         }
 
-        let imageName = (syncStatus == .inProgress) ? "FxA-Sync-Blue" : "FxA-Sync"
-        setImage(UIImage(named: imageName)?.createScaled(iconSize), for: .normal)
-
         if syncStatus == .inProgress {
+            setImage(self.syncingImage, for: [])
             animate()
+        } else {
+            setImage(self.normalImage, for: [])
         }
     }
 
@@ -822,9 +828,9 @@ private class SyncMenuButton: UIButton {
 
     func updateAnimations() {
         self.imageView?.layer.removeAllAnimations()
-        setImage(UIImage(named: "FxA-Sync")?.createScaled(iconSize), for: .normal)
+        setImage(self.normalImage, for: [])
         if let syncStatus = syncManager.syncDisplayState, syncStatus == .inProgress {
-            setImage(UIImage(named: "FxA-Sync-Blue")?.createScaled(iconSize), for: .normal)
+            setImage(self.syncingImage, for: [])
             animate()
         }
     }
