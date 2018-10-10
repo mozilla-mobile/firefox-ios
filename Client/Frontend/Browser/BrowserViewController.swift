@@ -1899,7 +1899,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         toast.showToast(viewController: self, delay: delay, duration: duration, makeConstraints: { make in
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.webViewContainer)
+            make.bottom.equalTo(self.webViewContainer?.safeArea.bottom ?? 0)
         })
     }
 
