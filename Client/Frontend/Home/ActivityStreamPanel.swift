@@ -135,8 +135,12 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
             }
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
-        }, completion: nil)
+        }, completion: { _ in
+            // Workaround: label positions are not correct without additional reload
+            self.collectionView?.reloadData()
+        })
     }
+
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
