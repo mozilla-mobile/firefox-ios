@@ -17,7 +17,6 @@ protocol TabPeekDelegate: AnyObject {
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     fileprivate static let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
-    fileprivate static let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Reading List")
     fileprivate static let PreviewActionCopyURL = NSLocalizedString("Copy URL", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
     fileprivate static let PreviewActionCloseTab = NSLocalizedString("Close Tab", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to close the current tab")
 
@@ -46,13 +45,6 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
         let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
         if !self.ignoreURL && !urlIsTooLongToSave {
-            if !self.isInReadingList {
-                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .default) { [weak self] previewAction, viewController in
-                    guard let wself = self, let tab = wself.tab else { return }
-                    _ = wself.delegate?.tabPeekDidAddToReadingList(tab)
-                })
-            }
-
             if !self.isBookmarked {
                 actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToBookmarks, style: .default) { [weak self] previewAction, viewController in
                     guard let wself = self, let tab = wself.tab else { return }
