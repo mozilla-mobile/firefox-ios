@@ -21,6 +21,8 @@ extension BrowserViewController: UIDropInteractionDelegate {
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        guard let tab = tabManager.selectedTab else { return }
+
         UnifiedTelemetry.recordEvent(category: .action, method: .drop, object: .url, value: .browser)
 
         _ = session.loadObjects(ofClass: URL.self) { urls in
@@ -28,7 +30,7 @@ extension BrowserViewController: UIDropInteractionDelegate {
                 return
             }
 
-            self.finishEditingAndSubmit(url, visitType: VisitType.typed)
+            self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
         }
     }
 }
