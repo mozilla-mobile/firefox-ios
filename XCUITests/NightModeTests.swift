@@ -16,10 +16,10 @@ class NightModeTests: BaseTestCase {
     }
 
     func testNightModeUI() {
-        let url1 = "www.google.com"
+        let url1 = "test-example.html"
 
         // Go to a webpage, and select night mode on and off, check it's applied or not
-        navigator.openNewURL(urlString: url1)
+        navigator.openURL(path(forTestPage: url1))
 
         //turn on the night mode
         navigator.performAction(Action.ToggleNightMode)

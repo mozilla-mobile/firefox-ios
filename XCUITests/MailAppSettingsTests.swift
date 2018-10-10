@@ -11,17 +11,9 @@ class MailAppSettingsTests: BaseTestCase {
         // Check that the list is shown
         waitforExistence(app.tables["OpenWithPage.Setting.Options"])
         XCTAssertTrue(app.tables["OpenWithPage.Setting.Options"].exists)
-        XCTAssertTrue(app.tables.staticTexts["OPEN MAIL LINKS WITH"].exists)
-
-        // Check that user can go back from that setting
-        navigator.goto(HomePanelsScreen)
-    }
-
-    func testDefaultOptionsDisabled() {
-        navigator.goto(OpenWithSettings)
 
         // Check that the list is shown with all elements disabled
-        waitforExistence(app.tables["OpenWithPage.Setting.Options"])
+        XCTAssertTrue(app.tables.staticTexts["OPEN MAIL LINKS WITH"].exists)
         XCTAssertFalse(app.tables.cells.staticTexts["Mail"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Outlook"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Airmail"].isSelected)
@@ -31,14 +23,13 @@ class MailAppSettingsTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts["YMail!"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Gmail"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Inbox by Gmail"].isSelected)
-    }
-
-    func testTapOnDisabledOptionDoesNothing() {
-        navigator.goto(OpenWithSettings)
 
         // Check that tapping on an element does nothing
         waitforExistence(app.tables["OpenWithPage.Setting.Options"])
         app.tables.cells.staticTexts["Airmail"].tap()
         XCTAssertFalse(app.tables.cells.staticTexts["Airmail"].isSelected)
+
+        // Check that user can go back from that setting
+        navigator.goto(HomePanelsScreen)
     }
 }

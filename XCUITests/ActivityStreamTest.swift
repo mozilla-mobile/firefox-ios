@@ -36,6 +36,7 @@ class ActivityStreamTest: BaseTestCase {
         super.tearDown()
     }
 
+    // Smoketest
     func testDefaultSites() {
         // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
@@ -176,6 +177,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(app.collectionViews.cells["Apple"].exists, "A new Tab has not been open")
     }
 
+    // Smoketest
     func testTopSitesOpenInNewTabDefaultTopSite() {
         // Open one of the sites from Topsites and wait until page is loaded
         app.cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
@@ -189,6 +191,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertEqual(numTabsOpen, 2, "New tab not open")
     }
 
+    // Smoketest
     func testTopSitesOpenInNewPrivateTab() {
         navigator.goto(HomePanelsScreen)
         waitforExistence(app.cells["apple"])
@@ -216,6 +219,7 @@ class ActivityStreamTest: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: "apple.com")
     }
 
+    // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         // Open one of the sites from Topsites and wait until page is loaded
         TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!]

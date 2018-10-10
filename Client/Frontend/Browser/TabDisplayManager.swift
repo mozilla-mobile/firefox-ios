@@ -343,10 +343,17 @@ extension TabDisplayManager {
         return TopTabChangeSet(reloadArr: reloads, insertArr: inserts, deleteArr: deletes, moveArr: moves)
     }
 
-    func updateTabsFrom(_ oldTabs: [Tab]?, to newTabs: [Tab], on completion: (() -> Void)? = nil) {
+    func updateTabsFrom(_ oldTabs: [Tab]?, to newTabs: [Tab]) {
         assertIsMainThread("Updates can only be performed from the main thread")
         guard let oldTabs = oldTabs, !self.isUpdating, !self.pendingReloadData, !self.isDragging else {
             return
+        }
+
+        func performPendingCompletions() {
+            for block in self.completionBlocks {
+                block()
+            }
+            self.completionBlocks.removeAll()
         }
 
         // Lets create our change set
@@ -355,7 +362,7 @@ extension TabDisplayManager {
 
         // If there are no changes. We have nothing to do
         if update.isEmpty {
-            completion?()
+            performPendingCompletions()
             return
         }
 
@@ -381,7 +388,7 @@ extension TabDisplayManager {
         self.pendingUpdatesToTabs = newTabs // This var helps other mutations that might happen while updating.
 
         let onComplete: () -> Void = {
-            completion?()
+            performPendingCompletions()
             self.isUpdating = false
             self.pendingUpdatesToTabs = []
             // run completion blocks
@@ -392,11 +399,13 @@ extension TabDisplayManager {
 
             // There can be pending animations. Run update again to clear them.
             let tabs = self.oldTabs ?? self.tabStore
-            self.updateTabsFrom(tabs, to: self.tabsToDisplay, on: {
+
+            self.completionBlocks.append {
                 if !update.inserts.isEmpty || !update.reloads.isEmpty {
                     self.tabDisplayer?.focusSelectedTab()
                 }
-            })
+            }
+            self.updateTabsFrom(tabs, to: self.tabsToDisplay)
         }
 
         // The actual update. Only animate the changes if no tabs have moved
@@ -471,12 +480,7 @@ extension TabDisplayManager: TabManagerDelegate {
         if self.pendingReloadData && !isUpdating {
             self.reloadData()
         } else {
-            self.updateTabsFrom(self.oldTabs, to: self.tabsToDisplay) {
-                for block in self.completionBlocks {
-                    block()
-                }
-                self.completionBlocks.removeAll()
-            }
+            self.updateTabsFrom(self.oldTabs, to: self.tabsToDisplay)
         }
     }
 
@@ -535,7 +539,6 @@ extension TabDisplayManager: TabManagerDelegate {
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
         recordEventAndBreadcrumb(object: .tab, method: .add)
-        self.reloadData()
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {

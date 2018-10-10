@@ -309,6 +309,7 @@ extension HomePanelViewController: Themeable {
         buttonTintColor = UIColor.theme.homePanel.toolbarTint
         buttonSelectedTintColor = UIColor.theme.homePanel.toolbarHighlight
         highlightLine.backgroundColor = UIColor.theme.homePanel.toolbarHighlight
+        buttonContainerBottomBorderView.backgroundColor = UIColor.theme.homePanel.buttonContainerBorder
         updateButtonTints()
     }
 }
@@ -335,6 +336,9 @@ extension HomePanelContextMenu {
         let contextMenu = PhotonActionSheet(site: site, actions: actions)
         contextMenu.modalPresentationStyle = .overFullScreen
         contextMenu.modalTransitionStyle = .crossDissolve
+
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
 
         return contextMenu
     }

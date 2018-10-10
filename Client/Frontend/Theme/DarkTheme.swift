@@ -6,7 +6,7 @@ import Foundation
 
 // Convenience reference to these normal mode colors which are used in a few color classes.
 fileprivate let defaultBackground = UIColor.Photon.Grey80
-fileprivate let defaultSeparator = UIColor.Photon.Grey30
+fileprivate let defaultSeparator = UIColor.Photon.Grey60
 fileprivate let defaultTextAndTint = UIColor.Photon.Grey10
 
 fileprivate class DarkTableViewColor: TableViewColor {
@@ -29,7 +29,11 @@ fileprivate class DarkActionMenuColor: ActionMenuColor {
 }
 
 fileprivate class DarkURLBarColor: URLBarColor {
-    // use defaults
+    override func textSelectionHighlight(_ isPrivate: Bool) -> TextSelectionHighlight {
+        let color = isPrivate ? UIColor.Defaults.MobilePrivatePurple : UIColor(rgb: 0x3d89cc)
+        return (labelMode: color.withAlphaComponent(0.25), textFieldMode: color)
+
+    }
 }
 
 fileprivate class DarkBrowserColor: BrowserColor {
@@ -111,6 +115,7 @@ fileprivate class DarkSnackBarColor: SnackBarColor {
 fileprivate class DarkGeneralColor: GeneralColor {
     override var settingsTextPlaceholder: UIColor? { return UIColor.black }
     override var faviconBackground: UIColor { return UIColor.Photon.White100 }
+    override var passcodeDot: UIColor { return UIColor.Photon.Grey40 }
 }
 
 class DarkTheme: NormalTheme {

@@ -24,7 +24,7 @@ class SaveLoginTest: BaseTestCase {
         navigator.goto(LoginsSettings)
         waitforExistence(app.tables["Login List"])
     }
-    // Test disabled on iPhone schema due to bug 1488215
+
     func testSaveLogin() {
         // Initially the login list should be empty
         openLoginsSettings()
@@ -37,7 +37,6 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, 1)
     }
 
-    // Test disabled on iPhone schema due to bug 1488215
     func testDoNotSaveLogin() {
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
@@ -49,6 +48,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, 0)
     }
 
+    // Smoketest
     func testSavedLoginSelectUnselect() {
         saveLogin()
         openLoginsSettings()
@@ -68,7 +68,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertTrue(app.cells.images["loginUnselected"].exists)
     }
 
-    // Test disabled on iPhone schema due to bug 1488215
+
     func testDeleteLogin() {
         saveLogin()
         openLoginsSettings()
@@ -82,7 +82,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertTrue(app.tables["No logins found"].exists)
     }
 
-    // Test disabled on iPhone schema due to bug 1488215
+
     func testEditOneLoginEntry() {
         saveLogin()
         openLoginsSettings()
@@ -96,7 +96,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts["Delete"].exists)
     }
 
-    // Test disabled on iPhone schema due to bug 1488215
+
     func testSearchLogin() {
         saveLogin()
         openLoginsSettings()
@@ -119,6 +119,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, 1)
     }
 
+    // Smoketest
     func testSavedLoginAutofilled() {
         navigator.openURL(urlLogin)
         waitUntilPageLoad()

@@ -52,6 +52,7 @@ class ClipBoardTests: BaseTestCase {
         waitForValueContains(app.textFields["address"], value: "www.example.com")
     }
 
+    // Smoketest
     func testClipboardPasteAndGo() {
         navigator.openURL(url)
         waitUntilPageLoad()

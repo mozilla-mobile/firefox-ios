@@ -135,8 +135,12 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
             }
             self.collectionViewLayout.invalidateLayout()
             self.collectionView?.reloadData()
-        }, completion: nil)
+        }, completion: { _ in
+            // Workaround: label positions are not correct without additional reload
+            self.collectionView?.reloadData()
+        })
     }
+
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
@@ -1009,32 +1013,41 @@ struct ActivityStreamTracker {
 
 // MARK: - Section Header View
 private struct ASHeaderViewUX {
-    static let SeperatorColor =  UIColor.Photon.Grey20
+    static var SeparatorColor: UIColor { return UIColor.theme.homePanel.separator }
     static let TextFont = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
-    static let SeperatorHeight = 1
+    static let SeparatorHeight = 1
     static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASPanelUX.MinimumInsets : ASPanelUX.MinimumInsets
     static let TitleTopInset: CGFloat = 5
 }
 
 class ASFooterView: UICollectionReusableView {
 
+    private var separatorLineView: UIView?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        let seperatorLine = UIView()
-        seperatorLine.backgroundColor = ASHeaderViewUX.SeperatorColor
+        let separatorLine = UIView()
         self.backgroundColor = UIColor.clear
-        addSubview(seperatorLine)
-        seperatorLine.snp.makeConstraints { make in
-            make.height.equalTo(ASHeaderViewUX.SeperatorHeight)
+        addSubview(separatorLine)
+        separatorLine.snp.makeConstraints { make in
+            make.height.equalTo(ASHeaderViewUX.SeparatorHeight)
             make.leading.equalTo(self.snp.leading)
             make.trailing.equalTo(self.snp.trailing)
             make.top.equalTo(self.snp.top)
         }
+        separatorLineView = separatorLine
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension ASFooterView: Themeable {
+    func applyTheme() {
+        separatorLineView?.backgroundColor = ASHeaderViewUX.SeparatorColor
     }
 }
 

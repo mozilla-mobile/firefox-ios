@@ -15,16 +15,6 @@ let urlValueExample = "example"
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
 class TopTabsTest: BaseTestCase {
-    func testAddTabFromSettings() {
-        navigator.createNewTab()
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitForValueContains(app.textFields["url"], value: "localhost")
-        waitforExistence(app.buttons["Show Tabs"])
-        let numTab = app.buttons["Show Tabs"].value as? String
-
-        XCTAssertEqual("2", numTab)
-    }
-
     func testAddTabFromTabTray() {
         navigator.goto(TabTray)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -104,6 +94,7 @@ class TopTabsTest: BaseTestCase {
         }
     }
 
+    // Smoketest
     func testCloseAllTabsUndo() {
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -173,7 +164,9 @@ class TopTabsTest: BaseTestCase {
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
-
+        if !iPad() {
+            waitforExistence(app.buttons["TabToolbar.tabsButton"])
+        }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs and check that the number of tabs is correct
@@ -199,6 +192,7 @@ class TopTabsTest: BaseTestCase {
         waitforNoExistence(app.collectionViews.cells[urlLabel])
     }
 
+    // Smoketest
     func testLongTapTabCounter() {
         if !iPad() {
             // Long tap on Tab Counter should show the correct options
@@ -294,6 +288,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
+    // Smoketest
     func testSwitchBetweenTabsToastButton() {
         if skipPlatform { return }
 
@@ -331,6 +326,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
+    // Smoketest
     func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
         if skipPlatform { return }
 
@@ -349,5 +345,26 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
         navigator.goto(TabTray)
         XCTAssertTrue(app.buttons["TabTrayController.maskButton"].isEnabled)
+    }
+}
+
+    // Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button and closing the tabs by tapping 'x' button
+class TopTabsTestIpad: IpadOnlyTestCase {
+    func testUpdateTabCounter(){
+        if skipPlatform {return}
+        // Open three tabs by tapping on '+' button
+        app/*@START_MENU_TOKEN@*/.buttons["New Tab"]/*[[".buttons[\"New Tab\"]",".buttons[\"TopTabsViewController.newTabButton\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
+        app/*@START_MENU_TOKEN@*/.buttons["New Tab"]/*[[".buttons[\"New Tab\"]",".buttons[\"TopTabsViewController.newTabButton\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("3", numTab)
+        // Remove one tab by tapping on 'x' button
+        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "home").element(boundBy: 1).buttons["Remove page — Open New Tab"].tap()
+        waitforExistence(app.buttons["Show Tabs"])
+        let numTabAfterRemovingThirdTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numTabAfterRemovingThirdTab)
+        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "home").element(boundBy: 1).buttons["Remove page — Open New Tab"].tap()
+        waitforExistence(app.buttons["Show Tabs"])
+        let numTabAfterRemovingSecondTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("1", numTabAfterRemovingSecondTab)
     }
 }

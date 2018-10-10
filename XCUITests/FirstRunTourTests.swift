@@ -8,6 +8,7 @@ class FirstRunTourTests: BaseTestCase {
         super.setUp()
     }
 
+    // Smoketest
     func testFirstRunTour() {
         // Complet the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there

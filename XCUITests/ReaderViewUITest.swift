@@ -5,6 +5,7 @@
 import XCTest
 
 class ReaderViewTest: BaseTestCase {
+    // Smoketest
     func testLoadReaderContent() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
@@ -32,6 +33,7 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertEqual(list, items, "The number of items in the reading table is not correct")
     }
 
+    // Smoketest
     func testAddToReadingList() {
         // Initially reading list is empty
         navigator.goto(HomePanel_ReadingList)

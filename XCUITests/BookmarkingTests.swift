@@ -4,8 +4,8 @@
 
 import XCTest
 
-let url_1 = "www.google.com"
-let url_2 = ["url": "www.mozilla.org", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
+let url_1 = "test-example.html"
+let url_2 = ["url": "test-mozilla-org.html", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
 
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
@@ -46,21 +46,19 @@ class BookmarkingTests: BaseTestCase {
 
     func testBookmarkingUI() {
         // Go to a webpage, and add to bookmarks, check it's added
-        navigator.createNewTab()
-        loadWebPage(url_1)
+        navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         bookmark()
         checkBookmarked()
 
         // Load a different page on a new tab, check it's not bookmarked
-        navigator.createNewTab()
-        loadWebPage(url_2["url"]!)
+        navigator.openNewURL(urlString: path(forTestPage: url_2["url"]!))
         navigator.nowAt(BrowserTab)
         checkUnbookmarked()
 
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         navigator.goto(TabTray)
-        app.collectionViews.cells["Google"].tap()
+        app.collectionViews.cells["Example Domain"].tap()
         navigator.nowAt(BrowserTab)
         checkBookmarked()
 
@@ -75,21 +73,18 @@ class BookmarkingTests: BaseTestCase {
     }
 
     private func checkItemInBookmarkList() {
+        waitforExistence(app.tables["Bookmarks List"])
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)
     }
 
     func testAccessBookmarksFromContextMenu() {
-        //First time there is not any bookmark
-        navigator.browserPerformAction(.openBookMarksOption)
-        checkEmptyBookmarkList()
-        navigator.nowAt(BrowserTab)
-
         //Add a bookmark
-        navigator.createNewTab()
-        loadWebPage(url_2["url"]!)
+        navigator.openURL(path(forTestPage: url_2["url"]!))
+        waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
+        waitforExistence(app.buttons["TabLocationView.pageOptionsButton"])
         bookmark()
 
         //There should be a bookmark
@@ -97,6 +92,7 @@ class BookmarkingTests: BaseTestCase {
         checkItemInBookmarkList()
     }
 
+    // Smoketest
     func testBookmarksAwesomeBar() {
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.ebay")
@@ -105,6 +101,7 @@ class BookmarkingTests: BaseTestCase {
         XCTAssertTrue(app.buttons["www.ebay.com"].exists)
         typeOnSearchBar(text: ".com")
         typeOnSearchBar(text: "\r")
+        navigator.nowAt(BrowserTab)
 
          //Clear text and enter new url
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -115,6 +112,7 @@ class BookmarkingTests: BaseTestCase {
         waitforExistence(app.tables["SiteTable"])
         XCTAssertEqual(app.tables["SiteTable"].cells.count, 0)
         typeOnSearchBar(text: "\r")
+        navigator.nowAt(BrowserTab)
 
         // Add page to bookmarks
         navigator.nowAt(BrowserTab)

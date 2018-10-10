@@ -39,6 +39,7 @@ class PasscodeInputView: UIView, UIKeyInput {
     }
 
     @objc var keyboardType: UIKeyboardType = .numberPad
+    @objc var keyboardAppearance: UIKeyboardAppearance = ThemeManager.instance.currentName == .dark ? .dark : .default
 
     init(frame: CGRect, passcodeSize: Int) {
         self.passcodeSize = passcodeSize
@@ -123,6 +124,7 @@ class PasscodePane: UIView {
         let label = UILabel()
         label.font = UIConstants.DefaultChromeFont
         label.isAccessibilityElement = true
+        label.textColor = UIColor.theme.tableView.rowText
         return label
     }()
 

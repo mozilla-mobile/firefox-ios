@@ -30,6 +30,7 @@ class AuthenticationTest: BaseTestCase {
         navigator.performAction(Action.DisablePasscode)
     }
 
+    // Smoketest
     func testPromptPassCodeUponReentry() {
         navigator.performAction(Action.SetPasscode)
         navigator.goto(SettingsScreen)

@@ -798,13 +798,9 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func finishEditingAndSubmit(_ url: URL, visitType: VisitType) {
+    func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
-
-        guard let tab = tabManager.selectedTab else {
-            return
-        }
 
         if let webView = tab.webView {
             resetSpoofedUserAgentIfRequired(webView, newURL: url)
@@ -1152,14 +1148,16 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
 
 extension BrowserViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
+        guard let tab = tabManager.selectedTab else { return }
         openBlankNewTab(focusLocationField: false)
-        finishEditingAndSubmit(url, visitType: VisitType.typed)
+        finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
         UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
     }
 
     func didScanQRCodeWithText(_ text: String) {
+        guard let tab = tabManager.selectedTab else { return }
         openBlankNewTab(focusLocationField: false)
-        submitSearchText(text)
+        submitSearchText(text, forTab: tab)
         UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeText)
     }
 }
@@ -1383,21 +1381,23 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {
+        guard let currentTab = tabManager.selectedTab else { return }
         if let fixupURL = URIFixup.getURL(text) {
             // The user entered a URL, so use it.
-            finishEditingAndSubmit(fixupURL, visitType: VisitType.typed)
+            finishEditingAndSubmit(fixupURL, visitType: VisitType.typed, forTab: currentTab)
             return
         }
 
         // We couldn't build a URL, so check for a matching search keyword.
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard let possibleKeywordQuerySeparatorSpace = trimmedText.index(of: " ") else {
-            submitSearchText(text)
+            submitSearchText(text, forTab: currentTab)
             return
         }
 
         let possibleKeyword = String(trimmedText[..<possibleKeywordQuerySeparatorSpace])
         let possibleQuery = String(trimmedText[trimmedText.index(after: possibleKeywordQuerySeparatorSpace)...])
+
 
         profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(.main) { result in
             if var urlString = result.successValue,
@@ -1406,22 +1406,22 @@ extension BrowserViewController: URLBarDelegate {
                 urlString.replaceSubrange(range, with: escapedQuery)
 
                 if let url = URL(string: urlString) {
-                    self.finishEditingAndSubmit(url, visitType: VisitType.typed)
+                    self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
                     return
                 }
             }
 
-            self.submitSearchText(text)
+            self.submitSearchText(text, forTab: currentTab)
         }
     }
 
-    fileprivate func submitSearchText(_ text: String) {
+    fileprivate func submitSearchText(_ text: String, forTab tab: Tab) {
         let engine = profile.searchEngines.defaultEngine
 
         if let searchURL = engine.searchURLForQuery(text) {
             // We couldn't find a matching search keyword, so do a search query.
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
-            finishEditingAndSubmit(searchURL, visitType: VisitType.typed)
+            finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
             print("Error handling URL entry: \"\(text)\".")
@@ -1715,7 +1715,8 @@ extension BrowserViewController: TabDelegate {
 
 extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewController(_ homePanelViewController: HomePanelViewController, didSelectURL url: URL, visitType: VisitType) {
-        finishEditingAndSubmit(url, visitType: visitType)
+        guard let tab = tabManager.selectedTab else { return }
+        finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
     func homePanelViewController(_ homePanelViewController: HomePanelViewController, didSelectPanel panel: Int) {
@@ -1753,7 +1754,8 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
 
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL) {
-        finishEditingAndSubmit(url, visitType: VisitType.typed)
+        guard let tab = tabManager.selectedTab else { return }
+        finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
 
     func searchViewController(_ searchViewController: SearchViewController, didLongPressSuggestion suggestion: String) {
@@ -1899,7 +1901,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         toast.showToast(viewController: self, delay: delay, duration: duration, makeConstraints: { make in
             make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.webViewContainer)
+            make.bottom.equalTo(self.webViewContainer?.safeArea.bottom ?? 0)
         })
     }
 

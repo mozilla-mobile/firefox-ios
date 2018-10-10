@@ -26,6 +26,7 @@ class TrackingProtectionTests: BaseTestCase {
         }
     }
 
+    // Smoketest
     func testTrackingProtection() {
         navigator.goto(TrackingProtectionSettings)
 
@@ -133,6 +134,7 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString].exists, "TP menu is wrong when blocking elements")
     }
 
+    // Smoketest
     func testEnableDisableTPforSite() {
         disableTrackingProtectionForSite()
 
