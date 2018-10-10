@@ -350,6 +350,12 @@
                   Identifier = "TopTabsTest/testSwitchBetweenTabsToastButton()">
                </Test>
                <Test
+                  Identifier = "TopTabsTestIphone/testSwitchBetweenTabsNoPrivatePrivateToastButton()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTestIphone/testSwitchBetweenTabsToastButton()">
+               </Test>
+               <Test
                   Identifier = "TrackingProtectionTests/testEnableDisableTPforSite()">
                </Test>
                <Test

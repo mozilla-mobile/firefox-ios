@@ -33,6 +33,7 @@ class FindInPageTests: BaseTestCase {
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
     }
 
+    // Smoketest
     func testFindFromMenu() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()

@@ -163,6 +163,7 @@ class SearchTests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
         }
 
+    // Smoketest
     func testSearchEngine() {
         // Change to the each search engine and verify the search uses it
         changeSearchEngine(searchEngine: "Bing")

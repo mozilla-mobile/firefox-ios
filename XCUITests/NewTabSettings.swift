@@ -5,6 +5,7 @@
 import XCTest
 
 class NewTabSettingsTest: BaseTestCase {
+    // Smoketest
     func testCheckNewTabSettingsByDefault() {
         navigator.goto(NewTabSettings)
         waitforExistence(app.navigationBars["New Tab"])
@@ -38,6 +39,7 @@ class NewTabSettingsTest: BaseTestCase {
         waitforExistence(app.staticTexts["Highlights"])
     }
 
+    // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
         navigator.goto(NewTabSettings)
         waitforExistence(app.navigationBars["New Tab"])
@@ -50,6 +52,7 @@ class NewTabSettingsTest: BaseTestCase {
         waitforNoExistence(app.staticTexts["Highlights"])
     }
 
+    // Smoketest
     func testChangeNewTabSettingsShowYourBookmarks() {
         navigator.goto(NewTabSettings)
         waitforExistence(app.navigationBars["New Tab"])
@@ -67,6 +70,8 @@ class NewTabSettingsTest: BaseTestCase {
         waitforExistence(app.tables["Bookmarks List"].cells.staticTexts["The Book of Mozilla"])
         waitforNoExistence(app.staticTexts["Highlights"])
     }
+
+    // Smoketest
     func testChangeNewTabSettingsShowYourHistory() {
         navigator.goto(NewTabSettings)
         waitforExistence(app.navigationBars["New Tab"])

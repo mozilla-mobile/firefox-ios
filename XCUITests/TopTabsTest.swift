@@ -94,6 +94,7 @@ class TopTabsTest: BaseTestCase {
         }
     }
 
+    // Smoketest
     func testCloseAllTabsUndo() {
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -287,6 +288,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
+    // Smoketest
     func testSwitchBetweenTabsToastButton() {
         if skipPlatform { return }
 
@@ -324,6 +326,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
+    // Smoketest
     func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
         if skipPlatform { return }
 

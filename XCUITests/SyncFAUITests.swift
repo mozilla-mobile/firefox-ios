@@ -109,6 +109,7 @@ class SyncUITests: BaseTestCase {
         app.keys["delete"].press(forDuration: 2)
     }
 
+    // Smoketest
     func testAccountManagmentPage() {
         deleteInbox()
         // Log in
