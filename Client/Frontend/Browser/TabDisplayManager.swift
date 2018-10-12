@@ -68,23 +68,7 @@ class TabDisplayManager: NSObject {
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
 
-    var isPrivate = false {
-        didSet {
-            searchedTabs = nil
-            refreshStore()
-
-            //if private tabs is empty and we are transitioning to it add a tab
-            if tabManager.privateTabs.isEmpty && isPrivate {
-                tabManager.addTab(isPrivate: true)
-            }
-
-            if let tab = mostRecentTab(inTabs: tabsToDisplay) {
-                tabManager.selectTab(tab)
-            } else {
-                tabManager.selectTab(tabsToDisplay.last)
-            }
-        }
-    }
+    private(set) var isPrivate = false
 
     init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String) {
         self.collectionView = collectionView
@@ -103,6 +87,25 @@ class TabDisplayManager: NSObject {
         collectionView.reloadData()
     }
 
+    func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
+        isPrivate = isOn
+
+        searchedTabs = nil
+        refreshStore()
+
+        if createTabOnEmptyPrivateMode {
+            //if private tabs is empty and we are transitioning to it add a tab
+            if tabManager.privateTabs.isEmpty && isPrivate {
+                tabManager.addTab(isPrivate: true)
+            }
+        }
+        
+        let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
+        if let tab = tab {
+            tabManager.selectTab(tab)
+        } 
+    }
+    
     func searchTabsAnimated() {
         let isUnchanged = tabsToDisplay.zip(dataStore).reduce(true) { $0 && $1.0 === $1.1 }
         if !tabsToDisplay.isEmpty && isUnchanged {

@@ -182,7 +182,7 @@ class TopTabsViewController: UIViewController {
     }
 
     @objc func togglePrivateModeTapped() {
-        tabDisplayManager.isPrivate = !tabDisplayManager.isPrivate
+        tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: true)
         delegate?.topTabsDidTogglePrivateMode()
         self.privateModeButton.setSelected(tabDisplayManager.isPrivate, animated: true)
     }
@@ -235,7 +235,7 @@ extension TopTabsViewController: TopTabCellDelegate {
 
 extension TopTabsViewController: Themeable, PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
-        tabDisplayManager.isPrivate = isPrivate
+        tabDisplayManager.togglePrivateMode(isOn: isPrivate, createTabOnEmptyPrivateMode: true)
 
         privateModeButton.onTint = UIColor.theme.topTabs.privateModeButtonOnTint
         privateModeButton.offTint = UIColor.theme.topTabs.privateModeButtonOffTint

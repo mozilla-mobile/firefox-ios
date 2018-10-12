@@ -191,7 +191,7 @@ class TabTrayController: UIViewController {
         }
 
         if let tab = tabManager.selectedTab, tab.isPrivate {
-            tabDisplayManager.isPrivate = true
+            tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
             toolbar.applyUIMode(isPrivate: true)
         }
 
@@ -274,7 +274,8 @@ class TabTrayController: UIViewController {
             fromView = emptyPrivateTabsView
         }
 
-        tabDisplayManager.isPrivate = !tabDisplayManager.isPrivate
+        tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
+
         tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
 
         if tabDisplayManager.isPrivate, privateTabsAreEmpty() {
