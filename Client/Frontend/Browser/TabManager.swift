@@ -263,6 +263,7 @@ class TabManager: NSObject {
         var tab: Tab!
         for url in urls {
             tab = self.addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie)
+            tab.url = url
         }
 
         // Select the most recent.

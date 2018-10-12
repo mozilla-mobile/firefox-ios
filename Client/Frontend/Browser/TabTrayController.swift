@@ -89,12 +89,6 @@ class TabTrayController: UIViewController {
         return cancelButton
     }()
 
-    fileprivate(set) internal var privateMode: Bool = false {
-        didSet {
-            toolbar.applyUIMode(isPrivate: privateMode)
-        }
-    }
-
     fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
@@ -128,6 +122,8 @@ class TabTrayController: UIViewController {
         // these will be animated during view show/hide transition
         statusBarBG.alpha = 0
         searchBarHolder.alpha = 0
+
+        tabDisplayManager.tabDisplayCompletionDelegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -143,7 +139,7 @@ class TabTrayController: UIViewController {
     }
 
     func focusTab() {
-        guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.tabStore.index(of: currentTab), let rect = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame else {
+        guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.dataStore.index(of: currentTab), let rect = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame else {
             return
         }
         self.collectionView.scrollRectToVisible(rect, animated: false)
@@ -195,7 +191,8 @@ class TabTrayController: UIViewController {
         }
 
         if let tab = tabManager.selectedTab, tab.isPrivate {
-            privateMode = true
+            tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
+            toolbar.applyUIMode(isPrivate: true)
         }
 
         if traitCollection.forceTouchCapability == .available {
@@ -277,11 +274,11 @@ class TabTrayController: UIViewController {
             fromView = emptyPrivateTabsView
         }
 
-        tabDisplayManager.isPrivate = !tabDisplayManager.isPrivate
-        tabManager.willSwitchTabMode(leavingPBM: privateMode)
-        privateMode = !privateMode
+        tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
-        if privateMode, privateTabsAreEmpty() {
+        tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
+
+        if tabDisplayManager.isPrivate, privateTabsAreEmpty() {
             UIView.animate(withDuration: 0.2) {
                 self.searchBarHolder.alpha = 0
             }
@@ -294,15 +291,14 @@ class TabTrayController: UIViewController {
         if tabDisplayManager.searchActive {
             self.didPressCancel()
         } else {
-            self.tabDisplayManager.reloadData()
+            self.tabDisplayManager.refreshStore()
         }
 
-        tabDisplayManager.isPrivate = privateMode
         // If we are exiting private mode and we have the close private tabs option selected, make sure
         // we clear out all of the private tabs
-        let exitingPrivateMode = !privateMode && tabManager.shouldClearPrivateTabs()
+        let exitingPrivateMode = !tabDisplayManager.isPrivate && tabManager.shouldClearPrivateTabs()
 
-        toolbar.maskButton.setSelected(privateMode, animated: true)
+        toolbar.maskButton.setSelected(tabDisplayManager.isPrivate, animated: true)
         collectionView.layoutSubviews()
 
         let toView: UIView
@@ -334,11 +330,20 @@ class TabTrayController: UIViewController {
             }
             self.collectionView.alpha = 1
             self.toolbar.isUserInteractionEnabled = true
+
+            // A final reload to ensure no animations happen while completing the transition.
+            self.tabDisplayManager.refreshStore()
+        }
+
+        toolbar.applyUIMode(isPrivate: tabDisplayManager.isPrivate)
+
+        if let search = searchBar.text, !search.isEmpty {
+            searchTabs(for: search)
         }
     }
 
     fileprivate func privateTabsAreEmpty() -> Bool {
-        return privateMode && tabManager.privateTabs.count == 0
+        return tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
     }
 
     @objc func openTab() {
@@ -353,20 +358,14 @@ class TabTrayController: UIViewController {
         toolbar.isUserInteractionEnabled = false
 
         tabManager.selectTab(tabManager.addTab(request, isPrivate: tabDisplayManager.isPrivate))
-        self.tabDisplayManager.performTabUpdates {
-            self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
-            self.dismissTabTray()
-        }
-        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray"])
     }
-
 }
 
 extension TabTrayController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        if privateMode, privateTabsAreEmpty() {
+        if tabDisplayManager.isPrivate, privateTabsAreEmpty() {
             UIView.animate(withDuration: 0.2) {
                 self.searchBarHolder.alpha = 0
             }
@@ -380,7 +379,7 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
-        if privateMode {
+        if tabDisplayManager.isPrivate {
             UIView.animate(withDuration: 0.2) {
                 self.searchBarHolder.alpha = 1
             }
@@ -409,9 +408,8 @@ extension TabTrayController: UITextFieldDelegate {
             clearSearch()
             return
         }
-        ensureMainThread {
-            self.searchTabs(for: text)
-        }
+
+        searchTabs(for: text)
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -435,18 +433,15 @@ extension TabTrayController: UITextFieldDelegate {
             }
             return false
         }
-        self.tabDisplayManager.searchActive = true
-        self.tabDisplayManager.searchedTabs = filteredTabs
-        self.tabDisplayManager.performTabUpdates()
+        tabDisplayManager.searchedTabs = filteredTabs
+
+        tabDisplayManager.searchTabsAnimated()
     }
 
     func clearSearch() {
-        tabDisplayManager.searchActive = false
-        tabDisplayManager.searchedTabs = []
+        tabDisplayManager.searchedTabs = nil
         searchBar.text = ""
-        ensureMainThread {
-            self.tabDisplayManager.performTabUpdates()
-        }
+        tabDisplayManager.refreshStore()
     }
 }
 
@@ -477,13 +472,8 @@ extension TabTrayController {
     }
 
     func closeTabsForCurrentTray() {
-        tabManager.removeTabsWithUndoToast(tabDisplayManager.tabStore)
-        if !tabDisplayManager.isPrivate {
-            // when closing all tabs in normal mode we automatically open a new tab and focus it
-            self.tabDisplayManager.performTabUpdates {
-                self.dismissTabTray()
-            }
-        } else {
+        tabManager.removeTabsWithUndoToast(tabDisplayManager.dataStore.compactMap { $0 })
+        if tabDisplayManager.isPrivate {
             emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
             if !emptyPrivateTabsView.isHidden {
                 // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
@@ -502,6 +492,8 @@ extension TabTrayController {
     }
 
     func dismissTabTray() {
+        collectionView.layer.removeAllAnimations()
+        collectionView.cellForItem(at: IndexPath(row: 0, section: 0))?.layer.removeAllAnimations()
         _ = self.navigationController?.popViewController(animated: true)
     }
 
@@ -510,7 +502,7 @@ extension TabTrayController {
 // MARK: - App Notifications
 extension TabTrayController {
     @objc func appWillResignActiveNotification() {
-        if privateMode {
+        if tabDisplayManager.isPrivate {
             collectionView.alpha = 0
             searchBarHolder.alpha = 0
         }
@@ -522,7 +514,7 @@ extension TabTrayController {
         UIView.animate(withDuration: 0.2) {
             self.collectionView.alpha = 1
 
-            if self.privateMode, !self.privateTabsAreEmpty() {
+            if self.tabDisplayManager.isPrivate, !self.privateTabsAreEmpty() {
                 self.searchBarHolder.alpha = 1
             }
         }
@@ -531,7 +523,7 @@ extension TabTrayController {
 
 extension TabTrayController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
-        if let tab = tabDisplayManager.tabStore[safe: index] {
+        if let tab = tabDisplayManager.dataStore.at(index) {
             tabManager.selectTab(tab)
             dismissTabTray()
         }
@@ -580,7 +572,7 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
 extension TabTrayController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
         guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
-        if let tab = tabDisplayManager.tabStore[safe: indexPath.item] {
+        if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             self.removeTab(tab: tab)
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
         }
@@ -589,8 +581,8 @@ extension TabTrayController: SwipeAnimatorDelegate {
 
 extension TabTrayController: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
-        if let indexPath = collectionView.indexPath(for: cell), let tab = tabDisplayManager.tabStore[safe: indexPath.item] {
-            self.removeTab(tab: tab)
+        if let indexPath = collectionView.indexPath(for: cell), let tab = tabDisplayManager.dataStore.at(indexPath.item) {
+            removeTab(tab: tab)
         }
     }
 }
@@ -606,7 +598,7 @@ extension TabTrayController: TabPeekDelegate {
     }
 
     func tabPeekDidCloseTab(_ tab: Tab) {
-        if let index = tabDisplayManager.tabStore.index(of: tab),
+        if let index = tabDisplayManager.dataStore.index(of: tab),
             let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: 0)) as? TabCell {
             cell.close()
         }
@@ -627,7 +619,7 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
         guard let indexPath = collectionView.indexPathForItem(at: convertedLocation),
             let cell = collectionView.cellForItem(at: indexPath) else { return nil }
 
-        guard let tab = tabDisplayManager.tabStore[safe: indexPath.row] else {
+        guard let tab = tabDisplayManager.dataStore.at(indexPath.row) else {
             return nil
         }
         let tabVC = TabPeekViewController(tab: tab, delegate: self)
@@ -647,19 +639,30 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
     }
 }
 
-extension TabTrayController {
-    func removeTab(tab: Tab) {
-        // when removing the last tab (only in normal mode) we will automatically open a new tab.
-        // When that happens focus it by dismissing the tab tray
-        let isLastTab = tabDisplayManager.tabStore.count == 1
-        tabManager.removeTabAndUpdateSelectedIndex(tab)
-        guard !tabDisplayManager.searchActive else { return }
-        self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
-        self.tabDisplayManager.performTabUpdates {
-            if isLastTab, !self.tabDisplayManager.isPrivate {
+extension TabTrayController: TabDisplayCompletionDelegate {
+    func completedAnimation(for type: TabAnimationType) {
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
+
+        switch type {
+        case .addTab:
+            dismissTabTray()
+            LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Tab Tray"])
+        case .removedLastTab:
+            // when removing the last tab (only in normal mode) we will automatically open a new tab.
+            // When that happens focus it by dismissing the tab tray
+            if !tabDisplayManager.isPrivate {
                 self.dismissTabTray()
             }
+        case .removedNonLastTab, .updateTab, .moveTab:
+            break
         }
+    }
+}
+
+extension TabTrayController  {
+    func removeTab(tab: Tab) {
+        tabDisplayManager.tabDisplayCompletionDelegate = self
+        tabManager.removeTabAndUpdateSelectedIndex(tab)
     }
 }
 
