@@ -95,7 +95,7 @@ class TopTabsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        tabDisplayManager.refreshStore()
+        tabDisplayManager.refreshStore(evenIfHidden: true)
     }
 
 

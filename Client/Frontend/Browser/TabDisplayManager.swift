@@ -103,7 +103,7 @@ class TabDisplayManager: NSObject {
         let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
         if let tab = tab {
             tabManager.selectTab(tab)
-        } 
+        }
     }
     
     func searchTabsAnimated() {
@@ -122,7 +122,7 @@ class TabDisplayManager: NSObject {
         collectionView.reloadSections(IndexSet(integer: 0))
     }
 
-    func refreshStore() {
+    func refreshStore(evenIfHidden: Bool = false) {
         operations.removeAll()
         dataStore.removeAll()
         tabsToDisplay.forEach {
@@ -130,14 +130,18 @@ class TabDisplayManager: NSObject {
         }
         collectionView.reloadData()
 
-        // reloadData() will reset the data for the collection view,
-        // but if called when offscreen it will not render properly,
-        // unless reloadItems is explicitly called on each item.
-        var indexPaths = [IndexPath]()
-        for i in 0..<collectionView.numberOfItems(inSection: 0) {
-            indexPaths.append(IndexPath(item: i, section: 0))
+        if evenIfHidden {
+            // reloadData() will reset the data for the collection view,
+            // but if called when offscreen it will not render properly,
+            // unless reloadItems is explicitly called on each item.
+            // Avoid calling with evenIfHidden=true, as it can cause a blink effect as the cell is updated.
+            // The cause of the blinking effect is unknown (and unusual).
+            var indexPaths = [IndexPath]()
+            for i in 0..<collectionView.numberOfItems(inSection: 0) {
+                indexPaths.append(IndexPath(item: i, section: 0))
+            }
+            collectionView.reloadItems(at: indexPaths)
         }
-        collectionView.reloadItems(at: indexPaths)
 
     }
 
