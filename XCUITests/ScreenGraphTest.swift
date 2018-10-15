@@ -176,8 +176,8 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.dismissOnUse = true
         // Would like to use app.otherElements.deviceStatusBars.networkLoadingIndicators.element
         // but this means exposing some of SnapshotHelper to another target.
-        screenState.onEnterWaitFor("exists != true",
-                                   element: app.progressIndicators.element(boundBy: 0))
+        // screenState.onEnterWaitFor("exists != true",
+                                   // element: app.progressIndicators.element(boundBy: 0))
         screenState.noop(to: BrowserTab)
     }
 
