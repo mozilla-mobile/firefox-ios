@@ -484,6 +484,9 @@ extension TabTrayController {
                     self.emptyPrivateTabsView.alpha = 1
                 }, completion: nil)
             }
+        } else if tabManager.normalTabs.count == 1, let tab = tabManager.normalTabs.first {
+            tabManager.selectTab(tab)
+            dismissTabTray()
         }
     }
 
