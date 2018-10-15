@@ -183,7 +183,7 @@ class SearchTests: BaseTestCase {
     func testSearchWithFirefoxOption() {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
-        waitForExistence(app.webViews.staticTexts["cloud"], timeout: 5)
+        waitForExistence(app.webViews.staticTexts["cloud"], timeout: 10)
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
         if !iPad() {

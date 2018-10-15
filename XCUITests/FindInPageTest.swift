@@ -18,7 +18,6 @@ class FindInPageTests: BaseTestCase {
 
     func testFindInLargeDoc() {
         navigator.openURL("http://localhost:6571/find-in-page-test.html")
-        waitUntilPageLoad()
         // Workaround until FxSGraph is fixed to allow the previos way with goto
         navigator.nowAt(BrowserTab)
 
@@ -82,7 +81,6 @@ class FindInPageTests: BaseTestCase {
 
     func testFindInPageTwoWordsSearchLargeDoc() {
         navigator.openURL("http://localhost:6571/find-in-page-test.html")
-        waitUntilPageLoad()
         // Workaround until FxSGraph is fixed to allow the previos way with goto
         navigator.nowAt(BrowserTab)
         waitForExistence(app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/, timeout: 15)

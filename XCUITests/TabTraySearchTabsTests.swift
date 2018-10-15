@@ -11,6 +11,7 @@ class TabTraySearchTabsTests: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.openNewURL(urlString: secondURL )
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         // Search no matches
@@ -38,10 +39,12 @@ class TabTraySearchTabsTests: BaseTestCase {
 
     func testSearchTabsPrivateMode() {
         navigator.performAction(Action.TogglePrivateMode)
+        navigator.goto(NewTabScreen)
         // Open two tabs to check that the search works
         navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.openNewURL(urlString: path(forTestPage: "test-example.html"))
+        waitForTabsButton()
         navigator.goto(TabTray)
         searchTabs(tabTitleOrUrl: "internet")
         XCTAssertEqual(app.collectionViews.cells.count, 1)
@@ -59,10 +62,12 @@ class TabTraySearchTabsTests: BaseTestCase {
 
     func testSearchFieldClearedAfterVisingWebsite() {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitForTabsButton()
         navigator.goto(TabTray)
         searchTabs(tabTitleOrUrl: "mozilla")
         app.collectionViews.cells["Internet for people, not profit — Mozilla"].tap()
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.goto(TabTray)
         let searchValue = app.textFields["Search Tabs"].value
         XCTAssertEqual(searchValue as! String, "Search Tabs")

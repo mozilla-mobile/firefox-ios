@@ -38,6 +38,7 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testTypingBadURL() {
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(HomePageSettings)
         // Enter an invalid Url
         enterWebPageAsHomepage(text: invalidUrl)
@@ -51,6 +52,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // There is no option to go to Home, instead the website open has the option to be set as HomePageSettings
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(BrowserTabMenu)
         let homePageMenuItem = app.tables["Context Menu"].cells["Open Homepage"]
         XCTAssertFalse(homePageMenuItem.exists)
