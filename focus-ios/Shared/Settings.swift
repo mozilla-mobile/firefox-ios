@@ -11,6 +11,7 @@ enum SettingsToggle: String {
     case blockSocial = "BlockSocial"
     case blockOther = "BlockOther"
     case blockFonts = "BlockFonts"
+    case showHomeScreenTips = "HomeScreenTips"
     case safari = "Safari"
     case sendAnonymousUsageData = "SendAnonymousUsageData"
     case enableDomainAutocomplete = "enableDomainAutocomplete"
@@ -31,6 +32,7 @@ struct Settings {
         case .blockSocial: return true
         case .blockOther: return false
         case .blockFonts: return false
+        case .showHomeScreenTips: return true
         case .safari: return true
         case .sendAnonymousUsageData: return AppInfo.isKlar ? false : true
         case .enableDomainAutocomplete: return true
