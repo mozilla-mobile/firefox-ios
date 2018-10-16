@@ -310,9 +310,9 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 
 extension TabDisplayManager: TabEventHandler {
     private func updateCellFor(tab: Tab) {
-        guard let index = dataStore.index(of: tab) else { return }
 
         updateWith(animationType: .updateTab) { [weak self] in
+            guard let index = self?.dataStore.index(of: tab) else { return }
             self?.collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
         }
     }
