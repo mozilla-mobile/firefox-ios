@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Run linting
+chruby 2.3.1
+bundle install
+bundle exec danger --fail-on-errors=false
+
 #
 # Add our Adjust keys to the build depending on the scheme. We use the sandbox for beta so
 # that we have some insight in beta usage.
@@ -31,10 +36,6 @@ elif [ "$BUDDYBUILD_SCHEME" == "Klar" ]; then
   echo "Setting Sentry DSN to PRODUCTION for $BUDDYBUILD_SCHEME"
   /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_RELEASE" "Blockzilla/Info.plist"
 fi
-
-
-# Set the build number to match the Buddybuild number
-agvtool new-version -all "$BUDDYBUILD_BUILD_NUMBER"
 
 
 # Set the build number to match the Buddybuild number
