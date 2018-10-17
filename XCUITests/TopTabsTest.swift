@@ -7,10 +7,12 @@ import XCTest
 let url = "www.mozilla.org"
 let urlLabel = "Internet for people, not profit — Mozilla"
 let urlValue = "mozilla.org"
+let urlValueLong = "localhost:6571/test-fixture/test-mozilla-org.html"
 
 let urlExample = path(forTestPage: "test-example.html")
 let urlLabelExample = "Example Domain"
 let urlValueExample = "example"
+let urlValueLongExample = "localhost:6571/test-fixture/test-example.html"
 
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
@@ -63,14 +65,16 @@ class TopTabsTest: BaseTestCase {
 
         waitforExistence(app.collectionViews.cells[urlLabel])
         app.collectionViews.cells[urlLabel].tap()
-        waitForValueContains(app.textFields["url"], value: "localhost")
+        let valueMozilla = app.textFields["url"].value as! String
+        XCTAssertEqual(valueMozilla, urlValueLong)
 
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
 
         waitforExistence(app.collectionViews.cells[urlLabelExample])
         app.collectionViews.cells[urlLabelExample].tap()
-        waitForValueContains(app.textFields["url"], value: urlValueExample)
+        let value = app.textFields["url"].value as! String
+        XCTAssertEqual(value, urlValueLongExample)
     }
 
     func testCloseOneTab() {
