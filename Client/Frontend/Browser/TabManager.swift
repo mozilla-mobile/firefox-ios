@@ -93,7 +93,6 @@ class TabManager: NSObject {
 
     var normalTabs: [Tab] {
         assert(Thread.isMainThread)
-
         return tabs.filter { !$0.isPrivate }
     }
 
@@ -458,18 +457,12 @@ class TabManager: NSObject {
         if selectedTab?.isPrivate ?? false {
             _selectedIndex = -1
         }
-
-        privateTabs.forEach { tab in
-            tab.closeAndRemovePrivateBrowsingData()
-        }
-
+        privateTabs.forEach { $0.closeAndRemovePrivateBrowsingData() }
         tabs = normalTabs
     }
 
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
-        recentlyClosedForUndo = normalTabs.compactMap { tab in
-            return SavedTab(tab: tab, isSelected: false)
-        }
+        recentlyClosedForUndo = normalTabs.compactMap { SavedTab(tab: $0, isSelected: false) }
 
         var tabsCopy = tabs
 
@@ -484,9 +477,9 @@ class TabManager: NSObject {
                 selectTab(addTab())
             }
         }
-        for tab in tabs {
-            tab.hideContent()
-        }
+
+        tabs.forEach({ $0.hideContent() })
+
         var toast: ButtonToast?
         let numberOfTabs = recentlyClosedForUndo.count
         if numberOfTabs > 0 {
@@ -511,14 +504,12 @@ class TabManager: NSObject {
             return
         }
 
-        _ = store.restoreTabs(savedTabs: recentlyClosedForUndo, clearPrivateTabs: false, tabManager: self)
+        store.restoreTabs(savedTabs: recentlyClosedForUndo, clearPrivateTabs: false, tabManager: self)
 
         recentlyClosedForUndo.removeAll()
 
         let tabs = isPrivate ? privateTabs : normalTabs
-        tabs.forEach { tab in
-            tab.showContent(true)
-        }
+        tabs.forEach({ $0.showContent(true) })
 
         // In non-private mode, delete all tabs will automatically create a tab
         if let tab = tabs.first, !tab.isPrivate {
@@ -545,8 +536,7 @@ class TabManager: NSObject {
 
     func getTabForURL(_ url: URL) -> Tab? {
         assert(Thread.isMainThread)
-
-        return tabs.filter { $0.webView?.url == url } .first
+        return tabs.filter({ $0.webView?.url == url }).first
     }
 
     @objc func prefsDidChange() {
@@ -564,7 +554,6 @@ class TabManager: NSObject {
 
     func resetProcessPool() {
         assert(Thread.isMainThread)
-
         configuration.processPool = WKProcessPool()
     }
 }
@@ -632,13 +621,13 @@ extension TabManager: WKNavigationDelegate {
         let isNightMode = NightModeAccessors.isNightMode(profile.prefs)
         tab.setNightMode(isNightMode)
 
-        if #available(iOS 11, *) {
-            let isNoImageMode = profile.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
-            tab.noImageMode = isNoImageMode
+        guard #available(iOS 11, *) else { return }
 
-            if let tpHelper = tab.contentBlocker as? ContentBlockerHelper, !tpHelper.isEnabled {
-                webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.securityToken))", completionHandler: nil)
-            }
+        let isNoImageMode = profile.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
+        tab.noImageMode = isNoImageMode
+
+        if let tpHelper = tab.contentBlocker as? ContentBlockerHelper, !tpHelper.isEnabled {
+            webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.securityToken))")
         }
     }
 
@@ -657,13 +646,8 @@ extension TabManager: WKNavigationDelegate {
     }
 
     func hideNetworkActivitySpinner() {
-        for tab in tabs {
-            if let tabWebView = tab.webView {
-                // If we find one tab loading, we don't hide the spinner
-                if tabWebView.isLoading {
-                    return
-                }
-            }
+        for tab in tabs where tab.webView?.isLoading == true {
+            return
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
@@ -698,9 +682,9 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-            for delegate in delegates {
-                delegate.webView?(webView, didFailProvisionalNavigation: navigation, withError: error)
-            }
+        for delegate in delegates {
+            delegate.webView?(webView, didFailProvisionalNavigation: navigation, withError: error)
+        }
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
@@ -716,17 +700,17 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-            let authenticatingDelegates = delegates.filter { wv in
-                return wv.responds(to: #selector(webView(_:didReceive:completionHandler:)))
-            }
+        let authenticatingDelegates = delegates.filter { wv in
+            return wv.responds(to: #selector(webView(_:didReceive:completionHandler:)))
+        }
 
-            guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {
-                return completionHandler(.performDefaultHandling, nil)
-            }
+        guard let firstAuthenticatingDelegate = authenticatingDelegates.first else {
+            return completionHandler(.performDefaultHandling, nil)
+        }
 
-            firstAuthenticatingDelegate.webView?(webView, didReceive: challenge) { (disposition, credential) in
-                completionHandler(disposition, credential)
-            }
+        firstAuthenticatingDelegate.webView?(webView, didReceive: challenge) { (disposition, credential) in
+            completionHandler(disposition, credential)
+        }
     }
 
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
@@ -742,16 +726,15 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-            var res = WKNavigationActionPolicy.allow
-            for delegate in delegates {
-                delegate.webView?(webView, decidePolicyFor: navigationAction, decisionHandler: { policy in
-                    if policy == .cancel {
-                        res = policy
-                    }
-                })
-            }
-
-            decisionHandler(res)
+        var res = WKNavigationActionPolicy.allow
+        for delegate in delegates {
+            delegate.webView?(webView, decidePolicyFor: navigationAction, decisionHandler: { policy in
+                if policy == .cancel {
+                    res = policy
+                }
+            })
+        }
+        decisionHandler(res)
     }
 
     func webView(_ webView: WKWebView,
@@ -764,11 +747,6 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
                     res = policy
                 }
             })
-        }
-
-        if res == .allow, let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            let tab = appDelegate.browserViewController.tabManager[webView]
-            tab?.mimeType = navigationResponse.response.mimeType
         }
 
         decisionHandler(res)
