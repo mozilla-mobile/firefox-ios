@@ -109,10 +109,14 @@ class TabDisplayManager: NSObject {
     }
 
     // The collection is showing this Tab as selected
-    func tabForCurrentlySelectedCell() -> Tab? {
+    func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab) -> IndexPath? {
         for i in 0..<collectionView.numberOfItems(inSection: 0) {
             if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? TopTabCell, cell.selectedTab {
-                return dataStore.at(i)
+                if let tab = dataStore.at(i), tab != currentlySelected {
+                    return IndexPath(row: i, section: 0)
+                } else {
+                    return nil
+                }
             }
         }
         return nil
@@ -321,7 +325,7 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 }
 
 extension TabDisplayManager: TabEventHandler {
-    private func updateCellFor(tab: Tab) {
+    private func updateCellFor(tab: Tab, selectedTabChanged: Bool) {
         let selectedTab = tabManager.selectedTab
 
         updateWith(animationType: .updateTab) { [weak self] in
@@ -330,11 +334,15 @@ extension TabDisplayManager: TabEventHandler {
             var items = [IndexPath]()
             items.append(IndexPath(row: index, section: 0))
 
-            // Check if the selected tab has changed. This method avoids relying on the state of the "previous" selected tab,
-            // instead it iterates the displayed tabs to see which appears selected.
-            // See also `didSelectedTabChange` for more info on why this is a good approach.
-            if let visuallySelectedTab = self?.tabForCurrentlySelectedCell(), visuallySelectedTab != selectedTab, let index = self?.dataStore.index(of: visuallySelectedTab) {
-                items.append(IndexPath(row: index, section: 0))
+            if selectedTabChanged {
+                self?.tabDisplayer?.focusSelectedTab()
+
+                // Check if the selected tab has changed. This method avoids relying on the state of the "previous" selected tab,
+                // instead it iterates the displayed tabs to see which appears selected.
+                // See also `didSelectedTabChange` for more info on why this is a good approach.
+                if let selectedTab = selectedTab, let previousSelectedIndex = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab) {
+                    items.append(previousSelectedIndex)
+                }
             }
 
             self?.collectionView.reloadItems(at: items)
@@ -342,11 +350,11 @@ extension TabDisplayManager: TabEventHandler {
     }
 
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
-        updateCellFor(tab: tab)
+        updateCellFor(tab: tab, selectedTabChanged: false)
     }
 
     func tab(_ tab: Tab, didChangeURL url: URL) {
-        updateCellFor(tab: tab)
+        updateCellFor(tab: tab, selectedTabChanged: false)
     }
 }
 
@@ -355,7 +363,9 @@ extension TabDisplayManager: TabManagerDelegate {
         isDragging = false
 
         if let selected = selected {
-            updateCellFor(tab: selected)
+            // A tab can be re-selected during deletion
+            let changed = selected != previous
+            updateCellFor(tab: selected, selectedTabChanged: changed)
         }
 
         // Rather than using 'previous' Tab to deselect, just check if the selected tab is different, and update the required cells.
