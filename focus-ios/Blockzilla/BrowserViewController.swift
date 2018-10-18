@@ -1100,6 +1100,11 @@ extension BrowserViewController: OverlayViewDelegate {
 }
 
 extension BrowserViewController: WebControllerDelegate {
+
+    func webController(_ controller: WebController, didOpenAMPURL url: URL) {
+        urlBar.url = url
+    }
+
     func webControllerDidStartProvisionalNavigation(_ controller: WebController) {
         urlBar.dismiss()
         updateFindInPageVisibility(visible: false)
