@@ -394,22 +394,19 @@ extension TabDisplayManager: TabManagerDelegate {
     }
 
     private func performChainedOperations() {
-        if performingChainedOperations {
+        guard !performingChainedOperations, let (type, operation) = operations.popLast() else {
             return
         }
-
-        if let (type, operation) = operations.popLast() {
-            performingChainedOperations = true
-            collectionView.performBatchUpdates({ [weak self] in
-                // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x
-                self?.collectionView.forFirstBaselineLayout.layer.speed = 3.0
-                operation()
-                }, completion: { [weak self] (done) in
-                    self?.performingChainedOperations = false
-                    self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
-                    self?.performChainedOperations()
-            })
-        }
+        performingChainedOperations = true
+        collectionView.performBatchUpdates({ [weak self] in
+            // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x
+            self?.collectionView.forFirstBaselineLayout.layer.speed = 3.0
+            operation()
+            }, completion: { [weak self] (done) in
+                self?.performingChainedOperations = false
+                self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
+                self?.performChainedOperations()
+        })
     }
 
     private func updateWith(animationType: TabAnimationType, operation: (() -> Void)?) {
