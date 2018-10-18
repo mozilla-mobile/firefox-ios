@@ -393,6 +393,16 @@ extension TabDisplayManager: TabManagerDelegate {
         }
     }
 
+    /* Function to take operations off the queue recursively, and perform them (i.e. performBatchUpdates) in sequence.
+     If this func is called while it (or performBatchUpdates) is running, it returns immediately.
+
+     The `refreshStore()` function will clear the queue and reload data, and the view will instantly match the tab manager.
+     Therefore, don't put operations on the queue that depend on previous operations on the queue. In these cases, just check
+     the current state on-demand in the operation (for example, don't assume that a previous tab is selected because that was the previous operation in queue).
+     
+     For app events where each operation should be animated for the user to see, performedChainedOperations() is the one to use,
+     and for bulk updates where it is ok to just redraw the entire view with the latest state, use `refreshStore()`.
+     */
     private func performChainedOperations() {
         guard !performingChainedOperations, let (type, operation) = operations.popLast() else {
             return
