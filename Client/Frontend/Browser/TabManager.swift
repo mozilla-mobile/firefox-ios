@@ -395,13 +395,13 @@ class TabManager: NSObject {
         if closedLastNormalTab {
             selectTab(addTab(), previous: tab)
         } else if closedLastPrivateTab {
-            selectTab(tabs.last, previous: tab)
+            selectTab(mostRecentTab(inTabs: tabs) ?? tabs.last, previous: tab)
         } else if deletedIndex == _selectedIndex {
             if !selectParentTab(afterRemoving: tab) {
                 if let rightOrLeftTab = viableTabs[safe: _selectedIndex] ?? viableTabs[safe: _selectedIndex - 1] {
                     selectTab(rightOrLeftTab, previous: tab)
                 } else {
-                    selectTab(viableTabs.last, previous: tab)
+                    selectTab(mostRecentTab(inTabs: viableTabs) ?? viableTabs.last, previous: tab)
                 }
             }
         } else if deletedIndex < _selectedIndex {
