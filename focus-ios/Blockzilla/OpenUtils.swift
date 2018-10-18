@@ -33,6 +33,10 @@ class OpenUtils: NSObject {
             activityItems.append(renderer)
         }
 
+        if let title = webViewController.pageTitle {
+            activityItems.append(TitleActivityItemProvider(title: title))
+        }
+        
         let shareController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
 
         // This needs to be ready by the time the share menu has been displayed and
