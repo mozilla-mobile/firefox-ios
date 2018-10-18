@@ -26,6 +26,9 @@ disabled_rules: # rule identifiers to exclude from running
   - switch_case_alignment
   - legacy_cggeometry_functions
   - closure_parameter_position
+  - identifier_name
+  - type_name
+  - function_body_length
 opt_in_rules: # some rules are only opt-in
   - closing_brace
   - opening_brace
