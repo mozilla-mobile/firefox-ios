@@ -57,7 +57,7 @@ class TabTrayController: UIViewController {
         return toolbar
     }()
 
-    lazy var searchBar: UITextField = {
+    lazy var searchBar: SearchBarTextField = {
         let searchBar = SearchBarTextField()
         searchBar.backgroundColor = UIColor.theme.tabTray.searchBackground
         searchBar.leftView = UIImageView(image: UIImage(named: "quickSearch"))
@@ -92,6 +92,7 @@ class TabTrayController: UIViewController {
     fileprivate(set) internal var privateMode: Bool = false {
         didSet {
             toolbar.applyUIMode(isPrivate: privateMode)
+            searchBar.applyUIMode(isPrivate: privateMode)
         }
     }
 
@@ -1169,8 +1170,12 @@ class TabCell: UICollectionViewCell {
     }
 }
 
-class SearchBarTextField: UITextField {
+class SearchBarTextField: UITextField, PrivateModeUI {
     static let leftInset = CGFloat(18)
+
+    func applyUIMode(isPrivate: Bool) {
+        tintColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate).textFieldMode
+    }
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.insetBy(dx: SearchBarTextField.leftInset, dy: 0)
