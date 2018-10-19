@@ -4,7 +4,7 @@
 
 import XCTest
 
-let website1: [String: String] = ["url": path(forTestPage: "test-mozilla-org.html"), "label": "Internet for people, not profit — Mozilla", "value": "localhost"]
+let website1: [String: String] = ["url": path(forTestPage: "test-mozilla-org.html"), "label": "Internet for people, not profit — Mozilla", "value": "localhost", "longValue": "localhost:6571/test-fixture/test-mozilla-org.html"]
 let website2 = path(forTestPage: "test-example.html")
 
 let PDFWebsite = ["url": "http://www.pdf995.com/samples/pdf.pdf"]
@@ -38,7 +38,8 @@ class ToolbarTests: BaseTestCase {
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
         waitforExistence(app.webViews.links["Mozilla"], timeout: 5)
-        waitForValueContains(app.textFields["url"], value: website1["value"]!)
+        let valueMozilla = app.textFields["url"].value as! String
+        XCTAssertEqual(valueMozilla, urlValueLong)
 
 
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
@@ -52,7 +53,8 @@ class ToolbarTests: BaseTestCase {
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
 
         app.buttons["URLBarView.backButton"].tap()
-        waitForValueContains(app.textFields["url"], value: website1["value"]!)
+        XCTAssertEqual(valueMozilla, urlValueLong)
+
         waitUntilPageLoad()
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertTrue(app.buttons["Forward"].isEnabled)
@@ -61,7 +63,7 @@ class ToolbarTests: BaseTestCase {
         navigator.goto(TabTray)
         waitforExistence(app.collectionViews.cells[website1["label"]!])
         app.collectionViews.cells[website1["label"]!].tap()
-        waitForValueContains(app.textFields["url"], value: website1["value"]!)
+        XCTAssertEqual(valueMozilla, urlValueLong)
 
         // Test to see if all the buttons are enabled then close tab.
         waitUntilPageLoad()

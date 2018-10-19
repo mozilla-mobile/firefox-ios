@@ -51,7 +51,7 @@ class HistoryTests: BaseTestCase {
     func testClearHistoryFromSettings() {
         // Browse to have an item in history list
         navigator.goto(HomePanel_History)
-        waitforExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
+        waitforExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts[webpage["label"]!].exists)
 
         // Go to Clear Data
