@@ -30,6 +30,8 @@ let PasscodeIntervalSettings = "PasscodeIntervalSettings"
 let SearchSettings = "SearchSettings"
 let NewTabSettings = "NewTabSettings"
 let ClearPrivateDataSettings = "ClearPrivateDataSettings"
+let WebsiteDataSettings = "WebsiteDataSettings"
+let WebsiteSearchDataSettings = "WebsiteSearchDataSettings"
 let LoginsSettings = "LoginsSettings"
 let OpenWithSettings = "OpenWithSettings"
 let ShowTourInSettings = "ShowTourInSettings"
@@ -152,6 +154,9 @@ class Action {
     static let SelectNewTabAsHistoryPage = "SelectNewTabAsHistoryPage"
 
     static let AcceptClearPrivateData = "AcceptClearPrivateData"
+    static let AcceptClearAllWebsiteData = "AcceptClearAllWebsiteData"
+    static let TapOnFilterWebsites = "TapOnFilterWebsites"
+    static let ShowMoreWebsiteDataEntries = "ShowMoreWebsiteDataEntries"
 
     static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
     static let ToggleTrackingProtectionSettingOnNormalMode = "ToggleTrackingProtectionSettingAlwaysOn"
@@ -542,6 +547,22 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
+    map.addScreenState(WebsiteDataSettings) { screenState in
+        screenState.gesture(forAction: Action.AcceptClearAllWebsiteData) { userState in
+            app.tables.cells["ClearAllWebsiteData"].tap()
+            app.alerts.buttons["OK"].tap()
+        }
+        // The swipeDown() is a workaround for an intermitent issue that the search filed is not always in view.
+        screenState.gesture(forAction: Action.TapOnFilterWebsites) { userState in
+            app.swipeDown()
+            app.searchFields["Filter Sites"].tap()
+        }
+        screenState.gesture(forAction: Action.ShowMoreWebsiteDataEntries) { userState in
+            app.tables.cells["ShowMoreWebsiteData"].tap()
+        }
+        screenState.backAction = navigationControllerBackAction
+    }
+    
     map.addScreenState(NewTabSettings) { screenState in
         let table = app.tables.element(boundBy: 0)
 
@@ -666,6 +687,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(ClearPrivateDataSettings) { screenState in
+        let table = app.tables.element(boundBy: 0)
+        screenState.tap(app.cells["WebsiteData"], to: WebsiteDataSettings)
         screenState.gesture(forAction: Action.AcceptClearPrivateData) { userState in
             app.tables.cells["ClearPrivateData"].tap()
             app.alerts.buttons["OK"].tap()

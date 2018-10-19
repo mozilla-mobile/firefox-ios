@@ -215,6 +215,9 @@
                   Identifier = "CopiedLinksTests">
                </Test>
                <Test
+                  Identifier = "DataManagementTests">
+               </Test>
+               <Test
                   Identifier = "DatabaseFixtureTest">
                </Test>
                <Test
