@@ -428,24 +428,20 @@ class TabManagerTests: XCTestCase {
     // Private tabs and regular tabs are in the same tabs array.
     // Make sure that when a private tab is added inbetween regular tabs it isnt accidently selected when removing a regular tab
     func testTabsIndex() {
-
         // We add 2 tabs. Then a private one before adding another normal tab and selecting it.
         // Make sure that when the last one is deleted we dont switch to the private tab
-        manager.addTab()
-        let newSelected = manager.addTab()
-        manager.addTab(isPrivate: true)
-        let deleted = manager.addTab()
-        manager.selectTab(manager.tabs.last)
+        let (_, _, privateOne, last) = (manager.addTab(), manager.addTab(), manager.addTab(isPrivate: true), manager.addTab())
+        manager.selectTab(last)
         manager.addDelegate(delegate)
 
         let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { tabs in
             let next = tabs[0]!
             let previous = tabs[1]!
-            XCTAssertEqual(deleted, previous)
-            XCTAssertEqual(next, newSelected)
+            XCTAssertEqual(last, previous)
+            XCTAssert(next != privateOne && !next.isPrivate)
         }
         delegate.expect([willRemove, didRemove, didSelect])
-        manager.removeTabAndUpdateSelectedIndex(manager.tabs.last!)
+        manager.removeTabAndUpdateSelectedIndex(last)
 
         delegate.verify("Not all delegate methods were called")
     }
