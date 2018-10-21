@@ -69,19 +69,20 @@ class SiriFavoriteViewController: UIViewController {
         
         inputLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(UIConstants.layout.siriUrlSectionPadding)
-            make.trailing.equalToSuperview()
-            make.leading.equalToSuperview().offset(UIConstants.layout.settingsTextPadding)
+            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
+            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(UIConstants.layout.settingsTextPadding)
         }
         
         textInput.snp.makeConstraints { make in
             make.height.equalTo(UIConstants.layout.settingsSectionHeight)
-            make.leading.trailing.equalToSuperview()
+            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
+            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
             make.top.equalTo(inputLabel.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
         }
         
         inputDescription.snp.makeConstraints { make in
             make.top.equalTo(textInput.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
-            make.leading.equalToSuperview().offset(UIConstants.layout.settingsTextPadding)
+            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(UIConstants.layout.settingsTextPadding)
         }
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
