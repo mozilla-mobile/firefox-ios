@@ -149,9 +149,9 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(topSiteFirstCell == allDefaultTopSites[0])
         XCTAssertTrue(topSiteSecondCell == allDefaultTopSites[1])
 
-        // Remove it
-        waitforExistence(app.cells["facebook"])
-        app.cells["facebook"].press(forDuration: 1)
+        // Remove facebook top sites, first cell
+        waitforExistence(app.cells["TopSitesCell"].cells.element(boundBy: 0), timeout: 3)
+        app.cells["TopSitesCell"].cells.element(boundBy: 0).press(forDuration:1)
         selectOptionFromContextMenu(option: "Remove")
 
         // Check top site in first cell now
@@ -180,7 +180,8 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testTopSitesOpenInNewTabDefaultTopSite() {
         // Open one of the sites from Topsites and wait until page is loaded
-        app.cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
+        waitforExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
+        app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
         selectOptionFromContextMenu(option: "Open in New Tab")
         waitUntilPageLoad()
 
@@ -194,8 +195,9 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() {
         navigator.goto(HomePanelsScreen)
-        waitforExistence(app.cells["apple"])
-        app.collectionViews.cells["TopSitesCell"].cells["apple"].press(forDuration: 1)
+        // Long tap on apple top site, second cell
+        waitforExistence(app.cells["TopSitesCell"].cells.element(boundBy: 2), timeout: 3)
+        app.cells["TopSitesCell"].cells.element(boundBy: 2).press(forDuration:1)
         app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
 
         XCTAssert(TopSiteCellgroup.exists)
@@ -222,8 +224,9 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         // Open one of the sites from Topsites and wait until page is loaded
-        TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!]
-            .press(forDuration: 1)
+        // Long tap on apple top site, second cell
+        waitforExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
+        app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
         selectOptionFromContextMenu(option: "Open in New Private Tab")
 
         // Check that two tabs are open and one of them is the default top site one
@@ -235,8 +238,9 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesBookmarkDefaultTopSite() {
-        // Bookmark a default TopSite
-        app.cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
+        // Bookmark a default TopSite, Wikipedia, third top site
+        waitforExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
+        app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
         selectOptionFromContextMenu(option: "Bookmark")
 
         // Check that it appears under Bookmarks menu
