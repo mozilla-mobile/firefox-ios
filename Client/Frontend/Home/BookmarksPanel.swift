@@ -376,6 +376,13 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return .none
     }
 
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        guard let source = source else {
+            return false
+        }
+        return source.current.itemIsEditableAtIndex(indexPath.row)
+    }
+
     func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
         return editingStyleforRow(atIndexPath: indexPath)
     }
