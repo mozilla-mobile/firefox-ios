@@ -385,6 +385,10 @@ class URLBar: UIView {
         urlText.becomeFirstResponder()
     }
     
+    public func displayClearButton(shouldDisplay: Bool) {
+        self.urlText.rightView?.isHidden = !shouldDisplay
+    }
+    
     public func dismissTextField() {
         urlText.isUserInteractionEnabled = false
         urlText.endEditing(true)
@@ -574,6 +578,9 @@ class URLBar: UIView {
 
             if self.inBrowsingMode {
                 self.isEditingConstraints.forEach { $0.activate() }
+                
+                // Hide clear button
+                self.displayClearButton(shouldDisplay: false)
 
                 // Shrink the URL text background in from the outer URL bar.
                 self.urlBarBackgroundView.alpha = 1
