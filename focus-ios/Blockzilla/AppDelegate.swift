@@ -109,10 +109,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
         
         // Don't highlight whats new on a fresh install (prefIntroDone == 0 on a fresh install)
-        if prefIntroDone != 0 && UserDefaults.standard.string(forKey: AppDelegate.prefWhatsNewDone) != AppInfo.shortVersion {
-            
-            let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
-            switch counter {
+        if let lastShownWhatsNew = UserDefaults.standard.string(forKey: AppDelegate.prefWhatsNewDone)?.first, let currentMajorRelease = AppInfo.shortVersion.first {
+            if prefIntroDone != 0 && lastShownWhatsNew != currentMajorRelease  {
+
+                let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
+                switch counter {
                 case 4:
                     // Shown three times, remove counter
                     UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
@@ -120,6 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                 default:
                     // Show highlight
                     UserDefaults.standard.set(counter+1, forKey: AppDelegate.prefWhatsNewCounter)
+                }
             }
         }
         
