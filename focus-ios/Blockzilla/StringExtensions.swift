@@ -21,22 +21,22 @@ extension String {
     }
 
     func truncated(limit: Int, position: TruncationPosition = .tail, leader: String = "...") -> String {
-        guard self.count > limit else { return self }
+        guard count > limit else { return self }
 
         switch position {
         case .head:
-            let truncated = self[self.index(startIndex, offsetBy: limit - leader.count)...]
+            let truncated = self[index(endIndex, offsetBy: leader.count - limit)...]
             return leader + truncated
         case .middle:
-            let headCharactersCount = Int(ceil(Float(limit - leader.count) / 2.0))
-            let head = self[...self.index(startIndex, offsetBy: headCharactersCount)]
+            let headCharactersCount = (limit - leader.count) / 2
+            let head = self[..<index(startIndex, offsetBy: headCharactersCount)]
 
-            let tailCharactersCount = Int(floor(Float(limit - leader.count) / 2.0))
-            let tail = self[self.index(endIndex, offsetBy: -tailCharactersCount)...]
+            let tailCharactersCount = Int(ceil(Double(limit - leader.count) / 2.0))
+            let tail = self[index(endIndex, offsetBy: -tailCharactersCount)...]
 
             return head + leader + tail
         case .tail:
-            let truncated = self[...self.index(startIndex, offsetBy: limit -  leader.self.count)]
+            let truncated = self[..<index(startIndex, offsetBy: limit - leader.count)]
             return truncated + leader
         }
     }
