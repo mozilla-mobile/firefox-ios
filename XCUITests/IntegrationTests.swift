@@ -43,6 +43,7 @@ class IntegrationTests: BaseTestCase {
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
+        sleep(3)
         allowNotifications()
     }
 
