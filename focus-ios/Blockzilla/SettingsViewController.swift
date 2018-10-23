@@ -49,6 +49,17 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         newLabel.numberOfLines = 0
         newLabel.lineBreakMode = .byWordWrapping
+        setupDynamicFont()
+        
+        if #available(iOS 10.0, *) {
+            newLabel.adjustsFontForContentSizeCategory = true
+            accessoryLabel.adjustsFontForContentSizeCategory = true
+        } else {
+            NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: nil, queue: nil)  { _ in
+                self.setupDynamicFont()
+            }
+        }
+        
         textLabel?.numberOfLines = 0
         textLabel?.text = " "
 
@@ -85,6 +96,11 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupDynamicFont() {
+        newLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+        accessoryLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
     }
 }
 
