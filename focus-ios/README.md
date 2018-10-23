@@ -26,7 +26,7 @@ This branch works with Xcode 10.0 and supports iOS 11.0+.
 
 This branch is written in Swift 4.2.
 
-For current development, see the V8.0 Development Branch section.
+Pull requests should be submitted with master as the base branch and should also be written in Swift 4.2.
 
 Build Instructions for Master
 ------------------
@@ -49,11 +49,7 @@ Build Instructions for Master
 5. Open `Blockzilla.xcodeproj` in Xcode.
 6. Build the `Focus` scheme in Xcode.
 
-V8.0 Development Branch
-----------------
+Upcoming Release (Version 8.0)
+------------------
 
-For version 8.0 of Focus, we are working off of the v8.0-dev branch.
-
-This branch is written in Swift 4.2. Pull requests for this branch must also be written in Swift 4.2. 
-
-For bugs and features for the upcoming v8.0 release, please see the V8.0 milestone within the GitHub Issues.
+Features planned for the next release can be found in the [V8.0 milestone](https://github.com/mozilla-mobile/focus-ios/milestone/29). 
