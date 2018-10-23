@@ -453,3 +453,15 @@ extension TabDisplayManager: TabManagerDelegate {
     }
 }
 
+// Functions for testing
+extension TabDisplayManager {
+    func test_toggleIsDragging() {
+        assert(AppConstants.IsRunningTest)
+        isDragging = !isDragging
+    }
+
+    func test_getIsDragging() -> Bool {
+        assert(AppConstants.IsRunningTest)
+        return isDragging
+    }
+}

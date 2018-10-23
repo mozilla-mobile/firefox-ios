@@ -250,3 +250,12 @@ extension TopTabsViewController: Themeable, PrivateModeUI {
         tabDisplayManager.refreshStore()
     }
 }
+
+// Functions for testing
+extension TopTabsViewController {
+    func test_getDisplayManager() -> TabDisplayManager {
+        assert(AppConstants.IsRunningTest)
+        return tabDisplayManager
+    }
+}
+
