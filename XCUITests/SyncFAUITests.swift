@@ -81,7 +81,7 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.webViews.staticTexts["Unknown account."])
+        waitforExistence(app.webViews.staticTexts["Unknown account."], timeout: 10)
         XCTAssertTrue(app.webViews.links["Sign up"].exists)
     }
 
