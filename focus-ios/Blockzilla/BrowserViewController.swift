@@ -707,6 +707,12 @@ class BrowserViewController: UIViewController {
     private func setNumberOfLifetimeTrackersBlocked(numberOfTrackers: Int) {
         UserDefaults.standard.set(numberOfTrackers, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
     }
+    
+    func updateURLBar() {
+        if webViewController.url?.absoluteString != "about:blank" {
+            urlBar.url = webViewController.url
+        }
+    }
 }
 
 extension BrowserViewController: UIDropInteractionDelegate {
@@ -1137,20 +1143,19 @@ extension BrowserViewController: WebControllerDelegate {
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
         showToolbars()
-        
-        if webViewController.url?.absoluteString != "about:blank" {
-            urlBar.url = webViewController.url
-        }
+        updateURLBar()
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
-        if webViewController.url?.absoluteString != "about:blank" {
-            urlBar.url = webViewController.url
-        }
+        updateURLBar()
         urlBar.isLoading = false
         toggleToolbarBackground()
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
+    }
+    
+    func webControllerURLDidChange(_ controller: WebController) {
+        updateURLBar()
     }
 
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {

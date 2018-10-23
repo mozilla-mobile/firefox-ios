@@ -27,6 +27,7 @@ protocol WebControllerDelegate: class {
     func webControllerDidStartProvisionalNavigation(_ controller: WebController)
     func webControllerDidStartNavigation(_ controller: WebController)
     func webControllerDidFinishNavigation(_ controller: WebController)
+    func webControllerURLDidChange(_ controller: WebController)
     func webController(_ controller: WebController, didFailNavigationWithError error: Error)
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool)
     func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool)
@@ -54,6 +55,7 @@ class WebViewController: UIViewController, WebController {
     private var browserView = WKWebView()
     var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
+    private var urlObserver: NSKeyValueObservation?
     private var userAgent: UserAgent?
     private var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
@@ -134,6 +136,10 @@ class WebViewController: UIViewController, WebController {
 
         progressObserver = browserView.observe(\WKWebView.estimatedProgress) { (webView, value) in
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
+        }
+        
+        urlObserver = browserView.observe(\WKWebView.url, options: .new) { (webview, value) in
+            self.delegate?.webControllerURLDidChange(self)
         }
 
         setupBlockLists()
