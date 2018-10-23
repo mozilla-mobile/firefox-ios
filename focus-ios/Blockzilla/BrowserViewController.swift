@@ -916,7 +916,7 @@ extension BrowserViewController: URLBarDelegate {
         let utils = OpenUtils(url: url, webViewController: webViewController)
         let items = PageActionSheetItems(url: url)
         let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
-            let shareVC = utils.buildShareViewController(url: url, printFormatter: self.webViewController.printFormatter)
+            let shareVC = utils.buildShareViewController()
             
             // Exact frame dimensions taken from presentPhotonActionSheet
             shareVC.popoverPresentationController?.sourceView = urlBar.pageActionsButton

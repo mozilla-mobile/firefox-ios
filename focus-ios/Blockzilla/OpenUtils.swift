@@ -17,21 +17,17 @@ class OpenUtils: NSObject {
         self.webViewController = webViewController
     }
 
-    func buildShareViewController(url: URL, printFormatter: UIPrintFormatter?) -> UIActivityViewController {
-        var activityItems: [Any] = [url]
-        
-        activityItems.append(self)
+    func buildShareViewController() -> UIActivityViewController {
+        var activityItems: [Any] = [selectedURL]
 
-        if let printFormatter = printFormatter {
-            let printInfo = UIPrintInfo(dictionary: nil)
-            printInfo.jobName = url.absoluteString
-            printInfo.outputType = .general
-            activityItems.append(printInfo)
+        let printInfo = UIPrintInfo(dictionary: nil)
+        printInfo.jobName = selectedURL.absoluteString
+        printInfo.outputType = .general
+        activityItems.append(printInfo)
 
-            let renderer = UIPrintPageRenderer()
-            renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
-            activityItems.append(renderer)
-        }
+        let renderer = UIPrintPageRenderer()
+        renderer.addPrintFormatter(webViewController.printFormatter, startingAtPageAt: 0)
+        activityItems.append(renderer)
 
         if let title = webViewController.pageTitle {
             activityItems.append(TitleActivityItemProvider(title: title))
