@@ -100,9 +100,9 @@ def tps_profile(pytestconfig, tps_addon, tps_config, tps_log, fxa_urls):
         'services.sync.log.logger': 'Trace',
         'services.sync.log.logger.engine': 'Trace',
         'services.sync.testing.tps': True,
+        'testing.tps.logFile': tps_log,
         'toolkit.startup.max_resumed_crashes': -1,
         'tps.config': json.dumps(tps_config),
-        'tps.logfile': tps_log,
         'tps.seconds_since_epoch': int(time.time()),
         'xpinstall.signatures.required': False
     }
