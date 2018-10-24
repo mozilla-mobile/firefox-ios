@@ -52,11 +52,6 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchDoneButton, style: .done, target: self, action: #selector(self.dismissAnimated))
         }
 
-        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: 44))
-        footer.showTopBorder = false
-        footer.showBottomBorder = false
-        tableView.tableFooterView = footer
-
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SettingsSearchEditButton, style: .plain, target: self,
                                                                  action: #selector(beginEditing))
     }
@@ -201,6 +196,10 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         return 44
     }
 
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
+    }
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
         var sectionTitle: String
@@ -212,6 +211,16 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         headerView.titleLabel.text = sectionTitle
 
         return headerView
+    }
+
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
+            return nil
+        }
+
+        footerView.showBottomBorder = false
+        footerView.applyTheme()
+        return footerView
     }
 
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
