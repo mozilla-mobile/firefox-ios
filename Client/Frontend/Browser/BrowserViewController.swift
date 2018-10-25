@@ -2105,8 +2105,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let saveImageTitle = NSLocalizedString("Save Image", comment: "Context menu item for saving an image")
             let saveImageAction = UIAlertAction(title: saveImageTitle, style: .default) { _ in
                 if photoAuthorizeStatus == .authorized || photoAuthorizeStatus == .notDetermined {
-                    self.getImage(url as URL) {
-                        UIImageWriteToSavedPhotosAlbum($0, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
+                    self.getImageData(url as URL) { data in
+                        PHPhotoLibrary.shared().performChanges({
+                            PHAssetCreationRequest.forAsset().addResource(with: .photo, data: data, options: nil)
+                        })
                     }
                 } else {
                     let accessDenied = UIAlertController(title: NSLocalizedString("Firefox would like to access your Photos", comment: "See http://mzl.la/1G7uHo7"), message: NSLocalizedString("This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7"), preferredStyle: .alert)
@@ -2166,10 +2168,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         self.present(actionSheetController, animated: true, completion: nil)
     }
 
-    fileprivate func getImage(_ url: URL, success: @escaping (UIImage) -> Void) {
+    fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
         Alamofire.request(url).validate(statusCode: 200..<300).response { response in
-            if let data = response.data, let image = data.isGIF ? UIImage.imageFromGIFDataThreadSafe(data) : UIImage.imageFromDataThreadSafe(data) {
-                success(image)
+            if let data = response.data {
+                success(data)
             }
         }
     }

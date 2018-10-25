@@ -34,15 +34,6 @@ extension UIImage {
         return image
     }
 
-    /// Generates a UIImage from GIF data by calling out to SDWebImage. The latter in turn uses UIImage(data: NSData)
-    /// in certain cases so we have to synchronize calls (see bug 1223132).
-    public static func imageFromGIFDataThreadSafe(_ data: Data) -> UIImage? {
-        imageLock.lock()
-        let image = UIImage.sd_animatedGIF(with: data)
-        imageLock.unlock()
-        return image
-    }
-
     public static func createWithColor(_ size: CGSize, color: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         let context = UIGraphicsGetCurrentContext()
