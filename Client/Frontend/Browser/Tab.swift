@@ -208,8 +208,6 @@ class Tab: NSObject {
     func createWebview() {
         if webView == nil {
             configuration.userContentController = WKUserContentController()
-            configuration.preferences = WKPreferences()
-            configuration.preferences.javaScriptCanOpenWindowsAutomatically = false
             configuration.allowsInlineMediaPlayback = true
             let webView = TabWebView(frame: .zero, configuration: configuration)
             webView.delegate = self
