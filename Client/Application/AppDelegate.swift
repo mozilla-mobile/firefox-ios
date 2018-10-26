@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var tabManager: TabManager!
     var adjustIntegration: AdjustIntegration?
     var applicationCleanlyBackgrounded = true
+    var shutdownWebServer: DispatchSourceTimer?
 
     weak var application: UIApplication?
     var launchOptions: [AnyHashable: Any]?
@@ -259,6 +260,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(_ application: UIApplication) {
+        shutdownWebServer?.cancel()
+        shutdownWebServer = nil
 
         //
         // We are back in the foreground, so set CleanlyBackgrounded to false so that we can detect that
@@ -277,6 +280,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
 
             profile.syncManager.applicationDidBecomeActive()
+
+            setUpWebServer(profile)
         }
 
         // We could load these here, but then we have to futz with the tab counter
@@ -313,6 +318,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         syncOnDidEnterBackground(application: application)
 
         UnifiedTelemetry.recordEvent(category: .action, method: .background, object: .app)
+
+        let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+        // 2 seconds is ample for a localhost request to be completed by GCDWebServer. <500ms is expected on newer devices.
+        singleShotTimer.schedule(deadline: .now() + 2.0, repeating: .never)
+        singleShotTimer.setEventHandler {
+            WebServer.sharedInstance.server.stop()
+            self.shutdownWebServer = nil
+        }
+        singleShotTimer.resume()
+        shutdownWebServer = singleShotTimer
     }
 
     fileprivate func syncOnDidEnterBackground(application: UIApplication) {
@@ -367,6 +382,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     fileprivate func setUpWebServer(_ profile: Profile) {
         let server = WebServer.sharedInstance
+        guard !server.server.isRunning else { return }
+
         ReaderModeHandlers.register(server, profile: profile)
         ErrorPageHelper.register(server, certStore: profile.certStore)
         AboutHomeHandler.register(server)
