@@ -463,18 +463,9 @@ class TabManager: NSObject {
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
         recentlyClosedForUndo = normalTabs.compactMap { SavedTab(tab: $0, isSelected: false) }
 
-        var tabsCopy = tabs
-
-        // Remove the current tab last to prevent switching tabs while removing tabs
-        if let selectedTab = selectedTab, let selectedIndex = tabsCopy.index(of: selectedTab) {
-            let removed = tabsCopy.remove(at: selectedIndex)
-            removeTabs(tabsCopy)
-            removeTabAndUpdateSelectedIndex(removed)
-        } else {
-            removeTabs(tabsCopy)
-            if normalTabs.isEmpty {
-                selectTab(addTab())
-            }
+        removeTabs(tabs)
+        if normalTabs.isEmpty {
+            selectTab(addTab())
         }
 
         tabs.forEach({ $0.hideContent() })
