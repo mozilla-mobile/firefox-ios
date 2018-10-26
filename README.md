@@ -6,15 +6,15 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch (master)
 -----------
 
-This branch is for mainline development that will ship in *v14.0*.
+This branch is for mainline development that will ship in *v15.0*.
 
-This branch only works with Xcode 9.4 and supports iOS 10.3, and 11.x.
+This branch only works with Xcode 10.0 and supports iOS 10.3 and above
 
-This branch is written in Swift 4
+This branch is written in Swift 4.2
 
 Please make sure you aim your pull requests in the right direction.
 
-For bug fixes and features for the upcoming v13.0 release, please see the *v13.x* branch.
+For bug fixes and features for a specfic release use the version branch.
 
 Getting involved
 ----------------
@@ -34,7 +34,7 @@ Likewise, the design and UX is still in flux. Don't get attached to them. They w
 Building the code
 -----------------
 
-> __As of April 2018, this project requires Xcode 9.3.__
+> __As of Oct 2018, this project requires Xcode 10.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install Carthage
