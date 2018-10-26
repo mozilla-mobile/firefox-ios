@@ -249,7 +249,6 @@ class Tab: NSObject {
             }
 
             let currentPage = sessionData.currentPage
-            self.sessionData = nil
             var jsonDict = [String: AnyObject]()
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
@@ -260,6 +259,8 @@ class Tab: NSObject {
             let restoreURL = URL(string: "\(WebServer.sharedInstance.base)/about/sessionrestore?history=\(escapedJSON)")
             lastRequest = PrivilegedRequest(url: restoreURL!) as URLRequest
             webView.load(lastRequest!)
+
+            // The BVC will set the tab's sessionData = nil when the load request is completed.
         } else if let request = lastRequest {
             webView.load(request)
         } else {
@@ -424,15 +425,15 @@ class Tab: NSObject {
             return
         }
 
-        if let _ = webView?.reloadFromOrigin() {
-            print("reloaded zombified tab from origin")
+        guard let webView = webView else { return }
+
+        if sessionData == nil {
+            webView.reloadFromOrigin()
             return
         }
 
-        if let webView = self.webView {
-            print("restoring webView from scratch")
-            restore(webView)
-        }
+        print("restoring webView from scratch")
+        restore(webView)
     }
 
     func addContentScript(_ helper: TabContentScript, name: String) {

@@ -939,7 +939,9 @@ class BrowserViewController: UIViewController {
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         urlBar.currentURL = tab.url?.displayURL
 
-        let isPage = tab.url?.displayURL?.isWebPage() ?? false
+        // If tab restore fails (the local URL for this didn't finish loading), ensure the reload button is active so the user can reload and restore the tab.
+        let tabRestorationIncomplete = tab.sessionData != nil
+        let isPage = tab.url?.displayURL?.isWebPage() ?? tabRestorationIncomplete
         navigationToolbar.updatePageStatus(isPage)
     }
 
@@ -1094,6 +1096,9 @@ class BrowserViewController: UIViewController {
             print("Cannot navigate in tab without a webView")
             return
         }
+
+        // Tab restore is complete (the local URL for this has loaded).
+        tab.sessionData = nil
 
         if let url = webView.url {
             if !url.isErrorPageURL, !url.isAboutHomeURL, !url.isFileURL {
