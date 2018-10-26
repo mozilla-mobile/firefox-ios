@@ -285,6 +285,7 @@
 		5002717C41BC7C50F67F1CAD /* StateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50027345B49B967409DDA348 /* StateTests.swift */; };
 		554867231DC3935A00183DAA /* HomePageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554867221DC3935A00183DAA /* HomePageTests.swift */; };
 		55A747171DC46FC400CE1B57 /* HomePageUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A747161DC46FC400CE1B57 /* HomePageUITest.swift */; };
+		580B0C4221748CFE00448DF8 /* DataManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580B0C4121748CFE00448DF8 /* DataManagementTests.swift */; };
 		59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68CCB63E2A565CB03F832 /* SearchViewController.swift */; };
 		59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6825233896FC846499289 /* HistoryPanel.swift */; };
 		59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68B1F857A8638598A63A0 /* TwoLineCell.swift */; };
@@ -1453,6 +1454,7 @@
 		50027345B49B967409DDA348 /* StateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StateTests.swift; path = SyncTests/StateTests.swift; sourceTree = "<group>"; };
 		554867221DC3935A00183DAA /* HomePageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageTests.swift; sourceTree = "<group>"; };
 		55A747161DC46FC400CE1B57 /* HomePageUITest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageUITest.swift; sourceTree = "<group>"; };
+		580B0C4121748CFE00448DF8 /* DataManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementTests.swift; sourceTree = "<group>"; };
 		59A6825233896FC846499289 /* HistoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = HistoryPanel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksPanel.swift; sourceTree = "<group>"; };
 		59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderPanel.swift; sourceTree = "<group>"; };
@@ -2658,6 +2660,7 @@
 				3BF4B8DA1D38493300493393 /* Utils */,
 				EB7A651020699BD200B52A5F /* WebPagesForTesting.swift */,
 				0B9D40781E8D5AC80059E664 /* XCUITests-Bridging-Header.h */,
+				580B0C4121748CFE00448DF8 /* DataManagementTests.swift */,
 			);
 			path = XCUITests;
 			sourceTree = "<group>";
@@ -4954,6 +4957,7 @@
 				2CF449A51E7BFE2C00FD7595 /* NavigationTest.swift in Sources */,
 				2C32EA442100C4BF00A25912 /* TabTraySearchTabsTests.swift in Sources */,
 				2C2A91291FA2410D002E36BD /* HistoryTests.swift in Sources */,
+				580B0C4221748CFE00448DF8 /* DataManagementTests.swift in Sources */,
 				3BF4B8E91D38497A00493393 /* BaseTestCase.swift in Sources */,
 				3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */,
 				2CB1A65A1FDEA8B60084E96D /* NewTabSettings.swift in Sources */,
