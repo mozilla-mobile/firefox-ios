@@ -38,7 +38,7 @@ class WebServer {
             try server.start(options: [
                 GCDWebServerOption_Port: 6571,
                 GCDWebServerOption_BindToLocalhost: true,
-                GCDWebServerOption_AutomaticallySuspendInBackground: true,
+                GCDWebServerOption_AutomaticallySuspendInBackground: false,
                 GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,
                 GCDWebServerOption_AuthenticationAccounts: [sessionToken: ""]
             ])
