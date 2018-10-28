@@ -214,7 +214,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         return CFURLCreateStringByReplacingPercentEscapes(
             kCFAllocatorDefault,
             string as CFString,
-            "[]." as CFString) as String
+            "" as CFString) as String
     }
 
     fileprivate func displaySplashAnimation() {
