@@ -461,7 +461,9 @@ class TabManager: NSObject {
     }
 
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
-        recentlyClosedForUndo = normalTabs.compactMap { SavedTab(tab: $0, isSelected: false) }
+        recentlyClosedForUndo = normalTabs.compactMap {
+            SavedTab(tab: $0, isSelected: selectedTab === $0)
+        }
 
         removeTabs(tabs)
         if normalTabs.isEmpty {
@@ -494,7 +496,7 @@ class TabManager: NSObject {
             return
         }
 
-        store.restoreTabs(savedTabs: recentlyClosedForUndo, clearPrivateTabs: false, tabManager: self)
+        let selectedTab = store.restoreTabs(savedTabs: recentlyClosedForUndo, clearPrivateTabs: false, tabManager: self)
 
         recentlyClosedForUndo.removeAll()
 
@@ -506,6 +508,7 @@ class TabManager: NSObject {
             removeTabAndUpdateSelectedIndex(tab)
         }
 
+        selectTab(selectedTab)
         delegates.forEach { $0.get()?.tabManagerDidRestoreTabs(self) }
     }
 
