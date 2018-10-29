@@ -101,7 +101,7 @@ class LeanPlumClient {
     // to prompting with native push permissions.
     private var useFxAPrePush: LPVar = LPVar.define("useFxAPrePush", with: false)
     var enablePocketVideo: LPVar = LPVar.define("pocketVideo", with: false)
-    var enableDragDrop: LPVar = LPVar.define("tabTrayDrag", with: false)
+    var enableDragDrop: LPVar = LPVar.define("tabTrayDrag", with: true)
     var enableTabBarReorder: LPVar = LPVar.define("tabBarDragReorder", with: true)
 
     var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))

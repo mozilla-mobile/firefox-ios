@@ -175,13 +175,11 @@ class TabManager: NSObject {
         return nil
     }
 
+    // This function updates the _selectedIndex.
+    // Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case where the index of the tab has changed (such as after deletion).
     func selectTab(_ tab: Tab?, previous: Tab? = nil) {
         assert(Thread.isMainThread)
         let previous = previous ?? selectedTab
-
-        if previous === tab {
-            return
-        }
 
         // Make sure to wipe the private tabs if the user has the pref turned on
         if shouldClearPrivateTabs(), !(tab?.isPrivate ?? false) {
@@ -404,7 +402,8 @@ class TabManager: NSObject {
                 }
             }
         } else if deletedIndex < _selectedIndex {
-            selectTab(tabs[safe: _selectedIndex - 1], previous: tab)
+            let selected = tabs[safe: _selectedIndex - 1]
+            selectTab(selected, previous: selected)
         }
     }
 
@@ -464,18 +463,9 @@ class TabManager: NSObject {
     func removeTabsWithUndoToast(_ tabs: [Tab]) {
         recentlyClosedForUndo = normalTabs.compactMap { SavedTab(tab: $0, isSelected: false) }
 
-        var tabsCopy = tabs
-
-        // Remove the current tab last to prevent switching tabs while removing tabs
-        if let selectedTab = selectedTab, let selectedIndex = tabsCopy.index(of: selectedTab) {
-            let removed = tabsCopy.remove(at: selectedIndex)
-            removeTabs(tabsCopy)
-            removeTabAndUpdateSelectedIndex(removed)
-        } else {
-            removeTabs(tabsCopy)
-            if normalTabs.isEmpty {
-                selectTab(addTab())
-            }
+        removeTabs(tabs)
+        if normalTabs.isEmpty {
+            selectTab(addTab())
         }
 
         tabs.forEach({ $0.hideContent() })

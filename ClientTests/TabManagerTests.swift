@@ -197,8 +197,13 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(privateTab)
         manager.addDelegate(delegate)
 
+
+        let didSelect = MethodSpy(functionName: spyDidSelectedTabChange) { _ in
+            // test fails if this not called
+        }
+
         // This test makes sure that a normal tab is always added even when a normal tab is not selected when calling removeAll
-        delegate.expect([willRemove, didRemove, willAdd, didAdd, removeAllTabs])
+        delegate.expect([willRemove, didRemove, willAdd, didAdd, didSelect, removeAllTabs])
 
         manager.removeTabsWithUndoToast(manager.normalTabs)
         delegate.verify("Not all delegate methods were called")

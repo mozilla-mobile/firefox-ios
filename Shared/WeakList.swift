@@ -24,14 +24,40 @@ open class WeakList<T: AnyObject>: Sequence {
      * been deallocated) to reuse them, so this class may not be appropriate in situations where
      * insertion is frequent.
      */
-    open func insert(_ item: T) {
+    open func insert(_ item: T, at: Int? = nil) {
         // Reuse any existing slots that have been deallocated.
         for wrapper in items where wrapper.value == nil {
             wrapper.value = item
             return
         }
 
-        items.append(WeakRef(item))
+        if let at = at, 0...items.endIndex ~= at {
+            items.insert(WeakRef(item), at: at)
+        } else {
+            items.append(WeakRef(item))
+        }
+    }
+
+    open var count: Int {
+        return items.count
+    }
+
+    open func removeAll() {
+        items.removeAll()
+    }
+
+    open func remove(_ item: T) -> Int? {
+        guard let index = self.index(of: item) else { return nil }
+        items.remove(at: index)
+        return index
+    }
+
+    open func at(_ index: Int) -> T? {
+        return items[safe: index]?.value
+    }
+
+    open func index(of item: T) -> Int? {
+        return items.index { $0.value === item }
     }
 
     open func makeIterator() -> AnyIterator<T> {

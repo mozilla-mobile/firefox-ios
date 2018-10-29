@@ -7,7 +7,7 @@ import UIKit
 
 extension TabTrayController {
     override var keyCommands: [UIKeyCommand]? {
-        let toggleText = privateMode ? Strings.SwitchToNonPBMKeyCodeTitle: Strings.SwitchToPBMKeyCodeTitle
+        let toggleText = tabDisplayManager.isPrivate ? Strings.SwitchToNonPBMKeyCodeTitle: Strings.SwitchToPBMKeyCodeTitle
         var commands = [
             UIKeyCommand(input: "`", modifierFlags: .command, action: #selector(didTogglePrivateModeKeyCommand), discoverabilityTitle: toggleText),
             UIKeyCommand(input: "w", modifierFlags: .command, action: #selector(didCloseTabKeyCommand)),
@@ -74,7 +74,7 @@ extension TabTrayController {
             step = 0
         }
 
-        let tabs = tabDisplayManager.tabStore
+        let tabs = tabDisplayManager.dataStore
         let currentIndex: Int
         if let selected = tabManager.selectedTab {
             currentIndex = tabs.index(of: selected) ?? 0
@@ -83,7 +83,7 @@ extension TabTrayController {
         }
 
         let nextIndex = max(0, min(currentIndex + step, tabs.count - 1))
-        if let nextTab = tabs[safe: nextIndex] {
+        if let nextTab = tabs.at(nextIndex) {
             tabManager.selectTab(nextTab)
         }
     }
