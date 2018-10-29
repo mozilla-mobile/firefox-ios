@@ -23,15 +23,15 @@ class SiteLoadTest: BaseTestCase {
 
             navigator.performAction(Action.AcceptRemovingAllTabs)
             navigator.goto(BrowserTab)
-            waitforNoExistence(app.staticTexts["1 tab(s) closed"])
+            waitForNoExistence(app.staticTexts["1 tab(s) closed"])
 
             // clear the cache
             navigator.goto(ClearPrivateDataSettings)
             app.tables.staticTexts["Clear Private Data"].tap()
-            waitforExistence(app.alerts.buttons["OK"])
+            waitForExistence(app.alerts.buttons["OK"])
             app.alerts.buttons["OK"].tap()
             navigator.goto(BrowserTab)
-            waitforExistence(app.textFields["url"])
+            waitForExistence(app.textFields["url"])
             counter += 1
         }
     }

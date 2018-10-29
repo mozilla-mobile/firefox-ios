@@ -23,7 +23,7 @@ class SyncUITests: BaseTestCase {
     func testSyncUIFromBrowserTabMenu() {
         // Check menu available from HomeScreenPanel
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables["Context Menu"].cells["menu-sync"])
+        waitForExistence(app.tables["Context Menu"].cells["menu-sync"])
         navigator.goto(FxASigninScreen)
         verifyFxASigninScreen()
 
@@ -31,13 +31,13 @@ class SyncUITests: BaseTestCase {
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables["Context Menu"].cells["menu-sync"])
+        waitForExistence(app.tables["Context Menu"].cells["menu-sync"])
         navigator.goto(FxASigninScreen)
         verifyFxASigninScreen()
     }
 
     private func verifyFxASigninScreen() {
-        waitforExistence(app.webViews.staticTexts["Sign in"])
+        waitForExistence(app.webViews.staticTexts["Sign in"])
         XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
         XCTAssertTrue(app.webViews.secureTextFields["Password"].exists)
@@ -54,48 +54,48 @@ class SyncUITests: BaseTestCase {
 
     func testTypeOnGivenFields() {
         navigator.goto(FxASigninScreen)
-        waitforExistence(app.webViews.staticTexts["Sign in"])
+        waitForExistence(app.webViews.staticTexts["Sign in"])
 
         // Tap Sign in without any value in email Password focus on Email
         navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.webViews.staticTexts["Valid email required"])
+        waitForExistence(app.webViews.staticTexts["Valid email required"])
 
         // Enter only email, wrong and correct and tap sign in
         userState.fxaUsername = "bademail"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.webViews.staticTexts["Valid email required"])
+        waitForExistence(app.webViews.staticTexts["Valid email required"])
 
         userState.fxaUsername = "valid@email.com"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.webViews.staticTexts["Valid password required"])
+        waitForExistence(app.webViews.staticTexts["Valid password required"])
 
         // Enter invalid (too short, it should be at least 8 chars) and incorrect password
         userState.fxaPassword = "foo"
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.webViews.staticTexts["Must be at least 8 characters"])
+        waitForExistence(app.webViews.staticTexts["Must be at least 8 characters"])
 
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.webViews.staticTexts["Unknown account."], timeout: 10)
+        waitForExistence(app.webViews.staticTexts["Unknown account."], timeout: 10)
         XCTAssertTrue(app.webViews.links["Sign up"].exists)
     }
 
     func testCreateAnAccountLink() {
         navigator.goto(FxASigninScreen)
-        waitforExistence(app.webViews.links["Create an account"])
+        waitForExistence(app.webViews.links["Create an account"])
         navigator.goto(FxCreateAccount)
-        waitforExistence(app.webViews.buttons["Create account"])
+        waitForExistence(app.webViews.buttons["Create account"])
     }
 
     func testShowPassword() {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
         navigator.goto(FxASigninScreen)
-        waitforExistence(app.textFields["Email"])
+        waitForExistence(app.textFields["Email"])
 
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "email"
@@ -104,7 +104,7 @@ class SyncUITests: BaseTestCase {
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "foo"
         navigator.performAction(Action.FxATypePassword)
-        waitforExistence(app.webViews.staticTexts["Show password"])
+        waitForExistence(app.webViews.staticTexts["Show password"])
         // Long press delete key to remove the password typed, Show (password) option should not be shown
         app.keys["delete"].press(forDuration: 2)
     }
@@ -114,7 +114,7 @@ class SyncUITests: BaseTestCase {
         deleteInbox()
         // Log in
         navigator.goto(FxASigninScreen)
-        waitforExistence(app.webViews.staticTexts["Sign in"], timeout: 10)
+        waitForExistence(app.webViews.staticTexts["Sign in"], timeout: 10)
         userState.fxaUsername = userMail
         userState.fxaPassword = password
         navigator.performAction(Action.FxATypeEmail)
@@ -136,14 +136,14 @@ class SyncUITests: BaseTestCase {
         // Once the sign in is successful check the account management page
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells["menu-TrackingProtection"])
+        waitForExistence(app.tables.cells["menu-TrackingProtection"])
         // Tap on the sync name option
         if iPad() {
             app.tables.cells.element(boundBy: 9).tap()
         } else {
             app.tables.cells.element(boundBy: 0).tap()
         }
-        waitforExistence(app.navigationBars["Firefox Account"])
+        waitForExistence(app.navigationBars["Firefox Account"])
         XCTAssertTrue(app.tables.cells["Manage"].exists)
         XCTAssertTrue(app.cells.switches["sync.engine.bookmarks.enabled"].exists)
         XCTAssertTrue(app.cells.switches["sync.engine.history.enabled"].exists)

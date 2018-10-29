@@ -42,14 +42,14 @@ class L10nBaseSnapshotTests: XCTestCase {
         app.activate()
     }
 
-    func waitforExistence(_ element: XCUIElement) {
+    func waitForExistence(_ element: XCUIElement) {
         let exists = NSPredicate(format: "exists == true")
 
         expectation(for: exists, evaluatedWith: element, handler: nil)
         waitForExpectations(timeout: 20, handler: nil)
     }
 
-    func waitforNoExistence(_ element: XCUIElement) {
+    func waitForNoExistence(_ element: XCUIElement) {
         let exists = NSPredicate(format: "exists != true")
 
         expectation(for: exists, evaluatedWith: element, handler: nil)

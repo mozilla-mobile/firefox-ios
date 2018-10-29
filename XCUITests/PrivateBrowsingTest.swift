@@ -15,10 +15,10 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(url1)
         navigator.goto(BrowserTabMenu)
         // Go to History screen
-        waitforExistence(app.tables.cells["History"])
+        waitForExistence(app.tables.cells["History"])
         app.tables.cells["History"].tap()
         navigator.nowAt(BrowserTab)
-        waitforExistence(app.tables["History List"])
+        waitForExistence(app.tables["History List"])
 
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
         // History without counting Recently Closed and Synced devices
@@ -32,9 +32,9 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(url2)
         waitForValueContains(app.textFields["url"], value: "facebook")
         navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells["History"])
+        waitForExistence(app.tables.cells["History"])
         app.tables.cells["History"].tap()
-        waitforExistence(app.tables["History List"])
+        waitForExistence(app.tables["History List"])
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
         XCTAssertFalse(app.tables["History List"].staticTexts[url2Label].exists)
 
@@ -49,7 +49,7 @@ class PrivateBrowsingTest: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(TabTray)
 
-        waitforExistence(app.collectionViews.cells[url1Label])
+        waitForExistence(app.collectionViews.cells[url1Label])
         let numTabs = userState.numTabs
         XCTAssertEqual(numTabs, 2, "The number of regular tabs is not correct")
 
@@ -61,15 +61,15 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(url2)
         waitForValueContains(app.textFields["url"], value: "facebook")
         navigator.goto(TabTray)
-        waitforExistence(app.collectionViews.cells[url2Label])
+        waitForExistence(app.collectionViews.cells[url2Label])
         let numPrivTabs = userState.numTabs
         XCTAssertEqual(numPrivTabs, 1, "The number of private tabs is not correct")
 
         // Go back to regular mode and check the total number of tabs
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        waitforExistence(app.collectionViews.cells[url1Label])
-        waitforNoExistence(app.collectionViews.cells[url2Label])
+        waitForExistence(app.collectionViews.cells[url1Label])
+        waitForNoExistence(app.collectionViews.cells[url2Label])
         let numRegularTabs = userState.numTabs
         XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
     }
@@ -97,7 +97,7 @@ class PrivateBrowsingTest: BaseTestCase {
         // Go back to private browsing and check that the tab has not been closed
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        waitforExistence(app.collectionViews.cells[url1Label])
+        waitForExistence(app.collectionViews.cells[url1Label])
         checkOpenTabsBeforeClosingPrivateMode()
 
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
@@ -112,7 +112,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        waitforNoExistence(app.collectionViews.cells[url1Label])
+        waitForNoExistence(app.collectionViews.cells[url1Label])
         checkOpenTabsAfterClosingPrivateMode()
     }
 
@@ -153,7 +153,7 @@ class PrivateBrowsingTest: BaseTestCase {
         // Go back to private browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        waitforNoExistence(app.staticTexts["Private Browsing"])
+        waitForNoExistence(app.staticTexts["Private Browsing"])
         XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is shown")
         let numPrivTabsOpen = userState.numTabs
         XCTAssertEqual(numPrivTabsOpen, 1, "The number of tabs is not correct, there should be one private tab")
@@ -212,7 +212,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.goto(NewTabScreen)
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
         navigator.goto(HomePanel_History)
-        waitforExistence(app.tables["History List"])
+        waitForExistence(app.tables["History List"])
         // History without counting Recently Closed and Synced devices
         let history = app.tables["History List"].cells.count - 2
         XCTAssertEqual(history, 0, "History list should be empty")
@@ -230,12 +230,12 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.openURL("http://example.com")
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
         navigator.browserPerformAction(.openHistoryOption)
-        waitforExistence(app.tables["History List"])
+        waitForExistence(app.tables["History List"])
         // History without counting Recently Closed and Synced devices
         let history = app.tables["History List"].cells.count - 2
         XCTAssertEqual(history, 1, "There should be one entry in History")
         let savedToHistory = app.tables["History List"].cells.staticTexts[url1Label]
-        waitforExistence(savedToHistory)
+        waitForExistence(savedToHistory)
         XCTAssertTrue(savedToHistory.exists)
     }
 }

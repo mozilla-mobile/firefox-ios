@@ -42,7 +42,7 @@ class HomePageSettingsTest: BaseTestCase {
         navigator.goto(BrowserTab)
         var currentURL = app.textFields["url"].value as! String
         navigator.goto(PageOptionsMenu)
-        waitforExistence(app.tables.staticTexts["Set as Homepage"])
+        waitForExistence(app.tables.staticTexts["Set as Homepage"])
         app.tables.staticTexts["Set as Homepage"].tap()
         app.buttons["Set Homepage"].tap()
 

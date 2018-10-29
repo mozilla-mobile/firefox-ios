@@ -10,7 +10,7 @@ class DownloadFilesTests: BaseTestCase {
         // The downloaded file has to be removed between tests
         navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Downloads)
-        waitforExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"])
 
         let list = app.tables["DownloadsTable"].cells.count
         if list != 0 {
@@ -40,7 +40,7 @@ class DownloadFilesTests: BaseTestCase {
         // Verify that the context menu prior to download a file is correct
         app.webViews.staticTexts[testFileName].tap()
         app.webViews.buttons["Download"].tap()
-        waitforExistence(app.tables["Context Menu"])
+        waitForExistence(app.tables["Context Menu"])
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileName].exists)
         XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
         app.buttons["Cancel"].tap()
@@ -57,7 +57,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Downloads)
 
-        waitforExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"])
         // There should be one item downloaded. It's name and size should be shown
         checkTheNumberOfDownloadedItems(items: 1)
         XCTAssertTrue(app.tables.cells.staticTexts[testFileName].exists)
@@ -68,10 +68,10 @@ class DownloadFilesTests: BaseTestCase {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Downloads)
-        waitforExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"])
 
         deleteItem(itemName: testFileName)
-        waitforNoExistence(app.tables.cells.staticTexts[testFileName])
+        waitForNoExistence(app.tables.cells.staticTexts[testFileName])
 
         // After removing the number of items should be 0
         checkTheNumberOfDownloadedItems(items: 0)
@@ -87,7 +87,7 @@ class DownloadFilesTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.buttons["Delete"].exists)
 
         app.tables.cells.buttons["Share"].tap()
-        waitforExistence(app.otherElements["ActivityListView"])
+        waitForExistence(app.otherElements["ActivityListView"])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
         } else {
@@ -100,9 +100,9 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Downloads)
 
-        waitforExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"])
         app.tables.cells.staticTexts[testFileName].press(forDuration: 2)
-        waitforExistence(app.otherElements["ActivityListView"])
+        waitForExistence(app.otherElements["ActivityListView"])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
         } else {
@@ -116,7 +116,7 @@ class DownloadFilesTests: BaseTestCase {
         for _ in 0..<numberOfDownlowds {
             app.webViews.staticTexts[fileName].tap()
             app.webViews.buttons["Download"].tap()
-            waitforExistence(app.tables["Context Menu"])
+            waitForExistence(app.tables["Context Menu"])
             app.tables["Context Menu"].cells["download"].tap()
         }
     }
@@ -126,7 +126,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Downloads)
 
-        waitforExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"])
         checkTheNumberOfDownloadedItems(items: 2)
     }
 
@@ -142,7 +142,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Downloads)
 
-        waitforExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"])
         checkTheNumberOfDownloadedItems(items: 1)
 
         // Remove private data once the switch to remove downloaded files is enabled
@@ -157,16 +157,16 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     private func checkTheNumberOfDownloadedItems(items: Int) {
-        waitforExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"])
         let list = app.tables["DownloadsTable"].cells.count
         XCTAssertEqual(list, items, "The number of items in the downloads table is not correct")
     }
 
     func testToastButtonToGoToDownloads() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
-        waitforExistence(app.buttons["Downloads"])
+        waitForExistence(app.buttons["Downloads"])
         app.buttons["Downloads"].tap()
-        waitforExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"])
         checkTheNumberOfDownloadedItems(items: 1)
     }
 }

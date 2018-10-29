@@ -10,21 +10,21 @@ let url_2 = ["url": "test-mozilla-org.html", "bookmarkLabel": "Internet for peop
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
         navigator.goto(PageOptionsMenu)
-        waitforExistence(app.tables.cells["Bookmark This Page"])
+        waitForExistence(app.tables.cells["Bookmark This Page"])
         app.tables.cells["Bookmark This Page"].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func unbookmark() {
         navigator.goto(PageOptionsMenu)
-        waitforExistence(app.tables.cells["Remove Bookmark"])
+        waitForExistence(app.tables.cells["Remove Bookmark"])
         app.cells["Remove Bookmark"].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func checkBookmarked() {
         navigator.goto(PageOptionsMenu)
-        waitforExistence(app.tables.cells["Remove Bookmark"])
+        waitForExistence(app.tables.cells["Remove Bookmark"])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
@@ -35,7 +35,7 @@ class BookmarkingTests: BaseTestCase {
 
     private func checkUnbookmarked() {
         navigator.goto(PageOptionsMenu)
-        waitforExistence(app.tables.cells["Bookmark This Page"])
+        waitForExistence(app.tables.cells["Bookmark This Page"])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
@@ -73,7 +73,7 @@ class BookmarkingTests: BaseTestCase {
     }
 
     private func checkItemInBookmarkList() {
-        waitforExistence(app.tables["Bookmarks List"])
+        waitForExistence(app.tables["Bookmarks List"])
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)
@@ -84,7 +84,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        waitforExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
         bookmark()
 
         //There should be a bookmark
@@ -96,8 +96,8 @@ class BookmarkingTests: BaseTestCase {
     func testBookmarksAwesomeBar() {
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.ebay")
-        waitforExistence(app.tables["SiteTable"])
-        waitforExistence(app.buttons["www.ebay.com"])
+        waitForExistence(app.tables["SiteTable"])
+        waitForExistence(app.buttons["www.ebay.com"])
         XCTAssertTrue(app.buttons["www.ebay.com"].exists)
         typeOnSearchBar(text: ".com")
         typeOnSearchBar(text: "\r")
@@ -109,7 +109,7 @@ class BookmarkingTests: BaseTestCase {
         typeOnSearchBar(text: "http://www.olx.ro")
 
         // Site table existes but is empty
-        waitforExistence(app.tables["SiteTable"])
+        waitForExistence(app.tables["SiteTable"])
         XCTAssertEqual(app.tables["SiteTable"].cells.count, 0)
         typeOnSearchBar(text: "\r")
         navigator.nowAt(BrowserTab)
@@ -123,13 +123,13 @@ class BookmarkingTests: BaseTestCase {
         navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "olx.ro")
-        waitforExistence(app.tables["SiteTable"])
-        waitforExistence(app.buttons["olx.ro"])
+        waitForExistence(app.tables["SiteTable"])
+        waitForExistence(app.buttons["olx.ro"])
         XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
     }
 
     private func typeOnSearchBar(text: String) {
-        waitforExistence(app.textFields["address"])
+        waitForExistence(app.textFields["address"])
         app.textFields["address"].typeText(text)
     }
 }

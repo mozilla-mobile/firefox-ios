@@ -32,7 +32,7 @@ class HomePageSettingsUITests: BaseTestCase {
 
         //Now check open home page should load the previously saved home page
         let homePageMenuItem = app.tables["Context Menu"].cells["Open Homepage"]
-        waitforExistence(homePageMenuItem)
+        waitForExistence(homePageMenuItem)
         homePageMenuItem.tap()
         waitForValueContains(app.textFields["url"], value: websiteUrl1)
     }
@@ -44,7 +44,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(SettingsScreen)
         // Check that it is not saved
         navigator.goto(HomePageSettings)
-        waitforExistence(app.textFields["HomePageSettingTextField"])
+        waitForExistence(app.textFields["HomePageSettingTextField"])
         let valueAfter = app.textFields["HomePageSettingTextField"].value
         XCTAssertEqual("Enter a webpage", valueAfter as! String)
 
@@ -60,7 +60,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // Go to a website and copy the url
         navigator.openURL(websiteUrl1)
         app.textFields["url"].press(forDuration: 5)
-        waitforExistence(app.tables["Context Menu"])
+        waitForExistence(app.tables["Context Menu"])
         app.tables["Context Menu"].cells["menu-Copy-Link"].tap()
         // Go to HomePage settings and paste it using the option Used Copied Link
         navigator.goto(HomePageSettings)
@@ -85,13 +85,13 @@ class HomePageSettingsUITests: BaseTestCase {
         app.textFields["address"].press(forDuration: 5)
         app.menuItems["Select All"].tap()
         app.menuItems["Copy"].tap()
-        waitforExistence(app.buttons["goBack"])
+        waitForExistence(app.buttons["goBack"])
         app.buttons["goBack"].tap()
 
         // Go to HomePage settings and check that it is not possible to copy it into the set webpage field
         navigator.nowAt(BrowserTab)
         navigator.goto(HomePageSettings)
-        waitforExistence(app.staticTexts["Use Copied Link"])
+        waitForExistence(app.staticTexts["Use Copied Link"])
 
         // Check that nothing is copied in the Set webpage field
         app.cells["Use Copied Link"].tap()

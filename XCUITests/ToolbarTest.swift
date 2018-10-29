@@ -37,7 +37,7 @@ class ToolbarTests: BaseTestCase {
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
-        waitforExistence(app.webViews.links["Mozilla"], timeout: 5)
+        waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
         let valueMozilla = app.textFields["url"].value as! String
         XCTAssertEqual(valueMozilla, urlValueLong)
 
@@ -61,7 +61,7 @@ class ToolbarTests: BaseTestCase {
 
         // Open new tab and then go back to previous tab to test navigation buttons.
         navigator.goto(TabTray)
-        waitforExistence(app.collectionViews.cells[website1["label"]!])
+        waitForExistence(app.collectionViews.cells[website1["label"]!])
         app.collectionViews.cells[website1["label"]!].tap()
         XCTAssertEqual(valueMozilla, urlValueLong)
 
@@ -73,7 +73,7 @@ class ToolbarTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
 
-        waitforExistence(app.collectionViews.cells[website1["label"]!])
+        waitForExistence(app.collectionViews.cells[website1["label"]!])
         app.collectionViews.cells[website1["label"]!].swipeRight()
 
         // Go Back to other tab to see if all buttons are disabled.
@@ -85,7 +85,7 @@ class ToolbarTests: BaseTestCase {
     func testClearURLTextUsingBackspace() {
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
-        waitforExistence(app.webViews.links["Mozilla"], timeout: 5)
+        waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: website1["value"]!)
 
         // Simulate pressing on backspace key should remove the text

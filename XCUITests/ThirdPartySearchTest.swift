@@ -102,7 +102,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.typeText("window")
 
         // For timing issue, we need a wait statement
-        waitforExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
+        waitForExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
         XCTAssert(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
         app.typeText("\r")
 
@@ -122,7 +122,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
         app.textFields["url"].tap()
         app.typeText("window")
-        waitforNoExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
+        waitForNoExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
     }
 
@@ -137,7 +137,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars.buttons["customEngineSaveButton"].tap()
 
         // Perform a search using a custom search engine
-        waitforExistence(app.tables.staticTexts["Ask"])
+        waitForExistence(app.tables.staticTexts["Ask"])
         navigator.goto(HomePanelsScreen)
         app.textFields["url"].tap()
         app.typeText("strange charm")
@@ -158,7 +158,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
         app.navigationBars.buttons["customEngineSaveButton"].tap()
 
-        waitforExistence(app.alerts.element(boundBy: 0))
+        waitForExistence(app.alerts.element(boundBy: 0))
         XCTAssert(app.alerts.element(boundBy: 0).label == "Failed")
     }
 }

@@ -61,14 +61,14 @@ class DomainAutocompleteTest: BaseTestCase {
     func testDeleteEntireString() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
-        waitforExistence(app.buttons["Clear text"])
+        waitForExistence(app.buttons["Clear text"])
         app.buttons["Clear text"].tap()
 
         // Check that the address field is empty and that the home panels are shown
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
 
-        waitforExistence(app.buttons["HomePanels.TopSites"])
+        waitForExistence(app.buttons["HomePanels.TopSites"])
         XCTAssertFalse(app.buttons["HomePanels.TopSites"].isEnabled)
         XCTAssertTrue(app.buttons["HomePanels.Bookmarks"].isEnabled)
     }
@@ -178,7 +178,7 @@ class DomainAutocompleteTest: BaseTestCase {
         navigator.goto(URLBarOpen)
         app.typeText("gith")
 
-        waitforExistence(app.tables["SiteTable"].cells.staticTexts[url2["label"]!])
+        waitForExistence(app.tables["SiteTable"].cells.staticTexts[url2["label"]!])
         // There should be only one matching entry
         XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
         XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
@@ -197,7 +197,7 @@ class DomainAutocompleteTest: BaseTestCase {
             app.typeText("\u{0008}")
         }
 
-        waitforNoExistence(app.tables["SiteTable"].staticTexts[url2["label"]!])
+        waitForNoExistence(app.tables["SiteTable"].staticTexts[url2["label"]!])
         XCTAssertFalse(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
         XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
     }

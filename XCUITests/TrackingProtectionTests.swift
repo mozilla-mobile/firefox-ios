@@ -74,14 +74,14 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(URLBarLongPressMenu)
 
-        waitforExistence(app.tables.cells["menu-TrackingProtection-Off"])
+        waitForExistence(app.tables.cells["menu-TrackingProtection-Off"])
         XCTAssertTrue(app.tables.cells["menu-TrackingProtection-Off"].staticTexts[tpIsDisabledString].exists, "TP menu is wrong when blocking elements")
     }
 
     private func checkTrackingProtectionEnabledForSite() {
         navigator.nowAt(BrowserTab)
         navigator.goto(URLBarLongPressMenu)
-        waitforExistence(app.tables.cells["menu-TrackingProtection"])
+        waitForExistence(app.tables.cells["menu-TrackingProtection"])
         XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[blockedElementsString].exists, "TP menu is wrong when blocking elements")
     }
 
@@ -95,7 +95,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(URLBarLongPressMenu)
 
-        waitforExistence(app.tables.cells["menu-TrackingProtection"])
+        waitForExistence(app.tables.cells["menu-TrackingProtection"])
         XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[blockedElementsString].exists, "TP menu is wrong when blocking elements")
 
         // Now disable TP from Brwoser Tab menu
@@ -117,7 +117,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.TrackingProtectionContextMenu)
 
         // Verify that all elements for TP menu are shown
-        waitforExistence(app.tables["Context Menu"])
+        waitForExistence(app.tables["Context Menu"])
         XCTAssertTrue(app.tables.cells["Total trackers blocked"].exists, "TP menu with elements blocked is not right")
         XCTAssertTrue(app.tables.cells["Ad trackers"].exists, "TP menu with elements blocked is not right")
         XCTAssertTrue(app.tables.cells["Analytic trackers"].exists, "TP menu with elements blocked is not right")
@@ -130,7 +130,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL(websiteWithoutBlockedElements)
         waitUntilPageLoad()
         navigator.goto(URLBarLongPressMenu)
-        waitforExistence(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString])
+        waitForExistence(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString])
         XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString].exists, "TP menu is wrong when blocking elements")
     }
 
@@ -150,7 +150,7 @@ class TrackingProtectionTests: BaseTestCase {
 
     func testTPMenuHomePanel() {
         navigator.goto(URLBarLongPressMenu)
-        waitforExistence(app.tables.cells["menu-TrackingProtection"])
+        waitForExistence(app.tables.cells["menu-TrackingProtection"])
         XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString].exists, "TP incorrectly shown when no blocking elements")
     }
 

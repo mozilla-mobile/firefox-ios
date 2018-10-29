@@ -17,9 +17,9 @@ class ClipBoardTests: BaseTestCase {
     func copyUrl() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].press(forDuration: 3)
-        waitforExistence(app.menuItems["Select All"])
+        waitForExistence(app.menuItems["Select All"])
         app.menuItems["Select All"].tap()
-        waitforExistence(app.menuItems["Copy"])
+        waitForExistence(app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
         app.typeText("\r")
         navigator.nowAt(BrowserTab)
@@ -63,7 +63,7 @@ class ClipBoardTests: BaseTestCase {
         checkCopiedUrl()
         navigator.createNewTab()
         app.textFields["url"].press(forDuration: 3)
-        waitforExistence(app.tables["Context Menu"])
+        waitForExistence(app.tables["Context Menu"])
         app.cells["menu-PasteAndGo"].tap()
         waitForValueContains(app.textFields["url"], value: "www.example.com")
     }

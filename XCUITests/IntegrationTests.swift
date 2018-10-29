@@ -37,7 +37,7 @@ class IntegrationTests: BaseTestCase {
 
     private func signInFxAccounts() {
         navigator.goto(FxASigninScreen)
-        waitforExistence(app.webViews.staticTexts["Sign in"], timeout: 10)
+        waitForExistence(app.webViews.staticTexts["Sign in"], timeout: 10)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
@@ -50,7 +50,7 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        waitforExistence(app.tables.staticTexts["Sync Now"], timeout: 10)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 10)
     }
 
     func testFxASyncHistory () {
@@ -84,13 +84,13 @@ class IntegrationTests: BaseTestCase {
         // This is only to check that the device's name changed
         navigator.goto(SettingsScreen)
         app.tables.cells.element(boundBy: 0).tap()
-        waitforExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
+        waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
         XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec on iOS")
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
         app.tables.cells.element(boundBy: 1).tap()
-        waitforExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
     }*/
 
     func testFxASyncLogins () {
@@ -98,18 +98,18 @@ class IntegrationTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Log in in order to save it
-        waitforExistence(app.webViews.textFields["Email or phone"])
+        waitForExistence(app.webViews.textFields["Email or phone"])
         app.webViews.textFields["Email or phone"].tap()
         app.webViews.textFields["Email or phone"].typeText(userName)
         app.webViews.buttons["Next"].tap()
-        waitforExistence(app.webViews.secureTextFields["Password"])
+        waitForExistence(app.webViews.secureTextFields["Password"])
         app.webViews.secureTextFields["Password"].tap()
         app.webViews.secureTextFields["Password"].typeText(userPassword)
 
         app.webViews.buttons["Sign in"].tap()
 
         // Save the login
-        waitforExistence(app.buttons["SaveLoginPrompt.saveLoginButton"])
+        waitForExistence(app.buttons["SaveLoginPrompt.saveLoginButton"])
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
 
         // Sign in with FxAccount
