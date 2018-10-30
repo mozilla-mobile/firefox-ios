@@ -14,7 +14,7 @@ This branch is written in Swift 4.2
 
 Please make sure you aim your pull requests in the right direction.
 
-For bug fixes and features for a specfic release use the version branch.
+For bug fixes and features for a specific release use the version branch.
 
 Getting involved
 ----------------
