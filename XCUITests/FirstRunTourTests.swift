@@ -12,8 +12,8 @@ class FirstRunTourTests: BaseTestCase {
     func testFirstRunTour() {
         // Complet the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        waitforExistence(app.scrollViews["IntroViewController.scrollView"])
-        waitforExistence(app.staticTexts["Thanks for choosing Firefox!"])
+        waitForExistence(app.scrollViews["IntroViewController.scrollView"])
+        waitForExistence(app.staticTexts["Thanks for choosing Firefox!"])
         XCTAssertFalse(app.buttons["IntroViewController.startBrowsingButton"].exists)
         XCTAssertTrue(app.images["tour-Welcome"].exists)
         XCTAssertTrue(app.pageIndicators["IntroViewController.pageControl"].exists)
@@ -21,28 +21,28 @@ class FirstRunTourTests: BaseTestCase {
 
         // Swipe to the second screen
         app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        waitforExistence(app.staticTexts["Your search, your way"])
+        waitForExistence(app.staticTexts["Your search, your way"])
         XCTAssertTrue(app.buttons["IntroViewController.startBrowsingButton"].exists)
         XCTAssertTrue(app.images["tour-Search"].exists)
         XCTAssertEqual(app.pageIndicators["IntroViewController.pageControl"].value as? String, "page 2 of 5")
 
         // Swipe to the third screen
         app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        waitforExistence(app.staticTexts["Browse like no one’s watching"])
+        waitForExistence(app.staticTexts["Browse like no one’s watching"])
         XCTAssertTrue(app.buttons["IntroViewController.startBrowsingButton"].exists)
         XCTAssertTrue(app.images["tour-Private"].exists)
         XCTAssertEqual(app.pageIndicators["IntroViewController.pageControl"].value as? String, "page 3 of 5")
 
         // Swipe to the fourth screen
         app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        waitforExistence(app.staticTexts["You’ve got mail… options"])
+        waitForExistence(app.staticTexts["You’ve got mail… options"])
         XCTAssertTrue(app.buttons["IntroViewController.startBrowsingButton"].exists)
         XCTAssertTrue(app.images["tour-Mail"].exists)
         XCTAssertEqual(app.pageIndicators["IntroViewController.pageControl"].value as? String, "page 4 of 5")
 
         // Swipe to the fifth screen
         app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        waitforExistence(app.staticTexts["Pick up where you left off"])
+        waitForExistence(app.staticTexts["Pick up where you left off"])
         XCTAssertTrue(app.buttons["IntroViewController.startBrowsingButton"].exists)
         XCTAssertTrue(app.images["tour-Sync"].exists)
         XCTAssertTrue(app.buttons["Sign in to Firefox"].exists)
@@ -56,11 +56,11 @@ class FirstRunTourTests: BaseTestCase {
     }
 
     private func tapStartBrowsingButton() {
-        waitforExistence(app.buttons["IntroViewController.startBrowsingButton"])
+        waitForExistence(app.buttons["IntroViewController.startBrowsingButton"])
         app.buttons["IntroViewController.startBrowsingButton"].tap()
         // User starts in HomePanelScreen with the default Top Sites
         let topSites = app.collectionViews.cells["TopSitesCell"]
-        waitforExistence(topSites)
+        waitForExistence(topSites)
     }
 
     func testStartBrowsingFromSecondScreen() {
@@ -91,7 +91,7 @@ class FirstRunTourTests: BaseTestCase {
         goToNextScreen(swipe: 1)
         tapStartBrowsingButton()
         navigator.goto(ShowTourInSettings)
-        waitforExistence(app.scrollViews["IntroViewController.scrollView"])
-        waitforExistence(app.staticTexts["Thanks for choosing Firefox!"])
+        waitForExistence(app.scrollViews["IntroViewController.scrollView"])
+        waitForExistence(app.staticTexts["Thanks for choosing Firefox!"])
     }
 }

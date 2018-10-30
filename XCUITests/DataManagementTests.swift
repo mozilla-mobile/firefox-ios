@@ -30,7 +30,7 @@ class DataManagementTests: BaseTestCase {
         navigator.goto(WebsiteDataSettings)
         navigator.performAction(Action.TapOnFilterWebsites)
         app.typeText("youtube")
-        waitforExistence(app.tables["Search results"])
+        waitForExistence(app.tables["Search results"])
         let expectedSearchResults = app.tables["Search results"].cells.count
         XCTAssertEqual(expectedSearchResults, 1)
         navigator.performAction(Action.TapOnFilterWebsites)
@@ -42,7 +42,7 @@ class DataManagementTests: BaseTestCase {
         let expectedShowMoreWebsites = app.tables.cells.count
         XCTAssertNotEqual(expectedShowMoreWebsites, 9)
         navigator.performAction(Action.AcceptClearAllWebsiteData)
-        waitforExistence(app.tables.cells["ClearAllWebsiteData"])
+        waitForExistence(app.tables.cells["ClearAllWebsiteData"])
         let expectedWebsitesCleared = app.tables.cells.count
         XCTAssertEqual(expectedWebsitesCleared, 1)
     }

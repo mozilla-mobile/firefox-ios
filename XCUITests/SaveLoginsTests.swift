@@ -15,14 +15,14 @@ class SaveLoginTest: BaseTestCase {
     private func saveLogin() {
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
-        waitforExistence(app.buttons["submit"], timeout: 3)
+        waitForExistence(app.buttons["submit"], timeout: 3)
         app.buttons["submit"].tap()
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
     }
 
     private func openLoginsSettings() {
         navigator.goto(LoginsSettings)
-        waitforExistence(app.tables["Login List"])
+        waitForExistence(app.tables["Login List"])
     }
 
     func testSaveLogin() {
@@ -32,7 +32,7 @@ class SaveLoginTest: BaseTestCase {
         // Save a login and check that it appears on the list
         saveLogin()
         navigator.goto(LoginsSettings)
-        waitforExistence(app.tables["Login List"])
+        waitForExistence(app.tables["Login List"])
         XCTAssertTrue(app.tables.cells[savedLoginEntry].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, 1)
     }
@@ -74,9 +74,9 @@ class SaveLoginTest: BaseTestCase {
         openLoginsSettings()
         app.tables.cells[savedLoginEntry].tap()
         app.cells.staticTexts["Delete"].tap()
-        waitforExistence(app.alerts["Are you sure?"])
+        waitForExistence(app.alerts["Are you sure?"])
         app.alerts.buttons["Delete"].tap()
-        waitforExistence(app.tables["Login List"])
+        waitForExistence(app.tables["Login List"])
         XCTAssertFalse(app.tables.cells[savedLoginEntry].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, 0)
         XCTAssertTrue(app.tables["No logins found"].exists)
@@ -89,7 +89,7 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertTrue(app.tables.cells[savedLoginEntry].exists)
 
         app.tables.cells[savedLoginEntry].tap()
-        waitforExistence(app.tables["Login Detail List"])
+        waitForExistence(app.tables["Login Detail List"])
         XCTAssertTrue(app.tables.cells["website, \(domain)"].exists)
         XCTAssertTrue(app.tables.cells["username, test@example.com"].exists)
         XCTAssertTrue(app.tables.cells["password"].exists)
@@ -112,7 +112,7 @@ class SaveLoginTest: BaseTestCase {
         // Type Text that does not match
         app.typeText("b")
         XCTAssertEqual(app.tables["Login List"].cells.count, 0)
-        waitforExistence(app.tables["No logins found"])
+        waitForExistence(app.tables["No logins found"])
 
         // Clear Text
         app.buttons["Clear Search"].tap()
@@ -124,7 +124,7 @@ class SaveLoginTest: BaseTestCase {
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         app.webViews.links["Sign in"].tap()
-        waitforExistence(app.webViews.textFields["Email"])
+        waitForExistence(app.webViews.textFields["Email"])
         app.webViews.textFields["Email"].tap()
         app.webViews.textFields["Email"].typeText(mailLogin)
 

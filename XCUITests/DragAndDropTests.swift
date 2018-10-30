@@ -154,8 +154,13 @@ class DragAndDropTests: IpadOnlyTestCase {
         // Home tab is open and then a new website
         navigator.openNewURL(urlString: secondWebsite.url)
         waitUntilPageLoad()
+<<<<<<< HEAD
         waitforExistence(app.collectionViews.cells.element(boundBy: 1))
         checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
+=======
+        waitForExistence(app.collectionViews.cells.element(boundBy: 1))
+        checkTabsOrder(dragAndDropTab: false, firstTab: homeTab["tabName"]!, secondTab: secondWebsite["tabName"]!)
+>>>>>>> Bug 1406477 - Code quality: rename BaseTestCase.waitfor* to BaseTestCase.waitFor*
 
         // Drag and drop home tab from the second position to the first one
         dragAndDrop(dragElement: app.collectionViews.cells["home"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
@@ -257,7 +262,7 @@ class DragAndDropTests: IpadOnlyTestCase {
 
         //navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Bookmarks)
-        waitforExistence(app.tables["Bookmarks List"])
+        waitForExistence(app.tables["Bookmarks List"])
 
         let firstEntryOnList = app.tables["Bookmarks List"].cells.element(boundBy: 0).staticTexts[exampleDomainTitle]
         let secondEntryOnList = app.tables["Bookmarks List"].cells.element(boundBy: 3).staticTexts[twitterTitle]
@@ -276,7 +281,7 @@ class DragAndDropTests: IpadOnlyTestCase {
         if skipPlatform { return }
 
         navigator.goto(HomePanel_History)
-        waitforExistence(app.tables["History List"].cells.staticTexts[twitterTitle])
+        waitForExistence(app.tables["History List"].cells.staticTexts[twitterTitle])
 
         app.tables["History List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
 
@@ -289,7 +294,7 @@ class DragAndDropTests: IpadOnlyTestCase {
         if skipPlatform { return }
 
         navigator.goto(HomePanel_Bookmarks)
-        waitforExistence(app.tables["Bookmarks List"])
+        waitForExistence(app.tables["Bookmarks List"])
         app.tables["Bookmarks List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
 
         // It is not allowed to drop the entry on the url field

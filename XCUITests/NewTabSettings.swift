@@ -8,7 +8,7 @@ class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
         navigator.goto(NewTabSettings)
-        waitforExistence(app.navigationBars["New Tab"])
+        waitForExistence(app.navigationBars["New Tab"])
         XCTAssertTrue(app.tables.cells["Top Sites"].exists)
         XCTAssertTrue(app.tables.cells["Blank Page"].exists)
         XCTAssertTrue(app.tables.cells["Bookmarks"].exists)
@@ -22,7 +22,7 @@ class NewTabSettingsTest: BaseTestCase {
         // Bookmark one site and check it appears in a new tab
         navigator.performAction(Action.BookmarkThreeDots)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitforExistence(app.staticTexts["Highlights"])
+        waitForExistence(app.staticTexts["Highlights"])
 
         // Disable toggle and check that it does not appear in a new tab
         navigator.goto(NewTabSettings)
@@ -30,36 +30,36 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
         //This appears under top sites
-        waitforNoExistence(app.staticTexts["Highlights"])
+        waitForNoExistence(app.staticTexts["Highlights"])
 
         // Enable toggle again and check it is shown
         navigator.goto(NewTabSettings)
         navigator.toggleOn(userState.bookmarksInNewTab, withAction: Action.ToggleBookmarksInNewTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitforExistence(app.staticTexts["Highlights"])
+        waitForExistence(app.staticTexts["Highlights"])
     }
 
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
         navigator.goto(NewTabSettings)
-        waitforExistence(app.navigationBars["New Tab"])
+        waitForExistence(app.navigationBars["New Tab"])
 
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        waitforNoExistence(app.collectionViews.cells["TopSitesCell"])
-        waitforNoExistence(app.collectionViews.cells["TopSitesCell"].collectionViews.cells["youtube"])
-        waitforNoExistence(app.staticTexts["Highlights"])
+        waitForNoExistence(app.collectionViews.cells["TopSitesCell"])
+        waitForNoExistence(app.collectionViews.cells["TopSitesCell"].collectionViews.cells["youtube"])
+        waitForNoExistence(app.staticTexts["Highlights"])
     }
 
     // Smoketest
     func testChangeNewTabSettingsShowYourBookmarks() {
         navigator.goto(NewTabSettings)
-        waitforExistence(app.navigationBars["New Tab"])
+        waitForExistence(app.navigationBars["New Tab"])
         // Show Bookmarks panel without bookmarks
         navigator.performAction(Action.SelectNewTabAsBookmarksPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitforExistence(app.otherElements.images["emptyBookmarks"])
+        waitForExistence(app.otherElements.images["emptyBookmarks"])
 
         // Add one bookmark and check the new tab screen
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
@@ -67,23 +67,23 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.Bookmark)
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitforExistence(app.tables["Bookmarks List"].cells.staticTexts["The Book of Mozilla"])
-        waitforNoExistence(app.staticTexts["Highlights"])
+        waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["The Book of Mozilla"])
+        waitForNoExistence(app.staticTexts["Highlights"])
     }
 
     // Smoketest
     func testChangeNewTabSettingsShowYourHistory() {
         navigator.goto(NewTabSettings)
-        waitforExistence(app.navigationBars["New Tab"])
+        waitForExistence(app.navigationBars["New Tab"])
         // Show History Panel without history
         navigator.performAction(Action.SelectNewTabAsHistoryPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitforNoExistence(app.tables.otherElements.staticTexts["Today"])
+        waitForNoExistence(app.tables.otherElements.staticTexts["Today"])
 
         // Add one history item and check the new tab screen
         navigator.openURL("example.com")
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitforExistence(app.tables["History List"].cells.staticTexts["Example Domain"])
+        waitForExistence(app.tables["History List"].cells.staticTexts["Example Domain"])
     }
 }

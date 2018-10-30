@@ -68,11 +68,11 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func waitforExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
-    func waitforNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+    func waitForNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
     }
 
@@ -118,7 +118,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
-        waitforNoExistence(progressIndicator, timeoutValue: 20.0)
+        waitForNoExistence(progressIndicator, timeoutValue: 20.0)
     }
 }
 

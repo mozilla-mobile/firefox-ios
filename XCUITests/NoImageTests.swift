@@ -10,12 +10,12 @@ let ContextMenuIdentifier = "Context Menu"
 class NoImageTests: BaseTestCase {
 
     private func checkShowImages() {
-        waitforExistence(app.tables.cells[NoImageButtonIdentifier])
+        waitForExistence(app.tables.cells[NoImageButtonIdentifier])
         XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["enabled"].exists)
     }
 
     private func checkHideImages() {
-        waitforExistence(app.tables.cells[NoImageButtonIdentifier])
+        waitForExistence(app.tables.cells[NoImageButtonIdentifier])
         XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["disabled"].exists)
     }
 
