@@ -154,13 +154,8 @@ class DragAndDropTests: IpadOnlyTestCase {
         // Home tab is open and then a new website
         navigator.openNewURL(urlString: secondWebsite.url)
         waitUntilPageLoad()
-<<<<<<< HEAD
-        waitforExistence(app.collectionViews.cells.element(boundBy: 1))
         checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
-=======
         waitForExistence(app.collectionViews.cells.element(boundBy: 1))
-        checkTabsOrder(dragAndDropTab: false, firstTab: homeTab["tabName"]!, secondTab: secondWebsite["tabName"]!)
->>>>>>> Bug 1406477 - Code quality: rename BaseTestCase.waitfor* to BaseTestCase.waitFor*
 
         // Drag and drop home tab from the second position to the first one
         dragAndDrop(dragElement: app.collectionViews.cells["home"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
