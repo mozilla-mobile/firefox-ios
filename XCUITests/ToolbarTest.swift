@@ -96,6 +96,29 @@ class ToolbarTests: BaseTestCase {
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
     }
 
+    //Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal the URL bar, tapping again on the status will scroll to the top
+    func testRevealToolbarWhenTappingOnStatusbar(){
+        //Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
+        if !iPad() {
+            XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+            waitForExistence(app.otherElements["Navigation Toolbar"])
+        }
+        navigator.openURL(website1["url"]!, waitForLoading: true)
+        let pageActionMenuButton = app.buttons["TabLocationView.pageOptionsButton"]
+        waitForExistence(pageActionMenuButton, timeout: 5)
+        let statusbarElement = app.statusBars.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
+        XCTAssertTrue(statusbarElement.isHittable)
+        app.swipeUp()
+        let hiddenStatusbarElement = app.statusBars.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
+        XCTAssertFalse(pageActionMenuButton.exists)
+        hiddenStatusbarElement.tap()
+        XCTAssertTrue(hiddenStatusbarElement.isHittable)
+        hiddenStatusbarElement.tap()
+        let topElement = app.webViews.otherElements["Internet for people, not profit — Mozilla"].children(matching: .other).matching(identifier: "navigation").element(boundBy: 0).staticTexts["Mozilla"]
+        waitForExistence(topElement)
+        XCTAssertTrue(topElement.isHittable)
+    }
+
     func testShowToolbarWhenScrollingDefaultOption() {
         navigator.goto(SettingsScreen)
         // Check that the setting is off by default
@@ -110,7 +133,7 @@ class ToolbarTests: BaseTestCase {
 
         // Swipe Up and check that the toolbar is not available and Down and it is available again
         let toolbarElement = app.buttons["TopTabsViewController.tabsButton"]
-        let element = app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
+        let element = app.webViews.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
         element.swipeUp()
         XCTAssertFalse(toolbarElement.isHittable)
 
@@ -136,7 +159,7 @@ class ToolbarTests: BaseTestCase {
 
         // Swipe Up and check that the toolbar is not available and Down and it is available again
         let toolbarElement = app.buttons["TopTabsViewController.tabsButton"]
-        let element = app/*@START_MENU_TOKEN@*/.webViews/*[[".otherElements[\"Web content\"].webViews",".otherElements[\"contentView\"].webViews",".webViews"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
+        let element = app.webViews.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
         element.swipeUp()
         XCTAssertFalse(toolbarElement.isHittable)
 
