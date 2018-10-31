@@ -14,82 +14,13 @@ let exampleDomainTitle = "Example Domain"
 let twitterTitle = "Twitter"
 
 
-class DragAndDropTests: IpadOnlyTestCase {
-
-    let testWithDB = ["testTryDragAndDropHistoryToURLBar","testTryDragAndDropBookmarkToURLBar","testDragAndDropBookmarkEntry","testDragAndDropHistoryEntry"]
-
-    // This DDBB contains those 4 websites listed in the name
-    let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample.db"
-
-    override func setUp() {
-        // Test name looks like: "[Class testFunc]", parse out the function name
-        let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
-        let key = String(parts[1])
-        if testWithDB.contains(key) {
-            // for the current test name, add the db fixture used
-            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.LoadDatabasePrefix + historyAndBookmarksDB]
-        }
-        super.setUp()
-    }
+class DragAndDropTests: BaseTestCase {
 
     override func tearDown() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         super.tearDown()
     }
 
-    private func openTwoWebsites() {
-        // Open two tabs
-        navigator.openURL(firstWebsite.url)
-        navigator.goto(TabTray)
-        navigator.openURL(secondWebsite.url)
-        waitUntilPageLoad()
-    }
-
-    private func dragAndDrop(dragElement: XCUIElement, dropOnElement: XCUIElement) {
-        dragElement.press(forDuration: 2, thenDragTo: dropOnElement)
-    }
-
-    private func checkTabsOrder(dragAndDropTab: Bool, firstTab: String, secondTab: String) {
-        let firstTabCell = app.collectionViews.cells.element(boundBy: 0).label
-        let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
-
-        if (dragAndDropTab) {
-            XCTAssertEqual(firstTabCell, firstTab, "first tab after is not correct")
-            XCTAssertEqual(secondTabCell, secondTab, "second tab after is not correct")
-        } else {
-            XCTAssertEqual(firstTabCell, firstTab, "first tab before is not correct")
-            XCTAssertEqual(secondTabCell, secondTab, "second tab before is not correct")
-        }
-    }
-
-    // This feature is working only on iPad so far and so tests enabled only on that schema
-    func testRearrangeTabs() {
-        if skipPlatform { return }
-
-        openTwoWebsites()
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-        // Drag first tab on the second one
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-        // Check that focus is kept on last website open
-        XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
-    }
-
-    func testRearrangeTabsLandscape() {
-        if skipPlatform { return }
-
-        // Set the device in landscape mode
-        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
-        openTwoWebsites()
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-
-        // Rearrange the tabs via drag home tab and drop it on twitter tab
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
-
-         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-        // Check that focus is kept on last website open
-        XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
-    }
     // Tests disabled because the feature is off for master and 14.x
     func testRearrangeTabsTabTray() {
         openTwoWebsites()
@@ -99,15 +30,22 @@ class DragAndDropTests: IpadOnlyTestCase {
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
-     func testRearrangeMoreThan3TabsTabTray() {
+    func testRearrangeMoreThan3TabsTabTray() {
         // Arranging more than 3 to check that it works moving tabs between lines
         let thirdWebsite = (url: "example.com", tabName: "Example Domain")
 
         // Open three websites and home tab
         openTwoWebsites()
+        navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if iPad() {
+            waitForExistence(app.buttons["TopTabsViewController.tabsButton"])
+        } else {
+            waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 10)
+        }
         navigator.openNewURL(urlString: thirdWebsite.url)
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         let fourthWebsitePosition = app.collectionViews.cells.element(boundBy: 3).label
@@ -132,6 +70,111 @@ class DragAndDropTests: IpadOnlyTestCase {
         dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+    }
+
+    func testDragAndDropHomeTabTabsTray() {
+        navigator.openNewURL(urlString: secondWebsite.url)
+        waitUntilPageLoad()
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
+
+        // Drag and drop home tab from the first position to the second
+        dragAndDrop(dragElement: app.collectionViews.cells["home"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName , secondTab: homeTabName)
+    }
+
+    func testRearrangeTabsPrivateModeTabTray() {
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        openTwoWebsites()
+        navigator.goto(TabTray)
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+        // Drag first tab on the second one
+        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+    }
+}
+
+fileprivate extension BaseTestCase {
+    func openTwoWebsites() {
+        // Open two tabs
+        navigator.openURL(firstWebsite.url)
+        waitForTabsButton()
+        navigator.goto(TabTray)
+        navigator.openURL(secondWebsite.url)
+        waitUntilPageLoad()
+        waitForTabsButton()
+    }
+
+    func dragAndDrop(dragElement: XCUIElement, dropOnElement: XCUIElement) {
+        dragElement.press(forDuration: 2, thenDragTo: dropOnElement)
+    }
+
+    func checkTabsOrder(dragAndDropTab: Bool, firstTab: String, secondTab: String) {
+        let firstTabCell = app.collectionViews.cells.element(boundBy: 0).label
+        let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
+
+        if (dragAndDropTab) {
+            XCTAssertEqual(firstTabCell, firstTab, "first tab after is not correct")
+            XCTAssertEqual(secondTabCell, secondTab, "second tab after is not correct")
+        } else {
+            XCTAssertEqual(firstTabCell, firstTab, "first tab before is not correct")
+            XCTAssertEqual(secondTabCell, secondTab, "second tab before is not correct")
+        }
+    }
+}
+
+class DragAndDropTestIpad: IpadOnlyTestCase {
+
+    let testWithDB = ["testTryDragAndDropHistoryToURLBar","testTryDragAndDropBookmarkToURLBar","testDragAndDropBookmarkEntry","testDragAndDropHistoryEntry"]
+
+        // This DDBB contains those 4 websites listed in the name
+    let historyAndBookmarksDB = "browserYoutubeTwitterMozillaExample.db"
+
+    override func setUp() {
+        // Test name looks like: "[Class testFunc]", parse out the function name
+        let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
+        let key = String(parts[1])
+        if testWithDB.contains(key) {
+            // for the current test name, add the db fixture used
+                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.LoadDatabasePrefix + historyAndBookmarksDB]
+        }
+        super.setUp()
+    }
+
+    override func tearDown() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        super.tearDown()
+    }
+
+    func testRearrangeTabs() {
+        if skipPlatform { return }
+
+        openTwoWebsites()
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+        // Drag first tab on the second one
+        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+        // Check that focus is kept on last website open
+        XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
+    }
+
+    func testRearrangeTabsLandscape() {
+        if skipPlatform { return }
+
+        // Set the device in landscape mode
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
+        openTwoWebsites()
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+
+        // Rearrange the tabs via drag home tab and drop it on twitter tab
+        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+        // Check that focus is kept on last website open
+        XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
 
     func testDragDropToInvalidArea() {
@@ -165,18 +208,6 @@ class DragAndDropTests: IpadOnlyTestCase {
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
 
-    func testDragAndDropHomeTabTabsTray() {
-        navigator.openNewURL(urlString: secondWebsite.url)
-        waitUntilPageLoad()
-        navigator.goto(TabTray)
-        checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
-
-        // Drag and drop home tab from the first position to the second
-        dragAndDrop(dragElement: app.collectionViews.cells["home"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
-
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName , secondTab: homeTabName)
-    }
-
     func testRearrangeTabsPrivateMode() {
         if skipPlatform { return }
 
@@ -190,15 +221,19 @@ class DragAndDropTests: IpadOnlyTestCase {
         // Check that focus is kept on last website open
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
-
-    func testRearrangeTabsPrivateModeTabTray() {
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        
+    func testRearrangeTabsTabTrayIsKeptinTopTabs() {
+        if skipPlatform { return }
         openTwoWebsites()
-        navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+        navigator.goto(TabTray)
+
         // Drag first tab on the second one
         dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
 
+        // Leave Tab Tray and check order in Top Tabs
+        app.collectionViews.cells[firstWebsite.tabName].tap()
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
@@ -216,21 +251,6 @@ class DragAndDropTests: IpadOnlyTestCase {
         XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField.urlSearchField].value as? String, websiteWithSearchField.url)
     }
 
-    //Test disabled due to a known crash Bug 1493175
-    func testRearrangeTabsTabTrayIsKeptinTopTabs() {
-        openTwoWebsites()
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-        navigator.goto(TabTray)
-
-        // Drag first tab on the second one
-        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-
-        // Leave Tab Tray and check order in Top Tabs
-        app.collectionViews.cells[firstWebsite.tabName].tap()
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-    }
- 
     func testDragAndDropHistoryEntry() {
         if skipPlatform { return }
 
