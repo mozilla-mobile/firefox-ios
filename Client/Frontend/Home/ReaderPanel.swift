@@ -213,10 +213,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
-
-        if #available(iOS 11.0, *) {
-            tableView.dragDelegate = self
-        }
+        tableView.dragDelegate = self
 
         if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
             records = newRecords

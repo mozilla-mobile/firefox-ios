@@ -151,9 +151,7 @@ class SnackBar: UIView {
         self.layer.borderWidth = SnackBarUX.BorderWidth
         self.layer.borderColor = UIColor.theme.snackbar.border.cgColor
         self.layer.cornerRadius = 8
-        if #available(iOS 11.0, *) {
-            self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        }
+        self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
 
     required init?(coder aDecoder: NSCoder) {

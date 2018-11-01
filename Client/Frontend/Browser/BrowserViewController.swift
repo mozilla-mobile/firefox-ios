@@ -405,10 +405,8 @@ class BrowserViewController: UIViewController {
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links into the view from other apps.
-        if #available(iOS 11, *) {
-            let dropInteraction = UIDropInteraction(delegate: self)
-            view.addInteraction(dropInteraction)
-        }
+        let dropInteraction = UIDropInteraction(delegate: self)
+        view.addInteraction(dropInteraction)
     }
 
     fileprivate func setupConstraints() {
@@ -910,11 +908,10 @@ class BrowserViewController: UIViewController {
         guard let url = webView.url, url.isWebPage(), !url.isLocal else {
             return
         }
-        if #available(iOS 11, *) {
-            if NoImageModeHelper.isActivated(profile.prefs) {
-                webView.evaluateJavaScript("__firefox__.NoImageMode.setEnabled(true)", completionHandler: nil)
-            }
+        if NoImageModeHelper.isActivated(profile.prefs) {
+            webView.evaluateJavaScript("__firefox__.NoImageMode.setEnabled(true)", completionHandler: nil)
         }
+
     }
 
     func updateUIForReaderHomeStateForTab(_ tab: Tab) {
@@ -1272,7 +1269,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidTapShield(_ urlBar: URLBarView, from button: UIButton) {
-        if #available(iOS 11.0, *), let tab = self.tabManager.selectedTab {
+        if let tab = self.tabManager.selectedTab {
             let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
             guard !trackingProtectionMenu.isEmpty else { return }
             self.presentSheetWith(actions: trackingProtectionMenu, on: self, from: urlBar)
@@ -1351,7 +1348,7 @@ extension BrowserViewController: URLBarDelegate {
         let urlActions = self.getLongPressLocationBarActions(with: urlBar)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        if #available(iOS 11.0, *), let tab = self.tabManager.selectedTab {
+        if let tab = self.tabManager.selectedTab {
             let trackingProtectionMenu = self.getTrackingMenu(for: tab, presentingOn: urlBar)
             self.presentSheetWith(actions: [urlActions, trackingProtectionMenu], on: self, from: urlBar)
         } else {
@@ -1649,11 +1646,9 @@ extension BrowserViewController: TabDelegate {
         historyStateHelper.delegate = self
         tab.addContentScript(historyStateHelper, name: HistoryStateHelper.name())
 
-        if #available(iOS 11, *) {
-            if let blocker = tab.contentBlocker as? ContentBlockerHelper {
-                blocker.setupTabTrackingProtection()
-                tab.addContentScript(blocker, name: ContentBlockerHelper.name())
-            }
+        if let blocker = tab.contentBlocker as? ContentBlockerHelper {
+            blocker.setupTabTrackingProtection()
+            tab.addContentScript(blocker, name: ContentBlockerHelper.name())
         }
 
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())

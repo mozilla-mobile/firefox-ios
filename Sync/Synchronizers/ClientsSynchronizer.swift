@@ -37,7 +37,7 @@ open class WipeCommand: Command {
         return succeed()
     }
 
-    open static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
+    public static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
         let json = JSON(parseJSON: syncCommand.value)
         if let name = json["command"].string,
             let args = json["args"].array {
@@ -86,7 +86,7 @@ open class DisplayURICommand: Command {
         }
     }
 
-    open static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
+    public static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
         let json = JSON(parseJSON: syncCommand.value)
         if let name = json["command"].string,
             let args = json["args"].array {
@@ -112,7 +112,7 @@ open class RepairResponseCommand: Command {
         return repairer.continueRepairs(response: self.repairResponse) >>> succeed
     }
 
-    open static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
+    public static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
         let json = JSON(parseJSON: syncCommand.value)
         if let name = json["command"].string,
             let args = json["args"].array {

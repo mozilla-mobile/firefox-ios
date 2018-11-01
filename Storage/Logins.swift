@@ -126,7 +126,7 @@ open class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable 
     open var guid: String
 
     open fileprivate(set) var credentials: URLCredential
-    open let protectionSpace: URLProtectionSpace
+    public let protectionSpace: URLProtectionSpace
 
     open var hostname: String {
         if let _ = protectionSpace.`protocol` {
@@ -614,7 +614,7 @@ public protocol SyncableLogins: AccountRemovalDelegate {
 }
 
 open class LoginDataError: MaybeErrorType {
-    open let description: String
+    public let description: String
     public init(description: String) {
         self.description = description
     }

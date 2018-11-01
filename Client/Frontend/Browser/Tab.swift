@@ -160,10 +160,8 @@ class Tab: NSObject {
         super.init()
         self.isPrivate = isPrivate
 
-        if #available(iOS 11, *) {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
-                contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
-            }
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
+            contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
         }
 
         debugTabCount += 1

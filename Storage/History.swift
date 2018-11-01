@@ -97,9 +97,9 @@ public protocol SyncableHistory: AccountRemovalDelegate {
 // TODO: integrate Site with this.
 
 open class Place {
-    open let guid: GUID
-    open let url: String
-    open let title: String
+    public let guid: GUID
+    public let url: String
+    public let title: String
 
     public init(guid: GUID, url: String, title: String) {
         self.guid = guid

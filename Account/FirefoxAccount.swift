@@ -27,11 +27,11 @@ let AccountSchemaVersion = 2
 open class FirefoxAccount {
     /// The email address identifying the account.  A Firefox Account is uniquely identified on a particular server
     /// (auth endpoint) by its email address.
-    open let email: String
+    public let email: String
 
     /// The auth endpoint user identifier identifying the account.  A Firefox Account is uniquely identified on a
     /// particular server (auth endpoint) by its assigned uid.
-    open let uid: String
+    public let uid: String
 
     open var fxaProfile: FxAProfile?
 
@@ -224,8 +224,8 @@ open class FirefoxAccount {
 
     public class FxAProfile {
         open var displayName: String?
-        open let email: String
-        open let avatar: Avatar
+        public let email: String
+        public let avatar: Avatar
 
         init(email: String, displayName: String?, avatar: String?) {
             self.email = email
@@ -244,7 +244,7 @@ open class FirefoxAccount {
 
         open class Avatar {
             open var image: UIImage?
-            open let url: URL?
+            public let url: URL?
             var currentImageState: ImageDownloadState = .notStarted
 
             init(url: URL?) {

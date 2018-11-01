@@ -294,7 +294,7 @@ public protocol SyncState {
 open class BaseSyncState: SyncState {
     open var label: SyncStateLabel { return SyncStateLabel.Stub }
 
-    open let client: Sync15StorageClient!
+    public let client: Sync15StorageClient!
     let token: TokenServerToken    // Maybe expired.
     var scratchpad: Scratchpad
 
@@ -334,7 +334,7 @@ open class BaseSyncState: SyncState {
 }
 
 open class BaseSyncStateWithInfo: BaseSyncState {
-    open let info: InfoCollections
+    public let info: InfoCollections
 
     init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
         self.info = info

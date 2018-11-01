@@ -76,7 +76,7 @@ open class FxADeviceRegistration: NSObject, NSCoding {
 }
 
 open class FxADeviceRegistrator {
-    open static func registerOrUpdateDevice(_ account: FirefoxAccount, sessionToken: NSData, client: FxAClient10? = nil) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
+    public static func registerOrUpdateDevice(_ account: FirefoxAccount, sessionToken: NSData, client: FxAClient10? = nil) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
         // If we've already registered, the registration version is up-to-date,
         // we've (re-)registered within the last week, *and* we have send-tab keys,
         // do nothing. We re-register weekly as a sanity check.

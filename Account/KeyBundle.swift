@@ -10,8 +10,8 @@ import SwiftyJSON
 public let KeyLength = 32
 
 open class KeyBundle: Hashable {
-    open let encKey: Data
-    open let hmacKey: Data
+    public let encKey: Data
+    public let hmacKey: Data
 
     open class func fromKSync(_ kSync: Data) -> KeyBundle {
         return KeyBundle(encKey: kSync.subdata(in: 0..<KeyLength),

@@ -11,7 +11,7 @@ import FxA
 /// and one with a String based one.
 class PushCrypto {
     // Stateless, we provide a singleton for convenience.
-    open static var sharedInstance = PushCrypto()
+    public static var sharedInstance = PushCrypto()
 }
 
 // AES128GCM

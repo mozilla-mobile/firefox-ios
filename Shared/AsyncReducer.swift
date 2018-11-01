@@ -34,7 +34,7 @@ open class AsyncReducer<T, U> {
     private let combine: Combine
 
     private let initialValueDeferred: Deferred<Maybe<T>>
-    open let terminal: Deferred<Maybe<T>> = Deferred()
+    public let terminal: Deferred<Maybe<T>> = Deferred()
 
     private var queuedItems: [U] = []
 

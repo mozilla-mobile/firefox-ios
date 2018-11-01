@@ -108,10 +108,8 @@ class TabLocationView: UIView {
 
         // Remove the default drop interaction from the URL text field so that our
         // custom drop interaction on the BVC can accept dropped URLs.
-        if #available(iOS 11, *) {
-            if let dropInteraction = urlTextField.textDropInteraction {
-                urlTextField.removeInteraction(dropInteraction)
-            }
+        if let dropInteraction = urlTextField.textDropInteraction {
+            urlTextField.removeInteraction(dropInteraction)
         }
 
         return urlTextField
@@ -228,11 +226,9 @@ class TabLocationView: UIView {
 
         // Setup UIDragInteraction to handle dragging the location
         // bar for dropping its URL into other apps.
-        if #available(iOS 11, *) {
-            let dragInteraction = UIDragInteraction(delegate: self)
-            dragInteraction.allowsSimultaneousRecognitionDuringLift = true
-            self.addInteraction(dragInteraction)
-        }
+        let dragInteraction = UIDragInteraction(delegate: self)
+        dragInteraction.allowsSimultaneousRecognitionDuringLift = true
+        self.addInteraction(dragInteraction)
     }
 
     required init(coder: NSCoder) {
@@ -354,7 +350,7 @@ extension TabLocationView: Themeable {
 extension TabLocationView: TabEventHandler {
     private func updateBlockerStatus(forTab tab: Tab) {
         assertIsMainThread("UI changes must be on the main thread")
-        guard #available(iOS 11.0, *), let blocker = tab.contentBlocker as? ContentBlockerHelper else { return }
+        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else { return }
         switch blocker.status {
         case .Blocking:
             self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)

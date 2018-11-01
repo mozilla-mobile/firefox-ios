@@ -34,10 +34,8 @@ class NoImageModeHelper: TabContentScript {
     }
 
     static func toggle(profile: Profile, tabManager: TabManager) {
-        if #available(iOS 11, *) {
-            let enabled = !isActivated(profile.prefs)
-            profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
-            tabManager.tabs.forEach { $0.noImageMode = enabled }
-        }
+        let enabled = !isActivated(profile.prefs)
+        profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+        tabManager.tabs.forEach { $0.noImageMode = enabled }        
     }
 }

@@ -13,9 +13,9 @@ private let log = Logger.syncLogger
  */
 open class BookmarkNode {
     open var id: Int?
-    open let guid: GUID
-    open let title: String
-    open let isEditable: Bool
+    public let guid: GUID
+    public let title: String
+    public let isEditable: Bool
     open var favicon: Favicon?
 
     init(guid: GUID, title: String, isEditable: Bool=false) {
@@ -41,7 +41,7 @@ open class BookmarkSeparator: BookmarkNode {
  * To modify this, issue changes against the backing store and get an updated model.
  */
 open class BookmarkItem: BookmarkNode {
-    open let url: String!
+    public let url: String!
 
     public init(guid: String, title: String, url: String, isEditable: Bool=false) {
         self.url = url
@@ -81,8 +81,8 @@ open class BookmarkFolder: BookmarkNode {
  */
 open class BookmarksModel: BookmarksModelFactorySource {
     fileprivate let factory: BookmarksModelFactory
-    open let modelFactory: Deferred<Maybe<BookmarksModelFactory>>
-    open let current: BookmarkFolder
+    public let modelFactory: Deferred<Maybe<BookmarksModelFactory>>
+    public let current: BookmarkFolder
 
     public init(modelFactory: BookmarksModelFactory, root: BookmarkFolder) {
         self.factory = modelFactory

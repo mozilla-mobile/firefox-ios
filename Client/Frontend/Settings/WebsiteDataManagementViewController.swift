@@ -62,20 +62,18 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         // Search Controller setup
         let searchResultsViewController = WebsiteDataSearchResultsViewController()
 
-        if #available(iOS 11.0, *) {
-            let searchController = UISearchController(searchResultsController: searchResultsViewController)
-            searchController.searchResultsUpdater = searchResultsViewController
-            searchController.obscuresBackgroundDuringPresentation = false
-            searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
-            searchController.searchBar.delegate = self
+        let searchController = UISearchController(searchResultsController: searchResultsViewController)
+        searchController.searchResultsUpdater = searchResultsViewController
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
+        searchController.searchBar.delegate = self
 
-            if theme == .dark {
-                searchController.searchBar.barStyle = .black
-            }
-            navigationItem.searchController = searchController
-            navigationItem.hidesSearchBarWhenScrolling = false
-            self.searchController = searchController
+        if theme == .dark {
+            searchController.searchBar.barStyle = .black
         }
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        self.searchController = searchController
 
         definesPresentationContext = true
     }
@@ -84,9 +82,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         super.viewDidAppear(animated)
 
         // Allows the search bar to be scrolled away even though we initially show it.
-        if #available(iOS 11.0, *) {
-            navigationItem.hidesSearchBarWhenScrolling = true
-        }
+        navigationItem.hidesSearchBarWhenScrolling = true
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

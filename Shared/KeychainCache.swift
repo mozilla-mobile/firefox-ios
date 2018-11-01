@@ -14,8 +14,8 @@ public protocol JSONLiteralConvertible {
 }
 
 open class KeychainCache<T: JSONLiteralConvertible> {
-    open let branch: String
-    open let label: String
+    public let branch: String
+    public let label: String
 
     open var value: T? {
         didSet {

@@ -12,19 +12,19 @@ open class UserAgent {
         return "\(prefix)/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName))"
     }
 
-    open static var syncUserAgent: String {
+    public static var syncUserAgent: String {
         return clientUserAgent(prefix: "Firefox-iOS-Sync")
     }
 
-    open static var tokenServerClientUserAgent: String {
+    public static var tokenServerClientUserAgent: String {
         return clientUserAgent(prefix: "Firefox-iOS-Token")
     }
 
-    open static var fxaUserAgent: String {
+    public static var fxaUserAgent: String {
         return clientUserAgent(prefix: "Firefox-iOS-FxA")
     }
 
-    open static var defaultClientUserAgent: String {
+    public static var defaultClientUserAgent: String {
         return clientUserAgent(prefix: "Firefox-iOS")
     }
 
@@ -32,7 +32,7 @@ open class UserAgent {
      * Use this if you know that a value must have been computed before your
      * code runs, or you don't mind failure.
      */
-    open static func cachedUserAgent(checkiOSVersion: Bool = true,
+    public static func cachedUserAgent(checkiOSVersion: Bool = true,
                                      checkFirefoxVersion: Bool = true,
                                      checkFirefoxBuildNumber: Bool = true) -> String? {
         let currentiOSVersion = UIDevice.current.systemVersion
@@ -58,7 +58,7 @@ open class UserAgent {
      * This will typically return quickly, but can require creation of a UIWebView.
      * As a result, it must be called on the UI thread.
      */
-    open static func defaultUserAgent() -> String {
+    public static func defaultUserAgent() -> String {
         assert(Thread.current.isMainThread, "This method must be called on the main thread.")
 
         if let firefoxUA = UserAgent.cachedUserAgent(checkiOSVersion: true) {
@@ -106,7 +106,7 @@ open class UserAgent {
         return firefoxUA
     }
 
-    open static func desktopUserAgent() -> String {
+    public static func desktopUserAgent() -> String {
         let userAgent = NSMutableString(string: defaultUserAgent())
 
         // Spoof platform section
