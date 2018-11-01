@@ -78,7 +78,7 @@ class UserAgent {
         }
 
         let mutableUA = NSMutableString(string: userAgent)
-        mutableUA.insert("FocusiOS/\(AppInfo.shortVersion) ", at: mobileRange.location)
+        mutableUA.insert("FxiOS/\(AppInfo.shortVersion) ", at: mobileRange.location)
 
         let focusUA = "\(mutableUA) Safari/\(webKitVersion)"
 
