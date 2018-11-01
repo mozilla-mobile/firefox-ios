@@ -199,9 +199,6 @@ private struct ASHorizontalScrollCellUX {
 
     static let TopSiteItemSize = CGSize(width: 75, height: 75)
     static let BackgroundColor = UIColor.Photon.White100
-    static let PageControlRadius: CGFloat = 3
-    static let PageControlSize = CGSize(width: 30, height: 15)
-    static let PageControlOffset: CGFloat = 12
     static let MinimumInsets: CGFloat = 14
 }
 
@@ -221,31 +218,10 @@ class ASHorizontalScrollCell: UICollectionViewCell {
         return collectionView
     }()
 
-    lazy fileprivate var pageControl: FilledPageControl = {
-        let pageControl = FilledPageControl()
-        pageControl.tintColor = UIColor.Photon.Grey50
-        pageControl.indicatorRadius = ASHorizontalScrollCellUX.PageControlRadius
-        pageControl.isUserInteractionEnabled = true
-        pageControl.isAccessibilityElement = true
-        pageControl.accessibilityIdentifier = "pageControl"
-        pageControl.accessibilityLabel = Strings.ASPageControlButton
-        pageControl.accessibilityTraits = UIAccessibilityTraitButton
-        return pageControl
-    }()
-
-    lazy fileprivate var pageControlPress: UITapGestureRecognizer = {
-        let press = UITapGestureRecognizer(target: self, action: #selector(handlePageTap))
-   //     press.delegate = self
-        return press
-    }()
-
     weak var delegate: ASHorizontalScrollCellManager? {
         didSet {
             collectionView.delegate = delegate
             collectionView.dataSource = delegate
-            delegate?.pageChangedHandler = { [weak self] progress in
-                self?.currentPageChanged(progress)
-            }
         }
     }
 
@@ -255,65 +231,9 @@ class ASHorizontalScrollCell: UICollectionViewCell {
         accessibilityIdentifier = "TopSitesCell"
         backgroundColor = UIColor.clear
         contentView.addSubview(collectionView)
-        contentView.addSubview(pageControl)
-
-        pageControl.addGestureRecognizer(self.pageControlPress)
 
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(contentView.safeArea.edges)
-        }
-
-        pageControl.snp.makeConstraints { make in
-            make.size.equalTo(ASHorizontalScrollCellUX.PageControlSize)
-            make.top.equalTo(collectionView.snp.bottom).inset(ASHorizontalScrollCellUX.PageControlOffset)
-            make.centerX.equalTo(self.snp.centerX)
-        }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let layout = collectionView.collectionViewLayout as! HorizontalFlowLayout
-
-        pageControl.pageCount = layout.numberOfPages(with: self.frame.size)
-        pageControl.isHidden = pageControl.pageCount <= 1
-    }
-
-    func currentPageChanged(_ currentPage: CGFloat) {
-        pageControl.progress = currentPage
-        if currentPage == floor(currentPage) {
-            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
-            self.setNeedsLayout()
-        }
-    }
-
-    @objc func handlePageTap(_ gesture: UITapGestureRecognizer) {
-        guard pageControl.pageCount > 1 else {
-            return
-        }
-
-        if pageControl.pageCount > pageControl.currentPage + 1 {
-            pageControl.progress = CGFloat(pageControl.currentPage + 1)
-        } else {
-            pageControl.progress = CGFloat(pageControl.currentPage - 1)
-        }
-
-        moveToPage(pageControl.currentPage, animated: true)
-    }
-
-    func moveToPage(_ pageNumber: Int, animated: Bool = false) {
-        if pageNumber < 0 || pageNumber >= pageControl.pageCount {
-            return
-        }
-        pageControl.progress = CGFloat(pageNumber)
-        let swipeCoordinate = CGFloat(pageNumber) * self.collectionView.frame.size.width
-        self.collectionView.setContentOffset(CGPoint(x: swipeCoordinate, y: 0), animated: animated)
-    }
-
-    func moveToInitialPage() {
-        if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
-            moveToPage(pageControl.pageCount-1)
-        } else {
-            moveToPage(0)
         }
     }
 
@@ -350,9 +270,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     }
 
     func numberOfPages(with bounds: CGSize) -> Int {
-        let itemsPerPage = maxVerticalItemsCount(height: bounds.height) * maxHorizontalItemsCount(width: bounds.width)
-        // Sometimes itemsPerPage is 0. In this case just return 0. We dont want to try dividing by 0.
-        return itemsPerPage == 0 ? 0 : Int(ceil(Double(cellCount) / Double(itemsPerPage)))
+        return 1
     }
 
     func calculateLayout(for size: CGSize) -> (size: CGSize, cellSize: CGSize, cellInsets: UIEdgeInsets) {
@@ -506,7 +424,6 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 */
 private struct ASTopSiteSourceUX {
     static let verticalItemsForTraitSizes: [UIUserInterfaceSizeClass: Int] = [.compact: 1, .regular: 2, .unspecified: 0]
-    static let maxNumberOfPages = 2
     static let CellIdentifier = "TopSiteItemCell"
 }
 
@@ -525,10 +442,10 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
     var content: [Site] = []
 
     var urlPressedHandler: ((URL, IndexPath) -> Void)?
-    var pageChangedHandler: ((CGFloat) -> Void)?
-
     // The current traits that define the parent ViewController. Used to determine how many rows/columns should be created.
     var currentTraits: UITraitCollection?
+
+    var numberOfRows: Int = 2
 
     // Size classes define how many items to show per row/column.
     func numberOfVerticalItems() -> Int {
@@ -581,10 +498,4 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         }
         urlPressedHandler?(url, indexPath)
     }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let pageWidth = scrollView.frame.width
-        pageChangedHandler?(scrollView.contentOffset.x / pageWidth)
-    }
-
 }

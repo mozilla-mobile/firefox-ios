@@ -50,11 +50,7 @@ public protocol FrecentHistory {
  * An interface for accessing recommendation content from Storage
  */
 public protocol HistoryRecommendations {
-    func getHighlights() -> Deferred<Maybe<Cursor<Site>>>
-    func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>>
-
-    func removeHighlightForURL(_ url: String) -> Success
-    func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success
+    func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool) -> Success
 }
 
 /**
