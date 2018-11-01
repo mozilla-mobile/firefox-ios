@@ -11,6 +11,10 @@ import urlparse
 
 categories = ("Advertising", "Analytics", "Social", "Content")
 
+# The block action is too restrictive for some domains and breaks sites. 
+# As a compromise, block cookies only for these.
+block_cookies_only = ("omtrdc.net")
+
 def output_filename(category):
     return "Lists/disconnect-{0}.json".format(category.lower())
 
@@ -23,10 +27,11 @@ def unless_domain(properties):
 
 
 def create_blocklist_entry(resource, properties):
+    action = "block-cookies" if (resource in block_cookies_only) else "block"
     return {"trigger": {"url-filter": url_filter(resource),
                         "load-type": ["third-party"],
                         "unless-domain": unless_domain(properties)},
-            "action": {"type": "block"}}
+            "action": {"type": action }}
 
 
 def generate_entity_list(path="shavar-prod-lists/disconnect-entitylist.json"):
