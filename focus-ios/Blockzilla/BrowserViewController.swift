@@ -999,13 +999,29 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
     
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
-        SearchHistoryUtils.goBack()
+        guard let navigatingFromAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
+        
+        // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
+        SearchHistoryUtils.isFromURLBar = true
+
+        if !navigatingFromAmpSite {
+            SearchHistoryUtils.goBack()
+        }
+        
         webViewController.goBack()
     }
 
     func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
-        SearchHistoryUtils.goForward()
+        // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
+        SearchHistoryUtils.isFromURLBar = true
         webViewController.goForward()
+
+        // Check if we're navigating to an AMP site *after* the URL bar is updated. This is intentionally after the goForward call.
+        guard let navigatingToAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
+        
+        if !navigatingToAmpSite {
+            SearchHistoryUtils.goForward()
+        }
     }
 
     func browserToolsetDidPressReload(_ browserToolset: BrowserToolset) {
@@ -1112,10 +1128,6 @@ extension BrowserViewController: OverlayViewDelegate {
 
 extension BrowserViewController: WebControllerDelegate {
 
-    func webController(_ controller: WebController, didOpenAMPURL url: URL) {
-        urlBar.url = url
-    }
-
     func webControllerDidStartProvisionalNavigation(_ controller: WebController) {
         urlBar.dismiss()
         updateFindInPageVisibility(visible: false)
@@ -1152,8 +1164,9 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.progressBar.hideProgressBar()
     }
     
-    func webControllerURLDidChange(_ controller: WebController) {
+    func webControllerURLDidChange(_ controller: WebController, url: URL) {
         updateURLBar()
+        urlBar.url = url
     }
 
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {

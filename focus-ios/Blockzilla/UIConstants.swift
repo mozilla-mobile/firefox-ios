@@ -431,5 +431,6 @@ struct UIConstants {
         static let siriEraseTipDescription = "Add Siri shortcut"
         static let shareTrackersTipTitle = "%@ trackers blocked so far"
         static let encodingNameUTF8 = "utf-8"
+        static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
     }
 }
