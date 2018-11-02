@@ -48,22 +48,28 @@ class BookmarkingTests: BaseTestCase {
         // Go to a webpage, and add to bookmarks, check it's added
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         bookmark()
+        waitForTabsButton()
         checkBookmarked()
 
         // Load a different page on a new tab, check it's not bookmarked
         navigator.openNewURL(urlString: path(forTestPage: url_2["url"]!))
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         checkUnbookmarked()
 
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
+        waitForTabsButton()
         navigator.goto(TabTray)
         app.collectionViews.cells["Example Domain"].tap()
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         checkBookmarked()
 
         // Open it, then unbookmark it, and check it's no longer on bookmarks home panel
         unbookmark()
+        waitForTabsButton()
         checkUnbookmarked()
     }
 
@@ -84,7 +90,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
         bookmark()
 
         //There should be a bookmark
@@ -104,6 +110,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
 
          //Clear text and enter new url
+        waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "http://www.olx.ro")
@@ -115,7 +122,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
 
         // Add page to bookmarks
-        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         bookmark()
 
         // Now the site should be suggested

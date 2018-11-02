@@ -18,6 +18,7 @@ let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
 class TopTabsTest: BaseTestCase {
     func testAddTabFromTabTray() {
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -59,8 +60,10 @@ class TopTabsTest: BaseTestCase {
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        waitForTabsButton()
         navigator.goto(TabTray)
         navigator.openURL(urlExample)
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         waitForExistence(app.collectionViews.cells[urlLabel])
@@ -69,6 +72,7 @@ class TopTabsTest: BaseTestCase {
         XCTAssertEqual(valueMozilla, urlValueLong)
 
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         waitForExistence(app.collectionViews.cells[urlLabelExample])
@@ -80,6 +84,7 @@ class TopTabsTest: BaseTestCase {
     func testCloseOneTab() {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         waitForExistence(app.collectionViews.cells[urlLabel])
@@ -103,6 +108,7 @@ class TopTabsTest: BaseTestCase {
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if !iPad() {
@@ -127,6 +133,7 @@ class TopTabsTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        waitForTabsButton()
         openNtabsFromTabTray(numTabs: 1)
         waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 3)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
@@ -142,6 +149,7 @@ class TopTabsTest: BaseTestCase {
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
@@ -165,12 +173,11 @@ class TopTabsTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
-        if !iPad() {
-            waitForExistence(app.buttons["TabToolbar.tabsButton"])
-        }
+        waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs and check that the number of tabs is correct
@@ -208,6 +215,7 @@ class TopTabsTest: BaseTestCase {
 
             // Open New Tab
             app.cells["quick_action_new_tab"].tap()
+            waitForTabsButton()
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
             app.collectionViews.cells["home"].firstMatch.tap()
 
@@ -248,28 +256,23 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
     func testCloseTabFromLongPressTabsButton() {
         if skipPlatform { return }
+        waitForTabsButton()
         // This menu is available in HomeScreen or NewTabScreen, so no need to open new websites
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
-        if !iPad() {
-            waitForExistence(app.buttons["TabToolbar.tabsButton"])
-        }
+        waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         closeTabTrayView(goBackToBrowserTab: "home")
 
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         navigator.nowAt(NewTabScreen)
-        if !iPad() {
-            waitForExistence(app.buttons["TabToolbar.tabsButton"])
-        }
+        waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         closeTabTrayView(goBackToBrowserTab: "home")
 
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         navigator.nowAt(NewTabScreen)
-        if !iPad() {
-            waitForExistence(app.buttons["TabToolbar.tabsButton"])
-        }
+        waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         closeTabTrayView(goBackToBrowserTab: "home")
     }
@@ -277,6 +280,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
+        waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
     }
@@ -284,6 +288,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
+        waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         waitForExistence(app.buttons["TabTrayController.maskButton"])

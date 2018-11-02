@@ -135,6 +135,7 @@ class SyncUITests: BaseTestCase {
         }
         // Once the sign in is successful check the account management page
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables.cells["menu-TrackingProtection"])
         // Tap on the sync name option

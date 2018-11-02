@@ -40,8 +40,6 @@ class ToolbarTests: BaseTestCase {
         waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
         let valueMozilla = app.textFields["url"].value as! String
         XCTAssertEqual(valueMozilla, urlValueLong)
-
-
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
         XCTAssertTrue(app.buttons["Reload"].isEnabled)
@@ -60,6 +58,11 @@ class ToolbarTests: BaseTestCase {
         XCTAssertTrue(app.buttons["Forward"].isEnabled)
 
         // Open new tab and then go back to previous tab to test navigation buttons.
+        if iPad() {
+            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 5)
+        } else {
+            waitForExistence(app.buttons["URLBarView.tabsButton"], timeout: 5)
+        }
         navigator.goto(TabTray)
         waitForExistence(app.collectionViews.cells[website1["label"]!])
         app.collectionViews.cells[website1["label"]!].tap()
@@ -71,6 +74,11 @@ class ToolbarTests: BaseTestCase {
         XCTAssertTrue(app.buttons["Forward"].isEnabled)
 
         navigator.nowAt(BrowserTab)
+        if iPad() {
+            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 5)
+        } else {
+            waitForExistence(app.buttons["URLBarView.tabsButton"], timeout: 5)
+        }
         navigator.goto(TabTray)
 
         waitForExistence(app.collectionViews.cells[website1["label"]!])
@@ -85,7 +93,7 @@ class ToolbarTests: BaseTestCase {
     func testClearURLTextUsingBackspace() {
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
-        waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
+        waitForExistence(app.webViews.links["Mozilla"], timeout: 10)
         waitForValueContains(app.textFields["url"], value: website1["value"]!)
 
         // Simulate pressing on backspace key should remove the text
