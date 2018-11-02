@@ -229,6 +229,9 @@
 /* Save button label */
 "Save" = "Salvar";
 
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Illo non functiona. Prova a supplantar le termino de recerca con isto: %s.";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Adder un altere motor de recerca";
 
@@ -279,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Valuta %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "INTEGRATION CON SAFARI";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Parametros";
@@ -355,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novas";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI VIAS BREVE";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Trovar in le pagina";
 
@@ -363,6 +372,9 @@
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Aperir in %@";
+
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Actiones del pagina";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Requirer le version scriptorio del sito";
@@ -376,17 +388,29 @@
 /* Text for the share menu option when a user wants to open the current website in the Safari app. */
 "ShareMenu.ShareOpenSafari" = "Aperir in Safari";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Compartir le pagina con...";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Adder";
 
 /* Button to add a specified shortcut option to Siri. */
 "Siri.addTo" = "Adder a Siri";
 
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Re-registra o dele le instantaneo";
+
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "Eliminar";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
 "Siri.eraseAndOpen" = "Eliminar e aperir";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Aperir le sito preferite";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Aperir le sito preferite";
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL a aperir";

@@ -452,7 +452,7 @@
 "browserShortcutDescription.selectLocationBar" = "Sélectionner la barre d’adresse";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "Lien que vous avez copié : %@";
+"contextMenu.clipboardLink" = "Lien copié : %@";
 
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
 "contextMenu.copyImageTitle" = "Copier l’image";
@@ -461,7 +461,7 @@
 "contextMenu.copyLink" = "Copier le lien";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "Lien que vous avez copié :";
+"contextMenu.linkCopied" = "Lien copié :";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Enregistrer l’image";

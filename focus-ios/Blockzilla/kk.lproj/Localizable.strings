@@ -104,6 +104,9 @@
 "Browser.backLabel" = "Артқа";
 
 /* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Адресін көшіріп алу";
+
+/* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Көшіріп алу";
 
 /* Custom URL button in URL long press menu */
@@ -193,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Шолу. Өшіру. Қайталау.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Жабу";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Бас тарту";
 
@@ -222,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Сақтау";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Бұл жасамады. Іздеу ұғымын келесімен алмастырып көріңіз: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Басқа іздеу жүйесін қосу";
@@ -273,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ бағалау";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI-МЕН ИНТЕГРАЦИЯ";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Баптаулар";
@@ -349,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Не жаңалық";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI ЖАРЛЫҚТАРЫ";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Беттен табу";
 
@@ -364,11 +379,41 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Сайттың толық нұсқасы";
 
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome көмегімен ашу";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox көмегімен ашу";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Safari көмегімен ашу";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Бетті көмегімен бөлісу...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Қосу";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri-ге қосу";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Жарлықты қайта жазу немесе өшіру";
+
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "Өшіру";
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
 "Siri.eraseAndOpen" = "Өшіру және ашу";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Таңдамалы сайтты ашу";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Таңдамалы сайтты ашу";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Ашу үшін URL";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Бас тарту";
@@ -385,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Беттен табу: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Кірістіру";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Іздеу немесе адрес";
 
@@ -397,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ көмегімен ашу";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL алмасу буферіне көшірілді";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Орналасу жолағын таңдау";
 
@@ -408,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Сілтемені көшіріп алу";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Сіз көшіріп алған сілтеме:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Суретті сақтау";
@@ -433,6 +487,9 @@
 /* Text for a share button */
 "share" = "Бөлісу";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Адресін көшіріп алу";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "%@ оралу үшін Touch ID қолданыңыз";
 
@@ -447,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Бақылаудан қорғаныс сөндірілген";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Бақылаудан қорғаныс";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Көбірек білу";

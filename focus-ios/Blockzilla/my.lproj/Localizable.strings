@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ က သင့်ကို ထိန်းချုပ်နိုင်စွမ်း ရှိစေသည်။";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@ ကို ပြန်သွားရန် အတည်ပြုပါ";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "စိတ်ကြိုက် URLs တိုးရန်";
 
@@ -67,14 +70,47 @@
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "စိတ်ကြိုက် URLs";
 
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "CUSTOM URL LIST";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "အသစ် စီမံထားသော URL ပေါင်းထည့်ခဲ့သည်";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "လိပ်စာဘားတွင် အသုံးများသော URLs 450 ကျော်ကို အလိုအလျောက်ဖြည့်စွက်မှု ဖွင့်ထားမည်";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "အလိုအလျောက် ဖြည့်စွက်မှု";
+
+/* Title for the default URL list section */
+"Autocomplete.defaultTitle" = "DEFAULT URL LIST";
+
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "ပိတ်ထားသည်";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "ပြသရန် ကိုယ်တိုင်ထည့် URLs မရှိပါ";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "ဖွင့်ထားသည်";
 
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "session အသစ်";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "ကိုယ်တိုင်ဝင်ရောက်မှု မှန်ကန်ရန် ပြန်လည်ဖွင့်ခြင်းဖြင့် %@ ကို ဖွင့်ပါ";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "နောက်သို့";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "လိပ်စာကို ကူးယူပါ";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "ကူးယူ";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "စိတ်ကြိုက် URL တိုးရန်";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "ရှေ့သို့";
@@ -133,6 +169,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Maps ကို ဖွင့်ပါ";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "စာမျက်နှာထဲတွင် ရှာပါ";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "စာမျက်နှာထဲတွင်နောက်ထပ် ရှာပါ";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "စာမျက်နှာထဲတွင် ပြီးခဲ့သောအရာ ရှာပါ";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "အိုကေ၊ သိပါပြီ!";
 
@@ -151,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "ရှာဖွေကြည့်ရှု၊ ဖယ်ရှားရှင်းလင်း၊ ၎င်းအတိုင်း ပြန်ဆောင်ရွက်။";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "ပိတ်ရန်";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "မလုပ်ဆောင်တော့ပါ";
 
@@ -162,6 +210,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "ဒတ်စ်တောခ့်ဆိုက်ကို တောင်းပါ";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari ကို တို့ထိပါ၊ ပြီးလျှင် Content Blockers ကို ရွေးပါ";
@@ -178,6 +229,42 @@
 /* Save button label */
 "Save" = "သိမ်းရန်";
 
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "၎င်းသည် မလုပ်ဆောင်နိုင်ပါ။ ရှာဖွေရေးစာလုံးကို ယခု%s စာလုံးနှင့် ပြောင်းသုံးပြီး ရှာကြည့်ပါ။";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "အခြားသော ရှာဖွေအင်ဂျင် ပေါင်းထည့်ပါ";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ အခြားသော ရှာဖွေအင်ဂျင် ပေါင်းထည့်ပါ";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "ရှာဖွေအင်ဂျင် ပေါင်းထည့်ပါ";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "ပြသရန် နာမည်ပေးပါ";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "ရှာဖွေအင်ဂျင်အသစ် ပေါင်းထည့်ခဲ့သည်";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "ရှာဖွေအင်ဂျင်ကို ပုံသေအတိုင်းထားပါ";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "အင်ဂျင်နာမည် ရှာဖွေပါ";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "စာကြောင်းကို အသုံးပြုရန် ရှာဖွေပါ";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "ရှာထားသောစာကြောင်းကို ကူးယူ သို့မဟုတ် ဝင်ရောက်ပါ လိုအပ်လှျင် %s နှင့်ရှာဖွေသုံးနှုန်းများကို ပြန်ထားပါ";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL အလိုအလျှောက်ဖြည့်စွက်";
+
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "အခြား အကြောင်းအရာနောက်ယောင်ခံကိရိယာများကို ပိတ်ခြင်းသည် အချို့သော ဗီဒီယိုများနှင့် ဝဘ်စာမျက်နှာများကို ကောင်းမွန်စွာ လုပ်ဆောင်နိုင်စေမည် မဟုတ်ပါ။";
 
@@ -193,8 +280,20 @@
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "ပိုမိုလေ့လာရန်";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "နှုန်းထား %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI နှင့်ပေါင်းစပ်အသုံးပြုခြင်း";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "အပြင်အဆင်များ";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "ရှာဖွေ အင်ဂျင်";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SEARCH";
 
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
@@ -207,6 +306,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "SECURITY";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "ကြော်ငြာနောက်ယောက်ခံ ကိရိယာများကို ပိတ်ပင်ပါ";
@@ -235,6 +337,12 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "ဝဘ်ဆိုက်များတွင် မြှုပ်ထည့်ထားခြင်းသည် လည်ပတ်ခြင်းကို မှတ်သားရန်နှင့် မျှဝေခလုတ်များကဲသို့ လုပ်ဆောင်မှုများကို ပြသရန်အတွက် ဖြစ်သည်။";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "အက်ပ်ဖွင့်ရန် မျက်နှာအိုင်ဒီကိုသုံးပါ";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "ဤ app ထဲတွင် URL ကိုဖွင့်ထားလျှင် မျက်နှာအိုင်ဒီ ဖြင့် %@ ကို ဖွင့်နိုင်သည်";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "အချို့သော ဗီဒီယိုများနှင့် ဝဘ်စာမျက်နှာများကို ထိခိုက်စေသည်";
 
@@ -244,11 +352,68 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "အသုံးပြုမှုဆိုင်ရာ အချက်အလက်များကို ပေးပို့ရန်";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "အက်ပ်ဖွင့်ရန် လက်ဗွေအိုင်ဒီကိုသုံးပါ";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "ဤ app ထဲတွင် URL ကိုဖွင့်ထားလျှင် လက်ဗွေအိုင်ဒီ ဖြင့် %@ ကို ဖွင့်နိုင်သည်";
+
+/* Title for What's new screen */
+"Settings.whatsNewTitle" = "အသစ်ထွက် ?";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI နည်းလမ်းတိုများ";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "စာမျက်နှာထဲတွင် ရှာပါ";
+
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox အက်ပ်ကို ရယူပါ";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "%@ တွင် ဖွင့်ပါ";
+
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "စာမျက်နှာဆိုင်ရာ လုပ်ဆောင်ချက်များ";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Desktop ဆိုက်ကို တောင်းပါ";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome တွင် ဖွင့်ပါ";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox တွင် ဖွင့်ပါ";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Safari တွင် ဖွင့်ပါ";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "၎င်းနှင့်အတူ မျှဝေရန် ...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "ထည့်ရန်";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri သို့ ပေါင်းထည့်ပါ";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "အမြန်သုံးခလုတ်ကို ပြန်လည်ဖမ်းယူ သို့မဟုတ် ဖျက်ရန်";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "ရှင်းလင်းရန်";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "ရှင်းလင်းပြီး ဖွင့်ရန်";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "နှစ်သက်ရာဝဘ်ဆိုက်ကို ဖွင့်ရန်";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "နှစ်သက်ရာဝဘ်ဆိုက်ကို ဖွင့်ရန်";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "ဖွင့်ရန် URL";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "မလုပ်ဆောင်တော့ပါ";
@@ -262,6 +427,12 @@
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "ကြည့်ရှုမှုမှတ်တမ်းကို ဖယ်ရှားရှင်းလင်းပြီးပြီ။";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "စာမျက်နှာထဲတွင် ရှာပါ %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "ပွားရန်";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "ရှာဖွေ သို့မဟုတ် လိပ်စာရိုက်ပါ";
 
@@ -274,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ တွင် ဖွင့်ပါ";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL ကို ကလစ်ဘုတ်သို့ ကူးယူပြီး";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "တည်နေရာဘားတန်းကို ရွေးပါ";
 
@@ -285,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "လင့်ခ်ကို ကူးရန်";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "သင်ကူးယူထားသော လင့်ခ်၊";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "ရုပ်ပုံကို သိမ်းရန်";
@@ -304,6 +481,18 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” သည် သင့်ဓါတ်ပုံများကို အသုံးပြုခွင့် ရလိုသည်";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ဥပမာ. searchengineexample.com /search/?q=%s";
+
+/* Text for a share button */
+"share" = "မျှဝေရန်";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "လိပ်စာကို ကူးယူရန်";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "%@ ကို ပြန်သွားရန် Touch ID ကို အသုံးပြုပါ";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "ကြော်ငြာခြေရာခံကိရိယာများ";
 
@@ -315,6 +504,12 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "ခြေရာခံကာကွယ်မှုကို ပိတ်ထားသည်";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "ခြေရာခံ ကာကွယ်မှု";
+
+/* Text for the button to learn more about Tracking Protection. */
+"trackingProtection.learnMore" = "ပိုမိုလေ့လာရန်";
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "လူမှုဆိုင်ရာ ခြေရာခံကိရိယာများ";

@@ -169,6 +169,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "Mở Bản đồ";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Hoàn thành tìm kiếm";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Kết quả tiếp theo trong trang";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Kết quả trước trong trang";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "OK, được rồi!";
 
@@ -254,7 +263,7 @@
 "Settings.Search.SearchTemplatePlaceholder" = "Dán hoặc nhập chuỗi tìm kiếm. Nếu cần, hãy thay thế cụm từ tìm kiếm bằng: %s.";
 
 /* Title for the URL Autocomplete row */
-"Settings.autocompleteSection" = "URL tự động điền";
+"Settings.autocompleteSection" = "Tự động điền URL";
 
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Chặn các trình theo dõi nội dung khác có thể dẫn đến việc không xem được một vài video và trang web.";
@@ -293,13 +302,13 @@
 "Settings.sectionMozilla" = "MOZILLA";
 
 /* Section label for performance toggles */
-"Settings.sectionPerformance" = "PERFORMANCE";
+"Settings.sectionPerformance" = "HIỆU SUẤT";
 
 /* Section label for privacy toggles */
-"Settings.sectionPrivacy" = "PRIVACY";
+"Settings.sectionPrivacy" = "RIÊNG TƯ";
 
 /* Header label for security toggles displayed in the settings menu */
-"Settings.sectionSecurity" = "SECURITY";
+"Settings.sectionSecurity" = "BẢO MẬT";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "Chặn trình theo dõi quảng cáo";
@@ -364,6 +373,9 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Mở trong %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Hành động trang";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Yêu cầu giao diện máy tính";
 
@@ -394,6 +406,12 @@
 /* Title of option in settings to set up Siri to erase and then open the app. */
 "Siri.eraseAndOpen" = "Xóa & mở";
 
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Mở trang yêu thích";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Mở trang yêu thích";
+
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL để mở";
 
@@ -404,7 +422,7 @@
 "URL.contextMenu" = "Dán & Mở đường dẫn";
 
 /* Erase button in the URL bar */
-"URL.eraseButtonLabel" = "ERASE";
+"URL.eraseButtonLabel" = "XÓA";
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "Lịch sử duyệt web của bạn đã bị xóa.";

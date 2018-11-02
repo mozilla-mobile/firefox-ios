@@ -1,6 +1,9 @@
 /* Button on About screen */
 "About.learnMoreButton" = "વધુ શીખો";
 
+/* Label on About screen */
+"About.privateBullet1" = "એપ્લિકેશનમાં જ શોધો અને બ્રાઉઝ કરો";
+
 /* Label for row in About screen */
 "About.rowHelp" = "મદદ";
 
@@ -24,6 +27,9 @@
 
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ પોતાનું URL ઉમેરો";
+
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "પોતાના સ્વતઃપૂર્ણ URLs ને ઉમેરો અને સંચાલિત કરો.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "પોતાના URLs";
@@ -88,6 +94,9 @@
 /* First label for product description on the home screen */
 "Home.descriptionLabel1" = "આપમેળે ખાનગી બ્રાઉઝિંગ.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "બંધ કરો";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "રદ કરો";
 
@@ -106,8 +115,14 @@
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ સક્ષમ નથી.";
 
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "સેટિંગ્સ એપ્લિકેશન ખોલો";
+
 /* Save button label */
 "Save" = "સંગ્રહો";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "શોધ એન્જિન ઉમેરો";
 
 /* Label for input field for the name of the search engine to be added */
 "Settings.Search.NameToDisplay" = "પ્રદર્શિત કરવા માટેનું નામ";
@@ -148,6 +163,24 @@
 /* Label for Safari integration section */
 "Settings.sectionIntegration" = "INTEGRATION";
 
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for performance toggles */
+"Settings.sectionPerformance" = "દેખાવ";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "ગોપનીય";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "સુરક્ષા";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAds" = "જાહેરાત ટ્રેકર્સને અવરોધિત કરો";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockAnalytics" = "વિશ્લેષણાત્મક ટ્રેકર્સને અવરોધિત કરો";
+
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";
 
@@ -157,11 +190,47 @@
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox એપ મેળવો";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "આની સાથે પૃષ્ઠ શેર કરો...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "ઉમેરો";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri માં ઉમેરો";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "કાઢી નાંખો";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "કાઢી નાખો અને ખોલો";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "મનપસંદ સાઇટ ખોલો";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "મનપસંદ સાઇટ ખોલો";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "ખોલવા માટેની URL";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "રદ કરો";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
 "URL.contextMenu" = "ચોંટાડો અને જાઓ";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "કાઢી નાંખો";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel" = "તમારો બ્રાઉઝિંગ ઇતિહાસ કાઢી નાખવામાં આવ્યો છે.";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "પૃષ્ઠમાં શોધો: %@";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "સરનામું શોધો અથવા દાખલ કરો";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "ની શોધ માં %@";
@@ -181,11 +250,20 @@
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Linkની નકલ કરો";
 
+/* Text for the context menu when a user wants to save an image after long pressing it. */
+"contextMenu.saveImageTitle" = "ઈમેજ સાચવો";
+
 /* Text for the context menu when a user wants to share a link after long pressing it. */
 "contextMenu.shareLinkTitle" = "Link વહેંચો";
 
+/* Description for dialog used for requesting a user to enable access to Photos. */
+"photosPermission.description" = "આ તમને છબીઓને તમારા કૅમેરા રોલમાં સાચવવા દે છે";
+
 /* Title for button that takes the user to system settings */
 "photosPermission.openSettings" = "સેટિંગ્સ ખોલો";
+
+/* Text for a share button */
+"share" = "વહેંચો";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "જાહેરાત ટ્રેકર્સ";
@@ -198,6 +276,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "ટ્રેકિંગ રક્ષણ બંધ";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "ટ્રેકિંગથી રક્ષણ";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "વધુ શીખો";

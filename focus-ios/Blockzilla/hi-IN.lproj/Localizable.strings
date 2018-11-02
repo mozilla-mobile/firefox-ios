@@ -362,7 +362,7 @@
 "Settings.whatsNewTitle" = "क्या नया है";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "सिरी शॉर्टकट";
+"Settinsg.siriShortcutsTitle" = "SIRI शॉर्टकट";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "पृष्ठ में ढूँढें";
@@ -395,7 +395,7 @@
 "Siri.add" = "जोड़ें";
 
 /* Button to add a specified shortcut option to Siri. */
-"Siri.addTo" = "सिरी में जोड़ें";
+"Siri.addTo" = "Siri में जोड़ें";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
 "Siri.editOpenUrl" = "पुनः रिकॉर्ड करें या शॉर्टकट हटाएँ";

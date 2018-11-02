@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ lader dig bestemme.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Godkend for at vende tilbage til %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Tilføj tilpasset URL";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Tilbage";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopier adresse";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopier";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Surf. Slet. Gentag.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Luk";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Annuller";
 
@@ -203,7 +212,7 @@
 "Open.Safari" = "Safari";
 
 /* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Anmod om desktop-version";
+"Request Desktop Site" = "Bed om desktop-version";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Tryk på Safari, og vælg Software til blokering af indhold";
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "Gem";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Det virkede ikke. Prøv at erstatte søgetermen med %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Tilføj en ny søgetjeneste";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Vurder %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI-INTEGRATION";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Indstillinger";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Nyheder";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI-GENVEJE";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Find på side";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Åbn i %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Sidehandlinger";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
-"ShareMenu.RequestDesktop" = "Bed om desktop-site";
+"ShareMenu.RequestDesktop" = "Bed om desktop-version";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Åbn i Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Åbn i Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Åbn i Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Del side med...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Tilføj";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Føj til Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Optag igen eller slet genvej";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Slet";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Slet og åbn";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Åbn favorit-websted";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Åbn favorit-websted";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL, der skal åbnes";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Fortryd";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Find på side: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Indsæt";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Søg eller indtast adresse";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Åbn i %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL kopieret til udklipsholder";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Vælg adresselinjen";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Kopier link";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Kopieret link:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Gem billede";
@@ -421,6 +487,9 @@
 /* Text for a share button */
 "share" = "Del";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopier adresse";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Brug Touch ID for at vende tilbage til %@";
 
@@ -435,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Beskyttelse mod sporing er slået fra";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Beskyttelse mod sporing";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Læs mere";

@@ -362,7 +362,7 @@
 "Settings.whatsNewTitle" = "Wat is er nieuw";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "SIRI-SNELTOETSEN";
+"Settinsg.siriShortcutsTitle" = "SIRI-SNELKOPPELINGEN";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Zoeken op pagina";
@@ -398,7 +398,7 @@
 "Siri.addTo" = "Toevoegen aan Siri";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
-"Siri.editOpenUrl" = "Sneltoets opnieuw vastleggen of verwijderen";
+"Siri.editOpenUrl" = "Snelkoppeling opnieuw vastleggen of verwijderen";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "Wissen";

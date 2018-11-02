@@ -92,6 +92,9 @@
 "Browser.backLabel" = "واپس";
 
 /* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "پتہ نقل کریں";
+
+/* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "نقل کریں";
 
 /* Custom URL button in URL long press menu */
@@ -181,6 +184,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "براؤز کریں ۔ مٹائیں ۔ دہرائیں۔";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "بند کریں";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "منسوخ کریں";
 
@@ -259,6 +265,9 @@
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "%@ کی شرح";
 
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "سیٹنگیں";
 
@@ -331,6 +340,18 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "ڈیسک ٹاپ سائٹ کی درخواست کریں";
 
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "اضافہ کریں";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "مٹائيں";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "پسندیدہ سائٹ کھولیں";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "پسندیدہ سائٹ کھولیں";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "منسوخ کریں";
 
@@ -345,6 +366,9 @@
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "صفحہ میں ڈھونڈیں: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "چسپاں کریں";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "پتہ تلاش یا داخل کریں";
@@ -393,6 +417,9 @@
 
 /* Text for a share button */
 "share" = "شیئر کریں";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "پتہ نقل کریں";
 
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "اشتھاری ٹریکرز";

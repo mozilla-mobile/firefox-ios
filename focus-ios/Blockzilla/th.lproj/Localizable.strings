@@ -98,7 +98,7 @@
 "BiometricPrompt.newSession" = "วาระใหม่";
 
 /* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "ปลดล็อค %@ เมื่อเปิดขึ้นมาใหม่อีกครั้งเพื่อป้องกันการเข้าถึงที่ไม่ได้รับอนุญาต";
+"BiometricPrompt.reason" = "ปลดล็อค %@ เมื่อเปิดใหม่เพื่อป้องกันการเข้าถึงที่ไม่ได้รับอนุญาต";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "ย้อนกลับ";
@@ -362,7 +362,7 @@
 "Settings.whatsNewTitle" = "มีอะไรใหม่";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "ทางลัด SIRI";
+"Settinsg.siriShortcutsTitle" = "คำสั่งลัด SIRI";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "ค้นหาในหน้า";
@@ -398,7 +398,7 @@
 "Siri.addTo" = "เพิ่มไปยัง Siri";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
-"Siri.editOpenUrl" = "บันทึกใหม่หรือลบทางลัด";
+"Siri.editOpenUrl" = "บันทึกใหม่หรือลบคำสั่งลัด";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "ล้าง";

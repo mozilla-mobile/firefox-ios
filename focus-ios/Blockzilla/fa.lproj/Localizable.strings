@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "برنامهٔ %@ شما را در کنترل قرار می‌دهد.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "بخشیدن اعتبار برای بازگشت به %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "اضافه کردن نشانی سفارشی";
 
@@ -99,6 +102,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "بازگشت";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "برداشت آدرس";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "برداشت";
@@ -190,6 +196,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "مرور کنید. پاک کنید. تکرار کنید.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "بستن";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "لغو";
 
@@ -219,6 +228,9 @@
 
 /* Save button label */
 "Save" = "ذخیره";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "اگر آن کار نکرد. جایگزین کرد شرط جست‌ و جو با %s را امتحان کنید.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "اضافه کردن موتور جست‌وجو دیگر";
@@ -270,6 +282,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "نرخ %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "تنظیمات";
@@ -346,6 +361,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "چه چیزهایی جدید است";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "پیدا کردن در صفحه";
 
@@ -355,8 +373,47 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "بازکردن در %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "اقدامات صفحه";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "درخواست نسخه رو میزی وب‌سایت";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "بازکردن در کروم";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "بازکردن در فایرفاکس";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "بازکردن در سافاری";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "همرسانی صفحه با...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "اضافه کردن";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "اضافه کردن به Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "ضبط مجدد یا پاک کردن میانبر";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "پاک کردن";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "پاک کردن و بازکردن";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "بازکردن پایگاه اینترنتی مورد علاقه";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "بازکردن پایگاه اینترنتی مورد علاقه";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "برای بازکردن URL";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "لغو";
@@ -373,6 +430,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "پیدا کردن در صفحه: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "چسباندن";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "جست‌وجو یا ورود نشانی";
 
@@ -385,6 +445,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "در %@ باز شد";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "برداشت URL به کلیپبورد";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "انتخاب نوار موقعیت";
 
@@ -396,6 +459,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "برداشت پیوند";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "پیوندی که شما برداشت کرده‌اید:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "ذخیره تصویر";
@@ -421,6 +487,9 @@
 /* Text for a share button */
 "share" = "همرسانی";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "برداشت آدرس";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "استفاده از Touch ID برای برگشتن به %@";
 
@@ -435,6 +504,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "محافظت در مقابل دنبال شدن خاموش شد";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "محافظت در برابر رهگیری";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "اطلاعات بیشتر";

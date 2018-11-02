@@ -190,6 +190,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Retumu. Viŝu. Ripetu.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Fermi";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Nuligi";
 
@@ -357,6 +360,9 @@
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Peti skribotablan retejon";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Aldoni";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Nuligi";

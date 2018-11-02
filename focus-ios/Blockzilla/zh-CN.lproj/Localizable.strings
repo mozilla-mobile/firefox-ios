@@ -98,7 +98,7 @@
 "BiometricPrompt.newSession" = "新会话";
 
 /* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
-"BiometricPrompt.reason" = "重新打开时要求解锁 ％@，以防止未经您允许的使用。";
+"BiometricPrompt.reason" = "重新打开时要求解锁 %@，以防止未经您允许的使用。";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "后退";
@@ -341,7 +341,7 @@
 "Settings.toggleFaceID" = "使用面容 ID 解锁应用";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleFaceIDDescription" = "如果网址已在应用中打开，则可用面容 ID 解锁 %@";
+"Settings.toggleFaceIDDescription" = "如果已有网址在应用中打开，则可用面容 ID 解锁 %@";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "可能对某些网页与视频有影响";
@@ -356,13 +356,13 @@
 "Settings.toggleTouchID" = "使用触控 ID 解锁应用";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "如果网址已在应用中打开，则可用触控 ID 解锁 ％@";
+"Settings.toggleTouchIDDescription" = "如果已有网址在应用中打开，则可用触控 ID 解锁 %@";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "新版变化";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "Siri 快捷方式";
+"Settinsg.siriShortcutsTitle" = "Siri 捷径";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "在页面中查找";
@@ -398,7 +398,7 @@
 "Siri.addTo" = "添加到 Siri";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
-"Siri.editOpenUrl" = "重新录音或删除快捷方式";
+"Siri.editOpenUrl" = "重新记录或删除捷径";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "清除";

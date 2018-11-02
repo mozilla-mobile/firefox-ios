@@ -229,6 +229,9 @@
 /* Save button label */
 "Save" = "احفظ";
 
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "لم ينجح الأمر. جرّب استخدام نص البحث هذا بدل الحالي: %s.";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "أضف محرك بحث آخر";
 
@@ -402,6 +405,9 @@
 
 /* Title of option in settings to set up Siri to erase and then open the app. */
 "Siri.eraseAndOpen" = "امسح وافتح";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "المسار الذي سيُفتح";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ألغِ";

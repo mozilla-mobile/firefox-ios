@@ -344,7 +344,7 @@
 "Settings.toggleFaceIDDescription" = "სახის ამომცნობით შესაძლებელია გაიხსნას %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
 
 /* Label subtitle for toggle on main screen */
-"Settings.toggleOtherSubtitle" = "შესაძლოა ზოგიერთმა საიტმა, ან ვიდეომ არ იმუშაოს გამართულად";
+"Settings.toggleOtherSubtitle" = "შესაძლოა, ზოგიერთმა საიტმა ან ვიდეომ არ იმუშაოს გამართულად";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari";

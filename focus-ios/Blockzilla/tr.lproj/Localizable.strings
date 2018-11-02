@@ -362,7 +362,7 @@
 "Settings.whatsNewTitle" = "Yeni neler var?";
 
 /* Title for settings section to enable different Siri Shortcuts. */
-"Settinsg.siriShortcutsTitle" = "SIRI KISAYOLLARI";
+"Settinsg.siriShortcutsTitle" = "SIRI KESTİRMELERİ";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Sayfada Bul";
@@ -380,25 +380,25 @@
 "ShareMenu.RequestDesktop" = "Masaüstü sitesini iste";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
-"ShareMenu.ShareOpenChrome" = "Chrome’da Aç";
+"ShareMenu.ShareOpenChrome" = "Chrome’da aç";
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
-"ShareMenu.ShareOpenFirefox" = "Firefox’ta Aç";
+"ShareMenu.ShareOpenFirefox" = "Firefox’ta aç";
 
 /* Text for the share menu option when a user wants to open the current website in the Safari app. */
-"ShareMenu.ShareOpenSafari" = "Safari’de Aç";
+"ShareMenu.ShareOpenSafari" = "Safari’de aç";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Sayfayı Paylaş...";
 
 /* Button to add a favorite URL to Siri. */
-"Siri.add" = "Add";
+"Siri.add" = "Ekle";
 
 /* Button to add a specified shortcut option to Siri. */
-"Siri.addTo" = "Siri’ye Ekle";
+"Siri.addTo" = "Siri’ye ekle";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
-"Siri.editOpenUrl" = "Yeniden kaydet veya kısayolu sil";
+"Siri.editOpenUrl" = "Yeniden kaydet veya kestirmeyi sil";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "Sil";

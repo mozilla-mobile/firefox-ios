@@ -230,7 +230,7 @@
 "Save" = "Salvează";
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
-"SearchEngine.addEngineError" = "Nu a funcționat. Încearcă să înlocuiești termenul  de căutare cu: %s.";
+"SearchEngine.addEngineError" = "Nu a funcționat. Încearcă să înlocuiești termenul de căutare cu: %s.";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Adaugă alt motor de căutare";
@@ -320,7 +320,7 @@
 "Settings.toggleBlockAnalytics" = "Blochează urmăritorii analitici";
 
 /* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Folosit pentru a colecta, analiza şi măsura activităţi ca atingere şi derulare";
+"Settings.toggleBlockAnalyticsDescription" = "Folosit pentru a colecta, analiza și măsura activități precum atingerea și derularea";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blochează fonturile web";
@@ -335,7 +335,7 @@
 "Settings.toggleBlockSocial" = "Blochează urmăritorii de rețele sociale";
 
 /* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Încorporat pe site-uri pentru a urmări vizitele tale şi a afişa funcţii precum butoanele de partajare";
+"Settings.toggleBlockSocialDescription" = "Încorporat în site-uri pentru a-ți urmări vizitele și a afișa funcții precum butoane de distribuire";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Folosește Face ID pentru a debloca aplicația";
@@ -503,10 +503,10 @@
 "trackingProtection.contentTrackerLabel" = "Urmăritori de conținut";
 
 /* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "Protecție față de urmărire dezactivată";
+"trackingProtection.disabledLabel" = "Protecție împotriva urmăririi dezactivată";
 
 /* Title for the tracking settings page to change what trackers are blocked. */
-"trackingProtection.label" = "Protecție față de urmărire";
+"trackingProtection.label" = "Protecție împotriva urmăririi";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Află mai multe";
@@ -515,11 +515,11 @@
 "trackingProtection.socialTrackerLabel" = "Urmăritori de rețele sociale";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.toggleDescription1" = "Dezactivare până când închizi %@ sau apeşi ERASE.";
+"trackingProtection.toggleDescription1" = "Dezactivează până când închizi %@ sau apeși ȘTERGE.";
 
 /* Text for the toggle that temporarily disables tracking protection. */
-"trackingProtection.toggleLabel" = "Protecție față de urmărire";
+"trackingProtection.toggleLabel" = "Protecție împotriva urmăririi";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Alege dacă %@ blochează mecanisme de urmărire de anunţuri, analitice, sociale şi alte.";
+"trackingProtection.trackerDescriptionLabel" = "Alege dacă %@ blochează mecanisme de urmărire de anunţuri, analitice, sociale și alte.";
 
