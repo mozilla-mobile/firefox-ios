@@ -482,6 +482,8 @@ class BrowserViewController: UIViewController {
         webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
+        browserToolbar.canGoBack = false
+        browserToolbar.canGoForward = false
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
         createHomeView()
