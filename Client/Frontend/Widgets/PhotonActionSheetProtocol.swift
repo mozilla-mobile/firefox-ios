@@ -90,18 +90,16 @@ extension PhotonActionSheetProtocol {
     func getOtherPanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         var items: [PhotonActionSheetItem] = []
 
-        if #available(iOS 11, *) {
-            let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-            let noImageMode = PhotonActionSheetItem(title: Strings.AppMenuNoImageMode, iconString: "menu-NoImageMode", isEnabled: noImageEnabled, accessory: .Switch) { action in
-                NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
-            }
-
-            let trackingProtectionEnabled = ContentBlockerHelper.isTrackingProtectionActive(tabManager: self.tabManager)
-            let trackingProtection = PhotonActionSheetItem(title: Strings.TPMenuTitle, iconString: "menu-TrackingProtection", isEnabled: trackingProtectionEnabled, accessory: .Switch) { action in
-                ContentBlockerHelper.toggleTrackingProtectionMode(for: self.profile.prefs, tabManager: self.tabManager)
-            }
-            items.append(contentsOf: [trackingProtection, noImageMode])
+        let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
+        let noImageMode = PhotonActionSheetItem(title: Strings.AppMenuNoImageMode, iconString: "menu-NoImageMode", isEnabled: noImageEnabled, accessory: .Switch) { action in
+            NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
         }
+
+        let trackingProtectionEnabled = ContentBlockerHelper.isTrackingProtectionActive(tabManager: self.tabManager)
+        let trackingProtection = PhotonActionSheetItem(title: Strings.TPMenuTitle, iconString: "menu-TrackingProtection", isEnabled: trackingProtectionEnabled, accessory: .Switch) { action in
+            ContentBlockerHelper.toggleTrackingProtectionMode(for: self.profile.prefs, tabManager: self.tabManager)
+        }
+        items.append(contentsOf: [trackingProtection, noImageMode])
 
         let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
         let nightMode = PhotonActionSheetItem(title: Strings.AppMenuNightMode, iconString: "menu-NightMode", isEnabled: nightModeEnabled, accessory: .Switch) { action in
@@ -452,7 +450,7 @@ extension PhotonActionSheetProtocol {
             tab.toggleDesktopSite()
         }
 
-        if #available(iOS 11, *), let helper = tab.contentBlocker as? ContentBlockerHelper {
+        if let helper = tab.contentBlocker as? ContentBlockerHelper {
             let title = helper.isEnabled ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
             let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { action in

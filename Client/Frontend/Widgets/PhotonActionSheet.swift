@@ -222,11 +222,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var frameHeight: CGFloat
-        if #available(iOS 11.0, *) {
-            frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
-        } else {
-            frameHeight = self.view.frame.height
-        }
+        frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
         let maxHeight = frameHeight - (style == .bottom ? PhotonActionSheetUX.CloseButtonHeight : 0)
         tableView.snp.makeConstraints { make in
             heightConstraint?.deactivate()

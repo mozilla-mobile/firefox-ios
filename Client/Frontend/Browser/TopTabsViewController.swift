@@ -106,7 +106,7 @@ class TopTabsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(iOS 11.0, *), LeanPlumClient.shared.enableTabBarReorder.boolValue() {
+        if LeanPlumClient.shared.enableTabBarReorder.boolValue() {
             collectionView.dragDelegate = tabDisplayManager
             collectionView.dropDelegate = tabDisplayManager
         }
@@ -122,10 +122,8 @@ class TopTabsViewController: UIViewController {
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links onto the "New Tab" button.
-        if #available(iOS 11, *) {
             let dropInteraction = UIDropInteraction(delegate: tabDisplayManager)
             newTab.addInteraction(dropInteraction)
-        }
 
         newTab.snp.makeConstraints { make in
             make.centerY.equalTo(view)

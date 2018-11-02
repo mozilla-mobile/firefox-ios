@@ -58,9 +58,9 @@ public protocol LocalItemSource: AnyObject {
 }
 
 open class ItemSources {
-    open let local: LocalItemSource
-    open let mirror: MirrorItemSource
-    open let buffer: BufferItemSource
+    public let local: LocalItemSource
+    public let mirror: MirrorItemSource
+    public let buffer: BufferItemSource
 
     public init(local: LocalItemSource, mirror: MirrorItemSource, buffer: BufferItemSource) {
         self.local = local

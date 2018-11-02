@@ -9,8 +9,8 @@ public protocol AccessibilityActionsSource: AnyObject {
 }
 
 open class AccessibleAction: NSObject {
-    open let name: String
-    open let handler: () -> Bool
+    public let name: String
+    public let handler: () -> Bool
 
     public init(name: String, handler: @escaping () -> Bool) {
         self.name = name

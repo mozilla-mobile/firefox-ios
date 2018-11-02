@@ -6,7 +6,7 @@ import Foundation
 
 open class AppInfo {
     /// Return the main application bundle. If this is called from an extension, the containing app bundle is returned.
-    open static var applicationBundle: Bundle {
+    public static var applicationBundle: Bundle {
         let bundle = Bundle.main
         switch bundle.bundleURL.pathExtension {
         case "app":
@@ -19,25 +19,25 @@ open class AppInfo {
         }
     }
 
-    open static var displayName: String {
+    public static var displayName: String {
         return applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
     }
 
-    open static var appVersion: String {
+    public static var appVersion: String {
         return applicationBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     }
 
-    open static var buildNumber: String {
+    public static var buildNumber: String {
         return applicationBundle.object(forInfoDictionaryKey: String(kCFBundleVersionKey)) as! String
     }
 
-    open static var majorAppVersion: String {
+    public static var majorAppVersion: String {
         return appVersion.components(separatedBy: ".").first!
     }
 
     /// Return the shared container identifier (also known as the app group) to be used with for example background
     /// http requests. It is the base bundle identifier with a "group." prefix.
-    open static var sharedContainerIdentifier: String {
+    public static var sharedContainerIdentifier: String {
         var bundleIdentifier = baseBundleIdentifier
         if bundleIdentifier == "org.mozilla.ios.FennecEnterprise" {
             // Bug 1373726 - Base bundle identifier incorrectly generated for Nightly builds
@@ -48,7 +48,7 @@ open class AppInfo {
     }
 
     /// Return the keychain access group.
-    open static func keychainAccessGroupWithPrefix(_ prefix: String) -> String {
+    public static func keychainAccessGroupWithPrefix(_ prefix: String) -> String {
         var bundleIdentifier = baseBundleIdentifier
         if bundleIdentifier == "org.mozilla.ios.FennecEnterprise" {
             // Bug 1373726 - Base bundle identifier incorrectly generated for Nightly builds
@@ -63,7 +63,7 @@ open class AppInfo {
     /// This function is smart enough to find out if it is being called from an extension or the main application. In
     /// case of the former, it will chop off the extension identifier from the bundle since that is a suffix not part
     /// of the *base* bundle identifier.
-    open static var baseBundleIdentifier: String {
+    public static var baseBundleIdentifier: String {
         let bundle = Bundle.main
         let packageType = bundle.object(forInfoDictionaryKey: "CFBundlePackageType") as! String
         let baseBundleIdentifier = bundle.bundleIdentifier!
@@ -75,12 +75,12 @@ open class AppInfo {
     }
 
     // Return the MozWhatsNewTopic key from the Info.plist
-    open static var whatsNewTopic: String? {
+    public static var whatsNewTopic: String? {
         return Bundle.main.object(forInfoDictionaryKey: "MozWhatsNewTopic") as? String
     }
 
     // Return whether the currently executing code is running in an Application
-    open static var isApplication: Bool {
+    public static var isApplication: Bool {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundlePackageType") as! String == "APPL"
     }
 }

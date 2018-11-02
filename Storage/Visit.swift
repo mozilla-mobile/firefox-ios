@@ -57,8 +57,8 @@ WKNavigationTypeOther = -1,
  */
 
 open class Visit: Hashable {
-    open let date: MicrosecondTimestamp
-    open let type: VisitType
+    public let date: MicrosecondTimestamp
+    public let type: VisitType
 
     open var hashValue: Int {
         return date.hashValue ^ type.hashValue
@@ -92,7 +92,7 @@ public func ==(lhs: Visit, rhs: Visit) -> Bool {
 
 open class SiteVisit: Visit {
     var id: Int?
-    open let site: Site
+    public let site: Site
 
     open override var hashValue: Int {
         return date.hashValue ^ type.hashValue ^ (id?.hashValue ?? 0) ^ (site.id ?? 0)

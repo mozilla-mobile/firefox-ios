@@ -37,9 +37,9 @@ open class ClosedTabsStore {
 }
 
 open class ClosedTab: NSObject, NSCoding {
-    open let url: URL
-    open let title: String?
-    open let faviconURL: String?
+    public let url: URL
+    public let title: String?
+    public let faviconURL: String?
 
     var jsonDictionary: [String: Any] {
         let title = (self.title ?? "")

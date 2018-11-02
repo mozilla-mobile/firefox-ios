@@ -11,7 +11,7 @@ import Foundation
  * the path using ".." or symlinks.
  */
 open class FileAccessor {
-    open let rootPath: String
+    public let rootPath: String
 
     public init(rootPath: String) {
         self.rootPath = rootPath

@@ -599,7 +599,7 @@ extension TabManager: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-        if #available(iOS 11, *), let tab = self[webView], let blocker = tab.contentBlocker as? ContentBlockerHelper {
+        if let tab = self[webView], let blocker = tab.contentBlocker as? ContentBlockerHelper {
             blocker.clearPageStats()
         }
     }
@@ -610,8 +610,6 @@ extension TabManager: WKNavigationDelegate {
         guard let tab = self[webView] else { return }
         let isNightMode = NightModeAccessors.isNightMode(profile.prefs)
         tab.setNightMode(isNightMode)
-
-        guard #available(iOS 11, *) else { return }
 
         let isNoImageMode = profile.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
         tab.noImageMode = isNoImageMode

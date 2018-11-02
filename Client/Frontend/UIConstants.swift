@@ -27,10 +27,8 @@ public struct UIConstants {
     static var BottomToolbarHeight: CGFloat {
         get {
             var bottomInset: CGFloat = 0.0
-            if #available(iOS 11, *) {
-                if let window = UIApplication.shared.keyWindow {
-                    bottomInset = window.safeAreaInsets.bottom
-                }
+            if let window = UIApplication.shared.keyWindow {
+                bottomInset = window.safeAreaInsets.bottom
             }
             return ToolbarHeight + bottomInset
         }

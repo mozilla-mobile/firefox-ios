@@ -29,7 +29,7 @@ open class UpstreamCompletionOp: PerhapsNoOp {
     // Upload these records as-is.
     open var records: [Record<BookmarkBasePayload>] = []
 
-    open let ifUnmodifiedSince: Timestamp?
+    public let ifUnmodifiedSince: Timestamp?
 
     open var isNoOp: Bool {
         return records.isEmpty
@@ -95,7 +95,7 @@ open class BookmarksMergeConsistencyError: BookmarksMergeError {
 }
 
 open class BookmarksMergeErrorTreeIsUnrooted: BookmarksMergeConsistencyError {
-    open let roots: Set<GUID>
+    public let roots: Set<GUID>
 
     public init(roots: Set<GUID>) {
         self.roots = roots

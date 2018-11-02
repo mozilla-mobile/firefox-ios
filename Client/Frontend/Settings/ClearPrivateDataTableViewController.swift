@@ -33,12 +33,10 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             (HistoryClearable(profile: self.profile), true),
             (CacheClearable(tabManager: self.tabManager), true),
             (CookiesClearable(tabManager: self.tabManager), true),
-            (SiteDataClearable(tabManager: self.tabManager), true)
+            (SiteDataClearable(tabManager: self.tabManager), true),
+            (TrackingProtectionClearable(), true),
+            (DownloadedFilesClearable(), false) // Don't clear downloaded files by default
         ]
-        if #available(iOS 11, *) {
-            items.append((TrackingProtectionClearable(), true))
-        }
-        items.append((DownloadedFilesClearable(), false)) // Don't clear downloaded files by default
         return items
     }()
 

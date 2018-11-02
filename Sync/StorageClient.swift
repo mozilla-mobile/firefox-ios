@@ -15,7 +15,7 @@ private let log = Logger.syncLogger
 // Not an error that indicates a server problem, but merely an
 // error that encloses a StorageResponse.
 open class StorageResponseError<T>: MaybeErrorType, SyncPingFailureFormattable {
-    open let response: StorageResponse<T>
+    public let response: StorageResponse<T>
 
     open var failureReasonName: SyncPingFailureReasonName {
         return .httpError
@@ -41,7 +41,7 @@ open class RequestError: MaybeErrorType, SyncPingFailureFormattable {
 }
 
 open class BadRequestError<T>: StorageResponseError<T> {
-    open let request: URLRequest?
+    public let request: URLRequest?
 
     public init(request: URLRequest?, response: StorageResponse<T>) {
         self.request = request
@@ -94,8 +94,8 @@ open class MalformedMetaGlobalError: MaybeErrorType, SyncPingFailureFormattable 
 }
 
 open class RecordTooLargeError: MaybeErrorType, SyncPingFailureFormattable {
-    open let guid: GUID
-    open let size: ByteCount
+    public let guid: GUID
+    public let size: ByteCount
 
     open var failureReasonName: SyncPingFailureReasonName {
         return .otherError
@@ -312,9 +312,9 @@ open class Sync15StorageClient {
     fileprivate let authorizer: Authorizer
     fileprivate let serverURI: URL
 
-    open static let maxRecordSizeBytes: Int = 262_140       // A shade under 256KB.
-    open static let maxPayloadSizeBytes: Int = 1_000_000    // A shade under 1MB.
-    open static let maxPayloadItemCount: Int = 100          // Bug 1250747 will raise this.
+    public static let maxRecordSizeBytes: Int = 262_140       // A shade under 256KB.
+    public static let maxPayloadSizeBytes: Int = 1_000_000    // A shade under 1MB.
+    public static let maxPayloadItemCount: Int = 100          // Bug 1250747 will raise this.
 
     var backoff: BackoffStorage
 

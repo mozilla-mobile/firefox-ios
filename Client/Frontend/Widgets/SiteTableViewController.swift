@@ -120,7 +120,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
 
-        if #available(iOS 11.0, *), let _ = self as? HomePanelContextMenu {
+        if let _ = self as? HomePanelContextMenu {
             tableView.dragDelegate = self
         }
     }
