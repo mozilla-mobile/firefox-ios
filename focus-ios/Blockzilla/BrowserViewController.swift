@@ -1152,7 +1152,6 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.isLoading = true
         browserToolbar.color = .loading
         toggleURLBarBackground(isBright: false)
-        showToolbars()
         updateURLBar()
     }
 
@@ -1165,6 +1164,7 @@ extension BrowserViewController: WebControllerDelegate {
     }
     
     func webControllerURLDidChange(_ controller: WebController, url: URL) {
+        showToolbars()
         updateURLBar()
         urlBar.url = url
     }
