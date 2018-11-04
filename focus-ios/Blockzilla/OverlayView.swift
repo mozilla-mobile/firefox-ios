@@ -11,11 +11,13 @@ protocol OverlayViewDelegate: class {
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String)
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String)
     func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String)
+    func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String)
 }
 
 class OverlayView: UIView {
     weak var delegate: OverlayViewDelegate?
     private let searchButton = InsetButton()
+    private let addToAutocompleteButton = InsetButton()
     private var presented = false
     private var searchQuery = ""
     private let copyButton = UIButton()
@@ -55,6 +57,25 @@ class OverlayView: UIView {
         }
         
         let padding = UIConstants.layout.searchButtonInset
+        let attributedString = NSMutableAttributedString(string: UIConstants.strings.addToAutocompleteButton, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
+        
+        addToAutocompleteButton.titleLabel?.font = UIConstants.fonts.copyButton
+        addToAutocompleteButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+        addToAutocompleteButton.titleLabel?.lineBreakMode = .byTruncatingTail
+        addToAutocompleteButton.setImage(#imageLiteral(resourceName: "icon_add_to_autocomplete"), for: .normal)
+        addToAutocompleteButton.setImage(#imageLiteral(resourceName: "icon_add_to_autocomplete"), for: .highlighted)
+        addToAutocompleteButton.setAttributedTitle(attributedString, for: .normal)
+        addToAutocompleteButton.addTarget(self, action: #selector(didPressAddToAutocomplete), for: .touchUpInside)
+        addToAutocompleteButton.accessibilityIdentifier = "AddToAutocomplete.button"
+        addToAutocompleteButton.backgroundColor = UIConstants.colors.background
+        setUpOverlayButton(button: addToAutocompleteButton)
+        addSubview(addToAutocompleteButton)
+        
+        addToAutocompleteButton.snp.makeConstraints { make in
+            make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
+        }
+
+        findInPageButton.isHidden = true
         findInPageButton.titleLabel?.font = UIConstants.fonts.copyButton
         findInPageButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         findInPageButton.titleLabel?.lineBreakMode = .byTruncatingTail
@@ -166,6 +187,7 @@ class OverlayView: UIView {
                     let duration = animated ? UIConstants.layout.searchButtonAnimationDuration : 0
                     self.topBorder.animateHidden(query.isEmpty, duration: duration)
                     self.searchButton.animateHidden(query.isEmpty, duration: duration)
+                    self.addToAutocompleteButton.animateHidden(true, duration: duration)
                     self.findInPageButton.animateHidden(query.isEmpty || hideFindInPage, duration: duration, completion: {
                         self.updateCopyConstraint(showCopyButton: showCopyButton)
                     })
@@ -183,8 +205,10 @@ class OverlayView: UIView {
         if showCopyButton {
             copyButton.isHidden = false
             if searchButton.isHidden || searchQuery.isEmpty {
+                let topConstraint: ConstraintRelatableTarget = addToAutocompleteButton.isHidden ? safeAreaLayoutGuide : addToAutocompleteButton.snp.bottom
                 copyButton.snp.remakeConstraints { make in
-                    make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
+                    make.top.equalTo(topConstraint)
+                    make.leading.trailing.equalTo(safeAreaLayoutGuide)
                     make.height.equalTo(56)
                 }
             } else if findInPageButton.isHidden {
@@ -215,6 +239,9 @@ class OverlayView: UIView {
     @objc private func didPressFindOnPage() {
         delegate?.overlayView(self, didSearchOnPage: searchQuery)
     }
+    @objc private func didPressAddToAutocomplete() {
+        delegate?.overlayView(self, didAddToAutocomplete: currentURL)
+    }
     @objc private func didPressSettings() {
         delegate?.overlayViewDidPressSettings(self)
     }
@@ -237,6 +264,7 @@ class OverlayView: UIView {
         setSearchQuery(query: "", animated: false, hideFindInPage: true)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = false
+        addToAutocompleteButton.animateHidden(currentURL.isEmpty, duration: UIConstants.layout.searchButtonAnimationDuration)
         animateHidden(false, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }

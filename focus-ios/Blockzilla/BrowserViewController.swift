@@ -711,6 +711,7 @@ class BrowserViewController: UIViewController {
     func updateURLBar() {
         if webViewController.url?.absoluteString != "about:blank" {
             urlBar.url = webViewController.url
+            overlayView.currentURL = urlBar.url?.absoluteString ?? ""
         }
     }
 }
@@ -1103,6 +1104,22 @@ extension BrowserViewController: OverlayViewDelegate {
     func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String) {
         updateFindInPageVisibility(visible: true, text: query)
         self.find(query, function: "find")
+    }
+    
+    func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String) {
+        urlBar.dismiss()
+
+        let autocompleteSource = CustomCompletionSource()        
+        switch autocompleteSource.add(suggestion: query) {
+        case .error(.duplicateDomain):
+            Toast(text: UIConstants.strings.autocompleteCustomURLDuplicate).show()
+        case .error(let error):
+            guard !error.message.isEmpty else { return }
+            Toast(text: error.message).show()
+        case .success:
+            Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.customDomain)
+            Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
+        }
     }
     
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
