@@ -35,7 +35,17 @@ class SearchHistoryUtils {
         
         if let propertylistSearchesRead = UserDefaults.standard.object(forKey: "searchedHistory") as? [[String:Any]] {
             currentStack = propertylistSearchesRead.compactMap{ textSearched(dictionary: $0) }
-            
+			
+			// Check whether the lastSearch is the current search. If not, remove subsequent searches
+			if let lastSearch = currentStack.last, !lastSearch.isCurrentSearch{
+				for index in 0..<currentStack.count {
+					if currentStack[index].isCurrentSearch{
+						currentStack.removeSubrange(index+1..<currentStack.count)
+						break
+					}
+				}
+			}
+			
             for index in 0..<currentStack.count {
                 currentStack[index].isCurrentSearch = false
             }
