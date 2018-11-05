@@ -49,7 +49,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
     override func viewDidLoad() {
         view.backgroundColor = UIConstants.colors.background
 
-        title = UIConstants.strings.autocompleteCustomSectionLabel
+        title = UIConstants.strings.autocompleteManageSitesLabel
 
         tableView.dataSource = self
         tableView.delegate = self

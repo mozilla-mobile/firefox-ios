@@ -377,13 +377,14 @@ struct UIConstants {
         static let done = NSLocalizedString("Done", value: "Done", comment: "Label on button to complete edits")
         static let cancelLabel = NSLocalizedString("Cancel", value: "Cancel", comment: "Label on button to cancel edits")
 
-        static let autocompleteLabel = NSLocalizedString("Autocomplete.defaultLabel", value: "Autocomplete", comment: "Label for enabling or disabling autocomplete")
+        static let autocompleteMySites = NSLocalizedString("Autocomplete.mySites", value: "My Sites", comment: "Label for enabling or disabling autocomplete")
+        static let autocompleteTopSites = NSLocalizedString("Autocomplete.topSites", value: "Top Sites", comment: "Label for enabling or disabling top sites")
         static let autocompleteDefaultSectionTitle = NSLocalizedString("Autocomplete.defaultTitle", value: "DEFAULT URL LIST", comment: "Title for the default URL list section")
-        static let autocompleteDefaultDescription = NSLocalizedString("Autocomplete.defaultDescriptoin", value: "Enable to have %@ autocomplete over 450 popular URLs in the address bar.", comment: "Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar.")
+        static let autocompleteTopSitesDesc = NSLocalizedString("Autocomplete.defaultDescriptoin", value: "Enable to have %@ autocomplete over 450 popular URLs in the address bar.", comment: "Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar.")
 
         static let autocompleteCustomSectionTitle = NSLocalizedString("Autocomplete.customTitle", value: "CUSTOM URL LIST", comment: "Title for the default URL list section")
-        static let autocompleteCustomSectionLabel = NSLocalizedString("Autocomplete.customLabel", value: "Custom URLs", comment: "Label for button taking you to your custom Autocomplete URL list")
-        static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
+        static let autocompleteManageSitesLabel = NSLocalizedString("Autocomplete.manageSites", value: "Manage Sites", comment: "Label for button taking you to your custom Autocomplete URL list")
+        static let autocompleteManageSitesDesc = NSLocalizedString("Autocomplete.mySitesDesc", value: "Enable to have %@ autocomplete your favorite URLs.", comment: "Description for adding and managing custom autocomplete URLs")
         static let autocompleteCustomEnabled = NSLocalizedString("Autocomplete.enabled", value: "Enabled", comment: "label describing URL Autocomplete as enabled")
         static let autocompleteCustomDisabled = NSLocalizedString("Autocomplete.disabled", value: "Disabled", comment: "label describing URL Autocomplete as disabled")
 
