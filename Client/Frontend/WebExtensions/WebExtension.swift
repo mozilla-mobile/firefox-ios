@@ -5,7 +5,6 @@
 import Foundation
 import WebKit
 import Shared
-import GCDWebServers
 import SwiftyJSON
 import ZipArchive
 
@@ -167,13 +166,9 @@ class WebExtension {
         let webExtensionManifest = manifest.stringify() ?? "{}"
         let webExtensionLocales = localization.locales.stringify() ?? "{}"
         let webExtensionSystemLanguage = NSLocale.current.languageCode ?? "en"
-        let webExtensionBaseURL = "http://localhost:\(port!)/"
+        let webExtensionBaseURL = "moz-extension://\(id)/"
         return String(format: WrappedWebExtensionAPITemplate, id, webExtensionManifest, webExtensionLocales, webExtensionSystemLanguage, webExtensionBaseURL, WebExtensionAPIJS)
     }()
-
-    fileprivate let server: GCDWebServer = GCDWebServer()
-
-    fileprivate(set) var port: UInt!
 
     init?(path: String) {
         let zipURL = URL(fileURLWithPath: path)
@@ -214,12 +209,6 @@ class WebExtension {
 
         self.name = name
         self.version = version
-
-        guard let port = self.getUniquePortAndStartServer() else {
-            return nil
-        }
-
-        self.port = port
     }
 
     func urlForResource(at path: String) -> URL {
@@ -229,37 +218,7 @@ class WebExtension {
         } else {
             normalizedPath = path
         }
-        return URL(string: "http://localhost:\(port!)/")!.appendingPathComponent(normalizedPath)
-    }
-
-    fileprivate func getUniquePortAndStartServer() -> UInt? {
-        if !server.isRunning {
-            for _ in 1...10 {
-                do {
-                    let port = UInt(arc4random_uniform(1000) + 6580)
-                    try server.start(options: [
-                        GCDWebServerOption_Port: port,
-                        GCDWebServerOption_BindToLocalhost: true,
-                        GCDWebServerOption_AutomaticallySuspendInBackground: true
-                    ])
-
-                    if !server.isRunning {
-                        continue;
-                    }
-
-                    server.addGETHandler(forBasePath: "/", directoryPath: tempDirectoryURL.path, indexFilename: nil, cacheAge: 0, allowRangeRequests: true)
-                    server.addGETHandler(forPath: "/__firefox__/web-extension-background-process", filePath: Bundle.main.path(forResource: "WebExtensionBackgroundProcess", ofType: "html")!, isAttachment: false, cacheAge: 0, allowRangeRequests: true)
-
-                    return port
-                } catch {
-                    continue;
-                }
-            }
-        } else {
-            return server.port
-        }
-
-        return nil
+        return URL(string: "moz-extension://\(id)/")!.appendingPathComponent(normalizedPath)
     }
 
     fileprivate func generateUserScriptForContentScript(_ contentScript: JSON, css: Bool = false) -> WKUserScript? {

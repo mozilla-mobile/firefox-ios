@@ -32,7 +32,10 @@ class WebExtensionBrowserActionWebViewController: UIViewController {
         self.browserAction = browserAction
         self.defaultPopup = defaultPopup
 
-        self.webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+        let configuration = WKWebViewConfiguration()
+        configuration.setURLSchemeHandler(WebExtensionSchemeHandler.default, forURLScheme: "moz-extension")
+
+        self.webView = WKWebView(frame: .zero, configuration: configuration)
 
         let webExtension = browserAction.webExtension
 

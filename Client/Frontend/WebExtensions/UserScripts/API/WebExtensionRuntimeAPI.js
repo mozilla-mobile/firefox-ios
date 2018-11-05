@@ -4,7 +4,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 const runtime = {
-  getBackgroundPage: noimpl("getBackgroundPage"),
+  getBackgroundPage: function() {
+    if (window.opener) {
+      return Promise.resolve(window.opener);
+    }
+
+    return Promise.reject();
+  },
   openOptionsPage: noimpl("openOptionsPage"),
   getManifest: noimpl("getManifest"),
   getURL: function(path) {

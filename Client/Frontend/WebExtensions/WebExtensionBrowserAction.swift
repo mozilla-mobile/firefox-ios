@@ -71,7 +71,7 @@ class WebExtensionBrowserAction {
         self.defaultTitle = defaultTitle
 
         if let defaultPopupPath = json["default_popup"].string {
-            self.defaultPopup = tempDirectoryURL.appendingPathComponent(defaultPopupPath)
+            self.defaultPopup = webExtension.urlForResource(at: defaultPopupPath)
         }
     }
 

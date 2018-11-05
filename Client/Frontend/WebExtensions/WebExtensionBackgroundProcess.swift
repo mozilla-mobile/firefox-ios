@@ -63,7 +63,10 @@ class WebExtensionBackgroundProcess: NSObject {
             return nil
         }
 
-        self.webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+        let configuration = WKWebViewConfiguration()
+        configuration.setURLSchemeHandler(WebExtensionSchemeHandler.default, forURLScheme: "moz-extension")
+
+        self.webView = WKWebView(frame: .zero, configuration: configuration)
 
         let allFramesAtDocumentStartUserScript = WKUserScript(source: AllFramesAtDocumentStartJS, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         self.webView.configuration.userContentController.addUserScript(allFramesAtDocumentStartUserScript)
