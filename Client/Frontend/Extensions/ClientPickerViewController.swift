@@ -54,7 +54,7 @@ class ClientPickerViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("Send Tab", tableName: "SendTo", comment: "Title of the dialog that allows you to send a tab to a different device")
+        title = Strings.SendToTitle
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -238,7 +238,7 @@ class ClientPickerViewController: UITableViewController {
             if self.clients.count == 0 {
                 self.navigationItem.rightBarButtonItem = nil
             } else {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Send", tableName: "SendTo", comment: "Navigation bar button to Send the current page to a device"), style: .done, target: self, action: #selector(self.send))
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SendToSendButtonTitle, style: .done, target: self, action: #selector(self.send))
                 self.navigationItem.rightBarButtonItem?.isEnabled = false
             }
             self.selectedClients.removeAllObjects()
@@ -289,7 +289,7 @@ class ClientPickerTableViewHeaderCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(nameLabel)
         nameLabel.font = ClientPickerViewControllerUX.TableHeaderTextFont
-        nameLabel.text = NSLocalizedString("Available devices:", tableName: "SendTo", comment: "Header for the list of devices table")
+        nameLabel.text = Strings.SendToDevicesListTitle
         nameLabel.textColor = ClientPickerViewControllerUX.TableHeaderTextColor
 
         nameLabel.snp.makeConstraints { (make) -> Void in
@@ -363,7 +363,7 @@ class ClientPickerNoClientsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupHelpView(contentView,
-            introText: NSLocalizedString("You don’t have any other devices connected to this Firefox Account available to sync.", tableName: "SendTo", comment: "Error message shown in the remote tabs panel"),
+            introText: Strings.SendToNoDevicesFound,
             showMeText: "") // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
         // Move the separator off screen
         separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
