@@ -1647,6 +1647,8 @@
 		D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPostHelper.swift; sourceTree = "<group>"; };
 		D0E89A2820910917001CE5C7 /* DownloadsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPanel.swift; sourceTree = "<group>"; };
 		D0F7DA832190A8BC001503D1 /* WebExtensionSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionSchemeHandler.swift; sourceTree = "<group>"; };
+		D0F7DA8E2190ED95001503D1 /* noimpl.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = noimpl.js; sourceTree = "<group>"; };
+		D0F7DA8F2190EE44001503D1 /* uuid.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = uuid.js; sourceTree = "<group>"; };
 		D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserScriptManager.swift; sourceTree = "<group>"; };
 		D0FCF7F61FE45E5D004A7995 /* PrintHandler.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = PrintHandler.js; sourceTree = "<group>"; };
 		D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentEnd.js; sourceTree = "<group>"; };
@@ -2898,6 +2900,7 @@
 		D04CD78421763137004FF5B0 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				D0F7DA8D2190ED71001503D1 /* common */,
 				D04CD7852176319F004FF5B0 /* __browser__.js */,
 				D0511E8E2189FF25008DA7A0 /* WebExtensionBrowserActionAPI.js */,
 				D04CD77E21758E5B004FF5B0 /* WebExtensionCookiesAPI.js */,
@@ -2910,6 +2913,15 @@
 				D0511E8B2188E970008DA7A0 /* WebExtensionWebRequestAPI.js */,
 			);
 			path = API;
+			sourceTree = "<group>";
+		};
+		D0F7DA8D2190ED71001503D1 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				D0F7DA8E2190ED95001503D1 /* noimpl.js */,
+				D0F7DA8F2190EE44001503D1 /* uuid.js */,
+			);
+			path = common;
 			sourceTree = "<group>";
 		};
 		D0FCF7E71FE44CA9004A7995 /* UserScripts */ = {

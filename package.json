@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Firefox for iOS",
   "scripts": {
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config UserScripts.webpack.config.js && webpack --config WebExtensionAPI.webpack.config.js"
   },
   "repository": {
     "type": "git",

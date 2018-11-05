@@ -32,11 +32,7 @@ private let WrappedWebExtensionAPITemplate = """
     const MessagePipeConnection = new __firefox__.MessagePipe(/*id*/"%1$@").MessagePipeConnection;
     const NativeEvent = __firefox__.NativeEvent;
 
-    function noimpl(name) { return function() { console.error("Method not yet implemented: " + name, this); }; }
-
-    /*window.browser*/%6$@
-
-    const browser = window.browser;
+    /*const browser*/%6$@
     """
 
 private let UserScriptTemplate = """
@@ -105,6 +101,7 @@ private let UserScriptTemplate = """
             (function(window) {
                 // BEGIN: WebExtensionAPI.js
                 /*const browser*/%6$@
+                window.browser = browser;
                 // END: WebExtensionAPI.js
 
                 // BEGIN: Aggregate source from WebExtension content scripts

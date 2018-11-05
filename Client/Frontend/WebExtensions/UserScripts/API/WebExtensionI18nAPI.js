@@ -3,6 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+const noimpl = require("./common/noimpl.js");
+
 const DEFAULT_LANGUAGE = WEB_EXTENSION_MANIFEST["default_locale"] || "en";
 
 const i18n = {
@@ -72,4 +74,4 @@ const i18n = {
   detectLanguage: noimpl("detectLanguage")
 };
 
-window.browser.i18n = i18n;
+module.exports = i18n;

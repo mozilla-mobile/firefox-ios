@@ -19,15 +19,13 @@ private let AllFramesAtDocumentStartJS: String = {
 }()
 
 private let UserScriptTemplate = """
-    (function() {
-        document.addEventListener("DOMContentLoaded", function() {
-            document.title = /*name*/"%1$@";
-        });
+    document.addEventListener("DOMContentLoaded", function() {
+        document.title = /*name*/"%1$@";
+    });
 
-        // BEGIN: WebExtensionAPI.js
-        /*const browser*/%2$@
-        // END: WebExtensionAPI.js
-    })();
+    // BEGIN: WebExtensionAPI.js
+    /*const browser*/%2$@
+    // END: WebExtensionAPI.js
 
     // BEGIN: Aggregate source from WebExtension background scripts
     %3$@

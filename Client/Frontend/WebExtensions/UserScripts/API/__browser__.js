@@ -3,13 +3,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-"use strict";
+const browser = {
+  browserAction: require("./WebExtensionBrowserActionAPI.js"),
+  cookies: require("./WebExtensionCookiesAPI.js"),
+  extension: require("./WebExtensionExtensionAPI.js"),
+  i18n: require("./WebExtensionI18nAPI.js"),
+  notifications: require("./WebExtensionNotificationsAPI.js"),
+  runtime: require("./WebExtensionRuntimeAPI.js"),
+  storage: require("./WebExtensionStorageAPI.js"),
+  tabs: require("./WebExtensionTabsAPI.js"),
+  webRequest: require("./WebExtensionWebRequestAPI.js")
+};
 
-if (!window.browser) {
-  Object.defineProperty(window, "browser", {
-    enumerable: false,
-    configurable: false,
-    writable: false,
-    value: {}
-  });
-}
+module.exports = browser;

@@ -3,6 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+const noimpl = require("./common/noimpl.js");
+
 const cookies = {
   get: function(details) {
     let connection = new MessagePipeConnection();
@@ -33,4 +35,4 @@ const cookies = {
   onChanged: new NativeEvent(SECURITY_TOKEN, WEB_EXTENSION_ID, "browser.cookies.onChanged")
 };
 
-window.browser.cookies = cookies;
+module.exports = cookies;

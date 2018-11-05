@@ -3,6 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+const noimpl = require("./common/noimpl.js");
+
 const tabs = {
   captureTab: noimpl("captureTab"),
   captureVisibleTab: noimpl("captureVisibleTab"),
@@ -72,4 +74,4 @@ const tabs = {
   onZoomChange: new NativeEvent(SECURITY_TOKEN, WEB_EXTENSION_ID, "browser.tabs.onZoomChange")
 };
 
-window.browser.tabs = tabs;
+module.exports = tabs;

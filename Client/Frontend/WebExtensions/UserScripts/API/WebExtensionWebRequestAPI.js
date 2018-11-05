@@ -3,6 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+const noimpl = require("./common/noimpl.js");
+
 // Event listeners for the `webRequest` API supply additional
 // arguments for filtering callbacks. To support this, we
 // sub-class `NativeEvent` and wrap the supplied `callback`
@@ -44,4 +46,4 @@ const webRequest = {
   onErrorOccurred: new WebRequestEvent(SECURITY_TOKEN, "browser.webRequest.onErrorOccurred")
 };
 
-window.browser.webRequest = webRequest;
+module.exports = webRequest;
