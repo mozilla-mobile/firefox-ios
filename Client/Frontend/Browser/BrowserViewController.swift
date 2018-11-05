@@ -1657,10 +1657,9 @@ extension BrowserViewController: TabDelegate {
         historyStateHelper.delegate = self
         tab.addContentScript(historyStateHelper, name: HistoryStateHelper.name())
 
-        if let blocker = tab.contentBlocker as? ContentBlockerHelper {
-            blocker.setupTabTrackingProtection()
-            tab.addContentScript(blocker, name: ContentBlockerHelper.name())
-        }
+        let blocker = FirefoxTabContentBlocker(tab: tab, prefs: profile.prefs)
+        tab.contentBlocker = blocker
+        tab.addContentScript(blocker, name: FirefoxTabContentBlocker.name())
 
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
     }

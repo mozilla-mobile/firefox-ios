@@ -172,7 +172,9 @@ class TabLocationView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.tabObservers = registerFor(.didChangeContentBlocking, .didGainFocus, queue: .main)
+        self.tabObservers = registerFor(.didGainFocus, queue: .main)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(onDidChangeContentBlocking), name: .didChangeContentBlocking, object: nil)
 
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
         longPressRecognizer.delegate = self
@@ -348,9 +350,14 @@ extension TabLocationView: Themeable {
 }
 
 extension TabLocationView: TabEventHandler {
+    @objc func onDidChangeContentBlocking(_ notification: Notification) {
+        guard let tab = notification.userInfo?.first?.value as? Tab else { return }
+        updateBlockerStatus(forTab: tab)
+    }
+
     private func updateBlockerStatus(forTab tab: Tab) {
         assertIsMainThread("UI changes must be on the main thread")
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else { return }
+        guard let blocker = tab.contentBlocker as? TabContentBlocker else { return }
         switch blocker.status {
         case .Blocking:
             self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)

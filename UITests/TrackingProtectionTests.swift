@@ -49,8 +49,6 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     override func setUp() {
         super.setUp()
 
-        self.tabObservers = registerFor(.didChangeContentBlocking, queue: .main)
-
         // IP addresses can't be used for whitelisted domains
         SimplePageServer.useLocalhostInsteadOfIP = true
         webRoot = SimplePageServer.start()
@@ -61,7 +59,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         let setup = self.expectation(description: "setup")
         func checkIsSetup() {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                if ContentBlockerHelper.heavyInitHasRunOnce {
+                if ContentBlocker.shared.setupCompleted {
                     setup.fulfill()
                     return
                 }
@@ -72,12 +70,17 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         wait(for: [setup], timeout: 5)
 
         let clear = self.expectation(description: "clearing")
-        ContentBlockerHelper.clearWhitelist() { clear.fulfill() }
+        ContentBlocker.shared.clearWhitelist() { clear.fulfill() }
         waitForExpectations(timeout: 2, handler: nil)
+
+        NotificationCenter.default.addObserver(forName: .didChangeContentBlocking, object: nil, queue: nil) { arg in
+            let tab = arg.userInfo!.first!.value as! Tab
+            self.tabDidChangeContentBlockerStatus(tab)
+        }
     }
 
     func tabDidChangeContentBlockerStatus(_ tab: Tab) {
-        stats = (tab.contentBlocker as! ContentBlockerHelper).stats
+        stats = (tab.contentBlocker as! TabContentBlocker).stats
 
         if (stats.total == 0) {
             statsZero?.fulfill()
@@ -167,29 +170,29 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         let url = URL(string: "http://localhost")!
 
         let clear = self.expectation(description: "clearing")
-        ContentBlockerHelper.clearWhitelist() { clear.fulfill() }
+        ContentBlocker.shared.clearWhitelist() { clear.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkTrackingProtection(isBlocking: true)
 
         let expWhitelist = self.expectation(description: "whitelisted")
-        ContentBlockerHelper.whitelist(enable: true, url: url) { expWhitelist.fulfill() }
+        ContentBlocker.shared.whitelist(enable: true, url: url) { expWhitelist.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         // The image from ymail.com would normally be blocked, but in this case it is whitelisted
         checkTrackingProtection(isBlocking: false)
 
         let expRemove = self.expectation(description: "whitelist removed")
-        ContentBlockerHelper.whitelist(enable: false,  url: url) { expRemove.fulfill() }
+        ContentBlocker.shared.whitelist(enable: false,  url: url) { expRemove.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkTrackingProtection(isBlocking: true)
 
         let expWhitelistAgain = self.expectation(description: "whitelisted")
-        ContentBlockerHelper.whitelist(enable: true, url: url) { expWhitelistAgain.fulfill() }
+        ContentBlocker.shared.whitelist(enable: true, url: url) { expWhitelistAgain.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         // The image from ymail.com would normally be blocked, but in this case it is whitelisted
         checkTrackingProtection(isBlocking: false)
 
         let clear1 = self.expectation(description: "clearing")
-        ContentBlockerHelper.clearWhitelist() { clear1.fulfill() }
+        ContentBlocker.shared.clearWhitelist() { clear1.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkTrackingProtection(isBlocking: true)
     }

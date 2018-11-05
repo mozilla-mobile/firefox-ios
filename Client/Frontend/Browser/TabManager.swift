@@ -602,7 +602,7 @@ extension TabManager: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-        if let tab = self[webView], let blocker = tab.contentBlocker as? ContentBlockerHelper {
+        if let tab = self[webView], let blocker = tab.contentBlocker as? TabContentBlocker {
             blocker.clearPageStats()
         }
     }
@@ -617,7 +617,7 @@ extension TabManager: WKNavigationDelegate {
         let isNoImageMode = profile.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
         tab.noImageMode = isNoImageMode
 
-        if let tpHelper = tab.contentBlocker as? ContentBlockerHelper, !tpHelper.isEnabled {
+        if let tpHelper = tab.contentBlocker as? TabContentBlocker, !tpHelper.isEnabled {
             webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.securityToken))")
         }
     }

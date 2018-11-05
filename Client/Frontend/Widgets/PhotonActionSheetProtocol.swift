@@ -90,9 +90,9 @@ extension PhotonActionSheetProtocol {
             NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
         }
 
-        let trackingProtectionEnabled = ContentBlockerHelper.isTrackingProtectionActive(tabManager: self.tabManager)
+        let trackingProtectionEnabled = FirefoxTabContentBlocker.isTrackingProtectionEnabled(tabManager: self.tabManager)
         let trackingProtection = PhotonActionSheetItem(title: Strings.TPMenuTitle, iconString: "menu-TrackingProtection", isEnabled: trackingProtectionEnabled, accessory: .Switch) { action in
-            ContentBlockerHelper.toggleTrackingProtectionMode(for: self.profile.prefs, tabManager: self.tabManager)
+            FirefoxTabContentBlocker.toggleTrackingProtectionEnabled(prefs: self.profile.prefs, tabManager: self.tabManager)
         }
         items.append(contentsOf: [trackingProtection, noImageMode])
 
@@ -332,10 +332,10 @@ extension PhotonActionSheetProtocol {
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
         let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlocking, iconString: "menu-TrackingProtection") { _ in
             // When TP is off for the tab tapping enable in this menu should turn it back on for the Tab.
-            if let blocker = tab.contentBlocker as? ContentBlockerHelper, blocker.isUserEnabled == false {
+            if let blocker = tab.contentBlocker as? FirefoxTabContentBlocker, blocker.isUserEnabled == false {
                 blocker.isUserEnabled = true
             } else {
-                ContentBlockerHelper.toggleTrackingProtectionMode(for: self.profile.prefs, tabManager: self.tabManager)
+                FirefoxTabContentBlocker.toggleTrackingProtectionEnabled(prefs: self.profile.prefs, tabManager: self.tabManager)
             }
             tab.reload()
         }
@@ -349,7 +349,7 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionEnabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper, let currentURL = tab.url else {
+        guard let blocker = tab.contentBlocker as? TabContentBlocker, let currentURL = tab.url else {
             return []
         }
 
@@ -363,7 +363,7 @@ extension PhotonActionSheetProtocol {
 
         let addToWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionDisableTitle, iconString: "menu-TrackingProtection-Off") { _ in
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
-            ContentBlockerHelper.whitelist(enable: true, url: currentURL) {
+            ContentBlocker.shared.whitelist(enable: true, url: currentURL) {
                 tab.reload()
             }
         }
@@ -377,7 +377,7 @@ extension PhotonActionSheetProtocol {
         }
 
         let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TrackingProtectionWhiteListRemove, iconString: "menu-TrackingProtection") { _ in
-            ContentBlockerHelper.whitelist(enable: false, url: currentURL) {
+            ContentBlocker.shared.whitelist(enable: false, url: currentURL) {
                 tab.reload()
             }
         }
@@ -386,7 +386,7 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     func getTrackingMenu(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else {
+        guard let blocker = tab.contentBlocker as? TabContentBlocker else {
             return []
         }
 
@@ -420,7 +420,7 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     func getTrackingSubMenu(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        guard let blocker = tab.contentBlocker as? ContentBlockerHelper else {
+        guard let blocker = tab.contentBlocker as? TabContentBlocker else {
             return []
         }
         switch blocker.status {
@@ -445,7 +445,7 @@ extension PhotonActionSheetProtocol {
             tab.toggleDesktopSite()
         }
 
-        if let helper = tab.contentBlocker as? ContentBlockerHelper {
+        if let helper = tab.contentBlocker as? FirefoxTabContentBlocker {
             let title = helper.isEnabled ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
             let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { action in

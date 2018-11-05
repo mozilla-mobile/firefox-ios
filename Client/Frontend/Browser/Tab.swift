@@ -128,7 +128,7 @@ class Tab: NSObject {
                 return
             }
             _noImageMode = newValue
-            let helper = (contentBlocker as? ContentBlockerHelper)
+            let helper = (contentBlocker as? FirefoxTabContentBlocker)
             helper?.noImageMode(enabled: _noImageMode)
         }
     }
@@ -169,10 +169,6 @@ class Tab: NSObject {
         self.configuration = configuration
         super.init()
         self.isPrivate = isPrivate
-
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
-            contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
-        }
 
         debugTabCount += 1
     }
@@ -573,6 +569,20 @@ extension Tab: TabWebViewDelegate {
     }
     fileprivate func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String) {
         tabDelegate?.tab(self, didSelectSearchWithFirefoxForSelection: selection)
+    }
+}
+
+extension Tab: ContentBlockerTab {
+    func currentURL() -> URL? {
+        return url
+    }
+
+    func currentWebView() -> WKWebView? {
+        return webView
+    }
+
+    func imageContentBlockingEnabled() -> Bool {
+        return noImageMode
     }
 }
 

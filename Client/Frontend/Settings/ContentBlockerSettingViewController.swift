@@ -94,10 +94,10 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
 
     override func generateSettings() -> [SettingSection] {
         let normalBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInNormalBrowsing)) { _ in
-            ContentBlockerHelper.prefsChanged()
+            TabContentBlocker.prefsChanged()
         }
         let privateBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.PrivateBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInPrivateBrowsing)) { _ in
-            ContentBlockerHelper.prefsChanged()
+            TabContentBlocker.prefsChanged()
         }
 
         let strengthSetting: [CheckmarkSetting] = BlockingStrength.allOptions.map { option in
@@ -107,7 +107,7 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
             }, onChanged: {
                 self.currentBlockingStrength = option
                 self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
-                ContentBlockerHelper.prefsChanged()
+                TabContentBlocker.prefsChanged()
                 self.tableView.reloadData()
                 LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue])
                 UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockingConfig.Prefs.StrengthKey, extras: ["to": option.rawValue])
