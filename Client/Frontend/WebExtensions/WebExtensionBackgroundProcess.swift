@@ -24,8 +24,11 @@ private let UserScriptTemplate = """
     });
 
     // BEGIN: WebExtensionAPI.js
-    /*const browser*/%2$@
+    /*const { browser, chrome }*/%2$@
     // END: WebExtensionAPI.js
+
+    // Set `opener` to self so that `getBackgroundPage()` resolves.
+    window.opener = window;
 
     // BEGIN: Aggregate source from WebExtension background scripts
     %3$@

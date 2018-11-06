@@ -12,7 +12,26 @@ const browser = {
   runtime: require("./WebExtensionRuntimeAPI.js"),
   storage: require("./WebExtensionStorageAPI.js"),
   tabs: require("./WebExtensionTabsAPI.js"),
+  webNavigation: require("./WebExtensionWebNavigationAPI.js"),
   webRequest: require("./WebExtensionWebRequestAPI.js")
 };
 
-module.exports = browser;
+const chromeAPIWrapper = require("../chromeAPIWrapper.js");
+
+const chrome = {
+  browserAction: chromeAPIWrapper(browser.browserAction),
+  cookies: chromeAPIWrapper(browser.cookies),
+  extension: chromeAPIWrapper(browser.extension),
+  i18n: chromeAPIWrapper(browser.i18n),
+  notifications: chromeAPIWrapper(browser.notifications),
+  runtime: chromeAPIWrapper(browser.runtime),
+  storage: {
+    local: chromeAPIWrapper(browser.storage.local),
+    onChanged: browser.storage.onChanged
+  },
+  tabs: chromeAPIWrapper(browser.tabs),
+  webNavigation: chromeAPIWrapper(browser.webNavigation),
+  webRequest: chromeAPIWrapper(browser.webRequest)
+};
+
+module.exports = { browser, chrome };

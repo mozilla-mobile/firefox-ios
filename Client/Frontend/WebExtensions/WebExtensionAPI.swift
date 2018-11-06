@@ -152,6 +152,7 @@ class WebExtensionAPI: NSObject {
     let runtime: WebExtensionRuntimeAPI
     let storage: WebExtensionStorageAPI
     let tabs: WebExtensionTabsAPI
+    let webNavigation: WebExtensionWebNavigationAPI
     let webRequest: WebExtensionWebRequestAPI
 
     init(webExtension: WebExtension) {
@@ -165,6 +166,7 @@ class WebExtensionAPI: NSObject {
         self.runtime = WebExtensionRuntimeAPI(webExtension: webExtension)
         self.storage = WebExtensionStorageAPI(webExtension: webExtension)
         self.tabs = WebExtensionTabsAPI(webExtension: webExtension)
+        self.webNavigation = WebExtensionWebNavigationAPI(webExtension: webExtension)
         self.webRequest = WebExtensionWebRequestAPI(webExtension: webExtension)
 
         super.init()

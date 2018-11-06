@@ -20,7 +20,7 @@ private let UserScriptTemplate = """
     });
 
     // BEGIN: WebExtensionAPI.js
-    /*const browser*/%1$@
+    /*const { browser, chrome }*/%1$@
     // END: WebExtensionAPI.js
     """
 

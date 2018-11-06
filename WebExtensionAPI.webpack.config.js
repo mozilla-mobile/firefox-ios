@@ -10,7 +10,7 @@ module.exports = {
   output: {
     filename: "WebExtensionAPI.js",
     path: path.resolve(__dirname, "Client/Assets"),
-    library: ["browser"]
+    library: "api"
   },
   module: {
     rules: [

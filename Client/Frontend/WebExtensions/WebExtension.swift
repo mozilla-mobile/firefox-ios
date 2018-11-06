@@ -5,13 +5,14 @@
 import Foundation
 import WebKit
 import Shared
+import GCDWebServers
 import SwiftyJSON
 import ZipArchive
 
 private let ManifestVersion = 2
 
 private let WindowProxyJS: String = {
-    let path = Bundle.main.path(forResource: "WindowProxy", ofType: "js")!
+    let path = Bundle.main.path(forResource: "windowProxy", ofType: "js")!
     return try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
 }()
 
@@ -32,7 +33,13 @@ private let WrappedWebExtensionAPITemplate = """
     const MessagePipeConnection = new __firefox__.MessagePipe(/*id*/"%1$@").MessagePipeConnection;
     const NativeEvent = __firefox__.NativeEvent;
 
-    /*const browser*/%6$@
+    /*var api*/%6$@
+    const { browser, chrome } = api;
+    window.browser = browser;
+    window.chrome = chrome;
+
+    const external = {};
+    window.external = external;
     """
 
 private let UserScriptTemplate = """
@@ -94,14 +101,13 @@ private let UserScriptTemplate = """
         document.addEventListener("readystatechange", function() {
             if (document.readyState !== "%2$@"/*runAtReadyState*/) { return; }
 
-            // BEGIN: WindowProxy.js
+            // BEGIN: windowProxy.js
             /*const { windowProxy, exportFunction, cloneInto }*/%5$@
-            // END: WindowProxy.js
+            // END: windowProxy.js
 
             (function(window) {
                 // BEGIN: WebExtensionAPI.js
-                /*const browser*/%6$@
-                window.browser = browser;
+                /*const { browser, chrome }*/%6$@
                 // END: WebExtensionAPI.js
 
                 // BEGIN: Aggregate source from WebExtension content scripts
@@ -163,9 +169,14 @@ class WebExtension {
         let webExtensionManifest = manifest.stringify() ?? "{}"
         let webExtensionLocales = localization.locales.stringify() ?? "{}"
         let webExtensionSystemLanguage = NSLocale.current.languageCode ?? "en"
+        // let webExtensionBaseURL = "http://localhost:\(port!)/"
         let webExtensionBaseURL = "moz-extension://\(id)/"
         return String(format: WrappedWebExtensionAPITemplate, id, webExtensionManifest, webExtensionLocales, webExtensionSystemLanguage, webExtensionBaseURL, WebExtensionAPIJS)
     }()
+
+    fileprivate let server: GCDWebServer = GCDWebServer()
+
+    fileprivate(set) var port: UInt!
 
     init?(path: String) {
         let zipURL = URL(fileURLWithPath: path)
@@ -206,6 +217,12 @@ class WebExtension {
 
         self.name = name
         self.version = version
+
+        guard let port = self.getUniquePortAndStartServer() else {
+            return nil
+        }
+
+        self.port = port
     }
 
     func urlForResource(at path: String) -> URL {
@@ -215,7 +232,61 @@ class WebExtension {
         } else {
             normalizedPath = path
         }
+        // return URL(string: "http://localhost:\(port!)/")!.appendingPathComponent(normalizedPath)
         return URL(string: "moz-extension://\(id)/")!.appendingPathComponent(normalizedPath)
+    }
+
+    fileprivate func getUniquePortAndStartServer() -> UInt? {
+        if !server.isRunning {
+            for _ in 1...10 {
+                do {
+                    let port = UInt(arc4random_uniform(1000) + 6580)
+                    try server.start(options: [
+                        GCDWebServerOption_Port: port,
+                        GCDWebServerOption_BindToLocalhost: true,
+                        GCDWebServerOption_AutomaticallySuspendInBackground: true
+                        ])
+
+                    if !server.isRunning {
+                        continue;
+                    }
+
+                    server.addDefaultHandler(forMethod: "GET", request: GCDWebServerRequest.self) { request in
+                        guard let path = request?.path else {
+                            return GCDWebServerErrorResponse(statusCode: 500)
+                        }
+
+                        let data: Data?
+                        let mimeType: String
+                        if path == "/__firefox__/web-extension-background-process" {
+                            data = try? Data(contentsOf: Bundle.main.url(forResource: "WebExtensionBackgroundProcess", withExtension: "html")!)
+                            mimeType = "text/html"
+                        } else {
+                            let file = self.tempDirectoryURL.appendingPathComponent(path)
+                            data = try? Data(contentsOf: file)
+                            mimeType = MIMEType.mimeTypeFromFileExtension(file.pathExtension)
+                        }
+
+                        guard data != nil else {
+                            return GCDWebServerErrorResponse(statusCode: 404)
+                        }
+
+                        let response = GCDWebServerDataResponse(data: data!, contentType: mimeType)
+                        response?.setValue("http://localhost:\(port),*", forAdditionalHeader: "Access-Control-Allow-Origin")
+                        response?.setValue("true", forAdditionalHeader: "Access-Control-Allow-Credentials")
+                        return response
+                    }
+
+                    return port
+                } catch {
+                    continue;
+                }
+            }
+        } else {
+            return server.port
+        }
+
+        return nil
     }
 
     fileprivate func generateUserScriptForContentScript(_ contentScript: JSON, css: Bool = false) -> WKUserScript? {
