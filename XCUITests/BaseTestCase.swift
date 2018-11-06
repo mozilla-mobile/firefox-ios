@@ -125,7 +125,12 @@ class BaseTestCase: XCTestCase {
         if iPad() {
         waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
         } else {
-        waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 10)
+            // iPhone sim tabs button is called differently when in portrait or landscape
+            if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
+                waitForExistence(app.buttons["URLBarView.tabsButton"], timeout: 10)
+            } else {
+                waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 10)
+            }
         }
     }
 }
