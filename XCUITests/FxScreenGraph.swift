@@ -47,6 +47,7 @@ let LockedLoginsSettings = "LockedLoginsSettings"
 let TabTrayLongPressMenu = "TabTrayLongPressMenu"
 let HistoryRecentlyClosed = "HistoryRecentlyClosed"
 let TrackingProtectionContextMenuDetails = "TrackingProtectionContextMenuDetails"
+let DisplaySettings = "DisplaySettings"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -58,6 +59,7 @@ let allSettingsScreens = [
     NewTabSettings,
     HomePageSettings,
     OpenWithSettings,
+    DisplaySettings,
 
     LoginsSettings,
     PasscodeSettings,
@@ -174,6 +176,10 @@ class Action {
 
     static let PinToTopSitesPAM = "PinToTopSitesPAM"
     static let CopyAddressPAM = "CopyAddressPAM"
+
+    static let SelectDarkMode = "SelectDarkMode"
+    static let SelectLightMode = "SelectLightMode"
+    static let SelectAutomatically = "SelectAutomatically"
 }
 
 private var isTablet: Bool {
@@ -498,6 +504,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["NewTab"], to: NewTabSettings)
         screenState.tap(table.cells["Homepage"], to: HomePageSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
+        screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         screenState.tap(table.cells["Logins"], to: LoginsSettings, if: "passcode == nil")
         screenState.tap(table.cells["Logins"], to: LockedLoginsSettings, if: "passcode != nil")
@@ -508,6 +515,19 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.ToggleShowToolbarWhenScrolling, if: "tablet == true") { UserState in
             app.cells.switches["AlwaysShowToolbar"].tap()
             app.buttons["Done"].tap()
+        }
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(DisplaySettings) { screenState in
+        screenState.gesture(forAction: Action.SelectDarkMode) { userState in
+            app.cells.staticTexts["Dark"].tap()
+        }
+        screenState.gesture(forAction: Action.SelectLightMode) { userState in
+            app.cells.staticTexts["Light"].tap()
+        }
+        screenState.gesture(forAction: Action.SelectAutomatically) { userState in
+            app.switches["DisplaySwitchValue"].tap()
         }
         screenState.backAction = navigationControllerBackAction
     }

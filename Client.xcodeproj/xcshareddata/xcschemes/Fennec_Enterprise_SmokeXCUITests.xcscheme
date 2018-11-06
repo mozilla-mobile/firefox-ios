@@ -305,6 +305,9 @@
                   Identifier = "DatabaseFixtureTest">
                </Test>
                <Test
+                  Identifier = "DisplaySettingTests">
+               </Test>
+               <Test
                   Identifier = "DomainAutocompleteTest">
                </Test>
                <Test
