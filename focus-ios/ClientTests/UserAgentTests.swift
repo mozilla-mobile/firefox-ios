@@ -43,7 +43,7 @@ class UserAgentTests: XCTestCase {
         XCTAssertTrue(mockUserDefaults.synchronizeCalled)
         XCTAssertNotNil(mockUserDefaults.registerValue)
         XCTAssertNotNil(mockUserDefaults.string(forKey: "LastFocusVersionNumber"))
-        XCTAssertTrue(((mockUserDefaults.registerValue!["UserAgent"] as? String)?.contains(AppInfo.config.productName))!)
+        XCTAssertTrue(((mockUserDefaults.registerValue!["UserAgent"] as? String)?.contains("FxiOS"))!)
     }
 
     func testGetDesktopUserAgent() {
