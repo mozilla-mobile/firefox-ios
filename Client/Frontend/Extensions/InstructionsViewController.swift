@@ -4,6 +4,7 @@
 
 import UIKit
 import SnapKit
+import Shared
 
 private struct InstructionsViewControllerUX {
     static let TopPadding = CGFloat(20)
@@ -77,12 +78,12 @@ class InstructionsViewController: UIViewController {
         edgesForExtendedLayout = []
         view.backgroundColor = UIColor.Photon.White100
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", tableName: "SendTo", comment: "Close button in top navigation bar"), style: .done, target: self, action: #selector(close))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SendToCloseButton, style: .done, target: self, action: #selector(close))
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "InstructionsViewController.navigationItem.leftBarButtonItem"
 
         setupHelpView(view,
-            introText: NSLocalizedString("You are not signed in to your Firefox Account.", tableName: "SendTo", comment: "See http://mzl.la/1ISlXnU"),
-                showMeText: NSLocalizedString("Please open Firefox, go to Settings and sign in to continue.", tableName: "SendTo", comment: "See http://mzl.la/1ISlXnU"))
+            introText: Strings.SendToNotSignedInText,
+                showMeText: Strings.SendToNotSignedInMessage)
     }
 
     @objc func close() {
