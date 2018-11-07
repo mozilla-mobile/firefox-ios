@@ -74,8 +74,6 @@ class BrowserViewController: UIViewController {
     var tipManager: TipManager?
     
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
-    static let userDefaultsShareTrackerStatsKeyOLD = "shareTrackerStats"
-    static let userDefaultsShareTrackerStatsKeyNEW = "shareTrackerStatsNew"
 
     init(appSplashController: AppSplashController, tipManager: TipManager = TipManager.shared) {
         self.appSplashController = appSplashController
@@ -297,7 +295,7 @@ class BrowserViewController: UIViewController {
 
     private func createHomeView() {
         let homeView: HomeView
-        if canShowTips() {
+        if TipManager.shared.shouldShowTips() {
             homeView = HomeView(tipManager: tipManager)
         }
         else {
@@ -694,10 +692,6 @@ class BrowserViewController: UIViewController {
     
     func refreshTipsDisplay() {
         createHomeView()
-    }
-
-    func canShowTips() -> Bool {
-        return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
     }
     
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {

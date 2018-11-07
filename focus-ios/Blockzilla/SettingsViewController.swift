@@ -118,7 +118,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .integration: return 1
             case .mozilla:
                 // Show tips option should not be displayed for users that do not see tips
-                return UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) ? 3 : 2
+                return TipManager.shared.shouldShowTips() ? 3 : 2
             }
         }
         
@@ -227,7 +227,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         if let safariRow = toggles.first(where: { $1 == safariToggle })?.key {
-            if !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW) {
+            if !TipManager.shared.shouldShowTips() {
                 toggles.removeValue(forKey: safariRow + 1)
             }
             
@@ -439,7 +439,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             cell = siriCell
-        case .mozilla where UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW):
+        case .mozilla where TipManager.shared.shouldShowTips():
             if indexPath.row == 0 {
                 let toggle = toggleForIndexPath(indexPath)
                 cell = createToggleCell(for: toggle)
@@ -452,7 +452,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 cell.textLabel?.text = String(format: UIConstants.strings.ratingSetting, AppInfo.productName)
                 cell.accessibilityIdentifier = "settingsViewController.rateFocus"
             }
-        case .mozilla where !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW):
+        case .mozilla where !TipManager.shared.shouldShowTips():
             if indexPath.row == 0 {
                 cell = SettingsTableViewCell(style: .subtitle, reuseIdentifier: "aboutCell")
                 cell.textLabel?.text = String(format: UIConstants.strings.aboutTitle, AppInfo.productName)
@@ -599,7 +599,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let siriFavoriteVC = SiriFavoriteViewController()
                 navigationController?.pushViewController(siriFavoriteVC, animated: true)
             }
-        case .mozilla where UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW):
+        case .mozilla where TipManager.shared.shouldShowTips():
             if indexPath.row == 1 {
                 aboutClicked()
             } else if indexPath.row == 2 {
@@ -608,7 +608,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
                 }
             }
-        case .mozilla where !UserDefaults.standard.bool(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW):
+        case .mozilla where !TipManager.shared.shouldShowTips():
             if indexPath.row == 0 {
                 aboutClicked()
             } else if indexPath.row == 1 {

@@ -104,4 +104,8 @@ class TipManager {
         }
         return defaults.bool(forKey: id)
     }
+    
+    func shouldShowTips() -> Bool {
+        return NSLocale.current.identifier == "en_US" && !AppInfo.isKlar
+    }
 }
