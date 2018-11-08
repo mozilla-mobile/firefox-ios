@@ -7,6 +7,9 @@ import XCTest
 private let testingURL = "example.com"
 private let userName = "iosmztest"
 private let userPassword = "test15mz"
+private let historyItemSavedOnDesktop = "http://www.example.com/"
+private let loginEntry = "iosmztest, https://accounts.google.com"
+private let tabOpenInDesktop = "http://example.com/"
 
 class IntegrationTests: BaseTestCase {
 
@@ -80,7 +83,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
         navigator.goto(HomePanelsScreen)
         waitForTabsButton()
-        navigator.goto(BrowserTabMenu)
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(HomePanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"].cells.element(boundBy: 1).staticTexts["Example Domain"])
     }
@@ -128,5 +131,54 @@ class IntegrationTests: BaseTestCase {
         signInFxAccounts()
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
+    }
+
+    func testFxASyncHistoryDesktop () {
+        // Sign into Firefox Accounts
+        signInFxAccounts()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
+
+        // Check synced History
+        navigator.goto(HomePanelsScreen)
+        waitForTabsButton()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(HomePanel_History)
+        waitForExistence(app.tables.cells.staticTexts[historyItemSavedOnDesktop], timeout: 5)
+    }
+
+    func testFxASyncPasswordDesktop () {
+        // Sign into Firefox Accounts
+        signInFxAccounts()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
+
+        // Check synced Logins
+        navigator.nowAt(SettingsScreen)
+        navigator.goto(LoginsSettings)
+        waitForExistence(app.tables["Login List"], timeout: 5)
+        XCTAssertTrue(app.tables.cells[loginEntry].exists, "The login saved on desktop is not synced")
+    }
+
+    func testFxASyncTabsDesktop () {
+        // Sign into Firefox Accounts
+        signInFxAccounts()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
+
+        // Check synced Tabs
+        navigator.goto(HomePanelsScreen)
+        waitForTabsButton()
+        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(HomePanel_History)
+        waitForExistence(app.cells["HistoryPanel.syncedDevicesCell"], timeout: 5)
+        app.cells["HistoryPanel.syncedDevicesCell"].tap()
+        // Need to swipe to get the data on the screen on focus
+        app.swipeDown()
+        waitForExistence(app.tables.otherElements["profile1"], timeout: 5)
+        XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
     }
 }
