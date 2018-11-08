@@ -71,6 +71,20 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
     }
 
+    func testFxASyncBookmarkDesktop () {
+        // Bookmark is added by the DB
+        // Sign into Firefox Accounts
+        signInFxAccounts()
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
+        navigator.goto(HomePanelsScreen)
+        waitForTabsButton()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(HomePanel_Bookmarks)
+        waitForExistence(app.tables["Bookmarks List"].cells.element(boundBy: 1).staticTexts["Example Domain"])
+    }
+
     func testFxASyncTabs () {
         navigator.openURL(testingURL)
         waitUntilPageLoad()
