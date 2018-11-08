@@ -123,7 +123,7 @@ class TabDisplayManager: NSObject {
     }
     
     func searchTabsAnimated() {
-        let isUnchanged = tabsToDisplay.zip(dataStore).reduce(true) { $0 && $1.0 === $1.1 }
+        let isUnchanged = (tabsToDisplay.count == dataStore.count) && tabsToDisplay.zip(dataStore).reduce(true) { $0 && $1.0 === $1.1 }
         if !tabsToDisplay.isEmpty && isUnchanged {
             return
         }
