@@ -43,7 +43,7 @@ class SearchProviderTest: BaseTestCase {
         let toast = app.staticTexts["Toast.label"]
         waitforNoExistence(element: toast)
 
-        XCTAssertTrue(app.tables.cells["MDN"].exists)
+        waitforExistence(element: app.tables.cells["MDN"])
         app.tables.cells["Wikipedia"].tap()
         
         waitforExistence(element: app.tables.cells["SettingsViewController.searchCell"])
@@ -51,7 +51,9 @@ class SearchProviderTest: BaseTestCase {
         
         // enter edit mode
         app.navigationBars.buttons["edit"].tap()
+        waitforExistence(element: app.tables.cells["MDN"].buttons["Delete MDN"])
         app.tables.cells["MDN"].buttons["Delete MDN"].tap()
+        waitforExistence(element: app.tables.cells["MDN"].buttons["Delete"])
         app.tables.cells["MDN"].buttons["Delete"].tap()
         
         // leave edit mode

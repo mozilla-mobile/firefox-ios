@@ -16,11 +16,11 @@ class UserAgentTest: BaseTestCase {
         super.tearDown()
     }
 
-    func testSignUpWithGoogle() {
-        loadWebPage("getpocket.com")
-        let signUpButton = app.webViews.buttons["Sign Up with Google"]
-        waitforExistence(element: signUpButton)
-        signUpButton.tap()
+    func testSignInWithGoogle() {
+        loadWebPage("https://getpocket.com/login?s=homepage/")
+        let signInButton = app.webViews.buttons["Log In with Google"]
+        waitforExistence(element: signInButton)
+        signInButton.tap()
         waitForWebPageLoad()
         waitforNoExistence(element: app.webViews.staticTexts["Error: disallowed_useragent"])
     }

@@ -98,6 +98,7 @@ class SettingAppearanceTest: BaseTestCase {
         let reviewCell = app.cells["settingsViewController.rateFocus"]
         let safariApp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         
+        app.tables.firstMatch.swipeUp()
         waitforHittable(element: reviewCell)
         reviewCell.tap()
         waitforExistence(element: safariApp)
