@@ -26,7 +26,6 @@ enum BlockingStrength: String {
     static let allOptions: [BlockingStrength] = [.basic, .strict]
 }
 
-
 /**
  Firefox-specific implementation of tab content blocking.
  */
