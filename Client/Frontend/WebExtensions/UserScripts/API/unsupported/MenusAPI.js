@@ -10,7 +10,7 @@
 
 const { nosupport, UnsupportedEvent } = require("../common/nosupport.js");
 
-const contextMenus = {
+const menus = {
   create: nosupport("create"),
   getTargetElement: nosupport("getTargetElement"),
   refresh: nosupport("refresh"),
@@ -18,9 +18,9 @@ const contextMenus = {
   removeAll: nosupport("removeAll"),
   update: nosupport("update"),
 
-  onClicked: new UnsupportedEvent(SECURITY_TOKEN, WEB_EXTENSION_ID, "browser.contextMenus.onClicked"),
-  onHidden: new UnsupportedEvent(SECURITY_TOKEN, WEB_EXTENSION_ID, "browser.contextMenus.onHidden"),
-  onShown: new UnsupportedEvent(SECURITY_TOKEN, WEB_EXTENSION_ID, "browser.contextMenus.onShown")
+  onClicked: new UnsupportedEvent(SECURITY_TOKEN, WEB_EXTENSION_ID, "browser.menus.onClicked"),
+  onHidden: new UnsupportedEvent(SECURITY_TOKEN, WEB_EXTENSION_ID, "browser.menus.onHidden"),
+  onShown: new UnsupportedEvent(SECURITY_TOKEN, WEB_EXTENSION_ID, "browser.menus.onShown")
 };
 
-module.exports = contextMenus;
+module.exports = menus;

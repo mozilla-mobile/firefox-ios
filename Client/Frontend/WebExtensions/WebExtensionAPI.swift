@@ -144,30 +144,68 @@ class WebExtensionAPIConnection {
 class WebExtensionAPI: NSObject {
     let webExtension: WebExtension
 
+    let alarms: WebExtensionAlarmsAPI
     let browserAction: WebExtensionBrowserActionAPI
+    let browserSettings: WebExtensionBrowserSettingsAPI
+    let clipboard: WebExtensionClipboardAPI
+    let commands: WebExtensionCommandsAPI
+    let contentScripts: WebExtensionContentScriptsAPI
     let cookies: WebExtensionCookiesAPI
+    let dns: WebExtensionDNSAPI
     let `extension`: WebExtensionExtensionAPI
+    let find: WebExtensionFindAPI
     let i18n: WebExtensionI18nAPI
+    let identity: WebExtensionIdentityAPI
+    let idle: WebExtensionIdleAPI
+    let management: WebExtensionManagementAPI
     let notifications: WebExtensionNotificationsAPI
+    let pageAction: WebExtensionPageActionAPI
+    let permissions: WebExtensionPermissionsAPI
+    let privacy: WebExtensionPrivacyAPI
+    let proxy: WebExtensionProxyAPI
     let runtime: WebExtensionRuntimeAPI
+    let search: WebExtensionSearchAPI
+    let sidebarAction: WebExtensionSidebarActionAPI
     let storage: WebExtensionStorageAPI
     let tabs: WebExtensionTabsAPI
+    let theme: WebExtensionThemeAPI
+    let topSites: WebExtensionTopSitesAPI
     let webNavigation: WebExtensionWebNavigationAPI
     let webRequest: WebExtensionWebRequestAPI
+    let windows: WebExtensionWindowsAPI
 
     init(webExtension: WebExtension) {
         self.webExtension = webExtension
 
+        self.alarms = WebExtensionAlarmsAPI(webExtension: webExtension)
         self.browserAction = WebExtensionBrowserActionAPI(webExtension: webExtension)
+        self.browserSettings = WebExtensionBrowserSettingsAPI(webExtension: webExtension)
+        self.clipboard = WebExtensionClipboardAPI(webExtension: webExtension)
+        self.commands = WebExtensionCommandsAPI(webExtension: webExtension)
+        self.contentScripts = WebExtensionContentScriptsAPI(webExtension: webExtension)
         self.cookies = WebExtensionCookiesAPI(webExtension: webExtension)
+        self.dns = WebExtensionDNSAPI(webExtension: webExtension)
         self.`extension` = WebExtensionExtensionAPI(webExtension: webExtension)
+        self.find = WebExtensionFindAPI(webExtension: webExtension)
         self.i18n = WebExtensionI18nAPI(webExtension: webExtension)
+        self.identity = WebExtensionIdentityAPI(webExtension: webExtension)
+        self.idle = WebExtensionIdleAPI(webExtension: webExtension)
+        self.management = WebExtensionManagementAPI(webExtension: webExtension)
         self.notifications = WebExtensionNotificationsAPI(webExtension: webExtension)
+        self.pageAction = WebExtensionPageActionAPI(webExtension: webExtension)
+        self.permissions = WebExtensionPermissionsAPI(webExtension: webExtension)
+        self.privacy = WebExtensionPrivacyAPI(webExtension: webExtension)
+        self.proxy = WebExtensionProxyAPI(webExtension: webExtension)
         self.runtime = WebExtensionRuntimeAPI(webExtension: webExtension)
+        self.search = WebExtensionSearchAPI(webExtension: webExtension)
+        self.sidebarAction = WebExtensionSidebarActionAPI(webExtension: webExtension)
         self.storage = WebExtensionStorageAPI(webExtension: webExtension)
         self.tabs = WebExtensionTabsAPI(webExtension: webExtension)
+        self.theme = WebExtensionThemeAPI(webExtension: webExtension)
+        self.topSites = WebExtensionTopSitesAPI(webExtension: webExtension)
         self.webNavigation = WebExtensionWebNavigationAPI(webExtension: webExtension)
         self.webRequest = WebExtensionWebRequestAPI(webExtension: webExtension)
+        self.windows = WebExtensionWindowsAPI(webExtension: webExtension)
 
         super.init()
     }
