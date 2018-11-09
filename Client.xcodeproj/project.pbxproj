@@ -1584,7 +1584,7 @@
 		D01914202177A01A008E74F1 /* WebExtensionCookiesAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionCookiesAPI.swift; sourceTree = "<group>"; };
 		D01914222177A032008E74F1 /* WebExtensionRuntimeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionRuntimeAPI.swift; sourceTree = "<group>"; };
 		D01914242177A04A008E74F1 /* WebExtensionStorageAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionStorageAPI.swift; sourceTree = "<group>"; };
-		D01914262177C233008E74F1 /* WebExtensionExtensionAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebExtensionExtensionAPI.js; sourceTree = "<group>"; };
+		D01914262177C233008E74F1 /* ExtensionAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ExtensionAPI.js; sourceTree = "<group>"; };
 		D01914282177C2C9008E74F1 /* WebExtensionExtensionAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionExtensionAPI.swift; sourceTree = "<group>"; };
 		D019142A2177FF94008E74F1 /* NativeEvent.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = NativeEvent.js; sourceTree = "<group>"; };
 		D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryStateHelper.swift; sourceTree = "<group>"; };
@@ -1607,24 +1607,24 @@
 		D04CD7702170FD26004FF5B0 /* WebExtensionBrowserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionBrowserAction.swift; sourceTree = "<group>"; };
 		D04CD77221710385004FF5B0 /* WebExtensionBackgroundProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionBackgroundProcess.swift; sourceTree = "<group>"; };
 		D04CD774217118BF004FF5B0 /* WebExtensionBrowserActionWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionBrowserActionWebViewController.swift; sourceTree = "<group>"; };
-		D04CD7782174DE64004FF5B0 /* WebExtensionStorageAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebExtensionStorageAPI.js; sourceTree = "<group>"; };
+		D04CD7782174DE64004FF5B0 /* StorageAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = StorageAPI.js; sourceTree = "<group>"; };
 		D04CD77A2174FB44004FF5B0 /* windowProxy.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = windowProxy.js; sourceTree = "<group>"; };
-		D04CD77E21758E5B004FF5B0 /* WebExtensionCookiesAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebExtensionCookiesAPI.js; sourceTree = "<group>"; };
-		D04CD78021758E8B004FF5B0 /* WebExtensionRuntimeAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebExtensionRuntimeAPI.js; sourceTree = "<group>"; };
-		D04CD78221758EA6004FF5B0 /* WebExtensionTabsAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebExtensionTabsAPI.js; sourceTree = "<group>"; };
+		D04CD77E21758E5B004FF5B0 /* CookiesAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CookiesAPI.js; sourceTree = "<group>"; };
+		D04CD78021758E8B004FF5B0 /* RuntimeAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = RuntimeAPI.js; sourceTree = "<group>"; };
+		D04CD78221758EA6004FF5B0 /* TabsAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = TabsAPI.js; sourceTree = "<group>"; };
 		D04CD7852176319F004FF5B0 /* __browser__.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = __browser__.js; sourceTree = "<group>"; };
 		D04CD7872176331B004FF5B0 /* WebExtensionAPI.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WebExtensionAPI.js; sourceTree = "<group>"; };
 		D04D1B852097859B0074B35F /* DownloadToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadToast.swift; sourceTree = "<group>"; };
 		D04D1B91209790B60074B35F /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D0511E81217E2B76008DA7A0 /* WebExtensionBackgroundProcess.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = WebExtensionBackgroundProcess.html; sourceTree = "<group>"; };
-		D0511E8321876B1B008DA7A0 /* WebExtensionI18nAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebExtensionI18nAPI.js; sourceTree = "<group>"; };
+		D0511E8321876B1B008DA7A0 /* I18nAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = I18nAPI.js; sourceTree = "<group>"; };
 		D0511E8421876BCB008DA7A0 /* WebExtensionI18nAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionI18nAPI.swift; sourceTree = "<group>"; };
 		D0511E8621876F02008DA7A0 /* WebExtensionLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionLocalization.swift; sourceTree = "<group>"; };
-		D0511E882187862B008DA7A0 /* WebExtensionNotificationsAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebExtensionNotificationsAPI.js; sourceTree = "<group>"; };
+		D0511E882187862B008DA7A0 /* NotificationsAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = NotificationsAPI.js; sourceTree = "<group>"; };
 		D0511E8921878642008DA7A0 /* WebExtensionNotificationsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionNotificationsAPI.swift; sourceTree = "<group>"; };
-		D0511E8B2188E970008DA7A0 /* WebExtensionWebRequestAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebExtensionWebRequestAPI.js; sourceTree = "<group>"; };
+		D0511E8B2188E970008DA7A0 /* WebRequestAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebRequestAPI.js; sourceTree = "<group>"; };
 		D0511E8C2188E988008DA7A0 /* WebExtensionWebRequestAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionWebRequestAPI.swift; sourceTree = "<group>"; };
-		D0511E8E2189FF25008DA7A0 /* WebExtensionBrowserActionAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebExtensionBrowserActionAPI.js; sourceTree = "<group>"; };
+		D0511E8E2189FF25008DA7A0 /* BrowserActionAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = BrowserActionAPI.js; sourceTree = "<group>"; };
 		D0511E8F2189FF3C008DA7A0 /* WebExtensionBrowserActionAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionBrowserActionAPI.swift; sourceTree = "<group>"; };
 		D0625C97208E87F10081F3B2 /* DownloadQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueue.swift; sourceTree = "<group>"; };
 		D0625CA7208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+DownloadQueueDelegate.swift"; sourceTree = "<group>"; };
@@ -1653,7 +1653,15 @@
 		D0F7DA8F2190EE44001503D1 /* uuid.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = uuid.js; sourceTree = "<group>"; };
 		D0F7DA9021920AA8001503D1 /* chromeAPIWrapper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = chromeAPIWrapper.js; sourceTree = "<group>"; };
 		D0F7DA92219216AE001503D1 /* WebExtensionWebNavigationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionWebNavigationAPI.swift; sourceTree = "<group>"; };
-		D0F7DA9421921734001503D1 /* WebExtensionWebNavigationAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebExtensionWebNavigationAPI.js; sourceTree = "<group>"; };
+		D0F7DA9421921734001503D1 /* WebNavigationAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebNavigationAPI.js; sourceTree = "<group>"; };
+		D0F7DA982195E1CB001503D1 /* nosupport.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = nosupport.js; sourceTree = "<group>"; };
+		D0F7DAA12195E437001503D1 /* BookmarksAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = BookmarksAPI.js; sourceTree = "<group>"; };
+		D0F7DAA22195E623001503D1 /* BrowsingDataAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = BrowsingDataAPI.js; sourceTree = "<group>"; };
+		D0F7DAA32195E6EB001503D1 /* ContextMenusAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ContextMenusAPI.js; sourceTree = "<group>"; };
+		D0F7DAA42195EA38001503D1 /* HistoryAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = HistoryAPI.js; sourceTree = "<group>"; };
+		D0F7DAA52195EB5D001503D1 /* OmniboxAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = OmniboxAPI.js; sourceTree = "<group>"; };
+		D0F7DAA62195EBCA001503D1 /* SessionsAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = SessionsAPI.js; sourceTree = "<group>"; };
+		D0F7DAA72195ECA2001503D1 /* DevtoolsAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = DevtoolsAPI.js; sourceTree = "<group>"; };
 		D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserScriptManager.swift; sourceTree = "<group>"; };
 		D0FCF7F61FE45E5D004A7995 /* PrintHandler.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = PrintHandler.js; sourceTree = "<group>"; };
 		D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentEnd.js; sourceTree = "<group>"; };
@@ -2907,18 +2915,19 @@
 		D04CD78421763137004FF5B0 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				D0F7DAA82195F09F001503D1 /* unsupported */,
 				D0F7DA8D2190ED71001503D1 /* common */,
 				D04CD7852176319F004FF5B0 /* __browser__.js */,
-				D0511E8E2189FF25008DA7A0 /* WebExtensionBrowserActionAPI.js */,
-				D04CD77E21758E5B004FF5B0 /* WebExtensionCookiesAPI.js */,
-				D01914262177C233008E74F1 /* WebExtensionExtensionAPI.js */,
-				D0511E8321876B1B008DA7A0 /* WebExtensionI18nAPI.js */,
-				D0511E882187862B008DA7A0 /* WebExtensionNotificationsAPI.js */,
-				D04CD78021758E8B004FF5B0 /* WebExtensionRuntimeAPI.js */,
-				D04CD7782174DE64004FF5B0 /* WebExtensionStorageAPI.js */,
-				D04CD78221758EA6004FF5B0 /* WebExtensionTabsAPI.js */,
-				D0F7DA9421921734001503D1 /* WebExtensionWebNavigationAPI.js */,
-				D0511E8B2188E970008DA7A0 /* WebExtensionWebRequestAPI.js */,
+				D0511E8E2189FF25008DA7A0 /* BrowserActionAPI.js */,
+				D04CD77E21758E5B004FF5B0 /* CookiesAPI.js */,
+				D01914262177C233008E74F1 /* ExtensionAPI.js */,
+				D0511E8321876B1B008DA7A0 /* I18nAPI.js */,
+				D0511E882187862B008DA7A0 /* NotificationsAPI.js */,
+				D04CD78021758E8B004FF5B0 /* RuntimeAPI.js */,
+				D04CD7782174DE64004FF5B0 /* StorageAPI.js */,
+				D04CD78221758EA6004FF5B0 /* TabsAPI.js */,
+				D0F7DA9421921734001503D1 /* WebNavigationAPI.js */,
+				D0511E8B2188E970008DA7A0 /* WebRequestAPI.js */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -2927,9 +2936,24 @@
 			isa = PBXGroup;
 			children = (
 				D0F7DA8E2190ED95001503D1 /* noimpl.js */,
+				D0F7DA982195E1CB001503D1 /* nosupport.js */,
 				D0F7DA8F2190EE44001503D1 /* uuid.js */,
 			);
 			path = common;
+			sourceTree = "<group>";
+		};
+		D0F7DAA82195F09F001503D1 /* unsupported */ = {
+			isa = PBXGroup;
+			children = (
+				D0F7DAA12195E437001503D1 /* BookmarksAPI.js */,
+				D0F7DAA22195E623001503D1 /* BrowsingDataAPI.js */,
+				D0F7DAA32195E6EB001503D1 /* ContextMenusAPI.js */,
+				D0F7DAA72195ECA2001503D1 /* DevtoolsAPI.js */,
+				D0F7DAA42195EA38001503D1 /* HistoryAPI.js */,
+				D0F7DAA52195EB5D001503D1 /* OmniboxAPI.js */,
+				D0F7DAA62195EBCA001503D1 /* SessionsAPI.js */,
+			);
+			path = unsupported;
 			sourceTree = "<group>";
 		};
 		D0FCF7E71FE44CA9004A7995 /* UserScripts */ = {

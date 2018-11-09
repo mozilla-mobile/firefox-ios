@@ -4,6 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 const noimpl = require("./common/noimpl.js");
+const { nosupport, UnsupportedEvent } = require("./common/nosupport.js");
 
 const runtime = {
   getBackgroundPage: function() {
@@ -22,7 +23,10 @@ const runtime = {
   reload: noimpl("reload"),
   requestUpdateCheck: noimpl("requestUpdateCheck"),
   connect: noimpl("connect"),
-  connectNative: noimpl("connectNative"),
+
+  // Not supported on mobile -- https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Differences_between_desktop_and_Android
+  connectNative: nosupport("connectNative"),
+
   sendMessage: function(extensionId, message, options) {
     if (arguments.length === 1) {
       message = extensionId;
@@ -43,7 +47,10 @@ const runtime = {
     // frames response to the message, the promise is resolved to one of answers.
     return Promise.resolve();
   },
-  sendNativeMessage: noimpl("sendNativeMessage"),
+
+  // Not supported on mobile -- https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Differences_between_desktop_and_Android
+  sendNativeMessage: nosupport("sendNativeMessage"),
+
   getPlatformInfo: noimpl("getPlatformInfo"),
   getBrowserInfo: noimpl("getBrowserInfo"),
   getPackageDirectoryEntry: noimpl("getPackageDirectoryEntry"),
