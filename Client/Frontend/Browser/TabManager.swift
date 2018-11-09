@@ -61,27 +61,27 @@ class TabManager: NSObject {
 
     fileprivate let navDelegate: TabManagerNavDelegate
 
-    // A WKWebViewConfiguration used for normal tabs
-    lazy fileprivate var configuration: WKWebViewConfiguration = {
+    private func makeDefaultWebViewConfig(isPrivate: Bool) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(profile.prefs.boolForKey("blockPopups") ?? true)
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
+        if isPrivate {
+            configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        }
         return configuration
+    }
+
+    // A WKWebViewConfiguration used for normal tabs
+    lazy fileprivate var configuration: WKWebViewConfiguration = {
+        return makeDefaultWebViewConfig(isPrivate: false)
     }()
 
     // A WKWebViewConfiguration used for private mode tabs
     lazy fileprivate var privateConfiguration: WKWebViewConfiguration = {
-        let configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(profile.prefs.boolForKey("blockPopups") ?? true)
-        // We do this to go against the configuration of the <meta name="viewport">
-        // tag to behave the same way as Safari :-(
-        configuration.ignoresViewportScaleLimits = true
-        configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
-        return configuration
+        return makeDefaultWebViewConfig(isPrivate: true)
     }()
 
     var selectedIndex: Int { return _selectedIndex }
