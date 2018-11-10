@@ -402,7 +402,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         if let site = siteForIndexPath(indexPath), let url = URL(string: site.url) {
             if let homePanelDelegate = homePanelDelegate {
-                homePanelDelegate.homePanel(self, didSelectURL: url, visitType: VisitType.typed)
+                homePanelDelegate.homePanel(didSelectURL: url, visitType: VisitType.typed)
             }
             return
         }

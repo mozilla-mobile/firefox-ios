@@ -327,7 +327,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
         switch bookmark {
         case let item as BookmarkItem:
-            homePanelDelegate?.homePanel(self, didSelectURLString: item.url, visitType: VisitType.bookmark)
+            homePanelDelegate?.homePanel(didSelectURLString: item.url, visitType: VisitType.bookmark)
             LeanPlumClient.shared.track(event: .openedBookmark)
             UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
             break

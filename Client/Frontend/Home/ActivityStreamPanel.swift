@@ -358,7 +358,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
 
     fileprivate func showSiteWithURLHandler(_ url: URL) {
         let visitType = VisitType.bookmark
-        homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: visitType)
+        homePanelDelegate?.homePanel(didSelectURL: url, visitType: visitType)
     }
 }
 

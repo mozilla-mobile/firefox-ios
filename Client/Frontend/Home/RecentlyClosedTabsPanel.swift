@@ -132,13 +132,12 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let homePanelDelegate = homePanelDelegate,
-              let recentlyClosedTabsPanel = recentlyClosedTabsPanel else {
+        guard let homePanelDelegate = homePanelDelegate else {
             log.warning("No site or no URL when selecting row.")
             return
         }
         let visitType = VisitType.typed    // Means History, too.
-        homePanelDelegate.homePanel(recentlyClosedTabsPanel, didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
+        homePanelDelegate.homePanel(didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
