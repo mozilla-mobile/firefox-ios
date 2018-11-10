@@ -19,14 +19,6 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                    return ActivityStreamPanel(profile: profile)
-            },
-            imageName: "TopSites",
-            accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label"),
-            accessibilityIdentifier: "HomePanels.TopSites"),
-
-        HomePanelDescriptor(
-            makeViewController: { profile in
                 let bookmarks = BookmarksPanel(profile: profile)
                 let controller = UINavigationController(rootViewController: bookmarks)
                 controller.setNavigationBarHidden(true, animated: false)

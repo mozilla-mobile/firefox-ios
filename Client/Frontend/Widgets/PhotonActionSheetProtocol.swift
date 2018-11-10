@@ -42,41 +42,34 @@ extension PhotonActionSheetProtocol {
 
     //Returns a list of actions which is used to build a menu
     //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
-    func getHomePanelActions() -> [PhotonActionSheetItem] {
+    func getHomePanelActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
         guard let tab = self.tabManager.selectedTab else { return [] }
 
-        let openTopSites = PhotonActionSheetItem(title: Strings.AppMenuTopSitesTitleString, iconString: "menu-panel-TopSites") { action in
-            tab.loadRequest(PrivilegedRequest(url: HomePanelType.topSites.localhostURL) as URLRequest)
-        }
+        let openLibrary = PhotonActionSheetItem(title: Strings.AppMenuLibraryTitleString, iconString: "menu-library") { action in
+            let homepanels = HomePanelViewController()
+            homepanels.profile = self.profile
+            homepanels.delegate = vcDelegate as? HomePanelDelegate
 
-        let openBookmarks = PhotonActionSheetItem(title: Strings.AppMenuBookmarksTitleString, iconString: "menu-panel-Bookmarks") { action in
-            tab.loadRequest(PrivilegedRequest(url: HomePanelType.bookmarks.localhostURL) as URLRequest)
-            UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .bookmarksPanel, value: .appMenu)
-        }
+            let controller = ThemedNavigationController(rootViewController: homepanels)
+            controller.popoverDelegate = vcDelegate
+            controller.modalPresentationStyle = .formSheet
 
-        let openReadingList = PhotonActionSheetItem(title: Strings.AppMenuReadingListTitleString, iconString: "menu-panel-ReadingList") { action in
-            tab.loadRequest(PrivilegedRequest(url: HomePanelType.readingList.localhostURL) as URLRequest)
-        }
-
-        let openHistory = PhotonActionSheetItem(title: Strings.AppMenuHistoryTitleString, iconString: "menu-panel-History") { action in
-            tab.loadRequest(PrivilegedRequest(url: HomePanelType.history.localhostURL) as URLRequest)
-        }
-
-        let openDownloads = PhotonActionSheetItem(title: Strings.AppMenuDownloadsTitleString, iconString: "menu-panel-Downloads") { action in
-            tab.loadRequest(PrivilegedRequest(url: HomePanelType.downloads.localhostURL) as URLRequest)
-            UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .appMenu)
+            // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+            // of this popover on iPad seems to block the presentation of the modal VC.
+            DispatchQueue.main.async {
+                vcDelegate.present(controller, animated: true, completion: nil)
+            }
         }
 
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
-            HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
+            if HomePageHelper(prefs: self.profile.prefs).isHomePageAvailable {
+                HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
+            } else {
+                tab.loadRequest(PrivilegedRequest(url: HomePanelType.topSites.localhostURL) as URLRequest)
+            }
         }
 
-        var actions = [openTopSites, openBookmarks, openReadingList, openHistory, openDownloads]
-        if HomePageHelper(prefs: self.profile.prefs).isHomePageAvailable {
-            actions.insert(openHomePage, at: 0)
-        }
-
-        return actions
+        return [openHomePage, openLibrary]
     }
 
     /*
@@ -113,7 +106,7 @@ extension PhotonActionSheetProtocol {
             settingsTableViewController.tabManager = self.tabManager
             settingsTableViewController.settingsDelegate = vcDelegate
 
-            let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
+            let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
             controller.popoverDelegate = vcDelegate
             controller.modalPresentationStyle = .formSheet
 

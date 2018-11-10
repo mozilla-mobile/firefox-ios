@@ -207,7 +207,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let tab = tabAtIndexPath(indexPath)
         if let homePanel = self.homePanel {
             // It's not a bookmark, so let's call it Typed (which means History, too).
-            homePanel.homePanelDelegate?.homePanel(homePanel, didSelectURL: tab.URL, visitType: VisitType.typed)
+            homePanel.homePanelDelegate?.homePanel(didSelectURL: tab.URL, visitType: VisitType.typed)
         }
     }
 }
@@ -423,13 +423,13 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
     @objc fileprivate func signIn() {
         if let homePanel = self.homePanel {
-            homePanel.homePanelDelegate?.homePanelDidRequestToSignIn(homePanel)
+            homePanel.homePanelDelegate?.homePanelDidRequestToSignIn()
         }
     }
 
     @objc fileprivate func createAnAccount() {
         if let homePanel = self.homePanel {
-            homePanel.homePanelDelegate?.homePanelDidRequestToCreateAccount(homePanel)
+            homePanel.homePanelDelegate?.homePanelDidRequestToCreateAccount()
         }
     }
 

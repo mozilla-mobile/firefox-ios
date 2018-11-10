@@ -4,7 +4,7 @@
 
 import UIKit
 
-class SettingsNavigationController: UINavigationController {
+class ThemedNavigationController: UINavigationController {
     var popoverDelegate: PresentingModalViewControllerDelegate?
 
     @objc func done() {
@@ -25,7 +25,7 @@ class SettingsNavigationController: UINavigationController {
     }
 }
 
-extension SettingsNavigationController: Themeable {
+extension ThemedNavigationController: Themeable {
     func applyTheme() {
         navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
         navigationBar.tintColor = UIColor.theme.general.controlTint

@@ -397,7 +397,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
             profile.readingList.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.bookmark
-            homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType)
+            homePanelDelegate?.homePanel(didSelectURL: encodedURL, visitType: visitType)
             UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .readingListItem)
         }
     }
