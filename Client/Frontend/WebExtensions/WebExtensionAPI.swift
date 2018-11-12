@@ -122,7 +122,7 @@ class WebExtensionAPIConnection {
         closed = true
     }
 
-    func respond(_ args: Any...) {
+    func respond(_ args: Any?...) {
         guard !closed else {
             print("WebExtension API connection \(connectionId) is closed for pipe \(pipeId)")
             return

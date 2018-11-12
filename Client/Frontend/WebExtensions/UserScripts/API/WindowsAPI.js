@@ -3,16 +3,36 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-const noimpl = require("./common/noimpl.js");
+const { nosupport } = require("./common/nosupport.js");
 
 const windows = {
-  get: noimpl("get"),
-  getCurrent: noimpl("getCurrent"),
-  getLastFocused: noimpl("getLastFocused"),
-  getAll: noimpl("getAll"),
-  create: noimpl("create"),
-  update: noimpl("update"),
-  remove: noimpl("remove"),
+  get: function(windowId, getInfo) {
+    let connection = new MessagePipeConnection();
+    return connection.send("windows", "get", { windowId, getInfo }).then((response) => {
+      return response[0];
+    });
+  },
+  getCurrent: function(getInfo) {
+    let connection = new MessagePipeConnection();
+    return connection.send("windows", "getCurrent", getInfo).then((response) => {
+      return response[0];
+    });
+  },
+  getLastFocused: function(getInfo) {
+    let connection = new MessagePipeConnection();
+    return connection.send("windows", "getLastFocused", getInfo).then((response) => {
+      return response[0];
+    });
+  },
+  getAll: function(getInfo) {
+    let connection = new MessagePipeConnection();
+    return connection.send("windows", "getAll", getInfo).then((response) => {
+      return response[0];
+    });
+  },
+  create: nosupport("create"),
+  update: nosupport("update"),
+  remove: nosupport("remove"),
 
   onCreated: new NativeEvent(SECURITY_TOKEN, WEB_EXTENSION_ID, "browser.windows.onCreated"),
   onRemoved: new NativeEvent(SECURITY_TOKEN, WEB_EXTENSION_ID, "browser.windows.onRemoved"),

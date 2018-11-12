@@ -141,6 +141,10 @@ class WebExtension {
         return WebExtensionBrowserAction(webExtension: self)
     }()
 
+    lazy var sidebarAction: WebExtensionSidebarAction? = {
+        return WebExtensionSidebarAction(webExtension: self)
+    }()
+
     lazy var localization: WebExtensionLocalization = {
         return WebExtensionLocalization(webExtension: self)
     }()

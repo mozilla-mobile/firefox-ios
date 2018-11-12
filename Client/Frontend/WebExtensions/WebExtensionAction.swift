@@ -24,53 +24,40 @@ private let UserScriptTemplate = """
     // END: WebExtensionAPI.js
     """
 
-private func defaultIconPathFromManifest(_ manifest: JSON) -> String? {
+private func defaultIconPathFromManifestAction(_ action: JSON) -> String? {
     var defaultIconPath: String?
 
-    let json = manifest["browser_action"]
-
-    if let defaultIconDictionary = json["default_icon"].dictionary,
+    if let defaultIconDictionary = action["default_icon"].dictionary,
         let firstDefaultIconKey = defaultIconDictionary.keys.first, // TODO: Determine the largest `default_icon`
         let firstDefaultIconPath = defaultIconDictionary[firstDefaultIconKey]?.string {
         defaultIconPath = firstDefaultIconPath
-    } else if let defaultIconString = json["default_icon"].string {
+    } else if let defaultIconString = action["default_icon"].string {
         defaultIconPath = defaultIconString
     }
 
     return defaultIconPath
 }
 
-class WebExtensionBrowserAction {
+class WebExtensionAction {
     let webExtension: WebExtension
+    let manifestKey: String
+    let eventDispatcher: WebExtensionAPIEventDispatcher
 
     let apiUserScript: WKUserScript
 
-    let defaultIcon: URL
-    let defaultTitle: String
+    fileprivate(set) var defaultIcon: URL?
+    fileprivate(set) var defaultTitle: String
+    fileprivate(set) var defaultURL: URL?
 
-    private(set) var defaultPopup: URL?
-
-    init?(webExtension: WebExtension) {
-        let json = webExtension.manifest["browser_action"]
-
-        guard let defaultIconPath = defaultIconPathFromManifest(webExtension.manifest),
-            let defaultTitle = json["default_title"].string else {
-            return nil
-        }
-
-        let tempDirectoryURL = webExtension.tempDirectoryURL
-
+    init?(webExtension: WebExtension, manifestKey: String, eventDispatcher: WebExtensionAPIEventDispatcher) {
         self.webExtension = webExtension
+        self.manifestKey = manifestKey
+        self.eventDispatcher = eventDispatcher
 
         let wrappedAPIUserScriptSource = String(format: UserScriptTemplate, webExtension.webExtensionAPIJS)
         self.apiUserScript = WKUserScript(source: wrappedAPIUserScriptSource, injectionTime: .atDocumentStart, forMainFrameOnly: true)
 
-        self.defaultIcon = tempDirectoryURL.appendingPathComponent(defaultIconPath)
-        self.defaultTitle = defaultTitle
-
-        if let defaultPopupPath = json["default_popup"].string {
-            self.defaultPopup = webExtension.urlForResource(at: defaultPopupPath)
-        }
+        self.defaultTitle = webExtension.name
     }
 
     func didClick() {
@@ -96,7 +83,49 @@ class WebExtensionBrowserAction {
                 "url": selectedTab.url?.absoluteString
             ]
 
-            webExtension.interface.browserAction.dispatch(to: backgroundWebView, listener: "onClicked", args: [tab])
+            eventDispatcher.dispatch(to: backgroundWebView, listener: "onClicked", args: [tab])
+        }
+    }
+}
+
+class WebExtensionBrowserAction: WebExtensionAction {
+    init?(webExtension: WebExtension) {
+        super.init(webExtension: webExtension, manifestKey: "browser_action", eventDispatcher: webExtension.interface.browserAction)
+
+        let json = webExtension.manifest["browser_action"]
+        guard let _ = json.dictionary else {
+            return nil
+        }
+
+        guard let defaultIconPath = defaultIconPathFromManifestAction(json),
+            let defaultTitle = json["default_title"].string else {
+            return nil
+        }
+
+        self.defaultIcon = webExtension.tempDirectoryURL.appendingPathComponent(defaultIconPath)
+        self.defaultTitle = defaultTitle
+
+        if let defaultPopupPath = json["default_popup"].string {
+            self.defaultURL = webExtension.urlForResource(at: defaultPopupPath)
+        }
+    }
+}
+
+class WebExtensionSidebarAction: WebExtensionAction {
+    init?(webExtension: WebExtension) {
+        super.init(webExtension: webExtension, manifestKey: "sidebar_action", eventDispatcher: webExtension.interface.sidebarAction)
+
+        let json = webExtension.manifest["sidebar_action"]
+        guard let _ = json.dictionary else {
+            return nil
+        }
+
+        if let defaultTitle = json["default_title"].string {
+            self.defaultTitle = defaultTitle
+        }
+
+        if let defaultPanelPath = json["default_panel"].string {
+            self.defaultURL = webExtension.urlForResource(at: defaultPanelPath)
         }
     }
 }

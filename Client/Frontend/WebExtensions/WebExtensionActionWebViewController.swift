@@ -18,32 +18,32 @@ private let AllFramesAtDocumentStartJS: String = {
         """
 }()
 
-class WebExtensionBrowserActionWebViewController: UIViewController {
-    let browserAction: WebExtensionBrowserAction
-    let defaultPopup: URL
+class WebExtensionActionWebViewController: UIViewController {
+    let action: WebExtensionAction
+    let url: URL
 
     let webView: WKWebView
 
-    init?(browserAction: WebExtensionBrowserAction) {
-        guard let defaultPopup = browserAction.defaultPopup else {
+    init?(action: WebExtensionAction) {
+        guard let url = action.defaultURL else {
             return nil
         }
 
-        self.browserAction = browserAction
-        self.defaultPopup = defaultPopup
+        self.action = action
+        self.url = url
 
         let configuration = WKWebViewConfiguration()
         configuration.setURLSchemeHandler(WebExtensionSchemeHandler.default, forURLScheme: "moz-extension")
 
         self.webView = WKWebView(frame: .zero, configuration: configuration)
 
-        let webExtension = browserAction.webExtension
+        let webExtension = action.webExtension
 
         super.init(nibName: nil, bundle: nil)
 
         let allFramesAtDocumentStartUserScript = WKUserScript(source: AllFramesAtDocumentStartJS, injectionTime: .atDocumentStart, forMainFrameOnly: false)
         self.webView.configuration.userContentController.addUserScript(allFramesAtDocumentStartUserScript)
-        self.webView.configuration.userContentController.addUserScript(browserAction.apiUserScript)
+        self.webView.configuration.userContentController.addUserScript(action.apiUserScript)
         self.webView.configuration.userContentController.add(webExtension.interface, name: "webExtensionAPI")
 
         self.webView.allowsLinkPreview = false
@@ -56,7 +56,7 @@ class WebExtensionBrowserActionWebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = browserAction.defaultTitle
+        navigationItem.title = action.defaultTitle
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the WebExtension browser action view controller title bar"),
             style: .done,
@@ -68,6 +68,6 @@ class WebExtensionBrowserActionWebViewController: UIViewController {
             make.edges.equalTo(self.view)
         }
 
-        webView.load(URLRequest(url: defaultPopup))
+        webView.load(URLRequest(url: url))
     }
 }

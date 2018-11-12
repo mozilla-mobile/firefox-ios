@@ -410,9 +410,9 @@
 		D04CD74E216CF86F004FF5B0 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */; };
 		D04CD762216FDA30004FF5B0 /* WebExtensionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD761216FDA30004FF5B0 /* WebExtensionManager.swift */; };
 		D04CD76E216FDAC5004FF5B0 /* WebExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD76D216FDAC5004FF5B0 /* WebExtension.swift */; };
-		D04CD7712170FD26004FF5B0 /* WebExtensionBrowserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD7702170FD26004FF5B0 /* WebExtensionBrowserAction.swift */; };
+		D04CD7712170FD26004FF5B0 /* WebExtensionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD7702170FD26004FF5B0 /* WebExtensionAction.swift */; };
 		D04CD77321710385004FF5B0 /* WebExtensionBackgroundProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD77221710385004FF5B0 /* WebExtensionBackgroundProcess.swift */; };
-		D04CD775217118BF004FF5B0 /* WebExtensionBrowserActionWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD774217118BF004FF5B0 /* WebExtensionBrowserActionWebViewController.swift */; };
+		D04CD775217118BF004FF5B0 /* WebExtensionActionWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD774217118BF004FF5B0 /* WebExtensionActionWebViewController.swift */; };
 		D04CD77B2174FB45004FF5B0 /* windowProxy.js in Resources */ = {isa = PBXBuildFile; fileRef = D04CD77A2174FB44004FF5B0 /* windowProxy.js */; };
 		D04CD7882176331B004FF5B0 /* WebExtensionAPI.js in Resources */ = {isa = PBXBuildFile; fileRef = D04CD7872176331B004FF5B0 /* WebExtensionAPI.js */; };
 		D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04D1B852097859B0074B35F /* DownloadToast.swift */; };
@@ -1624,9 +1624,9 @@
 		D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsViewController.swift; path = Extensions/InstructionsViewController.swift; sourceTree = "<group>"; };
 		D04CD761216FDA30004FF5B0 /* WebExtensionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionManager.swift; sourceTree = "<group>"; };
 		D04CD76D216FDAC5004FF5B0 /* WebExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtension.swift; sourceTree = "<group>"; };
-		D04CD7702170FD26004FF5B0 /* WebExtensionBrowserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionBrowserAction.swift; sourceTree = "<group>"; };
+		D04CD7702170FD26004FF5B0 /* WebExtensionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionAction.swift; sourceTree = "<group>"; };
 		D04CD77221710385004FF5B0 /* WebExtensionBackgroundProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionBackgroundProcess.swift; sourceTree = "<group>"; };
-		D04CD774217118BF004FF5B0 /* WebExtensionBrowserActionWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionBrowserActionWebViewController.swift; sourceTree = "<group>"; };
+		D04CD774217118BF004FF5B0 /* WebExtensionActionWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionActionWebViewController.swift; sourceTree = "<group>"; };
 		D04CD7782174DE64004FF5B0 /* StorageAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = StorageAPI.js; sourceTree = "<group>"; };
 		D04CD77A2174FB44004FF5B0 /* windowProxy.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = windowProxy.js; sourceTree = "<group>"; };
 		D04CD77E21758E5B004FF5B0 /* CookiesAPI.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CookiesAPI.js; sourceTree = "<group>"; };
@@ -2974,10 +2974,10 @@
 				D019141D21779F3C008E74F1 /* API */,
 				D04CD7772174DE2B004FF5B0 /* UserScripts */,
 				D04CD76D216FDAC5004FF5B0 /* WebExtension.swift */,
+				D04CD7702170FD26004FF5B0 /* WebExtensionAction.swift */,
+				D04CD774217118BF004FF5B0 /* WebExtensionActionWebViewController.swift */,
 				D019141B2176A372008E74F1 /* WebExtensionAPI.swift */,
 				D04CD77221710385004FF5B0 /* WebExtensionBackgroundProcess.swift */,
-				D04CD7702170FD26004FF5B0 /* WebExtensionBrowserAction.swift */,
-				D04CD774217118BF004FF5B0 /* WebExtensionBrowserActionWebViewController.swift */,
 				D04CD72521680A1A004FF5B0 /* WebExtensionHelper.swift */,
 				D0511E8621876F02008DA7A0 /* WebExtensionLocalization.swift */,
 				D04CD761216FDA30004FF5B0 /* WebExtensionManager.swift */,
@@ -5566,7 +5566,7 @@
 				E68E7ACB1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift in Sources */,
 				D04D1B92209790B60074B35F /* Toast.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
-				D04CD7712170FD26004FF5B0 /* WebExtensionBrowserAction.swift in Sources */,
+				D04CD7712170FD26004FF5B0 /* WebExtensionAction.swift in Sources */,
 				392ED6B71D06E85E009D9B62 /* NewTabChoiceViewController.swift in Sources */,
 				D0F7DABB21961099001503D1 /* WebExtensionDNSAPI.swift in Sources */,
 				E4B3348C1BC01D8F004E2BFF /* AdjustIntegration.swift in Sources */,
@@ -5636,7 +5636,7 @@
 				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
 				EBB89506219398E500EB91A0 /* TabContentBlocker.swift in Sources */,
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
-				D04CD775217118BF004FF5B0 /* WebExtensionBrowserActionWebViewController.swift in Sources */,
+				D04CD775217118BF004FF5B0 /* WebExtensionActionWebViewController.swift in Sources */,
 				C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */,
 				E69DB0BD1E97E301008A67E6 /* ActivityStreamTopics.swift in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,

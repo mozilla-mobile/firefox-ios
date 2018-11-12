@@ -80,6 +80,54 @@ class WebExtensionTabsAPI: WebExtensionAPIEventDispatcher {
         }
     }
 
+    func executeScript(_ connection: WebExtensionAPIConnection) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+            let tabManager = appDelegate.tabManager else {
+            connection.error("An unexpected error has occurred")
+            return
+        }
+
+        let args = connection.payload ?? [:]
+
+        let tab: Tab?
+        if let tabId = args["tabId"] as? Int {
+            tab = tabManager.tabs.find({ $0.id == tabId })
+        } else {
+            tab = tabManager.selectedTab
+        }
+
+        guard tab != nil else {
+            connection.error("Unable to get Tab")
+            return
+        }
+
+        let details = args["details"] as? [String : Any?] ?? [:]
+
+        var code: String?
+        if let file = details["file"] as? String {
+            let url = webExtension.tempDirectoryURL.appendingPathComponent(file)
+            if let string = try? NSString(contentsOf: url, encoding: String.Encoding.utf8.rawValue) as String {
+                code = string
+            }
+        } else {
+            code = details["code"] as? String
+        }
+
+        guard let javaScriptString = code else {
+            connection.error("No JavaScript found to execute")
+            return
+        }
+
+        tab?.webView?.evaluateJavaScript(javaScriptString, completionHandler: { (result, error) in
+            if let error = error {
+                connection.error(error.localizedDescription)
+                return
+            }
+
+            connection.respond(result)
+        })
+    }
+
     func query(_ connection: WebExtensionAPIConnection) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
             let tabManager = appDelegate.tabManager else {
@@ -112,7 +160,7 @@ class WebExtensionTabsAPI: WebExtensionAPIEventDispatcher {
 
     func sendMessage(_ connection: WebExtensionAPIConnection) {
         guard let payload = connection.payload,
-            let tabId = payload["tabId"] as? String,
+            let tabId = payload["tabId"] as? Int,
             let message = payload["message"] as? [String : Any?] else {
             return
         }
@@ -141,6 +189,8 @@ extension WebExtensionTabsAPI: WebExtensionAPIConnectionHandler {
         switch method {
         case .create:
             create(connection)
+        case .executeScript:
+            executeScript(connection)
         case .query:
             query(connection)
         case .sendMessage:

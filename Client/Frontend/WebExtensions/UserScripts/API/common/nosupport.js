@@ -5,7 +5,9 @@
 
 function nosupport(name) {
   return function() {
-    console.error("API not supported on this platform: " + name, this);
+    let error = "API not supported on this platform: " + name;
+    console.error(error, this);
+    return Promise.reject(error);
   };
 }
 

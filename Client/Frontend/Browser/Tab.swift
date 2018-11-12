@@ -10,6 +10,7 @@ import SwiftyJSON
 import XCGLogger
 
 fileprivate var debugTabCount = 0
+fileprivate var lastTabID = 0
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     var recent = tabs.first
@@ -63,7 +64,7 @@ class Tab: NSObject {
         }
     }
 
-    fileprivate(set) var id: String
+    fileprivate(set) var id: Int
 
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, url: url, title: displayTitle, favicon: displayFavicon)
@@ -166,12 +167,13 @@ class Tab: NSObject {
     fileprivate var alertQueue = [JSAlertInfo]()
 
     init(configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
-        self.id = UUID().uuidString
+        debugTabCount += 1
+        lastTabID += 1
+
+        self.id = lastTabID
         self.configuration = configuration
         super.init()
         self.isPrivate = isPrivate
-
-        debugTabCount += 1
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {

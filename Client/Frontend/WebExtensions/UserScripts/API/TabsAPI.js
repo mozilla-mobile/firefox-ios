@@ -18,7 +18,20 @@ const tabs = {
   detectLanguage: noimpl("detectLanguage"),
   discard: noimpl("discard"),
   duplicate: noimpl("duplicate"),
-  executeScript: noimpl("executeScript"),
+  executeScript: function(tabId, details) {
+    let args = {};
+    if (typeof tabId === "object") {
+      args.details = tabId
+    } else {
+      args.tabId = tabId;
+      args.details = details;
+    }
+
+    let connection = new MessagePipeConnection();
+    return connection.send("tabs", "executeScript", args).then((response) => {
+      return response[0];
+    });
+  },
   get: noimpl("get"),
   getAllInWindow: noimpl("getAllInWindow"),
   getCurrent: noimpl("getCurrent"),

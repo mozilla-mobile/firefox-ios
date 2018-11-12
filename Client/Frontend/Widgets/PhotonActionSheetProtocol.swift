@@ -81,8 +81,8 @@ extension PhotonActionSheetProtocol {
         WebExtensionManager.default.webExtensions.forEach { webExtension in
             if let browserAction = webExtension.browserAction {
                 let item = PhotonActionSheetItem(title: browserAction.defaultTitle, iconString: "placeholder-avatar", iconURL: browserAction.defaultIcon, iconType: .URL) { _ in
-                    if let browserActionViewController = WebExtensionBrowserActionWebViewController(browserAction: browserAction) {
-                        let controller = SettingsNavigationController(rootViewController: browserActionViewController)
+                    if let actionViewController = WebExtensionActionWebViewController(action: browserAction) {
+                        let controller = SettingsNavigationController(rootViewController: actionViewController)
                         controller.popoverDelegate = vcDelegate
                         controller.modalPresentationStyle = .formSheet
 
@@ -94,6 +94,26 @@ extension PhotonActionSheetProtocol {
                     }
 
                     browserAction.didClick()
+                }
+
+                actions.append(item)
+            }
+
+            if let sidebarAction = webExtension.sidebarAction {
+                let item = PhotonActionSheetItem(title: sidebarAction.defaultTitle, iconString: "placeholder-avatar", iconURL: sidebarAction.defaultIcon, iconType: .URL) { _ in
+                    if let actionViewController = WebExtensionActionWebViewController(action: sidebarAction) {
+                        let controller = SettingsNavigationController(rootViewController: actionViewController)
+                        controller.popoverDelegate = vcDelegate
+                        controller.modalPresentationStyle = .formSheet
+
+                        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+                        // of this popover on iPad seems to block the presentation of the modal VC.
+                        DispatchQueue.main.async {
+                            vcDelegate.present(controller, animated: true, completion: nil)
+                        }
+                    }
+
+                    sidebarAction.didClick()
                 }
 
                 actions.append(item)
