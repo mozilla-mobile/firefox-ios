@@ -80,7 +80,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
         navigator.goto(HomePanelsScreen)
         waitForTabsButton()
-        navigator.goto(BrowserTabMenu)
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(HomePanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"].cells.element(boundBy: 1).staticTexts["Example Domain"])
     }
