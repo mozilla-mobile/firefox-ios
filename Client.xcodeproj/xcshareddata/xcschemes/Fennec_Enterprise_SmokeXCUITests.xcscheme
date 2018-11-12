@@ -314,6 +314,9 @@
                   Identifier = "DownloadFilesTests">
                </Test>
                <Test
+                  Identifier = "DragAndDropTestIpad">
+               </Test>
+               <Test
                   Identifier = "DragAndDropTests">
                </Test>
                <Test
@@ -603,6 +606,9 @@
                </Test>
                <Test
                   Identifier = "TopTabsTest/testSwitchBetweenTabs()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTestIpad">
                </Test>
                <Test
                   Identifier = "TopTabsTestIpad/testUpdateTabCounter()">

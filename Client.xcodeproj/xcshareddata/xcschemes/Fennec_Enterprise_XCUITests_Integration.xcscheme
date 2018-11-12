@@ -230,6 +230,9 @@
                   Identifier = "DownloadFilesTests">
                </Test>
                <Test
+                  Identifier = "DragAndDropTestIpad">
+               </Test>
+               <Test
                   Identifier = "DragAndDropTests">
                </Test>
                <Test
@@ -302,6 +305,9 @@
                   Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
+                  Identifier = "PrivateBrowsingTestIpad">
+               </Test>
+               <Test
                   Identifier = "ReaderViewTest">
                </Test>
                <Test
@@ -329,6 +335,9 @@
                   Identifier = "SyncUITests">
                </Test>
                <Test
+                  Identifier = "TabTraySearchTabsTests">
+               </Test>
+               <Test
                   Identifier = "ThirdPartySearchTest">
                </Test>
                <Test
@@ -348,6 +357,12 @@
                </Test>
                <Test
                   Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTestIpad">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTestIphone">
                </Test>
                <Test
                   Identifier = "TrackingProtectionTests">
