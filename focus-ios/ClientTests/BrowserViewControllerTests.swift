@@ -57,8 +57,6 @@ class BrowserViewControllerTests: XCTestCase {
 
 fileprivate class MockUserDefaults: UserDefaults {
     func clear() {
-        removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyNEW)
-        removeObject(forKey: BrowserViewController.userDefaultsShareTrackerStatsKeyOLD)
         removeObject(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         removeObject(forKey: UIConstants.strings.userDefaultsLastReviewRequestDate)
         removeObject(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
