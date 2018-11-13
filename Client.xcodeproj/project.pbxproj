@@ -564,7 +564,6 @@
 		E6108FF91C84E91C005D25E8 /* BasePasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6108FF81C84E91C005D25E8 /* BasePasscodeViewController.swift */; };
 		E610B0191EDC68FC00DC9372 /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E610B0181EDC68FC00DC9372 /* EventTests.swift */; };
 		E61453BE1B750A1700C3F9D7 /* RollingFileLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */; };
-		E61D11681EAF8F43008A305B /* PanelDataObserversTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61D11671EAF8F43008A305B /* PanelDataObserversTests.swift */; };
 		E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
 		E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C041B90A472005ABB0D /* libxml2.2.tbd */; };
 		E6231C071B90A712005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
@@ -675,7 +674,6 @@
 		E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */ = {isa = PBXBuildFile; fileRef = E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */; };
 		E6B4C4031C68F58B001F97E8 /* BrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */; };
 		E6BA20211E52170E00697F9C /* SyncTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BA20111E52165800697F9C /* SyncTelemetryTests.swift */; };
-		E6BE53CD1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BE53CC1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift */; };
 		E6C70E821E28314700F8DB57 /* PingCentreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C70E811E28314700F8DB57 /* PingCentreTests.swift */; };
 		E6C9EB6B1E2FBFC300D5CE80 /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = E6C9EB6A1E2FBFC300D5CE80 /* signedInUser.json */; };
 		E6CF28E71CB43B7900151AB3 /* SensitiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */; };
@@ -1723,7 +1721,6 @@
 		E610B0181EDC68FC00DC9372 /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
 		E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollingFileLoggerTests.swift; sourceTree = "<group>"; };
 		E619FB2F1E292BE100882B20 /* signedInUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = signedInUser.json; sourceTree = "<group>"; };
-		E61D11671EAF8F43008A305B /* PanelDataObserversTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanelDataObserversTests.swift; sourceTree = "<group>"; };
 		E6231C001B90A44F005ABB0D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		E6231C041B90A472005ABB0D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		E62AC15F1E956AFC00843532 /* FennecEnterpriseApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FennecEnterpriseApplication.entitlements; sourceTree = "<group>"; };
@@ -1835,7 +1832,6 @@
 		E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = JSPrompt.html; sourceTree = "<group>"; };
 		E6B4C4021C68F58B001F97E8 /* BrowserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTests.swift; sourceTree = "<group>"; };
 		E6BA20111E52165800697F9C /* SyncTelemetryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyncTelemetryTests.swift; path = StorageTests/SyncTelemetryTests.swift; sourceTree = "<group>"; };
-		E6BE53CC1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteHistoryRecommendations.swift; sourceTree = "<group>"; };
 		E6C191D41E38F7B7000A213B /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		E6C191D51E38F7B7000A213B /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = "<group>"; };
 		E6C70E811E28314700F8DB57 /* PingCentreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PingCentreTests.swift; sourceTree = "<group>"; };
@@ -2483,7 +2479,6 @@
 				0BDA56AE1B26B1D5008C9B96 /* TestLogins.swift */,
 				28D158AC1AFD90E500F9C065 /* TestSQLiteBookmarks.swift */,
 				2FCAE27D1ABB533A00877008 /* TestSQLiteHistory.swift */,
-				E6BE53CC1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift */,
 				E63F71871DB7FBE200A995C9 /* TestSQLiteMetadata.swift */,
 				D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */,
 				2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */,
@@ -3430,7 +3425,6 @@
 				3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
 				E683F0A51E92E0820035D990 /* MockableHistory.swift */,
-				E61D11671EAF8F43008A305B /* PanelDataObserversTests.swift */,
 				E6C70E811E28314700F8DB57 /* PingCentreTests.swift */,
 				3B61CD581F2A750800D38DE1 /* PocketFeedTests.swift */,
 				2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */,
@@ -4892,7 +4886,6 @@
 				D0B693D5206C5BB9008A8B11 /* TestSQLiteReadingList.swift in Sources */,
 				E63F71881DB7FBE200A995C9 /* TestSQLiteMetadata.swift in Sources */,
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
-				E6BE53CD1D9177B10074909A /* TestSQLiteHistoryRecommendations.swift in Sources */,
 				289A4C131C4EB90600A460E3 /* StorageTestUtils.swift in Sources */,
 				D37DE2C71CA356D800A5EC69 /* CertTests.swift in Sources */,
 				281B029A1C037C1F005202C3 /* TestBrowserDB.swift in Sources */,
@@ -5321,7 +5314,6 @@
 				63306D452110BAF000F25400 /* TabManagerStoreTests.swift in Sources */,
 				4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */,
 				A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */,
-				E61D11681EAF8F43008A305B /* PanelDataObserversTests.swift in Sources */,
 				28D52E2F1BCDF53900187A1D /* ResetTests.swift in Sources */,
 				D82ED2641FEB3C420059570B /* DefaultSearchPrefsTests.swift in Sources */,
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,

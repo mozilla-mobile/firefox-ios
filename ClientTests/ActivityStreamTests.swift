@@ -91,17 +91,6 @@ extension ActivityStreamTests {
         }
     }
 
-    func testHighlightEmitsEventOnTap() {
-        let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        panel.highlights = [mockSite]
-        panel.selectItemAtIndex(0, inSection: .highlights)
-
-        let pingsSent = (telemetry.eventsTracker as! MockPingClient).pingsReceived
-        XCTAssertEqual(pingsSent.count, 1)
-        let eventPing = pingsSent[0]
-        assertPayload(eventPing, matches: expectedPayloadForEvent("CLICK", source: "HIGHLIGHTS", position: 0))
-    }
-
     func testContextMenuOnTopSiteEmitsRemoveEvent() {
         let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
         let topSitesContextMenu = panel.contextMenu(for: mockSite, with: IndexPath(item: 0, section: ActivityStreamPanel.Section.topSites.rawValue))
@@ -113,27 +102,6 @@ extension ActivityStreamTests {
         XCTAssertEqual(pingsSent.count, 1)
         let removePing = pingsSent[0]
         assertPayload(removePing, matches: expectedPayloadForEvent("REMOVE", source: "TOP_SITES", position: 0))
-    }
-
-    func testContextMenuOnHighlightsEmitsRemoveDismissEvents() {
-        let mockSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        let highlightsContextMenu = panel.contextMenu(for: mockSite, with: IndexPath(row: 0, section: ActivityStreamPanel.Section.highlights.rawValue))
-
-        let dismiss = highlightsContextMenu?.actions[0].find { $0.title == Strings.RemoveContextMenuTitle }
-        let delete = highlightsContextMenu?.actions[0].find { $0.title == Strings.DeleteFromHistoryContextMenuTitle }
-
-        dismiss?.handler?(dismiss!)
-        delete?.handler?(delete!)
-
-        // Check to see that they emitted telemetry events
-        let pingsSent = (telemetry.eventsTracker as! MockPingClient).pingsReceived
-        XCTAssertEqual(pingsSent.count, 2)
-
-        let dismissPing = pingsSent[0]
-        assertPayload(dismissPing, matches: expectedPayloadForEvent("DISMISS", source: "HIGHLIGHTS", position: 0))
-
-        let deletePing = pingsSent[1]
-        assertPayload(deletePing, matches: expectedPayloadForEvent("DELETE", source: "HIGHLIGHTS", position: 0))
     }
 
     func testSessionReportedWhenViewAppearsAndDisappears() {
@@ -150,36 +118,6 @@ extension ActivityStreamTests {
 
         let eventPing = pingsSent[0]
         XCTAssertNotNil(eventPing["session_duration"])
-    }
-
-    func testBadStateEventsForHighlights() {
-        let goodSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        goodSite.icon = Favicon(url: "http://image", date: Date())
-        goodSite.metadata = PageMetadata(id: nil,
-                                         siteURL: "http://mozilla.org",
-                                         mediaURL: "http://image",
-                                         title: "Mozilla",
-                                         description: "Web",
-                                         type: nil,
-                                         providerName: nil)
-        let badSite = Site(url: "http://mozilla.org", title: "Mozilla")
-        profile.recommendations = MockRecommender(highlights: [goodSite, badSite])
-
-        // Since invalidateHighlights calls back into the main thread, we can't
-        // simply call .value on this to block since the app will dead lock when
-        // trying to call back onto a blocked main thread.
-        let expect = XCTestExpectation(description: "Sent bad highlight pings")
-        panel.getHighlights() >>> {
-            expect.fulfill()
-        }
-
-        wait(for: [expect], timeout: 3)
-        let pingsSent = (self.telemetry.eventsTracker as! MockPingClient).pingsReceived
-        XCTAssertEqual(pingsSent.count, 2)
-        assertPayload(pingsSent[0],
-                      matches: expectedBadStatePayload(state: "MISSING_METADATA_IMAGE", source: "HIGHLIGHTS"))
-        assertPayload(pingsSent[1],
-                      matches: expectedBadStatePayload(state: "MISSING_FAVICON", source: "HIGHLIGHTS"))
     }
 
     func testBadStateEventsForTopSites() {
@@ -228,38 +166,6 @@ class MockPingClient: PingCentreClient {
     }
 }
 
-fileprivate class MockRecommender: HistoryRecommendations {
-    func repopulateHighlights() -> Success {
-        return succeed()
-    }
-
-    var highlights: [Site]
-
-    init(highlights: [Site]) {
-        self.highlights = highlights
-    }
-
-    func getHighlights() -> Deferred<Maybe<Cursor<Site>>> {
-        return deferMaybe(ArrayCursor(data: highlights))
-    }
-
-    func getRecentBookmarks(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return deferMaybe(ArrayCursor(data: []))
-    }
-
-    func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool, invalidateHighlights shouldInvalidateHighlights: Bool) -> Success {
-        return succeed()
-    }
-
-    func removeHighlightForURL(_ url: String) -> Success {
-        guard let foundSite = highlights.filter({ $0.url == url }).first else {
-            return succeed()
-        }
-        let foundIndex = highlights.index(of: foundSite)!
-        highlights.remove(at: foundIndex)
-        return succeed()
-    }
-}
 
 fileprivate class MockTopSitesHistory: MockableHistory {
     let mockTopSites: [Site]
