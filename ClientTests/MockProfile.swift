@@ -81,15 +81,14 @@ open class MockPanelDataObservers: PanelDataObservers {
 }
 
 open class MockActivityStreamDataObserver: DataObserver {
+    public func refreshIfNeeded(forceTopSites topSites: Bool) {
+    }
+
     public var profile: Profile
     public weak var delegate: DataObserverDelegate?
 
     init(profile: Profile) {
         self.profile = profile
-    }
-
-    public func refreshIfNeeded(forceHighlights highlights: Bool, forceTopSites topsites: Bool) {
-
     }
 }
 
