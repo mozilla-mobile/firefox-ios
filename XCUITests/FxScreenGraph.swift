@@ -438,10 +438,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.tap(app.buttons["TopTabsViewController.tabsButton"], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                if (app.buttons["TabToolbar.tabsButton"].exists) {
-                    app.buttons["TabToolbar.tabsButton"].tap()
-                } else {
+                // iPhone sim tabs button is called differently when in portrait or landscape
+                if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
                     app.buttons["URLBarView.tabsButton"].tap()
+                } else {
+                    app.buttons["TabToolbar.tabsButton"].tap()
                 }
             }
         }
