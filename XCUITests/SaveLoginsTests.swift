@@ -137,8 +137,10 @@ class SaveLoginTest: BaseTestCase {
         // Clear Data and go to linkedin, fields should be filled in
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.AcceptClearPrivateData)
+        navigator.goto(HomePanelsScreen)
         navigator.openNewURL(urlString: urlLogin)
         waitUntilPageLoad()
+        waitForExistence(app.webViews.textFields["Email"], timeout: 3)
         let emailValue = app.webViews.textFields["Email"].value!
         XCTAssertEqual(emailValue as! String, mailLogin)
         let passwordValue = app.webViews.secureTextFields["Password"].value!
