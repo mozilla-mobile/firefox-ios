@@ -3,7 +3,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
+
+#if FOCUS
 @testable import Firefox_Focus
+#else
+@testable import Firefox_Klar
+#endif
 
 class StringExtensionTest: XCTestCase {
     
