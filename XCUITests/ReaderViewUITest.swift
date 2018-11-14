@@ -167,17 +167,17 @@ class ReaderViewTest: BaseTestCase {
 
         // Now there should be an item on the list
         navigator.nowAt(BrowserTab)
-        navigator.browserPerformAction(.openReadingListOption)
+        navigator.goto(HomePanel_ReadingList)
         checkReadingListNumberOfItems(items: 1)
     }
 
     func testOpenSavedForReadingLongPressInNewTab() {
-        // Add item to Reading List
-        addContentToReaderView()
-        navigator.browserPerformAction(.openReadingListOption)
-
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual(numTab, "1")
+
+        // Add item to Reading List
+        addContentToReaderView()
+        navigator.goto(HomePanel_ReadingList)
 
         // Long tap on the item just saved
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
@@ -188,6 +188,7 @@ class ReaderViewTest: BaseTestCase {
         app.tables.cells["quick_action_new_tab"].tap()
 
         // Now there should be two tabs open
+        navigator.goto(HomePanelsScreen)
         let numTabAfter = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual(numTabAfter, "2")
     }
@@ -195,7 +196,7 @@ class ReaderViewTest: BaseTestCase {
     func testRemoveSavedForReadingLongPress() {
         // Add item to Reading List
         addContentToReaderView()
-        navigator.browserPerformAction(.openReadingListOption)
+        navigator.goto(HomePanel_ReadingList)
 
         // Long tap on the item just saved and choose remove
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]

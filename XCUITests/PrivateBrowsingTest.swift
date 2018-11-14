@@ -16,9 +16,7 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForTabsButton()
         navigator.goto(BrowserTabMenu)
         // Go to History screen
-        waitForExistence(app.tables.cells["History"])
-        app.tables.cells["History"].tap()
-        navigator.nowAt(BrowserTab)
+        navigator.goto(HomePanel_History)
         waitForExistence(app.tables["History List"])
 
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
@@ -32,9 +30,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         navigator.openURL(url2)
         waitForValueContains(app.textFields["url"], value: "facebook")
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.cells["History"])
-        app.tables.cells["History"].tap()
+        navigator.goto(HomePanel_History)
         waitForExistence(app.tables["History List"])
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
         XCTAssertFalse(app.tables["History List"].staticTexts[url2Label].exists)
@@ -161,6 +157,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         waitForNoExistence(app.staticTexts["Private Browsing"])
         XCTAssertFalse(app.staticTexts["Private Browsing"].exists, "Private Browsing screen is shown")
+        navigator.nowAt(TabTray)
         let numPrivTabsOpen = userState.numTabs
         XCTAssertEqual(numPrivTabsOpen, 1, "The number of tabs is not correct, there should be one private tab")
     }
@@ -239,7 +236,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         // Open website and check it does not appear under history once going back to regular mode
         navigator.openURL("http://example.com")
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
-        navigator.browserPerformAction(.openHistoryOption)
+        navigator.goto(HomePanel_History)
         waitForExistence(app.tables["History List"])
         // History without counting Recently Closed and Synced devices
         let history = app.tables["History List"].cells.count - 2
