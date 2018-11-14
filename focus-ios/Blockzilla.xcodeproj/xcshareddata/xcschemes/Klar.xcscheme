@@ -47,6 +47,11 @@
                BlueprintName = "XCUITest"
                ReferencedContainer = "container:Blockzilla.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "CopyTest/testCopyMenuItem()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
