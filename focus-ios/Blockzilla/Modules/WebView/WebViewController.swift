@@ -58,7 +58,7 @@ class WebViewController: UIViewController, WebController {
     
     weak var delegate: WebControllerDelegate?
 
-    private var browserView = WKWebView()
+    private var browserView: WKWebView!
     var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
     private var urlObserver: NSKeyValueObservation?
@@ -98,7 +98,6 @@ class WebViewController: UIViewController, WebController {
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
         trackingProtectionStatus = .on(TPPageStats())
-        browserView = WKWebView()
         setupWebview()
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
@@ -133,6 +132,10 @@ class WebViewController: UIViewController, WebController {
     func stop() { browserView.stopLoading() }
 
     private func setupWebview() {
+        let wvConfig = WKWebViewConfiguration()
+        wvConfig.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        browserView = WKWebView(frame: .zero, configuration: wvConfig)
+        
         browserView.allowsBackForwardNavigationGestures = true
         browserView.allowsLinkPreview = false
         browserView.scrollView.clipsToBounds = false
