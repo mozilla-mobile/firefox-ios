@@ -59,12 +59,13 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesRemove() {
         loadWebPage("http://example.com")
+        waitForTabsButton()
         if iPad() {
             app.buttons["URLBarView.backButton"].tap()
         } else {
             app.buttons["TabToolbar.backButton"].tap()
         }
-        navigator.goto(URLBarOpen)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         // A new site has been added to the top sites
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
@@ -102,8 +103,8 @@ class ActivityStreamTest: BaseTestCase {
         app.textFields["address"].typeText("\r")
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_TopSites)
+        waitForTabsButton()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
 
         waitForExistence(TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!])
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 1)
@@ -111,8 +112,8 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
         navigator.goto(BrowserTab)
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_TopSites)
+        waitForTabsButton()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForExistence(app.collectionViews.cells["mozilla"])
         XCTAssertTrue(app.collectionViews.cells["mozilla"].exists)
         // A new site has been added to the top sites
@@ -198,8 +199,8 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesOpenInNewPrivateTab() {
         navigator.goto(HomePanelsScreen)
         // Long tap on apple top site, second cell
-        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 2), timeout: 3)
-        app.cells["TopSitesCell"].cells.element(boundBy: 2).press(forDuration:1)
+        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 1), timeout: 3)
+        app.cells["TopSitesCell"].cells.element(boundBy: 1).press(forDuration:1)
         app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
 
         XCTAssert(TopSiteCellgroup.exists)
@@ -327,12 +328,15 @@ class ActivityStreamTest: BaseTestCase {
         // Go to a website
         navigator.openURL("example.com")
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
 
         // Go back to Top Sites from context menu
-        navigator.browserPerformAction(.openTopSitesOption)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
+    // Test disabled after bug 1504007 landed
     func testActivityStreamPages() {
         let pagecontrolButton = app.cells["TopSitesCell"].buttons["pageControl"]
         waitForExistence(pagecontrolButton, timeout: 5)
