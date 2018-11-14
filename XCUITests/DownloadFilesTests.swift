@@ -15,7 +15,9 @@ class DownloadFilesTests: BaseTestCase {
         let list = app.tables["DownloadsTable"].cells.count
         if list != 0 {
             for _ in 0...list-1 {
+                waitForExistence(app.tables["DownloadsTable"].cells.element(boundBy: 0))
                 app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft()
+                waitForExistence(app.tables.cells.buttons["Delete"])
                 app.tables.cells.buttons["Delete"].tap()
             }
         }
@@ -39,17 +41,12 @@ class DownloadFilesTests: BaseTestCase {
         waitUntilPageLoad()
         // Verify that the context menu prior to download a file is correct
         app.webViews.staticTexts[testFileName].tap()
+        waitForExistence(app.webViews.buttons["Download"])
         app.webViews.buttons["Download"].tap()
         waitForExistence(app.tables["Context Menu"])
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileName].exists)
         XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
         app.buttons["Cancel"].tap()
-    }
-
-    func testDownloadOptionFromBrowserTabMenu() {
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Downloads)
-        XCTAssertTrue(app.tables["DownloadsTable"].exists)
     }
 
     func testDownloadFile() {
@@ -115,6 +112,7 @@ class DownloadFilesTests: BaseTestCase {
         waitUntilPageLoad()
         for _ in 0..<numberOfDownlowds {
             app.webViews.staticTexts[fileName].tap()
+            waitForExistence(app.webViews.buttons["Download"])
             app.webViews.buttons["Download"].tap()
             waitForExistence(app.tables["Context Menu"])
             app.tables["Context Menu"].cells["download"].tap()
@@ -166,7 +164,7 @@ class DownloadFilesTests: BaseTestCase {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         waitForExistence(app.buttons["Downloads"])
         app.buttons["Downloads"].tap()
-        waitForExistence(app.tables["DownloadsTable"])
+        waitForExistence(app.tables["DownloadsTable"], timeout: 3)
         checkTheNumberOfDownloadedItems(items: 1)
     }
 }

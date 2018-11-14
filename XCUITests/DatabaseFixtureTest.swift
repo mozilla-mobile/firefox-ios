@@ -17,7 +17,7 @@ class DatabaseFixtureTest: BaseTestCase {
     }
 
     func testOneBookmark() {
-        navigator.browserPerformAction(.openBookMarksOption)
+        navigator.goto(HomePanel_Bookmarks)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
     }
