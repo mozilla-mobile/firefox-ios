@@ -68,10 +68,9 @@ class DomainAutocompleteTest: BaseTestCase {
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
 
-        waitForExistence(app.buttons["HomePanels.TopSites"])
-        XCTAssertFalse(app.buttons["HomePanels.TopSites"].isEnabled)
-        XCTAssertTrue(app.buttons["HomePanels.Bookmarks"].isEnabled)
+        waitForExistence(app.cells["TopSitesCell"])
     }
+
     // Ensure that the scheme is included in the autocompletion.
     func testEnsureSchemeIncludedAutocompletion() {
         navigator.openURL(website["url"]!)

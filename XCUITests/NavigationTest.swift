@@ -80,7 +80,7 @@ class NavigationTest: BaseTestCase {
 
         // Go back to NewTabScreen
         navigator.goto(HomePanelsScreen)
-        waitForExistence(app.buttons["HomePanels.TopSites"])
+        waitForExistence(app.cells["TopSitesCell"])
     }
 
     func testTapSigninShowsFxAFromSettings() {
