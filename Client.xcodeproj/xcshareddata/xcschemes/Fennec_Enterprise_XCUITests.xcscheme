@@ -194,6 +194,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "ActivityStreamTest/testActivityStreamPages()">
+               </Test>
+               <Test
                   Identifier = "ActivityStreamTest/testDefaultSites()">
                </Test>
                <Test
