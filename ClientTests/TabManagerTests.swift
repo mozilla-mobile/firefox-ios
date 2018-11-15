@@ -500,10 +500,11 @@ class TabManagerTests: XCTestCase {
         let tab = manager.addTab()
         let tabToSave = Tab(configuration: WKWebViewConfiguration())
         tabToSave.sessionData = SessionData(currentPage: 0, urls: [URL(string: "url")!], lastUsedTime: Date.now())
-        if let savedTab = SavedTab(tab: tabToSave, isSelected: false) {
-            manager.recentlyClosedForUndo = [savedTab]
+        guard let savedTab = SavedTab(tab: tabToSave, isSelected: true) else {
+            XCTFail("Failed to serialize tab")
+            return
         }
-
+        manager.recentlyClosedForUndo = [savedTab]
         manager.undoCloseTabs()
         XCTAssertNotEqual(manager.tabs.first, tab)
     }

@@ -440,6 +440,9 @@ extension TabDisplayManager: TabManagerDelegate {
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         isDragging = false
         refreshStore()
+
+        // Need scrollToCurrentTab and not focusTab; these exact params needed to focus (without using async dispatch).
+        (tabDisplayer as? TopTabsViewController)?.scrollToCurrentTab(false, centerCell: true)
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
