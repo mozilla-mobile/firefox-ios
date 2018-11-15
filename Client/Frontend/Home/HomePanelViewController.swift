@@ -66,6 +66,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     override func viewDidLoad() {
         view.backgroundColor = UIColor.theme.browser.background
+        self.edgesForExtendedLayout = []
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
