@@ -221,6 +221,9 @@
                   Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
                </Test>
                <Test
+                  Identifier = "DataManagementTests/testWebSiteDataEnterFirstTime()">
+               </Test>
+               <Test
                   Identifier = "DomainAutocompleteTest/testDeletingCharsUpdateTheResults()">
                </Test>
                <Test
