@@ -2007,7 +2007,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             signInVC.delegate = self
             vcToPresent = signInVC
         }
-        vcToPresent.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
+        vcToPresent.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
         let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
 		themedNavigationController.modalPresentationStyle = .formSheet
         themedNavigationController.navigationBar.isTranslucent = false

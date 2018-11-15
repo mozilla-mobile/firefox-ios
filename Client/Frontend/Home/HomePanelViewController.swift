@@ -68,7 +68,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         view.backgroundColor = UIColor.theme.browser.background
         self.edgesForExtendedLayout = []
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
             style: .done,
             target: self, action: #selector(done))
