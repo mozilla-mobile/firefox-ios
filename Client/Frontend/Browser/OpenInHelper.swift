@@ -36,6 +36,13 @@ struct MIMEType {
 
         return MIMEType.OctetStream
     }
+
+    static func fileExtensionFromMIMEType(_ mimeType: String) -> String? {
+        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, mimeType as CFString, nil)?.takeRetainedValue(), let fileExtension = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassFilenameExtension)?.takeRetainedValue() {
+            return fileExtension as String
+        }
+        return nil
+    }
 }
 
 protocol OpenInHelper {
@@ -76,7 +83,7 @@ class DownloadHelper: NSObject, OpenInHelper {
             return
         }
 
-        let download = Download(preflightResponse: preflightResponse, request: request)
+        let download = HTTPDownload(preflightResponse: preflightResponse, request: request)
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
 

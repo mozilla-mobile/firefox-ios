@@ -1635,6 +1635,9 @@ extension BrowserViewController: TabDelegate {
         let noImageModeHelper = NoImageModeHelper(tab: tab)
         tab.addContentScript(noImageModeHelper, name: NoImageModeHelper.name())
 
+        let downloadContentScript = DownloadContentScript(tab: tab)
+        tab.addContentScript(downloadContentScript, name: DownloadContentScript.name())
+
         let printHelper = PrintHelper(tab: tab)
         tab.addContentScript(printHelper, name: PrintHelper.name())
 
