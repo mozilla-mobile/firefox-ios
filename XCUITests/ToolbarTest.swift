@@ -112,18 +112,20 @@ class ToolbarTests: BaseTestCase {
             waitForExistence(app.otherElements["Navigation Toolbar"])
         }
         navigator.openURL(website1["url"]!, waitForLoading: true)
+        // Adding the waiter right after navigating to the webpage in order to make the test more stable
+        waitUntilPageLoad()
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
         let pageActionMenuButton = app.buttons["TabLocationView.pageOptionsButton"]
-        waitForExistence(pageActionMenuButton, timeout: 5)
         let statusbarElement = app.statusBars.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
         XCTAssertTrue(statusbarElement.isHittable)
         app.swipeUp()
         let hiddenStatusbarElement = app.statusBars.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
         XCTAssertFalse(pageActionMenuButton.exists)
         hiddenStatusbarElement.tap()
-        XCTAssertTrue(hiddenStatusbarElement.isHittable)
+        XCTAssertTrue(pageActionMenuButton.isHittable)
         hiddenStatusbarElement.tap()
         let topElement = app.webViews.otherElements["Internet for people, not profit — Mozilla"].children(matching: .other).matching(identifier: "navigation").element(boundBy: 0).staticTexts["Mozilla"]
-        waitForExistence(topElement)
+        waitForExistence(topElement, timeout: 5)
         XCTAssertTrue(topElement.isHittable)
     }
 
