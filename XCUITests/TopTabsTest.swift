@@ -94,7 +94,7 @@ class TopTabsTest: BaseTestCase {
 
         // After removing only one tab it automatically goes to HomepanelView
         waitForExistence(app.collectionViews.cells["TopSitesCell"])
-        XCTAssert(app.buttons["HomePanels.TopSites"].exists)
+        XCTAssert(app.cells["TopSitesCell"].cells["TopSite"].exists)
     }
 
     private func openNtabsFromTabTray(numTabs: Int) {

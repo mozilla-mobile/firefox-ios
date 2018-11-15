@@ -31,7 +31,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
 
         //Now check open home page should load the previously saved home page
-        let homePageMenuItem = app.tables["Context Menu"].cells["Open Homepage"]
+        let homePageMenuItem = app.cells["menu-Home"]
         waitForExistence(homePageMenuItem)
         homePageMenuItem.tap()
         waitForValueContains(app.textFields["url"], value: websiteUrl1)
