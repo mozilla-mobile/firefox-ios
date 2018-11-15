@@ -224,6 +224,12 @@
                   Identifier = "DomainAutocompleteTest/testDeletingCharsUpdateTheResults()">
                </Test>
                <Test
+                  Identifier = "DragAndDropTestIpad/testTryDragAndDropBookmarkToURLBar()">
+               </Test>
+               <Test
+                  Identifier = "DragAndDropTestIpad/testTryDragAndDropHistoryToURLBar()">
+               </Test>
+               <Test
                   Identifier = "FindInPageTests/testFindFromMenu()">
                </Test>
                <Test

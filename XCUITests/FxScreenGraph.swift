@@ -439,7 +439,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(HomePanel_Bookmarks) { screenState in
         let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
         screenState.press(bookmarkCell, to: BookmarksPanelContextMenu)
-        screenState.noop(to: HomePanelsScreen)
+        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
     }
 
     map.addScreenState(HomePanel_TopSites) { screenState in
