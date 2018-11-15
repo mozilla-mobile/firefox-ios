@@ -46,7 +46,9 @@ extension PhotonActionSheetProtocol {
         guard let tab = self.tabManager.selectedTab else { return [] }
 
         let openLibrary = PhotonActionSheetItem(title: Strings.AppMenuLibraryTitleString, iconString: "menu-library") { action in
-            let homepanels = HomePanelViewController()
+            let bvc = vcDelegate as? BrowserViewController
+            let homepanels = bvc?.libraryPanelController ?? HomePanelViewController()
+            bvc?.libraryPanelController = homepanels
             homepanels.profile = self.profile
             homepanels.delegate = vcDelegate as? HomePanelDelegate
 

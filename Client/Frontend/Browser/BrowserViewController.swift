@@ -38,6 +38,7 @@ private struct BrowserViewControllerUX {
 
 class BrowserViewController: UIViewController {
     var homePanelController: (UIViewController & Themeable)?
+    var libraryPanelController: HomePanelViewController?
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
@@ -688,7 +689,6 @@ class BrowserViewController: UIViewController {
             case .topSites:
                 homePanelVC = ActivityStreamPanel(profile: profile)
             case .bookmarks:
-
                 homePanelVC = BookmarksPanel(profile: profile)
             case .history:
                 homePanelVC = HistoryPanel(profile: profile)
