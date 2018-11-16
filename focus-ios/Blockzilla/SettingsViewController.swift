@@ -661,10 +661,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc private func whatsNewClicked() {
-        highlightsButton?.tintColor = UIColor.white        
-        guard let url = SupportUtils.URLForTopic(topic: UIConstants.strings.sumoTopicWhatsNew) else { return }
-
-        navigationController?.pushViewController(SettingsContentViewController(url: url), animated: true)
+        highlightsButton?.tintColor = UIColor.white
+        guard let focusURL = SupportUtils.URLForTopic(topic: UIConstants.strings.sumoTopicWhatsNew) else { return }
+        guard let klarURL = SupportUtils.URLForTopic(topic: UIConstants.strings.klarSumoTopicWhatsNew) else { return }
+        
+        if AppInfo.isKlar {
+            navigationController?.pushViewController(SettingsContentViewController(url: klarURL), animated: true)
+        } else {
+            navigationController?.pushViewController(SettingsContentViewController(url: focusURL), animated: true)
+        }
         
         whatsNew.didShowWhatsNew()
     }

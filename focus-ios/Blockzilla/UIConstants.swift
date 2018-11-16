@@ -444,7 +444,8 @@ struct UIConstants {
         static let siriEraseTipTitle = String(format: "Ask Siri to erase %@ history:", AppInfo.productName)
         static let siriEraseTipDescription = "Add Siri shortcut"
         static let shareTrackersTipTitle = "%@ trackers blocked so far"
-        static let sumoTopicWhatsNew = "whats-new-focus-ios-7"
+        static let sumoTopicWhatsNew = "whats-new-focus-ios-8"
+        static let klarSumoTopicWhatsNew = "whats-new-firefox-klar-ios-version-8"
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
     }
