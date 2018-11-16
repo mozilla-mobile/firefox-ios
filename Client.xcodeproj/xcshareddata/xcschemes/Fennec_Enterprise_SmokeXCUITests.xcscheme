@@ -299,7 +299,7 @@
                   Identifier = "CopiedLinksTests">
                </Test>
                <Test
-                  Identifier = "DataManagementTests">
+                  Identifier = "DataManagementTests/testWebSiteDataOptions()">
                </Test>
                <Test
                   Identifier = "DatabaseFixtureTest">
