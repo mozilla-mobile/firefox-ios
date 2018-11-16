@@ -199,8 +199,8 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesOpenInNewPrivateTab() {
         navigator.goto(HomePanelsScreen)
         // Long tap on apple top site, second cell
-        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 1), timeout: 3)
-        app.cells["TopSitesCell"].cells.element(boundBy: 1).press(forDuration:1)
+        waitForExistence(app.cells["TopSitesCell"].cells["apple"], timeout: 3)
+        app.cells["TopSitesCell"].cells["apple"].press(forDuration:1)
         app.tables["Context Menu"].cells["Open in New Private Tab"].tap()
 
         XCTAssert(TopSiteCellgroup.exists)
