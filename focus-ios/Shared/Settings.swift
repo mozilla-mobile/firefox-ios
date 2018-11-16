@@ -16,6 +16,7 @@ enum SettingsToggle: String {
     case sendAnonymousUsageData = "SendAnonymousUsageData"
     case enableDomainAutocomplete = "enableDomainAutocomplete"
     case enableCustomDomainAutocomplete = "enableCustomDomainAutocomplete"
+    case enableSearchSuggestions = "enableSearchSuggestions"
 }
 
 struct Settings {
@@ -37,6 +38,7 @@ struct Settings {
         case .sendAnonymousUsageData: return AppInfo.isKlar ? false : true
         case .enableDomainAutocomplete: return true
         case .enableCustomDomainAutocomplete: return true
+        case .enableSearchSuggestions: return false
         }
     }
 

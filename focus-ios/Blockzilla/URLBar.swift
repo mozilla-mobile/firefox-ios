@@ -693,6 +693,7 @@ class URLBar: UIView {
 
     @objc private func didPressClear() {
         urlText.text = nil
+        userInputText = nil
         urlText.rightView?.isHidden = true
         delegate?.urlBar(self, didEnterText: "")
     }
@@ -802,6 +803,11 @@ extension URLBar: AutocompleteTextFieldDelegate {
         userInputText = nil
         
         delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "")
+        
+        if Settings.getToggle(.enableSearchSuggestions) {
+            Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected))
+        }
+        
         return true
     }
 

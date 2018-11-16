@@ -87,6 +87,7 @@ class SearchProviderTest: BaseTestCase {
 	private func doSearch(searchWord: String, provider: String) {
 		let searchForText = "Search for " + searchWord
         let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
+        let cancelButton = app.buttons["URLBar.cancelButton"]
 		urlbarUrltextTextField.tap()
 		
 		urlbarUrltextTextField.typeText(searchWord)
@@ -94,6 +95,7 @@ class SearchProviderTest: BaseTestCase {
 		app.buttons[searchForText].tap()
         waitForWebPageLoad()
 		
+        urlbarUrltextTextField.tap()
 		// Check the correct site is reached
 		switch provider {
 			case "Google":
@@ -116,6 +118,8 @@ class SearchProviderTest: BaseTestCase {
 			default:
 				XCTFail("Invalid Search Provider")
 		}
+        
+        cancelButton.tap()
 	}
     
 }

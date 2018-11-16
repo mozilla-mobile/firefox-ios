@@ -31,6 +31,7 @@ class BrowserViewController: UIViewController {
     fileprivate var urlBar: URLBar!
     fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
+    fileprivate let searchSuggestClient = SearchSuggestClient()
     fileprivate var findInPageBar: FindInPageBar?
     fileprivate var fillerView: UIView?
     fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
@@ -69,6 +70,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    private let searchSuggestionsDebouncer = Debouncer(timeInterval: 0.1)
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
     var tipManager: TipManager?
@@ -128,6 +130,7 @@ class BrowserViewController: UIViewController {
         overlayView.alpha = 0
         overlayView.delegate = self
         overlayView.backgroundColor = UIConstants.colors.overlayBackground
+        overlayView.setSearchSuggestionsPromptViewDelegate(delegate: self)
         mainContainerView.addSubview(overlayView)
 
         background.snp.makeConstraints { make in
@@ -781,9 +784,29 @@ extension BrowserViewController: URLBarDelegate {
     }
     
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
-        // Hide find in page if the home view is displayed
-        let isOnHomeView = homeView != nil
-        overlayView.setSearchQuery(query: text, animated: true, hideFindInPage: isOnHomeView)
+        let trimmedText = text.trimmingCharacters(in: .whitespaces)
+        let isOnHomeView = homeView != nil 
+
+        if Settings.getToggle(.enableSearchSuggestions) && !trimmedText.isEmpty {
+            searchSuggestionsDebouncer.renewInterval()
+            searchSuggestionsDebouncer.completion = {
+                self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
+                    let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
+                    
+                    // Check if this callback is stale (new user input has been requested)
+                    if userInputText.isEmpty || userInputText != trimmedText {
+                        return
+                    }
+                    
+                    if userInputText == trimmedText {
+                        let suggestions = suggestions ?? [trimmedText]
+                        self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty)
+                    }
+                })
+            }
+        } else {
+            overlayView.setSearchQuery(suggestions: [trimmedText], hideFindInPage: isOnHomeView || text.isEmpty)
+        }
     }
 
     func urlBarDidPressScrollTop(_: URLBar, tap: UITapGestureRecognizer) {
@@ -1085,11 +1108,10 @@ extension BrowserViewController: OverlayViewDelegate {
     }
 
     func overlayView(_ overlayView: OverlayView, didSearchForQuery query: String) {
-        if let url = searchEngineManager.activeEngine.urlForQuery(query) {
+        if searchEngineManager.activeEngine.urlForQuery(query) != nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
-            submit(url: url)
-            urlBar.url = url
+            urlBar(urlBar, didSubmitText: query)
         }
 
         urlBar.dismiss()
@@ -1136,6 +1158,17 @@ extension BrowserViewController: OverlayViewDelegate {
             urlBar.url = overlayURL
         }
         urlBar.dismiss()
+    }
+}
+
+extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
+    func searchSuggestionsPromptView(_ searchSuggestionsPromptView: SearchSuggestionsPromptView, didEnable: Bool) {
+        UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
+        Settings.set(didEnable, forToggle: SettingsToggle.enableSearchSuggestions)
+        overlayView.updateSearchSuggestionsPrompt(hidden: true)
+        if didEnable, let urlbar = self.urlBar, let value = self.urlBar?.userInputText {
+            urlBar(urlbar, didEnterText: value)
+        }
     }
 }
 
