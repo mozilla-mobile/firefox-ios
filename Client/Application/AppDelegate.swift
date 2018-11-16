@@ -284,6 +284,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         receivedURLs.removeAll()
         application.applicationIconBadgeNumber = 0
 
+        // Resume file downloads.
+        browserViewController.downloadQueue.resumeAll()
+
         // handle quick actions is available
         let quickActions = QuickActions.sharedInstance
         if let shortcut = quickActions.launchedShortcutItem {
@@ -308,6 +311,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let defaults = UserDefaults()
         defaults.set(true, forKey: "ApplicationCleanlyBackgrounded")
         defaults.synchronize()
+
+        // Pause file downloads.
+        browserViewController.downloadQueue.pauseAll()
 
         syncOnDidEnterBackground(application: application)
 

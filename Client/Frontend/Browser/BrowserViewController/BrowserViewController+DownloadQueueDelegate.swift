@@ -16,7 +16,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
                 // Handle download cancellation
                 if buttonPressed, !downloadQueue.isEmpty {
-                    downloadQueue.cancelAllDownloads()
+                    downloadQueue.cancelAll()
 
                     let downloadCancelledToast = ButtonToast(labelText: Strings.DownloadCancelledToastLabelText, backgroundColor: UIColor.Photon.Grey60, textAlignment: .center)
 
