@@ -18,7 +18,7 @@ const NIGHT_MODE_STYLESHEET =
 `html {
   -webkit-filter: hue-rotate(180deg) invert(100%) !important;
 }
-img,video {
+iframe,img,video {
   -webkit-filter: ${NIGHT_MODE_INVERT_FILTER_CSS} !important;
 }`;
 
