@@ -80,7 +80,7 @@ class NavigationTest: BaseTestCase {
 
         // Go back to NewTabScreen
         navigator.goto(HomePanelsScreen)
-        waitForExistence(app.buttons["HomePanels.TopSites"])
+        waitForExistence(app.cells["TopSitesCell"])
     }
 
     func testTapSigninShowsFxAFromSettings() {
@@ -96,7 +96,7 @@ class NavigationTest: BaseTestCase {
     }
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
-        navigator.goto(HomePanel_TopSites)
+        //navigator.goto(HomePanel_TopSites)
         // Open FxAccount from remote tab panel and check the Sign in to Firefox scren
         navigator.goto(HomePanel_History)
         XCTAssertTrue(app.tables["History List"].staticTexts["Synced Devices"].isEnabled)
@@ -358,7 +358,7 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
         app.tables["Context Menu"].cells["download"].tap()
         navigator.goto(BrowserTabMenu)
-        app.tables.cells["menu-panel-Downloads"].tap()
+        navigator.goto(HomePanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
         // There should be one item downloaded. It's name and size should be shown
         let downloadedList = app.tables["DownloadsTable"].cells.count

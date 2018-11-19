@@ -292,6 +292,8 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssertTrue(secondEntryOnList.exists, "second entry after is not correct")
     }
 
+    // Test disabled due to new way bookmark panel is shown, url is not available. Library implementation bug 1506989
+    // Will be removed if this is going the final implementation
     func testTryDragAndDropHistoryToURLBar() {
         if skipPlatform { return }
 
@@ -305,6 +307,8 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssertEqual(urlBarValue, "Search or enter address")
     }
 
+    // Test disabled due to new way bookmark panel is shown, url is not available. Library implementation bug 1506989
+    // Will be removed if this is going the final implementation
     func testTryDragAndDropBookmarkToURLBar() {
         if skipPlatform { return }
 

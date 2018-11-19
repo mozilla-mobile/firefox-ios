@@ -37,7 +37,8 @@ private struct BrowserViewControllerUX {
 }
 
 class BrowserViewController: UIViewController {
-    var homePanelController: HomePanelViewController?
+    var homePanelController: (UIViewController & Themeable)?
+    var libraryPanelController: HomePanelViewController?
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
@@ -682,34 +683,40 @@ class BrowserViewController: UIViewController {
         homePanelIsInline = inline
 
         if homePanelController == nil {
-            let homePanelController = HomePanelViewController()
-            homePanelController.profile = profile
-            homePanelController.delegate = self
-            homePanelController.url = tabManager.selectedTab?.url?.displayURL
-            homePanelController.view.alpha = 0
-            self.homePanelController = homePanelController
+            var homePanelVC: (UIViewController & HomePanel)?
+            let currentChoice = NewTabAccessors.getNewTabPage(self.profile.prefs)
+            switch currentChoice {
+            case .topSites:
+                homePanelVC = ActivityStreamPanel(profile: profile)
+            case .bookmarks:
+                homePanelVC = BookmarksPanel(profile: profile)
+            case .history:
+                homePanelVC = HistoryPanel(profile: profile)
+            case .readingList:
+                homePanelVC = ReadingListPanel(profile: profile)
+            default:
+                break
+            }
 
-            addChildViewController(homePanelController)
-            view.addSubview(homePanelController.view)
-            homePanelController.didMove(toParentViewController: self)
+            if let vc = homePanelVC {
+                let navController = ThemedNavigationController(rootViewController: vc)
+                navController.setNavigationBarHidden(true, animated: false)
+                navController.interactivePopGestureRecognizer?.delegate = nil
+                navController.view.alpha = 0
+                self.homePanelController = navController
+                vc.homePanelDelegate = self
+                addChildViewController(navController)
+                view.addSubview(navController.view)
+                vc.didMove(toParentViewController: self)
+            }
+
         }
+
         guard let homePanelController = self.homePanelController else {
-            assertionFailure("homePanelController is still nil after assignment.")
             return
         }
 
         homePanelController.applyTheme()
-
-        let panelNumber = tabManager.selectedTab?.url?.fragment
-
-        // splitting this out to see if we can get better crash reports when this has a problem
-        var newSelectedButtonIndex = 0
-        if let numberArray = panelNumber?.components(separatedBy: "=") {
-            if let last = numberArray.last, let lastInt = Int(last) {
-                newSelectedButtonIndex = lastInt
-            }
-        }
-        homePanelController.selectedPanel = HomePanelType(rawValue: newSelectedButtonIndex)
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
@@ -1067,7 +1074,7 @@ class BrowserViewController: UIViewController {
         settingsTableViewController.tabManager = tabManager
         settingsTableViewController.settingsDelegate = self
 
-        let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
+        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
         controller.popoverDelegate = self
         controller.modalPresentationStyle = .formSheet
         self.present(controller, animated: true, completion: nil)
@@ -1504,7 +1511,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         if let syncAction = syncMenuButton(showFxA: presentSignInViewController) {
             actions.append(syncAction)
         }
-        actions.append(getHomePanelActions())
+        actions.append(getLibraryActions(vcDelegate: self))
         actions.append(getOtherPanelActions(vcDelegate: self))
         // force a modal if the menu is being displayed in compact split screen
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
@@ -1708,29 +1715,31 @@ extension BrowserViewController: TabDelegate {
     }
 }
 
-extension BrowserViewController: HomePanelViewControllerDelegate {
-    func homePanelViewController(_ homePanelViewController: HomePanelViewController, didSelectURL url: URL, visitType: VisitType) {
+extension BrowserViewController: HomePanelDelegate {
+    func homePanelDidRequestToSignIn() {
+        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
+    }
+
+    func homePanelDidRequestToCreateAccount() {
+        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
+    }
+
+    func homePanel(didSelectURL url: URL, visitType: VisitType) {
         guard let tab = tabManager.selectedTab else { return }
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
     }
 
-    func homePanelViewController(_ homePanelViewController: HomePanelViewController, didSelectPanel panel: Int) {
-        if let url = tabManager.selectedTab?.url, url.isAboutHomeURL {
-            tabManager.selectedTab?.webView?.evaluateJavaScript("history.replaceState({}, '', '#panel=\(panel)')", completionHandler: nil)
+    func homePanel(didSelectURLString url: String, visitType: VisitType) {
+        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
+            Logger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
+            return
         }
+        return self.homePanel(didSelectURL: url, visitType: visitType)
     }
 
-    func homePanelViewControllerDidRequestToCreateAccount(_ homePanelViewController: HomePanelViewController) {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
-        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
-    }
-
-    func homePanelViewControllerDidRequestToSignIn(_ homePanelViewController: HomePanelViewController) {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
-        presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
-    }
-
-    func homePanelViewControllerDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         let tab = self.tabManager.addTab(PrivilegedRequest(url: url) as URLRequest, afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
         // If we are showing toptabs a user can just use the top tab bar
         // If in overlay mode switching doesnt correctly dismiss the homepanels
@@ -1758,10 +1767,10 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func presentSearchSettingsController() {
-        let settingsNavigationController = SearchSettingsTableViewController()
-        settingsNavigationController.model = self.profile.searchEngines
-        settingsNavigationController.profile = self.profile
-        let navController = ModalSettingsNavigationController(rootViewController: settingsNavigationController)
+        let ThemedNavigationController = SearchSettingsTableViewController()
+        ThemedNavigationController.model = self.profile.searchEngines
+        ThemedNavigationController.profile = self.profile
+        let navController = ModalSettingsNavigationController(rootViewController: ThemedNavigationController)
 
         self.present(navController, animated: true, completion: nil)
     }
@@ -1998,11 +2007,11 @@ extension BrowserViewController: IntroViewControllerDelegate {
             signInVC.delegate = self
             vcToPresent = signInVC
         }
-        vcToPresent.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
-        let settingsNavigationController = SettingsNavigationController(rootViewController: vcToPresent)
-		settingsNavigationController.modalPresentationStyle = .formSheet
-        settingsNavigationController.navigationBar.isTranslucent = false
-        self.present(settingsNavigationController, animated: true, completion: nil)
+        vcToPresent.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
+        let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
+		themedNavigationController.modalPresentationStyle = .formSheet
+        themedNavigationController.navigationBar.isTranslucent = false
+        self.present(themedNavigationController, animated: true, completion: nil)
     }
 
     @objc func dismissSignInViewController() {

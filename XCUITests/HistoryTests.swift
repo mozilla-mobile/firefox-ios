@@ -33,14 +33,6 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells["HistoryPanel.syncedDevicesCell"].exists)
     }
 
-    func testOpenHistoryFromBrowserContextMenuOptions() {
-        navigator.browserPerformAction(.openHistoryOption)
-
-        // Go to History List from Browser context menu and there should be one entry
-        waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
-        XCTAssertTrue(app.tables.cells.staticTexts[webpage["label"]!].exists)
-    }
-
     func testOpenSyncDevices() {
         navigator.goto(HomePanel_History)
         app.tables.cells["HistoryPanel.syncedDevicesCell"].tap()

@@ -12,11 +12,11 @@ class AppSettingsTableViewController: SettingsTableViewController {
         super.viewDidLoad()
 
         navigationItem.title = NSLocalizedString("Settings", comment: "Title in the settings view controller title bar")
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
             style: .done,
-            target: navigationController, action: #selector((navigationController as! SettingsNavigationController).done))
-        navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
+            target: navigationController, action: #selector((navigationController as! ThemedNavigationController).done))
+        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
         tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
 

@@ -94,7 +94,7 @@ class BookmarkingTests: BaseTestCase {
         bookmark()
 
         //There should be a bookmark
-        navigator.browserPerformAction(.openBookMarksOption)
+        navigator.goto(HomePanel_Bookmarks)
         checkItemInBookmarkList()
     }
 

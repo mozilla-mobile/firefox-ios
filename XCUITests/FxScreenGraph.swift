@@ -48,6 +48,7 @@ let TabTrayLongPressMenu = "TabTrayLongPressMenu"
 let HistoryRecentlyClosed = "HistoryRecentlyClosed"
 let TrackingProtectionContextMenuDetails = "TrackingProtectionContextMenuDetails"
 let DisplaySettings = "DisplaySettings"
+let HomePanel_Library = "HomePanel_Library"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -95,13 +96,6 @@ let HomePanel_Bookmarks = "HomePanel.Bookmarks.1"
 let HomePanel_History = "HomePanel.History.2"
 let HomePanel_ReadingList = "HomePanel.ReadingList.3"
 let HomePanel_Downloads = "HomePanel.Downloads.4"
-
-let allHomePanels = [
-    HomePanel_Bookmarks,
-    HomePanel_TopSites,
-    HomePanel_History,
-    HomePanel_ReadingList
-]
 
 class Action {
     static let LoadURL = "LoadURL"
@@ -423,12 +417,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(HomePanelsScreen) { screenState in
-        screenState.tap(app.buttons["HomePanels.TopSites"], to: HomePanel_TopSites)
-        screenState.tap(app.buttons["HomePanels.Bookmarks"], to: HomePanel_Bookmarks)
-        screenState.tap(app.buttons["HomePanels.History"], to: HomePanel_History)
-        screenState.tap(app.buttons["HomePanels.ReadingList"], to: HomePanel_ReadingList)
-        screenState.tap(app.buttons["HomePanels.Downloads"], to: HomePanel_Downloads)
-
         screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarHomePanel, if: "tablet == true") { userState in
             userState.isPrivate = !userState.isPrivate
         }
@@ -451,39 +439,38 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(HomePanel_Bookmarks) { screenState in
         let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
         screenState.press(bookmarkCell, to: BookmarksPanelContextMenu)
-        screenState.noop(to: HomePanelsScreen)
+        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
     }
 
     map.addScreenState(HomePanel_TopSites) { screenState in
         let topSites = app.cells["TopSitesCell"]
         screenState.press(topSites.cells.matching(identifier: "TopSite").element(boundBy: 0), to: TopSitesPanelContextMenu)
-        screenState.noop(to: HomePanelsScreen)
     }
 
     map.addScreenState(HomePanel_History) { screenState in
         screenState.press(app.tables["History List"].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
         screenState.tap(app.cells["HistoryPanel.recentlyClosedCell"], to: HistoryRecentlyClosed)
-        screenState.noop(to: HomePanelsScreen)
+        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
     }
 
     map.addScreenState(HomePanel_ReadingList) { screenState in
-        screenState.noop(to: HomePanelsScreen)
+        screenState.dismissOnUse = true
+        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
     }
 
     map.addScreenState(HomePanel_Downloads) { screenState in
         screenState.dismissOnUse = true
-        //screenState.backAction = dismissContextMenuAction
-        screenState.noop(to: HomePanelsScreen)
+        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
     }
 
     map.addScreenState(HistoryRecentlyClosed) { screenState in
         screenState.dismissOnUse = true
-        screenState.backAction = dismissContextMenuAction
+        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
     }
 
     map.addScreenState(HistoryPanelContextMenu) { screenState in
         screenState.dismissOnUse = true
-        screenState.backAction = dismissContextMenuAction
+        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
     }
 
     map.addScreenState(TopSitesPanelContextMenu) { screenState in
@@ -888,15 +875,21 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["FindInPage.close"], to: BrowserTab)
     }
 
+    map.addScreenState(HomePanel_Library) { screenState in
+        screenState.dismissOnUse = true
+        screenState.backAction = navigationControllerBackAction
+
+        screenState.tap(app.buttons["HomePanels.Bookmarks"], to: HomePanel_Bookmarks)
+        screenState.tap(app.buttons["HomePanels.History"], to: HomePanel_History)
+        screenState.tap(app.buttons["HomePanels.ReadingList"], to: HomePanel_ReadingList)
+        screenState.tap(app.buttons["HomePanels.Downloads"], to: HomePanel_Downloads)
+    }
+
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.tap(app.tables.cells["menu-Settings"], to: SettingsScreen)
 
         screenState.tap(app.tables.cells["menu-sync"], to: FxASigninScreen, if: "fxaUsername == nil")
-        screenState.tap(app.tables.cells["menu-panel-TopSites"], to: HomePanel_TopSites)
-        screenState.tap(app.tables.cells["menu-panel-Bookmarks"], to: HomePanel_Bookmarks)
-        screenState.tap(app.tables.cells["menu-panel-History"], to: HomePanel_History)
-        screenState.tap(app.tables.cells["menu-panel-ReadingList"], to: HomePanel_ReadingList)
-        screenState.tap(app.tables.cells["menu-panel-Downloads"], to: HomePanel_Downloads)
+        screenState.tap(app.tables.cells["menu-library"], to: HomePanel_Library)
 
         screenState.tap(app.tables.cells["menu-NoImageMode"], forAction: Action.ToggleNoImageMode, transitionTo: BrowserTabMenu) { userState in
             userState.noImageMode = !userState.noImageMode
@@ -968,7 +961,7 @@ extension MMNavigator where T == FxUserState {
 
     func browserPerformAction(_ view: BrowserPerformAction) {
         let PageMenuOptions = [.shareOption, .toggleBookmarkOption, .addReadingListOption, .findInPageOption, .sendToDeviceOption, .toggleDesktopOption, BrowserPerformAction.copyURLOption]
-        let BrowserMenuOptions = [.openTopSitesOption, .openBookMarksOption, .openReadingListOption, .openHistoryOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
+        let BrowserMenuOptions = [.openTopSitesOption, .toggleHideImages, .toggleNightMode, BrowserPerformAction.openSettingsOption]
 
         let app = XCUIApplication()
 
