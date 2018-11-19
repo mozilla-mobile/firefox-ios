@@ -158,6 +158,9 @@ class BlobDownload: Download {
     }
 
     override func resume() {
+        // Wait momentarily before continuing here and firing off the delegate
+        // callbacks. Otherwise, these may end up getting called before the
+        // delegate is set up and the UI may never be notified of completion.
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
             do {
                 let destination = try self.uniqueDownloadPathForFilename(self.filename)
