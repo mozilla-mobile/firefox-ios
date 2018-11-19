@@ -135,7 +135,7 @@ class TopTabsTest: BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         openNtabsFromTabTray(numTabs: 1)
-        waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 3)
+        waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs, undo it and check that the number of tabs is correct
