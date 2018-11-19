@@ -58,7 +58,10 @@ class SyncNowSetting: WithAccountSetting {
     let imageView = UIImageView(frame: CGRect(width: 30, height: 30))
     let syncIconWrapper = UIImage.createWithColor(CGSize(width: 30, height: 30), color: UIColor.clear)
     let syncBlueIcon = UIImage(named: "FxA-Sync-Blue")?.createScaled(CGSize(width: 20, height: 20))
-    let syncIcon = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
+    let syncIcon: UIImage? = {
+        let image = UIImage(named: "FxA-Sync")?.createScaled(CGSize(width: 20, height: 20))
+        return ThemeManager.instance.currentName == .dark ? image?.tinted(withColor: .white) : image
+    }()
 
     // Animation used to rotate the Sync icon 360 degrees while syncing is in progress.
     let continuousRotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
@@ -86,7 +89,7 @@ class SyncNowSetting: WithAccountSetting {
         }
 
         return NSAttributedString(
-            string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"),
+            string: Strings.FxASyncNow,
             attributes: [
                 NSAttributedStringKey.foregroundColor: self.enabled ? UIColor.theme.tableView.syncText : UIColor.theme.tableView.headerTextLight,
                 NSAttributedStringKey.font: DynamicFontHelper.defaultHelper.DefaultStandardFont
