@@ -33,6 +33,8 @@ class Download: NSObject {
 
     private(set) var isComplete = false
 
+    private var resumeData: Data?
+
     init(preflightResponse: URLResponse, request: URLRequest) {
         self.preflightResponse = preflightResponse
         self.request = request
@@ -53,13 +55,33 @@ class Download: NSObject {
         task?.cancel()
     }
 
+    func pause() {
+        task?.cancel(byProducingResumeData: { resumeData in
+            self.resumeData = resumeData
+        })
+    }
+
     func resume() {
+        guard let resumeData = self.resumeData else {
+            task?.resume()
+            return
+        }
+
+        task = session?.downloadTask(withResumeData: resumeData)
         task?.resume()
     }
 }
 
 extension Download: URLSessionTaskDelegate, URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        // Don't bubble up cancellation as an error if the
+        // error is `.cancelled` and we have resume data.
+        if let urlError = error as? URLError,
+            urlError.code == .cancelled,
+            resumeData != nil {
+            return
+        }
+
         delegate?.download(self, didCompleteWithError: error)
     }
 
@@ -126,7 +148,7 @@ class DownloadQueue {
         self.downloads = []
     }
 
-    func enqueueDownload(_ download: Download) {
+    func enqueue(_ download: Download) {
         // Clear the download stats if the queue was empty at the start.
         if downloads.isEmpty {
             combinedBytesDownloaded = 0
@@ -147,9 +169,21 @@ class DownloadQueue {
         delegate?.downloadQueue(self, didStartDownload: download)
     }
 
-    func cancelAllDownloads() {
+    func cancelAll() {
         for download in downloads where !download.isComplete {
             download.cancel()
+        }
+    }
+
+    func pauseAll() {
+        for download in downloads where !download.isComplete {
+            download.pause()
+        }
+    }
+
+    func resumeAll() {
+        for download in downloads where !download.isComplete {
+            download.resume()
         }
     }
 }
