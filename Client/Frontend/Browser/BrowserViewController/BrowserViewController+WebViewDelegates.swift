@@ -87,7 +87,10 @@ extension BrowserViewController: WKUIDelegate {
 
     func webViewDidClose(_ webView: WKWebView) {
         if let tab = tabManager[webView] {
-            self.tabManager.removeTabAndUpdateSelectedIndex(tab)
+            // Need to wait here in case we're waiting for a pending `window.open()`.
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                self.tabManager.removeTabAndUpdateSelectedIndex(tab)
+            }
         }
     }
 }
