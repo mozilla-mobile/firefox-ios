@@ -23,6 +23,7 @@ class DownloadContentScript: TabContentScript {
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+            let browserViewController = appDelegate.browserViewController,
             let dictionary = message.body as? [String : Any?],
             var filename = dictionary["filename"] as? String,
             let mimeType = dictionary["mimeType"] as? String,
@@ -31,6 +32,8 @@ class DownloadContentScript: TabContentScript {
             let data = Bytes.decodeBase64(base64String) else {
             return
         }
+
+        browserViewController.pendingDownloadWebView = nil
 
         if !filename.contains(".") {
             if let fileExtension = MIMEType.fileExtensionFromMIMEType(mimeType) {
