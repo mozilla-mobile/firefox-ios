@@ -6,6 +6,29 @@ import Foundation
 import Shared
 import WebKit
 
+private let WindowProxyJS: String = {
+    let path = Bundle.main.path(forResource: "windowProxy", ofType: "js")!
+    return try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String
+}()
+
+private let ExecuteScriptTemplate = """
+    (function() {
+        // BEGIN: windowProxy.js
+        /*const { windowProxy, exportFunction, cloneInto }*/%1$@
+        // END: windowProxy.js
+
+        (function(window) {
+            // BEGIN: WebExtensionAPI.js
+            /*const { browser, chrome }*/%2$@
+            // END: WebExtensionAPI.js
+
+            // BEGIN: Source from executeScript() call
+            %3$@
+            // END: Source from executeScript() call
+        })(windowProxy);
+    })();
+    """
+
 class WebExtensionTabsAPI: WebExtensionAPIEventDispatcher {
     override class var Name: String { return "tabs" }
 
@@ -113,12 +136,9 @@ class WebExtensionTabsAPI: WebExtensionAPIEventDispatcher {
             code = details["code"] as? String
         }
 
-        guard let javaScriptString = code else {
-            connection.error("No JavaScript found to execute")
-            return
-        }
+        let wrappedJavaScriptSource = String(format: ExecuteScriptTemplate, WindowProxyJS, webExtension.webExtensionAPIJS, code ?? "")
 
-        tab?.webView?.evaluateJavaScript(javaScriptString, completionHandler: { (result, error) in
+        tab?.webView?.evaluateJavaScript(wrappedJavaScriptSource, completionHandler: { (result, error) in
             if let error = error {
                 connection.error(error.localizedDescription)
                 return
