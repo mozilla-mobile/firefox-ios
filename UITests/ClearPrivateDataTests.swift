@@ -96,16 +96,24 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         let url1 = urls[0].url
         let url2 = urls[1].url
-        tester().waitForView(withAccessibilityIdentifier: "HomePanels.History")
+        BrowserUtils.openLibraryMenu(tester())
+        // Open History Panel
         tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
         tester().waitForView(withAccessibilityLabel: url1)
         tester().waitForView(withAccessibilityLabel: url2)
 
+        BrowserUtils.closeLibraryMenu(tester())
+
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false)
-        tester().tapView(withAccessibilityLabel: "Bookmarks")
-        tester().tapView(withAccessibilityLabel: "History")
+
+        BrowserUtils.openLibraryMenu(tester())
+        // Open History Panel
         tester().waitForAbsenceOfView(withAccessibilityLabel: url1)
         tester().waitForAbsenceOfView(withAccessibilityLabel: url2)
+
+        // Going back to default panel, Bookmarks and closing it
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
+        BrowserUtils.closeLibraryMenu(tester())
     }
 
     func testDisabledHistoryDoesNotClearHistoryPanel() {
@@ -115,7 +123,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let url1 = urls[0].url
         let url2 = urls[1].url
         BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false)
-        EarlGrey.selectElement(with: grey_accessibilityLabel("History")).perform(grey_tap())
+        BrowserUtils.openLibraryMenu(tester())
+        // Open History Panel
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
 
         let historyListShown = GREYCondition(name: "Wait for history to appear", block: {
             var errorOrNil: NSError?
@@ -130,6 +140,10 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             .assert(grey_notNil(), error: &errorOrNil)
         EarlGrey.selectElement(with: grey_accessibilityLabel(url2))
             .assert(grey_notNil(), error: &errorOrNil)
+
+        // Close History (and so Library) panel
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
+        BrowserUtils.closeLibraryMenu(tester())
     }
 
     func testClearsCookies() {
