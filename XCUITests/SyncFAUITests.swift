@@ -140,7 +140,7 @@ class SyncUITests: BaseTestCase {
         waitForExistence(app.tables.cells["menu-TrackingProtection"])
         // Tap on the sync name option
         if iPad() {
-            app.tables.cells.element(boundBy: 9).tap()
+            app.tables.cells.element(boundBy: 6).tap()
         } else {
             app.tables.cells.element(boundBy: 0).tap()
         }

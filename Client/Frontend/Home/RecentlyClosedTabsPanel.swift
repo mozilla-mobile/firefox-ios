@@ -35,6 +35,7 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
 
     fileprivate lazy var historyBackButton: HistoryBackButton = {
         let button = HistoryBackButton()
+        button.accessibilityIdentifier = "goBackFromRecentlyClosedHistory"
         button.addTarget(self, action: #selector(RecentlyClosedTabsPanel.historyBackButtonWasTapped), for: .touchUpInside)
         return button
     }()

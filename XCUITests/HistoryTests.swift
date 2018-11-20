@@ -60,11 +60,18 @@ class HistoryTests: BaseTestCase {
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
 
         // Go to the default web site  and check whether the option is enabled
+        navigator.nowAt(HomePanel_History)
+        navigator.goto(HomePanelsScreen)
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         navigator.goto(BrowserTabMenu)
+        // Workaround to bug 1508368
+        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(HomePanel_History)
         navigator.goto(HistoryRecentlyClosed)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
+        navigator.nowAt(HomePanel_History)
+        navigator.goto(HomePanelsScreen)
 
         // Now go back to default website close it and check whether the option is enabled
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
@@ -79,6 +86,8 @@ class HistoryTests: BaseTestCase {
         // The Closed Tabs list should contain the info of the website just closed
         waitForExistence(app.tables["Recently Closed Tabs List"], timeout: 3)
         XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
+
+        navigator.goto(HomePanelsScreen)
 
         // This option should be enabled on private mode too
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -102,6 +111,8 @@ class HistoryTests: BaseTestCase {
         // Once the website is visited and closed it will appear in Recently Closed Tabs list
         waitForExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
+
+        navigator.goto(HomePanelsScreen)
 
         // Go to settings and clear private data
         navigator.performAction(Action.AcceptClearPrivateData)
