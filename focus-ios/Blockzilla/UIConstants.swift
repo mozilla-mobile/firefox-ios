@@ -305,7 +305,6 @@ struct UIConstants {
         static let settingsSearchLabel = NSLocalizedString("Settings.searchLabel", value: "Search Engine", comment: "Label for the search engine in the search screen")
         static let settingsSearchSuggestions = NSLocalizedString("Settings.searchSuggestions",value: "Get Search Suggestions",comment: "Label for the Search Suggestions toggle row")
         static let detailTextSearchSuggestion = NSLocalizedString("Settings.detailTextSearchSuggestion", value: "%@ will send what you type in the address bar to your search engine.", comment: "Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar)")
-        static let sumoTopicSearchSuggestion = NSLocalizedString("Settings.searchSuggestions", value: "search-suggestions-focus-ios", comment: "URL for the learn more of the search suggestions toggle")
         static let settingsAutocompleteSection = NSLocalizedString("Settings.autocompleteSection", value: "URL Autocomplete", comment: "Title for the URL Autocomplete row")
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
         static let settingsToggleOtherSubtitle = NSLocalizedString("Settings.toggleOtherSubtitle", value: "May break some videos and Web pages", comment: "Label subtitle for toggle on main screen")
@@ -366,7 +365,7 @@ struct UIConstants {
         static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
         static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "Take private browsing to the next level. Block ads and other content that can track you across sites and bog down page load times.", comment: "Description for the 'Welcome' panel in the First Run tour.")
         static let CardTextSearch = NSLocalizedString("Intro.Slides.Search.Description", tableName: "Intro", value: "Searching for something different? Choose a different search engine.", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
-        static let AddSearchEngineButton = NSLocalizedString("Settings.Search.AddSearchEngineButton", value: "+ Add Another Search Engine", comment: "Text for button to add another search engine in settings")
+        static let AddSearchEngineButton = NSLocalizedString("Settings.Search.AddSearchEngineButton", value: "Add Another Search Engine", comment: "Text for button to add another search engine in settings")
         static let AddSearchEngineTitle = NSLocalizedString("Settings.Search.AddSearchEngineTitle", value: "Add Search Engine", comment: "Title on add search engine settings screen")
         static let save = NSLocalizedString("Save", value: "Save", comment: "Save button label")
         static let NameToDisplay = NSLocalizedString("Settings.Search.NameToDisplay", value: "Name to display", comment: "Label for input field for the name of the search engine to be added")
@@ -395,7 +394,7 @@ struct UIConstants {
 
         static let autocompleteCustomSectionTitle = NSLocalizedString("Autocomplete.customTitle", value: "CUSTOM URL LIST", comment: "Title for the default URL list section")
         static let autocompleteManageSitesLabel = NSLocalizedString("Autocomplete.manageSites", value: "Manage Sites", comment: "Label for button taking you to your custom Autocomplete URL list")
-        static let autocompleteManageSitesDesc = NSLocalizedString("Autocomplete.mySitesDesc", value: "Enable to have %@ autocomplete your favorite URLs.", comment: "Description for adding and managing custom autocomplete URLs")
+        static let autocompleteManageSitesDesc = NSLocalizedString("Autocomplete.mySitesDesc", value: "Enable to have %@ autocomplete your favorite URLs.", comment: "Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar.")
         static let autocompleteCustomEnabled = NSLocalizedString("Autocomplete.enabled", value: "Enabled", comment: "label describing URL Autocomplete as enabled")
         static let autocompleteCustomDisabled = NSLocalizedString("Autocomplete.disabled", value: "Disabled", comment: "label describing URL Autocomplete as disabled")
 
@@ -409,7 +408,7 @@ struct UIConstants {
         static let autocompleteAddCustomUrlExample = NSLocalizedString("Autocomplete.addCustomUrlExample", value: "Example: example.com", comment: "A label displaying an example URL")
         static let autocompleteEmptyState = NSLocalizedString("Autocomplete.emptyState", value: "No Custom URLs to display", comment: "Label for button to add a custom URL")
         static let autocompleteCustomURLAdded = NSLocalizedString("Autocomplete.customUrlAdded", value: "New Custom URL added.", comment: "Label for toast alerting a custom URL has been added")
-        static let autocompleteCustomURLDuplicate = NSLocalizedString("Autocomplete.duplicateUrl", value: "URL already exists", comment: "Label for toast alerting that the custom URL being added is a duplicateß")
+        static let autocompleteCustomURLDuplicate = NSLocalizedString("Autocomplete.duplicateUrl", value: "URL already exists", comment: "Label for toast alerting that the custom URL being added is a duplicate")
 
         static let findInPagePreviousLabel = NSLocalizedString("FindInPage.PreviousResult", value: "Find previous in page", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
         static let findInPageNextLabel = NSLocalizedString("FindInPage.NextResult", value: "Find next in page", comment: "Accessibility label for next result button in Find in Page Toolbar.")
@@ -424,6 +423,9 @@ struct UIConstants {
         static let urlToOpen = NSLocalizedString("Siri.urlToOpen", value: "URL to open", comment: "Label for input to set a favorite URL to be opened by Siri.")
         static let editOpenUrl = NSLocalizedString("Siri.editOpenUrl", value: "Re-Record or Delete Shortcut", comment: "Label for button to edit the Siri phrase or delete the Siri functionality.")
         static let add = NSLocalizedString("Siri.add", value: "Add", comment: "Button to add a favorite URL to Siri.")
+        static let autocompleteLabel = NSLocalizedString("Autocomplete.defaultLabel", value: "Autocomplete", comment: "Label for enabling or disabling autocomplete")
+        static let autocompleteCustomSectionLabel = NSLocalizedString("Autocomplete.customLabel", value: "Custom URLs", comment: "Label for button taking you to your custom Autocomplete URL list")
+        static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs") 
         
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
@@ -446,6 +448,7 @@ struct UIConstants {
         static let shareTrackersTipTitle = "%@ trackers blocked so far"
         static let sumoTopicWhatsNew = "whats-new-focus-ios-8"
         static let klarSumoTopicWhatsNew = "whats-new-firefox-klar-ios-version-8"
+        static let sumoTopicSearchSuggestion = "search-suggestions-focus-ios"
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
     }
