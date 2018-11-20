@@ -60,7 +60,7 @@ class WebExtensionActionWebViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the WebExtension browser action view controller title bar"),
             style: .done,
-            target: navigationController, action: #selector((navigationController as! SettingsNavigationController).done))
+            target: navigationController, action: #selector((navigationController as! ThemedNavigationController).done))
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
         view.addSubview(webView)

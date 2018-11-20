@@ -82,7 +82,7 @@ extension PhotonActionSheetProtocol {
             if let browserAction = webExtension.browserAction {
                 let item = PhotonActionSheetItem(title: browserAction.defaultTitle, iconString: "placeholder-avatar", iconURL: browserAction.defaultIcon, iconType: .URL) { _ in
                     if let actionViewController = WebExtensionActionWebViewController(action: browserAction) {
-                        let controller = SettingsNavigationController(rootViewController: actionViewController)
+                        let controller = ThemedNavigationController(rootViewController: actionViewController)
                         controller.popoverDelegate = vcDelegate
                         controller.modalPresentationStyle = .formSheet
 
@@ -102,7 +102,7 @@ extension PhotonActionSheetProtocol {
             if let sidebarAction = webExtension.sidebarAction {
                 let item = PhotonActionSheetItem(title: sidebarAction.defaultTitle, iconString: "placeholder-avatar", iconURL: sidebarAction.defaultIcon, iconType: .URL) { _ in
                     if let actionViewController = WebExtensionActionWebViewController(action: sidebarAction) {
-                        let controller = SettingsNavigationController(rootViewController: actionViewController)
+                        let controller = ThemedNavigationController(rootViewController: actionViewController)
                         controller.popoverDelegate = vcDelegate
                         controller.modalPresentationStyle = .formSheet
 
